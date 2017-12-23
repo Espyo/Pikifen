@@ -9,9 +9,10 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 1) Controls
 2) FAQ and troubleshooting
 3) Compiling
-4) Credits
-5) Tips
-6) Disclaimer
+4) Changelog
+5) Credits
+6) Tips
+7) Disclaimer
 ===============
 
 ===============
@@ -41,6 +42,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 2) FAQ and troubleshooting
 ===============
     Why did it crash?
+        First of all, are you using the most recent version of the engine? You should try upgrading if you're not.
         If you got a message telling you to read the readme, then please open the file Error_log.txt in the engine's folder.
             Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
             If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
@@ -125,7 +127,12 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         Compile. Good luck.
 
 ===============
-4) Credits
+4) Changelog
+===============
+    See http://www.pikminfanon.com/Pikmin_fangame_engine/Changelog
+    
+===============
+5) Credits
 ===============
     The project's code is licensed under the MIT License (MIT), described in LICENSE.txt.
     Various assets may have their own licenses, which are detailed below.
@@ -201,12 +208,12 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             André 'Espyo' Silva
 
 ===============
-5) Tips
+6) Tips
 ===============
     * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
 
 ===============
-6) Disclaimer
+7) Disclaimer
 ===============
     The Pikmin fangame engine and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.

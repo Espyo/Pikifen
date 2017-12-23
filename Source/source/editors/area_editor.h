@@ -262,6 +262,10 @@ private:
     bool is_shift_pressed;
     //Number of the mouse button pressed.
     size_t last_mouse_click;
+    //Category of the last mob placed.
+    mob_category* last_mob_category;
+    //Mob type of the last mob placed.
+    mob_type* last_mob_type;
     //List of lone edges found.
     unordered_set<edge*> lone_edges;
     //Is this a mouse drag, or just a shaky click?
@@ -312,8 +316,8 @@ private:
     point path_preview_checkpoints[2];
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
-    //Area data before vertex, mob, etc. movement.
-    area_data pre_move_area_data;
+    //Area data before vertex movement.
+    area_data* pre_move_area_data;
     //Position of the selected mobs before movement.
     map<mob_gen*, point> pre_move_mob_coords;
     //Position of the selected tree shadow before movement.
@@ -449,7 +453,7 @@ private:
     void finish_circle_sector();
     void finish_layout_drawing();
     void finish_layout_moving();
-    void forget_change();
+    void forget_prepared_state(area_data* prepared_change);
     unordered_set<sector*> get_affected_sectors(set<vertex*> &vertexes);
     void get_clicked_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
@@ -488,7 +492,10 @@ private:
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
     void pick(const string &name, const string &category);
-    void register_change(const string operation_name);
+    area_data* prepare_state();
+    void register_change(
+        const string operation_name, area_data* pre_prepared_change = NULL
+    );
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
     void save_area(const bool to_backup);

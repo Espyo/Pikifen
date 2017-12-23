@@ -310,11 +310,7 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
     
         if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            if(
-                state == EDITOR_STATE_LAYOUT ||
-                state == EDITOR_STATE_ASA ||
-                state == EDITOR_STATE_ASB
-            ) {
+            if(state == EDITOR_STATE_LAYOUT) {
                 selected_edges.insert(
                     cur_area_data.edges.begin(), cur_area_data.edges.end()
                 );
@@ -324,18 +320,21 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
                 selected_vertexes.insert(
                     cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
                 );
+                sector_to_gui();
                 
             } else if(state == EDITOR_STATE_MOBS) {
                 selected_mobs.insert(
                     cur_area_data.mob_generators.begin(),
                     cur_area_data.mob_generators.end()
                 );
+                mob_to_gui();
                 
             } else if(state == EDITOR_STATE_PATHS) {
                 selected_path_stops.insert(
                     cur_area_data.path_stops.begin(),
                     cur_area_data.path_stops.end()
                 );
+                path_to_gui();
             }
         }
         
@@ -484,14 +483,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        (
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        )
-    ) {
+    if(sub_state == EDITOR_SUB_STATE_NONE && state == EDITOR_STATE_LAYOUT) {
         vertex* clicked_vertex = get_vertex_under_point(mouse_cursor_w);
         if(!clicked_vertex) {
             edge* clicked_edge = get_edge_under_point(mouse_cursor_w);
@@ -629,12 +621,21 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state = EDITOR_SUB_STATE_NONE;
         point hotspot = snap_to_grid(mouse_cursor_w);
         
+        mob_category* category_to_use = last_mob_category;
+        if(!category_to_use) {
+            category_to_use = mob_categories.get(MOB_CATEGORY_PIKMIN);
+        }
+        mob_type* type_to_use = last_mob_type;
+        if(!type_to_use) {
+            type_to_use = pikmin_order[0];
+        }
+        
         cur_area_data.mob_generators.push_back(
-            new mob_gen(
-                mob_categories.get(MOB_CATEGORY_NONE),
-                hotspot, NULL, 0, ""
-            )
+            new mob_gen(category_to_use, hotspot, type_to_use)
         );
+        
+        last_mob_category = category_to_use;
+        last_mob_type = type_to_use;
         
         selected_mobs.insert(cur_area_data.mob_generators.back());
         mob_to_gui();
@@ -738,11 +739,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
     } else if(
         sub_state == EDITOR_SUB_STATE_NONE &&
-        (
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        )
+        state == EDITOR_STATE_LAYOUT
     ) {
     
         //Start a new layout selection or select something.
@@ -1015,11 +1012,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         float selection_y2 = max(selection_start.y, selection_end.y);
         selection_end = mouse_cursor_w;
         
-        if(
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        ) {
+        if(state == EDITOR_STATE_LAYOUT) {
         
             //Selection box around the layout.
             clear_selection();
@@ -1157,11 +1150,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     } else if(
         !selected_vertexes.empty() &&
         sub_state == EDITOR_SUB_STATE_NONE &&
-        (
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        )
+        state == EDITOR_STATE_LAYOUT
     ) {
     
         //Move vertexes.
@@ -1238,13 +1227,15 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     ) {
     
         if(selected_shadow) {
-            register_change("tree shadow transformation");
+            area_data* prepared_state = prepare_state();
             if(
                 !selected_shadow_transformation.handle_mouse_move(
                     snap_to_grid(mouse_cursor_w)
                 )
             ) {
-                forget_change();
+                forget_prepared_state(prepared_state);
+            } else {
+                register_change("tree shadow transformation", prepared_state);
             }
             selected_shadow->angle =
                 selected_shadow_transformation.get_angle();
@@ -1253,6 +1244,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             selected_shadow->size =
                 selected_shadow_transformation.get_size();
             details_to_gui();
+            
         }
         
     } else if(
@@ -1268,7 +1260,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_TOOLS) {
         //Move reference handle.
-        register_change("tools change");
+        area_data* prepared_state = prepare_state();
         if(
             reference_transformation.handle_mouse_move(
                 snap_to_grid(mouse_cursor_w)
@@ -1278,8 +1270,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 reference_transformation.get_center();
             cur_area_data.reference_size =
                 reference_transformation.get_size();
+            register_change("tools change", prepared_state);
         } else {
-            forget_change();
+            forget_prepared_state(prepared_state);
         }
         tools_to_gui();
         
@@ -1331,11 +1324,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
     
     if(moving) {
-        if(
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        ) {
+        if(state == EDITOR_STATE_LAYOUT) {
             finish_layout_moving();
         }
         moving = false;

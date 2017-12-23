@@ -587,17 +587,18 @@ void area_editor::load() {
             );
             return;
         }
-        register_change("sector removal");
+        area_data* prepared_state = prepare_state();
         if(!remove_isolated_sectors()) {
             emit_status_bar_message(
                 "Some of the sectors are not isolated!", false
             );
-            forget_change();
+            forget_prepared_state(prepared_state);
         } else {
             emit_status_bar_message(
                 "Deleted sectors.", false
             );
             clear_selection();
+            register_change("sector removal", prepared_state);
         }
     };
     frm_layout->widgets["but_rem"]->description =
@@ -2340,6 +2341,8 @@ void area_editor::load() {
     
     fade_mgr.start_fade(true, nullptr);
     
+    last_mob_category = NULL;
+    last_mob_type = NULL;
     show_closest_stop = false;
     show_path_preview = false;
     path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);

@@ -83,7 +83,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
     row[(x) * 4 + 1] = 255; \
     row[(x) * 4 + 2] = 255; \
     row[(x) * 4 + 3] = cur_a; \
-     
+    
     for(int y = 0; y < ceil(FOG_BITMAP_SIZE / 2.0); ++y) {
         for(int x = 0; x < ceil(FOG_BITMAP_SIZE / 2.0); ++x) {
             //First, get how far this pixel is from the center.
@@ -180,15 +180,17 @@ void gameplay::load() {
     cam_zoom = cam_final_zoom = zoom_mid_level;
     update_transformations();
     
-    leader_cursor_w.x = cur_leader_ptr->pos.x + cursor_max_dist / 2.0;
-    leader_cursor_w.y = cur_leader_ptr->pos.y;
-    leader_cursor_s = leader_cursor_w;
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
+    mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
+    mouse_cursor_w = mouse_cursor_s;
     al_transform_coordinates(
-        &world_to_screen_transform,
-        &leader_cursor_s.x, &leader_cursor_s.y
+        &screen_to_world_transform,
+        &mouse_cursor_w.x, &mouse_cursor_w.y
     );
-    mouse_cursor_w = leader_cursor_w;
-    mouse_cursor_s = leader_cursor_s;
+    leader_cursor_w = mouse_cursor_w;
+    leader_cursor_s = mouse_cursor_s;
     
     day_minutes = day_minutes_start;
     area_time_passed = 0;

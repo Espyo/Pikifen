@@ -931,6 +931,8 @@ void area_editor::pick(const string &name, const string &category) {
         mob_gen* m_ptr = *selected_mobs.begin();
         m_ptr->category = mob_categories.get_from_pname(category);
         m_ptr->type = m_ptr->category->get_type(name);
+        last_mob_category = m_ptr->category;
+        last_mob_type = m_ptr->type;
         homogenize_selected_mobs();
         mob_to_gui();
         

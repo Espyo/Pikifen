@@ -2,7 +2,7 @@
 <CodeLite_Project Name="Pikmin_fangame_engine" InternalType="Console" Version="10.0.0">
   <Plugins>
     <Plugin Name="qmake">
-      <![CDATA[00020001N0005Debug0000000000000001N0007Windows000000000000]]>
+      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
     </Plugin>
     <Plugin Name="CppCheck"/>
     <Plugin Name="CMakePlugin">
@@ -174,6 +174,20 @@
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
+  <VirtualDirectory Name="editors">
+    <File Name="../source/editors/editor.h"/>
+    <File Name="../source/editors/editor.cpp"/>
+    <File Name="../source/editors/animation_editor.h"/>
+    <File Name="../source/editors/animation_editor.cpp"/>
+    <File Name="../source/editors/animation_editor_loading.cpp"/>
+    <File Name="../source/editors/animation_editor_event_handler.cpp"/>
+    <File Name="../source/editors/area_editor.h"/>
+    <File Name="../source/editors/area_editor.cpp"/>
+    <File Name="../source/editors/area_editor_loading.cpp"/>
+    <File Name="../source/editors/area_editor_event_handler.cpp"/>
+    <File Name="../source/editors/area_editor_drawing.cpp"/>
+    <File Name="../source/editors/area_editor_gui_functions.cpp"/>
+  </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -192,6 +206,7 @@
       <Linker Options="-lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0` -rdynamic" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="$(ProjectPath)/Debug/Pikmin_fangame_engine" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="../.." PauseExecWhenProcTerminates="no" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -224,13 +239,14 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-O2;-Wall;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <Preprocessor Value="NDEBUG"/>
       </Compiler>
-      <Linker Options="" Required="yes"/>
+      <Linker Options="-lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0` -rdynamic" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -270,6 +286,7 @@
       <Linker Options="-lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0`" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Windows" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -302,18 +319,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="editors">
-    <File Name="../source/editors/editor.h"/>
-    <File Name="../source/editors/editor.cpp"/>
-    <File Name="../source/editors/animation_editor.h"/>
-    <File Name="../source/editors/animation_editor.cpp"/>
-    <File Name="../source/editors/animation_editor_loading.cpp"/>
-    <File Name="../source/editors/animation_editor_event_handler.cpp"/>
-    <File Name="../source/editors/area_editor.h"/>
-    <File Name="../source/editors/area_editor.cpp"/>
-    <File Name="../source/editors/area_editor_loading.cpp"/>
-    <File Name="../source/editors/area_editor_event_handler.cpp"/>
-    <File Name="../source/editors/area_editor_drawing.cpp"/>
-    <File Name="../source/editors/area_editor_gui_functions.cpp"/>
-  </VirtualDirectory>
 </CodeLite_Project>

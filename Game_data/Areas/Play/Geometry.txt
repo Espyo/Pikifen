@@ -2861,7 +2861,7 @@ tree_shadows{
 	shadow{
 		pos=215.00 -547.48
 		size=2100.00 3300.00
-		file=Leaf_shadow.png
+		file=Tree_shadow.png
 		sway=1.00 0.00
 	}
 }

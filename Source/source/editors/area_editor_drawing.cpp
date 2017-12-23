@@ -91,6 +91,7 @@ void area_editor::do_drawing() {
     for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr;
         if(
+            pre_move_area_data &&
             moving &&
             (
                 state == EDITOR_STATE_ASA ||
@@ -98,7 +99,7 @@ void area_editor::do_drawing() {
                 state == EDITOR_STATE_LAYOUT
             )
         ) {
-            s_ptr = pre_move_area_data.sectors[s];
+            s_ptr = pre_move_area_data->sectors[s];
         } else {
             s_ptr = cur_area_data.sectors[s];
         }
@@ -429,7 +430,7 @@ void area_editor::do_drawing() {
     }
     
     //Vertexes.
-    if(state == EDITOR_STATE_LAYOUT) {
+    if(state == EDITOR_STATE_LAYOUT || state == EDITOR_STATE_ASB) {
         size_t n_vertexes = cur_area_data.vertexes.size();
         for(size_t v = 0; v < n_vertexes; ++v) {
             vertex* v_ptr = cur_area_data.vertexes[v];

@@ -175,6 +175,8 @@ area_editor::area_editor() :
     is_ctrl_pressed(false),
     is_shift_pressed(false),
     is_gui_focused(false),
+    last_mob_category(nullptr),
+    last_mob_type(nullptr),
     last_mouse_click(INVALID),
     mouse_drag_confirmed(false),
     moving(false),
@@ -182,6 +184,7 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
+    pre_move_area_data(nullptr),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
@@ -610,8 +613,11 @@ void area_editor::clear_layout_drawing() {
  * Clears the data about the layout moving.
  */
 void area_editor::clear_layout_moving() {
+    if(pre_move_area_data) {
+        forget_prepared_state(pre_move_area_data);
+        pre_move_area_data = NULL;
+    }
     pre_move_vertex_coords.clear();
-    pre_move_area_data.clear();
     clear_selection();
     moving = false;
 }
@@ -1590,7 +1596,8 @@ void area_editor::finish_layout_moving() {
             "That move would cause edges to intersect!", true
         );
         cancel_layout_moving();
-        forget_change();
+        forget_prepared_state(pre_move_area_data);
+        pre_move_area_data = NULL;
         return;
     }
     
@@ -1639,6 +1646,8 @@ void area_editor::finish_layout_moving() {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     
+    register_change("vertex movement", pre_move_area_data);
+    pre_move_area_data = NULL;
     clear_layout_moving();
 }
 
@@ -1911,12 +1920,11 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
 
 
 /* ----------------------------------------------------------------------------
- * Forgets the last undo save.
+ * Forgets a pre-prepared area state that was almost ready to be added to
+ * the undo history.
  */
-void area_editor::forget_change() {
-    delete undo_history[0].first;
-    undo_history.pop_front();
-    update_undo_history();
+void area_editor::forget_prepared_state(area_data* prepared_state) {
+    delete prepared_state;
 }
 
 
@@ -2512,6 +2520,16 @@ void area_editor::merge_vertex(
     
 }
 
+/* ----------------------------------------------------------------------------
+ * Prepares an area state to be delivered to register_change() later,
+ * or forgotten altogether with forget_prepared_state().
+ */
+area_data* area_editor::prepare_state() {
+    area_data* new_state = new area_data();
+    cur_area_data.clone(*new_state);
+    return new_state;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Saves the state of the area in the undo history.
@@ -2519,9 +2537,19 @@ void area_editor::merge_vertex(
  * operation is the same as the previous one's, then it is ignored.
  * This is useful to stop, for instance, a slider
  * drag from saving several dozen operations in the undo history.
+ * operation_name:      Name of the operation.
+ * pre_prepared_state: If you have the area state prepared from elsewhere in
+ *   the code, specify it here. Otherwise, it uses the current area state.
  */
-void area_editor::register_change(const string operation_name) {
-    if(area_editor_undo_limit == 0) return;
+void area_editor::register_change(
+    const string operation_name, area_data* pre_prepared_state
+) {
+    if(area_editor_undo_limit == 0) {
+        if(pre_prepared_state) {
+            forget_prepared_state(pre_prepared_state);
+        }
+        return;
+    }
     
     if(!undo_save_lock_operation.empty()) {
         if(undo_save_lock_operation == operation_name) {
@@ -2530,8 +2558,11 @@ void area_editor::register_change(const string operation_name) {
         }
     }
     
-    area_data* new_state = new area_data();
-    cur_area_data.clone(*new_state);
+    area_data* new_state = pre_prepared_state;
+    if(!pre_prepared_state) {
+        new_state = new area_data();
+        cur_area_data.clone(*new_state);
+    }
     undo_history.push_front(make_pair(new_state, operation_name));
     
     made_changes = true;
@@ -3293,8 +3324,6 @@ void area_editor::start_mob_move() {
         }
     }
     
-    cur_area_data.clone(pre_move_area_data);
-    
     move_mouse_start_pos = mouse_cursor_w;
     moving = true;
 }
@@ -3322,8 +3351,6 @@ void area_editor::start_path_stop_move() {
         }
     }
     
-    cur_area_data.clone(pre_move_area_data);
-    
     move_mouse_start_pos = mouse_cursor_w;
     moving = true;
 }
@@ -3333,8 +3360,6 @@ void area_editor::start_path_stop_move() {
  * Procedure to start moving the selected tree shadow.
  */
 void area_editor::start_shadow_move() {
-    cur_area_data.clone(pre_move_area_data);
-    
     pre_move_shadow_coords = selected_shadow->center;
     
     move_mouse_start_pos = mouse_cursor_w;
@@ -3346,7 +3371,7 @@ void area_editor::start_shadow_move() {
  * Procedure to start moving the selected vertexes.
  */
 void area_editor::start_vertex_move() {
-    register_change("vertex movement");
+    pre_move_area_data = prepare_state();
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
@@ -3365,8 +3390,6 @@ void area_editor::start_vertex_move() {
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
         
-    cur_area_data.clone(pre_move_area_data);
-    
     move_mouse_start_pos = mouse_cursor_w;
     moving = true;
 }
@@ -3411,6 +3434,8 @@ void area_editor::undo() {
     clear_problems();
     non_simples.clear();
     change_to_right_frame();
+    
+    made_changes = true;
 }
 
 
