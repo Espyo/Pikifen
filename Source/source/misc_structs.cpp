@@ -181,9 +181,9 @@ hud_item_manager::hud_item_manager(const size_t item_total) :
 
 /* ----------------------------------------------------------------------------
  * Sets a HUD item's data.
- * id:     ID of the HUD item.
- * center: Center coordinates, in screen dimension percentage.
- * size:   Dimensions, in screen dimension percentage.
+ * id:   ID of the HUD item.
+ * x, y: Center coordinates, in screen dimension ratio (0 to 1, normally).
+ * w, h: Total width and height, in screen dimension ratio (0 to 1, normally).
  */
 void hud_item_manager::set_item(
     const size_t id,

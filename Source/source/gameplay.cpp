@@ -287,14 +287,14 @@ void gameplay::load_hud_info() {
     loader(HUD_ITEM_PIKMIN_SLASH_3,        "pikmin_slash_3");
     loader(HUD_ITEM_SPRAY_1_ICON,          "spray_1_icon");
     loader(HUD_ITEM_SPRAY_1_AMOUNT,        "spray_1_amount");
-    loader(HUD_ITEM_SPRAY_1_BUTTON,        "spray_1_key");
+    loader(HUD_ITEM_SPRAY_1_BUTTON,        "spray_1_button");
     loader(HUD_ITEM_SPRAY_2_ICON,          "spray_2_icon");
     loader(HUD_ITEM_SPRAY_2_AMOUNT,        "spray_2_amount");
-    loader(HUD_ITEM_SPRAY_2_BUTTON,        "spray_2_key");
+    loader(HUD_ITEM_SPRAY_2_BUTTON,        "spray_2_button");
     loader(HUD_ITEM_SPRAY_PREV_ICON,       "spray_prev_icon");
-    loader(HUD_ITEM_SPRAY_PREV_BUTTON,     "spray_prev_key");
+    loader(HUD_ITEM_SPRAY_PREV_BUTTON,     "spray_prev_button");
     loader(HUD_ITEM_SPRAY_NEXT_ICON,       "spray_next_icon");
-    loader(HUD_ITEM_SPRAY_NEXT_BUTTON,     "spray_next_key");
+    loader(HUD_ITEM_SPRAY_NEXT_BUTTON,     "spray_next_button");
     
 #undef loader
     

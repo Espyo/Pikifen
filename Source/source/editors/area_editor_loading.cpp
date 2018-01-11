@@ -339,6 +339,8 @@ void area_editor::load() {
     };
     frm_info->widgets["but_weather"]->description =
         "The weather condition to use.";
+    ((lafi::button*) frm_info->widgets["but_weather"])->autoscroll =
+        true;
         
     frm_info->widgets["txt_bg_bitmap"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_bitmap"]->description =
@@ -689,6 +691,8 @@ void area_editor::load() {
     };
     frm_sector->widgets["but_texture"]->description =
         "Select a texture (image) for this sector.";
+    ((lafi::button*) frm_sector->widgets["but_texture"])->autoscroll =
+        true;
         
     frm_sector->widgets["but_adv_appearance"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -768,7 +772,7 @@ void area_editor::load() {
     frm_asb->easy_row();
     frm_asb->easy_add(
         "lbl_tag",
-        new lafi::label("Tags:"), 100, 16
+        new lafi::label(), 100, 16
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
@@ -833,9 +837,6 @@ void area_editor::load() {
     [this] (lafi::widget*) {
         gui_to_asb();
     };
-    
-    frm_asb->widgets["txt_tag"]->description =
-        "Special values you want the sector to know.";
         
         
     //Texture picker -- declarations.

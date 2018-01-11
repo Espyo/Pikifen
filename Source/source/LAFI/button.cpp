@@ -1,6 +1,11 @@
 #include "button.h"
 
 namespace lafi {
+	
+const float button::OFFSET_START_DELAY = 2.0f;
+const float button::OFFSET_RESET_DELAY = 2.0f;
+const float button::OFFSET_SPEED = 65.0f;
+
 
 /* ----------------------------------------------------------------------------
  * Creates a button given some parameters.
@@ -11,8 +16,12 @@ button::button(
     lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
+    offset(0),
+    offset_start_time_left(OFFSET_START_DELAY),
+    offset_reset_time_left(OFFSET_RESET_DELAY),
     text(text),
-    icon(icon) {
+    icon(icon),
+    autoscroll(false) {
     
     this->description = description;
 }
@@ -24,8 +33,12 @@ button::button(
     const string &text, const string &description, ALLEGRO_BITMAP* icon
 ) :
     widget(),
+    offset(0),
+    offset_start_time_left(OFFSET_START_DELAY),
+    offset_reset_time_left(OFFSET_RESET_DELAY),
     text(text),
-    icon(icon) {
+    icon(icon),
+    autoscroll(false) {
     
     this->description = description;
 }
@@ -106,14 +119,69 @@ void button::draw_self() {
     }
     
     if(text.size()) {
+        int text_x;
+        unsigned int text_w = al_get_text_width(style->text_font, text.c_str());
+        int align;
+        if(text_w <= w) {
+            text_x = x1 + (w / 2);
+            align = ALLEGRO_ALIGN_CENTER;
+        } else {
+            text_x = x1;
+            text_x -= offset;
+            align = ALLEGRO_ALIGN_LEFT;
+        }
+        int text_y = y1 + final_text_y;
+        
         draw_text_lines(
             style->text_font,
             get_fg_color(),
-            x1 + (w / 2),
-            y1 + final_text_y,
-            ALLEGRO_ALIGN_CENTRE,
+            text_x, text_y,
+            align,
             true,
-            text);
+            text
+        );
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame worth of time. This is used for the auto-scrolling.
+ */
+void button::widget_on_tick(const float time) {
+    if(!autoscroll || !style->text_font) return;
+    
+    float text_w = al_get_text_width(style->text_font, text.c_str());
+    float text_x2 = x1 - offset + text_w;
+    
+    if(text != prev_text) {
+        //Reset everything.
+        prev_text = text;
+        offset = 0;
+        offset_start_time_left = OFFSET_START_DELAY;
+        offset_reset_time_left = OFFSET_RESET_DELAY;
+    }
+    
+    if(offset == 0 && text_x2 <= x2) {
+        //We don't need to scroll!
+        return;
+    }
+    
+    if(text_x2 > x2) {
+        //Text needs to scroll left.
+        if(offset_start_time_left > 0) {
+            offset_start_time_left -= time;
+        } else {
+            offset += OFFSET_SPEED * time;
+        }
+        offset_reset_time_left = OFFSET_RESET_DELAY;
+        
+    } else {
+        //Text reached the end.
+        if(offset_reset_time_left > 0) {
+            offset_reset_time_left -= time;
+        } else {
+            offset = 0;
+        }
+        offset_start_time_left = OFFSET_START_DELAY;
     }
 }
 

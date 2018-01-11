@@ -75,6 +75,23 @@ void area_editor::asb_to_gui() {
     
     sector* s_ptr = *selected_sectors.begin();
     
+    if(
+        s_ptr->type == SECTOR_TYPE_BRIDGE ||
+        s_ptr->type == SECTOR_TYPE_BRIDGE_RAIL
+    ) {
+        frm_asb->widgets["lbl_tag"]->show();
+        frm_asb->widgets["txt_tag"]->show();
+        ((lafi::label*) frm_asb->widgets["lbl_tag"])->text =
+            "Bridge height:";
+        ((lafi::label*) frm_asb->widgets["txt_tag"])->description =
+            "Height to set the sector to, when the bridge opens.";
+    } else {
+        s_ptr->tag.clear();
+        
+        frm_asb->widgets["lbl_tag"]->hide();
+        frm_asb->widgets["txt_tag"]->hide();
+    }
+    
     ((lafi::button*) frm_asb->widgets["but_sector_type"])->text =
         sector_types.get_name(s_ptr->type);
         

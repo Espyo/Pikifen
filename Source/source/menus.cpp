@@ -559,7 +559,7 @@ void options_menu::do_drawing() {
         draw_control(
             font_main, *c_ptr,
             point(scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr)),
-            point(scr_w * 0.2, scr_h * 0.1)
+            point(scr_w * 0.2, scr_h * 0.08)
         );
     }
     

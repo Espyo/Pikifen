@@ -3,7 +3,7 @@
 An engine that allows users to create their Pikmin fangames easily.
 
 This project is still under construction, so expect weird things to happen.
-You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me, Espyo, via IRC, on DarkMyst's #pikipedia.
+You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me, Espyo, via IRC on DarkMyst's #pikipedia, or via Discord on the Pikcord server.
 
 ===============
 1) Controls
@@ -47,20 +47,16 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
             If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
         Other than that, here are some possible solutions and workarounds:
-            Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
+            * Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
     
     Why can't I see the game window?
         Because windows sometimes break under Windows.
         Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
     
-    Why are some textures black, but not HUD elements?
-        I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images.
-        So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
-    
-    Why are my textures showing up as red "ERROR" text?
+    Why are my graphics showing up as black and violet patterns?
         1. Remember that file names are case sensitive. Lowercase and uppercase matter.
         2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
-        3. Remember that the engine only finds textures if they're in the Game_data/Graphics/Textures folder.
+        3. Remember that the engine only finds the image in one folder. General images go in Game_data/Graphics, and textures go in Game_data/Graphics/Textures.
     
     Why is Olimar moving when I'm not touching the analog stick?
         You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if you only wiggle it a bit.
@@ -75,6 +71,9 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     Why are some parts of the logic and physics so broken?
         Because their code is still under construction.
     
+    Why are some textures black, but not HUD elements?
+        Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.
+    
     What is there left to do?
         It's hard to say, but the Pikmin Fanon page has a rough roadmap.
     
@@ -86,22 +85,23 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     
     Why are the textures and HUD all shiny and realistic, but the objects are simplistic?
-        Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
+        It's the style choice I went with for the packaged content, but anybody can style the textures, HUD, and objects in any way they want.
+        In my opinion, Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
         The objects are simple, and based off of vector graphics, so it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots and put them in-game.
-        An alternative style that could work all around is pixel art for everything. Game creators can create their graphics in this style if they so choose.
+        An alternative style that could work all around is pixel art for everything.
     
     Why didn't you use textures and sounds from the Pikmin games?
         1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
         2. Should something happen to the engine, I can rebrand it, and release the assets as they are.
-        3. If somebody wants to add a sound effect from the series, depending on the game, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible; if all sounds are custom-made, this isn't really a problem. This applies to a lesser degree to textures and such as well.
+        3. If somebody wants to add a sound effect from the series, depending on the game, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible. But if all sounds are custom-made, this isn't really a problem. This applies to a lesser degree to textures and such as well.
         4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
     
     Why 2D?
         3D would be MUCH harder for everyone. You can get something convincing with 2D alone.
-        A 3D engine would be much harder to create, and the game developers would have a much harder time creating models, areas, etc. that look good in 3D.
+        A 3D engine would be much harder to create, and the content creators would have a much harder time creating models, areas, etc. that look good in 3D.
     
     Will you ever add X?
-        Depends. If it's an area or enemy or something, the game developers are meant to do that, not me. Though I might still add it for the sake of demonstration. Other than that, ask me!
+        Depends. If it's an area or enemy or something, the content creators are meant to do that, not me. Though I might still add it for the sake of demonstration. But if it's something like a feature, ask me!
     
     Is it possible to add Winged Pikmin?
         No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.

@@ -274,6 +274,7 @@ void editor::populate_picker(const string &filter) {
             this->frm_picker->hide();
             pick(name, category);
         };
+        b->autoscroll = true;
         
         f->easy_add("but_" + i2s(e), b, 100, 24);
         f->easy_row(0);
