@@ -2381,7 +2381,7 @@ mobs{
 	}
 	Enemy{
 		type=Fiery Blowhog
-		p=576.00 -1600.00
+		p=384.00 -1024.00
 		angle=1.89
 	}
 	Custom{
@@ -2408,6 +2408,11 @@ mobs{
 	Enemy{
 		type=Crumbug
 		p=832.00 -1600.00
+	}
+	Enemy{
+		type=Whiptongue Bulborb
+		p=480.00 -1664.00
+		angle=1.11
 	}
 }
 path_stops{
@@ -2865,7 +2870,7 @@ tree_shadows{
 		sway=1.00 0.00
 	}
 }
-reference_file_name=
-reference_pos=0.00 0.00
+reference_file_name
+reference_center=0.00 0.00
 reference_size=0.00 0.00
 reference_alpha=255

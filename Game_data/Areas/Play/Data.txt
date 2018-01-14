@@ -1,6 +1,7 @@
-name     = Testing Area
-subtitle = A testing area for the engine
-bg_color = 0 0 0
-bg_dist  = 2.00
-bg_zoom  = 1.00
-weather  = Normal
+name=Testing Area
+subtitle=A testing area for the engine
+bg_bmp
+bg_color=0 0 0
+bg_dist=2.00
+bg_zoom=1.00
+weather=Normal

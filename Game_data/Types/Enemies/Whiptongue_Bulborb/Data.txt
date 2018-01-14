@@ -1,0 +1,22 @@
+name = Whiptongue Bulborb
+
+big_damage_interval = 100
+drops_corpse = true
+height = 128
+max_carriers = 25
+max_health = 975
+move_speed = 70
+pikmin_seeds = 15
+pushable = true
+pushes = true
+radius = 60
+reaches {
+    wake_up = 10 360
+    search = 250 180 30 360
+    attack = 60 30
+    chase = 250 360
+}
+rotation_speed = 114
+territory_radius = 500
+value = 50
+weight = 12
