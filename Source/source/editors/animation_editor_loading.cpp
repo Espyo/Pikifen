@@ -1010,6 +1010,10 @@ void animation_editor::load() {
         "but_next",
         new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
     );
+    frm_hitboxes->easy_add(
+        "but_import",
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+    );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
         "lbl_n",
@@ -1181,6 +1185,7 @@ void animation_editor::load() {
         
     frm_hitboxes->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        gui_to_hitbox();
         if(cur_sprite->hitboxes.size()) {
             if(cur_hitbox_nr == INVALID) {
                 cur_hitbox_nr = 0;
@@ -1198,6 +1203,7 @@ void animation_editor::load() {
         
     frm_hitboxes->widgets["but_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        gui_to_hitbox();
         if(cur_sprite->hitboxes.size()) {
             if(cur_hitbox_nr == INVALID) {
                 cur_hitbox_nr = 0;
@@ -1210,6 +1216,13 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_next"]->description =
         "Next hitbox.";
+        
+    frm_hitboxes->widgets["but_import"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+    };
+    frm_hitboxes->widgets["but_import"]->description =
+        "Import hitbox data from another sprite.";
         
     frm_hitbox->register_accelerator(
         ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,

@@ -36,6 +36,7 @@ const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
 const string animation_editor::DELETE_ICON = "Delete.png";
+const string animation_editor::DUPLICATE_ICON = "Duplicate.png";
 const string animation_editor::EXIT_ICON = "Exit.png";
 const string animation_editor::HITBOXES_ICON = "Hitboxes.png";
 const string animation_editor::LOAD_ICON = "Load.png";
@@ -1030,6 +1031,14 @@ void animation_editor::pick(const string &name, const string &category) {
                 (lafi::button*)
                 gui->widgets["frm_tools"]->widgets["but_rename_sprite_name"]
             )->text = name;
+        } else if(mode == EDITOR_MODE_HITBOXES) {
+            for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                if(anims.sprites[s]->name == name) {
+                    cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
+                }
+            }
+            cur_hitbox_nr = 0;
+            hitbox_to_gui();
         } else {
             cur_sprite = anims.sprites[anims.find_sprite(name)];
             cur_hitbox_nr = INVALID;
