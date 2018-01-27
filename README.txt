@@ -188,6 +188,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             Smoke texture: Crack.com - License: Public domain - Source: http://opengameart.org/node/7691
             Main menu background: Helen Marshall - License: Public domain - Source: http://www.publicdomainpictures.net/view-image.php?image=1255
             Leaf shadows: Titus Tscharntke - License: Public domain - Source: https://commons.wikimedia.org/wiki/File:Leaf_branch_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_white_background.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_branch_birch_alpha.jpg
+            Pikmin standby icons: CraftedPBody (for making the basis)
             Tools used
                 Inkscape
                 GIMP

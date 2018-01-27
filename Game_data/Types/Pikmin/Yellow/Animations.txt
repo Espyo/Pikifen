@@ -23,8 +23,17 @@ animations{
 	sprout{
 		loop_frame=0
 		frames{
-			sprout{
-				duration=0.00
+			sprout1{
+				duration=0.20
+			}
+			sprout2{
+				duration=0.20
+			}
+			sprout1{
+				duration=0.20
+			}
+			sprout3{
+				duration=0.20
 			}
 		}
 	}
@@ -95,7 +104,7 @@ animations{
 	plucking{
 		loop_frame=0
 		frames{
-			sprout{
+			sprout1{
 				duration=0.20
 			}
 			idling{
@@ -124,9 +133,9 @@ animations{
 	}
 }
 sprites{
-	sprout{
+	sprout1{
 		file=Yellow_Pikmin.png
-		file_pos=74.00 62.00
+		file_pos=186.00 0.00
 		file_size=12.00 12.00
 		game_size=6.00 6.00
 		offset=0.00 0.00
@@ -134,11 +143,35 @@ sprites{
 		top_pos=-4.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
+	}
+	sprout2{
+		file=Yellow_Pikmin.png
+		file_pos=186.00 0.00
+		file_size=12.00 12.00
+		game_size=6.00 6.00
+		offset=0.00 0.00
+		top_visible=true
+		top_pos=-4.50 0.00
+		top_size=5.50 10.00
+		top_angle=0.00
+		hitboxes
+	}
+	sprout3{
+		file=Yellow_Pikmin.png
+		file_pos=186.00 0.00
+		file_size=12.00 12.00
+		game_size=6.00 6.00
+		offset=0.00 0.00
+		top_visible=true
+		top_pos=-3.50 0.00
+		top_size=5.50 10.00
+		top_angle=0.00
+		hitboxes
 	}
 	grabbing{
 		file=Yellow_Pikmin.png
-		file_pos=138.00 0.00
+		file_pos=134.00 37.00
 		file_size=28.00 36.00
 		game_size=14.00 18.00
 		offset=0.00 0.00
@@ -146,11 +179,11 @@ sprites{
 		top_pos=-6.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	grabbing_far{
 		file=Yellow_Pikmin.png
-		file_pos=168.00 0.00
+		file_pos=163.00 37.00
 		file_size=42.00 36.00
 		game_size=21.00 18.00
 		offset=-3.50 0.00
@@ -158,11 +191,11 @@ sprites{
 		top_pos=-15.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	grabbing_near{
 		file=Yellow_Pikmin.png
-		file_pos=212.00 0.00
+		file_pos=206.00 37.00
 		file_size=26.00 36.00
 		game_size=13.00 18.00
 		offset=3.50 0.00
@@ -170,11 +203,11 @@ sprites{
 		top_pos=12.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes=
+		hitboxes
 	}
 	half_lying{
 		file=Yellow_Pikmin.png
-		file_pos=88.00 38.00
+		file_pos=54.00 0.00
 		file_size=48.00 36.00
 		game_size=24.00 18.00
 		offset=0.00 0.00
@@ -182,11 +215,11 @@ sprites{
 		top_pos=-13.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	idling{
 		file=Yellow_Pikmin.png
-		file_pos=0.00 38.00
+		file_pos=0.00 0.00
 		file_size=20.00 36.00
 		game_size=10.00 18.00
 		offset=0.00 0.00
@@ -194,11 +227,11 @@ sprites{
 		top_pos=-4.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	lying{
 		file=Yellow_Pikmin.png
-		file_pos=138.00 38.00
+		file_pos=103.00 0.00
 		file_size=82.00 36.00
 		game_size=41.00 18.00
 		offset=0.00 0.00
@@ -206,23 +239,23 @@ sprites{
 		top_pos=-20.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	thrown1{
 		file=Yellow_Pikmin.png
-		file_pos=0.00 0.00
-		file_size=32.00 36.00
+		file_pos=0.00 37.00
+		file_size=28.00 36.00
 		game_size=14.00 18.00
 		offset=0.00 0.00
 		top_visible=false
 		top_pos=0.00 0.00
 		top_size=1.00 1.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	thrown2{
 		file=Yellow_Pikmin.png
-		file_pos=30.00 0.00
+		file_pos=29.00 37.00
 		file_size=34.00 36.00
 		game_size=17.00 18.00
 		offset=0.00 0.00
@@ -230,11 +263,11 @@ sprites{
 		top_pos=-9.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes=
+		hitboxes
 	}
 	thrown3{
 		file=Yellow_Pikmin.png
-		file_pos=66.00 0.00
+		file_pos=64.00 37.00
 		file_size=32.00 36.00
 		game_size=16.00 18.00
 		offset=0.00 0.00
@@ -242,11 +275,11 @@ sprites{
 		top_pos=3.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes=
+		hitboxes
 	}
 	thrown4{
 		file=Yellow_Pikmin.png
-		file_pos=100.00 0.00
+		file_pos=97.00 37.00
 		file_size=36.00 36.00
 		game_size=18.00 18.00
 		offset=0.00 0.00
@@ -254,31 +287,31 @@ sprites{
 		top_pos=10.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes=
+		hitboxes
 	}
 	walking1{
 		file=Yellow_Pikmin.png
-		file_pos=48.00 38.00
-		file_size=24.00 36.00
-		game_size=12.00 18.00
-		offset=-0.50 0.00
+		file_pos=21.00 0.00
+		file_size=32.00 36.00
+		game_size=16.00 18.00
+		offset=0.00 0.00
 		top_visible=true
-		top_pos=-4.00 0.20
+		top_pos=-4.00 -2.00
 		top_size=5.50 10.00
-		top_angle=-0.08
-		hitboxes=
+		top_angle=0.35
+		hitboxes
 	}
 	walking2{
 		file=Yellow_Pikmin.png
-		file_pos=22.00 38.00
-		file_size=24.00 36.00
-		game_size=12.00 18.00
+		file_pos=21.00 0.00
+		file_size=32.00 36.00
+		game_size=16.00 -18.00
 		offset=-0.50 0.00
 		top_visible=true
-		top_pos=-4.00 -0.20
+		top_pos=-4.00 2.00
 		top_size=5.50 10.00
-		top_angle=0.08
-		hitboxes=
+		top_angle=5.93
+		hitboxes
 	}
 }
-body_parts=
+body_parts
