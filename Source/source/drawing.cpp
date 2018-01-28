@@ -1415,12 +1415,18 @@ void draw_control(
             al_map_rgba(160, 160, 160, 192), 2
         );
     } else {
-        al_draw_filled_ellipse(
-            where.x, where.y, total_width * 0.5, total_height * 0.5,
+        al_draw_filled_rounded_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            min(16.0, total_width * 0.5),
+            min(16.0, total_height * 0.5),
             map_alpha(192)
         );
-        al_draw_ellipse(
-            where.x, where.y, total_width * 0.5, total_height * 0.5,
+        al_draw_rounded_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            min(16.0, total_width * 0.5),
+            min(16.0, total_height * 0.5),
             al_map_rgba(160, 160, 160, 192), 2
         );
     }

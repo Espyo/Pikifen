@@ -25,7 +25,7 @@ class menu_widget {
 protected:
     virtual void on_click() = 0;
     
-    //Juicy.
+    //Juice.
     float juicy_grow_time_left;
     static const float ICON_SWAY_TIME_SCALE;
     static const float ICON_SWAY_DELTA;
@@ -34,14 +34,14 @@ protected:
     
     
 public:
-    point pos;
+    point center;
     point size;
     function<void()> click_handler;
     bool selected;
     bool enabled;
     
     menu_widget(
-        const point &pos = point(), const point &size = point(),
+        const point &center = point(), const point &size = point(),
         const function<void()> &click_handler = nullptr
     );
     virtual void tick(const float time);
@@ -65,7 +65,7 @@ public:
     int text_align;
     
     menu_button(
-        const point &pos = point(), const point &size = point(),
+        const point &center = point(), const point &size = point(),
         const function<void()> &click_handler = nullptr,
         const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
@@ -87,7 +87,7 @@ public:
     int text_align;
     
     menu_checkbox(
-        const point &pos = point(), const point &size = point(),
+        const point &center = point(), const point &size = point(),
         const function<void()> &click_handler = nullptr,
         const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
@@ -108,7 +108,7 @@ public:
     int text_align;
     
     menu_text(
-        const point &pos = point(), const point &size = point(),
+        const point &center = point(), const point &size = point(),
         const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER

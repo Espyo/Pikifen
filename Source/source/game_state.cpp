@@ -149,46 +149,46 @@ void game_state::handle_menu_button(
             
             if(pressed == BUTTON_MENU_RIGHT) {
                 cur_pivot.x =
-                    selected_widget->pos.x + selected_widget->size.x * 0.25;
+                    selected_widget->center.x + selected_widget->size.x * 0.25;
                 cur_pivot.y =
-                    selected_widget->pos.y;
-                w2_pivot.x = w_ptr->pos.x - w_ptr->size.x * 0.25;
-                w2_pivot.y = w_ptr->pos.y;
+                    selected_widget->center.y;
+                w2_pivot.x = w_ptr->center.x - w_ptr->size.x * 0.25;
+                w2_pivot.y = w_ptr->center.y;
                 
-                if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                if(selected_widget->center.x == w_ptr->center.x) continue;
                 if(cur_pivot.x > w2_pivot.x) w2_pivot.x += scr_w;
                 
             } else if(pressed == BUTTON_MENU_UP) {
                 cur_pivot.x =
-                    selected_widget->pos.x;
+                    selected_widget->center.x;
                 cur_pivot.y =
-                    selected_widget->pos.y - selected_widget->size.y * 0.25;
-                w2_pivot.x = w_ptr->pos.x;
-                w2_pivot.y = w_ptr->pos.y + w_ptr->size.y * 0.25;
+                    selected_widget->center.y - selected_widget->size.y * 0.25;
+                w2_pivot.x = w_ptr->center.x;
+                w2_pivot.y = w_ptr->center.y + w_ptr->size.y * 0.25;
                 
-                if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                if(selected_widget->center.y == w_ptr->center.y) continue;
                 if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= scr_h;
                 
             } else if(pressed == BUTTON_MENU_LEFT) {
                 cur_pivot.x =
-                    selected_widget->pos.x - selected_widget->size.x * 0.25;
+                    selected_widget->center.x - selected_widget->size.x * 0.25;
                 cur_pivot.y =
-                    selected_widget->pos.y;
-                w2_pivot.x = w_ptr->pos.x + w_ptr->size.x * 0.25;
-                w2_pivot.y = w_ptr->pos.y;
+                    selected_widget->center.y;
+                w2_pivot.x = w_ptr->center.x + w_ptr->size.x * 0.25;
+                w2_pivot.y = w_ptr->center.y;
                 
-                if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                if(selected_widget->center.x == w_ptr->center.x) continue;
                 if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= scr_w;
                 
             } else {
                 cur_pivot.x =
-                    selected_widget->pos.x;
+                    selected_widget->center.x;
                 cur_pivot.y =
-                    selected_widget->pos.y + selected_widget->size.y * 0.25;
-                w2_pivot.x = w_ptr->pos.x;
-                w2_pivot.y = w_ptr->pos.y - w_ptr->size.y * 0.25;
+                    selected_widget->center.y + selected_widget->size.y * 0.25;
+                w2_pivot.x = w_ptr->center.x;
+                w2_pivot.y = w_ptr->center.y - w_ptr->size.y * 0.25;
                 
-                if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                if(selected_widget->center.y == w_ptr->center.y) continue;
                 if(cur_pivot.y > w2_pivot.y) w2_pivot.y += scr_h;
             }
             

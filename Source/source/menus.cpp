@@ -406,7 +406,11 @@ void options_menu::change_resolution(const signed int step) {
     intended_scr_w = resolution_presets[current_r_index].first;
     intended_scr_h = resolution_presets[current_r_index].second;
     
-    warning_widget->enabled = true;
+    if(!warning_widget->enabled) {
+        warning_widget->enabled = true;
+        warning_widget->start_juicy_grow();
+    }
+    resolution_widget->start_juicy_grow();
     update();
 }
 
