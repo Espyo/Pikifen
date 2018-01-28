@@ -41,6 +41,32 @@ public:
 
 class options_menu : public game_state {
 private:
+    vector<pair<int, int> > resolution_presets;
+    
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    float time_spent;
+    
+    menu_checkbox* fullscreen_widget;
+    menu_text* resolution_widget;
+    menu_text* warning_widget;
+    
+    void change_resolution(const signed int step);
+    void go_to_controls();
+    void update();
+    void leave();
+    
+public:
+    options_menu();
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+};
+
+
+class controls_menu : public game_state {
+private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
     
@@ -61,7 +87,7 @@ private:
     void leave();
     
 public:
-    options_menu();
+    controls_menu();
     virtual void load();
     virtual void unload();
     virtual void handle_controls(const ALLEGRO_EVENT &ev);

@@ -36,5 +36,5 @@ whistle_growth_speed = 180
 
 info_spot_trigger_range = 64
 message_char_interval = 0.02
-zoom_max_level = 2.0
-zoom_min_level = 0.5
+zoom_max_level = 3.0
+zoom_min_level = 0.66

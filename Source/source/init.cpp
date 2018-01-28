@@ -261,7 +261,31 @@ void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
     if(window_position_hack) al_set_new_window_position(64, 64);
+    if(scr_fullscreen) {
+        al_set_new_display_flags(
+            al_get_new_display_flags() | ALLEGRO_FULLSCREEN
+        );
+    }
     display = al_create_display(scr_w, scr_h);
+    
+    //It's possible that this resolution is not valid for fullscreen.
+    //Detect this and try again in windowed.
+    if(!display && scr_fullscreen) {
+        log_error(
+            "Could not create a fullscreen window with the resolution " +
+            i2s(scr_w) + "x" + i2s(scr_h) + ". Setting the fullscreen "
+            "option back to false. You can try a different resolution, "
+            "preferably one from the options menu."
+        );
+        scr_fullscreen = false;
+        intended_scr_fullscreen = false;
+        save_options();
+        al_set_new_display_flags(
+            al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN
+        );
+        display = al_create_display(scr_w, scr_h);
+    }
+    
     logic_timer = al_create_timer(1.0 / game_fps);
     
     logic_queue = al_create_event_queue();
@@ -283,6 +307,7 @@ void init_game_states() {
     game_states[GAME_STATE_AREA_MENU] = new area_menu();
     game_states[GAME_STATE_GAME] = new gameplay();
     game_states[GAME_STATE_OPTIONS_MENU] = new options_menu();
+    game_states[GAME_STATE_CONTROLS_MENU] = new controls_menu();
     game_states[GAME_STATE_AREA_EDITOR] = new area_editor();
     game_states[GAME_STATE_ANIMATION_EDITOR] = new animation_editor();
 }

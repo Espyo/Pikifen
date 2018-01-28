@@ -1070,6 +1070,7 @@ void load_options() {
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
     rs.set("fps", game_fps);
+    rs.set("fullscreen", scr_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
     rs.set("max_particles", max_particles);
@@ -1099,6 +1100,10 @@ void load_options() {
             animation_editor_history[h]
         );
     }
+    
+    intended_scr_fullscreen = scr_fullscreen;
+    intended_scr_w = scr_w;
+    intended_scr_h = scr_h;
     
 }
 

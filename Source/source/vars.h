@@ -260,6 +260,9 @@ extern string info_print_text;
 extern timer info_print_timer;
 extern float info_spot_trigger_range;
 extern vector<info_spot*> info_spots;
+extern bool intended_scr_fullscreen;
+extern unsigned int intended_scr_h;
+extern unsigned int intended_scr_w;
 extern bool is_game_running;
 //Is input enabled in general, for reasons outside the ready_for_input variable?
 extern bool is_input_allowed;
@@ -337,6 +340,7 @@ extern double prev_frame_time;
 extern bool ready_for_input;
 //Is delta_t meant to be reset for the next frame?
 extern bool reset_delta_t;
+extern bool scr_fullscreen;
 extern int scr_h;
 extern int scr_w;
 extern ALLEGRO_TRANSFORM screen_to_world_transform;

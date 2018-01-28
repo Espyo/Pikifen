@@ -119,8 +119,11 @@ const float WHISTLE_RING_SPEED = 600.0f;
 const float WHISTLE_RINGS_INTERVAL = 0.1f;
 
 const unsigned int DEF_FPS   = 60;
-const unsigned int DEF_SCR_W = 640;
-const unsigned int DEF_SCR_H = 480;
+const bool DEF_SCR_FULLSCREEN = false;
+const unsigned int DEF_SCR_W = 1024;
+const unsigned int DEF_SCR_H = 768;
+const unsigned int SMALLEST_SCR_W = 640;
+const unsigned int SMALLEST_SCR_H = 480;
 
 const string GAME_DATA_FOLDER_PATH = "Game_data";
 const string TYPES_FOLDER_PATH =

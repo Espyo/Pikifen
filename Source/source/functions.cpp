@@ -771,11 +771,8 @@ void save_options() {
             "area_editor_view_mode", i2s(area_editor_view_mode)
         )
     );
-    file.add(
-        new data_node(
-            "fps", i2s(game_fps)
-        )
-    );
+    file.add(new data_node("fps", i2s(game_fps)));
+    file.add(new data_node("fullscreen", b2s(intended_scr_fullscreen)));
     file.add(
         new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))
     );
@@ -786,7 +783,11 @@ void save_options() {
     file.add(new data_node("middle_zoom_level", f2s(zoom_mid_level)));
     file.add(new data_node("mipmaps", b2s(mipmaps_enabled)));
     file.add(new data_node("pretty_whistle", b2s(pretty_whistle)));
-    file.add(new data_node("resolution", i2s(scr_w) + " " + i2s(scr_h)));
+    file.add(
+        new data_node(
+            "resolution", i2s(intended_scr_w) + " " + i2s(intended_scr_h)
+        )
+    );
     file.add(new data_node("smooth_scaling", b2s(smooth_scaling)));
     file.add(new data_node("window_position_hack", b2s(window_position_hack)));
     
