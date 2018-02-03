@@ -158,6 +158,10 @@ extern float carrying_speed_max_mult;
 extern float carrying_speed_weight_mult;
 extern vector<vector<control_info> > controls;
 extern size_t click_control_id;
+extern onion* close_to_onion_to_open;
+extern pikmin* close_to_pikmin_to_pluck;
+extern ship* close_to_ship_to_heal;
+extern info_spot* close_to_spot_to_read;
 extern mob* closest_group_member;
 extern bool closest_group_member_distant;
 extern string creator_tool_area_image_name;
@@ -371,6 +375,7 @@ extern vector<treasure*> treasures;
 //Voice from which the sound effects play.
 extern ALLEGRO_VOICE* voice;
 extern map<string, weather> weather_conditions;
+extern size_t whistle_control_id;
 //Radius of every 6th dot.
 extern float whistle_dot_radius[6];
 //Radius the whistle was at pre-fade.

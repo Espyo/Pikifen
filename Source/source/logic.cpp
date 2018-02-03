@@ -305,6 +305,67 @@ void gameplay::do_gameplay_logic() {
         
         cam_final_pos = cur_leader_ptr->pos;
         
+        //Check proximity with certain key things.
+        dist closest_d = 0;
+        dist d = 0;
+        close_to_spot_to_read = NULL;
+        
+        for(size_t i = 0; i < info_spots.size(); ++i) {
+            d = dist(cur_leader_ptr->pos, info_spots[i]->pos);
+            if(d > info_spot_trigger_range) continue;
+            if(d < closest_d || !close_to_spot_to_read) {
+                close_to_spot_to_read = info_spots[i];
+                closest_d = d;
+            }
+        }
+        
+        closest_d = 0;
+        d = 0;
+        close_to_pikmin_to_pluck = NULL;
+        
+        if(!cur_leader_ptr->auto_plucking) {
+            pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
+            if(p && d <= pluck_range) {
+                close_to_pikmin_to_pluck = p;
+            }
+        }
+        
+        closest_d = 0;
+        d = 0;
+        close_to_onion_to_open = NULL;
+        if(!close_to_pikmin_to_pluck && !cur_leader_ptr->auto_plucking) {
+            for(size_t o = 0; o < onions.size(); ++o) {
+                d = dist(cur_leader_ptr->pos, onions[o]->pos);
+                if(d > onion_open_range) continue;
+                if(d < closest_d || !close_to_spot_to_read) {
+                    close_to_onion_to_open = onions[o];
+                    closest_d = d;
+                }
+            }
+        }
+        
+        closest_d = 0;
+        d = 0;
+        close_to_ship_to_heal = NULL;
+        
+        for(size_t s = 0; s < ships.size(); ++s) {
+            ship* s_ptr = ships[s];
+            d = dist(cur_leader_ptr->pos, s_ptr->pos);
+            if(!s_ptr->is_leader_under_ring(cur_leader_ptr)) {
+                continue;
+            }
+            if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {
+                continue;
+            }
+            if(!s_ptr->shi_type->can_heal) {
+                continue;
+            }
+            if(d < closest_d || !close_to_spot_to_read) {
+                close_to_ship_to_heal = s_ptr;
+                closest_d = d;
+            }
+        }
+        
         
         /***********************************
         *                             ***  *

@@ -58,13 +58,13 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 id =
                     creator_tool_keys[
                         ev.keyboard.keycode - ALLEGRO_KEY_F2
-                    ];
+                ];
             } else {
                 //The last ten indexes are the 0 - 9 keys.
                 id =
                     creator_tool_keys[
                         10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
-                    ];
+                ];
             }
             
             if(id == CREATOR_TOOL_AREA_IMAGE) {
@@ -180,8 +180,6 @@ void gameplay::handle_button(
             *              V > *
             *******************/
             
-            if(is_down) active_control();
-            
             if(button == BUTTON_RIGHT) {
                 leader_movement.right = pos;
             } else if(button == BUTTON_LEFT) {
@@ -226,8 +224,6 @@ void gameplay::handle_button(
             *            ***  *
             ******************/
             
-            active_control();
-            
             if(button == BUTTON_GROUP_RIGHT) {
                 group_movement.right = pos;
             } else if(button == BUTTON_GROUP_LEFT) {
@@ -240,8 +236,6 @@ void gameplay::handle_button(
             
         } else if(button == BUTTON_GROUP_CURSOR) {
         
-            active_control();
-            
             group_move_cursor = is_down;
             
         } else if(button == BUTTON_THROW) {
@@ -254,79 +248,52 @@ void gameplay::handle_button(
             
             if(is_down) { //Button press.
             
-                active_control();
-                
                 bool done = false;
                 
                 //First check if the leader should pluck a Pikmin.
-                dist d;
-                pikmin* p =
-                    get_closest_sprout(
-                        cur_leader_ptr->pos, &d, false
-                    );
-                if(p && d <= pluck_range) {
+                if(close_to_pikmin_to_pluck) {
                     cur_leader_ptr->fsm.run_event(
-                        LEADER_EVENT_GO_PLUCK, (void*) p
+                        LEADER_EVENT_GO_PLUCK,
+                        (void*) close_to_pikmin_to_pluck
                     );
                     done = true;
                 }
                 
                 //Now check if the leader should read an info spot.
                 if(!done) {
-                    size_t n_info_spots = info_spots.size();
-                    for(size_t i = 0; i < n_info_spots; ++i) {
-                        info_spot* i_ptr = info_spots[i];
-                        if(i_ptr->opens_box) {
-                            if(
-                                dist(cur_leader_ptr->pos, i_ptr->pos) <=
-                                info_spot_trigger_range
-                            ) {
-                                start_message(i_ptr->text, NULL);
-                                done = true;
-                                break;
-                            }
-                        }
+                    if(
+                        close_to_spot_to_read &&
+                        close_to_spot_to_read->opens_box
+                    ) {
+                        start_message(close_to_spot_to_read->text, NULL);
+                        done = true;
                     }
                 }
                 
                 //Now check if the leader should open an Onion's menu.
                 if(!done) {
-                    size_t n_onions = onions.size();
-                    for(size_t o = 0; o < n_onions; ++o) {
+                    if(close_to_onion_to_open) {
+                        pikmin_type* pik_type =
+                            close_to_onion_to_open->oni_type->pik_type;
                         if(
-                            dist(cur_leader_ptr->pos, onions[o]->pos) <=
-                            onion_open_range
+                            pikmin_list.size() < max_pikmin_in_field &&
+                            pikmin_in_onions[pik_type] > 0
                         ) {
-                            pikmin_type* pik_type =
-                                onions[o]->oni_type->pik_type;
-                            if(
-                                pikmin_list.size() < max_pikmin_in_field &&
-                                pikmin_in_onions[pik_type] > 0
-                            ) {
-                                pikmin_in_onions[pik_type]--;
-                                create_mob(
-                                    mob_categories.get(MOB_CATEGORY_PIKMIN),
-                                    onions[o]->pos, pik_type, 0, ""
-                                );
-                            }
-                            done = true;
+                            pikmin_in_onions[pik_type]--;
+                            create_mob(
+                                mob_categories.get(MOB_CATEGORY_PIKMIN),
+                                close_to_onion_to_open->pos, pik_type, 0, ""
+                            );
                         }
+                        done = true;
                     }
                 }
                 
                 //Now check if the leader should heal themselves on the ship.
                 if(!done) {
-                    for(size_t s = 0; s < ships.size(); ++s) {
-                        ship* s_ptr = ships[s];
-                        if(
-                            cur_leader_ptr->health !=
-                            cur_leader_ptr->type->max_health &&
-                            s_ptr->shi_type->can_heal &&
-                            s_ptr->is_leader_under_ring(cur_leader_ptr)
-                        ) {
-                            ships[s]->heal_leader(cur_leader_ptr);
-                            done = true;
-                        }
+                    if(close_to_ship_to_heal) {
+                        close_to_ship_to_heal->heal_leader(cur_leader_ptr);
+                        done = true;
                     }
                 }
                 
@@ -361,10 +328,10 @@ void gameplay::handle_button(
             *              '-'  *
             ********************/
             
-            active_control();
-            
             if(is_down) {
                 //Button pressed.
+                //Cancel auto-pluck, lying down, etc.
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
                 cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
                 
             } else {
@@ -436,9 +403,7 @@ void gameplay::handle_button(
             ***********************/
             
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-            
-            active_control();
-            
+                        
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_DISMISS);
             
         } else if(button == BUTTON_PAUSE) {
@@ -470,9 +435,7 @@ void gameplay::handle_button(
             *******************/
             
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-            
-            active_control();
-            
+                        
             if(spray_types.size() == 1 || spray_types.size() == 2) {
                 size_t spray_nr = 0;
                 cur_leader_ptr->fsm.run_event(
@@ -483,9 +446,7 @@ void gameplay::handle_button(
         } else if(button == BUTTON_USE_SPRAY_2) {
         
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-            
-            active_control();
-            
+                        
             if(spray_types.size() == 2) {
                 size_t spray_nr = 1;
                 cur_leader_ptr->fsm.run_event(
@@ -515,9 +476,7 @@ void gameplay::handle_button(
         } else if(button == BUTTON_USE_SPRAY) {
         
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-            
-            active_control();
-            
+                        
             if(spray_types.size() > 2) {
                 cur_leader_ptr->fsm.run_event(
                     LEADER_EVENT_SPRAY,
@@ -597,9 +556,7 @@ void gameplay::handle_button(
             ****************************/
             
             if(!is_down) return;
-            
-            active_control();
-            
+                        
             if(cur_leader_ptr->group->members.empty()) return;
             
             subgroup_type* starting_subgroup_type =
@@ -748,17 +705,6 @@ void gameplay::handle_button(
         
     }
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Call this whenever an "active" control is inputted.
- * An "active" control is anything that moves the leader in some way.
- * This function makes the leader wake up from lying down,
- * stop auto-plucking, etc.
- */
-void gameplay::active_control() {
-    cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
 }
 
 

@@ -1443,6 +1443,8 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     if(new_pikmin && d <= next_pluck_range) {
         l_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) new_pikmin);
         l_ptr->queued_pluck_cancel = false;
+    } else {
+        leader_fsm::stop_auto_pluck(m, NULL, NULL);
     }
 }
 

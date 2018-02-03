@@ -20,7 +20,7 @@
  */
 class gameplay : public game_state {
 private:
-    
+
     static const float AREA_INTRO_HUD_MOVE_TIME;
     
     ALLEGRO_BITMAP* bmp_bubble;
@@ -39,7 +39,6 @@ private:
     //Minimum and maximum coordinates that are on-camera.
     point cam_box[2];
     
-    void active_control();
     void do_aesthetic_logic();
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,

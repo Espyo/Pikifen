@@ -862,50 +862,101 @@ void gameplay::draw_ingame_text() {
         }
     }
     
-    //Info spot notifications.
-    size_t n_info_spots = info_spots.size();
-    for(size_t i = 0; i < n_info_spots; ++i) {
-        if(
-            dist(cur_leader_ptr->pos, info_spots[i]->pos) <=
-            info_spot_trigger_range
-        ) {
-            float pivot_y =
-                info_spots[i]->pos.y - info_spots[i]->type->radius;
-            if(!info_spots[i]->opens_box) {
-                draw_notification(
-                    point(info_spots[i]->pos.x, pivot_y),
-                    info_spots[i]->text, NULL
-                );
-                
-            } else if(click_control_id != INVALID) {
-                draw_notification(
-                    point(info_spots[i]->pos.x, pivot_y),
-                    "Read", &controls[0][click_control_id]
-                );
-                
-            }
+    //Info spot notification.
+    if(
+        close_to_spot_to_read &&
+        click_control_id != INVALID
+    ) {
+        float pivot_y =
+            close_to_spot_to_read->pos.y - close_to_spot_to_read->type->radius;
+        if(!close_to_spot_to_read->opens_box) {
+            draw_notification(
+                point(close_to_spot_to_read->pos.x, pivot_y),
+                close_to_spot_to_read->text, NULL
+            );
+            
+        } else if(click_control_id != INVALID) {
+            draw_notification(
+                point(close_to_spot_to_read->pos.x, pivot_y),
+                "Read", &controls[0][click_control_id]
+            );
+            
         }
     }
     
-    //Ship healing notifications.
-    if(click_control_id != INVALID) {
-        for(size_t s = 0; s < ships.size(); ++s) {
-            ship* s_ptr = ships[s];
-            if(
-                cur_leader_ptr->health !=
-                cur_leader_ptr->type->max_health &&
-                s_ptr->shi_type->can_heal &&
-                s_ptr->is_leader_under_ring(cur_leader_ptr)
-            ) {
-                draw_notification(
-                    point(
-                        cur_leader_ptr->pos.x,
-                        cur_leader_ptr->pos.y - cur_leader_ptr->type->radius
-                    ),
-                    "Repair suit", &controls[0][click_control_id]
-                );
-            }
-        }
+    //Ship healing notification.
+    if(
+        close_to_ship_to_heal &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_ship_to_heal->beam_final_pos.x,
+                close_to_ship_to_heal->beam_final_pos.y -
+                close_to_ship_to_heal->shi_type->beam_radius
+            ),
+            "Repair suit", &controls[0][click_control_id]
+        );
+    }
+    
+    //Pikmin pluck notification.
+    if(
+        close_to_pikmin_to_pluck &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_pikmin_to_pluck->pos.x,
+                close_to_pikmin_to_pluck->pos.y -
+                close_to_pikmin_to_pluck->type->radius
+            ),
+            "Pluck", &controls[0][click_control_id]
+        );
+    }
+    
+    //Onion open notification.
+    if(
+        close_to_onion_to_open &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_onion_to_open->pos.x,
+                close_to_onion_to_open->pos.y -
+                close_to_onion_to_open->type->radius
+            ),
+            "Call a Pikmin", &controls[0][click_control_id]
+        );
+    }
+    
+    //Pluck stop notification.
+    if(
+        cur_leader_ptr->auto_plucking &&
+        whistle_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y -
+                cur_leader_ptr->type->radius
+            ),
+            "Stop plucking", &controls[0][whistle_control_id]
+        );
+    }
+    
+    //Lying down stop notification.
+    if(
+        cur_leader_ptr->carry_info &&
+        whistle_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y -
+                cur_leader_ptr->type->radius
+            ),
+            "Get up", &controls[0][whistle_control_id]
+        );
     }
 }
 

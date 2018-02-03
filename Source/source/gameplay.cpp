@@ -201,6 +201,12 @@ void gameplay::load() {
             break;
         }
     }
+    for(size_t c = 0; c < controls[0].size(); ++c) {
+        if(controls[0][c].action == BUTTON_WHISTLE) {
+            whistle_control_id = c;
+            break;
+        }
+    }
     
     al_hide_mouse_cursor(display);
     
