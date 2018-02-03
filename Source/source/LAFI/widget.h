@@ -204,6 +204,9 @@ void draw_text_lines(
     const float x, const float y, const int fl, const unsigned char va,
     const string &text
 );
+int get_text_width(
+    const ALLEGRO_FONT* const f, const string &text
+);
 vector<string> split(
     const string &text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false

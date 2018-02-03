@@ -376,14 +376,24 @@ void load_mob_type_from_file(
         data_node script_file(folder + "/Script.txt");
         size_t old_n_states = mt->states.size();
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
+        
         if(mt->states.size() > old_n_states) {
-            string first_state_name =
-                script_file.get_child_by_name("first_state")->value;
+            data_node* first_state_node =
+                script_file.get_child_by_name("first_state");
+            string first_state_name = first_state_node->value;
+            
             for(size_t s = 0; s < mt->states.size(); ++s) {
                 if(mt->states[s]->name == first_state_name) {
                     mt->first_state_nr = s;
                     break;
                 }
+            }
+            if(!first_state_name.empty() && mt->first_state_nr == INVALID) {
+                log_error(
+                    "The name of the first state \"" +
+                    first_state_name + "\" is invalid!",
+                    first_state_node
+                );
             }
         }
     }

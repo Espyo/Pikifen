@@ -2371,6 +2371,8 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                 mobs[m]->focused_mob = NULL;
             }
         }
+        
+        m_ptr->fsm.set_state(INVALID);
     }
     
     if(m_ptr->type->erase_mob_func) {

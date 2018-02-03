@@ -783,6 +783,19 @@ void draw_text_lines(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the width of a multiline text string.
+ */
+int get_text_width(const ALLEGRO_FONT* const f, const string &text) {
+    vector<string> lines = split(text, "\n", true);
+    int longest_w = 0;
+    for(size_t l = 0; l < lines.size(); ++l) {
+        longest_w = max(longest_w, al_get_text_width(f, lines[l].c_str()));
+    }
+    return longest_w;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Splits a string into several substrings, by the specified delimiter.
  * text:        The string to split.
  * del:         The delimiter. Default is space.

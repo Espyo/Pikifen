@@ -403,7 +403,7 @@ void gameplay::handle_button(
             ***********************/
             
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-                        
+            
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_DISMISS);
             
         } else if(button == BUTTON_PAUSE) {
@@ -435,7 +435,7 @@ void gameplay::handle_button(
             *******************/
             
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-                        
+            
             if(spray_types.size() == 1 || spray_types.size() == 2) {
                 size_t spray_nr = 0;
                 cur_leader_ptr->fsm.run_event(
@@ -446,7 +446,7 @@ void gameplay::handle_button(
         } else if(button == BUTTON_USE_SPRAY_2) {
         
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-                        
+            
             if(spray_types.size() == 2) {
                 size_t spray_nr = 1;
                 cur_leader_ptr->fsm.run_event(
@@ -476,7 +476,7 @@ void gameplay::handle_button(
         } else if(button == BUTTON_USE_SPRAY) {
         
             if(!is_down || cur_leader_ptr->holding_pikmin) return;
-                        
+            
             if(spray_types.size() > 2) {
                 cur_leader_ptr->fsm.run_event(
                     LEADER_EVENT_SPRAY,
@@ -556,7 +556,7 @@ void gameplay::handle_button(
             ****************************/
             
             if(!is_down) return;
-                        
+            
             if(cur_leader_ptr->group->members.empty()) return;
             
             subgroup_type* starting_subgroup_type =

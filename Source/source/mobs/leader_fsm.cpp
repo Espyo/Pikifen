@@ -270,6 +270,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(leader_fsm::get_knocked_back);
         }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(leader_fsm::lose_momentum);
+        }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
         }
@@ -283,6 +286,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     ); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(leader_fsm::get_knocked_back);
+        }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(leader_fsm::lose_momentum);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idling");
@@ -1211,6 +1217,15 @@ void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader should lose his momentum and stand still.
+ */
+void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
+    m->stop_chasing();
+    m->speed.x = m->speed.y = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
  * When an inactive leader loses health.
  * info1: Pointer to the hitbox touch information structure.
  */
@@ -1249,6 +1264,7 @@ void leader_fsm::suffer_pain(mob* m, void* info1, void* info2) {
  * When a leader lies down from being knocked back.
  */
 void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
+    m->remove_from_group();
     m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
 }
 

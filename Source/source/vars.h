@@ -146,6 +146,8 @@ extern ALLEGRO_BITMAP* bmp_error;
 extern vector<bridge*> bridges;
 extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;
+//Minimum and maximum coordinates that are on-camera.
+extern point cam_box[2];
 extern point cam_final_pos;
 extern float cam_final_zoom;
 extern point cam_pos;

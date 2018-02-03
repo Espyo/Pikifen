@@ -13,7 +13,7 @@ radius = 60
 reaches {
     wake_up = 10 360
     search = 250 180 30 360
-    attack = 60 30
+    attack = 130 30
     chase = 250 360
 }
 rotation_speed = 114

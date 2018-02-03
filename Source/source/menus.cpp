@@ -1029,7 +1029,7 @@ void area_menu::load() {
         menu_widgets.push_back(
             new menu_button(
                 point(scr_w * 0.5, scr_h * (0.2 + 0.08 * a)),
-                point(scr_w * 0.8, scr_h * 0.1),
+                point(scr_w * 0.8, scr_h * 0.06),
         [] () {
         
         },

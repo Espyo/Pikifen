@@ -80,6 +80,7 @@ ALLEGRO_BITMAP* bmp_error = NULL;
 vector<bridge*> bridges;
 map<string, bridge_type*> bridge_types;
 button_manager buttons;
+point cam_box[2];
 point cam_final_pos;
 float cam_final_zoom = 1.0;
 point cam_pos;

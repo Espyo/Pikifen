@@ -844,13 +844,6 @@ mob_state::mob_state(const string &name, const size_t id) :
  */
 void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
-    if(
-        new_state >= m->type->states.size() &&
-        new_state != INVALID
-    ) {
-        return;
-    }
-    
     //Run the code to leave the current state.
     if(cur_state) {
         for(unsigned char p = N_PREV_STATES - 1; p > 0; --p) {
@@ -866,7 +859,7 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
         << m->type->states[new_state]->name << "\n";
     }*/
     
-    if(new_state != INVALID) {
+    if(new_state < m->type->states.size() && new_state != INVALID) {
         //Switch states.
         cur_state = m->type->states[new_state];
         

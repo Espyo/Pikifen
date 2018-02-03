@@ -36,9 +36,6 @@ private:
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     ALLEGRO_BITMAP* bmp_sun;
     
-    //Minimum and maximum coordinates that are on-camera.
-    point cam_box[2];
-    
     void do_aesthetic_logic();
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,

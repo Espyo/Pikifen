@@ -1,7 +1,7 @@
 #include "button.h"
 
 namespace lafi {
-	
+
 const float button::OFFSET_START_DELAY = 2.0f;
 const float button::OFFSET_RESET_DELAY = 2.0f;
 const float button::OFFSET_SPEED = 65.0f;
@@ -120,7 +120,7 @@ void button::draw_self() {
     
     if(text.size()) {
         int text_x;
-        unsigned int text_w = al_get_text_width(style->text_font, text.c_str());
+        unsigned int text_w = get_text_width(style->text_font, text);
         int align;
         if(text_w <= w) {
             text_x = x1 + (w / 2);

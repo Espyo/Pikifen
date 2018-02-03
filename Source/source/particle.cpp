@@ -59,11 +59,11 @@ void particle::tick(const float delta_t) {
     
     pos += speed * delta_t;
     
-    speed.x *= 1 - (delta_t * friction);
-    speed.y *= 1 - (delta_t * friction);
-    speed.y += delta_t * gravity;
+    speed.x *= 1 - (delta_t* friction);
+    speed.y *= 1 - (delta_t* friction);
+    speed.y += delta_t* gravity;
     
-    size += delta_t * size_grow_speed;
+    size += delta_t* size_grow_speed;
     size = max(0.0f, size);
 }
 
@@ -359,6 +359,16 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
  * manager: The particle manager to place these particles on.
  */
 void particle_generator::emit(particle_manager &manager) {
+    if(
+        base_particle.pos.x < cam_box[0].x ||
+        base_particle.pos.x > cam_box[1].x ||
+        base_particle.pos.y < cam_box[0].y ||
+        base_particle.pos.y > cam_box[1].y
+    ) {
+        //Too far off-camera.
+        return;
+    }
+    
     size_t final_nr =
         max(
             0,
