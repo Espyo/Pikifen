@@ -702,6 +702,12 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             if(d_amount > m_ptr->push_amount) {
                 m_ptr->push_amount = d_amount / delta_t;
                 m_ptr->push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
+                if(m_ptr->carrying_target && m2_ptr->carrying_target) {
+                    //If they are both being carried by Pikmin, one of them
+                    //should push less hard, otherwise the Pikmin can get
+                    //stuck in a deadlock.
+                    m_ptr->push_amount *= 0.75;
+                }
             }
         }
         

@@ -1164,7 +1164,10 @@ void mob::tick_physics() {
     
     
     //If another mob is pushing it.
-    if(push_amount != 0.0f) {
+    if(
+        push_amount != 0.0f
+        && get_angle_smallest_dif(push_angle, angle) > M_PI_2
+    ) {
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
