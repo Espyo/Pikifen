@@ -117,8 +117,8 @@ animations{
 sprites{
 	idling11{
 		file=Munge_Dweevil.png
-		file_pos=0 0
-		file_size=118 120
+		file_pos=0.00 0.00
+		file_size=118.00 120.00
 		game_size=118.00 120.00
 		offset=0.00 0.00
 		hitboxes{
@@ -129,7 +129,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -141,7 +141,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -150,8 +150,8 @@ sprites{
 	}
 	idling12{
 		file=Munge_Dweevil.png
-		file_pos=119 0
-		file_size=118 120
+		file_pos=119.00 0.00
+		file_size=118.00 120.00
 		game_size=118.00 120.00
 		offset=0.00 0.00
 		hitboxes{
@@ -162,7 +162,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -174,7 +174,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -183,8 +183,8 @@ sprites{
 	}
 	idling13{
 		file=Munge_Dweevil.png
-		file_pos=238 0
-		file_size=118 120
+		file_pos=238.00 0.00
+		file_size=118.00 120.00
 		game_size=118.00 120.00
 		offset=0.00 0.00
 		hitboxes{
@@ -195,7 +195,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -207,7 +207,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -216,8 +216,8 @@ sprites{
 	}
 	moving1{
 		file=Munge_Dweevil.png
-		file_pos=357 0
-		file_size=129 135
+		file_pos=357.00 0.00
+		file_size=129.00 135.00
 		game_size=129.00 135.00
 		offset=0.00 3.00
 		hitboxes{
@@ -228,7 +228,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -240,7 +240,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -249,8 +249,8 @@ sprites{
 	}
 	moving2{
 		file=Munge_Dweevil.png
-		file_pos=487 0
-		file_size=137 143
+		file_pos=487.00 0.00
+		file_size=137.00 143.00
 		game_size=137.00 143.00
 		offset=2.00 5.00
 		hitboxes{
@@ -261,7 +261,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -273,7 +273,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -282,8 +282,8 @@ sprites{
 	}
 	moving3{
 		file=Munge_Dweevil.png
-		file_pos=625 0
-		file_size=151 147
+		file_pos=625.00 0.00
+		file_size=151.00 147.00
 		game_size=151.00 147.00
 		offset=-4.00 8.00
 		hitboxes{
@@ -294,7 +294,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -306,7 +306,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -315,8 +315,8 @@ sprites{
 	}
 	moving4{
 		file=Munge_Dweevil.png
-		file_pos=777 0
-		file_size=147 138
+		file_pos=777.00 0.00
+		file_size=147.00 138.00
 		game_size=147.00 138.00
 		offset=-1.00 11.00
 		hitboxes{
@@ -327,7 +327,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -339,7 +339,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -348,8 +348,8 @@ sprites{
 	}
 	moving5{
 		file=Munge_Dweevil.png
-		file_pos=925 0
-		file_size=127 128
+		file_pos=925.00 0.00
+		file_size=127.00 128.00
 		game_size=127.00 128.00
 		offset=1.00 13.00
 		hitboxes{
@@ -360,7 +360,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -372,7 +372,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -381,8 +381,8 @@ sprites{
 	}
 	moving6{
 		file=Munge_Dweevil.png
-		file_pos=1053 0
-		file_size=114 121
+		file_pos=1053.00 0.00
+		file_size=114.00 121.00
 		game_size=114.00 121.00
 		offset=3.00 1.00
 		hitboxes{
@@ -393,7 +393,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -405,7 +405,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -414,8 +414,8 @@ sprites{
 	}
 	dying1{
 		file=Munge_Dweevil.png
-		file_pos=0 121
-		file_size=94 88
+		file_pos=0.00 121.00
+		file_size=94.00 88.00
 		game_size=94.00 88.00
 		offset=4.00 0.00
 		hitboxes{
@@ -426,7 +426,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -438,7 +438,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -447,8 +447,8 @@ sprites{
 	}
 	dying2{
 		file=Munge_Dweevil.png
-		file_pos=95 121
-		file_size=76 52
+		file_pos=95.00 121.00
+		file_size=76.00 52.00
 		game_size=76.00 52.00
 		offset=13.00 0.00
 		hitboxes{
@@ -459,7 +459,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -471,7 +471,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -480,8 +480,8 @@ sprites{
 	}
 	dying3{
 		file=Munge_Dweevil.png
-		file_pos=172 121
-		file_size=103 90
+		file_pos=172.00 121.00
+		file_size=103.00 90.00
 		game_size=103.00 90.00
 		offset=-1.00 28.00
 		hitboxes{
@@ -492,7 +492,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -504,7 +504,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -513,8 +513,8 @@ sprites{
 	}
 	dying4{
 		file=Munge_Dweevil.png
-		file_pos=276 136
-		file_size=81 74
+		file_pos=276.00 136.00
+		file_size=81.00 74.00
 		game_size=81.00 74.00
 		offset=7.00 24.00
 		hitboxes{
@@ -525,7 +525,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -537,7 +537,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -546,8 +546,8 @@ sprites{
 	}
 	dying5{
 		file=Munge_Dweevil.png
-		file_pos=358 136
-		file_size=70 54
+		file_pos=358.00 136.00
+		file_size=70.00 54.00
 		game_size=70.00 54.00
 		offset=8.00 12.00
 		hitboxes{
@@ -558,7 +558,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -570,7 +570,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -579,8 +579,8 @@ sprites{
 	}
 	dying6{
 		file=Munge_Dweevil.png
-		file_pos=429 144
-		file_size=60 52
+		file_pos=429.00 144.00
+		file_size=60.00 52.00
 		game_size=60.00 52.00
 		offset=6.00 0.00
 		hitboxes{
@@ -591,7 +591,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -603,7 +603,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -612,8 +612,8 @@ sprites{
 	}
 	attacking1{
 		file=Munge_Dweevil.png
-		file_pos=490 144
-		file_size=113 116
+		file_pos=490.00 144.00
+		file_size=113.00 116.00
 		game_size=113.00 116.00
 		offset=-1.00 -1.00
 		hitboxes{
@@ -624,7 +624,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -636,7 +636,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -645,8 +645,8 @@ sprites{
 	}
 	attacking2{
 		file=Munge_Dweevil.png
-		file_pos=604 148
-		file_size=113 115
+		file_pos=604.00 148.00
+		file_size=113.00 115.00
 		game_size=113.00 115.00
 		offset=-1.00 0.00
 		hitboxes{
@@ -657,7 +657,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -669,7 +669,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -678,8 +678,8 @@ sprites{
 	}
 	shaking_kb{
 		file=Munge_Dweevil.png
-		file_pos=0 0
-		file_size=118 120
+		file_pos=0.00 0.00
+		file_size=118.00 120.00
 		game_size=118.00 120.00
 		offset=0.00 0.00
 		hitboxes{
@@ -690,19 +690,19 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			gas{
-				coords=0.00 0.00 0.00
+				coords=0.00 0.00 -64.00
 				height=128.00
 				radius=32.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -711,8 +711,8 @@ sprites{
 	}
 	attacking_gas{
 		file=Munge_Dweevil.png
-		file_pos=0 121
-		file_size=94 88
+		file_pos=0.00 121.00
+		file_size=94.00 88.00
 		game_size=94.00 88.00
 		offset=0.00 0.00
 		hitboxes{
@@ -723,14 +723,14 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			gas{
-				coords=0.00 0.00 0.00
-				height=48.00
+				coords=0.00 0.00 -32.00
+				height=64.00
 				radius=70.00
 				type=1
 				multiplier=0.00
@@ -744,6 +744,6 @@ sprites{
 	}
 }
 body_parts{
-	body=
-	gas=
+	body
+	gas
 }

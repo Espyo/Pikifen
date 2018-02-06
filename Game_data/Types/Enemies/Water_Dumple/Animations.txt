@@ -158,8 +158,8 @@ animations{
 sprites{
 	idling{
 		file=Water_Dumple.png
-		file_pos=0 0
-		file_size=66 50
+		file_pos=0.00 0.00
+		file_size=66.00 50.00
 		game_size=66.00 50.00
 		offset=0.00 0.00
 		hitboxes{
@@ -170,7 +170,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -182,7 +182,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -191,8 +191,8 @@ sprites{
 	}
 	moving1{
 		file=Water_Dumple.png
-		file_pos=201 0
-		file_size=72 50
+		file_pos=201.00 0.00
+		file_size=72.00 50.00
 		game_size=72.00 50.00
 		offset=3.00 0.00
 		hitboxes{
@@ -203,7 +203,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -215,7 +215,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -224,8 +224,8 @@ sprites{
 	}
 	moving2{
 		file=Water_Dumple.png
-		file_pos=274 0
-		file_size=79 50
+		file_pos=274.00 0.00
+		file_size=79.00 50.00
 		game_size=79.00 50.00
 		offset=6.00 0.00
 		hitboxes{
@@ -236,7 +236,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -248,7 +248,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -257,8 +257,8 @@ sprites{
 	}
 	idling2{
 		file=Water_Dumple.png
-		file_pos=67 0
-		file_size=67 51
+		file_pos=67.00 0.00
+		file_size=67.00 51.00
 		game_size=67.00 51.00
 		offset=0.50 0.50
 		hitboxes{
@@ -269,7 +269,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -281,7 +281,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -290,8 +290,8 @@ sprites{
 	}
 	idling3{
 		file=Water_Dumple.png
-		file_pos=135 0
-		file_size=65 51
+		file_pos=135.00 0.00
+		file_size=65.00 51.00
 		game_size=65.00 51.00
 		offset=-0.50 -0.50
 		hitboxes{
@@ -302,7 +302,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -314,7 +314,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -323,8 +323,8 @@ sprites{
 	}
 	attacking1{
 		file=Water_Dumple.png
-		file_pos=0 51
-		file_size=60 51
+		file_pos=0.00 51.00
+		file_size=60.00 51.00
 		game_size=60.00 51.00
 		offset=-3.00 0.00
 		hitboxes{
@@ -335,7 +335,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -347,7 +347,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -356,8 +356,8 @@ sprites{
 	}
 	attacking2{
 		file=Water_Dumple.png
-		file_pos=61 52
-		file_size=96 50
+		file_pos=61.00 52.00
+		file_size=96.00 50.00
 		game_size=96.00 50.00
 		offset=15.00 0.00
 		hitboxes{
@@ -368,19 +368,19 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=57.00 0.00 0.00
-				height=32.00
+				coords=57.00 0.00 -20.00
+				height=40.00
 				radius=32.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=1.00
@@ -389,8 +389,8 @@ sprites{
 	}
 	attacking3{
 		file=Water_Dumple.png
-		file_pos=158 52
-		file_size=100 50
+		file_pos=158.00 52.00
+		file_size=100.00 50.00
 		game_size=100.00 50.00
 		offset=17.00 0.00
 		hitboxes{
@@ -401,19 +401,19 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=65.00 0.00 0.00
-				height=32.00
+				coords=65.00 0.00 -20.00
+				height=40.00
 				radius=32.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=1.00
@@ -422,8 +422,8 @@ sprites{
 	}
 	shaking1{
 		file=Water_Dumple.png
-		file_pos=259 51
-		file_size=67 52
+		file_pos=259.00 51.00
+		file_size=67.00 52.00
 		game_size=67.00 52.00
 		offset=-1.00 -1.00
 		hitboxes{
@@ -434,7 +434,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -446,7 +446,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -455,8 +455,8 @@ sprites{
 	}
 	shaking2{
 		file=Water_Dumple.png
-		file_pos=259 51
-		file_size=67 52
+		file_pos=259.00 51.00
+		file_size=67.00 52.00
 		game_size=67.00 -52.00
 		offset=-1.00 -1.00
 		hitboxes{
@@ -467,7 +467,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -479,7 +479,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -488,19 +488,19 @@ sprites{
 	}
 	shaking3{
 		file=Water_Dumple.png
-		file_pos=327 51
-		file_size=68 55
+		file_pos=327.00 51.00
+		file_size=68.00 55.00
 		game_size=68.00 55.00
 		offset=-1.00 0.00
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=32.00
+				coords=1.00 0.00 -16.00
+				height=40.00
 				radius=42.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -512,7 +512,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -521,19 +521,19 @@ sprites{
 	}
 	shaking4{
 		file=Water_Dumple.png
-		file_pos=396 51
-		file_size=71 60
+		file_pos=396.00 51.00
+		file_size=71.00 60.00
 		game_size=71.00 60.00
 		offset=-2.00 0.00
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=32.00
+				coords=1.00 0.00 -16.00
+				height=40.00
 				radius=42.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -545,7 +545,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -554,8 +554,8 @@ sprites{
 	}
 	eating1{
 		file=Water_Dumple.png
-		file_pos=0 103
-		file_size=66 50
+		file_pos=0.00 103.00
+		file_size=66.00 50.00
 		game_size=66.00 50.00
 		offset=0.00 0.00
 		hitboxes{
@@ -566,7 +566,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -578,7 +578,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -587,8 +587,8 @@ sprites{
 	}
 	eating2{
 		file=Water_Dumple.png
-		file_pos=67 103
-		file_size=67 50
+		file_pos=67.00 103.00
+		file_size=67.00 50.00
 		game_size=67.00 50.00
 		offset=1.00 0.00
 		hitboxes{
@@ -599,7 +599,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -611,7 +611,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -620,8 +620,8 @@ sprites{
 	}
 	dying1{
 		file=Water_Dumple.png
-		file_pos=135 103
-		file_size=66 51
+		file_pos=135.00 103.00
+		file_size=66.00 51.00
 		game_size=66.00 51.00
 		offset=0.00 0.00
 		hitboxes{
@@ -632,7 +632,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -644,7 +644,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -653,8 +653,8 @@ sprites{
 	}
 	dying2{
 		file=Water_Dumple.png
-		file_pos=202 104
-		file_size=66 36
+		file_pos=202.00 104.00
+		file_size=66.00 36.00
 		game_size=66.00 36.00
 		offset=0.00 0.00
 		hitboxes{
@@ -665,7 +665,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -677,7 +677,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -686,8 +686,8 @@ sprites{
 	}
 	dying3{
 		file=Water_Dumple.png
-		file_pos=269 107
-		file_size=66 47
+		file_pos=269.00 107.00
+		file_size=66.00 47.00
 		game_size=66.00 47.00
 		offset=0.00 0.00
 		hitboxes{
@@ -698,7 +698,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -710,7 +710,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -719,8 +719,8 @@ sprites{
 	}
 	dying4{
 		file=Water_Dumple.png
-		file_pos=336 112
-		file_size=66 50
+		file_pos=336.00 112.00
+		file_size=66.00 50.00
 		game_size=66.00 50.00
 		offset=0.00 0.00
 		hitboxes{
@@ -731,7 +731,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -743,7 +743,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -752,8 +752,8 @@ sprites{
 	}
 	dying5{
 		file=Water_Dumple.png
-		file_pos=269 107
-		file_size=66 47
+		file_pos=269.00 107.00
+		file_size=66.00 47.00
 		game_size=66.00 -47.00
 		offset=0.00 0.00
 		hitboxes{
@@ -764,7 +764,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -776,7 +776,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -785,6 +785,6 @@ sprites{
 	}
 }
 body_parts{
-	body=
-	mouth=
+	body
+	mouth
 }

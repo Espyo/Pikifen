@@ -1,6 +1,6 @@
 name = Red Bulborb
 
-big_damage_interval = 100
+big_damage_interval = 70
 drops_corpse = true
 height = 128
 max_carriers = 20

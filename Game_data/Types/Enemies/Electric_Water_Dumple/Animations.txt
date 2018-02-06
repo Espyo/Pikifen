@@ -208,8 +208,8 @@ animations{
 sprites{
 	idling{
 		file=Electric_Water_Dumple.png
-		file_pos=0 0
-		file_size=140 87
+		file_pos=0.00 0.00
+		file_size=140.00 87.00
 		game_size=140.00 87.00
 		offset=0.00 0.00
 		hitboxes{
@@ -220,7 +220,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -232,7 +232,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -244,7 +244,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -253,8 +253,8 @@ sprites{
 	}
 	idling2{
 		file=Electric_Water_Dumple.png
-		file_pos=141 0
-		file_size=140 88
+		file_pos=141.00 0.00
+		file_size=140.00 88.00
 		game_size=140.00 88.00
 		offset=-1.00 0.50
 		hitboxes{
@@ -265,7 +265,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -277,7 +277,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -289,7 +289,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -298,8 +298,8 @@ sprites{
 	}
 	idling3{
 		file=Electric_Water_Dumple.png
-		file_pos=282 0
-		file_size=140 88
+		file_pos=282.00 0.00
+		file_size=140.00 88.00
 		game_size=140.00 88.00
 		offset=-0.50 0.50
 		hitboxes{
@@ -310,7 +310,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -322,7 +322,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -334,7 +334,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -343,8 +343,8 @@ sprites{
 	}
 	idling4{
 		file=Electric_Water_Dumple.png
-		file_pos=423 0
-		file_size=142 88
+		file_pos=423.00 0.00
+		file_size=142.00 88.00
 		game_size=142.00 88.00
 		offset=1.00 1.00
 		hitboxes{
@@ -355,7 +355,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -367,7 +367,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -379,7 +379,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -388,8 +388,8 @@ sprites{
 	}
 	idling5{
 		file=Electric_Water_Dumple.png
-		file_pos=566 0
-		file_size=136 88
+		file_pos=566.00 0.00
+		file_size=136.00 88.00
 		game_size=136.00 88.00
 		offset=-2.00 0.00
 		hitboxes{
@@ -400,7 +400,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -412,7 +412,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -424,7 +424,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -433,8 +433,8 @@ sprites{
 	}
 	moving1{
 		file=Electric_Water_Dumple.png
-		file_pos=703 0
-		file_size=143 86
+		file_pos=703.00 0.00
+		file_size=143.00 86.00
 		game_size=143.00 86.00
 		offset=1.00 1.00
 		hitboxes{
@@ -445,7 +445,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -457,7 +457,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -469,7 +469,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -478,8 +478,8 @@ sprites{
 	}
 	moving2{
 		file=Electric_Water_Dumple.png
-		file_pos=847 0
-		file_size=149 86
+		file_pos=847.00 0.00
+		file_size=149.00 86.00
 		game_size=149.00 86.00
 		offset=4.00 1.00
 		hitboxes{
@@ -490,7 +490,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -502,7 +502,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -514,7 +514,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -523,8 +523,8 @@ sprites{
 	}
 	attacking1{
 		file=Electric_Water_Dumple.png
-		file_pos=0 89
-		file_size=132 90
+		file_pos=0.00 89.00
+		file_size=132.00 90.00
 		game_size=132.00 90.00
 		offset=-4.00 0.00
 		hitboxes{
@@ -535,7 +535,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -547,7 +547,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -559,7 +559,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -568,8 +568,8 @@ sprites{
 	}
 	attacking2{
 		file=Electric_Water_Dumple.png
-		file_pos=133 89
-		file_size=178 89
+		file_pos=133.00 89.00
+		file_size=178.00 89.00
 		game_size=178.00 89.00
 		offset=18.00 1.00
 		hitboxes{
@@ -580,19 +580,19 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=80.00 0.00 0.00
+				coords=80.00 0.00 -20.00
 				height=56.00
 				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=1.00
@@ -604,7 +604,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -613,8 +613,8 @@ sprites{
 	}
 	attacking3{
 		file=Electric_Water_Dumple.png
-		file_pos=312 89
-		file_size=176 94
+		file_pos=312.00 89.00
+		file_size=176.00 94.00
 		game_size=176.00 94.00
 		offset=18.00 1.00
 		hitboxes{
@@ -625,19 +625,19 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=80.00 0.00 0.00
+				coords=80.00 0.00 -20.00
 				height=56.00
 				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=1.00
@@ -649,7 +649,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -658,8 +658,8 @@ sprites{
 	}
 	shaking1{
 		file=Electric_Water_Dumple.png
-		file_pos=489 89
-		file_size=145 90
+		file_pos=489.00 89.00
+		file_size=145.00 90.00
 		game_size=145.00 90.00
 		offset=1.25 -1.25
 		hitboxes{
@@ -670,7 +670,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -682,7 +682,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -694,7 +694,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -703,8 +703,8 @@ sprites{
 	}
 	shaking2{
 		file=Electric_Water_Dumple.png
-		file_pos=489 89
-		file_size=145 90
+		file_pos=489.00 89.00
+		file_size=145.00 90.00
 		game_size=145.00 -90.00
 		offset=1.25 1.25
 		hitboxes{
@@ -715,7 +715,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -727,7 +727,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -739,7 +739,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -748,22 +748,22 @@ sprites{
 	}
 	shaking3{
 		file=Electric_Water_Dumple.png
-		file_pos=635 89
-		file_size=142 97
+		file_pos=635.00 89.00
+		file_size=142.00 97.00
 		game_size=142.00 97.00
 		offset=-4.00 0.00
 		hitboxes{
 			body{
-				coords=-5.00 0.00 0.00
+				coords=-5.00 0.00 -20.00
 				height=56.00
 				radius=70.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
-				knockback=1.00
+				knockback=2.00
 			}
 			mouth{
 				coords=43.00 0.00 0.00
@@ -772,7 +772,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -784,7 +784,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -793,22 +793,22 @@ sprites{
 	}
 	shaking4{
 		file=Electric_Water_Dumple.png
-		file_pos=778 87
-		file_size=145 106
+		file_pos=778.00 87.00
+		file_size=145.00 106.00
 		game_size=145.00 106.00
 		offset=-5.00 -0.25
 		hitboxes{
 			body{
-				coords=-5.00 0.00 0.00
+				coords=-5.00 0.00 -20.00
 				height=56.00
 				radius=70.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
-				knockback=1.00
+				knockback=2.00
 			}
 			mouth{
 				coords=43.00 0.00 0.00
@@ -817,7 +817,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -829,7 +829,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -838,8 +838,8 @@ sprites{
 	}
 	eating1{
 		file=Electric_Water_Dumple.png
-		file_pos=0 180
-		file_size=136 88
+		file_pos=0.00 180.00
+		file_size=136.00 88.00
 		game_size=136.00 88.00
 		offset=-2.00 -0.25
 		hitboxes{
@@ -850,7 +850,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -862,7 +862,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -874,7 +874,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -883,8 +883,8 @@ sprites{
 	}
 	eating2{
 		file=Electric_Water_Dumple.png
-		file_pos=137 179
-		file_size=139 88
+		file_pos=137.00 179.00
+		file_size=139.00 88.00
 		game_size=139.00 88.00
 		offset=-0.75 0.25
 		hitboxes{
@@ -895,7 +895,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -907,7 +907,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -919,7 +919,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -928,8 +928,8 @@ sprites{
 	}
 	dying1{
 		file=Electric_Water_Dumple.png
-		file_pos=277 184
-		file_size=140 90
+		file_pos=277.00 184.00
+		file_size=140.00 90.00
 		game_size=140.00 90.00
 		offset=0.00 0.00
 		hitboxes{
@@ -940,7 +940,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -952,7 +952,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -964,7 +964,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -973,8 +973,8 @@ sprites{
 	}
 	dying2{
 		file=Electric_Water_Dumple.png
-		file_pos=418 184
-		file_size=141 63
+		file_pos=418.00 184.00
+		file_size=141.00 63.00
 		game_size=141.00 63.00
 		offset=0.00 0.00
 		hitboxes{
@@ -985,7 +985,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -997,7 +997,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1009,7 +1009,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1018,8 +1018,8 @@ sprites{
 	}
 	dying3{
 		file=Electric_Water_Dumple.png
-		file_pos=560 187
-		file_size=141 83
+		file_pos=560.00 187.00
+		file_size=141.00 83.00
 		game_size=141.00 83.00
 		offset=0.00 0.00
 		hitboxes{
@@ -1030,7 +1030,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1042,7 +1042,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1054,7 +1054,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1063,8 +1063,8 @@ sprites{
 	}
 	dying4{
 		file=Electric_Water_Dumple.png
-		file_pos=702 194
-		file_size=139 88
+		file_pos=702.00 194.00
+		file_size=139.00 88.00
 		game_size=139.00 88.00
 		offset=0.00 0.00
 		hitboxes{
@@ -1075,7 +1075,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1087,7 +1087,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1099,7 +1099,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1108,8 +1108,8 @@ sprites{
 	}
 	dying5{
 		file=Electric_Water_Dumple.png
-		file_pos=560 187
-		file_size=141 83
+		file_pos=560.00 187.00
+		file_size=141.00 83.00
 		game_size=141.00 -83.00
 		offset=0.00 0.00
 		hitboxes{
@@ -1120,7 +1120,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1132,7 +1132,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1144,7 +1144,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1153,8 +1153,8 @@ sprites{
 	}
 	zapping1{
 		file=Electric_Water_Dumple.png
-		file_pos=0 269
-		file_size=124 89
+		file_pos=0.00 269.00
+		file_size=124.00 89.00
 		game_size=124.00 89.00
 		offset=-7.00 0.00
 		hitboxes{
@@ -1165,7 +1165,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1177,7 +1177,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1189,7 +1189,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1198,8 +1198,8 @@ sprites{
 	}
 	zapping2{
 		file=Electric_Water_Dumple.png
-		file_pos=125 269
-		file_size=145 89
+		file_pos=125.00 269.00
+		file_size=145.00 89.00
 		game_size=145.00 89.00
 		offset=2.00 1.00
 		hitboxes{
@@ -1210,7 +1210,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1222,7 +1222,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1234,7 +1234,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1243,8 +1243,8 @@ sprites{
 	}
 	zapping3{
 		file=Electric_Water_Dumple.png
-		file_pos=271 275
-		file_size=189 88
+		file_pos=271.00 275.00
+		file_size=189.00 88.00
 		game_size=189.00 88.00
 		offset=23.00 0.00
 		hitboxes{
@@ -1255,7 +1255,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1267,13 +1267,13 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			zapping{
-				coords=67.00 0.00 0.00
+				coords=67.00 0.00 -20.00
 				height=56.00
 				radius=62.00
 				type=1
@@ -1288,8 +1288,8 @@ sprites{
 	}
 	zapping4{
 		file=Electric_Water_Dumple.png
-		file_pos=461 271
-		file_size=190 89
+		file_pos=461.00 271.00
+		file_size=190.00 89.00
 		game_size=190.00 89.00
 		offset=24.00 0.00
 		hitboxes{
@@ -1300,7 +1300,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1312,13 +1312,13 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			zapping{
-				coords=67.00 0.00 0.00
+				coords=67.00 0.00 -20.00
 				height=56.00
 				radius=62.00
 				type=1
@@ -1333,8 +1333,8 @@ sprites{
 	}
 	zapping5{
 		file=Electric_Water_Dumple.png
-		file_pos=652 283
-		file_size=190 88
+		file_pos=652.00 283.00
+		file_size=190.00 88.00
 		game_size=190.00 88.00
 		offset=24.00 0.00
 		hitboxes{
@@ -1345,7 +1345,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1357,13 +1357,13 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			zapping{
-				coords=67.00 0.00 0.00
+				coords=67.00 0.00 -20.00
 				height=56.00
 				radius=62.00
 				type=1
@@ -1378,8 +1378,8 @@ sprites{
 	}
 	zapping6{
 		file=Electric_Water_Dumple.png
-		file_pos=843 283
-		file_size=161 88
+		file_pos=843.00 283.00
+		file_size=161.00 88.00
 		game_size=161.00 88.00
 		offset=10.00 0.00
 		hitboxes{
@@ -1390,7 +1390,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1402,7 +1402,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1414,7 +1414,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1423,7 +1423,7 @@ sprites{
 	}
 }
 body_parts{
-	body=
-	mouth=
-	zapping=
+	body
+	mouth
+	zapping
 }

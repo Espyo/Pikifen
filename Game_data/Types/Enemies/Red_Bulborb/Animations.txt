@@ -285,7 +285,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -297,7 +297,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -309,7 +309,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -330,7 +330,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -342,7 +342,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -354,7 +354,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -375,7 +375,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -387,7 +387,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -399,7 +399,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -420,7 +420,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -432,7 +432,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -444,7 +444,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -465,7 +465,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -477,7 +477,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -489,7 +489,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -510,7 +510,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -522,7 +522,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -534,7 +534,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -555,7 +555,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -567,7 +567,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -579,7 +579,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -600,7 +600,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -612,19 +612,19 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=102.00 0.00 0.00
+				coords=102.00 0.00 -40.00
 				height=128.00
 				radius=38.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=0.00
@@ -645,7 +645,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -657,19 +657,19 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			mouth{
-				coords=95.00 4.00 0.00
+				coords=95.00 4.00 -40.00
 				height=128.00
 				radius=38.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=0.00
@@ -690,7 +690,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -702,7 +702,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -714,7 +714,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -735,7 +735,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -747,7 +747,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -759,7 +759,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -780,7 +780,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -792,7 +792,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -804,7 +804,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=0.00
@@ -825,7 +825,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -837,7 +837,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -849,7 +849,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -870,7 +870,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -882,7 +882,7 @@ sprites{
 				type=2
 				multiplier=0.80
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -894,7 +894,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -909,28 +909,28 @@ sprites{
 		offset=16.00 0.00
 		hitboxes{
 			body{
-				coords=50.00 -8.00 0.00
+				coords=50.00 -8.00 -32.00
 				height=128.00
 				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=4.71
-				knockback=1.00
+				knockback=3.00
 			}
 			back{
-				coords=-13.00 0.00 0.00
+				coords=-13.00 0.00 -32.00
 				height=128.00
 				radius=64.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=4.71
-				knockback=1.00
+				knockback=3.00
 			}
 			mouth{
 				coords=85.00 -14.00 0.00
@@ -939,7 +939,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -954,28 +954,28 @@ sprites{
 		offset=16.00 0.00
 		hitboxes{
 			body{
-				coords=50.00 8.00 0.00
+				coords=50.00 8.00 -32.00
 				height=128.00
 				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
-				knockback=1.00
+				knockback=3.00
 			}
 			back{
-				coords=-13.00 0.00 0.00
+				coords=-13.00 0.00 -32.00
 				height=128.00
 				radius=64.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
-				knockback=1.00
+				knockback=3.00
 			}
 			mouth{
 				coords=85.00 14.00 0.00
@@ -984,7 +984,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1005,7 +1005,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1017,7 +1017,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1029,7 +1029,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1050,7 +1050,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1062,7 +1062,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1074,7 +1074,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1095,7 +1095,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1107,7 +1107,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1119,7 +1119,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=0.00
@@ -1140,7 +1140,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1152,7 +1152,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1164,7 +1164,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1185,7 +1185,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1197,7 +1197,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1209,7 +1209,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1230,7 +1230,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1242,7 +1242,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1254,7 +1254,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1275,7 +1275,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1287,7 +1287,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1299,7 +1299,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1320,7 +1320,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1332,7 +1332,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1344,7 +1344,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1365,7 +1365,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1377,7 +1377,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1389,7 +1389,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1410,7 +1410,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1422,7 +1422,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1434,7 +1434,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1455,7 +1455,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1467,7 +1467,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1479,7 +1479,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1500,7 +1500,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1512,7 +1512,7 @@ sprites{
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1524,7 +1524,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1533,7 +1533,7 @@ sprites{
 	}
 }
 body_parts{
-	body=
-	back=
-	mouth=
+	body
+	back
+	mouth
 }

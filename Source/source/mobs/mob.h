@@ -35,8 +35,8 @@ extern size_t next_mob_id;
 
 //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 const float GRAVITY_ADDER = -2600.0f;
-const float MOB_KNOCKBACK_H_POWER = 130.0f;
-const float MOB_KNOCKBACK_V_POWER = 200.0f;
+const float MOB_KNOCKBACK_H_POWER = 64.0f;
+const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 //When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
 const float THROW_DISTANCE_MULTIPLIER = 0.49f;

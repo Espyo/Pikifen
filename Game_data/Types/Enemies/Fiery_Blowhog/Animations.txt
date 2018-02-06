@@ -55,13 +55,13 @@ animations{
 		loop_frame=0
 		frames{
 			idling{
-				duration=0.10
+				duration=0.40
 			}
 			puffing1{
-				duration=0.30
+				duration=0.40
 			}
 			puffing2{
-				duration=0.30
+				duration=0.50
 			}
 			puffing1{
 				duration=0.10
@@ -97,7 +97,7 @@ animations{
 				duration=0.10
 			}
 			idling{
-				duration=0.10
+				duration=0.30
 			}
 		}
 	}
@@ -179,7 +179,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -191,7 +191,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -203,7 +203,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -215,7 +215,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -236,7 +236,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -248,7 +248,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -260,7 +260,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -272,7 +272,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -293,7 +293,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -305,7 +305,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -317,7 +317,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -329,7 +329,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -350,7 +350,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -362,7 +362,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -374,7 +374,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -386,7 +386,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -407,7 +407,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -419,7 +419,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -431,7 +431,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -443,7 +443,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -464,7 +464,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -476,7 +476,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -488,7 +488,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -500,7 +500,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -521,7 +521,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -533,7 +533,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -545,7 +545,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -557,7 +557,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -578,7 +578,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -590,7 +590,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -602,7 +602,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -614,7 +614,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -635,7 +635,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -647,7 +647,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -659,7 +659,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -671,7 +671,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -692,7 +692,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -704,7 +704,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -716,7 +716,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -728,7 +728,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -749,7 +749,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -761,7 +761,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -773,7 +773,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -785,7 +785,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -806,7 +806,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -818,7 +818,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -830,7 +830,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -842,7 +842,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -863,7 +863,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -875,7 +875,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -887,7 +887,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -899,7 +899,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -920,13 +920,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=88.00 0.00 0.00
+				coords=88.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -938,7 +938,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=112.00 0.00 0.00
+				coords=112.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -950,7 +950,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=142.00 0.00 0.00
+				coords=142.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -966,9 +966,9 @@ sprites{
 	attacking2{
 		file=Fiery_Blowhog.png
 		file_pos=0.00 121.00
-		file_size=298.00 58.00
-		game_size=298.00 58.00
-		offset=115.00 0.00
+		file_size=298.00 87.00
+		game_size=298.00 87.00
+		offset=114.50 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -977,13 +977,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=100.00 0.00 0.00
+				coords=100.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -995,7 +995,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=158.00 0.00 0.00
+				coords=158.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1007,7 +1007,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=216.00 0.00 0.00
+				coords=216.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1023,8 +1023,8 @@ sprites{
 	attacking3{
 		file=Fiery_Blowhog.png
 		file_pos=299.00 122.00
-		file_size=298.00 60.00
-		game_size=298.00 60.00
+		file_size=298.00 90.00
+		game_size=298.00 90.00
 		offset=114.50 0.00
 		hitboxes{
 			body{
@@ -1034,13 +1034,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=100.00 0.00 0.00
+				coords=100.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1052,7 +1052,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=158.00 0.00 0.00
+				coords=158.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1064,7 +1064,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=216.00 0.00 0.00
+				coords=216.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1079,9 +1079,9 @@ sprites{
 	}
 	attacking4{
 		file=Fiery_Blowhog.png
-		file_pos=0.00 180.00
-		file_size=298.00 58.00
-		game_size=298.00 58.00
+		file_pos=0.00 209.00
+		file_size=298.00 87.00
+		game_size=298.00 87.00
 		offset=114.50 0.00
 		hitboxes{
 			body{
@@ -1091,13 +1091,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=100.00 0.00 0.00
+				coords=100.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1109,7 +1109,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=158.00 0.00 0.00
+				coords=158.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1121,7 +1121,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=216.00 0.00 0.00
+				coords=216.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1136,9 +1136,9 @@ sprites{
 	}
 	attacking5{
 		file=Fiery_Blowhog.png
-		file_pos=299.00 183.00
-		file_size=298.00 56.00
-		game_size=298.00 56.00
+		file_pos=299.00 213.00
+		file_size=298.00 84.00
+		game_size=298.00 84.00
 		offset=114.50 0.00
 		hitboxes{
 			body{
@@ -1148,13 +1148,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=100.00 0.00 0.00
+				coords=100.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1166,7 +1166,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=158.00 0.00 0.00
+				coords=158.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1178,7 +1178,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=216.00 0.00 0.00
+				coords=216.00 0.00 -64.00
 				height=128.00
 				radius=30.00
 				type=1
@@ -1193,7 +1193,7 @@ sprites{
 	}
 	attacking6{
 		file=Fiery_Blowhog.png
-		file_pos=0.00 239.00
+		file_pos=0.00 297.00
 		file_size=298.00 58.00
 		game_size=298.00 58.00
 		offset=114.50 0.00
@@ -1205,13 +1205,13 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			fire1{
-				coords=180.00 0.00 0.00
+				coords=180.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -1223,7 +1223,7 @@ sprites{
 				knockback=0.00
 			}
 			fire2{
-				coords=206.00 0.00 0.00
+				coords=206.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -1235,7 +1235,7 @@ sprites{
 				knockback=0.00
 			}
 			fire3{
-				coords=232.00 0.00 0.00
+				coords=232.00 0.00 -64.00
 				height=128.00
 				radius=18.00
 				type=1
@@ -1250,7 +1250,7 @@ sprites{
 	}
 	bucking1{
 		file=Fiery_Blowhog.png
-		file_pos=299.00 240.00
+		file_pos=299.00 298.00
 		file_size=107.00 58.00
 		game_size=107.00 58.00
 		offset=19.00 0.00
@@ -1262,7 +1262,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1274,7 +1274,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1286,7 +1286,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1298,7 +1298,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1307,7 +1307,7 @@ sprites{
 	}
 	bucking2{
 		file=Fiery_Blowhog.png
-		file_pos=407.00 240.00
+		file_pos=407.00 298.00
 		file_size=95.00 58.00
 		game_size=95.00 58.00
 		offset=8.00 0.00
@@ -1319,7 +1319,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1331,7 +1331,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1343,7 +1343,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1355,7 +1355,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1364,7 +1364,7 @@ sprites{
 	}
 	bucking3{
 		file=Fiery_Blowhog.png
-		file_pos=503.00 240.00
+		file_pos=503.00 298.00
 		file_size=66.00 58.00
 		game_size=66.00 58.00
 		offset=-8.00 0.00
@@ -1376,7 +1376,7 @@ sprites{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1388,7 +1388,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1400,7 +1400,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1412,7 +1412,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1421,19 +1421,19 @@ sprites{
 	}
 	bucking4{
 		file=Fiery_Blowhog.png
-		file_pos=0.00 298.00
+		file_pos=0.00 356.00
 		file_size=98.00 58.00
 		game_size=98.00 58.00
 		offset=19.00 0.00
 		hitboxes{
 			body{
-				coords=12.00 0.00 0.00
+				coords=12.00 0.00 -32.00
 				height=100.00
 				radius=50.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=7.00
@@ -1445,7 +1445,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1457,7 +1457,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1469,7 +1469,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1478,19 +1478,19 @@ sprites{
 	}
 	bucking5{
 		file=Fiery_Blowhog.png
-		file_pos=99.00 298.00
+		file_pos=99.00 356.00
 		file_size=98.00 58.00
 		game_size=98.00 58.00
 		offset=15.00 0.00
 		hitboxes{
 			body{
-				coords=8.00 0.00 0.00
+				coords=8.00 0.00 -32.00
 				height=100.00
 				radius=50.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=false
 				angle=0.00
 				knockback=7.00
@@ -1502,7 +1502,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1514,7 +1514,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1526,7 +1526,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1547,7 +1547,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1559,7 +1559,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1571,7 +1571,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1583,7 +1583,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1592,7 +1592,7 @@ sprites{
 	}
 	dying2{
 		file=Fiery_Blowhog.png
-		file_pos=299.00 240.00
+		file_pos=299.00 298.00
 		file_size=107.00 58.00
 		game_size=107.00 58.00
 		offset=19.00 0.00
@@ -1604,7 +1604,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1616,7 +1616,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1628,7 +1628,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1640,7 +1640,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1649,7 +1649,7 @@ sprites{
 	}
 	dying3{
 		file=Fiery_Blowhog.png
-		file_pos=407.00 240.00
+		file_pos=407.00 298.00
 		file_size=95.00 58.00
 		game_size=95.00 58.00
 		offset=8.00 0.00
@@ -1661,7 +1661,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1673,7 +1673,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1685,7 +1685,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1697,7 +1697,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1706,7 +1706,7 @@ sprites{
 	}
 	dying4{
 		file=Fiery_Blowhog.png
-		file_pos=198.00 299.00
+		file_pos=198.00 357.00
 		file_size=111.00 61.00
 		game_size=111.00 61.00
 		offset=21.00 0.00
@@ -1718,7 +1718,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1730,7 +1730,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1742,7 +1742,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1754,7 +1754,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1763,7 +1763,7 @@ sprites{
 	}
 	dying5{
 		file=Fiery_Blowhog.png
-		file_pos=310.00 299.00
+		file_pos=310.00 357.00
 		file_size=110.00 64.00
 		game_size=110.00 64.00
 		offset=20.50 0.00
@@ -1775,7 +1775,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1787,7 +1787,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1799,7 +1799,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1811,7 +1811,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1820,7 +1820,7 @@ sprites{
 	}
 	dying6{
 		file=Fiery_Blowhog.png
-		file_pos=421.00 299.00
+		file_pos=421.00 357.00
 		file_size=111.00 65.00
 		game_size=111.00 65.00
 		offset=21.50 0.00
@@ -1832,7 +1832,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1844,7 +1844,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1856,7 +1856,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1868,7 +1868,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1877,7 +1877,7 @@ sprites{
 	}
 	dying7{
 		file=Fiery_Blowhog.png
-		file_pos=533.00 299.00
+		file_pos=533.00 357.00
 		file_size=110.00 58.00
 		game_size=110.00 58.00
 		offset=20.50 0.00
@@ -1889,7 +1889,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1901,7 +1901,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1913,7 +1913,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1925,64 +1925,7 @@ sprites{
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	dying8{
-		file=Fiery_Blowhog.png
-		file_pos=421.00 299.00
-		file_size=111.00 65.00
-		game_size=111.00 -65.00
-		offset=21.50 0.00
-		hitboxes{
-			body{
-				coords=0.00 0.00 0.00
-				height=70.00
-				radius=35.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=true
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			fire1{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			fire2{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			fire3{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1991,8 +1934,8 @@ sprites{
 	}
 }
 body_parts{
-	body=
-	fire1=
-	fire2=
-	fire3=
+	body
+	fire1
+	fire2
+	fire3
 }
