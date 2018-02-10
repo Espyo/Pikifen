@@ -214,17 +214,31 @@ size_t data_node::load_node(
 //Saves a node into a new text file. Line numbers are ignored.
 //If you don't provide a file name, it'll use the node's file name.
 //Returns true on success.
-bool data_node::save_file(string file_name, const bool children_only) {
+bool data_node::save_file(
+    string file_name, const bool children_only,
+    const bool include_empty_values
+) {
     if(file_name == "") file_name = this->file_name;
     
+    //Create any missing folders.
+    size_t next_slash_pos = file_name.find('/', 0);
+    while(next_slash_pos != string::npos) {
+        string path_so_far = file_name.substr(0, next_slash_pos);
+        if(!al_make_directory(path_so_far.c_str())) {
+            return false;
+        }
+        next_slash_pos = file_name.find('/', next_slash_pos + 1);
+    }
+    
+    //Save the file.
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "w");
     if(file) {
         if(children_only) {
             for(size_t c = 0; c < children.size(); ++c) {
-                children[c]->save_node(file, 0);
+                children[c]->save_node(file, 0, include_empty_values);
             }
         } else {
-            save_node(file);
+            save_node(file, 0, include_empty_values);
         }
         al_fclose(file);
         return true;
@@ -235,7 +249,10 @@ bool data_node::save_file(string file_name, const bool children_only) {
 
 
 //Saved a node into a text file.
-void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
+void data_node::save_node(
+    ALLEGRO_FILE* file, const size_t level,
+    const bool include_empty_values
+) {
     string tabs = string(level, '\t');
     
     al_fwrite(file, tabs.c_str(), tabs.size());
@@ -244,12 +261,12 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
     if(!children.empty()) {
         al_fwrite(file, "{\n", 2);
         for(size_t c = 0; c < children.size(); ++c) {
-            children[c]->save_node(file, level + 1);
+            children[c]->save_node(file, level + 1, include_empty_values);
         }
         al_fwrite(file, tabs.c_str(), tabs.size());
         al_fwrite(file, "}", 1);
         
-    } else if(!value.empty()) {
+    } else if(!value.empty() || include_empty_values) {
         al_fwrite(file, "=", 1);
         al_fwrite(file, value.c_str(), value.size());
     }

@@ -142,7 +142,7 @@ private:
     
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         DEBUG_TEXT_SCALE;
-    static const float         DEF_GRID_INTERVAL;
+    static const unsigned char DEF_REFERENCE_ALPHA;
     static const float         DOUBLE_CLICK_TIMEOUT;
     static const float         KEYBOARD_CAM_ZOOM;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
@@ -342,6 +342,8 @@ private:
     string problem_string;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
+    //Opacity of the reference image.
+    unsigned char reference_alpha;
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* reference_bitmap;
     //Current transformations on the reference image.
@@ -422,7 +424,6 @@ private:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
-    void change_reference(const string &new_file_name);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -486,6 +487,7 @@ private:
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
     void load_backup();
+    void load_reference();
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
@@ -500,6 +502,7 @@ private:
     void resize_everything(const float mult);
     void save_area(const bool to_backup);
     void save_backup();
+    void save_reference();
     void select_different_hazard(const bool next);
     void select_edge(edge* e);
     void select_sector(sector* s);
@@ -521,6 +524,7 @@ private:
     void undo();
     void undo_layout_drawing_node();
     bool update_backup_status();
+    void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_status_bar();
     void update_texture_suggestions(const string &n);

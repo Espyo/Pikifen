@@ -30,7 +30,7 @@ void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL,
     const bool report_error = true, const bool error_bmp_on_error = true,
-    const bool error_bmp_on_empty = true
+    const bool error_bmp_on_empty = true, const bool path_from_root = false
 );
 void load_control(
     const unsigned char action, const unsigned char player,

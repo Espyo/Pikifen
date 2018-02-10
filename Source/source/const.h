@@ -126,12 +126,23 @@ const unsigned int SMALLEST_SCR_W = 640;
 const unsigned int SMALLEST_SCR_H = 480;
 
 const string GAME_DATA_FOLDER_PATH = "Game_data";
+const string USER_DATA_FOLDER_PATH = "User_data";
 const string TYPES_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Types";
 const string MISC_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Misc";
 const string TEXTURES_FOLDER_NAME =
     "Textures";
+const string AREA_BACKUPS_FOLDER_PATH =
+    USER_DATA_FOLDER_PATH + "/Area_backups";
+const string AREA_REFERENCES_FOLDER_PATH =
+    USER_DATA_FOLDER_PATH + "/Area_editor_references";
+const string ERROR_LOG_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Error_log.txt";
+const string CREATOR_TOOLS_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Tools.txt";
+const string OPTIONS_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Options.txt";
 
 const string ANIMATIONS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Animations";
@@ -170,8 +181,6 @@ const string TREASURES_FOLDER_PATH =
 
 const string CONFIG_FILE =
     MISC_FOLDER_PATH + "/Config.txt";
-const string CREATOR_TOOLS_FILE =
-    MISC_FOLDER_PATH + "/Tools.txt";
 const string PARTICLE_GENERATORS_FILE =
     MISC_FOLDER_PATH + "/Particle_generators.txt";
 const string SPIKE_DAMAGE_TYPES_FILE =

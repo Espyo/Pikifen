@@ -614,7 +614,7 @@ void log_error(string s, data_node* d) {
     
     string prev_error_log;
     string line;
-    ALLEGRO_FILE* file_i = al_fopen("Error_log.txt", "r");
+    ALLEGRO_FILE* file_i = al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
     if(file_i) {
         while(!al_feof(file_i)) {
             getline(file_i, line);
@@ -624,7 +624,7 @@ void log_error(string s, data_node* d) {
         al_fclose(file_i);
     }
     
-    ALLEGRO_FILE* file_o = al_fopen("Error_log.txt", "w");
+    ALLEGRO_FILE* file_o = al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
     if(file_o) {
         al_fwrite(file_o, prev_error_log + s);
         al_fclose(file_o);
@@ -684,6 +684,94 @@ string replace_all(string s, string search, string replacement) {
     };
     
     return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the creator tools settings.
+ */
+void save_creator_tools() {
+    data_node file("", "");
+    
+    file.add(
+        new data_node("enabled", b2s(creator_tools_enabled))
+    );
+    
+    for(unsigned char k = 0; k < 20; k++) {
+        string tool_key;
+        string tool_name;
+        if(k < 10) {
+            //The first ten indexes are the F2 - F11 keys.
+            tool_key = "f" + i2s(k + 2);
+        } else {
+            //The second ten indexes are the 0 - 9 keys.
+            tool_key = i2s(k - 10);
+        }
+        
+        if(creator_tool_keys[k] == CREATOR_TOOL_AREA_IMAGE) {
+            tool_name = "area_image";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_CHANGE_SPEED) {
+            tool_name = "change_speed";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_GEOMETRY_INFO) {
+            tool_name = "geometry_info";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_HITBOXES) {
+            tool_name = "hitboxes";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_HURT_MOB) {
+            tool_name = "hurt_mob";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_MOB_INFO) {
+            tool_name = "mob_info";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_NEW_PIKMIN) {
+            tool_name = "new_pikmin";
+        } else if(creator_tool_keys[k] == CREATOR_TOOL_TELEPORT) {
+            tool_name = "teleport";
+        }
+        
+        file.add(new data_node(tool_key, tool_name));
+    }
+    
+    file.add(
+        new data_node(
+            "area_image_file_name", creator_tool_area_image_name
+        )
+    );
+    file.add(
+        new data_node(
+            "area_image_mobs", b2s(creator_tool_area_image_mobs)
+        )
+    );
+    file.add(
+        new data_node(
+            "area_image_shadows", b2s(creator_tool_area_image_shadows)
+        )
+    );
+    file.add(
+        new data_node(
+            "area_image_size", i2s(creator_tool_area_image_size)
+        )
+    );
+    file.add(
+        new data_node(
+            "change_speed_multiplier", f2s(creator_tool_change_speed_mult)
+        )
+    );
+    file.add(
+        new data_node(
+            "mob_hurting_percentage", f2s(creator_tool_mob_hurting_ratio * 100)
+        )
+    );
+    
+    file.add(
+        new data_node(
+            "auto_start_option", creator_tool_auto_start_option
+        )
+    );
+    file.add(
+        new data_node(
+            "auto_start_mode", creator_tool_auto_start_mode
+        )
+    );
+    
+    file.save_file(CREATOR_TOOLS_FILE_PATH, true, true);
 }
 
 
@@ -800,7 +888,7 @@ void save_options() {
         );
     }
     
-    file.save_file("Options.txt");
+    file.save_file(OPTIONS_FILE_PATH, true, true);
 }
 
 

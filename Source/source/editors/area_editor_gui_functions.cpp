@@ -575,107 +575,51 @@ void area_editor::gui_to_sector() {
  * Saves the tool data to memory using info on the gui.
  */
 void area_editor::gui_to_tools() {
-    gui_to_var_helper h;
-    
-    string new_file_name =
-        ((lafi::textbox*) frm_tools->widgets["txt_file"])->text;
-    h.register_string(
-        &cur_area_data.reference_file_name,
-        new_file_name
+    reference_transformation.set_center(
+        point(
+            s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text),
+            s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text)
+        )
     );
     
-    point new_center(
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text),
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text)
-    );
-    h.register_point(
-        &cur_area_data.reference_center,
-        new_center
-    );
-    
-    bool new_aspect_ratio =
+    reference_transformation.keep_aspect_ratio =
         ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->checked;
-    h.register_bool(
-        &reference_transformation.keep_aspect_ratio,
-        new_aspect_ratio
-    );
     
     point new_size(
         s2f(((lafi::textbox*) frm_tools->widgets["txt_w"])->text),
         s2f(((lafi::textbox*) frm_tools->widgets["txt_h"])->text)
     );
-    h.register_point(
-        &cur_area_data.reference_size,
-        new_size
-    );
     
-    unsigned char new_alpha =
+    reference_alpha =
         ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->low_value;
-    h.register_uchar(&cur_area_data.reference_alpha, new_alpha);
     
-    if(!h.all_equal()) {
-        register_change("tools change");
-    }
-    
-    bool is_file_new = false;
-    
-    if(new_file_name != cur_area_data.reference_file_name) {
-        //New reference image, reset size.
-        change_reference(new_file_name);
-        is_file_new = true;
-        if(reference_bitmap) {
-            cur_area_data.reference_size.x =
-                al_get_bitmap_width(reference_bitmap);
-            cur_area_data.reference_size.y =
-                al_get_bitmap_height(reference_bitmap);
-        }
-    }
-    
-    if(!is_file_new) {
-        if(reference_transformation.keep_aspect_ratio) {
-            if(
-                new_size.x == cur_area_data.reference_size.x &&
-                new_size.y != cur_area_data.reference_size.y
-            ) {
-                if(cur_area_data.reference_size.y == 0.0f) {
-                    cur_area_data.reference_size.y = new_size.y;
-                } else {
-                    float ratio =
-                        cur_area_data.reference_size.x /
-                        cur_area_data.reference_size.y;
-                    cur_area_data.reference_size.x = new_size.y * ratio;
-                    cur_area_data.reference_size.y = new_size.y;
-                }
-                
-            } else if(
-                new_size.x != cur_area_data.reference_size.x &&
-                new_size.y == cur_area_data.reference_size.y
-            ) {
-                if(cur_area_data.reference_size.x == 0.0f) {
-                    cur_area_data.reference_size.x = new_size.x;
-                } else {
-                    float ratio =
-                        cur_area_data.reference_size.y /
-                        cur_area_data.reference_size.x;
-                    cur_area_data.reference_size.x =
-                        new_size.x;
-                    cur_area_data.reference_size.y = new_size.x * ratio;
-                }
-                
-            } else {
-                cur_area_data.reference_size = new_size;
-                
+    if(reference_transformation.keep_aspect_ratio) {
+        if(
+            new_size.x == reference_transformation.get_size().x &&
+            new_size.y != reference_transformation.get_size().y
+        ) {
+            if(reference_transformation.get_size().y != 0.0f) {
+                float ratio =
+                    reference_transformation.get_size().x /
+                    reference_transformation.get_size().y;
+                new_size.x = new_size.y * ratio;
             }
-        } else {
-            cur_area_data.reference_size = new_size;
+            
+        } else if(
+            new_size.x != reference_transformation.get_size().x &&
+            new_size.y == reference_transformation.get_size().y
+        ) {
+            if(reference_transformation.get_size().x != 0.0f) {
+                float ratio =
+                    reference_transformation.get_size().y /
+                    reference_transformation.get_size().x;
+                new_size.y = new_size.x * ratio;
+            }
+            
         }
     }
     
-    cur_area_data.reference_center = new_center;
-    cur_area_data.reference_alpha = new_alpha;
-    reference_transformation.set_center(cur_area_data.reference_center);
-    reference_transformation.set_size(cur_area_data.reference_size);
-    reference_transformation.keep_aspect_ratio = new_aspect_ratio;
+    reference_transformation.set_size(new_size);
     
     tools_to_gui();
 }
@@ -1290,24 +1234,20 @@ void area_editor::stt_to_gui() {
  * Loads the current tools data onto the GUI.
  */
 void area_editor::tools_to_gui() {
-    ((lafi::textbox*) frm_tools->widgets["txt_file"])->text =
-        cur_area_data.reference_file_name;
     ((lafi::textbox*) frm_tools->widgets["txt_x"])->text =
-        f2s(cur_area_data.reference_center.x);
+        f2s(reference_transformation.get_center().x);
     ((lafi::textbox*) frm_tools->widgets["txt_y"])->text =
-        f2s(cur_area_data.reference_center.y);
+        f2s(reference_transformation.get_center().y);
     ((lafi::textbox*) frm_tools->widgets["txt_w"])->text =
-        f2s(cur_area_data.reference_size.x);
+        f2s(reference_transformation.get_size().x);
     ((lafi::textbox*) frm_tools->widgets["txt_h"])->text =
-        f2s(cur_area_data.reference_size.y);
+        f2s(reference_transformation.get_size().y);
     ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->set(
         reference_transformation.keep_aspect_ratio
     );
     ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
-        cur_area_data.reference_alpha, false
+        reference_alpha, false
     );
-    reference_transformation.set_center(cur_area_data.reference_center);
-    reference_transformation.set_size(cur_area_data.reference_size);
     update_backup_status();
 }
 

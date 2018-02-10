@@ -797,14 +797,15 @@ void area_editor::do_drawing() {
     //Reference image.
     if(
         reference_bitmap &&
+        reference_bitmap != bmp_error &&
         (show_reference || state == EDITOR_STATE_TOOLS)
     ) {
         draw_sprite(
             reference_bitmap,
-            cur_area_data.reference_center,
-            cur_area_data.reference_size,
+            reference_transformation.get_center(),
+            reference_transformation.get_size(),
             0,
-            map_alpha(cur_area_data.reference_alpha)
+            map_alpha(reference_alpha)
         );
         
         if(state == EDITOR_STATE_TOOLS) {

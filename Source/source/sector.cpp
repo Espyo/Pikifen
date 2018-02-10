@@ -629,11 +629,6 @@ void area_data::clear() {
     bg_color = al_map_rgb(0, 0, 0);
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    
-    reference_alpha = 255;
-    reference_center = point();
-    reference_size = point();
-    reference_file_name.clear();
 }
 
 
@@ -784,11 +779,6 @@ void area_data::clone(area_data &other) {
     other.subtitle = subtitle;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
-    
-    other.reference_alpha = reference_alpha;
-    other.reference_center = reference_center;
-    other.reference_file_name = reference_file_name;
-    other.reference_size = reference_size;
 }
 
 

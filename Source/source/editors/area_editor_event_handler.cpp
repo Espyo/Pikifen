@@ -964,8 +964,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         details_to_gui();
         
     } else if(state == EDITOR_STATE_TOOLS) {
-        reference_transformation.handle_mouse_down(mouse_cursor_w);
-        tools_to_gui();
+        if(reference_bitmap && reference_bitmap != bmp_error) {
+            reference_transformation.handle_mouse_down(mouse_cursor_w);
+            tools_to_gui();
+        }
         
     } else if(state == EDITOR_STATE_STT) {
         moving = false;
@@ -1260,20 +1262,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_TOOLS) {
         //Move reference handle.
-        area_data* prepared_state = prepare_state();
-        if(
-            reference_transformation.handle_mouse_move(
-                snap_to_grid(mouse_cursor_w)
-            )
-        ) {
-            cur_area_data.reference_center =
-                reference_transformation.get_center();
-            cur_area_data.reference_size =
-                reference_transformation.get_size();
-            register_change("tools change", prepared_state);
-        } else {
-            forget_prepared_state(prepared_state);
-        }
+        reference_transformation.handle_mouse_move(
+            snap_to_grid(mouse_cursor_w)
+        );
         tools_to_gui();
         
     } else if(state == EDITOR_STATE_STT) {

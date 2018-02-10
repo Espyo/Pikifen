@@ -319,11 +319,6 @@ struct area_data {
     string name;
     string subtitle;
     
-    string reference_file_name;
-    point reference_center;
-    point reference_size;
-    unsigned char reference_alpha;
-    
     weather weather_condition;
     string weather_name;
     

@@ -89,8 +89,14 @@ public:
         const vector<string> &lines, const bool trim_values,
         const size_t start_line = 0
     );
-    bool save_file(string file_name = "", const bool children_only = true);
-    void save_node(ALLEGRO_FILE* file, const size_t level = 0);
+    bool save_file(
+        string file_name = "", const bool children_only = true,
+        const bool include_empty_values = false
+    );
+    void save_node(
+        ALLEGRO_FILE* file, const size_t level = 0,
+        const bool include_empty_values = false
+    );
     
     data_node();
     data_node(const string &file_name);

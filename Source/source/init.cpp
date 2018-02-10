@@ -413,6 +413,16 @@ void init_misc() {
     particles = particle_manager(max_particles);
     
     zoom_mid_level = clamp(zoom_mid_level, zoom_min_level, zoom_max_level);
+    
+    //Some creator tool defaults that are convenient to have on.
+    creator_tool_keys[10] = CREATOR_TOOL_AREA_IMAGE;
+    creator_tool_keys[11] = CREATOR_TOOL_CHANGE_SPEED;
+    creator_tool_keys[12] = CREATOR_TOOL_TELEPORT;
+    creator_tool_keys[13] = CREATOR_TOOL_HURT_MOB;
+    creator_tool_keys[14] = CREATOR_TOOL_NEW_PIKMIN;
+    creator_tool_keys[15] = CREATOR_TOOL_MOB_INFO;
+    creator_tool_keys[16] = CREATOR_TOOL_GEOMETRY_INFO;
+    creator_tool_keys[17] = CREATOR_TOOL_HITBOXES;
 }
 
 

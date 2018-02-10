@@ -35,7 +35,10 @@ void load_area(
     cur_area_data.clear();
     
     data_node data_file =
-        load_data_file(AREAS_FOLDER_PATH + "/" + name + "/Data.txt");
+        load_data_file(
+            (from_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
+            "/" + name + "/Data.txt"
+        );
         
     cur_area_data.name =
         data_file.get_child_by_name("name")->get_value_or_default(name);
@@ -91,8 +94,8 @@ void load_area(
         
     data_node geometry_file =
         load_data_file(
-            AREAS_FOLDER_PATH + "/" + name +
-            (from_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+            (from_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
+            "/" + name + "/Geometry.txt"
         );
         
     //Vertexes.
@@ -414,23 +417,6 @@ void load_area(
         get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
     }
     
-    
-    //Editor reference.
-    if(load_for_editor) {
-        cur_area_data.reference_alpha =
-            s2i(
-                geometry_file.get_child_by_name(
-                    "reference_alpha"
-                )->get_value_or_default("255")
-            );
-        cur_area_data.reference_center =
-            s2p(geometry_file.get_child_by_name("reference_center")->value);
-        cur_area_data.reference_file_name =
-            geometry_file.get_child_by_name("reference_file_name")->value;
-        cur_area_data.reference_size =
-            s2p(geometry_file.get_child_by_name("reference_size")->value);
-    }
-    
     if(!load_for_editor) cur_area_data.generate_blockmap();
 }
 
@@ -498,12 +484,20 @@ void load_asset_file_names() {
 
 /* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
- * If the node is present, it'll be used to report errors.
+ * file_name:          File name of the bitmap.
+ * node:               If present, it will be used to report errors, if any.
+ * report_error:       If false, omits error reporting.
+ * error_bmp_on_error: If true, returns the error bitmap in the case of an
+ *   error. Otherwise, returns NULL.
+ * error_bmp_on_empty: If true, returns the error bitmap in the case of an
+ *   empty file name. Otherwise, returns NULL.
+ * path_from_root:     Normally, files are fetched from the images folder.
+ *   If this is true, the path starts from the game's root.
  */
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node,
     const bool report_error, const bool error_bmp_on_error,
-    const bool error_bmp_on_empty
+    const bool error_bmp_on_empty, const bool path_from_root
 ) {
     if(file_name.empty()) {
         if(error_bmp_on_empty) {
@@ -512,8 +506,10 @@ ALLEGRO_BITMAP* load_bmp(
             return NULL;
         }
     }
+    
+    string base_dir = (path_from_root ? "" : (GRAPHICS_FOLDER_PATH + "/"));
     ALLEGRO_BITMAP* b =
-        al_load_bitmap((GRAPHICS_FOLDER_PATH + "/" + file_name).c_str());
+        al_load_bitmap((base_dir + file_name).c_str());
         
     if(!b) {
         if(report_error) {
@@ -552,9 +548,11 @@ void load_control(
  * Loads the creator tools from the tool config file.
  */
 void load_creator_tools() {
-    data_node file(CREATOR_TOOLS_FILE);
+    data_node file(CREATOR_TOOLS_FILE_PATH);
     
-    if(!s2b(file.get_child_by_name("enabled")->value)) return;
+    if(!file.file_was_opened) return;
+    
+    creator_tools_enabled = s2b(file.get_child_by_name("enabled")->value);
     
     for(unsigned char k = 0; k < 20; k++) {
         string tool_name;
@@ -562,7 +560,7 @@ void load_creator_tools() {
             //The first ten indexes are the F2 - F11 keys.
             tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
         } else {
-            //The first ten indexes are the 0 - 9 keys.
+            //The second ten indexes are the 0 - 9 keys.
             tool_name = file.get_child_by_name(i2s(k - 10))->value;
         }
         
@@ -1006,7 +1004,7 @@ void load_options() {
         animation_editor_history.push_back("");
     }
     
-    data_node file = data_node("Options.txt");
+    data_node file = data_node(OPTIONS_FILE_PATH);
     if(!file.file_was_opened) return;
     
     //Init joysticks.

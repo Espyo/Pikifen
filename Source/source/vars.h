@@ -181,6 +181,7 @@ extern pikmin_type* creator_tool_last_pikmin_type;
 extern float creator_tool_mob_hurting_ratio;
 //For each key (F2 - F11, 0 - 9), what tool is bound to it?
 extern unsigned char creator_tool_keys[20];
+extern bool creator_tools_enabled;
 extern area_data cur_area_data;
 extern size_t cur_leader_nr;
 extern leader* cur_leader_ptr;

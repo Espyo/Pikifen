@@ -837,8 +837,8 @@ void area_editor::load() {
     [this] (lafi::widget*) {
         gui_to_asb();
     };
-        
-        
+    
+    
     //Texture picker -- declarations.
     frm_texture =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
@@ -1842,11 +1842,7 @@ void area_editor::load() {
     frm_tools->easy_row();
     frm_tools->easy_add(
         "lbl_file",
-        new lafi::label("File:"), 30, 16
-    );
-    frm_tools->easy_add(
-        "txt_file",
-        new lafi::textbox(), 70, 16
+        new lafi::label("", ALLEGRO_ALIGN_LEFT, true), 100, 12
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
@@ -1936,6 +1932,7 @@ void area_editor::load() {
     //Tools -- properties.
     frm_tools->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        save_reference();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
@@ -1952,11 +1949,6 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         gui_to_tools();
     };
-    frm_tools->widgets["txt_file"]->lose_focus_handler =
-        lambda_gui_to_tools;
-    frm_tools->widgets["txt_file"]->description =
-        "Image file (in the Images folder) for the reference.";
-        
     frm_tools->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_tools;
     frm_tools->widgets["txt_x"]->description =
@@ -2309,6 +2301,7 @@ void area_editor::load() {
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_area(false);
+        save_reference();
         clear_selection();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();

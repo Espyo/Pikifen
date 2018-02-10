@@ -24,6 +24,8 @@ using namespace std;
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //Scale the debug text by this much.
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
+//Default reference image opacity.
+const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
 //Time until the next click is no longer considered a double-click.
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
@@ -344,27 +346,6 @@ void area_editor::center_camera(
 
 
 /* ----------------------------------------------------------------------------
- * Changes the reference image.
- */
-void area_editor::change_reference(const string &new_file_name) {
-    if(cur_area_data.reference_file_name == new_file_name) {
-        return;
-    }
-    
-    if(reference_bitmap && reference_bitmap != bmp_error) {
-        al_destroy_bitmap(reference_bitmap);
-    }
-    reference_bitmap = NULL;
-    
-    if(!new_file_name.empty()) {
-        reference_bitmap = load_bmp(new_file_name, NULL, false, false);
-    }
-    cur_area_data.reference_file_name = new_file_name;
-    tools_to_gui();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Checks if the line the user is trying to draw is okay. Sets the line's status
  * to drawing_line_error.
  */
@@ -564,7 +545,7 @@ void area_editor::clear_circle_sector() {
 void area_editor::clear_current_area() {
     clear_current_area_gui();
     
-    change_reference("");
+    update_reference();
     reference_transformation.keep_aspect_ratio = true;
     clear_selection();
     clear_area_textures();
@@ -754,6 +735,9 @@ void area_editor::create_area() {
             leader_order[0], 0, ""
         )
     );
+    
+    clear_undo_history();
+    update_undo_history();
 }
 
 
@@ -2367,7 +2351,7 @@ void area_editor::load_area(const bool from_backup) {
         );
     }
     
-    change_reference(cur_area_data.reference_file_name);
+    load_reference();
     
     made_changes = false;
     
@@ -2390,6 +2374,38 @@ void area_editor::load_backup() {
     
     load_area(true);
     backup_timer.start(area_editor_backup_interval);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the reference image data.
+ */
+void area_editor::load_reference() {
+    update_reference();
+    
+    data_node file(
+        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
+    );
+    
+    if(file.file_was_opened) {
+        reference_transformation.set_center(
+            s2p(file.get_child_by_name("center")->value)
+        );
+        reference_transformation.set_size(
+            s2p(file.get_child_by_name("size")->value)
+        );
+        reference_alpha =
+            s2i(
+                file.get_child_by_name(
+                    "alpha"
+                )->get_value_or_default(i2s(DEF_REFERENCE_ALPHA))
+            );
+            
+    } else if(!reference_bitmap || reference_bitmap == bmp_error) {
+        reference_transformation.set_center(point());
+        reference_transformation.set_size(point());
+        reference_alpha = 0;
+    }
 }
 
 
@@ -2967,33 +2983,6 @@ void area_editor::save_area(const bool to_backup) {
         
     }
     
-    //Editor reference.
-    geometry_file.add(
-        new data_node(
-            "reference_file_name",
-            cur_area_data.reference_file_name
-        )
-    );
-    geometry_file.add(
-        new data_node(
-            "reference_center",
-            p2s(cur_area_data.reference_center)
-        )
-    );
-    geometry_file.add(
-        new data_node(
-            "reference_size",
-            p2s(cur_area_data.reference_size)
-        )
-    );
-    geometry_file.add(
-        new data_node(
-            "reference_alpha",
-            i2s(cur_area_data.reference_alpha)
-        )
-    );
-    
-    
     //Now, the data file.
     data_node data_file("", "");
     
@@ -3020,39 +3009,14 @@ void area_editor::save_area(const bool to_backup) {
     );
     
     
-    //Check if the folder exists before saving. If not, create it.
-    ALLEGRO_FS_ENTRY* folder_fs_entry =
-        al_create_fs_entry((AREAS_FOLDER_PATH + "/" + cur_area_name).c_str());
-    if(!al_open_directory(folder_fs_entry)) {
-        al_make_directory((AREAS_FOLDER_PATH + "/" + cur_area_name).c_str());
-    }
-    al_close_directory(folder_fs_entry);
-    al_destroy_fs_entry(folder_fs_entry);
-    
-    //Also, check if the data file exists. Create it if not.
-    if(
-        !al_filename_exists(
-            (AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt").c_str()
-        )
-    ) {
-        data_node data_file;
-        data_file.save_file(
-            (AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt").c_str()
-        );
-    }
-    
-    
     //Finally, save.
+    string area_folder_path =
+        (to_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
+        "/" + cur_area_name;
     bool geo_save_ok =
-        geometry_file.save_file(
-            AREAS_FOLDER_PATH + "/" + cur_area_name +
-            (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
-        );
+        geometry_file.save_file(area_folder_path + "/Geometry.txt");
     bool data_save_ok =
-        data_file.save_file(
-            AREAS_FOLDER_PATH + "/" + cur_area_name +
-            (to_backup ? "/Data_backup.txt" : "/Data.txt")
-        );
+        data_file.save_file(area_folder_path + "/Data.txt");
         
     if(!geo_save_ok || !data_save_ok) {
         al_show_native_message_box(
@@ -3080,6 +3044,8 @@ void area_editor::save_area(const bool to_backup) {
     
     backup_timer.start(area_editor_backup_interval);
     enable_widget(frm_tools->widgets["but_load"]);
+    
+    save_reference();
     
 }
 
@@ -3109,6 +3075,43 @@ void area_editor::save_backup() {
     
     save_area(true);
     update_backup_status();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the reference data to disk.
+ */
+void area_editor::save_reference() {
+    string file_name =
+        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name +
+        "/Reference.txt";
+        
+    if(!reference_bitmap || reference_bitmap == bmp_error) {
+        al_remove_filename(file_name.c_str());
+        return;
+    }
+    
+    data_node reference_file("", "");
+    reference_file.add(
+        new data_node(
+            "center",
+            p2s(reference_transformation.get_center())
+        )
+    );
+    reference_file.add(
+        new data_node(
+            "size",
+            p2s(reference_transformation.get_size())
+        )
+    );
+    reference_file.add(
+        new data_node(
+            "alpha",
+            i2s(reference_alpha)
+        )
+    );
+    
+    reference_file.save_file(file_name);
 }
 
 
@@ -3414,20 +3417,12 @@ void area_editor::undo() {
         return;
     }
     
-    
-    string reference_fn_before = cur_area_data.reference_file_name;
-    
     undo_history[0].first->clone(cur_area_data);
     delete undo_history[0].first;
     undo_history.pop_front();
     
     undo_save_lock_timer.time_left = 0;
     update_undo_history();
-    
-    //Lets revert the reference filename so we can change it properly.
-    string new_reference_fn = cur_area_data.reference_file_name;
-    cur_area_data.reference_file_name = reference_fn_before;
-    change_reference(new_reference_fn);
     
     clear_selection();
     clear_circle_sector();
@@ -3484,12 +3479,63 @@ bool area_editor::update_backup_status() {
     if(cur_area_name.empty()) return false;
     
     data_node file(
-        AREAS_FOLDER_PATH + "/" + cur_area_name + "/Geometry_backup.txt"
+        AREA_BACKUPS_FOLDER_PATH + "/" + cur_area_name + "/Geometry.txt"
     );
     if(!file.file_was_opened) return false;
     
     enable_widget(frm_tools->widgets["but_backup"]);
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the reference image.
+ */
+void area_editor::update_reference() {
+    string file_path =
+        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name + "/Reference.png";
+    if(reference_bitmap && reference_bitmap != bmp_error) {
+        al_destroy_bitmap(reference_bitmap);
+    }
+    reference_bitmap = NULL;
+    
+    reference_bitmap =
+        load_bmp(file_path, NULL, false, true, true, true);
+        
+    if(reference_bitmap == bmp_error) {
+        ((lafi::label*) frm_tools->widgets["lbl_file"])->text =
+            "To use a reference, place it in \"" +
+            file_path + "\" and reload.";
+        disable_widget(frm_tools->widgets["txt_x"]);
+        disable_widget(frm_tools->widgets["txt_y"]);
+        disable_widget(frm_tools->widgets["txt_w"]);
+        disable_widget(frm_tools->widgets["txt_h"]);
+        disable_widget(frm_tools->widgets["chk_ratio"]);
+        disable_widget(frm_tools->widgets["bar_alpha"]);
+    } else {
+        ((lafi::label*) frm_tools->widgets["lbl_file"])->text =
+            "Reference.png loaded.";
+        enable_widget(frm_tools->widgets["txt_x"]);
+        enable_widget(frm_tools->widgets["txt_y"]);
+        enable_widget(frm_tools->widgets["txt_w"]);
+        enable_widget(frm_tools->widgets["txt_h"]);
+        enable_widget(frm_tools->widgets["chk_ratio"]);
+        enable_widget(frm_tools->widgets["bar_alpha"]);
+    }
+    
+    if(
+        reference_transformation.get_size().x == 0 ||
+        reference_transformation.get_size().y == 0
+    ) {
+        //Let's assume this is a new reference. Reset sizes and alpha.
+        reference_transformation.set_size(
+            point(
+                al_get_bitmap_width(reference_bitmap),
+                al_get_bitmap_height(reference_bitmap)
+            )
+        );
+        reference_alpha = DEF_REFERENCE_ALPHA;
+    }
 }
 
 

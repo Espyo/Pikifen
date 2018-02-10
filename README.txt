@@ -43,7 +43,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
     Why did it crash?
         First of all, are you using the most recent version of the engine? You should try upgrading if you're not.
-        If you got a message telling you to read the readme, then please open the file Error_log.txt in the engine's folder.
+        If you got a message telling you to read the readme, then please open the file "Error_log.txt" in the engine's "User_data" folder.
             Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
             If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
         Other than that, here are some possible solutions and workarounds:

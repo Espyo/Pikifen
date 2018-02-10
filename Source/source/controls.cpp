@@ -40,6 +40,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             show_framerate = !show_framerate;
             
         } else if(
+            creator_tools_enabled &&
             (
                 ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
                 ev.keyboard.keycode <= ALLEGRO_KEY_F11
@@ -60,7 +61,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                         ev.keyboard.keycode - ALLEGRO_KEY_F2
                 ];
             } else {
-                //The last ten indexes are the 0 - 9 keys.
+                //The second ten indexes are the 0 - 9 keys.
                 id =
                     creator_tool_keys[
                         10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
