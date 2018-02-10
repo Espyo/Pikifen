@@ -44,6 +44,12 @@ void load_area(
         data_file.get_child_by_name("name")->get_value_or_default(name);
     cur_area_data.subtitle =
         data_file.get_child_by_name("subtitle")->value;
+    cur_area_data.creator =
+        data_file.get_child_by_name("creator")->value;
+    cur_area_data.version =
+        data_file.get_child_by_name("version")->value;
+    cur_area_data.notes =
+        data_file.get_child_by_name("notes")->value;
         
     if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
     if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);

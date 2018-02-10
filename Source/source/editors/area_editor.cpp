@@ -3007,6 +3007,16 @@ void area_editor::save_area(const bool to_backup) {
     data_file.add(
         new data_node("weather", cur_area_data.weather_name)
     );
+    data_file.add(
+        new data_node("creator", cur_area_data.creator)
+    );
+    data_file.add(
+        new data_node("version", cur_area_data.version)
+    );
+    data_file.add(
+        new data_node("notes", cur_area_data.notes)
+    );
+    
     
     
     //Finally, save.

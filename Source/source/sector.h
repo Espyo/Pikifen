@@ -319,6 +319,10 @@ struct area_data {
     string name;
     string subtitle;
     
+    string creator;
+    string version;
+    string notes;
+    
     weather weather_condition;
     string weather_name;
     

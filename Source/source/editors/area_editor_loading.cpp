@@ -203,7 +203,7 @@ void area_editor::load() {
     );
     frm_info->easy_row();
     frm_info->easy_add(
-        "lin_1",
+        "lin_gen_1",
         new lafi::line(), 30, 16
     );
     frm_info->easy_add(
@@ -211,7 +211,7 @@ void area_editor::load() {
         new lafi::label("General", ALLEGRO_ALIGN_CENTER), 40, 16
     );
     frm_info->easy_add(
-        "lin_2",
+        "lin_gen_2",
         new lafi::line(), 30, 16
     );
     frm_info->easy_row();
@@ -252,7 +252,7 @@ void area_editor::load() {
     );
     frm_info->easy_row();
     frm_info->easy_add(
-        "lin_3",
+        "lin_bg_1",
         new lafi::line(), 20, 24
     );
     frm_info->easy_add(
@@ -260,7 +260,7 @@ void area_editor::load() {
         new lafi::label("Background", ALLEGRO_ALIGN_CENTER), 60, 16
     );
     frm_info->easy_add(
-        "lin_4",
+        "lin_bg_2",
         new lafi::line(), 20, 16
     );
     frm_info->easy_row();
@@ -297,6 +297,46 @@ void area_editor::load() {
     frm_info->easy_add(
         "txt_bg_zoom",
         new lafi::textbox(), 20, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lin_meta_1",
+        new lafi::line(), 20, 24
+    );
+    frm_info->easy_add(
+        "lbl_meta",
+        new lafi::label("Metadata", ALLEGRO_ALIGN_CENTER), 60, 16
+    );
+    frm_info->easy_add(
+        "lin_meta_2",
+        new lafi::line(), 20, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_creator",
+        new lafi::label("Creator:"), 30, 16
+    );
+    frm_info->easy_add(
+        "txt_creator",
+        new lafi::textbox(), 70, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_version",
+        new lafi::label("Version:"), 30, 16
+    );
+    frm_info->easy_add(
+        "txt_version",
+        new lafi::textbox(), 70, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_notes",
+        new lafi::label("Notes:"), 30, 16
+    );
+    frm_info->easy_add(
+        "txt_notes",
+        new lafi::textbox(), 70, 16
     );
     frm_info->easy_row();
     
@@ -358,6 +398,18 @@ void area_editor::load() {
     frm_info->widgets["txt_bg_zoom"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_zoom"]->description =
         "Scale the texture by this amount.";
+        
+    frm_info->widgets["txt_creator"]->lose_focus_handler = lambda_gui_to_info;
+    frm_info->widgets["txt_creator"]->description =
+        "Name (or nickname) of who created this area. (Optional)";
+        
+    frm_info->widgets["txt_version"]->lose_focus_handler = lambda_gui_to_info;
+    frm_info->widgets["txt_version"]->description =
+        "Version of the area, preferably in the \"X.Y.Z\" format. (Optional)";
+        
+    frm_info->widgets["txt_notes"]->lose_focus_handler = lambda_gui_to_info;
+    frm_info->widgets["txt_notes"]->description =
+        "Extra notes or comments about the area, if any.";
         
         
     //Layout -- declarations.

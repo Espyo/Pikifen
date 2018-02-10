@@ -449,6 +449,18 @@ void area_editor::gui_to_info() {
         &cur_area_data.bg_bmp_zoom,
         s2f(((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text)
     );
+    h.register_string(
+        &cur_area_data.creator,
+        ((lafi::textbox*) frm_info->widgets["txt_creator"])->text
+    );
+    h.register_string(
+        &cur_area_data.version,
+        ((lafi::textbox*) frm_info->widgets["txt_version"])->text
+    );
+    h.register_string(
+        &cur_area_data.notes,
+        ((lafi::textbox*) frm_info->widgets["txt_notes"])->text
+    );
     
     if(!h.all_equal()) {
         register_change("area info change");
@@ -584,7 +596,7 @@ void area_editor::gui_to_tools() {
     
     reference_transformation.keep_aspect_ratio =
         ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->checked;
-    
+        
     point new_size(
         s2f(((lafi::textbox*) frm_tools->widgets["txt_w"])->text),
         s2f(((lafi::textbox*) frm_tools->widgets["txt_h"])->text)
@@ -592,7 +604,7 @@ void area_editor::gui_to_tools() {
     
     reference_alpha =
         ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->low_value;
-    
+        
     if(reference_transformation.keep_aspect_ratio) {
         if(
             new_size.x == reference_transformation.get_size().x &&
@@ -665,6 +677,12 @@ void area_editor::info_to_gui() {
         f2s(cur_area_data.bg_dist);
     ((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text =
         f2s(cur_area_data.bg_bmp_zoom);
+    ((lafi::textbox*) frm_info->widgets["txt_creator"])->text =
+        cur_area_data.creator;
+    ((lafi::textbox*) frm_info->widgets["txt_version"])->text =
+        cur_area_data.version;
+    ((lafi::textbox*) frm_info->widgets["txt_notes"])->text =
+        cur_area_data.notes;
         
 }
 

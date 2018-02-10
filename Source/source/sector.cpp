@@ -624,6 +624,9 @@ void area_data::clear() {
     
     name.clear();
     subtitle.clear();
+    creator.clear();
+    version.clear();
+    notes.clear();
     weather_name.clear();
     bg_bmp_file_name.clear();
     bg_color = al_map_rgb(0, 0, 0);
@@ -777,6 +780,9 @@ void area_data::clone(area_data &other) {
     
     other.name = name;
     other.subtitle = subtitle;
+    other.creator = creator;
+    other.version = version;
+    other.notes = notes;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
 }
