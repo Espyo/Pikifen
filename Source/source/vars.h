@@ -132,6 +132,7 @@ extern asset_file_names_struct asset_file_names;
 extern vector<string> animation_editor_history;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
+extern bool area_editor_mmb_pan;
 extern bool area_editor_show_edge_length;
 extern size_t area_editor_undo_limit;
 extern unsigned char area_editor_view_mode;

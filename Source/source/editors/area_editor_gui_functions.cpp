@@ -542,6 +542,9 @@ void area_editor::gui_to_options() {
     area_editor_undo_limit =
         s2i(((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text);
         
+    area_editor_mmb_pan =
+        ((lafi::checkbox*) frm_options->widgets["chk_mmb_pan"])->checked;
+        
     update_undo_history();
     
     save_options();
@@ -816,6 +819,9 @@ void area_editor::options_to_gui() {
         i2s(area_editor_backup_interval);
     ((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text =
         i2s(area_editor_undo_limit);
+    ((lafi::checkbox*) frm_options->widgets["chk_mmb_pan"])->set(
+        area_editor_mmb_pan
+    );
 }
 
 

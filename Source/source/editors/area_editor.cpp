@@ -3565,21 +3565,28 @@ void area_editor::update_sector_texture(
  * Updates the status bar.
  */
 void area_editor::update_status_bar() {
+    string new_text;
     if(status_override_timer.time_left > 0.0f) {
-        lbl_status_bar->text = status_override_text;
+        new_text = status_override_text;
         
     } else {
-        if(!is_mouse_in_gui(mouse_cursor_s)) {
-            lbl_status_bar->text =
-                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
-        } else {
+        if(is_mouse_in_gui(mouse_cursor_s)) {
             lafi::widget* wum =
                 gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
             if(wum) {
-                lbl_status_bar->text = wum->description;
+                new_text = wum->description;
             }
+        } else if(cur_area_name.empty()) {
+            new_text =
+                "(Place the cursor on a widget "
+                "to show information about it here!)";
+        } else {
+            new_text =
+                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
         }
     }
+    
+    lbl_status_bar->text = new_text;
 }
 
 

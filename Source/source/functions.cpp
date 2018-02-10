@@ -846,6 +846,11 @@ void save_options() {
     );
     file.add(
         new data_node(
+            "area_editor_mmb_pan", b2s(area_editor_mmb_pan)
+        )
+    );
+    file.add(
+        new data_node(
             "area_editor_show_edge_length", b2s(area_editor_show_edge_length)
         )
     );

@@ -2230,6 +2230,11 @@ void area_editor::load() {
         new lafi::textbox(), 20, 16
     );
     frm_options->easy_row();
+    frm_options->easy_add(
+        "chk_mmb_pan",
+        new lafi::checkbox("Use MMB to pan"), 100, 16
+    );
+    frm_options->easy_row();
     
     
     //Options -- properties.
@@ -2308,6 +2313,13 @@ void area_editor::load() {
         lambda_gui_to_options;
     frm_options->widgets["txt_undo_limit"]->description =
         "Maximum number of operations that can be undone. 0 = off.";
+        
+        
+    frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["chk_mmb_pan"]->description =
+        "Use the middle mouse button to pan the camera "
+        "(and RMB to reset camera/zoom).";
         
         
     //Bottom bar -- declarations.
@@ -2411,6 +2423,7 @@ void area_editor::load() {
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
     open_picker(AREA_EDITOR_PICKER_AREA);
+    update_status_bar();
     
     load_custom_particle_generators(false);
     load_spike_damage_types();
