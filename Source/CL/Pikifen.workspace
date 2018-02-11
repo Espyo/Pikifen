@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Workspace Name="Pikmin_fangame_engine" Database="" Version="10.0.0">
-  <Project Name="Pikmin_fangame_engine" Path="Pikmin_fangame_engine.project" Active="Yes"/>
+<CodeLite_Workspace Name="Pikifen" Database="" Version="10.0.0">
+  <Project Name="Pikifen" Path="Pikifen.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
-      <Project Name="Pikmin_fangame_engine" ConfigName="Debug"/>
+      <Project Name="Pikifen" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="no">
       <Environment/>
-      <Project Name="Pikmin_fangame_engine" ConfigName="Release"/>
+      <Project Name="Pikifen" ConfigName="Release"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Windows" Selected="no">
       <Environment/>
-      <Project Name="Pikmin_fangame_engine" ConfigName="Windows"/>
+      <Project Name="Pikifen" ConfigName="Windows"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

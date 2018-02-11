@@ -266,7 +266,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\source\Pikmin_fangame_engine.rc">
+    <ResourceCompile Include="..\source\Pikifen.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

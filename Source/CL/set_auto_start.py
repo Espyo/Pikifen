@@ -1,6 +1,6 @@
 import os, sys
 
-input_file = open("../../Game_data/Misc/Tools.txt", "rb")
+input_file = open("../../User_data/Tools.txt", "rb")
 lines = []
 mode = ""
 option = ""
@@ -19,7 +19,7 @@ for line in input_file :
 
 input_file.close()
 
-output_file = open("../../Game_data/Misc/Tools.txt", "wb")
+output_file = open("../../User_data/Tools.txt", "wb")
 
 for line in lines :
     output_file.write(line)

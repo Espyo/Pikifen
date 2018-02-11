@@ -1,9 +1,9 @@
-﻿Pikmin fangame engine
+﻿Pikifen
 
-An engine that allows users to create their Pikmin fangames easily.
+A fan-made Pikmin engine that allows users to create and play their own Pikmin content.
 
-This project is still under construction, so expect weird things to happen.
-You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me, Espyo, via IRC on DarkMyst's #pikipedia, or via Discord on the Pikcord server.
+This project, formerly called "Pikmin fangame engine", is still under construction, so expect weird things to happen.
+You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by contacting me, Espyo, via IRC on DarkMyst's #pikipedia, or via Discord on the Pikcord server.
 
 ===============
 1) Controls
@@ -129,7 +129,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 4) Changelog
 ===============
-    See http://www.pikminfanon.com/Pikmin_fangame_engine/Changelog
+    See http://www.pikminfanon.com/Pikifen/Changelog
     
 ===============
 5) Credits
@@ -216,7 +216,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 7) Disclaimer
 ===============
-    The Pikmin fangame engine and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
+    Pikifen and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.
     Pikmin® is a trademark of Nintendo®. May contain content taken directly from official sources; said content belongs to Nintendo®.
     

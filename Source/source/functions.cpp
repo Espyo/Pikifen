@@ -1,7 +1,7 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2017.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2018.
  * The following source file belongs to the open-source project
- * Pikmin fangame engine. Please read the included
+ * Pikifen. Please read the included
  * README and LICENSE files for more information.
  * Pikmin is copyright (c) Nintendo.
  *
@@ -607,7 +607,7 @@ void log_error(string s, data_node* d) {
         s =
             "\n" +
             get_current_time(true) +
-            "; Pikmin fangame engine version " +
+            "; Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV) + "\n" + s;
     }
@@ -983,7 +983,7 @@ void signal_handler(const int signum) {
     
     al_show_native_message_box(
         NULL, "Program crash!",
-        "The Pikmin fangame engine has crashed!",
+        "Pikifen has crashed!",
         "Sorry about that! Please read the readme file to know what you "
         "can do to help me fix it. Thanks!",
         NULL,

@@ -1,4 +1,4 @@
-PROG := pfe
+PROG := pikifen
 SRCS := $(shell find Source/ -name '*.cpp')
 OBJS := ${SRCS:.cpp=.o}
 CXXFLAGS := -std=c++0x -g -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0

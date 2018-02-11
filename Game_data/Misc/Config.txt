@@ -1,4 +1,4 @@
-game_name = Pikmin fangame engine demo fangame
+game_name = Pikifen alpha
 game_version = X.X.X
 
 carrying_color_move = 255 255 255

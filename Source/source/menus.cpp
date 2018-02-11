@@ -1,7 +1,7 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2017.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2018.
  * The following source file belongs to the open-source project
- * Pikmin fangame engine. Please read the included
+ * Pikifen. Please read the included
  * README and LICENSE files for more information.
  * Pikmin is copyright (c) Nintendo.
  *
@@ -365,7 +365,7 @@ void main_menu::do_drawing() {
         point(0.4, 0.4),
         ALLEGRO_ALIGN_RIGHT, 2,
         game_name + " " + game_version +
-        ", powered by PFE " +
+        ", powered by Pikifen " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
     );
     

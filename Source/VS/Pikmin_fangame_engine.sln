@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pikmin_fangame_engine", "Pikmin_fangame_engine.vcxproj", "{4A2F524E-F005-4F19-9C58-9ECBB4F172D1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pikifen", "Pikifen.vcxproj", "{4A2F524E-F005-4F19-9C58-9ECBB4F172D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
