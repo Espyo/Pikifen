@@ -449,7 +449,7 @@ void load_area_textures() {
  * Loads asset file names.
  */
 void load_asset_file_names() {
-    data_node file(SYSTEM_ASSET_FILE_NAMES_FILE);
+    data_node file(SYSTEM_ASSET_FILE_NAMES_FILE_PATH);
     
     reader_setter rs(&file);
     
@@ -618,7 +618,7 @@ void load_creator_tools() {
 void load_custom_particle_generators(const bool load_resources) {
     custom_particle_generators.clear();
     
-    data_node file(PARTICLE_GENERATORS_FILE);
+    data_node file(PARTICLE_GENERATORS_FILE_PATH);
     
     size_t n_pg = file.get_nr_of_children();
     for(size_t pg = 0; pg < n_pg; ++pg) {
@@ -1133,7 +1133,7 @@ sample_struct load_sample(
  * Loads the spike damage types available.
  */
 void load_spike_damage_types() {
-    data_node types_file = load_data_file(SPIKE_DAMAGE_TYPES_FILE);
+    data_node types_file = load_data_file(SPIKE_DAMAGE_TYPES_FILE_PATH);
     size_t n_types =
         types_file.get_nr_of_children();
         
@@ -1315,7 +1315,7 @@ void load_status_types(const bool load_resources) {
  * Loads the animations that are used system-wide.
  */
 void load_system_animations() {
-    data_node system_animations_file = load_data_file(SYSTEM_ANIMATIONS_FILE);
+    data_node system_animations_file = load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
     
     init_single_animation(
         &system_animations_file, "leader_damage_sparks", spark_animation
@@ -1327,7 +1327,7 @@ void load_system_animations() {
  * Loads the weather conditions available.
  */
 void load_weather() {
-    data_node weather_file = load_data_file(WEATHER_FILE);
+    data_node weather_file = load_data_file(WEATHER_FILE_PATH);
     size_t n_weather_conditions =
         weather_file.get_nr_of_children();
         

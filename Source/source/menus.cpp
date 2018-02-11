@@ -22,6 +22,7 @@
 
 using namespace std;
 
+
 /* ----------------------------------------------------------------------------
  * Creates a "main menu" state.
  */
@@ -39,6 +40,7 @@ main_menu::main_menu() :
  */
 void main_menu::load() {
 
+
     selected_widget = NULL;
     
     draw_loading_screen("", "", 1.0);
@@ -46,17 +48,7 @@ void main_menu::load() {
     
     //Resources.
     bmp_menu_bg = load_bmp(asset_file_names.main_menu);
-    
-    data_node title_screen_logo_file =
-        load_data_file(
-            ANIMATIONS_FOLDER_PATH + "/Title_screen_logo.txt"
-        );
-    logo = load_animation_database_from_file(&title_screen_logo_file);
-    if(!logo.animations.empty()) {
-        logo_anim = animation_instance(&logo);
-        logo_anim.cur_anim = logo.animations[0];
-        logo_anim.start();
-    }
+    data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
     
     //Menu widgets.
     menu_widgets.push_back(
@@ -108,6 +100,150 @@ void main_menu::load() {
     );
     menu_widgets.push_back(back_widget);
     
+    //Logo pikmin.
+    data_node* logo_node =
+        title_screen_file.get_child_by_name("logo");
+        
+    data_node* pik_types_node =
+        logo_node->get_child_by_name("pikmin_types");
+    for(size_t t = 0; t < pik_types_node->get_nr_of_children(); ++t) {
+        data_node* type_node = pik_types_node->get_child(t);
+        if(type_node->name.empty()) continue;
+        logo_type_bitmaps[type_node->name[0]] =
+            load_bmp(type_node->value, type_node);
+    }
+    
+    data_node* map_node =
+        logo_node->get_child_by_name("map");
+    size_t map_total_rows = map_node->get_nr_of_children();
+    size_t map_total_cols = 0;
+    for(size_t r = 0; r < map_total_rows; ++r) {
+        map_total_cols =
+            max(map_total_cols, map_node->get_child(r)->name.size());
+    }
+    
+    logo_min_screen_limit =
+        s2p(
+            logo_node->get_child_by_name(
+                "min_screen_limit"
+            )->get_value_or_default("10 10")
+        );
+    logo_min_screen_limit.x *= scr_w / 100.0f;
+    logo_min_screen_limit.y *= scr_h / 100.0f;
+    logo_max_screen_limit =
+        s2p(
+            logo_node->get_child_by_name(
+                "max_screen_limit"
+            )->get_value_or_default("90 50")
+        );
+    logo_max_screen_limit.x *= scr_w / 100.0f;
+    logo_max_screen_limit.y *= scr_h / 100.0f;
+    logo_pikmin_max_speed =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_max_speed"
+            )->get_value_or_default("800")
+        );
+    logo_pikmin_min_speed =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_min_speed"
+            )->get_value_or_default("600")
+        );
+    logo_pikmin_speed_smoothness =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_speed_smoothness"
+            )->get_value_or_default("0.08")
+        );
+    logo_pikmin_sway_amount =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_sway_amount"
+            )->get_value_or_default("3")
+        );
+    logo_pikmin_sway_max_speed =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_sway_max_speed"
+            )->get_value_or_default("5.5")
+        );
+    logo_pikmin_sway_min_speed =
+        s2f(
+            logo_node->get_child_by_name(
+                "pikmin_sway_min_speed"
+            )->get_value_or_default("2.5")
+        );
+    logo_pikmin_size =
+        s2p(
+            logo_node->get_child_by_name(
+                "pikmin_size"
+            )->get_value_or_default("3.5 3.5")
+        );
+    logo_pikmin_size.x *= scr_w / 100.0f;
+    logo_pikmin_size.y *= scr_h / 100.0f;
+    
+    bool map_ok = true;
+    
+    for(size_t r = 0; r < map_total_rows; ++r) {
+        string row = map_node->get_child(r)->name;
+        
+        for(size_t c = 0; c < row.size(); ++c) {
+            if(row[c] == '.') continue;
+            if(logo_type_bitmaps.find(row[c]) == logo_type_bitmaps.end()) {
+                map_ok = false;
+                log_error(
+                    "Title screen Pikmin logo map has an invalid character \"" +
+                    string(1, row[c]) + "\" on row " + i2s(r + 1) +
+                    ", column " + i2s(c + 1) + "!"
+                );
+                break;
+            }
+            
+            logo_pik pik;
+            
+            pik.top = logo_type_bitmaps[row[c]];
+            pik.destination =
+                point(
+                    logo_min_screen_limit.x +
+                    (logo_max_screen_limit.x - logo_min_screen_limit.x) *
+                    (c / (float) map_total_cols),
+                    logo_min_screen_limit.y +
+                    (logo_max_screen_limit.y - logo_min_screen_limit.y) *
+                    (r / (float) map_total_rows)
+                );
+                
+            unsigned char h_side = randomi(0, 1);
+            unsigned char v_side = randomi(0, 1);
+            
+            pik.pos =
+                point(
+                    randomf(0, scr_w * 0.5),
+                    randomf(0, scr_h * 0.5)
+                );
+                
+            if(h_side == 0) {
+                pik.pos.x -= scr_w * 1.2;
+            } else {
+                pik.pos.x += scr_w * 1.2;
+            }
+            if(v_side == 0) {
+                pik.pos.y -= scr_h * 1.2;
+            } else {
+                pik.pos.y += scr_h * 1.2;
+            }
+            
+            pik.angle = randomf(0, M_PI * 2);
+            pik.speed = randomf(logo_pikmin_min_speed, logo_pikmin_max_speed);
+            pik.sway_speed =
+                randomf(logo_pikmin_sway_min_speed, logo_pikmin_sway_max_speed);
+            pik.sway_var = 0;
+            pik.reached_destination = false;
+            logo_pikmin.push_back(pik);
+        }
+        
+        if(!map_ok) break;
+    }
     
     //Finishing touches.
     set_selected_widget(menu_widgets[0]);
@@ -123,7 +259,6 @@ void main_menu::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
-    logo.destroy();
     
     //Menu widgets.
     set_selected_widget(NULL);
@@ -134,6 +269,9 @@ void main_menu::unload() {
         delete menu_widgets[w];
     }
     menu_widgets.clear();
+    
+    //Misc.
+    logo_pikmin.clear();
     
 }
 
@@ -153,7 +291,36 @@ void main_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void main_menu::do_logic() {
     time_spent += delta_t;
-    logo_anim.tick(delta_t);
+    
+    //Animate the logo Pikmin.
+    for(size_t p = 0; p < logo_pikmin.size(); ++p) {
+        logo_pik* pik = &logo_pikmin[p];
+        
+        if(!pik->reached_destination) {
+            float a = get_angle(pik->pos, pik->destination);
+            float speed =
+                min(
+                    (float) (pik->speed * delta_t),
+                    dist(pik->pos, pik->destination).to_float() *
+                    logo_pikmin_speed_smoothness
+                );
+            pik->pos.x += cos(a) * speed;
+            pik->pos.y += sin(a) * speed;
+            if(
+                fabs(pik->pos.x - pik->destination.x) < 1.0 &&
+                fabs(pik->pos.y - pik->destination.y) < 1.0
+            ) {
+                pik->destination = pik->pos;
+                pik->reached_destination = true;
+            }
+            
+        } else {
+            pik->sway_var += pik->sway_speed * delta_t;
+            pik->pos.x =
+                pik->destination.x +
+                sin(pik->sway_var) * logo_pikmin_sway_amount;
+        }
+    }
     
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
@@ -174,13 +341,11 @@ void main_menu::do_drawing() {
         point(scr_w, scr_h)
     );
     
-    sprite* logo_anim_s = logo_anim.get_cur_sprite();
-    if(logo_anim_s) {
-        draw_sprite(
-            logo_anim_s->bitmap,
-            point(scr_w * 0.5, scr_h * 0.25),
-            logo_anim_s->game_size
-        );
+    //Draw the logo Pikmin.
+    for(size_t p = 0; p < logo_pikmin.size(); ++p) {
+        logo_pik* pik = &logo_pikmin[p];
+        
+        draw_sprite_in_box(pik->top, pik->pos, logo_pikmin_size, pik->angle);
     }
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -238,7 +403,7 @@ options_menu::options_menu() :
         [] (
             pair<int, int> &p1,
             pair<int, int> &p2
-    ) {
+    ) -> bool {
         if(p1.first == p2.first) {
             return p1.second < p2.second;
         }

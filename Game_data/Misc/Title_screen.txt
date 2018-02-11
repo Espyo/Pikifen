@@ -1,0 +1,26 @@
+logo {
+    min_screen_limit = 10 20
+    max_screen_limit = 90 50
+    pikmin_max_speed = 800
+    pikmin_min_speed = 600
+    pikmin_speed_smoothness = 0.08
+    pikmin_sway_amount = 3
+    pikmin_sway_max_speed = 5.5
+    pikmin_sway_min_speed = 2.5
+    pikmin_size = 3.5 3.5
+    pikmin_types {
+        O = Flower_icon.png
+    }
+    map {
+        OOOOO....OOOOOO..OO....OO..OOOOOO..OOOOOO..OOOOOO..OOOO....OO
+        OOOOOO...OOOOOO..OO...OO...OOOOOO..OOOOOO..OOOOOO..OOOO....OO
+        OO...OO....OO....OO..OO......OO....OO......OO......OO.OO...OO
+        OO...OO....OO....OO.OO.......OO....OO......OO......OO.OO...OO
+        OOOOOO.....OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
+        OOOOO......OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
+        OO.........OO....OO.OO.......OO....OO......OO......OO...OO.OO
+        OO.........OO....OO..OO......OO....OO......OO......OO...OO.OO
+        OO.......OOOOOO..OO...OO...OOOOOO..OO......OOOOOO..OO....OOOO
+        OO.......OOOOOO..OO....OO..OOOOOO..OO......OOOOOO..OO....OOOO
+    }
+}

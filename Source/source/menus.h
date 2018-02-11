@@ -23,11 +23,35 @@ using namespace std;
 
 class main_menu : public game_state {
 private:
-    ALLEGRO_BITMAP* bmp_menu_bg;
+    struct logo_pik {
+        point pos;
+        float angle;
+        float speed;
+        point destination;
+        float sway_speed;
+        float sway_var;
+        ALLEGRO_BITMAP* top;
+        bool reached_destination;
+    };
+        
     size_t new_game_state;
     float time_spent;
-    animation_database logo;
-    animation_instance logo_anim;
+    
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    vector<logo_pik> logo_pikmin;
+    ALLEGRO_TRANSFORM scr_to_logo_transform;
+    ALLEGRO_TRANSFORM logo_to_scr_transform;
+    
+    point logo_min_screen_limit;
+    point logo_max_screen_limit;
+    float logo_pikmin_max_speed;
+    float logo_pikmin_min_speed;
+    float logo_pikmin_speed_smoothness;
+    float logo_pikmin_sway_amount;
+    float logo_pikmin_sway_max_speed;
+    float logo_pikmin_sway_min_speed;
+    point logo_pikmin_size;
+    map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
 public:
     main_menu();

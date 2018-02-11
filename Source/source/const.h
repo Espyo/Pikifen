@@ -181,15 +181,17 @@ const string TREASURES_FOLDER_PATH =
 
 const string CONFIG_FILE =
     MISC_FOLDER_PATH + "/Config.txt";
-const string PARTICLE_GENERATORS_FILE =
+const string PARTICLE_GENERATORS_FILE_PATH =
     MISC_FOLDER_PATH + "/Particle_generators.txt";
-const string SPIKE_DAMAGE_TYPES_FILE =
+const string SPIKE_DAMAGE_TYPES_FILE_PATH =
     MISC_FOLDER_PATH + "/Spike_damage.txt";
-const string SYSTEM_ANIMATIONS_FILE =
+const string SYSTEM_ANIMATIONS_FILE_PATH =
     MISC_FOLDER_PATH + "/System_animations.txt";
-const string SYSTEM_ASSET_FILE_NAMES_FILE =
+const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
     MISC_FOLDER_PATH + "/System_asset_file_names.txt";
-const string WEATHER_FILE =
+const string TITLE_SCREEN_FILE_PATH =
+    MISC_FOLDER_PATH + "/Title_screen.txt";
+const string WEATHER_FILE_PATH =
     MISC_FOLDER_PATH + "/Weather.txt";
 
 enum CREATOR_TOOL_IDS {
