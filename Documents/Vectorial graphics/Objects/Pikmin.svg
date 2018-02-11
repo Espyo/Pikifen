@@ -357,17 +357,6 @@
        id="radialGradient7063"
        xlink:href="#Purple_Pikmin"
        inkscape:collect="always" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Yellow_Pikmin"
-       id="linearGradient5616-7"
-       x1="22.5"
-       y1="986.36218"
-       x2="25"
-       y2="986.36218"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="reflect"
-       gradientTransform="matrix(1.9923894,0.17431148,-0.17431148,1.9923894,162.31426,-1012.4628)" />
     <radialGradient
        r="2"
        fy="643.36218"
@@ -572,17 +561,6 @@
        r="3.25"
        gradientTransform="matrix(3.6923072,0,0,3.0769231,-29.23125,-1233.7524)"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Yellow_Pikmin_dark"
-       id="linearGradient5616-1"
-       x1="22.5"
-       y1="986.36218"
-       x2="25"
-       y2="986.36218"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="reflect"
-       gradientTransform="translate(16.500004,-68.999987)" />
     <radialGradient
        r="3.25"
        fy="793.36218"
@@ -1644,17 +1622,6 @@
        spreadMethod="pad"
        gradientTransform="matrix(0,0.8749906,-1,0,172.25,153.05502)" />
     <linearGradient
-       gradientTransform="translate(0,-100.00001)"
-       inkscape:collect="always"
-       xlink:href="#Head_shadow"
-       id="linearGradient2032-2"
-       x1="188"
-       y1="1045.8622"
-       x2="188"
-       y2="1049.3622"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="reflect" />
-    <linearGradient
        gradientTransform="translate(150.00003,115.99982)"
        inkscape:collect="always"
        xlink:href="#Yellow_Pikmin_fade"
@@ -2161,8 +2128,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="142.86959"
-     inkscape:cy="-301.13073"
+     inkscape:cx="82.86959"
+     inkscape:cy="-277.63073"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -2207,7 +2174,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

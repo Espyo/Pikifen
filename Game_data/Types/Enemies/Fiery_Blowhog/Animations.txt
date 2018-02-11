@@ -1436,7 +1436,7 @@ sprites{
 				hazards
 				outward=false
 				angle=0.00
-				knockback=7.00
+				knockback=3.00
 			}
 			fire1{
 				coords=70.00 0.00 0.00
@@ -1493,7 +1493,7 @@ sprites{
 				hazards
 				outward=false
 				angle=0.00
-				knockback=7.00
+				knockback=3.00
 			}
 			fire1{
 				coords=60.31 -1.11 0.00

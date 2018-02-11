@@ -185,8 +185,8 @@ timer info_print_timer =
 float info_spot_trigger_range = 64.0f;
 vector<info_spot*> info_spots;
 bool intended_scr_fullscreen = DEF_SCR_FULLSCREEN;
-unsigned int intended_scr_h = DEF_SCR_H;
-unsigned int intended_scr_w = DEF_SCR_W;
+int intended_scr_h = DEF_SCR_H;
+int intended_scr_w = DEF_SCR_W;
 bool is_game_running = true;
 bool is_input_allowed = false;
 float joystick_min_deadzone = 0.2f;

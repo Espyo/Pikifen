@@ -28,11 +28,11 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 12;
+const unsigned char VERSION_MINOR = 13;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 23;
-const unsigned char VERSION_MONTH = 12;
-const unsigned int  VERSION_YEAR  = 17; //The year is 2000 + this.
+const unsigned char VERSION_DAY   = 11;
+const unsigned char VERSION_MONTH = 02;
+const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
 //How many entries of the animation editor history to store, at max.
 const size_t ANIMATION_EDITOR_HISTORY_SIZE = 6;
@@ -122,8 +122,8 @@ const unsigned int DEF_FPS   = 60;
 const bool DEF_SCR_FULLSCREEN = false;
 const unsigned int DEF_SCR_W = 1024;
 const unsigned int DEF_SCR_H = 768;
-const unsigned int SMALLEST_SCR_W = 640;
-const unsigned int SMALLEST_SCR_H = 480;
+const int SMALLEST_SCR_W = 640;
+const int SMALLEST_SCR_H = 480;
 
 const string GAME_DATA_FOLDER_PATH = "Game_data";
 const string USER_DATA_FOLDER_PATH = "User_data";

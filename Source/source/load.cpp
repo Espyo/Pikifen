@@ -1315,8 +1315,9 @@ void load_status_types(const bool load_resources) {
  * Loads the animations that are used system-wide.
  */
 void load_system_animations() {
-    data_node system_animations_file = load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
-    
+    data_node system_animations_file =
+        load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
+        
     init_single_animation(
         &system_animations_file, "leader_damage_sparks", spark_animation
     );

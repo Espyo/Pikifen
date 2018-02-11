@@ -269,8 +269,8 @@ extern timer info_print_timer;
 extern float info_spot_trigger_range;
 extern vector<info_spot*> info_spots;
 extern bool intended_scr_fullscreen;
-extern unsigned int intended_scr_h;
-extern unsigned int intended_scr_w;
+extern int intended_scr_h;
+extern int intended_scr_w;
 extern bool is_game_running;
 //Is input enabled in general, for reasons outside the ready_for_input variable?
 extern bool is_input_allowed;

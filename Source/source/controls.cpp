@@ -42,11 +42,13 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
         } else if(
             creator_tools_enabled &&
             (
-                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-                ev.keyboard.keycode <= ALLEGRO_KEY_F11
-            ) || (
-                ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
-                ev.keyboard.keycode <= ALLEGRO_KEY_9
+                (
+                    ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
+                    ev.keyboard.keycode <= ALLEGRO_KEY_F11
+                ) || (
+                    ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
+                    ev.keyboard.keycode <= ALLEGRO_KEY_9
+                )
             )
         ) {
         

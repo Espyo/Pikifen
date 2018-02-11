@@ -28,9 +28,15 @@ using namespace std;
  */
 main_menu::main_menu() :
     game_state(),
-    bmp_menu_bg(NULL),
     new_game_state(0),
-    time_spent(0) {
+    time_spent(0),
+    bmp_menu_bg(NULL),
+    logo_pikmin_max_speed(0),
+    logo_pikmin_min_speed(0),
+    logo_pikmin_speed_smoothness(0),
+    logo_pikmin_sway_amount(0),
+    logo_pikmin_sway_max_speed(0),
+    logo_pikmin_sway_min_speed(0) {
     
 }
 
@@ -39,8 +45,6 @@ main_menu::main_menu() :
  * Loads the main menu into memory.
  */
 void main_menu::load() {
-
-
     selected_widget = NULL;
     
     draw_loading_screen("", "", 1.0);
@@ -384,8 +388,8 @@ options_menu::options_menu() :
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
-    size_t n_modes = al_get_num_display_modes();
-    for(size_t d = 0; d < al_get_num_display_modes(); ++d) {
+    int n_modes = al_get_num_display_modes();
+    for(int d = 0; d < n_modes; ++d) {
         ALLEGRO_DISPLAY_MODE d_info;
         if(!al_get_display_mode(d, &d_info)) continue;
         if(d_info.width < SMALLEST_SCR_W) continue;

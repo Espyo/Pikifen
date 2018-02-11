@@ -39,8 +39,6 @@ private:
     
     ALLEGRO_BITMAP* bmp_menu_bg;
     vector<logo_pik> logo_pikmin;
-    ALLEGRO_TRANSFORM scr_to_logo_transform;
-    ALLEGRO_TRANSFORM logo_to_scr_transform;
     
     point logo_min_screen_limit;
     point logo_max_screen_limit;
