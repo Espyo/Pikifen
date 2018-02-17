@@ -118,6 +118,9 @@ void area_editor::asb_to_gui() {
     ((lafi::checkbox*) frm_asb->widgets["chk_h_air"])->set(
         !s_ptr->hazard_floor
     );
+    ((lafi::checkbox*) frm_asb->widgets["chk_pit"])->set(
+        s_ptr->is_bottomless_pit
+    );
     
     ((lafi::textbox*) frm_asb->widgets["txt_tag"])->text = s_ptr->tag;
     
@@ -306,6 +309,10 @@ void area_editor::gui_to_asb() {
     h.register_bool(
         &s_ptr->hazard_floor,
         !((lafi::checkbox*) frm_asb->widgets["chk_h_air"])->checked
+    );
+    h.register_bool(
+        &s_ptr->is_bottomless_pit,
+        ((lafi::checkbox*) frm_asb->widgets["chk_pit"])->checked
     );
     h.register_string(
         &s_ptr->tag,

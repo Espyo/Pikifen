@@ -50,8 +50,8 @@ string box_string(const string &s, const size_t size) {
  */
 bool casts_shadow(sector* s1, sector* s2) {
     if(!s1 || !s2) return false;
-    if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
-    if(s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
+    if(s1->is_bottomless_pit) return false;
+    if(s2->is_bottomless_pit) return false;
     if(s1->z > s2->z && s1->always_cast_shadow) return true;
     if(s1->z <= s2->z + SECTOR_STEP) return false;
     return true;

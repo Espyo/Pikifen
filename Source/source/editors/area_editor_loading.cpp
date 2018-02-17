@@ -818,8 +818,17 @@ void area_editor::load() {
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
+        "dum_2",
+        new lafi::dummy(), 10, 16
+    );
+    frm_asb->easy_add(
         "chk_h_air",
-        new lafi::checkbox("Floor and air"), 100, 16
+        new lafi::checkbox("Floor and air"), 90, 16
+    );
+    frm_asb->easy_row();
+    frm_asb->easy_add(
+        "chk_pit",
+        new lafi::checkbox("Bottomless pit"), 100, 16
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
@@ -884,6 +893,13 @@ void area_editor::load() {
     };
     frm_asb->widgets["chk_h_air"]->description =
         "Trigger hazards on the floor only or in the air too?";
+        
+    frm_asb->widgets["chk_pit"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        gui_to_asb();
+    };
+    frm_asb->widgets["chk_pit"]->description =
+        "Is this sector's floor a bottomless pit?";
         
     frm_asb->widgets["txt_tag"]->lose_focus_handler =
     [this] (lafi::widget*) {

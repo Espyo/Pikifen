@@ -975,6 +975,7 @@ mob_gen::mob_gen(
  */
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
+    is_bottomless_pit(false),
     z(0),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
@@ -1006,6 +1007,7 @@ void sector::add_edge(edge* e_ptr, const size_t e_nr) {
  */
 void sector::clone(sector* new_sector) {
     new_sector->type = type;
+    new_sector->is_bottomless_pit = is_bottomless_pit;
     new_sector->z = z;
     new_sector->tag = tag;
     new_sector->hazard_floor = hazard_floor;
@@ -1086,7 +1088,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     } else if(!texture_sector[1]) {
         //Nothing to draw.
         return;
-    } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+    } else if(texture_sector[1]->is_bottomless_pit) {
         swap(texture_sector[0], texture_sector[1]);
     }
     

@@ -181,6 +181,7 @@ struct sector_texture_info {
  */
 struct sector {
     unsigned char type;
+    bool is_bottomless_pit;
     float z; //Height.
     string tag;
     unsigned char brightness;
@@ -436,7 +437,6 @@ TRIANGULATION_ERRORS triangulate(
 
 enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
-    SECTOR_TYPE_BOTTOMLESS_PIT,
     SECTOR_TYPE_BLOCKING,
     SECTOR_TYPE_BRIDGE,
     SECTOR_TYPE_BRIDGE_RAIL,

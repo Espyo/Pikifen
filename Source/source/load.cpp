@@ -165,6 +165,12 @@ void load_area(
         new_sector->type =
             sector_types.get_nr(sector_data->get_child_by_name("type")->value);
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
+        new_sector->is_bottomless_pit =
+            s2b(
+                sector_data->get_child_by_name(
+                    "is_bottomless_pit"
+                )->get_value_or_default("false")
+            );
         new_sector->brightness =
             s2f(
                 sector_data->get_child_by_name(

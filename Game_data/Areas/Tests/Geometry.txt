@@ -967,7 +967,7 @@ sectors{
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bottomless pit
+		is_bottomless_pit=true
 		z=-200.00
 		texture=Grass_dark.jpg
 	}
@@ -1454,8 +1454,4 @@ path_stops{
 		}
 	}
 }
-tree_shadows=
-reference_file_name=
-reference_pos=0.00 0.00
-reference_size=0.00 0.00
-reference_alpha=255
+tree_shadows

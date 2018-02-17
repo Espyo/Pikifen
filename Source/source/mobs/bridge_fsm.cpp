@@ -77,6 +77,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
             s_ptr->z = s2f(s_ptr->tag);
         }
         
+        s_ptr->is_bottomless_pit = false;
         s_ptr->hazards.clear();
         s_ptr->associated_liquid = NULL;
         

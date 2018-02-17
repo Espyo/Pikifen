@@ -1542,7 +1542,7 @@ void mob::tick_physics() {
         speed_z = 0;
         was_thrown = false;
         fsm.run_event(MOB_EVENT_LANDED);
-        if(ground_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+        if(ground_sector->is_bottomless_pit) {
             fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
         }
         

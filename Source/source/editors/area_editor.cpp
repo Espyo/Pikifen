@@ -1065,7 +1065,7 @@ unsigned char area_editor::find_problems() {
         if(s_ptr->edges.empty()) continue;
         if(
             s_ptr->texture_info.file_name.empty() &&
-            s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade
+            !s_ptr->is_bottomless_pit && !s_ptr->fade
         ) {
             problem_string = "";
             problem_sector_ptr = s_ptr;
@@ -2807,6 +2807,11 @@ void area_editor::save_area(const bool to_backup) {
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
             sector_node->add(
                 new data_node("type", sector_types.get_name(s_ptr->type))
+            );
+        }
+        if(s_ptr->is_bottomless_pit) {
+            sector_node->add(
+                new data_node("is_bottomless_pit", "true")
             );
         }
         sector_node->add(new data_node("z", f2s(s_ptr->z)));

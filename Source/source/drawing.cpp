@@ -2152,7 +2152,7 @@ void draw_scaled_text(
  * scale:    Drawing scale.
  */
 void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
-    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
+    if(s_ptr->is_bottomless_pit) return;
     
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         edge* e_ptr = s_ptr->edges[e];
@@ -2465,7 +2465,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 ) {
-    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
+    if(s_ptr->is_bottomless_pit) return;
     
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
@@ -2493,7 +2493,7 @@ void draw_sector_texture(
     
         bool draw_sector_0 = true;
         if(!texture_sector[0]) draw_sector_0 = false;
-        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+        else if(texture_sector[0]->is_bottomless_pit) {
             draw_sector_0 = false;
         }
         

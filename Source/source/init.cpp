@@ -503,7 +503,6 @@ void init_mob_categories() {
  */
 void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
-    sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
     sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
     sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
     sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
