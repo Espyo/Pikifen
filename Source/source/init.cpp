@@ -37,14 +37,32 @@
  * Initializes Allegro and its modules.
  */
 void init_allegro() {
-    al_init();
-    al_install_mouse();
-    al_install_keyboard();
-    al_install_audio();
+    if(!al_init()) {
+        report_fatal_error("Could not initialize Allegro!");
+    }
+    if(!al_install_mouse()) {
+        report_fatal_error("Could not install the Allegro mouse module!");
+    }
+    if(!al_install_keyboard()) {
+        report_fatal_error("Could not install the Allegro keyboard module!");
+    }
+    if(!al_install_audio()) {
+        report_fatal_error("Could not install the Allegro audio module!");
+    }
+    if(!al_init_image_addon()) {
+        report_fatal_error("Could not initialize the Allegro image addon!");
+    }
+    if(!al_init_primitives_addon()) {
+        report_fatal_error(
+            "Could not initialize the Allegro primitives addon!"
+        );
+    }
+    if(!al_init_acodec_addon()) {
+        report_fatal_error(
+            "Could not initialize the Allegro audio codec addon!"
+        );
+    }
     al_install_joystick();
-    al_init_image_addon();
-    al_init_primitives_addon();
-    al_init_acodec_addon();
 }
 
 
@@ -286,9 +304,19 @@ void init_event_things(
         display = al_create_display(scr_w, scr_h);
     }
     
+    if(!display) {
+        report_fatal_error("Could not create a display!");
+    }
+    
     logic_timer = al_create_timer(1.0 / game_fps);
+    if(!logic_timer) {
+        report_fatal_error("Could not create the main logic timer!");
+    }
     
     logic_queue = al_create_event_queue();
+    if(!logic_queue) {
+        report_fatal_error("Could not create the main logic event queue!");
+    }
     al_register_event_source(logic_queue, al_get_mouse_event_source());
     al_register_event_source(logic_queue, al_get_keyboard_event_source());
     al_register_event_source(logic_queue, al_get_joystick_event_source());

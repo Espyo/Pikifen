@@ -9,6 +9,7 @@ Source/CL/Pikifen.txt
 allegro.log
 *.lnk
 *.o
+*.aps
 User_data/*
 /pikifen
 /pikifen_shortcut

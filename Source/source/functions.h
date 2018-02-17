@@ -112,6 +112,7 @@ float randomf(float min, float max);
 int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 string replace_all(string s, string search, string replacement);
+void report_fatal_error(const string &s, data_node* dn = NULL);
 void save_creator_tools();
 void save_options();
 void save_screenshot();

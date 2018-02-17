@@ -404,10 +404,7 @@ options_menu::options_menu() :
     //Sort the list.
     sort(
         resolution_presets.begin(), resolution_presets.end(),
-        [] (
-            pair<int, int> &p1,
-            pair<int, int> &p2
-    ) -> bool {
+    [] (pair<int, int> p1, pair<int, int> p2) -> bool {
         if(p1.first == p2.first) {
             return p1.second < p2.second;
         }
@@ -441,7 +438,7 @@ void options_menu::load() {
     [this] () {
         leave();
     },
-    "Exit", font_main
+    "Back", font_main
         )
     );
     
@@ -604,7 +601,7 @@ void options_menu::do_drawing() {
     
     draw_sprite(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(128)
+        point(scr_w, scr_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -749,7 +746,7 @@ void controls_menu::load() {
     [this] () {
         leave();
     },
-    "Exit", font_main
+    "Back", font_main
     );
     menu_widgets.push_back(back_widget);
     
@@ -1012,7 +1009,7 @@ void controls_menu::do_drawing() {
     
     draw_sprite(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(128)
+        point(scr_w, scr_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -1316,7 +1313,7 @@ void area_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(128)
+        point(scr_w, scr_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);

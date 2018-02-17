@@ -688,6 +688,25 @@ string replace_all(string s, string search, string replacement) {
 
 
 /* ----------------------------------------------------------------------------
+ * Reports a fatal error to the user and shuts down the program.
+ */
+void report_fatal_error(const string &s, data_node* dn) {
+    log_error(s, dn);
+    
+    al_show_native_message_box(
+        NULL, "Fatal error!",
+        "Pikifen has encountered a fatal error!",
+        s.c_str(),
+        NULL,
+        ALLEGRO_MESSAGEBOX_ERROR
+    );
+    
+    exit(-1);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the creator tools settings.
  */
 void save_creator_tools() {
@@ -831,11 +850,6 @@ void save_options() {
     //Other options.
     file.add(
         new data_node(
-            "draw_cursor_trail", b2s(draw_cursor_trail)
-        )
-    );
-    file.add(
-        new data_node(
             "area_editor_backup_interval", f2s(area_editor_backup_interval)
         )
     );
@@ -862,6 +876,11 @@ void save_options() {
     file.add(
         new data_node(
             "area_editor_view_mode", i2s(area_editor_view_mode)
+        )
+    );
+    file.add(
+        new data_node(
+            "draw_cursor_trail", b2s(draw_cursor_trail)
         )
     );
     file.add(new data_node("fps", i2s(game_fps)));
