@@ -22,7 +22,6 @@ namespace bridge_fsm {
 void create_fsm(mob_type* typ);
 
 void open(mob* m, void* info1, void* info2);
-void take_damage(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
 };
 

@@ -148,75 +148,303 @@ animations{
 sprites{
 	ducking{
 		file=Louie.png
-		file_pos=0 0
-		file_size=54 64
+		file_pos=0.00 0.00
+		file_size=54.00 64.00
 		game_size=27.00 32.00
 		offset=4.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=10.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	ducking2{
 		file=Louie.png
-		file_pos=56 0
-		file_size=54 64
+		file_pos=56.00 0.00
+		file_size=54.00 64.00
 		game_size=27.00 32.00
 		offset=4.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=10.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	half_limbo{
 		file=Louie.png
-		file_pos=112 0
-		file_size=66 64
+		file_pos=112.00 0.00
+		file_size=66.00 64.00
 		game_size=33.00 32.00
 		offset=-12.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=0.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-10.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	half_lying{
 		file=Louie.png
-		file_pos=198 66
-		file_size=82 64
+		file_pos=198.00 66.00
+		file_size=82.00 64.00
 		game_size=41.00 32.00
 		offset=-8.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=0.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-8.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	idling{
 		file=Louie.png
-		file_pos=0 66
-		file_size=64 64
+		file_pos=0.00 66.00
+		file_size=64.00 64.00
 		game_size=32.00 32.00
 		offset=0.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=10.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	limbo{
 		file=Louie.png
-		file_pos=180 0
-		file_size=106 64
+		file_pos=180.00 0.00
+		file_size=106.00 64.00
 		game_size=53.00 32.00
 		offset=-22.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=0.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-16.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	lying{
 		file=Louie.png
-		file_pos=282 66
-		file_size=114 64
+		file_pos=282.00 66.00
+		file_size=114.00 64.00
 		game_size=57.00 32.00
 		offset=-16.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=0.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	walking1{
 		file=Louie.png
-		file_pos=132 66
-		file_size=64 64
+		file_pos=132.00 66.00
+		file_size=64.00 64.00
 		game_size=32.00 32.00
 		offset=0.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=10.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	walking2{
 		file=Louie.png
-		file_pos=66 66
-		file_size=64 64
+		file_pos=66.00 66.00
+		file_size=64.00 64.00
 		game_size=32.00 32.00
 		offset=0.00 0.00
-		hitboxes=
+		hitboxes{
+			fist{
+				coords=10.00 10.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 }
-body_parts=
+body_parts{
+	fist
+	body
+}

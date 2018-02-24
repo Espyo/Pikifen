@@ -86,17 +86,6 @@ void pikmin_type::load_parameters(data_node* file) {
         rs.set("sprout_evolution_time_" + i2s(m + 1), sprout_evolution_time[m]);
     }
     
-    data_node* hazards_node = file->get_child_by_name("resistances");
-    vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
-    for(size_t h = 0; h < hazards_strs.size(); ++h) {
-        string hazard_name = hazards_strs[h];
-        if(hazards.find(hazard_name) == hazards.end()) {
-            log_error("Unknown hazard \"" + hazard_name + "\"!", hazards_node);
-        } else {
-            resistances.push_back(&(hazards[hazard_name]));
-        }
-    }
-    
     pikmin_in_onions[this] =
         s2i(file->get_child_by_name("onion_starting_number")->value);
         

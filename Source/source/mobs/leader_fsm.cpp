@@ -38,7 +38,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_lose_health);
+            efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
@@ -102,7 +102,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -147,7 +147,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -190,7 +190,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::notify_pikmin_release);
             efc.run(leader_fsm::release);
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -225,7 +225,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -240,7 +240,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -333,7 +333,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_going_to_pluck");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_lose_health);
+            efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
@@ -375,7 +375,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_going_to_pluck");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_lose_health);
+            efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
@@ -406,7 +406,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::stop_auto_pluck);
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_DEATH); {
@@ -464,7 +464,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::stop_auto_pluck);
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run(leader_fsm::stop_auto_pluck);
@@ -529,7 +529,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -584,7 +584,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EVENT_DEATH); {
@@ -630,7 +630,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -687,7 +687,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::lose_health);
+            efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EVENT_DEATH); {
@@ -732,7 +732,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_lose_health);
+            efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
@@ -1182,27 +1182,23 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hitbox touch information structure.
  * info2: If not NULL, that means this leader is inactive.
  */
-void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
-    //TODO
-    
+void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     if(m->invuln_period.time_left > 0.0f) return;
     m->invuln_period.start();
     
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float damage = 0;
+    
+    if(!info->mob2->attack(m, info->h2, info->h1, NULL)) return;
+    
     float knockback = 0;
     float knockback_angle = 0;
-    
-    damage = calculate_damage(info->mob2, m, info->h2, info->h1);
     calculate_knockback(
         info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
     );
-    
-    m->set_health(true, false, -damage);
     m->apply_knockback(knockback, knockback_angle);
     
     //If info2 has a value, then this leader is inactive.
-    if(knockback > 0 && damage == 0) {
+    if(knockback > 0) {
         if(info2)
             m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
         else
@@ -1229,9 +1225,9 @@ void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  * When an inactive leader loses health.
  * info1: Pointer to the hitbox touch information structure.
  */
-void leader_fsm::inactive_lose_health(mob* m, void* info1, void* info2) {
+void leader_fsm::inactive_be_attacked(mob* m, void* info1, void* info2) {
     int a = 0;
-    leader_fsm::lose_health(m, info1, &a);
+    leader_fsm::be_attacked(m, info1, &a);
     //We need to send the function a value so it knows
     //it's an inactive leader.
 }

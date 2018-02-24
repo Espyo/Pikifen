@@ -12,6 +12,7 @@
 #include "../functions.h"
 #include "bridge.h"
 #include "bridge_fsm.h"
+#include "mob_fsm.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -24,7 +25,7 @@ void bridge_fsm::create_fsm(mob_type* typ) {
             efc.run(bridge_fsm::set_anim);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(bridge_fsm::take_damage);
+            efc.run(gen_mob_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run(bridge_fsm::open);
@@ -97,16 +98,6 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Damage the bridge, depending on the Pikmin, hitbox, etc.
- */
-void bridge_fsm::take_damage(mob* m, void* info1, void* info2) {
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float damage = calculate_damage(info->mob2, m, info->h2, info->h1);
-    m->set_health(true, false, -damage);
 }
 
 

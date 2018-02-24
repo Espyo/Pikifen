@@ -36,12 +36,6 @@ pikmin::pikmin(
     carrying_mob(NULL),
     carrying_spot(0),
     missed_attack_ptr(nullptr),
-    missed_attack_timer(
-        PIKMIN_MISSED_ATTACK_DURATION,
-        [this] () {
-            this->missed_attack_ptr = NULL;
-        }
-    ),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
     pluck_reserved(false) {
     
@@ -54,6 +48,12 @@ pikmin::pikmin(
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
     near_reach = 0;
     far_reach = 2;
+    
+    missed_attack_timer =
+        timer(
+            PIKMIN_MISSED_ATTACK_DURATION,
+    [this] () { this->missed_attack_ptr = NULL; }
+        );
 }
 
 
@@ -67,42 +67,6 @@ pikmin::~pikmin() { }
 float pikmin::get_base_speed() {
     float base = mob::get_base_speed();
     return base + (base * this->maturity * maturity_speed_mult);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Actually makes the Pikmin attack connect - the process that makes
- * the victim lose health, the sound, the sparks, etc.
- * victim_hitbox: Hitbox of the victim.
- */
-void pikmin::do_attack(mob* m, hitbox* victim_hitbox) {
-    if(!m || !victim_hitbox) return;
-    
-    if(
-        !is_resistant_to_hazards(
-            this->pik_type->resistances, victim_hitbox->hazards
-        )
-    ) {
-        //If the hitbox says it has a fire effect, and this
-        //Pikmin is not immune to fire, don't let it be a wise-guy;
-        //it cannot be able to attack the hitbox.
-        return;
-    }
-    
-    hitbox_touch_info info = hitbox_touch_info(this, victim_hitbox, NULL);
-    focused_mob->fsm.run_event(MOB_EVENT_HITBOX_TOUCH_N_A, &info);
-    
-    sfx_attack.play(0.06, false, 0.4f);
-    sfx_pikmin_attack.play(0.06, false, 0.8f);
-    
-    particle smack_p(
-        PARTICLE_TYPE_SMACK, pos,
-        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
-    );
-    smack_p.bitmap = bmp_smack;
-    smack_p.color = al_map_rgb(255, 160, 128);
-    smack_p.before_mobs = false;
-    particles.add(smack_p);
 }
 
 

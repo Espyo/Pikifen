@@ -10,6 +10,7 @@ name_call_sfx = Louie_name_call.ogg
 pluck_delay = 0.6
 pushable = true
 pushes = false
+resistances = poison
 rotation_speed = 360
 radius = 16
 throw_strength_mult = 0.7

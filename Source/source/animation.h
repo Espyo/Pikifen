@@ -193,7 +193,6 @@ public:
     animation_database* anim_db; //The database this belongs to.
     float cur_frame_time;        //Time passed on the current frame.
     size_t cur_frame_index;
-    bool done_once;
     
     animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);

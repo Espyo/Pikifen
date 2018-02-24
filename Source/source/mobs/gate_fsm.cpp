@@ -12,6 +12,7 @@
 #include "../functions.h"
 #include "gate.h"
 #include "gate_fsm.h"
+#include "mob_fsm.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -24,7 +25,7 @@ void gate_fsm::create_fsm(mob_type* typ) {
             efc.run(gate_fsm::set_anim);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(gate_fsm::take_damage);
+            efc.run(gen_mob_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run(gate_fsm::open);
@@ -71,16 +72,6 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     pg.total_speed_deviation = 15;
     pg.duration_deviation = 0.25;
     pg.emit(particles);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a gate takes damage, based on the Pikmin, hitboxes, etc.
- */
-void gate_fsm::take_damage(mob* m, void* info1, void* info2) {
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float damage = calculate_damage(info->mob2, m, info->h2, info->h1);
-    m->set_health(true, false, -damage);
 }
 
 

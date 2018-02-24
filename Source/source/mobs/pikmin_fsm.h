@@ -20,6 +20,7 @@
 namespace pikmin_fsm {
 void create_fsm(mob_type* typ);
 
+void be_attacked(            mob* m, void* info1, void* info2);
 void be_dismissed(           mob* m, void* info1, void* info2);
 void be_grabbed_by_enemy(    mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(   mob* m, void* info1, void* info2);
@@ -36,14 +37,11 @@ void chase_leader(           mob* m, void* info1, void* info2);
 void check_disabled_edible(  mob* m, void* info1, void* info2);
 void check_remove_flailing(  mob* m, void* info1, void* info2);
 void clear_timer(            mob* m, void* info1, void* info2);
-void do_grounded_attack(     mob* m, void* info1, void* info2);
-void do_latched_attack(      mob* m, void* info1, void* info2);
 void end_pluck(              mob* m, void* info1, void* info2);
 void face_leader(            mob* m, void* info1, void* info2);
 void fall_down_pit(          mob* m, void* info1, void* info2);
 void flail_to_whistle(       mob* m, void* info1, void* info2);
 void forget_carriable_object(mob* m, void* info1, void* info2);
-void get_knocked_down(       mob* m, void* info1, void* info2);
 void get_up(                 mob* m, void* info1, void* info2);
 void go_to_carriable_object( mob* m, void* info1, void* info2);
 void go_to_opponent(         mob* m, void* info1, void* info2);

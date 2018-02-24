@@ -63,32 +63,9 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * Event handler that makes a mob lose health by being damaged by another.
  */
-void gen_mob_fsm::lose_health(mob* m, void* info1, void* info2) {
+void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    if(!info->mob2->should_attack(m)) return;
-    
-    float damage = 0;
-    
-    damage = calculate_damage(info->mob2, m, info->h2, info->h1);
-    m->set_health(true, false, -damage);
-    
-    m->fsm.run_event(MOB_EVENT_DAMAGE, info->mob2);
-    
-    m->cause_spike_damage(info->mob2, false);
-    
-    //If before taking damage, the interval was dividable X times,
-    //and after it's only dividable by Y (X>Y), an interval was crossed.
-    if(
-        m->type->big_damage_interval > 0 &&
-        m->health != m->type->max_health
-    ) {
-        if(
-            floor((m->health + damage) / m->type->big_damage_interval) >
-            floor(m->health / m->type->big_damage_interval)
-        ) {
-            m->big_damage_ev_queued = true;
-        }
-    }
+    info->mob2->attack(m, info->h2, info->h1, NULL);    
 }
 
 

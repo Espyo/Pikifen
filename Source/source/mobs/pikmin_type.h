@@ -33,7 +33,6 @@ class leader;
  */
 class pikmin_type : public mob_type {
 public:
-    vector<hazard*> resistances;
     float attack_power;
     float carry_strength;
     float carry_speed;

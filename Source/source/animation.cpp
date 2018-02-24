@@ -196,8 +196,7 @@ animation_instance::animation_instance(animation_database* anim_db) :
     cur_anim(nullptr),
     anim_db(anim_db),
     cur_frame_time(0),
-    cur_frame_index(0),
-    done_once(false) {
+    cur_frame_index(0) {
     
 }
 
@@ -220,7 +219,6 @@ animation_instance::animation_instance(const animation_instance &ai2) :
 void animation_instance::start() {
     cur_frame_time = 0;
     cur_frame_index = 0;
-    done_once = false;
 }
 
 
@@ -236,11 +234,12 @@ bool animation_instance::tick(const float time, vector<size_t>* signals) {
     if(n_frames == 0) return false;
     frame* cur_frame = &cur_anim->frames[cur_frame_index];
     if(cur_frame->duration == 0) {
-        done_once = true;
         return true;
     }
     
     cur_frame_time += time;
+    
+    bool reached_end = false;
     
     //This is a while instead of an if because if the framerate is too low
     //and the next frame's duration is too short, it could be that a tick
@@ -249,7 +248,7 @@ bool animation_instance::tick(const float time, vector<size_t>* signals) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
         cur_frame_index++;
         if(cur_frame_index >= n_frames) {
-            done_once = true;
+            reached_end = true;
             cur_frame_index =
                 (cur_anim->loop_frame >= n_frames) ? 0 : cur_anim->loop_frame;
         }
@@ -259,7 +258,7 @@ bool animation_instance::tick(const float time, vector<size_t>* signals) {
         }
     }
     
-    return done_once;
+    return reached_end;
 }
 
 

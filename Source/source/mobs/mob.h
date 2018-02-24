@@ -226,6 +226,8 @@ public:
     map<string, string> vars;
     //The mob it has focus on.
     mob* focused_mob;
+    //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
+    vector<mob*> hit_opponents;
     //Are we waiting to report the big damage event?
     bool big_damage_ev_queued;
     //Index of the reach to use for "X in reach" events.
@@ -349,6 +351,7 @@ public:
     void become_carriable(const bool to_ship);
     void become_uncarriable();
     
+    bool attack(mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage);
     void add_to_group(mob* new_member);
     void apply_knockback(const float knockback, const float knockback_angle);
     void calculate_carrying_destination(mob* added, mob* removed);
@@ -357,6 +360,7 @@ public:
     void unfocus_from_mob();
     void remove_from_group();
     bool should_attack(mob* m);
+    bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
@@ -401,10 +405,6 @@ public:
 };
 
 
-float calculate_damage(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h
-);
 void calculate_knockback(
     mob* attacker, mob* victim, hitbox* attacker_h,
     hitbox* victim_h, float* knockback, float* angle
@@ -418,8 +418,5 @@ mob* create_mob(
     const float angle, const string &vars
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
-bool is_resistant_to_hazards(
-    vector<hazard*> &resistances, vector<hazard*> &hazards
-);
 
 #endif //ifndef MOB_INCLUDED

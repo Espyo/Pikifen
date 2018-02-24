@@ -21,6 +21,7 @@
 namespace leader_fsm {
 void create_fsm(mob_type* typ);
 
+void be_attacked(           mob* m, void* info1, void* info2);
 void be_dismissed(          mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(  mob* m, void* info1, void* info2);
 void be_released(           mob* m, void* info1, void* info2);
@@ -38,13 +39,12 @@ void focus(                 mob* m, void* info1, void* info2);
 void get_knocked_back(      mob* m, void* info1, void* info2);
 void go_pluck(              mob* m, void* info1, void* info2);
 void grab_mob(              mob* m, void* info1, void* info2);
+void inactive_be_attacked(  mob* m, void* info1, void* info2);
 void inactive_die(          mob* m, void* info1, void* info2);
-void inactive_lose_health(  mob* m, void* info1, void* info2);
 void inactive_search_seed(  mob* m, void* info1, void* info2);
 void join_group(            mob* m, void* info1, void* info2);
 void land(                  mob* m, void* info1, void* info2);
 void left_hazard(           mob* m, void* info1, void* info2);
-void lose_health(           mob* m, void* info1, void* info2);
 void lose_momentum(         mob* m, void* info1, void* info2);
 void move(                  mob* m, void* info1, void* info2);
 void notify_pikmin_release( mob* m, void* info1, void* info2);

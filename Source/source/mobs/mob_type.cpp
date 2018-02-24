@@ -321,6 +321,17 @@ void load_mob_type_from_file(
         }
     }
     
+    data_node* hazards_node = file.get_child_by_name("resistances");
+    vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
+    for(size_t h = 0; h < hazards_strs.size(); ++h) {
+        string hazard_name = hazards_strs[h];
+        if(hazards.find(hazard_name) == hazards.end()) {
+            log_error("Unknown hazard \"" + hazard_name + "\"!", hazards_node);
+        } else {
+            mt->resistances.push_back(&(hazards[hazard_name]));
+        }
+    }
+    
     data_node* spike_damage_vuln_node =
         file.get_child_by_name("spike_damage_vulnerabilities");
     size_t n_sd_vuln =

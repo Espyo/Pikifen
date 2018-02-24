@@ -735,13 +735,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             } else {
                 z_touch =
                     !(
-                        (
-                            m2_ptr->z >
-                            m_ptr->z + m_ptr->type->height
-                        ) || (
-                            m2_ptr->z + m2_ptr->type->height <
-                            m2_ptr->z
-                        )
+                        (m2_ptr->z > m_ptr->z + m_ptr->type->height) ||
+                        (m2_ptr->z + m2_ptr->type->height < m2_ptr->z)
                     );
             }
             
@@ -785,66 +780,62 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
         mob_event* hitbox_touch_haz_ev =
             q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
-        if(hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) {
+            
+        sprite* s1_ptr = m_ptr->anim.get_cur_sprite();
+        sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
         
-            sprite* s1_ptr = m_ptr->anim.get_cur_sprite();
-            sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
+        if(
+            (hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) &&
+            s1_ptr && s2_ptr &&
+            !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty() &&
+            d < s1_ptr->hitbox_span + s2_ptr->hitbox_span
+        ) {
+        
+            bool reported_an_ev = false;
+            bool reported_na_ev = false;
+            bool reported_eat_ev = false;
+            bool reported_haz_ev = false;
             
-            bool m1_is_hitbox = false;
-            vector<hazard*> m1_resistances;
+            float m1_angle_sin = sin(m_ptr->angle);
+            float m1_angle_cos = cos(m_ptr->angle);
+            float m2_angle_sin = sin(m2_ptr->angle);
+            float m2_angle_cos = cos(m2_ptr->angle);
             
-            if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-                m1_is_hitbox = true;
-                m1_resistances = ((pikmin*) m_ptr)->pik_type->resistances;
-            } else if(m_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
-                m1_is_hitbox = true;
-            }
+            for(size_t h1 = 0; h1 < s1_ptr->hitboxes.size(); ++h1) {
             
-            bool m1_has_hitboxes =
-                s1_ptr && (!s1_ptr->hitboxes.empty() || m1_is_hitbox);
-            bool m2_has_hitboxes =
-                s2_ptr && !s2_ptr->hitboxes.empty();
+                hitbox* h1_ptr = &s1_ptr->hitboxes[h1];
+                if(h1_ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
-            //If they're so far away the hitboxes can't touch, just skip
-            //the check. Also, if neither have hitboxes up, never mind.
-            if(
-                m1_has_hitboxes && m2_has_hitboxes &&
-                d < s1_ptr->hitbox_span + s2_ptr->hitbox_span
-            ) {
-            
-                bool reported_an_ev = false;
-                bool reported_na_ev = false;
-                bool reported_eat_ev = false;
-                bool reported_haz_ev = false;
-                
-                float m1_angle_sin = 0;
-                float m1_angle_cos = 0;
-                if(!m1_is_hitbox) {
-                    m1_angle_sin = sin(m_ptr->angle);
-                    m1_angle_cos = cos(m_ptr->angle);
-                }
-                float m2_angle_sin = sin(m2_ptr->angle);
-                float m2_angle_cos = cos(m2_ptr->angle);
-                
-                //For all of mob 2's hitboxes, check for collisions.
-                for(
-                    size_t h2 = 0;
-                    h2 < s2_ptr->hitboxes.size(); ++h2
-                ) {
+                for(size_t h2 = 0; h2 < s2_ptr->hitboxes.size(); ++h2) {
                     hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
                     if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                     
-                    //Hazard resistance check.
-                    if(
-                        !h2_ptr->hazards.empty() &&
-                        is_resistant_to_hazards(
-                            m1_resistances, h2_ptr->hazards
-                        )
+                    if(h1_ptr->type == h2_ptr->type) continue;
+                    
+                    //Check if m2 is under any status effect
+                    //that disables attacks.
+                    bool disable_attack_status = false;
+                    for(
+                        size_t s = 0;
+                        s < m2_ptr->statuses.size(); ++s
                     ) {
-                        continue;
+                        if(m2_ptr->statuses[s].type->disables_attack) {
+                            disable_attack_status = true;
+                            break;
+                        }
                     }
                     
-                    //Get mob 2's real hitbox location.
+                    //Get the real hitbox locations.
+                    point m1_h_pos(
+                        m_ptr->pos.x + (
+                            h1_ptr->pos.x * m1_angle_cos -
+                            h1_ptr->pos.y * m1_angle_sin
+                        ),
+                        m_ptr->pos.y + (
+                            h1_ptr->pos.x * m1_angle_sin +
+                            h1_ptr->pos.y * m1_angle_cos
+                        )
+                    );
                     point m2_h_pos(
                         m2_ptr->pos.x + (
                             h2_ptr->pos.x * m2_angle_cos -
@@ -855,254 +846,173 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                             h2_ptr->pos.y * m2_angle_cos
                         )
                     );
+                    float m1_h_z = m_ptr->z + h1_ptr->z;
                     float m2_h_z = m2_ptr->z + h2_ptr->z;
                     
-                    if(m1_is_hitbox) {
-                        //Just check if the entire Pikmin/leader
-                        //touched mob 2's hitbox.
-                        
-                        bool collided = false;
-                        
-                        //TODO improve this "connected hitbox" logic
-                        //in the future, so that it's not so magically
-                        //Pikmin-dependant...
-                        if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-                            pikmin* p_ptr = (pikmin*) m_ptr;
-                            if(
-                                m_ptr->focused_mob == m2_ptr &&
-                                p_ptr->connected_hitbox_nr == h2
-                            ) {
-                                collided = true;
-                            }
-                        };
-                        
-                        if(!collided) {
-                            bool z_collision;
-                            if(h2_ptr->height == 0) {
-                                //Always hits vertically.
-                                //Imagine the hitbox is infinitely high.
-                                z_collision = true;
-                            } else {
-                                z_collision =
-                                    !(
-                                        (m2_h_z > m_ptr->z) ||
-                                        (m2_h_z + h2_ptr->height < m_ptr->z)
-                                    );
-                            }
-                            
-                            if(
-                                z_collision &&
-                                dist(m_ptr->pos, m2_h_pos) <
-                                (m_ptr->type->radius + h2_ptr->radius)
-                            ) {
-                                collided = true;
-                            }
-                        }
-                        
-                        if(collided) {
-                            //Collision!
-                            if(
-                                hitbox_touch_eat_ev && !reported_eat_ev &&
-                                m2_ptr->chomping_pikmin.size() <
-                                m2_ptr->chomp_max &&
-                                find(
-                                    m2_ptr->chomp_hitboxes.begin(),
-                                    m2_ptr->chomp_hitboxes.end(),
-                                    h2_ptr->body_part_index
-                                ) !=
-                                m2_ptr->chomp_hitboxes.end()
-                            ) {
-                                hitbox_touch_eat_ev->run(
-                                    m_ptr, (void*) m2_ptr, (void*) h2_ptr
-                                );
-                                m2_ptr->chomping_pikmin.push_back(m_ptr);
-                                reported_eat_ev = true;
-                            }
-                            
-                            if(
-                                !reported_haz_ev &&
-                                h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                                hitbox_touch_haz_ev &&
-                                !h2_ptr->hazards.empty()
-                            ) {
-                                for(
-                                    size_t h = 0;
-                                    h < h2_ptr->hazards.size(); ++h
-                                ) {
-                                    hitbox_touch_haz_ev->run(
-                                        m_ptr,
-                                        (void*) h2_ptr->hazards[h]
-                                    );
-                                }
-                                reported_haz_ev = true;
-                            }
-                            
-                            //Check if m2 is under any status effect
-                            //that disables attacks.
-                            bool disable_attack_status = false;
-                            for(
-                                size_t s = 0; s < m2_ptr->statuses.size(); ++s
-                            ) {
-                                if(m2_ptr->statuses[s].type->disables_attack) {
-                                    disable_attack_status = true;
-                                    break;
-                                }
-                            }
-                            
-                            if(
-                                h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                                hitbox_touch_na_ev && !reported_na_ev &&
-                                //Check if the events have been sent
-                                //already. This way, Pikmin aren't
-                                //knocked back AND eaten.
-                                !reported_eat_ev &&
-                                !reported_haz_ev &&
-                                !disable_attack_status
-                            ) {
-                                hitbox_touch_info ev_info =
-                                    hitbox_touch_info(m2_ptr, NULL, h2_ptr);
-                                hitbox_touch_na_ev->run(
-                                    m_ptr, (void*) &ev_info
-                                );
-                                reported_na_ev = true;
-                                
-                            } else if(
-                                h2_ptr->type == HITBOX_TYPE_NORMAL &&
-                                hitbox_touch_an_ev && !reported_an_ev &&
-                                !reported_haz_ev
-                            ) {
-                                hitbox_touch_info ev_info =
-                                    hitbox_touch_info(m2_ptr, NULL, h2_ptr);
-                                hitbox_touch_an_ev->run(
-                                    m_ptr, (void*) &ev_info
-                                );
-                                reported_an_ev = true;
-                            }
-                        }
-                        
-                    } else {
-                        //Check if any hitbox touched mob 2's hitbox.
-                        
-                        for(
-                            size_t h1 = 0;
-                            h1 < s1_ptr->hitboxes.size(); ++h1
+                    bool collided = false;
+                    
+                    if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                        //Pikmin latched on to a hitbox are obviously
+                        //touching it.
+                        pikmin* p_ptr = (pikmin*) m_ptr;
+                        if(
+                            m_ptr->focused_mob == m2_ptr &&
+                            p_ptr->connected_hitbox_nr == h2
                         ) {
+                            collided = true;
+                        }
+                    }
+                    
+                    if(!collided) {
+                        bool z_collision;
+                        if(h1_ptr->height == 0 || h2_ptr->height == 0) {
+                            z_collision = true;
+                        } else {
+                            z_collision =
+                                !(
+                                    (m2_h_z > m1_h_z + h1_ptr->height) ||
+                                    (m2_h_z + h2_ptr->height < m1_h_z)
+                                );
+                        }
                         
-                            hitbox* h1_ptr =
-                                &s1_ptr->hitboxes[h1];
-                            if(h1_ptr->type == HITBOX_TYPE_DISABLED) {
-                                continue;
-                            }
-                            
-                            //Get mob 1's real hitbox location.
-                            point m1_h_pos(
-                                m_ptr->pos.x + (
-                                    h1_ptr->pos.x * m1_angle_cos -
-                                    h1_ptr->pos.y * m1_angle_sin
-                                ),
-                                m_ptr->pos.y + (
-                                    h1_ptr->pos.x * m1_angle_sin +
-                                    h1_ptr->pos.y * m1_angle_cos
-                                )
-                            );
-                            float m1_h_z =
-                                m_ptr->z + h1_ptr->z;
-                                
-                            bool z_collision;
-                            if(h1_ptr->height == 0 || h2_ptr->height == 0) {
-                                z_collision = true;
-                            } else {
-                                z_collision =
-                                    !(
-                                        (
-                                            m2_h_z >
-                                            m1_h_z + h1_ptr->height
-                                        ) || (
-                                            m2_h_z + h2_ptr->height <
-                                            m1_h_z
-                                        )
-                                    );
-                            }
-                            
-                            if(
-                                z_collision &&
-                                dist(m1_h_pos, m2_h_pos) <
-                                (h1_ptr->radius + h2_ptr->radius)
-                            ) {
-                                //Collision!
-                                if(
-                                    hitbox_touch_eat_ev &&
-                                    !reported_eat_ev &&
-                                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                                    m2_ptr->chomping_pikmin.size() <
-                                    m2_ptr->chomp_max &&
-                                    find(
-                                        m2_ptr->chomp_hitboxes.begin(),
-                                        m2_ptr->chomp_hitboxes.end(),
-                                        h2_ptr->body_part_index
-                                    ) !=
-                                    m2_ptr->chomp_hitboxes.end()
-                                ) {
-                                    hitbox_touch_eat_ev->run(
-                                        m_ptr,
-                                        (void*) m2_ptr,
-                                        (void*) h2_ptr
-                                    );
-                                    m2_ptr->chomping_pikmin.push_back(
-                                        m_ptr
-                                    );
-                                    reported_eat_ev = true;
-                                }
-                                
-                                //Check if m2 is under any status effect
-                                //that disables attacks.
-                                bool disable_attack_status = false;
-                                for(
-                                    size_t s = 0;
-                                    s < m2_ptr->statuses.size(); ++s
-                                ) {
-                                    if(
-                                        m2_ptr->statuses[
-                                            s
-                                        ].type->disables_attack
-                                    ) {
-                                        disable_attack_status = true;
-                                        break;
-                                    }
-                                }
-                                
-                                if(
-                                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                                    h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                                    hitbox_touch_na_ev && !reported_na_ev &&
-                                    !disable_attack_status
-                                ) {
-                                    hitbox_touch_info ev_info =
-                                        hitbox_touch_info(
-                                            m2_ptr, h1_ptr, h2_ptr
-                                        );
-                                    hitbox_touch_na_ev->run(
-                                        m_ptr, (void*) &ev_info
-                                    );
-                                    reported_na_ev = true;
-                                    
-                                } else if(
-                                    h1_ptr->type == HITBOX_TYPE_ATTACK &&
-                                    h2_ptr->type == HITBOX_TYPE_NORMAL &&
-                                    hitbox_touch_an_ev && !reported_an_ev &&
-                                    !reported_haz_ev
-                                ) {
-                                    hitbox_touch_info ev_info =
-                                        hitbox_touch_info(
-                                            m2_ptr, h1_ptr, h2_ptr
-                                        );
-                                    hitbox_touch_an_ev->run(
-                                        m_ptr, (void*) &ev_info
-                                    );
-                                    reported_an_ev = true;
-                                }
+                        if(
+                            z_collision &&
+                            dist(m_ptr->pos, m2_h_pos) <
+                            (m_ptr->type->radius + h2_ptr->radius)
+                        ) {
+                            collided = true;
+                        }
+                    }
+                    
+                    if(!collided) continue;
+                    
+                    //Collision!
+                    if(
+                        h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                        h2_ptr->type == HITBOX_TYPE_ATTACK
+                    ) {
+                        bool already_hit = false;
+                        //The attack already hit this mob?
+                        for(
+                            size_t ho = 0;
+                            ho < m2_ptr->hit_opponents.size();
+                            ++ho
+                        ) {
+                            if(m2_ptr->hit_opponents[ho] == m_ptr) {
+                                already_hit = true;
+                                break;
                             }
                         }
+                        if(already_hit) {
+                            continue;
+                        } else {
+                            m2_ptr->hit_opponents.push_back(m_ptr);
+                        }
+                        
+                        //Hazard resistance check.
+                        if(
+                            !h2_ptr->hazards.empty() &&
+                            m_ptr->is_resistant_to_hazards(h2_ptr->hazards)
+                        ) {
+                            continue;
+                        }
+                        
+                        //Should this mob even attack this other mob?
+                        if(!m2_ptr->should_attack(m_ptr)) {
+                            continue;
+                        }
+                    }
+                    
+                    //Confirmed damage. First, the "touched eat hitbox" event.
+                    if(
+                        hitbox_touch_eat_ev &&
+                        !reported_eat_ev &&
+                        !disable_attack_status &&
+                        h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                        m2_ptr->chomping_pikmin.size() <
+                        m2_ptr->chomp_max &&
+                        find(
+                            m2_ptr->chomp_hitboxes.begin(),
+                            m2_ptr->chomp_hitboxes.end(),
+                            h2_ptr->body_part_index
+                        ) !=
+                        m2_ptr->chomp_hitboxes.end()
+                    ) {
+                        hitbox_touch_eat_ev->run(
+                            m_ptr,
+                            (void*) m2_ptr,
+                            (void*) h2_ptr
+                        );
+                        reported_eat_ev = true;
+                        
+                        //Re-fetch the other events, since the eating event
+                        //could have triggered a state change.
+                        hitbox_touch_haz_ev =
+                            q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
+                        hitbox_touch_an_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
+                        hitbox_touch_na_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                    }
+                    
+                    //"Touched hazard" event.
+                    if(
+                        hitbox_touch_haz_ev &&
+                        !reported_haz_ev &&
+                        !disable_attack_status &&
+                        h2_ptr->type == HITBOX_TYPE_ATTACK &&
+                        !h2_ptr->hazards.empty()
+                    ) {
+                        for(
+                            size_t h = 0;
+                            h < h2_ptr->hazards.size(); ++h
+                        ) {
+                            hitbox_touch_haz_ev->run(
+                                m_ptr,
+                                (void*) h2_ptr->hazards[h]
+                            );
+                        }
+                        reported_haz_ev = true;
+                        
+                        //Re-fetch the other events, since the hazard event
+                        //could have triggered a state change.
+                        hitbox_touch_an_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
+                        hitbox_touch_na_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                    }
+                    
+                    //"Touched normal/attack hitbox" events.
+                    if(
+                        hitbox_touch_na_ev &&
+                        !reported_na_ev &&
+                        !disable_attack_status &&
+                        h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                        h2_ptr->type == HITBOX_TYPE_ATTACK
+                    ) {
+                        hitbox_touch_info ev_info =
+                            hitbox_touch_info(
+                                m2_ptr, h1_ptr, h2_ptr
+                            );
+                        hitbox_touch_na_ev->run(
+                            m_ptr, (void*) &ev_info
+                        );
+                        reported_na_ev = true;
+                        
+                    } else if(
+                        hitbox_touch_an_ev &&
+                        !reported_an_ev &&
+                        h1_ptr->type == HITBOX_TYPE_ATTACK &&
+                        h2_ptr->type == HITBOX_TYPE_NORMAL
+                    ) {
+                        hitbox_touch_info ev_info =
+                            hitbox_touch_info(
+                                m2_ptr, h1_ptr, h2_ptr
+                            );
+                        hitbox_touch_an_ev->run(
+                            m_ptr, (void*) &ev_info
+                        );
+                        reported_an_ev = true;
                     }
                 }
             }

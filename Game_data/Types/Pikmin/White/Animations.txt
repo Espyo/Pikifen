@@ -8,9 +8,8 @@ animations{
 			grabbing{
 				duration=0.10
 			}
-			grabbing_near{
+			attacl{
 				duration=0.30
-				signal=0
 			}
 			grabbing{
 				duration=0.10
@@ -143,7 +142,32 @@ sprites{
 		top_pos=-4.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-4.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	sprout2{
 		file=White_Pikmin.png
@@ -155,7 +179,32 @@ sprites{
 		top_pos=-4.50 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-4.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	sprout3{
 		file=White_Pikmin.png
@@ -167,7 +216,32 @@ sprites{
 		top_pos=-3.50 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-4.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	grabbing{
 		file=White_Pikmin.png
@@ -179,7 +253,32 @@ sprites{
 		top_pos=-4.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-6.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=8.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	grabbing_far{
 		file=White_Pikmin.png
@@ -191,7 +290,32 @@ sprites{
 		top_pos=-14.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-15.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=8.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	grabbing_near{
 		file=White_Pikmin.png
@@ -203,7 +327,32 @@ sprites{
 		top_pos=11.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes
+		hitboxes{
+			top{
+				coords=12.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=2.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	half_lying{
 		file=White_Pikmin.png
@@ -215,7 +364,32 @@ sprites{
 		top_pos=-12.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-13.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=2.00 0.00 0.00
+				height=128.00
+				radius=8.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	idling{
 		file=White_Pikmin.png
@@ -227,7 +401,32 @@ sprites{
 		top_pos=-4.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-4.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=5.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	lying{
 		file=White_Pikmin.png
@@ -239,7 +438,32 @@ sprites{
 		top_pos=-20.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-20.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=8.00 0.00 0.00
+				height=128.00
+				radius=10.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	thrown1{
 		file=White_Pikmin.png
@@ -251,7 +475,32 @@ sprites{
 		top_pos=0.00 0.00
 		top_size=1.00 1.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-4.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	thrown2{
 		file=White_Pikmin.png
@@ -263,7 +512,32 @@ sprites{
 		top_pos=-9.00 0.00
 		top_size=5.50 10.00
 		top_angle=0.00
-		hitboxes
+		hitboxes{
+			top{
+				coords=-9.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=2.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	thrown3{
 		file=White_Pikmin.png
@@ -275,7 +549,32 @@ sprites{
 		top_pos=3.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes
+		hitboxes{
+			top{
+				coords=3.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	thrown4{
 		file=White_Pikmin.png
@@ -287,7 +586,32 @@ sprites{
 		top_pos=9.00 0.00
 		top_size=5.50 10.00
 		top_angle=3.14
-		hitboxes
+		hitboxes{
+			top{
+				coords=9.00 0.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-2.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	walking1{
 		file=White_Pikmin.png
@@ -299,7 +623,32 @@ sprites{
 		top_pos=-4.00 -1.50
 		top_size=5.50 10.00
 		top_angle=0.35
-		hitboxes
+		hitboxes{
+			top{
+				coords=-4.00 -2.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=5.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 	walking2{
 		file=White_Pikmin.png
@@ -311,7 +660,72 @@ sprites{
 		top_pos=-4.00 1.50
 		top_size=5.50 10.00
 		top_angle=5.93
-		hitboxes
+		hitboxes{
+			top{
+				coords=-4.00 2.00 0.00
+				height=128.00
+				radius=4.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=5.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	attack{
+		file=White_Pikmin.png
+		file_pos=170.00 29.00
+		file_size=22.00 22.00
+		game_size=11.00 11.00
+		offset=3.00 0.00
+		top_visible=true
+		top_pos=11.00 0.00
+		top_size=5.50 10.00
+		top_angle=3.14
+		hitboxes{
+			top{
+				coords=12.00 -0.00 0.00
+				height=128.00
+				radius=8.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			body{
+				coords=2.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
 	}
 }
-body_parts
+body_parts{
+	top
+	body
+}

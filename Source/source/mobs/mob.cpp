@@ -248,6 +248,104 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the mob attack another mob.
+ * Returns true if the attack was successful.
+ * victim:   The mob to be attacked.
+ * attack_h: Hitbox used for the attack.
+ * victim_h: Victim's hitbox that got hit.
+ * damage:   If not NULL, total damage caused is returned here.
+ */
+bool mob::attack(
+    mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
+) {
+    float total_damage = 0;
+    float attacker_offense = 0;
+    float defense_multiplier = 1;
+    
+    if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
+        //This hitbox can't be damaged! Abort!
+        return false;
+    }
+    
+    if(!is_resistant_to_hazards(victim_h->hazards)) {
+        //If the hitbox says it has a fire effect, and this
+        //mob is not immune to fire, don't let it be a wise-guy;
+        //it cannot be able to attack the hitbox.
+        return false;
+    }
+    
+    if(attack_h) {
+        attacker_offense = attack_h->multiplier;
+        
+    } else {
+        if(type->category->id == MOB_CATEGORY_PIKMIN) {
+            pikmin* pik_ptr = (pikmin*) this;
+            attacker_offense =
+                pik_ptr->pik_type->attack_power *
+                (1 + pik_ptr->maturity * maturity_power_mult);
+        }
+    }
+    
+    if(victim_h) {
+        if(victim_h->multiplier == 0.0f) {
+            //Hah, this hitbox is invulnerable!
+            return false;
+        }
+        defense_multiplier = victim_h->multiplier;
+    }
+    
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        attacker_offense *= statuses[s].type->attack_multiplier;
+    }
+    for(size_t s = 0; s < victim->statuses.size(); ++s) {
+        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
+    }
+    
+    total_damage = attacker_offense * (1.0 / defense_multiplier);
+    
+    victim->set_health(true, false, -total_damage);
+    
+    victim->fsm.run_event(MOB_EVENT_DAMAGE, this);
+    victim->cause_spike_damage(victim, false);
+    
+    //If before taking damage, the interval was dividable X times,
+    //and after it's only dividable by Y (X>Y), an interval was crossed.
+    if(
+        victim->type->big_damage_interval > 0 &&
+        victim->health != victim->type->max_health
+    ) {
+        if(
+            floor(
+                (victim->health + total_damage) /
+                victim->type->big_damage_interval
+            ) >
+            floor(victim->health / victim->type->big_damage_interval)
+        ) {
+            victim->big_damage_ev_queued = true;
+        }
+    }
+    
+    //Smack particle effect.
+    point smack_p_pos =
+        pos +
+        (victim->pos - pos) *
+        (type->radius / (type->radius + victim->type->radius));
+    sfx_attack.play(0.06, false, 0.6f);
+    particle smack_p(
+        PARTICLE_TYPE_SMACK, smack_p_pos,
+        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+    );
+    smack_p.bitmap = bmp_smack;
+    smack_p.color = al_map_rgb(255, 160, 128);
+    smack_p.before_mobs = false;
+    particles.add(smack_p);
+    
+    if(damage) *damage = total_damage;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets up data for a mob to become carriable.
  */
 void mob::become_carriable(const bool to_ship) {
@@ -771,6 +869,29 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a mob is resistant to a list of hazards, given the list
+ * of hazards.
+ */
+bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
+    size_t n_matches = 0;
+    for(size_t h = 0; h < hazards.size(); ++h) {
+        for(size_t r = 0; r < type->resistances.size(); ++r) {
+            if(hazards[h] == type->resistances[r]) {
+                n_matches++;
+                break;
+            }
+        }
+    }
+    if(n_matches == hazards.size()) {
+        //The mob can resist all
+        //of these hazards!
+        return true;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes all particle generators with the given ID.
  */
 void mob::remove_particle_generator(const size_t id) {
@@ -866,6 +987,8 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
     animation* new_anim = anim.anim_db->animations[final_nr];
     anim.cur_anim = new_anim;
     anim.start();
+    
+    hit_opponents.clear();
 }
 
 
@@ -909,7 +1032,7 @@ void mob::set_var(const string &name, const string &value) {
 
 
 /* ----------------------------------------------------------------------------
- * Should this mob attack m? Teams are used to decide this.
+ * Should this mob attack m? Teams and other factors are used to decide this.
  */
 bool mob::should_attack(mob* m) {
     if(team == m->team) return false;
@@ -996,6 +1119,7 @@ void mob::tick_animation() {
     
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
+        hit_opponents.clear();
     }
     for(size_t s = 0; s < frame_signals.size(); ++s) {
         fsm.run_event(MOB_EVENT_FRAME_SIGNAL, &frame_signals[s]);
@@ -2185,57 +2309,6 @@ void group_info::sort(subgroup_type* leading_type) {
 
 
 /* ----------------------------------------------------------------------------
- * Calculates how much damage an attack will cause.
- * attacker:     the attacking mob.
- * victim:       the mob that'll take the damage.
- * attacker_h:   the hitbox of the attacker mob, if any.
- * victim_h:     the hitbox of the victim mob, if any.
- */
-float calculate_damage(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h
-) {
-    float attacker_offense = 0;
-    float defense_multiplier = 1;
-    
-    if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
-        //This hitbox can't be damaged! Abort!
-        return 0;
-    }
-    
-    if(attacker_h) {
-        attacker_offense = attacker_h->multiplier;
-        
-    } else {
-        if(attacker->type->category->id == MOB_CATEGORY_PIKMIN) {
-            pikmin* pik_ptr = (pikmin*) attacker;
-            attacker_offense =
-                pik_ptr->pik_type->attack_power *
-                (1 + pik_ptr->maturity * maturity_power_mult);
-        }
-    }
-    
-    if(victim_h) {
-        if(victim_h->multiplier == 0.0f) {
-            //Hah, this hitbox is invulnerable!
-            return 0;
-        }
-        defense_multiplier = victim_h->multiplier;
-    }
-    
-    for(size_t s = 0; s < attacker->statuses.size(); ++s) {
-        attacker_offense *= attacker->statuses[s].type->attack_multiplier;
-    }
-    for(size_t s = 0; s < victim->statuses.size(); ++s) {
-        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
-    }
-    
-    return attacker_offense * (1.0 / defense_multiplier);
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Calculates how much knockback an attack will cause.
  * attacker:   the attacking mob.
  * victim:     the mob that'll take the damage.
@@ -2386,29 +2459,4 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     mobs.erase(find(mobs.begin(), mobs.end(), m_ptr));
     
     delete m_ptr;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if a mob is resistant to a list of hazards, given the list
- * of resistances and the list of hazards.
- */
-bool is_resistant_to_hazards(
-    vector<hazard*> &resistances, vector<hazard*> &hazards
-) {
-    size_t n_matches = 0;
-    for(size_t h = 0; h < hazards.size(); ++h) {
-        for(size_t r = 0; r < resistances.size(); ++r) {
-            if(hazards[h] == resistances[r]) {
-                n_matches++;
-                break;
-            }
-        }
-    }
-    if(n_matches == hazards.size()) {
-        //The mob can resist all
-        //of these hazards!
-        return true;
-    }
-    return false;
 }

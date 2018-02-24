@@ -12,6 +12,7 @@ pushable = true
 pushes = false
 rotation_speed = 360
 radius = 16
+resistances = poison
 throw_strength_mult = 0.7
 weight = 1
 whistle_sfx = President_whistle.ogg
