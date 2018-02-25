@@ -28,15 +28,15 @@ animations{
 sprites{
 	1{
 		file=Electric_gate.png
-		file_pos=0 0
-		file_size=48 288
+		file_pos=0.00 0.00
+		file_size=48.00 288.00
 		game_size=48.00 288.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=48.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -48,7 +48,7 @@ sprites{
 			center_zap{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=49.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -57,10 +57,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=48.00
+			near_left{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -69,10 +69,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left_zap{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=49.00
+			near_left_zap{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -81,10 +81,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
+			near_right{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -93,10 +93,58 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right_zap{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=49.00
+			near_right_zap{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left_zap{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right_zap{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -109,15 +157,15 @@ sprites{
 	}
 	2{
 		file=Electric_gate.png
-		file_pos=49 0
-		file_size=48 288
+		file_pos=49.00 0.00
+		file_size=48.00 288.00
 		game_size=48.00 288.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=48.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -129,7 +177,7 @@ sprites{
 			center_zap{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=49.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -138,10 +186,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=48.00
+			near_left{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -150,10 +198,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left_zap{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=49.00
+			near_left_zap{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -162,10 +210,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
+			near_right{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -174,10 +222,58 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right_zap{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=49.00
+			near_right_zap{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left_zap{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right_zap{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -190,15 +286,15 @@ sprites{
 	}
 	3{
 		file=Electric_gate.png
-		file_pos=98 0
-		file_size=48 288
+		file_pos=98.00 0.00
+		file_size=48.00 288.00
 		game_size=48.00 288.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=48.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -210,7 +306,7 @@ sprites{
 			center_zap{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=49.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -219,10 +315,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=48.00
+			near_left{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -231,10 +327,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			left_zap{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=49.00
+			near_left_zap{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -243,10 +339,10 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
+			near_right{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -255,10 +351,58 @@ sprites{
 				angle=0.00
 				knockback=1.00
 			}
-			right_zap{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=49.00
+			near_right_zap{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left_zap{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right_zap{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -271,79 +415,127 @@ sprites{
 	}
 	open{
 		file=Electric_gate.png
-		file_pos=147 0
-		file_size=48 288
+		file_pos=147.00 0.00
+		file_size=48.00 288.00
 		game_size=48.00 288.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				height=0.00
+				radius=28.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			center_zap{
 				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				height=0.00
+				radius=28.00
 				type=2
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 0.00 0.00
+			near_left{
+				coords=0.00 -35.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			left_zap{
-				coords=0.00 0.00 0.00
+			near_left_zap{
+				coords=0.00 -35.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
 				type=2
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 0.00 0.00
+			near_right{
+				coords=0.00 35.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			right_zap{
-				coords=0.00 0.00 0.00
+			near_right_zap{
+				coords=0.00 35.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_left_zap{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			far_right_zap{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -352,10 +544,14 @@ sprites{
 	}
 }
 body_parts{
-	center=
-	center_zap=
-	left=
-	left_zap=
-	right=
-	right_zap=
+	center
+	center_zap
+	near_left
+	near_left_zap
+	near_right
+	near_right_zap
+	far_left
+	far_left_zap
+	far_right
+	far_right_zap
 }

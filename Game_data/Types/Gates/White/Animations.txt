@@ -19,43 +19,67 @@ animations{
 sprites{
 	idling{
 		file=White_gate.png
-		file_pos=0 0
-		file_size=48 192
+		file_pos=0.00 0.00
+		file_size=48.00 192.00
 		game_size=48.00 192.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=48.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
+			far_left{
+				coords=0.00 -70.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 -80.00 0.00
-				height=0.00
-				radius=48.00
+			far_right{
+				coords=0.00 70.00 0.00
+				height=128.00
+				radius=28.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
-				hazards=
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			near_left{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			near_right{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -64,43 +88,67 @@ sprites{
 	}
 	destroyed{
 		file=White_gate.png
-		file_pos=0 0
-		file_size=0 0
+		file_pos=0.00 0.00
+		file_size=0.00 0.00
 		game_size=0.00 0.00
 		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				height=0.00
+				radius=28.00
 				type=2
 				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
+				can_pikmin_latch=true
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			left{
-				coords=0.00 0.00 0.00
+			far_left{
+				coords=0.00 -70.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
 				type=2
 				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
+				can_pikmin_latch=true
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
-			right{
-				coords=0.00 0.00 0.00
+			far_right{
+				coords=0.00 70.00 0.00
 				height=128.00
-				radius=32.00
+				radius=28.00
 				type=2
 				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			near_left{
+				coords=0.00 -35.00 0.00
+				height=128.00
+				radius=28.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			near_right{
+				coords=0.00 35.00 0.00
+				height=128.00
+				radius=28.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -109,7 +157,9 @@ sprites{
 	}
 }
 body_parts{
-	center=
-	left=
-	right=
+	center
+	far_left
+	far_right
+	near_left
+	near_right
 }

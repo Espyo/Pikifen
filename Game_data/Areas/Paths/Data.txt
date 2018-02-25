@@ -1,2 +1,10 @@
-name     = Paths
-weather  = Normal
+name=Paths
+subtitle
+bg_bmp
+bg_color=0 0 0
+bg_dist=2.00
+bg_zoom=1.00
+weather=Normal
+creator
+version
+notes

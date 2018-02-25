@@ -1,7 +1,5 @@
 name = White bramble gate
 
-height = 200
+height = 0
 max_health = 2000
-pushable = false
-pushes = false
 radius = 32

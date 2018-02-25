@@ -430,7 +430,6 @@ sectors{
 		texture=Stone.jpg
 	}
 	s{
-		type=Blocking
 		z=0.00
 		texture=Stone.jpg
 	}
@@ -439,7 +438,6 @@ sectors{
 		texture=Stone.jpg
 	}
 	s{
-		type=Blocking
 		z=0.00
 		texture=Stone.jpg
 	}
@@ -669,11 +667,7 @@ path_stops{
 	}
 	s{
 		pos=320.00 -320.00
-		links=
+		links
 	}
 }
-tree_shadows=
-reference_file_name=
-reference_pos=0.00 0.00
-reference_size=0.00 0.00
-reference_alpha=255
+tree_shadows

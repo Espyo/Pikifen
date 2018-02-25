@@ -75,6 +75,7 @@ public:
     bool always_active;
     bool pushes; //Blocks passage of other mobs.
     bool pushable; //Can be pushed by other mobs.
+    bool pushes_with_hitboxes; //Is the push via hitbox, or mob radius?
     
     //Behavior things.
     float max_health;

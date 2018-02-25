@@ -1849,7 +1849,6 @@ sectors{
 		texture=Bark.jpg
 	}
 	s{
-		type=Blocking
 		z=0.00
 		fade=true
 	}
@@ -1962,8 +1961,8 @@ sectors{
 		texture=Dirt.jpg
 	}
 	s{
-		type=Blocking
 		z=0.00
+		fade=true
 		texture=Grass_light.jpg
 	}
 	s{

@@ -676,6 +676,10 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs[m2];
+        float m1_angle_sin = sin(m_ptr->angle);
+        float m1_angle_cos = cos(m_ptr->angle);
+        float m2_angle_sin = sin(m2_ptr->angle);
+        float m2_angle_cos = cos(m2_ptr->angle);
         dist d(m_ptr->pos, m2_ptr->pos);
         float face_diff =
             get_angle_smallest_dif(
@@ -688,20 +692,72 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             m2_ptr->type->pushes &&
             m2_ptr->tangible &&
             m_ptr->type->pushable && !m_ptr->unpushable &&
-            m2_ptr->z < m_ptr->z + m_ptr->type->height &&
-            m2_ptr->z + m2_ptr->type->height > m_ptr->z &&
-            d <= m_ptr->type->radius + m2_ptr->type->radius
+            (
+                (
+                    m2_ptr->z < m_ptr->z + m_ptr->type->height &&
+                    m2_ptr->z + m2_ptr->type->height > m_ptr->z
+                ) || (
+                    m_ptr->type->height == 0
+                ) || (
+                    m2_ptr->type->height == 0
+                )
+            )
         ) {
-            float d_amount =
-                fabs(
-                    d.to_float() - m_ptr->type->radius -
-                    m2_ptr->type->radius
-                );
+            float push_amount = 0;
+            float push_angle = 0;
+            
+            if(m2_ptr->type->pushes_with_hitboxes) {
+                //Push with the hitboxes.
+                
+                sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
+                
+                if(d <= m_ptr->type->radius + s2_ptr->hitbox_span) {
+                    for(size_t h = 0; h < s2_ptr->hitboxes.size(); ++h) {
+                        hitbox* h_ptr = &s2_ptr->hitboxes[h];
+                        if(h_ptr->type == HITBOX_TYPE_DISABLED) continue;
+                        point h_pos(
+                            m2_ptr->pos.x + (
+                                h_ptr->pos.x * m2_angle_cos -
+                                h_ptr->pos.y * m2_angle_sin
+                            ),
+                            m2_ptr->pos.y + (
+                                h_ptr->pos.x * m2_angle_sin +
+                                h_ptr->pos.y * m2_angle_cos
+                            )
+                        );
+                        
+                        dist hd(m_ptr->pos, h_pos);
+                        if(hd < m_ptr->type->radius + h_ptr->radius) {
+                            float p =
+                                fabs(
+                                    hd.to_float() - m_ptr->type->radius -
+                                    h_ptr->radius
+                                );
+                            if(push_amount == 0 || p > push_amount) {
+                                push_amount = p;
+                                push_angle = get_angle(h_pos, m_ptr->pos);
+                            }
+                        }
+                    }
+                }
+                
+            } else if(d <= m_ptr->type->radius + m2_ptr->type->radius) {
+                //Push with the object radius.
+                
+                push_amount =
+                    fabs(
+                        d.to_float() - m_ptr->type->radius -
+                        m2_ptr->type->radius
+                    );
+                push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
+                
+            }
+            
             //If the mob is inside the other,
             //it needs to be pushed out.
-            if(d_amount > m_ptr->push_amount) {
-                m_ptr->push_amount = d_amount / delta_t;
-                m_ptr->push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
+            if(push_amount > m_ptr->push_amount) {
+                m_ptr->push_amount = push_amount / delta_t;
+                m_ptr->push_angle = push_angle;
                 if(m_ptr->carrying_target && m2_ptr->carrying_target) {
                     //If they are both being carried by Pikmin, one of them
                     //should push less hard, otherwise the Pikmin can get
@@ -772,8 +828,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         }
         
         //Check hitbox touches.
-        mob_event* hitbox_touch_an_ev =
-            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
+        mob_event* hitbox_touch_n_ev =
+            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N);
         mob_event* hitbox_touch_na_ev =
             q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
         mob_event* hitbox_touch_eat_ev =
@@ -785,21 +841,16 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
         
         if(
-            (hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) &&
+            (hitbox_touch_n_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) &&
             s1_ptr && s2_ptr &&
             !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty() &&
             d < s1_ptr->hitbox_span + s2_ptr->hitbox_span
         ) {
         
-            bool reported_an_ev = false;
+            bool reported_n_ev = false;
             bool reported_na_ev = false;
             bool reported_eat_ev = false;
             bool reported_haz_ev = false;
-            
-            float m1_angle_sin = sin(m_ptr->angle);
-            float m1_angle_cos = cos(m_ptr->angle);
-            float m2_angle_sin = sin(m2_ptr->angle);
-            float m2_angle_cos = cos(m2_ptr->angle);
             
             for(size_t h1 = 0; h1 < s1_ptr->hitboxes.size(); ++h1) {
             
@@ -809,8 +860,6 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 for(size_t h2 = 0; h2 < s2_ptr->hitboxes.size(); ++h2) {
                     hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
                     if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
-                    
-                    if(h1_ptr->type == h2_ptr->type) continue;
                     
                     //Check if m2 is under any status effect
                     //that disables attacks.
@@ -851,13 +900,13 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     
                     bool collided = false;
                     
-                    if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                    if(m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
                         //Pikmin latched on to a hitbox are obviously
                         //touching it.
-                        pikmin* p_ptr = (pikmin*) m_ptr;
+                        pikmin* p_ptr = (pikmin*) m2_ptr;
                         if(
-                            m_ptr->focused_mob == m2_ptr &&
-                            p_ptr->connected_hitbox_nr == h2
+                            m2_ptr->focused_mob == m_ptr &&
+                            p_ptr->connected_hitbox_nr == h1
                         ) {
                             collided = true;
                         }
@@ -877,22 +926,48 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         
                         if(
                             z_collision &&
-                            dist(m_ptr->pos, m2_h_pos) <
-                            (m_ptr->type->radius + h2_ptr->radius)
+                            dist(m1_h_pos, m2_h_pos) <
+                            (h1_ptr->radius + h2_ptr->radius)
                         ) {
                             collided = true;
                         }
                     }
                     
                     if(!collided) continue;
+                    //Collision confirmed!
                     
-                    //Collision!
+                    if(
+                        hitbox_touch_n_ev &&
+                        !reported_n_ev &&
+                        h2_ptr->type == HITBOX_TYPE_NORMAL
+                    ) {
+                        hitbox_touch_info ev_info =
+                            hitbox_touch_info(
+                                m2_ptr, h1_ptr, h2_ptr
+                            );
+                        hitbox_touch_n_ev->run(
+                            m_ptr, (void*) &ev_info
+                        );
+                        reported_n_ev = true;
+                        
+                        //Re-fetch the other events, since the eating event
+                        //could have triggered a state change.
+                        hitbox_touch_eat_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
+                        hitbox_touch_haz_ev =
+                            q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
+                        hitbox_touch_na_ev =
+                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                    }
+                    
                     if(
                         h1_ptr->type == HITBOX_TYPE_NORMAL &&
                         h2_ptr->type == HITBOX_TYPE_ATTACK
                     ) {
+                        //Confirmed damage.
+                        
+                        //Check if the attack already hit this mob.
                         bool already_hit = false;
-                        //The attack already hit this mob?
                         for(
                             size_t ho = 0;
                             ho < m2_ptr->hit_opponents.size();
@@ -923,7 +998,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         }
                     }
                     
-                    //Confirmed damage. First, the "touched eat hitbox" event.
+                    //First, the "touched eat hitbox" event.
                     if(
                         hitbox_touch_eat_ev &&
                         !reported_eat_ev &&
@@ -945,12 +1020,10 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         );
                         reported_eat_ev = true;
                         
-                        //Re-fetch the other events, since the eating event
+                        //Re-fetch the other events, since this event
                         //could have triggered a state change.
                         hitbox_touch_haz_ev =
                             q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
-                        hitbox_touch_an_ev =
-                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
                         hitbox_touch_na_ev =
                             q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
                     }
@@ -974,15 +1047,13 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         }
                         reported_haz_ev = true;
                         
-                        //Re-fetch the other events, since the hazard event
+                        //Re-fetch the other events, since this event
                         //could have triggered a state change.
-                        hitbox_touch_an_ev =
-                            q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
                         hitbox_touch_na_ev =
                             q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
                     }
                     
-                    //"Touched normal/attack hitbox" events.
+                    //"Normal hitbox touched attack hitbox" event.
                     if(
                         hitbox_touch_na_ev &&
                         !reported_na_ev &&
@@ -999,20 +1070,6 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         );
                         reported_na_ev = true;
                         
-                    } else if(
-                        hitbox_touch_an_ev &&
-                        !reported_an_ev &&
-                        h1_ptr->type == HITBOX_TYPE_ATTACK &&
-                        h2_ptr->type == HITBOX_TYPE_NORMAL
-                    ) {
-                        hitbox_touch_info ev_info =
-                            hitbox_touch_info(
-                                m2_ptr, h1_ptr, h2_ptr
-                            );
-                        hitbox_touch_an_ev->run(
-                            m_ptr, (void*) &ev_info
-                        );
-                        reported_an_ev = true;
                     }
                 }
             }

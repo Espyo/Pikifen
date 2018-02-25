@@ -162,7 +162,7 @@ enum MOB_EVENT_TYPES {
     //When it has reached its carrying spot on the carriable object.
     MOB_EVENT_REACHED_CARRIABLE_OBJECT,
     //When one of its attack hitboxes touches another mob's normal hitbox.
-    MOB_EVENT_HITBOX_TOUCH_A_N,
+    MOB_EVENT_HITBOX_TOUCH_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.
     MOB_EVENT_HITBOX_TOUCH_N_A,
     //When one of its normal hitboxes touches another mob's eating hitbox.

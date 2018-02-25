@@ -288,7 +288,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::land);
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
             efc.run(pikmin_fsm::land_on_mob);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
@@ -1311,8 +1311,10 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
 void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    
     mob* mob_ptr = info->mob2;
+    
+    if(!m->should_attack(mob_ptr)) return;
+    
     hitbox* h_ptr = info->h2;
     
     if(!h_ptr || !h_ptr->can_pikmin_latch) {
