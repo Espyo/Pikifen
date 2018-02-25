@@ -52,7 +52,7 @@ void treasure::draw(sprite_effect_manager* effect_manager) {
         );
     }
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos,
         point(type->radius * 2.0, -1),

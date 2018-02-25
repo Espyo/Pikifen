@@ -183,8 +183,13 @@ void mob::add_to_group(mob* new_member) {
     new_member->group_spot_index = group->spots.size() - 1;
     
     if(!group->cur_standby_type) {
-        group->cur_standby_type =
-            new_member->subgroup_type_ptr;
+        if(
+            new_member->type->category->id != MOB_CATEGORY_LEADERS ||
+            can_throw_leaders
+        ) {
+            group->cur_standby_type =
+                new_member->subgroup_type_ptr;
+        }
     }
     
     if(group->members.size() == 1) {
@@ -203,6 +208,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
         speed.x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed_z = MOB_KNOCKBACK_V_POWER;
+        face(get_angle(point(), point(speed)) + M_PI);
     }
 }
 
@@ -652,7 +658,7 @@ void mob::draw(sprite_effect_manager* effect_manager) {
     add_status_sprite_effects(effect_manager);
     add_sector_brightness_sprite_effect(effect_manager);
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
         angle, effect_manager

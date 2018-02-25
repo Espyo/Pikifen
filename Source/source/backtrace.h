@@ -47,13 +47,14 @@ vector<string> get_backtrace() {
 #elif defined(_WIN32)
 //Windows.
 
+#include <Windows.h>
 #include <DbgHelp.h>
 #include <sstream>
 #include <WinBase.h>
 vector<string> get_backtrace() {
     vector<string> result;
     void* stack[BACKTRACE_MAX_FRAMES];
-
+    
     HANDLE process = GetCurrentProcess();
     SYMBOL_INFO* symbol =
         (SYMBOL_INFO*) malloc(
@@ -63,17 +64,17 @@ vector<string> get_backtrace() {
     symbol->MaxNameLen = BACKTRACE_MAX_SYMBOL_LENGTH;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     DWORD dummy_displacement;
-
+    
     IMAGEHLP_LINE64* line = (IMAGEHLP_LINE64*) malloc(sizeof(IMAGEHLP_LINE64));
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-
+    
     SymInitialize(process, NULL, TRUE);
     size_t n_symbols =
         CaptureStackBackTrace(0, BACKTRACE_MAX_FRAMES, stack, NULL);
-
+        
     for(size_t s = 0; s < n_symbols; ++s) {
         SymFromAddr(process, (DWORD64) stack[s], NULL, symbol);
-
+        
         stringstream str;
         if(
             SymGetLineFromAddr64(
@@ -88,13 +89,13 @@ vector<string> get_backtrace() {
         } else {
             str << symbol->Name << " [" << symbol->Address << "]";
         }
-
+        
         result.push_back(str.str());
     }
-
+    
     free(line);
     free(symbol);
-
+    
     if(result.empty()) {
         result.push_back("(Could not obtain)");
     }

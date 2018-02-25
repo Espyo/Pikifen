@@ -55,7 +55,7 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     add_status_sprite_effects(&effects);
     add_sector_brightness_sprite_effect(&effects);
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
         angle, &effects

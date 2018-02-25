@@ -9,6 +9,7 @@
  * Area editor event handler function.
  */
 
+#include <algorithm>
 #include <allegro5/allegro.h>
 
 #include "area_editor.h"

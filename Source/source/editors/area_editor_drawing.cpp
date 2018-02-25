@@ -729,7 +729,7 @@ void area_editor::do_drawing() {
                 al_use_transform(&current);
             }
             
-            draw_sprite(
+            draw_bitmap(
                 s_ptr->bitmap, s_ptr->center, s_ptr->size,
                 s_ptr->angle, map_alpha(s_ptr->alpha)
             );
@@ -800,7 +800,7 @@ void area_editor::do_drawing() {
         reference_bitmap != bmp_error &&
         (show_reference || state == EDITOR_STATE_TOOLS)
     ) {
-        draw_sprite(
+        draw_bitmap(
             reference_bitmap,
             reference_transformation.get_center(),
             reference_transformation.get_size(),

@@ -35,7 +35,7 @@ void nectar::draw(sprite_effect_manager* effect_manager) {
     sprite_effect_manager effects;
     add_sector_brightness_sprite_effect(&effects);
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         bmp_nectar,
         pos, point(radius * 2, radius * 2),
         0, &effects

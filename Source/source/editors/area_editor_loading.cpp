@@ -9,6 +9,8 @@
  * Area editor loading function.
  */
 
+#include <algorithm>
+
 #include "area_editor.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"

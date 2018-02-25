@@ -220,7 +220,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
         effects.add_effect(idle_effect);
     }
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
         angle, &effects
@@ -231,7 +231,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     if(s_ptr->top_visible) {
         point top_pos;
         top_pos = rotate_point(s_ptr->top_pos, angle);
-        draw_sprite_with_effects(
+        draw_bitmap_with_effects(
             pik_type->bmp_top[maturity],
             pos + top_pos,
             s_ptr->top_size,
@@ -241,7 +241,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     }
     
     if(is_idle) {
-        draw_sprite(
+        draw_bitmap(
             bmp_idle_glow,
             pos,
             size_mult * 35,
@@ -253,7 +253,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
     if(status_bmp) {
-        draw_sprite(
+        draw_bitmap(
             status_bmp, pos,
             point(type->radius * 2 * status_bmp_scale, -1)
         );

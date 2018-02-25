@@ -169,7 +169,7 @@ void onion::draw(sprite_effect_manager* effect_manager) {
     seethrough_effect.add_keyframe(0, seethrough_effect_props);
     effects.add_effect(seethrough_effect);
     
-    draw_sprite_with_effects(
+    draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
         angle, &effects

@@ -202,15 +202,37 @@ void animation_editor::load() {
         "Go back to the main menu.";
     frm_history->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        string last_file_opened;
+        if(animation_editor_history.size()) {
+            last_file_opened = animation_editor_history[0];
+        }
+        file_dialog =
+            al_create_native_file_dialog(
+                last_file_opened.c_str(),
+                "Please choose an animation text file to load or create.",
+                "*.txt",
+                0
+            );
+            
         al_show_native_file_dialog(display, file_dialog);
         
         //Reset the locale, which gets set by Allegro's native dialogs...
         //and breaks s2f().
         setlocale(LC_ALL, "C");
         
-        if(al_get_native_file_dialog_count(file_dialog) == 0) return;
-        file_path = al_get_native_file_dialog_path(file_dialog, 0);
-        if(file_path.empty()) return;
+        bool ok = true;
+        
+        if(al_get_native_file_dialog_count(file_dialog) == 0) {
+            ok = false;
+        } else {
+            file_path = al_get_native_file_dialog_path(file_dialog, 0);
+            if(file_path.empty()) {
+                ok = false;
+            }
+        }
+        
+        al_destroy_native_file_dialog(file_dialog);
+        if(!ok) return;
         
         load_animation_database();
         update_animation_editor_history(file_path);
@@ -1968,15 +1990,6 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_quit"]->description =
         "Quit the animation editor.";
-        
-    //File dialog.
-    file_dialog =
-        al_create_native_file_dialog(
-            NULL,
-            "Please choose an animation text file to load or create.",
-            "*.txt",
-            0
-        );
         
     create_changes_warning_frame();
     create_picker_frame();

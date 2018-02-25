@@ -207,7 +207,7 @@ void gameplay::draw_cursor(
                     191 * (group_move_arrows[a] / (cursor_max_dist * 0.4))
                 )
             );
-        draw_sprite(
+        draw_bitmap(
             bmp_group_move_arrow,
             cur_leader_ptr->pos + pos,
             point(16 * (1 + group_move_arrows[a] / cursor_max_dist), -1),
@@ -320,7 +320,7 @@ void gameplay::draw_cursor(
     }
     
     //Mouse cursor.
-    draw_sprite(
+    draw_bitmap(
         bmp_mouse_cursor,
         mouse_cursor_s,
         point(
@@ -336,7 +336,7 @@ void gameplay::draw_cursor(
     
     //Leader cursor.
     al_use_transform(&world_to_screen_drawing_transform);
-    draw_sprite(
+    draw_bitmap(
         bmp_cursor,
         leader_cursor_w,
         point(
@@ -354,7 +354,7 @@ void gameplay::draw_cursor(
         unsigned char alpha =
             0 + (sin(cursor_invalid_effect) + 1) * 127.0;
             
-        draw_sprite(
+        draw_bitmap(
             bmp_cursor_invalid,
             leader_cursor_w,
             point(
@@ -390,11 +390,11 @@ void gameplay::draw_hud() {
                 min(i_size.x, i_size.y) / 2.0f,
                 change_alpha(leaders[l_nr]->type->main_color, 128)
             );
-            draw_sprite_in_box(
+            draw_bitmap_in_box(
                 leaders[l_nr]->lea_type->bmp_icon,
                 i_center, i_size
             );
-            draw_sprite_in_box(bmp_bubble, i_center, i_size);
+            draw_bitmap_in_box(bmp_bubble, i_center, i_size);
             
         }
         
@@ -406,7 +406,7 @@ void gameplay::draw_hud() {
                 min(i_size.x, i_size.y) * 0.4f,
                 true
             );
-            draw_sprite_in_box(bmp_hard_bubble, i_center, i_size);
+            draw_bitmap_in_box(bmp_hard_bubble, i_center, i_size);
         }
         
     }
@@ -429,21 +429,21 @@ void gameplay::draw_hud() {
         
         //Larger bubbles at the start, middle and end of the meter.
         al_hold_bitmap_drawing(true);
-        draw_sprite(
+        draw_bitmap(
             bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
-        draw_sprite(
+        draw_bitmap(
             bmp_hard_bubble, point(first_dot_x + dots_span * 0.5, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
-        draw_sprite(
+        draw_bitmap(
             bmp_hard_bubble, point(first_dot_x + dots_span * 1.0, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
         
         for(unsigned char h = 0; h < n_hours + 1; ++h) {
-            draw_sprite(
+            draw_bitmap(
                 bmp_hard_bubble,
                 point(first_dot_x + h * dot_interval, dots_y),
                 point(sun_radius * 0.6, sun_radius * 0.6)
@@ -452,20 +452,20 @@ void gameplay::draw_hud() {
         al_hold_bitmap_drawing(false);
         
         //Static sun.
-        draw_sprite(
+        draw_bitmap(
             bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             point(sun_radius * 1.5, sun_radius * 1.5)
         );
         //Spinning sun.
-        draw_sprite(
+        draw_bitmap(
             bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             point(sun_radius * 1.5, sun_radius * 1.5),
             sun_meter_sun_angle
         );
         //Bubble in front the sun.
-        draw_sprite(
+        draw_bitmap(
             bmp_hard_bubble,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             point(sun_radius * 1.5, sun_radius * 1.5),
@@ -475,7 +475,7 @@ void gameplay::draw_hud() {
     
     //Day number bubble.
     if(hud_items.get_draw_data(HUD_ITEM_DAY_BUBBLE, &i_center, &i_size)) {
-        draw_sprite_in_box(bmp_day_bubble, i_center, i_size);
+        draw_bitmap_in_box(bmp_day_bubble, i_center, i_size);
     }
     
     //Day number text.
@@ -517,13 +517,13 @@ void gameplay::draw_hud() {
             HUD_ITEM_PIKMIN_STANDBY_ICON, &i_center, &i_size
         )
     ) {
-        draw_sprite_in_box(standby_bmp, i_center, i_size * 0.8);
+        draw_bitmap_in_box(standby_bmp, i_center, i_size * 0.8);
         if(closest_group_member_distant) {
-            draw_sprite_in_box(
+            draw_bitmap_in_box(
                 bmp_distant_pikmin_marker, i_center, i_size * 0.8
             );
         }
-        draw_sprite_in_box(bmp_bubble, i_center, i_size);
+        draw_bitmap_in_box(bmp_bubble, i_center, i_size);
     }
     
     //Standby group member maturity.
@@ -533,8 +533,8 @@ void gameplay::draw_hud() {
         )
     ) {
         if(standby_mat_bmp) {
-            draw_sprite_in_box(standby_mat_bmp, i_center, i_size * 0.8);
-            draw_sprite_in_box(bmp_bubble, i_center, i_size);
+            draw_bitmap_in_box(standby_mat_bmp, i_center, i_size * 0.8);
+            draw_bitmap_in_box(bmp_bubble, i_center, i_size);
         }
     }
     
@@ -566,7 +566,7 @@ void gameplay::draw_hud() {
             }
         }
         
-        draw_sprite(bmp_counter_bubble_standby, i_center, i_size);
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
         draw_compressed_text(
             font_counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
@@ -588,7 +588,7 @@ void gameplay::draw_hud() {
             }
         }
         
-        draw_sprite(bmp_counter_bubble_group, i_center, i_size);
+        draw_bitmap(bmp_counter_bubble_group, i_center, i_size);
         draw_compressed_text(
             font_counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
@@ -600,7 +600,7 @@ void gameplay::draw_hud() {
     if(
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_FIELD_NR, &i_center, &i_size)
     ) {
-        draw_sprite(bmp_counter_bubble_field, i_center, i_size);
+        draw_bitmap(bmp_counter_bubble_field, i_center, i_size);
         draw_compressed_text(
             font_counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
@@ -620,7 +620,7 @@ void gameplay::draw_hud() {
             total_pikmin += o->second;
         }
         
-        draw_sprite(bmp_counter_bubble_total, i_center, i_size);
+        draw_bitmap(bmp_counter_bubble_total, i_center, i_size);
         draw_compressed_text(
             font_counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
@@ -665,7 +665,7 @@ void gameplay::draw_hud() {
         if(
             hud_items.get_draw_data(HUD_ITEM_SPRAY_1_ICON, &i_center, &i_size)
         ) {
-            draw_sprite_in_box(
+            draw_bitmap_in_box(
                 spray_types[top_spray_nr].bmp_spray, i_center, i_size
             );
         }
@@ -708,7 +708,7 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_2_ICON, &i_center, &i_size
                 )
             ) {
-                draw_sprite_in_box(spray_types[1].bmp_spray, i_center, i_size);
+                draw_bitmap_in_box(spray_types[1].bmp_spray, i_center, i_size);
             }
             
             if(
@@ -748,7 +748,7 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_PREV_ICON, &i_center, &i_size
                 )
             ) {
-                draw_sprite_in_box(
+                draw_bitmap_in_box(
                     spray_types[
                         sum_and_wrap(selected_spray, -1, spray_types.size())
                     ].bmp_spray,
@@ -777,7 +777,7 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_NEXT_ICON, &i_center, &i_size
                 )
             ) {
-                draw_sprite_in_box(
+                draw_bitmap_in_box(
                     spray_types[
                         sum_and_wrap(selected_spray, 1, spray_types.size())
                     ].bmp_spray,
@@ -1027,7 +1027,7 @@ void gameplay::draw_lighting_filter() {
         );
         
         if(bmp_fog) {
-            draw_sprite(
+            draw_bitmap(
                 bmp_fog,
                 (fog_top_left + fog_bottom_right) / 2,
                 (fog_bottom_right - fog_top_left),
@@ -1129,19 +1129,19 @@ void gameplay::draw_lighting_filter() {
 void gameplay::draw_message_box() {
     al_use_transform(&identity_transform);
     
-    draw_sprite(
+    draw_bitmap(
         bmp_message_box,
         point(scr_w / 2, scr_h - font_main_h * 2 - 4),
         point(scr_w - 16, font_main_h * 4)
     );
     
     if(cur_message_speaker) {
-        draw_sprite(
+        draw_bitmap(
             cur_message_speaker,
             point(40, scr_h - font_main_h * 4 - 16),
             point(48, 48)
         );
-        draw_sprite(
+        draw_bitmap(
             bmp_bubble,
             point(40, scr_h - font_main_h * 4 - 16),
             point(64, 64)
@@ -1326,7 +1326,7 @@ void gameplay::draw_tree_shadows() {
         unsigned char alpha =
             ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
             
-        draw_sprite(
+        draw_bitmap(
             s_ptr->bitmap,
             point(
                 s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT *
@@ -1405,7 +1405,7 @@ void draw_control(
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {
         
-            draw_sprite_in_box(
+            draw_bitmap_in_box(
                 bmp_mouse_button_icon[c.button - 1], where, max_size
             );
             return;
@@ -1423,7 +1423,7 @@ void draw_control(
             b = bmp_mouse_wd_icon;
         }
         
-        draw_sprite_in_box(b, where, max_size);
+        draw_bitmap_in_box(b, where, max_size);
         return;
     }
     
@@ -1488,6 +1488,129 @@ void draw_control(
             (max_size.y == 0 ? 0 : max_size.y - 2)
         ), name
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a bitmap.
+ * bmp:    The bitmap.
+ * center: Center coordinates.
+ * size:   Final width and height.
+ *   Make this -1 on one of them to keep the aspect ratio from the other.
+ * angle:  Angle to rotate the bitmap by.
+ * tint:   Tint the bitmap with this color.
+ */
+void draw_bitmap(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle, const ALLEGRO_COLOR &tint
+) {
+
+    if(size.x == 0 && size.y == 0) return;
+    
+    if(!bmp) {
+        bmp = bmp_error;
+    }
+    
+    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point scale = size / bmp_size;
+    al_draw_tinted_scaled_rotated_bitmap(
+        bmp,
+        tint,
+        bmp_size.x / 2.0, bmp_size.y / 2.0,
+        center.x, center.y,
+        (size.x == -1) ? scale.y : scale.x,
+        (size.y == -1) ? scale.x : scale.y,
+        angle,
+        0
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a bitmap, but keeps its aspect ratio,
+ * and scales it to fit in an imaginary box.
+ * bmp:      The bitmap.
+ * center:   Center coordinates.
+ * box_size: Width and height of the box.
+ * angle:    Angle to rotate the bitmap by.
+ *   The box does not take angling into account.
+ * tint:     Tint the bitmap with this color.
+ */
+void draw_bitmap_in_box(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &box_size, const float angle, const ALLEGRO_COLOR &tint
+) {
+    if(box_size.x == 0 || box_size.y == 0) return;
+    float w_diff = al_get_bitmap_width(bmp) / box_size.x;
+    float h_diff = al_get_bitmap_height(bmp) / box_size.y;
+    
+    if(w_diff > h_diff) {
+        draw_bitmap(bmp, center, point(box_size.x, -1), angle, tint);
+    } else {
+        draw_bitmap(bmp, center, point(-1, box_size.y), angle, tint);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a bitmap, applying sprite effects.
+ * bmp:      The bitmap.
+ * center:   Center coordinates.
+ * size:     Final width and height.
+ *   Make this -1 on one of them to keep the aspect ratio from the other.
+ * angle:    Angle to rotate the bitmap by.
+ * effects:  Sprite effect manager with the effects.
+ */
+void draw_bitmap_with_effects(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle,
+    sprite_effect_manager* effects
+) {
+
+    if(!bmp) {
+        bmp = bmp_error;
+    }
+    
+    sprite_effect_props final_props = effects->get_final_properties();
+    
+    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point scale(
+        (size.x / bmp_size.x) * final_props.scale.x,
+        (size.y / bmp_size.y) * final_props.scale.y
+    );
+    point final_pos = center + final_props.translation;
+    float final_angle = angle + final_props.rotation;
+    al_draw_tinted_scaled_rotated_bitmap(
+        bmp,
+        final_props.tint_color,
+        bmp_size.x / 2, bmp_size.y / 2,
+        final_pos.x, final_pos.y,
+        (size.x == -1) ? scale.y : scale.x,
+        (size.y == -1) ? scale.x : scale.y,
+        final_angle,
+        0
+    );
+    
+    if(final_props.glow_color.a > 0) {
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(
+            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+        );
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
+        al_draw_tinted_scaled_rotated_bitmap(
+            bmp,
+            final_props.glow_color,
+            bmp_size.x / 2, bmp_size.y / 2,
+            final_pos.x, final_pos.y,
+            (size.x == -1) ? scale.y : scale.x,
+            (size.y == -1) ? scale.x : scale.y,
+            final_angle,
+            0
+        );
+        al_set_separate_blender(
+            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+        );
+    }
 }
 
 
@@ -1988,7 +2111,7 @@ void draw_loading_screen(
         );
         
         if(bmp_icon && bmp_icon != bmp_error) {
-            draw_sprite(
+            draw_bitmap(
                 bmp_icon, icon_pos, point(-1, font_main_h),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
@@ -2033,7 +2156,7 @@ void draw_notification(
     float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
     float text_box_y2 = NOTIFICATION_PADDING;
     
-    draw_sprite(
+    draw_bitmap(
         bmp_notification,
         point(0, -bmp_h * 0.5),
         point(bmp_w, bmp_h),
@@ -2107,7 +2230,7 @@ void draw_mob_shadow(
     }
     
     
-    draw_sprite(
+    draw_bitmap(
         bmp_shadow,
         point(center.x + shadow_x + shadow_w / 2, center.y),
         point(shadow_w, diameter),
@@ -2601,136 +2724,13 @@ void draw_sector_texture(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a sprite.
- * bmp:    The bitmap.
- * center: Center coordinates.
- * size:   Final width and height.
- *   Make this -1 on one of them to keep the aspect ratio from the other.
- * angle:  Angle to rotate the sprite by.
- * tint:   Tint the sprite with this color.
- */
-void draw_sprite(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle, const ALLEGRO_COLOR &tint
-) {
-
-    if(size.x == 0 && size.y == 0) return;
-    
-    if(!bmp) {
-        bmp = bmp_error;
-    }
-    
-    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
-    point scale = size / bmp_size;
-    al_draw_tinted_scaled_rotated_bitmap(
-        bmp,
-        tint,
-        bmp_size.x / 2.0, bmp_size.y / 2.0,
-        center.x, center.y,
-        (size.x == -1) ? scale.y : scale.x,
-        (size.y == -1) ? scale.x : scale.y,
-        angle,
-        0
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a sprite, but keeps its aspect ratio,
- * and scales it to fit in an imaginary box.
- * bmp:      The bitmap.
- * center:   Center coordinates.
- * box_size: Width and height of the box.
- * angle:    Angle to rotate the sprite by.
- *   The box does not take angling into account.
- * tint:     Tint the sprite with this color.
- */
-void draw_sprite_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const float angle, const ALLEGRO_COLOR &tint
-) {
-    if(box_size.x == 0 || box_size.y == 0) return;
-    float w_diff = al_get_bitmap_width(bmp) / box_size.x;
-    float h_diff = al_get_bitmap_height(bmp) / box_size.y;
-    
-    if(w_diff > h_diff) {
-        draw_sprite(bmp, center, point(box_size.x, -1), angle, tint);
-    } else {
-        draw_sprite(bmp, center, point(-1, box_size.y), angle, tint);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a sprite, applying sprite effects.
- * bmp:      The bitmap.
- * center:   Center coordinates.
- * size:     Final width and height.
- *   Make this -1 on one of them to keep the aspect ratio from the other.
- * angle:    Angle to rotate the sprite by.
- * effects:  Sprite effect manager with the effects.
- */
-void draw_sprite_with_effects(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle,
-    sprite_effect_manager* effects
-) {
-
-    if(!bmp) {
-        bmp = bmp_error;
-    }
-    
-    sprite_effect_props final_props = effects->get_final_properties();
-    
-    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
-    point scale(
-        (size.x / bmp_size.x) * final_props.scale.x,
-        (size.y / bmp_size.y) * final_props.scale.y
-    );
-    point final_pos = center + final_props.translation;
-    float final_angle = angle + final_props.rotation;
-    al_draw_tinted_scaled_rotated_bitmap(
-        bmp,
-        final_props.tint_color,
-        bmp_size.x / 2, bmp_size.y / 2,
-        final_pos.x, final_pos.y,
-        (size.x == -1) ? scale.y : scale.x,
-        (size.y == -1) ? scale.x : scale.y,
-        final_angle,
-        0
-    );
-    
-    if(final_props.glow_color.a > 0) {
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
-        al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
-        );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        al_draw_tinted_scaled_rotated_bitmap(
-            bmp,
-            final_props.glow_color,
-            bmp_size.x / 2, bmp_size.y / 2,
-            final_pos.x, final_pos.y,
-            (size.x == -1) ? scale.y : scale.x,
-            (size.y == -1) ? scale.x : scale.y,
-            final_angle,
-            0
-        );
-        al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
-        );
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a status effect's bitmap.
  */
 void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     if(status_bmp) {
-        draw_sprite_with_effects(
+        draw_bitmap_with_effects(
             status_bmp,
             m->pos,
             point(m->type->radius * 2 * status_bmp_scale, -1),

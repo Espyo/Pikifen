@@ -173,7 +173,7 @@ void animation_editor::do_drawing() {
         
         if(s) {
             if(s->bitmap) {
-                draw_sprite(s->bitmap, s->offset, s->game_size);
+                draw_bitmap(s->bitmap, s->offset, s->game_size);
             }
             
             if(hitboxes_visible) {
@@ -225,7 +225,7 @@ void animation_editor::do_drawing() {
             }
             
             if(s->top_visible && is_pikmin) {
-                draw_sprite(
+                draw_bitmap(
                     top_bmp[cur_maturity],
                     s->top_pos, s->top_size,
                     s->top_angle
@@ -236,7 +236,7 @@ void animation_editor::do_drawing() {
                 comparison && comparison_blink_show &&
                 comparison_sprite && comparison_sprite->bitmap
             ) {
-                draw_sprite(
+                draw_bitmap(
                     comparison_sprite->bitmap,
                     comparison_sprite->offset, comparison_sprite->game_size,
                     0

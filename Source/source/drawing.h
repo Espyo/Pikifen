@@ -36,6 +36,21 @@ enum EASING_METHODS {
 };
 
 
+void draw_bitmap(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle = 0,
+    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+);
+void draw_bitmap_in_box(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &box_size, const float angle = 0,
+    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+);
+void draw_bitmap_with_effects(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle,
+    sprite_effect_manager* effects
+);
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point &where, const point &max_size
@@ -78,21 +93,6 @@ void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
     const int flags, const unsigned char valign, const string &text
-);
-void draw_sprite(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle = 0,
-    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
-);
-void draw_sprite_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const float angle = 0,
-    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
-);
-void draw_sprite_with_effects(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle,
-    sprite_effect_manager* effects
 );
 void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects);
 void draw_text_lines(

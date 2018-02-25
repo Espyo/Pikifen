@@ -114,12 +114,12 @@ void menu_button::draw(const float time_spent) {
     );
     
     if(selected) {
-        draw_sprite(
+        draw_bitmap(
             bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
-        draw_sprite(
+        draw_bitmap(
             bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
@@ -177,12 +177,12 @@ void menu_checkbox::draw(const float time_spent) {
     );
     
     if(selected) {
-        draw_sprite(
+        draw_bitmap(
             bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
-        draw_sprite(
+        draw_bitmap(
             bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
@@ -202,7 +202,7 @@ void menu_checkbox::draw(const float time_spent) {
         text_align, 1, text
     );
     if(checked) {
-        draw_sprite(
+        draw_bitmap(
             bmp_checkbox_check,
             point(center.x + size.x * 0.5 - 40, center.y),
             point(32, -1)

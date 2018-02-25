@@ -340,7 +340,7 @@ void main_menu::do_logic() {
  */
 void main_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    draw_sprite(
+    draw_bitmap(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
         point(scr_w, scr_h)
     );
@@ -349,7 +349,7 @@ void main_menu::do_drawing() {
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
         
-        draw_sprite_in_box(pik->top, pik->pos, logo_pikmin_size, pik->angle);
+        draw_bitmap_in_box(pik->top, pik->pos, logo_pikmin_size, pik->angle);
     }
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -599,7 +599,7 @@ void options_menu::do_logic() {
 void options_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
-    draw_sprite(
+    draw_bitmap(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
         point(scr_w, scr_h), 0, map_gray(64)
     );
@@ -1007,7 +1007,7 @@ void controls_menu::do_logic() {
 void controls_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
-    draw_sprite(
+    draw_bitmap(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
         point(scr_w, scr_h), 0, map_gray(64)
     );
@@ -1172,24 +1172,24 @@ void area_menu::load() {
     bmp_menu_bg = load_bmp(asset_file_names.main_menu);
     
     //Menu widgets.
-    menu_widgets.push_back(
-        new menu_text(
-            point(scr_w * 0.3, scr_h * 0.1), point(scr_w * 0.5, scr_h * 0.1),
-            "Pick an area:",
-            font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
-        )
-    );
-    
     back_widget =
         new menu_button(
-        point(scr_w * 0.8, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
+        point(scr_w * 0.15, scr_h * 0.10),
+        point(scr_w * 0.20, scr_h * 0.06),
     [this] () {
         leave();
     },
     "Back", font_main
     );
-    
     menu_widgets.push_back(back_widget);
+    
+    menu_widgets.push_back(
+        new menu_text(
+            point(scr_w * 0.5, scr_h * 0.1), point(scr_w * 0.3, scr_h * 0.1),
+            "Pick an area:",
+            font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_CENTER
+        )
+    );
     
     for(size_t a = 0; a < 8; ++a) {
         menu_widgets.push_back(
@@ -1311,7 +1311,7 @@ void area_menu::do_logic() {
  */
 void area_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    draw_sprite(
+    draw_bitmap(
         bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
         point(scr_w, scr_h), 0, map_gray(64)
     );

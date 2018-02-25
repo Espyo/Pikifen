@@ -383,7 +383,7 @@ void leader::draw(sprite_effect_manager* effect_manager) {
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s = spark_animation.instance.get_cur_sprite();
         if(spark_s && spark_s->bitmap) {
-            draw_sprite(
+            draw_bitmap(
                 spark_s->bitmap, draw_pos,
                 draw_size
             );

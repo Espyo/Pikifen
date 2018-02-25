@@ -10,6 +10,9 @@ script {
         on_opponent_in_reach {
             state = waking_up
         }
+        on_damage {
+            state = waking_up
+        }
         on_touch_opponent {
             state = waking_up
         }

@@ -97,7 +97,7 @@ void particle::draw() {
         );
         
     } else if(type == PARTICLE_TYPE_BITMAP) {
-        draw_sprite(
+        draw_bitmap(
             bitmap, pos, point(size, -1),
             0, change_alpha(
                 color,
@@ -107,7 +107,7 @@ void particle::draw() {
         );
         
     } else if(type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
-        draw_sprite(
+        draw_bitmap(
             bitmap, pos, point(size, -1),
             0, change_alpha(
                 color,
@@ -119,7 +119,7 @@ void particle::draw() {
         
     } else if(type == PARTICLE_TYPE_ENEMY_SPIRIT) {
         float s = sin((time / duration) * M_PI);
-        draw_sprite(
+        draw_bitmap(
             bitmap,
             point(pos.x + s * 16, pos.y),
             point(size, -1), s * M_PI,
@@ -135,7 +135,7 @@ void particle::draw() {
         if(r <= 0.5) s *= r * 2;
         else opacity *= (1 - r) * 2;
         
-        draw_sprite(
+        draw_bitmap(
             bitmap, pos, point(s, s),
             0, change_alpha(color, opacity)
         );
