@@ -144,6 +144,23 @@ animations{
 			}
 		}
 	}
+	punching{
+		loop_frame=0
+		frames{
+			wind-up{
+				duration=0.10
+			}
+			punch{
+				duration=0.20
+			}
+			ducking{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
 }
 sprites{
 	ducking{
@@ -431,6 +448,72 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	punch{
+		file=Olimar.png
+		file_pos=338.00 0.00
+		file_size=78.00 64.00
+		game_size=39.00 32.00
+		offset=10.00 0.00
+		hitboxes{
+			fist{
+				coords=22.00 3.00 0.00
+				height=128.00
+				radius=14.00
+				type=1
+				multiplier=8.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			body{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	wind-up{
+		file=Olimar.png
+		file_pos=270.00 0.00
+		file_size=66.00 64.00
+		game_size=33.00 32.00
+		offset=-8.00 0.00
+		hitboxes{
+			fist{
+				coords=-5.00 8.00 0.00
+				height=128.00
+				radius=8.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			body{
+				coords=-10.00 0.00 0.00
 				height=128.00
 				radius=16.00
 				type=0

@@ -48,6 +48,7 @@ void left_hazard(           mob* m, void* info1, void* info2);
 void lose_momentum(         mob* m, void* info1, void* info2);
 void move(                  mob* m, void* info1, void* info2);
 void notify_pikmin_release( mob* m, void* info1, void* info2);
+void punch(                 mob* m, void* info1, void* info2);
 void queue_stop_auto_pluck( mob* m, void* info1, void* info2);
 void release(               mob* m, void* info1, void* info2);
 void search_seed(           mob* m, void* info1, void* info2);

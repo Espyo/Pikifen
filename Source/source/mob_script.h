@@ -203,6 +203,8 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_START_WHISTLE,
     //When the leader stops whistling.
     LEADER_EVENT_STOP_WHISTLE,
+    //When the leader throws a punch.
+    LEADER_EVENT_PUNCH,
     //When the leader dismisses their group.
     LEADER_EVENT_DISMISS,
     //When the leader uses a spray.

@@ -26,7 +26,6 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
  */
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN),
-    attack_power(1),
     carry_strength(1),
     carry_speed(1),
     throw_strength_mult(1.0),
@@ -72,7 +71,6 @@ void pikmin_type::load_parameters(data_node* file) {
     
     reader_setter rs(file);
     
-    rs.set("attack_power", attack_power);
     rs.set("throw_strength_mult", throw_strength_mult);
     rs.set("can_carry_bomb_rocks", can_carry_bomb_rocks);
     rs.set("can_dig", can_dig);

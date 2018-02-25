@@ -276,14 +276,8 @@ bool mob::attack(
     
     if(attack_h) {
         attacker_offense = attack_h->multiplier;
-        
     } else {
-        if(type->category->id == MOB_CATEGORY_PIKMIN) {
-            pikmin* pik_ptr = (pikmin*) this;
-            attacker_offense =
-                pik_ptr->pik_type->attack_power *
-                (1 + pik_ptr->maturity * maturity_power_mult);
-        }
+        attacker_offense = 1;
     }
     
     if(victim_h) {
@@ -2327,82 +2321,6 @@ void calculate_knockback(
             *angle = get_angle(attacker->pos, victim->pos);
         } else {
             *angle = attacker->angle + attacker_h->knockback_angle;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Causes a mob to damage another via hitboxes.
- * attacker:     the attacking mob.
- * victim:       the mob that'll take the damage.
- * attacker_h:   the hitbox of the attacker mob, if any.
- * victim_h:     the hitbox of the victim mob, if any.
- * total_damage: the variable to return the total caused damage to, if any.
- */
-void cause_hitbox_damage(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h, float* total_damage
-) {
-    //TODO this function is unused.
-    float attacker_offense = 0;
-    float defense_multiplier = 1;
-    float knockback = 0;
-    float knockback_angle = attacker->angle;
-    
-    if(attacker_h) {
-        attacker_offense = attacker_h->multiplier;
-        knockback = attacker_h->knockback;
-        if(attacker_h->knockback_outward) {
-            knockback_angle += get_angle(attacker->pos, victim->pos);
-        } else {
-            knockback_angle += attacker_h->knockback_angle;
-        }
-        
-    } else {
-        if(attacker->type->category->id == MOB_CATEGORY_PIKMIN) {
-            attacker_offense =
-                ((pikmin*) attacker)->maturity *
-                ((pikmin*) attacker)->pik_type->attack_power *
-                maturity_power_mult;
-        }
-    }
-    
-    if(victim_h) {
-        defense_multiplier = victim_h->multiplier;
-    }
-    
-    float damage = attacker_offense * (1.0 / defense_multiplier);
-    
-    if(total_damage) *total_damage = damage;
-    
-    //Cause the damage and the knockback.
-    victim->set_health(true, false, damage);
-    if(knockback != 0) {
-        victim->stop_chasing();
-        victim->speed.x =
-            cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        victim->speed.y =
-            sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        victim->speed_z =
-            MOB_KNOCKBACK_V_POWER;
-    }
-    
-    //Script stuff.
-    victim->fsm.run_event(MOB_EVENT_DAMAGE, attacker);
-    
-    //If before taking damage, the interval was dividable X times,
-    //and after it's only dividable by Y (X>Y), an interval was crossed.
-    if(
-        victim->type->big_damage_interval > 0 &&
-        victim->health != victim->type->max_health
-    ) {
-        if(
-            floor((victim->health + damage) /
-                  victim->type->big_damage_interval) >
-            floor(victim->health / victim->type->big_damage_interval)
-        ) {
-            victim->big_damage_ev_queued = true;
         }
     }
 }

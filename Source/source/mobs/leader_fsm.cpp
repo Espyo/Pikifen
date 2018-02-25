@@ -91,6 +91,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_START_WHISTLE); {
             efc.change_state("whistling");
         }
+        efc.new_event(LEADER_EVENT_PUNCH); {
+            efc.change_state("punching");
+        }
         efc.new_event(LEADER_EVENT_DISMISS); {
             efc.change_state("dismissing");
         }
@@ -138,6 +141,39 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_TIMER); {
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run(leader_fsm::move);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run(leader_fsm::stop);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("punching", LEADER_STATE_PUNCHING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(leader_fsm::punch);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
         }
         efc.new_event(LEADER_EVENT_MOVE_START); {
@@ -1060,6 +1096,14 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(!l_ptr->holding_pikmin) return;
     l_ptr->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader punches.
+ */
+void leader_fsm::punch(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_PUNCHING);
 }
 
 

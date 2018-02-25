@@ -314,6 +314,8 @@ void gameplay::handle_button(
                 
                 //Now check if the leader should punch.
                 if(!done) {
+                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_PUNCH);
+                    done = true;
                 }
                 
             } else { //Button release.

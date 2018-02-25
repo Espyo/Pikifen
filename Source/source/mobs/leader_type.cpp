@@ -91,6 +91,7 @@ anim_conversion_vector leader_type::get_anim_conversions() {
     v.push_back(make_pair(LEADER_ANIM_DISMISSING,   "dismissing"));
     v.push_back(make_pair(LEADER_ANIM_THROWING,     "throwing"));
     v.push_back(make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
+    v.push_back(make_pair(LEADER_ANIM_PUNCHING,     "punching"));
     v.push_back(make_pair(LEADER_ANIM_LYING,        "lying"));
     v.push_back(make_pair(LEADER_ANIM_PAIN,         "pain"));
     v.push_back(make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));

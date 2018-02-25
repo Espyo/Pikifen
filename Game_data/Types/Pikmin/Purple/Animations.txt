@@ -703,7 +703,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=1
-				multiplier=1.00
+				multiplier=11.00
 				can_pikmin_latch=false
 				hazards
 				outward=false

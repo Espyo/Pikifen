@@ -33,7 +33,6 @@ class leader;
  */
 class pikmin_type : public mob_type {
 public:
-    float attack_power;
     float carry_strength;
     float carry_speed;
     float throw_strength_mult;
