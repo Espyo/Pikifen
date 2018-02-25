@@ -462,6 +462,9 @@ void animation_editor::hitbox_to_gui() {
             (
                 (lafi::textbox*) f->widgets["txt_knockback"]
             )->text = f2s(cur_h->knockback);
+            (
+                (lafi::textbox*) f->widgets["txt_wither"]
+            )->text = i2s(cur_h->wither_chance);
             
             if(cur_h->knockback_outward) {
                 disable_widget(f->widgets["ang_angle"]);
@@ -706,6 +709,13 @@ void animation_editor::gui_to_hitbox() {
                 (
                     (lafi::textbox*)
                     f->widgets["frm_attack"]->widgets["txt_knockback"]
+                )->text
+            );
+        cur_h->wither_chance =
+            s2i(
+                (
+                    (lafi::textbox*)
+                    f->widgets["frm_attack"]->widgets["txt_wither"]
                 )->text
             );
             
@@ -1344,6 +1354,11 @@ void animation_editor::save_animation_database() {
             hitbox_node->add(
                 new data_node("knockback", f2s(h_ptr->knockback))
             );
+            if(h_ptr->wither_chance > 0) {
+                hitbox_node->add(
+                    new data_node("wither_chance", i2s(h_ptr->wither_chance))
+                );
+            }
         }
     }
     

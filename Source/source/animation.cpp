@@ -456,6 +456,10 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 s2f(
                     hitbox_node->get_child_by_name("multiplier")->value
                 );
+            cur_hitbox.wither_chance =
+                s2i(
+                    hitbox_node->get_child_by_name("wither_chance")->value
+                );
             cur_hitbox.can_pikmin_latch =
                 s2b(
                     hitbox_node->get_child_by_name(

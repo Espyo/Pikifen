@@ -1196,6 +1196,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			hide{
 				coords=-4.00 0.00 -32.00
@@ -1208,6 +1209,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			mouth{
 				coords=35.00 0.00 0.00
@@ -1241,6 +1243,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			hide{
 				coords=-4.00 0.00 -32.00
@@ -1253,6 +1256,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			mouth{
 				coords=35.00 0.00 0.00
@@ -1286,6 +1290,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			hide{
 				coords=-4.00 0.00 -32.00
@@ -1298,6 +1303,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=2.00
+				wither_chance=5
 			}
 			mouth{
 				coords=35.00 0.00 0.00

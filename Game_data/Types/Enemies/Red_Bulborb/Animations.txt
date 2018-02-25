@@ -919,6 +919,7 @@ sprites{
 				outward=true
 				angle=4.71
 				knockback=3.00
+				wither_chance=10
 			}
 			back{
 				coords=-13.00 0.00 -32.00
@@ -931,6 +932,7 @@ sprites{
 				outward=true
 				angle=4.71
 				knockback=3.00
+				wither_chance=10
 			}
 			mouth{
 				coords=85.00 -14.00 0.00
@@ -964,6 +966,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=3.00
+				wither_chance=10
 			}
 			back{
 				coords=-13.00 0.00 -32.00
@@ -976,6 +979,7 @@ sprites{
 				outward=true
 				angle=0.00
 				knockback=3.00
+				wither_chance=10
 			}
 			mouth{
 				coords=85.00 14.00 0.00

@@ -47,6 +47,7 @@ hitbox::hitbox(
     knockback_outward(true),
     knockback_angle(0),
     knockback(1),
+    wither_chance(0),
     can_pikmin_latch(false) {
     
 }

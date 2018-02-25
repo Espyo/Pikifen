@@ -1165,6 +1165,19 @@ void animation_editor::load() {
         new lafi::textbox(), 40, 16
     );
     frm_attack->easy_row();
+    frm_attack->easy_add(
+        "lbl_wither",
+        new lafi::label("Wither chance:"), 60, 16
+    );
+    frm_attack->easy_add(
+        "txt_wither",
+        new lafi::textbox(), 30, 16
+    );
+    frm_attack->easy_add(
+        "lbl_wither_per",
+        new lafi::label("%"), 10, 16
+    );
+    frm_attack->easy_row();
     
     
     //Hitboxes -- properties.
@@ -1312,6 +1325,11 @@ void animation_editor::load() {
         lambda_gui_to_hitbox_instance;
     frm_attack->widgets["txt_knockback"]->description =
         "Knockback strength.";
+        
+    frm_attack->widgets["txt_wither"]->lose_focus_handler =
+        lambda_gui_to_hitbox_instance;
+    frm_attack->widgets["txt_wither"]->description =
+        "Chance of the attack lowering a Pikmin's maturity by one.";
         
         
     //Pikmin top -- declarations.

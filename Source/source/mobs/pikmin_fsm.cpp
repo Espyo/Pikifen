@@ -1116,7 +1116,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
     if(hit_rate == 0) return;
     
-    float hit_roll = randomi(0, 100);
+    unsigned char hit_roll = randomi(0, 100);
     if(hit_roll > hit_rate) {
         //This attack was randomly decided to be a miss.
         //Record this animation so it won't be considered a hit next frame.
@@ -1137,6 +1137,14 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     m->apply_knockback(knockback, knockback_angle);
     
     m->set_animation(PIKMIN_ANIM_LYING);
+    
+    //Withering.
+    if(info->h2->wither_chance > 0 && p_ptr->maturity > 0) {
+        unsigned char wither_roll = randomi(0, 100);
+        if(wither_roll < info->h2->wither_chance) {
+            p_ptr->maturity--;
+        }
+    }
     
     m->remove_from_group();
     

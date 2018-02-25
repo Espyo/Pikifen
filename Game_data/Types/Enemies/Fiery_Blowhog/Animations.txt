@@ -1437,6 +1437,7 @@ sprites{
 				outward=false
 				angle=0.00
 				knockback=3.00
+				wither_chance=5
 			}
 			fire1{
 				coords=70.00 0.00 0.00
@@ -1494,6 +1495,7 @@ sprites{
 				outward=false
 				angle=0.00
 				knockback=3.00
+				wither_chance=5
 			}
 			fire1{
 				coords=60.31 -1.11 0.00

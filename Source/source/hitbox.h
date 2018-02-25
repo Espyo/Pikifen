@@ -67,6 +67,8 @@ public:
     float knockback_angle;
     //Knockback strength.
     float knockback;
+    //Chance of this attack withering a Pikmin's maturity (0-100).
+    unsigned char wither_chance;
     //Can the Pikmin latch on to this hitbox to continue inflicting damage?
     //Example of a non-latchable hitbox: Goolix' larger core.
     bool can_pikmin_latch;
