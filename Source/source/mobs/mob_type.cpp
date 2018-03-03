@@ -369,14 +369,23 @@ void load_mob_type_from_file(
         mt->anims = load_animation_database_from_file(&anim_file);
         mt->anims.fix_body_part_pointers();
         
-        data_node script_file(folder + "/Script.txt");
+        data_node script_file(folder + "/Script.txt", true);
         size_t old_n_states = mt->states.size();
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
         
         if(mt->states.size() > old_n_states) {
-            data_node* first_state_node =
-                script_file.get_child_by_name("first_state");
-            string first_state_name = first_state_node->value;
+        
+            string first_state_name;
+            data_node* first_state_node;
+            for(size_t n = 0; n < script_file.get_nr_of_children(); ++n) {
+                data_node* dn = script_file.get_child(n);
+                string s = get_var_value(dn->name, "first_state", "");
+                if(!s.empty()) {
+                    first_state_name = s;
+                    first_state_node;
+                    break;
+                }
+            }
             
             for(size_t s = 0; s < mt->states.size(); ++s) {
                 if(mt->states[s]->name == first_state_name) {
@@ -388,7 +397,7 @@ void load_mob_type_from_file(
                 log_error(
                     "The name of the first state \"" +
                     first_state_name + "\" is invalid!",
-                    first_state_node
+                    (first_state_node ? first_state_node : &script_file)
                 );
             }
         }

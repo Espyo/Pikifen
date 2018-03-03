@@ -3,127 +3,127 @@ first_state = resting
 script {
     resting_start {
         on_enter {
-            animation = resting
-            move = stop
-            timer = 1
-            gravity = 1
+            animation resting
+            move stop
+            timer 1
+            gravity 1
         }
         on_timer {
-            state = resting
+            state resting
         }
         on_pikmin_land {
-            state = dying
+            state dying
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
-            state = resting
+            special_function spray
+            state resting
         }
     }
     
     going_home {
         on_enter {
-            move = home
-            timer = 5
+            move home
+            timer 5
         }
         on_reach_destination {
-            state = resting_start
+            state resting_start
         }
         on_pikmin_land {
-            state = dying
+            state dying
         }
         on_death {
-            state = dying
+            state dying
         }
         on_timer {
-            state = flying
+            state flying
         }
         on_touch_spray {
-            special_function = spray
-            state = resting
+            special_function spray
+            state resting
         }
     }
     
     resting {
         on_enter {
-            animation = resting
-            timer = 5
-            near_reach = fear
-            far_reach = fear
+            animation resting
+            timer 5
+            near_reach fear
+            far_reach fear
         }
         on_timer {
-            state = flying
+            state flying
         }
         on_opponent_in_reach {
-            state = flying
+            state flying
         }
         on_touch_opponent {
-            state = flying
+            state flying
         }
         on_pikmin_land {
-            state = dying
+            state dying
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     flying {
         on_enter {
-            animation = flapping
-            gravity = -2
-            timer = 0.3
-            move = randomly
-            var = flutters 0
+            animation flapping
+            gravity -2
+            timer 0.3
+            move randomly
+            var flutters 0
         }
         on_pikmin_land {
-            state = dying
+            state dying
         }
         on_death {
-            state = dying
+            state dying
         }
         on_timer {
-            timer = 0.3
-            move = stop vertically
-            gravity = 0
-            move = randomly
-            inc_var = flutters
-            if = flutters 10
-            state = going_home
+            timer 0.3
+            move stop vertically
+            gravity 0
+            move randomly
+            inc_var flutters
+            if flutters 10
+            state going_home
         }
         on_touch_spray {
-            special_function = spray
-            state = resting
+            special_function spray
+            state resting
         }
     }
     
     dying {
         on_enter {
-            special_function = die_start
-            animation = dying
-            move = stop
-            gravity = 1
+            special_function die_start
+            animation dying
+            move stop
+            gravity 1
         }
         on_animation_end {
-            special_function = die_end
+            special_function die_end
         }
     }
     
     deleting {
         on_enter {
-            special_function = die_end
-            special_function = delete
+            special_function die_end
+            special_function delete
         }
     }
     

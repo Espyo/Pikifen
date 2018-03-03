@@ -3,54 +3,54 @@ first_state = safe
 script{
     safe {
         on_enter {
-            timer = 3
-            animation = safe
+            timer 3
+            animation safe
         }
         on_timer {
-            state = starting
+            state starting
         }
         on_death {
-            state = destroyed
+            state destroyed
         }
     }
     starting {
         on_enter {
-            animation = starting
+            animation starting
         }
         on_animation_end {
-            state = shooting
+            state shooting
         }
         on_death {
-            state = destroyed
+            state destroyed
         }
     }
     shooting {
         on_enter {
-            timer = 3
-            animation = shooting
+            timer 3
+            animation shooting
         }
         on_timer {
-            state = stopping
+            state stopping
         }
         on_death {
-            state = destroyed
+            state destroyed
         }
     }
     stopping {
         on_enter {
-            animation = stopping
+            animation stopping
         }
         on_animation_end {
-            state = safe
+            state safe
         }
         on_death {
-            state = destroyed
+            state destroyed
         }
     }
     destroyed {
         on_enter {
-            animation = destroyed
-            special_function = die_start
+            animation destroyed
+            special_function die_start
         }
     }
 }

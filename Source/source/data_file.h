@@ -84,10 +84,14 @@ public:
     size_t add(data_node* new_node);
     bool remove(data_node* node_to_remove);
     
-    void load_file(const string &file_name, const bool trim_values = true);
+    void load_file(
+        const string &file_name,
+        const bool trim_values = true,
+        const bool names_only = false
+    );
     size_t load_node(
         const vector<string> &lines, const bool trim_values,
-        const size_t start_line = 0
+        const size_t start_line = 0, const bool names_only = false
     );
     bool save_file(
         string file_name = "", const bool children_only = true,
@@ -99,7 +103,7 @@ public:
     );
     
     data_node();
-    data_node(const string &file_name);
+    data_node(const string &file_name, const bool names_only = false);
     data_node(const string &name, const string &value);
     data_node(const data_node &dn2);
     ~data_node();

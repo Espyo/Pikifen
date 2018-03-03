@@ -3,142 +3,142 @@ first_state = hidden
 script {
     hidden {
         on_enter {
-            animation = hidden
-            hide = true
-            near_reach = chase
-            far_reach = chase
+            animation hidden
+            hide true
+            near_reach chase
+            far_reach chase
         }
         on_opponent_in_reach {
-            state = emerging
+            state emerging
         }
         on_leave {
-            hide = false
+            hide false
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     emerging {
         on_enter {
-            animation = emerging
+            animation emerging
         }
         on_animation_end {
-            state = examining
+            state examining
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
         on_death {
-            state = dying
+            state dying
         }
     }
     
     examining {
         on_enter {
-            animation = examining
+            animation examining
         }
         on_opponent_in_reach {
-            focus = mob
-            state = chasing
+            focus mob
+            state chasing
         }
         on_animation_end {
-            state = going_home
+            state going_home
         }
         on_pikmin_land {
-            state = crushed
+            state crushed
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
         on_death {
-            state = dying
+            state dying
         }
     }
     
     burying {
         on_enter {
-            animation = burying
+            animation burying
         }
         on_animation_end {
-            state = hidden
+            state hidden
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
         on_death {
-            state = dying
+            state dying
         }
     }
     
     chasing {
         on_enter {
-            animation = moving
-            move = focused_mob
+            animation moving
+            move focused_mob
         }
         on_focus_off_reach {
-            state = going_home
+            state going_home
         }
         on_far_from_home {
-            state = going_home
+            state going_home
         }
         on_pikmin_land {
-            state = crushed
+            state crushed
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
         on_death {
-            state = dying
+            state dying
         }
     }
     
     going_home {
         on_enter {
-            animation = moving
-            move = home
+            animation moving
+            move home
         }
         on_reach_destination {
-            state = burying
+            state burying
         }
         on_pikmin_land {
-            state = crushed
+            state crushed
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
         on_death {
-            state = dying
+            state dying
         }
     }
     
     crushed {
         on_enter {
-            state = dying
+            state dying
         }
     }
     
     dying {
         on_enter {
-            special_function = die_start
-            animation = dying
-            move = stop
+            special_function die_start
+            animation dying
+            move stop
         }
         on_animation_end {
-            special_function = die_end
+            special_function die_end
         }
     }
     
     deleting {
         on_enter {
-            special_function = die_end
-            special_function = delete
+            special_function die_end
+            special_function delete
         }
     }
     

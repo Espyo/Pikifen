@@ -38,25 +38,30 @@ mob_action::mob_action(
     code(nullptr),
     valid(true) {
     
-    string n = dn->name;
+    vector<string> words = split(dn->name);
+    string n = words[0];
+    string v = "";
+    if(words.size() > 1) {
+        v = dn->name.substr(n.size(), string::npos);
+        v = trim_spaces(v);
+    }
     
-    if(n == "chomp") {
+    if(words[0] == "chomp") {
     
         type = MOB_ACTION_CHOMP_HITBOXES;
         
-        vector<string> hitbox_names = split(dn->value);
-        
-        if(!hitbox_names.empty()) {
+        words.erase(words.begin());
+        if(!words.empty()) {
             //The first one is actually the number of Pikmin it can eat at most.
-            vf.push_back(s2f(hitbox_names[0]));
-            hitbox_names.erase(hitbox_names.begin());
+            vf.push_back(s2f(words[0]));
+            words.erase(words.begin());
         }
         
-        for(size_t hn = 0; hn < hitbox_names.size(); ++hn) {
-            size_t h_pos = mt->anims.find_body_part(hitbox_names[hn]);
+        for(size_t hn = 0; hn < words.size(); ++hn) {
+            size_t h_pos = mt->anims.find_body_part(words[hn]);
             
             if(h_pos == INVALID) {
-                log_error("Unknown hitbox \"" + hitbox_names[hn] + "\"!", dn);
+                log_error("Unknown hitbox \"" + words[hn] + "\"!", dn);
                 valid = false;
             } else {
                 vi.push_back(h_pos);
@@ -64,39 +69,44 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "eat") {
+    } else if(words[0] == "eat") {
     
         type = MOB_ACTION_EAT;
         
-        if(dn->value == "all") {
+        if(v == "all") {
             sub_type = MOB_ACTION_EAT_ALL;
         } else {
             sub_type = MOB_ACTION_EAT_NUMBER;
-            vi.push_back(s2i(dn->value));
+            vi.push_back(s2i(v));
         }
         
         
-    } else if(n == "focus") {
+    } else if(words[0] == "focus") {
     
         type = MOB_ACTION_FOCUS;
         
         
-    } else if(n == "hide") {
+    } else if(words[0] == "hide") {
     
         type = MOB_ACTION_HIDE;
         
-        vi.push_back(s2b(dn->value));
+        if(words.size() == 1) {
+            log_error("The hide action requires a true or false value!", dn);
+            valid = false;
+        } else {
+            vi.push_back(s2b(words[1]));
+        }
         
         
-    } else if(n == "if") {
+    } else if(words[0] == "if") {
     
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.size() < 2) {
             log_error(
-                "Not enough parts on this if: \"" + dn->value + "\"!",
+                "Not enough parts on this if: \"" + v + "\"!",
                 dn
             );
             valid = false;
@@ -105,15 +115,15 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "if_less") {
+    } else if(words[0] == "if_less") {
     
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_LESS;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.size() < 2) {
             log_error(
-                "Not enough parts on this if_less: \"" + dn->value + "\"!",
+                "Not enough parts on this if_less: \"" + v + "\"!",
                 dn
             );
             valid = false;
@@ -122,15 +132,15 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "if_more") {
+    } else if(words[0] == "if_more") {
     
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_MORE;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.size() < 2) {
             log_error(
-                "Not enough parts on this if_more: \"" + dn->value + "\"!",
+                "Not enough parts on this if_more: \"" + v + "\"!",
                 dn
             );
             valid = false;
@@ -139,15 +149,15 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "if_not") {
+    } else if(words[0] == "if_not") {
     
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_NOT;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.size() < 2) {
             log_error(
-                "Not enough parts on this if_not: \"" + dn->value + "\"!",
+                "Not enough parts on this if_not: \"" + v + "\"!",
                 dn
             );
             valid = false;
@@ -156,53 +166,53 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "move") {
+    } else if(words[0] == "move") {
     
         type = MOB_ACTION_MOVE;
         
-        if(dn->value == "focused_mob") {
+        if(v == "focused_mob") {
             sub_type = MOB_ACTION_MOVE_FOCUSED_MOB;
-        } else if(dn->value == "home") {
+        } else if(v == "home") {
             sub_type = MOB_ACTION_MOVE_HOME;
-        } else if(dn->value == "stop") {
+        } else if(v == "stop") {
             sub_type = MOB_ACTION_MOVE_STOP;
-        } else if(dn->value == "stop vertically") {
+        } else if(v == "stop vertically") {
             sub_type = MOB_ACTION_MOVE_STOP_VERTICALLY;
         } else {
         
-            vector<string> string_coords = split(dn->value);
+            words.erase(words.begin());
             
-            if(string_coords.empty()) valid = false;
+            if(words.empty()) valid = false;
             else {
-                if(string_coords[0] == "vertically") {
+                if(words[0] == "vertically") {
                     sub_type = MOB_ACTION_MOVE_VERTICALLY;
-                    if(string_coords.size() < 2) valid = false;
+                    if(words.size() < 2) valid = false;
                     else {
-                        vf.push_back(s2f(string_coords[1]));
+                        vf.push_back(s2f(words[1]));
                     }
                     
-                } else if(string_coords[0] == "randomly") {
+                } else if(words[0] == "randomly") {
                     sub_type = MOB_ACTION_MOVE_RANDOMLY;
                     
-                } else if(string_coords[0] == "relative") {
+                } else if(words[0] == "relative") {
                     sub_type = MOB_ACTION_MOVE_REL_COORDS;
-                    if(string_coords.size() < 3) valid = false;
+                    if(words.size() < 3) valid = false;
                     else {
-                        for(size_t sc = 1; sc < string_coords.size(); ++sc) {
-                            vf.push_back(s2f(string_coords[sc]));
+                        for(size_t sc = 1; sc < words.size(); ++sc) {
+                            vf.push_back(s2f(words[sc]));
                         }
                     }
                     
                 } else {
                     sub_type = MOB_ACTION_MOVE_COORDS;
-                    for(size_t sc = 0; sc < string_coords.size(); ++sc) {
-                        vf.push_back(s2f(string_coords[sc]));
+                    for(size_t sc = 0; sc < words.size(); ++sc) {
+                        vf.push_back(s2f(words[sc]));
                     }
                 }
             }
             
             if(!valid) {
-                log_error("Invalid move location \"" + dn->value + "\"!", dn);
+                log_error("Invalid move location \"" + v + "\"!", dn);
             }
         }
         
@@ -216,9 +226,9 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_ANIMATION;
         
-        size_t f_pos = mt->anims.find_animation(dn->value);
+        size_t f_pos = mt->anims.find_animation(v);
         if(f_pos == INVALID) {
-            log_error("Unknown animation \"" + dn->value + "\"!", dn);
+            log_error("Unknown animation \"" + v + "\"!", dn);
             valid = false;
         } else {
             vi.push_back(f_pos);
@@ -229,14 +239,14 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_GRAVITY;
         
-        vf.push_back(s2f(dn->value));
+        vf.push_back(s2f(v));
         
         
     } else if(n == "health") {
     
         type = MOB_ACTION_SET_HEALTH;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.empty()) {
             valid = false;
         } else {
@@ -254,7 +264,7 @@ mob_action::mob_action(
         }
         
         if(!valid) {
-            log_error("Invalid health data \"" + dn->value + "\"!", dn);
+            log_error("Invalid health data \"" + v + "\"!", dn);
         }
         
         
@@ -262,19 +272,21 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_SPEED;
         
+        //TODO
+        
         
     } else if(n == "state") {
     
         type = MOB_ACTION_CHANGE_STATE;
         
         for(size_t s = 0; s < states->size(); ++s) {
-            if(states->at(s)->name == dn->value) {
+            if(states->at(s)->name == v) {
                 vi.push_back(s);
                 break;
             }
         }
         if(vi.empty()) {
-            log_error("Unknown state \"" + dn->value + "\"!", dn);
+            log_error("Unknown state \"" + v + "\"!", dn);
         }
         
         
@@ -282,7 +294,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_TIMER;
         
-        vf.push_back(s2f(dn->value));
+        vf.push_back(s2f(v));
         
         
     } else if(n == "far_reach" || n == "near_reach") {
@@ -293,13 +305,13 @@ mob_action::mob_action(
             type = MOB_ACTION_SET_NEAR_REACH;
         }
         
-        if(dn->value.empty()) {
+        if(v.empty()) {
             vi.push_back(INVALID);
             return;
         }
         
         for(size_t r = 0; r < mt->reaches.size(); ++r) {
-            if(mt->reaches[r].name == dn->value) {
+            if(mt->reaches[r].name == v) {
                 vi.push_back(r);
                 return;
             }
@@ -307,7 +319,7 @@ mob_action::mob_action(
         
         log_error(
             "Reach-setting action refers to non-existent reach \"" +
-            dn->value + "\"!", dn
+            v + "\"!", dn
         );
         valid = false;
         
@@ -316,7 +328,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_VAR;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.size() < 2) {
             log_error("Not enough info to set a variable!", dn);
             valid = false;
@@ -329,7 +341,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_INC_VAR;
         
-        vector<string> words = split(dn->value);
+        words.erase(words.begin());
         if(words.empty()) {
             log_error("Not enough info to increment a variable!", dn);
             valid = false;
@@ -341,16 +353,16 @@ mob_action::mob_action(
     } else if(n == "particle") {
     
         type = MOB_ACTION_PARTICLE;
-        if(!dn->value.empty()) {
+        if(!v.empty()) {
             if(
-                custom_particle_generators.find(dn->value) ==
+                custom_particle_generators.find(v) ==
                 custom_particle_generators.end()
             ) {
                 log_error(
-                    "Particle generator \"" + dn->value + "\" not found!", dn
+                    "Particle generator \"" + v + "\" not found!", dn
                 );
             } else {
-                vs.push_back(dn->value);
+                vs.push_back(v);
             }
         }
         
@@ -364,18 +376,18 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SPECIAL_FUNCTION;
         
-        if(dn->value == "die_start") {
+        if(v == "die_start") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_START;
-        } else if(dn->value == "die_end") {
+        } else if(v == "die_end") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_END;
-        } else if(dn->value == "delete") {
+        } else if(v == "delete") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DELETE;
-        } else if(dn->value == "hazard") {
+        } else if(v == "hazard") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_HAZARD;
-        } else if(dn->value == "spray") {
+        } else if(v == "spray") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_SPRAY;
         } else {
-            log_error("Unknown special function \"" + dn->value + "\"!", dn);
+            log_error("Unknown special function \"" + v + "\"!", dn);
             valid = false;
         }
         
@@ -389,11 +401,11 @@ mob_action::mob_action(
     
         type = MOB_ACTION_WAIT;
         
-        if(dn->value == "animation") {
+        if(v == "animation") {
             sub_type = MOB_ACTION_WAIT_ANIMATION;
         } else {
             sub_type = MOB_ACTION_WAIT_TIME;
-            vf.push_back(s2f(dn->value));
+            vf.push_back(s2f(v));
         }
         
         

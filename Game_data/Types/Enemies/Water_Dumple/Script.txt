@@ -3,170 +3,170 @@ first_state = idling
 script {
     idling {
         on_enter {
-            var = ignoring false
-            animation = idling
-            move = stop
-            near_reach = search
+            var ignoring false
+            animation idling
+            move stop
+            near_reach search
         }
         on_opponent_in_reach {
-            if = ignoring false
-            focus = mob
-            if = ignoring false
-            state = chasing
+            if ignoring false
+            focus mob
+            if ignoring false
+            state chasing
         }
         on_big_damage {
-            state = shaking
+            state shaking
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     chasing {
         on_enter {
-            animation = moving
-            move = focused_mob
-            near_reach = attack
-            far_reach = chase
+            animation moving
+            move focused_mob
+            near_reach attack
+            far_reach chase
         }
         on_opponent_in_reach {
-            state = attacking
+            state attacking
         }
         on_focus_off_reach {
-            state = returning
+            state returning
         }
         on_far_from_home {
-            var = ignoring true
-            state = returning
+            var ignoring true
+            state returning
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_big_damage {
-            state = shaking
+            state shaking
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     attacking {
         on_enter {
-            move = stop
-            animation = attacking
-            chomp = 2 mouth
+            move stop
+            animation attacking
+            chomp 2 mouth
         }
         on_animation_end {
-            state = checking_mouth
+            state checking_mouth
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     checking_mouth {
         on_mouth_occupied {
-            state = eating
+            state eating
         }
         on_animation_end {
-            state = idling
+            state idling
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     eating {
         on_enter {
             chomp =
-            animation = eating
+            animation eating
         }
         on_animation_end {
-            eat = all
-            state = idling
+            eat all
+            state idling
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     shaking {
         on_enter {
-            move = stop
-            animation = shaking
+            move stop
+            animation shaking
         }
         on_animation_end {
-            state = idling
+            state idling
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     returning {
         on_enter {
-            move = home
-            animation = moving
-            timer = 2
-            near_reach = search
+            move home
+            animation moving
+            timer 2
+            near_reach search
         }
         on_leave {
-            timer = 0
+            timer 0
         }
         on_timer {
-            var = ignoring false
+            var ignoring false
         }
         on_reach_destination {
-            state = idling
+            state idling
         }
         on_opponent_in_reach {
-            if = ignoring false
-            focus = mob
-            if = ignoring false
-            state = chasing
+            if ignoring false
+            focus mob
+            if ignoring false
+            state chasing
         }
         on_bottomless_pit {
-            state = deleting
+            state deleting
         }
         on_death {
-            state = dying
+            state dying
         }
         on_touch_spray {
-            special_function = spray
+            special_function spray
         }
     }
     
     dying {
         on_enter {
-            special_function = die_start
-            animation = dying
-            move = stop
-            eat = 
+            special_function die_start
+            animation dying
+            move stop
+            eat 
         }
         on_animation_end {
-            special_function = die_end
+            special_function die_end
         }
     }
     
     deleting {
         on_enter {
-            special_function = die_end
-            special_function = delete
+            special_function die_end
+            special_function delete
         }
     }
     

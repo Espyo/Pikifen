@@ -92,7 +92,9 @@ bool data_node::remove(data_node* node_to_remove) {
 
 
 //Loads data from a file.
-void data_node::load_file(const string &file_name, const bool trim_values) {
+void data_node::load_file(
+    const string &file_name, const bool trim_values, const bool names_only
+) {
     vector<string> lines;
     
     file_was_opened = false;
@@ -121,7 +123,7 @@ void data_node::load_file(const string &file_name, const bool trim_values) {
         al_fclose(file);
     }
     
-    load_node(lines, trim_values, 0);
+    load_node(lines, trim_values, 0, names_only);
 }
 
 
@@ -130,7 +132,7 @@ void data_node::load_file(const string &file_name, const bool trim_values) {
 //This is used for the recursion.
 size_t data_node::load_node(
     const vector<string> &lines, const bool trim_values,
-    const size_t start_line
+    const size_t start_line, const bool names_only
 ) {
     children.clear();
     
@@ -189,7 +191,7 @@ size_t data_node::load_node(
         //Option=value.
         pos = line.find('=');
         string n, v;
-        if(pos != string::npos && pos > 0 && line.size() > 2) {
+        if(!names_only && pos != string::npos && pos > 0 && line.size() > 2) {
             n = line.substr(0, pos);
             v = line.substr(pos + 1, line.size() - (pos + 1));
         } else {
@@ -302,12 +304,12 @@ data_node::data_node(const data_node &dn2) :
 
 
 //Creates a data node from a file, given the file name.
-data_node::data_node(const string &file_name) :
+data_node::data_node(const string &file_name, const bool names_only) :
     file_was_opened(false),
     file_name(file_name),
     line_nr(0) {
     
-    load_file(file_name);
+    load_file(file_name, true, names_only);
 }
 
 
