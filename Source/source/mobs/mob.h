@@ -58,13 +58,6 @@ enum MOB_TEAMS {
     MOB_TEAM_DECORATION,
 };
 
-enum MOB_STATE_IDS {
-    MOB_STATE_IDLE,
-    MOB_STATE_BEING_CARRIED,
-    MOB_STATE_BEING_DELIVERED, //Into an Onion.
-    
-};
-
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.

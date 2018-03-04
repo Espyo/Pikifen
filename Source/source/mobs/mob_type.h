@@ -87,8 +87,9 @@ public:
     float big_damage_interval;
     
     //Script things.
-    vector<mob_state*> states;    //The states, events and actions.
-    size_t first_state_nr;        //Number of the state a mob starts at.
+    vector<mob_action> init_actions; //Actions to run on spawn.
+    vector<mob_state*> states;       //The states, events and actions.
+    size_t first_state_nr;           //Number of the state a mob starts at.
     
     //Misc.
     bool is_obstacle;

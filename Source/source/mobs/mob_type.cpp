@@ -371,6 +371,9 @@ void load_mob_type_from_file(
         
         data_node script_file(folder + "/Script.txt", true);
         size_t old_n_states = mt->states.size();
+        load_init_actions(
+            mt, script_file.get_child_by_name("init"), &mt->init_actions
+        );
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
         
         if(mt->states.size() > old_n_states) {

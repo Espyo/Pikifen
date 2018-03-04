@@ -275,7 +275,7 @@ mob_action::mob_action(
         //TODO
         
         
-    } else if(n == "state") {
+    } else if(n == "state" && states) {
     
         type = MOB_ACTION_CHANGE_STATE;
         
@@ -465,7 +465,7 @@ void mob_action::run(
         return;
     }
     
-    if(type == MOB_ACTION_CHANGE_STATE) {
+    if(type == MOB_ACTION_CHANGE_STATE && action_nr) {
     
         m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
         *action_nr = INVALID - 1; //End the event's actions now.
@@ -496,7 +496,7 @@ void mob_action::run(
         if(!vi.empty()) m->hide = vi[0];
         
         
-    } else if(type == MOB_ACTION_IF) {
+    } else if(type == MOB_ACTION_IF && action_nr) {
     
         if(vs.size() >= 2) {
             //If false, skip to the next one.
@@ -504,7 +504,7 @@ void mob_action::run(
         }
         
         
-    } else if(type == MOB_ACTION_IF_LESS) {
+    } else if(type == MOB_ACTION_IF_LESS && action_nr) {
     
         if(vs.size() >= 2) {
             if(
@@ -516,7 +516,7 @@ void mob_action::run(
         }
         
         
-    } else if(type == MOB_ACTION_IF_MORE) {
+    } else if(type == MOB_ACTION_IF_MORE && action_nr) {
     
         if(vs.size() >= 2) {
             if(
@@ -528,7 +528,7 @@ void mob_action::run(
         }
         
         
-    } else if(type == MOB_ACTION_IF_NOT) {
+    } else if(type == MOB_ACTION_IF_NOT && action_nr) {
     
         if(vs.size() >= 2) {
             //If false, skip to the next one.
@@ -955,10 +955,25 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the actions to be run when the mob initializes.
+ * mt:      The type of mob the actions are going to.
+ * node:    The data node.
+ * actions: Vector of actions to be filled.
+ */
+void load_init_actions(
+    mob_type* mt, data_node* node, vector<mob_action>* actions
+) {
+    for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
+        actions->push_back(mob_action(node->get_child(a), NULL, mt));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the states off of a data node.
- * mt:     the type of mob the states are going to.
- * node:   the data node.
- * states: vector of states to place the new states on.
+ * mt:     The type of mob the states are going to.
+ * node:   The data node.
+ * states: Vector of states to place the new states on.
  */
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     size_t n_new_states = node->get_nr_of_children();

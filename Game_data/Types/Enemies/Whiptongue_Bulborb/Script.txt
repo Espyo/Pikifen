@@ -1,13 +1,10 @@
-first_state = init
+first_state = sniffing
+
+init {
+    var ignoring false
+}
 
 script {
-    init {
-        on_enter {
-            var ignoring false
-            state sniffing
-        }
-    }
-    
     sniffing {
         on_enter {
             animation sniffing

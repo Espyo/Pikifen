@@ -1,13 +1,10 @@
-first_state = init
+first_state = examining
+
+init {
+    var ignoring false
+}
 
 script {
-    init {
-        on_enter {
-            var ignoring false
-            state examining
-        }
-    }
-    
     examining {
         on_enter {
             animation idling

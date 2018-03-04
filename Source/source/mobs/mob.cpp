@@ -95,6 +95,9 @@ mob::mob(
     
     if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
     
+    for(size_t a = 0; a < type->init_actions.size(); ++a) {
+        type->init_actions[a].run(this, NULL, NULL, NULL);
+    }
     fsm.set_state(type->first_state_nr);
 }
 
