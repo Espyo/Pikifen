@@ -47,7 +47,8 @@ mob_type::mob_type(size_t category_id) :
     territory_radius(0),
     max_carriers(0),
     weight(0),
-    big_damage_interval(0),
+    itch_damage(0),
+    itch_time(0),
     first_state_nr(INVALID),
     is_obstacle(false),
     spike_damage(nullptr),
@@ -274,11 +275,12 @@ void load_mob_type_from_file(
     reader_setter rs(&file);
     rs.set("name",                mt->name);
     rs.set("always_active",       mt->always_active);
-    rs.set("big_damage_interval", mt->big_damage_interval);
     rs.set("main_color",          mt->main_color);
     rs.set("max_carriers",        mt->max_carriers);
     rs.set("max_health",          mt->max_health);
     rs.set("health_regen",        mt->health_regen);
+    rs.set("itch_damage",         mt->itch_damage);
+    rs.set("itch_time",           mt->itch_time);
     rs.set("move_speed",          mt->move_speed);
     rs.set("rotation_speed",      mt->rotation_speed);
     rs.set("territory_radius",    mt->territory_radius);

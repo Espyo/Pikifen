@@ -1,9 +1,10 @@
 name = Munge Dweevil
 
 allow_ground_attacks = false
-big_damage_interval = 120
 drops_corpse = true
 height = 48
+itch_damage = 120
+itch_time = 6
 max_carriers = 6
 max_health = 350
 move_speed = 40

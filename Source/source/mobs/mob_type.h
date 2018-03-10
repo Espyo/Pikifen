@@ -84,7 +84,8 @@ public:
     vector<reach_struct> reaches;
     size_t max_carriers;
     float weight;          //Pikmin strength needed to carry it.
-    float big_damage_interval;
+    float itch_damage;
+    float itch_time;
     
     //Script things.
     vector<mob_action> init_actions; //Actions to run on spawn.

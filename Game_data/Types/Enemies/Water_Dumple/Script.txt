@@ -14,7 +14,7 @@ script {
                 state chasing
             endif
         }
-        on_big_damage {
+        on_itch {
             state shaking
         }
         on_death {
@@ -45,7 +45,7 @@ script {
         on_bottomless_pit {
             state deleting
         }
-        on_big_damage {
+        on_itch {
             state shaking
         }
         on_death {

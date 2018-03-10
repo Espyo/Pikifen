@@ -21,7 +21,7 @@ script {
         on_timer {
             state exploring
         }
-        on_big_damage {
+        on_itch {
             state bucking
         }
         on_death {
@@ -52,7 +52,7 @@ script {
             var ignoring true
             state returning
         }
-        on_big_damage {
+        on_itch {
             state bucking
         }
         on_death {
@@ -83,7 +83,7 @@ script {
             var ignoring true
             state returning
         }
-        on_big_damage {
+        on_itch {
             state bucking
         }
         on_death {

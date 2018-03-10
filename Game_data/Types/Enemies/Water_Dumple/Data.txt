@@ -1,8 +1,9 @@
 name = Water Dumple
 
-big_damage_interval = 50
 drops_corpse = true
 height = 32
+itch_damage = 50
+itch_time = 4
 max_carriers = 10
 max_health = 200
 move_speed = 50

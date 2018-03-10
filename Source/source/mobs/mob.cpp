@@ -38,9 +38,10 @@ mob::mob(
     fsm(this),
     script_timer(0),
     focused_mob(nullptr),
-    big_damage_ev_queued(false),
     far_reach(INVALID),
     near_reach(INVALID),
+    itch_damage(0),
+    itch_time(0),
     pos(pos),
     z(0),
     speed_z(0),
@@ -310,23 +311,7 @@ bool mob::attack(
     
     victim->fsm.run_event(MOB_EVENT_DAMAGE, this);
     victim->cause_spike_damage(victim, false);
-    
-    //If before taking damage, the interval was dividable X times,
-    //and after it's only dividable by Y (X>Y), an interval was crossed.
-    if(
-        victim->type->big_damage_interval > 0 &&
-        victim->health != victim->type->max_health
-    ) {
-        if(
-            floor(
-                (victim->health + total_damage) /
-                victim->type->big_damage_interval
-            ) >
-            floor(victim->health / victim->type->big_damage_interval)
-        ) {
-            victim->big_damage_ev_queued = true;
-        }
-    }
+    victim->itch_damage += total_damage;
     
     //Smack particle effect.
     point smack_p_pos =
@@ -1754,11 +1739,18 @@ void mob::tick_script() {
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
     
-    //Big damage.
-    mob_event* big_damage_ev = q_get_event(this, MOB_EVENT_BIG_DAMAGE);
-    if(big_damage_ev && big_damage_ev_queued) {
-        big_damage_ev->run(this);
-        big_damage_ev_queued = false;
+    //Itch event.
+    if(type->itch_damage > 0 || type->itch_time > 0) {
+        itch_time += delta_t;
+        mob_event* itch_ev = q_get_event(this, MOB_EVENT_ITCH);
+        if(
+            itch_ev &&
+            itch_damage > type->itch_damage && itch_time > type->itch_time
+        ) {
+            itch_ev->run(this);
+            itch_damage = 0;
+            itch_time = 0;
+        }
     }
     
     //Health regeneration.

@@ -815,12 +815,12 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     if(n == "on_enter")  type = MOB_EVENT_ON_ENTER;
     r("on_leave",               MOB_EVENT_ON_LEAVE);
     r("on_animation_end",       MOB_EVENT_ANIMATION_END);
-    r("on_big_damage",          MOB_EVENT_BIG_DAMAGE);
     r("on_bottomless_pit",      MOB_EVENT_BOTTOMLESS_PIT);
     r("on_damage",              MOB_EVENT_DAMAGE);
     r("on_death",               MOB_EVENT_DEATH);
     r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
     r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
+    r("on_itch",                MOB_EVENT_ITCH);
     r("on_mouth_empty",         MOB_EVENT_MOUTH_EMPTY);
     r("on_mouth_occupied",      MOB_EVENT_MOUTH_OCCUPIED);
     r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);

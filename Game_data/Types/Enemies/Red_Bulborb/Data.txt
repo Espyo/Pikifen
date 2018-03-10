@@ -1,8 +1,9 @@
 name = Red Bulborb
 
-big_damage_interval = 70
 drops_corpse = true
 height = 128
+itch_damage = 70
+itch_time = 5
 max_carriers = 20
 max_health = 750
 move_speed = 70

@@ -12,7 +12,7 @@ script {
             focus opponent
             state panicking
         }
-        on_big_damage {
+        on_itch {
             state shaking
         }
         on_death {
@@ -39,7 +39,7 @@ script {
         on_far_from_home {
             state going_home
         }
-        on_big_damage {
+        on_itch {
             state shaking
         }
         on_bottomless_pit {
@@ -61,7 +61,7 @@ script {
         on_reach_destination {
             state relaxing
         }
-        on_big_damage {
+        on_itch {
             state shaking
         }
         on_bottomless_pit {

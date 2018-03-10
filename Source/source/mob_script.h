@@ -78,8 +78,6 @@ enum MOB_EVENT_TYPES {
     
     //When the current animation ends.
     MOB_EVENT_ANIMATION_END,
-    //When it reaches a certain health %.
-    MOB_EVENT_BIG_DAMAGE,
     //When it lands on a bottomless pit.
     MOB_EVENT_BOTTOMLESS_PIT,
     //When it is damaged.
@@ -94,6 +92,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUS_OFF_REACH,
     //When a frame of animation sends a signal.
     MOB_EVENT_FRAME_SIGNAL,
+    //When it has been damaged enough to want to shake.
+    MOB_EVENT_ITCH,
     //When it leaves a hazard in a sector.
     MOB_EVENT_LEFT_HAZARD,
     //When its mouth has Pikmin in it.

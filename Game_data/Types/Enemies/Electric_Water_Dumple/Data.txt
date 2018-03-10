@@ -1,8 +1,9 @@
 name = Electric Water Dumple
 
-big_damage_interval = 100
 drops_corpse = true
 height = 56
+itch_damage = 100
+itch_time = 5
 max_carriers = 15
 max_health = 400
 move_speed = 55

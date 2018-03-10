@@ -221,8 +221,10 @@ public:
     mob* focused_mob;
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
     vector<mob*> hit_opponents;
-    //Are we waiting to report the big damage event?
-    bool big_damage_ev_queued;
+    //How much damage did it take since the last time the itch event triggered?
+    float itch_damage;
+    //How much time has passed the last time the itch event triggered?
+    float itch_time;
     //Index of the reach to use for "X in reach" events.
     size_t far_reach;
     //Index or the reach to use for "focused mob out of reach" events.
