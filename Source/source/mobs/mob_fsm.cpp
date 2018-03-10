@@ -65,7 +65,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    info->mob2->attack(m, info->h2, info->h1, NULL);    
+    info->mob2->attack(m, info->h2, info->h1, NULL);
 }
 
 
@@ -161,6 +161,8 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     m->carry_info->is_moving = false;
+    m->carry_info->final_destination = point();
+    m->carry_info->obstacle_ptr = NULL;
     m->stop_chasing();
 }
 

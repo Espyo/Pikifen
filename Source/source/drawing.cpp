@@ -862,87 +862,7 @@ void gameplay::draw_ingame_text() {
         }
     }
     
-    //Info spot notification.
-    if(
-        close_to_spot_to_read &&
-        click_control_id != INVALID
-    ) {
-        float pivot_y =
-            close_to_spot_to_read->pos.y - close_to_spot_to_read->type->radius;
-        if(!close_to_spot_to_read->opens_box) {
-            draw_notification(
-                point(close_to_spot_to_read->pos.x, pivot_y),
-                close_to_spot_to_read->text, NULL
-            );
-            
-        } else if(click_control_id != INVALID) {
-            draw_notification(
-                point(close_to_spot_to_read->pos.x, pivot_y),
-                "Read", &controls[0][click_control_id]
-            );
-            
-        }
-    }
-    
-    //Ship healing notification.
-    if(
-        close_to_ship_to_heal &&
-        click_control_id != INVALID
-    ) {
-        draw_notification(
-            point(
-                close_to_ship_to_heal->beam_final_pos.x,
-                close_to_ship_to_heal->beam_final_pos.y -
-                close_to_ship_to_heal->shi_type->beam_radius
-            ),
-            "Repair suit", &controls[0][click_control_id]
-        );
-    }
-    
-    //Pikmin pluck notification.
-    if(
-        close_to_pikmin_to_pluck &&
-        click_control_id != INVALID
-    ) {
-        draw_notification(
-            point(
-                close_to_pikmin_to_pluck->pos.x,
-                close_to_pikmin_to_pluck->pos.y -
-                close_to_pikmin_to_pluck->type->radius
-            ),
-            "Pluck", &controls[0][click_control_id]
-        );
-    }
-    
-    //Onion open notification.
-    if(
-        close_to_onion_to_open &&
-        click_control_id != INVALID
-    ) {
-        draw_notification(
-            point(
-                close_to_onion_to_open->pos.x,
-                close_to_onion_to_open->pos.y -
-                close_to_onion_to_open->type->radius
-            ),
-            "Call a Pikmin", &controls[0][click_control_id]
-        );
-    }
-    
-    //Pluck stop notification.
-    if(
-        cur_leader_ptr->auto_plucking &&
-        whistle_control_id != INVALID
-    ) {
-        draw_notification(
-            point(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y -
-                cur_leader_ptr->type->radius
-            ),
-            "Stop plucking", &controls[0][whistle_control_id]
-        );
-    }
+    bool done = false;
     
     //Lying down stop notification.
     if(
@@ -957,6 +877,100 @@ void gameplay::draw_ingame_text() {
             ),
             "Get up", &controls[0][whistle_control_id]
         );
+        done = true;
+    }
+    
+    //Pluck stop notification.
+    if(
+        !done &&
+        cur_leader_ptr->auto_plucking &&
+        whistle_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y -
+                cur_leader_ptr->type->radius
+            ),
+            "Stop plucking", &controls[0][whistle_control_id]
+        );
+        done = true;
+    }
+    
+    //Ship healing notification.
+    if(
+        !done &&
+        close_to_ship_to_heal &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_ship_to_heal->beam_final_pos.x,
+                close_to_ship_to_heal->beam_final_pos.y -
+                close_to_ship_to_heal->shi_type->beam_radius
+            ),
+            "Repair suit", &controls[0][click_control_id]
+        );
+        done = true;
+    }
+    
+    //Info spot notification.
+    if(
+        !done &&
+        close_to_spot_to_read &&
+        click_control_id != INVALID
+    ) {
+        float pivot_y =
+            close_to_spot_to_read->pos.y - close_to_spot_to_read->type->radius;
+        if(!close_to_spot_to_read->opens_box) {
+            draw_notification(
+                point(close_to_spot_to_read->pos.x, pivot_y),
+                close_to_spot_to_read->text, NULL
+            );
+            done = true;
+            
+        } else if(click_control_id != INVALID) {
+            draw_notification(
+                point(close_to_spot_to_read->pos.x, pivot_y),
+                "Read", &controls[0][click_control_id]
+            );
+            done = true;
+            
+        }
+    }
+    
+    //Pikmin pluck notification.
+    if(
+        !done &&
+        close_to_pikmin_to_pluck &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_pikmin_to_pluck->pos.x,
+                close_to_pikmin_to_pluck->pos.y -
+                close_to_pikmin_to_pluck->type->radius
+            ),
+            "Pluck", &controls[0][click_control_id]
+        );
+        done = true;
+    }
+    
+    //Onion open notification.
+    if(
+        !done &&
+        close_to_onion_to_open &&
+        click_control_id != INVALID
+    ) {
+        draw_notification(
+            point(
+                close_to_onion_to_open->pos.x,
+                close_to_onion_to_open->pos.y -
+                close_to_onion_to_open->type->radius
+            ),
+            "Call a Pikmin", &controls[0][click_control_id]
+        );
+        done = true;
     }
 }
 

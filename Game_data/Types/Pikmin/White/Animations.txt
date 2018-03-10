@@ -8,7 +8,7 @@ animations{
 			grabbing{
 				duration=0.10
 			}
-			attacl{
+			attack{
 				duration=0.30
 			}
 			grabbing{

@@ -28,6 +28,7 @@ const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 editor::editor() :
     gui(nullptr),
     gui_x(0),
+    warning_style(nullptr),
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
@@ -37,8 +38,20 @@ editor::editor() :
     sec_mode(0),
     status_bar_y(0) {
     
+    warning_style = new lafi::style(
+        al_map_rgb(224, 224, 64),
+        al_map_rgb(0, 0, 0),
+        al_map_rgb(96, 96, 96)
+    );
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Destroys an instance of the editor class.
+ */
+editor::~editor() {
+    delete warning_style;
+}
 
 /* ----------------------------------------------------------------------------
  * Closes the change warning box.
@@ -54,7 +67,7 @@ void editor::close_changes_warning() {
  */
 void editor::create_changes_warning_frame() {
     lafi::frame* frm_changes =
-        new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h);
+        new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h, warning_style);
     frm_changes->hide();
     gui->add("frm_changes", frm_changes);
     
@@ -261,7 +274,7 @@ void editor::populate_picker(const string &filter) {
             //New category. Create its label.
             prev_category = category;
             lafi::label* c =
-                new lafi::label("- " + category + " -", ALLEGRO_ALIGN_CENTER);
+                new lafi::label(category + ":", ALLEGRO_ALIGN_LEFT);
             f->easy_add("lbl_" + i2s(e), c, 100, 16);
             f->easy_row(0);
         }

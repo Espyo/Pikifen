@@ -353,7 +353,7 @@ public:
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
-    void remove_from_group();
+    void leave_group();
     bool should_attack(mob* m);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void eat(size_t nr);

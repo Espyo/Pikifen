@@ -1387,7 +1387,6 @@ void animation_editor::unload() {
     //which has non-virtual destructor might cause undefined behaviour
     //[-Wdelete-non-virtual-dtor]
     delete(gui);
-    al_destroy_native_file_dialog(file_dialog);
     
     unload_hazards();
     unload_status_types(false);

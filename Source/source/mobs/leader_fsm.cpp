@@ -862,7 +862,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     size_t n_group_members = l_ptr->group->members.size();
     for(size_t m = 0; m < n_group_members; ++m) {
         mob* member = l_ptr->group->members[0];
-        member->remove_from_group();
+        member->leave_group();
         cur_leader_ptr->add_to_group(member);
     }
 }
@@ -873,6 +873,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
  * This damages and respawns them.
  */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
+    m->leave_group();
     m->set_health(true, true, -0.2);
     m->respawn();
 }
@@ -1080,7 +1081,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->was_thrown = true;
     
-    holding_ptr->remove_from_group();
+    holding_ptr->leave_group();
     leader_ptr->holding_pikmin = NULL;
     
     sfx_throw.stop();
@@ -1304,7 +1305,7 @@ void leader_fsm::suffer_pain(mob* m, void* info1, void* info2) {
  * When a leader lies down from being knocked back.
  */
 void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
-    m->remove_from_group();
+    m->leave_group();
     m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
 }
 

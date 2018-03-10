@@ -103,6 +103,7 @@ protected:
     
     lafi::frame*  frm_picker;
     lafi::gui*    gui;
+    lafi::style*  warning_style;
     int           gui_x;
     bool          holding_m1;
     bool          holding_m2;
@@ -138,6 +139,7 @@ protected:
 public:
 
     editor();
+    ~editor();
     
     virtual void do_logic() = 0;
     virtual void do_drawing() = 0;

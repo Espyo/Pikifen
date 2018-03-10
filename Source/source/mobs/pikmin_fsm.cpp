@@ -850,7 +850,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     
     sfx_pikmin_caught.play(0.2, 0);
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
-    pik_ptr->remove_from_group();
+    pik_ptr->leave_group();
     
     mob_ptr->chomping_pikmin.push_back(m);
 }
@@ -887,7 +887,7 @@ void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
 void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     pikmin_fsm::stand_still(m, NULL, NULL);
-    m->remove_from_group();
+    m->leave_group();
 }
 
 
@@ -1064,7 +1064,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob->type->radius + m->type->radius + GROUNDED_ATTACK_DIST
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
-    m->remove_from_group();
+    m->leave_group();
     
     m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
@@ -1146,7 +1146,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
         }
     }
     
-    m->remove_from_group();
+    m->leave_group();
     
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
@@ -1211,7 +1211,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         pik_ptr->type->radius * 1.2
     );
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
-    pik_ptr->remove_from_group();
+    pik_ptr->leave_group();
     
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
@@ -1432,7 +1432,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     point final_pos = m->get_chase_target();
     m->chase(final_pos, NULL, false);
     
-    m->remove_from_group();
+    m->leave_group();
     
     //Let the Pikmin continue to swim into the water for a bit
     //before coming to a stop. Otherwise the Pikmin would stop nearly
@@ -1503,7 +1503,7 @@ void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
  * When a Pikmin starts panicking.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
-    m->remove_from_group();
+    m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
 }
 

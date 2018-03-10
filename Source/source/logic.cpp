@@ -306,66 +306,72 @@ void gameplay::do_gameplay_logic() {
         cam_final_pos = cur_leader_ptr->pos;
         
         //Check proximity with certain key things.
-        dist closest_d = 0;
-        dist d = 0;
-        close_to_spot_to_read = NULL;
-        
-        for(size_t i = 0; i < info_spots.size(); ++i) {
-            d = dist(cur_leader_ptr->pos, info_spots[i]->pos);
-            if(d > info_spot_trigger_range) continue;
-            if(d < closest_d || !close_to_spot_to_read) {
-                close_to_spot_to_read = info_spots[i];
-                closest_d = d;
-            }
-        }
-        
-        closest_d = 0;
-        d = 0;
-        close_to_pikmin_to_pluck = NULL;
-        
         if(!cur_leader_ptr->auto_plucking) {
-            pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
-            if(p && d <= pluck_range) {
-                close_to_pikmin_to_pluck = p;
-            }
-        }
-        
-        closest_d = 0;
-        d = 0;
-        close_to_onion_to_open = NULL;
-        if(!close_to_pikmin_to_pluck && !cur_leader_ptr->auto_plucking) {
-            for(size_t o = 0; o < onions.size(); ++o) {
-                d = dist(cur_leader_ptr->pos, onions[o]->pos);
-                if(d > onion_open_range) continue;
-                if(d < closest_d || !close_to_spot_to_read) {
-                    close_to_onion_to_open = onions[o];
+            dist closest_d = 0;
+            dist d = 0;
+            bool done = false;
+            
+            close_to_ship_to_heal = NULL;
+            for(size_t s = 0; s < ships.size(); ++s) {
+                ship* s_ptr = ships[s];
+                d = dist(cur_leader_ptr->pos, s_ptr->pos);
+                if(!s_ptr->is_leader_under_ring(cur_leader_ptr)) {
+                    continue;
+                }
+                if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {
+                    continue;
+                }
+                if(!s_ptr->shi_type->can_heal) {
+                    continue;
+                }
+                if(d < closest_d || !close_to_ship_to_heal) {
+                    close_to_ship_to_heal = s_ptr;
                     closest_d = d;
+                    done = true;
+                }
+            }
+            
+            closest_d = 0;
+            d = 0;
+            close_to_pikmin_to_pluck = NULL;
+            if(!done) {
+                pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
+                if(p && d <= pluck_range) {
+                    close_to_pikmin_to_pluck = p;
+                    done = true;
+                }
+            }
+            
+            closest_d = 0;
+            d = 0;
+            close_to_onion_to_open = NULL;
+            if(!done) {
+                for(size_t o = 0; o < onions.size(); ++o) {
+                    d = dist(cur_leader_ptr->pos, onions[o]->pos);
+                    if(d > onion_open_range) continue;
+                    if(d < closest_d || !close_to_onion_to_open) {
+                        close_to_onion_to_open = onions[o];
+                        closest_d = d;
+                        done = true;
+                    }
+                }
+            }
+            
+            closest_d = 0;
+            d = 0;
+            close_to_spot_to_read = NULL;
+            if(!done) {
+                for(size_t i = 0; i < info_spots.size(); ++i) {
+                    d = dist(cur_leader_ptr->pos, info_spots[i]->pos);
+                    if(d > info_spot_trigger_range) continue;
+                    if(d < closest_d || !close_to_spot_to_read) {
+                        close_to_spot_to_read = info_spots[i];
+                        closest_d = d;
+                        done = true;
+                    }
                 }
             }
         }
-        
-        closest_d = 0;
-        d = 0;
-        close_to_ship_to_heal = NULL;
-        
-        for(size_t s = 0; s < ships.size(); ++s) {
-            ship* s_ptr = ships[s];
-            d = dist(cur_leader_ptr->pos, s_ptr->pos);
-            if(!s_ptr->is_leader_under_ring(cur_leader_ptr)) {
-                continue;
-            }
-            if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {
-                continue;
-            }
-            if(!s_ptr->shi_type->can_heal) {
-                continue;
-            }
-            if(d < closest_d || !close_to_spot_to_read) {
-                close_to_ship_to_heal = s_ptr;
-                closest_d = d;
-            }
-        }
-        
         
         /***********************************
         *                             ***  *
@@ -423,7 +429,7 @@ void gameplay::do_gameplay_logic() {
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
-            mouse_cursor_speed * delta_t * MOUSE_CURSOR_MOVE_SPEED;
+            mouse_cursor_speed * delta_t* MOUSE_CURSOR_MOVE_SPEED;
             
         mouse_cursor_s += mouse_cursor_speed;
         
@@ -545,13 +551,13 @@ void gameplay::do_gameplay_logic() {
     //Print info on a mob.
     if(creator_tool_info_lock) {
         string name_str =
-            box_string("Mob: " + creator_tool_info_lock->type->name + ".", 30);
+            box_string("Mob: " + creator_tool_info_lock->type->name, 30);
         string coords_str =
             box_string(
                 "Coords: " +
-                box_string(f2s(creator_tool_info_lock->pos.x), 6) + " " +
-                box_string(f2s(creator_tool_info_lock->pos.y), 6) + " " +
-                box_string(f2s(creator_tool_info_lock->z), 6) + ".",
+                box_string(f2s(creator_tool_info_lock->pos.x), 7) + " " +
+                box_string(f2s(creator_tool_info_lock->pos.y), 7) + " " +
+                box_string(f2s(creator_tool_info_lock->z), 7),
                 30
             );
         string stateh_str =
@@ -565,14 +571,12 @@ void gameplay::do_gameplay_logic() {
             stateh_str +=
                 ", " + creator_tool_info_lock->fsm.prev_state_names[p];
         }
-        stateh_str += ".";
         string anim_str =
             box_string(
                 "Animation: " +
                 (creator_tool_info_lock->anim.cur_anim ?
                  creator_tool_info_lock->anim.cur_anim->name :
-                 "(None!)") +
-                ".",
+                 "(None!)"),
                 60
             );
         string health_str =
@@ -580,17 +584,15 @@ void gameplay::do_gameplay_logic() {
                 "Health: " +
                 f2s(creator_tool_info_lock->health) +
                 " / " +
-                f2s(creator_tool_info_lock->type->max_health) +
-                ".",
+                f2s(creator_tool_info_lock->type->max_health),
                 30
             );
         string timer_str =
             box_string(
                 "Timer: " +
-                f2s(creator_tool_info_lock->script_timer.time_left) + ".",
+                f2s(creator_tool_info_lock->script_timer.time_left),
                 30
             );
-            
         string vars_str = "Vars: ";
         if(!creator_tool_info_lock->vars.empty()) {
             for(
@@ -600,9 +602,8 @@ void gameplay::do_gameplay_logic() {
                 vars_str += v->first + "=" + v->second + "; ";
             }
             vars_str.erase(vars_str.size() - 2, 2);
-            vars_str += ".";
         } else {
-            vars_str += "(None).";
+            vars_str += "(None)";
         }
         
         print_info(
@@ -620,14 +621,14 @@ void gameplay::do_gameplay_logic() {
             get_sector(mouse_cursor_w, NULL, true);
         string str =
             "Mouse coordinates: " + f2s(mouse_cursor_w.x) +
-            ", " + f2s(mouse_cursor_w.y) + ".\n"
+            ", " + f2s(mouse_cursor_w.y) + "\n"
             "Sector under mouse: " +
-            (mouse_sector ? "" : "None.") + "\n";
+            (mouse_sector ? "" : "None") + "\n";
         if(mouse_sector) {
             str +=
-                "  Z: " + f2s(mouse_sector->z) + ".\n"
+                "  Z: " + f2s(mouse_sector->z) + "\n"
                 "  Texture: " +
-                mouse_sector->texture_info.file_name + ".";
+                mouse_sector->texture_info.file_name;
         }
         print_info(str);
     }
@@ -701,6 +702,13 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 ) || (
                     m2_ptr->type->height == 0
                 )
+            ) && !(
+                //If they are both being carried by Pikmin, one of them
+                //shouldn't push, otherwise the Pikmin
+                //can get stuck in a deadlock.
+                m_ptr->carry_info && m_ptr->carry_info->is_moving &&
+                m2_ptr->carry_info && m2_ptr->carry_info->is_moving &&
+                m < m2
             )
         ) {
             float push_amount = 0;
@@ -758,12 +766,6 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             if(push_amount > m_ptr->push_amount) {
                 m_ptr->push_amount = push_amount / delta_t;
                 m_ptr->push_angle = push_angle;
-                if(m_ptr->carrying_target && m2_ptr->carrying_target) {
-                    //If they are both being carried by Pikmin, one of them
-                    //should push less hard, otherwise the Pikmin can get
-                    //stuck in a deadlock.
-                    m_ptr->push_amount *= 0.75;
-                }
             }
         }
         
@@ -950,7 +952,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         );
                         reported_n_ev = true;
                         
-                        //Re-fetch the other events, since the eating event
+                        //Re-fetch the other events, since this event
                         //could have triggered a state change.
                         hitbox_touch_eat_ev =
                             q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);

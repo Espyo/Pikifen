@@ -49,7 +49,7 @@ animations{
 			attacking3{
 				duration=0.20
 			}
-			attacking4{
+			grazing2{
 				duration=0.50
 			}
 		}
@@ -419,7 +419,7 @@ sprites{
 		file_pos=161.00 116.00
 		file_size=174.00 110.00
 		game_size=52.00 33.00
-		offset=7.00 0.00
+		offset=8.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
@@ -485,7 +485,7 @@ sprites{
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
 		game_size=49.00 30.00
-		offset=6.00 0.00
+		offset=7.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -1081,10 +1081,10 @@ sprites{
 		file_pos=675.00 252.00
 		file_size=164.00 103.00
 		game_size=49.00 30.00
-		offset=5.00 0.00
+		offset=7.00 0.00
 		hitboxes{
 			body{
-				coords=3.00 0.00 0.00
+				coords=5.00 0.00 0.00
 				height=32.00
 				radius=22.00
 				type=0
@@ -1114,10 +1114,10 @@ sprites{
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
 		game_size=49.00 30.00
-		offset=5.00 0.00
+		offset=7.00 0.00
 		hitboxes{
 			body{
-				coords=3.00 0.00 0.00
+				coords=5.00 0.00 0.00
 				height=32.00
 				radius=22.00
 				type=0
@@ -1129,7 +1129,7 @@ sprites{
 				knockback=1.00
 			}
 			mouth{
-				coords=19.00 0.00 0.00
+				coords=26.00 4.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -1147,10 +1147,10 @@ sprites{
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
 		game_size=49.00 -30.00
-		offset=5.00 0.00
+		offset=7.00 0.00
 		hitboxes{
 			body{
-				coords=3.00 0.00 0.00
+				coords=5.00 0.00 0.00
 				height=32.00
 				radius=22.00
 				type=0
@@ -1162,7 +1162,7 @@ sprites{
 				knockback=1.00
 			}
 			mouth{
-				coords=19.00 0.00 0.00
+				coords=26.00 -4.00 0.00
 				height=32.00
 				radius=6.00
 				type=2

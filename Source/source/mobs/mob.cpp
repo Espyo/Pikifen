@@ -896,7 +896,7 @@ void mob::remove_particle_generator(const size_t id) {
 /* ----------------------------------------------------------------------------
  * Removes a mob from its leader's group.
  */
-void mob::remove_from_group() {
+void mob::leave_group() {
     if(!following_group) return;
     
     mob* group_leader = following_group;
@@ -1276,10 +1276,7 @@ void mob::tick_physics() {
     
     
     //If another mob is pushing it.
-    if(
-        push_amount != 0.0f
-        && get_angle_smallest_dif(push_angle, angle) > M_PI_2
-    ) {
+    if(push_amount != 0.0f) {
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
@@ -2359,7 +2356,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     if(creator_tool_info_lock == m_ptr) creator_tool_info_lock = NULL;
     
     if(!complete_destruction) {
-        m_ptr->remove_from_group();
+        m_ptr->leave_group();
         
         for(size_t m = 0; m < mobs.size(); ++m) {
             if(mobs[m]->focused_mob == m_ptr) {

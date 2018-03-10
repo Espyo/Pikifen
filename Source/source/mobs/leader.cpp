@@ -327,7 +327,7 @@ void leader::dismiss() {
             
             destination += this->pos;
             
-            subgroups_info[s].members[m]->remove_from_group();
+            subgroups_info[s].members[m]->leave_group();
             subgroups_info[s].members[m]->fsm.run_event(
                 MOB_EVENT_DISMISSED, (void*) &destination
             );
@@ -338,7 +338,7 @@ void leader::dismiss() {
     //Dismiss leaders now.
     while(!group->members.empty()) {
         group->members[0]->fsm.run_event(MOB_EVENT_DISMISSED, NULL);
-        group->members[0]->remove_from_group();
+        group->members[0]->leave_group();
     }
     
     //Final things.
@@ -554,8 +554,8 @@ void leader::tick_class_specifics() {
         holding_pikmin->z = z;
         holding_pikmin->angle = angle;
     }
-        
-        
+    
+    
 }
 
 
@@ -655,5 +655,11 @@ void update_closest_group_member() {
         }
     }
     
-    closest_group_member_distant = closest_dist > pikmin_grab_range;
+    if(fabs(closest_group_member->z - cur_leader_ptr->z) > SECTOR_STEP) {
+        //If the group member is beyond a step, it's obviously above or below
+        //a wall, compared to the leader. No grabbing allowed.
+        closest_group_member_distant = true;
+    } else {
+        closest_group_member_distant = closest_dist > pikmin_grab_range;
+    }
 }

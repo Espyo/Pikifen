@@ -253,22 +253,19 @@ void gameplay::handle_button(
             
                 bool done = false;
                 
-                //First check if the leader should pluck a Pikmin.
-                if(close_to_pikmin_to_pluck) {
-                    cur_leader_ptr->fsm.run_event(
-                        LEADER_EVENT_GO_PLUCK,
-                        (void*) close_to_pikmin_to_pluck
-                    );
+                //First check if the leader should heal themselves on the ship.
+                if(close_to_ship_to_heal) {
+                    close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
                 
-                //Now check if the leader should read an info spot.
+                //Now check if the leader should pluck a Pikmin.
                 if(!done) {
-                    if(
-                        close_to_spot_to_read &&
-                        close_to_spot_to_read->opens_box
-                    ) {
-                        start_message(close_to_spot_to_read->text, NULL);
+                    if(close_to_pikmin_to_pluck) {
+                        cur_leader_ptr->fsm.run_event(
+                            LEADER_EVENT_GO_PLUCK,
+                            (void*) close_to_pikmin_to_pluck
+                        );
                         done = true;
                     }
                 }
@@ -292,10 +289,13 @@ void gameplay::handle_button(
                     }
                 }
                 
-                //Now check if the leader should heal themselves on the ship.
+                //Now check if the leader should read an info spot.
                 if(!done) {
-                    if(close_to_ship_to_heal) {
-                        close_to_ship_to_heal->heal_leader(cur_leader_ptr);
+                    if(
+                        close_to_spot_to_read &&
+                        close_to_spot_to_read->opens_box
+                    ) {
+                        start_message(close_to_spot_to_read->text, NULL);
                         done = true;
                     }
                 }

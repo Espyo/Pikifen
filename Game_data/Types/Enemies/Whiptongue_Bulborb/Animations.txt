@@ -952,9 +952,9 @@ sprites{
 				knockback=1.00
 			}
 			tongue1{
-				coords=122.00 5.00 -40.00
+				coords=93.00 4.00 -40.00
 				height=128.00
-				radius=8.00
+				radius=37.00
 				type=1
 				multiplier=0.50
 				can_pikmin_latch=false
@@ -1009,9 +1009,9 @@ sprites{
 				knockback=1.00
 			}
 			tongue1{
-				coords=146.06 11.84 -40.00
+				coords=90.00 4.00 -40.00
 				height=128.00
-				radius=25.49
+				radius=33.00
 				type=1
 				multiplier=0.50
 				can_pikmin_latch=false
@@ -1021,9 +1021,9 @@ sprites{
 				knockback=0.00
 			}
 			tongue2{
-				coords=165.84 -10.84 -40.00
+				coords=155.00 4.00 -40.00
 				height=128.00
-				radius=27.72
+				radius=32.00
 				type=1
 				multiplier=0.50
 				can_pikmin_latch=false
@@ -1168,7 +1168,7 @@ sprites{
 				knockback=1.00
 			}
 			head{
-				coords=79.87 13.40 0.00
+				coords=84.00 14.00 0.00
 				height=128.00
 				radius=32.00
 				type=0
