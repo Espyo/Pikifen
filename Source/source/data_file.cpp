@@ -304,12 +304,12 @@ data_node::data_node(const data_node &dn2) :
 
 
 //Creates a data node from a file, given the file name.
-data_node::data_node(const string &file_name, const bool names_only) :
+data_node::data_node(const string &file_name) :
     file_was_opened(false),
     file_name(file_name),
     line_nr(0) {
     
-    load_file(file_name, true, names_only);
+    load_file(file_name);
 }
 
 

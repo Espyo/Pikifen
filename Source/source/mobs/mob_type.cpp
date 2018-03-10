@@ -369,7 +369,8 @@ void load_mob_type_from_file(
         mt->anims = load_animation_database_from_file(&anim_file);
         mt->anims.fix_body_part_pointers();
         
-        data_node script_file(folder + "/Script.txt", true);
+        data_node script_file;
+        script_file.load_file(folder + "/Script.txt", true, true);
         size_t old_n_states = mt->states.size();
         load_init_actions(
             mt, script_file.get_child_by_name("init"), &mt->init_actions

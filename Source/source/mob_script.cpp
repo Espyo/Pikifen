@@ -81,6 +81,16 @@ mob_action::mob_action(
         }
         
         
+    } else if(words[0] == "else") {
+    
+        type = MOB_ACTION_ELSE;
+        
+        
+    } else if(words[0] == "endif") {
+    
+        type = MOB_ACTION_ENDIF;
+        
+        
     } else if(words[0] == "focus") {
     
         type = MOB_ACTION_FOCUS;
@@ -450,25 +460,24 @@ mob_action::mob_action(custom_action_code code) :
 /* ----------------------------------------------------------------------------
  * Runs an action.
  * m:             the mob.
- * action_nr:     pointer to an external int that controls
- *   the current action number.
  * custom_data_1: custom argument #1 to pass to the code.
  * custom_data_2: custom argument #2 to pass to the code.
+ * Return value is only used by the "if" actions, to indicate their
+ *   evaluation result.
  */
-void mob_action::run(
-    mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2
+bool mob_action::run(
+    mob* m, void* custom_data_1, void* custom_data_2
 ) {
 
     //Custom code (i.e. instead of text-based script, use actual code).
     if(code) {
         code(m, custom_data_1, custom_data_2);
-        return;
+        return false;
     }
     
-    if(type == MOB_ACTION_CHANGE_STATE && action_nr) {
+    if(type == MOB_ACTION_CHANGE_STATE) {
     
         m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
-        *action_nr = INVALID - 1; //End the event's actions now.
         
         
     } else if(type == MOB_ACTION_CHOMP_HITBOXES) {
@@ -496,43 +505,31 @@ void mob_action::run(
         if(!vi.empty()) m->hide = vi[0];
         
         
-    } else if(type == MOB_ACTION_IF && action_nr) {
+    } else if(type == MOB_ACTION_IF) {
     
         if(vs.size() >= 2) {
-            //If false, skip to the next one.
-            if(m->vars[vs[0]] != vs[1]) (*action_nr)++;
+            return (m->vars[vs[0]] == vs[1]);
         }
         
         
-    } else if(type == MOB_ACTION_IF_LESS && action_nr) {
+    } else if(type == MOB_ACTION_IF_LESS) {
     
         if(vs.size() >= 2) {
-            if(
-                s2i(m->vars[vs[0]]) >=
-                s2i(vs[1])
-            ) {
-                (*action_nr)++; //If false, skip to the next one.
-            }
+            return (s2i(m->vars[vs[0]]) < s2i(vs[1]));
         }
         
         
-    } else if(type == MOB_ACTION_IF_MORE && action_nr) {
+    } else if(type == MOB_ACTION_IF_MORE) {
     
         if(vs.size() >= 2) {
-            if(
-                s2i(m->vars[vs[0]]) <=
-                s2i(vs[1])
-            ) {
-                (*action_nr)++; //If false, skip to the next one.
-            }
+            return (s2i(m->vars[vs[0]]) > s2i(vs[1]));
         }
         
         
-    } else if(type == MOB_ACTION_IF_NOT && action_nr) {
+    } else if(type == MOB_ACTION_IF_NOT) {
     
         if(vs.size() >= 2) {
-            //If false, skip to the next one.
-            if(m->vars[vs[0]] == vs[1]) (*action_nr)++;
+            return (m->vars[vs[0]] != vs[1]);
         }
         
         
@@ -689,6 +686,8 @@ void mob_action::run(
         
         
     }
+    
+    return false;
 }
 
 
@@ -700,8 +699,55 @@ void mob_action::run(
  */
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     for(size_t a = 0; a < actions.size(); ++a) {
-        actions[a]->run(m, &a, custom_data_1, custom_data_2);
-        if(a == INVALID) break;
+    
+        if(actions[a]->type == MOB_ACTION_IF) {
+            //If statement. Look out for its return value, and
+            //change the flow accordingly.
+            
+            if(!actions[a]->run(m, custom_data_1, custom_data_2)) {
+                //If it returned true, execution continues as normal, but
+                //if it returned false, skip to the "else" or "end if" actions.
+                size_t next_a = a + 1;
+                size_t depth = 0;
+                for(; next_a < actions.size(); ++next_a) {
+                    if(actions[next_a]->type == MOB_ACTION_IF) {
+                        depth++;
+                    } else if(actions[next_a]->type == MOB_ACTION_ELSE) {
+                        if(depth == 0) break;
+                    } else if(actions[next_a]->type == MOB_ACTION_ENDIF) {
+                        if(depth == 0) break;
+                        else depth--;
+                    }
+                }
+                a = next_a;
+                
+            }
+            
+        } else if(actions[a]->type == MOB_ACTION_ELSE) {
+            //If we actually managed to read an "else", that means we were
+            //running through the normal execution of a "then" section.
+            //Jump to the "end if".
+            size_t next_a = a + 1;
+            size_t depth = 0;
+            for(; next_a < actions.size(); ++next_a) {
+                if(actions[next_a]->type == MOB_ACTION_IF) {
+                    depth++;
+                } else if(actions[next_a]->type == MOB_ACTION_ENDIF) {
+                    if(depth == 0) break;
+                    else depth--;
+                }
+            }
+            a = next_a;
+            
+        } else if(actions[a]->type == MOB_ACTION_ENDIF) {
+            //Nothing to do.
+            
+        } else {
+            //Normal action.
+            actions[a]->run(m, custom_data_1, custom_data_2);
+            if(actions[a]->type == MOB_ACTION_CHANGE_STATE) break;
+            
+        }
     }
 }
 

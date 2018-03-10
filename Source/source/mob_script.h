@@ -36,6 +36,8 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_CHANGE_STATE,
     MOB_ACTION_CHOMP_HITBOXES,
     MOB_ACTION_EAT,
+    MOB_ACTION_ELSE,
+    MOB_ACTION_ENDIF,
     MOB_ACTION_FOCUS,
     MOB_ACTION_HIDE,
     MOB_ACTION_IF,
@@ -273,9 +275,7 @@ public:
     vector<float> vf;
     vector<string> vs;
     
-    void run(
-        mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2
-    );
+    bool run(mob* m, void* custom_data_1, void* custom_data_2);
     mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
     mob_action(unsigned char type, unsigned char sub_type = 0);
     mob_action(custom_action_code code);

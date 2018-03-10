@@ -103,7 +103,7 @@ public:
     );
     
     data_node();
-    data_node(const string &file_name, const bool names_only = false);
+    data_node(const string &file_name);
     data_node(const string &name, const string &value);
     data_node(const data_node &dn2);
     ~data_node();

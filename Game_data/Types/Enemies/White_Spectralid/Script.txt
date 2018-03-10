@@ -100,7 +100,8 @@ script {
             move randomly
             inc_var flutters
             if flutters 10
-            state going_home
+                state going_home
+            endif
         }
         on_touch_spray {
             special_function spray

@@ -10,9 +10,9 @@ script {
         }
         on_opponent_in_reach {
             if ignoring false
-            focus mob
-            if ignoring false
-            state chasing
+                focus mob
+                state chasing
+            endif
         }
         on_big_damage {
             state shaking
@@ -136,9 +136,9 @@ script {
         }
         on_opponent_in_reach {
             if ignoring false
-            focus mob
-            if ignoring false
-            state chasing
+                focus mob
+                state chasing
+            endif
         }
         on_bottomless_pit {
             state deleting

@@ -1,5 +1,10 @@
 first_state = idling
 
+init {
+    var ignoring false
+    var next_eat false
+}
+
 script {
     idling {
         on_enter {
@@ -10,9 +15,9 @@ script {
         }
         on_opponent_in_reach {
             if ignoring false
-            focus mob
-            if ignoring false
-            state chasing
+                focus mob
+                state chasing
+            endif
         }
         on_big_damage {
             state shaking
@@ -33,9 +38,13 @@ script {
             far_reach chase
         }
         on_opponent_in_reach {
-            if eat true
-            state attacking
-            state zapping
+            if next_eat true
+                var next_eat false
+                state attacking
+            else
+                var next_eat true
+                state zapping
+            endif
         }
         on_focus_off_reach {
             state returning
@@ -65,7 +74,6 @@ script {
             chomp 2 mouth
         }
         on_animation_end {
-            var eat false
             state checking_mouth
         }
         on_touch_spray {
@@ -77,7 +85,7 @@ script {
         on_mouth_occupied {
             state eating
         }
-        on_animation_end {
+        on_mouth_empty {
             state idling
         }
         on_death {
@@ -111,7 +119,6 @@ script {
             animation zapping
         }
         on_animation_end {
-            var eat true
             state idling
         }
         on_touch_spray {
@@ -153,9 +160,9 @@ script {
         }
         on_opponent_in_reach {
             if ignoring false
-            focus mob
-            if ignoring false
-            state chasing
+                focus mob
+                state chasing
+            endif
         }
         on_bottomless_pit {
             state deleting

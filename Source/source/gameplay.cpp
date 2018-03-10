@@ -263,7 +263,7 @@ void gameplay::load_game_content() {
  * Loads all gameplay HUD info.
  */
 void gameplay::load_hud_info() {
-    data_node file = data_node(MISC_FOLDER_PATH + "/HUD.txt");
+    data_node file(MISC_FOLDER_PATH + "/HUD.txt");
     if(!file.file_was_opened) return;
     
     //Hud coordinates.
