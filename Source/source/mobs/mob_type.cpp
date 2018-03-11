@@ -50,6 +50,7 @@ mob_type::mob_type(size_t category_id) :
     itch_damage(0),
     itch_time(0),
     first_state_nr(INVALID),
+    death_state_nr(INVALID),
     is_obstacle(false),
     spike_damage(nullptr),
     create_mob_func(nullptr) {
@@ -374,6 +375,31 @@ void load_mob_type_from_file(
         data_node script_file;
         script_file.load_file(folder + "/Script.txt", true, true);
         size_t old_n_states = mt->states.size();
+        
+        data_node* death_state_name_node =
+            script_file.get_child_by_name("death_state");
+        mt->death_state_name = death_state_name_node->value;
+        
+        mt->states_ignoring_death =
+            split(
+                script_file.get_child_by_name("states_ignoring_death")->value,
+                ";"
+            );
+        for(size_t s = 0; s < mt->states_ignoring_death.size(); ++s) {
+            mt->states_ignoring_death[s] =
+                trim_spaces(mt->states_ignoring_death[s]);
+        }
+        
+        mt->states_ignoring_spray =
+            split(
+                script_file.get_child_by_name("states_ignoring_spray")->value,
+                ";"
+            );
+        for(size_t s = 0; s < mt->states_ignoring_spray.size(); ++s) {
+            mt->states_ignoring_spray[s] =
+                trim_spaces(mt->states_ignoring_spray[s]);
+        }
+        
         load_init_actions(
             mt, script_file.get_child_by_name("init"), &mt->init_actions
         );
@@ -381,17 +407,9 @@ void load_mob_type_from_file(
         
         if(mt->states.size() > old_n_states) {
         
-            string first_state_name;
-            data_node* first_state_node;
-            for(size_t n = 0; n < script_file.get_nr_of_children(); ++n) {
-                data_node* dn = script_file.get_child(n);
-                string s = get_var_value(dn->name, "first_state", "");
-                if(!s.empty()) {
-                    first_state_name = s;
-                    first_state_node;
-                    break;
-                }
-            }
+            data_node* first_state_name_node =
+                script_file.get_child_by_name("first_state");
+            string first_state_name = first_state_name_node->value;
             
             for(size_t s = 0; s < mt->states.size(); ++s) {
                 if(mt->states[s]->name == first_state_name) {
@@ -399,12 +417,28 @@ void load_mob_type_from_file(
                     break;
                 }
             }
-            if(!first_state_name.empty() && mt->first_state_nr == INVALID) {
+            if(mt->first_state_nr == INVALID) {
                 log_error(
                     "The name of the first state \"" +
                     first_state_name + "\" is invalid!",
-                    (first_state_node ? first_state_node : &script_file)
+                    first_state_name_node
                 );
+            }
+            
+            if(!mt->death_state_name.empty()) {
+                for(size_t s = 0; s < mt->states.size(); ++s) {
+                    if(mt->states[s]->name == mt->death_state_name) {
+                        mt->death_state_nr = s;
+                        break;
+                    }
+                }
+                if(mt->death_state_nr == INVALID) {
+                    log_error(
+                        "The name of the death state \"" +
+                        mt->death_state_name + "\" is invalid!",
+                        death_state_name_node
+                    );
+                }
             }
         }
     }

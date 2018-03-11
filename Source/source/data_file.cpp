@@ -93,7 +93,8 @@ bool data_node::remove(data_node* node_to_remove) {
 
 //Loads data from a file.
 void data_node::load_file(
-    const string &file_name, const bool trim_values, const bool names_only
+    const string &file_name, const bool trim_values,
+    const bool names_only_after_root
 ) {
     vector<string> lines;
     
@@ -123,7 +124,7 @@ void data_node::load_file(
         al_fclose(file);
     }
     
-    load_node(lines, trim_values, 0, names_only);
+    load_node(lines, trim_values, 0, 0, names_only_after_root);
 }
 
 
@@ -132,7 +133,8 @@ void data_node::load_file(
 //This is used for the recursion.
 size_t data_node::load_node(
     const vector<string> &lines, const bool trim_values,
-    const size_t start_line, const bool names_only
+    const size_t start_line, const size_t depth,
+    const bool names_only_after_root
 ) {
     children.clear();
     
@@ -180,7 +182,7 @@ size_t data_node::load_node(
             new_child->file_was_opened = file_was_opened;
             new_child->file_name = file_name;
             new_child->line_nr = l + 1;
-            l = new_child->load_node(lines, trim_values, l + 1);
+            l = new_child->load_node(lines, trim_values, l + 1, depth + 1);
             l--; //So the block-ending line gets re-examined.
             children.push_back(new_child);
             
@@ -191,7 +193,10 @@ size_t data_node::load_node(
         //Option=value.
         pos = line.find('=');
         string n, v;
-        if(!names_only && pos != string::npos && pos > 0 && line.size() > 2) {
+        if(
+            (!names_only_after_root || depth == 0) &&
+            pos != string::npos && pos > 0 && line.size() > 2
+        ) {
             n = line.substr(0, pos);
             v = line.substr(pos + 1, line.size() - (pos + 1));
         } else {

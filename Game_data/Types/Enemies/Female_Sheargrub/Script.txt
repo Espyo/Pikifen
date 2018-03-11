@@ -1,4 +1,5 @@
 first_state = hidden
+death_state = dying
 
 script {
     hidden {
@@ -14,9 +15,6 @@ script {
         on_leave {
             hide false
         }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     emerging {
@@ -25,12 +23,6 @@ script {
         }
         on_animation_end {
             state examining
-        }
-        on_touch_spray {
-            special_function spray
-        }
-        on_death {
-            state dying
         }
     }
     
@@ -48,12 +40,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_touch_spray {
-            special_function spray
-        }
-        on_death {
-            state dying
-        }
     }
     
     burying {
@@ -62,12 +48,6 @@ script {
         }
         on_animation_end {
             state hidden
-        }
-        on_touch_spray {
-            special_function spray
-        }
-        on_death {
-            state dying
         }
     }
     
@@ -85,15 +65,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_touch_spray {
-            special_function spray
-        }
-        on_death {
-            state dying
-        }
     }
     
     going_home {
@@ -107,15 +78,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_touch_spray {
-            special_function spray
-        }
-        on_death {
-            state dying
-        }
     }
     
     crushed {
@@ -128,17 +90,9 @@ script {
         on_enter {
             special_function die_start
             animation dying
-            move stop
         }
         on_animation_end {
             special_function die_end
-        }
-    }
-    
-    deleting {
-        on_enter {
-            special_function die_end
-            special_function delete
         }
     }
     

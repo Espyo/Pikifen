@@ -70,6 +70,26 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Event handler that makes a mob die.
+ */
+void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
+    if(m->type->death_state_nr == INVALID) return;
+    m->fsm.set_state(m->type->death_state_nr, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler that makes a mob fall into a pit and vanish.
+ */
+void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
+    m->set_health(false, false, 0);
+    m->dead = true;
+    m->finish_dying();
+    m->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Event handler for a Pikmin being added as a carrier.
  */
 void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {

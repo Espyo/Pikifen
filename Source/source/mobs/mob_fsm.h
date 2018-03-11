@@ -22,6 +22,8 @@ const float CARRYING_STUCK_SWAY_AMOUNT = 20.0f;
 const float CARRYING_STUCK_SPEED_MULT = 0.3f;
 
 void be_attacked(mob* m, void* info1, void* info2);
+void die(mob* m, void* info1, void* info2);
+void fall_down_pit(mob* m, void* info1, void* info2);
 void touch_hazard(mob* m, void* info1, void* info2);
 void touch_spray(mob* m, void* info1, void* info2);
 void handle_carrier_added(mob* m, void* info1, void* info2);

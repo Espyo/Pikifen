@@ -1,4 +1,5 @@
 first_state = hidden
+death_state = dying
 
 script {
     hidden {
@@ -10,9 +11,6 @@ script {
         on_opponent_in_reach {
             state emerging
         }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     emerging {
@@ -21,9 +19,6 @@ script {
         }
         on_animation_end {
             state examining
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -42,14 +37,8 @@ script {
         on_itch {
             state shaking
         }
-        on_death {
-            state dying
-        }
         on_animation_end {
             state returning
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -73,15 +62,6 @@ script {
         on_itch {
             state shaking
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     attacking {
@@ -93,9 +73,6 @@ script {
         on_animation_end {
             state checking_mouth
         }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     checking_mouth {
@@ -104,12 +81,6 @@ script {
         }
         on_mouth_empty {
             state examining
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -122,12 +93,6 @@ script {
             eat all
             state examining
         }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     shaking {
@@ -137,12 +102,6 @@ script {
         }
         on_animation_end {
             state examining
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -168,15 +127,6 @@ script {
                 state chasing
             endif
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     hiding {
@@ -186,27 +136,15 @@ script {
         on_animation_end {
             state hidden
         }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     dying {
         on_enter {
             special_function die_start
             animation dying
-            move stop
-            eat 
         }
         on_animation_end {
             special_function die_end
-        }
-    }
-    
-    deleting {
-        on_enter {
-            special_function die_end
-            special_function delete
         }
     }
     

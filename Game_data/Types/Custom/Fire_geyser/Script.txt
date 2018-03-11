@@ -1,4 +1,5 @@
 first_state = safe
+death_state = destroyed
 
 script{
     safe {
@@ -9,9 +10,6 @@ script{
         on_timer {
             state starting
         }
-        on_death {
-            state destroyed
-        }
     }
     starting {
         on_enter {
@@ -19,9 +17,6 @@ script{
         }
         on_animation_end {
             state shooting
-        }
-        on_death {
-            state destroyed
         }
     }
     shooting {
@@ -32,9 +27,6 @@ script{
         on_timer {
             state stopping
         }
-        on_death {
-            state destroyed
-        }
     }
     stopping {
         on_enter {
@@ -42,9 +34,6 @@ script{
         }
         on_animation_end {
             state safe
-        }
-        on_death {
-            state destroyed
         }
     }
     destroyed {

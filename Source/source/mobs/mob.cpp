@@ -727,6 +727,8 @@ void mob::finish_dying() {
         par.color = al_map_rgb(255, 192, 255);
         particles.add(par);
     }
+    
+    eat(0);
 }
 
 
@@ -1047,6 +1049,9 @@ bool mob::should_attack(mob* m) {
  */
 void mob::start_dying() {
     set_health(false, false, 0.0f);
+    stop_chasing();
+    gravity_mult = 1.0;
+    
     particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
     p.bitmap = bmp_sparkle;
     p.color = al_map_rgb(255, 192, 192);

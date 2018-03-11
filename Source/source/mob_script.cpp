@@ -815,9 +815,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     if(n == "on_enter")  type = MOB_EVENT_ON_ENTER;
     r("on_leave",               MOB_EVENT_ON_LEAVE);
     r("on_animation_end",       MOB_EVENT_ANIMATION_END);
-    r("on_bottomless_pit",      MOB_EVENT_BOTTOMLESS_PIT);
     r("on_damage",              MOB_EVENT_DAMAGE);
-    r("on_death",               MOB_EVENT_DEATH);
     r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
     r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
     r("on_itch",                MOB_EVENT_ITCH);
@@ -832,7 +830,6 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_revival",             MOB_EVENT_REVIVED);
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);
-    r("on_touch_spray",         MOB_EVENT_TOUCHED_SPRAY);
     r("on_timer",               MOB_EVENT_TIMER);
     r("on_wall",                MOB_EVENT_TOUCHED_WALL);
     else {
@@ -1053,10 +1050,44 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         }
         
         //Inject a damage event.
-        vector<mob_action*> actions;
-        actions.push_back(new mob_action(gen_mob_fsm::be_attacked));
-        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, actions));
+        vector<mob_action*> da_actions;
+        da_actions.push_back(new mob_action(gen_mob_fsm::be_attacked));
+        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, da_actions));
         
+        //Inject a death event.
+        if(
+            state_node->name != mt->death_state_name &&
+            find(
+                mt->states_ignoring_death.begin(),
+                mt->states_ignoring_death.end(),
+                state_node->name
+            ) == mt->states_ignoring_death.end() &&
+            !mt->death_state_name.empty()
+        ) {
+            vector<mob_action*> de_actions;
+            de_actions.push_back(new mob_action(gen_mob_fsm::die));
+            events.push_back(new mob_event(MOB_EVENT_DEATH, de_actions));
+        }
+        
+        //Inject a bottomless pit event.
+        vector<mob_action*> bp_actions;
+        bp_actions.push_back(new mob_action(gen_mob_fsm::fall_down_pit));
+        events.push_back(new mob_event(MOB_EVENT_BOTTOMLESS_PIT, bp_actions));
+        
+        //Inject a spray event.
+        if(
+            find(
+                mt->states_ignoring_spray.begin(),
+                mt->states_ignoring_spray.end(),
+                state_node->name
+            ) == mt->states_ignoring_spray.end()
+        ) {
+            vector<mob_action*> s_actions;
+            s_actions.push_back(new mob_action(gen_mob_fsm::touch_spray));
+            events.push_back(new mob_event(MOB_EVENT_TOUCHED_SPRAY, s_actions));
+        }
+        
+        //Connect the events to the state.
         for(size_t e = 0; e < events.size(); ++e) {
             size_t ev_type = events[e]->type;
             states->at(s + old_n_states)->events[ev_type] = events[e];

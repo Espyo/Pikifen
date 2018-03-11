@@ -1,13 +1,11 @@
 first_state = shooting
+death_state = destroyed
 
 script{
     shooting {
         on_enter {
             animation shooting
             particle gas_pipe
-        }
-        on_death {
-            state destroyed
         }
     }
     destroyed {

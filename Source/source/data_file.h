@@ -87,11 +87,12 @@ public:
     void load_file(
         const string &file_name,
         const bool trim_values = true,
-        const bool names_only = false
+        const bool names_only_after_root = false
     );
     size_t load_node(
         const vector<string> &lines, const bool trim_values,
-        const size_t start_line = 0, const bool names_only = false
+        const size_t start_line = 0, const size_t depth = 0,
+        const bool names_only_after_root = false
     );
     bool save_file(
         string file_name = "", const bool children_only = true,

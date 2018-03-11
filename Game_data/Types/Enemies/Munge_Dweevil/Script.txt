@@ -1,4 +1,5 @@
 first_state = relaxing
+death_state = dying
 
 script {
     relaxing {
@@ -14,12 +15,6 @@ script {
         }
         on_itch {
             state shaking
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -42,15 +37,6 @@ script {
         on_itch {
             state shaking
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     going_home {
@@ -64,15 +50,6 @@ script {
         on_itch {
             state shaking
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     shaking {
@@ -82,9 +59,6 @@ script {
         }
         on_animation_end {
             state attacking
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -97,27 +71,15 @@ script {
             state relaxing
             particle 
         }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     dying {
         on_enter {
             special_function die_start
             animation dying
-            move stop
-            gravity 1
         }
         on_animation_end {
             special_function die_end
-        }
-    }
-    
-    deleting {
-        on_enter {
-            special_function die_end
-            special_function delete
         }
     }
     

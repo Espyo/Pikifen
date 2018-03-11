@@ -1,4 +1,5 @@
 first_state = examining
+death_state = dying
 
 init {
     var ignoring false
@@ -23,14 +24,8 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_death {
-            state dying
-        }
         on_animation_end {
             state grazing
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -42,14 +37,8 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_death {
-            state dying
-        }
         on_animation_end {
             state exploring
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -74,15 +63,6 @@ script {
         }
         on_pikmin_land {
             state crushed
-        }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -109,15 +89,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     attacking {
@@ -128,9 +99,6 @@ script {
         }
         on_animation_end {
             state checking_mouth
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -147,12 +115,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     eating {
@@ -166,12 +128,6 @@ script {
         on_pikmin_land {
             state crushed
         }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     shaking {
@@ -184,12 +140,6 @@ script {
         }
         on_pikmin_land {
             state crushed
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
         }
     }
     
@@ -215,15 +165,6 @@ script {
                 state chasing
             endif
         }
-        on_bottomless_pit {
-            state deleting
-        }
-        on_death {
-            state dying
-        }
-        on_touch_spray {
-            special_function spray
-        }
     }
     
     crushed {
@@ -241,18 +182,9 @@ script {
         on_enter {
             special_function die_start
             animation dying
-            move stop
-            eat 
         }
         on_animation_end {
             special_function die_end
-        }
-    }
-    
-    deleting {
-        on_enter {
-            special_function die_end
-            special_function delete
         }
     }
     
