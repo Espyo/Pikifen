@@ -29,7 +29,7 @@ script {
             near_reach search
         }
         on_opponent_in_reach {
-            if ignoring false
+            if var ignoring = false
                 focus mob
                 state chasing
             endif
@@ -122,7 +122,7 @@ script {
             state hiding
         }
         on_opponent_in_reach {
-            if ignoring false
+            if var ignoring = false
                 focus mob
                 state chasing
             endif

@@ -71,7 +71,7 @@ script {
             gravity 0
             move randomly
             inc_var flutters
-            if flutters 10
+            if var flutters = 10
                 state going_home
             endif
         }

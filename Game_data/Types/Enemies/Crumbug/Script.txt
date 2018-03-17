@@ -104,7 +104,7 @@ script {
             state exploring
         }
         on_opponent_in_reach {
-            if ignoring false
+            if var ignoring = false
                 focus mob
                 state chasing
             endif

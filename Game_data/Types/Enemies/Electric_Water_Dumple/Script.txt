@@ -15,7 +15,7 @@ script {
             near_reach search
         }
         on_opponent_in_reach {
-            if ignoring false
+            if var ignoring = false
                 focus mob
                 state chasing
             endif
@@ -33,7 +33,7 @@ script {
             far_reach chase
         }
         on_opponent_in_reach {
-            if next_eat true
+            if var next_eat = true
                 var next_eat false
                 state attacking
             else
@@ -121,7 +121,7 @@ script {
             state idling
         }
         on_opponent_in_reach {
-            if ignoring false
+            if var ignoring = false
                 focus mob
                 state chasing
             endif

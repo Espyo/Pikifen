@@ -114,65 +114,64 @@ mob_action::mob_action(
         type = MOB_ACTION_IF;
         
         words.erase(words.begin());
-        if(words.size() < 2) {
-            log_error(
-                "Not enough parts on this if: \"" + v + "\"!",
-                dn
-            );
-            valid = false;
+        if(words.size() >= 4 && words[0] == "var") {
+            sub_type = MOB_ACTION_IF_LHS_VAR;
+            words.erase(words.begin());
         } else {
-            vs.push_back(words[0]); vs.push_back(words[1]);
+            sub_type = MOB_ACTION_IF_LHS_INFO;
         }
         
-        
-    } else if(words[0] == "if_less") {
-    
-        //TODO make this use integers instead of strings, eventually?
-        type = MOB_ACTION_IF_LESS;
-        
-        words.erase(words.begin());
-        if(words.size() < 2) {
+        if(words.size() >= 3) {
+            if(words[1] == "=") {
+                vi.push_back(MOB_ACTION_IF_OP_EQUAL);
+            } else if(words[1] == "!=") {
+                vi.push_back(MOB_ACTION_IF_OP_NOT);
+            } else if(words[1] == "<") {
+                vi.push_back(MOB_ACTION_IF_OP_LESS);
+            } else if(words[1] == ">") {
+                vi.push_back(MOB_ACTION_IF_OP_MORE);
+            } else if(words[1] == "<=") {
+                vi.push_back(MOB_ACTION_IF_OP_LESS_E);
+            } else if(words[1] == ">=") {
+                vi.push_back(MOB_ACTION_IF_OP_MORE_E);
+            } else {
+                log_error(
+                    "Unknown operator \"" + words[2] + "\"!",
+                    dn
+                );
+                valid = false;
+            }
+            
+            string rhs =
+                v.substr(v.find(words[1]) + words[1].size(), string::npos);
+            rhs = trim_spaces(rhs);
+            
+            if(sub_type == MOB_ACTION_IF_LHS_VAR) {
+                vs.push_back(words[0]);
+                
+            } else {
+            
+                if(words[0] == "day_minutes") {
+                    vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
+                    
+                } else {
+                    log_error(
+                        "Unknown comparison \"" + words[0] + "\"!",
+                        dn
+                    );
+                    valid = false;
+                }
+                
+            }
+            
+            vs.push_back(rhs);
+            
+        } else {
             log_error(
-                "Not enough parts on this if_less: \"" + v + "\"!",
+                "Not enough parts on this if: \"" + dn->name + "\"!",
                 dn
             );
             valid = false;
-        } else {
-            vs.push_back(words[0]); vs.push_back(words[1]);
-        }
-        
-        
-    } else if(words[0] == "if_more") {
-    
-        //TODO make this use integers instead of strings, eventually?
-        type = MOB_ACTION_IF_MORE;
-        
-        words.erase(words.begin());
-        if(words.size() < 2) {
-            log_error(
-                "Not enough parts on this if_more: \"" + v + "\"!",
-                dn
-            );
-            valid = false;
-        } else {
-            vs.push_back(words[0]); vs.push_back(words[1]);
-        }
-        
-        
-    } else if(words[0] == "if_not") {
-    
-        //TODO make this use integers instead of strings, eventually?
-        type = MOB_ACTION_IF_NOT;
-        
-        words.erase(words.begin());
-        if(words.size() < 2) {
-            log_error(
-                "Not enough parts on this if_not: \"" + v + "\"!",
-                dn
-            );
-            valid = false;
-        } else {
-            vs.push_back(words[0]); vs.push_back(words[1]);
         }
         
         
@@ -507,31 +506,40 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_IF) {
     
-        if(vs.size() >= 2) {
-            return (m->vars[vs[0]] == vs[1]);
+        string lhs;
+        string rhs;
+        if(
+            sub_type == MOB_ACTION_IF_LHS_VAR &&
+            vs.size() >= 2
+        ) {
+            lhs = m->vars[vs[0]];
+            rhs = vs[1];
+        } else if(
+            sub_type == MOB_ACTION_IF_LHS_INFO &&
+            vi.size() >= 2 && !vs.empty()
+        ) {
+            if(vi[1] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
+                lhs = f2s(day_minutes);
+                
+            }
+            rhs = vs[0];
+        } else {
+            return false;
         }
         
-        
-    } else if(type == MOB_ACTION_IF_LESS) {
-    
-        if(vs.size() >= 2) {
-            return (s2i(m->vars[vs[0]]) < s2i(vs[1]));
+        if(vi[0] == MOB_ACTION_IF_OP_EQUAL) {
+            return (lhs == rhs);
+        } else if(vi[0] == MOB_ACTION_IF_OP_NOT) {
+            return (lhs != rhs);
+        } else if(vi[0] == MOB_ACTION_IF_OP_LESS) {
+            return (s2f(lhs) < s2f(rhs));
+        } else if(vi[0] == MOB_ACTION_IF_OP_MORE) {
+            return (s2f(lhs) > s2f(rhs));
+        } else if(vi[0] == MOB_ACTION_IF_OP_LESS_E) {
+            return (s2f(lhs) <= s2f(rhs));
+        } else if(vi[0] == MOB_ACTION_IF_OP_MORE_E) {
+            return (s2f(lhs) >= s2f(rhs));
         }
-        
-        
-    } else if(type == MOB_ACTION_IF_MORE) {
-    
-        if(vs.size() >= 2) {
-            return (s2i(m->vars[vs[0]]) > s2i(vs[1]));
-        }
-        
-        
-    } else if(type == MOB_ACTION_IF_NOT) {
-    
-        if(vs.size() >= 2) {
-            return (m->vars[vs[0]] != vs[1]);
-        }
-        
         
     } else if(type == MOB_ACTION_MOVE) {
     

@@ -182,7 +182,10 @@ size_t data_node::load_node(
             new_child->file_was_opened = file_was_opened;
             new_child->file_name = file_name;
             new_child->line_nr = l + 1;
-            l = new_child->load_node(lines, trim_values, l + 1, depth + 1);
+            l =
+                new_child->load_node(
+                    lines, trim_values, l + 1, depth + 1, names_only_after_root
+                );
             l--; //So the block-ending line gets re-examined.
             children.push_back(new_child);
             
