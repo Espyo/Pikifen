@@ -1397,16 +1397,17 @@ vertex* get_merge_vertex(
 /* ----------------------------------------------------------------------------
  * Returns the shortest available path between two points, following
  * the area's path graph.
- * start:          Start coordinates.
- * end:            End coordinates.
- * obstacle_found: If an obstacle was found in the only path, this points to it.
- * go_straight:    This is set according to whether it's better
+ * start:           Start coordinates.
+ * end:             End coordinates.
+ * obstacles_found: If there is no clear path, this points to all obstacles
+ *   found, so the mob can keep an eye for when they're open and try again.
+ * go_straight:     This is set according to whether it's better
  *   to go straight to the end point.
- * total_dist:     If not NULL, place the total path distance here.
+ * total_dist:      If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
     const point &start, const point &end,
-    mob** obstacle_found, bool* go_straight,
+    unordered_set<mob*>* obstacles_found, bool* go_straight,
     float* total_dist
 ) {
 
@@ -1468,7 +1469,7 @@ vector<path_stop*> get_path(
     //Calculate the path.
     full_path =
         dijkstra(
-            closest_to_start, closest_to_end, obstacle_found, total_dist
+            closest_to_start, closest_to_end, false, obstacles_found, total_dist
         );
         
     if(total_dist && !full_path.empty()) {
@@ -1484,8 +1485,12 @@ vector<path_stop*> get_path(
 
 /* ----------------------------------------------------------------------------
  * Returns what active obstacle stands in the way of these two stops, if any.
+ * If multiple ones do, it returns the closest.
  */
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
+    mob* closest_obs = NULL;
+    dist closest_obs_dist;
+    
     for(size_t m = 0; m < mobs.size(); ++m) {
         mob* m_ptr = mobs[m];
         if(!m_ptr->type->is_obstacle) continue;
@@ -1498,10 +1503,15 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
                 s1->pos, s2->pos
             )
         ) {
-            return m_ptr;
+            dist d(s1->pos, m_ptr->pos);
+            if(!closest_obs || d < closest_obs_dist) {
+                closest_obs = m_ptr;
+                closest_obs_dist = d;
+            }
         }
     }
-    return NULL;
+    
+    return closest_obs;
 }
 
 
@@ -2357,22 +2367,24 @@ void depth_first_search(
 /* ----------------------------------------------------------------------------
  * Uses Dijstra's algorithm to get the shortest path between two nodes.
  * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
- * *node:          Start and end node.
- * obstacle_found: If the only path has an obstacle, this points to it.
- * total_dist:     If not NULL, place the total path distance here.
+ * *node:           Start and end node.
+ * obstacles_found: If there is no clear path, this points to all obstacles
+ *   found, so the mob can keep an eye for when they're open and try again.
+ * total_dist:      If not NULL, place the total path distance here.
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    mob** obstacle_found, float* total_dist
+    const bool ignore_obstacles,
+    unordered_set<mob*>* obstacles_found, float* total_dist
 ) {
 
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
     map<path_stop*, pair<float, path_stop*> > data;
-    //Data about any active obstacles we came across.
-    vector<pair<path_stop*, mob*> > obstacles_found;
     //If we found an error, set this to true.
     bool got_error = false;
+    //Total obstacles found.
+    unordered_set<mob*> total_obstacles;
     
     //Initialize the algorithm.
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
@@ -2380,6 +2392,7 @@ vector<path_stop*> dijkstra(
         unvisited.insert(s_ptr);
         data[s_ptr] = make_pair(FLT_MAX, (path_stop*) NULL);
     }
+    if(obstacles_found) obstacles_found->clear();
     
     //The distance between the start node and the start node is 0.
     data[start_node].first = 0;
@@ -2418,7 +2431,6 @@ vector<path_stop*> dijkstra(
                 got_error = true;
                 break;
             } else {
-                if(obstacle_found) *obstacle_found = NULL;
                 if(total_dist) *total_dist = td;
                 return final_path;
             }
@@ -2436,10 +2448,13 @@ vector<path_stop*> dijkstra(
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
             
             //Is this link unobstructed?
-            mob* obs = get_path_link_obstacle(shortest_node, l_ptr->end_ptr);
-            if(obs) {
-                obstacles_found.push_back(make_pair(shortest_node, obs));
-                continue;
+            if(!ignore_obstacles) {
+                mob* obs =
+                    get_path_link_obstacle(shortest_node, l_ptr->end_ptr);
+                if(obs) {
+                    total_obstacles.insert(obs);
+                    continue;
+                }
             }
             
             float total_dist = shortest_node_data.first + l_ptr->distance;
@@ -2454,40 +2469,32 @@ vector<path_stop*> dijkstra(
     }
     
     //If we got to this point, there means that there is no available path!
-    if(!obstacles_found.empty()) {
-        //Let's try making a path to the closest obstacle we found,
-        //and stay there... The closest obstacle does not necessarily mean
-        //the obstacle on the best path; we can't know the best path
-        //because we can't reach the finish. By using the closest obstacle,
-        //we just hope that that is also the best path.
-        path_stop* closest_obstacle_node = NULL;
-        mob* closest_obstacle_mob = NULL;
-        dist closest_obstacle_d;
-        for(size_t o = 0; o < obstacles_found.size(); ++o) {
-            dist d(start_node->pos, obstacles_found[o].first->pos);
-            if(d < closest_obstacle_d || !closest_obstacle_node) {
-                closest_obstacle_d = d;
-                closest_obstacle_node = obstacles_found[o].first;
-                closest_obstacle_mob = obstacles_found[o].second;
+    if(!total_obstacles.empty()) {
+    
+        //First, let's find the shortest path, period.
+        float td;
+        vector<path_stop*> shortest_path =
+            dijkstra(start_node, end_node, true, NULL, &td);
+            
+        vector<path_stop*> final_path;
+        
+        //Now, trim the path such that it ends at the closest obstacle.
+        //This will be the final recommended path.
+        for(size_t s = 0; s < shortest_path.size() - 1; ++s) {
+            final_path.push_back(shortest_path[s]);
+            if(get_path_link_obstacle(shortest_path[s], shortest_path[s + 1])) {
+                break;
             }
         }
         
-        vector<path_stop*> final_path;
-        final_path.push_back(closest_obstacle_node);
-        path_stop* next = data[closest_obstacle_node].second;
-        float td = data[closest_obstacle_node].first;
-        while(next) {
-            final_path.insert(final_path.begin(), next);
-            next = data[next].second;
-        }
-        
-        if(obstacle_found) *obstacle_found = closest_obstacle_mob;
+        if(obstacles_found) *obstacles_found = total_obstacles;
         if(total_dist) *total_dist = td;
         return final_path;
         
     } else {
         //No obstacle?... Something really went wrong. No path.
         if(total_dist) *total_dist = 0;
+        if(obstacles_found) obstacles_found->clear();
         return vector<path_stop*>();
     }
 }

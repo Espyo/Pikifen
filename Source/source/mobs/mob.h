@@ -160,10 +160,8 @@ struct carry_info_struct {
     //not necessarily there already.
     size_t cur_n_carriers;
     point final_destination;
-    //If the path has an obstacle, this is the pointer to it.
-    //This not being NULL also means the last stop in the path is
-    //the stop before the obstacle.
-    mob* obstacle_ptr;
+    //If there is no clear path, this points to all obstacles found.
+    unordered_set<mob*> obstacle_ptrs;
     //If true, it's best to go straight to the end point
     //instead of taking a path.
     bool go_straight;

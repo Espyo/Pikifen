@@ -370,7 +370,8 @@ void depth_first_search(
 );
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    mob** obstacle_found, float* total_dist
+    const bool ignore_obstacles,
+    unordered_set<mob*>* obstacles_found, float* total_dist
 );
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
@@ -385,7 +386,7 @@ vertex* get_merge_vertex(
 );
 vector<path_stop*> get_path(
     const point &start, const point &end,
-    mob** obstacle_found, bool* go_straight, float* get_dist
+    unordered_set<mob*>* obstacles_found, bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(

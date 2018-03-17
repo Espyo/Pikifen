@@ -1049,7 +1049,9 @@ bool mob::should_attack(mob* m) {
  */
 void mob::start_dying() {
     set_health(false, false, 0.0f);
+    
     stop_chasing();
+    intended_angle = angle;
     gravity_mult = 1.0;
     
     particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
@@ -1859,9 +1861,14 @@ void mob::tick_script() {
     
     //Being carried, but has an obstacle.
     if(carry_info) {
-        if(carry_info->obstacle_ptr) {
-            if(carry_info->obstacle_ptr->health == 0) {
+        for(
+            auto o = carry_info->obstacle_ptrs.begin();
+            o != carry_info->obstacle_ptrs.end();
+            ++o
+        ) {
+            if((*o)->health == 0) {
                 fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+                break;
             }
         }
     }
@@ -1916,7 +1923,6 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     carry_to_ship(carry_to_ship),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    obstacle_ptr(nullptr),
     go_straight(false),
     stuck_state(0),
     is_moving(false) {

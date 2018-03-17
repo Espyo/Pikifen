@@ -138,7 +138,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
  * or update its path.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
-    mob* obs = NULL;
+    unordered_set<mob*> obs;
     bool go_straight = false;
     vector<path_stop*> old_path = m->path;
     
@@ -148,7 +148,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
                 m->pos, m->carry_info->final_destination,
                 &obs, &go_straight, NULL
             );
-        m->carry_info->obstacle_ptr = obs;
+        m->carry_info->obstacle_ptrs = obs;
         m->carry_info->go_straight = go_straight;
         
         if(
@@ -182,7 +182,7 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     m->carry_info->is_moving = false;
     m->carry_info->final_destination = point();
-    m->carry_info->obstacle_ptr = NULL;
+    m->carry_info->obstacle_ptrs.clear();
     m->stop_chasing();
 }
 
@@ -255,7 +255,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
     } else if(m->cur_path_stop_nr == m->path.size()) {
         //Reached the final stop.
         
-        if(m->carry_info->obstacle_ptr) {
+        if(!m->carry_info->obstacle_ptrs.empty()) {
             //If there's an obstacle in the path, the last stop on the path
             //actually means it's the last possible stop before the obstacle.
             //Meaning the object should get stuck.
