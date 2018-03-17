@@ -15,7 +15,7 @@ script {
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state chasing
+                state turning
             endif
         }
         on_itch {
@@ -50,7 +50,7 @@ script {
         }
         on_opponent_in_reach {
             focus mob
-            state chasing
+            state turning
         }
         on_reach_destination {
             state examining
@@ -63,6 +63,29 @@ script {
         }
         on_pikmin_land {
             state crushed
+        }
+    }
+    
+    turning {
+        on_enter {
+            animation moving
+            move stop
+            face focused_mob
+            near_reach chase
+            far_reach close
+        }
+        on_tick {
+            face focused_mob
+        }
+        on_opponent_in_reach {
+            focus mob
+            state chasing
+        }
+        on_focus_off_reach {
+            state examining
+        }
+        on_itch {
+            state shaking
         }
     }
     
@@ -162,7 +185,7 @@ script {
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state chasing
+                state turning
             endif
         }
     }

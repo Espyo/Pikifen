@@ -73,6 +73,12 @@ animations{
 		hit_rate=40
 		frames{
 			idling{
+				duration=0.40
+			}
+			attacking1{
+				duration=0.40
+			}
+			idling{
 				duration=0.10
 			}
 			attacking1{

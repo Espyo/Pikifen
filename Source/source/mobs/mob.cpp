@@ -1722,10 +1722,10 @@ void mob::tick_script() {
     
     //Timer events.
     mob_event* timer_ev = q_get_event(this, MOB_EVENT_TIMER);
-    if(timer_ev && script_timer.duration > 0) {
+    if(script_timer.duration > 0) {
         if(script_timer.time_left > 0) {
             script_timer.tick(delta_t);
-            if(script_timer.time_left == 0.0f) {
+            if(script_timer.time_left == 0.0f && timer_ev) {
                 timer_ev->run(this);
             }
         }

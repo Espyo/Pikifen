@@ -91,6 +91,20 @@ mob_action::mob_action(
         type = MOB_ACTION_ENDIF;
         
         
+    } else if(words[0] == "face") {
+    
+        type = MOB_ACTION_FACE;
+        
+        if(v == "focused_mob") {
+            sub_type = MOB_ACTION_FACE_FOCUSED_MOB;
+        } else if(v == "home") {
+            sub_type = MOB_ACTION_FACE_HOME;
+        } else {
+            valid = false;
+            log_error("Invalid face target \"" + v + "\"!", dn);
+        }
+        
+        
     } else if(words[0] == "focus") {
     
         type = MOB_ACTION_FOCUS;
@@ -499,6 +513,15 @@ bool mob_action::run(
         m->focused_mob = (mob*) custom_data_1;
         
         
+    } else if(type == MOB_ACTION_FACE) {
+    
+        if(sub_type == MOB_ACTION_FACE_FOCUSED_MOB && m->focused_mob) {
+            m->face(get_angle(m->pos, m->focused_mob->pos));
+        } else if(sub_type == MOB_ACTION_FACE_HOME) {
+            m->face(get_angle(m->pos, m->home));
+        }
+        
+        
     } else if(type == MOB_ACTION_HIDE) {
     
         if(!vi.empty()) m->hide = vi[0];
@@ -822,6 +845,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     string n = d->name;
     if(n == "on_enter")  type = MOB_EVENT_ON_ENTER;
     r("on_leave",               MOB_EVENT_ON_LEAVE);
+    r("on_tick",                MOB_EVENT_ON_TICK);
     r("on_animation_end",       MOB_EVENT_ANIMATION_END);
     r("on_damage",              MOB_EVENT_DAMAGE);
     r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
