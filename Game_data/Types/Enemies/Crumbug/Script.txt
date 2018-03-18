@@ -2,125 +2,125 @@ first_state = exploring
 death_state = dying
 
 init {
-    var ignoring false
+    set_var ignoring false
 }
 
 script {
     exploring {
         on_enter {
-            animation moving
-            timer 1
-            near_reach search
+            set_animation moving
+            set_timer 1
+            set_near_reach search
             move randomly
         }
         on_leave {
-            timer 0
+            set_timer 0
         }
         on_timer {
             move randomly
-            timer 1
+            set_timer 1
         }
         on_opponent_in_reach {
             focus mob
-            state chasing
+            set_state chasing
         }
         on_far_from_home {
-            state returning
+            set_state returning
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     chasing {
         on_enter {
             move focused_mob
-            near_reach attack
-            far_reach chase
+            set_near_reach attack
+            set_far_reach chase
         }
         on_opponent_in_reach {
-            state attacking
+            set_state attacking
         }
         on_focus_off_reach {
-            state exploring
+            set_state exploring
         }
         on_far_from_home {
-            state returning
+            set_state returning
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     attacking {
         on_enter {
-            move stop
-            animation attacking
-            chomp 1 mouth
+            stop
+            set_animation attacking
+            set_chomp_body_parts 1 mouth
         }
         on_animation_end {
-            state checking_mouth
+            set_state checking_mouth
         }
     }
     
     checking_mouth {
         on_leave {
-            chomp =
+            set_chomp_body_parts =
         }
         on_mouth_occupied {
-            state eating
+            set_state eating
         }
         on_mouth_empty {
-            state exploring
+            set_state exploring
         }
     }
     
     eating {
         on_enter {
-            animation eating
+            set_animation eating
         }
         on_animation_end {
             eat all
-            state exploring
+            set_state exploring
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     returning {
         on_enter {
             move home
-            timer 2
-            near_reach search
+            set_timer 2
+            set_near_reach search
         }
         on_leave {
-            timer 0
+            set_timer 0
         }
         on_timer {
-            var ignoring false
+            set_var ignoring false
         }
         on_reach_destination {
-            state exploring
+            set_state exploring
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state chasing
-            endif
+                set_state chasing
+            end_if
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

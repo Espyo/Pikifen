@@ -4,185 +4,185 @@ death_state = dying
 script {
     sleeping {
         on_enter {
-            var ignoring false
-            animation sleeping
-            near_reach wake_up
+            set_var ignoring false
+            set_animation sleeping
+            set_near_reach wake_up
         }
         on_opponent_in_reach {
-            state waking_up
+            set_state waking_up
         }
         on_damage {
-            state waking_up
+            set_state waking_up
         }
         on_touch_opponent {
-            state waking_up
+            set_state waking_up
         }
     }
     
     waking_up {
         on_enter {
-            animation waking_up
+            set_animation waking_up
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     examining {
         on_enter {
-            animation looking
-            move stop
-            near_reach search
+            set_animation looking
+            stop
+            set_near_reach search
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state turning
-            endif
+                set_state turning
+            end_if
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
         on_animation_end {
-            state returning
+            set_state returning
         }
     }
     
     turning {
         on_enter {
-            animation moving
-            move stop
+            set_animation moving
+            stop
             face focused_mob
-            near_reach chase
-            far_reach close
+            set_near_reach chase
+            set_far_reach close
         }
         on_tick {
             face focused_mob
         }
         on_opponent_in_reach {
             focus mob
-            state chasing
+            set_state chasing
         }
         on_focus_off_reach {
-            state examining
+            set_state examining
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     chasing {
         on_enter {
-            animation moving
+            set_animation moving
             move focused_mob
-            near_reach attack
-            far_reach chase
+            set_near_reach attack
+            set_far_reach chase
         }
         on_opponent_in_reach {
-            state attacking
+            set_state attacking
         }
         on_focus_off_reach {
-            state examining
+            set_state examining
         }
         on_far_from_home {
-            var ignoring true
-            state examining
+            set_var ignoring true
+            set_state examining
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     attacking {
         on_enter {
-            move stop
-            animation attacking
-            chomp 5 mouth
+            stop
+            set_animation attacking
+            set_chomp_body_parts 5 mouth
         }
         on_animation_end {
-            state checking_mouth
+            set_state checking_mouth
         }
     }
     
     checking_mouth {
         on_mouth_occupied {
-            state eating
+            set_state eating
         }
         on_mouth_empty {
-            state failing
+            set_state failing
         }
     }
     
     eating {
         on_enter {
-            chomp =
-            animation eating
+            set_chomp_body_parts =
+            set_animation eating
         }
         on_animation_end {
             eat all
-            state examining
+            set_state examining
         }
     }
     
     failing {
         on_enter {
-            animation failing
+            set_animation failing
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     shaking {
         on_enter {
-            move stop
-            animation shaking
+            stop
+            set_animation shaking
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     returning {
         on_enter {
             move home
-            animation moving
-            timer 2
-            near_reach search
+            set_animation moving
+            set_timer 2
+            set_near_reach search
         }
         on_leave {
-            timer 0
+            set_timer 0
         }
         on_timer {
-            var ignoring false
+            set_var ignoring false
         }
         on_reach_destination {
-            state falling_asleep
+            set_state falling_asleep
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state turning
-            endif
+                set_state turning
+            end_if
         }
     }
     
     falling_asleep {
         on_enter {
-            animation falling_asleep
+            set_animation falling_asleep
         }
         on_animation_end {
-            state sleeping
+            set_state sleeping
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

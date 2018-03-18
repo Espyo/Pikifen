@@ -1107,6 +1107,8 @@ void gameplay::draw_lighting_filter() {
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
         for(size_t m = 0; m < mobs.size(); ++m) {
+            if(mobs[m]->hide) continue;
+            
             point pos = mobs[m]->pos;
             al_transform_coordinates(
                 &world_to_screen_transform,

@@ -4,95 +4,95 @@ death_state = dying
 script {
     hidden {
         on_enter {
-            animation hidden
-            hide true
-            near_reach chase
-            far_reach chase
+            set_animation hidden
+            set_hiding true
+            set_near_reach chase
+            set_far_reach chase
         }
         on_opponent_in_reach {
-            state emerging
+            set_state emerging
         }
         on_leave {
-            hide false
+            set_hiding false
         }
     }
     
     emerging {
         on_enter {
-            animation emerging
+            set_animation emerging
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     examining {
         on_enter {
-            animation examining
+            set_animation examining
         }
         on_opponent_in_reach {
             focus mob
-            state chasing
+            set_state chasing
         }
         on_animation_end {
-            state going_home
+            set_state going_home
         }
         on_pikmin_land {
-            state crushed
+            set_state crushed
         }
     }
     
     burying {
         on_enter {
-            animation burying
+            set_animation burying
         }
         on_animation_end {
-            state hidden
+            set_state hidden
         }
     }
     
     chasing {
         on_enter {
-            animation moving
+            set_animation moving
             move focused_mob
         }
         on_focus_off_reach {
-            state going_home
+            set_state going_home
         }
         on_far_from_home {
-            state going_home
+            set_state going_home
         }
         on_pikmin_land {
-            state crushed
+            set_state crushed
         }
     }
     
     going_home {
         on_enter {
-            animation moving
+            set_animation moving
             move home
         }
         on_reach_destination {
-            state burying
+            set_state burying
         }
         on_pikmin_land {
-            state crushed
+            set_state crushed
         }
     }
     
     crushed {
         on_enter {
-            state dying
+            set_state dying
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

@@ -567,7 +567,7 @@ void gameplay::do_gameplay_logic() {
                 creator_tool_info_lock->fsm.cur_state->name :
                 "(None!)"
             );
-        for(unsigned char p = 0; p < N_PREV_STATES; ++p) {
+        for(unsigned char p = 0; p < STATE_HISTORY_SIZE; ++p) {
             stateh_str +=
                 ", " + creator_tool_info_lock->fsm.prev_state_names[p];
         }

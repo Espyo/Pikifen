@@ -4,86 +4,86 @@ death_state = dying
 script {
     resting_start {
         on_enter {
-            animation resting
-            move stop
-            timer 1
-            gravity 1
+            set_animation resting
+            stop
+            set_timer 1
+            set_gravity 1
         }
         on_timer {
-            state resting
+            set_state resting
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     going_home {
         on_enter {
             move home
-            timer 5
+            set_timer 5
         }
         on_reach_destination {
-            state resting_start
+            set_state resting_start
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
         on_timer {
-            state flying
+            set_state flying
         }
     }
     
     resting {
         on_enter {
-            animation resting
-            timer 5
-            near_reach fear
-            far_reach fear
+            set_animation resting
+            set_timer 5
+            set_near_reach fear
+            set_far_reach fear
         }
         on_timer {
-            state flying
+            set_state flying
         }
         on_opponent_in_reach {
-            state flying
+            set_state flying
         }
         on_touch_opponent {
-            state flying
+            set_state flying
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
     }
     
     flying {
         on_enter {
-            animation flapping
-            gravity -2
-            timer 0.3
+            set_animation flapping
+            set_gravity -2
+            set_timer 0.3
             move randomly
-            var flutters 0
+            set_var flutters 0
         }
         on_pikmin_land {
-            state dying
+            set_state dying
         }
         on_timer {
-            timer 0.3
-            move stop vertically
-            gravity 0
+            set_timer 0.3
+            stop vertically
+            set_gravity 0
             move randomly
             inc_var flutters
             if var flutters = 10
-                state going_home
-            endif
+                set_state going_home
+            end_if
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

@@ -4,15 +4,15 @@ death_state = destroyed
 script{
     shooting {
         on_enter {
-            animation shooting
-            particle gas_pipe
+            set_animation shooting
+            set_particle_generator gas_pipe
         }
     }
     destroyed {
         on_enter {
-            animation destroyed
-            special_function die_start
-            particle 
+            set_animation destroyed
+            start_dying
+            set_particle_generator 
         }
     }
 }

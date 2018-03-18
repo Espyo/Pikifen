@@ -4,147 +4,147 @@ death_state = dying
 script {
     hidden {
         on_enter {
-            var ignoring false
-            near_reach wake_up
-            animation hidden
+            set_var ignoring false
+            set_near_reach wake_up
+            set_animation hidden
         }
         on_opponent_in_reach {
-            state emerging
+            set_state emerging
         }
     }
     
     emerging {
         on_enter {
-            animation emerging
+            set_animation emerging
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     examining {
         on_enter {
-            animation looking
-            move stop
-            near_reach search
+            set_animation looking
+            stop
+            set_near_reach search
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state chasing
-            endif
+                set_state chasing
+            end_if
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
         on_animation_end {
-            state returning
+            set_state returning
         }
     }
     
     chasing {
         on_enter {
-            animation moving
+            set_animation moving
             move focused_mob
-            near_reach attack
-            far_reach chase
+            set_near_reach attack
+            set_far_reach chase
         }
         on_opponent_in_reach {
-            state attacking
+            set_state attacking
         }
         on_focus_off_reach {
-            state examining
+            set_state examining
         }
         on_far_from_home {
-            var ignoring true
-            state examining
+            set_var ignoring true
+            set_state examining
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     attacking {
         on_enter {
-            move stop
-            animation attacking
-            chomp 1 mouth
+            stop
+            set_animation attacking
+            set_chomp_body_parts 1 mouth
         }
         on_animation_end {
-            state checking_mouth
+            set_state checking_mouth
         }
     }
     
     checking_mouth {
         on_mouth_occupied {
-            state eating
+            set_state eating
         }
         on_mouth_empty {
-            state examining
+            set_state examining
         }
     }
     
     eating {
         on_enter {
-            chomp =
-            animation eating
+            set_chomp_body_parts =
+            set_animation eating
         }
         on_animation_end {
             eat all
-            state examining
+            set_state examining
         }
     }
     
     shaking {
         on_enter {
-            move stop
-            animation shaking
+            stop
+            set_animation shaking
         }
         on_animation_end {
-            state examining
+            set_state examining
         }
     }
     
     returning {
         on_enter {
             move home
-            animation moving
-            timer 2
-            near_reach search
+            set_animation moving
+            set_timer 2
+            set_near_reach search
         }
         on_leave {
-            timer 0
+            set_timer 0
         }
         on_timer {
-            var ignoring false
+            set_var ignoring false
         }
         on_reach_destination {
-            state hiding
+            set_state hiding
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state chasing
-            endif
+                set_state chasing
+            end_if
         }
     }
     
     hiding {
         on_enter {
-            animation hiding
+            set_animation hiding
         }
         on_animation_end {
-            state hidden
+            set_state hidden
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

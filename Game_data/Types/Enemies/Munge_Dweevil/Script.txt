@@ -4,82 +4,82 @@ death_state = dying
 script {
     relaxing {
         on_enter {
-            animation idling
-            move stop
-            near_reach fear
-            far_reach fear
+            set_animation idling
+            stop
+            set_near_reach fear
+            set_far_reach fear
         }
         on_opponent_in_reach {
             focus opponent
-            state panicking
+            set_state panicking
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     panicking {
         on_enter {
-            animation moving
-            timer 0.3
+            set_animation moving
+            set_timer 0.3
             move randomly
         }
         on_timer {
-            timer 0.3
+            set_timer 0.3
             move randomly
         }
         on_focus_off_reach {
-            state relaxing
+            set_state relaxing
         }
         on_far_from_home {
-            state going_home
+            set_state going_home
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     going_home {
         on_enter {
             move home
-            animation moving
+            set_animation moving
         }
         on_reach_destination {
-            state relaxing
+            set_state relaxing
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     shaking {
         on_enter {
-            move stop
-            animation shaking
+            stop
+            set_animation shaking
         }
         on_animation_end {
-            state attacking
+            set_state attacking
         }
     }
     
     attacking {
         on_enter {
-            animation attacking
-            particle gas_explosion
+            set_animation attacking
+            set_particle_generator gas_explosion
         }
         on_animation_end {
-            state relaxing
-            particle 
+            set_state relaxing
+            set_particle_generator 
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

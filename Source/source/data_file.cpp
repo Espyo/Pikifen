@@ -105,8 +105,8 @@ void data_node::load_file(
     if(file) {
         bool is_first_line = true;
         file_was_opened = true;
+        string line;
         while(!al_feof(file)) {
-            string line;
             getline(file, line);
             
             if(is_first_line) {

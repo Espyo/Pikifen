@@ -1,45 +1,45 @@
 first_state = safe
 death_state = destroyed
 
-script{
+script {
     safe {
         on_enter {
-            timer 3
-            animation safe
+            set_timer 3
+            set_animation safe
         }
         on_timer {
-            state starting
+            set_state starting
         }
     }
     starting {
         on_enter {
-            animation starting
+            set_animation starting
         }
         on_animation_end {
-            state shooting
+            set_state shooting
         }
     }
     shooting {
         on_enter {
-            timer 3
-            animation shooting
+            set_timer 3
+            set_animation shooting
         }
         on_timer {
-            state stopping
+            set_state stopping
         }
     }
     stopping {
         on_enter {
-            animation stopping
+            set_animation stopping
         }
         on_animation_end {
-            state safe
+            set_state safe
         }
     }
     destroyed {
         on_enter {
-            animation destroyed
-            special_function die_start
+            set_animation destroyed
+            start_dying
         }
     }
 }

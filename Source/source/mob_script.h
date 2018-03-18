@@ -25,7 +25,7 @@ class mob_type;
 class mob_state;
 class hitbox;
 
-const unsigned char N_PREV_STATES = 3;
+const unsigned char STATE_HISTORY_SIZE = 3;
 
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
@@ -33,33 +33,83 @@ typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 //Types of script action.
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
-    MOB_ACTION_CHANGE_STATE,
-    MOB_ACTION_CHOMP_HITBOXES,
+    MOB_ACTION_DELETE,
     MOB_ACTION_EAT,
     MOB_ACTION_ELSE,
-    MOB_ACTION_ENDIF,
+    MOB_ACTION_END_IF,
     MOB_ACTION_FACE,
     MOB_ACTION_FOCUS,
-    MOB_ACTION_HIDE,
+    MOB_ACTION_FINISH_DYING,
     MOB_ACTION_IF,
     MOB_ACTION_INC_VAR,
     MOB_ACTION_MOVE,
-    MOB_ACTION_PARTICLE,
     MOB_ACTION_PLAY_SOUND,
-    MOB_ACTION_RANDOM,
+    MOB_ACTION_RANDOMIZE_VAR,
     MOB_ACTION_SET_ANIMATION,
-    MOB_ACTION_SET_NEAR_REACH,
+    MOB_ACTION_SET_CHOMP_BODY_PARTS,
     MOB_ACTION_SET_FAR_REACH,
     MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_SET_HEALTH,
-    MOB_ACTION_SET_SPEED,
+    MOB_ACTION_SET_HIDING,
+    MOB_ACTION_SET_NEAR_REACH,
+    MOB_ACTION_SET_PARTICLE_GENERATOR,
+    MOB_ACTION_SET_STATE,
     MOB_ACTION_SET_TANGIBLE,
     MOB_ACTION_SET_TIMER,
     MOB_ACTION_SET_VAR,
-    MOB_ACTION_SPAWN_PROJECTILE,
     MOB_ACTION_SPECIAL_FUNCTION,
-    MOB_ACTION_TURN,
-    MOB_ACTION_WAIT,
+    MOB_ACTION_START_DYING,
+    MOB_ACTION_STOP,
+};
+
+//Eating action sub-types.
+enum MOB_ACTION_EAT_TYPES {
+    MOB_ACTION_EAT_ALL,
+    MOB_ACTION_EAT_NUMBER,
+};
+
+//Face action sub-types.
+enum MOB_ACTION_FACE_TYPES {
+    MOB_ACTION_FACE_FOCUSED_MOB,
+    MOB_ACTION_FACE_HOME,
+};
+
+//If action left-hand side content types.
+enum MOB_ACTION_IF_LHS_TYPE {
+    MOB_ACTION_IF_LHS_VAR,
+    MOB_ACTION_IF_LHS_INFO,
+};
+
+//If action info types.
+enum MOB_ACTION_IF_INFO_TYPES {
+    MOB_ACTION_IF_INFO_DAY_MINUTES,
+    MOB_ACTION_IF_INFO_HEALTH,
+};
+
+//If action operator types.
+enum MOB_ACTION_IF_OPERATOR_TYPES {
+    MOB_ACTION_IF_OP_EQUAL,
+    MOB_ACTION_IF_OP_NOT,
+    MOB_ACTION_IF_OP_LESS,
+    MOB_ACTION_IF_OP_MORE,
+    MOB_ACTION_IF_OP_LESS_E,
+    MOB_ACTION_IF_OP_MORE_E,
+};
+
+//Moving action sub-types.
+enum MOB_ACTION_MOVE_TYPES {
+    MOB_ACTION_MOVE_FOCUSED_MOB,
+    MOB_ACTION_MOVE_FOCUSED_MOB_POS,
+    MOB_ACTION_MOVE_HOME,
+    MOB_ACTION_MOVE_COORDS,
+    MOB_ACTION_MOVE_REL_COORDS,
+    MOB_ACTION_MOVE_RANDOMLY,
+};
+
+//Set health action sub-types.
+enum MOB_ACTION_SET_HEALTH_TYPES {
+    MOB_ACTION_SET_HEALTH_ABSOLUTE,
+    MOB_ACTION_SET_HEALTH_RELATIVE,
 };
 
 //Types of script events.
@@ -128,7 +178,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TIMER,
     //When it touches a wall.
     MOB_EVENT_TOUCHED_WALL,
-    
     
     //More internal script stuff.
     
@@ -225,79 +274,9 @@ enum MOB_EVENT_TYPES {
     N_MOB_EVENTS,
 };
 
-//Eating action sub-types.
-enum MOB_ACTION_EAT_TYPES {
-    MOB_ACTION_EAT_ALL,
-    MOB_ACTION_EAT_NUMBER,
-};
-
-//Face action sub-types.
-enum MOB_ACTION_FACE_TYPES {
-    MOB_ACTION_FACE_FOCUSED_MOB,
-    MOB_ACTION_FACE_HOME,
-};
-
-//If action left-hand side content types.
-enum MOB_ACTION_IF_LHS_TYPE {
-    MOB_ACTION_IF_LHS_VAR,
-    MOB_ACTION_IF_LHS_INFO,
-};
-
-//If action info types.
-enum MOB_ACTION_IF_INFO_TYPES {
-    MOB_ACTION_IF_INFO_DAY_MINUTES,
-    MOB_ACTION_IF_INFO_HEALTH,
-};
-
-//If action operator types.
-enum MOB_ACTION_IF_OPERATOR_TYPES {
-    MOB_ACTION_IF_OP_EQUAL,
-    MOB_ACTION_IF_OP_NOT,
-    MOB_ACTION_IF_OP_LESS,
-    MOB_ACTION_IF_OP_MORE,
-    MOB_ACTION_IF_OP_LESS_E,
-    MOB_ACTION_IF_OP_MORE_E,
-};
-
-//Moving action sub-types.
-enum MOB_ACTION_MOVE_TYPES {
-    MOB_ACTION_MOVE_FOCUSED_MOB,
-    MOB_ACTION_MOVE_FOCUSED_MOB_POS,
-    MOB_ACTION_MOVE_HOME,
-    MOB_ACTION_MOVE_STOP,
-    MOB_ACTION_MOVE_STOP_VERTICALLY,
-    MOB_ACTION_MOVE_COORDS,
-    MOB_ACTION_MOVE_REL_COORDS,
-    MOB_ACTION_MOVE_VERTICALLY,
-    MOB_ACTION_MOVE_RANDOMLY,
-};
-
-//Set health action sub-types.
-enum MOB_ACTION_SET_HEALTH_TYPES {
-    MOB_ACTION_SET_HEALTH_ABSOLUTE,
-    MOB_ACTION_SET_HEALTH_RELATIVE,
-};
-
-//Special function action sub-types.
-enum MOB_ACTION_SPECIAL_FUNCTION_TYPES {
-    MOB_ACTION_SPECIAL_FUNCTION_DELETE,
-    MOB_ACTION_SPECIAL_FUNCTION_DIE_START,
-    MOB_ACTION_SPECIAL_FUNCTION_DIE_END,
-    MOB_ACTION_SPECIAL_FUNCTION_HAZARD,
-    MOB_ACTION_SPECIAL_FUNCTION_SPRAY,
-};
-
-//Waiting action sub-types.
-enum MOB_ACTION_WAIT_TYPES {
-    MOB_ACTION_WAIT_ANIMATION,
-    MOB_ACTION_WAIT_TIME,
-};
-
-
 class mob_action {
 public:
     unsigned char type;
-    unsigned char sub_type;
     custom_action_code code;
     bool valid;
     vector<int> vi;
@@ -306,7 +285,7 @@ public:
     
     bool run(mob* m, void* custom_data_1, void* custom_data_2);
     mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
-    mob_action(unsigned char type, unsigned char sub_type = 0);
+    mob_action(unsigned char type);
     mob_action(custom_action_code code);
 };
 
@@ -345,7 +324,7 @@ public:
     //Conversion between pre-named states and in-file states.
     vector<size_t> pre_named_conversions;
     //Knowing the previous states' names helps with debugging.
-    string prev_state_names[N_PREV_STATES];
+    string prev_state_names[STATE_HISTORY_SIZE];
     
     mob_event* get_event(const size_t type);
     void run_event(

@@ -2,170 +2,170 @@ first_state = sniffing
 death_state = dying
 
 init {
-    var ignoring false
+    set_var ignoring false
 }
 
 script {
     sniffing {
         on_enter {
-            animation sniffing
-            move stop
-            near_reach search
+            set_animation sniffing
+            stop
+            set_near_reach search
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state turning
-            endif
+                set_state turning
+            end_if
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
         on_animation_end {
-            state exploring
+            set_state exploring
         }
     }
     
     exploring {
         on_enter {
             move randomly
-            animation walking
-            timer 2
+            set_animation walking
+            set_timer 2
         }
         on_opponent_in_reach {
             focus mob
-            state turning
+            set_state turning
         }
         on_reach_destination {
-            state sniffing
+            set_state sniffing
         }
         on_timer {
-            state sniffing
+            set_state sniffing
         }
         on_far_from_home {
-            state returning
+            set_state returning
         }
     }
     
     turning {
         on_enter {
-            animation walking
-            move stop
+            set_animation walking
+            stop
             face focused_mob
-            near_reach chase
-            far_reach close
+            set_near_reach chase
+            set_far_reach close
         }
         on_tick {
             face focused_mob
         }
         on_opponent_in_reach {
             focus mob
-            state chasing
+            set_state chasing
         }
         on_focus_off_reach {
-            state sniffing
+            set_state sniffing
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     chasing {
         on_enter {
-            animation walking
+            set_animation walking
             move focused_mob
-            near_reach attack
-            far_reach chase
+            set_near_reach attack
+            set_far_reach chase
         }
         on_opponent_in_reach {
-            state attacking
+            set_state attacking
         }
         on_focus_off_reach {
-            state sniffing
+            set_state sniffing
         }
         on_far_from_home {
-            var ignoring true
-            state returning
+            set_var ignoring true
+            set_state returning
         }
         on_itch {
-            state shaking
+            set_state shaking
         }
     }
     
     attacking {
         on_enter {
-            move stop
-            animation attacking
-            chomp 5 tongue1 tongue2
+            stop
+            set_animation attacking
+            set_chomp_body_parts 5 tongue1 tongue2
         }
         on_animation_end {
-            state checking_mouth
+            set_state checking_mouth
         }
     }
     
     checking_mouth {
         on_leave {
-            chomp =
+            set_chomp_body_parts =
         }
         on_mouth_occupied {
-            state eating
+            set_state eating
         }
         on_mouth_empty {
-            state sniffing
+            set_state sniffing
         }
     }
     
     eating {
         on_enter {
-            animation chomping
+            set_animation chomping
         }
         on_animation_end {
             eat all
-            state sniffing
+            set_state sniffing
         }
     }
     
     shaking {
         on_enter {
-            move stop
-            animation shaking
+            stop
+            set_animation shaking
         }
         on_animation_end {
-            state sniffing
+            set_state sniffing
         }
     }
     
     returning {
         on_enter {
             move home
-            animation walking
-            timer 2
-            near_reach search
+            set_animation walking
+            set_timer 2
+            set_near_reach search
         }
         on_leave {
-            timer 0
+            set_timer 0
         }
         on_timer {
-            var ignoring false
+            set_var ignoring false
         }
         on_reach_destination {
-            state sniffing
+            set_state sniffing
         }
         on_opponent_in_reach {
             if var ignoring = false
                 focus mob
-                state turning
-            endif
+                set_state turning
+            end_if
         }
     }
     
     dying {
         on_enter {
-            special_function die_start
-            animation dying
+            start_dying
+            set_animation dying
         }
         on_animation_end {
-            special_function die_end
+            finish_dying
         }
     }
     

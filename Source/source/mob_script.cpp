@@ -34,144 +34,125 @@ mob_action::mob_action(
     data_node* dn, vector<mob_state*>* states, mob_type* mt
 ) :
     type(MOB_ACTION_UNKNOWN),
-    sub_type(0),
     code(nullptr),
     valid(true) {
     
     vector<string> words = split(dn->name);
+    vector<string> v_words;
     string n = words[0];
     string v = "";
     if(words.size() > 1) {
+        v_words = words;
+        v_words.erase(v_words.begin());
         v = dn->name.substr(n.size(), string::npos);
         v = trim_spaces(v);
     }
     
-    if(words[0] == "chomp") {
+    if(n == "delete") {
     
-        type = MOB_ACTION_CHOMP_HITBOXES;
+        type = MOB_ACTION_DELETE;
         
-        words.erase(words.begin());
-        if(!words.empty()) {
-            //The first one is actually the number of Pikmin it can eat at most.
-            vf.push_back(s2f(words[0]));
-            words.erase(words.begin());
-        }
-        
-        for(size_t hn = 0; hn < words.size(); ++hn) {
-            size_t h_pos = mt->anims.find_body_part(words[hn]);
-            
-            if(h_pos == INVALID) {
-                log_error("Unknown hitbox \"" + words[hn] + "\"!", dn);
-                valid = false;
-            } else {
-                vi.push_back(h_pos);
-            }
-        }
-        
-        
-    } else if(words[0] == "eat") {
+    } else if(n == "eat") {
     
         type = MOB_ACTION_EAT;
         
         if(v == "all") {
-            sub_type = MOB_ACTION_EAT_ALL;
+            vi.push_back(MOB_ACTION_EAT_ALL);
         } else {
-            sub_type = MOB_ACTION_EAT_NUMBER;
+            vi.push_back(MOB_ACTION_EAT_NUMBER);
             vi.push_back(s2i(v));
         }
         
         
-    } else if(words[0] == "else") {
+    } else if(n == "else") {
     
         type = MOB_ACTION_ELSE;
+        if(!v.empty()) {
+            log_error("The else action shouldn't have anything after it!");
+        }
         
         
-    } else if(words[0] == "endif") {
+    } else if(n == "end_if") {
     
-        type = MOB_ACTION_ENDIF;
+        type = MOB_ACTION_END_IF;
+        if(!v.empty()) {
+            log_error("The end_if action shouldn't have anything after it!");
+        }
         
         
-    } else if(words[0] == "face") {
+    } else if(n == "face") {
     
         type = MOB_ACTION_FACE;
         
         if(v == "focused_mob") {
-            sub_type = MOB_ACTION_FACE_FOCUSED_MOB;
+            vi.push_back(MOB_ACTION_FACE_FOCUSED_MOB);
         } else if(v == "home") {
-            sub_type = MOB_ACTION_FACE_HOME;
+            vi.push_back(MOB_ACTION_FACE_HOME);
         } else {
             valid = false;
             log_error("Invalid face target \"" + v + "\"!", dn);
         }
         
         
-    } else if(words[0] == "focus") {
+    } else if(n == "finish_dying") {
+    
+        type = MOB_ACTION_FINISH_DYING;
+        
+        
+    } else if(n == "focus") {
     
         type = MOB_ACTION_FOCUS;
         
         
-    } else if(words[0] == "hide") {
-    
-        type = MOB_ACTION_HIDE;
-        
-        if(words.size() == 1) {
-            log_error("The hide action requires a true or false value!", dn);
-            valid = false;
-        } else {
-            vi.push_back(s2b(words[1]));
-        }
-        
-        
-    } else if(words[0] == "if") {
+    } else if(n == "if") {
     
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
-        words.erase(words.begin());
-        if(words.size() >= 4 && words[0] == "var") {
-            sub_type = MOB_ACTION_IF_LHS_VAR;
-            words.erase(words.begin());
+        if(v_words.size() >= 4 && v_words[0] == "var") {
+            vi.push_back(MOB_ACTION_IF_LHS_VAR);
+            v_words.erase(v_words.begin());
         } else {
-            sub_type = MOB_ACTION_IF_LHS_INFO;
+            vi.push_back(MOB_ACTION_IF_LHS_INFO);
         }
         
-        if(words.size() >= 3) {
-            if(words[1] == "=") {
+        if(v_words.size() >= 3) {
+            if(v_words[1] == "=") {
                 vi.push_back(MOB_ACTION_IF_OP_EQUAL);
-            } else if(words[1] == "!=") {
+            } else if(v_words[1] == "!=") {
                 vi.push_back(MOB_ACTION_IF_OP_NOT);
-            } else if(words[1] == "<") {
+            } else if(v_words[1] == "<") {
                 vi.push_back(MOB_ACTION_IF_OP_LESS);
-            } else if(words[1] == ">") {
+            } else if(v_words[1] == ">") {
                 vi.push_back(MOB_ACTION_IF_OP_MORE);
-            } else if(words[1] == "<=") {
+            } else if(v_words[1] == "<=") {
                 vi.push_back(MOB_ACTION_IF_OP_LESS_E);
-            } else if(words[1] == ">=") {
+            } else if(v_words[1] == ">=") {
                 vi.push_back(MOB_ACTION_IF_OP_MORE_E);
             } else {
                 log_error(
-                    "Unknown operator \"" + words[2] + "\"!",
+                    "Unknown operator \"" + v_words[2] + "\"!",
                     dn
                 );
                 valid = false;
             }
             
             string rhs =
-                v.substr(v.find(words[1]) + words[1].size(), string::npos);
+                v.substr(v.find(v_words[1]) + v_words[1].size(), string::npos);
             rhs = trim_spaces(rhs);
             
-            if(sub_type == MOB_ACTION_IF_LHS_VAR) {
-                vs.push_back(words[0]);
+            if(vi[0] == MOB_ACTION_IF_LHS_VAR) {
+                vs.push_back(v_words[0]);
                 
             } else {
             
-                if(words[0] == "day_minutes") {
+                if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
-                } else if(words[0] == "health") {
+                } else if(v_words[0] == "health") {
                     vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
                 } else {
                     log_error(
-                        "Unknown comparison \"" + words[0] + "\"!",
+                        "Unknown comparison \"" + v_words[0] + "\"!",
                         dn
                     );
                     valid = false;
@@ -183,61 +164,57 @@ mob_action::mob_action(
             
         } else {
             log_error(
-                "Not enough parts on this if: \"" + dn->name + "\"!",
+                "The if action needs a comparison, operator, and value!",
                 dn
             );
             valid = false;
         }
         
         
-    } else if(words[0] == "move") {
+    } else if(n == "inc_var") {
+    
+        type = MOB_ACTION_INC_VAR;
+        
+        if(v_words.empty()) {
+            log_error(
+                "The inc_var action needs to know what variable to increment!",
+                dn
+            );
+            valid = false;
+        } else {
+            vs = v_words;
+        }
+        
+        
+    } else if(n == "move") {
     
         type = MOB_ACTION_MOVE;
         
-        if(v == "focused_mob") {
-            sub_type = MOB_ACTION_MOVE_FOCUSED_MOB;
+        if(v.empty()) {
+            valid = false;
+            log_error("The move action has no location specified!", dn);
+        } else if(v == "focused_mob") {
+            vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB);
         } else if(v == "focused_mob_position") {
-            sub_type = MOB_ACTION_MOVE_FOCUSED_MOB_POS;
+            vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
         } else if(v == "home") {
-            sub_type = MOB_ACTION_MOVE_HOME;
-        } else if(v == "stop") {
-            sub_type = MOB_ACTION_MOVE_STOP;
-        } else if(v == "stop vertically") {
-            sub_type = MOB_ACTION_MOVE_STOP_VERTICALLY;
+            vi.push_back(MOB_ACTION_MOVE_HOME);
+        } else if(v == "randomly") {
+            vi.push_back(MOB_ACTION_MOVE_RANDOMLY);
         } else {
-        
-            words.erase(words.begin());
-            
-            if(words.empty()) valid = false;
-            else {
-                if(words[0] == "vertically") {
-                    sub_type = MOB_ACTION_MOVE_VERTICALLY;
-                    if(words.size() < 2) valid = false;
-                    else {
-                        vf.push_back(s2f(words[1]));
-                    }
-                    
-                } else if(words[0] == "randomly") {
-                    sub_type = MOB_ACTION_MOVE_RANDOMLY;
-                    
-                } else if(words[0] == "relative") {
-                    sub_type = MOB_ACTION_MOVE_REL_COORDS;
-                    if(words.size() < 3) valid = false;
-                    else {
-                        for(size_t sc = 1; sc < words.size(); ++sc) {
-                            vf.push_back(s2f(words[sc]));
-                        }
-                    }
-                    
-                } else {
-                    sub_type = MOB_ACTION_MOVE_COORDS;
-                    for(size_t sc = 0; sc < words.size(); ++sc) {
-                        vf.push_back(s2f(words[sc]));
-                    }
-                }
+            if(v_words[0] == "relative") {
+                vi.push_back(MOB_ACTION_MOVE_REL_COORDS);
+                v_words.erase(v_words.begin());
+            } else {
+                vi.push_back(MOB_ACTION_MOVE_COORDS);
             }
             
-            if(!valid) {
+            if(v_words.size() >= 2) {
+                for(size_t c = 0; c < v_words.size(); ++c) {
+                    vf.push_back(s2f(v_words[c]));
+                }
+            } else {
+                valid = false;
                 log_error("Invalid move location \"" + v + "\"!", dn);
             }
         }
@@ -248,7 +225,23 @@ mob_action::mob_action(
         type = MOB_ACTION_PLAY_SOUND;
         
         
-    } else if(n == "animation") {
+    } else if(n == "randomize_var") {
+    
+        type = MOB_ACTION_RANDOMIZE_VAR;
+        if(v_words.size() < 3) {
+            log_error(
+                "The random action needs a variable name, "
+                "a minimum, and a maximum!", dn
+            );
+            valid = false;
+        } else {
+            vs.push_back(v_words[0]);
+            vi.push_back(s2i(v_words[1]));
+            vi.push_back(s2i(v_words[2]));
+        }
+        
+        
+    } else if(n == "set_animation") {
     
         type = MOB_ACTION_SET_ANIMATION;
         
@@ -261,71 +254,30 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "gravity") {
+    } else if(n == "set_chomp_body_parts") {
     
-        type = MOB_ACTION_SET_GRAVITY;
+        type = MOB_ACTION_SET_CHOMP_BODY_PARTS;
         
-        vf.push_back(s2f(v));
-        
-        
-    } else if(n == "health") {
-    
-        type = MOB_ACTION_SET_HEALTH;
-        
-        words.erase(words.begin());
-        if(words.empty()) {
-            valid = false;
-        } else {
-            if(words[0] == "relative") {
-                if(words.size() < 2) {
+        if(!v_words.empty()) {
+            //The first word is the number of Pikmin it can chomp at most.
+            vi.push_back(s2i(v_words[0]));
+            
+            for(size_t p = 1; p < v_words.size(); ++p) {
+                size_t p_nr = mt->anims.find_body_part(v_words[p]);
+                
+                if(p_nr == INVALID) {
+                    log_error("Unknown body part \"" + v_words[p] + "\"!", dn);
                     valid = false;
                 } else {
-                    sub_type = MOB_ACTION_SET_HEALTH_RELATIVE;
-                    vf.push_back(s2f(words[1]));
+                    vi.push_back(p_nr);
                 }
-            } else {
-                sub_type = MOB_ACTION_SET_HEALTH_ABSOLUTE;
-                vf.push_back(s2f(words[0]));
             }
         }
         
-        if(!valid) {
-            log_error("Invalid health data \"" + v + "\"!", dn);
-        }
         
-        
-    } else if(n == "speed") {
+    } else if(n == "set_near_reach" || n == "set_far_reach") {
     
-        type = MOB_ACTION_SET_SPEED;
-        
-        //TODO
-        
-        
-    } else if(n == "state" && states) {
-    
-        type = MOB_ACTION_CHANGE_STATE;
-        
-        for(size_t s = 0; s < states->size(); ++s) {
-            if(states->at(s)->name == v) {
-                vi.push_back(s);
-                break;
-            }
-        }
-        if(vi.empty()) {
-            log_error("Unknown state \"" + v + "\"!", dn);
-        }
-        
-        
-    } else if(n == "timer") {
-    
-        type = MOB_ACTION_SET_TIMER;
-        
-        vf.push_back(s2f(v));
-        
-        
-    } else if(n == "far_reach" || n == "near_reach") {
-    
-        if(n == "far_reach") {
+        if(n == "set_far_reach") {
             type = MOB_ACTION_SET_FAR_REACH;
         } else {
             type = MOB_ACTION_SET_NEAR_REACH;
@@ -350,35 +302,61 @@ mob_action::mob_action(
         valid = false;
         
         
-    } else if(n == "var") {
+    } else if(n == "set_gravity") {
     
-        type = MOB_ACTION_SET_VAR;
+        type = MOB_ACTION_SET_GRAVITY;
         
-        words.erase(words.begin());
-        if(words.size() < 2) {
-            log_error("Not enough info to set a variable!", dn);
+        if(v.empty()) {
             valid = false;
+            log_error(
+                "The set_gravity action needs to know the "
+                "new gravity multiplier!", dn
+            );
         } else {
-            vs = words;
+            vf.push_back(s2f(v));
         }
         
         
-    } else if(n == "inc_var") {
+    } else if(n == "set_health") {
     
-        type = MOB_ACTION_INC_VAR;
+        type = MOB_ACTION_SET_HEALTH;
         
-        words.erase(words.begin());
-        if(words.empty()) {
-            log_error("Not enough info to increment a variable!", dn);
+        if(v_words.empty()) {
             valid = false;
         } else {
-            vs = words;
+            if(v_words[0] == "relative") {
+                vi.push_back(MOB_ACTION_SET_HEALTH_RELATIVE);
+                v_words.erase(v_words.begin());
+            } else {
+                vi.push_back(MOB_ACTION_SET_HEALTH_ABSOLUTE);
+            }
+            if(v_words.empty()) {
+                valid = false;
+            } else {
+                vf.push_back(s2f(v_words[0]));
+            }
+        }
+        
+        if(!valid) {
+            log_error("Invalid health data \"" + v + "\"!", dn);
         }
         
         
-    } else if(n == "particle") {
+    } else if(n == "set_hiding") {
     
-        type = MOB_ACTION_PARTICLE;
+        type = MOB_ACTION_SET_HIDING;
+        
+        if(v.empty()) {
+            log_error("The hide action needs a true or false value!", dn);
+            valid = false;
+        } else {
+            vi.push_back(s2b(v));
+        }
+        
+        
+    } else if(n == "set_particle_generator") {
+    
+        type = MOB_ACTION_SET_PARTICLE_GENERATOR;
         if(!v.empty()) {
             if(
                 custom_particle_generators.find(v) ==
@@ -393,28 +371,22 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "projectile") {
+    } else if(n == "set_state" && states) {
     
-        type = MOB_ACTION_SPAWN_PROJECTILE;
+        type = MOB_ACTION_SET_STATE;
         
-        
-    } else if(words[0] == "random") {
-    
-        type = MOB_ACTION_RANDOM;
-        if(words.size() < 4) {
-            log_error(
-                "The random action requires a variable name, "
-                "a minimum, and a maximum!", dn
-            );
-            valid = false;
-        } else {
-            vs.push_back(words[1]);
-            vi.push_back(s2i(words[2]));
-            vi.push_back(s2i(words[3]));
+        for(size_t s = 0; s < states->size(); ++s) {
+            if(states->at(s)->name == v) {
+                vi.push_back(s);
+                break;
+            }
+        }
+        if(vi.empty()) {
+            log_error("Unknown state \"" + v + "\"!", dn);
         }
         
         
-    } else if(words[0] == "set_tangible") {
+    } else if(n == "set_tangible") {
     
         type = MOB_ACTION_SET_TANGIBLE;
         
@@ -428,40 +400,36 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "special_function") {
+    } else if(n == "set_timer") {
     
-        type = MOB_ACTION_SPECIAL_FUNCTION;
+        type = MOB_ACTION_SET_TIMER;
         
-        if(v == "die_start") {
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_START;
-        } else if(v == "die_end") {
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_END;
-        } else if(v == "delete") {
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_DELETE;
-        } else if(v == "hazard") {
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_HAZARD;
-        } else if(v == "spray") {
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_SPRAY;
-        } else {
-            log_error("Unknown special function \"" + v + "\"!", dn);
+        vf.push_back(s2f(v));
+        
+        
+    } else if(n == "set_var") {
+    
+        type = MOB_ACTION_SET_VAR;
+        
+        if(v_words.size() < 2) {
+            log_error("Not enough info to set a variable!", dn);
             valid = false;
+        } else {
+            vs = v_words;
         }
         
         
-    } else if(n == "turn") {
+    } else if(n == "start_dying") {
     
-        type = MOB_ACTION_TURN;
+        type = MOB_ACTION_START_DYING;
         
         
-    } else if(n == "wait") {
+    } else if(n == "stop") {
     
-        type = MOB_ACTION_WAIT;
+        type = MOB_ACTION_STOP;
         
-        if(v == "animation") {
-            sub_type = MOB_ACTION_WAIT_ANIMATION;
-        } else {
-            sub_type = MOB_ACTION_WAIT_TIME;
-            vf.push_back(s2f(v));
+        if(v == "vertically") {
+            vi.push_back(1);
         }
         
         
@@ -479,11 +447,9 @@ mob_action::mob_action(
 /* ----------------------------------------------------------------------------
  * Creates a new, empty mob action.
  * type:     the action type.
- * sub_type: sub-type, if any.
  */
-mob_action::mob_action(unsigned char type, unsigned char sub_type) :
+mob_action::mob_action(unsigned char type) :
     type(type),
-    sub_type(sub_type),
     code(nullptr),
     valid(true) {
     
@@ -496,7 +462,6 @@ mob_action::mob_action(unsigned char type, unsigned char sub_type) :
  */
 mob_action::mob_action(custom_action_code code) :
     type(MOB_ACTION_UNKNOWN),
-    sub_type(MOB_ACTION_UNKNOWN),
     code(code),
     valid(true) {
     
@@ -515,29 +480,25 @@ bool mob_action::run(
     mob* m, void* custom_data_1, void* custom_data_2
 ) {
 
+    if(!valid) return false;
+    
     //Custom code (i.e. instead of text-based script, use actual code).
     if(code) {
         code(m, custom_data_1, custom_data_2);
         return false;
     }
     
-    if(type == MOB_ACTION_CHANGE_STATE) {
+    if(type == MOB_ACTION_DELETE) {
     
-        m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
-        
-        
-    } else if(type == MOB_ACTION_CHOMP_HITBOXES) {
-    
-        m->chomp_hitboxes = vi;
-        m->chomp_max = (vf.empty() ? 0 : (size_t) vf[0]);
+        m->to_delete = true;
         
         
     } else if(type == MOB_ACTION_EAT) {
     
-        if(sub_type == MOB_ACTION_EAT_ALL) {
+        if(vi[0] == MOB_ACTION_EAT_ALL) {
             m->eat(m->chomping_pikmin.size());
         } else {
-            m->eat(vi[0]);
+            m->eat(vi[1]);
         }
         
         
@@ -548,16 +509,16 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_FACE) {
     
-        if(sub_type == MOB_ACTION_FACE_FOCUSED_MOB && m->focused_mob) {
+        if(vi[0] == MOB_ACTION_FACE_FOCUSED_MOB && m->focused_mob) {
             m->face(get_angle(m->pos, m->focused_mob->pos));
-        } else if(sub_type == MOB_ACTION_FACE_HOME) {
+        } else if(vi[0] == MOB_ACTION_FACE_HOME) {
             m->face(get_angle(m->pos, m->home));
         }
         
         
-    } else if(type == MOB_ACTION_HIDE) {
+    } else if(type == MOB_ACTION_FINISH_DYING) {
     
-        if(!vi.empty()) m->hide = vi[0];
+        m->finish_dying();
         
         
     } else if(type == MOB_ACTION_IF) {
@@ -565,18 +526,18 @@ bool mob_action::run(
         string lhs;
         string rhs;
         if(
-            sub_type == MOB_ACTION_IF_LHS_VAR &&
+            vi[0] == MOB_ACTION_IF_LHS_VAR &&
             vs.size() >= 2
         ) {
             lhs = m->vars[vs[0]];
             rhs = vs[1];
         } else if(
-            sub_type == MOB_ACTION_IF_LHS_INFO &&
-            vi.size() >= 2 && !vs.empty()
+            vi[0] == MOB_ACTION_IF_LHS_INFO &&
+            vi.size() >= 3 && !vs.empty()
         ) {
-            if(vi[1] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
+            if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
                 lhs = f2s(day_minutes);
-            } else if(vi[1] == MOB_ACTION_IF_INFO_HEALTH) {
+            } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
                 lhs = f2s(m->health);
             }
             rhs = vs[0];
@@ -584,58 +545,46 @@ bool mob_action::run(
             return false;
         }
         
-        if(vi[0] == MOB_ACTION_IF_OP_EQUAL) {
+        if(vi[1] == MOB_ACTION_IF_OP_EQUAL) {
             return (lhs == rhs);
-        } else if(vi[0] == MOB_ACTION_IF_OP_NOT) {
+        } else if(vi[1] == MOB_ACTION_IF_OP_NOT) {
             return (lhs != rhs);
-        } else if(vi[0] == MOB_ACTION_IF_OP_LESS) {
+        } else if(vi[1] == MOB_ACTION_IF_OP_LESS) {
             return (s2f(lhs) < s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_MORE) {
+        } else if(vi[1] == MOB_ACTION_IF_OP_MORE) {
             return (s2f(lhs) > s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_LESS_E) {
+        } else if(vi[1] == MOB_ACTION_IF_OP_LESS_E) {
             return (s2f(lhs) <= s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_MORE_E) {
+        } else if(vi[1] == MOB_ACTION_IF_OP_MORE_E) {
             return (s2f(lhs) >= s2f(rhs));
         }
         
+    } else if(type == MOB_ACTION_INC_VAR) {
+    
+        int nr = s2i(m->vars[vs[0]]);
+        m->set_var(vs[0], i2s(nr + 1));
+        
+        
     } else if(type == MOB_ACTION_MOVE) {
     
-        if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
+        if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(point(), &m->focused_mob->pos, false);
             } else {
                 m->stop_chasing();
             }
             
-        } else if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
+        } else if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
             if(m->focused_mob) {
                 m->chase(m->focused_mob->pos, NULL, false);
             } else {
                 m->stop_chasing();
             }
             
-        } else if(sub_type == MOB_ACTION_MOVE_HOME) {
+        } else if(vi[0] == MOB_ACTION_MOVE_HOME) {
             m->chase(m->home, NULL, false);
             
-        } else if(sub_type == MOB_ACTION_MOVE_STOP) {
-            m->stop_chasing();
-            m->intended_angle = m->angle;
-            
-        } else if(sub_type == MOB_ACTION_MOVE_STOP_VERTICALLY) {
-            m->speed_z = 0;
-            
-        } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
-            if(vf.size() >= 2) {
-                m->chase(point(vf[0], vf[1]), NULL, false);
-            }
-            
-        } else if(sub_type == MOB_ACTION_MOVE_VERTICALLY) {
-            if(!vf.empty()) {
-                //TODO replace this with something prettier in the future.
-                m->z += vf[0];
-            }
-            
-        } else if(sub_type == MOB_ACTION_MOVE_RANDOMLY) {
+        } else if(vi[0] == MOB_ACTION_MOVE_RANDOMLY) {
             m->chase(
                 point(
                     m->pos.x + randomf(-1000, 1000),
@@ -644,7 +593,12 @@ bool mob_action::run(
                 NULL, false
             );
             
-        } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
+        } else if(vi[0] == MOB_ACTION_MOVE_COORDS) {
+            if(vf.size() >= 2) {
+                m->chase(point(vf[0], vf[1]), NULL, false);
+            }
+            
+        } else if(vi[0] == MOB_ACTION_MOVE_REL_COORDS) {
             if(vf.size() >= 2) {
                 m->chase(
                     point(
@@ -658,7 +612,56 @@ bool mob_action::run(
         }
         
         
-    } else if(type == MOB_ACTION_PARTICLE) {
+    } else if(type == MOB_ACTION_RANDOMIZE_VAR) {
+    
+        m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
+        
+        
+    } else if(type == MOB_ACTION_SET_ANIMATION) {
+    
+        m->set_animation(vi[0], false);
+        
+        
+    } else if(type == MOB_ACTION_SET_CHOMP_BODY_PARTS) {
+    
+        if(vi.empty()) {
+            m->chomp_max = 0;
+            m->chomp_hitboxes.clear();
+        } else {
+            m->chomp_max = vi[0];
+            vi.erase(vi.begin());
+            m->chomp_hitboxes = vi;
+        }
+        
+        
+    } else if(type == MOB_ACTION_SET_FAR_REACH) {
+    
+        m->far_reach = vi[0];
+        
+    } else if(type == MOB_ACTION_SET_GRAVITY) {
+    
+        m->gravity_mult = vf[0];
+        
+        
+    } else if(type == MOB_ACTION_SET_HEALTH) {
+    
+        m->set_health(
+            vi[0] == MOB_ACTION_SET_HEALTH_RELATIVE,
+            false,
+            vf[0]
+        );
+        
+        
+    } else if(type == MOB_ACTION_SET_HIDING) {
+    
+        m->hide = vi[0];
+        
+        
+    } else if(type == MOB_ACTION_SET_NEAR_REACH) {
+    
+        m->near_reach = vi[0];
+        
+    } else if(type == MOB_ACTION_SET_PARTICLE_GENERATOR) {
     
         if(vs.empty()) {
             m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
@@ -676,34 +679,9 @@ bool mob_action::run(
         }
         
         
-    } else if(type == MOB_ACTION_RANDOM) {
+    } else if(type == MOB_ACTION_SET_STATE) {
     
-        m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
-        
-        
-    } else if(type == MOB_ACTION_SET_ANIMATION) {
-    
-        if(!vi.empty()) {
-            m->set_animation(vi[0], false);
-        }
-        
-        
-    } else if(type == MOB_ACTION_SET_GRAVITY) {
-    
-        if(!vf.empty()) {
-            m->gravity_mult = vf[0];
-        }
-        
-        
-    } else if(type == MOB_ACTION_SET_HEALTH) {
-    
-        if(!vf.empty()) {
-            m->set_health(
-                sub_type == MOB_ACTION_SET_HEALTH_RELATIVE,
-                false,
-                vf[0]
-            );
-        }
+        m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
         
         
     } else if(type == MOB_ACTION_SET_TANGIBLE) {
@@ -719,51 +697,22 @@ bool mob_action::run(
         m->set_timer(t);
         
         
-    } else if(type == MOB_ACTION_SET_FAR_REACH) {
-    
-        m->far_reach = vi[0];
-        
-    } else if(type == MOB_ACTION_SET_NEAR_REACH) {
-    
-        m->near_reach = vi[0];
-        
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        if(vs.size() >= 2) {
-            m->set_var(vs[0], vs[1]);
-        }
+        m->set_var(vs[0], vs[1]);
         
         
-    } else if(type == MOB_ACTION_INC_VAR) {
+    } else if(type == MOB_ACTION_START_DYING) {
     
-        if(!vs.empty()) {
-            int nr = s2i(m->vars[vs[0]]);
-            m->set_var(vs[0], i2s(nr + 1));
-        }
+        m->start_dying();
         
         
-    } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {
-    
-        if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_START) {
-        
-            m->start_dying();
-            
-        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_END) {
-        
-            m->finish_dying();
-            
-        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DELETE) {
-        
-            m->to_delete = true;
-            
-        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_HAZARD) {
-        
-            gen_mob_fsm::touch_hazard(m, custom_data_1, NULL);
-            
-        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_SPRAY) {
-        
-            gen_mob_fsm::touch_spray(m, custom_data_1, NULL);
-            
+    } else if(type == MOB_ACTION_STOP) {
+        if(vi.empty()) {
+            m->stop_chasing();
+            m->intended_angle = m->angle;
+        } else {
+            m->speed_z = 0;
         }
         
         
@@ -796,7 +745,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                         depth++;
                     } else if(actions[next_a]->type == MOB_ACTION_ELSE) {
                         if(depth == 0) break;
-                    } else if(actions[next_a]->type == MOB_ACTION_ENDIF) {
+                    } else if(actions[next_a]->type == MOB_ACTION_END_IF) {
                         if(depth == 0) break;
                         else depth--;
                     }
@@ -814,20 +763,20 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             for(; next_a < actions.size(); ++next_a) {
                 if(actions[next_a]->type == MOB_ACTION_IF) {
                     depth++;
-                } else if(actions[next_a]->type == MOB_ACTION_ENDIF) {
+                } else if(actions[next_a]->type == MOB_ACTION_END_IF) {
                     if(depth == 0) break;
                     else depth--;
                 }
             }
             a = next_a;
             
-        } else if(actions[a]->type == MOB_ACTION_ENDIF) {
+        } else if(actions[a]->type == MOB_ACTION_END_IF) {
             //Nothing to do.
             
         } else {
             //Normal action.
             actions[a]->run(m, custom_data_1, custom_data_2);
-            if(actions[a]->type == MOB_ACTION_CHANGE_STATE) break;
+            if(actions[a]->type == MOB_ACTION_SET_STATE) break;
             
         }
     }
@@ -987,7 +936,7 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(cur_state) {
-        for(unsigned char p = N_PREV_STATES - 1; p > 0; --p) {
+        for(unsigned char p = STATE_HISTORY_SIZE - 1; p > 0; --p) {
             prev_state_names[p] = prev_state_names[p - 1];
         }
         prev_state_names[0] = cur_state->name;
@@ -1045,7 +994,7 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                 mob_action* action = ev->actions[a];
                 
                 if(
-                    action->type == MOB_ACTION_CHANGE_STATE &&
+                    action->type == MOB_ACTION_SET_STATE &&
                     !action->vs.empty()
                 ) {
                     string state_name = action->vs[0];
@@ -1267,7 +1216,7 @@ void easy_fsm_creator::new_event(const unsigned char type) {
  * the mob's state to something else.
  */
 void easy_fsm_creator::change_state(const string &new_state) {
-    cur_event->actions.push_back(new mob_action(MOB_ACTION_CHANGE_STATE));
+    cur_event->actions.push_back(new mob_action(MOB_ACTION_SET_STATE));
     cur_event->actions.back()->vs.push_back(new_state);
 }
 
