@@ -7,7 +7,7 @@ itch_damage = 120
 itch_time = 6
 max_carriers = 6
 max_health = 350
-move_speed = 40
+move_speed = 70
 pikmin_seeds = 5
 pushable = true
 pushes = false
@@ -15,7 +15,7 @@ radius = 24
 reaches {
     fear = 80 360
 }
-rotation_speed = 90
+rotation_speed = 160
 territory_radius = 600
 value = 2
 weight = 3

@@ -167,7 +167,8 @@ mob_action::mob_action(
             
                 if(words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
-                    
+                } else if(words[0] == "health") {
+                    vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
                 } else {
                     log_error(
                         "Unknown comparison \"" + words[0] + "\"!",
@@ -195,6 +196,8 @@ mob_action::mob_action(
         
         if(v == "focused_mob") {
             sub_type = MOB_ACTION_MOVE_FOCUSED_MOB;
+        } else if(v == "focused_mob_position") {
+            sub_type = MOB_ACTION_MOVE_FOCUSED_MOB_POS;
         } else if(v == "home") {
             sub_type = MOB_ACTION_MOVE_HOME;
         } else if(v == "stop") {
@@ -395,6 +398,36 @@ mob_action::mob_action(
         type = MOB_ACTION_SPAWN_PROJECTILE;
         
         
+    } else if(words[0] == "random") {
+    
+        type = MOB_ACTION_RANDOM;
+        if(words.size() < 4) {
+            log_error(
+                "The random action requires a variable name, "
+                "a minimum, and a maximum!", dn
+            );
+            valid = false;
+        } else {
+            vs.push_back(words[1]);
+            vi.push_back(s2i(words[2]));
+            vi.push_back(s2i(words[3]));
+        }
+        
+        
+    } else if(words[0] == "set_tangible") {
+    
+        type = MOB_ACTION_SET_TANGIBLE;
+        
+        if(v.empty()) {
+            valid = false;
+            log_error(
+                "The set_tangible action needs a true or false value!", dn
+            );
+        } else {
+            vi.push_back(s2b(v));
+        }
+        
+        
     } else if(n == "special_function") {
     
         type = MOB_ACTION_SPECIAL_FUNCTION;
@@ -543,7 +576,8 @@ bool mob_action::run(
         ) {
             if(vi[1] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
                 lhs = f2s(day_minutes);
-                
+            } else if(vi[1] == MOB_ACTION_IF_INFO_HEALTH) {
+                lhs = f2s(m->health);
             }
             rhs = vs[0];
         } else {
@@ -569,6 +603,13 @@ bool mob_action::run(
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(point(), &m->focused_mob->pos, false);
+            } else {
+                m->stop_chasing();
+            }
+            
+        } else if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
+            if(m->focused_mob) {
+                m->chase(m->focused_mob->pos, NULL, false);
             } else {
                 m->stop_chasing();
             }
@@ -635,6 +676,11 @@ bool mob_action::run(
         }
         
         
+    } else if(type == MOB_ACTION_RANDOM) {
+    
+        m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
+        
+        
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
         if(!vi.empty()) {
@@ -658,6 +704,11 @@ bool mob_action::run(
                 vf[0]
             );
         }
+        
+        
+    } else if(type == MOB_ACTION_SET_TANGIBLE) {
+    
+        m->tangible = (bool) vi[0];
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {
@@ -861,6 +912,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
     r("on_revival",             MOB_EVENT_REVIVED);
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
+    r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
     r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);
     r("on_timer",               MOB_EVENT_TIMER);
     r("on_wall",                MOB_EVENT_TOUCHED_WALL);

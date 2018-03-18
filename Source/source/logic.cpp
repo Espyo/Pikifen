@@ -688,6 +688,66 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 get_angle(m_ptr->pos, m2_ptr->pos)
             );
             
+        //Check touches. This does not use hitboxes,
+        //only the object radii.
+        mob_event* touch_op_ev =
+            q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
+        mob_event* touch_le_ev =
+            q_get_event(m_ptr, MOB_EVENT_TOUCHED_ACTIVE_LEADER);
+        mob_event* touch_ob_ev =
+            q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
+        mob_event* pik_land_ev =
+            q_get_event(m_ptr, MOB_EVENT_PIKMIN_LANDED);
+        if(
+            touch_op_ev || touch_le_ev ||
+            touch_ob_ev || pik_land_ev
+        ) {
+        
+            bool z_touch;
+            if(
+                m_ptr->type->height == 0 ||
+                m2_ptr->type->height == 0
+            ) {
+                z_touch = true;
+            } else {
+                z_touch =
+                    !(
+                        (m2_ptr->z > m_ptr->z + m_ptr->type->height) ||
+                        (m2_ptr->z + m2_ptr->type->height < m2_ptr->z)
+                    );
+            }
+            
+            if(
+                z_touch &&
+                m2_ptr->tangible &&
+                d <= (m_ptr->type->radius + m2_ptr->type->radius)
+            ) {
+                if(touch_ob_ev) {
+                    touch_ob_ev->run(m_ptr, (void*) m2_ptr);
+                }
+                if(touch_op_ev && m_ptr->should_attack(m2_ptr)) {
+                    touch_op_ev->run(m_ptr, (void*) m2_ptr);
+                }
+                if(
+                    pik_land_ev &&
+                    m2_ptr->was_thrown &&
+                    m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN
+                ) {
+                    pik_land_ev->run(m_ptr, (void*) m2_ptr);
+                }
+                if(
+                    touch_le_ev && m2_ptr == cur_leader_ptr &&
+                    //Small hack. This way,
+                    //Pikmin don't get bumped by leaders that are,
+                    //for instance, lying down.
+                    m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE
+                ) {
+                    touch_le_ev->run(m_ptr, (void*) m2_ptr);
+                }
+            }
+            
+        }
+        
         //Check if mob 1 should be pushed by mob 2.
         if(
             m2_ptr->type->pushes &&
@@ -767,66 +827,6 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 m_ptr->push_amount = push_amount / delta_t;
                 m_ptr->push_angle = push_angle;
             }
-        }
-        
-        //Check touches. This does not use hitboxes,
-        //only the object radii.
-        mob_event* touch_op_ev =
-            q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
-        mob_event* touch_le_ev =
-            q_get_event(m_ptr, MOB_EVENT_TOUCHED_ACTIVE_LEADER);
-        mob_event* touch_ob_ev =
-            q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
-        mob_event* pik_land_ev =
-            q_get_event(m_ptr, MOB_EVENT_PIKMIN_LANDED);
-        if(
-            touch_op_ev || touch_le_ev ||
-            touch_ob_ev || pik_land_ev
-        ) {
-        
-            bool z_touch;
-            if(
-                m_ptr->type->height == 0 ||
-                m2_ptr->type->height == 0
-            ) {
-                z_touch = true;
-            } else {
-                z_touch =
-                    !(
-                        (m2_ptr->z > m_ptr->z + m_ptr->type->height) ||
-                        (m2_ptr->z + m2_ptr->type->height < m2_ptr->z)
-                    );
-            }
-            
-            if(
-                z_touch &&
-                m2_ptr->tangible &&
-                d <= (m_ptr->type->radius + m2_ptr->type->radius)
-            ) {
-                if(touch_ob_ev) {
-                    touch_ob_ev->run(m_ptr, (void*) m2_ptr);
-                }
-                if(touch_op_ev && m_ptr->should_attack(m2_ptr)) {
-                    touch_op_ev->run(m_ptr, (void*) m2_ptr);
-                }
-                if(
-                    pik_land_ev &&
-                    m2_ptr->was_thrown &&
-                    m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN
-                ) {
-                    pik_land_ev->run(m_ptr, (void*) m2_ptr);
-                }
-                if(
-                    touch_le_ev && m2_ptr == cur_leader_ptr &&
-                    //Small hack. This way,
-                    //Pikmin don't get bumped by leaders that are,
-                    //for instance, lying down.
-                    m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE
-                ) {
-                    touch_le_ev->run(m_ptr, (void*) m2_ptr);
-                }
-            }
-            
         }
         
         //Check hitbox touches.

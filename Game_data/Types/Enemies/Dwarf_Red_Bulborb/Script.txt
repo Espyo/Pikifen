@@ -1,6 +1,8 @@
 first_state = examining
 death_state = dying
 
+states_ignoring_death = crushed
+
 init {
     var ignoring false
 }
@@ -87,6 +89,9 @@ script {
         on_itch {
             state shaking
         }
+        on_pikmin_land {
+            state crushed
+        }
     }
     
     chasing {
@@ -122,6 +127,9 @@ script {
         }
         on_animation_end {
             state checking_mouth
+        }
+        on_pikmin_land {
+            state crushed
         }
     }
     
@@ -188,6 +196,9 @@ script {
                 state turning
             endif
         }
+        on_pikmin_land {
+            state crushed
+        }
     }
     
     crushed {
@@ -195,6 +206,7 @@ script {
             animation crushed
             health 0
             move stop
+            particle dust_explosion
         }
         on_animation_end {
             state dying
