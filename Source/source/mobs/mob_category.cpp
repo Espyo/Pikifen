@@ -82,6 +82,20 @@ void mob_category_manager::register_category(
 
 
 /* ----------------------------------------------------------------------------
+ * Finds a mob type given its name. This finds the first occurence, in case
+ * multiple categories have a mob type of that name.
+ * Returns NULL on error.
+ */
+mob_type* mob_category_manager::find_mob_type(const string &name) {
+    for(size_t n = 0; n < categories.size(); ++n) {
+        mob_type* t = categories[n]->get_type(name);
+        if(t) return t;
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a category given its ID.
  * Returns NULL on error.
  */

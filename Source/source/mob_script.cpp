@@ -325,10 +325,10 @@ mob_action::mob_action(
             valid = false;
         } else {
             if(v_words[0] == "relative") {
-                vi.push_back(MOB_ACTION_SET_HEALTH_RELATIVE);
+                vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
                 v_words.erase(v_words.begin());
             } else {
-                vi.push_back(MOB_ACTION_SET_HEALTH_ABSOLUTE);
+                vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
             }
             if(v_words.empty()) {
                 valid = false;
@@ -419,6 +419,74 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "spawn") {
+    
+        type = MOB_ACTION_SPAWN;
+        
+        if(v.empty()) {
+            valid = false;
+            log_error(
+                "The spawn action needs the object name, coordinates, and "
+                "angle!", dn
+            );
+            return;
+        }
+        
+        size_t params_word = v_words.size();
+        for(size_t w = 0; w < v_words.size(); ++w) {
+            if(v_words[w].find("=") != string::npos) {
+                //Found a word that has an equals in it,
+                //so this is the spawned object's extra script data.
+                if(v_words[w] == "=") {
+                    //If it's the full word, that means the user split the
+                    //parameter and the equals.
+                    params_word = w - 1;
+                } else {
+                    params_word = w;
+                }
+                break;
+            }
+        }
+        
+        string object_name;
+        bool relative;
+        float x, y, z, a;
+        for(size_t w = 0; w < params_word - 5; ++w) {
+            object_name += v_words[w] + " ";
+        }
+        if(object_name.empty()) {
+            valid = false;
+            log_error(
+                "The spawn action needs the object name, coordinates, and "
+                "angle!", dn
+            );
+        } else {
+            object_name.erase(object_name.size() - 1);
+            
+            relative = (v_words[params_word - 5] == "relative");
+            x = s2f(v_words[params_word - 4]);
+            y = s2f(v_words[params_word - 3]);
+            z = s2f(v_words[params_word - 2]);
+            a = deg_to_rad(s2f(v_words[params_word - 1]));
+            
+            vs.push_back(object_name);
+            vi.push_back(
+                relative ?
+                MOB_ACTION_NUMERICAL_RELATIVE : MOB_ACTION_NUMERICAL_ABSOLUTE
+            );
+            vf.push_back(x);
+            vf.push_back(y);
+            vf.push_back(z);
+            vf.push_back(a);
+            if(params_word < v_words.size()) {
+                vs.push_back(
+                    v.substr(v.find(v_words[params_word]), string::npos)
+                );
+            }
+        }
+        
+        
+        
     } else if(n == "start_dying") {
     
         type = MOB_ACTION_START_DYING;
@@ -430,6 +498,34 @@ mob_action::mob_action(
         
         if(v == "vertically") {
             vi.push_back(1);
+        }
+        
+        
+    } else if(n == "teleport") {
+    
+        type = MOB_ACTION_TELEPORT;
+        
+        if(v.empty()) {
+            valid = false;
+            log_error("The teleport action needs to know the location!", dn);
+        } else {
+            if(v_words[0] == "relative") {
+                vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
+                v_words.erase(v_words.begin());
+            } else {
+                vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
+            }
+            if(v_words.size() < 3) {
+                valid = false;
+                log_error(
+                    "The teleport action needs to know the "
+                    "X, Y, and Z coordinates!", dn
+                );
+            } else {
+                vf.push_back(s2f(v_words[0]));
+                vf.push_back(s2f(v_words[1]));
+                vf.push_back(s2f(v_words[2]));
+            }
         }
         
         
@@ -646,7 +742,7 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
         m->set_health(
-            vi[0] == MOB_ACTION_SET_HEALTH_RELATIVE,
+            vi[0] == MOB_ACTION_NUMERICAL_RELATIVE,
             false,
             vf[0]
         );
@@ -702,18 +798,81 @@ bool mob_action::run(
         m->set_var(vs[0], vs[1]);
         
         
+    } else if(type == MOB_ACTION_SPAWN) {
+    
+        //First, find the mob.
+        mob_type* type_ptr = mob_categories.find_mob_type(vs[0]);
+        if(!type_ptr) return false;
+        if(
+            type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
+            pikmin_list.size() >= max_pikmin_in_field
+        ) {
+            return false;
+        }
+        
+        point xy;
+        float z = 0;
+        float angle = 0;
+        
+        if(vi[0] == MOB_ACTION_NUMERICAL_RELATIVE) {
+            xy = m->pos + rotate_point(point(vf[0], vf[1]), m->angle);
+            z = m->z + vf[2];
+            angle = m->angle + vf[3];
+        } else {
+            xy = point(vf[0], vf[1]);
+            z = vf[2];
+            angle = vf[3];
+        }
+        
+        mob* new_mob =
+            create_mob(
+                type_ptr->category,
+                xy,
+                type_ptr,
+                angle,
+                vs.size() >= 1 ? vs[1] : ""
+            );
+            
+        new_mob->z = z;
+        
+        if(type_ptr->category->id == MOB_CATEGORY_TREASURES) {
+            //This way, treasures that fall into the abyss respawn at the
+            //spawner mob's original spot.
+            new_mob->home = m->home;
+        } else {
+            new_mob->home = xy;
+        }
+        
+        
     } else if(type == MOB_ACTION_START_DYING) {
     
         m->start_dying();
         
         
     } else if(type == MOB_ACTION_STOP) {
+    
         if(vi.empty()) {
             m->stop_chasing();
             m->intended_angle = m->angle;
         } else {
             m->speed_z = 0;
         }
+        
+        
+    } else if(type == MOB_ACTION_TELEPORT) {
+    
+        m->stop_chasing();
+        point base_xy;
+        float base_z = 0;
+        if(vi[0] == MOB_ACTION_NUMERICAL_RELATIVE) {
+            base_xy = m->pos;
+            base_z = m->z;
+        }
+        m->chase(
+            base_xy + point(vf[0], vf[1]),
+            NULL, true
+        );
+        m->z = base_z + vf[2];
         
         
     }
