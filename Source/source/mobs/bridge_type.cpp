@@ -30,6 +30,7 @@ bridge_type::bridge_type() :
     pushes = false;
     casts_shadow = false;
     is_obstacle = true;
+    blocks_carrier_pikmin = true;
     
     bridge_fsm::create_fsm(this);
 }

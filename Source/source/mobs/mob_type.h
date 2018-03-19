@@ -98,6 +98,7 @@ public:
     
     //Misc.
     bool is_obstacle;
+    bool blocks_carrier_pikmin;
     vector<hazard*> resistances;
     spike_damage_type* spike_damage;
     map<spike_damage_type*, float> spike_damage_vulnerabilities;

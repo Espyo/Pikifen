@@ -1493,7 +1493,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     
     for(size_t m = 0; m < mobs.size(); ++m) {
         mob* m_ptr = mobs[m];
-        if(!m_ptr->type->is_obstacle) continue;
+        if(!m_ptr->type->blocks_carrier_pikmin) continue;
         
         if(
             m_ptr->health != 0 &&

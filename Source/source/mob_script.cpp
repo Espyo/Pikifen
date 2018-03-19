@@ -690,20 +690,11 @@ bool mob_action::run(
             );
             
         } else if(vi[0] == MOB_ACTION_MOVE_COORDS) {
-            if(vf.size() >= 2) {
-                m->chase(point(vf[0], vf[1]), NULL, false);
-            }
+            m->chase(point(vf[0], vf[1]), NULL, false);
             
         } else if(vi[0] == MOB_ACTION_MOVE_REL_COORDS) {
-            if(vf.size() >= 2) {
-                m->chase(
-                    point(
-                        m->pos.x + vf[0],
-                        m->pos.y + vf[1]
-                    ),
-                    NULL, false
-                );
-            }
+            point p = rotate_point(point(vf[0], vf[1]), m->angle);
+            m->chase(m->pos + p, NULL, false);
             
         }
         
@@ -862,17 +853,18 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_TELEPORT) {
     
         m->stop_chasing();
-        point base_xy;
-        float base_z = 0;
+        point xy;
+        float z;
         if(vi[0] == MOB_ACTION_NUMERICAL_RELATIVE) {
-            base_xy = m->pos;
-            base_z = m->z;
+            point p = rotate_point(point(vf[0], vf[1]), m->angle);
+            xy = m->pos + p;
+            z = m->z + vf[2];
+        } else {
+            xy = point(vf[0], vf[1]);
+            z = vf[2];
         }
-        m->chase(
-            base_xy + point(vf[0], vf[1]),
-            NULL, true
-        );
-        m->z = base_z + vf[2];
+        m->chase(xy, NULL, true);
+        m->z = z;
         
         
     }

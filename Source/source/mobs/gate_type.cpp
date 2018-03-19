@@ -22,6 +22,7 @@ gate_type::gate_type() :
     
     casts_shadow = false;
     is_obstacle = true;
+    blocks_carrier_pikmin = true;
     pushes = true;
     pushes_with_hitboxes = true;
     

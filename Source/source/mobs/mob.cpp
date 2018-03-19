@@ -1022,19 +1022,19 @@ void mob::set_var(const string &name, const string &value) {
 
 
 /* ----------------------------------------------------------------------------
- * Should this mob attack m? Teams and other factors are used to decide this.
+ * Should this mob attack v? Teams and other factors are used to decide this.
  */
-bool mob::should_attack(mob* m) {
-    if(team == m->team) return false;
-    if(m->team == MOB_TEAM_DECORATION) return false;
+bool mob::should_attack(mob* v) {
+    if(team == v->team) return false;
+    if(v->team == MOB_TEAM_DECORATION) return false;
     if(team == MOB_TEAM_NONE) return true;
     if(team == MOB_TEAM_OBSTACLE) {
-        if(m->team >= MOB_TEAM_PLAYER_1 && m->team <= MOB_TEAM_PLAYER_4) {
+        if(v->team >= MOB_TEAM_PLAYER_1 && v->team <= MOB_TEAM_PLAYER_4) {
             return true;
         }
         return false;
     }
-    if(m->team == MOB_TEAM_OBSTACLE) {
+    if(v->team == MOB_TEAM_OBSTACLE) {
         if(type->category->id == MOB_CATEGORY_PIKMIN) {
             return true;
         }

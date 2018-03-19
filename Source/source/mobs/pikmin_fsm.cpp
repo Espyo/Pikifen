@@ -1602,13 +1602,11 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
     
     p_ptr->stop_chasing();
     
-    if(!p_ptr->focused_mob->type->is_obstacle) {
-        closest_h =
-            p_ptr->focused_mob->get_closest_hitbox(
-                p_ptr->pos, HITBOX_TYPE_NORMAL, &d
-            );
-    }
-    
+    closest_h =
+        p_ptr->focused_mob->get_closest_hitbox(
+            p_ptr->pos, HITBOX_TYPE_NORMAL, &d
+        );
+        
     if(
         !closest_h || !closest_h->can_pikmin_latch ||
         d >= closest_h->radius + p_ptr->type->radius
