@@ -1384,7 +1384,7 @@ void pikmin_fsm::tick_latched(mob* m, void* info1, void* info2) {
 void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
-    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->dead) {
+    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health <= 0) {
         return;
     }
     
@@ -1405,7 +1405,6 @@ void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(false, false, 0);
-    m->dead = true;
 }
 
 

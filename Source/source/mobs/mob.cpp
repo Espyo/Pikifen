@@ -704,6 +704,9 @@ const float ENEMY_SPIRIT_MIN_SIZE = 16;
  * Sets up stuff for the end of the mob's dying process.
  */
 void mob::finish_dying() {
+    if(dead) return;
+    dead = true;
+    
     if(type->category->id == MOB_CATEGORY_ENEMIES) {
         //TODO move this to the enemy class.
         enemy* e_ptr = (enemy*) this;
@@ -1739,7 +1742,6 @@ void mob::tick_script() {
     
     //Is it dead?
     if(health <= 0 && type->max_health != 0) {
-        dead = true;
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
     
@@ -1758,7 +1760,7 @@ void mob::tick_script() {
     }
     
     //Health regeneration.
-    if(!dead) {
+    if(health > 0) {
         set_health(true, false, type->health_regen * delta_t);
     }
     
@@ -1793,7 +1795,7 @@ void mob::tick_script() {
     //Focused on a mob.
     if(focused_mob) {
     
-        if(focused_mob->dead) {
+        if(focused_mob->health <= 0) {
             fsm.run_event(MOB_EVENT_FOCUS_DIED);
             fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
         }

@@ -171,14 +171,14 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "inc_var") {
+    } else if(n == "increment_var") {
     
         type = MOB_ACTION_INC_VAR;
         
         if(v_words.empty()) {
             log_error(
-                "The inc_var action needs to know what variable to increment!",
-                dn
+                "The increment_var action needs to know "
+                "what variable to increment!", dn
             );
             valid = false;
         } else {
@@ -632,9 +632,9 @@ bool mob_action::run(
             vi.size() >= 3 && !vs.empty()
         ) {
             if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
-                lhs = f2s(day_minutes);
+                lhs = i2s(day_minutes);
             } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
-                lhs = f2s(m->health);
+                lhs = i2s(m->health);
             }
             rhs = vs[0];
         } else {
@@ -646,13 +646,13 @@ bool mob_action::run(
         } else if(vi[1] == MOB_ACTION_IF_OP_NOT) {
             return (lhs != rhs);
         } else if(vi[1] == MOB_ACTION_IF_OP_LESS) {
-            return (s2f(lhs) < s2f(rhs));
+            return (s2i(lhs) < s2i(rhs));
         } else if(vi[1] == MOB_ACTION_IF_OP_MORE) {
-            return (s2f(lhs) > s2f(rhs));
+            return (s2i(lhs) > s2i(rhs));
         } else if(vi[1] == MOB_ACTION_IF_OP_LESS_E) {
-            return (s2f(lhs) <= s2f(rhs));
+            return (s2i(lhs) <= s2i(rhs));
         } else if(vi[1] == MOB_ACTION_IF_OP_MORE_E) {
-            return (s2f(lhs) >= s2f(rhs));
+            return (s2i(lhs) >= s2i(rhs));
         }
         
     } else if(type == MOB_ACTION_INC_VAR) {
@@ -713,11 +713,13 @@ bool mob_action::run(
     
         if(vi.empty()) {
             m->chomp_max = 0;
-            m->chomp_hitboxes.clear();
+            m->chomp_body_parts.clear();
         } else {
             m->chomp_max = vi[0];
-            vi.erase(vi.begin());
-            m->chomp_hitboxes = vi;
+            m->chomp_body_parts.clear();
+            for(size_t p = 1; p < vi.size(); ++p) {
+                m->chomp_body_parts.push_back(vi[p]);
+            }
         }
         
         

@@ -65,7 +65,7 @@ script {
     
     checking_mouth {
         on_leave {
-            set_chomp_body_parts =
+            set_chomp_body_parts
         }
         on_mouth_occupied {
             set_state eating

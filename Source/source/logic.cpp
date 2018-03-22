@@ -1011,11 +1011,11 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         m2_ptr->chomping_pikmin.size() <
                         m2_ptr->chomp_max &&
                         find(
-                            m2_ptr->chomp_hitboxes.begin(),
-                            m2_ptr->chomp_hitboxes.end(),
+                            m2_ptr->chomp_body_parts.begin(),
+                            m2_ptr->chomp_body_parts.end(),
                             h2_ptr->body_part_index
                         ) !=
-                        m2_ptr->chomp_hitboxes.end()
+                        m2_ptr->chomp_body_parts.end()
                     ) {
                         hitbox_touch_eat_ev->run(
                             m_ptr,
@@ -1079,7 +1079,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             }
         }
         
-        if(!m2_ptr->dead && m_ptr->near_reach != INVALID) {
+        if(m2_ptr->health > 0 && m_ptr->near_reach != INVALID) {
             //Check reaches.
             
             mob_event* obir_ev =

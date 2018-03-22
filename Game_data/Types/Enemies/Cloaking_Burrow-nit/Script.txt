@@ -86,7 +86,7 @@ script {
     
     eating {
         on_enter {
-            set_chomp_body_parts =
+            set_chomp_body_parts
             set_animation eating
         }
         on_animation_end {

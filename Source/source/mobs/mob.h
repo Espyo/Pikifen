@@ -321,10 +321,10 @@ public:
     vector<status> statuses;
     //Hazard of the sector the mob is currently on.
     hazard* on_hazard;
-    //Is the mob dead?
+    //Is it completely dead? Health = 0 isn't necessarily dead; could be dying.
     bool dead;
-    //List of hitboxes that will chomp Pikmin.
-    vector<int> chomp_hitboxes;
+    //List of body parts that will chomp Pikmin.
+    vector<int> chomp_body_parts;
     //Mobs it is chomping.
     vector<mob*> chomping_pikmin;
     //Max mobs it can chomp in the current attack.
