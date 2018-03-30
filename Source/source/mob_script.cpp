@@ -80,20 +80,6 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "face") {
-    
-        type = MOB_ACTION_FACE;
-        
-        if(v == "focused_mob") {
-            vi.push_back(MOB_ACTION_FACE_FOCUSED_MOB);
-        } else if(v == "home") {
-            vi.push_back(MOB_ACTION_FACE_HOME);
-        } else {
-            valid = false;
-            log_error("Invalid face target \"" + v + "\"!", dn);
-        }
-        
-        
     } else if(n == "finish_dying") {
     
         type = MOB_ACTION_FINISH_DYING;
@@ -148,6 +134,8 @@ mob_action::mob_action(
             
                 if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
+                } else if(v_words[0] == "signal") {
+                    vi.push_back(MOB_ACTION_IF_INFO_FRAME_SIGNAL);
                 } else if(v_words[0] == "health") {
                     vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
                 } else {
@@ -529,6 +517,22 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "turn") {
+    
+        type = MOB_ACTION_TURN;
+        
+        if(v == "focused_mob") {
+            vi.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
+        } else if(v == "home") {
+            vi.push_back(MOB_ACTION_TURN_HOME);
+        } else if(v == "randomly") {
+            vi.push_back(MOB_ACTION_TURN_RANDOMLY);
+        } else {
+            valid = false;
+            log_error("Invalid turn target \"" + v + "\"!", dn);
+        }
+        
+        
     } else {
     
         type = MOB_ACTION_UNKNOWN;
@@ -573,7 +577,8 @@ mob_action::mob_action(custom_action_code code) :
  *   evaluation result.
  */
 bool mob_action::run(
-    mob* m, void* custom_data_1, void* custom_data_2
+    mob* m, void* custom_data_1, void* custom_data_2,
+    const size_t parent_event
 ) {
 
     if(!valid) return false;
@@ -603,15 +608,6 @@ bool mob_action::run(
         m->focused_mob = (mob*) custom_data_1;
         
         
-    } else if(type == MOB_ACTION_FACE) {
-    
-        if(vi[0] == MOB_ACTION_FACE_FOCUSED_MOB && m->focused_mob) {
-            m->face(get_angle(m->pos, m->focused_mob->pos));
-        } else if(vi[0] == MOB_ACTION_FACE_HOME) {
-            m->face(get_angle(m->pos, m->home));
-        }
-        
-        
     } else if(type == MOB_ACTION_FINISH_DYING) {
     
         m->finish_dying();
@@ -633,6 +629,10 @@ bool mob_action::run(
         ) {
             if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
                 lhs = i2s(day_minutes);
+            } else if(vi[2] == MOB_ACTION_IF_INFO_FRAME_SIGNAL) {
+                if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
+                    lhs = i2s(*((size_t*) custom_data_1));
+                }
             } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
                 lhs = i2s(m->health);
             }
@@ -869,6 +869,17 @@ bool mob_action::run(
         m->z = z;
         
         
+    } else if(type == MOB_ACTION_TURN) {
+    
+        if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
+            m->face(get_angle(m->pos, m->focused_mob->pos));
+        } else if(vi[0] == MOB_ACTION_TURN_HOME) {
+            m->face(get_angle(m->pos, m->home));
+        } else if(vi[0] == MOB_ACTION_TURN_RANDOMLY) {
+            m->face(randomf(0, M_PI * 2));
+        }
+        
+        
     }
     
     return false;
@@ -888,7 +899,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             //If statement. Look out for its return value, and
             //change the flow accordingly.
             
-            if(!actions[a]->run(m, custom_data_1, custom_data_2)) {
+            if(!actions[a]->run(m, custom_data_1, custom_data_2, type)) {
                 //If it returned true, execution continues as normal, but
                 //if it returned false, skip to the "else" or "end if" actions.
                 size_t next_a = a + 1;
@@ -928,7 +939,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             
         } else {
             //Normal action.
-            actions[a]->run(m, custom_data_1, custom_data_2);
+            actions[a]->run(m, custom_data_1, custom_data_2, type);
             if(actions[a]->type == MOB_ACTION_SET_STATE) break;
             
         }
@@ -1003,6 +1014,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_damage",              MOB_EVENT_DAMAGE);
     r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
     r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
+    r("on_frame_signal",        MOB_EVENT_FRAME_SIGNAL);
     r("on_itch",                MOB_EVENT_ITCH);
     r("on_mouth_empty",         MOB_EVENT_MOUTH_EMPTY);
     r("on_mouth_occupied",      MOB_EVENT_MOUTH_OCCUPIED);
@@ -1010,9 +1022,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
     r("on_pikmin_latch",        MOB_EVENT_PIKMIN_LATCHED);
-    r("on_pikmin_touch",        MOB_EVENT_PIKMIN_TOUCHED);
     r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
-    r("on_revival",             MOB_EVENT_REVIVED);
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
     r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);

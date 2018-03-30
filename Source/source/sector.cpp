@@ -1351,46 +1351,28 @@ void vertex::remove_edge(edge* e_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the closest vertex that can be merged with the specified point.
- * Returns NULL if there is no vertex close enough to merge.
+ * Returns all vertexes that are close enough to be merged with
+ * the specified point, as well as their distances to said point.
  * point:        Coordinates of the point.
  * all_vertexes: Vector with all of the vertexes in the area.
  * merge_radius: Minimum radius to merge.
- * v_nr:         If not NULL, the vertex's number is returned here.
- * after:        Only check vertexes that come after this one.
  */
-vertex* get_merge_vertex(
-    const point &pos, vector<vertex*> &all_vertexes,
-    const float merge_radius, size_t* v_nr, vertex* after
+vector<pair<dist, vertex*> > get_merge_vertexes(
+    const point &pos, vector<vertex*> &all_vertexes, const float merge_radius
 ) {
-    bool found_after = (!after ? true : false);
-    dist closest_dist = 0;
-    vertex* closest_v = NULL;
-    size_t closest_nr = INVALID;
-    
+
+    vector<pair<dist, vertex*> > result;
     for(size_t v = 0; v < all_vertexes.size(); ++v) {
         vertex* v_ptr = all_vertexes[v];
         
-        if(v_ptr == after) {
-            found_after = true;
-            continue;
-        } else if(!found_after) {
-            continue;
-        }
-        
         dist d(pos, point(v_ptr->x, v_ptr->y));
-        if(
-            d <= merge_radius &&
-            (d < closest_dist || !closest_v)
-        ) {
-            closest_dist = d;
-            closest_v = v_ptr;
-            closest_nr = v;
+        if(d <= merge_radius) {
+        
+            result.push_back(make_pair(d, v_ptr));
         }
     }
     
-    if(v_nr) *v_nr = closest_nr;
-    return closest_v;
+    return result;
 }
 
 

@@ -116,12 +116,22 @@ area_editor::layout_drawing_node::layout_drawing_node(
     on_sector_nr(INVALID),
     is_new_vertex(false) {
     
-    on_vertex =
-        get_merge_vertex(
+    vector<pair<dist, vertex*> > merge_vertexes =
+        get_merge_vertexes(
             mouse_click, cur_area_data.vertexes,
-            VERTEX_MERGE_RADIUS / cam_zoom, &on_vertex_nr
+            VERTEX_MERGE_RADIUS / cam_zoom
         );
-        
+    if(!merge_vertexes.empty()) {
+        sort(
+            merge_vertexes.begin(), merge_vertexes.end(),
+        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+            return v1.first < v2.first;
+        }
+        );
+        on_vertex = merge_vertexes[0].second;
+        on_vertex_nr = cur_area_data.find_vertex_nr(on_vertex);
+    }
+    
     if(on_vertex) {
         snapped_spot.x = on_vertex->x;
         snapped_spot.y = on_vertex->y;
@@ -1445,17 +1455,36 @@ void area_editor::finish_layout_moving() {
     //Find merge vertexes and edges to split, if any.
     for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
         point p((*v)->x, (*v)->y);
-        vertex* merge_v = NULL;
-        do {
-            merge_v =
-                get_merge_vertex(
-                    p, cur_area_data.vertexes,
-                    cam_zoom / VERTEX_MERGE_RADIUS, NULL, merge_v
-                );
-        } while(
-            merge_v == *v ||
-            selected_vertexes.find(merge_v) != selected_vertexes.end()
+        
+        vector<pair<dist, vertex*> > merge_vertexes =
+            get_merge_vertexes(
+                p, cur_area_data.vertexes,
+                VERTEX_MERGE_RADIUS / cam_zoom
+            );
+            
+        for(size_t mv = 0; mv < merge_vertexes.size(); ) {
+            vertex* mv_ptr = merge_vertexes[mv].second;
+            if(
+                mv_ptr == *v ||
+                selected_vertexes.find(mv_ptr) != selected_vertexes.end()
+            ) {
+                merge_vertexes.erase(merge_vertexes.begin() + mv);
+            } else {
+                ++mv;
+            }
+        }
+        
+        sort(
+            merge_vertexes.begin(), merge_vertexes.end(),
+        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+            return v1.first < v2.first;
+        }
         );
+        
+        vertex* merge_v = NULL;
+        if(!merge_vertexes.empty()) {
+            merge_v = merge_vertexes[0].second;
+        }
         
         if(merge_v) {
             merges[*v] = merge_v;

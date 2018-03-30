@@ -37,7 +37,6 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_EAT,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,
-    MOB_ACTION_FACE,
     MOB_ACTION_FOCUS,
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_IF,
@@ -61,6 +60,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_START_DYING,
     MOB_ACTION_STOP,
     MOB_ACTION_TELEPORT,
+    MOB_ACTION_TURN,
 };
 
 //Eating action sub-types.
@@ -70,9 +70,10 @@ enum MOB_ACTION_EAT_TYPES {
 };
 
 //Face action sub-types.
-enum MOB_ACTION_FACE_TYPES {
-    MOB_ACTION_FACE_FOCUSED_MOB,
-    MOB_ACTION_FACE_HOME,
+enum MOB_ACTION_TURN_TYPES {
+    MOB_ACTION_TURN_FOCUSED_MOB,
+    MOB_ACTION_TURN_HOME,
+    MOB_ACTION_TURN_RANDOMLY,
 };
 
 //If action left-hand side content types.
@@ -84,6 +85,7 @@ enum MOB_ACTION_IF_LHS_TYPE {
 //If action info types.
 enum MOB_ACTION_IF_INFO_TYPES {
     MOB_ACTION_IF_INFO_DAY_MINUTES,
+    MOB_ACTION_IF_INFO_FRAME_SIGNAL,
     MOB_ACTION_IF_INFO_HEALTH,
 };
 
@@ -159,12 +161,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_PIKMIN_LANDED,
     //When a Pikmin latches on to it.
     MOB_EVENT_PIKMIN_LATCHED,
-    //When a Pikmin touches it.
-    MOB_EVENT_PIKMIN_TOUCHED,
     //When it reaches its destination.
     MOB_EVENT_REACHED_DESTINATION,
-    //When it revives from being dead.
-    MOB_EVENT_REVIVED,
     //When it gets touched by a leader.
     MOB_EVENT_TOUCHED_ACTIVE_LEADER,
     //When it touches a hazard (sector or hitbox).
@@ -284,7 +282,10 @@ public:
     vector<float> vf;
     vector<string> vs;
     
-    bool run(mob* m, void* custom_data_1, void* custom_data_2);
+    bool run(
+        mob* m, void* custom_data_1, void* custom_data_2,
+        const size_t parent_event
+    );
     mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
     mob_action(unsigned char type);
     mob_action(custom_action_code code);

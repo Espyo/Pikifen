@@ -379,10 +379,8 @@ void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
-vertex* get_merge_vertex(
-    const point &p,
-    vector<vertex*> &all_vertexes, const float merge_radius,
-    size_t* nr = NULL, vertex* ignore = NULL
+vector<pair<dist, vertex*> > get_merge_vertexes(
+    const point &p, vector<vertex*> &all_vertexes, const float merge_radius
 );
 vector<path_stop*> get_path(
     const point &start, const point &end,

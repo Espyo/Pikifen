@@ -72,12 +72,12 @@ script {
         on_enter {
             set_animation moving
             stop
-            face focused_mob
+            turn focused_mob
             set_near_reach chase
             set_far_reach close
         }
         on_tick {
-            face focused_mob
+            turn focused_mob
         }
         on_opponent_in_reach {
             focus mob

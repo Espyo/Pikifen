@@ -118,7 +118,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     First, download the source, of course.
     Then, under Linux...
         Install Allegro 5 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
-        On a terminal, go to the source's folder and write "make".
+            If you are on Ubuntu, I recommend this link https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853
+        On a terminal, go to the engine's root folder and write "make".
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
     Or under Windows...
         What are you doing? Just download a pre-built binary, please!
