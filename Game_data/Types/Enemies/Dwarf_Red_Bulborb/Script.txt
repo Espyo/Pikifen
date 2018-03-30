@@ -126,22 +126,12 @@ script {
             set_chomp_body_parts 1 mouth
         }
         on_animation_end {
-            set_state checking_mouth
-        }
-        on_pikmin_land {
-            set_state crushed
-        }
-    }
-    
-    checking_mouth {
-        on_leave {
             set_chomp_body_parts
-        }
-        on_mouth_occupied {
-            set_state eating
-        }
-        on_mouth_empty {
-            set_state examining
+            if chomped_pikmin > 0
+                set_state eating
+            else
+                set_state examining
+            end_if
         }
         on_pikmin_land {
             set_state crushed

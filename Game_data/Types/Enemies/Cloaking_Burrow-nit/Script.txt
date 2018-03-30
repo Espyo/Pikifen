@@ -71,16 +71,12 @@ script {
             set_chomp_body_parts 1 mouth
         }
         on_animation_end {
-            set_state checking_mouth
-        }
-    }
-    
-    checking_mouth {
-        on_mouth_occupied {
-            set_state eating
-        }
-        on_mouth_empty {
-            set_state examining
+            set_chomp_body_parts
+            if chomped_pikmin > 0
+                set_state eating
+            else
+                set_state examining
+            end_if
         }
     }
     

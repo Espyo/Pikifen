@@ -1854,13 +1854,6 @@ void mob::tick_script() {
         }
     }
     
-    //Check its mouth.
-    if(chomping_pikmin.empty()) {
-        fsm.run_event(MOB_EVENT_MOUTH_EMPTY);
-    } else {
-        fsm.run_event(MOB_EVENT_MOUTH_OCCUPIED);
-    }
-    
     //Being carried, but has an obstacle.
     if(carry_info) {
         for(

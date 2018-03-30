@@ -99,19 +99,12 @@ script {
             set_chomp_body_parts 5 tongue1 tongue2
         }
         on_animation_end {
-            set_state checking_mouth
-        }
-    }
-    
-    checking_mouth {
-        on_leave {
             set_chomp_body_parts
-        }
-        on_mouth_occupied {
-            set_state eating
-        }
-        on_mouth_empty {
-            set_state sniffing
+            if chomped_pikmin > 0
+                set_state eating
+            else
+                set_state sniffing
+            end_if
         }
     }
     

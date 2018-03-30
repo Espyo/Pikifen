@@ -84,6 +84,7 @@ enum MOB_ACTION_IF_LHS_TYPE {
 
 //If action info types.
 enum MOB_ACTION_IF_INFO_TYPES {
+    MOB_ACTION_IF_INFO_CHOMPED_PIKMIN,
     MOB_ACTION_IF_INFO_DAY_MINUTES,
     MOB_ACTION_IF_INFO_FRAME_SIGNAL,
     MOB_ACTION_IF_INFO_HEALTH,
@@ -149,10 +150,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_ITCH,
     //When it leaves a hazard in a sector.
     MOB_EVENT_LEFT_HAZARD,
-    //When its mouth has Pikmin in it.
-    MOB_EVENT_MOUTH_OCCUPIED,
-    //When its mouth is empty.
-    MOB_EVENT_MOUTH_EMPTY,
     //When an object is within the "near" reach.
     MOB_EVENT_OBJECT_IN_REACH,
     //When an opponent is within the "near" reach.

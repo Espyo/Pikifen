@@ -168,6 +168,9 @@ void pikmin::tick_class_specifics() {
     }
     
     //Is it dead?
+    if(health <= 0) {
+        dead = true;
+    }
     if(dead) {
         to_delete = true;
         

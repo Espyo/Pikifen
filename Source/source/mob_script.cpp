@@ -132,7 +132,9 @@ mob_action::mob_action(
                 
             } else {
             
-                if(v_words[0] == "day_minutes") {
+                if(v_words[0] == "chomped_pikmin") {
+                    vi.push_back(MOB_ACTION_IF_INFO_CHOMPED_PIKMIN);
+                } else if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
                 } else if(v_words[0] == "signal") {
                     vi.push_back(MOB_ACTION_IF_INFO_FRAME_SIGNAL);
@@ -627,7 +629,9 @@ bool mob_action::run(
             vi[0] == MOB_ACTION_IF_LHS_INFO &&
             vi.size() >= 3 && !vs.empty()
         ) {
-            if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
+            if(vi[2] == MOB_ACTION_IF_INFO_CHOMPED_PIKMIN) {
+                lhs = i2s(m->chomping_pikmin.size());
+            } else if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
                 lhs = i2s(day_minutes);
             } else if(vi[2] == MOB_ACTION_IF_INFO_FRAME_SIGNAL) {
                 if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
@@ -1016,8 +1020,6 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
     r("on_frame_signal",        MOB_EVENT_FRAME_SIGNAL);
     r("on_itch",                MOB_EVENT_ITCH);
-    r("on_mouth_empty",         MOB_EVENT_MOUTH_EMPTY);
-    r("on_mouth_occupied",      MOB_EVENT_MOUTH_OCCUPIED);
     r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
     r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
