@@ -180,8 +180,7 @@ vector<string> folder_to_vector(
     }
     
     //Normalize the folder's path.
-    folder_name = replace_all(folder_name, "\\", "/");
-    if(folder_name.back() == '/') folder_name.pop_back();
+    folder_name = standardize_path(folder_name);
     
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_name.c_str());
@@ -198,26 +197,16 @@ vector<string> folder_to_vector(
             ((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0)
         ) {
         
-            string entry_name = al_get_fs_entry_name(entry);
-            if(folders) {
-                //If we're using folders, remove the trailing slash,
-                //lest the string be fully deleted.
-                if(
-                    entry_name[entry_name.size() - 1] == '/' ||
-                    entry_name[entry_name.size() - 1] == '\\'
-                ) {
-                    entry_name.erase(entry_name.size() - 1);
-                }
-            }
+            string entry_name =
+                standardize_path(al_get_fs_entry_name(entry));
             
             //Only save what's after the final slash.
-            entry_name = replace_all(entry_name, "\\", "/");
             size_t pos = entry_name.find_last_of("/");
-            
             if(pos != string::npos) {
                 entry_name =
                     entry_name.substr(pos + 1, entry_name.size() - pos - 1);
             }
+            
             v.push_back(entry_name);
         }
         al_destroy_fs_entry(entry);
@@ -642,6 +631,41 @@ void print_info(const string &text) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates and opens an Allegro native file dialog, and returns
+ * the user's choice(s).
+ * The arguments are the same you'd pass to al_create_native_file_dialog().
+ */
+vector<string> prompt_file_dialog(
+    const string &initial_path, const string &title,
+    const string &patterns, const int mode
+) {
+    ALLEGRO_FILECHOOSER* dialog =
+        al_create_native_file_dialog(
+            initial_path.c_str(), title.c_str(),
+            patterns.c_str(), mode
+        );
+    al_show_native_file_dialog(display, dialog);
+        
+    //Reset the locale, which gets set by Allegro's native dialogs...
+    //and breaks s2f().
+    setlocale(LC_ALL, "C");
+    
+    vector<string> result;
+    size_t n_choices = al_get_native_file_dialog_count(dialog);
+    for(size_t c = 0; c < n_choices; ++c) {
+        result.push_back(
+            standardize_path(
+                al_get_native_file_dialog_path(dialog, c)
+            )
+        );
+    }
+    
+    al_destroy_native_file_dialog(dialog);
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a random float between the provided range, inclusive.
  */
 float randomf(float min, float max) {
@@ -1059,6 +1083,17 @@ vector<string> split(
     }
     
     return v;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Standardizes a path, making it use forward slashes instead of backslashes,
+ * and removing excess slashes at the end.
+ */
+string standardize_path(const string &path) {
+    string res = replace_all(path, "\\", "/");
+    if(res.back() == '/') res.pop_back();
+    return res;
 }
 
 
