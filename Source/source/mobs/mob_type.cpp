@@ -51,8 +51,11 @@ mob_type::mob_type(size_t category_id) :
     itch_time(0),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
+    appears_in_area_editor(true),
     is_obstacle(false),
+    is_projectile(false),
     blocks_carrier_pikmin(false),
+    projectiles_can_damage(true),
     spike_damage(nullptr),
     create_mob_func(nullptr) {
     
@@ -275,27 +278,30 @@ void load_mob_type_from_file(
     string spike_damage_name;
     
     reader_setter rs(&file);
-    rs.set("name",                  mt->name);
-    rs.set("always_active",         mt->always_active);
-    rs.set("main_color",            mt->main_color);
-    rs.set("max_carriers",          mt->max_carriers);
-    rs.set("max_health",            mt->max_health);
-    rs.set("health_regen",          mt->health_regen);
-    rs.set("itch_damage",           mt->itch_damage);
-    rs.set("itch_time",             mt->itch_time);
-    rs.set("move_speed",            mt->move_speed);
-    rs.set("rotation_speed",        mt->rotation_speed);
-    rs.set("territory_radius",      mt->territory_radius);
-    rs.set("radius",                mt->radius);
-    rs.set("height",                mt->height);
-    rs.set("weight",                mt->weight);
-    rs.set("pushes",                mt->pushes);
-    rs.set("pushable",              mt->pushable);
-    rs.set("show_health",           mt->show_health);
-    rs.set("casts_shadow",          mt->casts_shadow);
-    rs.set("is_obstacle",           mt->is_obstacle);
-    rs.set("blocks_carrier_pikmin", mt->blocks_carrier_pikmin);
-    rs.set("spike_damage",          spike_damage_name);
+    rs.set("name",                   mt->name);
+    rs.set("always_active",          mt->always_active);
+    rs.set("main_color",             mt->main_color);
+    rs.set("max_carriers",           mt->max_carriers);
+    rs.set("max_health",             mt->max_health);
+    rs.set("health_regen",           mt->health_regen);
+    rs.set("itch_damage",            mt->itch_damage);
+    rs.set("itch_time",              mt->itch_time);
+    rs.set("move_speed",             mt->move_speed);
+    rs.set("rotation_speed",         mt->rotation_speed);
+    rs.set("territory_radius",       mt->territory_radius);
+    rs.set("radius",                 mt->radius);
+    rs.set("height",                 mt->height);
+    rs.set("weight",                 mt->weight);
+    rs.set("pushes",                 mt->pushes);
+    rs.set("pushable",               mt->pushable);
+    rs.set("show_health",            mt->show_health);
+    rs.set("casts_shadow",           mt->casts_shadow);
+    rs.set("appears_in_area_editor", mt->appears_in_area_editor);
+    rs.set("is_obstacle",            mt->is_obstacle);
+    rs.set("is_projectile",          mt->is_projectile);
+    rs.set("blocks_carrier_pikmin",  mt->blocks_carrier_pikmin);
+    rs.set("projectiles_can_damage", mt->projectiles_can_damage);
+    rs.set("spike_damage",           spike_damage_name);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
     

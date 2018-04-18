@@ -769,10 +769,14 @@ void area_editor::open_picker(const unsigned char type) {
             if(f == MOB_CATEGORY_NONE) continue;
             
             vector<string> names;
-            mob_categories.get(f)->get_type_names(names);
+            mob_category* cat = mob_categories.get(f);
+            cat->get_type_names(names);
             string cat_name = mob_categories.get(f)->plural_name;
             
             for(size_t n = 0; n < names.size(); ++n) {
+                if(!cat->get_type(names[n])->appears_in_area_editor) {
+                    continue;
+                }
                 elements.push_back(make_pair(cat_name, names[n]));
             }
         }

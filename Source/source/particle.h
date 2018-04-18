@@ -125,7 +125,11 @@ public:
     //Interval at which to emit a new one. 0 means once only.
     float emission_interval;
     //Follow the given coordinates. e.g. a mob's position.
-    point* follow;
+    point* follow_pos;
+    //Offset the follow coordinates by this.
+    point follow_pos_offset;
+    //Follow the given angle. e.g. a mob's angle.
+    float* follow_angle;
     
     //Maximum random deviations of...
     size_t number_deviation;

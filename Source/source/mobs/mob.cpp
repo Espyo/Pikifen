@@ -250,7 +250,8 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     change_maturity_amount_from_status(s->maturity_change_amount);
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
-        pg.follow = &this->pos;
+        pg.follow_pos = &this->pos;
+        pg.follow_angle = &this->angle;
         pg.reset();
         particle_generators.push_back(pg);
     }
@@ -1028,19 +1029,31 @@ void mob::set_var(const string &name, const string &value) {
  * Should this mob attack v? Teams and other factors are used to decide this.
  */
 bool mob::should_attack(mob* v) {
-    if(team == v->team) return false;
-    if(v->team == MOB_TEAM_DECORATION) return false;
-    if(team == MOB_TEAM_NONE) return true;
-    if(team == MOB_TEAM_OBSTACLE) {
-        if(v->team >= MOB_TEAM_PLAYER_1 && v->team <= MOB_TEAM_PLAYER_4) {
-            return true;
-        }
+    if(team == v->team && team != MOB_TEAM_NONE) {
+        //Teammates can't hurt each other.
         return false;
     }
-    if(v->team == MOB_TEAM_OBSTACLE) {
-        if(type->category->id == MOB_CATEGORY_PIKMIN) {
-            return true;
-        }
+    if(v->team == MOB_TEAM_DECORATION) {
+        //Decoration isn't meant to be hurt.
+        return false;
+    }
+    if(type->is_projectile && !v->type->projectiles_can_damage) {
+        //Projectiles can't hurt those which are invulnerable to them.
+        return false;
+    }
+    if(
+        team == MOB_TEAM_OBSTACLE &&
+        (v->team < MOB_TEAM_PLAYER_1 || v->team > MOB_TEAM_PLAYER_4)
+    ) {
+        //Obstacles can only hurt Pikmin and leaders.
+        return false;
+    }
+    if(
+        v->team == MOB_TEAM_OBSTACLE &&
+        type->category->id != MOB_CATEGORY_PIKMIN &&
+        !type->is_projectile
+    ) {
+        //Only Pikmin and projectiles can hurt obstacles.
         return false;
     }
     return true;
@@ -1298,6 +1311,7 @@ void mob::tick_physics() {
     }
     
     push_amount = 0;
+    bool touched_wall = false;
     
     
     //Try placing it in the place it should be at, judging
@@ -1591,6 +1605,7 @@ void mob::tick_physics() {
             //By the way, if we got to this point, that means there are real
             //collisions happening. Let's mark this move as unsuccessful.
             successful_move = false;
+            touched_wall = true;
         }
         
         //If the mob is just slamming against the wall head-on, perpendicularly,
@@ -1639,6 +1654,10 @@ void mob::tick_physics() {
             
         }
         
+    }
+    
+    if(touched_wall) {
+        fsm.run_event(MOB_EVENT_TOUCHED_WALL);
     }
     
     

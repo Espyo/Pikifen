@@ -136,10 +136,14 @@ mob_action::mob_action(
                     vi.push_back(MOB_ACTION_IF_INFO_CHOMPED_PIKMIN);
                 } else if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
-                } else if(v_words[0] == "signal") {
+                } else if(v_words[0] == "frame_signal") {
                     vi.push_back(MOB_ACTION_IF_INFO_FRAME_SIGNAL);
                 } else if(v_words[0] == "health") {
                     vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
+                } else if(v_words[0] == "mob_category") {
+                    vi.push_back(MOB_ACTION_IF_INFO_MOB_CATEGORY);
+                } else if(v_words[0] == "mob_type") {
+                    vi.push_back(MOB_ACTION_IF_INFO_MOB_TYPE);
                 } else {
                     log_error(
                         "Unknown comparison \"" + v_words[0] + "\"!",
@@ -262,6 +266,15 @@ mob_action::mob_action(
                     vi.push_back(p_nr);
                 }
             }
+            
+            if(vi.size() == 1) {
+                log_error(
+                    "The set_chomp_body_parts action needs both the maximum "
+                    "number of victims and the list of body parts!",
+                    dn
+                );
+                valid = false;
+            }
         }
         
         
@@ -347,16 +360,28 @@ mob_action::mob_action(
     } else if(n == "set_particle_generator") {
     
         type = MOB_ACTION_SET_PARTICLE_GENERATOR;
-        if(!v.empty()) {
+        if(v_words.size() == 0) {
+            //Everything okay, just remove whatever particle generator is up.
+        } else if(v_words.size() < 3) {
+            log_error(
+                "The set_particle_generator action needs a particle "
+                "generator name, and a coordinate offset!",
+                dn
+            );
+            valid = false;
+        } else {
             if(
-                custom_particle_generators.find(v) ==
+                custom_particle_generators.find(v_words[0]) ==
                 custom_particle_generators.end()
             ) {
                 log_error(
-                    "Particle generator \"" + v + "\" not found!", dn
+                    "Particle generator \"" + v_words[0] + "\" not found!", dn
                 );
+                valid = false;
             } else {
-                vs.push_back(v);
+                vs.push_back(v_words[0]);
+                vf.push_back(s2f(v_words[1]));
+                vf.push_back(s2f(v_words[2]));
             }
         }
         
@@ -639,6 +664,24 @@ bool mob_action::run(
                 }
             } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
                 lhs = i2s(m->health);
+            } else if(vi[2] == MOB_ACTION_IF_INFO_MOB_CATEGORY) {
+                if(
+                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                    parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+                    parent_event == MOB_EVENT_OPPONENT_IN_REACH
+                ) {
+                    lhs = ((mob*) custom_data_1)->type->category->name;
+                }
+            } else if(vi[2] == MOB_ACTION_IF_INFO_MOB_TYPE) {
+                if(
+                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                    parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+                    parent_event == MOB_EVENT_OPPONENT_IN_REACH
+                ) {
+                    lhs = ((mob*) custom_data_1)->type->name;
+                }
             }
             rhs = vs[0];
         } else {
@@ -765,7 +808,9 @@ bool mob_action::run(
             ) {
                 particle_generator pg = custom_particle_generators[vs[0]];
                 pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
-                pg.follow = &m->pos;
+                pg.follow_pos = &m->pos;
+                pg.follow_angle = &m->angle;
+                pg.follow_pos_offset = point(vf[0], vf[1]);
                 pg.reset();
                 m->particle_generators.push_back(pg);
             }
@@ -1028,8 +1073,8 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
     r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);
+    r("on_touch_wall",          MOB_EVENT_TOUCHED_WALL);
     r("on_timer",               MOB_EVENT_TIMER);
-    r("on_wall",                MOB_EVENT_TOUCHED_WALL);
     else {
         type = MOB_EVENT_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", d);

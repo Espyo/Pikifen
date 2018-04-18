@@ -953,7 +953,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
             p.size_grow_speed = m->type->radius * 4;
             p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow = &m->pos;
+            pg.follow_pos = &m->pos;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
@@ -1545,7 +1545,7 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow = &m->pos;
+    pg.follow_pos = &m->pos;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }

@@ -1156,15 +1156,17 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     }
     );
     
+    mob_state* state_before = m_ptr->fsm.cur_state;
     for(size_t e = 0; e < pending_intermob_events.size(); ++e) {
         if(!pending_intermob_events[e].event_ptr) continue;
         pending_intermob_events[e].event_ptr->run(
             m_ptr, (void*) pending_intermob_events[e].mob_ptr
         );
-        
-        //If it successfully ran the event, let's not go through the rest,
-        //since the state, reaches, etc. could've changed.
-        break;
+        if(m_ptr->fsm.cur_state != state_before) {
+            //We can't go on, since the new state might not even have the
+            //event, and the reaches could've also changed.
+            break;
+        }
     }
     
 }

@@ -918,7 +918,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow = &m->pos;
+    pg.follow_pos = &m->pos;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }
@@ -1318,8 +1318,9 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     hitbox* h_ptr = info->h2;
     
     if(!h_ptr || !h_ptr->can_pikmin_latch) {
-        //No good for latching on. Make it act like it landed on the ground.
-        m->fsm.run_event(MOB_EVENT_LANDED);
+        //No good for latching on. Make it bounce back.
+        m->speed.x *= -0.3;
+        m->speed.y *= -0.3;
         return;
     }
     
@@ -1560,7 +1561,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
             p.size_grow_speed = m->type->radius * 4;
             p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow = &m->pos;
+            pg.follow_pos = &m->pos;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }

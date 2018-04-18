@@ -97,8 +97,11 @@ public:
     vector<string> states_ignoring_spray; //States that ignore the spray event.
     
     //Misc.
+    bool appears_in_area_editor;
     bool is_obstacle;
+    bool is_projectile;
     bool blocks_carrier_pikmin;
+    bool projectiles_can_damage;
     vector<hazard*> resistances;
     spike_damage_type* spike_damage;
     map<spike_damage_type*, float> spike_damage_vulnerabilities;

@@ -31,6 +31,7 @@ bridge_type::bridge_type() :
     casts_shadow = false;
     is_obstacle = true;
     blocks_carrier_pikmin = true;
+    projectiles_can_damage = false;
     
     bridge_fsm::create_fsm(this);
 }
@@ -44,7 +45,7 @@ void bridge_type::load_resources(data_node* file) {
         file->get_child_by_name("main_texture")->value;
     if(!main_texture_file_name.empty()) {
         bmp_main_texture = textures.get(main_texture_file_name);
-            
+        
     }
     
     rail_texture_file_name =

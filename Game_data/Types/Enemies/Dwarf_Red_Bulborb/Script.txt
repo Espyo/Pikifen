@@ -196,7 +196,7 @@ script {
             set_animation crushed
             set_health 0
             stop
-            set_particle_generator dust_explosion
+            set_particle_generator dust_explosion 0 0
         }
         on_animation_end {
             set_state dying

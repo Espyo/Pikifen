@@ -145,7 +145,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -157,7 +157,7 @@ sprites{
 			}
 			body{
 				coords=-4.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -182,7 +182,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -194,7 +194,7 @@ sprites{
 			}
 			body{
 				coords=-4.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -219,7 +219,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -231,7 +231,7 @@ sprites{
 			}
 			body{
 				coords=-4.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -256,7 +256,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-6.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -268,7 +268,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=8.00
 				type=0
 				multiplier=1.00
@@ -293,7 +293,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-15.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -305,7 +305,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=8.00
 				type=0
 				multiplier=1.00
@@ -330,7 +330,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=12.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -342,7 +342,7 @@ sprites{
 			}
 			body{
 				coords=2.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00
@@ -367,7 +367,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-13.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -379,7 +379,7 @@ sprites{
 			}
 			body{
 				coords=2.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=8.00
 				type=0
 				multiplier=1.00
@@ -404,7 +404,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -416,7 +416,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=5.00
 				type=0
 				multiplier=1.00
@@ -441,7 +441,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-20.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -453,7 +453,7 @@ sprites{
 			}
 			body{
 				coords=8.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=10.00
 				type=0
 				multiplier=1.00
@@ -478,7 +478,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -490,7 +490,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00
@@ -515,7 +515,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-9.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -527,7 +527,7 @@ sprites{
 			}
 			body{
 				coords=2.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00
@@ -552,7 +552,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=3.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -564,7 +564,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00
@@ -589,7 +589,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=9.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -601,7 +601,7 @@ sprites{
 			}
 			body{
 				coords=-2.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00
@@ -626,7 +626,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.00 -2.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -638,7 +638,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=5.00
 				type=0
 				multiplier=1.00
@@ -663,7 +663,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=-4.00 2.00 0.00
-				height=128.00
+				height=24.00
 				radius=4.00
 				type=2
 				multiplier=1.00
@@ -675,7 +675,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=5.00
 				type=0
 				multiplier=1.00
@@ -700,7 +700,7 @@ sprites{
 		hitboxes{
 			top{
 				coords=12.00 -0.00 0.00
-				height=128.00
+				height=24.00
 				radius=8.00
 				type=1
 				multiplier=10.00
@@ -712,7 +712,7 @@ sprites{
 			}
 			body{
 				coords=2.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=6.00
 				type=0
 				multiplier=1.00

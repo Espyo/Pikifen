@@ -325,7 +325,8 @@ particle_generator::particle_generator(
     base_particle(base_particle),
     number(number),
     emission_interval(emission_interval),
-    follow(nullptr),
+    follow_pos(nullptr),
+    follow_angle(nullptr),
     number_deviation(0),
     duration_deviation(0),
     friction_deviation(0),
@@ -343,8 +344,8 @@ particle_generator::particle_generator(
  * Ticks one game frame of logic.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
-    if(follow) {
-        base_particle.pos = *follow;
+    if(follow_pos) {
+        base_particle.pos = *follow_pos;
     }
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {
@@ -359,11 +360,18 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
  * manager: The particle manager to place these particles on.
  */
 void particle_generator::emit(particle_manager &manager) {
+    point base_p_pos = base_particle.pos;
+    point offs = follow_pos_offset;
+    if(follow_angle) {
+        offs = rotate_point(offs, *follow_angle);
+    }
+    base_p_pos += offs;
+    
     if(
-        base_particle.pos.x < cam_box[0].x ||
-        base_particle.pos.x > cam_box[1].x ||
-        base_particle.pos.y < cam_box[0].y ||
-        base_particle.pos.y > cam_box[1].y
+        base_p_pos.x < cam_box[0].x ||
+        base_p_pos.x > cam_box[1].x ||
+        base_p_pos.y < cam_box[0].y ||
+        base_p_pos.y > cam_box[1].y
     ) {
         //Too far off-camera.
         return;
@@ -390,6 +398,7 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-friction_deviation, friction_deviation);
         new_p.gravity +=
             randomf(-gravity_deviation, gravity_deviation);
+        new_p.pos = base_p_pos;
         new_p.pos.x +=
             randomf(-pos_deviation.x, pos_deviation.x);
         new_p.pos.y +=
@@ -404,9 +413,12 @@ void particle_generator::emit(particle_manager &manager) {
         //(speed.x and speed.y) or (speed and angle).
         //We'll use whichever one is not all zeros.
         if(angle != 0 || total_speed != 0) {
+            float angle_to_use = angle;
+            if(follow_angle) angle_to_use += (*follow_angle);
+            
             new_p.speed =
                 angle_to_coordinates(
-                    angle + randomf(-angle_deviation, angle_deviation),
+                    angle_to_use + randomf(-angle_deviation, angle_deviation),
                     total_speed +
                     randomf(-total_speed_deviation, total_speed_deviation)
                 );
