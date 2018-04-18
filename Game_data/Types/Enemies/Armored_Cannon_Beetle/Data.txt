@@ -1,0 +1,23 @@
+name = Armored Cannon Beetle
+
+allow_ground_attacks = false
+drops_corpse = true
+health_regen = 0
+height = 100
+itch_damage = 20
+itch_time = 2
+max_carriers = 50
+max_health = 1300
+move_speed = 80
+pikmin_seeds = 50
+pushable = true
+pushes = true
+radius = 100
+reaches {
+    search = 300 180
+    attack = 300 5
+}
+rotation_speed = 40
+territory_radius = 300
+value = 200
+weight = 30

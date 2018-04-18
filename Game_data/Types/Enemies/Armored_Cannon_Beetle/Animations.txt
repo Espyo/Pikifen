@@ -1,0 +1,2327 @@
+animations{
+	idling{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.00
+			}
+		}
+	}
+	moving{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			moving1{
+				duration=0.10
+			}
+			moving2{
+				duration=0.10
+			}
+			moving1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			moving3{
+				duration=0.10
+			}
+			moving4{
+				duration=0.10
+			}
+			moving3{
+				duration=0.10
+			}
+		}
+	}
+	bored{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.20
+			}
+			bored1{
+				duration=0.20
+			}
+			idling{
+				duration=0.20
+			}
+			bored2{
+				duration=0.20
+			}
+		}
+	}
+	inhaling{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			inhale1{
+				duration=0.10
+			}
+			inhale2{
+				duration=0.10
+			}
+			inhale3{
+				duration=0.10
+			}
+			inhale4{
+				duration=0.10
+			}
+			inhale5{
+				duration=0.10
+			}
+			inhale2{
+				duration=0.10
+			}
+			inhale3{
+				duration=0.10
+			}
+			inhale4{
+				duration=0.10
+			}
+			inhale5{
+				duration=0.10
+			}
+			inhale2{
+				duration=0.10
+			}
+			inhale3{
+				duration=0.10
+			}
+			inhale4{
+				duration=0.10
+			}
+			inhale5{
+				duration=0.10
+			}
+			inhale1{
+				duration=0.10
+			}
+		}
+	}
+	spitting{
+		loop_frame=0
+		frames{
+			inhale1{
+				duration=0.10
+			}
+			spitting2{
+				duration=0.10
+				signal=0
+			}
+			spitting1{
+				duration=0.10
+			}
+			idling{
+				duration=0.30
+			}
+		}
+	}
+	catching{
+		loop_frame=0
+		frames{
+			opening1{
+				duration=0.10
+			}
+			inhale1{
+				duration=0.10
+			}
+			idling{
+				duration=0.80
+			}
+			opening1{
+				duration=0.10
+			}
+			opening2{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.30
+			}
+		}
+	}
+	moving_hot{
+		loop_frame=0
+		frames{
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot1{
+				duration=0.10
+			}
+			moving_hot2{
+				duration=0.10
+			}
+			moving_hot1{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot3{
+				duration=0.10
+			}
+			moving_hot4{
+				duration=0.10
+			}
+			moving_hot3{
+				duration=0.10
+			}
+		}
+	}
+	closing_cool{
+		loop_frame=0
+		frames{
+			moving_cool1{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			moving_cool3{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			moving_cool1{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			moving_cool3{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			moving_cool1{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			closing_cool1{
+				duration=0.10
+				signal=0
+			}
+			closing_cool2{
+				duration=0.10
+			}
+			inhale1{
+				duration=0.10
+			}
+			idling{
+				duration=1.00
+			}
+		}
+	}
+	closing_hot{
+		loop_frame=0
+		frames{
+			moving_hot1{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot3{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot1{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot3{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			moving_hot1{
+				duration=0.10
+			}
+			idling_hot{
+				duration=0.10
+			}
+			closing_hot1{
+				duration=0.10
+				signal=0
+			}
+			closing_hot2{
+				duration=0.10
+			}
+			inhale1{
+				duration=0.10
+			}
+			idling{
+				duration=1.00
+			}
+		}
+	}
+	dying{
+		loop_frame=4
+		frames{
+			idling{
+				duration=0.10
+			}
+			dying1{
+				duration=0.10
+			}
+			dying2{
+				duration=0.10
+			}
+			dying3{
+				duration=0.10
+			}
+			dying4{
+				duration=1.00
+			}
+		}
+	}
+	moving_cool{
+		loop_frame=1
+		frames{
+			cooling{
+				duration=0.10
+			}
+			moving_cool1{
+				duration=0.10
+			}
+			moving_cool2{
+				duration=0.10
+			}
+			moving_cool1{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+			moving_cool3{
+				duration=0.10
+			}
+			moving_cool4{
+				duration=0.10
+			}
+			moving_cool3{
+				duration=0.10
+			}
+			idling_cool{
+				duration=0.10
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=36.00 0.00
+		hitboxes{
+			flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=284.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=36.00 2.00
+		hitboxes{
+			flesh{
+				coords=-18.00 2.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 2.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 2.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=568.00 0.00
+		file_size=286.00 386.00
+		game_size=286.00 386.00
+		offset=37.00 4.00
+		hitboxes{
+			flesh{
+				coords=-18.00 4.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 4.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 4.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving3{
+		file=Armored_Cannon_Beetle.png
+		file_pos=284.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 -386.00
+		offset=36.00 -2.00
+		hitboxes{
+			flesh{
+				coords=-18.00 -2.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 -2.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 -2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 -2.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving4{
+		file=Armored_Cannon_Beetle.png
+		file_pos=568.00 0.00
+		file_size=286.00 386.00
+		game_size=286.00 -386.00
+		offset=37.00 -4.00
+		hitboxes{
+			flesh{
+				coords=-18.00 -4.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 -4.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 -4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 -4.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bored1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=855.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=36.00 0.00
+		hitboxes{
+			flesh{
+				coords=-18.00 6.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 6.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 6.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 6.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bored2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=855.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 -386.00
+		offset=36.00 0.00
+		hitboxes{
+			flesh{
+				coords=-18.00 -6.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 -6.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=120.00 -6.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=5.00 -6.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	inhale1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1139.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=32.00 0.00
+		hitboxes{
+			flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	inhale2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1423.00 0.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=28.00 0.00
+		hitboxes{
+			flesh{
+				coords=-26.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			hot_flesh{
+				coords=-26.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			shell{
+				coords=-4.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	inhale3{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 387.00
+		file_size=284.00 386.00
+		game_size=284.00 386.00
+		offset=26.00 0.00
+		hitboxes{
+			flesh{
+				coords=-30.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-30.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=112.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			shell{
+				coords=-8.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	inhale4{
+		file=Armored_Cannon_Beetle.png
+		file_pos=285.00 387.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=28.00 0.00
+		hitboxes{
+			flesh{
+				coords=-26.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-26.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			shell{
+				coords=-4.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	inhale5{
+		file=Armored_Cannon_Beetle.png
+		file_pos=569.00 387.00
+		file_size=284.00 386.00
+		game_size=284.00 386.00
+		offset=26.00 0.00
+		hitboxes{
+			flesh{
+				coords=-30.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-30.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=112.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			shell{
+				coords=-8.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	spitting1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=854.00 387.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=40.00 0.00
+		hitboxes{
+			flesh{
+				coords=-14.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-14.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=124.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=9.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	spitting2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1138.00 387.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=44.00 0.00
+		hitboxes{
+			flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=128.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=13.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	opening1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1422.00 387.00
+		file_size=285.00 386.00
+		game_size=285.00 386.00
+		offset=28.00 0.00
+		hitboxes{
+			flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=-4.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	opening2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 774.00
+		file_size=303.00 386.00
+		game_size=303.00 386.00
+		offset=26.00 0.00
+		hitboxes{
+			flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=41.84 0.00 0.00
+				height=100.00
+				radius=140.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	idling_hot{
+		file=Armored_Cannon_Beetle.png
+		file_pos=304.00 774.00
+		file_size=312.00 386.00
+		game_size=312.00 386.00
+		offset=22.00 0.00
+		hitboxes{
+			flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 0.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_hot1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=617.00 774.00
+		file_size=312.00 386.00
+		game_size=312.00 386.00
+		offset=22.00 2.00
+		hitboxes{
+			flesh{
+				coords=0.00 2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 2.00 50.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 2.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_hot2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=930.00 774.00
+		file_size=315.00 386.00
+		game_size=315.00 386.00
+		offset=23.00 4.00
+		hitboxes{
+			flesh{
+				coords=0.00 4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 4.00 50.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 4.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_hot3{
+		file=Armored_Cannon_Beetle.png
+		file_pos=617.00 774.00
+		file_size=312.00 386.00
+		game_size=312.00 -386.00
+		offset=22.00 -2.00
+		hitboxes{
+			flesh{
+				coords=0.00 -2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 -2.00 50.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 -2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 -2.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_hot4{
+		file=Armored_Cannon_Beetle.png
+		file_pos=930.00 774.00
+		file_size=315.00 386.00
+		game_size=315.00 -386.00
+		offset=23.00 -4.00
+		hitboxes{
+			flesh{
+				coords=0.00 -4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 -4.00 50.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			blowhole{
+				coords=116.00 -4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 -4.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 1548.00
+		file_size=287.00 326.00
+		game_size=287.00 326.00
+		offset=32.00 0.00
+		hitboxes{
+			flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=70.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=288.00 1548.00
+		file_size=264.00 338.00
+		game_size=264.00 338.00
+		offset=26.00 0.00
+		hitboxes{
+			flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=-60.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying3{
+		file=Armored_Cannon_Beetle.png
+		file_pos=553.00 1548.00
+		file_size=281.00 232.00
+		game_size=281.00 232.00
+		offset=-25.00 0.00
+		hitboxes{
+			flesh{
+				coords=18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=-70.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying4{
+		file=Armored_Cannon_Beetle.png
+		file_pos=835.00 1548.00
+		file_size=283.00 234.00
+		game_size=283.00 234.00
+		offset=-36.00 0.00
+		hitboxes{
+			flesh{
+				coords=18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=18.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=-120.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=-5.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	closing_cool1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 1161.00
+		file_size=285.00 386.00
+		game_size=285.00 386.00
+		offset=35.00 0.00
+		hitboxes{
+			flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=41.84 0.00 0.00
+				height=100.00
+				radius=140.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+		}
+	}
+	closing_cool2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1141.00 1161.00
+		file_size=285.00 386.00
+		game_size=285.00 386.00
+		offset=28.00 0.00
+		hitboxes{
+			flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=-4.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+		}
+	}
+	closing_hot1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=0.00 774.00
+		file_size=303.00 386.00
+		game_size=303.00 386.00
+		offset=26.00 0.00
+		hitboxes{
+			flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-10.00 0.00 50.00
+				height=100.00
+				radius=100.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=41.84 0.00 0.00
+				height=100.00
+				radius=140.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+		}
+	}
+	closing_hot2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1422.00 387.00
+		file_size=285.00 386.00
+		game_size=285.00 386.00
+		offset=28.00 0.00
+		hitboxes{
+			flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=-22.00 0.00 50.00
+				height=100.00
+				radius=80.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=-4.00 0.00 0.00
+				height=100.00
+				radius=110.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=3.14
+				knockback=1.00
+			}
+		}
+	}
+	cooling{
+		file=Armored_Cannon_Beetle.png
+		file_pos=1246.00 774.00
+		file_size=312.00 386.00
+		game_size=312.00 386.00
+		offset=22.00 0.00
+		hitboxes{
+			flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 0.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	idling_cool{
+		file=Armored_Cannon_Beetle.png
+		file_pos=286.00 1161.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=36.00 0.00
+		hitboxes{
+			flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 0.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 0.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 0.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_cool1{
+		file=Armored_Cannon_Beetle.png
+		file_pos=570.00 1161.00
+		file_size=283.00 386.00
+		game_size=283.00 386.00
+		offset=36.00 2.00
+		hitboxes{
+			flesh{
+				coords=0.00 2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 2.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_cool2{
+		file=Armored_Cannon_Beetle.png
+		file_pos=854.00 1161.00
+		file_size=286.00 386.00
+		game_size=286.00 386.00
+		offset=37.00 4.00
+		hitboxes{
+			flesh{
+				coords=0.00 4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 4.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_cool3{
+		file=Armored_Cannon_Beetle.png
+		file_pos=570.00 1161.00
+		file_size=283.00 386.00
+		game_size=283.00 -386.00
+		offset=36.00 -2.00
+		hitboxes{
+			flesh{
+				coords=0.00 -2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 -2.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 -2.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 -2.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving_cool4{
+		file=Armored_Cannon_Beetle.png
+		file_pos=854.00 1161.00
+		file_size=286.00 386.00
+		game_size=286.00 -386.00
+		offset=37.00 -4.00
+		hitboxes{
+			flesh{
+				coords=0.00 -4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			hot_flesh{
+				coords=0.00 -4.00 50.00
+				height=100.00
+				radius=110.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			blowhole{
+				coords=116.00 -4.00 50.00
+				height=300.00
+				radius=18.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			shell{
+				coords=90.00 -4.00 0.00
+				height=300.00
+				radius=90.00
+				type=0
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+}
+body_parts{
+	flesh
+	hot_flesh
+	blowhole
+	shell
+}

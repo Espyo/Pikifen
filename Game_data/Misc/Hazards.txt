@@ -33,3 +33,8 @@ ink {
     color = 64 64 64
     effects = inked
 }
+
+crush {
+    color = 0 0 0
+    effects = crushed
+}

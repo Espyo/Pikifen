@@ -93,3 +93,13 @@ petrified {
     speed_multiplier = 0
     tint = 64 64 64
 }
+
+crushed {
+    affects_pikmin = true
+    causes_disable = true
+    disabled_state_inedible = true
+    color = 0 0 0
+    health_change_ratio = -1.5
+    speed_multiplier = 0
+    tint = 0 0 0 0
+}

@@ -1,0 +1,334 @@
+animations{
+	rolling{
+		loop_frame=0
+		frames{
+			rolling4{
+				duration=0.10
+			}
+			rolling5{
+				duration=0.10
+			}
+			rolling6{
+				duration=0.10
+			}
+			rolling1{
+				duration=0.10
+			}
+			rolling2{
+				duration=0.10
+			}
+			rolling3{
+				duration=0.10
+			}
+		}
+	}
+	growing{
+		loop_frame=0
+		frames{
+			growing1{
+				duration=0.05
+			}
+			growing2{
+				duration=0.05
+			}
+			growing3{
+				duration=0.05
+			}
+			growing4{
+				duration=0.05
+			}
+			growing5{
+				duration=0.05
+			}
+			growing6{
+				duration=0.05
+			}
+		}
+	}
+	destroyed{
+		loop_frame=0
+		frames{
+			destroyed{
+				duration=0.10
+			}
+		}
+	}
+}
+sprites{
+	rolling1{
+		file=Boulder.png
+		file_pos=0.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	rolling2{
+		file=Boulder.png
+		file_pos=65.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	rolling3{
+		file=Boulder.png
+		file_pos=130.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	rolling4{
+		file=Boulder.png
+		file_pos=195.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	rolling5{
+		file=Boulder.png
+		file_pos=260.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	rolling6{
+		file=Boulder.png
+		file_pos=325.00 0.00
+		file_size=64.00 64.00
+		game_size=64.00 64.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	destroyed{
+		file=Boulder.png
+		file_pos=0.00 0.00
+		file_size=0.00 0.00
+		game_size=0.00 0.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing1{
+		file=Boulder.png
+		file_pos=0.00 0.00
+		file_size=64.00 64.00
+		game_size=16.00 16.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=8.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing2{
+		file=Boulder.png
+		file_pos=0.00 0.00
+		file_size=64.00 64.00
+		game_size=24.00 24.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=12.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing3{
+		file=Boulder.png
+		file_pos=65.00 0.00
+		file_size=64.00 64.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=16.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing4{
+		file=Boulder.png
+		file_pos=65.00 0.00
+		file_size=64.00 64.00
+		game_size=40.00 40.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=20.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing5{
+		file=Boulder.png
+		file_pos=130.00 0.00
+		file_size=64.00 64.00
+		game_size=48.00 48.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=24.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	growing6{
+		file=Boulder.png
+		file_pos=130.00 0.00
+		file_size=64.00 64.00
+		game_size=56.00 56.00
+		offset=0.00 0.00
+		hitboxes{
+			rock{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=28.00
+				type=1
+				multiplier=2.00
+				can_pikmin_latch=false
+				hazards=crush
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+}
+body_parts{
+	rock
+}
