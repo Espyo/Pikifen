@@ -1103,7 +1103,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hitbox touch information structure.
  */
 void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    hitbox_interaction* info = (hitbox_interaction*) info1;
     pikmin* p_ptr = (pikmin*) m;
     
     if(p_ptr->invuln_period.time_left > 0) return;
@@ -1310,7 +1310,7 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    hitbox_interaction* info = (hitbox_interaction*) info1;
     mob* mob_ptr = info->mob2;
     
     if(!m->should_attack(mob_ptr)) return;
@@ -1616,7 +1616,7 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
         
     } else {
         //Go for a latch.
-        hitbox_touch_info hti(p_ptr->focused_mob, NULL, closest_h);
+        hitbox_interaction hti(p_ptr->focused_mob, NULL, closest_h);
         pikmin_fsm::land_on_mob(m, &hti, NULL);
         
     }

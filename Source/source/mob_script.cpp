@@ -132,7 +132,9 @@ mob_action::mob_action(
                 
             } else {
             
-                if(v_words[0] == "chomped_pikmin") {
+                if(v_words[0] == "body_part") {
+                    vi.push_back(MOB_ACTION_IF_INFO_BODY_PART);
+                } else if(v_words[0] == "chomped_pikmin") {
                     vi.push_back(MOB_ACTION_IF_INFO_CHOMPED_PIKMIN);
                 } else if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
@@ -140,10 +142,16 @@ mob_action::mob_action(
                     vi.push_back(MOB_ACTION_IF_INFO_FRAME_SIGNAL);
                 } else if(v_words[0] == "health") {
                     vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
+                } else if(v_words[0] == "latched_pikmin") {
+                    vi.push_back(MOB_ACTION_IF_INFO_LATCHED_PIKMIN);
+                } else if(v_words[0] == "latched_pikmin_weight") {
+                    vi.push_back(MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT);
                 } else if(v_words[0] == "mob_category") {
                     vi.push_back(MOB_ACTION_IF_INFO_MOB_CATEGORY);
                 } else if(v_words[0] == "mob_type") {
                     vi.push_back(MOB_ACTION_IF_INFO_MOB_TYPE);
+                } else if(v_words[0] == "other_body_part") {
+                    vi.push_back(MOB_ACTION_IF_INFO_OTHER_BODY_PART);
                 } else {
                     log_error(
                         "Unknown comparison \"" + v_words[0] + "\"!",
@@ -664,6 +672,10 @@ bool mob_action::run(
                 }
             } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
                 lhs = i2s(m->health);
+            } else if(vi[2] == MOB_ACTION_IF_INFO_LATCHED_PIKMIN) {
+                lhs = i2s(m->get_latched_pikmin_amount());
+            } else if(vi[2] == MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT) {
+                lhs = i2s(m->get_latched_pikmin_weight());
             } else if(vi[2] == MOB_ACTION_IF_INFO_MOB_CATEGORY) {
                 if(
                     parent_event == MOB_EVENT_TOUCHED_OBJECT ||
@@ -681,6 +693,47 @@ bool mob_action::run(
                     parent_event == MOB_EVENT_OPPONENT_IN_REACH
                 ) {
                     lhs = ((mob*) custom_data_1)->type->name;
+                }
+            } else if(vi[2] == MOB_ACTION_IF_INFO_BODY_PART) {
+                if(
+                    parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+                    parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+                    parent_event == MOB_EVENT_DAMAGE
+                ) {
+                    lhs =
+                        (
+                            (hitbox_interaction*) custom_data_1
+                        )->h1->body_part_name;
+                } else if(
+                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                    parent_event == MOB_EVENT_PIKMIN_LANDED
+                ) {
+                    lhs =
+                        m->get_closest_hitbox(
+                            ((mob*) custom_data_1)->pos,
+                            INVALID, NULL
+                        )->body_part_name;
+                }
+            } else if(vi[2] == MOB_ACTION_IF_INFO_OTHER_BODY_PART) {
+                if(
+                    parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+                    parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+                    parent_event == MOB_EVENT_DAMAGE
+                ) {
+                    lhs =
+                        (
+                            (hitbox_interaction*) custom_data_1
+                        )->h2->body_part_name;
+                } else if(
+                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                    parent_event == MOB_EVENT_PIKMIN_LANDED
+                ) {
+                    lhs =
+                        ((mob*) custom_data_1)->get_closest_hitbox(
+                            m->pos, INVALID, NULL
+                        )->body_part_name;
                 }
             }
             rhs = vs[0];
@@ -1068,7 +1121,6 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
     r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
-    r("on_pikmin_latch",        MOB_EVENT_PIKMIN_LATCHED);
     r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
@@ -1463,7 +1515,7 @@ vector<mob_state*> easy_fsm_creator::finish() {
  * h1:   the current mob's hitbox.
  * h2:   the other mob's hitbox.
  */
-hitbox_touch_info::hitbox_touch_info(
+hitbox_interaction::hitbox_interaction(
     mob* mob2, hitbox* h1, hitbox* h2
 ) {
     this->mob2 = mob2;

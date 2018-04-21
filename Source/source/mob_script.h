@@ -84,12 +84,16 @@ enum MOB_ACTION_IF_LHS_TYPE {
 
 //If action info types.
 enum MOB_ACTION_IF_INFO_TYPES {
+    MOB_ACTION_IF_INFO_BODY_PART,
     MOB_ACTION_IF_INFO_CHOMPED_PIKMIN,
     MOB_ACTION_IF_INFO_DAY_MINUTES,
     MOB_ACTION_IF_INFO_FRAME_SIGNAL,
     MOB_ACTION_IF_INFO_HEALTH,
+    MOB_ACTION_IF_INFO_LATCHED_PIKMIN,
+    MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT,
     MOB_ACTION_IF_INFO_MOB_CATEGORY,
     MOB_ACTION_IF_INFO_MOB_TYPE,
+    MOB_ACTION_IF_INFO_OTHER_BODY_PART,
 };
 
 //If action operator types.
@@ -158,8 +162,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_OPPONENT_IN_REACH,
     //When a Pikmin lands on it.
     MOB_EVENT_PIKMIN_LANDED,
-    //When a Pikmin latches on to it.
-    MOB_EVENT_PIKMIN_LATCHED,
     //When it reaches its destination.
     MOB_EVENT_REACHED_DESTINATION,
     //When it gets touched by a leader.
@@ -369,11 +371,11 @@ public:
     easy_fsm_creator();
 };
 
-struct hitbox_touch_info {
+struct hitbox_interaction {
     mob* mob2;  //Mob that touched our mob.
     hitbox* h1; //Hitbox of our mob that got touched.
     hitbox* h2; //Hitbox of the other mob.
-    hitbox_touch_info(
+    hitbox_interaction(
         mob* mob2 = NULL,
         hitbox* h1 = NULL, hitbox* h2 = NULL
     );

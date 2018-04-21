@@ -310,7 +310,9 @@ bool mob::attack(
     
     victim->set_health(true, false, -total_damage);
     
-    victim->fsm.run_event(MOB_EVENT_DAMAGE, this);
+    hitbox_interaction ev_info(this, victim_h, attack_h);
+    victim->fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
+    
     victim->cause_spike_damage(victim, false);
     victim->itch_damage += total_damage;
     
@@ -808,6 +810,43 @@ hitbox* mob::get_hitbox(const size_t nr) {
     if(!s) return NULL;
     if(s->hitboxes.empty()) return NULL;
     return &s->hitboxes[nr];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many Pikmin are currently latched on to this mob.
+ */
+size_t mob::get_latched_pikmin_amount() {
+    size_t total = 0;
+    for(size_t p = 0; p < pikmin_list.size(); ++p) {
+        pikmin* p_ptr = pikmin_list[p];
+        if(
+            p_ptr->focused_mob == this &&
+            p_ptr->connected_hitbox_nr != INVALID
+        ) {
+            total++;
+        }
+    }
+    return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total weight of the Pikmin that are currently
+ * latched on to this mob.
+ */
+float mob::get_latched_pikmin_weight() {
+    float total = 0;
+    for(size_t p = 0; p < pikmin_list.size(); ++p) {
+        pikmin* p_ptr = pikmin_list[p];
+        if(
+            p_ptr->focused_mob == this &&
+            p_ptr->connected_hitbox_nr != INVALID
+        ) {
+            total += p_ptr->type->weight;
+        }
+    }
+    return total;
 }
 
 

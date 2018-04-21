@@ -945,8 +945,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         !reported_n_ev &&
                         h2_ptr->type == HITBOX_TYPE_NORMAL
                     ) {
-                        hitbox_touch_info ev_info =
-                            hitbox_touch_info(
+                        hitbox_interaction ev_info =
+                            hitbox_interaction(
                                 m2_ptr, h1_ptr, h2_ptr
                             );
                         hitbox_touch_n_ev->run(
@@ -1065,8 +1065,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         h1_ptr->type == HITBOX_TYPE_NORMAL &&
                         h2_ptr->type == HITBOX_TYPE_ATTACK
                     ) {
-                        hitbox_touch_info ev_info =
-                            hitbox_touch_info(
+                        hitbox_interaction ev_info =
+                            hitbox_interaction(
                                 m2_ptr, h1_ptr, h2_ptr
                             );
                         hitbox_touch_na_ev->run(

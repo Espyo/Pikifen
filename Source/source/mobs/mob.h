@@ -349,6 +349,8 @@ public:
     void apply_knockback(const float knockback, const float knockback_angle);
     void calculate_carrying_destination(mob* added, mob* removed);
     void cause_spike_damage(mob* victim, const bool is_ingestion);
+    size_t get_latched_pikmin_amount();
+    float get_latched_pikmin_weight();
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void leave_group();
