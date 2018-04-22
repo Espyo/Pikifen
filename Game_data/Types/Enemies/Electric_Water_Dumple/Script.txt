@@ -57,10 +57,10 @@ script {
         on_enter {
             stop
             set_animation attacking
-            set_chomp_body_parts 2 mouth
+            start_chomping 2 mouth
         }
         on_animation_end {
-            set_chomp_body_parts
+            stop_chomping
             if chomped_pikmin > 0
                 set_state eating
             else
@@ -71,11 +71,11 @@ script {
     
     eating {
         on_enter {
-            set_chomp_body_parts
+            stop_chomping
             set_animation eating
         }
         on_animation_end {
-            eat all
+            swallow all
             set_state idling
         }
     }

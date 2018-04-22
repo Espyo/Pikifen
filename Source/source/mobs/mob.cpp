@@ -662,20 +662,11 @@ void mob::draw(sprite_effect_manager* effect_manager) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes the mob eat some of the opponents it has chomped on.
+ * Makes the mob swallow some of the opponents it has chomped on.
  * nr: Number of captured opponents to swallow.
- *   0: Release all of them.
  */
-void mob::eat(const size_t nr) {
+void mob::swallow_chomped_pikmin(const size_t nr) {
 
-    if(nr == 0) {
-        for(size_t p = 0; p < chomping_pikmin.size(); ++p) {
-            chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
-        }
-        chomping_pikmin.clear();
-        return;
-    }
-    
     size_t total = min(nr, chomping_pikmin.size());
     
     for(size_t p = 0; p < total; ++p) {
@@ -734,7 +725,7 @@ void mob::finish_dying() {
         particles.add(par);
     }
     
-    eat(0);
+    release_chomped_pikmin();
 }
 
 
@@ -973,6 +964,17 @@ void mob::leave_group() {
     }
     
     following_group = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Safely releases all chomped Pikmin.
+ */
+void mob::release_chomped_pikmin() {
+    for(size_t p = 0; p < chomping_pikmin.size(); ++p) {
+        chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
+    }
+    chomping_pikmin.clear();
 }
 
 

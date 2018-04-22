@@ -52,18 +52,6 @@ mob_action::mob_action(
     
         type = MOB_ACTION_DELETE;
         
-    } else if(n == "eat") {
-    
-        type = MOB_ACTION_EAT;
-        
-        if(v == "all") {
-            vi.push_back(MOB_ACTION_EAT_ALL);
-        } else {
-            vi.push_back(MOB_ACTION_EAT_NUMBER);
-            vi.push_back(s2i(v));
-        }
-        
-        
     } else if(n == "else") {
     
         type = MOB_ACTION_ELSE;
@@ -255,6 +243,11 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "release") {
+    
+        type = MOB_ACTION_RELEASE;
+        
+        
     } else if(n == "set_animation") {
     
         type = MOB_ACTION_SET_ANIMATION;
@@ -265,36 +258,6 @@ mob_action::mob_action(
             valid = false;
         } else {
             vi.push_back(f_pos);
-        }
-        
-        
-    } else if(n == "set_chomp_body_parts") {
-    
-        type = MOB_ACTION_SET_CHOMP_BODY_PARTS;
-        
-        if(!v_words.empty()) {
-            //The first word is the number of Pikmin it can chomp at most.
-            vi.push_back(s2i(v_words[0]));
-            
-            for(size_t p = 1; p < v_words.size(); ++p) {
-                size_t p_nr = mt->anims.find_body_part(v_words[p]);
-                
-                if(p_nr == INVALID) {
-                    log_error("Unknown body part \"" + v_words[p] + "\"!", dn);
-                    valid = false;
-                } else {
-                    vi.push_back(p_nr);
-                }
-            }
-            
-            if(vi.size() == 1) {
-                log_error(
-                    "This \"set_chomp_body_parts\" is badly formed! Format: "
-                    "\"set_chomp_body_parts <maximum victims> <body parts>\".",
-                    dn
-                );
-                valid = false;
-            }
         }
         
         
@@ -371,35 +334,6 @@ mob_action::mob_action(
             valid = false;
         } else {
             vi.push_back(s2b(v));
-        }
-        
-        
-    } else if(n == "set_particle_generator") {
-    
-        type = MOB_ACTION_SET_PARTICLE_GENERATOR;
-        if(v_words.size() == 0) {
-            //Everything okay, just remove whatever particle generator is up.
-        } else if(v_words.size() < 3) {
-            log_error(
-                "This \"set_particle_generator\" is badly formed! Format: "
-                "\"set_particle_generator\" <generator name> "
-                "<x offset> <y offset>\".", dn
-            );
-            valid = false;
-        } else {
-            if(
-                custom_particle_generators.find(v_words[0]) ==
-                custom_particle_generators.end()
-            ) {
-                log_error(
-                    "Particle generator \"" + v_words[0] + "\" not found!", dn
-                );
-                valid = false;
-            } else {
-                vs.push_back(v_words[0]);
-                vf.push_back(s2f(v_words[1]));
-                vf.push_back(s2f(v_words[2]));
-            }
         }
         
         
@@ -529,9 +463,70 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "start_chomping") {
+    
+        type = MOB_ACTION_START_CHOMPING;
+        
+        if(v_words.empty()) {
+            valid = false;
+        } else {
+            //The first word is the number of Pikmin it can chomp at most.
+            vi.push_back(s2i(v_words[0]));
+            
+            for(size_t p = 1; p < v_words.size(); ++p) {
+                size_t p_nr = mt->anims.find_body_part(v_words[p]);
+                
+                if(p_nr == INVALID) {
+                    log_error("Unknown body part \"" + v_words[p] + "\"!", dn);
+                    valid = false;
+                } else {
+                    vi.push_back(p_nr);
+                }
+            }
+            
+            if(vi.size() == 1) {
+                valid = false;
+            }
+        }
+        
+        if(!valid) {
+            log_error(
+                "This \"start_chomping\" is badly formed! Format: "
+                "\"start_chomping <maximum victims> <body parts>\".", dn
+            );
+        }
+        
+        
     } else if(n == "start_dying") {
     
         type = MOB_ACTION_START_DYING;
+        
+        
+    } else if(n == "start_particles") {
+    
+        type = MOB_ACTION_START_PARTICLES;
+        if(v_words.size() < 3) {
+            log_error(
+                "This \"start_particles\" is badly formed! Format: "
+                "\"start_particles\" <generator name> "
+                "<x offset> <y offset>\".", dn
+            );
+            valid = false;
+        } else {
+            if(
+                custom_particle_generators.find(v_words[0]) ==
+                custom_particle_generators.end()
+            ) {
+                log_error(
+                    "Particle generator \"" + v_words[0] + "\" not found!", dn
+                );
+                valid = false;
+            } else {
+                vs.push_back(v_words[0]);
+                vf.push_back(s2f(v_words[1]));
+                vf.push_back(s2f(v_words[2]));
+            }
+        }
         
         
     } else if(n == "stop") {
@@ -540,6 +535,28 @@ mob_action::mob_action(
         
         if(v == "vertically") {
             vi.push_back(1);
+        }
+        
+        
+    } else if(n == "stop_chomping") {
+    
+        type = MOB_ACTION_STOP_CHOMPING;
+        
+        
+    } else if(n == "stop_particles") {
+    
+        type = MOB_ACTION_STOP_PARTICLES;
+        
+        
+    } else if(n == "swallow") {
+    
+        type = MOB_ACTION_SWALLOW;
+        
+        if(v == "all") {
+            vi.push_back(MOB_ACTION_SWALLOW_ALL);
+        } else {
+            vi.push_back(MOB_ACTION_SWALLOW_NUMBER);
+            vi.push_back(s2i(v));
         }
         
         
@@ -653,12 +670,12 @@ bool mob_action::run(
         m->to_delete = true;
         
         
-    } else if(type == MOB_ACTION_EAT) {
+    } else if(type == MOB_ACTION_SWALLOW) {
     
-        if(vi[0] == MOB_ACTION_EAT_ALL) {
-            m->eat(m->chomping_pikmin.size());
+        if(vi[0] == MOB_ACTION_SWALLOW_ALL) {
+            m->swallow_chomped_pikmin(m->chomping_pikmin.size());
         } else {
-            m->eat(vi[1]);
+            m->swallow_chomped_pikmin(vi[1]);
         }
         
         
@@ -828,22 +845,22 @@ bool mob_action::run(
         m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
         
         
+    } else if(type == MOB_ACTION_RELEASE) {
+    
+        m->release_chomped_pikmin();
+        
+        
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
         m->set_animation(vi[0], false);
         
         
-    } else if(type == MOB_ACTION_SET_CHOMP_BODY_PARTS) {
+    } else if(type == MOB_ACTION_START_CHOMPING) {
     
-        if(vi.empty()) {
-            m->chomp_max = 0;
-            m->chomp_body_parts.clear();
-        } else {
-            m->chomp_max = vi[0];
-            m->chomp_body_parts.clear();
-            for(size_t p = 1; p < vi.size(); ++p) {
-                m->chomp_body_parts.push_back(vi[p]);
-            }
+        m->chomp_max = vi[0];
+        m->chomp_body_parts.clear();
+        for(size_t p = 1; p < vi.size(); ++p) {
+            m->chomp_body_parts.push_back(vi[p]);
         }
         
         
@@ -873,26 +890,6 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_NEAR_REACH) {
     
         m->near_reach = vi[0];
-        
-    } else if(type == MOB_ACTION_SET_PARTICLE_GENERATOR) {
-    
-        if(vs.empty()) {
-            m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
-        } else {
-            if(
-                custom_particle_generators.find(vs[0]) !=
-                custom_particle_generators.end()
-            ) {
-                particle_generator pg = custom_particle_generators[vs[0]];
-                pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
-                pg.follow_pos = &m->pos;
-                pg.follow_angle = &m->angle;
-                pg.follow_pos_offset = point(vf[0], vf[1]);
-                pg.reset();
-                m->particle_generators.push_back(pg);
-            }
-        }
-        
         
     } else if(type == MOB_ACTION_SET_STATE) {
     
@@ -968,6 +965,26 @@ bool mob_action::run(
         m->start_dying();
         
         
+    } else if(type == MOB_ACTION_START_PARTICLES) {
+    
+        if(vs.empty()) {
+            m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+        } else {
+            if(
+                custom_particle_generators.find(vs[0]) !=
+                custom_particle_generators.end()
+            ) {
+                particle_generator pg = custom_particle_generators[vs[0]];
+                pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
+                pg.follow_pos = &m->pos;
+                pg.follow_angle = &m->angle;
+                pg.follow_pos_offset = point(vf[0], vf[1]);
+                pg.reset();
+                m->particle_generators.push_back(pg);
+            }
+        }
+        
+        
     } else if(type == MOB_ACTION_STOP) {
     
         if(vi.empty()) {
@@ -976,6 +993,17 @@ bool mob_action::run(
         } else {
             m->speed_z = 0;
         }
+        
+        
+    } else if(type == MOB_ACTION_STOP_CHOMPING) {
+    
+        m->chomp_max = 0;
+        m->chomp_body_parts.clear();
+        
+        
+    } else if(type == MOB_ACTION_STOP_PARTICLES) {
+    
+        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
         
         
     } else if(type == MOB_ACTION_TELEPORT) {

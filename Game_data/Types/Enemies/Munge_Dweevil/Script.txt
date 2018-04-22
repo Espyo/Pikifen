@@ -65,7 +65,7 @@ script {
     attacking {
         on_enter {
             set_animation attacking
-            set_particle_generator gas_explosion 0 0
+            start_particles gas_explosion 0 0
         }
         on_animation_end {
             set_state relaxing

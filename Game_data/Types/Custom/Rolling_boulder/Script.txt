@@ -11,7 +11,7 @@ script {
         on_enter {
             move relative 1000 0
             set_animation growing
-            set_particle_generator dust 0 0
+            start_particles dust 0 0
             set_near_reach homing
             set_far_reach homing
         }
@@ -62,7 +62,7 @@ script {
     
     destroying {
         on_enter {
-            set_particle_generator rock_explosion 0 0
+            start_particles rock_explosion 0 0
             set_animation destroyed
         }
         on_animation_end {

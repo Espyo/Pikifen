@@ -5,14 +5,14 @@ script{
     shooting {
         on_enter {
             set_animation shooting
-            set_particle_generator gas_pipe 0 0
+            start_particles gas_pipe 0 0
         }
     }
     destroyed {
         on_enter {
             set_animation destroyed
             start_dying
-            set_particle_generator 
+            stop_particles
         }
     }
 }

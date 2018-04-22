@@ -96,10 +96,10 @@ script {
         on_enter {
             stop
             set_animation attacking
-            set_chomp_body_parts 5 tongue1 tongue2
+            start_chomping 5 tongue1 tongue2
         }
         on_animation_end {
-            set_chomp_body_parts
+            stop_chomping
             if chomped_pikmin > 0
                 set_state eating
             else
@@ -113,7 +113,7 @@ script {
             set_animation chomping
         }
         on_animation_end {
-            eat all
+            swallow all
             set_state sniffing
         }
     }

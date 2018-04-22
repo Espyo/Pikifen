@@ -123,10 +123,10 @@ script {
         on_enter {
             stop
             set_animation attacking
-            set_chomp_body_parts 1 mouth
+            start_chomping 1 mouth
         }
         on_animation_end {
-            set_chomp_body_parts
+            stop_chomping
             if chomped_pikmin > 0
                 set_state eating
             else
@@ -143,7 +143,7 @@ script {
             set_animation eating
         }
         on_animation_end {
-            eat all
+            swallow all
             set_state examining
         }
         on_pikmin_land {
@@ -196,7 +196,7 @@ script {
             set_animation crushed
             set_health absolute 0
             stop
-            set_particle_generator dust_explosion 0 0
+            start_particles dust_explosion 0 0
         }
         on_animation_end {
             set_state dying
