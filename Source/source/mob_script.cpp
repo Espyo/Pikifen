@@ -370,7 +370,25 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_TIMER;
         
-        vf.push_back(s2f(v));
+        if(v_words.size() >= 1 && v_words[0] == "randomly") {
+            vi.push_back(MOB_ACTION_SET_TIMER_RANDOM);
+            if(v_words.size() >= 3) {
+                vf.push_back(s2f(v_words[1]));
+                vf.push_back(s2f(v_words[2]));
+            } else {
+                log_error(
+                    "To set a timer randomly, you need to specify the "
+                    "minimum and maximum time!", dn
+                );
+                valid = false;
+            }
+        } else if(v_words.size() >= 1) {
+            vi.push_back(MOB_ACTION_SET_TIMER_NUMBER);
+            vf.push_back(s2f(v_words[0]));
+        } else {
+            log_error("No timer amount specified!", dn);
+            valid = false;
+        }
         
         
     } else if(n == "set_var") {
@@ -597,10 +615,37 @@ mob_action::mob_action(
     
         type = MOB_ACTION_TURN;
         
-        if(v == "focused_mob") {
+        if(v_words.empty()) {
+            valid = false;
+            log_error("The \"turn\" action needs a direction!", dn);
+        } else if(v_words[0] == "absolute") {
+            vi.push_back(MOB_ACTION_TURN_ABSOLUTE);
+            if(v_words.size() >= 2) {
+                vf.push_back(deg_to_rad(s2f(v_words[1])));
+            } else {
+                valid = false;
+                log_error(
+                    "The \"turn\" action with an absolute angle needs "
+                    "the angle!"
+                );
+            }
+        } else if(v_words[0] == "relative") {
+            vi.push_back(MOB_ACTION_TURN_RELATIVE);
+            if(v_words.size() >= 2) {
+                vf.push_back(deg_to_rad(s2f(v_words[1])));
+            } else {
+                valid = false;
+                log_error(
+                    "The \"turn\" action with a relative angle needs "
+                    "the angle!"
+                );
+            }
+        } else if(v == "focused_mob") {
             vi.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
         } else if(v == "home") {
             vi.push_back(MOB_ACTION_TURN_HOME);
+        } else if(v == "randomly") {
+            vi.push_back(MOB_ACTION_TURN_RANDOMLY);
         } else if(v == "randomly") {
             vi.push_back(MOB_ACTION_TURN_RANDOMLY);
         } else {
@@ -903,10 +948,11 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
-        float t;
-        if(vf.empty()) t = 0;
-        else t = vf[0];
-        m->set_timer(t);
+        if(vi[0] == MOB_ACTION_SET_TIMER_RANDOM) {
+            m->set_timer(randomf(vf[0], vf[1]));
+        } else {
+            m->set_timer(vf[0]);
+        }
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
@@ -1025,7 +1071,11 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_TURN) {
     
-        if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
+        if(vi[0] == MOB_ACTION_TURN_ABSOLUTE) {
+            m->face(vf[0]);
+        } else if(vi[0] == MOB_ACTION_TURN_RELATIVE) {
+            m->face(m->angle + vf[0]);
+        } else if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
             m->face(get_angle(m->pos, m->focused_mob->pos));
         } else if(vi[0] == MOB_ACTION_TURN_HOME) {
             m->face(get_angle(m->pos, m->home));

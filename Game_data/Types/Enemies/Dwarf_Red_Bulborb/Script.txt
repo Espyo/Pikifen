@@ -48,7 +48,7 @@ script {
         on_enter {
             move randomly
             set_animation moving
-            set_timer 2
+            set_timer randomly 1.5 2.5
         }
         on_opponent_in_reach {
             focus mob
