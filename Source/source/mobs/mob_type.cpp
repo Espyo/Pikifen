@@ -68,6 +68,10 @@ mob_type::mob_type(size_t category_id) :
 mob_type::~mob_type() {
     states.clear();
     anims.destroy();
+    for(size_t a = 0; a < init_actions.size(); ++a) {
+        delete init_actions[a];
+    }
+    init_actions.clear();
 }
 
 

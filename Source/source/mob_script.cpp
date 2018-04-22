@@ -68,7 +68,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_ELSE;
         if(!v.empty()) {
-            log_error("The else action shouldn't have anything after it!");
+            log_error("The \"else\" action shouldn't have anything after it!");
         }
         
         
@@ -76,7 +76,9 @@ mob_action::mob_action(
     
         type = MOB_ACTION_END_IF;
         if(!v.empty()) {
-            log_error("The end_if action shouldn't have anything after it!");
+            log_error(
+                "The \"end_if\" action shouldn't have anything after it!"
+            );
         }
         
         
@@ -133,28 +135,28 @@ mob_action::mob_action(
             } else {
             
                 if(v_words[0] == "body_part") {
-                    vi.push_back(MOB_ACTION_IF_INFO_BODY_PART);
+                    vi.push_back(MOB_ACTION_COMPARAND_BODY_PART);
                 } else if(v_words[0] == "chomped_pikmin") {
-                    vi.push_back(MOB_ACTION_IF_INFO_CHOMPED_PIKMIN);
+                    vi.push_back(MOB_ACTION_COMPARAND_CHOMPED_PIKMIN);
                 } else if(v_words[0] == "day_minutes") {
-                    vi.push_back(MOB_ACTION_IF_INFO_DAY_MINUTES);
+                    vi.push_back(MOB_ACTION_COMPARAND_DAY_MINUTES);
                 } else if(v_words[0] == "frame_signal") {
-                    vi.push_back(MOB_ACTION_IF_INFO_FRAME_SIGNAL);
+                    vi.push_back(MOB_ACTION_COMPARAND_FRAME_SIGNAL);
                 } else if(v_words[0] == "health") {
-                    vi.push_back(MOB_ACTION_IF_INFO_HEALTH);
+                    vi.push_back(MOB_ACTION_COMPARAND_HEALTH);
                 } else if(v_words[0] == "latched_pikmin") {
-                    vi.push_back(MOB_ACTION_IF_INFO_LATCHED_PIKMIN);
+                    vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN);
                 } else if(v_words[0] == "latched_pikmin_weight") {
-                    vi.push_back(MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT);
+                    vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT);
                 } else if(v_words[0] == "mob_category") {
-                    vi.push_back(MOB_ACTION_IF_INFO_MOB_CATEGORY);
+                    vi.push_back(MOB_ACTION_COMPARAND_MOB_CATEGORY);
                 } else if(v_words[0] == "mob_type") {
-                    vi.push_back(MOB_ACTION_IF_INFO_MOB_TYPE);
+                    vi.push_back(MOB_ACTION_COMPARAND_MOB_TYPE);
                 } else if(v_words[0] == "other_body_part") {
-                    vi.push_back(MOB_ACTION_IF_INFO_OTHER_BODY_PART);
+                    vi.push_back(MOB_ACTION_COMPARAND_OTHER_BODY_PART);
                 } else {
                     log_error(
-                        "Unknown comparison \"" + v_words[0] + "\"!",
+                        "Unknown comparand \"" + v_words[0] + "\"!",
                         dn
                     );
                     valid = false;
@@ -166,7 +168,8 @@ mob_action::mob_action(
             
         } else {
             log_error(
-                "The if action needs a comparison, operator, and value!",
+                "This \"if\" is badly formed! Format: \"if <comparand> "
+                "<operator> <value>\".",
                 dn
             );
             valid = false;
@@ -203,22 +206,30 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_MOVE_HOME);
         } else if(v == "randomly") {
             vi.push_back(MOB_ACTION_MOVE_RANDOMLY);
-        } else {
-            if(v_words[0] == "relative") {
-                vi.push_back(MOB_ACTION_MOVE_REL_COORDS);
-                v_words.erase(v_words.begin());
-            } else {
-                vi.push_back(MOB_ACTION_MOVE_COORDS);
-            }
-            
+        } else if(v_words[0] == "relative") {
+            vi.push_back(MOB_ACTION_MOVE_REL_COORDS);
+            v_words.erase(v_words.begin());
             if(v_words.size() >= 2) {
                 for(size_t c = 0; c < v_words.size(); ++c) {
                     vf.push_back(s2f(v_words[c]));
                 }
             } else {
                 valid = false;
-                log_error("Invalid move location \"" + v + "\"!", dn);
             }
+        } else if(v_words[0] == "absolute") {
+            vi.push_back(MOB_ACTION_MOVE_COORDS);
+            if(v_words.size() >= 2) {
+                for(size_t c = 0; c < v_words.size(); ++c) {
+                    vf.push_back(s2f(v_words[c]));
+                }
+            } else {
+                valid = false;
+            }
+        } else {
+            valid = false;
+        }
+        if(!valid) {
+            log_error("Invalid move location \"" + v + "\"!", dn);
         }
         
         
@@ -232,8 +243,9 @@ mob_action::mob_action(
         type = MOB_ACTION_RANDOMIZE_VAR;
         if(v_words.size() < 3) {
             log_error(
-                "The random action needs a variable name, "
-                "a minimum, and a maximum!", dn
+                "This \"randomize_var\" is badly formed! Format: "
+                "\"randomize_var <variable> <minimum value> <maximum value>\".",
+                dn
             );
             valid = false;
         } else {
@@ -277,8 +289,8 @@ mob_action::mob_action(
             
             if(vi.size() == 1) {
                 log_error(
-                    "The set_chomp_body_parts action needs both the maximum "
-                    "number of victims and the list of body parts!",
+                    "This \"set_chomp_body_parts\" is badly formed! Format: "
+                    "\"set_chomp_body_parts <maximum victims> <body parts>\".",
                     dn
                 );
                 valid = false;
@@ -332,20 +344,17 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_HEALTH;
         
-        if(v_words.empty()) {
+        if(v_words.size() < 2) {
             valid = false;
         } else {
             if(v_words[0] == "relative") {
                 vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
-                v_words.erase(v_words.begin());
-            } else {
+            } else if(v_words[0] == "absolute") {
                 vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
-            }
-            if(v_words.empty()) {
-                valid = false;
             } else {
-                vf.push_back(s2f(v_words[0]));
+                valid = false;
             }
+            vf.push_back(s2f(v_words[1]));
         }
         
         if(!valid) {
@@ -372,9 +381,9 @@ mob_action::mob_action(
             //Everything okay, just remove whatever particle generator is up.
         } else if(v_words.size() < 3) {
             log_error(
-                "The set_particle_generator action needs a particle "
-                "generator name, and a coordinate offset!",
-                dn
+                "This \"set_particle_generator\" is badly formed! Format: "
+                "\"set_particle_generator\" <generator name> "
+                "<x offset> <y offset>\".", dn
             );
             valid = false;
         } else {
@@ -435,7 +444,7 @@ mob_action::mob_action(
         type = MOB_ACTION_SET_VAR;
         
         if(v_words.size() < 2) {
-            log_error("Not enough info to set a variable!", dn);
+            log_error("\"set_var\" needs to know the variable and value!", dn);
             valid = false;
         } else {
             vs = v_words;
@@ -449,8 +458,9 @@ mob_action::mob_action(
         if(v.empty()) {
             valid = false;
             log_error(
-                "The spawn action needs the object name, coordinates, and "
-                "angle!", dn
+                "This \"spawn\" is badly formed! Format: \"spawn <object name> "
+                "<relative/absolute> <x> <y> <z> <angle> "
+                "[<script variables>]\".", dn
             );
             return;
         }
@@ -479,14 +489,16 @@ mob_action::mob_action(
         }
         if(object_name.empty()) {
             valid = false;
-            log_error(
-                "The spawn action needs the object name, coordinates, and "
-                "angle!", dn
-            );
         } else {
             object_name.erase(object_name.size() - 1);
             
-            relative = (v_words[params_word - 5] == "relative");
+            if(v_words[params_word - 5] == "relative") {
+                relative = true;
+            } else if(v_words[params_word - 5] == "absolute") {
+                relative = false;
+            } else {
+                valid = false;
+            }
             x = s2f(v_words[params_word - 4]);
             y = s2f(v_words[params_word - 3]);
             z = s2f(v_words[params_word - 2]);
@@ -508,6 +520,13 @@ mob_action::mob_action(
             }
         }
         
+        if(!valid) {
+            log_error(
+                "This \"spawn\" is badly formed! Format: \"spawn <object name> "
+                "<relative/absolute> <x> <y> <z> <angle> "
+                "[<script variables>]\".", dn
+            );
+        }
         
         
     } else if(n == "start_dying") {
@@ -530,18 +549,23 @@ mob_action::mob_action(
         
         if(v.empty()) {
             valid = false;
-            log_error("The teleport action needs to know the location!", dn);
+            log_error(
+                "The \"teleport\" action needs to know the location!", dn
+            );
         } else {
             if(v_words[0] == "relative") {
                 vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
                 v_words.erase(v_words.begin());
-            } else {
+            } else if(v_words[0] == "absolute") {
                 vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
+                v_words.erase(v_words.begin());
+            } else {
+                valid = false;
             }
             if(v_words.size() < 3) {
                 valid = false;
                 log_error(
-                    "The teleport action needs to know the "
+                    "The \"teleport\" action needs to know the "
                     "X, Y, and Z coordinates!", dn
                 );
             } else {
@@ -662,21 +686,21 @@ bool mob_action::run(
             vi[0] == MOB_ACTION_IF_LHS_INFO &&
             vi.size() >= 3 && !vs.empty()
         ) {
-            if(vi[2] == MOB_ACTION_IF_INFO_CHOMPED_PIKMIN) {
+            if(vi[2] == MOB_ACTION_COMPARAND_CHOMPED_PIKMIN) {
                 lhs = i2s(m->chomping_pikmin.size());
-            } else if(vi[2] == MOB_ACTION_IF_INFO_DAY_MINUTES) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_DAY_MINUTES) {
                 lhs = i2s(day_minutes);
-            } else if(vi[2] == MOB_ACTION_IF_INFO_FRAME_SIGNAL) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_FRAME_SIGNAL) {
                 if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
                     lhs = i2s(*((size_t*) custom_data_1));
                 }
-            } else if(vi[2] == MOB_ACTION_IF_INFO_HEALTH) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_HEALTH) {
                 lhs = i2s(m->health);
-            } else if(vi[2] == MOB_ACTION_IF_INFO_LATCHED_PIKMIN) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_LATCHED_PIKMIN) {
                 lhs = i2s(m->get_latched_pikmin_amount());
-            } else if(vi[2] == MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT) {
                 lhs = i2s(m->get_latched_pikmin_weight());
-            } else if(vi[2] == MOB_ACTION_IF_INFO_MOB_CATEGORY) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_MOB_CATEGORY) {
                 if(
                     parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                     parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -685,7 +709,7 @@ bool mob_action::run(
                 ) {
                     lhs = ((mob*) custom_data_1)->type->category->name;
                 }
-            } else if(vi[2] == MOB_ACTION_IF_INFO_MOB_TYPE) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_MOB_TYPE) {
                 if(
                     parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                     parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -694,7 +718,7 @@ bool mob_action::run(
                 ) {
                     lhs = ((mob*) custom_data_1)->type->name;
                 }
-            } else if(vi[2] == MOB_ACTION_IF_INFO_BODY_PART) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_BODY_PART) {
                 if(
                     parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
                     parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
@@ -715,7 +739,7 @@ bool mob_action::run(
                             INVALID, NULL
                         )->body_part_name;
                 }
-            } else if(vi[2] == MOB_ACTION_IF_INFO_OTHER_BODY_PART) {
+            } else if(vi[2] == MOB_ACTION_COMPARAND_OTHER_BODY_PART) {
                 if(
                     parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
                     parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
@@ -1234,6 +1258,50 @@ mob_fsm::mob_fsm(mob* m) :
 
 
 /* ----------------------------------------------------------------------------
+ * Confirms if the "if", "else", and "end_if" actions in a given vector of
+ * actions are all okay, and there are no mismatches, like for instance,
+ * an "else" without an "if".
+ * If everything is okay, returns true. If not, throws errors to the
+ * error log and returns false.
+ * actions: The vector of actions to check.
+ * dn:      Data node from where these actions came.
+ */
+bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn) {
+    int level = 0;
+    for(size_t a = 0; a < actions.size(); ++a) {
+        if(actions[a]->type == MOB_ACTION_IF) {
+            level++;
+        } else if(actions[a]->type == MOB_ACTION_ELSE) {
+            if(level == 0) {
+                log_error(
+                    "Found an \"else\" action without a matching "
+                    "\"if\" action!", dn
+                );
+                return false;
+            }
+        } else if(actions[a]->type == MOB_ACTION_END_IF) {
+            if(level == 0) {
+                log_error(
+                    "Found an \"end_if\" action without a matching "
+                    "\"if\" action!", dn
+                );
+                return false;
+            }
+            level--;
+        }
+    }
+    if(level > 0) {
+        log_error(
+            "Some \"if\" actions don't have a matching \"end_if\" action!",
+            dn
+        );
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Fixes some things in the list of states.
  * For instance, state-switching actions that use
  * a name instead of a number.
@@ -1299,11 +1367,12 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
  * actions: Vector of actions to be filled.
  */
 void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action>* actions
+    mob_type* mt, data_node* node, vector<mob_action*>* actions
 ) {
     for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
-        actions->push_back(mob_action(node->get_child(a), NULL, mt));
+        actions->push_back(new mob_action(node->get_child(a), NULL, mt));
     }
+    assert_if_actions(*actions, node);
 }
 
 
@@ -1341,6 +1410,8 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             }
             
             events.push_back(new mob_event(event_node, actions));
+            
+            assert_if_actions(actions, event_node);
             
         }
         

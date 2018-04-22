@@ -83,17 +83,17 @@ enum MOB_ACTION_IF_LHS_TYPE {
 };
 
 //If action info types.
-enum MOB_ACTION_IF_INFO_TYPES {
-    MOB_ACTION_IF_INFO_BODY_PART,
-    MOB_ACTION_IF_INFO_CHOMPED_PIKMIN,
-    MOB_ACTION_IF_INFO_DAY_MINUTES,
-    MOB_ACTION_IF_INFO_FRAME_SIGNAL,
-    MOB_ACTION_IF_INFO_HEALTH,
-    MOB_ACTION_IF_INFO_LATCHED_PIKMIN,
-    MOB_ACTION_IF_INFO_LATCHED_PIKMIN_WEIGHT,
-    MOB_ACTION_IF_INFO_MOB_CATEGORY,
-    MOB_ACTION_IF_INFO_MOB_TYPE,
-    MOB_ACTION_IF_INFO_OTHER_BODY_PART,
+enum MOB_ACTION_COMPARAND_TYPES {
+    MOB_ACTION_COMPARAND_BODY_PART,
+    MOB_ACTION_COMPARAND_CHOMPED_PIKMIN,
+    MOB_ACTION_COMPARAND_DAY_MINUTES,
+    MOB_ACTION_COMPARAND_FRAME_SIGNAL,
+    MOB_ACTION_COMPARAND_HEALTH,
+    MOB_ACTION_COMPARAND_LATCHED_PIKMIN,
+    MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT,
+    MOB_ACTION_COMPARAND_MOB_CATEGORY,
+    MOB_ACTION_COMPARAND_MOB_TYPE,
+    MOB_ACTION_COMPARAND_OTHER_BODY_PART,
 };
 
 //If action operator types.
@@ -383,10 +383,11 @@ struct hitbox_interaction {
 
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
 void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action>* actions
+    mob_type* mt, data_node* node, vector<mob_action*>* actions
 );
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 void unload_script(mob_type* mt);
+bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn);
 
 
 #endif //ifndef MOB_EVENT_INCLUDED

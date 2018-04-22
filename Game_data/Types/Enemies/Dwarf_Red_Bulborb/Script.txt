@@ -194,7 +194,7 @@ script {
     crushed {
         on_enter {
             set_animation crushed
-            set_health 0
+            set_health absolute 0
             stop
             set_particle_generator dust_explosion 0 0
         }
