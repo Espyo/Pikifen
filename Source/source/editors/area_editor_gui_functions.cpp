@@ -1296,6 +1296,7 @@ void area_editor::update_main_frame() {
     if(cur_area_name.empty()) {
         frm_area->hide();
     } else {
+        picked_area_yet = true;
         frm_area->show();
     }
     ((lafi::button*) frm_main->widgets["but_area"])->text = cur_area_name;

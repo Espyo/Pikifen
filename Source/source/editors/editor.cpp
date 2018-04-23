@@ -138,6 +138,7 @@ void editor::create_picker_frame() {
         this->frm_picker->hide();
         show_bottom_frame();
         change_to_right_frame();
+        custom_picker_cancel_action();
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
@@ -736,3 +737,7 @@ void editor::gui_to_var_helper::set_all() {
         *(p->first) = p->second;
     }
 }
+
+
+//Runs custom code when the user presses the "cancel" button on a picker.
+void editor::custom_picker_cancel_action() { }

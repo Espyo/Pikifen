@@ -131,6 +131,7 @@ protected:
     void show_changes_warning();
     void update_gui_coordinates();
     
+    virtual void custom_picker_cancel_action();
     virtual void hide_all_frames() = 0;
     virtual void change_to_right_frame() = 0;
     virtual void create_new_from_picker(const string &name) = 0;

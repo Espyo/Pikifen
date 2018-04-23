@@ -316,6 +316,8 @@ private:
     point path_preview_checkpoints[2];
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
+    //Has the user picked an area yet?
+    bool picked_area_yet;
     //Area data before vertex movement.
     area_data* pre_move_area_data;
     //Position of the selected mobs before movement.
@@ -575,6 +577,8 @@ private:
     void tools_to_gui();
     void stt_to_gui();
     void update_main_frame();
+    
+    virtual void custom_picker_cancel_action();
     
 public:
     virtual void do_logic();

@@ -195,6 +195,7 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
+    picked_area_yet(false),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
     reference_bitmap(nullptr),
@@ -776,6 +777,18 @@ void area_editor::create_new_from_picker(const string &name) {
     emit_status_bar_message("Created new area successfully.", false);
     show_bottom_frame();
     change_to_right_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Runs custom code when the user presses the "cancel" button on a picker.
+ */
+void area_editor::custom_picker_cancel_action() {
+    //If the user canceled out without picking an area yet, then they want
+    //to leave the area editor.
+    if(!picked_area_yet) {
+        leave();
+    }
 }
 
 
@@ -3496,6 +3509,7 @@ void area_editor::undo_layout_drawing_node() {
 void area_editor::unload() {
     //TODO
     clear_current_area();
+    cur_area_name.clear();
     
     delete(gui_style);
     delete(faded_style);
