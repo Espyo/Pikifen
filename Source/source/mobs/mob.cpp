@@ -46,7 +46,8 @@ mob::mob(
     z(0),
     speed_z(0),
     angle(angle),
-    intended_angle(angle),
+    intended_turn_angle(angle),
+    intended_turn_pos(nullptr),
     z_cap(FLT_MAX),
     home(pos),
     ground_sector(nullptr),
@@ -220,7 +221,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
         speed.x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed_z = MOB_KNOCKBACK_V_POWER;
-        face(get_angle(point(), point(speed)) + M_PI);
+        face(get_angle(point(), point(speed)) + M_PI, NULL);
     }
 }
 
@@ -688,10 +689,13 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
 
 /* ----------------------------------------------------------------------------
  * Makes a mob intend to face a new angle.
+ * new_angle: Face this angle.
+ * new_pos:   If this is not NULL, turn towards this point every frame, instead.
  */
-void mob::face(const float new_angle) {
+void mob::face(const float new_angle, point* new_pos) {
     if(carry_info) return; //If it's being carried, it shouldn't rotate.
-    intended_angle = new_angle;
+    intended_turn_angle = new_angle;
+    intended_turn_pos = new_pos;
 }
 
 
@@ -1116,7 +1120,8 @@ void mob::start_dying() {
     set_health(false, false, 0.0f);
     
     stop_chasing();
-    intended_angle = angle;
+    intended_turn_angle = angle;
+    intended_turn_pos = NULL;
     gravity_mult = 1.0;
     
     particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
@@ -1210,7 +1215,7 @@ void mob::tick_brain() {
                 //time to make it think about how to get there.
                 
                 //Let the mob think about facing the actual target.
-                face(get_angle(pos, final_target_pos));
+                face(get_angle(pos, final_target_pos), NULL);
                 
             } else {
                 //Reached the location. The mob should now think
@@ -1285,10 +1290,13 @@ void mob::tick_physics() {
     //Change the facing angle to the angle the mob wants to face.
     if(angle > M_PI)  angle -= M_PI * 2;
     if(angle < -M_PI) angle += M_PI * 2;
-    if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
-    if(intended_angle < -M_PI) intended_angle += M_PI * 2;
+    if(intended_turn_pos) {
+        intended_turn_angle = get_angle(pos, *intended_turn_pos);
+    }
+    if(intended_turn_angle > M_PI)  intended_turn_angle -= M_PI * 2;
+    if(intended_turn_angle < -M_PI) intended_turn_angle += M_PI * 2;
     
-    float angle_dif = intended_angle - angle;
+    float angle_dif = intended_turn_angle - angle;
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     

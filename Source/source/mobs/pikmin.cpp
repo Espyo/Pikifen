@@ -116,7 +116,7 @@ void pikmin::teleport_to_connected_hitbox() {
         
         chase(final_pos, NULL, true);
         
-        face(get_angle(pos, focused_mob->pos));
+        face(get_angle(pos, focused_mob->pos), NULL);
         //Force the Z to be above the mob, so it'll always appear above it.
         z = focused_mob->z + 1;
         

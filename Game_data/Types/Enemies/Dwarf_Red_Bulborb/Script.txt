@@ -76,10 +76,8 @@ script {
             set_near_reach chase
             set_far_reach close
         }
-        on_tick {
-            turn focused_mob
-        }
         on_opponent_in_reach {
+            stop
             focus mob
             set_state chasing
         }

@@ -924,7 +924,7 @@ void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
  * Every tick in the active state.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
-    m->face(cursor_angle);
+    m->face(cursor_angle, NULL);
 }
 
 
@@ -1085,7 +1085,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
         m->z + get_max_throw_height(holding_ptr->speed_z);
         
     holding_ptr->angle = angle;
-    holding_ptr->face(angle);
+    holding_ptr->face(angle, NULL);
     
     holding_ptr->was_thrown = true;
     

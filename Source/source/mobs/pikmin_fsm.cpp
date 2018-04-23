@@ -100,9 +100,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::stop_in_group);
         }
-        efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(pikmin_fsm::face_leader);
-        }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
@@ -195,9 +192,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::set_group_move_reach);
             efc.run(pikmin_fsm::stop_in_group);
-        }
-        efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(pikmin_fsm::face_leader);
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
@@ -1237,7 +1231,7 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         true, &carriable_mob->z
     );
     
-    pik_ptr->face(get_angle(final_pos, carriable_mob->pos));
+    pik_ptr->face(get_angle(final_pos, carriable_mob->pos), NULL);
     
     pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
     
@@ -1302,6 +1296,7 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACKING);
+    p->face(0, &p->focused_mob->pos);
 }
 
 
@@ -1389,16 +1384,6 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health <= 0) {
         return;
     }
-    
-    pik_ptr->face(get_angle(pik_ptr->pos, pik_ptr->focused_mob->pos));
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin needs to turn towards its leader.
- */
-void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
-    m->face(get_angle(m->pos, m->following_group->pos));
 }
 
 
@@ -1532,6 +1517,7 @@ void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
 void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLING);
+    m->face(0, &m->following_group->pos);
 }
 
 

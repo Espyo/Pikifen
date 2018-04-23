@@ -1035,7 +1035,8 @@ bool mob_action::run(
     
         if(vi.empty()) {
             m->stop_chasing();
-            m->intended_angle = m->angle;
+            m->intended_turn_angle = m->angle;
+            m->intended_turn_pos = NULL;
         } else {
             m->speed_z = 0;
         }
@@ -1072,15 +1073,15 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_TURN) {
     
         if(vi[0] == MOB_ACTION_TURN_ABSOLUTE) {
-            m->face(vf[0]);
+            m->face(vf[0], NULL);
         } else if(vi[0] == MOB_ACTION_TURN_RELATIVE) {
-            m->face(m->angle + vf[0]);
+            m->face(m->angle + vf[0], NULL);
         } else if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
-            m->face(get_angle(m->pos, m->focused_mob->pos));
+            m->face(0, &m->focused_mob->pos);
         } else if(vi[0] == MOB_ACTION_TURN_HOME) {
-            m->face(get_angle(m->pos, m->home));
+            m->face(get_angle(m->pos, m->home), NULL);
         } else if(vi[0] == MOB_ACTION_TURN_RANDOMLY) {
-            m->face(randomf(0, M_PI * 2));
+            m->face(randomf(0, M_PI * 2), NULL);
         }
         
         

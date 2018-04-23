@@ -240,7 +240,9 @@ public:
     //Current facing angle. 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float angle;
     //Angle the mob wants to be facing.
-    float intended_angle;
+    float intended_turn_angle;
+    //Variable that holds the position the mob wants to be facing.
+    point* intended_turn_pos;
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     float z_cap;
@@ -373,7 +375,7 @@ public:
         const float speed = -1
     );
     void stop_chasing();
-    void face(const float new_angle);
+    void face(const float new_angle, point* new_pos);
     point get_chase_target();
     virtual float get_base_speed();
     

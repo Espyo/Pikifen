@@ -86,9 +86,6 @@ script {
             set_near_reach attack
             set_far_reach search
         }
-        on_tick {
-            turn focused_mob
-        }
         on_opponent_in_reach {
             set_state inhaling
         }
