@@ -174,6 +174,8 @@ void pikmin::tick_class_specifics() {
     if(dead) {
         to_delete = true;
         
+        pikmin_fsm::notify_leader_release(this, NULL, NULL);
+        
         particle par(
             PARTICLE_TYPE_PIKMIN_SPIRIT, pos,
             pik_type->radius * 2, 2.0f

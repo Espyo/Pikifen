@@ -431,16 +431,16 @@ void options_menu::load() {
     bmp_menu_bg = load_bmp(asset_file_names.main_menu);
     
     //Menu widgets.
-    menu_widgets.push_back(
+    back_widget =
         new menu_button(
-            point(scr_w * 0.15, scr_h * 0.10),
-            point(scr_w * 0.20, scr_h * 0.06),
+        point(scr_w * 0.15, scr_h * 0.10),
+        point(scr_w * 0.20, scr_h * 0.06),
     [this] () {
         leave();
     },
     "Back", font_main
-        )
     );
+    menu_widgets.push_back(back_widget);
     
     fullscreen_widget =
         new menu_checkbox(

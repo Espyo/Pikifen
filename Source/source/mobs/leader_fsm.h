@@ -40,7 +40,6 @@ void get_knocked_back(      mob* m, void* info1, void* info2);
 void go_pluck(              mob* m, void* info1, void* info2);
 void grab_mob(              mob* m, void* info1, void* info2);
 void inactive_be_attacked(  mob* m, void* info1, void* info2);
-void inactive_die(          mob* m, void* info1, void* info2);
 void inactive_search_seed(  mob* m, void* info1, void* info2);
 void join_group(            mob* m, void* info1, void* info2);
 void land(                  mob* m, void* info1, void* info2);

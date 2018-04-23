@@ -356,48 +356,9 @@ void gameplay::handle_button(
             *                    / \  / \ *
             ******************************/
             
-            if(!is_down || leaders.size() == 1) return;
+            if(!is_down) return;
             
-            size_t new_leader_nr = cur_leader_nr;
-            leader* new_leader_ptr = nullptr;
-            bool search_new_leader = true;
-            
-            if(!cur_leader_ptr->fsm.get_event(LEADER_EVENT_UNFOCUSED)) {
-                //This leader isn't ready to be switched out of. Forget it.
-                return;
-            }
-            
-            //We'll send the switch event to the next leader on the list.
-            //If they accept, they run a function to change leaders.
-            //If not, we try the next leader.
-            //If we return to the current leader without anything being
-            //changed, then stop trying; no leader can be switched to.
-            
-            size_t original_leader_nr = cur_leader_nr;
-            
-            while(search_new_leader) {
-                new_leader_nr =
-                    sum_and_wrap(
-                        new_leader_nr,
-                        (button == BUTTON_NEXT_LEADER ? 1 : -1),
-                        leaders.size()
-                    );
-                new_leader_ptr = leaders[new_leader_nr];
-                
-                if(new_leader_nr == original_leader_nr) {
-                    //Back to the original; stop trying.
-                    return;
-                }
-                
-                new_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
-                
-                //If after we called the event, the leader is the same,
-                //then that means the leader can't be switched to.
-                //Try a new one.
-                if(cur_leader_nr != original_leader_nr) {
-                    search_new_leader = false;
-                }
-            }
+            change_to_next_leader(button == BUTTON_NEXT_LEADER, false);
             
         } else if(button == BUTTON_DISMISS) {
         

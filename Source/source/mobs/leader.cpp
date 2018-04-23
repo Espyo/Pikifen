@@ -433,23 +433,58 @@ void leader::signal_group_move_start() {
 /* ----------------------------------------------------------------------------
  * Switch active leader.
  */
-void switch_to_leader(leader* new_leader_ptr) {
-
-    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
+void change_to_next_leader(const bool forward, const bool force_success) {
+    if(leaders.size() == 1) return;
+    
+    if(
+        !cur_leader_ptr->fsm.get_event(LEADER_EVENT_UNFOCUSED) &&
+        !force_success
+    ) {
+        //This leader isn't ready to be switched out of. Forget it.
+        return;
+    }
+    
+    //We'll send the switch event to the next leader on the list.
+    //If they accept, they run a function to change leaders.
+    //If not, we try the next leader.
+    //If we return to the current leader without anything being
+    //changed, then stop trying; no leader can be switched to.
     
     size_t new_leader_nr = cur_leader_nr;
-    for(size_t l = 0; l < leaders.size(); ++l) {
-        if(leaders[l] == new_leader_ptr) {
-            new_leader_nr = l;
-            break;
+    leader* new_leader_ptr = NULL;
+    bool searching = true;
+    size_t original_leader_nr = cur_leader_nr;
+    bool cant_find_new_leader = false;
+    
+    while(searching) {
+        new_leader_nr =
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
+        new_leader_ptr = leaders[new_leader_nr];
+        
+        if(new_leader_nr == original_leader_nr) {
+            //Back to the original; stop trying.
+            cant_find_new_leader = true;
+            searching = false;
+        }
+        
+        new_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
+        
+        //If after we called the event, the leader is the same,
+        //then that means the leader can't be switched to.
+        //Try a new one.
+        if(cur_leader_nr != original_leader_nr) {
+            searching = false;
         }
     }
     
-    cur_leader_ptr = new_leader_ptr;
-    cur_leader_nr = new_leader_nr;
-    
-    new_leader_ptr->lea_type->sfx_name_call.play(0, false);
-    
+    if(cant_find_new_leader && force_success) {
+        //Ok, we need to force a leader to accept the focus. Let's do so.
+        cur_leader_nr =
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
+        cur_leader_ptr = leaders[cur_leader_nr];
+        
+        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+    }
 }
 
 

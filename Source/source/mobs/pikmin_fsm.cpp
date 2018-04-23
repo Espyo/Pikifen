@@ -56,7 +56,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("in_group_chasing", PIKMIN_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::chase_leader);
+            efc.run(pikmin_fsm::start_chasing_leader);
         }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
@@ -141,13 +141,13 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("group_move_chasing", PIKMIN_STATE_GROUP_MOVE_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::set_group_move_reach);
-            efc.run(pikmin_fsm::chase_leader);
+            efc.run(pikmin_fsm::start_chasing_leader);
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
         }
         efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(pikmin_fsm::chase_leader);
+            efc.run(pikmin_fsm::update_in_group_chasing);
         }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
@@ -885,6 +885,7 @@ void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
  * When a Pikmin becomes "disabled".
  */
 void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
+    pikmin_fsm::notify_leader_release(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_IDLING);
     pikmin_fsm::stand_still(m, NULL, NULL);
     m->leave_group();
@@ -1410,15 +1411,15 @@ void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin needs to chase after its leader (or the group spot
+ * When a Pikmin needs to start chasing after its leader (or the group spot
  * belonging to the leader).
  * info1: Points to the position struct with the final destination.
  *   If NULL, the final destination is calculated here.
  */
-void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    pikmin_fsm::update_in_group_chasing(m, info1, info2);
+void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     m->set_animation(PIKMIN_ANIM_WALKING);
+    pikmin_fsm::update_in_group_chasing(m, info1, info2);
 }
 
 
@@ -1503,6 +1504,7 @@ void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
  * When a Pikmin starts panicking.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
 }

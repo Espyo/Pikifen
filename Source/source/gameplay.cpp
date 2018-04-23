@@ -351,6 +351,8 @@ void gameplay::unload() {
     al_show_mouse_cursor(display);
     
     cur_leader_ptr = NULL;
+    pikmin_in_onions.clear();
+    
     cam_pos = cam_final_pos = point();
     cam_zoom = cam_final_zoom = 1.0f;
     

@@ -34,7 +34,6 @@ enum LEADER_STATES {
     LEADER_STATE_KNOCKED_BACK,
     LEADER_STATE_INACTIVE_KNOCKED_BACK,
     LEADER_STATE_DYING,
-    LEADER_STATE_INACTIVE_DYING,
     LEADER_STATE_IN_GROUP_CHASING,
     LEADER_STATE_IN_GROUP_STOPPED,
     LEADER_STATE_GOING_TO_PLUCK,
@@ -111,8 +110,8 @@ public:
 };
 
 
+void change_to_next_leader(const bool forward, const bool force_success);
 bool grab_closest_group_member();
-void switch_to_leader(leader* new_leader_ptr);
 void update_closest_group_member();
 
 #endif //ifndef LEADER_INCLUDED

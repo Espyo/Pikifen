@@ -41,7 +41,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.change_state("inactive_dying");
+            efc.change_state("dying");
         }
         efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
             efc.run(leader_fsm::inactive_search_seed);
@@ -340,12 +340,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("inactive_dying", LEADER_STATE_INACTIVE_DYING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(leader_fsm::inactive_die);
-        }
-    }
-    
     efc.new_state("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(leader_fsm::chase_leader);
@@ -372,7 +366,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.change_state("inactive_dying");
+            efc.change_state("dying");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -414,7 +408,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.change_state("inactive_dying");
+            efc.change_state("dying");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -504,7 +498,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run(leader_fsm::stop_auto_pluck);
-            efc.change_state("inactive_dying");
+            efc.change_state("dying");
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run(leader_fsm::focus);
@@ -771,7 +765,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::inactive_be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.change_state("inactive_dying");
+            efc.change_state("dying");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -883,7 +877,21 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * When a leader is meant to become the active one.
  */
 void leader_fsm::focus(mob* m, void* info1, void* info2) {
-    switch_to_leader((leader*) m);
+    leader* l_ptr = (leader*) m;
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
+    
+    size_t new_leader_nr = cur_leader_nr;
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l] == l_ptr) {
+            new_leader_nr = l;
+            break;
+        }
+    }
+    
+    cur_leader_ptr = l_ptr;
+    cur_leader_nr = new_leader_nr;
+    
+    l_ptr->lea_type->sfx_name_call.play(0, false);
 }
 
 
@@ -1282,13 +1290,25 @@ void leader_fsm::inactive_be_attacked(mob* m, void* info1, void* info2) {
  * When a leader dies.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * When an inactive leader dies.
- */
-void leader_fsm::inactive_die(mob* m, void* info1, void* info2) {
+    //TODO TEMP.
+    size_t living_leaders = 0;
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l]->health > 0) living_leaders++;
+    }
+    if(living_leaders == 0) {
+        fade_mgr.start_fade(
+            false,
+        []() {
+            change_game_state(GAME_STATE_MAIN_MENU);
+        }
+        );
+    } else if(cur_leader_ptr == m) {
+        change_to_next_leader(true, true);
+    }
+    
+    m->stop_chasing();
+    m->become_uncarriable();
+    m->set_animation(LEADER_ANIM_LYING);
 }
 
 
@@ -1416,6 +1436,8 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
             leaders[l]->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
         }
     }
+    
+    lea_ptr->set_animation(LEADER_ANIM_WALKING);
 }
 
 
