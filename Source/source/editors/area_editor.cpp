@@ -204,7 +204,7 @@ area_editor::area_editor() :
     selection_filter(SELECTION_FILTER_SECTORS),
     show_closest_stop(false),
     show_path_preview(false),
-    show_reference(false),
+    show_reference(true),
     stt_mode(0),
     stt_sector(nullptr) {
     

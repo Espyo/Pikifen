@@ -7,12 +7,13 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 
 ===============
 1) Controls
-2) FAQ and troubleshooting
-3) Compiling
-4) Changelog
-5) Credits
+2) How to create
+3) FAQ and troubleshooting
+4) Compiling
+5) Changelog
 6) Tips
-7) Disclaimer
+7) Credits
+8) Disclaimer
 ===============
 
 ===============
@@ -39,7 +40,14 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     Take screenshot:           F12
 
 ===============
-2) FAQ and troubleshooting
+2) How to create
+===============
+    To create content for the engine, just edit the image, sound, or text files in the "Game_data" folder.
+    Some things can also be edited using the built-in editors on the main menu.
+    Everything should be intuitive, but you may want to check the tutorials here: http://www.pikminfanon.com/Pikifen#How_to_create
+
+===============
+3) FAQ and troubleshooting
 ===============
     Why did it crash?
         First of all, are you using the most recent version of the engine? You should try upgrading if you're not.
@@ -112,7 +120,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         If you contact me, I can help you with your problem, as well as change stuff to make it easier to follow in the future.
     
 ===============
-3) Compiling
+4) Compiling
 ===============
     (You likely don't need to do this.)
     First, download the source, of course.
@@ -128,12 +136,18 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         Compile. Good luck.
 
 ===============
-4) Changelog
+5) Changelog
 ===============
     See http://www.pikminfanon.com/Pikifen/Changelog
     
 ===============
-5) Credits
+6) Tips
+===============
+    * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
+    * To drop a held Pikmin without throwing it, keep holding the throw button, and press the whistle button.
+
+===============
+7) Credits
 ===============
     The project's code is licensed under the MIT License (MIT), described in LICENSE.txt.
     Various assets may have their own licenses, which are detailed below.
@@ -210,12 +224,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
             André 'Espyo' Silva
 
 ===============
-6) Tips
-===============
-    * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
-
-===============
-7) Disclaimer
+8) Disclaimer
 ===============
     Pikifen and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.

@@ -283,5 +283,5 @@ bool whistling = false;
 bool window_position_hack = false;
 ALLEGRO_TRANSFORM world_to_screen_transform;
 float zoom_max_level = 3.0f;
-float zoom_mid_level = 1.5f;
+float zoom_mid_level = 1.4f;
 float zoom_min_level = 0.66f;

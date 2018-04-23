@@ -99,6 +99,14 @@ mob::mob(
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
         type->init_actions[a]->run(this, NULL, NULL, MOB_EVENT_UNKNOWN);
     }
+    if(!vars.empty()) {
+        vector<string> vars_strings = split(vars, ";");
+        for(size_t v = 0; v < vars_strings.size(); ++v) {
+            vector<string> parts = split(vars_strings[v], "=");
+            if(parts.size() < 2) continue;
+            this->vars[parts[0]] = parts[1];
+        }
+    }
     fsm.set_state(type->first_state_nr);
 }
 
