@@ -1146,11 +1146,11 @@ void animation_editor::load() {
     
     frm_attack->easy_row();
     frm_attack->easy_add(
-        "lbl_mult",
-        new lafi::label("Attack mult.:"), 60, 16
+        "lbl_value",
+        new lafi::label("Power:"), 60, 16
     );
     frm_attack->easy_add(
-        "txt_mult",
+        "txt_value",
         new lafi::textbox(), 40, 16
     );
     frm_attack->easy_row();
@@ -1323,10 +1323,10 @@ void animation_editor::load() {
     frm_normal->widgets["txt_hazards"]->description =
         "List of hazards, semicolon separated.";
         
-    frm_attack->widgets["txt_mult"]->lose_focus_handler =
+    frm_attack->widgets["txt_value"]->lose_focus_handler =
         lambda_gui_to_hitbox_instance;
-    frm_attack->widgets["txt_mult"]->description =
-        "Attack multiplier.";
+    frm_attack->widgets["txt_value"]->description =
+        "Attack power, in hit points.";
         
     frm_attack->widgets["txt_hazards"]->lose_focus_handler =
         lambda_gui_to_hitbox_instance;

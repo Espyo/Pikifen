@@ -175,7 +175,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -187,7 +187,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -208,7 +208,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -220,7 +220,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -241,7 +241,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -253,7 +253,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -274,7 +274,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -286,7 +286,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -307,7 +307,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -319,7 +319,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -340,7 +340,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -352,7 +352,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -373,7 +373,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -385,7 +385,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -406,7 +406,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -418,7 +418,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -439,7 +439,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -451,7 +451,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -472,7 +472,7 @@ sprites{
 				height=128.00
 				radius=14.00
 				type=1
-				multiplier=8.00
+				value=8.00
 				can_pikmin_latch=false
 				hazards
 				outward=false
@@ -484,7 +484,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -505,7 +505,7 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true
@@ -517,7 +517,7 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards
 				outward=true

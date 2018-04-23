@@ -295,17 +295,17 @@ bool mob::attack(
     }
     
     if(attack_h) {
-        attacker_offense = attack_h->multiplier;
+        attacker_offense = attack_h->value;
     } else {
         attacker_offense = 1;
     }
     
     if(victim_h) {
-        if(victim_h->multiplier == 0.0f) {
+        if(victim_h->value == 0.0f) {
             //Hah, this hitbox is invulnerable!
             return false;
         }
-        defense_multiplier = victim_h->multiplier;
+        defense_multiplier = victim_h->value;
     }
     
     for(size_t s = 0; s < statuses.size(); ++s) {

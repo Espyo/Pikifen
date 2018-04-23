@@ -43,7 +43,7 @@ hitbox::hitbox(
     height(height),
     radius(radius),
     type(HITBOX_TYPE_NORMAL),
-    multiplier(1),
+    value(1),
     knockback_outward(true),
     knockback_angle(0),
     knockback(1),

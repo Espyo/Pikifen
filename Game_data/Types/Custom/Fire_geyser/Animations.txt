@@ -68,9 +68,9 @@ sprites{
 				height=24.00
 				radius=28.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -80,9 +80,9 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -101,7 +101,7 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=1.00
+				value=30.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -113,9 +113,9 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -134,7 +134,7 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=1.00
+				value=30.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -146,7 +146,7 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -167,7 +167,7 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=1.00
+				value=30.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -179,7 +179,7 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=true
@@ -200,7 +200,7 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=1.00
+				value=30.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -212,7 +212,7 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=true
@@ -233,7 +233,7 @@ sprites{
 				height=128.00
 				radius=28.00
 				type=1
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
 				hazards=fire
 				outward=false
@@ -245,9 +245,9 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=0
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -266,9 +266,9 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -278,9 +278,9 @@ sprites{
 				height=24.00
 				radius=24.00
 				type=2
-				multiplier=1.00
+				value=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -289,6 +289,6 @@ sprites{
 	}
 }
 body_parts{
-	fire=
-	hit=
+	fire
+	hit
 }

@@ -59,8 +59,8 @@ public:
     string hazards_str;
     vector<hazard*> hazards;
     //If it's a normal hitbox, this is the defense multiplier.
-    //If it's an attack one, the attack multiplier.
-    float multiplier;
+    //If it's an attack one, the attack power.
+    float value;
     //If true, the Pikmin is knocked away from the center.
     bool knockback_outward;
     //Knockback angle.

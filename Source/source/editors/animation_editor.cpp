@@ -436,7 +436,7 @@ void animation_editor::hitbox_to_gui() {
         if(cur_h->type == HITBOX_TYPE_NORMAL) {
             f = f->widgets["frm_normal"];
             ((lafi::textbox*) f->widgets["txt_mult"])->text =
-                f2s(cur_h->multiplier);
+                f2s(cur_h->value);
             if(cur_h->can_pikmin_latch) {
                 ((lafi::checkbox*) f->widgets["chk_latch"])->check();
             } else {
@@ -449,8 +449,8 @@ void animation_editor::hitbox_to_gui() {
                 
         } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
             f = f->widgets["frm_attack"];
-            ((lafi::textbox*) f->widgets["txt_mult"])->text =
-                f2s(cur_h->multiplier);
+            ((lafi::textbox*) f->widgets["txt_value"])->text =
+                f2s(cur_h->value);
             ((lafi::textbox*) f->widgets["txt_hazards"])->text =
                 cur_h->hazards_str;
             (
@@ -663,7 +663,7 @@ void animation_editor::gui_to_hitbox() {
     }
     
     if(cur_h->type == HITBOX_TYPE_NORMAL) {
-        cur_h->multiplier =
+        cur_h->value =
             s2f(
                 (
                     (lafi::textbox*)
@@ -682,11 +682,11 @@ void animation_editor::gui_to_hitbox() {
             )->text;
             
     } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
-        cur_h->multiplier =
+        cur_h->value =
             s2f(
                 (
                     (lafi::textbox*)
-                    f->widgets["frm_attack"]->widgets["txt_mult"]
+                    f->widgets["frm_attack"]->widgets["txt_value"]
                 )->text
             );
         cur_h->hazards_str =
@@ -1337,7 +1337,7 @@ void animation_editor::save_animation_database() {
                 new data_node("type", i2s(h_ptr->type))
             );
             hitbox_node->add(
-                new data_node("multiplier", f2s(h_ptr->multiplier))
+                new data_node("value", f2s(h_ptr->value))
             );
             hitbox_node->add(
                 new data_node("can_pikmin_latch", b2s(h_ptr->can_pikmin_latch))

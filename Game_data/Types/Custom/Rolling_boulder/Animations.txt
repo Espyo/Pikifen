@@ -67,12 +67,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -88,12 +88,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -109,12 +109,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -130,12 +130,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -151,12 +151,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -172,12 +172,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -193,12 +193,12 @@ sprites{
 				height=128.00
 				radius=32.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -214,12 +214,12 @@ sprites{
 				height=128.00
 				radius=8.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -235,12 +235,12 @@ sprites{
 				height=128.00
 				radius=12.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -256,12 +256,12 @@ sprites{
 				height=128.00
 				radius=16.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -277,12 +277,12 @@ sprites{
 				height=128.00
 				radius=20.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -298,12 +298,12 @@ sprites{
 				height=128.00
 				radius=24.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
@@ -319,12 +319,12 @@ sprites{
 				height=128.00
 				radius=28.00
 				type=1
-				multiplier=2.00
+				value=60.00
 				can_pikmin_latch=false
 				hazards=crush
 				outward=false
 				angle=0.00
-				knockback=0.00
+				knockback=2.00
 			}
 		}
 	}
