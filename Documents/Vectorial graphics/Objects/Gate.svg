@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Gate.svg"
    inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
    inkscape:export-xdpi="90"
@@ -615,55 +615,6 @@
          stdDeviation="4.1"
          id="feGaussianBlur4840" />
     </filter>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#flourescent-lamp"
-       id="linearGradient4333"
-       x1="-120"
-       y1="837.36218"
-       x2="-100"
-       y2="837.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(5,55.000005)"
-       inkscape:collect="always"
-       xlink:href="#electric-gate-ring-1"
-       id="linearGradient4333-3"
-       x1="-120"
-       y1="837.36218"
-       x2="-100"
-       y2="837.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(5,105)"
-       inkscape:collect="always"
-       xlink:href="#round-shade"
-       id="linearGradient4333-6"
-       x1="-120"
-       y1="837.36218"
-       x2="-100"
-       y2="837.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(10,150.00002)"
-       inkscape:collect="always"
-       xlink:href="#broken-lamp-9"
-       id="linearGradient4333-2"
-       x1="-120"
-       y1="837.36218"
-       x2="-100"
-       y2="837.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(5,200.00002)"
-       inkscape:collect="always"
-       xlink:href="#border"
-       id="linearGradient4333-0"
-       x1="-120"
-       y1="837.36218"
-       x2="-100"
-       y2="837.36218"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -673,7 +624,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="-13.683243"
+     inkscape:cx="-1031.917"
      inkscape:cy="-95.408134"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -714,8 +665,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253"
@@ -763,106 +713,9 @@
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4323"
-       width="470"
-       height="530"
-       x="-530"
-       y="792.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4333);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4325"
-       width="20"
-       height="20"
-       x="-120"
-       y="827.36218" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4333-3);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4325-5"
-       width="20"
-       height="20"
-       x="-115"
-       y="882.36218" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4333-6);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4325-7"
-       width="20"
-       height="20"
-       x="-115"
-       y="932.36218" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4333-2);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4325-9"
-       width="20"
-       height="20"
-       x="-110"
-       y="977.36218" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-235"
-       y="837.36218"
-       id="text4402"><tspan
-         sodipodi:role="line"
-         id="tspan4404"
-         x="-235"
-         y="837.36218"
-         style="font-size:10px;line-height:1.25">Electric gate lamp</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-228.5"
-       y="893.86218"
-       id="text4406"><tspan
-         sodipodi:role="line"
-         x="-228.5"
-         y="893.86218"
-         id="tspan4410"
-         style="font-size:10px;line-height:1.25">Electric gate ring</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-225"
-       y="942.36218"
-       id="text4414"><tspan
-         sodipodi:role="line"
-         id="tspan4416"
-         x="-225"
-         y="942.36218"
-         style="font-size:10px;line-height:1.25">Electric round shape</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-245"
-       y="990.86218"
-       id="text4422"><tspan
-         sodipodi:role="line"
-         id="tspan4424"
-         x="-245"
-         y="990.86218"
-         style="font-size:10px;line-height:1.25">electric gate broken lamp</tspan></text>
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4333-0);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4325-6"
-       width="20"
-       height="20"
-       x="-115"
-       y="1027.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-234.5"
-       y="1036.8622"
-       id="text4418"><tspan
-         sodipodi:role="line"
-         id="tspan4420"
-         x="-234.5"
-         y="1036.8622"
-         style="font-size:10px;line-height:1.25">bramble gate border</tspan></text>
   </g>
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">

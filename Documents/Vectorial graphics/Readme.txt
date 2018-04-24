@@ -10,7 +10,6 @@ I get screenshots from games and trace on top of them.
         When shading is present, it uses a gradient, as opposed to "cel shading".
     Everything is colored using a gradient, which is always named.
     1:1 scale. 1 pixel on the document matches 1 pixel on the engine at 1.0x zoom level (which is 1 unit in world coordinates).
-For every gradient I use, I create a square with it outside of the spritesheet, to the left, and explain what color it is.
 For every sprite, I align the grid to wrap it snuggly. I also make the top-left of the spritesheet be at 0, 0. The position and size of the grid's rectangles is what I use on the animation editor, like so:
     To get a frame's X, width, and height, I just click its rectangle on the grid and check the properties.
     To get a frame's Y,

@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Sheargrubs.svg">
   <defs
      id="defs4">
@@ -432,45 +432,6 @@
        x2="38"
        y2="1037.8359"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#body-9"
-       id="linearGradient4292"
-       x1="-120"
-       y1="1012.3622"
-       x2="-100"
-       y2="1012.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,44.999983)"
-       inkscape:collect="always"
-       xlink:href="#mouth-6"
-       id="linearGradient4292-3"
-       x1="-120"
-       y1="1012.3622"
-       x2="-100"
-       y2="1012.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,89.999983)"
-       inkscape:collect="always"
-       xlink:href="#eye-3"
-       id="linearGradient4292-35"
-       x1="-120"
-       y1="1012.3622"
-       x2="-100"
-       y2="1012.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,134.99998)"
-       inkscape:collect="always"
-       xlink:href="#head-8"
-       id="linearGradient4292-1"
-       x1="-120"
-       y1="1012.3622"
-       x2="-100"
-       y2="1012.3622"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -479,11 +440,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313708"
-     inkscape:cx="-55.72638"
-     inkscape:cy="79.394399"
+     inkscape:zoom="0.99999996"
+     inkscape:cx="-284.98856"
+     inkscape:cy="33.965321"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:object-paths="true"
      inkscape:snap-intersection-paths="true"
@@ -518,7 +479,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="grid"
+     inkscape:label="Grid"
      style="display:inline">
     <rect
        style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.3254902;marker:none;enable-background:accumulate"
@@ -597,88 +558,9 @@
        height="27.999897"
        x="117"
        y="1024.3622" />
-    <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4266"
-       width="235"
-       height="305"
-       x="-285"
-       y="972.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4292);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4283"
-       width="20"
-       height="20"
-       x="-120"
-       y="1002.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4292-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4283-5"
-       width="20"
-       height="20"
-       x="-120"
-       y="1047.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4292-35);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4283-9"
-       width="20"
-       height="20"
-       x="-120"
-       y="1092.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4292-1);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4283-0"
-       width="20"
-       height="20"
-       x="-120"
-       y="1137.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-161.5"
-       y="1014.6122"
-       id="text4340"><tspan
-         sodipodi:role="line"
-         id="tspan4342"
-         x="-161.5"
-         y="1014.6122"
-         style="font-size:10px;line-height:1.25">body</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-175"
-       y="1057.3622"
-       id="text4344"><tspan
-         sodipodi:role="line"
-         id="tspan4346"
-         x="-175"
-         y="1057.3622"
-         style="font-size:10px;line-height:1.25">mouth</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-170"
-       y="1102.3622"
-       id="text4348"><tspan
-         sodipodi:role="line"
-         id="tspan4350"
-         x="-170"
-         y="1102.3622"
-         style="font-size:10px;line-height:1.25">eye</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-165"
-       y="1147.3622"
-       id="text4352"><tspan
-         sodipodi:role="line"
-         id="tspan4354"
-         x="-165"
-         y="1147.3622"
-         style="font-size:10px;line-height:1.25">head</tspan></text>
   </g>
   <g
-     inkscape:label="sprites"
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1">
     <path

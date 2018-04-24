@@ -27,8 +27,8 @@ const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
  */
 editor::editor() :
     gui(nullptr),
-    gui_x(0),
     warning_style(nullptr),
+    gui_x(0),
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),

@@ -50,7 +50,6 @@ void gate_fsm::create_fsm(mob_type* typ) {
  * When a gate is opened. This creates the particle explosion too.
  */
 void gate_fsm::open(mob* m, void* info1, void* info2) {
-    gate* g_ptr = (gate*) m;
     m->set_animation(GATE_ANIM_DESTROYED);
     m->start_dying();
     m->finish_dying();

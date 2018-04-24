@@ -434,7 +434,7 @@ mob_action::mob_action(
         }
         
         string object_name;
-        bool relative;
+        bool relative = true;
         float x, y, z, a;
         for(size_t w = 0; w < params_word - 5; ++w) {
             object_name += v_words[w] + " ";
@@ -644,8 +644,6 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
         } else if(v == "home") {
             vi.push_back(MOB_ACTION_TURN_HOME);
-        } else if(v == "randomly") {
-            vi.push_back(MOB_ACTION_TURN_RANDOMLY);
         } else if(v == "randomly") {
             vi.push_back(MOB_ACTION_TURN_RANDOMLY);
         } else {
@@ -992,7 +990,7 @@ bool mob_action::run(
                 xy,
                 type_ptr,
                 angle,
-                vs.size() >= 1 ? vs[1] : ""
+                vs.size() >= 2 ? vs[1] : ""
             );
             
         new_mob->z = z;

@@ -1585,12 +1585,11 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
-    dist d;
-    hitbox* closest_h = NULL;
     
     p_ptr->stop_chasing();
     
-    closest_h =
+    dist d;
+    hitbox* closest_h =
         p_ptr->focused_mob->get_closest_hitbox(
             p_ptr->pos, HITBOX_TYPE_NORMAL, &d
         );

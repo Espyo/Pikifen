@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.2 (unknown)"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Pikmin.svg"
    inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Documents/Vectorial graphics/Objects/Pikmin.svg.png"
    inkscape:export-xdpi="180"
@@ -1045,125 +1045,6 @@
        r="3.25"
        gradientTransform="matrix(2.7692248,0,0,3.076916,19.076944,-1149.7469)"
        gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Red_Pikmin"
-       id="linearGradient4977"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,70)"
-       inkscape:collect="always"
-       xlink:href="#Yellow_Pikmin"
-       id="linearGradient4977-3"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,137.5)"
-       inkscape:collect="always"
-       xlink:href="#Blue_Pikmin"
-       id="linearGradient4977-6"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,217.5)"
-       inkscape:collect="always"
-       xlink:href="#Purple_Pikmin"
-       id="linearGradient4977-2"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,287.5)"
-       inkscape:collect="always"
-       xlink:href="#White_Pikmin"
-       id="linearGradient4977-36"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,32.5)"
-       inkscape:collect="always"
-       xlink:href="#Red_Pikmin_dark"
-       id="linearGradient4977-61"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,102.5)"
-       inkscape:collect="always"
-       xlink:href="#Yellow_Pikmin_dark"
-       id="linearGradient4977-0"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,177.5)"
-       inkscape:collect="always"
-       xlink:href="#Blue_Pikmin_dark"
-       id="linearGradient4977-5"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,247.5)"
-       inkscape:collect="always"
-       xlink:href="#Purple_Pikmin_dark"
-       id="linearGradient4977-9"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,332.5)"
-       inkscape:collect="always"
-       xlink:href="#White_Pikmin_dark"
-       id="linearGradient4977-1"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,377.5)"
-       inkscape:collect="always"
-       xlink:href="#Flower_shadow_petal"
-       id="linearGradient4977-19"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,412.5)"
-       inkscape:collect="always"
-       xlink:href="#Flower_shadow_circle"
-       id="linearGradient4977-50"
-       x1="-120"
-       y1="919.86218"
-       x2="-100"
-       y2="919.86218"
-       gradientUnits="userSpaceOnUse" />
     <radialGradient
        r="3.25"
        fy="793.36218"
@@ -2127,9 +2008,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="82.86959"
-     inkscape:cy="-277.63073"
+     inkscape:zoom="1"
+     inkscape:cx="-44.267963"
+     inkscape:cy="-202.6195"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -2181,7 +2062,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="grid"
+     inkscape:label="Grid"
      style="display:inline;opacity:1">
     <use
        style="display:inline"
@@ -2836,229 +2717,6 @@
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4967"
-       width="303.5"
-       height="530"
-       x="-368.5"
-       y="897.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4977);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969"
-       width="20"
-       height="20"
-       x="-120"
-       y="909.86218" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-190"
-       y="922.36218"
-       id="text4979"><tspan
-         sodipodi:role="line"
-         id="tspan4981"
-         x="-190"
-         y="922.36218"
-         style="font-size:10px;line-height:1.25">Red Pikmin</tspan></text>
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-3);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-5"
-       width="20"
-       height="20"
-       x="-120"
-       y="979.86218" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-6);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-1"
-       width="20"
-       height="20"
-       x="-120"
-       y="1047.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-2);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-9"
-       width="20"
-       height="20"
-       x="-120"
-       y="1127.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-36);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-2"
-       width="20"
-       height="20"
-       x="-120"
-       y="1197.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-61);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-92"
-       width="20"
-       height="20"
-       x="-120"
-       y="942.36218" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-0);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-7"
-       width="20"
-       height="20"
-       x="-120"
-       y="1012.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-5);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-8"
-       width="20"
-       height="20"
-       x="-120"
-       y="1087.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-9);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-6"
-       width="20"
-       height="20"
-       x="-120"
-       y="1157.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-1);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-3"
-       width="20"
-       height="20"
-       x="-120"
-       y="1242.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-19);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-84"
-       width="20"
-       height="20"
-       x="-120"
-       y="1287.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4977-50);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4969-10"
-       width="20"
-       height="20"
-       x="-120"
-       y="1322.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-208.17383"
-       y="991.09021"
-       id="text5117"><tspan
-         sodipodi:role="line"
-         id="tspan5119"
-         x="-208.17383"
-         y="991.09021"
-         style="font-size:10px;line-height:1.25">Yellow Pikmin</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-210.98877"
-       y="956.09021"
-       id="text5121"><tspan
-         sodipodi:role="line"
-         id="tspan5123"
-         x="-210.98877"
-         y="956.09021"
-         style="font-size:10px;line-height:1.25">Red Pikmin dark</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-221.37695"
-       y="1026.0902"
-       id="text5117-6"><tspan
-         sodipodi:role="line"
-         id="tspan5119-3"
-         x="-221.37695"
-         y="1026.0902"
-         style="font-size:10px;line-height:1.25">Yellow Pikmin dark</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-208.17383"
-       y="1061.0902"
-       id="text5117-2"><tspan
-         sodipodi:role="line"
-         id="tspan5119-0"
-         x="-208.17383"
-         y="1061.0902"
-         style="font-size:10px;line-height:1.25">Blue Pikmin</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-217.55127"
-       y="1101.0902"
-       id="text5117-61"><tspan
-         sodipodi:role="line"
-         id="tspan5119-5"
-         x="-217.55127"
-         y="1101.0902"
-         style="font-size:10px;line-height:1.25">Blue Pikmin dark</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-203.17383"
-       y="1141.0902"
-       id="text5117-5"><tspan
-         sodipodi:role="line"
-         id="tspan5119-4"
-         x="-203.17383"
-         y="1141.0902"
-         style="font-size:10px;line-height:1.25">Purple Pikmin</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-227.2876"
-       y="1165.121"
-       id="text5117-7"><tspan
-         sodipodi:role="line"
-         x="-227.2876"
-         y="1165.121"
-         id="tspan5207"
-         style="font-size:10px;line-height:1.25">Purple Pikmin dark</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-203.17383"
-       y="1211.0902"
-       id="text5117-56"><tspan
-         sodipodi:role="line"
-         id="tspan5119-9"
-         x="-203.17383"
-         y="1211.0902"
-         style="font-size:10px;line-height:1.25">White Pikmin</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-220.70312"
-       y="1251.0902"
-       id="text5117-3"><tspan
-         sodipodi:role="line"
-         id="tspan5119-7"
-         x="-220.70312"
-         y="1251.0902"
-         style="font-size:10px;line-height:1.25">White Pikmin dark</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-226.59668"
-       y="1305.121"
-       id="text5117-4"><tspan
-         sodipodi:role="line"
-         id="tspan5119-52"
-         x="-226.59668"
-         y="1305.121"
-         style="font-size:10px;line-height:1.25">Flower petal shadow</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-232.49512"
-       y="1336.0902"
-       id="text5117-54"><tspan
-         sodipodi:role="line"
-         id="tspan5119-74"
-         x="-232.49512"
-         y="1336.0902"
-         style="font-size:10px;line-height:1.25">Flower circle shadow</tspan></text>
-    <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect5016"
        width="16"
@@ -3229,7 +2887,7 @@
        inkscape:export-ydpi="95.998047" />
   </g>
   <g
-     inkscape:label="sprites"
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1">

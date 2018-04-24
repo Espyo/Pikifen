@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg6593"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Ship.svg">
   <defs
      id="defs6595">
@@ -222,35 +222,6 @@
        id="linearGradient6738"
        xlink:href="#glass-8"
        inkscape:collect="always" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#glass-8"
-       id="linearGradient4192"
-       x1="-65"
-       y1="907.36218"
-       x2="-45"
-       y2="907.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,45.000003)"
-       inkscape:collect="always"
-       xlink:href="#hood-9"
-       id="linearGradient4192-3"
-       x1="-65"
-       y1="907.36218"
-       x2="-45"
-       y2="907.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,90.000003)"
-       inkscape:collect="always"
-       xlink:href="#rust-1"
-       id="linearGradient4192-35"
-       x1="-65"
-       y1="907.36218"
-       x2="-45"
-       y2="907.36218"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -259,11 +230,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="-76.672293"
-     inkscape:cy="73.462806"
+     inkscape:zoom="2.8"
+     inkscape:cx="117.56647"
+     inkscape:cy="92.416131"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -296,7 +267,20 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Grid"
+     style="display:inline">
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect873"
+       width="137"
+       height="113"
+       x="0"
+       y="939.36218" />
+  </g>
+  <g
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1">
     <path
@@ -503,66 +487,5 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
-    <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4180"
-       width="315.71429"
-       height="432.14285"
-       x="-330.71429"
-       y="872.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4192);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4182"
-       width="20"
-       height="20"
-       x="-65"
-       y="897.36218" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-112.87109"
-       y="910.12097"
-       id="text4194"><tspan
-         sodipodi:role="line"
-         id="tspan4196"
-         x="-112.87109"
-         y="910.12097"
-         style="font-size:10px;line-height:1.25">glass</tspan></text>
-    <rect
-       style="opacity:1;fill:url(#linearGradient4192-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4182-5"
-       width="20"
-       height="20"
-       x="-65"
-       y="942.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4192-35);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4182-9"
-       width="20"
-       height="20"
-       x="-65"
-       y="987.36218" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-114.01367"
-       y="956.09021"
-       id="text4233"><tspan
-         sodipodi:role="line"
-         id="tspan4235"
-         x="-114.01367"
-         y="956.09021"
-         style="font-size:10px;line-height:1.25">hood</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-109.36523"
-       y="1002.2206"
-       id="text4237"><tspan
-         sodipodi:role="line"
-         id="tspan4239"
-         x="-109.36523"
-         y="1002.2206"
-         style="font-size:10px;line-height:1.25">rust</tspan></text>
   </g>
 </svg>

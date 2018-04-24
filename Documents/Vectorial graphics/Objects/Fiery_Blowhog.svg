@@ -15,7 +15,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.2 (unknown)"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Fiery_Blowhog.svg">
   <defs
      id="defs2">
@@ -1144,116 +1144,6 @@
        spreadMethod="pad" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#body-1"
-       id="linearGradient7270"
-       x1="-19.84375"
-       y1="291.04688"
-       x2="-15.875"
-       y2="291.04688"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458333,-7.6338728e-6)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#snout"
-       id="linearGradient7280"
-       x1="-19.84375"
-       y1="298.98438"
-       x2="-15.875"
-       y2="298.98438"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458333,-7.6338728e-6)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#nose"
-       id="linearGradient7290"
-       x1="-19.84375"
-       y1="306.92188"
-       x2="-15.875"
-       y2="306.92188"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458333,-7.6338728e-6)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#fire-glow-nose-5"
-       id="linearGradient7300"
-       x1="-19.84375"
-       y1="314.85938"
-       x2="-15.875"
-       y2="314.85938"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458298,39.687456)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#nose-opening-3"
-       id="linearGradient7310"
-       x1="-19.84375"
-       y1="322.79688"
-       x2="-15.875"
-       y2="322.79688"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458319,-7.9375228)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#mask1"
-       id="linearGradient7320"
-       x1="-19.84375"
-       y1="330.73438"
-       x2="-15.875"
-       y2="330.73438"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458305,31.749963)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#eye"
-       id="linearGradient7330"
-       x1="-19.84375"
-       y1="338.67188"
-       x2="-15.875"
-       y2="338.67188"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458319,-15.875023)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#leg-3"
-       id="linearGradient7340"
-       x1="-19.84375"
-       y1="346.60938"
-       x2="-15.875"
-       y2="346.60938"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458319,-15.875023)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#shade-9"
-       id="linearGradient7350"
-       x1="-19.84375"
-       y1="354.54688"
-       x2="-15.875"
-       y2="354.54688"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458319,15.874977)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#belly-shade-2"
-       id="linearGradient7360"
-       x1="-19.84375"
-       y1="362.48438"
-       x2="-15.875"
-       y2="362.48438"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(2.6458319,15.874977)" />
-    <linearGradient
-       gradientTransform="matrix(0.19843749,0,0,0.19843712,-0.33073014,152.66439)"
-       inkscape:collect="always"
-       xlink:href="#fire-5"
-       id="linearGradient4330-2"
-       x1="-85"
-       y1="937.36218"
-       x2="-65"
-       y2="937.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
        id="fire-5">
       <stop
          style="stop-color:#ffffff;stop-opacity:1"
@@ -1409,16 +1299,6 @@
        y1="331.39581"
        x2="74.347923"
        y2="331.39581" />
-    <linearGradient
-       gradientTransform="matrix(0.19843748,0,0,0.19843711,-0.33073024,160.60187)"
-       inkscape:collect="always"
-       xlink:href="#fire-glow-snout-7"
-       id="linearGradient4330-2-5"
-       x1="-85"
-       y1="937.36218"
-       x2="-65"
-       y2="937.36218"
-       gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#eye"
@@ -2407,9 +2287,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="340.28392"
-     inkscape:cy="-274.26628"
+     inkscape:zoom="1"
+     inkscape:cx="6.58146"
+     inkscape:cy="-168.70162"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
@@ -2448,61 +2328,6 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:label="Reference"
-     inkscape:groupmode="layer"
-     id="layer1"
-     style="display:none;opacity:0.45558089">
-    <g
-       transform="matrix(0.26458333,0,0,0.26458333,22.754167,-8.954165)"
-       style="display:inline"
-       id="g4760">
-      <ellipse
-         ry="3.5000007"
-         rx="3.203124"
-         cy="1036.3622"
-         cx="-6.7031322"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
-      <circle
-         r="15"
-         cy="1036.3622"
-         cx="-16"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <circle
-         r="9.5"
-         cy="1036.3622"
-         cx="-18"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3780"
-         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:connector-curvature="0"
-         id="path3824"
-         d="m -12,1034.8622 v -6 h 2 v 6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:connector-curvature="0"
-         id="path3824-4"
-         d="m -12,1043.8622 v -6 h 2 v 6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
-    </g>
-  </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
@@ -2699,216 +2524,6 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7252"
-       width="189.17709"
-       height="119.0625"
-       x="-198.4375"
-       y="286.41666" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7270);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7254"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="289.0625" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7280);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7272"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="297" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7290);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7282"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="304.9375" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7300);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7292"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="352.5625" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7310);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7302"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="312.875" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7320);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7312"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="360.5" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7330);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7322"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="320.8125" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7340);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7332"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="328.75" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7350);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7342"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="368.4375" />
-    <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient7360);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect7352"
-       width="3.96875"
-       height="3.96875"
-       x="-17.197916"
-       y="376.375" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.36322"
-       y="293.16818"
-       id="text7364"><tspan
-         sodipodi:role="line"
-         id="tspan7362"
-         x="-18.36322"
-         y="293.16818"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Body</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="300.8938"
-       id="text7368"><tspan
-         sodipodi:role="line"
-         id="tspan7366"
-         x="-18.39164"
-         y="300.8938"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Snout (the tube part)</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="308.8313"
-       id="text7368-5"><tspan
-         sodipodi:role="line"
-         id="tspan7366-6"
-         x="-18.391644"
-         y="308.8313"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Nose (the end part)</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="356.4563"
-       id="text7368-7"><tspan
-         sodipodi:role="line"
-         id="tspan7366-7"
-         x="-18.391642"
-         y="356.4563"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Fire glow on the nose</tspan><tspan
-         sodipodi:role="line"
-         x="-18.391642"
-         y="363.07089"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px"
-         id="tspan8962" /></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="316.7688"
-       id="text7368-4"><tspan
-         sodipodi:role="line"
-         id="tspan7366-0"
-         x="-18.391642"
-         y="316.7688"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Nose opening</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="364.3938"
-       id="text7368-6"><tspan
-         sodipodi:role="line"
-         id="tspan7366-4"
-         x="-18.391636"
-         y="364.3938"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Mask 1 (fades from sideways body pattern to top-down pattern)</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="324.7063"
-       id="text7368-74"><tspan
-         sodipodi:role="line"
-         id="tspan7366-8"
-         x="-18.391642"
-         y="324.7063"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Eyes</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="332.6438"
-       id="text7368-58"><tspan
-         sodipodi:role="line"
-         id="tspan7366-2"
-         x="-18.391642"
-         y="332.6438"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Legs</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="372.3313"
-       id="text7368-60"><tspan
-         sodipodi:role="line"
-         id="tspan7366-66"
-         x="-18.39164"
-         y="372.3313"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Height shade</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.391642"
-       y="380.2688"
-       id="text7368-46"><tspan
-         sodipodi:role="line"
-         id="tspan7366-28"
-         x="-18.391642"
-         y="380.2688"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Belly shade</tspan></text>
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4330-2);fill-opacity:1;stroke:none;stroke-width:0.42333335;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4322-36"
-       width="3.96875"
-       height="3.9687424"
-       x="-17.197916"
-       y="336.6875" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.239195"
-       y="339.55554"
-       id="text7368-46-9"><tspan
-         sodipodi:role="line"
-         id="tspan7366-28-6"
-         x="-18.239195"
-         y="339.55554"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Fire</tspan></text>
-    <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect4545-7-6"
        width="78.845802"
@@ -2918,24 +2533,6 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Fiery_Blowhog.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4330-2-5);fill-opacity:1;stroke:none;stroke-width:0.42333335;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4322-36-8"
-       width="3.96875"
-       height="3.9687424"
-       x="-17.197916"
-       y="344.625" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:6.61458302px;font-family:sans-serif;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-18.239197"
-       y="348.5188"
-       id="text7368-46-9-3"><tspan
-         sodipodi:role="line"
-         id="tspan7366-28-6-8"
-         x="-18.239195"
-         y="348.5188"
-         style="text-align:end;text-anchor:end;stroke-width:0.26458332px">Fire glow on the snout</tspan></text>
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect4545-7-6-9"
@@ -2976,11 +2573,60 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Fiery_Blowhog.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,22.754167,-8.9541651)"
+       style="display:inline;opacity:1"
+       id="g4760">
+      <ellipse
+         ry="3.5000007"
+         rx="3.203124"
+         cy="1036.3622"
+         cx="-6.7031322"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3782"
+         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+      <circle
+         r="15"
+         cy="1036.3622"
+         cx="-16"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3770"
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         r="9.5"
+         cy="1036.3622"
+         cx="-18"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3780"
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824-4"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="Objects"
+     inkscape:label="Sprites"
      style="display:inline">
     <path
        style="display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient4604-8);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"

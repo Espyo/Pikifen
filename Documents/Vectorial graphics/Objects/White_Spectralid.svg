@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="White_Spectralid.svg"
    inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
    inkscape:export-xdpi="90"
@@ -158,25 +158,6 @@
        fx="29.200005"
        fy="1030.7927"
        r="8" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#top_wings"
-       id="linearGradient4231"
-       x1="-85"
-       y1="1087.3622"
-       x2="-65"
-       y2="1087.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,45.000005)"
-       inkscape:collect="always"
-       xlink:href="#bottom_wings"
-       id="linearGradient4231-3"
-       x1="-85"
-       y1="1087.3622"
-       x2="-65"
-       y2="1087.3622"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -185,9 +166,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="-137.17073"
-     inkscape:cy="-41.817118"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="63.399568"
+     inkscape:cy="-68.558977"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -293,16 +274,9 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4221"
-       width="255"
-       height="305"
-       x="-295"
-       y="1057.3622" />
   </g>
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
@@ -604,42 +578,6 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4231);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4223"
-       width="20"
-       height="20"
-       x="-85"
-       y="1077.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-160"
-       y="1092.3622"
-       id="text4233"><tspan
-         sodipodi:role="line"
-         id="tspan4235"
-         x="-160"
-         y="1092.3622"
-         style="font-size:10px;line-height:1.25">top wings</tspan></text>
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient4231-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4223-2"
-       width="20"
-       height="20"
-       x="-85"
-       y="1122.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-162.72949"
-       y="1130.121"
-       id="text4269"><tspan
-         sodipodi:role="line"
-         id="tspan4271"
-         x="-162.72949"
-         y="1130.121"
-         style="font-size:10px;line-height:1.25">bottom wings</tspan></text>
     <g
        transform="translate(-2.3841858e-7,2.1868804e-5)"
        style="display:inline"

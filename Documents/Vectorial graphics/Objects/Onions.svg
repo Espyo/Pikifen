@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg6166"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Onions.svg">
   <defs
      id="defs6168">
@@ -333,76 +333,6 @@
        id="linearGradient6164"
        xlink:href="#stick-8"
        inkscape:collect="always" />
-    <linearGradient
-       gradientTransform="translate(0,235)"
-       inkscape:collect="always"
-       xlink:href="#blue-body-2"
-       id="linearGradient4235-37"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,195)"
-       inkscape:collect="always"
-       xlink:href="#blue-joint-1"
-       id="linearGradient4235-7"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,155)"
-       inkscape:collect="always"
-       xlink:href="#yellow-body-9"
-       id="linearGradient4235-0"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(-5,115)"
-       inkscape:collect="always"
-       xlink:href="#yellow-joint-9"
-       id="linearGradient4235-2"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,75.000003)"
-       inkscape:collect="always"
-       xlink:href="#red-body"
-       id="linearGradient4235-5"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,35.000003)"
-       inkscape:collect="always"
-       xlink:href="#red-joint-6"
-       id="linearGradient4235-3"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,2.6171875e-6)"
-       inkscape:collect="always"
-       xlink:href="#stick-8"
-       id="linearGradient4235"
-       x1="-80"
-       y1="652.36218"
-       x2="-60"
-       y2="652.36218"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -411,11 +341,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="-226.45084"
-     inkscape:cy="297.13586"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="-217.62011"
+     inkscape:cy="356.28897"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -450,17 +380,9 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="grid">
-    <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4223"
-       width="470"
-       height="600"
-       x="-500"
-       y="622.36218" />
-  </g>
+     inkscape:label="Grid" />
   <g
-     inkscape:label="sprites"
+     inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1">
     <path
@@ -877,131 +799,5 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227"
-       width="20"
-       height="20"
-       x="-80"
-       y="642.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-3);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-3"
-       width="20"
-       height="20"
-       x="-80"
-       y="677.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-5);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-1"
-       width="20"
-       height="20"
-       x="-80"
-       y="717.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-2);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-36"
-       width="20"
-       height="20"
-       x="-85"
-       y="757.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-0);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-18"
-       width="20"
-       height="20"
-       x="-80"
-       y="797.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-7);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-2"
-       width="20"
-       height="20"
-       x="-80"
-       y="837.36218" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient4235-37);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4227-28"
-       width="20"
-       height="20"
-       x="-80"
-       y="877.36218" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-131.86279"
-       y="659.95984"
-       id="text4323"><tspan
-         sodipodi:role="line"
-         id="tspan4325"
-         x="-131.86279"
-         y="659.95984"
-         style="font-size:10px;line-height:1.25">stick</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-155"
-       y="692.36218"
-       id="text4327"><tspan
-         sodipodi:role="line"
-         id="tspan4329"
-         x="-155"
-         y="692.36218"
-         style="font-size:10px;line-height:1.25">red joint</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-140"
-       y="732.36218"
-       id="text4331"><tspan
-         sodipodi:role="line"
-         id="tspan4333"
-         x="-140"
-         y="732.36218"
-         style="font-size:10px;line-height:1.25">red body</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-155"
-       y="767.36218"
-       id="text4335"><tspan
-         sodipodi:role="line"
-         id="tspan4337"
-         x="-155"
-         y="767.36218"
-         style="font-size:10px;line-height:1.25">yellow joint</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-150"
-       y="807.36218"
-       id="text4339"><tspan
-         sodipodi:role="line"
-         id="tspan4341"
-         x="-150"
-         y="807.36218"
-         style="font-size:10px;line-height:1.25">yellow body</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-140"
-       y="852.36218"
-       id="text4343"><tspan
-         sodipodi:role="line"
-         id="tspan4345"
-         x="-140"
-         y="852.36218"
-         style="font-size:10px;line-height:1.25">blue joint</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-145"
-       y="892.36218"
-       id="text4347"><tspan
-         sodipodi:role="line"
-         id="tspan4349"
-         x="-145"
-         y="892.36218"
-         style="font-size:10px;line-height:1.25">blue body</tspan></text>
   </g>
 </svg>

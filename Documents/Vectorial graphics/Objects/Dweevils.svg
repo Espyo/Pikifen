@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Dweevils.svg"
    inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Munge_Dweevil.png"
    inkscape:export-xdpi="90"
@@ -2479,96 +2479,6 @@
        y1="1489.5393"
        x2="754.72284"
        y2="1489.5393" />
-    <linearGradient
-       gradientTransform="translate(0,-1.727559e-5)"
-       inkscape:collect="always"
-       xlink:href="#munge-leg4"
-       id="linearGradient6994"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,39.999983)"
-       inkscape:collect="always"
-       xlink:href="#munge-body-6"
-       id="linearGradient6994-6"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,79.999983)"
-       inkscape:collect="always"
-       xlink:href="#munge-feelers-7"
-       id="linearGradient6994-2"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,119.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-eyes-6"
-       id="linearGradient6994-3"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,159.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-leg1"
-       id="linearGradient6994-26"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,194.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-head"
-       id="linearGradient6994-9"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,239.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-leg2"
-       id="linearGradient6994-37"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,274.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-leg3"
-       id="linearGradient6994-8"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       gradientTransform="translate(0,314.99998)"
-       inkscape:collect="always"
-       xlink:href="#munge-body-dark"
-       id="linearGradient6994-61"
-       x1="-60"
-       y1="1082.3622"
-       x2="-40"
-       y2="1082.3622"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2578,10 +2488,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.50000001"
-     inkscape:cx="-986.29873"
-     inkscape:cy="6.3717204"
+     inkscape:cx="-591.74816"
+     inkscape:cy="-401.04667"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -2616,7 +2526,7 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="grid"
+     inkscape:label="Grid"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
@@ -2739,18 +2649,60 @@
        height="115"
        x="604"
        y="1200.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6983"
-       width="411.33514"
-       height="790"
-       x="-431.33514"
-       y="1052.3622" />
+    <g
+       transform="translate(-4.7019602e-7,2.1574303e-5)"
+       style="display:inline"
+       id="g4760">
+      <ellipse
+         ry="3.5000007"
+         rx="3.203124"
+         cy="1036.3622"
+         cx="-6.7031322"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3782"
+         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+      <circle
+         r="15"
+         cy="1036.3622"
+         cx="-16"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3770"
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         r="9.5"
+         cy="1036.3622"
+         cx="-18"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3780"
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824-4"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="sprites"
+     inkscape:label="Sprites"
      style="display:inline">
     <use
        x="0"
@@ -6755,222 +6707,5 @@
        style="display:inline;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none"
        inkscape:transform-center-x="-2.2148943"
        inkscape:transform-center-y="7.47187" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1072.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-6);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-1"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1112.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-2);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-9"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1152.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-6"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1192.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-26);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-7"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1232.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-9);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-2"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1267.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-37);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-22"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1312.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-8);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-3"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1347.3622" />
-    <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient6994-61);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect6985-31"
-       width="20"
-       height="20"
-       x="-59.999996"
-       y="1387.3622" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-157.83203"
-       y="1085.121"
-       id="text7161"><tspan
-         sodipodi:role="line"
-         x="-157.83203"
-         y="1085.121"
-         id="tspan7267"
-         style="font-size:10px;line-height:1.25">Munge leg 4</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-151.21094"
-       y="1125.121"
-       id="text7161-9"><tspan
-         sodipodi:role="line"
-         x="-151.21094"
-         y="1125.121"
-         id="tspan7239"
-         style="font-size:10px;line-height:1.25">Munge body</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-147.83203"
-       y="1165.121"
-       id="text7161-7"><tspan
-         sodipodi:role="line"
-         x="-147.83203"
-         y="1165.121"
-         id="tspan7243"
-         style="font-size:10px;line-height:1.25">Munge feelers</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-152.83203"
-       y="1205.121"
-       id="text7161-4"><tspan
-         sodipodi:role="line"
-         x="-152.83203"
-         y="1205.121"
-         id="tspan7247"
-         style="font-size:10px;line-height:1.25">Munge eyes</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-141.37695"
-       y="1244.9598"
-       id="text7161-0"><tspan
-         sodipodi:role="line"
-         x="-141.37695"
-         y="1244.9598"
-         id="tspan7259"
-         style="font-size:10px;line-height:1.25">Munge leg 1</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-146.08398"
-       y="1280.121"
-       id="text7161-6"><tspan
-         sodipodi:role="line"
-         x="-146.08398"
-         y="1280.121"
-         id="tspan7255"
-         style="font-size:10px;line-height:1.25">Munge head</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-152.83203"
-       y="1325.121"
-       id="text7161-06"><tspan
-         sodipodi:role="line"
-         id="tspan7163-32"
-         x="-152.83203"
-         y="1325.121"
-         style="font-size:10px;line-height:1.25">Munge leg 2</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-161.44287"
-       y="1360.121"
-       id="text7161-061"><tspan
-         sodipodi:role="line"
-         x="-161.44287"
-         y="1360.121"
-         id="tspan7263"
-         style="font-size:10px;line-height:1.25">Munge leg 3</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-159.1333"
-       y="1400.121"
-       id="text7161-47"><tspan
-         sodipodi:role="line"
-         id="tspan7163-6"
-         x="-159.1333"
-         y="1400.121"
-         style="font-size:10px;line-height:1.25">Munge body dark</tspan></text>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="temp"
-     style="display:inline">
-    <g
-       transform="translate(-2.3841858e-7,2.1868804e-5)"
-       style="display:inline"
-       id="g4760">
-      <ellipse
-         ry="3.5000007"
-         rx="3.203124"
-         cy="1036.3622"
-         cx="-6.7031322"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
-      <circle
-         r="15"
-         cy="1036.3622"
-         cx="-16"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <circle
-         r="9.5"
-         cy="1036.3622"
-         cx="-18"
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         id="path3780"
-         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:connector-curvature="0"
-         id="path3824"
-         d="m -12,1034.8622 0,-6 2,0 0,6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
-         inkscape:connector-curvature="0"
-         id="path3824-4"
-         d="m -12,1043.8622 0,-6 2,0 0,6 z"
-         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
-    </g>
   </g>
 </svg>

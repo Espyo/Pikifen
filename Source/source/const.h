@@ -28,10 +28,10 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 13;
+const unsigned char VERSION_MINOR = 14;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 11;
-const unsigned char VERSION_MONTH = 02;
+const unsigned char VERSION_DAY   = 23;
+const unsigned char VERSION_MONTH = 04;
 const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
 //How many entries of the animation editor history to store, at max.
