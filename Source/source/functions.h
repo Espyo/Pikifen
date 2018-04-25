@@ -108,6 +108,10 @@ float interpolate_number(
 );
 void log_error(string s, data_node* d = NULL);
 void print_info(const string &t);
+vector<string> prompt_file_dialog(
+    const string &initial_path, const string &title,
+    const string &patterns, const int mode
+);
 float randomf(float min, float max);
 int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
@@ -122,6 +126,7 @@ vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false
 );
+string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string str_to_lower(string s);
 string str_to_upper(string s);

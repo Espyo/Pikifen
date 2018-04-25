@@ -69,6 +69,26 @@ private:
     static const string PREVIOUS_ICON;
     static const string SAVE_ICON;
     
+    //GUI widgets.
+    lafi::frame* frm_main;
+    lafi::frame* frm_object;
+    lafi::frame* frm_history;
+    lafi::frame* frm_anims;
+    lafi::frame* frm_anim;
+    lafi::frame* frm_frame;
+    lafi::frame* frm_sprites;
+    lafi::frame* frm_sprite;
+    lafi::frame* frm_sprite_tra;
+    lafi::frame* frm_hitboxes;
+    lafi::frame* frm_hitbox;
+    lafi::frame* frm_normal_h;
+    lafi::frame* frm_attack_h;
+    lafi::frame* frm_top;
+    lafi::frame* frm_body_parts;
+    lafi::frame* frm_body_part;
+    lafi::frame* frm_tools;
+    lafi::frame* frm_bottom;
+    
     
     animation_database   anims;
     bool                 anim_playing;
@@ -89,7 +109,6 @@ private:
     unsigned char        cur_maturity;
     sprite*              cur_sprite;
     string               file_path;
-    ALLEGRO_FILECHOOSER* file_dialog;
     //Hitbox being grabbed by the mouse cursor. INVALID = none.
     size_t               grabbing_hitbox;
     bool                 grabbing_hitbox_edge;
