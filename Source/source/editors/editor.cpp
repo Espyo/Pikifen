@@ -19,8 +19,16 @@
 
 
 
+//Time until the next click is no longer considered a double-click.
+const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
+//Name of the folder in the graphics folder where the icons are found.
 const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
-
+//If the mouse is dragged outside of this range, that's a real drag.
+const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
+//Maximum zoom level possible in the editor.
+const float editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+//Minimum zoom level possible in the editor.
+const float editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
@@ -29,11 +37,17 @@ editor::editor() :
     gui(nullptr),
     warning_style(nullptr),
     gui_x(0),
+    double_click_time(0),
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
     icons(EDITOR_ICONS_FOLDER_NAME),
+    is_ctrl_pressed(false),
+    is_gui_focused(false),
+    is_shift_pressed(false),
+    last_mouse_click(INVALID),
     made_changes(false),
+    mouse_drag_confirmed(false),
     mode(0),
     sec_mode(0),
     status_bar_y(0) {
@@ -191,6 +205,23 @@ void editor::create_picker_frame() {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the logic part of the main loop of the area editor.
+ */
+void editor::do_logic() {
+    gui->tick(delta_t);
+    
+    update_transformations();
+    
+    if(double_click_time > 0) {
+        double_click_time -= delta_t;
+        if(double_click_time < 0) double_click_time = 0;
+    }
+    
+    fade_mgr.tick(delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Populates and opens the frame where you pick from a list.
  */
 void editor::generate_and_open_picker(
@@ -215,6 +246,217 @@ void editor::generate_and_open_picker(
     picker_elements = elements;
     populate_picker("");
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an Allegro event for control-related things.
+ */
+void editor::handle_controls(const ALLEGRO_EVENT &ev) {
+    if(fade_mgr.is_fading()) return;
+    
+    gui->handle_event(ev);
+    
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
+    ) {
+        handle_mouse_update(ev);
+    }
+    
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        !is_mouse_in_gui(mouse_cursor_s)
+    ) {
+    
+        if(ev.mouse.button == 1) {
+            holding_m1 = true;
+        } else if(ev.mouse.button == 2) {
+            holding_m2 = true;
+        } else if(ev.mouse.button == 3) {
+            holding_m3 = true;
+        }
+        
+        mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
+        mouse_drag_confirmed = false;
+        
+        gui->lose_focus();
+        is_gui_focused = false;
+        
+        if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
+            if(ev.mouse.button == 1) {
+                handle_lmb_double_click(ev);
+            } else if(ev.mouse.button == 2) {
+                if(area_editor_mmb_pan) {
+                    handle_mmb_double_click(ev);
+                } else {
+                    handle_rmb_double_click(ev);
+                }
+            } else if(ev.mouse.button == 3) {
+                if(area_editor_mmb_pan) {
+                    handle_rmb_double_click(ev);
+                } else {
+                    handle_mmb_double_click(ev);
+                }
+            }
+            
+            double_click_time = 0;
+            
+        } else {
+            if(ev.mouse.button == 1) {
+                handle_lmb_down(ev);
+            } else if(ev.mouse.button == 2) {
+                if(area_editor_mmb_pan) {
+                    handle_mmb_down(ev);
+                } else {
+                    handle_rmb_down(ev);
+                }
+            } else if(ev.mouse.button == 3) {
+                if(area_editor_mmb_pan) {
+                    handle_rmb_down(ev);
+                } else {
+                    handle_mmb_down(ev);
+                }
+            }
+            
+            last_mouse_click = ev.mouse.button;
+            double_click_time = DOUBLE_CLICK_TIMEOUT;
+        }
+        
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        is_mouse_in_gui(mouse_cursor_s)
+    ) {
+        is_gui_focused = true;
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
+    ) {
+        if(ev.mouse.button == 1) {
+            holding_m1 = false;
+            handle_lmb_up(ev);
+        } else if(ev.mouse.button == 2) {
+            holding_m2 = false;
+            if(area_editor_mmb_pan) {
+                handle_mmb_up(ev);
+            } else {
+                handle_rmb_up(ev);
+            }
+        } else if(ev.mouse.button == 3) {
+            holding_m3 = false;
+            if(area_editor_mmb_pan) {
+                handle_rmb_up(ev);
+            } else {
+                handle_mmb_up(ev);
+            }
+        }
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED
+    ) {
+        if(
+            fabs(ev.mouse.x - mouse_drag_start.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
+            fabs(ev.mouse.y - mouse_drag_start.y) >= MOUSE_DRAG_CONFIRM_RANGE
+        ) {
+            mouse_drag_confirmed = true;
+        }
+        
+        if(mouse_drag_confirmed) {
+            if(holding_m1) {
+                handle_lmb_drag(ev);
+            }
+            if(holding_m2) {
+                if(area_editor_mmb_pan) {
+                    handle_mmb_drag(ev);
+                } else {
+                    handle_rmb_drag(ev);
+                }
+            }
+            if(holding_m3) {
+                if(area_editor_mmb_pan) {
+                    handle_rmb_drag(ev);
+                } else {
+                    handle_mmb_drag(ev);
+                }
+            }
+        }
+        if(
+            (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
+            !is_mouse_in_gui(mouse_cursor_s)
+        ) {
+            handle_mouse_wheel(ev);
+        }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
+        ) {
+            is_shift_pressed = true;
+            
+        } else if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LCTRL ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RCTRL ||
+            ev.keyboard.keycode == ALLEGRO_KEY_COMMAND
+        ) {
+            is_ctrl_pressed = true;
+            
+        }
+        
+        if(!is_gui_focused) {
+            handle_key_down(ev);
+        }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+        if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
+        ) {
+            is_shift_pressed = false;
+            
+        } else if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LCTRL ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RCTRL ||
+            ev.keyboard.keycode == ALLEGRO_KEY_COMMAND
+        ) {
+            is_ctrl_pressed = false;
+            
+        }
+        
+        if(!is_gui_focused) {
+            handle_key_up(ev);
+        }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(!is_gui_focused) {
+            handle_key_char(ev);
+        }
+        
+    }
+}
+
+
+//Input handler functions.
+void editor::handle_key_char(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_down(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_up(const ALLEGRO_EVENT &ev) {}
+void editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
+void editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
+void editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}
+void editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {}
+void editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {}
+void editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
+void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
+void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
+void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
 
 /* ----------------------------------------------------------------------------
@@ -326,6 +568,36 @@ void editor::show_changes_warning() {
 void editor::update_gui_coordinates() {
     gui_x = scr_w * 0.675;
     status_bar_y = scr_h - 16;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Zooms in or out to a specific amount, optionally keeping the mouse cursor
+ * in the same spot.
+ */
+void editor::zoom(const float new_zoom, const bool anchor_cursor) {
+    cam_zoom =
+        clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
+        
+    if(anchor_cursor) {
+        //Keep a backup of the old mouse coordinates.
+        point old_mouse_pos = mouse_cursor_w;
+        
+        //Figure out where the mouse will be after the zoom.
+        update_transformations();
+        mouse_cursor_w = mouse_cursor_s;
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &mouse_cursor_w.x, &mouse_cursor_w.y
+        );
+        
+        //Readjust the transformation by shifting the camera
+        //so that the cursor ends up where it was before.
+        cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
+        cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
+    }
+    
+    update_transformations();
 }
 
 

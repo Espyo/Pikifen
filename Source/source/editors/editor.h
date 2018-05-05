@@ -33,8 +33,12 @@ private:
     
 protected:
 
+    static const float  DOUBLE_CLICK_TIMEOUT;
     static const string EDITOR_ICONS_FOLDER_NAME;
-    
+    static const float  MOUSE_DRAG_CONFIRM_RANGE;
+    static const float  ZOOM_MAX_LEVEL_EDITOR;
+    static const float  ZOOM_MIN_LEVEL_EDITOR;
+
     struct transformation_controller {
     private:
         static const float HANDLE_RADIUS;
@@ -104,12 +108,26 @@ protected:
     lafi::frame*  frm_picker;
     lafi::gui*    gui;
     lafi::style*  warning_style;
+    //If the next click is within this time, it's a double-click.
+    float         double_click_time;
     int           gui_x;
     bool          holding_m1;
     bool          holding_m2;
     bool          holding_m3;
     bmp_manager   icons;
+    //Is Ctrl pressed down?
+    bool          is_ctrl_pressed;
+    //Is the GUI currently what's in focus, i.e. the last thing clicked?
+    bool          is_gui_focused;
+    //Is Shift pressed down?
+    bool          is_shift_pressed;
+    //Number of the mouse button pressed.
+    size_t        last_mouse_click;
     bool          made_changes;
+    //Is this a mouse drag, or just a shaky click?
+    bool          mouse_drag_confirmed;
+    //Starting coordinates of a raw mouse drag.
+    point         mouse_drag_start;
     unsigned char mode;
     size_t        picker_type;
     //Secondary/sub mode.
@@ -130,6 +148,7 @@ protected:
     void show_bottom_frame();
     void show_changes_warning();
     void update_gui_coordinates();
+    void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     virtual void custom_picker_cancel_action();
     virtual void hide_all_frames() = 0;
@@ -137,14 +156,33 @@ protected:
     virtual void create_new_from_picker(const string &name) = 0;
     virtual void pick(const string &name, const string &category) = 0;
     
+    //Input handler functions.
+    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_up(const ALLEGRO_EVENT &ev);
+    
 public:
 
     editor();
     ~editor();
     
-    virtual void do_logic() = 0;
+    virtual void do_logic();
     virtual void do_drawing() = 0;
-    virtual void handle_controls(const ALLEGRO_EVENT &ev) = 0;
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load() = 0;
     virtual void unload() = 0;
 };

@@ -30,11 +30,6 @@
 #include "../vars.h"
 
 
-//Maximum zoom level possible in the editor.
-const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
-//Minimum zoom level possible in the editor.
-const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
-
 const string animation_editor::DELETE_ICON = "Delete.png";
 const string animation_editor::DUPLICATE_ICON = "Duplicate.png";
 const string animation_editor::EXIT_ICON = "Exit.png";
@@ -92,11 +87,26 @@ animation_editor::animation_editor() :
 
 
 /* ----------------------------------------------------------------------------
+ * Adds the current sprite's transformation controller data to the GUI.
+ */
+void animation_editor::cur_sprite_tc_to_gui() {
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text =
+        f2s(cur_sprite_tc.get_center().x);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text =
+        f2s(cur_sprite_tc.get_center().y);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text =
+        f2s(cur_sprite_tc.get_size().x);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text =
+        f2s(cur_sprite_tc.get_size().y);
+    gui_to_sprite_transform();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
-
-    update_transformations();
+    editor::do_logic();
     
     if(
         anim_playing && mode == EDITOR_MODE_ANIMATION &&
@@ -131,8 +141,6 @@ void animation_editor::do_logic() {
     } else {
         comparison_blink_show = true;
     }
-    
-    fade_mgr.tick(delta_t);
     
 }
 

@@ -17,197 +17,6 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Handles an Allegro event for control-related things.
- */
-void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
-    if(fade_mgr.is_fading()) return;
-    
-    gui->handle_event(ev);
-    
-    if(
-        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
-        ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
-    ) {
-        handle_mouse_update(ev);
-    }
-    
-    if(
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui(mouse_cursor_s)
-    ) {
-    
-        if(ev.mouse.button == 1) {
-            holding_m1 = true;
-        } else if(ev.mouse.button == 2) {
-            holding_m2 = true;
-        } else if(ev.mouse.button == 3) {
-            holding_m3 = true;
-        }
-        
-        mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
-        mouse_drag_confirmed = false;
-        
-        gui->lose_focus();
-        is_gui_focused = false;
-        
-        if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
-            if(ev.mouse.button == 1) {
-                handle_lmb_double_click(ev);
-            } else if(ev.mouse.button == 2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_double_click(ev);
-                } else {
-                    handle_rmb_double_click(ev);
-                }
-            } else if(ev.mouse.button == 3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_double_click(ev);
-                } else {
-                    handle_mmb_double_click(ev);
-                }
-            }
-            
-            double_click_time = 0;
-            
-        } else {
-            if(ev.mouse.button == 1) {
-                handle_lmb_down(ev);
-            } else if(ev.mouse.button == 2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_down(ev);
-                } else {
-                    handle_rmb_down(ev);
-                }
-            } else if(ev.mouse.button == 3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_down(ev);
-                } else {
-                    handle_mmb_down(ev);
-                }
-            }
-            
-            last_mouse_click = ev.mouse.button;
-            double_click_time = DOUBLE_CLICK_TIMEOUT;
-        }
-        
-        
-    } else if(
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        is_mouse_in_gui(mouse_cursor_s)
-    ) {
-        is_gui_focused = true;
-        
-    } else if(
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
-    ) {
-        if(ev.mouse.button == 1) {
-            holding_m1 = false;
-            handle_lmb_up(ev);
-        } else if(ev.mouse.button == 2) {
-            holding_m2 = false;
-            if(area_editor_mmb_pan) {
-                handle_mmb_up(ev);
-            } else {
-                handle_rmb_up(ev);
-            }
-        } else if(ev.mouse.button == 3) {
-            holding_m3 = false;
-            if(area_editor_mmb_pan) {
-                handle_rmb_up(ev);
-            } else {
-                handle_mmb_up(ev);
-            }
-        }
-        
-    } else if(
-        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
-        ev.type == ALLEGRO_EVENT_MOUSE_WARPED
-    ) {
-        if(
-            fabs(ev.mouse.x - mouse_drag_start.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
-            fabs(ev.mouse.y - mouse_drag_start.y) >= MOUSE_DRAG_CONFIRM_RANGE
-        ) {
-            mouse_drag_confirmed = true;
-        }
-        
-        if(mouse_drag_confirmed) {
-            if(holding_m1) {
-                handle_lmb_drag(ev);
-            }
-            if(holding_m2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_drag(ev);
-                } else {
-                    handle_rmb_drag(ev);
-                }
-            }
-            if(holding_m3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_drag(ev);
-                } else {
-                    handle_mmb_drag(ev);
-                }
-            }
-        }
-        if(
-            (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
-            !is_mouse_in_gui(mouse_cursor_s)
-        ) {
-            handle_mouse_wheel(ev);
-        }
-        
-    } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        if(
-            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
-            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
-        ) {
-            is_shift_pressed = true;
-            
-        } else if(
-            ev.keyboard.keycode == ALLEGRO_KEY_LCTRL ||
-            ev.keyboard.keycode == ALLEGRO_KEY_RCTRL ||
-            ev.keyboard.keycode == ALLEGRO_KEY_COMMAND
-        ) {
-            is_ctrl_pressed = true;
-            
-        }
-        
-        if(!is_gui_focused) {
-            handle_key_down(ev);
-        }
-        
-    } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
-        if(
-            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
-            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
-        ) {
-            is_shift_pressed = false;
-            
-        } else if(
-            ev.keyboard.keycode == ALLEGRO_KEY_LCTRL ||
-            ev.keyboard.keycode == ALLEGRO_KEY_RCTRL ||
-            ev.keyboard.keycode == ALLEGRO_KEY_COMMAND
-        ) {
-            is_ctrl_pressed = false;
-            
-        }
-        
-        if(!is_gui_focused) {
-            handle_key_up(ev);
-        }
-        
-    } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(!is_gui_focused) {
-            handle_key_char(ev);
-        }
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed.
  */
 void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
@@ -497,14 +306,6 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         frm_stt->widgets["rad_angle"]->simulate_click();
         
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles a key being released.
- */
-void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
-
 }
 
 
@@ -1386,20 +1187,6 @@ void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being dragged.
- */
-void area_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the middle mouse button being released.
- */
-void area_editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles the mouse coordinates being updated.
  */
 void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
@@ -1433,30 +1220,9 @@ void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being double-clicked.
- */
-void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the right mouse button being pressed down.
- */
-void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles the right mouse button being dragged.
  */
 void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     cam_pos.x -= ev.mouse.dx / cam_zoom;
     cam_pos.y -= ev.mouse.dy / cam_zoom;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the right mouse button being released.
- */
-void area_editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {
 }

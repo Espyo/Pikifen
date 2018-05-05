@@ -143,14 +143,12 @@ private:
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         DEBUG_TEXT_SCALE;
     static const unsigned char DEF_REFERENCE_ALPHA;
-    static const float         DOUBLE_CLICK_TIMEOUT;
     static const float         KEYBOARD_CAM_ZOOM;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
     static const float         MAX_GRID_INTERVAL;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
     static const unsigned char MIN_CIRCLE_SECTOR_POINTS;
     static const float         MIN_GRID_INTERVAL;
-    static const float         MOUSE_DRAG_CONFIRM_RANGE;
     static const float         NEW_SECTOR_ERROR_TINT_DURATION;
     static const float         PATH_LINK_THICKNESS;
     static const float         PATH_PREVIEW_CHECKPOINT_RADIUS;
@@ -163,8 +161,6 @@ private:
     static const float         STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     static const float         UNDO_SAVE_LOCK_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
-    static const float         ZOOM_MAX_LEVEL_EDITOR;
-    static const float         ZOOM_MIN_LEVEL_EDITOR;
     
     static const string ICON_DELETE;
     static const string ICON_DELETE_LINK;
@@ -248,30 +244,16 @@ private:
     bool debug_triangulation;
     //Debug tool -- show the vertex numbers?
     bool debug_vertex_nrs;
-    //If the next click is within this time, it's a double-click.
-    float double_click_time;
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;
     //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
     unsigned char drawing_line_error;
-    //Is Ctrl pressed down?
-    bool is_ctrl_pressed;
-    //Is the GUI currently what's in focus, i.e. the last thing clicked?
-    bool is_gui_focused;
-    //Is Shift pressed down?
-    bool is_shift_pressed;
     //Category of the last mob placed.
     mob_category* last_mob_category;
     //Mob type of the last mob placed.
     mob_type* last_mob_type;
-    //Number of the mouse button pressed.
-    size_t last_mouse_click;
     //List of lone edges found.
     unordered_set<edge*> lone_edges;
-    //Is this a mouse drag, or just a shaky click?
-    bool mouse_drag_confirmed;
-    //Starting coordinates of a raw mouse drag.
-    point mouse_drag_start;
     //Closest mob to the mouse when moving.
     mob_gen* move_closest_mob;
     //Closest mob was here when the move started (world coords).
@@ -415,6 +397,7 @@ private:
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
     
+    //General functions.
     bool are_nodes_traversable(
         const layout_drawing_node &n1,
         const layout_drawing_node &n2
@@ -531,26 +514,19 @@ private:
     void update_status_bar();
     void update_texture_suggestions(const string &n);
     void update_undo_history();
-    void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     //Input handler functions.
-    void handle_key_char(const ALLEGRO_EVENT &ev);
-    void handle_key_down(const ALLEGRO_EVENT &ev);
-    void handle_key_up(const ALLEGRO_EVENT &ev);
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_lmb_down(const ALLEGRO_EVENT &ev);
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev);
-    void handle_lmb_up(const ALLEGRO_EVENT &ev);
-    void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_mmb_down(const ALLEGRO_EVENT &ev);
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev);
-    void handle_mmb_up(const ALLEGRO_EVENT &ev);
-    void handle_mouse_update(const ALLEGRO_EVENT &ev);
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
-    void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_rmb_down(const ALLEGRO_EVENT &ev);
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev);
-    void handle_rmb_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     
     //GUI functions.
     void asa_to_gui();
@@ -583,7 +559,6 @@ private:
 public:
     virtual void do_logic();
     virtual void do_drawing();
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
     virtual void update_transformations();

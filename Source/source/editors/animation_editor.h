@@ -54,9 +54,6 @@ private:
         LMB_ACTION_ROTATE,
     };
     
-    static const float  ZOOM_MAX_LEVEL_EDITOR;
-    static const float  ZOOM_MIN_LEVEL_EDITOR;
-    
     static const string DELETE_ICON;
     static const string DUPLICATE_ICON;
     static const string EXIT_ICON;
@@ -125,23 +122,9 @@ private:
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
     unsigned char             top_lmb_action;
     
+    //General functions.
+    void cur_sprite_tc_to_gui();
     string get_cut_path(const string &p);
-    void animation_to_gui();
-    void body_part_to_gui();
-    void frame_to_gui();
-    void hitbox_to_gui();
-    void sprite_to_gui();
-    void sprite_bmp_to_gui();
-    void sprite_transform_to_gui();
-    void top_to_gui();
-    void gui_to_body_part();
-    void gui_to_animation();
-    void gui_to_frame();
-    void gui_to_hitbox();
-    void gui_to_sprite();
-    void gui_to_sprite_bmp();
-    void gui_to_sprite_transform();
-    void gui_to_top();
     void load_animation_database();
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
@@ -158,6 +141,36 @@ private:
     void update_hitboxes();
     void update_stats();
     
+    //Input handler functions.
+    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    
+    //GUI functions.
+    void animation_to_gui();
+    void body_part_to_gui();
+    void frame_to_gui();
+    void hitbox_to_gui();
+    void sprite_to_gui();
+    void sprite_bmp_to_gui();
+    void sprite_transform_to_gui();
+    void top_to_gui();
+    void gui_to_body_part();
+    void gui_to_animation();
+    void gui_to_frame();
+    void gui_to_hitbox();
+    void gui_to_sprite();
+    void gui_to_sprite_bmp();
+    void gui_to_sprite_transform();
+    void gui_to_top();
+    
     virtual void hide_all_frames();
     virtual void change_to_right_frame();
     virtual void create_new_from_picker(const string &name);
@@ -171,7 +184,6 @@ public:
     
     virtual void do_logic();
     virtual void do_drawing();
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
     virtual void update_transformations();

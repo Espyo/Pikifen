@@ -26,8 +26,6 @@ const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
-//Time until the next click is no longer considered a double-click.
-const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
 const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //Maximum number of points that a circle sector can be created with.
@@ -40,8 +38,6 @@ const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
 const float area_editor::MIN_GRID_INTERVAL = 2.0;
-//If the mouse is dragged outside of this range, that's a real drag.
-const float area_editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //How long to tint the new sector's line(s) red for.
 const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
@@ -66,10 +62,6 @@ const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
 const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
 const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
-//Maximum zoom level possible in the editor.
-const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
-//Minimum zoom level possible in the editor.
-const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 const string area_editor::ICON_DELETE = "Delete.png";
 const string area_editor::ICON_DELETE_LINK = "Delete_link.png";
@@ -181,15 +173,9 @@ area_editor::area_editor() :
     debug_sector_nrs(false),
     debug_triangulation(false),
     debug_vertex_nrs(false),
-    double_click_time(0),
     drawing_line_error(DRAWING_LINE_NO_ERROR),
-    is_ctrl_pressed(false),
-    is_gui_focused(false),
-    is_shift_pressed(false),
     last_mob_category(nullptr),
     last_mob_type(nullptr),
-    last_mouse_click(INVALID),
-    mouse_drag_confirmed(false),
     moving(false),
     moving_path_preview_checkpoint(-1),
     moving_cross_section_point(-1),
@@ -854,15 +840,7 @@ void area_editor::delete_selected_path_elements() {
  * Handles the logic part of the main loop of the area editor.
  */
 void area_editor::do_logic() {
-
-    gui->tick(delta_t);
-    
-    update_transformations();
-    
-    if(double_click_time > 0) {
-        double_click_time -= delta_t;
-        if(double_click_time < 0) double_click_time = 0;
-    }
+    editor::do_logic();
     
     path_preview_timer.tick(delta_t);
     new_sector_error_tint_timer.tick(delta_t);
@@ -872,8 +850,6 @@ void area_editor::do_logic() {
     if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
     }
-    
-    fade_mgr.tick(delta_t);
     
     selection_effect += SELECTION_EFFECT_SPEED * delta_t;
     
@@ -3714,36 +3690,6 @@ void area_editor::update_undo_history() {
         b->description = "Undo: " + undo_history[0].second + ".";
         update_status_bar();
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Zooms in or out to a specific amount, optionally keeping the mouse cursor
- * in the same spot.
- */
-void area_editor::zoom(const float new_zoom, const bool anchor_cursor) {
-    cam_zoom =
-        clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
-        
-    if(anchor_cursor) {
-        //Keep a backup of the old mouse coordinates.
-        point old_mouse_pos = mouse_cursor_w;
-        
-        //Figure out where the mouse will be after the zoom.
-        update_transformations();
-        mouse_cursor_w = mouse_cursor_s;
-        al_transform_coordinates(
-            &screen_to_world_transform,
-            &mouse_cursor_w.x, &mouse_cursor_w.y
-        );
-        
-        //Readjust the transformation by shifting the camera
-        //so that the cursor ends up where it was before.
-        cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
-        cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
-    }
-    
-    update_transformations();
 }
 
 
