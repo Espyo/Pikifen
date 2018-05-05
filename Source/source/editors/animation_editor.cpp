@@ -72,7 +72,6 @@ animation_editor::animation_editor() :
     grabbing_hitbox_edge(false),
     hitboxes_visible(true),
     is_pikmin(false),
-    sprite_tra_lmb_action(LMB_ACTION_MOVE),
     top_lmb_action(LMB_ACTION_MOVE) {
     
     top_bmp[0] = NULL;
@@ -87,6 +86,8 @@ animation_editor::animation_editor() :
     }
         );
     comparison_blink_timer.start();
+    
+    cur_sprite_tc.keep_aspect_ratio = true;
 }
 
 
@@ -308,6 +309,10 @@ void animation_editor::do_drawing() {
                 comparison_sprite->offset, comparison_sprite->game_size,
                 0
             );
+        }
+        
+        if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+            cur_sprite_tc.draw_handles();
         }
         
     }
@@ -547,15 +552,6 @@ void animation_editor::sprite_to_gui() {
     } else {
         frm_sprite->show();
         
-        ((lafi::textbox*) frm_sprite->widgets["txt_gamew"])->text =
-            f2s(cur_sprite->game_size.x);
-        ((lafi::textbox*) frm_sprite->widgets["txt_gameh"])->text =
-            f2s(cur_sprite->game_size.y);
-        ((lafi::textbox*) frm_sprite->widgets["txt_offsx"])->text =
-            f2s(cur_sprite->offset.x);
-        ((lafi::textbox*) frm_sprite->widgets["txt_offsy"])->text =
-            f2s(cur_sprite->offset.y);
-            
         if(is_pikmin) {
             enable_widget(frm_sprite->widgets["but_top"]);
         } else {
@@ -623,10 +619,14 @@ void animation_editor::sprite_bmp_to_gui() {
  * Loads the sprite transformation's data from memory to the gui.
  */
 void animation_editor::sprite_transform_to_gui() {
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text = f2s(cur_sprite->offset.x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text = f2s(cur_sprite->offset.y);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text = f2s(cur_sprite->game_size.x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text = f2s(cur_sprite->game_size.y);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text =
+        f2s(cur_sprite->offset.x);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text =
+        f2s(cur_sprite->offset.y);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text =
+        f2s(cur_sprite->game_size.x);
+    ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text =
+        f2s(cur_sprite->game_size.y);
     ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare"])->set(comparison);
     ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare_blink"])->set(
         comparison_blink
@@ -890,13 +890,11 @@ void animation_editor::gui_to_sprite_transform() {
     comparison_blink =
         ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare_blink"])->checked;
         
-    sprite_tra_lmb_action = LMB_ACTION_NONE;
-    if(((lafi::checkbox*) frm_sprite_tra->widgets["chk_mousexy"])->checked) {
-        sprite_tra_lmb_action = LMB_ACTION_MOVE;
-    } else if(((lafi::checkbox*) frm_sprite_tra->widgets["chk_mousewh"])->checked) {
-        sprite_tra_lmb_action = LMB_ACTION_RESIZE;
-    }
-    
+    cur_sprite_tc.set_center(cur_sprite->offset);
+    cur_sprite_tc.set_size(cur_sprite->game_size);
+    cur_sprite_tc.keep_aspect_ratio =
+        ((lafi::checkbox*) frm_sprite_tra->widgets["chk_ratio"])->checked;
+        
     sprite_transform_to_gui();
     made_changes = true;
 }

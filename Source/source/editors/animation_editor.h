@@ -92,38 +92,38 @@ private:
     lafi::frame* frm_bottom;
     
     
-    animation_database   anims;
-    bool                 anim_playing;
-    bool                 comparison;
-    sprite*              comparison_sprite;
-    bool                 comparison_blink;
-    bool                 comparison_blink_show;
-    timer                comparison_blink_timer;
-    animation*           cur_anim;
-    size_t               cur_body_part_nr;
-    size_t               cur_frame_nr;
-    float                cur_frame_time;
+    animation_database        anims;
+    bool                      anim_playing;
+    bool                      comparison;
+    sprite*                   comparison_sprite;
+    bool                      comparison_blink;
+    bool                      comparison_blink_show;
+    timer                     comparison_blink_timer;
+    animation*                cur_anim;
+    size_t                    cur_body_part_nr;
+    size_t                    cur_frame_nr;
+    float                     cur_frame_time;
     //The alpha is calculated using the sine of this value.
-    float                cur_hitbox_alpha;
-    size_t               cur_hitbox_nr;
+    float                     cur_hitbox_alpha;
+    size_t                    cur_hitbox_nr;
     //Current maturity of the Pikmin,
     //used to check the visuals of different Pikmin tops.
-    unsigned char        cur_maturity;
-    sprite*              cur_sprite;
-    string               file_path;
+    unsigned char             cur_maturity;
+    sprite*                   cur_sprite;
+    transformation_controller cur_sprite_tc;
+    string                    file_path;
     //Hitbox being grabbed by the mouse cursor. INVALID = none.
-    size_t               grabbing_hitbox;
-    bool                 grabbing_hitbox_edge;
+    size_t                    grabbing_hitbox;
+    bool                      grabbing_hitbox_edge;
     //X world coordinate of the point we're grabbing,
     //or the anchor, when in resize mode.
-    point                grabbing_hitbox_point;
-    bool                 hitboxes_visible;
-    bool                 is_pikmin;
-    string               last_file_used;
+    point                     grabbing_hitbox_point;
+    bool                      hitboxes_visible;
+    bool                      is_pikmin;
+    string                    last_file_used;
     //Top bitmaps for the current Pikmin type.
-    ALLEGRO_BITMAP*      top_bmp[N_MATURITIES];
-    unsigned char        sprite_tra_lmb_action;
-    unsigned char        top_lmb_action;
+    ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
+    unsigned char             top_lmb_action;
     
     string get_cut_path(const string &p);
     void animation_to_gui();

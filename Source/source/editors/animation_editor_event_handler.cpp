@@ -89,20 +89,7 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             }
         }
         
-        if(holding_m1 && mode == EDITOR_MODE_SPRITE_TRANSFORM) {
-            if(sprite_tra_lmb_action == LMB_ACTION_MOVE) {
-                cur_sprite->offset.x += (ev.mouse.dx / cam_zoom);
-                cur_sprite->offset.y += (ev.mouse.dy / cam_zoom);
-                sprite_transform_to_gui();
-            } else if(sprite_tra_lmb_action == LMB_ACTION_RESIZE) {
-                float new_w = cur_sprite->game_size.x + ev.mouse.dx / cam_zoom;
-                float ratio = cur_sprite->game_size.y / cur_sprite->game_size.x;
-                cur_sprite->game_size.x = new_w;
-                cur_sprite->game_size.y = new_w * ratio;
-                sprite_transform_to_gui();
-            }
-            
-        } else if(holding_m1 && mode == EDITOR_MODE_TOP) {
+        if(holding_m1 && mode == EDITOR_MODE_TOP) {
             if(top_lmb_action == LMB_ACTION_MOVE) {
                 cur_sprite->top_pos.x += (ev.mouse.dx / cam_zoom);
                 cur_sprite->top_pos.y += (ev.mouse.dy / cam_zoom);
@@ -134,6 +121,38 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         if(ev.mouse.button == 1) holding_m1 = false;
         else if(ev.mouse.button == 2) holding_m2 = false;
+    }
+    
+    if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+        bool tc_handled = false;
+        if(
+            ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+            ev.type == ALLEGRO_EVENT_MOUSE_WARPED
+        ) {
+            tc_handled = cur_sprite_tc.handle_mouse_move(mouse_cursor_w);
+        } else if(
+            ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+            ev.mouse.button == 1
+        ) {
+            tc_handled = cur_sprite_tc.handle_mouse_down(mouse_cursor_w);
+        } else if(
+            ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP &&
+            ev.mouse.button == 1
+        ) {
+            cur_sprite_tc.handle_mouse_up();
+        }
+        
+        if(tc_handled) {
+            ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text =
+                f2s(cur_sprite_tc.get_center().x);
+            ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text =
+                f2s(cur_sprite_tc.get_center().y);
+            ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text =
+                f2s(cur_sprite_tc.get_size().x);
+            ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text =
+                f2s(cur_sprite_tc.get_size().y);
+            gui_to_sprite_transform();
+        }
     }
     
     sprite* s = NULL;

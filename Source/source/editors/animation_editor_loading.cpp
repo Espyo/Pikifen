@@ -653,39 +653,18 @@ void animation_editor::load() {
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
-        "but_offsxy",
-        new lafi::button("Offset:"), 45, 16
-    );
-    frm_sprite->easy_add(
-        "txt_offsx",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_add(
-        "txt_offsy",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_row();
-    frm_sprite->easy_add(
-        "but_gamewh",
-        new lafi::button("Game WH:"), 45, 16
-    );
-    frm_sprite->easy_add(
-        "txt_gamew",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_add(
-        "txt_gameh",
-        new lafi::textbox(), 27.5, 16
+        "but_transform",
+        new lafi::button("Transformations"), 100, 32
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
         "but_hitboxes",
-        new lafi::button("Edit hitboxes"), 100, 32
+        new lafi::button("Hitboxes"), 100, 32
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
         "but_top",
-        new lafi::button("Edit Pikmin top"), 100, 32
+        new lafi::button("Pikmin top"), 100, 32
     );
     frm_sprite->easy_row();
     
@@ -739,35 +718,16 @@ void animation_editor::load() {
     frm_sprite->widgets["but_bitmap"]->description =
         "Pick what part of an image file makes up this sprite.";
         
-    frm_sprite->widgets["but_offsxy"]->left_mouse_click_handler =
-        lambda_sprite_transform;
-    frm_sprite->widgets["but_offsxy"]->description =
-        "Click this button for an offset helper tool.";
-        
-    frm_sprite->widgets["txt_offsx"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_offsx"]->description =
-        "In-game, offset by this much, horizontally.";
-        
-    frm_sprite->widgets["txt_offsy"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_offsy"]->description =
-        "In-game, offset by this much, vertically.";
-        
-    frm_sprite->widgets["but_gamewh"]->left_mouse_click_handler =
-        lambda_sprite_transform;
-    frm_sprite->widgets["but_gamewh"]->description =
-        "Click this button for a resize helper tool.";
-        
-    frm_sprite->widgets["txt_gamew"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_gamew"]->description =
-        "In-game sprite width.";
-        
-    frm_sprite->widgets["txt_gameh"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_gameh"]->description =
-        "In-game sprite height.";
+    frm_sprite->widgets["but_transform"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_sprite_tc.set_center(cur_sprite->offset);
+        cur_sprite_tc.set_size(cur_sprite->game_size);
+        mode = EDITOR_MODE_SPRITE_TRANSFORM;
+        sprite_transform_to_gui();
+        change_to_right_frame();
+    };
+    frm_sprite->widgets["but_transform"]->description =
+        "Offset, scale, or rotate the sprite's image.";
         
     frm_sprite->widgets["but_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -987,15 +947,6 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "dum_1",
-        new lafi::dummy(), 20, 12
-    );
-    frm_sprite_tra->easy_add(
-        "chk_mousexy",
-        new lafi::checkbox("Move with LMB", true), 80, 12
-    );
-    frm_sprite_tra->easy_row();
-    frm_sprite_tra->easy_add(
         "lbl_wh",
         new lafi::label("W, H:"), 25, 16
     );
@@ -1009,12 +960,8 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "dum_2",
-        new lafi::dummy(), 20, 12
-    );
-    frm_sprite_tra->easy_add(
-        "chk_mousewh",
-        new lafi::checkbox("Resize with LMB"), 80, 12
+        "chk_ratio",
+        new lafi::checkbox("Keep aspect ratio", true), 100, 16
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1028,7 +975,7 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "dum_3",
+        "dum_1",
         new lafi::dummy(), 10, 24
     );
     frm_sprite_tra->easy_add(
@@ -1037,7 +984,7 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "dum_4",
+        "dum_2",
         new lafi::dummy(), 10, 16
     );
     frm_sprite_tra->easy_add(
@@ -1073,17 +1020,6 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["txt_y"]->description =
         "In-game, offset by this much, vertically.";
         
-    frm_sprite_tra->widgets["chk_mousexy"]->description =
-        "Allows moving with the left mouse button.";
-    frm_sprite_tra->widgets["chk_mousexy"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        (
-            (lafi::checkbox*)
-            this->frm_sprite_tra->widgets["chk_mousewh"]
-        )->uncheck();
-        gui_to_sprite_transform();
-    };
-    
     frm_sprite_tra->widgets["txt_w"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_w"]->description =
@@ -1094,17 +1030,11 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["txt_h"]->description =
         "In-game sprite height.";
         
-    frm_sprite_tra->widgets["chk_mousewh"]->description =
-        "Allows resizing with the left mouse button.";
-    frm_sprite_tra->widgets["chk_mousewh"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        (
-            (lafi::checkbox*)
-            this->frm_sprite_tra->widgets["chk_mousexy"]
-        )->uncheck();
-        gui_to_sprite_transform();
-    };
-    
+    frm_sprite_tra->widgets["chk_ratio"]->left_mouse_click_handler =
+        lambda_save_sprite_tra_click;
+    frm_sprite_tra->widgets["chk_ratio"]->description =
+        "Lock width/height proportion when changing either one.";
+        
     frm_sprite_tra->widgets["chk_compare"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;
     frm_sprite_tra->widgets["chk_compare"]->description =
