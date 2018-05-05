@@ -80,7 +80,7 @@ sprite::sprite(
  */
 sprite::sprite(const sprite &s2) :
     name(s2.name),
-    parent_bmp(s2.parent_bmp),
+    parent_bmp(NULL),
     file(s2.file),
     file_pos(s2.file_pos),
     file_size(s2.file_size),
@@ -90,10 +90,11 @@ sprite::sprite(const sprite &s2) :
     top_size(s2.top_size),
     top_angle(s2.top_angle),
     top_visible(s2.top_visible),
-    bitmap(s2.bitmap),
+    bitmap(NULL),
     hitboxes(s2.hitboxes),
     hitbox_span(s2.hitbox_span) {
     
+    set_bitmap(file, file_pos, file_size);
 }
 
 
@@ -101,8 +102,7 @@ sprite::sprite(const sprite &s2) :
  * Destroys a sprite and its bitmaps.
  */
 sprite::~sprite() {
-    if(parent_bmp) bitmaps.detach(file);
-    if(bitmap) al_destroy_bitmap(bitmap);
+    set_bitmap("", point(), point());
 }
 
 
@@ -136,6 +136,41 @@ void sprite::create_hitboxes(animation_database* const adb) {
         );
     }
     calculate_hitbox_span();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the bitmap and parent bitmap, according to the given information.
+ * This automatically manages bitmap un/loading and such.
+ * If the file name string is empty, sets to a NULL bitmap
+ * (and still unloads the old bitmap).
+ * file_name: File name of the bitmap.
+ * file_pos:  Top-left coordinates of the sub-bitmap inside the bitmap.
+ * file_size: Dimensions of the sub-bitmap.
+ * node:      If not NULL, this will be used to report an error with, in case
+ *   something happens.
+ */
+void sprite::set_bitmap(
+    const string &file_name, const point &file_pos, const point &file_size,
+    data_node* node
+) {
+    if(parent_bmp) bitmaps.detach(file);
+    if(bitmap) al_destroy_bitmap(bitmap);
+    parent_bmp = NULL;
+    bitmap = NULL;
+    if(file_name.empty()) return;
+    
+    parent_bmp = bitmaps.get(file_name, node);
+    if(parent_bmp) {
+        bitmap =
+            al_create_sub_bitmap(
+                parent_bmp, file_pos.x, file_pos.y,
+                file_size.x, file_size.y
+            );
+    }
+    file = file_name;
+    this->file_pos = file_pos;
+    this->file_size = file_size;
 }
 
 
@@ -501,15 +536,10 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             
         }
         
-        ALLEGRO_BITMAP* parent =
-            bitmaps.get(
-                sprite_node->get_child_by_name("file")->value,
-                sprite_node->get_child_by_name("file")
-            );
         sprite* new_s =
             new sprite(
             sprite_node->name,
-            parent,
+            NULL,
             s2p(sprite_node->get_child_by_name("file_pos")->value),
             s2p(sprite_node->get_child_by_name("file_size")->value),
             s2p(sprite_node->get_child_by_name("game_size")->value),
@@ -518,7 +548,10 @@ animation_database load_animation_database_from_file(data_node* file_node) {
         adb.sprites.push_back(new_s);
         
         new_s->file = sprite_node->get_child_by_name("file")->value;
-        new_s->parent_bmp = parent;
+        new_s->set_bitmap(
+            new_s->file, new_s->file_pos, new_s->file_size,
+            sprite_node->get_child_by_name("file")
+        );
         new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
         new_s->top_visible =
             s2b(

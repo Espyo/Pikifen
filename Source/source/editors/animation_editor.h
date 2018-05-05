@@ -35,6 +35,7 @@ private:
         EDITOR_MODE_SPRITE,
         EDITOR_MODE_BODY_PART,
         EDITOR_MODE_HITBOXES,
+        EDITOR_MODE_SPRITE_BITMAP,
         EDITOR_MODE_SPRITE_TRANSFORM,
         EDITOR_MODE_TOP,
         EDITOR_MODE_HISTORY,
@@ -78,6 +79,7 @@ private:
     lafi::frame* frm_frame;
     lafi::frame* frm_sprites;
     lafi::frame* frm_sprite;
+    lafi::frame* frm_sprite_bmp;
     lafi::frame* frm_sprite_tra;
     lafi::frame* frm_hitboxes;
     lafi::frame* frm_hitbox;
@@ -129,6 +131,7 @@ private:
     void frame_to_gui();
     void hitbox_to_gui();
     void sprite_to_gui();
+    void sprite_bmp_to_gui();
     void sprite_transform_to_gui();
     void top_to_gui();
     void gui_to_body_part();
@@ -136,6 +139,7 @@ private:
     void gui_to_frame();
     void gui_to_hitbox();
     void gui_to_sprite();
+    void gui_to_sprite_bmp();
     void gui_to_sprite_transform();
     void gui_to_top();
     void load_animation_database();
@@ -147,6 +151,10 @@ private:
     void resize_by_resolution();
     void resize_everything();
     void save_animation_database();
+    void sprite_bmp_flood_fill(
+        ALLEGRO_BITMAP* bmp, bool* selection_pixels,
+        const int x, const int y, const int bmp_w, const int bmp_h
+    );
     void update_hitboxes();
     void update_stats();
     

@@ -105,6 +105,10 @@ public:
     );
     sprite(const sprite &s2);
     void create_hitboxes(animation_database* const adb);
+    void set_bitmap(
+        const string &file_name, const point &file_pos, const point &file_size,
+        data_node* node = NULL
+    );
     
     ~sprite();
 };

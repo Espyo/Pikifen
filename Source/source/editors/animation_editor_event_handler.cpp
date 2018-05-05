@@ -10,9 +10,9 @@
  */
 
 #include "animation_editor.h"
+#include "../LAFI/textbox.h"
 #include "../functions.h"
 #include "../vars.h"
-
 
 /* ----------------------------------------------------------------------------
  * Handles the controls and other events.
@@ -35,7 +35,8 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             &mouse_cursor_w.x, &mouse_cursor_w.y
         );
         
-        lafi::widget* widget_under_mouse;
+        bool empty_status_bar = (mode == EDITOR_MODE_SPRITE_BITMAP);
+        lafi::widget* widget_under_mouse = NULL;
         if(!is_mouse_in_gui(mouse_cursor_s)) {
             widget_under_mouse = NULL;
         } else {
@@ -46,6 +47,7 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             (lafi::label*) gui->widgets["lbl_status_bar"]
         )->text =
             (
+                empty_status_bar ? "" :
                 widget_under_mouse ?
                 widget_under_mouse->description :
                 "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")"
@@ -210,6 +212,74 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             hitbox_to_gui();
             made_changes = true;
         }
+        
+    } else if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1 &&
+        mode == EDITOR_MODE_SPRITE_BITMAP && cur_sprite &&
+        cur_sprite->parent_bmp && !is_mouse_in_gui(mouse_cursor_s)
+    ) {
+        int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
+        int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
+        int bmp_x = -bmp_w / 2.0;
+        int bmp_y = -bmp_h / 2.0;
+        point bmp_click_pos = mouse_cursor_w;
+        bmp_click_pos.x = floor(bmp_click_pos.x - bmp_x);
+        bmp_click_pos.y = floor(bmp_click_pos.y - bmp_y);
+        
+        if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
+        if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
+        
+        point selection_tl;
+        point selection_br;
+        if(cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) {
+            selection_tl = bmp_click_pos;
+            selection_br = bmp_click_pos;
+        } else {
+            selection_tl = cur_sprite->file_pos;
+            selection_br.x =
+                cur_sprite->file_pos.x + cur_sprite->file_size.x - 1;
+            selection_br.y =
+                cur_sprite->file_pos.y + cur_sprite->file_size.y - 1;
+        }
+        
+        bool* selection_pixels = new bool[bmp_w * bmp_h];
+        memset(selection_pixels, 0, sizeof(bool) * bmp_w * bmp_h);
+        
+        al_lock_bitmap(
+            cur_sprite->parent_bmp,
+            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READONLY
+        );
+        
+        sprite_bmp_flood_fill(
+            cur_sprite->parent_bmp, selection_pixels,
+            bmp_click_pos.x, bmp_click_pos.y, bmp_w, bmp_h
+        );
+        
+        al_unlock_bitmap(cur_sprite->parent_bmp);
+        
+        size_t p;
+        for(size_t y = 0; y < bmp_h; ++y) {
+            for(size_t x = 0; x < bmp_w; ++x) {
+                p = y * bmp_w + x;
+                if(!selection_pixels[p]) continue;
+                selection_tl.x = min(selection_tl.x, (float) x);
+                selection_tl.y = min(selection_tl.y, (float) y);
+                selection_br.x = max(selection_br.x, (float) x);
+                selection_br.y = max(selection_br.y, (float) y);
+            }
+        }
+        
+        delete[] selection_pixels;
+        
+        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
+            i2s(selection_tl.x);
+        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
+            i2s(selection_tl.y);
+        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
+            i2s(selection_br.x - selection_tl.x + 1);
+        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
+            i2s(selection_br.y - selection_tl.y + 1);
+        gui_to_sprite_bmp();
         
     }
     

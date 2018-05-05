@@ -648,42 +648,8 @@ void animation_editor::load() {
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
-        "lbl_file",
-        new lafi::label("File:"), 25, 16
-    );
-    frm_sprite->easy_add(
-        "txt_file",
-        new lafi::textbox(), 60, 16
-    );
-    frm_sprite->easy_add(
-        "but_file",
-        new lafi::button("..."), 15, 16
-    );
-    frm_sprite->easy_row();
-    frm_sprite->easy_add(
-        "lbl_filexy",
-        new lafi::label("File XY:"), 45, 16
-    );
-    frm_sprite->easy_add(
-        "txt_filex",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_add(
-        "txt_filey",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_row();
-    frm_sprite->easy_add(
-        "lbl_filewh",
-        new lafi::label("File WH:"), 45, 16
-    );
-    frm_sprite->easy_add(
-        "txt_filew",
-        new lafi::textbox(), 27.5, 16
-    );
-    frm_sprite->easy_add(
-        "txt_fileh",
-        new lafi::textbox(), 27.5, 16
+        "but_bitmap",
+        new lafi::button("Bitmap file"), 100, 32
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
@@ -764,64 +730,14 @@ void animation_editor::load() {
     frm_sprites->widgets["but_sprite"]->description =
         "Pick a sprite to edit.";
         
-    frm_sprite->widgets["txt_file"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_file"]->description =
-        "Name (+extension) of the file with the sprite.";
-        
-    frm_sprite->widgets["but_file"]->left_mouse_click_handler =
+    frm_sprite->widgets["but_bitmap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        vector<string> f =
-            prompt_file_dialog(
-                GRAPHICS_FOLDER_PATH + "/",
-                "Please choose the bitmap to get the sprites from.",
-                "*.png",
-                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                ALLEGRO_FILECHOOSER_PICTURES
-            );
-            
-        if(f.empty() || f[0].empty()) {
-            return;
-        }
-        
-        size_t folder_pos = f[0].find(GRAPHICS_FOLDER_PATH);
-        if(folder_pos == string::npos) {
-            //This isn't in the graphics folder!
-            //TODO warn on the status bar
-            return;
-        } else {
-            f[0] =
-                f[0].substr(
-                    folder_pos + GRAPHICS_FOLDER_PATH.size() + 1,
-                    string::npos
-                );
-        }
-        
-        ((lafi::textbox*) this->frm_sprite->widgets["txt_file"])->text = f[0];
-        this->frm_sprite->widgets["txt_file"]->call_lose_focus_handler();
+        mode = EDITOR_MODE_SPRITE_BITMAP;
+        sprite_bmp_to_gui();
+        change_to_right_frame();
     };
-    frm_sprite->widgets["but_file"]->description =
-        "Browse for the file to use, in the Graphics folder.";
-        
-    frm_sprite->widgets["txt_filex"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_filex"]->description =
-        "X of the top-left corner of the sprite.";
-        
-    frm_sprite->widgets["txt_filey"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_filey"]->description =
-        "Y of the top-left corner of the sprite.";
-        
-    frm_sprite->widgets["txt_filew"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_filew"]->description =
-        "Width of the sprite, in the file.";
-        
-    frm_sprite->widgets["txt_fileh"]->lose_focus_handler =
-        lambda_gui_to_sprite;
-    frm_sprite->widgets["txt_fileh"]->description =
-        "Height of the sprite, in the file.";
+    frm_sprite->widgets["but_bitmap"]->description =
+        "Pick what part of an image file makes up this sprite.";
         
     frm_sprite->widgets["but_offsxy"]->left_mouse_click_handler =
         lambda_sprite_transform;
@@ -871,6 +787,178 @@ void animation_editor::load() {
     };
     frm_sprite->widgets["but_top"]->description =
         "Edit the Pikmin's top (maturity) for this sprite.";
+        
+        
+    //Sprite bitmap -- declarations.
+    frm_sprite_bmp =
+        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+    frm_sprite_bmp->hide();
+    gui->add("frm_sprite_bmp", frm_sprite_bmp);
+    
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "but_back",
+        new lafi::button("Back"), 50, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "but_import",
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_file",
+        new lafi::label("File:"), 25, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "txt_file",
+        new lafi::textbox(), 60, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "but_file",
+        new lafi::button("..."), 15, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_xy",
+        new lafi::label("X&Y:"), 40, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "txt_x",
+        new lafi::textbox(), 30, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "txt_y",
+        new lafi::textbox(), 30, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_wh",
+        new lafi::label("W&H:"), 40, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "txt_w",
+        new lafi::textbox(), 30, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "txt_h",
+        new lafi::textbox(), 30, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "dum_1",
+        new lafi::dummy(), 100, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_click1",
+        new lafi::label("Click parts of the image"), 100, 12
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_click2",
+        new lafi::label("on the left to expand"), 100, 12
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "lbl_click3",
+        new lafi::label("the selection limits."), 100, 12
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
+        "but_clear",
+        new lafi::button("Clear selection"), 100, 16
+    );
+    frm_sprite_bmp->easy_row();
+    
+    
+    //Sprite bitmap -- properties.
+    auto lambda_gui_to_sprite_bmp =
+    [this] (lafi::widget*) { gui_to_sprite_bmp(); };
+    
+    frm_sprite_bmp->widgets["but_back"]->description =
+        "Go back to the sprite editor.";
+    frm_sprite_bmp->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_SPRITE;
+        change_to_right_frame();
+    };
+    
+    frm_sprite_bmp->widgets["but_import"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+    };
+    frm_sprite_bmp->widgets["but_import"]->description =
+        "Import bitmap data from a different sprite.";
+        
+    frm_sprite_bmp->widgets["txt_file"]->lose_focus_handler =
+        lambda_gui_to_sprite_bmp;
+    frm_sprite_bmp->widgets["txt_file"]->description =
+        "Name (+extension) of the file with the sprite.";
+        
+    frm_sprite_bmp->widgets["but_file"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        vector<string> f =
+            prompt_file_dialog(
+                GRAPHICS_FOLDER_PATH + "/",
+                "Please choose the bitmap to get the sprites from.",
+                "*.png",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES
+            );
+            
+        if(f.empty() || f[0].empty()) {
+            return;
+        }
+        
+        size_t folder_pos = f[0].find(GRAPHICS_FOLDER_PATH);
+        if(folder_pos == string::npos) {
+            //This isn't in the graphics folder!
+            //TODO warn on the status bar
+            return;
+        } else {
+            f[0] =
+                f[0].substr(
+                    folder_pos + GRAPHICS_FOLDER_PATH.size() + 1,
+                    string::npos
+                );
+        }
+        
+        ((lafi::textbox*) this->frm_sprite_bmp->widgets["txt_file"])->text =
+            f[0];
+        this->frm_sprite_bmp->widgets["txt_file"]->call_lose_focus_handler();
+    };
+    frm_sprite_bmp->widgets["but_file"]->description =
+        "Browse for the file to use, in the Graphics folder.";
+        
+    frm_sprite_bmp->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_to_sprite_bmp;
+    frm_sprite_bmp->widgets["txt_x"]->description =
+        "X of the top-left corner of the sprite.";
+        
+    frm_sprite_bmp->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_to_sprite_bmp;
+    frm_sprite_bmp->widgets["txt_y"]->description =
+        "Y of the top-left corner of the sprite.";
+        
+    frm_sprite_bmp->widgets["txt_w"]->lose_focus_handler =
+        lambda_gui_to_sprite_bmp;
+    frm_sprite_bmp->widgets["txt_w"]->description =
+        "Width of the sprite, in the file.";
+        
+    frm_sprite_bmp->widgets["txt_h"]->lose_focus_handler =
+        lambda_gui_to_sprite_bmp;
+    frm_sprite_bmp->widgets["txt_h"]->description =
+        "Height of the sprite, in the file.";
+        
+    frm_sprite_bmp->widgets["but_clear"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_sprite->file_pos = point();
+        cur_sprite->file_size = point();
+        sprite_bmp_to_gui();
+    };
+    frm_sprite_bmp->widgets["but_clear"]->description =
+        "Clear the selection so you can start your clicks over.";
         
         
     //Sprite transform -- declarations.

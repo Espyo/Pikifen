@@ -147,125 +147,194 @@ void animation_editor::do_drawing() {
     
     al_set_clipping_rectangle(
         0, 0, gui_x, status_bar_y
-    ); {
+    );
     
-        al_clear_to_color(al_map_rgb(128, 144, 128));
-        
-        sprite* s = NULL;
-        
-        if(mode == EDITOR_MODE_ANIMATION) {
-            if(cur_frame_nr != INVALID) {
-                string name =
-                    cur_anim->frames[cur_frame_nr].sprite_name;
-                size_t s_pos = anims.find_sprite(name);
-                if(s_pos != INVALID) s = anims.sprites[s_pos];
-            }
-            
-        } else if(
-            mode == EDITOR_MODE_SPRITE || mode == EDITOR_MODE_TOP ||
-            mode == EDITOR_MODE_HITBOXES ||
-            mode == EDITOR_MODE_SPRITE_TRANSFORM
-        ) {
-            s = cur_sprite;
-            
+    al_clear_to_color(al_map_rgb(128, 144, 128));
+    
+    sprite* s = NULL;
+    bool draw_hitboxes = hitboxes_visible;
+    
+    if(mode == EDITOR_MODE_ANIMATION) {
+        if(cur_frame_nr != INVALID) {
+            string name =
+                cur_anim->frames[cur_frame_nr].sprite_name;
+            size_t s_pos = anims.find_sprite(name);
+            if(s_pos != INVALID) s = anims.sprites[s_pos];
         }
         
-        if(s) {
-            if(s->bitmap) {
-                draw_bitmap(s->bitmap, s->offset, s->game_size);
+    } else if(
+        mode == EDITOR_MODE_SPRITE || mode == EDITOR_MODE_TOP ||
+        mode == EDITOR_MODE_HITBOXES ||
+        mode == EDITOR_MODE_SPRITE_BITMAP ||
+        mode == EDITOR_MODE_SPRITE_TRANSFORM
+    ) {
+        s = cur_sprite;
+        
+    }
+    
+    if(mode == EDITOR_MODE_SPRITE_BITMAP && s && s->parent_bmp) {
+    
+        draw_hitboxes = false;
+        
+        int bmp_w = al_get_bitmap_width(s->parent_bmp);
+        int bmp_h = al_get_bitmap_height(s->parent_bmp);
+        int bmp_x = -bmp_w / 2.0;
+        int bmp_y = -bmp_h / 2.0;
+        al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
+        
+        point scene_tl = point(-1, -1);
+        point scene_br = point(gui_x + 1, status_bar_y + 1);
+        al_transform_coordinates(
+            &screen_to_world_transform, &scene_tl.x, &scene_tl.y
+        );
+        al_transform_coordinates(
+            &screen_to_world_transform, &scene_br.x, &scene_br.y
+        );
+        
+        for(unsigned char x = 0; x < 3; ++x) {
+            point rec_tl, rec_br;
+            if(x == 0) {
+                rec_tl.x = scene_tl.x;
+                rec_br.x = bmp_x + s->file_pos.x;
+            } else if(x == 1) {
+                rec_tl.x = bmp_x + s->file_pos.x;
+                rec_br.x = bmp_x + s->file_pos.x + s->file_size.x;
+            } else {
+                rec_tl.x = bmp_x + s->file_pos.x + s->file_size.x;
+                rec_br.x = scene_br.x;
             }
-            
-            if(hitboxes_visible) {
-                size_t n_hitboxes = s->hitboxes.size();
-                for(size_t h = 0; h < n_hitboxes; ++h) {
-                    hitbox* h_ptr = &s->hitboxes[h];
-                    
-                    ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
-                    unsigned char hitbox_outline_alpha =
-                        63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
-                        
-                    if(h_ptr->type == HITBOX_TYPE_NORMAL) {
-                        hitbox_color = al_map_rgba(0, 128, 0, 128);
-                        hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
-                    } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                        hitbox_color = al_map_rgba(128, 0, 0, 128);
-                        hitbox_outline_color = al_map_rgba(64, 0, 0, 255);
-                    } else {
-                        hitbox_color = al_map_rgba(128, 128, 0, 128);
-                        hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
-                    }
-                    
-                    al_draw_filled_circle(
-                        h_ptr->pos.x,
-                        h_ptr->pos.y,
-                        h_ptr->radius,
-                        hitbox_color
-                    );
-                    
-                    al_draw_circle(
-                        h_ptr->pos.x,
-                        h_ptr->pos.y,
-                        h_ptr->radius,
-                        (
-                            cur_hitbox_nr == h ?
-                            change_alpha(
-                                hitbox_outline_color,
-                                hitbox_outline_alpha
-                            ) :
-                            hitbox_outline_color
-                        ),
-                        (
-                            cur_hitbox_nr == h ?
-                            3 / cam_zoom :
-                            2 / cam_zoom
-                        )
-                    );
+            for(unsigned char y = 0; y < 3; ++y) {
+                if(x == 1 && y == 1) continue;
+                if(y == 0) {
+                    rec_tl.y = scene_tl.y;
+                    rec_br.y = bmp_y + s->file_pos.y;
+                } else if(y == 1) {
+                    rec_tl.y = bmp_y + s->file_pos.y;
+                    rec_br.y = bmp_y + s->file_pos.y + s->file_size.y;
+                } else {
+                    rec_tl.y = bmp_y + s->file_pos.y + s->file_size.y;
+                    rec_br.y = scene_br.y;
                 }
-            }
-            
-            if(s->top_visible && is_pikmin) {
-                draw_bitmap(
-                    top_bmp[cur_maturity],
-                    s->top_pos, s->top_size,
-                    s->top_angle
-                );
-            }
-            
-            if(
-                comparison && comparison_blink_show &&
-                comparison_sprite && comparison_sprite->bitmap
-            ) {
-                draw_bitmap(
-                    comparison_sprite->bitmap,
-                    comparison_sprite->offset, comparison_sprite->game_size,
-                    0
+                
+                al_draw_filled_rectangle(
+                    rec_tl.x, rec_tl.y,
+                    rec_br.x, rec_br.y,
+                    al_map_rgba(0, 0, 0, 128)
                 );
             }
         }
         
-        if(hitboxes_visible) {
-            point cam_top_left_corner(0, 0);
-            point cam_bottom_right_corner(gui_x, status_bar_y);
-            al_transform_coordinates(
-                &screen_to_world_transform,
-                &cam_top_left_corner.x, &cam_top_left_corner.y
-            );
-            al_transform_coordinates(
-                &screen_to_world_transform,
-                &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
-            );
-            
-            al_draw_line(
-                0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-                al_map_rgb(240, 240, 240), 1 / cam_zoom
-            );
-            al_draw_line(
-                cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-                al_map_rgb(240, 240, 240), 1 / cam_zoom
+        if(s->file_size.x > 0 && s->file_size.y > 0) {
+        
+            unsigned char outline_alpha =
+                255 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+            al_draw_rectangle(
+                bmp_x + s->file_pos.x + 0.5,
+                bmp_y + s->file_pos.y + 0.5,
+                bmp_x + s->file_pos.x + s->file_size.x - 0.5,
+                bmp_y + s->file_pos.y + s->file_size.y - 0.5,
+                al_map_rgba(224, 192, 0, outline_alpha), 1.0
             );
         }
         
-    } al_reset_clipping_rectangle();
+    } else if(s) {
+    
+        if(s->bitmap) {
+            draw_bitmap(s->bitmap, s->offset, s->game_size);
+        }
+        
+        if(draw_hitboxes) {
+            size_t n_hitboxes = s->hitboxes.size();
+            for(size_t h = 0; h < n_hitboxes; ++h) {
+                hitbox* h_ptr = &s->hitboxes[h];
+                
+                ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
+                unsigned char hitbox_outline_alpha =
+                    63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+                    
+                if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                    hitbox_color = al_map_rgba(0, 128, 0, 128);
+                    hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
+                } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                    hitbox_color = al_map_rgba(128, 0, 0, 128);
+                    hitbox_outline_color = al_map_rgba(64, 0, 0, 255);
+                } else {
+                    hitbox_color = al_map_rgba(128, 128, 0, 128);
+                    hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
+                }
+                
+                al_draw_filled_circle(
+                    h_ptr->pos.x,
+                    h_ptr->pos.y,
+                    h_ptr->radius,
+                    hitbox_color
+                );
+                
+                al_draw_circle(
+                    h_ptr->pos.x,
+                    h_ptr->pos.y,
+                    h_ptr->radius,
+                    (
+                        cur_hitbox_nr == h ?
+                        change_alpha(
+                            hitbox_outline_color,
+                            hitbox_outline_alpha
+                        ) :
+                        hitbox_outline_color
+                    ),
+                    (
+                        cur_hitbox_nr == h ?
+                        3 / cam_zoom :
+                        2 / cam_zoom
+                    )
+                );
+            }
+        }
+        
+        if(s->top_visible && is_pikmin) {
+            draw_bitmap(
+                top_bmp[cur_maturity],
+                s->top_pos, s->top_size,
+                s->top_angle
+            );
+        }
+        
+        if(
+            comparison && comparison_blink_show &&
+            comparison_sprite && comparison_sprite->bitmap
+        ) {
+            draw_bitmap(
+                comparison_sprite->bitmap,
+                comparison_sprite->offset, comparison_sprite->game_size,
+                0
+            );
+        }
+        
+    }
+    
+    if(draw_hitboxes) {
+        point cam_top_left_corner(0, 0);
+        point cam_bottom_right_corner(gui_x, status_bar_y);
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &cam_top_left_corner.x, &cam_top_left_corner.y
+        );
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+        );
+        
+        al_draw_line(
+            0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
+            al_map_rgb(240, 240, 240), 1 / cam_zoom
+        );
+        al_draw_line(
+            cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
+            al_map_rgb(240, 240, 240), 1 / cam_zoom
+        );
+    }
+    
+    al_reset_clipping_rectangle();
     
     al_use_transform(&identity_transform);
     
@@ -467,7 +536,7 @@ void animation_editor::hitbox_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the frame's data from memory to the gui.
+ * Loads the sprite's data from memory to the gui.
  */
 void animation_editor::sprite_to_gui() {
     ((lafi::button*) frm_sprites->widgets["but_sprite"])->text =
@@ -478,16 +547,6 @@ void animation_editor::sprite_to_gui() {
     } else {
         frm_sprite->show();
         
-        ((lafi::textbox*) frm_sprite->widgets["txt_file"])->text =
-            cur_sprite->file;
-        ((lafi::textbox*) frm_sprite->widgets["txt_filex"])->text =
-            i2s(cur_sprite->file_pos.x);
-        ((lafi::textbox*) frm_sprite->widgets["txt_filey"])->text =
-            i2s(cur_sprite->file_pos.y);
-        ((lafi::textbox*) frm_sprite->widgets["txt_filew"])->text =
-            i2s(cur_sprite->file_size.x);
-        ((lafi::textbox*) frm_sprite->widgets["txt_fileh"])->text =
-            i2s(cur_sprite->file_size.y);
         ((lafi::textbox*) frm_sprite->widgets["txt_gamew"])->text =
             f2s(cur_sprite->game_size.x);
         ((lafi::textbox*) frm_sprite->widgets["txt_gameh"])->text =
@@ -503,6 +562,60 @@ void animation_editor::sprite_to_gui() {
             disable_widget(frm_sprite->widgets["but_top"]);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Performs a recursive flood fill on the bitmap sprite, to see what parts
+ * contain non-alpha pixels, based on a starting position.
+ * bmp:              Locked bitmap to check.
+ * selection_pixels: Array that controls which pixels are selected or not.
+ * x, y:             Image coordinates of the current iteration.
+ * bmp_w, bmp_h:     Bitmap dimensions.
+ */
+void animation_editor::sprite_bmp_flood_fill(
+    ALLEGRO_BITMAP* bmp, bool* selection_pixels,
+    const int x, const int y, const int bmp_w, const int bmp_h
+) {
+    if(x < 0 || x > bmp_w) return;
+    if(y < 0 || y > bmp_h) return;
+    if(selection_pixels[y * bmp_w + x]) return;
+    if(al_get_pixel(bmp, x, y).a < 0.008) {
+        return;
+    }
+    
+    selection_pixels[y * bmp_w + x] = true;
+    sprite_bmp_flood_fill(
+        bmp, selection_pixels, x + 1, y, bmp_w, bmp_h
+    );
+    sprite_bmp_flood_fill(
+        bmp, selection_pixels, x - 1, y, bmp_w, bmp_h
+    );
+    sprite_bmp_flood_fill(
+        bmp, selection_pixels, x, y + 1, bmp_w, bmp_h
+    );
+    sprite_bmp_flood_fill(
+        bmp, selection_pixels, x, y - 1, bmp_w, bmp_h
+    );
+    
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the sprite's bitmap data from memory to the gui.
+ */
+void animation_editor::sprite_bmp_to_gui() {
+    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text =
+        cur_sprite->file;
+    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
+        i2s(cur_sprite->file_pos.x);
+    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
+        i2s(cur_sprite->file_pos.y);
+    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
+        i2s(cur_sprite->file_size.x);
+    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
+        i2s(cur_sprite->file_size.y);
 }
 
 
@@ -702,21 +815,9 @@ void animation_editor::gui_to_hitbox() {
  * Saves the sprite's data to memory using info on the gui.
  */
 void animation_editor::gui_to_sprite() {
+    //TODO will this be unused after the Sprite frame is split?
     if(!cur_sprite) return;
     
-    string new_file;
-    point new_f_pos, new_f_size;
-    
-    new_file =
-        ((lafi::textbox*) frm_sprite->widgets["txt_file"])->text;
-    new_f_pos.x =
-        s2i(((lafi::textbox*) frm_sprite->widgets["txt_filex"])->text);
-    new_f_pos.y =
-        s2i(((lafi::textbox*) frm_sprite->widgets["txt_filey"])->text);
-    new_f_size.x =
-        s2i(((lafi::textbox*) frm_sprite->widgets["txt_filew"])->text);
-    new_f_size.y =
-        s2i(((lafi::textbox*) frm_sprite->widgets["txt_fileh"])->text);
     cur_sprite->game_size.x =
         s2f(((lafi::textbox*) frm_sprite->widgets["txt_gamew"])->text);
     cur_sprite->game_size.y =
@@ -726,14 +827,32 @@ void animation_editor::gui_to_sprite() {
     cur_sprite->offset.y =
         s2f(((lafi::textbox*) frm_sprite->widgets["txt_offsy"])->text);
         
-    //Automatically fill in the in-game width/height if it hasn't been set yet.
-    if(cur_sprite->game_size.x == 0.0f) {
-        cur_sprite->game_size.x = new_f_size.x;
-    }
-    if(cur_sprite->game_size.y == 0.0f) {
-        cur_sprite->game_size.y = new_f_size.y;
-    }
+    sprite_to_gui();
     
+    made_changes = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the sprite's bitmap data to memory using info on the gui.
+ */
+void animation_editor::gui_to_sprite_bmp() {
+    if(!cur_sprite) return;
+    
+    string new_file;
+    point new_f_pos, new_f_size;
+    
+    new_file =
+        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text;
+    new_f_pos.x =
+        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text);
+    new_f_pos.y =
+        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text);
+    new_f_size.x =
+        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text);
+    new_f_size.y =
+        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text);
+        
     if(
         cur_sprite->file != new_file ||
         cur_sprite->file_pos.x != new_f_pos.x ||
@@ -742,26 +861,13 @@ void animation_editor::gui_to_sprite() {
         cur_sprite->file_size.y != new_f_size.y
     ) {
         //Changed something image-wise. Recreate it.
-        if(cur_sprite->parent_bmp) bitmaps.detach(cur_sprite->file);
-        if(cur_sprite->bitmap) al_destroy_bitmap(cur_sprite->bitmap);
-        cur_sprite->bitmap = NULL;
-        cur_sprite->parent_bmp = bitmaps.get(new_file, NULL);
-        if(cur_sprite->parent_bmp) {
-            cur_sprite->bitmap =
-                al_create_sub_bitmap(
-                    cur_sprite->parent_bmp, new_f_pos.x,
-                    new_f_pos.y, new_f_size.x, new_f_size.y
-                );
-        }
-        cur_sprite->file = new_file;
-        cur_sprite->file_pos = new_f_pos;
-        cur_sprite->file_size = new_f_size;
+        cur_sprite->set_bitmap(new_file, new_f_pos, new_f_size);
     }
     
     last_file_used = new_file;
     
     gui_to_hitbox();
-    sprite_to_gui();
+    sprite_bmp_to_gui();
     
     made_changes = true;
 }
@@ -999,6 +1105,20 @@ void animation_editor::pick(const string &name, const string &category) {
             cur_anim->frames[cur_frame_nr].sprite_ptr =
                 anims.sprites[anims.find_sprite(name)];
             frame_to_gui();
+        } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
+            sprite* s = anims.sprites[anims.find_sprite(name)];
+            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text =
+                s->file;
+            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
+                i2s(s->file_pos.x);
+            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
+                i2s(s->file_pos.y);
+            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
+                i2s(s->file_size.x);
+            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
+                i2s(s->file_size.y);
+                
+            gui_to_sprite_bmp();
         } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
             sprite_transform_to_gui();
@@ -1021,6 +1141,7 @@ void animation_editor::pick(const string &name, const string &category) {
             if(cur_sprite->file.empty()) {
                 //New frame. Suggest file name.
                 cur_sprite->file = last_file_used;
+                cur_sprite->set_bitmap(last_file_used, point(), point());
             }
             sprite_to_gui();
         }
@@ -1470,6 +1591,7 @@ void animation_editor::hide_all_frames() {
     frm_history->hide();
     frm_anims->hide();
     frm_sprites->hide();
+    frm_sprite_bmp->hide();
     frm_sprite_tra->hide();
     frm_hitboxes->hide();
     frm_top->hide();
@@ -1492,10 +1614,12 @@ void animation_editor::change_to_right_frame() {
         frm_sprites->show();
     } else if(mode == EDITOR_MODE_BODY_PART) {
         frm_body_parts->show();
-    } else if(mode == EDITOR_MODE_HITBOXES) {
-        frm_hitboxes->show();
+    } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
+        frm_sprite_bmp->show();
     } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
         frm_sprite_tra->show();
+    } else if(mode == EDITOR_MODE_HITBOXES) {
+        frm_hitboxes->show();
     } else if(mode == EDITOR_MODE_TOP) {
         frm_top->show();
     } else if(mode == EDITOR_MODE_HISTORY) {
