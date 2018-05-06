@@ -18,7 +18,14 @@
  * Handles a key being pressed down.
  */
 void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
-
+    if(
+        mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+        ev.keyboard.keycode == ALLEGRO_KEY_C &&
+        is_ctrl_pressed
+    ) {
+        comparison = !comparison;
+        sprite_transform_to_gui();
+    }
 }
 
 

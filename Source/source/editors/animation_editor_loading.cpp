@@ -971,33 +971,41 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "lin_1",
-        new lafi::line(), 100, 8
+        "dum_1",
+        new lafi::dummy(), 100, 8
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
         "chk_compare",
         new lafi::checkbox("Comparison sprite"), 100, 16
     );
-    frm_sprite_tra->easy_row();
-    frm_sprite_tra->easy_add(
-        "dum_1",
-        new lafi::dummy(), 10, 24
-    );
-    frm_sprite_tra->easy_add(
+    y = frm_sprite_tra->easy_row();
+    
+    frm_sprite_comp =
+        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+    frm_sprite_tra->add("frm_sprite_comp", frm_sprite_comp);
+    
+    frm_sprite_comp->easy_row();
+    frm_sprite_comp->easy_add(
         "but_compare",
-        new lafi::button(""), 90, 24
+        new lafi::button(""), 100, 24
     );
-    frm_sprite_tra->easy_row();
-    frm_sprite_tra->easy_add(
-        "dum_2",
-        new lafi::dummy(), 10, 16
-    );
-    frm_sprite_tra->easy_add(
+    frm_sprite_comp->easy_row();
+    frm_sprite_comp->easy_add(
         "chk_compare_blink",
-        new lafi::checkbox("Blink comparison?"), 90, 16
+        new lafi::checkbox("Blink comparison"), 100, 16
     );
-    frm_sprite_tra->easy_row();
+    frm_sprite_comp->easy_row();
+    frm_sprite_comp->easy_add(
+        "chk_compare_above",
+        new lafi::checkbox("Comparison above"), 100, 16
+    );
+    frm_sprite_comp->easy_row();
+    frm_sprite_comp->easy_add(
+        "chk_tint",
+        new lafi::checkbox("Tint both"), 100, 16
+    );
+    frm_sprite_comp->easy_row();
     
     
     //Sprite transform -- properties.
@@ -1052,20 +1060,30 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["chk_compare"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;
     frm_sprite_tra->widgets["chk_compare"]->description =
-        "Overlay a different sprite for comparison purposes.";
+        "Overlay a different sprite for comparison purposes. (Ctrl+C)";
         
-    frm_sprite_tra->widgets["but_compare"]->left_mouse_click_handler =
+    frm_sprite_comp->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         picker_disambig = PICKER_DISAMBIG_COMPARISON;
         open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
-    frm_sprite_tra->widgets["but_compare"]->description =
+    frm_sprite_comp->widgets["but_compare"]->description =
         "Sprite to compare with.";
         
-    frm_sprite_tra->widgets["chk_compare_blink"]->left_mouse_click_handler =
+    frm_sprite_comp->widgets["chk_compare_blink"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;
-    frm_sprite_tra->widgets["chk_compare_blink"]->description =
+    frm_sprite_comp->widgets["chk_compare_blink"]->description =
         "Blink the comparison in and out?";
+        
+    frm_sprite_comp->widgets["chk_compare_above"]->left_mouse_click_handler =
+        lambda_save_sprite_tra_click;
+    frm_sprite_comp->widgets["chk_compare_above"]->description =
+        "Should the comparison appear above or below the working sprite?";
+        
+    frm_sprite_comp->widgets["chk_tint"]->left_mouse_click_handler =
+        lambda_save_sprite_tra_click;
+    frm_sprite_comp->widgets["chk_tint"]->description =
+        "Tint the working sprite blue and the comparison orange.";
         
         
     //Hitboxes -- declarations.

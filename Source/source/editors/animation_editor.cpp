@@ -54,11 +54,13 @@ const string animation_editor::SAVE_ICON = "Save.png";
  */
 animation_editor::animation_editor() :
     anim_playing(false),
-    comparison(true),
+    comparison(false),
     comparison_sprite(nullptr),
     comparison_blink(true),
     comparison_blink_show(true),
     comparison_blink_timer(0),
+    comparison_above(true),
+    comparison_tint(true),
     cur_anim(NULL),
     cur_body_part_nr(INVALID),
     cur_frame_nr(INVALID),
@@ -264,8 +266,22 @@ void animation_editor::do_drawing() {
         
     } else if(s) {
     
+        if(!comparison_above) {
+            draw_comparison();
+        }
+        
         if(s->bitmap) {
-            draw_bitmap(s->bitmap, s->offset, s->game_size);
+            ALLEGRO_COLOR tint;
+            if(
+                mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+                comparison && comparison_tint &&
+                comparison_sprite && comparison_sprite->bitmap
+            ) {
+                tint = al_map_rgb(0, 128, 255);
+            } else {
+                tint = al_map_rgb(255, 255, 255);
+            }
+            draw_bitmap(s->bitmap, s->offset, s->game_size, 0, tint);
         }
         
         if(draw_hitboxes) {
@@ -324,15 +340,8 @@ void animation_editor::do_drawing() {
             );
         }
         
-        if(
-            comparison && comparison_blink_show &&
-            comparison_sprite && comparison_sprite->bitmap
-        ) {
-            draw_bitmap(
-                comparison_sprite->bitmap,
-                comparison_sprite->offset, comparison_sprite->game_size,
-                0
-            );
+        if(comparison_above) {
+            draw_comparison();
         }
         
         if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
@@ -375,6 +384,29 @@ void animation_editor::do_drawing() {
     fade_mgr.draw();
     
     al_flip_display();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the comparison sprite on the canvas, all tinted and everything.
+ */
+void animation_editor::draw_comparison() {
+    if(
+        comparison && comparison_blink_show &&
+        comparison_sprite && comparison_sprite->bitmap
+    ) {
+        ALLEGRO_COLOR tint;
+        if(comparison_tint) {
+            tint = al_map_rgb(255, 128, 0);
+        } else {
+            tint = al_map_rgb(255, 255, 255);
+        }
+        draw_bitmap(
+            comparison_sprite->bitmap,
+            comparison_sprite->offset, comparison_sprite->game_size,
+            0, tint
+        );
+    }
 }
 
 
@@ -644,9 +676,18 @@ void animation_editor::sprite_transform_to_gui() {
     set_textbox_text(frm_sprite_tra, "txt_w", f2s(cur_sprite->game_size.x));
     set_textbox_text(frm_sprite_tra, "txt_h", f2s(cur_sprite->game_size.y));
     set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
-    set_checkbox_check(frm_sprite_tra, "chk_compare_blink", comparison_blink);
+    
+    if(comparison) {
+        frm_sprite_comp->show();
+    } else {
+        frm_sprite_comp->hide();
+    }
+    
+    set_checkbox_check(frm_sprite_comp, "chk_compare_blink", comparison_blink);
+    set_checkbox_check(frm_sprite_comp, "chk_compare_above", comparison_above);
+    set_checkbox_check(frm_sprite_comp, "chk_tint", comparison_tint);
     set_button_text(
-        frm_sprite_tra, "but_compare",
+        frm_sprite_comp, "but_compare",
         comparison_sprite ? comparison_sprite->name : ""
     );
 }
@@ -860,8 +901,13 @@ void animation_editor::gui_to_sprite_transform() {
         s2f(get_textbox_text(frm_sprite_tra, "txt_h"));
     comparison =
         get_checkbox_check(frm_sprite_tra, "chk_compare");
+        
     comparison_blink =
-        get_checkbox_check(frm_sprite_tra, "chk_compare_blink");
+        get_checkbox_check(frm_sprite_comp, "chk_compare_blink");
+    comparison_above =
+        get_checkbox_check(frm_sprite_comp, "chk_compare_above");
+    comparison_tint =
+        get_checkbox_check(frm_sprite_comp, "chk_tint");
         
     cur_sprite_tc.set_center(cur_sprite->offset);
     cur_sprite_tc.set_size(cur_sprite->game_size);

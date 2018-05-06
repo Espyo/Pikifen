@@ -80,6 +80,7 @@ private:
     lafi::frame* frm_sprite;
     lafi::frame* frm_sprite_bmp;
     lafi::frame* frm_sprite_tra;
+    lafi::frame* frm_sprite_comp;
     lafi::frame* frm_hitboxes;
     lafi::frame* frm_hitbox;
     lafi::frame* frm_normal_h;
@@ -94,10 +95,12 @@ private:
     animation_database        anims;
     bool                      anim_playing;
     bool                      comparison;
-    sprite*                   comparison_sprite;
+    bool                      comparison_above;
     bool                      comparison_blink;
     bool                      comparison_blink_show;
     timer                     comparison_blink_timer;
+    sprite*                   comparison_sprite;
+    bool                      comparison_tint;
     animation*                cur_anim;
     size_t                    cur_body_part_nr;
     size_t                    cur_frame_nr;
@@ -128,6 +131,7 @@ private:
     
     //General functions.
     void cur_sprite_tc_to_gui();
+    void draw_comparison();
     string get_cut_path(const string &p);
     void load_animation_database();
     void open_hitbox_type(unsigned char type);
