@@ -35,18 +35,19 @@ const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
-const string animation_editor::DELETE_ICON = "Delete.png";
-const string animation_editor::DUPLICATE_ICON = "Duplicate.png";
-const string animation_editor::EXIT_ICON = "Exit.png";
-const string animation_editor::HITBOXES_ICON = "Hitboxes.png";
-const string animation_editor::LOAD_ICON = "Load.png";
-const string animation_editor::MOVE_LEFT_ICON = "Move_left.png";
-const string animation_editor::MOVE_RIGHT_ICON = "Move_right.png";
-const string animation_editor::NEW_ICON = "New.png";
-const string animation_editor::NEXT_ICON = "Next.png";
-const string animation_editor::PLAY_PAUSE_ICON = "Play_pause.png";
-const string animation_editor::PREVIOUS_ICON = "Previous.png";
-const string animation_editor::SAVE_ICON = "Save.png";
+const string animation_editor::ICON_DELETE = "Delete.png";
+const string animation_editor::ICON_DUPLICATE = "Duplicate.png";
+const string animation_editor::ICON_EXIT = "Exit.png";
+const string animation_editor::ICON_HITBOXES = "Hitboxes.png";
+const string animation_editor::ICON_INFO = "Info.png";
+const string animation_editor::ICON_LOAD = "Load.png";
+const string animation_editor::ICON_MOVE_LEFT = "Move_left.png";
+const string animation_editor::ICON_MOVE_RIGHT = "Move_right.png";
+const string animation_editor::ICON_NEW = "New.png";
+const string animation_editor::ICON_NEXT = "Next.png";
+const string animation_editor::ICON_PLAY_PAUSE = "Play_pause.png";
+const string animation_editor::ICON_PREVIOUS = "Previous.png";
+const string animation_editor::ICON_SAVE = "Save.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -597,6 +598,65 @@ void animation_editor::hitbox_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
+ * Imports the sprite file data from a different sprite to the current.
+ */
+void animation_editor::import_sprite_file_data(const string &name) {
+    sprite* s = anims.sprites[anims.find_sprite(name)];
+    set_textbox_text(frm_sprite_bmp, "txt_file", s->file);
+    set_textbox_text(frm_sprite_bmp, "txt_x", i2s(s->file_pos.x));
+    set_textbox_text(frm_sprite_bmp, "txt_y", i2s(s->file_pos.y));
+    set_textbox_text(frm_sprite_bmp, "txt_w", i2s(s->file_size.x));
+    set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
+    gui_to_sprite_bmp();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Imports the sprite hitbox data from a different sprite to the current.
+ */
+void animation_editor::import_sprite_hitbox_data(const string &name) {
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        if(anims.sprites[s]->name == name) {
+            cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
+        }
+    }
+    cur_hitbox_nr = 0;
+    hitbox_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Imports the sprite top data from a different sprite to the current.
+ */
+void animation_editor::import_sprite_top_data(const string &name) {
+    sprite* s = anims.sprites[anims.find_sprite(name)];
+    set_checkbox_check(frm_top, "chk_visible", s->top_visible);
+    set_textbox_text(frm_top, "txt_x", i2s(s->top_pos.x));
+    set_textbox_text(frm_top, "txt_y", i2s(s->top_pos.y));
+    set_textbox_text(frm_top, "txt_w", i2s(s->top_size.x));
+    set_textbox_text(frm_top, "txt_h", i2s(s->top_size.y));
+    set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
+    
+    gui_to_top();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Imports the sprite transformation data from
+ * a different sprite to the current.
+ */
+void animation_editor::import_sprite_transformation_data(const string &name) {
+    sprite* s = anims.sprites[anims.find_sprite(name)];
+    set_textbox_text(frm_sprite_tra, "txt_x", i2s(s->offset.x));
+    set_textbox_text(frm_sprite_tra, "txt_y", i2s(s->offset.y));
+    set_textbox_text(frm_sprite_tra, "txt_w", i2s(s->game_size.x));
+    set_textbox_text(frm_sprite_tra, "txt_h", i2s(s->game_size.y));
+    
+    gui_to_sprite_transform();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the sprite's data from memory to the gui.
  */
 void animation_editor::sprite_to_gui() {
@@ -1116,14 +1176,7 @@ void animation_editor::pick(const string &name, const string &category) {
                 anims.sprites[anims.find_sprite(name)];
             frame_to_gui();
         } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
-            sprite* s = anims.sprites[anims.find_sprite(name)];
-            set_textbox_text(frm_sprite_bmp, "txt_file", s->file);
-            set_textbox_text(frm_sprite_bmp, "txt_x", i2s(s->file_pos.x));
-            set_textbox_text(frm_sprite_bmp, "txt_y", i2s(s->file_pos.y));
-            set_textbox_text(frm_sprite_bmp, "txt_w", i2s(s->file_size.x));
-            set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
-            
-            gui_to_sprite_bmp();
+            import_sprite_file_data(name);
         } else if(
             mode == EDITOR_MODE_SPRITE_TRANSFORM &&
             picker_disambig == PICKER_DISAMBIG_COMPARISON
@@ -1134,48 +1187,47 @@ void animation_editor::pick(const string &name, const string &category) {
             mode == EDITOR_MODE_SPRITE_TRANSFORM &&
             picker_disambig == PICKER_DISAMBIG_IMPORT
         ) {
-            sprite* s = anims.sprites[anims.find_sprite(name)];
-            set_textbox_text(frm_sprite_tra, "txt_x", i2s(s->offset.x));
-            set_textbox_text(frm_sprite_tra, "txt_y", i2s(s->offset.y));
-            set_textbox_text(frm_sprite_tra, "txt_w", i2s(s->game_size.x));
-            set_textbox_text(frm_sprite_tra, "txt_h", i2s(s->game_size.y));
-            
-            gui_to_sprite_transform();
+            import_sprite_transformation_data(name);
         } else if(mode == EDITOR_MODE_TOP) {
-            sprite* s = anims.sprites[anims.find_sprite(name)];
-            set_checkbox_check(frm_top, "chk_visible", s->top_visible);
-            set_textbox_text(frm_top, "txt_x", i2s(s->top_pos.x));
-            set_textbox_text(frm_top, "txt_y", i2s(s->top_pos.y));
-            set_textbox_text(frm_top, "txt_w", i2s(s->top_size.x));
-            set_textbox_text(frm_top, "txt_h", i2s(s->top_size.y));
-            set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
-            
-            gui_to_top();
+            import_sprite_top_data(name);
         } else if(mode == EDITOR_MODE_TOOLS) {
             set_button_text(frm_tools, "but_rename_sprite_name", name);
         } else if(mode == EDITOR_MODE_HITBOXES) {
-            for(size_t s = 0; s < anims.sprites.size(); ++s) {
-                if(anims.sprites[s]->name == name) {
-                    cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
-                }
-            }
-            cur_hitbox_nr = 0;
-            hitbox_to_gui();
-        } else {
-            cur_sprite = anims.sprites[anims.find_sprite(name)];
-            cur_hitbox_nr = INVALID;
-            if(cur_sprite->file.empty()) {
-                //New frame. Suggest file name.
-                cur_sprite->file = last_file_used;
-                cur_sprite->set_bitmap(last_file_used, point(), point());
-            }
-            sprite_to_gui();
+            import_sprite_hitbox_data(name);
+        } else if(
+            mode == EDITOR_MODE_SPRITE &&
+            picker_disambig == PICKER_DISAMBIG_LOAD
+        ) {
+            pick_sprite(name);
+        } else if(
+            mode == EDITOR_MODE_SPRITE &&
+            picker_disambig == PICKER_DISAMBIG_IMPORT
+        ) {
+            import_sprite_file_data(name);
+            import_sprite_transformation_data(name);
+            import_sprite_hitbox_data(name);
+            import_sprite_top_data(name);
         }
         
     }
     
     show_bottom_frame();
     change_to_right_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Picks a sprite.
+ */
+void animation_editor::pick_sprite(const string &name) {
+    cur_sprite = anims.sprites[anims.find_sprite(name)];
+    cur_hitbox_nr = INVALID;
+    if(cur_sprite->file.empty()) {
+        //New frame. Suggest file name.
+        cur_sprite->file = last_file_used;
+        cur_sprite->set_bitmap(last_file_used, point(), point());
+    }
+    sprite_to_gui();
 }
 
 

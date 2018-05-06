@@ -249,7 +249,7 @@ void animation_editor::load() {
     );
     frm_anims->easy_add(
         "but_del_anim",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
+        new lafi::button("", "", icons.get(ICON_DELETE)), 15, 24
     );
     frm_anims->easy_row();
     frm_anims->easy_add(
@@ -328,23 +328,23 @@ void animation_editor::load() {
     frm_anim->easy_row();
     frm_anim->easy_add(
         "but_play",
-        new lafi::button("", "", icons.get(PLAY_PAUSE_ICON)), 20, 32
+        new lafi::button("", "", icons.get(ICON_PLAY_PAUSE)), 20, 32
     );
     frm_anim->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 32
+        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 32
     );
     frm_anim->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 32
+        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 32
     );
     frm_anim->easy_add(
         "but_add",
-        new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
+        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
     );
     frm_anim->easy_add(
         "but_rem",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 32
+        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
     );
     y += frm_anim->easy_row();
     
@@ -616,11 +616,7 @@ void animation_editor::load() {
     frm_sprites->easy_row();
     frm_sprites->easy_add(
         "lbl_sprite",
-        new lafi::label("Sprite:"), 85, 16
-    );
-    frm_sprites->easy_add(
-        "but_del_sprite",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 32
+        new lafi::label("Sprite:"), 100, 8
     );
     frm_sprites->easy_row();
     frm_sprites->easy_add(
@@ -633,6 +629,23 @@ void animation_editor::load() {
         new lafi::frame(gui_x, y, scr_w, scr_h - 48);
     frm_sprites->add("frm_sprite", frm_sprite);
     
+    frm_sprite->easy_row();
+    frm_sprite->easy_add(
+        "but_prev_sprite",
+        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 32
+    );
+    frm_sprite->easy_add(
+        "but_next_sprite",
+        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 32
+    );
+    frm_sprite->easy_add(
+        "but_del_sprite",
+        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+    );
+    frm_sprite->easy_add(
+        "but_import",
+        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 32
+    );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
         "lin_1",
@@ -687,7 +700,47 @@ void animation_editor::load() {
     frm_sprites->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_sprites->widgets["but_del_sprite"]->left_mouse_click_handler =
+    frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        picker_disambig = PICKER_DISAMBIG_LOAD;
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, true);
+    };
+    frm_sprites->widgets["but_sprite"]->description =
+        "Pick a sprite to edit.";
+        
+    frm_sprite->widgets["but_prev_sprite"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_sprite && !anims.sprites.empty()) {
+            pick_sprite(anims.sprites[0]->name);
+        } else {
+            size_t s = 0;
+            for(; s < anims.sprites.size(); ++s) {
+                if(anims.sprites[s]->name == cur_sprite->name) break;
+            }
+            s = sum_and_wrap(s, -1, anims.sprites.size());
+            pick_sprite(anims.sprites[s]->name);
+        }
+    };
+    frm_sprite->widgets["but_prev_sprite"]->description =
+        "Jump to the previous sprite in the list.";
+        
+    frm_sprite->widgets["but_next_sprite"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_sprite && !anims.sprites.empty()) {
+            pick_sprite(anims.sprites[0]->name);
+        } else {
+            size_t s = 0;
+            for(; s < anims.sprites.size(); ++s) {
+                if(anims.sprites[s]->name == cur_sprite->name) break;
+            }
+            s = sum_and_wrap(s, 1, anims.sprites.size());
+            pick_sprite(anims.sprites[s]->name);
+        }
+    };
+    frm_sprite->widgets["but_next_sprite"]->description =
+        "Jump to the next sprite in the list.";
+        
+    frm_sprite->widgets["but_del_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_sprite) return;
         anims.sprites.erase(
@@ -698,16 +751,16 @@ void animation_editor::load() {
         sprite_to_gui();
         made_changes = true;
     };
-    frm_sprites->widgets["but_del_sprite"]->description =
+    frm_sprite->widgets["but_del_sprite"]->description =
         "Delete the current sprite.";
         
-    frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
+    frm_sprite->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        this->frm_sprites->hide();
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, true);
+        picker_disambig = PICKER_DISAMBIG_IMPORT;
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
-    frm_sprites->widgets["but_sprite"]->description =
-        "Pick a sprite to edit.";
+    frm_sprite->widgets["but_import"]->description =
+        "Import the data from another sprite.";
         
     frm_sprite->widgets["but_bitmap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -765,7 +818,7 @@ void animation_editor::load() {
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
     );
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
@@ -936,7 +989,7 @@ void animation_editor::load() {
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1100,15 +1153,15 @@ void animation_editor::load() {
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 24
     );
     frm_hitboxes->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 24
     );
     frm_hitboxes->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
     );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
@@ -1442,7 +1495,7 @@ void animation_editor::load() {
     frm_top->easy_row();
     frm_top->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
     );
     frm_top->easy_row();
     frm_top->easy_add(
@@ -1604,20 +1657,20 @@ void animation_editor::load() {
     );
     frm_body_parts->easy_add(
         "but_add",
-        new lafi::button("", "", icons.get(NEW_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_NEW)), 20, 24
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 24
     );
     frm_body_parts->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 24
     );
     frm_body_parts->easy_add(
         "but_del",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 24
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
@@ -1646,11 +1699,11 @@ void animation_editor::load() {
     frm_body_part->easy_row();
     frm_body_part->easy_add(
         "but_left",
-        new lafi::button("", "", icons.get(MOVE_LEFT_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_MOVE_LEFT)), 20, 24
     );
     frm_body_part->easy_add(
         "but_right",
-        new lafi::button("", "", icons.get(MOVE_RIGHT_ICON)), 20, 24
+        new lafi::button("", "", icons.get(ICON_MOVE_RIGHT)), 20, 24
     );
     frm_body_part->easy_row();
     
@@ -1951,19 +2004,19 @@ void animation_editor::load() {
     frm_bottom->easy_row();
     frm_bottom->easy_add(
         "but_toggle_hitboxes",
-        new lafi::button("", "", icons.get(HITBOXES_ICON)), 25, 32
+        new lafi::button("", "", icons.get(ICON_HITBOXES)), 25, 32
     );
     frm_bottom->easy_add(
         "but_load",
-        new lafi::button("", "", icons.get(LOAD_ICON)), 25, 32
+        new lafi::button("", "", icons.get(ICON_LOAD)), 25, 32
     );
     frm_bottom->easy_add(
         "but_save",
-        new lafi::button("", "", icons.get(SAVE_ICON)), 25, 32
+        new lafi::button("", "", icons.get(ICON_SAVE)), 25, 32
     );
     frm_bottom->easy_add(
         "but_quit",
-        new lafi::button("", "", icons.get(EXIT_ICON)), 25, 32
+        new lafi::button("", "", icons.get(ICON_EXIT)), 25, 32
     );
     frm_bottom->easy_row();
     

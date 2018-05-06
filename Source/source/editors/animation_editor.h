@@ -48,6 +48,7 @@ private:
     };
     
     enum PICKER_DISAMBIGS {
+        PICKER_DISAMBIG_LOAD,
         PICKER_DISAMBIG_IMPORT,
         PICKER_DISAMBIG_COMPARISON,
     };
@@ -56,18 +57,19 @@ private:
     static const float ZOOM_MIN_LEVEL_EDITOR;
     
     
-    static const string DELETE_ICON;
-    static const string DUPLICATE_ICON;
-    static const string EXIT_ICON;
-    static const string HITBOXES_ICON;
-    static const string LOAD_ICON;
-    static const string MOVE_LEFT_ICON;
-    static const string MOVE_RIGHT_ICON;
-    static const string NEW_ICON;
-    static const string NEXT_ICON;
-    static const string PLAY_PAUSE_ICON;
-    static const string PREVIOUS_ICON;
-    static const string SAVE_ICON;
+    static const string ICON_DELETE;
+    static const string ICON_DUPLICATE;
+    static const string ICON_EXIT;
+    static const string ICON_HITBOXES;
+    static const string ICON_INFO;
+    static const string ICON_LOAD;
+    static const string ICON_MOVE_LEFT;
+    static const string ICON_MOVE_RIGHT;
+    static const string ICON_NEW;
+    static const string ICON_NEXT;
+    static const string ICON_PLAY_PAUSE;
+    static const string ICON_PREVIOUS;
+    static const string ICON_SAVE;
     
     //GUI widgets.
     lafi::frame* frm_main;
@@ -133,10 +135,15 @@ private:
     void cur_sprite_tc_to_gui();
     void draw_comparison();
     string get_cut_path(const string &p);
+    void import_sprite_file_data(const string &name);
+    void import_sprite_hitbox_data(const string &name);
+    void import_sprite_top_data(const string &name);
+    void import_sprite_transformation_data(const string &name);
     void load_animation_database();
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
+    void pick_sprite(const string &name);
     void rename_animation();
     void rename_sprite();
     void resize_by_resolution();
