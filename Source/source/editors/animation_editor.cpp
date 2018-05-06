@@ -70,8 +70,7 @@ animation_editor::animation_editor() :
     grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
     hitboxes_visible(true),
-    is_pikmin(false),
-    top_lmb_action(LMB_ACTION_MOVE) {
+    is_pikmin(false) {
     
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
@@ -87,6 +86,8 @@ animation_editor::animation_editor() :
     comparison_blink_timer.start();
     
     cur_sprite_tc.keep_aspect_ratio = true;
+    top_tc.keep_aspect_ratio = true;
+    top_tc.allow_rotation = true;
     
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
@@ -190,6 +191,10 @@ void animation_editor::do_drawing() {
     ) {
         s = cur_sprite;
         
+    }
+    
+    if(mode == EDITOR_MODE_SPRITE_TRANSFORM || mode == EDITOR_MODE_TOP) {
+        draw_hitboxes = false;
     }
     
     if(mode == EDITOR_MODE_SPRITE_BITMAP && s && s->parent_bmp) {
@@ -332,6 +337,11 @@ void animation_editor::do_drawing() {
         
         if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             cur_sprite_tc.draw_handles();
+        } else if(
+            mode == EDITOR_MODE_TOP &&
+            cur_sprite && cur_sprite->top_visible
+        ) {
+            top_tc.draw_handles();
         }
         
     }
@@ -880,15 +890,12 @@ void animation_editor::gui_to_top() {
     cur_sprite->top_angle =
         get_angle_picker_angle(frm_top, "ang_angle");
         
-    top_lmb_action = LMB_ACTION_NONE;
-    if(get_checkbox_check(frm_top, "chk_mousexy")) {
-        top_lmb_action = LMB_ACTION_MOVE;
-    } else if(get_checkbox_check(frm_top, "chk_mousewh")) {
-        top_lmb_action = LMB_ACTION_RESIZE;
-    } else if(get_checkbox_check(frm_top, "chk_mousea")) {
-        top_lmb_action = LMB_ACTION_ROTATE;
-    }
-    
+    top_tc.set_center(cur_sprite->top_pos);
+    top_tc.set_size(cur_sprite->top_size);
+    top_tc.set_angle(cur_sprite->top_angle);
+    top_tc.keep_aspect_ratio =
+        get_checkbox_check(frm_top, "chk_ratio");
+        
     top_to_gui();
     made_changes = true;
 }
@@ -1071,9 +1078,33 @@ void animation_editor::pick(const string &name, const string &category) {
             set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
             
             gui_to_sprite_bmp();
-        } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+        } else if(
+            mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+            picker_disambig == PICKER_DISAMBIG_COMPARISON
+        ) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
             sprite_transform_to_gui();
+        } else if(
+            mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+            picker_disambig == PICKER_DISAMBIG_IMPORT
+        ) {
+            sprite* s = anims.sprites[anims.find_sprite(name)];
+            set_textbox_text(frm_sprite_tra, "txt_x", i2s(s->offset.x));
+            set_textbox_text(frm_sprite_tra, "txt_y", i2s(s->offset.y));
+            set_textbox_text(frm_sprite_tra, "txt_w", i2s(s->game_size.x));
+            set_textbox_text(frm_sprite_tra, "txt_h", i2s(s->game_size.y));
+            
+            gui_to_sprite_transform();
+        } else if(mode == EDITOR_MODE_TOP) {
+            sprite* s = anims.sprites[anims.find_sprite(name)];
+            set_checkbox_check(frm_top, "chk_visible", s->top_visible);
+            set_textbox_text(frm_top, "txt_x", i2s(s->top_pos.x));
+            set_textbox_text(frm_top, "txt_y", i2s(s->top_pos.y));
+            set_textbox_text(frm_top, "txt_w", i2s(s->top_size.x));
+            set_textbox_text(frm_top, "txt_h", i2s(s->top_size.y));
+            set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
+            
+            gui_to_top();
         } else if(mode == EDITOR_MODE_TOOLS) {
             set_button_text(frm_tools, "but_rename_sprite_name", name);
         } else if(mode == EDITOR_MODE_HITBOXES) {
@@ -1398,6 +1429,30 @@ void animation_editor::save_animation_database() {
     
     file_node.save_file(file_path);
     made_changes = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds the current sprite Pikmin top's transformation controller data
+ * to the GUI.
+ */
+void animation_editor::top_tc_to_gui() {
+    set_textbox_text(
+        frm_top, "txt_x", f2s(top_tc.get_center().x)
+    );
+    set_textbox_text(
+        frm_top, "txt_y", f2s(top_tc.get_center().y)
+    );
+    set_textbox_text(
+        frm_top, "txt_w", f2s(top_tc.get_size().x)
+    );
+    set_textbox_text(
+        frm_top, "txt_h", f2s(top_tc.get_size().y)
+    );
+    set_angle_picker_angle(
+        frm_top, "ang_angle", top_tc.get_angle()
+    );
+    gui_to_top();
 }
 
 

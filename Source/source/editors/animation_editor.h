@@ -47,16 +47,14 @@ private:
         ANIMATION_EDITOR_PICKER_SPRITE,
     };
     
-    enum LMB_ACTION {
-        LMB_ACTION_NONE,
-        LMB_ACTION_MOVE,
-        LMB_ACTION_RESIZE,
-        LMB_ACTION_ROTATE,
+    enum PICKER_DISAMBIGS {
+        PICKER_DISAMBIG_IMPORT,
+        PICKER_DISAMBIG_COMPARISON,
     };
     
     static const float ZOOM_MAX_LEVEL_EDITOR;
     static const float ZOOM_MIN_LEVEL_EDITOR;
-
+    
     
     static const string DELETE_ICON;
     static const string DUPLICATE_ICON;
@@ -122,9 +120,11 @@ private:
     bool                      hitboxes_visible;
     bool                      is_pikmin;
     string                    last_file_used;
+    //Disambiguation for the exact kind of picker. Use PICKER_DISAMBIG_*.
+    unsigned char             picker_disambig;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
-    unsigned char             top_lmb_action;
+    transformation_controller top_tc;
     
     //General functions.
     void cur_sprite_tc_to_gui();
@@ -142,6 +142,7 @@ private:
         ALLEGRO_BITMAP* bmp, bool* selection_pixels,
         const int x, const int y, const int bmp_w, const int bmp_h
     );
+    void top_tc_to_gui();
     void update_hitboxes();
     void update_stats();
     

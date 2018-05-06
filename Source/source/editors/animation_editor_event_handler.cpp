@@ -152,6 +152,12 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         );
         gui_to_sprite_bmp();
         
+    } else if(
+        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+    ) {
+        if(top_tc.handle_mouse_down(mouse_cursor_w)) {
+            top_tc_to_gui();
+        }
     }
 }
 
@@ -160,23 +166,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    if(mode == EDITOR_MODE_TOP) {
-        if(top_lmb_action == LMB_ACTION_MOVE) {
-            cur_sprite->top_pos.x += (ev.mouse.dx / cam_zoom);
-            cur_sprite->top_pos.y += (ev.mouse.dy / cam_zoom);
-            top_to_gui();
-        } else if(top_lmb_action == LMB_ACTION_RESIZE) {
-            float new_w = cur_sprite->top_size.x + ev.mouse.dx / cam_zoom;
-            float ratio = cur_sprite->top_size.y / cur_sprite->top_size.x;
-            cur_sprite->top_size.x = new_w;
-            cur_sprite->top_size.y = new_w * ratio;
-            top_to_gui();
-        } else if(top_lmb_action == LMB_ACTION_ROTATE) {
-            cur_sprite->top_angle += ev.mouse.dx / cam_zoom;
-            top_to_gui();
-        }
-        
-    } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
         if(cur_sprite_tc.handle_mouse_move(mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
         }
@@ -197,6 +187,12 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             hitbox_to_gui();
             made_changes = true;
         }
+    } else if(
+        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+    ) {
+        if(top_tc.handle_mouse_move(mouse_cursor_w)) {
+            top_tc_to_gui();
+        }
     }
 }
 
@@ -207,6 +203,10 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
         cur_sprite_tc.handle_mouse_up();
+    } else if(
+        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+    ) {
+        top_tc.handle_mouse_up();
     }
     grabbing_hitbox = INVALID;
 }

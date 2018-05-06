@@ -741,6 +741,8 @@ void animation_editor::load() {
         
     frm_sprite->widgets["but_top"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        top_tc.set_center(cur_sprite->top_pos);
+        top_tc.set_size(cur_sprite->top_size);
         mode = EDITOR_MODE_TOP;
         change_to_right_frame();
         top_to_gui();
@@ -933,6 +935,11 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
+        "but_import",
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+    );
+    frm_sprite_tra->easy_row();
+    frm_sprite_tra->easy_add(
         "lbl_xy",
         new lafi::label("X, Y:"), 25, 16
     );
@@ -1009,6 +1016,14 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["but_back"]->description =
         "Go back to the sprite editor.";
         
+    frm_sprite_tra->widgets["but_import"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        picker_disambig = PICKER_DISAMBIG_IMPORT;
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+    };
+    frm_sprite_tra->widgets["but_import"]->description =
+        "Import transformation data from a different sprite.";
+        
     frm_sprite_tra->widgets["txt_x"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_x"]->description =
@@ -1041,7 +1056,7 @@ void animation_editor::load() {
         
     frm_sprite_tra->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        this->frm_sprite_tra->hide();
+        picker_disambig = PICKER_DISAMBIG_COMPARISON;
         open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
     frm_sprite_tra->widgets["but_compare"]->description =
@@ -1408,6 +1423,11 @@ void animation_editor::load() {
     );
     frm_top->easy_row();
     frm_top->easy_add(
+        "but_import",
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 24
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
         "chk_visible",
         new lafi::checkbox("Visible"), 100, 16
     );
@@ -1426,15 +1446,6 @@ void animation_editor::load() {
     );
     frm_top->easy_row();
     frm_top->easy_add(
-        "dum_1",
-        new lafi::dummy(), 20, 12
-    );
-    frm_top->easy_add(
-        "chk_mousexy",
-        new lafi::checkbox("Move with LMB", true), 100, 12
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
         "lbl_wh",
         new lafi::label("W&H:"), 20, 16
     );
@@ -1448,12 +1459,8 @@ void animation_editor::load() {
     );
     frm_top->easy_row();
     frm_top->easy_add(
-        "dum_2",
-        new lafi::dummy(), 20, 12
-    );
-    frm_top->easy_add(
-        "chk_mousewh",
-        new lafi::checkbox("Resize with LMB"), 100, 12
+        "chk_ratio",
+        new lafi::checkbox("Keep aspect ratio", true), 100, 16
     );
     frm_top->easy_row();
     frm_top->easy_add(
@@ -1463,15 +1470,6 @@ void animation_editor::load() {
     frm_top->easy_add(
         "ang_angle",
         new lafi::angle_picker(), 60, 24
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "dum_3",
-        new lafi::dummy(), 20, 12
-    );
-    frm_top->easy_add(
-        "chk_mousea",
-        new lafi::checkbox("Rotate with LMB"), 100, 12
     );
     frm_top->easy_row();
     frm_top->easy_add(
@@ -1495,6 +1493,13 @@ void animation_editor::load() {
     frm_top->widgets["but_back"]->description =
         "Go back to the sprite editor.";
         
+    frm_top->widgets["but_import"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+    };
+    frm_top->widgets["but_import"]->description =
+        "Import transformation data from a different sprite.";
+        
     frm_top->widgets["chk_visible"]->left_mouse_click_handler =
         lambda_save_top_click;
     frm_top->widgets["chk_visible"]->description =
@@ -1510,15 +1515,6 @@ void animation_editor::load() {
     frm_top->widgets["txt_y"]->description =
         "Y position of the top's center.";
         
-    frm_top->widgets["chk_mousexy"]->description =
-        "Allows moving with the left mouse button.";
-    frm_top->widgets["chk_mousexy"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        set_checkbox_check(this->frm_top, "chk_mousewh", false);
-        set_checkbox_check(this->frm_top, "chk_mousea", false);
-        gui_to_top();
-    };
-    
     frm_top->widgets["txt_w"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["txt_w"]->description =
@@ -1529,29 +1525,16 @@ void animation_editor::load() {
     frm_top->widgets["txt_h"]->description =
         "In-game height of the top.";
         
-    frm_top->widgets["chk_mousewh"]->description =
-        "Allows resizing with the left mouse button.";
-    frm_top->widgets["chk_mousewh"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        set_checkbox_check(this->frm_top, "chk_mousexy", false);
-        set_checkbox_check(this->frm_top, "chk_mousea", false);
-        gui_to_top();
-    };
-    
+    frm_top->widgets["chk_ratio"]->left_mouse_click_handler =
+        lambda_save_top_click;
+    frm_top->widgets["chk_ratio"]->description =
+        "Lock width/height proportion when changing either one.";
+        
     frm_top->widgets["ang_angle"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["ang_angle"]->description =
         "Angle of the top.";
         
-    frm_top->widgets["chk_mousea"]->description =
-        "Allows rotating with the left mouse button.";
-    frm_top->widgets["chk_mousea"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        set_checkbox_check(this->frm_top, "chk_mousexy", false);
-        set_checkbox_check(this->frm_top, "chk_mousewh", false);
-        gui_to_top();
-    };
-    
     frm_top->widgets["but_maturity"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
