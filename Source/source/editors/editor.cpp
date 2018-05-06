@@ -11,12 +11,14 @@
 
 #include "editor.h"
 #include "../functions.h"
+#include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
+#include "../LAFI/checkbox.h"
 #include "../LAFI/frame.h"
+#include "../LAFI/radio_button.h"
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/textbox.h"
 #include "../vars.h"
-
 
 
 //Time until the next click is no longer considered a double-click.
@@ -25,10 +27,6 @@ const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 //If the mouse is dragged outside of this range, that's a real drag.
 const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
-//Maximum zoom level possible in the editor.
-const float editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
-//Minimum zoom level possible in the editor.
-const float editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
@@ -50,7 +48,9 @@ editor::editor() :
     mouse_drag_confirmed(false),
     mode(0),
     sec_mode(0),
-    status_bar_y(0) {
+    status_bar_y(0),
+    zoom_max_level(0),
+    zoom_min_level(0) {
     
     warning_style = new lafi::style(
         al_map_rgb(224, 224, 64),
@@ -169,20 +169,14 @@ void editor::create_picker_frame() {
     frm_picker->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
-            (
-                (lafi::textbox*)
-                this->frm_picker->widgets["txt_text"]
-            )->text;
+            get_textbox_text(this->frm_picker, "txt_text");
         if(name.empty()) return;
         
         this->create_new_from_picker(name);
         
         made_changes = true;
         
-        (
-            (lafi::textbox*)
-            this->frm_picker->widgets["txt_text"]
-        )->text.clear();
+        set_textbox_text(this->frm_picker, "txt_text", "");
     };
     frm_picker->widgets["but_new"]->description =
         "Create a new one with the name on the textbox.";
@@ -233,9 +227,8 @@ void editor::generate_and_open_picker(
     frm_picker->show();
     hide_bottom_frame();
     
-    ((lafi::label*) frm_picker->widgets["lbl_title"])->text = title;
-    
-    ((lafi::textbox*) frm_picker->widgets["txt_text"])->text.clear();
+    set_label_text(frm_picker, "lbl_title", title);
+    set_textbox_text(frm_picker, "txt_text", "");
     
     if(can_make_new) {
         enable_widget(frm_picker->widgets["but_new"]);
@@ -458,6 +451,82 @@ void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
+//LAFI helper functions.
+float editor::get_angle_picker_angle(
+    lafi::widget* parent, const string &picker_name
+) {
+    return
+        ((lafi::angle_picker*) parent->widgets[picker_name])->get_angle_rads();
+}
+string editor::get_button_text(
+    lafi::widget* parent, const string &button_name
+) {
+    return
+        ((lafi::button*) parent->widgets[button_name])->text;
+}
+bool editor::get_checkbox_check(
+    lafi::widget* parent, const string &checkbox_name
+) {
+    return
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->checked;
+}
+string editor::get_label_text(
+    lafi::widget* parent, const string &label_name
+) {
+    return
+        ((lafi::label*) parent->widgets[label_name])->text;
+}
+string editor::get_textbox_text(
+    lafi::widget* parent, const string &textbox_name
+) {
+    return
+        ((lafi::textbox*) parent->widgets[textbox_name])->text;
+}
+bool editor::get_radio_selection(
+    lafi::widget* parent, const string &radio_name
+) {
+    return
+        ((lafi::radio_button*) parent->widgets[radio_name])->selected;
+}
+void editor::set_angle_picker_angle(
+    lafi::widget* parent, const string &picker_name, const float angle
+) {
+    ((lafi::angle_picker*) parent->widgets[picker_name])->set_angle_rads(angle);
+}
+void editor::set_button_text(
+    lafi::widget* parent, const string &button_name, const string &text
+) {
+    ((lafi::button*) parent->widgets[button_name])->text = text;
+}
+void editor::set_checkbox_check(
+    lafi::widget* parent, const string &checkbox_name, const bool check
+) {
+    if(check) {
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->check();
+    } else {
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->uncheck();
+    }
+}
+void editor::set_label_text(
+    lafi::widget* parent, const string &label_name, const string &text
+) {
+    ((lafi::label*) parent->widgets[label_name])->text = text;
+}
+void editor::set_textbox_text(
+    lafi::widget* parent, const string &textbox_name, const string &text
+) {
+    ((lafi::textbox*) parent->widgets[textbox_name])->text = text;
+}
+void editor::set_radio_selection(
+    lafi::widget* parent, const string &radio_name, const bool selection
+) {
+    if(selection) {
+        ((lafi::radio_button*) parent->widgets[radio_name])->select();
+    } else {
+        ((lafi::radio_button*) parent->widgets[radio_name])->unselect();
+    }
+}
+
 
 /* ----------------------------------------------------------------------------
  * Hides the bottom tools frame.
@@ -576,9 +645,8 @@ void editor::update_gui_coordinates() {
  * in the same spot.
  */
 void editor::zoom(const float new_zoom, const bool anchor_cursor) {
-    cam_zoom =
-        clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
-        
+    cam_zoom = clamp(new_zoom, zoom_min_level, zoom_max_level);
+    
     if(anchor_cursor) {
         //Keep a backup of the old mouse coordinates.
         point old_mouse_pos = mouse_cursor_w;

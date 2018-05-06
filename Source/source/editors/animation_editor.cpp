@@ -30,6 +30,11 @@
 #include "../vars.h"
 
 
+//Maximum zoom level possible in the editor.
+const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
+//Minimum zoom level possible in the editor.
+const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
+
 const string animation_editor::DELETE_ICON = "Delete.png";
 const string animation_editor::DUPLICATE_ICON = "Duplicate.png";
 const string animation_editor::EXIT_ICON = "Exit.png";
@@ -48,7 +53,6 @@ const string animation_editor::SAVE_ICON = "Save.png";
  * Initializes animation editor class stuff.
  */
 animation_editor::animation_editor() :
-    editor(),
     anim_playing(false),
     comparison(true),
     comparison_sprite(nullptr),
@@ -83,6 +87,9 @@ animation_editor::animation_editor() :
     comparison_blink_timer.start();
     
     cur_sprite_tc.keep_aspect_ratio = true;
+    
+    zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
+    zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
 }
 
 
@@ -90,14 +97,18 @@ animation_editor::animation_editor() :
  * Adds the current sprite's transformation controller data to the GUI.
  */
 void animation_editor::cur_sprite_tc_to_gui() {
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text =
-        f2s(cur_sprite_tc.get_center().x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text =
-        f2s(cur_sprite_tc.get_center().y);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text =
-        f2s(cur_sprite_tc.get_size().x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text =
-        f2s(cur_sprite_tc.get_size().y);
+    set_textbox_text(
+        frm_sprite_tra, "txt_x", f2s(cur_sprite_tc.get_center().x)
+    );
+    set_textbox_text(
+        frm_sprite_tra, "txt_y", f2s(cur_sprite_tc.get_center().y)
+    );
+    set_textbox_text(
+        frm_sprite_tra, "txt_w", f2s(cur_sprite_tc.get_size().x)
+    );
+    set_textbox_text(
+        frm_sprite_tra, "txt_h", f2s(cur_sprite_tc.get_size().y)
+    );
     gui_to_sprite_transform();
 }
 
@@ -384,33 +395,30 @@ string animation_editor::get_cut_path(const string &p) {
  * Loads the animation's data onto the gui.
  */
 void animation_editor::animation_to_gui() {
-    ((lafi::button*) frm_anims->widgets["but_anim"])->text =
-        cur_anim ? cur_anim->name : "";
-        
+    set_button_text(frm_anims, "but_anim", cur_anim ? cur_anim->name : "");
+    
     if(!cur_anim) {
         frm_anim->hide();
     } else {
         frm_anim->show();
         
-        ((lafi::button*) frm_anims->widgets["but_anim"])->text = cur_anim->name;
-        ((lafi::textbox*) frm_anim->widgets["txt_loop"])->text =
-            i2s(cur_anim->loop_frame + 1);
-            
+        set_button_text(frm_anims, "but_anim", cur_anim->name);
+        set_textbox_text(frm_anim, "txt_loop", i2s(cur_anim->loop_frame + 1));
+        
         if(cur_anim->hit_rate == 100) {
-            ((lafi::checkbox*) frm_anim->widgets["chk_missable"])->uncheck();
+            set_checkbox_check(frm_anim, "chk_missable", false);
             frm_anim->widgets["lbl_hit_rate"]->hide();
             frm_anim->widgets["txt_hit_rate"]->hide();
             frm_anim->widgets["lbl_hit_rate_p"]->hide();
-            ((lafi::textbox*) frm_anim->widgets["txt_hit_rate"])->text = "100";
+            set_textbox_text(frm_anim, "txt_hit_rate", "100");
             
         } else {
-            ((lafi::checkbox*) frm_anim->widgets["chk_missable"])->check();
+            set_checkbox_check(frm_anim, "chk_missable", true);
             frm_anim->widgets["lbl_hit_rate"]->show();
             frm_anim->widgets["txt_hit_rate"]->show();
             frm_anim->widgets["lbl_hit_rate_p"]->show();
-            ((lafi::textbox*) frm_anim->widgets["txt_hit_rate"])->text =
-                i2s(cur_anim->hit_rate);
-                
+            set_textbox_text(frm_anim, "txt_hit_rate", i2s(cur_anim->hit_rate));
+            
         }
         
         frame_to_gui();
@@ -422,7 +430,8 @@ void animation_editor::animation_to_gui() {
  * Loads the body part's data onto the gui.
  */
 void animation_editor::body_part_to_gui() {
-    ((lafi::label*) frm_body_parts->widgets["lbl_nr"])->text =
+    set_label_text(
+        frm_body_parts, "lbl_nr",
         (
             anims.body_parts.empty() ?
             "--/0" :
@@ -430,8 +439,9 @@ void animation_editor::body_part_to_gui() {
                 i2s(cur_body_part_nr + 1) + "/" +
                 i2s(anims.body_parts.size())
             )
-        );
-        
+        )
+    );
+    
     if(anims.body_parts.empty()) {
         frm_body_part->hide();
         return;
@@ -439,8 +449,9 @@ void animation_editor::body_part_to_gui() {
     
     frm_body_part->show();
     
-    ((lafi::textbox*) frm_body_part->widgets["txt_name"])->text =
-        anims.body_parts[cur_body_part_nr]->name;
+    set_textbox_text(
+        frm_body_part, "txt_name", anims.body_parts[cur_body_part_nr]->name
+    );
 }
 
 
@@ -450,30 +461,36 @@ void animation_editor::body_part_to_gui() {
 void animation_editor::frame_to_gui() {
     bool valid = cur_frame_nr != INVALID && cur_anim;
     
-    ((lafi::label*) frm_anim->widgets["lbl_f_nr"])->text =
+    set_label_text(
+        frm_anim, "lbl_f_nr",
         "Current frame: " +
         (valid ? i2s((cur_frame_nr + 1)) : "--") +
-        " / " + i2s(cur_anim->frames.size());
-        
+        " / " + i2s(cur_anim->frames.size())
+    );
+    
     if(!valid) {
         frm_frame->hide();
     } else {
         frm_frame->show();
         
-        ((lafi::button*) frm_frame->widgets["but_sprite"])->text =
-            cur_anim->frames[cur_frame_nr].sprite_name;
-        ((lafi::textbox*) frm_frame->widgets["txt_dur"])->text =
-            f2s(cur_anim->frames[cur_frame_nr].duration);
-            
+        set_button_text(
+            frm_frame, "but_sprite", cur_anim->frames[cur_frame_nr].sprite_name
+        );
+        set_textbox_text(
+            frm_frame, "txt_dur", f2s(cur_anim->frames[cur_frame_nr].duration)
+        );
+        
         if(cur_anim->frames[cur_frame_nr].signal != INVALID) {
-            ((lafi::checkbox*) frm_frame->widgets["chk_signal"])->check();
+            set_checkbox_check(frm_frame, "chk_signal", true);
             frm_frame->widgets["txt_signal"]->show();
-            ((lafi::textbox*) frm_frame->widgets["txt_signal"])->text =
-                i2s(cur_anim->frames[cur_frame_nr].signal);
+            set_textbox_text(
+                frm_frame, "txt_signal",
+                i2s(cur_anim->frames[cur_frame_nr].signal)
+            );
         } else {
-            ((lafi::checkbox*) frm_frame->widgets["chk_signal"])->uncheck();
+            set_checkbox_check(frm_frame, "chk_signal", false);
             frm_frame->widgets["txt_signal"]->hide();
-            ((lafi::textbox*) frm_frame->widgets["txt_signal"])->text = "0";
+            set_textbox_text(frm_frame, "txt_signal", "0");
         }
         
     }
@@ -489,15 +506,12 @@ void animation_editor::hitbox_to_gui() {
         cur_h = &cur_sprite->hitboxes[cur_hitbox_nr];
     }
     if(cur_h) {
-        (
-            (lafi::label*) frm_hitboxes->widgets["lbl_name"]
-        )->text =
-            cur_h->body_part_name;
-        ((lafi::textbox*) frm_hitbox->widgets["txt_x"])->text = f2s(cur_h->pos.x);
-        ((lafi::textbox*) frm_hitbox->widgets["txt_y"])->text = f2s(cur_h->pos.y);
-        ((lafi::textbox*) frm_hitbox->widgets["txt_z"])->text = f2s(cur_h->z);
-        ((lafi::textbox*) frm_hitbox->widgets["txt_h"])->text = f2s(cur_h->height);
-        ((lafi::textbox*) frm_hitbox->widgets["txt_r"])->text = f2s(cur_h->radius);
+        set_label_text(frm_hitboxes, "lbl_name", cur_h->body_part_name);
+        set_textbox_text(frm_hitbox, "txt_x", f2s(cur_h->pos.x));
+        set_textbox_text(frm_hitbox, "txt_y", f2s(cur_h->pos.y));
+        set_textbox_text(frm_hitbox, "txt_z", f2s(cur_h->z));
+        set_textbox_text(frm_hitbox, "txt_h", f2s(cur_h->height));
+        set_textbox_text(frm_hitbox, "txt_r", f2s(cur_h->radius));
     }
     
     open_hitbox_type(cur_h ? cur_h->type : 255);
@@ -505,35 +519,27 @@ void animation_editor::hitbox_to_gui() {
     if(cur_h) {
         frm_hitbox->show();
         if(cur_h->type == HITBOX_TYPE_NORMAL) {
-            ((lafi::textbox*) frm_normal_h->widgets["txt_mult"])->text =
-                f2s(cur_h->value);
-            if(cur_h->can_pikmin_latch) {
-                ((lafi::checkbox*) frm_normal_h->widgets["chk_latch"])->check();
-            } else {
-                ((lafi::checkbox*) frm_normal_h->widgets["chk_latch"])->uncheck();
-            }
-            (
-                (lafi::textbox*) frm_normal_h->widgets["txt_hazards"]
-            )->text =
-                cur_h->hazards_str;
-                
+            set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_h->value));
+            set_checkbox_check(
+                frm_normal_h, "chk_latch", cur_h->can_pikmin_latch
+            );
+            set_textbox_text(frm_normal_h, "txt_hazards", cur_h->hazards_str);
+            
         } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
-            ((lafi::textbox*) frm_attack_h->widgets["txt_mult"])->text =
-                f2s(cur_h->value);
-            ((lafi::textbox*) frm_attack_h->widgets["txt_hazards"])->text =
-                cur_h->hazards_str;
-            (
-                (lafi::checkbox*) frm_attack_h->widgets["chk_outward"]
-            )->set(cur_h->knockback_outward);
-            (
-                (lafi::angle_picker*) frm_attack_h->widgets["ang_angle"]
-            )->set_angle_rads(cur_h->knockback_angle);
-            (
-                (lafi::textbox*) frm_attack_h->widgets["txt_knockback"]
-            )->text = f2s(cur_h->knockback);
-            (
-                (lafi::textbox*) frm_attack_h->widgets["txt_wither"]
-            )->text = i2s(cur_h->wither_chance);
+            set_textbox_text(frm_attack_h, "txt_value", f2s(cur_h->value));
+            set_textbox_text(frm_attack_h, "txt_hazards", cur_h->hazards_str);
+            set_checkbox_check(
+                frm_attack_h, "chk_outward", cur_h->knockback_outward
+            );
+            set_angle_picker_angle(
+                frm_attack_h, "ang_angle", cur_h->knockback_angle
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_knockback", f2s(cur_h->knockback)
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_wither", i2s(cur_h->wither_chance)
+            );
             
             if(cur_h->knockback_outward) {
                 disable_widget(frm_attack_h->widgets["ang_angle"]);
@@ -552,9 +558,10 @@ void animation_editor::hitbox_to_gui() {
  * Loads the sprite's data from memory to the gui.
  */
 void animation_editor::sprite_to_gui() {
-    ((lafi::button*) frm_sprites->widgets["but_sprite"])->text =
-        cur_sprite ? cur_sprite->name : "";
-        
+    set_button_text(
+        frm_sprites, "but_sprite", cur_sprite ? cur_sprite->name : ""
+    );
+    
     if(!cur_sprite) {
         frm_sprite->hide();
     } else {
@@ -610,16 +617,11 @@ void animation_editor::sprite_bmp_flood_fill(
  * Loads the sprite's bitmap data from memory to the gui.
  */
 void animation_editor::sprite_bmp_to_gui() {
-    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text =
-        cur_sprite->file;
-    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
-        i2s(cur_sprite->file_pos.x);
-    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
-        i2s(cur_sprite->file_pos.y);
-    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
-        i2s(cur_sprite->file_size.x);
-    ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
-        i2s(cur_sprite->file_size.y);
+    set_textbox_text(frm_sprite_bmp, "txt_file", cur_sprite->file);
+    set_textbox_text(frm_sprite_bmp, "txt_x", i2s(cur_sprite->file_pos.x));
+    set_textbox_text(frm_sprite_bmp, "txt_y", i2s(cur_sprite->file_pos.y));
+    set_textbox_text(frm_sprite_bmp, "txt_w", i2s(cur_sprite->file_size.x));
+    set_textbox_text(frm_sprite_bmp, "txt_h", i2s(cur_sprite->file_size.y));
 }
 
 
@@ -627,20 +629,16 @@ void animation_editor::sprite_bmp_to_gui() {
  * Loads the sprite transformation's data from memory to the gui.
  */
 void animation_editor::sprite_transform_to_gui() {
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text =
-        f2s(cur_sprite->offset.x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text =
-        f2s(cur_sprite->offset.y);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text =
-        f2s(cur_sprite->game_size.x);
-    ((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text =
-        f2s(cur_sprite->game_size.y);
-    ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare"])->set(comparison);
-    ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare_blink"])->set(
-        comparison_blink
+    set_textbox_text(frm_sprite_tra, "txt_x", f2s(cur_sprite->offset.x));
+    set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
+    set_textbox_text(frm_sprite_tra, "txt_w", f2s(cur_sprite->game_size.x));
+    set_textbox_text(frm_sprite_tra, "txt_h", f2s(cur_sprite->game_size.y));
+    set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
+    set_checkbox_check(frm_sprite_tra, "chk_compare_blink", comparison_blink);
+    set_button_text(
+        frm_sprite_tra, "but_compare",
+        comparison_sprite ? comparison_sprite->name : ""
     );
-    ((lafi::button*) frm_sprite_tra->widgets["but_compare"])->text =
-        (comparison_sprite ? comparison_sprite->name : "");
 }
 
 
@@ -652,13 +650,11 @@ void animation_editor::top_to_gui() {
     if(cur_sprite->top_visible) c->check();
     else c->uncheck();
     
-    ((lafi::textbox*) frm_top->widgets["txt_x"])->text = f2s(cur_sprite->top_pos.x);
-    ((lafi::textbox*) frm_top->widgets["txt_y"])->text = f2s(cur_sprite->top_pos.y);
-    ((lafi::textbox*) frm_top->widgets["txt_w"])->text = f2s(cur_sprite->top_size.x);
-    ((lafi::textbox*) frm_top->widgets["txt_h"])->text = f2s(cur_sprite->top_size.y);
-    (
-        (lafi::angle_picker*) frm_top->widgets["ang_angle"]
-    )->set_angle_rads(cur_sprite->top_angle);
+    set_textbox_text(frm_top, "txt_x", f2s(cur_sprite->top_pos.x));
+    set_textbox_text(frm_top, "txt_y", f2s(cur_sprite->top_pos.y));
+    set_textbox_text(frm_top, "txt_w", f2s(cur_sprite->top_size.x));
+    set_textbox_text(frm_top, "txt_h", f2s(cur_sprite->top_size.y));
+    set_angle_picker_angle(frm_top, "ang_angle", cur_sprite->top_angle);
 }
 
 
@@ -669,13 +665,13 @@ void animation_editor::gui_to_animation() {
     if(!cur_anim) return;
     
     cur_anim->loop_frame =
-        s2i(((lafi::textbox*) frm_anim->widgets["txt_loop"])->text) - 1;
+        s2i(get_textbox_text(frm_anim, "txt_loop")) - 1;
     if(cur_anim->loop_frame >= cur_anim->frames.size()) {
         cur_anim->loop_frame = 0;
     }
-    if(((lafi::checkbox*) frm_anim->widgets["chk_missable"])->checked) {
+    if(get_checkbox_check(frm_anim, "chk_missable")) {
         cur_anim->hit_rate =
-            s2i(((lafi::textbox*) frm_anim->widgets["txt_hit_rate"])->text);
+            s2i(get_textbox_text(frm_anim, "txt_hit_rate"));
         cur_anim->hit_rate = clamp(cur_anim->hit_rate, 0, 100);
     } else {
         cur_anim->hit_rate = 100;
@@ -707,16 +703,11 @@ void animation_editor::gui_to_frame() {
     
     frame* f = &cur_anim->frames[cur_frame_nr];
     f->duration =
-        s2f(
-            (
-                (lafi::textbox*)
-                frm_frame->widgets["txt_dur"]
-            )->text
-        );
+        s2f(get_textbox_text(frm_frame, "txt_dur"));
     if(f->duration < 0) f->duration = 0;
     
-    if(((lafi::checkbox*) frm_frame->widgets["chk_signal"])->checked) {
-        f->signal = s2i(((lafi::textbox*) frm_frame->widgets["txt_signal"])->text);
+    if(get_checkbox_check(frm_frame, "chk_signal")) {
+        f->signal = s2i(get_textbox_text(frm_frame, "txt_signal"));
     } else {
         f->signal = INVALID;
     }
@@ -736,20 +727,20 @@ void animation_editor::gui_to_hitbox() {
     
     hitbox* h = &cur_sprite->hitboxes[cur_hitbox_nr];
     
-    h->pos.x = s2f(((lafi::textbox*) frm_hitbox->widgets["txt_x"])->text);
-    h->pos.y = s2f(((lafi::textbox*) frm_hitbox->widgets["txt_y"])->text);
-    h->z = s2f(((lafi::textbox*) frm_hitbox->widgets["txt_z"])->text);
+    h->pos.x = s2f(get_textbox_text(frm_hitbox, "txt_x"));
+    h->pos.y = s2f(get_textbox_text(frm_hitbox, "txt_y"));
+    h->z = s2f(get_textbox_text(frm_hitbox, "txt_z"));
     
-    h->height = s2f(((lafi::textbox*) frm_hitbox->widgets["txt_h"])->text);
-    h->radius = s2f(((lafi::textbox*) frm_hitbox->widgets["txt_r"])->text);
+    h->height = s2f(get_textbox_text(frm_hitbox, "txt_h"));
+    h->radius = s2f(get_textbox_text(frm_hitbox, "txt_r"));
     if(h->radius <= 0) h->radius = 16;
     
     hitbox* cur_h =
         &cur_sprite->hitboxes[cur_hitbox_nr];
         
-    if(((lafi::radio_button*) frm_hitbox->widgets["rad_normal"])->selected) {
+    if(get_radio_selection(frm_hitbox, "rad_normal")) {
         cur_h->type = HITBOX_TYPE_NORMAL;
-    } else if(((lafi::radio_button*) frm_hitbox->widgets["rad_attack"])->selected) {
+    } else if(get_radio_selection(frm_hitbox, "rad_attack")) {
         cur_h->type = HITBOX_TYPE_ATTACK;
     } else {
         cur_h->type = HITBOX_TYPE_DISABLED;
@@ -757,61 +748,25 @@ void animation_editor::gui_to_hitbox() {
     
     if(cur_h->type == HITBOX_TYPE_NORMAL) {
         cur_h->value =
-            s2f(
-                (
-                    (lafi::textbox*)
-                    frm_normal_h->widgets["txt_mult"]
-                )->text
-            );
+            s2f(get_textbox_text(frm_normal_h, "txt_mult"));
         cur_h->can_pikmin_latch =
-            (
-                (lafi::checkbox*)
-                frm_normal_h->widgets["chk_latch"]
-            )->checked;
+            get_checkbox_check(frm_normal_h, "chk_latch");
         cur_h->hazards_str =
-            (
-                (lafi::textbox*)
-                frm_normal_h->widgets["txt_hazards"]
-            )->text;
+            get_textbox_text(frm_normal_h, "txt_hazards");
             
     } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
         cur_h->value =
-            s2f(
-                (
-                    (lafi::textbox*)
-                    frm_attack_h->widgets["txt_value"]
-                )->text
-            );
+            s2f(get_textbox_text(frm_attack_h, "txt_value"));
         cur_h->hazards_str =
-            (
-                (lafi::textbox*)
-                frm_attack_h->widgets["txt_hazards"]
-            )->text;
+            get_textbox_text(frm_attack_h, "txt_hazards");
         cur_h->knockback_outward =
-            (
-                (lafi::checkbox*)
-                frm_attack_h->widgets["chk_outward"]
-            )->checked;
+            get_checkbox_check(frm_attack_h, "chk_outward");
         cur_h->knockback_angle =
-            (
-                (lafi::angle_picker*)
-                frm_attack_h->widgets["ang_angle"]
-            )->get_angle_rads();
+            get_angle_picker_angle(frm_attack_h, "ang_angle");
         cur_h->knockback =
-            s2f(
-                (
-                    (lafi::textbox*)
-                    frm_attack_h->widgets["txt_knockback"]
-                )->text
-            );
+            s2f(get_textbox_text(frm_attack_h, "txt_knockback"));
         cur_h->wither_chance =
-            s2i(
-                (
-                    (lafi::textbox*)
-                    frm_attack_h->widgets["txt_wither"]
-                )->text
-            );
-            
+            s2i(get_textbox_text(frm_attack_h, "txt_wither"));
     }
     
     hitbox_to_gui();
@@ -827,13 +782,13 @@ void animation_editor::gui_to_sprite() {
     if(!cur_sprite) return;
     
     cur_sprite->game_size.x =
-        s2f(((lafi::textbox*) frm_sprite->widgets["txt_gamew"])->text);
+        s2f(get_textbox_text(frm_sprite, "txt_gamew"));
     cur_sprite->game_size.y =
-        s2f(((lafi::textbox*) frm_sprite->widgets["txt_gameh"])->text);
+        s2f(get_textbox_text(frm_sprite, "txt_gameh"));
     cur_sprite->offset.x =
-        s2f(((lafi::textbox*) frm_sprite->widgets["txt_offsx"])->text);
+        s2f(get_textbox_text(frm_sprite, "txt_offsx"));
     cur_sprite->offset.y =
-        s2f(((lafi::textbox*) frm_sprite->widgets["txt_offsy"])->text);
+        s2f(get_textbox_text(frm_sprite, "txt_offsy"));
         
     sprite_to_gui();
     
@@ -851,15 +806,15 @@ void animation_editor::gui_to_sprite_bmp() {
     point new_f_pos, new_f_size;
     
     new_file =
-        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text;
+        get_textbox_text(frm_sprite_bmp, "txt_file");
     new_f_pos.x =
-        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text);
+        s2i(get_textbox_text(frm_sprite_bmp, "txt_x"));
     new_f_pos.y =
-        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text);
+        s2i(get_textbox_text(frm_sprite_bmp, "txt_y"));
     new_f_size.x =
-        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text);
+        s2i(get_textbox_text(frm_sprite_bmp, "txt_w"));
     new_f_size.y =
-        s2i(((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text);
+        s2i(get_textbox_text(frm_sprite_bmp, "txt_h"));
         
     if(
         cur_sprite->file != new_file ||
@@ -886,22 +841,22 @@ void animation_editor::gui_to_sprite_bmp() {
  */
 void animation_editor::gui_to_sprite_transform() {
     cur_sprite->offset.x =
-        s2f(((lafi::textbox*) frm_sprite_tra->widgets["txt_x"])->text);
+        s2f(get_textbox_text(frm_sprite_tra, "txt_x"));
     cur_sprite->offset.y =
-        s2f(((lafi::textbox*) frm_sprite_tra->widgets["txt_y"])->text);
+        s2f(get_textbox_text(frm_sprite_tra, "txt_y"));
     cur_sprite->game_size.x =
-        s2f(((lafi::textbox*) frm_sprite_tra->widgets["txt_w"])->text);
+        s2f(get_textbox_text(frm_sprite_tra, "txt_w"));
     cur_sprite->game_size.y =
-        s2f(((lafi::textbox*) frm_sprite_tra->widgets["txt_h"])->text);
+        s2f(get_textbox_text(frm_sprite_tra, "txt_h"));
     comparison =
-        ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare"])->checked;
+        get_checkbox_check(frm_sprite_tra, "chk_compare");
     comparison_blink =
-        ((lafi::checkbox*) frm_sprite_tra->widgets["chk_compare_blink"])->checked;
+        get_checkbox_check(frm_sprite_tra, "chk_compare_blink");
         
     cur_sprite_tc.set_center(cur_sprite->offset);
     cur_sprite_tc.set_size(cur_sprite->game_size);
     cur_sprite_tc.keep_aspect_ratio =
-        ((lafi::checkbox*) frm_sprite_tra->widgets["chk_ratio"])->checked;
+        get_checkbox_check(frm_sprite_tra, "chk_ratio");
         
     sprite_transform_to_gui();
     made_changes = true;
@@ -913,24 +868,24 @@ void animation_editor::gui_to_sprite_transform() {
  */
 void animation_editor::gui_to_top() {
     cur_sprite->top_visible =
-        ((lafi::checkbox*) frm_top->widgets["chk_visible"])->checked;
+        get_checkbox_check(frm_top, "chk_visible");
     cur_sprite->top_pos.x =
-        s2f(((lafi::textbox*) frm_top->widgets["txt_x"])->text);
+        s2f(get_textbox_text(frm_top, "txt_x"));
     cur_sprite->top_pos.y =
-        s2f(((lafi::textbox*) frm_top->widgets["txt_y"])->text);
+        s2f(get_textbox_text(frm_top, "txt_y"));
     cur_sprite->top_size.x =
-        s2f(((lafi::textbox*) frm_top->widgets["txt_w"])->text);
+        s2f(get_textbox_text(frm_top, "txt_w"));
     cur_sprite->top_size.y =
-        s2f(((lafi::textbox*) frm_top->widgets["txt_h"])->text);
+        s2f(get_textbox_text(frm_top, "txt_h"));
     cur_sprite->top_angle =
-        ((lafi::angle_picker*) frm_top->widgets["ang_angle"])->get_angle_rads();
+        get_angle_picker_angle(frm_top, "ang_angle");
         
     top_lmb_action = LMB_ACTION_NONE;
-    if(((lafi::checkbox*) frm_top->widgets["chk_mousexy"])->checked) {
+    if(get_checkbox_check(frm_top, "chk_mousexy")) {
         top_lmb_action = LMB_ACTION_MOVE;
-    } else if(((lafi::checkbox*) frm_top->widgets["chk_mousewh"])->checked) {
+    } else if(get_checkbox_check(frm_top, "chk_mousewh")) {
         top_lmb_action = LMB_ACTION_RESIZE;
-    } else if(((lafi::checkbox*) frm_top->widgets["chk_mousea"])->checked) {
+    } else if(get_checkbox_check(frm_top, "chk_mousea")) {
         top_lmb_action = LMB_ACTION_ROTATE;
     }
     
@@ -998,9 +953,8 @@ void animation_editor::load_animation_database() {
     }
     
     vector<string> file_path_parts = split(file_path, "/");
-    ((lafi::button*) frm_main->widgets["but_file"])->text =
-        get_cut_path(file_path);
-        
+    set_button_text(frm_main, "but_file", get_cut_path(file_path));
+    
     //Top bitmap.
     for(unsigned char t = 0; t < N_MATURITIES; ++t) {
         if(top_bmp[t] && top_bmp[t] != bmp_error) {
@@ -1039,21 +993,21 @@ void animation_editor::load_animation_database() {
 void animation_editor::open_hitbox_type(unsigned char type) {
     lafi::widget* f = frm_hitboxes->widgets["frm_hitbox"];
     
-    ((lafi::radio_button*) f->widgets["rad_normal"])->unselect();
-    ((lafi::radio_button*) f->widgets["rad_attack"])->unselect();
-    ((lafi::radio_button*) f->widgets["rad_disabled"])->unselect();
+    set_radio_selection(f, "rad_normal", false);
+    set_radio_selection(f, "rad_attack", false);
+    set_radio_selection(f, "rad_disabled", false);
     
     frm_normal_h->hide();
     frm_attack_h->hide();
     
     if(type == HITBOX_TYPE_NORMAL) {
-        ((lafi::radio_button*) f->widgets["rad_normal"])->select();
+        set_radio_selection(f, "rad_normal", true);
         frm_normal_h->show();
     } else if(type == HITBOX_TYPE_ATTACK) {
-        ((lafi::radio_button*) f->widgets["rad_attack"])->select();
+        set_radio_selection(f, "rad_attack", true);
         frm_attack_h->show();
     } else {
-        ((lafi::radio_button*) f->widgets["rad_disabled"])->select();
+        set_radio_selection(f, "rad_disabled", true);
     }
 }
 
@@ -1092,10 +1046,7 @@ void animation_editor::open_picker(
 void animation_editor::pick(const string &name, const string &category) {
     if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         if(mode == EDITOR_MODE_TOOLS) {
-            (
-                (lafi::button*)
-                frm_tools->widgets["but_rename_anim_name"]
-            )->text = name;
+            set_button_text(frm_tools, "but_rename_anim_name", name);
         } else {
             cur_anim = anims.animations[anims.find_animation(name)];
             cur_frame_nr =
@@ -1113,26 +1064,18 @@ void animation_editor::pick(const string &name, const string &category) {
             frame_to_gui();
         } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
             sprite* s = anims.sprites[anims.find_sprite(name)];
-            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_file"])->text =
-                s->file;
-            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
-                i2s(s->file_pos.x);
-            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
-                i2s(s->file_pos.y);
-            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
-                i2s(s->file_size.x);
-            ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
-                i2s(s->file_size.y);
-                
+            set_textbox_text(frm_sprite_bmp, "txt_file", s->file);
+            set_textbox_text(frm_sprite_bmp, "txt_x", i2s(s->file_pos.x));
+            set_textbox_text(frm_sprite_bmp, "txt_y", i2s(s->file_pos.y));
+            set_textbox_text(frm_sprite_bmp, "txt_w", i2s(s->file_size.x));
+            set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
+            
             gui_to_sprite_bmp();
         } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
             sprite_transform_to_gui();
         } else if(mode == EDITOR_MODE_TOOLS) {
-            (
-                (lafi::button*)
-                frm_tools->widgets["but_rename_sprite_name"]
-            )->text = name;
+            set_button_text(frm_tools, "but_rename_sprite_name", name);
         } else if(mode == EDITOR_MODE_HITBOXES) {
             for(size_t s = 0; s < anims.sprites.size(); ++s) {
                 if(anims.sprites[s]->name == name) {
@@ -1206,15 +1149,9 @@ void animation_editor::populate_history() {
  */
 void animation_editor::rename_animation() {
     lafi::button* but_ptr =
-        (
-            (lafi::button*)
-            frm_tools->widgets["but_rename_anim_name"]
-        );
+        (lafi::button*) frm_tools->widgets["but_rename_anim_name"];
     lafi::textbox* txt_ptr =
-        (
-            (lafi::textbox*)
-            frm_tools->widgets["txt_rename_anim"]
-        );
+        (lafi::textbox*) frm_tools->widgets["txt_rename_anim"];
     size_t old_anim_id = INVALID;
     string old_name = but_ptr->text;
     string new_name = txt_ptr->text;
@@ -1242,15 +1179,9 @@ void animation_editor::rename_animation() {
  */
 void animation_editor::rename_sprite() {
     lafi::button* but_ptr =
-        (
-            (lafi::button*)
-            frm_tools->widgets["but_rename_sprite_name"]
-        );
+        (lafi::button*) frm_tools->widgets["but_rename_sprite_name"];
     lafi::textbox* txt_ptr =
-        (
-            (lafi::textbox*)
-            frm_tools->widgets["txt_rename_sprite"]
-        );
+        (lafi::textbox*) frm_tools->widgets["txt_rename_sprite"];
     size_t old_sprite_id = INVALID;
     string old_name = but_ptr->text;
     string new_name = txt_ptr->text;
@@ -1560,12 +1491,16 @@ void animation_editor::update_stats() {
         frm_object->show();
     }
     
-    ((lafi::label*) frm_object->widgets["lbl_n_anims"])->text =
-        "Animations: " + i2s(anims.animations.size());
-    ((lafi::label*) frm_object->widgets["lbl_n_sprites"])->text =
-        "Sprites: " + i2s(anims.sprites.size());
-    ((lafi::label*) frm_object->widgets["lbl_n_body_parts"])->text =
-        "Body parts: " + i2s(anims.body_parts.size());
+    set_label_text(
+        frm_object, "lbl_n_anims", "Animations: " + i2s(anims.animations.size())
+    );
+    set_label_text(
+        frm_object, "lbl_n_sprites", "Sprites: " + i2s(anims.sprites.size())
+    );
+    set_label_text(
+        frm_object, "lbl_n_body_parts",
+        "Body parts: " + i2s(anims.body_parts.size())
+    );
 }
 
 

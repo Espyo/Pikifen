@@ -442,7 +442,7 @@ void animation_editor::load() {
     frm_anim->widgets["chk_missable"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
         if(((lafi::checkbox*) c)->checked) {
-            ((lafi::textbox*) this->frm_anim->widgets["txt_hit_rate"])->text = "50";
+            set_textbox_text(this->frm_anim, "txt_hit_rate", "50");
         }
         gui_to_animation();
     };
@@ -884,8 +884,7 @@ void animation_editor::load() {
                 );
         }
         
-        ((lafi::textbox*) this->frm_sprite_bmp->widgets["txt_file"])->text =
-            f[0];
+        set_textbox_text(this->frm_sprite_bmp, "txt_file", f[0]);
         this->frm_sprite_bmp->widgets["txt_file"]->call_lose_focus_handler();
     };
     frm_sprite_bmp->widgets["but_file"]->description =
@@ -1515,14 +1514,8 @@ void animation_editor::load() {
         "Allows moving with the left mouse button.";
     frm_top->widgets["chk_mousexy"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousewh"]
-        )->uncheck();
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousea"]
-        )->uncheck();
+        set_checkbox_check(this->frm_top, "chk_mousewh", false);
+        set_checkbox_check(this->frm_top, "chk_mousea", false);
         gui_to_top();
     };
     
@@ -1540,14 +1533,8 @@ void animation_editor::load() {
         "Allows resizing with the left mouse button.";
     frm_top->widgets["chk_mousewh"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousexy"]
-        )->uncheck();
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousea"]
-        )->uncheck();
+        set_checkbox_check(this->frm_top, "chk_mousexy", false);
+        set_checkbox_check(this->frm_top, "chk_mousea", false);
         gui_to_top();
     };
     
@@ -1560,14 +1547,8 @@ void animation_editor::load() {
         "Allows rotating with the left mouse button.";
     frm_top->widgets["chk_mousea"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousexy"]
-        )->uncheck();
-        (
-            (lafi::checkbox*)
-            this->frm_top->widgets["chk_mousewh"]
-        )->uncheck();
+        set_checkbox_check(this->frm_top, "chk_mousexy", false);
+        set_checkbox_check(this->frm_top, "chk_mousewh", false);
         gui_to_top();
     };
     
@@ -1691,14 +1672,8 @@ void animation_editor::load() {
     frm_body_parts->widgets["but_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
-            (
-                (lafi::textbox*)
-                this->frm_body_parts->widgets["txt_add"]
-            )->text;
-        (
-            (lafi::textbox*)
-            this->frm_body_parts->widgets["txt_add"]
-        )->text.clear();
+            get_textbox_text(this->frm_body_parts, "txt_add");
+        set_textbox_text(this->frm_body_parts, "txt_add", "");
         if(name.empty()) return;
         for(size_t b = 0; b < anims.body_parts.size(); ++b) {
             if(anims.body_parts[b]->name == name) {

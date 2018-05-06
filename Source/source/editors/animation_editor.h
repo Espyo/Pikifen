@@ -54,6 +54,10 @@ private:
         LMB_ACTION_ROTATE,
     };
     
+    static const float ZOOM_MAX_LEVEL_EDITOR;
+    static const float ZOOM_MIN_LEVEL_EDITOR;
+
+    
     static const string DELETE_ICON;
     static const string DUPLICATE_ICON;
     static const string EXIT_ICON;

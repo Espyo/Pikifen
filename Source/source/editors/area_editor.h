@@ -161,7 +161,9 @@ private:
     static const float         STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     static const float         UNDO_SAVE_LOCK_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
-    
+    static const float         ZOOM_MAX_LEVEL_EDITOR;
+    static const float         ZOOM_MIN_LEVEL_EDITOR;
+
     static const string ICON_DELETE;
     static const string ICON_DELETE_LINK;
     static const string ICON_DELETE_STOP;

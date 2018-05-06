@@ -952,13 +952,10 @@ void area_editor::load() {
     frm_texture->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
-            (
-                (lafi::textbox*) this->frm_texture->widgets["txt_name"]
-            )->text;
+            get_textbox_text(this->frm_texture, "txt_name");
         if(name.empty()) return;
-        ((lafi::button*) this->frm_sector->widgets["but_texture"])->text =
-            name;
-        ((lafi::textbox*) this->frm_texture->widgets["txt_name"])->text.clear();
+        set_button_text(this->frm_sector, "but_texture", name);
+        set_textbox_text(this->frm_texture, "txt_name", "");
         update_texture_suggestions(name);
         gui_to_sector();
         state = EDITOR_STATE_LAYOUT;
@@ -1130,8 +1127,9 @@ void area_editor::load() {
         
     ((lafi::scrollbar*) frm_asa->widgets["bar_brightness"])->change_handler =
     [this] (lafi::widget * w) {
-        ((lafi::textbox*) frm_asa->widgets["txt_brightness"])->text =
-            i2s(((lafi::scrollbar*) w)->low_value);
+        set_textbox_text(
+            frm_asa, "txt_brightness", i2s(((lafi::scrollbar*) w)->low_value)
+        );
         gui_to_asa();
     };
     frm_asa->widgets["bar_brightness"]->description =

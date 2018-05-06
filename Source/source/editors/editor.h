@@ -36,9 +36,7 @@ protected:
     static const float  DOUBLE_CLICK_TIMEOUT;
     static const string EDITOR_ICONS_FOLDER_NAME;
     static const float  MOUSE_DRAG_CONFIRM_RANGE;
-    static const float  ZOOM_MAX_LEVEL_EDITOR;
-    static const float  ZOOM_MIN_LEVEL_EDITOR;
-
+    
     struct transformation_controller {
     private:
         static const float HANDLE_RADIUS;
@@ -133,6 +131,8 @@ protected:
     //Secondary/sub mode.
     unsigned char sec_mode;
     int           status_bar_y;
+    float         zoom_max_level;
+    float         zoom_min_level;
     
     void close_changes_warning();
     void create_changes_warning_frame();
@@ -174,6 +174,44 @@ protected:
     virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_up(const ALLEGRO_EVENT &ev);
+    
+    //LAFI helper functions.
+    float get_angle_picker_angle(
+        lafi::widget* parent, const string &picker_name
+    );
+    string get_button_text(
+        lafi::widget* parent, const string &button_name
+    );
+    bool get_checkbox_check(
+        lafi::widget* parent, const string &checkbox_name
+    );
+    string get_label_text(
+        lafi::widget* parent, const string &label_name
+    );
+    string get_textbox_text(
+        lafi::widget* parent, const string &textbox_name
+    );
+    bool get_radio_selection(
+        lafi::widget* parent, const string &radio_name
+    );
+    void set_angle_picker_angle(
+        lafi::widget* parent, const string &picker_name, const float angle
+    );
+    void set_button_text(
+        lafi::widget* parent, const string &button_name, const string &text
+    );
+    void set_checkbox_check(
+        lafi::widget* parent, const string &checkbox_name, const bool check
+    );
+    void set_label_text(
+        lafi::widget* parent, const string &label_name, const string &text
+    );
+    void set_textbox_text(
+        lafi::widget* parent, const string &textbox_name, const string &text
+    );
+    void set_radio_selection(
+        lafi::widget* parent, const string &radio_name, const bool selection
+    );
     
 public:
 

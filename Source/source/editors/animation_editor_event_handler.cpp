@@ -138,14 +138,18 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         delete[] selection_pixels;
         
-        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_x"])->text =
-            i2s(selection_tl.x);
-        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_y"])->text =
-            i2s(selection_tl.y);
-        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_w"])->text =
-            i2s(selection_br.x - selection_tl.x + 1);
-        ((lafi::textbox*) frm_sprite_bmp->widgets["txt_h"])->text =
-            i2s(selection_br.y - selection_tl.y + 1);
+        set_textbox_text(
+            frm_sprite_bmp, "txt_x", i2s(selection_tl.x)
+        );
+        set_textbox_text(
+            frm_sprite_bmp, "txt_y", i2s(selection_tl.y)
+        );
+        set_textbox_text(
+            frm_sprite_bmp, "txt_w", i2s(selection_br.x - selection_tl.x + 1)
+        );
+        set_textbox_text(
+            frm_sprite_bmp, "txt_h", i2s(selection_br.y - selection_tl.y + 1)
+        );
         gui_to_sprite_bmp();
         
     }
@@ -245,15 +249,15 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         widget_under_mouse =
             gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
     }
-    (
-        (lafi::label*) gui->widgets["lbl_status_bar"]
-    )->text =
+    set_label_text(
+        gui, "lbl_status_bar",
         (
             empty_status_bar ? "" :
             widget_under_mouse ?
             widget_under_mouse->description :
             "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")"
-        );
+        )
+    );
 }
 
 

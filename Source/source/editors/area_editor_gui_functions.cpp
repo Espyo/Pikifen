@@ -37,28 +37,17 @@ void area_editor::asa_to_gui() {
     
     sector* s_ptr = *selected_sectors.begin();
     
-    ((lafi::textbox*) frm_asa->widgets["txt_x"])->text =
-        f2s(s_ptr->texture_info.translation.x);
-    ((lafi::textbox*) frm_asa->widgets["txt_y"])->text =
-        f2s(s_ptr->texture_info.translation.y);
-    ((lafi::textbox*) frm_asa->widgets["txt_sx"])->text =
-        f2s(s_ptr->texture_info.scale.x);
-    ((lafi::textbox*) frm_asa->widgets["txt_sy"])->text =
-        f2s(s_ptr->texture_info.scale.y);
-    ((lafi::angle_picker*) frm_asa->widgets["ang_a"])->set_angle_rads(
-        s_ptr->texture_info.rot
-    );
-    ((lafi::textbox*) frm_asa->widgets["txt_tint"])->text =
-        c2s(s_ptr->texture_info.tint);
-        
-    ((lafi::textbox*) frm_asa->widgets["txt_brightness"])->text =
-        i2s(s_ptr->brightness);
+    set_textbox_text(frm_asa, "txt_x", f2s(s_ptr->texture_info.translation.x));
+    set_textbox_text(frm_asa, "txt_y", f2s(s_ptr->texture_info.translation.y));
+    set_textbox_text(frm_asa, "txt_sx", f2s(s_ptr->texture_info.scale.x));
+    set_textbox_text(frm_asa, "txt_sy", f2s(s_ptr->texture_info.scale.y));
+    set_angle_picker_angle(frm_asa, "ang_a", s_ptr->texture_info.rot);
+    set_textbox_text(frm_asa, "txt_tint", c2s(s_ptr->texture_info.tint));
+    set_textbox_text(frm_asa, "txt_brightness", i2s(s_ptr->brightness));
     ((lafi::scrollbar*) frm_asa->widgets["bar_brightness"])->set_value(
         s_ptr->brightness, false
     );
-    ((lafi::checkbox*) frm_asa->widgets["chk_shadow"])->set(
-        s_ptr->always_cast_shadow
-    );
+    set_checkbox_check(frm_asa, "chk_shadow", s_ptr->always_cast_shadow);
 }
 
 
@@ -83,8 +72,7 @@ void area_editor::asb_to_gui() {
     ) {
         frm_asb->widgets["lbl_tag"]->show();
         frm_asb->widgets["txt_tag"]->show();
-        ((lafi::label*) frm_asb->widgets["lbl_tag"])->text =
-            "Bridge height:";
+        set_label_text(frm_asb, "lbl_tag", "Bridge height:");
         ((lafi::label*) frm_asb->widgets["txt_tag"])->description =
             "Height to set the sector to, when the bridge opens.";
     } else {
@@ -94,11 +82,12 @@ void area_editor::asb_to_gui() {
         frm_asb->widgets["txt_tag"]->hide();
     }
     
-    ((lafi::button*) frm_asb->widgets["but_sector_type"])->text =
-        sector_types.get_name(s_ptr->type);
-        
+    set_button_text(
+        frm_asb, "but_sector_type", sector_types.get_name(s_ptr->type)
+    );
+    
     if(s_ptr->hazards_str.empty()) {
-        ((lafi::label*) frm_asb->widgets["lbl_hazard"])->text = "(No hazards)";
+        set_label_text(frm_asb, "lbl_hazard", "(No hazards)");
         disable_widget(frm_asb->widgets["but_h_del"]);
         disable_widget(frm_asb->widgets["but_h_prev"]);
         disable_widget(frm_asb->widgets["but_h_next"]);
@@ -108,23 +97,20 @@ void area_editor::asb_to_gui() {
         if(cur_hazard_nr >= list.size()) {
             cur_hazard_nr = list.size() - 1;
         }
-        ((lafi::label*) frm_asb->widgets["lbl_hazard"])->text =
+        set_label_text(
+            frm_asb, "lbl_hazard",
             i2s(cur_hazard_nr + 1) + "/" + i2s(list.size()) + ": " +
-            list[cur_hazard_nr];
-            
+            list[cur_hazard_nr]
+        );
+        
         enable_widget(frm_asb->widgets["but_h_del"]);
         enable_widget(frm_asb->widgets["but_h_prev"]);
         enable_widget(frm_asb->widgets["but_h_next"]);
     }
     
-    ((lafi::checkbox*) frm_asb->widgets["chk_h_air"])->set(
-        !s_ptr->hazard_floor
-    );
-    ((lafi::checkbox*) frm_asb->widgets["chk_pit"])->set(
-        s_ptr->is_bottomless_pit
-    );
-    
-    ((lafi::textbox*) frm_asb->widgets["txt_tag"])->text = s_ptr->tag;
+    set_checkbox_check(frm_asb, "chk_h_air", !s_ptr->hazard_floor);
+    set_checkbox_check(frm_asb, "chk_pit", s_ptr->is_bottomless_pit);
+    set_textbox_text(frm_asb, "txt_tag", s_ptr->tag);
     
 }
 
@@ -183,11 +169,11 @@ void area_editor::change_to_right_frame() {
  * GUI functions for clearing the data for the current area.
  */
 void area_editor::clear_current_area_gui() {
-    ((lafi::button*) frm_main->widgets["but_area"])->text = cur_area_name;
+    set_button_text(frm_main, "but_area", cur_area_name);
     frm_area->show();
     enable_widget(frm_bottom->widgets["but_save"]);
     frm_paths->widgets["lbl_path_dist"]->hide();
-    ((lafi::checkbox*) frm_paths->widgets["chk_show_path"])->uncheck();
+    set_checkbox_check(frm_paths, "chk_show_path", false);
 }
 
 
@@ -222,30 +208,22 @@ void area_editor::details_to_gui() {
     if(selected_shadow) {
     
         frm_shadow->show();
-        ((lafi::textbox*) frm_shadow->widgets["txt_x"])->text =
-            f2s(selected_shadow->center.x);
-        ((lafi::textbox*) frm_shadow->widgets["txt_y"])->text =
-            f2s(selected_shadow->center.y);
-        ((lafi::textbox*) frm_shadow->widgets["txt_w"])->text =
-            f2s(selected_shadow->size.x);
-        ((lafi::textbox*) frm_shadow->widgets["txt_h"])->text =
-            f2s(selected_shadow->size.y);
-        ((lafi::checkbox*) frm_shadow->widgets["chk_ratio"])->set(
+        set_textbox_text(frm_shadow, "txt_x", f2s(selected_shadow->center.x));
+        set_textbox_text(frm_shadow, "txt_y", f2s(selected_shadow->center.y));
+        set_textbox_text(frm_shadow, "txt_w", f2s(selected_shadow->size.x));
+        set_textbox_text(frm_shadow, "txt_h", f2s(selected_shadow->size.y));
+        set_checkbox_check(
+            frm_shadow, "chk_ratio",
             selected_shadow_transformation.keep_aspect_ratio
         );
-        ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->set_angle_rads(
-            selected_shadow->angle
-        );
+        set_angle_picker_angle(frm_shadow, "ang_an", selected_shadow->angle);
         ((lafi::scrollbar*) frm_shadow->widgets["bar_al"])->set_value(
             selected_shadow->alpha, false
         );
-        ((lafi::textbox*) frm_shadow->widgets["txt_file"])->text =
-            selected_shadow->file_name;
-        ((lafi::textbox*) frm_shadow->widgets["txt_sx"])->text =
-            f2s(selected_shadow->sway.x);
-        ((lafi::textbox*) frm_shadow->widgets["txt_sy"])->text =
-            f2s(selected_shadow->sway.y);
-            
+        set_textbox_text(frm_shadow, "txt_file", selected_shadow->file_name);
+        set_textbox_text(frm_shadow, "txt_sx", f2s(selected_shadow->sway.x));
+        set_textbox_text(frm_shadow, "txt_sy", f2s(selected_shadow->sway.y));
+        
     } else {
         frm_shadow->hide();
     }
@@ -262,32 +240,32 @@ void area_editor::gui_to_asa() {
     h.register_point(
         &s_ptr->texture_info.translation,
         point(
-            s2f(((lafi::textbox*) frm_asa->widgets["txt_x"])->text),
-            s2f(((lafi::textbox*) frm_asa->widgets["txt_y"])->text)
+            s2f(get_textbox_text(frm_asa, "txt_x")),
+            s2f(get_textbox_text(frm_asa, "txt_y"))
         )
     );
     h.register_point(
         &s_ptr->texture_info.scale,
         point(
-            s2f(((lafi::textbox*) frm_asa->widgets["txt_sx"])->text),
-            s2f(((lafi::textbox*) frm_asa->widgets["txt_sy"])->text)
+            s2f(get_textbox_text(frm_asa, "txt_sx")),
+            s2f(get_textbox_text(frm_asa, "txt_sy"))
         )
     );
     h.register_float(
         &s_ptr->texture_info.rot,
-        ((lafi::angle_picker*) frm_asa->widgets["ang_a"])->get_angle_rads()
+        get_angle_picker_angle(frm_asa, "ang_a")
     );
     h.register_color(
         &s_ptr->texture_info.tint,
-        s2c(((lafi::textbox*) frm_asa->widgets["txt_tint"])->text)
+        s2c(get_textbox_text(frm_asa, "txt_tint"))
     );
     h.register_uchar(
         &s_ptr->brightness,
-        s2i(((lafi::textbox*) frm_asa->widgets["txt_brightness"])->text)
+        s2i(get_textbox_text(frm_asa, "txt_brightness"))
     );
     h.register_bool(
         &s_ptr->always_cast_shadow,
-        ((lafi::checkbox*) frm_asa->widgets["chk_shadow"])->checked
+        get_checkbox_check(frm_asa, "chk_shadow")
     );
     
     if(!h.all_equal()) {
@@ -310,15 +288,15 @@ void area_editor::gui_to_asb() {
     
     h.register_bool(
         &s_ptr->hazard_floor,
-        !((lafi::checkbox*) frm_asb->widgets["chk_h_air"])->checked
+        !get_checkbox_check(frm_asb, "chk_h_air")
     );
     h.register_bool(
         &s_ptr->is_bottomless_pit,
-        ((lafi::checkbox*) frm_asb->widgets["chk_pit"])->checked
+        get_checkbox_check(frm_asb, "chk_pit")
     );
     h.register_string(
         &s_ptr->tag,
-        ((lafi::textbox*) frm_asb->widgets["txt_tag"])->text
+        get_textbox_text(frm_asb, "txt_tag")
     );
     
     if(!h.all_equal()) {
@@ -343,19 +321,19 @@ void area_editor::gui_to_details() {
     h.register_point(
         &selected_shadow->center,
         point(
-            s2f(((lafi::textbox*) frm_shadow->widgets["txt_x"])->text),
-            s2f(((lafi::textbox*) frm_shadow->widgets["txt_y"])->text)
+            s2f(get_textbox_text(frm_shadow, "txt_x")),
+            s2f(get_textbox_text(frm_shadow, "txt_y"))
         )
     );
     h.register_bool(
         &selected_shadow_transformation.keep_aspect_ratio,
-        ((lafi::checkbox*) frm_shadow->widgets["chk_ratio"])->checked
+        get_checkbox_check(frm_shadow, "chk_ratio")
     );
     point new_size(
-        s2f(((lafi::textbox*) frm_shadow->widgets["txt_w"])->text),
-        s2f(((lafi::textbox*) frm_shadow->widgets["txt_h"])->text)
+        s2f(get_textbox_text(frm_shadow, "txt_w")),
+        s2f(get_textbox_text(frm_shadow, "txt_h"))
     );
-    if(((lafi::checkbox*) frm_shadow->widgets["chk_ratio"])->checked) {
+    if(get_checkbox_check(frm_shadow, "chk_ratio")) {
         if(
             new_size.x == selected_shadow->size.x &&
             new_size.y != selected_shadow->size.y
@@ -384,7 +362,7 @@ void area_editor::gui_to_details() {
     );
     h.register_float(
         &selected_shadow->angle,
-        ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->get_angle_rads()
+        get_angle_picker_angle(frm_shadow, "ang_an")
     );
     h.register_uchar(
         &selected_shadow->alpha,
@@ -393,13 +371,13 @@ void area_editor::gui_to_details() {
     h.register_point(
         &selected_shadow->sway,
         point(
-            s2f(((lafi::textbox*) frm_shadow->widgets["txt_sx"])->text),
-            s2f(((lafi::textbox*) frm_shadow->widgets["txt_sy"])->text)
+            s2f(get_textbox_text(frm_shadow, "txt_sx")),
+            s2f(get_textbox_text(frm_shadow, "txt_sy"))
         )
     );
     
     string new_file_name =
-        ((lafi::textbox*) frm_shadow->widgets["txt_file"])->text;
+        get_textbox_text(frm_shadow, "txt_file");
         
     if(!h.all_equal() || new_file_name != selected_shadow->file_name) {
         register_change("area details change");
@@ -432,43 +410,43 @@ void area_editor::gui_to_info() {
     
     h.register_string(
         &cur_area_data.name,
-        ((lafi::textbox*) frm_info->widgets["txt_name"])->text
+        get_textbox_text(frm_info, "txt_name")
     );
     h.register_string(
         &cur_area_data.subtitle,
-        ((lafi::textbox*) frm_info->widgets["txt_subtitle"])->text
+        get_textbox_text(frm_info, "txt_subtitle")
     );
     h.register_string(
         &cur_area_data.weather_name,
-        ((lafi::button*) frm_info->widgets["but_weather"])->text
+        get_button_text(frm_info, "but_weather")
     );
     h.register_string(
         &cur_area_data.bg_bmp_file_name,
-        ((lafi::textbox*) frm_info->widgets["txt_bg_bitmap"])->text
+        get_textbox_text(frm_info, "txt_bg_bitmap")
     );
     h.register_color(
         &cur_area_data.bg_color,
-        s2c(((lafi::textbox*) frm_info->widgets["txt_bg_color"])->text)
+        s2c(get_textbox_text(frm_info, "txt_bg_color"))
     );
     h.register_float(
         &cur_area_data.bg_dist,
-        s2f(((lafi::textbox*) frm_info->widgets["txt_bg_dist"])->text)
+        s2f(get_textbox_text(frm_info, "txt_bg_dist"))
     );
     h.register_float(
         &cur_area_data.bg_bmp_zoom,
-        s2f(((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text)
+        s2f(get_textbox_text(frm_info, "txt_bg_zoom"))
     );
     h.register_string(
         &cur_area_data.creator,
-        ((lafi::textbox*) frm_info->widgets["txt_creator"])->text
+        get_textbox_text(frm_info, "txt_creator")
     );
     h.register_string(
         &cur_area_data.version,
-        ((lafi::textbox*) frm_info->widgets["txt_version"])->text
+        get_textbox_text(frm_info, "txt_version")
     );
     h.register_string(
         &cur_area_data.notes,
-        ((lafi::textbox*) frm_info->widgets["txt_notes"])->text
+        get_textbox_text(frm_info, "txt_notes")
     );
     
     if(!h.all_equal()) {
@@ -490,13 +468,11 @@ void area_editor::gui_to_mob() {
     
     h.register_float(
         &m_ptr->angle,
-        (
-            (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
-        )->get_angle_rads()
+        get_angle_picker_angle(frm_mob, "ang_angle")
     );
     h.register_string(
         &m_ptr->vars,
-        ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text
+        get_textbox_text(frm_mob, "txt_vars")
     );
     
     if(!h.all_equal()) {
@@ -514,45 +490,29 @@ void area_editor::gui_to_mob() {
  */
 void area_editor::gui_to_options() {
     area_editor_show_edge_length =
-        ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->checked;
+        get_checkbox_check(frm_options, "chk_edge_length");
         
-    if(
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_textures"]
-        )->selected
-    ) {
+    if(get_radio_selection(frm_options, "rad_view_textures")) {
         area_editor_view_mode = VIEW_MODE_TEXTURES;
         
-    } else if(
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_wireframe"]
-        )->selected
-    ) {
+    } else if(get_radio_selection(frm_options, "rad_view_wireframe")) {
         area_editor_view_mode = VIEW_MODE_WIREFRAME;
         
-    } else if(
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_heightmap"]
-        )->selected
-    ) {
+    } else if(get_radio_selection(frm_options, "rad_view_heightmap")) {
         area_editor_view_mode = VIEW_MODE_HEIGHTMAP;
         
-    } else if(
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_brightness"]
-        )->selected
-    ) {
+    } else if(get_radio_selection(frm_options, "rad_view_brightness")) {
         area_editor_view_mode = VIEW_MODE_BRIGHTNESS;
         
     }
     
     area_editor_backup_interval =
-        s2i(((lafi::textbox*) frm_options->widgets["txt_backup"])->text);
+        s2i(get_textbox_text(frm_options, "txt_backup"));
     area_editor_undo_limit =
-        s2i(((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text);
+        s2i(get_textbox_text(frm_options, "txt_undo_limit"));
         
     area_editor_mmb_pan =
-        ((lafi::checkbox*) frm_options->widgets["chk_mmb_pan"])->checked;
+        get_checkbox_check(frm_options, "chk_mmb_pan");
         
     update_undo_history();
     
@@ -570,16 +530,16 @@ void area_editor::gui_to_sector() {
     
     h.register_float(
         &s_ptr->z,
-        s2f(((lafi::textbox*) frm_sector->widgets["txt_z"])->text)
+        s2f(get_textbox_text(frm_sector, "txt_z"))
     );
     h.register_bool(
         &s_ptr->fade,
-        ((lafi::radio_button*) frm_sector->widgets["rad_fade"])->selected
+        get_radio_selection(frm_sector, "rad_fade")
     );
     string new_texture = s_ptr->texture_info.file_name;
     h.register_string(
         &new_texture,
-        ((lafi::button*) frm_sector->widgets["but_texture"])->text
+        get_button_text(frm_sector, "but_texture")
     );
     
     if(!h.all_equal()) {
@@ -601,17 +561,17 @@ void area_editor::gui_to_sector() {
 void area_editor::gui_to_tools() {
     reference_transformation.set_center(
         point(
-            s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text),
-            s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text)
+            s2f(get_textbox_text(frm_tools, "txt_x")),
+            s2f(get_textbox_text(frm_tools, "txt_y"))
         )
     );
     
     reference_transformation.keep_aspect_ratio =
-        ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->checked;
+        get_checkbox_check(frm_tools, "chk_ratio");
         
     point new_size(
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_w"])->text),
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_h"])->text)
+        s2f(get_textbox_text(frm_tools, "txt_w")),
+        s2f(get_textbox_text(frm_tools, "txt_h"))
     );
     
     reference_alpha =
@@ -675,27 +635,17 @@ void area_editor::hide_all_frames() {
  * Loads the current area metadata onto the GUI.
  */
 void area_editor::info_to_gui() {
-    ((lafi::textbox*) frm_info->widgets["txt_name"])->text =
-        cur_area_data.name;
-    ((lafi::textbox*) frm_info->widgets["txt_subtitle"])->text =
-        cur_area_data.subtitle;
-    ((lafi::button*) frm_info->widgets["but_weather"])->text =
-        cur_area_data.weather_name;
-    ((lafi::textbox*) frm_info->widgets["txt_bg_bitmap"])->text =
-        cur_area_data.bg_bmp_file_name;
-    ((lafi::textbox*) frm_info->widgets["txt_bg_color"])->text =
-        c2s(cur_area_data.bg_color);
-    ((lafi::textbox*) frm_info->widgets["txt_bg_dist"])->text =
-        f2s(cur_area_data.bg_dist);
-    ((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text =
-        f2s(cur_area_data.bg_bmp_zoom);
-    ((lafi::textbox*) frm_info->widgets["txt_creator"])->text =
-        cur_area_data.creator;
-    ((lafi::textbox*) frm_info->widgets["txt_version"])->text =
-        cur_area_data.version;
-    ((lafi::textbox*) frm_info->widgets["txt_notes"])->text =
-        cur_area_data.notes;
-        
+    set_textbox_text(frm_info, "txt_name", cur_area_data.name);
+    set_textbox_text(frm_info, "txt_subtitle", cur_area_data.subtitle);
+    set_button_text(frm_info, "but_weather", cur_area_data.weather_name);
+    set_textbox_text(frm_info, "txt_bg_bitmap", cur_area_data.bg_bmp_file_name);
+    set_textbox_text(frm_info, "txt_bg_color", c2s(cur_area_data.bg_color));
+    set_textbox_text(frm_info, "txt_bg_dist", f2s(cur_area_data.bg_dist));
+    set_textbox_text(frm_info, "txt_bg_zoom", f2s(cur_area_data.bg_bmp_zoom));
+    set_textbox_text(frm_info, "txt_creator", cur_area_data.creator);
+    set_textbox_text(frm_info, "txt_version", cur_area_data.version);
+    set_textbox_text(frm_info, "txt_notes", cur_area_data.notes);
+    
 }
 
 
@@ -711,17 +661,18 @@ void area_editor::mob_to_gui() {
         
         mob_gen* m_ptr = *selected_mobs.begin();
         
-        (
-            (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
-        )->set_angle_rads(m_ptr->angle);
-        ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text = m_ptr->vars;
+        set_angle_picker_angle(frm_mob, "ang_angle", m_ptr->angle);
+        set_textbox_text(frm_mob, "txt_vars", m_ptr->vars);
         
-        ((lafi::label*) frm_mob->widgets["lbl_cat"])->text =
+        set_label_text(
+            frm_mob, "lbl_cat",
             "Category: " +
-            (m_ptr->category ? m_ptr->category->plural_name : "");
-        ((lafi::button*) frm_mob->widgets["but_type"])->text =
-            m_ptr->type ? m_ptr->type->name : "";
-            
+            (m_ptr->category ? m_ptr->category->plural_name : "")
+        );
+        set_button_text(
+            frm_mob, "but_type", m_ptr->type ? m_ptr->type->name : ""
+        );
+        
     } else if(selected_mobs.size() > 1 && !selection_homogenized) {
         frm_mob_multi->show();
         
@@ -803,38 +754,31 @@ void area_editor::open_picker(const unsigned char type) {
  * Loads the options data onto the GUI.
  */
 void area_editor::options_to_gui() {
-    ((lafi::label*) frm_options->widgets["lbl_grid"])->text =
-        "Grid: " + i2s(area_editor_grid_interval);
-    ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->set(
-        area_editor_show_edge_length
+    set_label_text(
+        frm_options, "lbl_grid", "Grid: " + i2s(area_editor_grid_interval)
+    );
+    set_checkbox_check(
+        frm_options, "chk_edge_length", area_editor_show_edge_length
     );
     
     if(area_editor_view_mode == VIEW_MODE_TEXTURES) {
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_textures"]
-        )->select();
+        set_radio_selection(frm_options, "rad_view_textures", true);
         
     } else if(area_editor_view_mode == VIEW_MODE_WIREFRAME) {
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_wireframe"]
-        )->select();
+        set_radio_selection(frm_options, "rad_view_wireframe", true);
     } else if(area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_heightmap"]
-        )->select();
+        set_radio_selection(frm_options, "rad_view_heightmap", true);
     } else if(area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
-        (
-            (lafi::radio_button*) frm_options->widgets["rad_view_brightness"]
-        )->select();
+        set_radio_selection(frm_options, "rad_view_brightness", true);
     }
     
-    ((lafi::textbox*) frm_options->widgets["txt_backup"])->text =
-        i2s(area_editor_backup_interval);
-    ((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text =
-        i2s(area_editor_undo_limit);
-    ((lafi::checkbox*) frm_options->widgets["chk_mmb_pan"])->set(
-        area_editor_mmb_pan
+    set_textbox_text(
+        frm_options, "txt_backup", i2s(area_editor_backup_interval)
     );
+    set_textbox_text(
+        frm_options, "txt_undo_limit", i2s(area_editor_undo_limit)
+    );
+    set_checkbox_check(frm_options, "chk_mmb_pan", area_editor_mmb_pan);
 }
 
 
@@ -843,9 +787,9 @@ void area_editor::options_to_gui() {
  */
 void area_editor::path_to_gui() {
     if(path_drawing_normals) {
-        ((lafi::radio_button*) frm_paths->widgets["rad_normal"])->select();
+        set_radio_selection(frm_paths, "rad_normal", true);
     } else {
-        ((lafi::radio_button*) frm_paths->widgets["rad_one_way"])->select();
+        set_radio_selection(frm_paths, "rad_one_way", true);
     }
 }
 
@@ -874,8 +818,7 @@ void area_editor::populate_texture_suggestions() {
             new lafi::label(name);
             
         auto lambda = [name, this] (lafi::widget*, int, int) {
-            ((lafi::button*) this->frm_sector->widgets["but_texture"])->text =
-                name;
+            set_button_text(this->frm_sector, "but_texture", name);
             update_texture_suggestions(name);
             gui_to_sector();
             state = EDITOR_STATE_LAYOUT;
@@ -963,17 +906,18 @@ void area_editor::review_to_gui() {
     lbl_prob_title_2->text.clear();
     lbl_prob_desc->text.clear();
     
-    ((lafi::checkbox*) frm_review->widgets["chk_see_textures"])->set(
+    set_checkbox_check(
+        frm_review, "chk_see_textures",
         sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW
     );
-    ((lafi::checkbox*) frm_review->widgets["chk_shadows"])->set(
-        show_shadows
+    set_checkbox_check(
+        frm_review, "chk_shadows", show_shadows
     );
-    ((lafi::checkbox*) frm_review->widgets["chk_cross_section"])->set(
-        show_cross_section
+    set_checkbox_check(
+        frm_review, "chk_cross_section", show_cross_section
     );
-    ((lafi::checkbox*) frm_review->widgets["chk_cross_section_grid"])->set(
-        show_cross_section_grid
+    set_checkbox_check(
+        frm_review, "chk_cross_section_grid", show_cross_section_grid
     );
     
     if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
@@ -1193,7 +1137,7 @@ void area_editor::review_to_gui() {
  */
 void area_editor::sector_to_gui() {
     lafi::button* but_sel_filter =
-        ((lafi::button*) frm_layout->widgets["but_sel_filter"]);
+        (lafi::button*) frm_layout->widgets["but_sel_filter"];
     if(selection_filter == SELECTION_FILTER_SECTORS) {
         but_sel_filter->icon = icons.get(ICON_SELECT_SECTORS);
         but_sel_filter->description =
@@ -1216,20 +1160,18 @@ void area_editor::sector_to_gui() {
         
         sector* s_ptr = *selected_sectors.begin();
         
-        ((lafi::textbox*) frm_sector->widgets["txt_z"])->text =
-            f2s(s_ptr->z);
-            
+        set_textbox_text(frm_sector, "txt_z", f2s(s_ptr->z));
+        
         if(s_ptr->fade) {
-            ((lafi::radio_button*) frm_sector->widgets["rad_fade"])->select();
-            ((lafi::button*) frm_sector->widgets["but_texture"])->text = "";
+            set_radio_selection(frm_sector, "rad_fade", true);
+            set_button_text(frm_sector, "but_texture", "");
             disable_widget(frm_sector->widgets["but_texture"]);
             
         } else {
-            (
-                (lafi::radio_button*) frm_sector->widgets["rad_texture"]
-            )->select();
-            ((lafi::button*) frm_sector->widgets["but_texture"])->text =
-                s_ptr->texture_info.file_name;
+            set_radio_selection(frm_sector, "rad_texture", true);
+            set_button_text(
+                frm_sector, "but_texture", s_ptr->texture_info.file_name
+            );
             enable_widget(frm_sector->widgets["but_texture"]);
             
         }
@@ -1258,11 +1200,11 @@ void area_editor::select_different_hazard(const bool next) {
  */
 void area_editor::stt_to_gui() {
     if(stt_mode == 0) {
-        ((lafi::radio_button*) frm_stt->widgets["rad_offset"])->select();
+        set_radio_selection(frm_stt, "rad_offset", true);
     } else if(stt_mode == 1) {
-        ((lafi::radio_button*) frm_stt->widgets["rad_scale"])->select();
+        set_radio_selection(frm_stt, "rad_scale", true);
     } else {
-        ((lafi::radio_button*) frm_stt->widgets["rad_angle"])->select();
+        set_radio_selection(frm_stt, "rad_angle", true);
     }
 }
 
@@ -1271,16 +1213,20 @@ void area_editor::stt_to_gui() {
  * Loads the current tools data onto the GUI.
  */
 void area_editor::tools_to_gui() {
-    ((lafi::textbox*) frm_tools->widgets["txt_x"])->text =
-        f2s(reference_transformation.get_center().x);
-    ((lafi::textbox*) frm_tools->widgets["txt_y"])->text =
-        f2s(reference_transformation.get_center().y);
-    ((lafi::textbox*) frm_tools->widgets["txt_w"])->text =
-        f2s(reference_transformation.get_size().x);
-    ((lafi::textbox*) frm_tools->widgets["txt_h"])->text =
-        f2s(reference_transformation.get_size().y);
-    ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->set(
-        reference_transformation.keep_aspect_ratio
+    set_textbox_text(
+        frm_tools, "txt_x", f2s(reference_transformation.get_center().x)
+    );
+    set_textbox_text(
+        frm_tools, "txt_y", f2s(reference_transformation.get_center().y)
+    );
+    set_textbox_text(
+        frm_tools, "txt_w", f2s(reference_transformation.get_size().x)
+    );
+    set_textbox_text(
+        frm_tools, "txt_h", f2s(reference_transformation.get_size().y)
+    );
+    set_checkbox_check(
+        frm_tools, "chk_ratio", reference_transformation.keep_aspect_ratio
     );
     ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
         reference_alpha, false
@@ -1299,5 +1245,5 @@ void area_editor::update_main_frame() {
         picked_area_yet = true;
         frm_area->show();
     }
-    ((lafi::button*) frm_main->widgets["but_area"])->text = cur_area_name;
+    set_button_text(frm_main, "but_area", cur_area_name);
 }

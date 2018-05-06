@@ -62,6 +62,10 @@ const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
 const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
 const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
+//Maximum zoom level possible in the editor.
+const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+//Minimum zoom level possible in the editor.
+const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 const string area_editor::ICON_DELETE = "Delete.png";
 const string area_editor::ICON_DELETE_LINK = "Delete_link.png";
@@ -213,6 +217,9 @@ area_editor::area_editor() :
     }
     
     selected_shadow_transformation.allow_rotation = true;
+    
+    zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
+    zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
 }
 
 
@@ -276,8 +283,7 @@ void area_editor::calculate_preview_path() {
             ).to_float();
     }
     
-    ((lafi::label*) gui->widgets["frm_paths"]->widgets["lbl_path_dist"])->text =
-        "  Total dist.: " + f2s(d);
+    set_label_text(frm_paths, "lbl_path_dist", "  Total dist.: " + f2s(d));
 }
 
 
@@ -3537,9 +3543,11 @@ void area_editor::update_reference() {
         load_bmp(file_path, NULL, false, true, true, true);
         
     if(reference_bitmap == bmp_error) {
-        ((lafi::label*) frm_tools->widgets["lbl_file"])->text =
+        set_label_text(
+            frm_tools, "lbl_file",
             "To use a reference, place it in \"" +
-            file_path + "\" and reload.";
+            file_path + "\" and reload."
+        );
         disable_widget(frm_tools->widgets["txt_x"]);
         disable_widget(frm_tools->widgets["txt_y"]);
         disable_widget(frm_tools->widgets["txt_w"]);
@@ -3547,8 +3555,7 @@ void area_editor::update_reference() {
         disable_widget(frm_tools->widgets["chk_ratio"]);
         disable_widget(frm_tools->widgets["bar_alpha"]);
     } else {
-        ((lafi::label*) frm_tools->widgets["lbl_file"])->text =
-            "Reference.png loaded.";
+        set_label_text(frm_tools, "lbl_file", "Reference.png loaded.");
         enable_widget(frm_tools->widgets["txt_x"]);
         enable_widget(frm_tools->widgets["txt_y"]);
         enable_widget(frm_tools->widgets["txt_w"]);
