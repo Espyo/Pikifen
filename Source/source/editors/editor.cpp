@@ -27,6 +27,10 @@ const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 //If the mouse is dragged outside of this range, that's a real drag.
 const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
+//How long to override the status bar text for, for important messages.
+const float editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
+//How long to override the status bar text for, for unimportant messages.
+const float editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
 
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
@@ -44,6 +48,7 @@ editor::editor() :
     is_gui_focused(false),
     is_shift_pressed(false),
     last_mouse_click(INVALID),
+    loaded_content_yet(false),
     made_changes(false),
     mouse_drag_confirmed(false),
     mode(0),
@@ -57,6 +62,10 @@ editor::editor() :
         al_map_rgb(0, 0, 0),
         al_map_rgb(96, 96, 96)
     );
+    
+    status_override_timer =
+    timer(STATUS_OVERRIDE_IMPORTANT_DURATION, [this] () {update_status_bar();});
+    
 }
 
 
@@ -211,7 +220,26 @@ void editor::do_logic() {
         if(double_click_time < 0) double_click_time = 0;
     }
     
+    status_override_timer.tick(delta_t);
     fade_mgr.tick(delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Emits a message onto the status bar, and keeps it there for some seconds.
+ * text:      Message text.
+ * important: If true, the message stays for a few more seconds than normal.
+ */
+void editor::emit_status_bar_message(
+    const string &text, const bool important
+) {
+    status_override_text = text;
+    status_override_timer.start(
+        important ?
+        STATUS_OVERRIDE_IMPORTANT_DURATION :
+        STATUS_OVERRIDE_UNIMPORTANT_DURATION
+    );
+    lbl_status_bar->text = status_override_text;
 }
 
 
@@ -637,6 +665,35 @@ void editor::show_changes_warning() {
 void editor::update_gui_coordinates() {
     gui_x = scr_w * 0.675;
     status_bar_y = scr_h - 16;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the status bar.
+ */
+void editor::update_status_bar(const bool omit_coordinates) {
+    string new_text;
+    if(status_override_timer.time_left > 0.0f) {
+        new_text = status_override_text;
+        
+    } else {
+        if(is_mouse_in_gui(mouse_cursor_s)) {
+            lafi::widget* wum =
+                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+            if(wum) {
+                new_text = wum->description;
+            }
+        } else if(!loaded_content_yet) {
+            new_text =
+                "(Place the cursor on a widget "
+                "to show information about it here!)";
+        } else if(!omit_coordinates) {
+            new_text =
+                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
+        }
+    }
+    
+    lbl_status_bar->text = new_text;
 }
 
 

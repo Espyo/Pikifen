@@ -2436,7 +2436,7 @@ void area_editor::load() {
     cross_section_z_window_end =
         point(cross_section_window_end.x + 48, cross_section_window_end.y);
         
-    picked_area_yet = false;
+    loaded_content_yet = false;
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
     open_picker(AREA_EDITOR_PICKER_AREA);

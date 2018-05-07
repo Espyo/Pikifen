@@ -248,23 +248,7 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &mouse_cursor_w.x, &mouse_cursor_w.y
     );
     
-    bool empty_status_bar = (mode == EDITOR_MODE_SPRITE_BITMAP);
-    lafi::widget* widget_under_mouse = NULL;
-    if(!is_mouse_in_gui(mouse_cursor_s)) {
-        widget_under_mouse = NULL;
-    } else {
-        widget_under_mouse =
-            gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
-    }
-    set_label_text(
-        gui, "lbl_status_bar",
-        (
-            empty_status_bar ? "" :
-            widget_under_mouse ?
-            widget_under_mouse->description :
-            "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")"
-        )
-    );
+    update_status_bar(mode == EDITOR_MODE_SPRITE_BITMAP);
 }
 
 

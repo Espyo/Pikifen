@@ -157,8 +157,6 @@ private:
     static const float         POINT_LETTER_TEXT_SCALE;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
-    static const float         STATUS_OVERRIDE_IMPORTANT_DURATION;
-    static const float         STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     static const float         UNDO_SAVE_LOCK_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
@@ -214,7 +212,6 @@ private:
     lafi::frame* frm_stt;
     lafi::frame* frm_options;
     lafi::frame* frm_bottom;
-    lafi::label* lbl_status_bar;
     lafi::style* gui_style;
     lafi::style* faded_style;
     
@@ -300,8 +297,6 @@ private:
     point path_preview_checkpoints[2];
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
-    //Has the user picked an area yet?
-    bool picked_area_yet;
     //Area data before vertex movement.
     area_data* pre_move_area_data;
     //Position of the selected mobs before movement.
@@ -374,10 +369,6 @@ private:
     bool show_reference;
     //Render the tree shadows?
     bool show_shadows;
-    //Status bar override text.
-    string status_override_text;
-    //Time left to show the status bar override text for.
-    timer status_override_timer;
     //Starting coordinates of a sector texture transformer drag.
     point stt_drag_start;
     //Original angle of the sector in the sector texture transformer.
@@ -433,7 +424,6 @@ private:
         const unsigned char dots = 0
     );
     void draw_line_dist(const point &focus, const point &other);
-    void emit_status_bar_message(const string &text, const bool important);
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
@@ -513,7 +503,6 @@ private:
     bool update_backup_status();
     void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);
-    void update_status_bar();
     void update_texture_suggestions(const string &n);
     void update_undo_history();
     

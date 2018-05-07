@@ -421,6 +421,7 @@ void animation_editor::load() {
         cur_hitbox_nr = INVALID;
         animation_to_gui();
         made_changes = true;
+        emit_status_bar_message("Animation deleted.", false);
     };
     frm_anims->widgets["but_del_anim"]->description =
         "Delete the current animation.";
@@ -588,6 +589,9 @@ void animation_editor::load() {
         for(size_t i = 0; i < cur_anim->frames.size(); ++i) {
             cur_anim->frames[i].duration = d;
         }
+        emit_status_bar_message(
+            "Applied the duration " + f2s(d) + " to all frames.", false
+        );
     };
     frm_frame->widgets["but_dur_all"]->description =
         "Apply this duration to all frames on this animation.";
@@ -750,6 +754,7 @@ void animation_editor::load() {
         cur_hitbox_nr = INVALID;
         sprite_to_gui();
         made_changes = true;
+        emit_status_bar_message("Sprite deleted.", false);
     };
     frm_sprite->widgets["but_del_sprite"]->description =
         "Delete the current sprite.";
@@ -929,7 +934,10 @@ void animation_editor::load() {
         size_t folder_pos = f[0].find(GRAPHICS_FOLDER_PATH);
         if(folder_pos == string::npos) {
             //This isn't in the graphics folder!
-            //TODO warn on the status bar
+            emit_status_bar_message(
+                "The chosen image is not in the graphics folder!",
+                true
+            );
             return;
         } else {
             f[0] =
@@ -2020,9 +2028,9 @@ void animation_editor::load() {
     );
     frm_bottom->easy_row();
     
-    lafi::label* gui_status_bar =
+    lbl_status_bar =
         new lafi::label(0, status_bar_y, gui_x, scr_h);
-    gui->add("lbl_status_bar", gui_status_bar);
+    gui->add("lbl_status_bar", lbl_status_bar);
     
     
     //Bottom bar -- properties.
@@ -2070,9 +2078,10 @@ void animation_editor::load() {
     
     update_stats();
     
+    loaded_content_yet = false;
+    
     if(!auto_load_anim.empty()) {
         file_path = auto_load_anim;
         load_animation_database();
     }
-    
 }

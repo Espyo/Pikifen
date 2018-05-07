@@ -608,6 +608,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
     set_textbox_text(frm_sprite_bmp, "txt_w", i2s(s->file_size.x));
     set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
     gui_to_sprite_bmp();
+    emit_status_bar_message("Data imported.", false);
 }
 
 
@@ -622,6 +623,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
     }
     cur_hitbox_nr = 0;
     hitbox_to_gui();
+    emit_status_bar_message("Data imported.", false);
 }
 
 
@@ -638,6 +640,7 @@ void animation_editor::import_sprite_top_data(const string &name) {
     set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
     
     gui_to_top();
+    emit_status_bar_message("Data imported.", false);
 }
 
 
@@ -653,6 +656,7 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     set_textbox_text(frm_sprite_tra, "txt_h", i2s(s->game_size.y));
     
     gui_to_sprite_transform();
+    emit_status_bar_message("Data imported.", false);
 }
 
 
@@ -1096,6 +1100,7 @@ void animation_editor::load_animation_database() {
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
+    loaded_content_yet = true;
     update_stats();
 }
 
@@ -1285,12 +1290,18 @@ void animation_editor::rename_animation() {
     string old_name = but_ptr->text;
     string new_name = txt_ptr->text;
     
-    if(new_name.empty()) return;
+    if(new_name.empty()) {
+        emit_status_bar_message("You need to specify the new name!", true);
+        return;
+    }
     
     //Check if the name already exists.
     for(size_t a = 0; a < anims.animations.size(); ++a) {
         if(anims.animations[a]->name == old_name) old_anim_id = a;
-        if(anims.animations[a]->name == new_name) return;
+        if(anims.animations[a]->name == new_name) {
+            emit_status_bar_message("That name is already being used!", true);
+            return;
+        }
     }
     
     if(old_anim_id == INVALID) return;
@@ -1300,6 +1311,8 @@ void animation_editor::rename_animation() {
     but_ptr->text = "";
     txt_ptr->text = "";
     
+    made_changes = true;
+    emit_status_bar_message("Renamed successfully.", false);
 }
 
 
@@ -1315,12 +1328,18 @@ void animation_editor::rename_sprite() {
     string old_name = but_ptr->text;
     string new_name = txt_ptr->text;
     
-    if(new_name.empty()) return;
+    if(new_name.empty()) {
+        emit_status_bar_message("You need to specify the new name!", true);
+        return;
+    }
     
     //Check if the name already exists.
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         if(anims.sprites[s]->name == old_name) old_sprite_id = s;
-        if(anims.sprites[s]->name == new_name) return;
+        if(anims.sprites[s]->name == new_name) {
+            emit_status_bar_message("That name is already being used!", true);
+            return;
+        }
     }
     
     if(old_sprite_id == INVALID) return;
@@ -1338,6 +1357,8 @@ void animation_editor::rename_sprite() {
     but_ptr->text = "";
     txt_ptr->text = "";
     
+    made_changes = true;
+    emit_status_bar_message("Renamed successfully.", false);
 }
 
 
@@ -1346,10 +1367,13 @@ void animation_editor::rename_sprite() {
  * to the respective file-width/height.
  */
 void animation_editor::resize_by_resolution() {
-    lafi::textbox* txt_resize =
-        (lafi::textbox*) frm_tools->widgets["txt_resolution"];
-    float mult = s2f(txt_resize->text);
-    if(mult == 0) return;
+    float mult = s2f(get_textbox_text(frm_tools, "txt_resolution"));
+    
+    if(mult == 0) {
+        emit_status_bar_message("Can't resize sprites to size 0!", true);
+        return;
+    }
+    
     mult = 1.0 / mult;
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
@@ -1357,6 +1381,9 @@ void animation_editor::resize_by_resolution() {
         s_ptr->game_size = s_ptr->file_size * mult;
     }
     
+    set_textbox_text(frm_tools, "txt_resolution", "");
+    made_changes = true;
+    emit_status_bar_message("Resized successfully.", false);
 }
 
 
@@ -1364,9 +1391,12 @@ void animation_editor::resize_by_resolution() {
  * Resizes sprites, body parts, etc. by a multiplier.
  */
 void animation_editor::resize_everything() {
-    lafi::textbox* txt_resize =
-        (lafi::textbox*) frm_tools->widgets["txt_resize"];
-    float mult = s2f(txt_resize->text);
+    float mult = s2f(get_textbox_text(frm_tools, "txt_resize"));
+    
+    if(mult == 0) {
+        emit_status_bar_message("Can't resize everything to size 0!", true);
+        return;
+    }
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
@@ -1384,7 +1414,9 @@ void animation_editor::resize_everything() {
         }
     }
     
+    set_textbox_text(frm_tools, "txt_resize", "");
     made_changes = true;
+    emit_status_bar_message("Resized successfully.", false);
 }
 
 

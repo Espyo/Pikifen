@@ -1242,7 +1242,7 @@ void area_editor::update_main_frame() {
     if(cur_area_name.empty()) {
         frm_area->hide();
     } else {
-        picked_area_yet = true;
+        loaded_content_yet = true;
         frm_area->show();
     }
     set_button_text(frm_main, "but_area", cur_area_name);

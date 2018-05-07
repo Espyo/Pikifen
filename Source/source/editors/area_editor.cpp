@@ -54,10 +54,6 @@ const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
-//How long to override the status bar text for, for important messages.
-const float area_editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
-//How long to override the status bar text for, for unimportant messages.
-const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
 //Wait this long before letting a new repeat undo operation be saved.
 const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
@@ -185,7 +181,6 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
-    picked_area_yet(false),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
     reference_bitmap(nullptr),
@@ -208,9 +203,6 @@ area_editor::area_editor() :
     [this] () {undo_save_lock_operation.clear();}
         );
         
-    status_override_timer =
-    timer(STATUS_OVERRIDE_IMPORTANT_DURATION, [this] () {update_status_bar();});
-    
     if(area_editor_backup_interval > 0) {
         backup_timer =
         timer(area_editor_backup_interval, [this] () {save_backup();});
@@ -778,7 +770,7 @@ void area_editor::create_new_from_picker(const string &name) {
 void area_editor::custom_picker_cancel_action() {
     //If the user canceled out without picking an area yet, then they want
     //to leave the area editor.
-    if(!picked_area_yet) {
+    if(!loaded_content_yet) {
         leave();
     }
 }
@@ -850,7 +842,6 @@ void area_editor::do_logic() {
     
     path_preview_timer.tick(delta_t);
     new_sector_error_tint_timer.tick(delta_t);
-    status_override_timer.tick(delta_t);
     undo_save_lock_timer.tick(delta_t);
     
     if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
@@ -859,24 +850,6 @@ void area_editor::do_logic() {
     
     selection_effect += SELECTION_EFFECT_SPEED * delta_t;
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Emits a message onto the status bar, and keeps it there for some seconds.
- * text:      Message text.
- * important: If true, the message stays for a few more seconds than normal.
- */
-void area_editor::emit_status_bar_message(
-    const string &text, const bool important
-) {
-    status_override_text = text;
-    status_override_timer.start(
-        important ?
-        STATUS_OVERRIDE_IMPORTANT_DURATION :
-        STATUS_OVERRIDE_UNIMPORTANT_DURATION
-    );
-    lbl_status_bar->text = status_override_text;
 }
 
 
@@ -3589,35 +3562,6 @@ void area_editor::update_sector_texture(
     textures.detach(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
     s_ptr->texture_info.bitmap = textures.get(file_name);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the status bar.
- */
-void area_editor::update_status_bar() {
-    string new_text;
-    if(status_override_timer.time_left > 0.0f) {
-        new_text = status_override_text;
-        
-    } else {
-        if(is_mouse_in_gui(mouse_cursor_s)) {
-            lafi::widget* wum =
-                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
-            if(wum) {
-                new_text = wum->description;
-            }
-        } else if(cur_area_name.empty()) {
-            new_text =
-                "(Place the cursor on a widget "
-                "to show information about it here!)";
-        } else {
-            new_text =
-                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
-        }
-    }
-    
-    lbl_status_bar->text = new_text;
 }
 
 

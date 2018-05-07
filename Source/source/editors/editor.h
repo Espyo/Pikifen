@@ -17,6 +17,7 @@
 
 #include "../LAFI/frame.h"
 #include "../LAFI/gui.h"
+#include "../LAFI/label.h"
 #include "../game_state.h"
 #include "../misc_structs.h"
 
@@ -36,6 +37,8 @@ protected:
     static const float  DOUBLE_CLICK_TIMEOUT;
     static const string EDITOR_ICONS_FOLDER_NAME;
     static const float  MOUSE_DRAG_CONFIRM_RANGE;
+    static const float  STATUS_OVERRIDE_IMPORTANT_DURATION;
+    static const float  STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     
     struct transformation_controller {
     private:
@@ -121,6 +124,9 @@ protected:
     bool          is_shift_pressed;
     //Number of the mouse button pressed.
     size_t        last_mouse_click;
+    lafi::label*  lbl_status_bar;
+    //Has the user picked any content to load yet?
+    bool          loaded_content_yet;
     bool          made_changes;
     //Is this a mouse drag, or just a shaky click?
     bool          mouse_drag_confirmed;
@@ -131,12 +137,17 @@ protected:
     //Secondary/sub mode.
     unsigned char sec_mode;
     int           status_bar_y;
+    //Status bar override text.
+    string        status_override_text;
+    //Time left to show the status bar override text for.
+    timer         status_override_timer;
     float         zoom_max_level;
     float         zoom_min_level;
     
     void close_changes_warning();
     void create_changes_warning_frame();
     void create_picker_frame();
+    void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
         const vector<pair<string, string> > &elements, const string &title,
         const bool can_make_new
@@ -148,6 +159,7 @@ protected:
     void show_bottom_frame();
     void show_changes_warning();
     void update_gui_coordinates();
+    void update_status_bar(const bool omit_coordinates = false);
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     virtual void custom_picker_cancel_action();
