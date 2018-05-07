@@ -1006,21 +1006,25 @@ void signal_handler(const int signum) {
         al_get_backbuffer(display)
     );
     
+    string signal_name(strsignal(signum));
     string error_str =
         "Program crash!\n"
         "  Time: " + get_current_time(true) + ". "
-        "Signal: " + i2s(signum) + ". Backtrace:\n";
+        "Signal " + i2s(signum) + " (" + signal_name + "). "
+        "Backtrace:\n";
     vector<string> bt = get_backtrace();
     for(size_t s = 0; s < bt.size(); ++s) {
         error_str += "    " + bt[s] + "\n";
     }
+    if(!no_error_logs_today) {
+        error_str += "  Error log has messages!\n";
+    }
     error_str +=
-        "  Game state number: " + i2s(cur_game_state_nr) + "\n"
-        "  Number of mobs: " + i2s(mobs.size()) + "\n"
-        "  Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
-        i2s(bitmaps.get_total_calls()) + " total calls)" + "\n"
-        "  Delta_t: " + f2s(delta_t) + " (" +
-        f2s(1 / delta_t) + " FPS)";
+        "  Game state: " + i2s(cur_game_state_nr) + ". "
+        "delta_t: " + f2s(delta_t) + " (" + f2s(1 / delta_t) + " FPS).\n"
+        "  Mob count: " + i2s(mobs.size()) + ". "
+        "Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
+        i2s(bitmaps.get_total_calls()) + " total calls).";
         
     log_error(error_str);
     

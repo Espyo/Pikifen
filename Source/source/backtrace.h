@@ -19,19 +19,84 @@ using namespace std;
 
 const size_t BACKTRACE_MAX_FRAMES = 30;
 const size_t BACKTRACE_MAX_SYMBOL_LENGTH = 512;
+const size_t BACKTRACE_DEMANGLE_BUFFER_SIZE = 512;
 
 #if defined(__linux__) || (__APPLE__ && __MACH__)
 //Linux and Mac OS.
 
 #include <execinfo.h>
+#include <cxxabi.h>
+
+string demangle_symbol(const string &symbol) {
+    //Special thanks: https://oroboro.com/stack-trace-on-crash/
+    size_t module_size = 0;
+    size_t name_start = string::npos;
+    size_t name_size = 0;
+    size_t offset_start = string::npos;
+    size_t offset_size = 0;
+    string ret;
+    
+#ifdef DARWIN //Mac OS.
+    name_start = symbol.find(" _");
+    if(name_start != string::npos) {
+        module_size = name_start;
+        name_start = name_start + 1;
+        size_t space_pos = symbol.find(" ", name_start + 1);
+        if(space_pos != string::npos) {
+            name_size = space_pos - name_start;
+            offset_start = name_start + name_size + 1;
+            if(offset_start != string::npos) {
+                offset_size = symbol.size();
+            }
+        }
+    }
+#else //Linux.
+    name_start = symbol.find("(");
+    if(name_start != string::npos) {
+        module_size = name_start;
+        name_start = name_start + 1;
+        size_t plus_pos = symbol.find("+", name_start + 1);
+        if(plus_pos != string::npos) {
+            name_size = plus_pos - name_start;
+            offset_start = name_start + name_size + 1;
+            if(offset_start != string::npos) {
+                offset_size = symbol.find(")", offset_start) - offset_start;
+            }
+        }
+    }
+#endif
+    
+    if(name_start != string::npos && offset_start != string::npos) {
+        string module_str = symbol.substr(0, module_size);
+        string mangled_name = symbol.substr(name_start, name_size);
+        string offset_str = symbol.substr(offset_start, offset_size);
+        
+        int demangle_status;
+        char* demangled_name =
+            abi::__cxa_demangle(mangled_name.c_str(), NULL, NULL, &demangle_status);
+        
+        if(demangle_status == 0) {
+            ret =
+                module_str + " " + demangled_name + " + " + offset_str;
+        } else {
+            ret =
+                module_str + " " + mangled_name + " + " + offset_str;
+        }
+    } else {
+        ret = symbol;
+    }
+    return ret;
+}
+
 vector<string> get_backtrace() {
     vector<string> result;
     void* stack[BACKTRACE_MAX_FRAMES];
     
     size_t n_symbols = backtrace(stack, BACKTRACE_MAX_FRAMES);
     char** symbols = backtrace_symbols(stack, n_symbols);
+    
     for(size_t s = 0; s < n_symbols; ++s) {
-        result.push_back(symbols[s]);
+        result.push_back(demangle_symbol(symbols[s]));
     }
     
     free(symbols);
