@@ -28,15 +28,16 @@
 void animation_editor::load() {
     fade_mgr.start_fade(true, nullptr);
     
-    update_gui_coordinates();
+    update_canvas_coordinates();
     mode = EDITOR_MODE_MAIN;
     file_path.clear();
     
-    load_mob_types(false);
     load_custom_particle_generators(false);
     load_status_types(false);
     load_liquids(false);
     load_hazards();
+    load_spike_damage_types();
+    load_mob_types(false);
     
     lafi::style* s =
         new lafi::style(
@@ -50,7 +51,7 @@ void animation_editor::load() {
     
     //Main -- declarations.
     frm_main =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
@@ -66,7 +67,7 @@ void animation_editor::load() {
     int y = frm_main->easy_row();
     
     frm_object =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_main->add("frm_object", frm_object);
     frm_object->easy_row();
     frm_object->easy_add(
@@ -111,7 +112,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_HISTORY;
         populate_history();
-        hide_bottom_frame();
+        frm_toolbar->hide();
         change_to_right_frame();
     };
     frm_main->widgets["but_file"]->description =
@@ -161,7 +162,7 @@ void animation_editor::load() {
         
     //History -- declarations.
     frm_history =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_history->hide();
     gui->add("frm_history", frm_history);
     
@@ -203,14 +204,14 @@ void animation_editor::load() {
     y = frm_history->easy_row();
     frm_history->add(
         "frm_list",
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48)
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h)
     );
     
     
     //History -- properties.
     frm_history->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        show_bottom_frame();
+        frm_toolbar->show();
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
@@ -259,7 +260,7 @@ void animation_editor::load() {
         
     //Animations -- declarations.
     frm_anims =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_anims->hide();
     gui->add("frm_anims", frm_anims);
     
@@ -285,7 +286,7 @@ void animation_editor::load() {
     y = frm_anims->easy_row();
     
     frm_anim =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_anims->add("frm_anim", frm_anim);
     frm_anim->easy_row();
     frm_anim->easy_add(
@@ -375,7 +376,7 @@ void animation_editor::load() {
     y += frm_anim->easy_row();
     
     frm_frame =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_anim->add("frm_frame", frm_frame);
     
     frm_frame->easy_row();
@@ -634,7 +635,7 @@ void animation_editor::load() {
     
     //Sprites -- declarations.
     frm_sprites =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_sprites->hide();
     gui->add("frm_sprites", frm_sprites);
     
@@ -656,7 +657,7 @@ void animation_editor::load() {
     y = frm_sprites->easy_row();
     
     frm_sprite =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_sprites->add("frm_sprite", frm_sprite);
     
     frm_sprite->easy_row();
@@ -837,7 +838,7 @@ void animation_editor::load() {
         
     //Sprite bitmap -- declarations.
     frm_sprite_bmp =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_sprite_bmp->hide();
     gui->add("frm_sprite_bmp", frm_sprite_bmp);
     
@@ -1011,7 +1012,7 @@ void animation_editor::load() {
         
     //Sprite transform -- declarations.
     frm_sprite_tra =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_sprite_tra->hide();
     gui->add("frm_sprite_tra", frm_sprite_tra);
     
@@ -1069,7 +1070,7 @@ void animation_editor::load() {
     y = frm_sprite_tra->easy_row();
     
     frm_sprite_comp =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_sprite_tra->add("frm_sprite_comp", frm_sprite_comp);
     
     frm_sprite_comp->easy_row();
@@ -1175,7 +1176,7 @@ void animation_editor::load() {
         
     //Hitboxes -- declarations.
     frm_hitboxes =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_hitboxes->hide();
     gui->add("frm_hitboxes", frm_hitboxes);
     
@@ -1209,7 +1210,7 @@ void animation_editor::load() {
     y = frm_hitboxes->easy_row();
     
     frm_hitbox =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_hitboxes->add("frm_hitbox", frm_hitbox);
     
     frm_hitbox->easy_row();
@@ -1270,7 +1271,7 @@ void animation_editor::load() {
     y += frm_hitbox->easy_row();
     
     frm_normal_h =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_normal_h->hide();
     frm_hitbox->add("frm_normal_h", frm_normal_h);
     
@@ -1301,7 +1302,7 @@ void animation_editor::load() {
     frm_normal_h->easy_row();
     
     frm_attack_h =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_attack_h->hide();
     frm_hitbox->add("frm_attack_h", frm_attack_h);
     
@@ -1517,7 +1518,7 @@ void animation_editor::load() {
         
     //Pikmin top -- declarations.
     frm_top =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_top->hide();
     gui->add("frm_top", frm_top);
     
@@ -1650,7 +1651,7 @@ void animation_editor::load() {
         
     //Body parts -- declarations.
     frm_body_parts =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_body_parts->hide();
     gui->add("frm_body_parts", frm_body_parts);
     
@@ -1718,7 +1719,7 @@ void animation_editor::load() {
     y = frm_body_parts->easy_row();
     
     frm_body_part =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_body_parts->add("frm_body_part", frm_body_part);
     
     frm_body_part->easy_row();
@@ -1874,7 +1875,7 @@ void animation_editor::load() {
         
     //Tools -- declarations.
     frm_tools =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_tools->hide();
     gui->add("frm_tools", frm_tools);
     
@@ -2030,44 +2031,42 @@ void animation_editor::load() {
         "Do the rename, if the new name is valid.";
         
         
-    //Bottom bar -- declarations.
-    frm_bottom =
-        new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h);
-    gui->add("frm_bottom", frm_bottom);
+    //Toolbar -- declarations.
+    create_toolbar_frame();
     
-    frm_bottom->easy_row();
-    frm_bottom->easy_add(
-        "but_toggle_hitboxes",
-        new lafi::button("", "", icons.get(ICON_HITBOXES)), 25, 32
-    );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_row(4, 4, 4);
+    frm_toolbar->easy_add(
         "but_load",
-        new lafi::button("", "", icons.get(ICON_LOAD)), 25, 32
+        new lafi::button("", "", icons.get(ICON_LOAD)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_add(
         "but_save",
-        new lafi::button("", "", icons.get(ICON_SAVE)), 25, 32
+        new lafi::button("", "", icons.get(ICON_SAVE)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_add(
+        "but_toggle_hitboxes",
+        new lafi::button("", "", icons.get(ICON_HITBOXES)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_quit",
-        new lafi::button("", "", icons.get(ICON_EXIT)), 25, 32
+        new lafi::button("", "", icons.get(ICON_EXIT)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_row();
-    
-    lbl_status_bar =
-        new lafi::label(0, status_bar_y, gui_x, scr_h);
-    gui->add("lbl_status_bar", lbl_status_bar);
+    frm_toolbar->easy_row(4, 4, 4);
     
     
-    //Bottom bar -- properties.
-    frm_bottom->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
+    //Toolbar -- properties.
+    frm_toolbar->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hitboxes_visible = !hitboxes_visible;
     };
-    frm_bottom->widgets["but_toggle_hitboxes"]->description =
+    frm_toolbar->widgets["but_toggle_hitboxes"]->description =
         "Toggle hitbox and center-point grid visibility.";
         
-    frm_bottom->widgets["but_load"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
             this->show_changes_warning();
@@ -2075,17 +2074,17 @@ void animation_editor::load() {
             load_animation_database(false);
         }
     };
-    frm_bottom->widgets["but_load"]->description =
+    frm_toolbar->widgets["but_load"]->description =
         "Load the object from the text file.";
         
-    frm_bottom->widgets["but_save"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_animation_database();
     };
-    frm_bottom->widgets["but_save"]->description =
+    frm_toolbar->widgets["but_save"]->description =
         "Save the object to the text file.";
         
-    frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
             this->show_changes_warning();
@@ -2093,14 +2092,15 @@ void animation_editor::load() {
             leave();
         }
     };
-    frm_bottom->widgets["but_quit"]->description =
+    frm_toolbar->widgets["but_quit"]->description =
         "Quit the animation editor.";
         
+    disable_widget(frm_toolbar->widgets["but_load"]);
+    disable_widget(frm_toolbar->widgets["but_save"]);
+    
     create_changes_warning_frame();
     create_picker_frame();
-    
-    disable_widget(frm_bottom->widgets["but_load"]);
-    disable_widget(frm_bottom->widgets["but_save"]);
+    create_status_bar();
     
     update_stats();
     

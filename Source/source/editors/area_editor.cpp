@@ -332,8 +332,8 @@ void area_editor::center_camera(
     cam_pos.y = floor(min_c.y + height / 2);
     
     float z;
-    if(width > height) z = gui_x / width;
-    else z = status_bar_y / height;
+    if(width > height) z = canvas_br.x / width;
+    else z = canvas_br.y / height;
     z -= z * 0.1;
     
     zoom(z, false);
@@ -759,7 +759,7 @@ void area_editor::create_new_from_picker(const string &name) {
     
     state = EDITOR_STATE_MAIN;
     emit_status_bar_message("Created new area successfully.", false);
-    show_bottom_frame();
+    frm_toolbar->show();
     change_to_right_frame();
 }
 
@@ -3612,8 +3612,8 @@ void area_editor::update_transformations() {
     world_to_screen_transform = identity_transform;
     al_translate_transform(
         &world_to_screen_transform,
-        -cam_pos.x + gui_x / 2.0 / cam_zoom,
-        -cam_pos.y + status_bar_y / 2.0 / cam_zoom
+        -cam_pos.x + canvas_br.x / 2.0 / cam_zoom,
+        -cam_pos.y + canvas_br.y / 2.0 / cam_zoom
     );
     al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
     
@@ -3628,7 +3628,7 @@ void area_editor::update_transformations() {
  * the undo history.
  */
 void area_editor::update_undo_history() {
-    lafi::widget* b = frm_bottom->widgets["but_undo"];
+    lafi::widget* b = frm_toolbar->widgets["but_undo"];
     
     while(undo_history.size() > area_editor_undo_limit) {
         undo_history.pop_back();

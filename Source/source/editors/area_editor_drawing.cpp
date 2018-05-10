@@ -19,7 +19,10 @@ void area_editor::do_drawing() {
     gui->draw();
     
     al_use_transform(&world_to_screen_transform);
-    al_set_clipping_rectangle(0, 0, gui_x, status_bar_y);
+    al_set_clipping_rectangle(
+        canvas_tl.x, canvas_tl.y,
+        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
+    );
     
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
@@ -186,7 +189,7 @@ void area_editor::do_drawing() {
     
     //Grid.
     point cam_top_left_corner(0, 0);
-    point cam_bottom_right_corner(gui_x, status_bar_y);
+    point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
     al_transform_coordinates(
         &screen_to_world_transform,
         &cam_top_left_corner.x, &cam_top_left_corner.y

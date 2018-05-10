@@ -32,7 +32,7 @@
  */
 void area_editor::load() {
 
-    update_gui_coordinates();
+    update_canvas_coordinates();
     
     gui_style =
         new lafi::style(
@@ -53,7 +53,7 @@ void area_editor::load() {
     
     //Main -- declarations.
     frm_main =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
@@ -69,7 +69,7 @@ void area_editor::load() {
     int y = frm_main->easy_row();
     
     frm_area =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_main->add("frm_area", frm_area);
     
     frm_area->easy_row();
@@ -191,7 +191,7 @@ void area_editor::load() {
         
     //Info -- declarations.
     frm_info =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_info", frm_info);
     
     frm_info->easy_row();
@@ -416,7 +416,7 @@ void area_editor::load() {
         
     //Layout -- declarations.
     frm_layout =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_layout", frm_layout);
     
     frm_layout->easy_row();
@@ -452,7 +452,7 @@ void area_editor::load() {
     y = frm_layout->easy_row();
     
     frm_sector =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_layout->add("frm_sector", frm_sector);
     
     frm_sector->easy_row();
@@ -554,7 +554,7 @@ void area_editor::load() {
     frm_sector->easy_row();
     
     frm_sector_multi =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_layout->add("frm_sector_multi", frm_sector_multi);
     
     frm_sector_multi->easy_row();
@@ -769,7 +769,7 @@ void area_editor::load() {
     
     //Advanced sector behavior -- declarations.
     frm_asb =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_asb", frm_asb);
     
     frm_asb->easy_row();
@@ -911,16 +911,16 @@ void area_editor::load() {
     
     //Texture picker -- declarations.
     frm_texture =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_texture", frm_texture);
     
     frm_texture->add(
         "but_back",
-        new lafi::button(gui_x + 8, 8, gui_x + 96, 24, "Back")
+        new lafi::button(canvas_br.x + 8, 8, canvas_br.x + 96, 24, "Back")
     );
     frm_texture->add(
         "txt_name",
-        new lafi::textbox(gui_x + 8, 40, scr_w - 48, 56)
+        new lafi::textbox(canvas_br.x + 8, 40, scr_w - 48, 56)
     );
     frm_texture->add(
         "but_ok",
@@ -928,11 +928,11 @@ void area_editor::load() {
     );
     frm_texture->add(
         "lbl_suggestions",
-        new lafi::label(gui_x + 8, 72, scr_w - 8, 88, "Suggestions:")
+        new lafi::label(canvas_br.x + 8, 72, scr_w - 8, 88, "Suggestions:")
     );
     frm_texture->add(
         "frm_list",
-        new lafi::frame(gui_x + 8, 96, scr_w - 32, scr_h - 56)
+        new lafi::frame(canvas_br.x + 8, 96, scr_w - 32, scr_h - 56)
     );
     frm_texture->add(
         "bar_scroll",
@@ -982,7 +982,7 @@ void area_editor::load() {
     
     //Advanced sector appearance -- declarations.
     frm_asa =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_asa", frm_asa);
     
     frm_asa->easy_row();
@@ -1151,7 +1151,7 @@ void area_editor::load() {
         
     //Mobs -- declarations.
     frm_mobs =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_mobs", frm_mobs);
     
     frm_mobs->easy_row();
@@ -1179,7 +1179,7 @@ void area_editor::load() {
     y = frm_mobs->easy_row();
     
     frm_mob =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_mobs->add("frm_mob", frm_mob);
     
     frm_mob->easy_row();
@@ -1219,7 +1219,7 @@ void area_editor::load() {
     frm_mob->easy_row();
     
     frm_mob_multi =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_mobs->add("frm_mob_multi", frm_mob_multi);
     
     frm_mob_multi->easy_row();
@@ -1359,7 +1359,7 @@ void area_editor::load() {
     
     //Paths -- declarations.
     frm_paths =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_paths", frm_paths);
     
     frm_paths->easy_row();
@@ -1507,7 +1507,7 @@ void area_editor::load() {
         
     //Details -- declarations.
     frm_details =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_details", frm_details);
     
     frm_details->easy_row();
@@ -1544,7 +1544,7 @@ void area_editor::load() {
     y = frm_details->easy_row();
     
     frm_shadow =
-        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_details->add("frm_shadow", frm_shadow);
     
     frm_shadow->easy_row();
@@ -1729,7 +1729,7 @@ void area_editor::load() {
         
     //Review -- declarations.
     frm_review =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_review", frm_review);
     
     frm_review->easy_row();
@@ -1882,7 +1882,7 @@ void area_editor::load() {
         
     //Tools -- declarations.
     frm_tools =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_tools", frm_tools);
     
     frm_tools->easy_row();
@@ -2095,7 +2095,7 @@ void area_editor::load() {
         
     //Sector texture transformer -- declarations.
     frm_stt =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_stt", frm_stt);
     
     frm_stt->easy_row();
@@ -2172,7 +2172,7 @@ void area_editor::load() {
         
     //Options -- declarations.
     frm_options =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     gui->add("frm_options", frm_options);
     
     frm_options->easy_row();
@@ -2338,47 +2338,49 @@ void area_editor::load() {
         "(and RMB to reset camera/zoom).";
         
         
-    //Bottom bar -- declarations.
-    frm_bottom =
-        new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h);
-    gui->add("frm_bottom", frm_bottom);
+    //Toolbar -- declarations.
+    create_toolbar_frame();
     
-    frm_bottom->easy_row();
-    frm_bottom->easy_add(
+    frm_toolbar->easy_row(4, 4, 4);
+    frm_toolbar->easy_add(
         "but_undo",
-        new lafi::button("", "", icons.get(ICON_UNDO)), 25, 32
+        new lafi::button("", "", icons.get(ICON_UNDO)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_add(
         "but_reference",
-        new lafi::button("", "", icons.get(ICON_REFERENCE)), 25, 32
+        new lafi::button("", "", icons.get(ICON_REFERENCE)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_add(
         "but_save",
-        new lafi::button("", "", icons.get(ICON_SAVE)), 25, 32
+        new lafi::button("", "", icons.get(ICON_SAVE)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_add(
+    frm_toolbar->easy_add(
         "but_quit",
-        new lafi::button("", "", icons.get(ICON_EXIT)), 25, 32
+        new lafi::button("", "", icons.get(ICON_EXIT)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_bottom->easy_row();
+    frm_toolbar->easy_row(4, 4, 4);
     
     
     //Bottom bar -- properties.
-    frm_bottom->widgets["but_undo"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_undo"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         undo();
     };
-    frm_bottom->widgets["but_undo"]->description =
+    frm_toolbar->widgets["but_undo"]->description =
         "Undo the last move. (Ctrl+Z)";
         
-    frm_bottom->widgets["but_reference"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_reference"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_reference = !show_reference;
     };
-    frm_bottom->widgets["but_reference"]->description =
+    frm_toolbar->widgets["but_reference"]->description =
         "Toggle the visibility of the reference. (Ctrl+R)";
         
-    frm_bottom->widgets["but_save"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_area(false);
         save_reference();
@@ -2387,10 +2389,10 @@ void area_editor::load() {
         change_to_right_frame();
         made_changes = false;
     };
-    frm_bottom->widgets["but_save"]->description =
+    frm_toolbar->widgets["but_save"]->description =
         "Save the area onto the files. (Ctrl+S)";
         
-    frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
             this->show_changes_warning();
@@ -2398,18 +2400,13 @@ void area_editor::load() {
             leave();
         }
     };
-    frm_bottom->widgets["but_quit"]->description =
+    frm_toolbar->widgets["but_quit"]->description =
         "Quit the area editor. (Ctrl+Q)";
         
         
-    //Status bar.
-    lbl_status_bar =
-        new lafi::label(0, status_bar_y, gui_x, scr_h, "", 0, true);
-    gui->add("lbl_status_bar", lbl_status_bar);
-    
-    
     create_changes_warning_frame();
     create_picker_frame();
+    create_status_bar();
     
     fade_mgr.start_fade(true, nullptr);
     
@@ -2430,7 +2427,7 @@ void area_editor::load() {
     is_gui_focused = false;
     gui->lose_focus();
     cross_section_window_start = point(0.0f, 0.0f);
-    cross_section_window_end = point(gui_x * 0.5, status_bar_y * 0.5);
+    cross_section_window_end = point(canvas_br.x * 0.5, canvas_br.y * 0.5);
     cross_section_z_window_start =
         point(cross_section_window_end.x, cross_section_window_start.y);
     cross_section_z_window_end =

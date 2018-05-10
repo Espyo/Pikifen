@@ -106,12 +106,13 @@ protected:
         void set_all();
     };
     
-    lafi::frame*  frm_picker;
-    lafi::gui*    gui;
-    lafi::style*  warning_style;
     //If the next click is within this time, it's a double-click.
+    point         canvas_tl;
+    point         canvas_br;
     float         double_click_time;
-    int           gui_x;
+    lafi::frame*  frm_picker;
+    lafi::frame*  frm_toolbar;
+    lafi::gui*    gui;
     bool          holding_m1;
     bool          holding_m2;
     bool          holding_m3;
@@ -136,29 +137,29 @@ protected:
     size_t        picker_type;
     //Secondary/sub mode.
     unsigned char sec_mode;
-    int           status_bar_y;
     //Status bar override text.
     string        status_override_text;
     //Time left to show the status bar override text for.
     timer         status_override_timer;
+    lafi::style*  warning_style;
     float         zoom_max_level;
     float         zoom_min_level;
     
     void close_changes_warning();
     void create_changes_warning_frame();
     void create_picker_frame();
+    void create_status_bar();
+    void create_toolbar_frame();
     void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
         const vector<pair<string, string> > &elements, const string &title,
         const bool can_make_new
     );
-    void hide_bottom_frame();
     bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
     void populate_picker(const string &filter);
-    void show_bottom_frame();
     void show_changes_warning();
-    void update_gui_coordinates();
+    void update_canvas_coordinates();
     void update_status_bar(const bool omit_coordinates = false);
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     

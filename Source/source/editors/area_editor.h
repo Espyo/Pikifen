@@ -211,7 +211,6 @@ private:
     lafi::frame* frm_tools;
     lafi::frame* frm_stt;
     lafi::frame* frm_options;
-    lafi::frame* frm_bottom;
     lafi::style* gui_style;
     lafi::style* faded_style;
     

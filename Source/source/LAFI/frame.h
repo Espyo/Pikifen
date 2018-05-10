@@ -15,6 +15,7 @@ namespace lafi {
  */
 class frame : public widget {
 public:
+    bool solid_color_only;
     frame(
         const int x1, const int y1, const int x2, const int y2,
         lafi::style* style = NULL, const unsigned char flags = 0

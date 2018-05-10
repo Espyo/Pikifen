@@ -171,7 +171,7 @@ void area_editor::change_to_right_frame() {
 void area_editor::clear_current_area_gui() {
     set_button_text(frm_main, "but_area", cur_area_name);
     frm_area->show();
-    enable_widget(frm_bottom->widgets["but_save"]);
+    enable_widget(frm_toolbar->widgets["but_save"]);
     frm_paths->widgets["lbl_path_dist"]->hide();
     set_checkbox_check(frm_paths, "chk_show_path", false);
 }
@@ -882,7 +882,7 @@ void area_editor::pick(const string &name, const string &category) {
         
     }
     
-    show_bottom_frame();
+    frm_toolbar->show();
     change_to_right_frame();
 }
 

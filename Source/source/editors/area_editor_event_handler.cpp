@@ -183,20 +183,20 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
     
         if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            frm_bottom->widgets["but_undo"]->simulate_click();
+            frm_toolbar->widgets["but_undo"]->simulate_click();
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
     
-        frm_bottom->widgets["but_save"]->simulate_click();
+        frm_toolbar->widgets["but_save"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
     
-        frm_bottom->widgets["but_quit"]->simulate_click();
+        frm_toolbar->widgets["but_quit"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
     
-        frm_bottom->widgets["but_reference"]->simulate_click();
+        frm_toolbar->widgets["but_reference"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
         bool got_something = false;

@@ -9,7 +9,8 @@ frame::frame(
     const int x1, const int y1, const int x2, const int y2, lafi::style* style,
     const unsigned char flags
 ) :
-    widget(x1, y1, x2, y2, style, flags) {
+    widget(x1, y1, x2, y2, style, flags),
+    solid_color_only(false) {
     
 }
 
@@ -34,6 +35,7 @@ frame::~frame() {}
  */
 void frame::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
+    if(solid_color_only) return;
     //Top line, outermost.
     draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_lighter_bg_color());
     //Top line, innermost.

@@ -170,7 +170,8 @@ void animation_editor::do_drawing() {
     al_use_transform(&world_to_screen_transform);
     
     al_set_clipping_rectangle(
-        0, 0, gui_x, status_bar_y
+        canvas_tl.x, canvas_tl.y,
+        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
     );
     
     al_clear_to_color(al_map_rgb(128, 144, 128));
@@ -211,7 +212,7 @@ void animation_editor::do_drawing() {
         al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
         
         point scene_tl = point(-1, -1);
-        point scene_br = point(gui_x + 1, status_bar_y + 1);
+        point scene_br = point(canvas_br.x + 1, canvas_br.y + 1);
         al_transform_coordinates(
             &screen_to_world_transform, &scene_tl.x, &scene_tl.y
         );
@@ -361,7 +362,7 @@ void animation_editor::do_drawing() {
     
     if(draw_hitboxes) {
         point cam_top_left_corner(0, 0);
-        point cam_bottom_right_corner(gui_x, status_bar_y);
+        point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
         al_transform_coordinates(
             &screen_to_world_transform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
@@ -1045,8 +1046,8 @@ void animation_editor::load_animation_database(const bool update_history) {
         if(cur_sprite->hitboxes.size()) cur_hitbox_nr = 0;
     }
     
-    enable_widget(frm_bottom->widgets["but_load"]);
-    enable_widget(frm_bottom->widgets["but_save"]);
+    enable_widget(frm_toolbar->widgets["but_load"]);
+    enable_widget(frm_toolbar->widgets["but_save"]);
     frm_hitboxes->hide();
     frm_top->hide();
     
@@ -1109,7 +1110,7 @@ void animation_editor::load_animation_database(const bool update_history) {
         save_options(); //Save the history on the options.
     }
     
-    show_bottom_frame();
+    frm_toolbar->show();
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
     loaded_content_yet = true;
@@ -1262,7 +1263,7 @@ void animation_editor::pick(const string &name, const string &category) {
         
     }
     
-    show_bottom_frame();
+    frm_toolbar->show();
     change_to_right_frame();
 }
 
@@ -1660,8 +1661,12 @@ void animation_editor::unload() {
     //[-Wdelete-non-virtual-dtor]
     delete(gui);
     
+    unload_mob_types(false);
+    unload_spike_damage_types();
     unload_hazards();
+    unload_liquids();
     unload_status_types(false);
+    unload_custom_particle_generators();
     
     icons.clear();
 }
@@ -1827,8 +1832,8 @@ void animation_editor::update_transformations() {
     world_to_screen_transform = identity_transform;
     al_translate_transform(
         &world_to_screen_transform,
-        -cam_pos.x + gui_x / 2.0 / cam_zoom,
-        -cam_pos.y + status_bar_y / 2.0 / cam_zoom
+        -cam_pos.x + canvas_br.x / 2.0 / cam_zoom,
+        -cam_pos.y + canvas_br.y / 2.0 / cam_zoom
     );
     al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
     

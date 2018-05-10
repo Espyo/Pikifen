@@ -93,7 +93,6 @@ private:
     lafi::frame* frm_body_parts;
     lafi::frame* frm_body_part;
     lafi::frame* frm_tools;
-    lafi::frame* frm_bottom;
     
     
     animation_database        anims;

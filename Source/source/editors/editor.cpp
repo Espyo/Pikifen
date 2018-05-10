@@ -36,10 +36,10 @@ const float editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
  * Initializes editor class stuff.
  */
 editor::editor() :
-    gui(nullptr),
-    warning_style(nullptr),
-    gui_x(0),
     double_click_time(0),
+    frm_picker(nullptr),
+    frm_toolbar(nullptr),
+    gui(nullptr),
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
@@ -53,7 +53,7 @@ editor::editor() :
     mouse_drag_confirmed(false),
     mode(0),
     sec_mode(0),
-    status_bar_y(0),
+    warning_style(nullptr),
     zoom_max_level(0),
     zoom_min_level(0) {
     
@@ -81,7 +81,7 @@ editor::~editor() {
  */
 void editor::close_changes_warning() {
     gui->widgets["frm_changes"]->hide();
-    show_bottom_frame();
+    frm_toolbar->show();
 }
 
 
@@ -90,7 +90,7 @@ void editor::close_changes_warning() {
  */
 void editor::create_changes_warning_frame() {
     lafi::frame* frm_changes =
-        new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h, warning_style);
+        new lafi::frame(canvas_br.x, scr_h, scr_w, scr_h, warning_style);
     frm_changes->hide();
     gui->add("frm_changes", frm_changes);
     
@@ -125,21 +125,21 @@ void editor::create_changes_warning_frame() {
 void editor::create_picker_frame() {
 
     frm_picker =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
     frm_picker->hide();
     gui->add("frm_picker", frm_picker);
     
     frm_picker->add(
         "but_back",
-        new lafi::button(gui_x + 8, 8, gui_x + 96, 24, "Back")
+        new lafi::button(canvas_br.x + 8, 8, canvas_br.x + 96, 24, "Back")
     );
     frm_picker->add(
         "lbl_title",
-        new lafi::label(gui_x + 8, 32, scr_w - 8, 44)
+        new lafi::label(canvas_br.x + 8, 32, scr_w - 8, 44)
     );
     frm_picker->add(
         "txt_text",
-        new lafi::textbox(gui_x + 8, 52, scr_w - 48, 68)
+        new lafi::textbox(canvas_br.x + 8, 52, scr_w - 48, 68)
     );
     frm_picker->add(
         "but_new",
@@ -148,18 +148,18 @@ void editor::create_picker_frame() {
     
     frm_picker->add(
         "frm_list",
-        new lafi::frame(gui_x + 8, 84, scr_w - 32, scr_h - 56)
+        new lafi::frame(canvas_br.x + 8, 84, scr_w - 32, scr_h - 8)
     );
     frm_picker->add(
         "bar_scroll",
-        new lafi::scrollbar(scr_w - 24, 84, scr_w - 8, scr_h - 56)
+        new lafi::scrollbar(scr_w - 24, 84, scr_w - 8, scr_h - 8)
     );
     
     
     frm_picker->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         this->frm_picker->hide();
-        show_bottom_frame();
+        frm_toolbar->show();
         change_to_right_frame();
         custom_picker_cancel_action();
     };
@@ -204,6 +204,27 @@ void editor::create_picker_frame() {
         }
     };
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates the status bar.
+ */
+void editor::create_status_bar() {
+    lbl_status_bar =
+        new lafi::label(0, canvas_br.y, canvas_br.x, scr_h);
+    gui->add("lbl_status_bar", lbl_status_bar);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates the toolbar frame.
+ */
+void editor::create_toolbar_frame() {
+    frm_toolbar =
+        new lafi::frame(0, 0, canvas_br.x, canvas_tl.y);
+    gui->add("frm_toolbar", frm_toolbar);
+    frm_toolbar->solid_color_only = true;
 }
 
 
@@ -253,7 +274,7 @@ void editor::generate_and_open_picker(
 
     hide_all_frames();
     frm_picker->show();
-    hide_bottom_frame();
+    frm_toolbar->hide();
     
     set_label_text(frm_picker, "lbl_title", title);
     set_textbox_text(frm_picker, "txt_text", "");
@@ -557,19 +578,13 @@ void editor::set_radio_selection(
 
 
 /* ----------------------------------------------------------------------------
- * Hides the bottom tools frame.
- */
-void editor::hide_bottom_frame() {
-    gui->widgets["frm_bottom"]->hide();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns whether the mouse cursor is inside the gui or not.
  * The status bar counts as the gui.
  */
 bool editor::is_mouse_in_gui(const point &mouse_coords) {
-    return mouse_coords.x >= gui_x || mouse_coords.y >= status_bar_y;
+    return
+        mouse_coords.x >= canvas_br.x || mouse_coords.y >= canvas_br.y ||
+        mouse_coords.x <= canvas_tl.x || mouse_coords.y <= canvas_tl.y;
 }
 
 
@@ -641,30 +656,24 @@ void editor::populate_picker(const string &filter) {
 
 
 /* ----------------------------------------------------------------------------
- * Shows the bottom tools frame.
- */
-void editor::show_bottom_frame() {
-    gui->widgets["frm_bottom"]->show();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Shows the "unsaved changes" warning.
  */
 void editor::show_changes_warning() {
     gui->widgets["frm_changes"]->show();
-    hide_bottom_frame();
+    frm_toolbar->hide();
     
     made_changes = false;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Updates the variables that hold the gui's coordinates.
+ * Updates the variables that hold the canvas's coordinates.
  */
-void editor::update_gui_coordinates() {
-    gui_x = scr_w * 0.675;
-    status_bar_y = scr_h - 16;
+void editor::update_canvas_coordinates() {
+    canvas_tl.x = 0;
+    canvas_tl.y = 40;
+    canvas_br.x = scr_w * 0.675;
+    canvas_br.y = scr_h - 16;
 }
 
 
