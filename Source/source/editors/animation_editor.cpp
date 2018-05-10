@@ -73,7 +73,7 @@ animation_editor::animation_editor() :
     grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
     hitboxes_visible(true),
-    is_pikmin(false) {
+    loaded_mob_type(nullptr) {
     
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
@@ -333,7 +333,10 @@ void animation_editor::do_drawing() {
             }
         }
         
-        if(s->top_visible && is_pikmin) {
+        if(
+            s->top_visible && loaded_mob_type
+            && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
             draw_bitmap(
                 top_bmp[cur_maturity],
                 s->top_pos, s->top_size,
@@ -673,7 +676,10 @@ void animation_editor::sprite_to_gui() {
     } else {
         frm_sprite->show();
         
-        if(is_pikmin) {
+        if(
+            loaded_mob_type &&
+            loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
             enable_widget(frm_sprite->widgets["but_top"]);
         } else {
             disable_widget(frm_sprite->widgets["but_top"]);
@@ -1014,7 +1020,7 @@ void animation_editor::gui_to_top() {
 /* ----------------------------------------------------------------------------
  * Loads the animation database for the current object.
  */
-void animation_editor::load_animation_database() {
+void animation_editor::load_animation_database(const bool update_history) {
     file_path = standardize_path(file_path);
     
     anims.destroy();
@@ -1080,8 +1086,10 @@ void animation_editor::load_animation_database() {
         }
     }
     
-    if(file_path.find(PIKMIN_FOLDER_PATH) != string::npos) {
-        is_pikmin = true;
+    if(
+        loaded_mob_type &&
+        loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+    ) {
         data_node data =
             load_data_file(
                 PIKMIN_FOLDER_PATH + "/" +
@@ -1094,10 +1102,14 @@ void animation_editor::load_animation_database() {
             load_bmp(data.get_child_by_name("top_bud")->value, &data);
         top_bmp[2] =
             load_bmp(data.get_child_by_name("top_flower")->value, &data);
-    } else {
-        is_pikmin = false;
     }
     
+    if(update_history) {
+        update_animation_editor_history(file_path);
+        save_options(); //Save the history on the options.
+    }
+    
+    show_bottom_frame();
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
     loaded_content_yet = true;
@@ -1142,7 +1154,29 @@ void animation_editor::open_picker(
     
     picker_type = type;
     
-    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(type == ANIMATION_EDITOR_PICKER_MOB_TYPES) {
+        for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
+            //0 is none.
+            if(f == MOB_CATEGORY_NONE) continue;
+            
+            vector<string> names;
+            mob_category* cat = mob_categories.get(f);
+            cat->get_type_names(names);
+            string cat_name = mob_categories.get(f)->plural_name;
+            
+            for(size_t n = 0; n < names.size(); ++n) {
+                elements.push_back(make_pair(cat_name, names[n]));
+            }
+        }
+        title = "Choose an object type.";
+    } else if(type == ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS) {
+        vector<string> files =
+            folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
+        for(size_t f = 0; f < files.size(); ++f) {
+            elements.push_back(make_pair("", files[f]));
+        }
+        title = "Choose an animation.";
+    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             elements.push_back(make_pair("", anims.animations[a]->name));
         }
@@ -1162,7 +1196,19 @@ void animation_editor::open_picker(
  * Picks an item and closes the list picker frame.
  */
 void animation_editor::pick(const string &name, const string &category) {
-    if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(picker_type == ANIMATION_EDITOR_PICKER_MOB_TYPES) {
+        loaded_mob_type = mob_categories.find_mob_type(name);
+        file_path =
+            TYPES_FOLDER_PATH + "/" +
+            loaded_mob_type->category->plural_name + "/" +
+            loaded_mob_type->folder_name + "/Animations.txt";
+        load_animation_database(true);
+        
+    } else if(picker_type == ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS) {
+        file_path = ANIMATIONS_FOLDER_PATH + "/" + name;
+        load_animation_database(true);
+        
+    } else if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         if(mode == EDITOR_MODE_TOOLS) {
             set_button_text(frm_tools, "but_rename_anim_name", name);
         } else {
@@ -1257,23 +1303,37 @@ void animation_editor::populate_history() {
         string name = animation_editor_history[h];
         if(name.empty()) continue;
         
+        string button_text;
+        if(name.find(TYPES_FOLDER_PATH) != string::npos) {
+            vector<string> path_parts = split(name, "/");
+            if(
+                path_parts.size() > 3 &&
+                path_parts[path_parts.size() - 1] == "Animations.txt"
+            ) {
+                button_text =
+                    path_parts[path_parts.size() - 3] + "/" +
+                    path_parts[path_parts.size() - 2];
+            }
+        } else if(name.find(ANIMATIONS_FOLDER_PATH) != string::npos) {
+            vector<string> path_parts = split(name, "/");
+            if(!path_parts.empty()) {
+                button_text = path_parts[path_parts.size() - 1];
+            }
+        }
+        if(button_text.empty()) {
+            button_text = get_cut_path(name);
+        }
+        
         lafi::button* b =
-            new lafi::button(0, 0, 0, 0, get_cut_path(name));
+            new lafi::button(0, 0, 0, 0, button_text);
             
         auto lambda = [name, this] (lafi::widget*, int, int) {
             file_path = name;
-            load_animation_database();
-            
-            mode = EDITOR_MODE_MAIN;
-            show_bottom_frame();
-            change_to_right_frame();
-            
-            update_animation_editor_history(name);
-            save_options(); //Save the history on the options.
+            load_animation_database(true);
         };
         b->left_mouse_click_handler = lambda;
         f->easy_add("but_" + i2s(h), b, 100, 32);
-        f->easy_row();
+        f->easy_row(0);
     }
 }
 
@@ -1479,7 +1539,10 @@ void animation_editor::save_animation_database() {
         sprite_node->add(new data_node("game_size", p2s(s_ptr->game_size)));
         sprite_node->add(new data_node("offset",    p2s(s_ptr->offset)));
         
-        if(is_pikmin) {
+        if(
+            loaded_mob_type &&
+            loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
             sprite_node->add(
                 new data_node("top_visible", b2s(s_ptr->top_visible))
             );

@@ -32,6 +32,7 @@ void animation_editor::load() {
     mode = EDITOR_MODE_MAIN;
     file_path.clear();
     
+    load_mob_types(false);
     load_custom_particle_generators(false);
     load_status_types(false);
     load_liquids(false);
@@ -171,13 +172,28 @@ void animation_editor::load() {
     );
     frm_history->easy_row();
     frm_history->easy_add(
+        "lbl_load",
+        new lafi::label("Load:"), 100, 16
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "but_object",
+        new lafi::button("Object animation"), 100, 32
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "but_global",
+        new lafi::button("Global animation"), 100, 32
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
         "but_browse",
-        new lafi::button("Browse"), 100, 24
+        new lafi::button("Other..."), 100, 32
     );
     frm_history->easy_row();
     frm_history->easy_add(
         "dum_1",
-        new lafi::dummy(), 100, 16
+        new lafi::dummy(), 100, 12
     );
     frm_history->easy_row();
     frm_history->easy_add(
@@ -200,6 +216,21 @@ void animation_editor::load() {
     };
     frm_history->widgets["but_back"]->description =
         "Go back to the main menu.";
+        
+    frm_history->widgets["but_object"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_MOB_TYPES, false);
+    };
+    frm_history->widgets["but_object"]->description =
+        "Load the animations of an object type.";
+        
+    frm_history->widgets["but_global"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS, false);
+    };
+    frm_history->widgets["but_global"]->description =
+        "Load a global generic animation.";
+        
     frm_history->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string last_file_opened;
@@ -220,12 +251,7 @@ void animation_editor::load() {
         
         file_path = f[0];
         
-        load_animation_database();
-        update_animation_editor_history(f[0]);
-        save_options(); //Save the history on the options.
-        show_bottom_frame();
-        mode = EDITOR_MODE_MAIN;
-        change_to_right_frame();
+        load_animation_database(true);
     };
     frm_history->widgets["but_browse"]->description =
         "Pick a file to load or create.";
@@ -2046,7 +2072,7 @@ void animation_editor::load() {
         if(made_changes) {
             this->show_changes_warning();
         } else {
-            load_animation_database();
+            load_animation_database(false);
         }
     };
     frm_bottom->widgets["but_load"]->description =
@@ -2082,6 +2108,6 @@ void animation_editor::load() {
     
     if(!auto_load_anim.empty()) {
         file_path = auto_load_anim;
-        load_animation_database();
+        load_animation_database(true);
     }
 }

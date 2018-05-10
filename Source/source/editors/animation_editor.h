@@ -43,6 +43,8 @@ private:
     };
     
     enum ANIMATION_EDITOR_PICKER_TYPES {
+        ANIMATION_EDITOR_PICKER_MOB_TYPES,
+        ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS,
         ANIMATION_EDITOR_PICKER_ANIMATION,
         ANIMATION_EDITOR_PICKER_SPRITE,
     };
@@ -123,8 +125,8 @@ private:
     //or the anchor, when in resize mode.
     point                     grabbing_hitbox_point;
     bool                      hitboxes_visible;
-    bool                      is_pikmin;
     string                    last_file_used;
+    mob_type*                 loaded_mob_type;
     //Disambiguation for the exact kind of picker. Use PICKER_DISAMBIG_*.
     unsigned char             picker_disambig;
     //Top bitmaps for the current Pikmin type.
@@ -139,7 +141,7 @@ private:
     void import_sprite_hitbox_data(const string &name);
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
-    void load_animation_database();
+    void load_animation_database(const bool update_history);
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();

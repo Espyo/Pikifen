@@ -58,6 +58,7 @@ public:
     
     //Technical things.
     string name;
+    string folder_name;
     mob_category* category;
     
     //Visual things.

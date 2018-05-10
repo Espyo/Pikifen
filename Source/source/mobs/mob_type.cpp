@@ -221,6 +221,8 @@ void load_mob_types(mob_category* category, bool load_resources) {
         
         category->register_type(mt);
         
+        mt->folder_name = types[t];
+        
     }
     
 }
