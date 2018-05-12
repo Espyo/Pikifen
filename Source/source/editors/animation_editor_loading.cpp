@@ -120,6 +120,7 @@ void animation_editor::load() {
         
     frm_object->widgets["but_anims"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         if(cur_anim) {
             if(cur_anim->frames.size()) cur_frame_nr = 0;
@@ -134,6 +135,7 @@ void animation_editor::load() {
     frm_object->widgets["but_sprites"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SPRITE;
+        cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         change_to_right_frame();
         sprite_to_gui();
@@ -446,6 +448,7 @@ void animation_editor::load() {
         anim_playing = false;
         cur_anim = NULL;
         cur_frame_nr = INVALID;
+        cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         animation_to_gui();
         made_changes = true;
@@ -779,6 +782,7 @@ void animation_editor::load() {
             anims.sprites.begin() + anims.find_sprite(cur_sprite->name)
         );
         cur_sprite = NULL;
+        cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         sprite_to_gui();
         made_changes = true;
@@ -818,7 +822,10 @@ void animation_editor::load() {
     frm_sprite->widgets["but_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_HITBOXES;
-        cur_hitbox_nr = 0;
+        if(cur_sprite && !cur_sprite->hitboxes.empty()) {
+            cur_hitbox = &cur_sprite->hitboxes[0];
+            cur_hitbox_nr = 0;
+        }
         hitbox_to_gui();
         change_to_right_frame();
     };
@@ -1229,6 +1236,15 @@ void animation_editor::load() {
     );
     frm_hitbox->easy_row();
     frm_hitbox->easy_add(
+        "lbl_r",
+        new lafi::label("Radius:"), 45, 16
+    );
+    frm_hitbox->easy_add(
+        "txt_r",
+        new lafi::textbox(), 55, 16
+    );
+    frm_hitbox->easy_row();
+    frm_hitbox->easy_add(
         "lbl_zh",
         new lafi::label("Z, Height:"), 45, 16
     );
@@ -1239,15 +1255,6 @@ void animation_editor::load() {
     frm_hitbox->easy_add(
         "txt_h",
         new lafi::textbox(), 27.5, 16
-    );
-    frm_hitbox->easy_row();
-    frm_hitbox->easy_add(
-        "lbl_r",
-        new lafi::label("Radius:"), 45, 16
-    );
-    frm_hitbox->easy_add(
-        "txt_r",
-        new lafi::textbox(), 55, 16
     );
     frm_hitbox->easy_row();
     
@@ -1375,6 +1382,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SPRITE;
         change_to_right_frame();
+        cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         update_stats();
     };
@@ -1385,13 +1393,15 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         gui_to_hitbox();
         if(cur_sprite->hitboxes.size()) {
-            if(cur_hitbox_nr == INVALID) {
+            if(!cur_hitbox) {
+                cur_hitbox = &cur_sprite->hitboxes[0];
                 cur_hitbox_nr = 0;
             } else {
                 cur_hitbox_nr =
                     sum_and_wrap(
                         cur_hitbox_nr, -1, cur_sprite->hitboxes.size()
                     );
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
         }
         hitbox_to_gui();
@@ -1404,10 +1414,12 @@ void animation_editor::load() {
         gui_to_hitbox();
         if(cur_sprite->hitboxes.size()) {
             if(cur_hitbox_nr == INVALID) {
+                cur_hitbox = &cur_sprite->hitboxes[0];
                 cur_hitbox_nr = 0;
             } else {
                 cur_hitbox_nr =
                     sum_and_wrap(cur_hitbox_nr, 1, cur_sprite->hitboxes.size());
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
         }
         hitbox_to_gui();

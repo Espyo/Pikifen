@@ -123,15 +123,21 @@ void sprite::calculate_hitbox_span() {
 
 /* ----------------------------------------------------------------------------
  * Creates the hitboxes, based on the body parts.
+ * adb:    The animation database the sprites and body parts belong to.
+ * height: The hitboxes's starting height.
+ * radius: The hitboxes's starting radius.
  */
-void sprite::create_hitboxes(animation_database* const adb) {
+void sprite::create_hitboxes(
+    animation_database* const adb, const float height, const float radius
+) {
     hitboxes.clear();
     for(size_t b = 0; b < adb->body_parts.size(); ++b) {
         hitboxes.push_back(
             hitbox(
                 adb->body_parts[b]->name,
                 b,
-                adb->body_parts[b]
+                adb->body_parts[b],
+                point(), 0, height, radius
             )
         );
     }

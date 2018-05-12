@@ -114,7 +114,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
 #undef fill_pixel
     
     al_unlock_bitmap(bmp);
-    bmp = recreate_bitmap(bmp);
+    bmp = recreate_bitmap(bmp); //Refresh mipmaps.
     return bmp;
 }
 

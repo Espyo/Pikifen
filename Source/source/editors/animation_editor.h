@@ -112,21 +112,17 @@ private:
     size_t                    cur_body_part_nr;
     size_t                    cur_frame_nr;
     float                     cur_frame_time;
+    hitbox*                   cur_hitbox;
     //The alpha is calculated using the sine of this value.
     float                     cur_hitbox_alpha;
     size_t                    cur_hitbox_nr;
+    transformation_controller cur_hitbox_tc;
     //Current maturity of the Pikmin,
     //used to check the visuals of different Pikmin tops.
     unsigned char             cur_maturity;
     sprite*                   cur_sprite;
     transformation_controller cur_sprite_tc;
     string                    file_path;
-    //Hitbox being grabbed by the mouse cursor. INVALID = none.
-    size_t                    grabbing_hitbox;
-    bool                      grabbing_hitbox_edge;
-    //X world coordinate of the point we're grabbing,
-    //or the anchor, when in resize mode.
-    point                     grabbing_hitbox_point;
     bool                      hitboxes_visible;
     string                    last_file_used;
     mob_type*                 loaded_mob_type;
@@ -140,6 +136,8 @@ private:
     transformation_controller top_tc;
     
     //General functions.
+    ALLEGRO_BITMAP* create_hitbox_bitmap();
+    void cur_hitbox_tc_to_gui();
     void cur_sprite_tc_to_gui();
     void draw_comparison();
     string get_cut_path(const string &p);

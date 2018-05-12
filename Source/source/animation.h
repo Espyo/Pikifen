@@ -104,7 +104,10 @@ public:
         const vector<hitbox> &h
     );
     sprite(const sprite &s2);
-    void create_hitboxes(animation_database* const adb);
+    void create_hitboxes(
+        animation_database* const adb,
+        const float height = 0, const float radius = 0
+    );
     void set_bitmap(
         const string &file_name, const point &file_pos, const point &file_size,
         data_node* node = NULL

@@ -51,39 +51,21 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(mode == EDITOR_MODE_HITBOXES) {
-        if(cur_sprite) {
-            for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
-            
-                hitbox* h_ptr = &cur_sprite->hitboxes[h];
-                dist d(mouse_cursor_w, h_ptr->pos);
-                if(d <= h_ptr->radius) {
-                    gui_to_hitbox();
-                    cur_hitbox_nr = h;
-                    hitbox_to_gui();
-                    
-                    grabbing_hitbox = h;
-                    grabbing_hitbox_edge =
-                        (d > h_ptr->radius - 5 / cam_zoom);
+        if(cur_sprite && cur_hitbox) {
+            if(cur_hitbox_tc.handle_mouse_down(mouse_cursor_w)) {
+                cur_hitbox_tc_to_gui();
+            } else {
+                for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
+                    hitbox* h_ptr = &cur_sprite->hitboxes[h];
+                    dist d(mouse_cursor_w, h_ptr->pos);
+                    if(d <= h_ptr->radius) {
+                        gui_to_hitbox();
+                        cur_hitbox_nr = h;
+                        cur_hitbox = &cur_sprite->hitboxes[h];
+                        hitbox_to_gui();
                         
-                    //If the user grabbed the outermost 5 pixels,
-                    //change radius. Else move hitbox.
-                    if(grabbing_hitbox_edge) {
-                        float anchor_angle =
-                            get_angle(mouse_cursor_w, h_ptr->pos);
-                        //These variables will actually serve
-                        //to store the anchor.
-                        grabbing_hitbox_point.x =
-                            h_ptr->pos.x +
-                            cos(anchor_angle) * h_ptr->radius;
-                        grabbing_hitbox_point.y =
-                            h_ptr->pos.y +
-                            sin(anchor_angle) * h_ptr->radius;
-                    } else {
-                        grabbing_hitbox_point =
-                            h_ptr->pos - mouse_cursor_w;
+                        made_changes = true;
                     }
-                    
-                    made_changes = true;
                 }
             }
         }
@@ -176,23 +158,15 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
         if(cur_sprite_tc.handle_mouse_move(mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
+            made_changes = true;
         }
         
     } else if(mode == EDITOR_MODE_HITBOXES) {
-        if(grabbing_hitbox != INVALID) {
-            hitbox* h_ptr = &cur_sprite->hitboxes[grabbing_hitbox];
-            
-            if(grabbing_hitbox_edge) {
-                h_ptr->radius =
-                    dist(mouse_cursor_w, grabbing_hitbox_point).to_float() / 2;
-                h_ptr->pos = (mouse_cursor_w + grabbing_hitbox_point) / 2.0;
-                
-            } else {
-                h_ptr->pos = mouse_cursor_w + grabbing_hitbox_point;
+        if(cur_sprite && cur_hitbox) {
+            if(cur_hitbox_tc.handle_mouse_move(mouse_cursor_w)) {
+                cur_hitbox_tc_to_gui();
+                made_changes = true;
             }
-            
-            hitbox_to_gui();
-            made_changes = true;
         }
     } else if(
         mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
@@ -214,8 +188,11 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
         top_tc.handle_mouse_up();
+    } else if(mode == EDITOR_MODE_HITBOXES) {
+        if(cur_sprite && cur_hitbox) {
+            cur_hitbox_tc.handle_mouse_up();
+        }
     }
-    grabbing_hitbox = INVALID;
 }
 
 

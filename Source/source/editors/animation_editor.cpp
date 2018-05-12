@@ -70,12 +70,11 @@ animation_editor::animation_editor() :
     cur_body_part_nr(INVALID),
     cur_frame_nr(INVALID),
     cur_frame_time(0),
+    cur_hitbox(nullptr),
     cur_hitbox_alpha(0),
     cur_hitbox_nr(INVALID),
     cur_maturity(0),
     cur_sprite(NULL),
-    grabbing_hitbox(INVALID),
-    grabbing_hitbox_edge(false),
     hitboxes_visible(true),
     mob_radius_visible(false),
     origin_visible(true),
@@ -95,12 +94,31 @@ animation_editor::animation_editor() :
         );
     comparison_blink_timer.start();
     
+    cur_hitbox_tc.keep_aspect_ratio = true;
     cur_sprite_tc.keep_aspect_ratio = true;
     top_tc.keep_aspect_ratio = true;
     top_tc.allow_rotation = true;
     
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds the current hitbox's transformation controller data to the GUI.
+ */
+void animation_editor::cur_hitbox_tc_to_gui() {
+    if(!cur_sprite && !cur_hitbox) return;
+    set_textbox_text(
+        frm_hitbox, "txt_x", f2s(cur_hitbox_tc.get_center().x)
+    );
+    set_textbox_text(
+        frm_hitbox, "txt_y", f2s(cur_hitbox_tc.get_center().y)
+    );
+    set_textbox_text(
+        frm_hitbox, "txt_r", f2s(cur_hitbox_tc.get_size().x / 2.0)
+    );
+    gui_to_hitbox();
 }
 
 
@@ -299,6 +317,17 @@ void animation_editor::do_drawing() {
             draw_bitmap(s->bitmap, s->offset, s->game_size, 0, tint);
         }
         
+        if(
+            s->top_visible && loaded_mob_type
+            && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
+            draw_bitmap(
+                top_bmp[cur_maturity],
+                s->top_pos, s->top_size,
+                s->top_angle
+            );
+        }
+        
         if(draw_hitboxes) {
             size_t n_hitboxes = s->hitboxes.size();
             for(size_t h = 0; h < n_hitboxes; ++h) {
@@ -347,17 +376,6 @@ void animation_editor::do_drawing() {
             }
         }
         
-        if(
-            s->top_visible && loaded_mob_type
-            && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
-        ) {
-            draw_bitmap(
-                top_bmp[cur_maturity],
-                s->top_pos, s->top_size,
-                s->top_angle
-            );
-        }
-        
         if(comparison_above) {
             draw_comparison();
         }
@@ -369,6 +387,10 @@ void animation_editor::do_drawing() {
             cur_sprite && cur_sprite->top_visible
         ) {
             top_tc.draw_handles();
+        } else if(mode == EDITOR_MODE_HITBOXES) {
+            if(cur_sprite && cur_hitbox) {
+                cur_hitbox_tc.draw_handles();
+            }
         }
         
     }
@@ -580,47 +602,49 @@ void animation_editor::frame_to_gui() {
  * Loads the hitbox's data from memory to the gui.
  */
 void animation_editor::hitbox_to_gui() {
-    hitbox* cur_h = NULL;
-    if(!cur_sprite->hitboxes.empty()) {
-        cur_h = &cur_sprite->hitboxes[cur_hitbox_nr];
-    }
-    if(cur_h) {
-        set_label_text(frm_hitboxes, "lbl_name", cur_h->body_part_name);
-        set_textbox_text(frm_hitbox, "txt_x", f2s(cur_h->pos.x));
-        set_textbox_text(frm_hitbox, "txt_y", f2s(cur_h->pos.y));
-        set_textbox_text(frm_hitbox, "txt_z", f2s(cur_h->z));
-        set_textbox_text(frm_hitbox, "txt_h", f2s(cur_h->height));
-        set_textbox_text(frm_hitbox, "txt_r", f2s(cur_h->radius));
+    if(cur_hitbox) {
+        set_label_text(frm_hitboxes, "lbl_name", cur_hitbox->body_part_name);
+        set_textbox_text(frm_hitbox, "txt_x", f2s(cur_hitbox->pos.x));
+        set_textbox_text(frm_hitbox, "txt_y", f2s(cur_hitbox->pos.y));
+        set_textbox_text(frm_hitbox, "txt_z", f2s(cur_hitbox->z));
+        set_textbox_text(frm_hitbox, "txt_h", f2s(cur_hitbox->height));
+        set_textbox_text(frm_hitbox, "txt_r", f2s(cur_hitbox->radius));
     }
     
-    open_hitbox_type(cur_h ? cur_h->type : 255);
+    open_hitbox_type(cur_hitbox ? cur_hitbox->type : 255);
     
-    if(cur_h) {
+    if(cur_hitbox) {
         frm_hitbox->show();
-        if(cur_h->type == HITBOX_TYPE_NORMAL) {
-            set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_h->value));
+        if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
+            set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_hitbox->value));
             set_checkbox_check(
-                frm_normal_h, "chk_latch", cur_h->can_pikmin_latch
+                frm_normal_h, "chk_latch", cur_hitbox->can_pikmin_latch
             );
-            set_textbox_text(frm_normal_h, "txt_hazards", cur_h->hazards_str);
+            set_textbox_text(
+                frm_normal_h, "txt_hazards", cur_hitbox->hazards_str
+            );
             
-        } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
-            set_textbox_text(frm_attack_h, "txt_value", f2s(cur_h->value));
-            set_textbox_text(frm_attack_h, "txt_hazards", cur_h->hazards_str);
+        } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
+            set_textbox_text(
+                frm_attack_h, "txt_value", f2s(cur_hitbox->value)
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_hazards", cur_hitbox->hazards_str
+            );
             set_checkbox_check(
-                frm_attack_h, "chk_outward", cur_h->knockback_outward
+                frm_attack_h, "chk_outward", cur_hitbox->knockback_outward
             );
             set_angle_picker_angle(
-                frm_attack_h, "ang_angle", cur_h->knockback_angle
+                frm_attack_h, "ang_angle", cur_hitbox->knockback_angle
             );
             set_textbox_text(
-                frm_attack_h, "txt_knockback", f2s(cur_h->knockback)
+                frm_attack_h, "txt_knockback", f2s(cur_hitbox->knockback)
             );
             set_textbox_text(
-                frm_attack_h, "txt_wither", i2s(cur_h->wither_chance)
+                frm_attack_h, "txt_wither", i2s(cur_hitbox->wither_chance)
             );
             
-            if(cur_h->knockback_outward) {
+            if(cur_hitbox->knockback_outward) {
                 disable_widget(frm_attack_h->widgets["ang_angle"]);
             } else {
                 enable_widget(frm_attack_h->widgets["ang_angle"]);
@@ -629,6 +653,13 @@ void animation_editor::hitbox_to_gui() {
         }
     } else {
         frm_hitbox->hide();
+    }
+    
+    if(cur_hitbox) {
+        cur_hitbox_tc.set_center(cur_hitbox->pos);
+        cur_hitbox_tc.set_size(
+            point(cur_hitbox->radius * 2, cur_hitbox->radius * 2)
+        );
     }
 }
 
@@ -658,6 +689,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
         }
     }
     cur_hitbox_nr = 0;
+    cur_hitbox = NULL;
     hitbox_to_gui();
     emit_status_bar_message("Data imported.", false);
 }
@@ -708,6 +740,12 @@ void animation_editor::sprite_to_gui() {
         frm_sprite->hide();
     } else {
         frm_sprite->show();
+        
+        if(anims.body_parts.empty()) {
+            disable_widget(frm_sprite->widgets["but_hitboxes"]);
+        } else {
+            enable_widget(frm_sprite->widgets["but_hitboxes"]);
+        }
         
         if(
             loaded_mob_type &&
@@ -876,50 +914,45 @@ void animation_editor::gui_to_frame() {
  * Saves the hitbox's data to memory using info on the gui.
  */
 void animation_editor::gui_to_hitbox() {
-    bool valid = cur_hitbox_nr != INVALID && cur_sprite;
+    bool valid = cur_sprite && cur_hitbox;
     if(!valid) return;
     
-    hitbox* h = &cur_sprite->hitboxes[cur_hitbox_nr];
+    cur_hitbox->pos.x = s2f(get_textbox_text(frm_hitbox, "txt_x"));
+    cur_hitbox->pos.y = s2f(get_textbox_text(frm_hitbox, "txt_y"));
+    cur_hitbox->z = s2f(get_textbox_text(frm_hitbox, "txt_z"));
     
-    h->pos.x = s2f(get_textbox_text(frm_hitbox, "txt_x"));
-    h->pos.y = s2f(get_textbox_text(frm_hitbox, "txt_y"));
-    h->z = s2f(get_textbox_text(frm_hitbox, "txt_z"));
+    cur_hitbox->height = s2f(get_textbox_text(frm_hitbox, "txt_h"));
+    cur_hitbox->radius = s2f(get_textbox_text(frm_hitbox, "txt_r"));
+    if(cur_hitbox->radius <= 0) cur_hitbox->radius = 16;
     
-    h->height = s2f(get_textbox_text(frm_hitbox, "txt_h"));
-    h->radius = s2f(get_textbox_text(frm_hitbox, "txt_r"));
-    if(h->radius <= 0) h->radius = 16;
-    
-    hitbox* cur_h =
-        &cur_sprite->hitboxes[cur_hitbox_nr];
-        
     if(get_radio_selection(frm_hitbox, "rad_normal")) {
-        cur_h->type = HITBOX_TYPE_NORMAL;
+        cur_hitbox->type = HITBOX_TYPE_NORMAL;
     } else if(get_radio_selection(frm_hitbox, "rad_attack")) {
-        cur_h->type = HITBOX_TYPE_ATTACK;
+        cur_hitbox->type = HITBOX_TYPE_ATTACK;
     } else {
-        cur_h->type = HITBOX_TYPE_DISABLED;
+        cur_hitbox->type = HITBOX_TYPE_DISABLED;
     }
     
-    if(cur_h->type == HITBOX_TYPE_NORMAL) {
-        cur_h->value =
+    if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
+        cur_hitbox->value =
             s2f(get_textbox_text(frm_normal_h, "txt_mult"));
-        cur_h->can_pikmin_latch =
+        cur_hitbox->can_pikmin_latch =
             get_checkbox_check(frm_normal_h, "chk_latch");
-        cur_h->hazards_str =
+        cur_hitbox->hazards_str =
             get_textbox_text(frm_normal_h, "txt_hazards");
             
-    } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
-        cur_h->value =
+    } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
+        cur_hitbox->value =
             s2f(get_textbox_text(frm_attack_h, "txt_value"));
-        cur_h->hazards_str =
+        cur_hitbox->hazards_str =
             get_textbox_text(frm_attack_h, "txt_hazards");
-        cur_h->knockback_outward =
+        cur_hitbox->knockback_outward =
             get_checkbox_check(frm_attack_h, "chk_outward");
-        cur_h->knockback_angle =
+        cur_hitbox->knockback_angle =
             get_angle_picker_angle(frm_attack_h, "ang_angle");
-        cur_h->knockback =
+        cur_hitbox->knockback =
             s2f(get_textbox_text(frm_attack_h, "txt_knockback"));
-        cur_h->wither_chance =
+        cur_hitbox->wither_chance =
             s2i(get_textbox_text(frm_attack_h, "txt_wither"));
     }
     
@@ -1068,6 +1101,7 @@ void animation_editor::load_animation_database(const bool update_history) {
     cur_anim = NULL;
     cur_sprite = NULL;
     cur_frame_nr = INVALID;
+    cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
     if(!anims.animations.empty()) {
         cur_anim = anims.animations[0];
@@ -1075,7 +1109,10 @@ void animation_editor::load_animation_database(const bool update_history) {
     }
     if(!anims.sprites.empty()) {
         cur_sprite = anims.sprites[0];
-        if(cur_sprite->hitboxes.size()) cur_hitbox_nr = 0;
+        if(!cur_sprite->hitboxes.empty()) {
+            cur_hitbox = &cur_sprite->hitboxes[0];
+            cur_hitbox_nr = 0;
+        }
     }
     
     enable_widget(frm_toolbar->widgets["but_load"]);
@@ -1271,6 +1308,7 @@ void animation_editor::pick(const string &name, const string &category) {
             cur_anim = anims.animations[anims.find_animation(name)];
             cur_frame_nr =
                 (cur_anim->frames.size()) ? 0 : INVALID;
+            cur_hitbox = NULL;
             cur_hitbox_nr = INVALID;
             animation_to_gui();
         }
@@ -1328,6 +1366,7 @@ void animation_editor::pick(const string &name, const string &category) {
  */
 void animation_editor::pick_sprite(const string &name) {
     cur_sprite = anims.sprites[anims.find_sprite(name)];
+    cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
     if(cur_sprite->file.empty()) {
         //New frame. Suggest file name.
@@ -1769,7 +1808,13 @@ void animation_editor::update_hitboxes() {
             }
             
             if(!hitbox_found) {
-                s_ptr->hitboxes.push_back(hitbox(name));
+                s_ptr->hitboxes.push_back(
+                    hitbox(
+                        name, INVALID, NULL, point(), 0,
+                        loaded_mob_type ? loaded_mob_type->height : 128,
+                        loaded_mob_type ? loaded_mob_type->radius : 32
+                    )
+                );
             }
         }
         
@@ -1814,7 +1859,7 @@ void animation_editor::update_stats() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new item from the picker frame, given its name.
+ * Creates a new item from the picker frame, given the item's name.
  */
 void animation_editor::create_new_from_picker(const string &name) {
     if(mode == EDITOR_MODE_ANIMATION) {
@@ -1825,7 +1870,11 @@ void animation_editor::create_new_from_picker(const string &name) {
     } else if(mode == EDITOR_MODE_SPRITE) {
         if(anims.find_sprite(name) != INVALID) return;
         anims.sprites.push_back(new sprite(name));
-        anims.sprites.back()->create_hitboxes(&anims);
+        anims.sprites.back()->create_hitboxes(
+            &anims,
+            loaded_mob_type ? loaded_mob_type->height : 128,
+            loaded_mob_type ? loaded_mob_type->radius : 32
+        );
         pick(name, "");
         
     }
