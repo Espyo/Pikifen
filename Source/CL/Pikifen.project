@@ -175,6 +175,7 @@
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
   <VirtualDirectory Name="editors">
+    <File Name="../source/editors/animation_editor_gui_functions.cpp"/>
     <File Name="../source/editors/editor.h"/>
     <File Name="../source/editors/editor.cpp"/>
     <File Name="../source/editors/animation_editor.h"/>
