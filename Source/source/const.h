@@ -34,6 +34,11 @@ const unsigned char VERSION_DAY   = 23;
 const unsigned char VERSION_MONTH = 04;
 const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
+const string ANIMATION_EDITOR_TUTORIAL_URL =
+    "http://www.pikminfanon.com/Pikifen/Creating_animations";
+const string AREA_EDITOR_TUTORIAL_URL =
+    "http://www.pikminfanon.com/Pikifen/Creating_areas";
+
 //How many entries of the animation editor history to store, at max.
 const size_t ANIMATION_EDITOR_HISTORY_SIZE = 6;
 //How long it takes for the area name to fade away, in-game.

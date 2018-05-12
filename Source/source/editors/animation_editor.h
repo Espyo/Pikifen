@@ -62,13 +62,17 @@ private:
     static const string ICON_DELETE;
     static const string ICON_DUPLICATE;
     static const string ICON_EXIT;
+    static const string ICON_HELP;
     static const string ICON_HITBOXES;
     static const string ICON_INFO;
     static const string ICON_LOAD;
+    static const string ICON_MOB_RADIUS;
     static const string ICON_MOVE_LEFT;
     static const string ICON_MOVE_RIGHT;
     static const string ICON_NEW;
     static const string ICON_NEXT;
+    static const string ICON_ORIGIN;
+    static const string ICON_PIKMIN_SILHOUETTE;
     static const string ICON_PLAY_PAUSE;
     static const string ICON_PREVIOUS;
     static const string ICON_SAVE;
@@ -126,8 +130,11 @@ private:
     bool                      hitboxes_visible;
     string                    last_file_used;
     mob_type*                 loaded_mob_type;
+    bool                      mob_radius_visible;
+    bool                      origin_visible;
     //Disambiguation for the exact kind of picker. Use PICKER_DISAMBIG_*.
     unsigned char             picker_disambig;
+    bool                      pikmin_silhouette_visible;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
     transformation_controller top_tc;

@@ -96,6 +96,24 @@ mob_type* mob_category_manager::find_mob_type(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Finds a mob type given its folder's name in the Game data folder.
+ * cat:  Category the mob is in.
+ * name: Name of the folder.
+ */
+mob_type* mob_category_manager::find_mob_type_from_folder_name(
+    mob_category* cat, const string &name
+) {
+    vector<string> types;
+    cat->get_type_names(types);
+    for(size_t t = 0 ; t < types.size(); ++t) {
+        mob_type* mt = cat->get_type(types[t]);
+        if(mt->folder_name == name) return mt;
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a category given its ID.
  * Returns NULL on error.
  */

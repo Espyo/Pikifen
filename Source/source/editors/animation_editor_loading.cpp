@@ -252,6 +252,7 @@ void animation_editor::load() {
         
         file_path = f[0];
         
+        loaded_mob_type = NULL;
         load_animation_database(true);
     };
     frm_history->widgets["but_browse"]->description =
@@ -2046,8 +2047,38 @@ void animation_editor::load() {
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
+        "dum_1",
+        new lafi::dummy(), 12, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_toggle_origin",
+        new lafi::button("", "", icons.get(ICON_ORIGIN)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_toggle_hitboxes",
         new lafi::button("", "", icons.get(ICON_HITBOXES)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_toggle_mob_radius",
+        new lafi::button("", "", icons.get(ICON_MOB_RADIUS)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_toggle_pik_sil",
+        new lafi::button("", "", icons.get(ICON_PIKMIN_SILHOUETTE)), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "dum_2",
+        new lafi::dummy(), 12, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_help",
+        new lafi::button("", "", icons.get(ICON_HELP)), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
@@ -2059,13 +2090,6 @@ void animation_editor::load() {
     
     
     //Toolbar -- properties.
-    frm_toolbar->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        hitboxes_visible = !hitboxes_visible;
-    };
-    frm_toolbar->widgets["but_toggle_hitboxes"]->description =
-        "Toggle hitbox and center-point grid visibility.";
-        
     frm_toolbar->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -2083,6 +2107,53 @@ void animation_editor::load() {
     };
     frm_toolbar->widgets["but_save"]->description =
         "Save the object to the text file.";
+        
+    frm_toolbar->widgets["but_toggle_origin"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        origin_visible = !origin_visible;
+    };
+    frm_toolbar->widgets["but_toggle_origin"]->description =
+        "Toggle visibility of the center-point (origin).";
+        
+    frm_toolbar->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        hitboxes_visible = !hitboxes_visible;
+    };
+    frm_toolbar->widgets["but_toggle_hitboxes"]->description =
+        "Toggle visibility of the hitboxes, if any.";
+        
+    frm_toolbar->widgets["but_toggle_mob_radius"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mob_radius_visible = !mob_radius_visible;
+    };
+    frm_toolbar->widgets["but_toggle_mob_radius"]->description =
+        "Toggle visibility of the mob's radius, if applicable.";
+        
+    frm_toolbar->widgets["but_toggle_pik_sil"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        pikmin_silhouette_visible = !pikmin_silhouette_visible;
+    };
+    frm_toolbar->widgets["but_toggle_pik_sil"]->description =
+        "Toggle visibility of a lying Pikmin silhouette.";
+        
+    frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        string help_str =
+            "To create an animation, first you need some image file "
+            "to get the animation frames from, featuring the object "
+            "you want to edit in the different poses. After that, "
+            "you define what sprites exist (what parts of the image match "
+            "what poses), and then create animations, populating "
+            "their frames with the sprites.\n\n"
+            "If you need more help on how to use the animation editor, "
+            "check out the tutorial on\n" + ANIMATION_EDITOR_TUTORIAL_URL;
+        al_show_native_message_box(
+            display, "Help", "Animation editor help",
+            help_str.c_str(), NULL, 0
+        );
+    };
+    frm_toolbar->widgets["but_help"]->description =
+        "Display some information about the animation editor.";
         
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2107,6 +2178,7 @@ void animation_editor::load() {
     loaded_content_yet = false;
     
     if(!auto_load_anim.empty()) {
+        loaded_mob_type = NULL;
         file_path = auto_load_anim;
         load_animation_database(true);
     }

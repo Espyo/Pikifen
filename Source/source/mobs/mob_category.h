@@ -86,6 +86,9 @@ private:
 public:
     void register_category(size_t nr, mob_category* category);
     mob_type* find_mob_type(const string &name);
+    mob_type* find_mob_type_from_folder_name(
+        mob_category* cat, const string &name
+    );
     mob_category* get(const size_t id);
     mob_category* get_from_name(const string &name);
     mob_category* get_from_pname(const string &pname);

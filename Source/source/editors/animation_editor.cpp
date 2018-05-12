@@ -38,13 +38,17 @@ const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 const string animation_editor::ICON_DELETE = "Delete.png";
 const string animation_editor::ICON_DUPLICATE = "Duplicate.png";
 const string animation_editor::ICON_EXIT = "Exit.png";
+const string animation_editor::ICON_HELP = "Help.png";
 const string animation_editor::ICON_HITBOXES = "Hitboxes.png";
 const string animation_editor::ICON_INFO = "Info.png";
 const string animation_editor::ICON_LOAD = "Load.png";
+const string animation_editor::ICON_MOB_RADIUS = "Mob_radius.png";
 const string animation_editor::ICON_MOVE_LEFT = "Move_left.png";
 const string animation_editor::ICON_MOVE_RIGHT = "Move_right.png";
 const string animation_editor::ICON_NEW = "New.png";
 const string animation_editor::ICON_NEXT = "Next.png";
+const string animation_editor::ICON_ORIGIN = "Origin.png";
+const string animation_editor::ICON_PIKMIN_SILHOUETTE = "Pikmin_silhouette.png";
 const string animation_editor::ICON_PLAY_PAUSE = "Play_pause.png";
 const string animation_editor::ICON_PREVIOUS = "Previous.png";
 const string animation_editor::ICON_SAVE = "Save.png";
@@ -73,6 +77,9 @@ animation_editor::animation_editor() :
     grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
     hitboxes_visible(true),
+    mob_radius_visible(false),
+    origin_visible(true),
+    pikmin_silhouette_visible(false),
     loaded_mob_type(nullptr) {
     
     top_bmp[0] = NULL;
@@ -177,7 +184,10 @@ void animation_editor::do_drawing() {
     al_clear_to_color(al_map_rgb(128, 144, 128));
     
     sprite* s = NULL;
+    bool draw_origin = origin_visible;
     bool draw_hitboxes = hitboxes_visible;
+    bool draw_mob_radius = mob_radius_visible;
+    bool draw_pikmin_silhouette = pikmin_silhouette_visible;
     
     if(mode == EDITOR_MODE_ANIMATION) {
         if(cur_frame_nr != INVALID) {
@@ -203,7 +213,10 @@ void animation_editor::do_drawing() {
     
     if(mode == EDITOR_MODE_SPRITE_BITMAP && s && s->parent_bmp) {
     
+        draw_origin = false;
         draw_hitboxes = false;
+        draw_mob_radius = false;
+        draw_pikmin_silhouette = false;
         
         int bmp_w = al_get_bitmap_width(s->parent_bmp);
         int bmp_h = al_get_bitmap_height(s->parent_bmp);
@@ -360,7 +373,7 @@ void animation_editor::do_drawing() {
         
     }
     
-    if(draw_hitboxes) {
+    if(draw_origin) {
         point cam_top_left_corner(0, 0);
         point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
         al_transform_coordinates(
@@ -379,6 +392,25 @@ void animation_editor::do_drawing() {
         al_draw_line(
             cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
             al_map_rgb(240, 240, 240), 1 / cam_zoom
+        );
+    }
+    
+    if(draw_mob_radius && loaded_mob_type) {
+        al_draw_circle(
+            0, 0, loaded_mob_type->radius,
+            al_map_rgb(240, 240, 240), 1 / cam_zoom
+        );
+    }
+    
+    if(draw_pikmin_silhouette) {
+        float x_offset = 32;
+        if(loaded_mob_type) {
+            x_offset += loaded_mob_type->radius;
+        }
+        draw_bitmap(
+            bmp_pikmin_silhouette, point(x_offset, 0),
+            point(-1, standard_pikmin_height),
+            0, al_map_rgba(240, 240, 240, 160)
         );
     }
     
@@ -1079,6 +1111,26 @@ void animation_editor::load_animation_database(const bool update_history) {
     vector<string> file_path_parts = split(file_path, "/");
     set_button_text(frm_main, "but_file", get_cut_path(file_path));
     
+    if(file_path.find(TYPES_FOLDER_PATH) != string::npos) {
+        vector<string> path_parts = split(file_path, "/");
+        if(
+            path_parts.size() > 3 &&
+            path_parts[path_parts.size() - 1] == "Animations.txt"
+        ) {
+            mob_category* cat =
+                mob_categories.get_from_pname(
+                    path_parts[path_parts.size() - 3]
+                );
+            if(cat) {
+                loaded_mob_type =
+                    mob_categories.find_mob_type_from_folder_name(
+                        cat,
+                        path_parts[path_parts.size() - 2]
+                    );
+            }
+        }
+    }
+    
     //Top bitmap.
     for(unsigned char t = 0; t < N_MATURITIES; ++t) {
         if(top_bmp[t] && top_bmp[t] != bmp_error) {
@@ -1198,7 +1250,9 @@ void animation_editor::open_picker(
  */
 void animation_editor::pick(const string &name, const string &category) {
     if(picker_type == ANIMATION_EDITOR_PICKER_MOB_TYPES) {
-        loaded_mob_type = mob_categories.find_mob_type(name);
+        loaded_mob_type =
+            mob_categories.get_from_pname(category)->get_type(name);
+            
         file_path =
             TYPES_FOLDER_PATH + "/" +
             loaded_mob_type->category->plural_name + "/" +
@@ -1206,6 +1260,7 @@ void animation_editor::pick(const string &name, const string &category) {
         load_animation_database(true);
         
     } else if(picker_type == ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS) {
+        loaded_mob_type = NULL;
         file_path = ANIMATIONS_FOLDER_PATH + "/" + name;
         load_animation_database(true);
         
@@ -1330,6 +1385,7 @@ void animation_editor::populate_history() {
             
         auto lambda = [name, this] (lafi::widget*, int, int) {
             file_path = name;
+            loaded_mob_type = NULL;
             load_animation_database(true);
         };
         b->left_mouse_click_handler = lambda;
