@@ -121,6 +121,7 @@ void area_editor::asb_to_gui() {
 void area_editor::change_to_right_frame() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
+    frm_toolbar->show();
     hide_all_frames();
     
     if(state == EDITOR_STATE_MAIN) {
@@ -134,6 +135,7 @@ void area_editor::change_to_right_frame() {
         asb_to_gui();
     } else if(state == EDITOR_STATE_TEXTURE) {
         frm_texture->show();
+        frm_toolbar->hide();
     } else if(state == EDITOR_STATE_ASA) {
         frm_asa->show();
         asa_to_gui();
@@ -1139,15 +1141,15 @@ void area_editor::sector_to_gui() {
     lafi::button* but_sel_filter =
         (lafi::button*) frm_layout->widgets["but_sel_filter"];
     if(selection_filter == SELECTION_FILTER_SECTORS) {
-        but_sel_filter->icon = icons.get(ICON_SELECT_SECTORS);
+        but_sel_filter->icon = editor_icons[ICON_SECTORS];
         but_sel_filter->description =
             "Current selection filter: Sectors + edges + vertexes. (F)";
     } else if(selection_filter == SELECTION_FILTER_EDGES) {
-        but_sel_filter->icon = icons.get(ICON_SELECT_EDGES);
+        but_sel_filter->icon = editor_icons[ICON_EDGES];
         but_sel_filter->description =
             "Current selection filter: Edges + vertexes. (F)";
     } else {
-        but_sel_filter->icon = icons.get(ICON_SELECT_VERTEXES);
+        but_sel_filter->icon = editor_icons[ICON_VERTEXES];
         but_sel_filter->description =
             "Current selection filter: Vertexes only. (F)";
     }

@@ -26,6 +26,8 @@
  * Loads the animation editor.
  */
 void animation_editor::load() {
+    editor::load();
+    
     fade_mgr.start_fade(true, nullptr);
     
     update_canvas_coordinates();
@@ -279,7 +281,7 @@ void animation_editor::load() {
     );
     frm_anims->easy_add(
         "but_del_anim",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 15, 24
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 15, 32
     );
     frm_anims->easy_row();
     frm_anims->easy_add(
@@ -358,23 +360,23 @@ void animation_editor::load() {
     frm_anim->easy_row();
     frm_anim->easy_add(
         "but_play",
-        new lafi::button("", "", icons.get(ICON_PLAY_PAUSE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_PLAY_PAUSE]), 20, 32
     );
     frm_anim->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
     );
     frm_anim->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
     );
     frm_anim->easy_add(
         "but_add",
-        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
     );
     frm_anim->easy_add(
         "but_rem",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     y += frm_anim->easy_row();
     
@@ -667,19 +669,19 @@ void animation_editor::load() {
     frm_sprite->easy_row();
     frm_sprite->easy_add(
         "but_prev_sprite",
-        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
     );
     frm_sprite->easy_add(
         "but_next_sprite",
-        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
     );
     frm_sprite->easy_add(
         "but_del_sprite",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     frm_sprite->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     frm_sprite->easy_row();
     frm_sprite->easy_add(
@@ -858,7 +860,7 @@ void animation_editor::load() {
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
@@ -1032,7 +1034,7 @@ void animation_editor::load() {
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1196,15 +1198,15 @@ void animation_editor::load() {
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
     );
     frm_hitboxes->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
     );
     frm_hitboxes->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
@@ -1543,7 +1545,7 @@ void animation_editor::load() {
     frm_top->easy_row();
     frm_top->easy_add(
         "but_import",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     frm_top->easy_row();
     frm_top->easy_add(
@@ -1705,20 +1707,20 @@ void animation_editor::load() {
     );
     frm_body_parts->easy_add(
         "but_add",
-        new lafi::button("", "", icons.get(ICON_NEW)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
         "but_prev",
-        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
     );
     frm_body_parts->easy_add(
         "but_next",
-        new lafi::button("", "", icons.get(ICON_NEXT)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
     );
     frm_body_parts->easy_add(
         "but_del",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
@@ -1747,11 +1749,11 @@ void animation_editor::load() {
     frm_body_part->easy_row();
     frm_body_part->easy_add(
         "but_left",
-        new lafi::button("", "", icons.get(ICON_MOVE_LEFT)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_MOVE_LEFT]), 20, 32
     );
     frm_body_part->easy_add(
         "but_right",
-        new lafi::button("", "", icons.get(ICON_MOVE_RIGHT)), 20, 24
+        new lafi::button("", "", editor_icons[ICON_MOVE_RIGHT]), 20, 32
     );
     frm_body_part->easy_row();
     
@@ -2050,12 +2052,12 @@ void animation_editor::load() {
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
         "but_load",
-        new lafi::button("", "", icons.get(ICON_LOAD)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_LOAD]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_save",
-        new lafi::button("", "", icons.get(ICON_SAVE)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_SAVE]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
@@ -2065,22 +2067,22 @@ void animation_editor::load() {
     );
     frm_toolbar->easy_add(
         "but_toggle_origin",
-        new lafi::button("", "", icons.get(ICON_ORIGIN)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_ORIGIN]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_toggle_hitboxes",
-        new lafi::button("", "", icons.get(ICON_HITBOXES)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_HITBOXES]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_toggle_mob_radius",
-        new lafi::button("", "", icons.get(ICON_MOB_RADIUS)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_MOB_RADIUS]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_toggle_pik_sil",
-        new lafi::button("", "", icons.get(ICON_PIKMIN_SILHOUETTE)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_PIKMIN_SILHOUETTE]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
@@ -2090,12 +2092,12 @@ void animation_editor::load() {
     );
     frm_toolbar->easy_add(
         "but_help",
-        new lafi::button("", "", icons.get(ICON_HELP)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_HELP]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_quit",
-        new lafi::button("", "", icons.get(ICON_EXIT)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_row(4, 4, 4);

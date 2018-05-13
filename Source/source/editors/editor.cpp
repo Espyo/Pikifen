@@ -19,12 +19,15 @@
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/textbox.h"
 #include "../vars.h"
+#include "../load.h"
 
 
+//Every icon in the icon bitmap file is these many pixels from the previous.
+const int editor::EDITOR_ICON_BMP_PADDING = 1;
+//Every icon in the icon bitmap file has this size.
+const int editor::EDITOR_ICON_BMP_SIZE = 24;
 //Time until the next click is no longer considered a double-click.
 const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
-//Name of the folder in the graphics folder where the icons are found.
-const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 //If the mouse is dragged outside of this range, that's a real drag.
 const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //How long to override the status bar text for, for important messages.
@@ -43,7 +46,6 @@ editor::editor() :
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
-    icons(EDITOR_ICONS_FOLDER_NAME),
     is_ctrl_pressed(false),
     is_gui_focused(false),
     is_shift_pressed(false),
@@ -62,6 +64,11 @@ editor::editor() :
         al_map_rgb(0, 0, 0),
         al_map_rgb(96, 96, 96)
     );
+    
+    editor_icons.reserve(N_EDITOR_ICONS);
+    for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+        editor_icons.push_back(NULL);
+    }
     
     status_override_timer =
     timer(STATUS_OVERRIDE_IMPORTANT_DURATION, [this] () {update_status_bar();});
@@ -599,6 +606,25 @@ void editor::leave() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads content common for all editors.
+ */
+void editor::load() {
+    bmp_editor_icons =
+        load_bmp(asset_file_names.editor_icons, NULL, true, false);
+    if(bmp_editor_icons) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+            editor_icons[i] =
+                al_create_sub_bitmap(
+                    bmp_editor_icons,
+                    EDITOR_ICON_BMP_SIZE * i + EDITOR_ICON_BMP_PADDING * i,
+                    0, EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE
+                );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Populates the picker frame with the elements of the list that match
  * the specified filter.
  */
@@ -663,6 +689,21 @@ void editor::show_changes_warning() {
     frm_toolbar->hide();
     
     made_changes = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded editor-related content.
+ */
+void editor::unload() {
+    if(bmp_editor_icons) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+            al_destroy_bitmap(editor_icons[i]);
+            editor_icons[i] = NULL;
+        }
+        al_destroy_bitmap(bmp_editor_icons);
+        bmp_editor_icons = NULL;
+    }
 }
 
 

@@ -103,6 +103,7 @@ struct asset_file_names_struct {
     string cursor;
     string cursor_invalid;
     string counter_font;
+    string editor_icons;
     string enemy_spirit;
     string group_move_arrow;
     string icon;

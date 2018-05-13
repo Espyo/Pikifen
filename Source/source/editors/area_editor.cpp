@@ -63,34 +63,6 @@ const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
 const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
-const string area_editor::ICON_DELETE = "Delete.png";
-const string area_editor::ICON_DELETE_LINK = "Delete_link.png";
-const string area_editor::ICON_DELETE_STOP = "Delete_stop.png";
-const string area_editor::ICON_DETAILS = "Details.png";
-const string area_editor::ICON_DUPLICATE = "Duplicate.png";
-const string area_editor::ICON_EXIT = "Exit.png";
-const string area_editor::ICON_INFO = "Info.png";
-const string area_editor::ICON_LAYOUT = "Layout.png";
-const string area_editor::ICON_MOBS = "Mobs.png";
-const string area_editor::ICON_NEW = "New.png";
-const string area_editor::ICON_NEW_1WAY_LINK = "New_1wlink.png";
-const string area_editor::ICON_NEW_CIRCLE_SECTOR = "New_circle_sector.png";
-const string area_editor::ICON_NEW_LINK = "New_link.png";
-const string area_editor::ICON_NEW_STOP = "New_stop.png";
-const string area_editor::ICON_NEXT = "Next.png";
-const string area_editor::ICON_OPTIONS = "Options.png";
-const string area_editor::ICON_PATHS = "Paths.png";
-const string area_editor::ICON_PREVIOUS = "Previous.png";
-const string area_editor::ICON_REFERENCE = "Reference.png";
-const string area_editor::ICON_REVIEW = "Review.png";
-const string area_editor::ICON_SAVE = "Save.png";
-const string area_editor::ICON_SELECT_NONE = "Select_none.png";
-const string area_editor::ICON_SELECT_EDGES = "Select_edges.png";
-const string area_editor::ICON_SELECT_SECTORS = "Select_sectors.png";
-const string area_editor::ICON_SELECT_VERTEXES = "Select_vertexes.png";
-const string area_editor::ICON_TOOLS = "Tools.png";
-const string area_editor::ICON_UNDO = "Undo.png";
-
 
 /* ----------------------------------------------------------------------------
  * Creates a layout drawing node based on the mouse's click position.
@@ -3462,6 +3434,8 @@ void area_editor::undo_layout_drawing_node() {
  * Unloads the editor from memory.
  */
 void area_editor::unload() {
+    editor::unload();
+    
     //TODO
     clear_current_area();
     cur_area_name.clear();
@@ -3476,8 +3450,6 @@ void area_editor::unload() {
     unload_hazards();
     unload_mob_types(false);
     unload_status_types(false);
-    
-    icons.clear();
 }
 
 

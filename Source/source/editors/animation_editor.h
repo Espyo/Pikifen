@@ -59,24 +59,6 @@ private:
     static const float ZOOM_MIN_LEVEL_EDITOR;
     
     
-    static const string ICON_DELETE;
-    static const string ICON_DUPLICATE;
-    static const string ICON_EXIT;
-    static const string ICON_HELP;
-    static const string ICON_HITBOXES;
-    static const string ICON_INFO;
-    static const string ICON_LOAD;
-    static const string ICON_MOB_RADIUS;
-    static const string ICON_MOVE_LEFT;
-    static const string ICON_MOVE_RIGHT;
-    static const string ICON_NEW;
-    static const string ICON_NEXT;
-    static const string ICON_ORIGIN;
-    static const string ICON_PIKMIN_SILHOUETTE;
-    static const string ICON_PLAY_PAUSE;
-    static const string ICON_PREVIOUS;
-    static const string ICON_SAVE;
-    
     //GUI widgets.
     lafi::frame* frm_main;
     lafi::frame* frm_object;

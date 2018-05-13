@@ -31,7 +31,8 @@
  * Loads the area editor.
  */
 void area_editor::load() {
-
+    editor::load();
+    
     update_canvas_coordinates();
     
     gui_style =
@@ -75,38 +76,38 @@ void area_editor::load() {
     frm_area->easy_row();
     frm_area->easy_add(
         "but_info",
-        new lafi::button("Info", "", icons.get(ICON_INFO)), 50, 48
+        new lafi::button("Info", "", editor_icons[ICON_INFO]), 50, 48
     );
     frm_area->easy_add(
         "but_layout",
-        new lafi::button("Layout", "", icons.get(ICON_LAYOUT)), 50, 48
+        new lafi::button("Layout", "", editor_icons[ICON_SECTORS]), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_mobs",
-        new lafi::button("Objects", "", icons.get(ICON_MOBS)), 50, 48
+        new lafi::button("Objects", "", editor_icons[ICON_MOBS]), 50, 48
     );
     frm_area->easy_add(
         "but_paths",
-        new lafi::button("Paths", "", icons.get(ICON_PATHS)), 50, 48
+        new lafi::button("Paths", "", editor_icons[ICON_PATHS]), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_details",
-        new lafi::button("Details", "", icons.get(ICON_DETAILS)), 50, 48
+        new lafi::button("Details", "", editor_icons[ICON_DETAILS]), 50, 48
     );
     frm_area->easy_add(
         "but_review",
-        new lafi::button("Review", "", icons.get(ICON_REVIEW)), 50, 48
+        new lafi::button("Review", "", editor_icons[ICON_REVIEW]), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_tools",
-        new lafi::button("Tools", "", icons.get(ICON_TOOLS)), 50, 48
+        new lafi::button("Tools", "", editor_icons[ICON_TOOLS]), 50, 48
     );
     frm_area->easy_add(
         "but_options",
-        new lafi::button("Options", "", icons.get(ICON_OPTIONS)), 50, 48
+        new lafi::button("Options", "", editor_icons[ICON_OPTIONS]), 50, 48
     );
     frm_area->easy_row();
     
@@ -431,15 +432,15 @@ void area_editor::load() {
     frm_layout->easy_row();
     frm_layout->easy_add(
         "but_new",
-        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
     );
     frm_layout->easy_add(
         "but_circle",
-        new lafi::button("", "", icons.get(ICON_NEW_CIRCLE_SECTOR)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_ADD_CIRCLE_SECTOR]), 20, 32
     );
     frm_layout->easy_add(
         "but_rem",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     frm_layout->easy_add(
         "but_sel_filter",
@@ -447,7 +448,7 @@ void area_editor::load() {
     );
     frm_layout->easy_add(
         "but_sel_none",
-        new lafi::button("", "", icons.get(ICON_SELECT_NONE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_SELECT_NONE]), 20, 32
     );
     y = frm_layout->easy_row();
     
@@ -795,19 +796,19 @@ void area_editor::load() {
     frm_asb->easy_row();
     frm_asb->easy_add(
         "but_h_add",
-        new lafi::button("", "", icons.get(ICON_NEW)), 25, 24
+        new lafi::button("", "", editor_icons[ICON_ADD]), 25, 32
     );
     frm_asb->easy_add(
         "but_h_del",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 25, 24
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 25, 32
     );
     frm_asb->easy_add(
         "but_h_prev",
-        new lafi::button("", "", icons.get(ICON_PREVIOUS)), 25, 24
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 25, 32
     );
     frm_asb->easy_add(
         "but_h_next",
-        new lafi::button("", "", icons.get(ICON_NEXT)), 25, 24
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 25, 32
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
@@ -1166,15 +1167,15 @@ void area_editor::load() {
     frm_mobs->easy_row();
     frm_mobs->easy_add(
         "but_new",
-        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
     );
     frm_mobs->easy_add(
         "but_del",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     frm_mobs->easy_add(
         "but_duplicate",
-        new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
     );
     y = frm_mobs->easy_row();
     
@@ -1374,11 +1375,11 @@ void area_editor::load() {
     frm_paths->easy_row();
     frm_paths->easy_add(
         "but_draw",
-        new lafi::button("", "", icons.get(ICON_NEW)), 25, 32
+        new lafi::button("", "", editor_icons[ICON_ADD]), 25, 32
     );
     frm_paths->easy_add(
         "but_del",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 25, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 25, 32
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -1535,11 +1536,11 @@ void area_editor::load() {
     frm_details->easy_row();
     frm_details->easy_add(
         "but_new",
-        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
     );
     frm_details->easy_add(
         "but_del",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
     );
     y = frm_details->easy_row();
     
@@ -2344,22 +2345,22 @@ void area_editor::load() {
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
         "but_undo",
-        new lafi::button("", "", icons.get(ICON_UNDO)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_UNDO]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_reference",
-        new lafi::button("", "", icons.get(ICON_REFERENCE)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_REFERENCE]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_save",
-        new lafi::button("", "", icons.get(ICON_SAVE)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_SAVE]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
         "but_quit",
-        new lafi::button("", "", icons.get(ICON_EXIT)), 32, 32,
+        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_row(4, 4, 4);
@@ -2438,6 +2439,7 @@ void area_editor::load() {
     change_to_right_frame();
     open_picker(AREA_EDITOR_PICKER_AREA);
     update_status_bar();
+    problem_type = EPT_NONE_YET;
     
     load_custom_particle_generators(false);
     load_spike_damage_types();

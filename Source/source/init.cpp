@@ -75,6 +75,7 @@ void init_asset_file_names() {
     asset_file_names.cursor =            "Cursor.png";
     asset_file_names.cursor_invalid =    "Cursor_invalid.png";
     asset_file_names.counter_font =      "Counter_font.png";
+    asset_file_names.editor_icons =      "Editor_icons.png";
     asset_file_names.enemy_spirit =      "Enemy_spirit.png";
     asset_file_names.group_move_arrow =  "Group_move_arrow.png";
     asset_file_names.icon =              "Icon.png";

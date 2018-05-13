@@ -162,35 +162,6 @@ private:
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
 
-    static const string ICON_DELETE;
-    static const string ICON_DELETE_LINK;
-    static const string ICON_DELETE_STOP;
-    static const string ICON_DETAILS;
-    static const string ICON_DUPLICATE;
-    static const string ICON_EXIT;
-    static const string ICON_INFO;
-    static const string ICON_LAYOUT;
-    static const string ICON_MOBS;
-    static const string ICON_NEW;
-    static const string ICON_NEW_1WAY_LINK;
-    static const string ICON_NEW_CIRCLE_SECTOR;
-    static const string ICON_NEW_LINK;
-    static const string ICON_NEW_STOP;
-    static const string ICON_NEXT;
-    static const string ICON_OPTIONS;
-    static const string ICON_PATHS;
-    static const string ICON_PREVIOUS;
-    static const string ICON_REFERENCE;
-    static const string ICON_REVIEW;
-    static const string ICON_SAVE;
-    static const string ICON_SELECT_NONE;
-    static const string ICON_SELECT_EDGES;
-    static const string ICON_SELECT_SECTORS;
-    static const string ICON_SELECT_VERTEXES;
-    static const string ICON_TOOLS;
-    static const string ICON_UNDO;
-    
-    
     //GUI widgets.
     lafi::frame* frm_main;
     lafi::frame* frm_area;

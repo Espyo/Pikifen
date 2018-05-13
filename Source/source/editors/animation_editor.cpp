@@ -35,24 +35,6 @@ const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
-const string animation_editor::ICON_DELETE = "Delete.png";
-const string animation_editor::ICON_DUPLICATE = "Duplicate.png";
-const string animation_editor::ICON_EXIT = "Exit.png";
-const string animation_editor::ICON_HELP = "Help.png";
-const string animation_editor::ICON_HITBOXES = "Hitboxes.png";
-const string animation_editor::ICON_INFO = "Info.png";
-const string animation_editor::ICON_LOAD = "Load.png";
-const string animation_editor::ICON_MOB_RADIUS = "Mob_radius.png";
-const string animation_editor::ICON_MOVE_LEFT = "Move_left.png";
-const string animation_editor::ICON_MOVE_RIGHT = "Move_right.png";
-const string animation_editor::ICON_NEW = "New.png";
-const string animation_editor::ICON_NEXT = "Next.png";
-const string animation_editor::ICON_ORIGIN = "Origin.png";
-const string animation_editor::ICON_PIKMIN_SILHOUETTE = "Pikmin_silhouette.png";
-const string animation_editor::ICON_PLAY_PAUSE = "Play_pause.png";
-const string animation_editor::ICON_PREVIOUS = "Previous.png";
-const string animation_editor::ICON_SAVE = "Save.png";
-
 
 /* ----------------------------------------------------------------------------
  * Initializes animation editor class stuff.
@@ -994,6 +976,8 @@ void animation_editor::save_animation_database() {
  * Unloads the editor from memory.
  */
 void animation_editor::unload() {
+    editor::unload();
+    
     anims.destroy();
     delete(gui->style);
     //TODO warning: deleting object of polymorphic class type 'lafi::gui'
@@ -1007,8 +991,6 @@ void animation_editor::unload() {
     unload_liquids();
     unload_status_types(false);
     unload_custom_particle_generators();
-    
-    icons.clear();
 }
 
 /* ----------------------------------------------------------------------------

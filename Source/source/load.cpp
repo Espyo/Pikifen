@@ -464,6 +464,7 @@ void load_asset_file_names() {
     rs.set("cursor", asset_file_names.cursor);
     rs.set("cursor_invalid", asset_file_names.cursor_invalid);
     rs.set("counter_font", asset_file_names.counter_font);
+    rs.set("editor_icons", asset_file_names.editor_icons);
     rs.set("enemy_spirit", asset_file_names.enemy_spirit);
     rs.set("group_move_arrow", asset_file_names.group_move_arrow);
     rs.set("icon", asset_file_names.icon);
@@ -504,7 +505,7 @@ void load_asset_file_names() {
  * error_bmp_on_empty: If true, returns the error bitmap in the case of an
  *   empty file name. Otherwise, returns NULL.
  * path_from_root:     Normally, files are fetched from the images folder.
- *   If this is true, the path starts from the game's root.
+ *   If this parameter is true, the path starts from the game's root.
  */
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node,

@@ -34,11 +34,52 @@ private:
     
 protected:
 
-    static const float  DOUBLE_CLICK_TIMEOUT;
-    static const string EDITOR_ICONS_FOLDER_NAME;
-    static const float  MOUSE_DRAG_CONFIRM_RANGE;
-    static const float  STATUS_OVERRIDE_IMPORTANT_DURATION;
-    static const float  STATUS_OVERRIDE_UNIMPORTANT_DURATION;
+    static const int   EDITOR_ICON_BMP_PADDING;
+    static const int   EDITOR_ICON_BMP_SIZE;
+    static const float DOUBLE_CLICK_TIMEOUT;
+    static const float MOUSE_DRAG_CONFIRM_RANGE;
+    static const float STATUS_OVERRIDE_IMPORTANT_DURATION;
+    static const float STATUS_OVERRIDE_UNIMPORTANT_DURATION;
+    
+    enum EDITOR_ICONS {
+        ICON_SAVE,
+        ICON_LOAD,
+        ICON_QUIT,
+        ICON_HITBOXES,
+        ICON_REFERENCE,
+        ICON_INFO,
+        ICON_HELP,
+        ICON_PLAY_PAUSE,
+        ICON_NEXT,
+        ICON_PREVIOUS,
+        ICON_ADD,
+        ICON_REMOVE,
+        ICON_MOVE_RIGHT,
+        ICON_MOVE_LEFT,
+        ICON_SELECT_NONE,
+        ICON_DUPLICATE,
+        ICON_ADD_STOP,
+        ICON_ADD_LINK,
+        ICON_ADD_1W_LINK,
+        ICON_REMOVE_STOP,
+        ICON_REMOVE_LINK,
+        ICON_ADD_CIRCLE_SECTOR,
+        ICON_VERTEXES,
+        ICON_EDGES,
+        ICON_SECTORS,
+        ICON_MOBS,
+        ICON_PATHS,
+        ICON_DETAILS,
+        ICON_REVIEW,
+        ICON_TOOLS,
+        ICON_OPTIONS,
+        ICON_UNDO,
+        ICON_ORIGIN,
+        ICON_MOB_RADIUS,
+        ICON_PIKMIN_SILHOUETTE,
+        
+        N_EDITOR_ICONS
+    };
     
     struct transformation_controller {
     private:
@@ -106,44 +147,45 @@ protected:
         void set_all();
     };
     
+    ALLEGRO_BITMAP*         bmp_editor_icons;
     //If the next click is within this time, it's a double-click.
-    point         canvas_tl;
-    point         canvas_br;
-    float         double_click_time;
-    lafi::frame*  frm_picker;
-    lafi::frame*  frm_toolbar;
-    lafi::gui*    gui;
-    bool          holding_m1;
-    bool          holding_m2;
-    bool          holding_m3;
-    bmp_manager   icons;
+    point                   canvas_tl;
+    point                   canvas_br;
+    float                   double_click_time;
+    vector<ALLEGRO_BITMAP*> editor_icons;
+    lafi::frame*            frm_picker;
+    lafi::frame*            frm_toolbar;
+    lafi::gui*              gui;
+    bool                    holding_m1;
+    bool                    holding_m2;
+    bool                    holding_m3;
     //Is Ctrl pressed down?
-    bool          is_ctrl_pressed;
+    bool                    is_ctrl_pressed;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?
-    bool          is_gui_focused;
+    bool                    is_gui_focused;
     //Is Shift pressed down?
-    bool          is_shift_pressed;
+    bool                    is_shift_pressed;
     //Number of the mouse button pressed.
-    size_t        last_mouse_click;
-    lafi::label*  lbl_status_bar;
+    size_t                  last_mouse_click;
+    lafi::label*            lbl_status_bar;
     //Has the user picked any content to load yet?
-    bool          loaded_content_yet;
-    bool          made_changes;
+    bool                    loaded_content_yet;
+    bool                    made_changes;
     //Is this a mouse drag, or just a shaky click?
-    bool          mouse_drag_confirmed;
+    bool                    mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
-    point         mouse_drag_start;
-    unsigned char mode;
-    size_t        picker_type;
+    point                   mouse_drag_start;
+    unsigned char           mode;
+    size_t                  picker_type;
     //Secondary/sub mode.
-    unsigned char sec_mode;
+    unsigned char           sec_mode;
     //Status bar override text.
-    string        status_override_text;
+    string                  status_override_text;
     //Time left to show the status bar override text for.
-    timer         status_override_timer;
-    lafi::style*  warning_style;
-    float         zoom_max_level;
-    float         zoom_min_level;
+    timer                   status_override_timer;
+    lafi::style*            warning_style;
+    float                   zoom_max_level;
+    float                   zoom_min_level;
     
     void close_changes_warning();
     void create_changes_warning_frame();
@@ -234,8 +276,8 @@ public:
     virtual void do_logic();
     virtual void do_drawing() = 0;
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
-    virtual void load() = 0;
-    virtual void unload() = 0;
+    virtual void load();
+    virtual void unload();
 };
 
 #endif //ifndef EDITOR_INCLUDED
