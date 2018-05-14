@@ -11,6 +11,8 @@
 
 #include <algorithm>
 
+#include <allegro5/allegro_native_dialog.h>
+
 #include "area_editor.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
@@ -1910,20 +1912,28 @@ void area_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lbl_file",
-        new lafi::label("", ALLEGRO_ALIGN_LEFT, true), 100, 12
+        "lbl_ref_file",
+        new lafi::label("File:"), 25, 16
+    );
+    frm_tools->easy_add(
+        "txt_ref_file",
+        new lafi::textbox(), 60, 16
+    );
+    frm_tools->easy_add(
+        "but_ref_file",
+        new lafi::button("..."), 15, 16
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lbl_xy",
+        "lbl_ref_xy",
         new lafi::label("X&Y:"), 30, 16
     );
     frm_tools->easy_add(
-        "txt_x",
+        "txt_ref_x",
         new lafi::textbox(), 35, 16
     );
     frm_tools->easy_add(
-        "txt_y",
+        "txt_ref_y",
         new lafi::textbox(), 35, 16
     );
     frm_tools->easy_row();
@@ -1932,25 +1942,25 @@ void area_editor::load() {
         new lafi::label("W&H:"), 30, 16
     );
     frm_tools->easy_add(
-        "txt_w",
+        "txt_ref_w",
         new lafi::textbox(), 35, 16
     );
     frm_tools->easy_add(
-        "txt_h",
+        "txt_ref_h",
         new lafi::textbox(), 35, 16
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "chk_ratio",
+        "chk_ref_ratio",
         new lafi::checkbox("Keep aspect ratio"), 100, 16
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lbl_alpha",
+        "lbl_ref_alpha",
         new lafi::label("Opacity:"), 40, 16
     );
     frm_tools->easy_add(
-        "bar_alpha",
+        "bar_ref_alpha",
         new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 60, 24
     );
     frm_tools->easy_row();
@@ -2018,34 +2028,61 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         gui_to_tools();
     };
-    frm_tools->widgets["txt_x"]->lose_focus_handler =
+    
+    frm_tools->widgets["txt_ref_file"]->lose_focus_handler =
         lambda_gui_to_tools;
-    frm_tools->widgets["txt_x"]->description =
-        "X of the top-left corner for the reference.";
+    frm_tools->widgets["txt_ref_file"]->description =
+        "File name of the reference image, anywhere on the disk.";
         
-    frm_tools->widgets["txt_y"]->lose_focus_handler =
-        lambda_gui_to_tools;
-    frm_tools->widgets["txt_y"]->description =
-        "Y of the top-left corner for the reference.";
+    frm_tools->widgets["but_ref_file"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        vector<string> f =
+            prompt_file_dialog(
+                "",
+                "Please choose the bitmap to use for a reference.",
+                "*.*",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES
+            );
+            
+        if(f.empty() || f[0].empty()) {
+            return;
+        }
         
-    frm_tools->widgets["txt_w"]->lose_focus_handler =
+        set_textbox_text(this->frm_tools, "txt_ref_file", f[0]);
+        this->frm_tools->widgets["txt_ref_file"]->call_lose_focus_handler();
+    };
+    frm_tools->widgets["but_ref_file"]->description =
+        "Browse for the file to use, anywhere on the disk.";
+        
+    frm_tools->widgets["txt_ref_x"]->lose_focus_handler =
         lambda_gui_to_tools;
-    frm_tools->widgets["txt_w"]->description =
+    frm_tools->widgets["txt_ref_x"]->description =
+        "X of the center of the reference.";
+        
+    frm_tools->widgets["txt_ref_y"]->lose_focus_handler =
+        lambda_gui_to_tools;
+    frm_tools->widgets["txt_ref_y"]->description =
+        "Y of the center of the reference.";
+        
+    frm_tools->widgets["txt_ref_w"]->lose_focus_handler =
+        lambda_gui_to_tools;
+    frm_tools->widgets["txt_ref_w"]->description =
         "Reference total width.";
         
-    frm_tools->widgets["txt_h"]->lose_focus_handler =
+    frm_tools->widgets["txt_ref_h"]->lose_focus_handler =
         lambda_gui_to_tools;
-    frm_tools->widgets["txt_h"]->description =
+    frm_tools->widgets["txt_ref_h"]->description =
         "Reference total height.";
         
-    frm_tools->widgets["chk_ratio"]->left_mouse_click_handler =
+    frm_tools->widgets["chk_ref_ratio"]->left_mouse_click_handler =
         lambda_gui_to_tools_click;
-    frm_tools->widgets["chk_ratio"]->description =
+    frm_tools->widgets["chk_ref_ratio"]->description =
         "Lock width/height proportion when changing either one.";
         
-    ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->change_handler =
+    ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->change_handler =
         lambda_gui_to_tools;
-    frm_tools->widgets["bar_alpha"]->description =
+    frm_tools->widgets["bar_ref_alpha"]->description =
         "How see-through the reference is.";
         
     frm_tools->widgets["but_load"]->left_mouse_click_handler =

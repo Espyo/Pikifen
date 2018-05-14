@@ -561,23 +561,25 @@ void area_editor::gui_to_sector() {
  * Saves the tool data to memory using info on the gui.
  */
 void area_editor::gui_to_tools() {
+    string new_file_name = get_textbox_text(frm_tools, "txt_ref_file");
+    
     reference_transformation.set_center(
         point(
-            s2f(get_textbox_text(frm_tools, "txt_x")),
-            s2f(get_textbox_text(frm_tools, "txt_y"))
+            s2f(get_textbox_text(frm_tools, "txt_ref_x")),
+            s2f(get_textbox_text(frm_tools, "txt_ref_y"))
         )
     );
     
     reference_transformation.keep_aspect_ratio =
-        get_checkbox_check(frm_tools, "chk_ratio");
+        get_checkbox_check(frm_tools, "chk_ref_ratio");
         
     point new_size(
-        s2f(get_textbox_text(frm_tools, "txt_w")),
-        s2f(get_textbox_text(frm_tools, "txt_h"))
+        s2f(get_textbox_text(frm_tools, "txt_ref_w")),
+        s2f(get_textbox_text(frm_tools, "txt_ref_h"))
     );
     
     reference_alpha =
-        ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->low_value;
+        ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->low_value;
         
     if(reference_transformation.keep_aspect_ratio) {
         if(
@@ -606,6 +608,8 @@ void area_editor::gui_to_tools() {
     }
     
     reference_transformation.set_size(new_size);
+    
+    update_reference(new_file_name);
     
     tools_to_gui();
 }
@@ -1216,21 +1220,24 @@ void area_editor::stt_to_gui() {
  */
 void area_editor::tools_to_gui() {
     set_textbox_text(
-        frm_tools, "txt_x", f2s(reference_transformation.get_center().x)
+        frm_tools, "txt_ref_file", reference_file_name
     );
     set_textbox_text(
-        frm_tools, "txt_y", f2s(reference_transformation.get_center().y)
+        frm_tools, "txt_ref_x", f2s(reference_transformation.get_center().x)
     );
     set_textbox_text(
-        frm_tools, "txt_w", f2s(reference_transformation.get_size().x)
+        frm_tools, "txt_ref_y", f2s(reference_transformation.get_center().y)
     );
     set_textbox_text(
-        frm_tools, "txt_h", f2s(reference_transformation.get_size().y)
+        frm_tools, "txt_ref_w", f2s(reference_transformation.get_size().x)
+    );
+    set_textbox_text(
+        frm_tools, "txt_ref_h", f2s(reference_transformation.get_size().y)
     );
     set_checkbox_check(
-        frm_tools, "chk_ratio", reference_transformation.keep_aspect_ratio
+        frm_tools, "chk_ref_ratio", reference_transformation.keep_aspect_ratio
     );
-    ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
+    ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->set_value(
         reference_alpha, false
     );
     update_backup_status();

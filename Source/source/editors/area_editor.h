@@ -297,6 +297,8 @@ private:
     unsigned char reference_alpha;
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* reference_bitmap;
+    //File name of the reference image.
+    string reference_file_name;
     //Current transformations on the reference image.
     transformation_controller reference_transformation;
     //Currently selected edges.
@@ -471,7 +473,7 @@ private:
     void undo();
     void undo_layout_drawing_node();
     bool update_backup_status();
-    void update_reference();
+    void update_reference(const string &new_file_name);
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();

@@ -34,11 +34,23 @@ void load_area(
 
     cur_area_data.clear();
     
-    data_node data_file =
-        load_data_file(
-            (from_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
-            "/" + name + "/Data.txt"
-        );
+    string geometry_file_name;
+    string data_file_name;
+    if(from_backup) {
+        geometry_file_name =
+            USER_AREA_DATA_FOLDER_PATH + "/" + name +
+            "/Geometry_backup.txt";
+        data_file_name =
+            USER_AREA_DATA_FOLDER_PATH + "/" + name +
+            "/Data_backup.txt";
+    } else {
+        geometry_file_name =
+            AREAS_FOLDER_PATH + "/" + name + "/Geometry.txt";
+        data_file_name =
+            AREAS_FOLDER_PATH + "/" + name + "/Data.txt";
+    }
+    
+    data_node data_file = load_data_file(data_file_name);
         
     cur_area_data.name =
         data_file.get_child_by_name("name")->get_value_or_default(name);
@@ -98,11 +110,7 @@ void load_area(
         s2f(data_file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
         
         
-    data_node geometry_file =
-        load_data_file(
-            (from_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
-            "/" + name + "/Geometry.txt"
-        );
+    data_node geometry_file = load_data_file(geometry_file_name);
         
     //Vertexes.
     size_t n_vertexes =

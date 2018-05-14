@@ -798,7 +798,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         details_to_gui();
         
     } else if(state == EDITOR_STATE_TOOLS) {
-        if(reference_bitmap && reference_bitmap != bmp_error) {
+        if(reference_bitmap) {
             reference_transformation.handle_mouse_down(mouse_cursor_w);
             tools_to_gui();
         }

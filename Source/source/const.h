@@ -138,10 +138,8 @@ const string MISC_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Misc";
 const string TEXTURES_FOLDER_NAME =
     "Textures";
-const string AREA_BACKUPS_FOLDER_PATH =
-    USER_DATA_FOLDER_PATH + "/Area_backups";
-const string AREA_REFERENCES_FOLDER_PATH =
-    USER_DATA_FOLDER_PATH + "/Area_editor_references";
+const string USER_AREA_DATA_FOLDER_PATH =
+    USER_DATA_FOLDER_PATH + "/Areas";
 const string ERROR_LOG_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Error_log.txt";
 const string CREATOR_TOOLS_FILE_PATH =

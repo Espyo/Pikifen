@@ -800,7 +800,6 @@ void area_editor::do_drawing() {
     //Reference image.
     if(
         reference_bitmap &&
-        reference_bitmap != bmp_error &&
         (show_reference || state == EDITOR_STATE_TOOLS)
     ) {
         draw_bitmap(

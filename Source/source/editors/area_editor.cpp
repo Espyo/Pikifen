@@ -512,8 +512,8 @@ void area_editor::clear_circle_sector() {
 void area_editor::clear_current_area() {
     clear_current_area_gui();
     
-    update_reference();
     reference_transformation.keep_aspect_ratio = true;
+    update_reference("");
     clear_selection();
     clear_area_textures();
     
@@ -2347,16 +2347,16 @@ void area_editor::load_backup() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the reference image data.
+ * Loads the reference image data from the reference configuration file.
  */
 void area_editor::load_reference() {
-    update_reference();
-    
     data_node file(
-        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
+        USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
     );
     
+    string new_ref_file_name;
     if(file.file_was_opened) {
+        new_ref_file_name = file.get_child_by_name("file")->value;
         reference_transformation.set_center(
             s2p(file.get_child_by_name("center")->value)
         );
@@ -2370,11 +2370,14 @@ void area_editor::load_reference() {
                 )->get_value_or_default(i2s(DEF_REFERENCE_ALPHA))
             );
             
-    } else if(!reference_bitmap || reference_bitmap == bmp_error) {
+    } else {
+        new_ref_file_name.clear();
         reference_transformation.set_center(point());
         reference_transformation.set_size(point());
         reference_alpha = 0;
     }
+    
+    update_reference(new_ref_file_name);
 }
 
 
@@ -2994,13 +2997,25 @@ void area_editor::save_area(const bool to_backup) {
     
     
     //Finally, save.
-    string area_folder_path =
-        (to_backup ? AREA_BACKUPS_FOLDER_PATH : AREAS_FOLDER_PATH) +
-        "/" + cur_area_name;
-    bool geo_save_ok =
-        geometry_file.save_file(area_folder_path + "/Geometry.txt");
-    bool data_save_ok =
-        data_file.save_file(area_folder_path + "/Data.txt");
+    string geometry_file_name;
+    string data_file_name;
+    if(to_backup) {
+        geometry_file_name =
+            USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
+            "/Geometry_backup.txt";
+        data_file_name =
+            USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
+            "/Data_backup.txt";
+    } else {
+        geometry_file_name =
+            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            "/Geometry.txt";
+        data_file_name =
+            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            "/Data.txt";
+    }
+    bool geo_save_ok = geometry_file.save_file(geometry_file_name);
+    bool data_save_ok = data_file.save_file(data_file_name);
         
     if(!geo_save_ok || !data_save_ok) {
         al_show_native_message_box(
@@ -3063,19 +3078,24 @@ void area_editor::save_backup() {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the reference data to disk.
+ * Saves the reference data to disk, in the area's reference config file.
  */
 void area_editor::save_reference() {
     string file_name =
-        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name +
+        USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
         "/Reference.txt";
         
-    if(!reference_bitmap || reference_bitmap == bmp_error) {
+    if(!reference_bitmap) {
+        //The user doesn't want a reference more.
+        //Delete its config file.
         al_remove_filename(file_name.c_str());
         return;
     }
     
     data_node reference_file("", "");
+    reference_file.add(
+        new data_node("file", reference_file_name)
+    );
     reference_file.add(
         new data_node(
             "center",
@@ -3464,7 +3484,8 @@ bool area_editor::update_backup_status() {
     if(cur_area_name.empty()) return false;
     
     data_node file(
-        AREA_BACKUPS_FOLDER_PATH + "/" + cur_area_name + "/Geometry.txt"
+        USER_AREA_DATA_FOLDER_PATH + "/" +
+        cur_area_name + "/Geometry_backup.txt"
     );
     if(!file.file_was_opened) return false;
     
@@ -3474,54 +3495,44 @@ bool area_editor::update_backup_status() {
 
 
 /* ----------------------------------------------------------------------------
- * Updates the reference image.
+ * Updates the reference image's bitmap, given a new bitmap file name.
  */
-void area_editor::update_reference() {
-    string file_path =
-        AREA_REFERENCES_FOLDER_PATH + "/" + cur_area_name + "/Reference.png";
+void area_editor::update_reference(const string &new_file_name) {
+    if(reference_file_name == new_file_name) {
+        //Nothing to do.
+        return;
+    }
+    
+    reference_file_name = new_file_name;
+    
     if(reference_bitmap && reference_bitmap != bmp_error) {
         al_destroy_bitmap(reference_bitmap);
     }
     reference_bitmap = NULL;
     
-    reference_bitmap =
-        load_bmp(file_path, NULL, false, true, true, true);
-        
-    if(reference_bitmap == bmp_error) {
-        set_label_text(
-            frm_tools, "lbl_file",
-            "To use a reference, place it in \"" +
-            file_path + "\" and reload."
-        );
-        disable_widget(frm_tools->widgets["txt_x"]);
-        disable_widget(frm_tools->widgets["txt_y"]);
-        disable_widget(frm_tools->widgets["txt_w"]);
-        disable_widget(frm_tools->widgets["txt_h"]);
-        disable_widget(frm_tools->widgets["chk_ratio"]);
-        disable_widget(frm_tools->widgets["bar_alpha"]);
+    if(!new_file_name.empty()) {
+        reference_bitmap =
+            load_bmp(new_file_name, NULL, false, true, true, true);
+            
+        if(
+            reference_transformation.get_size().x == 0 ||
+            reference_transformation.get_size().y == 0
+        ) {
+            //Let's assume this is a new reference. Reset sizes and alpha.
+            reference_transformation.set_size(
+                point(
+                    al_get_bitmap_width(reference_bitmap),
+                    al_get_bitmap_height(reference_bitmap)
+                )
+            );
+            reference_alpha = DEF_REFERENCE_ALPHA;
+        }
     } else {
-        set_label_text(frm_tools, "lbl_file", "Reference.png loaded.");
-        enable_widget(frm_tools->widgets["txt_x"]);
-        enable_widget(frm_tools->widgets["txt_y"]);
-        enable_widget(frm_tools->widgets["txt_w"]);
-        enable_widget(frm_tools->widgets["txt_h"]);
-        enable_widget(frm_tools->widgets["chk_ratio"]);
-        enable_widget(frm_tools->widgets["bar_alpha"]);
+        reference_transformation.set_center(point());
+        reference_transformation.set_size(point());
     }
     
-    if(
-        reference_transformation.get_size().x == 0 ||
-        reference_transformation.get_size().y == 0
-    ) {
-        //Let's assume this is a new reference. Reset sizes and alpha.
-        reference_transformation.set_size(
-            point(
-                al_get_bitmap_width(reference_bitmap),
-                al_get_bitmap_height(reference_bitmap)
-            )
-        );
-        reference_alpha = DEF_REFERENCE_ALPHA;
-    }
+    tools_to_gui();
 }
 
 
