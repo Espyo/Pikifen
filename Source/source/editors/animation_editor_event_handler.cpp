@@ -64,7 +64,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         cur_hitbox = &cur_sprite->hitboxes[h];
                         hitbox_to_gui();
                         
-                        made_changes = true;
+                        made_new_changes = true;
                     }
                 }
             }
@@ -158,14 +158,14 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
         if(cur_sprite_tc.handle_mouse_move(mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
-            made_changes = true;
+            made_new_changes = true;
         }
         
     } else if(mode == EDITOR_MODE_HITBOXES) {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_move(mouse_cursor_w)) {
                 cur_hitbox_tc_to_gui();
-                made_changes = true;
+                made_new_changes = true;
             }
         }
     } else if(

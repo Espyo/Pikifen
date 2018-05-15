@@ -116,11 +116,8 @@ void area_editor::load() {
     
     //Main -- properties.
     frm_main->widgets["but_area"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
-            close_changes_warning();
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             open_picker(AREA_EDITOR_PICKER_AREA);
         }
     };
@@ -2086,11 +2083,8 @@ void area_editor::load() {
         "How see-through the reference is.";
         
     frm_tools->widgets["but_load"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
-            close_changes_warning();
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             this->load_area(false);
         }
     };
@@ -2098,11 +2092,8 @@ void area_editor::load() {
         "Discard all changes made and load the area again.";
         
     frm_tools->widgets["but_backup"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
-            this->close_changes_warning();
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             this->load_backup();
         }
     };
@@ -2425,16 +2416,14 @@ void area_editor::load() {
         clear_selection();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
-        made_changes = false;
+        made_new_changes = false;
     };
     frm_toolbar->widgets["but_save"]->description =
         "Save the area onto the files. (Ctrl+S)";
         
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             leave();
         }
     };
@@ -2442,7 +2431,6 @@ void area_editor::load() {
         "Quit the area editor. (Ctrl+Q)";
         
         
-    create_changes_warning_frame();
     create_picker_frame();
     create_status_bar();
     

@@ -59,7 +59,7 @@ void animation_editor::load() {
     frm_main->easy_row();
     frm_main->easy_add(
         "lbl_file",
-        new lafi::label("Choose a file:"), 100, 16
+        new lafi::label("Current file:"), 100, 16
     );
     frm_main->easy_row();
     frm_main->easy_add(
@@ -111,11 +111,13 @@ void animation_editor::load() {
     
     //Main -- properties.
     frm_main->widgets["but_file"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_HISTORY;
-        populate_history();
-        frm_toolbar->hide();
-        change_to_right_frame();
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
+            mode = EDITOR_MODE_LOAD;
+            populate_history();
+            frm_toolbar->hide();
+            change_to_right_frame();
+        }
     };
     frm_main->widgets["but_file"]->description =
         "Pick a file to load or create.";
@@ -453,7 +455,7 @@ void animation_editor::load() {
         cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         animation_to_gui();
-        made_changes = true;
+        made_new_changes = true;
         emit_status_bar_message("Animation deleted.", false);
     };
     frm_anims->widgets["but_del_anim"]->description =
@@ -557,7 +559,7 @@ void animation_editor::load() {
             cur_frame_nr = 0;
         }
         frame_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_anim->widgets["but_add"]->description =
         "Add a new frame after the current one (via copy).";
@@ -580,7 +582,7 @@ void animation_editor::load() {
             }
         }
         frame_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_anim->widgets["but_rem"]->description =
         "Remove the current frame.";
@@ -787,7 +789,7 @@ void animation_editor::load() {
         cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         sprite_to_gui();
-        made_changes = true;
+        made_new_changes = true;
         emit_status_bar_message("Sprite deleted.", false);
     };
     frm_sprite->widgets["but_del_sprite"]->description =
@@ -1795,7 +1797,7 @@ void animation_editor::load() {
         else cur_body_part_nr++;
         update_hitboxes();
         body_part_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_body_parts->widgets["but_add"]->description =
         "Create a new body part (after the current one).";
@@ -1837,7 +1839,7 @@ void animation_editor::load() {
         anims.body_parts[cur_body_part_nr]->name = new_name;
         update_hitboxes();
         body_part_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_body_part->widgets["txt_name"]->description =
         "Name of this body part.";
@@ -1853,7 +1855,7 @@ void animation_editor::load() {
         cur_body_part_nr = prev_nr;
         update_hitboxes();
         body_part_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_body_part->widgets["but_left"]->description =
         "Move this part to the left in the list.";
@@ -1869,7 +1871,7 @@ void animation_editor::load() {
         cur_body_part_nr = next_nr;
         update_hitboxes();
         body_part_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_body_part->widgets["but_right"]->description =
         "Move this part to the right in the list.";
@@ -1882,7 +1884,7 @@ void animation_editor::load() {
         if(cur_body_part_nr > 0) cur_body_part_nr--;
         update_hitboxes();
         body_part_to_gui();
-        made_changes = true;
+        made_new_changes = true;
     };
     frm_body_parts->widgets["but_del"]->description =
         "Delete this body part.";
@@ -2105,10 +2107,8 @@ void animation_editor::load() {
     
     //Toolbar -- properties.
     frm_toolbar->widgets["but_load"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             load_animation_database(false);
         }
     };
@@ -2170,10 +2170,8 @@ void animation_editor::load() {
         "Display some information about the animation editor.";
         
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
             leave();
         }
     };
@@ -2183,7 +2181,6 @@ void animation_editor::load() {
     disable_widget(frm_toolbar->widgets["but_load"]);
     disable_widget(frm_toolbar->widgets["but_save"]);
     
-    create_changes_warning_frame();
     create_picker_frame();
     create_status_bar();
     

@@ -10,6 +10,7 @@
  */
 
 #include "editor.h"
+#include "../drawing.h"
 #include "../functions.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
@@ -18,8 +19,8 @@
 #include "../LAFI/radio_button.h"
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/textbox.h"
-#include "../vars.h"
 #include "../load.h"
+#include "../vars.h"
 
 
 //Every icon in the icon bitmap file is these many pixels from the previous.
@@ -34,6 +35,14 @@ const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 const float editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
 //How long to override the status bar text for, for unimportant messages.
 const float editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
+//How long the unsaved changes warning stays on-screen for.
+const float editor::UNSAVED_CHANGES_WARNING_DURATION = 3.0f;
+//Height of the unsaved changes warning, sans spike.
+const int editor::UNSAVED_CHANGES_WARNING_HEIGHT = 30;
+//Width and height of the unsaved changes warning's spike.
+const int editor::UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
+//Width of the unsaved changes warning, sans spike.
+const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
 
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
@@ -51,19 +60,13 @@ editor::editor() :
     is_shift_pressed(false),
     last_mouse_click(INVALID),
     loaded_content_yet(false),
-    made_changes(false),
+    made_new_changes(false),
     mouse_drag_confirmed(false),
     mode(0),
     sec_mode(0),
-    warning_style(nullptr),
+    unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     zoom_max_level(0),
     zoom_min_level(0) {
-    
-    warning_style = new lafi::style(
-        al_map_rgb(224, 224, 64),
-        al_map_rgb(0, 0, 0),
-        al_map_rgb(96, 96, 96)
-    );
     
     editor_icons.reserve(N_EDITOR_ICONS);
     for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
@@ -80,48 +83,29 @@ editor::editor() :
  * Destroys an instance of the editor class.
  */
 editor::~editor() {
-    delete warning_style;
-}
-
-/* ----------------------------------------------------------------------------
- * Closes the change warning box.
- */
-void editor::close_changes_warning() {
-    gui->widgets["frm_changes"]->hide();
-    frm_toolbar->show();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a "you have unsaved changes!" warning frame in the gui.
+ * Checks if there are any unsaved changes that have not been notified yet.
+ * Returns true if there are, and also sets up the unsaved changes warning.
+ * Returns false if everything is okay to continue.
+ * caller_widget: Widget that summoned this warning.
  */
-void editor::create_changes_warning_frame() {
-    lafi::frame* frm_changes =
-        new lafi::frame(canvas_br.x, scr_h, scr_w, scr_h, warning_style);
-    frm_changes->hide();
-    gui->add("frm_changes", frm_changes);
+bool editor::check_new_unsaved_changes(lafi::widget* caller_widget) {
+    unsaved_changes_warning_timer.time_left = 0;
     
-    frm_changes->easy_row();
-    frm_changes->easy_add(
-        "lbl_text1",
-        new lafi::label("Warning: you have", ALLEGRO_ALIGN_LEFT),
-        80, 8
-    );
-    frm_changes->easy_row();
-    frm_changes->easy_add(
-        "lbl_text2",
-        new lafi::label("unsaved changes!", ALLEGRO_ALIGN_LEFT),
-        80, 8
-    );
-    frm_changes->easy_row();
-    frm_changes->add(
-        "but_ok",
-        new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok")
-    );
+    if(!made_new_changes) return false;
+    made_new_changes = false;
     
-    frm_changes->widgets["but_ok"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) { close_changes_warning(); };
+    unsaved_changes_warning_pos =
+        point(
+            (caller_widget->x1 + caller_widget->x2) / 2.0,
+            (caller_widget->y1 + caller_widget->y2) / 2.0
+        );
+    unsaved_changes_warning_timer.start();
     
+    return true;
 }
 
 
@@ -190,7 +174,7 @@ void editor::create_picker_frame() {
         
         this->create_new_from_picker(name);
         
-        made_changes = true;
+        made_new_changes = true;
         
         set_textbox_text(this->frm_picker, "txt_text", "");
     };
@@ -248,8 +232,96 @@ void editor::do_logic() {
         if(double_click_time < 0) double_click_time = 0;
     }
     
+    unsaved_changes_warning_timer.tick(delta_t);
     status_override_timer.tick(delta_t);
     fade_mgr.tick(delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the unsaved changes warning, if it is visible.
+ */
+void editor::draw_unsaved_changes_warning() {
+    float r = unsaved_changes_warning_timer.get_ratio_left();
+    if(r == 0) return;
+    
+    ALLEGRO_COLOR back_color = al_map_rgba(192, 192, 64, r * 255);
+    ALLEGRO_COLOR outline_color = al_map_rgba(80, 80, 16, r * 255);
+    ALLEGRO_COLOR text_color = al_map_rgba(0, 0, 0, r * 255);
+    bool spike_up = unsaved_changes_warning_pos.y < scr_h / 2.0;
+    
+    point box_center = unsaved_changes_warning_pos;
+    if(unsaved_changes_warning_pos.x < UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
+        box_center.x +=
+            UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
+    } else if(
+        unsaved_changes_warning_pos.x >
+        scr_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0
+    ) {
+        box_center.x -=
+            unsaved_changes_warning_pos.x -
+            (scr_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
+    }
+    if(spike_up) {
+        box_center.y += UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y += UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    } else {
+        box_center.y -= UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y -= UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    }
+    
+    point box_tl(
+        box_center.x - UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y - UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+    );
+    point box_br(
+        box_center.x + UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y + UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+    );
+    point spike_p1(
+        unsaved_changes_warning_pos.x,
+        unsaved_changes_warning_pos.y
+    );
+    point spike_p2(
+        unsaved_changes_warning_pos.x -
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        unsaved_changes_warning_pos.y +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+    );
+    point spike_p3(
+        unsaved_changes_warning_pos.x +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        unsaved_changes_warning_pos.y +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+    );
+    
+    al_draw_filled_rectangle(
+        box_tl.x, box_tl.y, box_br.x, box_br.y, back_color
+    );
+    al_draw_filled_triangle(
+        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
+        back_color
+    );
+    al_draw_rectangle(
+        box_tl.x, box_tl.y, box_br.x, box_br.y, outline_color, 2
+    );
+    al_draw_line(
+        spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
+        back_color, 2
+    );
+    al_draw_line(
+        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y,
+        outline_color, 2
+    );
+    al_draw_line(
+        spike_p1.x, spike_p1.y, spike_p3.x, spike_p3.y,
+        outline_color, 2
+    );
+    draw_text_lines(
+        gui->style->text_font, text_color,
+        box_center, ALLEGRO_ALIGN_CENTER, 1,
+        "You have\nunsaved changes!"
+    );
 }
 
 
@@ -678,17 +750,6 @@ void editor::populate_picker(const string &filter) {
     (
         (lafi::scrollbar*) frm_picker->widgets["bar_scroll"]
     )->make_widget_scroll(f);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Shows the "unsaved changes" warning.
- */
-void editor::show_changes_warning() {
-    gui->widgets["frm_changes"]->show();
-    frm_toolbar->hide();
-    
-    made_changes = false;
 }
 
 

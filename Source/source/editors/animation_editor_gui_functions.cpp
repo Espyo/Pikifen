@@ -43,7 +43,7 @@ void animation_editor::change_to_right_frame() {
         frm_hitboxes->show();
     } else if(mode == EDITOR_MODE_TOP) {
         frm_top->show();
-    } else if(mode == EDITOR_MODE_HISTORY) {
+    } else if(mode == EDITOR_MODE_LOAD) {
         frm_history->show();
     } else if(mode == EDITOR_MODE_TOOLS) {
         frm_tools->show();
@@ -391,7 +391,7 @@ void animation_editor::gui_to_animation() {
     gui_to_frame();
     animation_to_gui();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -401,7 +401,7 @@ void animation_editor::gui_to_animation() {
 void animation_editor::gui_to_body_part() {
     body_part_to_gui();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -425,7 +425,7 @@ void animation_editor::gui_to_frame() {
     
     frame_to_gui();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -476,7 +476,7 @@ void animation_editor::gui_to_hitbox() {
     }
     
     hitbox_to_gui();
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -498,7 +498,7 @@ void animation_editor::gui_to_sprite() {
         
     sprite_to_gui();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -538,7 +538,7 @@ void animation_editor::gui_to_sprite_bmp() {
     gui_to_hitbox();
     sprite_bmp_to_gui();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -570,7 +570,7 @@ void animation_editor::gui_to_sprite_transform() {
         get_checkbox_check(frm_sprite_tra, "chk_ratio");
         
     sprite_transform_to_gui();
-    made_changes = true;
+    made_new_changes = true;
 }
 
 
@@ -598,7 +598,7 @@ void animation_editor::gui_to_top() {
         get_checkbox_check(frm_top, "chk_ratio");
         
     top_to_gui();
-    made_changes = true;
+    made_new_changes = true;
 }
 
 

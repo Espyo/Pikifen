@@ -1194,6 +1194,8 @@ void area_editor::do_drawing() {
     al_reset_clipping_rectangle();
     al_use_transform(&identity_transform);
     
+    draw_unsaved_changes_warning();
+    
     fade_mgr.draw();
     
     al_flip_display();

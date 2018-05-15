@@ -38,7 +38,7 @@ private:
         EDITOR_MODE_SPRITE_BITMAP,
         EDITOR_MODE_SPRITE_TRANSFORM,
         EDITOR_MODE_TOP,
-        EDITOR_MODE_HISTORY,
+        EDITOR_MODE_LOAD,
         EDITOR_MODE_TOOLS,
     };
     

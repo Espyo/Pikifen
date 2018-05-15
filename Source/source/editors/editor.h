@@ -40,6 +40,10 @@ protected:
     static const float MOUSE_DRAG_CONFIRM_RANGE;
     static const float STATUS_OVERRIDE_IMPORTANT_DURATION;
     static const float STATUS_OVERRIDE_UNIMPORTANT_DURATION;
+    static const float UNSAVED_CHANGES_WARNING_DURATION;
+    static const int   UNSAVED_CHANGES_WARNING_HEIGHT;
+    static const int   UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    static const int   UNSAVED_CHANGES_WARNING_WIDTH;
     
     enum EDITOR_ICONS {
         ICON_SAVE,
@@ -170,7 +174,7 @@ protected:
     lafi::label*            lbl_status_bar;
     //Has the user picked any content to load yet?
     bool                    loaded_content_yet;
-    bool                    made_changes;
+    bool                    made_new_changes;
     //Is this a mouse drag, or just a shaky click?
     bool                    mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
@@ -183,15 +187,18 @@ protected:
     string                  status_override_text;
     //Time left to show the status bar override text for.
     timer                   status_override_timer;
-    lafi::style*            warning_style;
+    point                   unsaved_changes_warning_pos;
+    timer                   unsaved_changes_warning_timer;
     float                   zoom_max_level;
     float                   zoom_min_level;
     
+    bool check_new_unsaved_changes(lafi::widget* caller_widget);
     void close_changes_warning();
     void create_changes_warning_frame();
     void create_picker_frame();
     void create_status_bar();
     void create_toolbar_frame();
+    void draw_unsaved_changes_warning();
     void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
         const vector<pair<string, string> > &elements, const string &title,
@@ -200,7 +207,6 @@ protected:
     bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
     void populate_picker(const string &filter);
-    void show_changes_warning();
     void update_canvas_coordinates();
     void update_status_bar(const bool omit_coordinates = false);
     void zoom(const float new_zoom, const bool anchor_cursor = true);

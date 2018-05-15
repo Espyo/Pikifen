@@ -540,7 +540,7 @@ void area_editor::clear_current_area() {
     
     cur_area_data.clear();
     
-    made_changes = false;
+    made_new_changes = false;
     backup_timer.start(area_editor_backup_interval);
     
     state = EDITOR_STATE_MAIN;
@@ -2322,7 +2322,7 @@ void area_editor::load_area(const bool from_backup) {
     
     load_reference();
     
-    made_changes = false;
+    made_new_changes = false;
     
     clear_undo_history();
     update_undo_history();
@@ -2555,7 +2555,7 @@ void area_editor::register_change(
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
-    made_changes = true;
+    made_new_changes = true;
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
     
@@ -3436,7 +3436,7 @@ void area_editor::undo() {
     non_simples.clear();
     change_to_right_frame();
     
-    made_changes = true;
+    made_new_changes = true;
 }
 
 

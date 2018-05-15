@@ -381,8 +381,9 @@ void animation_editor::do_drawing() {
     }
     
     al_reset_clipping_rectangle();
-    
     al_use_transform(&identity_transform);
+    
+    draw_unsaved_changes_warning();
     
     fade_mgr.draw();
     
@@ -718,7 +719,7 @@ void animation_editor::rename_animation() {
     but_ptr->text = "";
     txt_ptr->text = "";
     
-    made_changes = true;
+    made_new_changes = true;
     emit_status_bar_message("Renamed successfully.", false);
 }
 
@@ -764,7 +765,7 @@ void animation_editor::rename_sprite() {
     but_ptr->text = "";
     txt_ptr->text = "";
     
-    made_changes = true;
+    made_new_changes = true;
     emit_status_bar_message("Renamed successfully.", false);
 }
 
@@ -789,7 +790,7 @@ void animation_editor::resize_by_resolution() {
     }
     
     set_textbox_text(frm_tools, "txt_resolution", "");
-    made_changes = true;
+    made_new_changes = true;
     emit_status_bar_message("Resized successfully.", false);
 }
 
@@ -822,7 +823,7 @@ void animation_editor::resize_everything() {
     }
     
     set_textbox_text(frm_tools, "txt_resize", "");
-    made_changes = true;
+    made_new_changes = true;
     emit_status_bar_message("Resized successfully.", false);
 }
 
@@ -968,7 +969,7 @@ void animation_editor::save_animation_database() {
     }
     
     file_node.save_file(file_path);
-    made_changes = false;
+    made_new_changes = false;
 }
 
 
