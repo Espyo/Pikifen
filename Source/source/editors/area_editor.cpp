@@ -139,7 +139,6 @@ area_editor::layout_drawing_node::layout_drawing_node() :
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
-    state(EDITOR_STATE_MAIN),
     backup_timer(area_editor_backup_interval),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
@@ -3016,7 +3015,7 @@ void area_editor::save_area(const bool to_backup) {
     }
     bool geo_save_ok = geometry_file.save_file(geometry_file_name);
     bool data_save_ok = data_file.save_file(data_file_name);
-        
+    
     if(!geo_save_ok || !data_save_ok) {
         al_show_native_message_box(
             NULL, "Save failed!",

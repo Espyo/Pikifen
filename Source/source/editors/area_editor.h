@@ -161,7 +161,7 @@ private:
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
-
+    
     //GUI widgets.
     lafi::frame* frm_main;
     lafi::frame* frm_area;
@@ -185,10 +185,6 @@ private:
     lafi::style* gui_style;
     lafi::style* faded_style;
     
-    //Current state.
-    size_t state;
-    //Current sub-state.
-    size_t sub_state;
     //Time left until a backup is generated.
     timer backup_timer;
     //Where the cross-section tool points are.

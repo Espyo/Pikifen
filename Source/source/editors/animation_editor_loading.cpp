@@ -31,7 +31,7 @@ void animation_editor::load() {
     fade_mgr.start_fade(true, nullptr);
     
     update_canvas_coordinates();
-    mode = EDITOR_MODE_MAIN;
+    state = EDITOR_STATE_MAIN;
     file_path.clear();
     
     load_custom_particle_generators(false);
@@ -113,7 +113,7 @@ void animation_editor::load() {
     frm_main->widgets["but_file"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
-            mode = EDITOR_MODE_LOAD;
+            state = EDITOR_STATE_LOAD;
             populate_history();
             frm_toolbar->hide();
             change_to_right_frame();
@@ -129,7 +129,7 @@ void animation_editor::load() {
         if(cur_anim) {
             if(cur_anim->frames.size()) cur_frame_nr = 0;
         }
-        mode = EDITOR_MODE_ANIMATION;
+        state = EDITOR_STATE_ANIMATION;
         change_to_right_frame();
         animation_to_gui();
     };
@@ -138,7 +138,7 @@ void animation_editor::load() {
         
     frm_object->widgets["but_sprites"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE;
+        state = EDITOR_STATE_SPRITE;
         cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
         change_to_right_frame();
@@ -149,7 +149,7 @@ void animation_editor::load() {
         
     frm_object->widgets["but_body_parts"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_BODY_PART;
+        state = EDITOR_STATE_BODY_PART;
         change_to_right_frame();
         cur_body_part_nr = 0;
         body_part_to_gui();
@@ -159,7 +159,7 @@ void animation_editor::load() {
         
     frm_object->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_TOOLS;
+        state = EDITOR_STATE_TOOLS;
         change_to_right_frame();
     };
     frm_object->widgets["but_tools"]->description =
@@ -218,7 +218,7 @@ void animation_editor::load() {
     frm_history->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         frm_toolbar->show();
-        mode = EDITOR_MODE_MAIN;
+        state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
     frm_history->widgets["but_back"]->description =
@@ -434,7 +434,7 @@ void animation_editor::load() {
     
     frm_anims->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
+        state = EDITOR_STATE_MAIN;
         anim_playing = false;
         change_to_right_frame();
         update_stats();
@@ -724,7 +724,7 @@ void animation_editor::load() {
     //Sprites -- properties.
     auto lambda_gui_to_sprite = [this] (lafi::widget*) { gui_to_sprite(); };
     auto lambda_sprite_transform = [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE_TRANSFORM;
+        state = EDITOR_STATE_SPRITE_TRANSFORM;
         change_to_right_frame();
         comparison_sprite = NULL;
         sprite_transform_to_gui();
@@ -732,7 +732,7 @@ void animation_editor::load() {
     
     frm_sprites->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
+        state = EDITOR_STATE_MAIN;
         change_to_right_frame();
         update_stats();
     };
@@ -805,7 +805,7 @@ void animation_editor::load() {
         
     frm_sprite->widgets["but_bitmap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE_BITMAP;
+        state = EDITOR_STATE_SPRITE_BITMAP;
         sprite_bmp_to_gui();
         change_to_right_frame();
     };
@@ -816,7 +816,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         cur_sprite_tc.set_center(cur_sprite->offset);
         cur_sprite_tc.set_size(cur_sprite->game_size);
-        mode = EDITOR_MODE_SPRITE_TRANSFORM;
+        state = EDITOR_STATE_SPRITE_TRANSFORM;
         sprite_transform_to_gui();
         change_to_right_frame();
     };
@@ -825,7 +825,7 @@ void animation_editor::load() {
         
     frm_sprite->widgets["but_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_HITBOXES;
+        state = EDITOR_STATE_HITBOXES;
         if(cur_sprite && !cur_sprite->hitboxes.empty()) {
             cur_hitbox = &cur_sprite->hitboxes[0];
             cur_hitbox_nr = 0;
@@ -840,7 +840,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         top_tc.set_center(cur_sprite->top_pos);
         top_tc.set_size(cur_sprite->top_size);
-        mode = EDITOR_MODE_TOP;
+        state = EDITOR_STATE_TOP;
         change_to_right_frame();
         top_to_gui();
     };
@@ -939,7 +939,7 @@ void animation_editor::load() {
         "Go back to the sprite editor.";
     frm_sprite_bmp->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE;
+        state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
     };
     
@@ -1117,7 +1117,7 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         this->comparison_sprite = NULL;
-        mode = EDITOR_MODE_SPRITE;
+        state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
         sprite_to_gui();
     };
@@ -1384,7 +1384,7 @@ void animation_editor::load() {
     
     frm_hitboxes->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE;
+        state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
         cur_hitbox = NULL;
         cur_hitbox_nr = INVALID;
@@ -1610,7 +1610,7 @@ void animation_editor::load() {
     
     frm_top->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_SPRITE;
+        state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
     };
     frm_top->widgets["but_back"]->description =
@@ -1763,7 +1763,7 @@ void animation_editor::load() {
     //Body parts -- properties.
     frm_body_parts->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
+        state = EDITOR_STATE_MAIN;
         change_to_right_frame();
         update_stats();
     };
@@ -1986,7 +1986,7 @@ void animation_editor::load() {
     //Tools -- properties.
     frm_tools->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
+        state = EDITOR_STATE_MAIN;
         change_to_right_frame();
         update_stats();
     };

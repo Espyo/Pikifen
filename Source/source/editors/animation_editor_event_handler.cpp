@@ -19,7 +19,7 @@
  */
 void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     if(
-        mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+        state == EDITOR_STATE_SPRITE_TRANSFORM &&
         ev.keyboard.keycode == ALLEGRO_KEY_C &&
         is_ctrl_pressed
     ) {
@@ -45,12 +45,12 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
         if(cur_sprite_tc.handle_mouse_down(mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
         }
         
-    } else if(mode == EDITOR_MODE_HITBOXES) {
+    } else if(state == EDITOR_STATE_HITBOXES) {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_down(mouse_cursor_w)) {
                 cur_hitbox_tc_to_gui();
@@ -71,7 +71,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(
-        mode == EDITOR_MODE_SPRITE_BITMAP && cur_sprite &&
+        state == EDITOR_STATE_SPRITE_BITMAP && cur_sprite &&
         cur_sprite->parent_bmp
     ) {
         int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
@@ -142,7 +142,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         gui_to_sprite_bmp();
         
     } else if(
-        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
         if(top_tc.handle_mouse_down(mouse_cursor_w)) {
             top_tc_to_gui();
@@ -155,13 +155,13 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
         if(cur_sprite_tc.handle_mouse_move(mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
             made_new_changes = true;
         }
         
-    } else if(mode == EDITOR_MODE_HITBOXES) {
+    } else if(state == EDITOR_STATE_HITBOXES) {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_move(mouse_cursor_w)) {
                 cur_hitbox_tc_to_gui();
@@ -169,7 +169,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
         }
     } else if(
-        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
         if(top_tc.handle_mouse_move(mouse_cursor_w)) {
             top_tc_to_gui();
@@ -182,13 +182,13 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
         cur_sprite_tc.handle_mouse_up();
     } else if(
-        mode == EDITOR_MODE_TOP && cur_sprite && cur_sprite->top_visible
+        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
         top_tc.handle_mouse_up();
-    } else if(mode == EDITOR_MODE_HITBOXES) {
+    } else if(state == EDITOR_STATE_HITBOXES) {
         if(cur_sprite && cur_hitbox) {
             cur_hitbox_tc.handle_mouse_up();
         }
@@ -225,7 +225,7 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &mouse_cursor_w.x, &mouse_cursor_w.y
     );
     
-    update_status_bar(mode == EDITOR_MODE_SPRITE_BITMAP);
+    update_status_bar(state == EDITOR_STATE_SPRITE_BITMAP);
 }
 
 

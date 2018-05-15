@@ -2359,7 +2359,6 @@ void area_editor::load() {
     frm_options->widgets["txt_undo_limit"]->description =
         "Maximum number of operations that can be undone. 0 = off.";
         
-        
     frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["chk_mmb_pan"]->description =

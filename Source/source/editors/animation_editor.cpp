@@ -93,7 +93,7 @@ void animation_editor::do_logic() {
     editor::do_logic();
     
     if(
-        anim_playing && mode == EDITOR_MODE_ANIMATION &&
+        anim_playing && state == EDITOR_STATE_ANIMATION &&
         cur_anim && cur_frame_nr != INVALID
     ) {
         frame* f = &cur_anim->frames[cur_frame_nr];
@@ -151,7 +151,7 @@ void animation_editor::do_drawing() {
     bool draw_mob_radius = mob_radius_visible;
     bool draw_pikmin_silhouette = pikmin_silhouette_visible;
     
-    if(mode == EDITOR_MODE_ANIMATION) {
+    if(state == EDITOR_STATE_ANIMATION) {
         if(cur_frame_nr != INVALID) {
             string name =
                 cur_anim->frames[cur_frame_nr].sprite_name;
@@ -160,20 +160,20 @@ void animation_editor::do_drawing() {
         }
         
     } else if(
-        mode == EDITOR_MODE_SPRITE || mode == EDITOR_MODE_TOP ||
-        mode == EDITOR_MODE_HITBOXES ||
-        mode == EDITOR_MODE_SPRITE_BITMAP ||
-        mode == EDITOR_MODE_SPRITE_TRANSFORM
+        state == EDITOR_STATE_SPRITE || state == EDITOR_STATE_TOP ||
+        state == EDITOR_STATE_HITBOXES ||
+        state == EDITOR_STATE_SPRITE_BITMAP ||
+        state == EDITOR_STATE_SPRITE_TRANSFORM
     ) {
         s = cur_sprite;
         
     }
     
-    if(mode == EDITOR_MODE_SPRITE_TRANSFORM || mode == EDITOR_MODE_TOP) {
+    if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
         draw_hitboxes = false;
     }
     
-    if(mode == EDITOR_MODE_SPRITE_BITMAP && s && s->parent_bmp) {
+    if(state == EDITOR_STATE_SPRITE_BITMAP && s && s->parent_bmp) {
     
         draw_origin = false;
         draw_hitboxes = false;
@@ -250,7 +250,7 @@ void animation_editor::do_drawing() {
         if(s->bitmap) {
             ALLEGRO_COLOR tint;
             if(
-                mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+                state == EDITOR_STATE_SPRITE_TRANSFORM &&
                 comparison && comparison_tint &&
                 comparison_sprite && comparison_sprite->bitmap
             ) {
@@ -324,14 +324,14 @@ void animation_editor::do_drawing() {
             draw_comparison();
         }
         
-        if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+        if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
             cur_sprite_tc.draw_handles();
         } else if(
-            mode == EDITOR_MODE_TOP &&
+            state == EDITOR_STATE_TOP &&
             cur_sprite && cur_sprite->top_visible
         ) {
             top_tc.draw_handles();
-        } else if(mode == EDITOR_MODE_HITBOXES) {
+        } else if(state == EDITOR_STATE_HITBOXES) {
             if(cur_sprite && cur_hitbox) {
                 cur_hitbox_tc.draw_handles();
             }
@@ -654,7 +654,7 @@ void animation_editor::load_animation_database(const bool update_history) {
     }
     
     frm_toolbar->show();
-    mode = EDITOR_MODE_MAIN;
+    state = EDITOR_STATE_MAIN;
     change_to_right_frame();
     loaded_content_yet = true;
     update_stats();

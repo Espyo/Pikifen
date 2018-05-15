@@ -51,7 +51,7 @@ void load_area(
     }
     
     data_node data_file = load_data_file(data_file_name);
-        
+    
     cur_area_data.name =
         data_file.get_child_by_name("name")->get_value_or_default(name);
     cur_area_data.subtitle =
@@ -111,7 +111,7 @@ void load_area(
         
         
     data_node geometry_file = load_data_file(geometry_file_name);
-        
+    
     //Vertexes.
     size_t n_vertexes =
         geometry_file.get_child_by_name(

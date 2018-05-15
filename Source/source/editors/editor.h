@@ -179,10 +179,11 @@ protected:
     bool                    mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point                   mouse_drag_start;
-    unsigned char           mode;
     size_t                  picker_type;
-    //Secondary/sub mode.
-    unsigned char           sec_mode;
+    //Current state.
+    size_t                  state;
+    //Current sub-state.
+    size_t                  sub_state;
     //Status bar override text.
     string                  status_override_text;
     //Time left to show the status bar override text for.

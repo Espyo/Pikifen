@@ -62,8 +62,8 @@ editor::editor() :
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
-    mode(0),
-    sec_mode(0),
+    state(0),
+    sub_state(0),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     zoom_max_level(0),
     zoom_min_level(0) {

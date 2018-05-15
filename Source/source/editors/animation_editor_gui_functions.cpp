@@ -22,30 +22,30 @@
 
 
 /* ----------------------------------------------------------------------------
- * Switches to the correct frame, depending on the current editor mode.
+ * Switches to the correct frame, depending on the current editor state.
  */
 void animation_editor::change_to_right_frame() {
     hide_all_frames();
     
-    if(mode == EDITOR_MODE_MAIN) {
+    if(state == EDITOR_STATE_MAIN) {
         frm_main->show();
-    } else if(mode == EDITOR_MODE_ANIMATION) {
+    } else if(state == EDITOR_STATE_ANIMATION) {
         frm_anims->show();
-    } else if(mode == EDITOR_MODE_SPRITE) {
+    } else if(state == EDITOR_STATE_SPRITE) {
         frm_sprites->show();
-    } else if(mode == EDITOR_MODE_BODY_PART) {
+    } else if(state == EDITOR_STATE_BODY_PART) {
         frm_body_parts->show();
-    } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
+    } else if(state == EDITOR_STATE_SPRITE_BITMAP) {
         frm_sprite_bmp->show();
-    } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    } else if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
         frm_sprite_tra->show();
-    } else if(mode == EDITOR_MODE_HITBOXES) {
+    } else if(state == EDITOR_STATE_HITBOXES) {
         frm_hitboxes->show();
-    } else if(mode == EDITOR_MODE_TOP) {
+    } else if(state == EDITOR_STATE_TOP) {
         frm_top->show();
-    } else if(mode == EDITOR_MODE_LOAD) {
+    } else if(state == EDITOR_STATE_LOAD) {
         frm_history->show();
-    } else if(mode == EDITOR_MODE_TOOLS) {
+    } else if(state == EDITOR_STATE_TOOLS) {
         frm_tools->show();
     }
 }
@@ -55,12 +55,12 @@ void animation_editor::change_to_right_frame() {
  * Creates a new item from the picker frame, given the item's name.
  */
 void animation_editor::create_new_from_picker(const string &name) {
-    if(mode == EDITOR_MODE_ANIMATION) {
+    if(state == EDITOR_STATE_ANIMATION) {
         if(anims.find_animation(name) != INVALID) return;
         anims.animations.push_back(new animation(name));
         pick(name, "");
         
-    } else if(mode == EDITOR_MODE_SPRITE) {
+    } else if(state == EDITOR_STATE_SPRITE) {
         if(anims.find_sprite(name) != INVALID) return;
         anims.sprites.push_back(new sprite(name));
         anims.sprites.back()->create_hitboxes(
@@ -690,7 +690,7 @@ void animation_editor::pick(const string &name, const string &category) {
         load_animation_database(true);
         
     } else if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        if(mode == EDITOR_MODE_TOOLS) {
+        if(state == EDITOR_STATE_TOOLS) {
             set_button_text(frm_tools, "but_rename_anim_name", name);
         } else {
             cur_anim = anims.animations[anims.find_animation(name)];
@@ -702,38 +702,38 @@ void animation_editor::pick(const string &name, const string &category) {
         }
         
     } else if(picker_type == ANIMATION_EDITOR_PICKER_SPRITE) {
-        if(mode == EDITOR_MODE_ANIMATION) {
+        if(state == EDITOR_STATE_ANIMATION) {
             cur_anim->frames[cur_frame_nr].sprite_name =
                 name;
             cur_anim->frames[cur_frame_nr].sprite_ptr =
                 anims.sprites[anims.find_sprite(name)];
             frame_to_gui();
-        } else if(mode == EDITOR_MODE_SPRITE_BITMAP) {
+        } else if(state == EDITOR_STATE_SPRITE_BITMAP) {
             import_sprite_file_data(name);
         } else if(
-            mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+            state == EDITOR_STATE_SPRITE_TRANSFORM &&
             picker_disambig == PICKER_DISAMBIG_COMPARISON
         ) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
             sprite_transform_to_gui();
         } else if(
-            mode == EDITOR_MODE_SPRITE_TRANSFORM &&
+            state == EDITOR_STATE_SPRITE_TRANSFORM &&
             picker_disambig == PICKER_DISAMBIG_IMPORT
         ) {
             import_sprite_transformation_data(name);
-        } else if(mode == EDITOR_MODE_TOP) {
+        } else if(state == EDITOR_STATE_TOP) {
             import_sprite_top_data(name);
-        } else if(mode == EDITOR_MODE_TOOLS) {
+        } else if(state == EDITOR_STATE_TOOLS) {
             set_button_text(frm_tools, "but_rename_sprite_name", name);
-        } else if(mode == EDITOR_MODE_HITBOXES) {
+        } else if(state == EDITOR_STATE_HITBOXES) {
             import_sprite_hitbox_data(name);
         } else if(
-            mode == EDITOR_MODE_SPRITE &&
+            state == EDITOR_STATE_SPRITE &&
             picker_disambig == PICKER_DISAMBIG_LOAD
         ) {
             pick_sprite(name);
         } else if(
-            mode == EDITOR_MODE_SPRITE &&
+            state == EDITOR_STATE_SPRITE &&
             picker_disambig == PICKER_DISAMBIG_IMPORT
         ) {
             import_sprite_file_data(name);
