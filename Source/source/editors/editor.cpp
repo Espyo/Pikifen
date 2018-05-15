@@ -409,17 +409,9 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             if(ev.mouse.button == 1) {
                 handle_lmb_double_click(ev);
             } else if(ev.mouse.button == 2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_double_click(ev);
-                } else {
-                    handle_rmb_double_click(ev);
-                }
+                handle_rmb_double_click(ev);
             } else if(ev.mouse.button == 3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_double_click(ev);
-                } else {
-                    handle_mmb_double_click(ev);
-                }
+                handle_mmb_double_click(ev);
             }
             
             double_click_time = 0;
@@ -428,17 +420,9 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             if(ev.mouse.button == 1) {
                 handle_lmb_down(ev);
             } else if(ev.mouse.button == 2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_down(ev);
-                } else {
-                    handle_rmb_down(ev);
-                }
+                handle_rmb_down(ev);
             } else if(ev.mouse.button == 3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_down(ev);
-                } else {
-                    handle_mmb_down(ev);
-                }
+                handle_mmb_down(ev);
             }
             
             last_mouse_click = ev.mouse.button;
@@ -460,18 +444,10 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             handle_lmb_up(ev);
         } else if(ev.mouse.button == 2) {
             holding_m2 = false;
-            if(area_editor_mmb_pan) {
-                handle_mmb_up(ev);
-            } else {
-                handle_rmb_up(ev);
-            }
+            handle_rmb_up(ev);
         } else if(ev.mouse.button == 3) {
             holding_m3 = false;
-            if(area_editor_mmb_pan) {
-                handle_rmb_up(ev);
-            } else {
-                handle_mmb_up(ev);
-            }
+            handle_mmb_up(ev);
         }
         
     } else if(
@@ -490,18 +466,10 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 handle_lmb_drag(ev);
             }
             if(holding_m2) {
-                if(area_editor_mmb_pan) {
-                    handle_mmb_drag(ev);
-                } else {
-                    handle_rmb_drag(ev);
-                }
+                handle_rmb_drag(ev);
             }
             if(holding_m3) {
-                if(area_editor_mmb_pan) {
-                    handle_rmb_drag(ev);
-                } else {
-                    handle_mmb_drag(ev);
-                }
+                handle_mmb_drag(ev);
             }
         }
         if(

@@ -1082,13 +1082,14 @@ void load_options() {
     //Other options.
     reader_setter rs(&file);
     string resolution_str;
-    rs.set("draw_cursor_trail", draw_cursor_trail);
+    rs.set("animation_editor_mmb_pan", animation_editor_mmb_pan);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_mmb_pan", area_editor_mmb_pan);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
+    rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("fps", game_fps);
     rs.set("fullscreen", scr_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);

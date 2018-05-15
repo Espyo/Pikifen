@@ -47,6 +47,9 @@ void animation_editor::change_to_right_frame() {
         frm_history->show();
     } else if(state == EDITOR_STATE_TOOLS) {
         frm_tools->show();
+    } else if(state == EDITOR_STATE_OPTIONS) {
+        frm_options->show();
+        options_to_gui();
     }
 }
 
@@ -285,6 +288,14 @@ void animation_editor::hitbox_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the options data onto the GUI.
+ */
+void animation_editor::options_to_gui() {
+    set_checkbox_check(frm_options, "chk_mmb_pan", animation_editor_mmb_pan);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the sprite's data from memory to the gui.
  */
 void animation_editor::sprite_to_gui() {
@@ -481,6 +492,18 @@ void animation_editor::gui_to_hitbox() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the options data to memory using info on the gui.
+ */
+void animation_editor::gui_to_options() {
+    animation_editor_mmb_pan =
+        get_checkbox_check(frm_options, "chk_mmb_pan");
+        
+    save_options();
+    options_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the sprite's data to memory using info on the gui.
  */
 void animation_editor::gui_to_sprite() {
@@ -617,6 +640,7 @@ void animation_editor::hide_all_frames() {
     frm_top->hide();
     frm_body_parts->hide();
     frm_tools->hide();
+    frm_options->hide();
 }
 
 

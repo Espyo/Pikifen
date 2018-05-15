@@ -40,6 +40,7 @@ private:
         EDITOR_STATE_TOP,
         EDITOR_STATE_LOAD,
         EDITOR_STATE_TOOLS,
+        EDITOR_STATE_OPTIONS,
     };
     
     enum ANIMATION_EDITOR_PICKER_TYPES {
@@ -79,6 +80,7 @@ private:
     lafi::frame* frm_body_parts;
     lafi::frame* frm_body_part;
     lafi::frame* frm_tools;
+    lafi::frame* frm_options;
     
     
     animation_database        anims;
@@ -153,15 +155,22 @@ private:
     virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
     virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
     virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
     virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
     virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void pan_cam(const ALLEGRO_EVENT &ev);
+    void reset_cam_xy(const ALLEGRO_EVENT &ev);
+    void reset_cam_zoom(const ALLEGRO_EVENT &ev);
     
     //GUI functions.
     void animation_to_gui();
     void body_part_to_gui();
     void frame_to_gui();
     void hitbox_to_gui();
+    void options_to_gui();
     void sprite_to_gui();
     void sprite_bmp_to_gui();
     void sprite_transform_to_gui();
@@ -170,6 +179,7 @@ private:
     void gui_to_animation();
     void gui_to_frame();
     void gui_to_hitbox();
+    void gui_to_options();
     void gui_to_sprite();
     void gui_to_sprite_bmp();
     void gui_to_sprite_transform();

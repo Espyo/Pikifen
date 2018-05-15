@@ -874,6 +874,11 @@ void save_options() {
     //Other options.
     file.add(
         new data_node(
+            "animation_editor_mmb_pan", b2s(animation_editor_mmb_pan)
+        )
+    );
+    file.add(
+        new data_node(
             "area_editor_backup_interval", f2s(area_editor_backup_interval)
         )
     );

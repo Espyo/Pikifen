@@ -131,6 +131,7 @@ extern asset_file_names_struct asset_file_names;
 //General globals.
 
 extern vector<string> animation_editor_history;
+extern bool animation_editor_mmb_pan;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
 extern bool area_editor_mmb_pan;

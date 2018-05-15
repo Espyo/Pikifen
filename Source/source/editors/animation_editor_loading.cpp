@@ -93,6 +93,11 @@ void animation_editor::load() {
     );
     frm_object->easy_row();
     frm_object->easy_add(
+        "but_options",
+        new lafi::button("Options"), 100, 32
+    );
+    frm_object->easy_row();
+    frm_object->easy_add(
         "lbl_n_anims",
         new lafi::label(), 100, 12
     );
@@ -164,6 +169,14 @@ void animation_editor::load() {
     };
     frm_object->widgets["but_tools"]->description =
         "Special tools to help with specific tasks.";
+        
+    frm_object->widgets["but_options"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_OPTIONS;
+        change_to_right_frame();
+    };
+    frm_object->widgets["but_options"]->description =
+        "Options for the area editor.";
         
         
     //History -- declarations.
@@ -2048,6 +2061,49 @@ void animation_editor::load() {
         "Do the rename, if the new name is valid.";
         
         
+    //Options -- declarations.
+    frm_options =
+        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+    gui->add("frm_options", frm_options);
+    
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "but_back",
+        new lafi::button("Back"), 50, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "chk_mmb_pan",
+        new lafi::checkbox("Use MMB to pan"), 100, 16
+    );
+    frm_options->easy_row();
+    
+    
+    //Options -- properties.
+    auto lambda_gui_to_options =
+    [this] (lafi::widget*) {
+        gui_to_options();
+    };
+    auto lambda_gui_to_options_click =
+    [this] (lafi::widget*, int, int) {
+        gui_to_options();
+    };
+    
+    frm_options->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_MAIN;
+        change_to_right_frame();
+    };
+    frm_options->widgets["but_back"]->description =
+        "Close the options.";
+    
+    frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["chk_mmb_pan"]->description =
+        "Use the middle mouse button to pan the camera "
+        "(and RMB to reset camera/zoom).";
+    
+    
     //Toolbar -- declarations.
     create_toolbar_frame();
     

@@ -200,8 +200,9 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being double-clicked.
  */
 void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
-    cam_pos.x = 0;
-    cam_pos.y = 0;
+    if(!animation_editor_mmb_pan) {
+        reset_cam_xy(ev);
+    }
 }
 
 
@@ -209,7 +210,19 @@ void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being pressed down.
  */
 void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    zoom(1.0f);
+    if(!animation_editor_mmb_pan) {
+        reset_cam_zoom(ev);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the middle mouse button being dragged.
+ */
+void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
+    if(animation_editor_mmb_pan) {
+        pan_cam(ev);
+    }
 }
 
 
@@ -238,9 +251,56 @@ void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the right mouse button being double-clicked.
+ */
+void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(animation_editor_mmb_pan) {
+        reset_cam_xy(ev);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the right mouse button being dragged.
+ */
+void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
+    if(animation_editor_mmb_pan) {
+        reset_cam_zoom(ev);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the right mouse button being dragged.
  */
 void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
+    if(!animation_editor_mmb_pan) {
+        pan_cam(ev);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pans the camera around.
+ */
+void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
     cam_pos.x -= ev.mouse.dx / cam_zoom;
     cam_pos.y -= ev.mouse.dy / cam_zoom;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's X and Y coordinates.
+ */
+void animation_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
+    cam_pos.x = 0;
+    cam_pos.y = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's zoom.
+ */
+void animation_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
+    zoom(1.0f);
 }

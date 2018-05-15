@@ -483,9 +483,15 @@ private:
     virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
     virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
     virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
     virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
     virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void pan_cam(const ALLEGRO_EVENT &ev);
+    void reset_cam_xy(const ALLEGRO_EVENT &ev);
+    void reset_cam_zoom(const ALLEGRO_EVENT &ev);
     
     //GUI functions.
     void asa_to_gui();

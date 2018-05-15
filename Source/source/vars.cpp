@@ -66,6 +66,7 @@ sample_struct sfx_throw;
 asset_file_names_struct asset_file_names;
 
 vector<string> animation_editor_history;
+bool animation_editor_mmb_pan = false;
 float area_editor_backup_interval = DEF_AREA_EDITOR_BACKUP_INTERVAL;
 float area_editor_grid_interval = DEF_AREA_EDITOR_GRID_INTERVAL;
 bool area_editor_mmb_pan = false;
