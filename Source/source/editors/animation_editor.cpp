@@ -258,7 +258,14 @@ void animation_editor::do_drawing() {
             } else {
                 tint = al_map_rgb(255, 255, 255);
             }
-            draw_bitmap(s->bitmap, s->offset, s->game_size, 0, tint);
+            draw_bitmap(
+                s->bitmap, s->offset,
+                point(
+                    cur_sprite->file_size.x * s->scale.x,
+                    cur_sprite->file_size.y * s->scale.y
+                ),
+                s->angle, tint
+            );
         }
         
         if(
@@ -407,7 +414,11 @@ void animation_editor::draw_comparison() {
         }
         draw_bitmap(
             comparison_sprite->bitmap,
-            comparison_sprite->offset, comparison_sprite->game_size,
+            comparison_sprite->offset,
+            point(
+                comparison_sprite->file_size.x * comparison_sprite->scale.x,
+                comparison_sprite->file_size.y * comparison_sprite->scale.y
+            ),
             0, tint
         );
     }
@@ -493,8 +504,8 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     set_textbox_text(frm_sprite_tra, "txt_x", i2s(s->offset.x));
     set_textbox_text(frm_sprite_tra, "txt_y", i2s(s->offset.y));
-    set_textbox_text(frm_sprite_tra, "txt_w", i2s(s->game_size.x));
-    set_textbox_text(frm_sprite_tra, "txt_h", i2s(s->game_size.y));
+    set_textbox_text(frm_sprite_tra, "txt_sx", i2s(s->scale.x));
+    set_textbox_text(frm_sprite_tra, "txt_sy", i2s(s->scale.y));
     
     gui_to_sprite_transform();
     emit_status_bar_message("Data imported.", false);
@@ -771,31 +782,6 @@ void animation_editor::rename_sprite() {
 
 
 /* ----------------------------------------------------------------------------
- * Resizes all sprite game-width/height by a factor compared
- * to the respective file-width/height.
- */
-void animation_editor::resize_by_resolution() {
-    float mult = s2f(get_textbox_text(frm_tools, "txt_resolution"));
-    
-    if(mult == 0) {
-        emit_status_bar_message("Can't resize sprites to size 0!", true);
-        return;
-    }
-    
-    mult = 1.0 / mult;
-    
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        sprite* s_ptr = anims.sprites[s];
-        s_ptr->game_size = s_ptr->file_size * mult;
-    }
-    
-    set_textbox_text(frm_tools, "txt_resolution", "");
-    made_new_changes = true;
-    emit_status_bar_message("Resized successfully.", false);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Resizes sprites, body parts, etc. by a multiplier.
  */
 void animation_editor::resize_everything() {
@@ -809,10 +795,10 @@ void animation_editor::resize_everything() {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
         
-        s_ptr->game_size *= mult;
-        s_ptr->offset    *= mult;
-        s_ptr->top_pos   *= mult;
-        s_ptr->top_size  *= mult;
+        s_ptr->scale    *= mult;
+        s_ptr->offset   *= mult;
+        s_ptr->top_pos  *= mult;
+        s_ptr->top_size *= mult;
         
         for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
@@ -841,9 +827,13 @@ void animation_editor::save_animation_database() {
         data_node* anim_node = new data_node(anims.animations[a]->name, "");
         animations_node->add(anim_node);
         
-        anim_node->add(
-            new data_node("loop_frame", i2s(anims.animations[a]->loop_frame))
-        );
+        if(anims.animations[a]->loop_frame > 0) {
+            anim_node->add(
+                new data_node(
+                    "loop_frame", i2s(anims.animations[a]->loop_frame)
+                )
+            );
+        }
         if(anims.animations[a]->hit_rate != 100) {
             anim_node->add(
                 new data_node("hit_rate", i2s(anims.animations[a]->hit_rate))
@@ -884,8 +874,12 @@ void animation_editor::save_animation_database() {
         sprite_node->add(new data_node("file",      s_ptr->file));
         sprite_node->add(new data_node("file_pos",  p2s(s_ptr->file_pos)));
         sprite_node->add(new data_node("file_size", p2s(s_ptr->file_size)));
-        sprite_node->add(new data_node("game_size", p2s(s_ptr->game_size)));
-        sprite_node->add(new data_node("offset",    p2s(s_ptr->offset)));
+        if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
+            sprite_node->add(new data_node("offset", p2s(s_ptr->offset)));
+        }
+        if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
+            sprite_node->add(new data_node("scale", p2s(s_ptr->scale)));
+        }
         
         if(
             loaded_mob_type &&
@@ -905,55 +899,67 @@ void animation_editor::save_animation_database() {
             );
         }
         
-        data_node* hitboxes_node =
-            new data_node("hitboxes", "");
-        sprite_node->add(hitboxes_node);
-        
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
+        if(!s_ptr->hitboxes.empty()) {
+            data_node* hitboxes_node =
+                new data_node("hitboxes", "");
+            sprite_node->add(hitboxes_node);
             
-            data_node* hitbox_node =
-                new data_node(h_ptr->body_part_name, "");
-            hitboxes_node->add(hitbox_node);
-            
-            hitbox_node->add(
-                new data_node(
-                    "coords",
-                    f2s(h_ptr->pos.x) + " " + f2s(h_ptr->pos.y) +
-                    " " + f2s(h_ptr->z)
-                )
-            );
-            hitbox_node->add(
-                new data_node("height", f2s(h_ptr->height))
-            );
-            hitbox_node->add(
-                new data_node("radius", f2s(h_ptr->radius))
-            );
-            hitbox_node->add(
-                new data_node("type", i2s(h_ptr->type))
-            );
-            hitbox_node->add(
-                new data_node("value", f2s(h_ptr->value))
-            );
-            hitbox_node->add(
-                new data_node("can_pikmin_latch", b2s(h_ptr->can_pikmin_latch))
-            );
-            hitbox_node->add(
-                new data_node("hazards", h_ptr->hazards_str)
-            );
-            hitbox_node->add(
-                new data_node("outward", b2s(h_ptr->knockback_outward))
-            );
-            hitbox_node->add(
-                new data_node("angle", f2s(h_ptr->knockback_angle))
-            );
-            hitbox_node->add(
-                new data_node("knockback", f2s(h_ptr->knockback))
-            );
-            if(h_ptr->wither_chance > 0) {
+            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+                hitbox* h_ptr = &s_ptr->hitboxes[h];
+                
+                data_node* hitbox_node =
+                    new data_node(h_ptr->body_part_name, "");
+                hitboxes_node->add(hitbox_node);
+                
                 hitbox_node->add(
-                    new data_node("wither_chance", i2s(h_ptr->wither_chance))
+                    new data_node(
+                        "coords",
+                        f2s(h_ptr->pos.x) + " " + f2s(h_ptr->pos.y) +
+                        " " + f2s(h_ptr->z)
+                    )
                 );
+                hitbox_node->add(
+                    new data_node("height", f2s(h_ptr->height))
+                );
+                hitbox_node->add(
+                    new data_node("radius", f2s(h_ptr->radius))
+                );
+                hitbox_node->add(
+                    new data_node("type", i2s(h_ptr->type))
+                );
+                hitbox_node->add(
+                    new data_node("value", f2s(h_ptr->value))
+                );
+                if(h_ptr->type == HITBOX_TYPE_NORMAL && h_ptr->can_pikmin_latch) {
+                    hitbox_node->add(
+                        new data_node(
+                            "can_pikmin_latch", b2s(h_ptr->can_pikmin_latch)
+                        )
+                    );
+                }
+                if(!h_ptr->hazards_str.empty()) {
+                    hitbox_node->add(
+                        new data_node("hazards", h_ptr->hazards_str)
+                    );
+                }
+                if(h_ptr->knockback_outward) {
+                    hitbox_node->add(
+                        new data_node("outward", b2s(h_ptr->knockback_outward))
+                    );
+                }
+                hitbox_node->add(
+                    new data_node("angle", f2s(h_ptr->knockback_angle))
+                );
+                if(h_ptr->knockback != 0) {
+                    hitbox_node->add(
+                        new data_node("knockback", f2s(h_ptr->knockback))
+                    );
+                }
+                if(h_ptr->wither_chance > 0) {
+                    hitbox_node->add(
+                        new data_node("wither_chance", i2s(h_ptr->wither_chance))
+                    );
+                }
             }
         }
     }
@@ -970,6 +976,29 @@ void animation_editor::save_animation_database() {
     
     file_node.save_file(file_path);
     made_new_changes = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets all sprite scales to the value specified in the textbox.
+ */
+void animation_editor::set_all_sprite_scales() {
+    float mult = s2f(get_textbox_text(frm_tools, "txt_set_scales"));
+    
+    if(mult == 0) {
+        emit_status_bar_message("The scales can't be 0!", true);
+        return;
+    }
+    
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        sprite* s_ptr = anims.sprites[s];
+        s_ptr->scale.x = mult;
+        s_ptr->scale.y = mult;
+    }
+    
+    set_textbox_text(frm_tools, "txt_set_scales", "");
+    made_new_changes = true;
+    emit_status_bar_message("Sprite scales set successfully.", false);
 }
 
 

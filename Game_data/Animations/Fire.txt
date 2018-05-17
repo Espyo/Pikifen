@@ -1,6 +1,5 @@
 animations{
 	normal{
-		loop_frame=0
 		frames{
 			1{
 				duration=0.08
@@ -23,43 +22,38 @@ animations{
 sprites{
 	1{
 		file=Fire.png
-		file_pos=0 0
-		file_size=24 50
-		game_size=24.00 50.00
+		file_pos=0.00 0.00
+		file_size=24.00 50.00
 		offset=0.00 -9.00
-		hitboxes=
+		hitboxes
 	}
 	2{
 		file=Fire.png
-		file_pos=26 0
-		file_size=24 50
-		game_size=24.00 50.00
+		file_pos=26.00 0.00
+		file_size=24.00 50.00
 		offset=0.00 -9.00
-		hitboxes=
+		hitboxes
 	}
 	3{
 		file=Fire.png
-		file_pos=52 0
-		file_size=24 50
-		game_size=24.00 50.00
+		file_pos=52.00 0.00
+		file_size=24.00 50.00
 		offset=0.00 -9.00
-		hitboxes=
+		hitboxes
 	}
 	4{
 		file=Fire.png
-		file_pos=78 0
-		file_size=24 50
-		game_size=24.00 50.00
+		file_pos=78.00 0.00
+		file_size=24.00 50.00
 		offset=0.00 -9.00
-		hitboxes=
+		hitboxes
 	}
 	5{
 		file=Fire.png
-		file_pos=104 0
-		file_size=24 50
-		game_size=24.00 50.00
+		file_pos=104.00 0.00
+		file_size=24.00 50.00
 		offset=0.00 -9.00
-		hitboxes=
+		hitboxes
 	}
 }
-body_parts=
+body_parts

@@ -231,8 +231,6 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
         angle, &effects
     );
     
-    point size_mult = draw_size / s_ptr->game_size;
-    
     if(s_ptr->top_visible) {
         point top_pos;
         top_pos = rotate_point(s_ptr->top_pos, angle);
@@ -249,7 +247,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
         draw_bitmap(
             bmp_idle_glow,
             pos,
-            size_mult * 35,
+            point(standard_pikmin_radius * 8, standard_pikmin_radius * 8),
             area_time_passed * IDLE_GLOW_SPIN_SPEED,
             type->main_color
         );

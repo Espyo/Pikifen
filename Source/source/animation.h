@@ -73,11 +73,13 @@ public:
     point file_pos;
     //Size of the sprite inside the image file.
     point file_size;
-    //In-game size of the sprite.
-    point game_size;
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
     point offset;
+    //Scale multiplier.
+    point scale;
+    //Angle to rotate the image by.
+    float angle;
     //X&Y of the Pikmin's top (left/bud/flower).
     point top_pos;
     //W&H of the Pikmin's top.
@@ -95,13 +97,11 @@ public:
     
     sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
-        const point &g_size = point(),
         const vector<hitbox> &h = vector<hitbox>()
     );
     sprite(
         const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
-        const point &b_size, const point &g_size,
-        const vector<hitbox> &h
+        const point &b_size, const vector<hitbox> &h
     );
     sprite(const sprite &s2);
     void create_hitboxes(

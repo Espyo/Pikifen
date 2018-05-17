@@ -868,12 +868,16 @@ point mob::get_sprite_center(sprite* s) {
 /* ----------------------------------------------------------------------------
  * Returns what a sprite's dimensions should be,
  * for normal mob drawing routines.
- * s: the sprite.
+ * s:     the sprite.
  * scale: variable to return the scale used to. Optional.
  */
 point mob::get_sprite_dimensions(sprite* s, float* scale) {
     point dim;
-    dim = s->game_size;
+    dim.x = s->file_size.x;
+    dim.y = s->file_size.y;
+    dim.x *= s->scale.x;
+    dim.y *= s->scale.y;
+    
     float sucking_mult = 1.0;
     float height_mult = 1 + z * 0.0001;
     

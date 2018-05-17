@@ -1,6 +1,5 @@
 animations{
 	default{
-		loop_frame=0
 		frames{
 			1{
 				duration=0.06
@@ -20,35 +19,27 @@ animations{
 sprites{
 	1{
 		file=Sparks.png
-		file_pos=0 0
-		file_size=32 32
-		game_size=32.00 32.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=32.00 32.00
+		hitboxes
 	}
 	2{
 		file=Sparks.png
-		file_pos=33 0
-		file_size=32 32
-		game_size=32.00 32.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=33.00 0.00
+		file_size=32.00 32.00
+		hitboxes
 	}
 	3{
 		file=Sparks.png
-		file_pos=66 0
-		file_size=32 32
-		game_size=32.00 32.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=66.00 0.00
+		file_size=32.00 32.00
+		hitboxes
 	}
 	4{
 		file=Sparks.png
-		file_pos=99 0
-		file_size=32 32
-		game_size=32.00 32.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=99.00 0.00
+		file_size=32.00 32.00
+		hitboxes
 	}
 }
-body_parts=
+body_parts

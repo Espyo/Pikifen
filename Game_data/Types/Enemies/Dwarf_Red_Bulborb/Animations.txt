@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	moving{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -37,7 +35,6 @@ animations{
 		}
 	}
 	attacking{
-		loop_frame=0
 		hit_rate=75
 		frames{
 			attacking1{
@@ -55,7 +52,6 @@ animations{
 		}
 	}
 	eating{
-		loop_frame=0
 		frames{
 			chomping1{
 				duration=0.30
@@ -113,7 +109,6 @@ animations{
 		}
 	}
 	shaking{
-		loop_frame=0
 		hit_rate=50
 		frames{
 			shaking1{
@@ -161,7 +156,6 @@ animations{
 		}
 	}
 	looking{
-		loop_frame=0
 		frames{
 			looking2{
 				duration=0.10
@@ -190,7 +184,6 @@ animations{
 		}
 	}
 	grazing{
-		loop_frame=0
 		frames{
 			grazing1{
 				duration=0.40
@@ -207,7 +200,6 @@ animations{
 		}
 	}
 	crushed{
-		loop_frame=0
 		frames{
 			crushed{
 				duration=1.00
@@ -220,8 +212,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 0.00
 		file_size=153.00 103.00
-		game_size=45.00 30.00
 		offset=5.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -229,8 +221,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -241,8 +231,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -253,8 +241,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=154.00 0.00
 		file_size=153.00 104.00
-		game_size=45.00 -31.00
 		offset=5.00 -1.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
@@ -262,8 +250,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -274,8 +260,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -286,8 +270,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=308.00 0.00
 		file_size=153.00 115.00
-		game_size=45.00 -34.00
 		offset=5.00 -2.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 -2.00 0.00
@@ -295,8 +279,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -307,8 +289,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -319,8 +299,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=154.00 0.00
 		file_size=153.00 104.00
-		game_size=45.00 31.00
 		offset=5.00 1.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
@@ -328,8 +308,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -340,8 +318,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -352,8 +328,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=308.00 0.00
 		file_size=153.00 115.00
-		game_size=45.00 34.00
 		offset=5.00 2.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 2.00 0.00
@@ -361,8 +337,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -373,8 +347,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -385,8 +357,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 116.00
 		file_size=160.00 103.00
-		game_size=48.00 30.00
 		offset=6.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -394,8 +366,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -406,8 +376,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -418,8 +386,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=161.00 116.00
 		file_size=174.00 110.00
-		game_size=52.00 33.00
 		offset=8.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
@@ -427,8 +395,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -439,8 +405,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -451,8 +415,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=336.00 116.00
 		file_size=174.00 103.00
-		game_size=52.00 30.00
 		offset=8.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -460,8 +424,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -472,11 +434,7 @@ sprites{
 				radius=16.00
 				type=1
 				value=20.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -484,8 +442,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
-		game_size=49.00 30.00
 		offset=7.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -493,8 +451,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -505,11 +461,7 @@ sprites{
 				radius=16.00
 				type=1
 				value=20.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -517,8 +469,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
-		game_size=49.00 30.00
 		offset=6.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -526,8 +478,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -538,8 +488,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -550,8 +498,7 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 252.00
 		file_size=124.00 103.00
-		game_size=37.00 30.00
-		offset=0.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -559,8 +506,6 @@ sprites{
 				radius=18.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -571,8 +516,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -583,8 +526,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=125.00 252.00
 		file_size=100.00 103.00
-		game_size=30.00 30.00
 		offset=-3.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -592,8 +535,6 @@ sprites{
 				radius=18.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -604,11 +545,7 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -616,8 +553,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=226.00 252.00
 		file_size=115.00 103.00
-		game_size=34.00 30.00
 		offset=-1.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -625,8 +562,6 @@ sprites{
 				radius=18.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -637,8 +572,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -649,8 +582,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 0.00
 		file_size=153.00 103.00
-		game_size=45.00 30.00
 		offset=5.00 1.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
@@ -658,8 +591,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -670,8 +601,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -682,8 +611,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=515.00 252.00
 		file_size=159.00 105.00
-		game_size=47.00 31.00
 		offset=4.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=4.00 0.00 -16.00
@@ -691,8 +620,6 @@ sprites{
 				radius=30.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -704,8 +631,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -716,8 +641,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=515.00 252.00
 		file_size=159.00 105.00
-		game_size=47.00 -31.00
 		offset=4.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=4.00 0.00 -16.00
@@ -725,8 +650,6 @@ sprites{
 				radius=30.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=4.71
 				knockback=1.00
@@ -738,8 +661,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -750,8 +671,7 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 252.00
 		file_size=124.00 103.00
-		game_size=37.00 30.00
-		offset=0.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -759,8 +679,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -771,8 +689,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -783,8 +699,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=125.00 252.00
 		file_size=100.00 103.00
-		game_size=30.00 30.00
 		offset=-3.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -792,8 +708,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -804,11 +718,7 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -816,8 +726,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=226.00 252.00
 		file_size=115.00 103.00
-		game_size=34.00 30.00
 		offset=-1.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -825,8 +735,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -837,8 +745,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -849,8 +755,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 0.00
 		file_size=153.00 103.00
-		game_size=45.00 30.00
 		offset=5.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -858,8 +764,6 @@ sprites{
 				radius=22.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -870,8 +774,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -882,8 +784,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=342.00 252.00
 		file_size=172.00 103.00
-		game_size=51.00 30.00
 		offset=4.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -891,8 +793,6 @@ sprites{
 				radius=22.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -903,8 +803,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -915,8 +813,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=158.00 358.00
 		file_size=135.00 131.00
-		game_size=40.00 39.00
 		offset=2.00 4.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=3.00 3.00 0.00
@@ -924,8 +822,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -936,8 +832,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -948,8 +842,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 358.00
 		file_size=157.00 121.00
-		game_size=47.00 36.00
 		offset=5.00 3.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=3.00 2.00 0.00
@@ -957,8 +851,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -969,8 +861,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -981,8 +871,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=158.00 358.00
 		file_size=135.00 131.00
-		game_size=40.00 -39.00
 		offset=2.00 -4.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=3.00 -3.00 0.00
@@ -990,8 +880,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1002,8 +890,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1014,8 +900,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=0.00 358.00
 		file_size=157.00 121.00
-		game_size=47.00 -36.00
 		offset=5.00 -3.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=3.00 -2.00 0.00
@@ -1023,8 +909,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1035,8 +919,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1047,8 +929,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=295.00 358.00
 		file_size=159.00 163.00
-		game_size=47.00 48.00
 		offset=6.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=6.00 0.00 0.00
@@ -1056,8 +938,6 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1068,8 +948,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1080,8 +958,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=675.00 252.00
 		file_size=164.00 103.00
-		game_size=49.00 30.00
 		offset=7.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -1089,8 +967,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1101,8 +977,6 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1113,8 +987,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
-		game_size=49.00 30.00
 		offset=7.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -1122,8 +996,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1134,11 +1006,7 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1146,8 +1014,8 @@ sprites{
 		file=Red_Bulborb.png
 		file_pos=512.00 116.00
 		file_size=163.00 103.00
-		game_size=49.00 -30.00
 		offset=7.00 0.00
+		scale=0.30 0.30
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -1155,8 +1023,6 @@ sprites{
 				radius=22.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1167,11 +1033,7 @@ sprites{
 				radius=6.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	destroyed{
-		loop_frame=0
 		frames{
 			destroyed{
 				duration=0.00
@@ -19,10 +17,8 @@ animations{
 sprites{
 	idling{
 		file=Wood_bridge.png
-		file_pos=0 0
-		file_size=41 128
-		game_size=41.00 128.00
-		offset=0.00 0.00
+		file_pos=0.00 0.00
+		file_size=41.00 128.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -31,7 +27,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -43,7 +38,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -55,7 +49,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -63,11 +56,9 @@ sprites{
 		}
 	}
 	destroyed{
-		file=
-		file_pos=0 0
-		file_size=0 0
-		game_size=0.00 0.00
-		offset=0.00 0.00
+		file
+		file_pos=0.00 0.00
+		file_size=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -75,8 +66,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -87,8 +76,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -99,8 +86,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -109,7 +94,7 @@ sprites{
 	}
 }
 body_parts{
-	center=
-	left=
-	right=
+	center
+	left
+	right
 }

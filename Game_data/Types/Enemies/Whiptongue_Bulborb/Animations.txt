@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	walking{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -37,7 +35,6 @@ animations{
 		}
 	}
 	sniffing{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.30
@@ -69,7 +66,6 @@ animations{
 		}
 	}
 	attacking{
-		loop_frame=0
 		hit_rate=40
 		frames{
 			idling{
@@ -111,7 +107,6 @@ animations{
 		}
 	}
 	chomping{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -146,7 +141,6 @@ animations{
 		}
 	}
 	shaking{
-		loop_frame=0
 		hit_rate=90
 		frames{
 			idling{
@@ -246,7 +240,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 0.00
 		file_size=171.00 102.00
-		game_size=171.00 102.00
 		offset=33.00 0.00
 		hitboxes{
 			body{
@@ -256,7 +249,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -268,7 +260,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -279,8 +270,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -291,8 +280,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -303,7 +290,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=172.00 0.00
 		file_size=171.00 105.00
-		game_size=171.00 105.00
 		offset=33.00 3.00
 		hitboxes{
 			body{
@@ -313,7 +299,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -325,7 +310,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -336,8 +320,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -348,8 +330,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -360,7 +340,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=344.00 0.00
 		file_size=171.00 114.00
-		game_size=171.00 114.00
 		offset=33.00 6.00
 		hitboxes{
 			body{
@@ -370,7 +349,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -382,7 +360,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -393,8 +370,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -405,8 +380,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -417,7 +390,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=172.00 0.00
 		file_size=171.00 105.00
-		game_size=171.00 -105.00
 		offset=33.00 -3.00
 		hitboxes{
 			body{
@@ -427,7 +399,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -439,7 +410,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -450,8 +420,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -462,8 +430,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -474,7 +440,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=344.00 0.00
 		file_size=171.00 114.00
-		game_size=171.00 -114.00
 		offset=33.00 -6.00
 		hitboxes{
 			body{
@@ -484,7 +449,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -496,7 +460,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -507,8 +470,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -519,8 +480,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -531,7 +490,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=516.00 0.00
 		file_size=166.00 102.00
-		game_size=166.00 102.00
 		offset=30.00 0.00
 		hitboxes{
 			body{
@@ -541,7 +499,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -553,7 +510,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -564,8 +520,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -576,8 +530,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -588,7 +540,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=683.00 0.00
 		file_size=162.00 102.00
-		game_size=162.00 102.00
 		offset=31.00 0.00
 		hitboxes{
 			body{
@@ -598,7 +549,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -610,7 +560,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -621,8 +570,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -633,8 +580,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -645,7 +590,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=846.00 0.00
 		file_size=162.00 106.00
-		game_size=162.00 106.00
 		offset=31.00 -2.00
 		hitboxes{
 			body{
@@ -655,7 +599,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -667,7 +610,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -678,8 +620,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -690,8 +630,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -702,7 +640,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=683.00 0.00
 		file_size=162.00 102.00
-		game_size=162.00 -102.00
 		offset=31.00 0.00
 		hitboxes{
 			body{
@@ -712,7 +649,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -724,7 +660,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -735,8 +670,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -747,8 +680,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -759,7 +690,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=846.00 0.00
 		file_size=162.00 106.00
-		game_size=162.00 -106.00
 		offset=31.00 2.00
 		hitboxes{
 			body{
@@ -769,7 +699,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -781,7 +710,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -792,8 +720,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -804,8 +730,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -816,7 +740,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 103.00
 		file_size=166.00 102.00
-		game_size=166.00 102.00
 		offset=30.00 0.00
 		hitboxes{
 			body{
@@ -826,7 +749,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -838,7 +760,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -849,8 +770,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -861,8 +780,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -873,7 +790,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=167.00 106.00
 		file_size=156.00 104.00
-		game_size=156.00 104.00
 		offset=25.00 -3.00
 		hitboxes{
 			body{
@@ -883,7 +799,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -895,7 +810,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -906,8 +820,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -918,8 +830,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -930,7 +840,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=324.00 115.00
 		file_size=188.00 104.00
-		game_size=188.00 104.00
 		offset=41.00 1.00
 		hitboxes{
 			body{
@@ -940,7 +849,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -952,7 +860,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -963,11 +870,7 @@ sprites{
 				radius=37.00
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=131.00 -4.00 -40.00
@@ -975,11 +878,7 @@ sprites{
 				radius=8.00
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -987,7 +886,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=516.00 103.00
 		file_size=239.00 105.00
-		game_size=239.00 105.00
 		offset=66.00 1.00
 		hitboxes{
 			body{
@@ -997,7 +895,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1009,7 +906,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1020,11 +916,7 @@ sprites{
 				radius=33.00
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=155.00 4.00 -40.00
@@ -1032,11 +924,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1044,7 +932,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=756.00 107.00
 		file_size=293.00 108.00
-		game_size=293.00 108.00
 		offset=93.00 3.00
 		hitboxes{
 			body{
@@ -1054,7 +941,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1066,7 +952,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1077,11 +962,7 @@ sprites{
 				radius=30.29
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=212.10 22.10 -40.00
@@ -1089,11 +970,7 @@ sprites{
 				radius=32.47
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1101,7 +978,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 211.00
 		file_size=260.00 140.00
-		game_size=260.00 140.00
 		offset=77.00 19.00
 		hitboxes{
 			body{
@@ -1111,7 +987,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1123,7 +998,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1134,11 +1008,7 @@ sprites{
 				radius=25.19
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=183.26 62.89 -40.00
@@ -1146,11 +1016,7 @@ sprites{
 				radius=27.36
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1158,7 +1024,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=261.00 220.00
 		file_size=216.00 114.00
-		game_size=216.00 114.00
 		offset=55.00 6.00
 		hitboxes{
 			body{
@@ -1168,7 +1033,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1180,7 +1044,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1191,11 +1054,7 @@ sprites{
 				radius=20.08
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=151.43 30.44 -40.00
@@ -1203,11 +1062,7 @@ sprites{
 				radius=22.27
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1215,7 +1070,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=478.00 220.00
 		file_size=185.00 103.00
-		game_size=185.00 103.00
 		offset=40.00 0.00
 		hitboxes{
 			body{
@@ -1225,7 +1079,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1237,7 +1090,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1248,11 +1100,7 @@ sprites{
 				radius=10.45
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=126.20 -17.11 -40.00
@@ -1260,11 +1108,7 @@ sprites{
 				radius=11.56
 				type=1
 				value=15.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1272,7 +1116,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=664.00 216.00
 		file_size=177.00 104.00
-		game_size=177.00 104.00
 		offset=36.00 1.00
 		hitboxes{
 			body{
@@ -1282,7 +1125,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1294,7 +1136,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1305,11 +1146,7 @@ sprites{
 				radius=4.93
 				type=2
 				value=0.50
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			tongue2{
 				coords=120.83 -8.79 -40.00
@@ -1317,11 +1154,7 @@ sprites{
 				radius=4.56
 				type=2
 				value=0.50
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -1329,7 +1162,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=842.00 216.00
 		file_size=166.00 102.00
-		game_size=166.00 102.00
 		offset=31.00 0.00
 		hitboxes{
 			body{
@@ -1339,7 +1171,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1351,7 +1182,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1362,8 +1192,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1374,8 +1202,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1386,7 +1212,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 352.00
 		file_size=164.00 102.00
-		game_size=164.00 102.00
 		offset=29.00 0.00
 		hitboxes{
 			body{
@@ -1396,7 +1221,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1408,7 +1232,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1419,8 +1242,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1431,8 +1252,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1443,7 +1262,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=165.00 352.00
 		file_size=160.00 102.00
-		game_size=160.00 102.00
 		offset=27.00 0.00
 		hitboxes{
 			body{
@@ -1453,7 +1271,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1465,7 +1282,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1476,8 +1292,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1488,8 +1302,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1500,7 +1312,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=326.00 335.00
 		file_size=171.00 102.00
-		game_size=171.00 102.00
 		offset=33.00 -8.00
 		hitboxes{
 			body{
@@ -1509,9 +1320,6 @@ sprites{
 				radius=60.57
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=4.71
 				knockback=3.00
 				wither_chance=10
@@ -1522,9 +1330,6 @@ sprites{
 				radius=36.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=4.71
 				knockback=3.00
 				wither_chance=10
@@ -1535,8 +1340,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1547,8 +1350,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1559,7 +1360,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=498.00 324.00
 		file_size=167.00 115.00
-		game_size=167.00 115.00
 		offset=30.00 -16.00
 		hitboxes{
 			body{
@@ -1568,9 +1368,6 @@ sprites{
 				radius=60.57
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=4.71
 				knockback=3.00
 				wither_chance=10
@@ -1581,9 +1378,6 @@ sprites{
 				radius=36.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=4.71
 				knockback=3.00
 				wither_chance=10
@@ -1594,8 +1388,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1606,8 +1398,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1618,7 +1408,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=326.00 335.00
 		file_size=171.00 102.00
-		game_size=171.00 -102.00
 		offset=33.00 8.00
 		hitboxes{
 			body{
@@ -1627,9 +1416,6 @@ sprites{
 				radius=60.57
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=1.57
 				knockback=3.00
 				wither_chance=10
@@ -1640,9 +1426,6 @@ sprites{
 				radius=36.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=1.57
 				knockback=3.00
 				wither_chance=10
@@ -1653,8 +1436,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1665,8 +1446,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1677,7 +1456,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=498.00 324.00
 		file_size=167.00 115.00
-		game_size=167.00 -115.00
 		offset=30.00 16.00
 		hitboxes{
 			body{
@@ -1686,9 +1464,6 @@ sprites{
 				radius=60.57
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=1.57
 				knockback=3.00
 				wither_chance=10
@@ -1699,9 +1474,6 @@ sprites{
 				radius=36.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
-				outward=false
 				angle=1.57
 				knockback=3.00
 				wither_chance=10
@@ -1712,8 +1484,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1724,8 +1494,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1736,7 +1504,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=666.00 321.00
 		file_size=163.00 102.00
-		game_size=163.00 102.00
 		offset=29.00 0.00
 		hitboxes{
 			body{
@@ -1745,8 +1512,6 @@ sprites{
 				radius=56.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1757,8 +1522,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1769,8 +1532,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1781,8 +1542,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1793,7 +1552,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=830.00 321.00
 		file_size=144.00 102.00
-		game_size=144.00 102.00
 		offset=21.00 0.00
 		hitboxes{
 			body{
@@ -1802,8 +1560,6 @@ sprites{
 				radius=52.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1814,8 +1570,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1826,8 +1580,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1838,8 +1590,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1850,7 +1600,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=830.00 321.00
 		file_size=144.00 102.00
-		game_size=144.00 102.00
 		offset=23.00 0.00
 		hitboxes{
 			body{
@@ -1859,8 +1608,6 @@ sprites{
 				radius=52.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1871,8 +1618,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1883,8 +1628,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1895,8 +1638,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1907,7 +1648,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 455.00
 		file_size=171.00 102.00
-		game_size=171.00 102.00
 		offset=33.00 0.00
 		hitboxes{
 			body{
@@ -1916,8 +1656,6 @@ sprites{
 				radius=56.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1928,8 +1666,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1940,8 +1676,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1952,8 +1686,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1964,7 +1696,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=172.00 455.00
 		file_size=177.00 102.00
-		game_size=177.00 102.00
 		offset=40.00 0.00
 		hitboxes{
 			body{
@@ -1973,8 +1704,6 @@ sprites{
 				radius=56.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1985,8 +1714,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1997,8 +1724,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2009,8 +1734,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2021,7 +1744,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=350.00 440.00
 		file_size=185.00 102.00
-		game_size=185.00 102.00
 		offset=50.00 0.00
 		hitboxes{
 			body{
@@ -2030,8 +1752,6 @@ sprites{
 				radius=56.00
 				type=2
 				value=0.80
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2042,8 +1762,6 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2054,8 +1772,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2066,8 +1782,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2078,7 +1792,6 @@ sprites{
 		file=Whiptongue_Bulborb.png
 		file_pos=0.00 0.00
 		file_size=171.00 102.00
-		game_size=171.00 102.00
 		offset=33.00 2.00
 		hitboxes{
 			body{
@@ -2088,7 +1801,6 @@ sprites{
 				type=0
 				value=0.80
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2100,7 +1812,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2111,8 +1822,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2123,8 +1832,6 @@ sprites{
 				radius=8.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

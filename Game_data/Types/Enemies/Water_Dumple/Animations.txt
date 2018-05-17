@@ -1,6 +1,5 @@
 animations{
 	moving{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -17,7 +16,6 @@ animations{
 		}
 	}
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -43,7 +41,6 @@ animations{
 		}
 	}
 	attacking{
-		loop_frame=0
 		hit_rate=50
 		frames{
 			attacking1{
@@ -67,7 +64,6 @@ animations{
 		}
 	}
 	shaking{
-		loop_frame=0
 		hit_rate=50
 		frames{
 			shaking1{
@@ -106,7 +102,6 @@ animations{
 		}
 	}
 	eating{
-		loop_frame=0
 		frames{
 			eating1{
 				duration=0.20
@@ -160,8 +155,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.00 0.00
 		file_size=66.00 50.00
-		game_size=66.00 50.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -170,7 +163,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -181,8 +173,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -193,7 +183,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=201.00 0.00
 		file_size=72.00 50.00
-		game_size=72.00 50.00
 		offset=3.00 0.00
 		hitboxes{
 			body{
@@ -203,7 +192,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -214,8 +202,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -226,7 +212,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=274.00 0.00
 		file_size=79.00 50.00
-		game_size=79.00 50.00
 		offset=6.00 0.00
 		hitboxes{
 			body{
@@ -236,7 +221,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -247,8 +231,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -259,7 +241,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=67.00 0.00
 		file_size=67.00 51.00
-		game_size=67.00 51.00
 		offset=0.50 0.50
 		hitboxes{
 			body{
@@ -269,7 +250,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -280,8 +260,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -292,7 +270,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=135.00 0.00
 		file_size=65.00 51.00
-		game_size=65.00 51.00
 		offset=-0.50 -0.50
 		hitboxes{
 			body{
@@ -302,7 +279,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -313,8 +289,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -325,7 +299,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.00 51.00
 		file_size=60.00 51.00
-		game_size=60.00 51.00
 		offset=-3.00 0.00
 		hitboxes{
 			body{
@@ -335,7 +308,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -346,8 +318,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -358,7 +328,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=61.00 52.00
 		file_size=96.00 50.00
-		game_size=96.00 50.00
 		offset=15.00 0.00
 		hitboxes{
 			body{
@@ -368,7 +337,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -379,9 +347,6 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
 				knockback=1.00
 			}
@@ -391,7 +356,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=158.00 52.00
 		file_size=100.00 50.00
-		game_size=100.00 50.00
 		offset=17.00 0.00
 		hitboxes{
 			body{
@@ -401,7 +365,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -412,9 +375,6 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
 				knockback=1.00
 			}
@@ -424,7 +384,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.00 51.00
 		file_size=67.00 52.00
-		game_size=67.00 52.00
 		offset=-1.00 -1.00
 		hitboxes{
 			body{
@@ -434,7 +393,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -445,8 +403,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -457,7 +413,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=259.00 51.00
 		file_size=67.00 52.00
-		game_size=67.00 -52.00
 		offset=-1.00 -1.00
 		hitboxes{
 			body{
@@ -467,7 +422,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -478,8 +432,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -490,7 +442,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=327.00 51.00
 		file_size=68.00 55.00
-		game_size=68.00 55.00
 		offset=-1.00 0.00
 		hitboxes{
 			body{
@@ -499,8 +450,6 @@ sprites{
 				radius=42.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -512,8 +461,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -524,7 +471,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=396.00 51.00
 		file_size=71.00 60.00
-		game_size=71.00 60.00
 		offset=-2.00 0.00
 		hitboxes{
 			body{
@@ -533,8 +479,6 @@ sprites{
 				radius=42.00
 				type=1
 				value=30.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -546,8 +490,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -558,8 +500,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=0.00 103.00
 		file_size=66.00 50.00
-		game_size=66.00 50.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -568,7 +508,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -579,8 +518,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -591,7 +528,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=67.00 103.00
 		file_size=67.00 50.00
-		game_size=67.00 50.00
 		offset=1.00 0.00
 		hitboxes{
 			body{
@@ -601,7 +537,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -612,8 +547,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -624,8 +557,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=135.00 103.00
 		file_size=66.00 51.00
-		game_size=66.00 51.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -633,8 +564,6 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -645,8 +574,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -657,8 +584,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=202.00 104.00
 		file_size=66.00 36.00
-		game_size=66.00 36.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -666,8 +591,6 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -678,8 +601,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -690,8 +611,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=269.00 107.00
 		file_size=66.00 47.00
-		game_size=66.00 47.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -699,8 +618,6 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -711,8 +628,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -723,8 +638,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=336.00 112.00
 		file_size=66.00 50.00
-		game_size=66.00 50.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -732,8 +645,6 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -744,8 +655,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -756,8 +665,6 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=269.00 107.00
 		file_size=66.00 47.00
-		game_size=66.00 -47.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -765,8 +672,6 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -777,8 +682,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

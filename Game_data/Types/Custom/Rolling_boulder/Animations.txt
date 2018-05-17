@@ -1,6 +1,5 @@
 animations{
 	rolling{
-		loop_frame=0
 		frames{
 			rolling4{
 				duration=0.10
@@ -23,7 +22,6 @@ animations{
 		}
 	}
 	growing{
-		loop_frame=0
 		frames{
 			growing1{
 				duration=0.05
@@ -46,7 +44,6 @@ animations{
 		}
 	}
 	destroyed{
-		loop_frame=0
 		frames{
 			destroyed{
 				duration=0.10
@@ -59,8 +56,6 @@ sprites{
 		file=Boulder.png
 		file_pos=0.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -68,9 +63,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -80,8 +73,6 @@ sprites{
 		file=Boulder.png
 		file_pos=65.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -89,9 +80,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -101,8 +90,6 @@ sprites{
 		file=Boulder.png
 		file_pos=130.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -110,9 +97,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -122,8 +107,6 @@ sprites{
 		file=Boulder.png
 		file_pos=195.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -131,9 +114,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -143,8 +124,6 @@ sprites{
 		file=Boulder.png
 		file_pos=260.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -152,9 +131,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -164,8 +141,6 @@ sprites{
 		file=Boulder.png
 		file_pos=325.00 0.00
 		file_size=64.00 64.00
-		game_size=64.00 64.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -173,9 +148,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -185,8 +158,6 @@ sprites{
 		file=Boulder.png
 		file_pos=0.00 0.00
 		file_size=0.00 0.00
-		game_size=0.00 0.00
-		offset=0.00 0.00
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -194,9 +165,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -206,8 +175,7 @@ sprites{
 		file=Boulder.png
 		file_pos=0.00 0.00
 		file_size=64.00 64.00
-		game_size=16.00 16.00
-		offset=0.00 0.00
+		scale=0.25 0.25
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -215,9 +183,7 @@ sprites{
 				radius=8.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -227,8 +193,7 @@ sprites{
 		file=Boulder.png
 		file_pos=0.00 0.00
 		file_size=64.00 64.00
-		game_size=24.00 24.00
-		offset=0.00 0.00
+		scale=0.35 0.35
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -236,9 +201,7 @@ sprites{
 				radius=12.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -248,8 +211,7 @@ sprites{
 		file=Boulder.png
 		file_pos=65.00 0.00
 		file_size=64.00 64.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
+		scale=0.50 0.50
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -257,9 +219,7 @@ sprites{
 				radius=16.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -269,8 +229,7 @@ sprites{
 		file=Boulder.png
 		file_pos=65.00 0.00
 		file_size=64.00 64.00
-		game_size=40.00 40.00
-		offset=0.00 0.00
+		scale=0.63 0.63
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -278,9 +237,7 @@ sprites{
 				radius=20.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -290,8 +247,7 @@ sprites{
 		file=Boulder.png
 		file_pos=130.00 0.00
 		file_size=64.00 64.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
+		scale=0.75 0.75
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -299,9 +255,7 @@ sprites{
 				radius=24.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}
@@ -311,8 +265,7 @@ sprites{
 		file=Boulder.png
 		file_pos=130.00 0.00
 		file_size=64.00 64.00
-		game_size=56.00 56.00
-		offset=0.00 0.00
+		scale=0.88 0.88
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
@@ -320,9 +273,7 @@ sprites{
 				radius=28.00
 				type=1
 				value=60.00
-				can_pikmin_latch=false
 				hazards=crush
-				outward=false
 				angle=0.00
 				knockback=2.00
 			}

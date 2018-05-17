@@ -1,6 +1,5 @@
 animations{
 	safe{
-		loop_frame=0
 		frames{
 			safe{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	shooting{
-		loop_frame=0
 		frames{
 			fire1{
 				duration=0.10
@@ -25,7 +23,6 @@ animations{
 		}
 	}
 	starting{
-		loop_frame=0
 		frames{
 			low{
 				duration=0.10
@@ -36,7 +33,6 @@ animations{
 		}
 	}
 	stopping{
-		loop_frame=0
 		frames{
 			low{
 				duration=0.10
@@ -47,7 +43,6 @@ animations{
 		}
 	}
 	destroyed{
-		loop_frame=0
 		frames{
 			destroyed{
 				duration=0.00
@@ -60,8 +55,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=0.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -69,8 +62,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -81,8 +72,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -93,8 +82,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=98.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -102,11 +89,8 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -114,8 +98,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -126,8 +108,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=147.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -135,11 +115,8 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -147,11 +124,8 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -159,8 +133,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=196.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -168,11 +140,8 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -180,7 +149,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
 				hazards=fire
 				outward=true
 				angle=0.00
@@ -192,8 +160,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=245.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -201,11 +167,8 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -213,7 +176,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
 				hazards=fire
 				outward=true
 				angle=0.00
@@ -225,8 +187,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=49.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -234,11 +194,8 @@ sprites{
 				radius=28.00
 				type=1
 				value=1.00
-				can_pikmin_latch=false
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -246,8 +203,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -258,8 +213,6 @@ sprites{
 		file=Fire_geyser.png
 		file_pos=294.00 0.00
 		file_size=48.00 48.00
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
@@ -267,8 +220,6 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -279,8 +230,6 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

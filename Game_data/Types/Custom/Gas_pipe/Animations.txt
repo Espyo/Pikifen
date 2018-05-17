@@ -1,6 +1,5 @@
 animations{
 	shooting{
-		loop_frame=0
 		frames{
 			shooting{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	destroyed{
-		loop_frame=0
 		frames{
 			safe{
 				duration=0.00
@@ -21,8 +19,6 @@ sprites{
 		file=Gas_pipe.png
 		file_pos=0 0
 		file_size=48 48
-		game_size=48.00 48.00
-		offset=0.00 0.00
 		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00
@@ -30,8 +26,6 @@ sprites{
 				radius=48.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -42,20 +36,15 @@ sprites{
 				radius=48.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
 				hazards=poison
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
 	shooting{
 		file=Gas_pipe.png
-		file_pos=0 0
-		file_size=48 48
-		game_size=48.00 48.00
-		offset=0.00 0.00
+		file_pos=0.00 0.00
+		file_size=48.00 48.00
 		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00
@@ -63,7 +52,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
 				hazards=poison
 				outward=true
 				angle=0.00
@@ -75,16 +63,13 @@ sprites{
 				radius=80.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
 				hazards=poison
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
 }
 body_parts{
-	tube=
-	gas=
+	tube
+	gas
 }

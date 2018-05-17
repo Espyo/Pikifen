@@ -1,6 +1,5 @@
 animations{
 	default{
-		loop_frame=0
 		frames{
 			1{
 				duration=0.07
@@ -16,17 +15,15 @@ sprites{
 		file=Electrocution.png
 		file_pos=0.00 0.00
 		file_size=60.00 60.00
-		game_size=30.00 30.00
-		offset=0.00 0.00
-		hitboxes=
+		scale=0.50 0.50
+		hitboxes
 	}
 	2{
 		file=Electrocution.png
 		file_pos=61.00 0.00
 		file_size=60.00 60.00
-		game_size=30.00 30.00
-		offset=0.00 0.00
-		hitboxes=
+		scale=0.50 0.50
+		hitboxes
 	}
 }
-body_parts=
+body_parts

@@ -106,10 +106,14 @@ void animation_editor::cur_sprite_tc_to_gui() {
         frm_sprite_tra, "txt_y", f2s(cur_sprite_tc.get_center().y)
     );
     set_textbox_text(
-        frm_sprite_tra, "txt_w", f2s(cur_sprite_tc.get_size().x)
+        frm_sprite_tra, "txt_sx", f2s(
+            cur_sprite_tc.get_size().x / cur_sprite->file_size.x
+        )
     );
     set_textbox_text(
-        frm_sprite_tra, "txt_h", f2s(cur_sprite_tc.get_size().y)
+        frm_sprite_tra, "txt_sy", f2s(
+            cur_sprite_tc.get_size().y / cur_sprite->file_size.y
+        )
     );
     gui_to_sprite_transform();
 }
@@ -344,8 +348,8 @@ void animation_editor::sprite_bmp_to_gui() {
 void animation_editor::sprite_transform_to_gui() {
     set_textbox_text(frm_sprite_tra, "txt_x", f2s(cur_sprite->offset.x));
     set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
-    set_textbox_text(frm_sprite_tra, "txt_w", f2s(cur_sprite->game_size.x));
-    set_textbox_text(frm_sprite_tra, "txt_h", f2s(cur_sprite->game_size.y));
+    set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
+    set_textbox_text(frm_sprite_tra, "txt_sy", f2s(cur_sprite->scale.y));
     set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
     
     if(comparison) {
@@ -504,28 +508,6 @@ void animation_editor::gui_to_options() {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the sprite's data to memory using info on the gui.
- */
-void animation_editor::gui_to_sprite() {
-    //TODO will this be unused after the Sprite frame is split?
-    if(!cur_sprite) return;
-    
-    cur_sprite->game_size.x =
-        s2f(get_textbox_text(frm_sprite, "txt_gamew"));
-    cur_sprite->game_size.y =
-        s2f(get_textbox_text(frm_sprite, "txt_gameh"));
-    cur_sprite->offset.x =
-        s2f(get_textbox_text(frm_sprite, "txt_offsx"));
-    cur_sprite->offset.y =
-        s2f(get_textbox_text(frm_sprite, "txt_offsy"));
-        
-    sprite_to_gui();
-    
-    made_new_changes = true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Saves the sprite's bitmap data to memory using info on the gui.
  */
 void animation_editor::gui_to_sprite_bmp() {
@@ -573,10 +555,10 @@ void animation_editor::gui_to_sprite_transform() {
         s2f(get_textbox_text(frm_sprite_tra, "txt_x"));
     cur_sprite->offset.y =
         s2f(get_textbox_text(frm_sprite_tra, "txt_y"));
-    cur_sprite->game_size.x =
-        s2f(get_textbox_text(frm_sprite_tra, "txt_w"));
-    cur_sprite->game_size.y =
-        s2f(get_textbox_text(frm_sprite_tra, "txt_h"));
+    cur_sprite->scale.x =
+        s2f(get_textbox_text(frm_sprite_tra, "txt_sx"));
+    cur_sprite->scale.y =
+        s2f(get_textbox_text(frm_sprite_tra, "txt_sy"));
     comparison =
         get_checkbox_check(frm_sprite_tra, "chk_compare");
         
@@ -588,7 +570,12 @@ void animation_editor::gui_to_sprite_transform() {
         get_checkbox_check(frm_sprite_comp, "chk_tint");
         
     cur_sprite_tc.set_center(cur_sprite->offset);
-    cur_sprite_tc.set_size(cur_sprite->game_size);
+    cur_sprite_tc.set_size(
+        point(
+            cur_sprite->file_size.x * cur_sprite->scale.x,
+            cur_sprite->file_size.y * cur_sprite->scale.y
+        )
+    );
     cur_sprite_tc.keep_aspect_ratio =
         get_checkbox_check(frm_sprite_tra, "chk_ratio");
         

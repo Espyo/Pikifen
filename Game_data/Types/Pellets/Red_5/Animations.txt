@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -11,11 +10,8 @@ animations{
 sprites{
 	idling{
 		file=Red_pellet.png
-		file_pos=0 0
-		file_size=128 128
-		game_size=64.00 64.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=128.00 128.00
 	}
 }
-body_parts=
+body_parts

@@ -1,6 +1,5 @@
 animations{
 	default{
-		loop_frame=0
 		frames{
 			1{
 				duration=0.00
@@ -11,11 +10,9 @@ animations{
 sprites{
 	1{
 		file=Bubble.png
-		file_pos=0 0
-		file_size=64 64
-		game_size=64.00 64.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=64.00 64.00
+		hitboxes
 	}
 }
-body_parts=
+body_parts

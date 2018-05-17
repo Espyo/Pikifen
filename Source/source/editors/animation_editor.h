@@ -136,9 +136,9 @@ private:
     void pick_sprite(const string &name);
     void rename_animation();
     void rename_sprite();
-    void resize_by_resolution();
     void resize_everything();
     void save_animation_database();
+    void set_all_sprite_scales();
     void sprite_bmp_flood_fill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels,
         const int x, const int y, const int bmp_w, const int bmp_h

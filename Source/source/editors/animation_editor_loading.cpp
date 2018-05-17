@@ -735,7 +735,6 @@ void animation_editor::load() {
     
     
     //Sprites -- properties.
-    auto lambda_gui_to_sprite = [this] (lafi::widget*) { gui_to_sprite(); };
     auto lambda_sprite_transform = [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_SPRITE_TRANSFORM;
         change_to_right_frame();
@@ -828,7 +827,12 @@ void animation_editor::load() {
     frm_sprite->widgets["but_transform"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_sprite_tc.set_center(cur_sprite->offset);
-        cur_sprite_tc.set_size(cur_sprite->game_size);
+        cur_sprite_tc.set_size(
+            point(
+                cur_sprite->file_size.x * cur_sprite->scale.x,
+                cur_sprite->file_size.y * cur_sprite->scale.y
+            )
+        );
         state = EDITOR_STATE_SPRITE_TRANSFORM;
         sprite_transform_to_gui();
         change_to_right_frame();
@@ -1066,15 +1070,15 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
-        "lbl_wh",
-        new lafi::label("W, H:"), 25, 16
+        "lbl_scale",
+        new lafi::label("Scale:"), 25, 16
     );
     frm_sprite_tra->easy_add(
-        "txt_w",
+        "txt_sx",
         new lafi::textbox(""), 37.5, 16
     );
     frm_sprite_tra->easy_add(
-        "txt_h",
+        "txt_sy",
         new lafi::textbox(""), 37.5, 16
     );
     frm_sprite_tra->easy_row();
@@ -1155,14 +1159,14 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["txt_y"]->description =
         "In-game, offset by this much, vertically.";
         
-    frm_sprite_tra->widgets["txt_w"]->lose_focus_handler =
+    frm_sprite_tra->widgets["txt_sx"]->lose_focus_handler =
         lambda_save_sprite_tra;
-    frm_sprite_tra->widgets["txt_w"]->description =
+    frm_sprite_tra->widgets["txt_sx"]->description =
         "In-game sprite width.";
         
-    frm_sprite_tra->widgets["txt_h"]->lose_focus_handler =
+    frm_sprite_tra->widgets["txt_sy"]->lose_focus_handler =
         lambda_save_sprite_tra;
-    frm_sprite_tra->widgets["txt_h"]->description =
+    frm_sprite_tra->widgets["txt_sy"]->description =
         "In-game sprite height.";
         
     frm_sprite_tra->widgets["chk_ratio"]->left_mouse_click_handler =
@@ -1930,21 +1934,16 @@ void animation_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lbl_resolution_1",
-        new lafi::label("Set all sprite in-game"), 100, 8
+        "lbl_set_scales",
+        new lafi::label("Set all sprite scales:"), 100, 8
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lbl_resolution_2",
-        new lafi::label("W/H by resolution:"), 100, 8
-    );
-    frm_tools->easy_row();
-    frm_tools->easy_add(
-        "txt_resolution",
+        "txt_set_scales",
         new lafi::textbox(), 80, 16
     );
     frm_tools->easy_add(
-        "but_resolution",
+        "but_set_scales",
         new lafi::button("Ok"), 20, 24
     );
     frm_tools->easy_row();
@@ -2016,15 +2015,15 @@ void animation_editor::load() {
     frm_tools->widgets["but_resize"]->description =
         "Resize all in-game X/Y and W/H by the given amount.";
         
-    frm_tools->widgets["txt_resolution"]->description =
-        "Resolution. (2=half-size in-game, 0.5=double, etc.)";
+    frm_tools->widgets["txt_set_scales"]->description =
+        "New scale.";
         
-    frm_tools->widgets["but_resolution"]->left_mouse_click_handler =
+    frm_tools->widgets["but_set_scales"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        resize_by_resolution();
+        set_all_sprite_scales();
     };
-    frm_tools->widgets["but_resolution"]->description =
-        "Resize all in-game W/H with the given resolution.";
+    frm_tools->widgets["but_set_scales"]->description =
+        "Sets the X and Y scale of all sprites to the given value.";
         
     frm_tools->widgets["but_rename_anim_name"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2096,14 +2095,14 @@ void animation_editor::load() {
     };
     frm_options->widgets["but_back"]->description =
         "Close the options.";
-    
+        
     frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["chk_mmb_pan"]->description =
         "Use the middle mouse button to pan the camera "
         "(and RMB to reset camera/zoom).";
-    
-    
+        
+        
     //Toolbar -- declarations.
     create_toolbar_frame();
     

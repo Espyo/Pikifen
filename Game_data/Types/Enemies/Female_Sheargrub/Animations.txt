@@ -1,6 +1,5 @@
 animations{
 	hidden{
-		loop_frame=0
 		frames{
 			nothing{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	moving{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -25,7 +23,6 @@ animations{
 		}
 	}
 	emerging{
-		loop_frame=0
 		frames{
 			emerging1{
 				duration=0.15
@@ -45,7 +42,6 @@ animations{
 		}
 	}
 	burying{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.30
@@ -68,7 +64,6 @@ animations{
 		}
 	}
 	examining{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.50
@@ -102,10 +97,8 @@ animations{
 sprites{
 	idling{
 		file=Female_Sheargrub.png
-		file_pos=0 32
-		file_size=38 28
-		game_size=28.50 21.00
-		offset=0.00 0.00
+		file_pos=0.00 32.00
+		file_size=38.00 28.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -113,8 +106,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -123,9 +114,8 @@ sprites{
 	}
 	moving1{
 		file=Female_Sheargrub.png
-		file_pos=39 32
-		file_size=41 28
-		game_size=30.75 21.00
+		file_pos=39.00 32.00
+		file_size=41.00 28.00
 		offset=0.75 0.00
 		hitboxes{
 			body{
@@ -134,8 +124,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -144,9 +132,8 @@ sprites{
 	}
 	moving2{
 		file=Female_Sheargrub.png
-		file_pos=81 32
-		file_size=44 28
-		game_size=33.00 21.00
+		file_pos=81.00 32.00
+		file_size=44.00 28.00
 		offset=1.50 0.00
 		hitboxes{
 			body{
@@ -155,8 +142,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -165,9 +150,8 @@ sprites{
 	}
 	emerging1{
 		file=Female_Sheargrub.png
-		file_pos=0 4
-		file_size=20 27
-		game_size=15.00 20.25
+		file_pos=0.00 4.00
+		file_size=20.00 27.00
 		offset=-9.00 0.00
 		hitboxes{
 			body{
@@ -176,8 +160,6 @@ sprites{
 				radius=9.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -186,9 +168,8 @@ sprites{
 	}
 	emerging2{
 		file=Female_Sheargrub.png
-		file_pos=0 4
-		file_size=20 27
-		game_size=15.00 -20.25
+		file_pos=0.00 4.00
+		file_size=20.00 27.00
 		offset=-9.00 0.00
 		hitboxes{
 			body{
@@ -197,8 +178,6 @@ sprites{
 				radius=9.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -207,9 +186,8 @@ sprites{
 	}
 	emerging3{
 		file=Female_Sheargrub.png
-		file_pos=21 2
-		file_size=33 29
-		game_size=24.75 21.75
+		file_pos=21.00 2.00
+		file_size=33.00 29.00
 		offset=-4.50 0.00
 		hitboxes{
 			body{
@@ -218,8 +196,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -228,9 +204,8 @@ sprites{
 	}
 	emerging4{
 		file=Female_Sheargrub.png
-		file_pos=21 2
-		file_size=33 29
-		game_size=24.75 -21.75
+		file_pos=21.00 2.00
+		file_size=33.00 29.00
 		offset=-4.50 0.00
 		hitboxes{
 			body{
@@ -239,8 +214,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -249,9 +222,8 @@ sprites{
 	}
 	burying1{
 		file=Female_Sheargrub.png
-		file_pos=55 0
-		file_size=36 31
-		game_size=27.00 23.25
+		file_pos=55.00 0.00
+		file_size=36.00 31.00
 		offset=4.50 0.00
 		hitboxes{
 			body{
@@ -260,8 +232,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -270,9 +240,8 @@ sprites{
 	}
 	burying2{
 		file=Female_Sheargrub.png
-		file_pos=55 0
-		file_size=36 31
-		game_size=27.00 -23.25
+		file_pos=55.00 0.00
+		file_size=36.00 31.00
 		offset=4.50 0.00
 		hitboxes{
 			body{
@@ -281,8 +250,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -291,9 +258,8 @@ sprites{
 	}
 	burying3{
 		file=Female_Sheargrub.png
-		file_pos=92 3
-		file_size=26 28
-		game_size=19.50 21.00
+		file_pos=92.00 3.00
+		file_size=26.00 28.00
 		offset=9.00 0.00
 		hitboxes{
 			body{
@@ -302,8 +268,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -312,9 +276,8 @@ sprites{
 	}
 	burying4{
 		file=Female_Sheargrub.png
-		file_pos=92 3
-		file_size=26 28
-		game_size=19.50 -21.00
+		file_pos=92.00 3.00
+		file_size=26.00 28.00
 		offset=9.00 0.00
 		hitboxes{
 			body{
@@ -323,8 +286,6 @@ sprites{
 				radius=12.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -333,10 +294,8 @@ sprites{
 	}
 	nothing{
 		file=Female_Sheargrub.png
-		file_pos=0 0
-		file_size=0 0
-		game_size=0.75 0.75
-		offset=0.00 0.00
+		file_pos=0.00 0.00
+		file_size=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -344,8 +303,6 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -354,10 +311,8 @@ sprites{
 	}
 	dying1{
 		file=Female_Sheargrub.png
-		file_pos=0 61
-		file_size=38 28
-		game_size=28.50 21.00
-		offset=0.00 0.00
+		file_pos=0.00 61.00
+		file_size=38.00 28.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -365,8 +320,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -375,10 +328,8 @@ sprites{
 	}
 	dying2{
 		file=Female_Sheargrub.png
-		file_pos=39 63
-		file_size=38 26
-		game_size=28.50 19.50
-		offset=0.00 0.00
+		file_pos=39.00 63.00
+		file_size=38.00 26.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -386,8 +337,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -396,10 +345,8 @@ sprites{
 	}
 	dying3{
 		file=Female_Sheargrub.png
-		file_pos=78 63
-		file_size=38 26
-		game_size=28.50 19.50
-		offset=0.00 0.00
+		file_pos=78.00 63.00
+		file_size=38.00 26.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -407,8 +354,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -417,10 +362,8 @@ sprites{
 	}
 	dying4{
 		file=Female_Sheargrub.png
-		file_pos=117 61
-		file_size=38 28
-		game_size=28.50 21.00
-		offset=0.00 0.00
+		file_pos=117.00 61.00
+		file_size=38.00 28.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -428,8 +371,6 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -438,10 +379,8 @@ sprites{
 	}
 	dying5{
 		file=Female_Sheargrub.png
-		file_pos=78 63
-		file_size=38 26
-		game_size=28.50 -19.50
-		offset=0.00 0.00
+		file_pos=78.00 63.00
+		file_size=38.00 26.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -449,8 +388,6 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -459,5 +396,5 @@ sprites{
 	}
 }
 body_parts{
-	body=
+	body
 }

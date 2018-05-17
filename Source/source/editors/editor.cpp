@@ -813,6 +813,7 @@ const float editor::transformation_controller::ROTATION_HANDLE_THICKNESS = 8.0;
  * Creates a transformation controller.
  */
 editor::transformation_controller::transformation_controller() :
+    size(point(16, 16)),
     moving_handle(-1),
     angle(0),
     keep_aspect_ratio(true),
@@ -825,6 +826,8 @@ editor::transformation_controller::transformation_controller() :
  * Draws the transformation (move, scale, rotate) handles.
  */
 void editor::transformation_controller::draw_handles() {
+    if(size.x == 0 || size.y == 0) return;
+    
     //Rotation handle.
     if(allow_rotation) {
         al_draw_circle(
@@ -869,6 +872,8 @@ void editor::transformation_controller::draw_handles() {
  * Returns true if handled, false if nothing was done.
  */
 bool editor::transformation_controller::handle_mouse_down(const point pos) {
+    if(size.x == 0 || size.y == 0) return false;
+    
     for(unsigned char h = 0; h < 9; ++h) {
         point handle_pos = get_handle_pos(h);
         if(dist(handle_pos, pos) <= HANDLE_RADIUS / cam_zoom) {

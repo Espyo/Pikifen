@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -11,11 +10,9 @@ animations{
 sprites{
 	idling{
 		file=Hocotate_ship.png
-		file_pos=0 0
-		file_size=274 225
-		game_size=138.00 112.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=274.00 225.00
+		scale=0.50 0.50
 	}
 }
-body_parts=
+body_parts

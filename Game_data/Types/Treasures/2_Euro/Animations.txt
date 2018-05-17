@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -11,11 +10,9 @@ animations{
 sprites{
 	idling{
 		file=2_Euro.png
-		file_pos=0 0
-		file_size=64 64
-		game_size=52.00 52.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=64.00 64.00
+		scale=0.81 0.81
 	}
 }
-body_parts=
+body_parts

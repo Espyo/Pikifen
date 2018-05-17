@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	destroyed{
-		loop_frame=0
 		frames{
 			destroyed{
 				duration=0.00
@@ -21,8 +19,6 @@ sprites{
 		file=White_gate.png
 		file_pos=0.00 0.00
 		file_size=48.00 192.00
-		game_size=48.00 192.00
-		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -31,7 +27,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -43,7 +38,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -55,7 +49,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -67,7 +60,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -79,7 +71,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -90,8 +81,6 @@ sprites{
 		file=White_gate.png
 		file_pos=0.00 0.00
 		file_size=0.00 0.00
-		game_size=0.00 0.00
-		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -99,8 +88,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -111,8 +98,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -123,8 +108,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -135,8 +118,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -147,8 +128,6 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

@@ -22,18 +22,17 @@ using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Creates a sprite, with a pre-existing bitmap.
- * name:   Internal name, should be unique.
- * b:      Bitmap.
- * gw, gh: In-game width and height of the sprite.
- * h:      List of hitboxes.
+ * name:  Internal name; should be unique.
+ * b:     Bitmap.
+ * h:     List of hitboxes.
  */
 sprite::sprite(
-    const string &name, ALLEGRO_BITMAP* const b,
-    const point &g_size, const vector<hitbox> &h
+    const string &name, ALLEGRO_BITMAP* const b, const vector<hitbox> &h
 ) :
     name(name),
     parent_bmp(nullptr),
-    game_size(g_size),
+    scale(point(1.0, 1.0)),
+    angle(0),
     top_angle(0),
     top_visible(true),
     bitmap(b),
@@ -49,19 +48,18 @@ sprite::sprite(
  * b:      Parent bitmap.
  * b_pos:  X and Y of the top-left corner of the sprite, in the parent's bitmap.
  * b_size: Width and height of the sprite, in the parent's bitmap.
- * g_size: In-game width and height of the sprite.
  * h:      List of hitboxes.
  */
 sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
-    const point &b_size, const point &g_size,
-    const vector<hitbox> &h
+    const point &b_size, const vector<hitbox> &h
 ) :
     name(name),
     parent_bmp(b),
     file_pos(b_pos),
     file_size(b_size),
-    game_size(g_size),
+    scale(point(1.0, 1.0)),
+    angle(0),
     top_angle(0),
     top_visible(true),
     bitmap(
@@ -84,7 +82,8 @@ sprite::sprite(const sprite &s2) :
     file(s2.file),
     file_pos(s2.file_pos),
     file_size(s2.file_size),
-    game_size(s2.game_size),
+    scale(s2.scale),
+    angle(s2.angle),
     offset(s2.offset),
     top_pos(s2.top_pos),
     top_size(s2.top_size),
@@ -497,25 +496,29 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 s2f(
                     hitbox_node->get_child_by_name("value")->value
                 );
-            cur_hitbox.wither_chance =
-                s2i(
-                    hitbox_node->get_child_by_name("wither_chance")->value
-                );
             cur_hitbox.can_pikmin_latch =
                 s2b(
                     hitbox_node->get_child_by_name(
                         "can_pikmin_latch"
-                    )->value
+                    )->get_value_or_default("false")
                 );
             cur_hitbox.knockback_outward =
-                s2b(hitbox_node->get_child_by_name("outward")->value);
+                s2b(
+                    hitbox_node->get_child_by_name(
+                        "outward"
+                    )->get_value_or_default("false")
+                );
             cur_hitbox.knockback_angle =
                 s2f(hitbox_node->get_child_by_name("angle")->value);
             cur_hitbox.knockback =
                 s2f(
                     hitbox_node->get_child_by_name(
                         "knockback"
-                    )->value
+                    )->get_value_or_default("0")
+                );
+            cur_hitbox.wither_chance =
+                s2i(
+                    hitbox_node->get_child_by_name("wither_chance")->value
                 );
                 
             data_node* hazards_node =
@@ -548,17 +551,22 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             NULL,
             s2p(sprite_node->get_child_by_name("file_pos")->value),
             s2p(sprite_node->get_child_by_name("file_size")->value),
-            s2p(sprite_node->get_child_by_name("game_size")->value),
             hitboxes
         );
         adb.sprites.push_back(new_s);
         
+        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
+        new_s->scale =
+            s2p(
+                sprite_node->get_child_by_name(
+                    "scale"
+                )->get_value_or_default("1 1")
+            );
         new_s->file = sprite_node->get_child_by_name("file")->value;
         new_s->set_bitmap(
             new_s->file, new_s->file_pos, new_s->file_size,
             sprite_node->get_child_by_name("file")
         );
-        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
         new_s->top_visible =
             s2b(
                 sprite_node->get_child_by_name("top_visible")->value

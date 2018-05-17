@@ -1,6 +1,5 @@
 animations{
 	flapping{
-		loop_frame=0
 		frames{
 			opened{
 				duration=0.10
@@ -17,7 +16,6 @@ animations{
 		}
 	}
 	resting{
-		loop_frame=0
 		frames{
 			opened{
 				duration=0.80
@@ -48,10 +46,8 @@ animations{
 sprites{
 	opened{
 		file=White_Spectralid.png
-		file_pos=0 0
-		file_size=25 32
-		game_size=25.00 32.00
-		offset=0.00 0.00
+		file_pos=0.00 0.00
+		file_size=25.00 32.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -59,8 +55,6 @@ sprites{
 				radius=16.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -69,10 +63,8 @@ sprites{
 	}
 	mid{
 		file=White_Spectralid.png
-		file_pos=0 33
-		file_size=25 22
-		game_size=25.00 22.00
-		offset=0.00 0.00
+		file_pos=0.00 33.00
+		file_size=25.00 22.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -80,8 +72,6 @@ sprites{
 				radius=16.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -90,10 +80,8 @@ sprites{
 	}
 	closed{
 		file=White_Spectralid.png
-		file_pos=0 56
-		file_size=25 10
-		game_size=25.00 10.00
-		offset=0.00 0.00
+		file_pos=0.00 56.00
+		file_size=25.00 10.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -101,8 +89,6 @@ sprites{
 				radius=16.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -111,9 +97,8 @@ sprites{
 	}
 	dying1{
 		file=White_Spectralid.png
-		file_pos=0 67
-		file_size=25 16
-		game_size=25.00 16.00
+		file_pos=0.00 67.00
+		file_size=25.00 16.00
 		offset=0.00 -1.00
 		hitboxes{
 			body{
@@ -122,8 +107,6 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -132,9 +115,8 @@ sprites{
 	}
 	dying2{
 		file=White_Spectralid.png
-		file_pos=0 84
-		file_size=25 18
-		game_size=25.00 18.00
+		file_pos=0.00 84.00
+		file_size=25.00 18.00
 		offset=0.00 -4.00
 		hitboxes{
 			body{
@@ -143,8 +125,6 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -153,9 +133,8 @@ sprites{
 	}
 	dead{
 		file=White_Spectralid.png
-		file_pos=0 103
-		file_size=25 17
-		game_size=25.00 17.00
+		file_pos=0.00 103.00
+		file_size=25.00 17.00
 		offset=0.00 -4.00
 		hitboxes{
 			body{
@@ -164,8 +143,6 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards=
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -174,5 +151,5 @@ sprites{
 	}
 }
 body_parts{
-	body=
+	body
 }

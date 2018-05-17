@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -8,7 +7,6 @@ animations{
 		}
 	}
 	moving{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -37,7 +35,6 @@ animations{
 		}
 	}
 	bored{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.20
@@ -54,7 +51,6 @@ animations{
 		}
 	}
 	inhaling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -104,7 +100,6 @@ animations{
 		}
 	}
 	spitting{
-		loop_frame=0
 		frames{
 			inhale1{
 				duration=0.10
@@ -122,7 +117,6 @@ animations{
 		}
 	}
 	catching{
-		loop_frame=0
 		frames{
 			opening1{
 				duration=0.10
@@ -145,7 +139,6 @@ animations{
 		}
 	}
 	moving_hot{
-		loop_frame=0
 		frames{
 			idling_hot{
 				duration=0.10
@@ -174,7 +167,6 @@ animations{
 		}
 	}
 	closing_cool{
-		loop_frame=0
 		frames{
 			moving_cool1{
 				duration=0.10
@@ -222,7 +214,6 @@ animations{
 		}
 	}
 	closing_hot{
-		loop_frame=0
 		frames{
 			moving_hot1{
 				duration=0.10
@@ -327,7 +318,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=36.00 0.00
 		hitboxes{
 			flesh{
@@ -336,8 +326,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -348,8 +336,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -360,8 +346,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -372,8 +356,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -384,7 +366,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=284.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=36.00 2.00
 		hitboxes{
 			flesh{
@@ -393,8 +374,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -405,8 +384,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -417,8 +394,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -429,8 +404,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -441,7 +414,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=568.00 0.00
 		file_size=286.00 386.00
-		game_size=286.00 386.00
 		offset=37.00 4.00
 		hitboxes{
 			flesh{
@@ -450,8 +422,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -462,8 +432,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -474,8 +442,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -486,8 +452,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -498,7 +462,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=284.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 -386.00
 		offset=36.00 -2.00
 		hitboxes{
 			flesh{
@@ -507,8 +470,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -519,8 +480,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -531,8 +490,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -543,8 +500,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -555,7 +510,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=568.00 0.00
 		file_size=286.00 386.00
-		game_size=286.00 -386.00
 		offset=37.00 -4.00
 		hitboxes{
 			flesh{
@@ -564,8 +518,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -576,8 +528,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -588,8 +538,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -600,8 +548,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -612,7 +558,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=855.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=36.00 0.00
 		hitboxes{
 			flesh{
@@ -621,8 +566,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -633,8 +576,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -645,8 +586,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -657,8 +596,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -669,7 +606,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=855.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 -386.00
 		offset=36.00 0.00
 		hitboxes{
 			flesh{
@@ -678,8 +614,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -690,8 +624,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -702,8 +634,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -714,8 +644,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -726,7 +654,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1139.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=32.00 0.00
 		hitboxes{
 			flesh{
@@ -735,8 +662,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -747,8 +672,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -759,8 +682,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -771,8 +692,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -783,7 +702,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1423.00 0.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=28.00 0.00
 		hitboxes{
 			flesh{
@@ -792,11 +710,7 @@ sprites{
 				radius=80.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			hot_flesh{
 				coords=-26.00 0.00 50.00
@@ -804,11 +718,7 @@ sprites{
 				radius=80.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 0.00 50.00
@@ -816,11 +726,7 @@ sprites{
 				radius=18.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			shell{
 				coords=-4.00 0.00 0.00
@@ -828,8 +734,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -840,7 +744,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 387.00
 		file_size=284.00 386.00
-		game_size=284.00 386.00
 		offset=26.00 0.00
 		hitboxes{
 			flesh{
@@ -849,8 +752,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -861,8 +762,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -873,11 +772,7 @@ sprites{
 				radius=18.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			shell{
 				coords=-8.00 0.00 0.00
@@ -885,8 +780,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -897,7 +790,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=285.00 387.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=28.00 0.00
 		hitboxes{
 			flesh{
@@ -906,8 +798,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -918,8 +808,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -930,11 +818,7 @@ sprites{
 				radius=18.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			shell{
 				coords=-4.00 0.00 0.00
@@ -942,8 +826,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -954,7 +836,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=569.00 387.00
 		file_size=284.00 386.00
-		game_size=284.00 386.00
 		offset=26.00 0.00
 		hitboxes{
 			flesh{
@@ -963,8 +844,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -975,8 +854,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -987,11 +864,7 @@ sprites{
 				radius=18.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			shell{
 				coords=-8.00 0.00 0.00
@@ -999,8 +872,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1011,7 +882,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=854.00 387.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=40.00 0.00
 		hitboxes{
 			flesh{
@@ -1020,8 +890,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1032,8 +900,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1044,8 +910,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1056,8 +920,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1068,7 +930,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1138.00 387.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=44.00 0.00
 		hitboxes{
 			flesh{
@@ -1077,8 +938,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1089,8 +948,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1101,8 +958,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1113,8 +968,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1125,7 +978,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1422.00 387.00
 		file_size=285.00 386.00
-		game_size=285.00 386.00
 		offset=28.00 0.00
 		hitboxes{
 			flesh{
@@ -1134,8 +986,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1146,8 +996,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1158,8 +1006,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1170,8 +1016,6 @@ sprites{
 				radius=110.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1182,7 +1026,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 774.00
 		file_size=303.00 386.00
-		game_size=303.00 386.00
 		offset=26.00 0.00
 		hitboxes{
 			flesh{
@@ -1203,11 +1046,8 @@ sprites{
 				radius=100.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 0.00 50.00
@@ -1215,8 +1055,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1227,8 +1065,6 @@ sprites{
 				radius=140.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1239,7 +1075,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=304.00 774.00
 		file_size=312.00 386.00
-		game_size=312.00 386.00
 		offset=22.00 0.00
 		hitboxes{
 			flesh{
@@ -1260,11 +1095,8 @@ sprites{
 				radius=110.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 0.00 50.00
@@ -1272,8 +1104,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1284,8 +1114,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1296,7 +1124,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=617.00 774.00
 		file_size=312.00 386.00
-		game_size=312.00 386.00
 		offset=22.00 2.00
 		hitboxes{
 			flesh{
@@ -1317,11 +1144,8 @@ sprites{
 				radius=110.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 2.00 50.00
@@ -1329,8 +1153,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1341,8 +1163,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1353,7 +1173,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=930.00 774.00
 		file_size=315.00 386.00
-		game_size=315.00 386.00
 		offset=23.00 4.00
 		hitboxes{
 			flesh{
@@ -1374,11 +1193,8 @@ sprites{
 				radius=110.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 4.00 50.00
@@ -1386,8 +1202,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1398,8 +1212,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1410,7 +1222,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=617.00 774.00
 		file_size=312.00 386.00
-		game_size=312.00 -386.00
 		offset=22.00 -2.00
 		hitboxes{
 			flesh{
@@ -1431,11 +1242,8 @@ sprites{
 				radius=110.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 -2.00 50.00
@@ -1443,8 +1251,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1455,8 +1261,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1467,7 +1271,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=930.00 774.00
 		file_size=315.00 386.00
-		game_size=315.00 -386.00
 		offset=23.00 -4.00
 		hitboxes{
 			flesh{
@@ -1488,11 +1291,8 @@ sprites{
 				radius=110.00
 				type=1
 				value=10.00
-				can_pikmin_latch=true
 				hazards=fire
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 			blowhole{
 				coords=116.00 -4.00 50.00
@@ -1500,8 +1300,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1512,8 +1310,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1524,7 +1320,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 1548.00
 		file_size=287.00 326.00
-		game_size=287.00 326.00
 		offset=32.00 0.00
 		hitboxes{
 			flesh{
@@ -1533,8 +1328,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1545,8 +1338,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1557,8 +1348,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1569,8 +1358,6 @@ sprites{
 				radius=110.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1581,7 +1368,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=288.00 1548.00
 		file_size=264.00 338.00
-		game_size=264.00 338.00
 		offset=26.00 0.00
 		hitboxes{
 			flesh{
@@ -1590,8 +1376,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1602,8 +1386,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1614,8 +1396,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1626,8 +1406,6 @@ sprites{
 				radius=110.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1638,7 +1416,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=553.00 1548.00
 		file_size=281.00 232.00
-		game_size=281.00 232.00
 		offset=-25.00 0.00
 		hitboxes{
 			flesh{
@@ -1647,8 +1424,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1659,8 +1434,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1671,8 +1444,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1683,8 +1454,6 @@ sprites{
 				radius=110.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1695,7 +1464,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=835.00 1548.00
 		file_size=283.00 234.00
-		game_size=283.00 234.00
 		offset=-36.00 0.00
 		hitboxes{
 			flesh{
@@ -1704,8 +1472,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1716,8 +1482,6 @@ sprites{
 				radius=80.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1728,8 +1492,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1740,8 +1502,6 @@ sprites{
 				radius=110.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1752,7 +1512,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 1161.00
 		file_size=285.00 386.00
-		game_size=285.00 386.00
 		offset=35.00 0.00
 		hitboxes{
 			flesh{
@@ -1761,8 +1520,6 @@ sprites{
 				radius=100.00
 				type=1
 				value=0.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1773,8 +1530,6 @@ sprites{
 				radius=100.00
 				type=1
 				value=0.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1785,8 +1540,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1797,8 +1550,6 @@ sprites{
 				radius=140.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1809,7 +1560,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1141.00 1161.00
 		file_size=285.00 386.00
-		game_size=285.00 386.00
 		offset=28.00 0.00
 		hitboxes{
 			flesh{
@@ -1818,8 +1568,6 @@ sprites{
 				radius=80.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1830,8 +1578,6 @@ sprites{
 				radius=80.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1842,8 +1588,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1854,8 +1598,6 @@ sprites{
 				radius=110.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1866,7 +1608,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=0.00 774.00
 		file_size=303.00 386.00
-		game_size=303.00 386.00
 		offset=26.00 0.00
 		hitboxes{
 			flesh{
@@ -1875,8 +1616,6 @@ sprites{
 				radius=100.00
 				type=1
 				value=0.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1887,8 +1626,6 @@ sprites{
 				radius=100.00
 				type=1
 				value=0.00
-				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1899,8 +1636,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1911,8 +1646,6 @@ sprites{
 				radius=140.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1923,7 +1656,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1422.00 387.00
 		file_size=285.00 386.00
-		game_size=285.00 386.00
 		offset=28.00 0.00
 		hitboxes{
 			flesh{
@@ -1932,8 +1664,6 @@ sprites{
 				radius=80.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1944,8 +1674,6 @@ sprites{
 				radius=80.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1956,8 +1684,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -1968,8 +1694,6 @@ sprites{
 				radius=110.00
 				type=1
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=3.14
 				knockback=1.00
@@ -1980,7 +1704,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=1246.00 774.00
 		file_size=312.00 386.00
-		game_size=312.00 386.00
 		offset=22.00 0.00
 		hitboxes{
 			flesh{
@@ -1990,7 +1713,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2002,7 +1724,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2013,8 +1734,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2025,8 +1744,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2037,7 +1754,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=286.00 1161.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=36.00 0.00
 		hitboxes{
 			flesh{
@@ -2047,7 +1763,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2059,7 +1774,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2070,8 +1784,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2082,8 +1794,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2094,7 +1804,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=570.00 1161.00
 		file_size=283.00 386.00
-		game_size=283.00 386.00
 		offset=36.00 2.00
 		hitboxes{
 			flesh{
@@ -2104,7 +1813,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2116,7 +1824,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2127,8 +1834,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2139,8 +1844,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2151,7 +1854,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=854.00 1161.00
 		file_size=286.00 386.00
-		game_size=286.00 386.00
 		offset=37.00 4.00
 		hitboxes{
 			flesh{
@@ -2161,7 +1863,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2173,7 +1874,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2184,8 +1884,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2196,8 +1894,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2208,7 +1904,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=570.00 1161.00
 		file_size=283.00 386.00
-		game_size=283.00 -386.00
 		offset=36.00 -2.00
 		hitboxes{
 			flesh{
@@ -2218,7 +1913,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2230,7 +1924,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2241,8 +1934,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2253,8 +1944,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2265,7 +1954,6 @@ sprites{
 		file=Armored_Cannon_Beetle.png
 		file_pos=854.00 1161.00
 		file_size=286.00 386.00
-		game_size=286.00 -386.00
 		offset=37.00 -4.00
 		hitboxes{
 			flesh{
@@ -2275,7 +1963,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2287,7 +1974,6 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2298,8 +1984,6 @@ sprites{
 				radius=18.00
 				type=2
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -2310,8 +1994,6 @@ sprites{
 				radius=90.00
 				type=0
 				value=0.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

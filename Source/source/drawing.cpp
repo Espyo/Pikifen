@@ -1859,8 +1859,7 @@ void draw_liquid(
                 s_ptr->associated_liquid->anim_instance.get_cur_sprite();
             if(anim_sprite->bitmap) {
                 layer_2_dy =
-                    (anim_sprite->file_size.y * 0.5) *
-                    (anim_sprite->game_size.x / anim_sprite->file_size.x);
+                    (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;
             }
         }
         
@@ -1884,8 +1883,8 @@ void draw_liquid(
                 );
             av[v].x *= scale;
             av[v].y *= scale;
-            av[v].u *= (anim_sprite->file_size.x / anim_sprite->game_size.x);
-            av[v].v *= (anim_sprite->file_size.x / anim_sprite->game_size.x);
+            av[v].u /= anim_sprite->scale.x;
+            av[v].v /= anim_sprite->scale.x;
         }
         
         al_draw_prim(

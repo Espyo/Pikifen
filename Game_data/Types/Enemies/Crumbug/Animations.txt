@@ -1,6 +1,5 @@
 animations{
 	moving{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -29,7 +28,6 @@ animations{
 		}
 	}
 	attacking{
-		loop_frame=0
 		frames{
 			attacking1{
 				duration=0.10
@@ -43,7 +41,6 @@ animations{
 		}
 	}
 	eating{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.10
@@ -88,8 +85,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=0.00 0.00
 		file_size=32.00 32.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -97,8 +92,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -109,8 +102,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -121,8 +112,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=33.00 0.00
 		file_size=32.00 32.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -130,8 +119,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -142,8 +129,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -154,8 +139,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=66.00 0.00
 		file_size=32.00 32.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -163,8 +146,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -175,8 +156,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -187,8 +166,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=99.00 0.00
 		file_size=33.00 32.00
-		game_size=33.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -196,8 +173,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -208,8 +183,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -220,8 +193,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=133.00 0.00
 		file_size=34.00 32.00
-		game_size=34.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -229,8 +200,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -241,8 +210,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -253,8 +220,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=0.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -262,8 +227,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -274,8 +237,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -286,8 +247,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=31.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -295,8 +254,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -307,11 +264,7 @@ sprites{
 				radius=7.00
 				type=1
 				value=20.00
-				can_pikmin_latch=false
-				hazards
-				outward=false
 				angle=0.00
-				knockback=0.00
 			}
 		}
 	}
@@ -319,8 +272,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=0.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -328,8 +279,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -340,8 +289,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -352,8 +299,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=31.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -361,8 +306,6 @@ sprites{
 				radius=14.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -373,8 +316,6 @@ sprites{
 				radius=7.00
 				type=0
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -385,8 +326,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=0.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -394,8 +333,6 @@ sprites{
 				radius=14.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -406,8 +343,6 @@ sprites{
 				radius=7.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -418,8 +353,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=31.00 33.00
 		file_size=30.00 32.00
-		game_size=30.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -427,8 +360,6 @@ sprites{
 				radius=14.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -439,8 +370,6 @@ sprites{
 				radius=7.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -451,8 +380,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=62.00 33.00
 		file_size=32.00 32.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -460,8 +387,6 @@ sprites{
 				radius=14.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -472,8 +397,6 @@ sprites{
 				radius=7.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -484,8 +407,6 @@ sprites{
 		file=Crumbug.png
 		file_pos=95.00 33.00
 		file_size=32.00 32.00
-		game_size=32.00 32.00
-		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-3.00 0.00 0.00
@@ -493,8 +414,6 @@ sprites{
 				radius=14.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -505,8 +424,6 @@ sprites{
 				radius=7.00
 				type=2
 				value=1.00
-				can_pikmin_latch=false
-				hazards
 				outward=true
 				angle=0.00
 				knockback=1.00

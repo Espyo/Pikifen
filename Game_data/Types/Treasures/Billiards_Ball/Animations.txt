@@ -1,6 +1,5 @@
 animations{
 	idling{
-		loop_frame=0
 		frames{
 			idling{
 				duration=0.00
@@ -11,11 +10,8 @@ animations{
 sprites{
 	idling{
 		file=Billiards_Ball.png
-		file_pos=0 0
-		file_size=100 100
-		game_size=100.00 100.00
-		offset=0.00 0.00
-		hitboxes=
+		file_pos=0.00 0.00
+		file_size=100.00 100.00
 	}
 }
-body_parts=
+body_parts
