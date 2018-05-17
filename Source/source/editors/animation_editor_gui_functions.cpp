@@ -115,6 +115,9 @@ void animation_editor::cur_sprite_tc_to_gui() {
             cur_sprite_tc.get_size().y / cur_sprite->file_size.y
         )
     );
+    set_angle_picker_angle(
+        frm_sprite_tra, "ang_a", cur_sprite_tc.get_angle()
+    );
     gui_to_sprite_transform();
 }
 
@@ -350,6 +353,7 @@ void animation_editor::sprite_transform_to_gui() {
     set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
     set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
     set_textbox_text(frm_sprite_tra, "txt_sy", f2s(cur_sprite->scale.y));
+    set_angle_picker_angle(frm_sprite_tra, "ang_a", cur_sprite->angle);
     set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
     
     if(comparison) {
@@ -559,6 +563,8 @@ void animation_editor::gui_to_sprite_transform() {
         s2f(get_textbox_text(frm_sprite_tra, "txt_sx"));
     cur_sprite->scale.y =
         s2f(get_textbox_text(frm_sprite_tra, "txt_sy"));
+    cur_sprite->angle =
+        get_angle_picker_angle(frm_sprite_tra, "ang_a");
     comparison =
         get_checkbox_check(frm_sprite_tra, "chk_compare");
         
@@ -576,6 +582,7 @@ void animation_editor::gui_to_sprite_transform() {
             cur_sprite->file_size.y * cur_sprite->scale.y
         )
     );
+    cur_sprite_tc.set_angle(cur_sprite->angle);
     cur_sprite_tc.keep_aspect_ratio =
         get_checkbox_check(frm_sprite_tra, "chk_ratio");
         

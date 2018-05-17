@@ -58,7 +58,7 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
-        angle, &effects
+        angle + s_ptr->angle, &effects
     );
     
     draw_status_effect_bmp(this, &effects);

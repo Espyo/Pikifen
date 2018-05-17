@@ -661,7 +661,7 @@ void mob::draw(sprite_effect_manager* effect_manager) {
     draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
-        angle, effect_manager
+        angle + s_ptr->angle, effect_manager
     );
     
     if(internal_effect_manager) {

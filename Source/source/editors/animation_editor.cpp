@@ -78,6 +78,7 @@ animation_editor::animation_editor() :
     
     cur_hitbox_tc.keep_aspect_ratio = true;
     cur_sprite_tc.keep_aspect_ratio = true;
+    cur_sprite_tc.allow_rotation = true;
     top_tc.keep_aspect_ratio = true;
     top_tc.allow_rotation = true;
     
@@ -261,8 +262,8 @@ void animation_editor::do_drawing() {
             draw_bitmap(
                 s->bitmap, s->offset,
                 point(
-                    cur_sprite->file_size.x * s->scale.x,
-                    cur_sprite->file_size.y * s->scale.y
+                    s->file_size.x * s->scale.x,
+                    s->file_size.y * s->scale.y
                 ),
                 s->angle, tint
             );
@@ -419,7 +420,7 @@ void animation_editor::draw_comparison() {
                 comparison_sprite->file_size.x * comparison_sprite->scale.x,
                 comparison_sprite->file_size.y * comparison_sprite->scale.y
             ),
-            0, tint
+            comparison_sprite->angle, tint
         );
     }
 }
@@ -485,10 +486,10 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
 void animation_editor::import_sprite_top_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     set_checkbox_check(frm_top, "chk_visible", s->top_visible);
-    set_textbox_text(frm_top, "txt_x", i2s(s->top_pos.x));
-    set_textbox_text(frm_top, "txt_y", i2s(s->top_pos.y));
-    set_textbox_text(frm_top, "txt_w", i2s(s->top_size.x));
-    set_textbox_text(frm_top, "txt_h", i2s(s->top_size.y));
+    set_textbox_text(frm_top, "txt_x", f2s(s->top_pos.x));
+    set_textbox_text(frm_top, "txt_y", f2s(s->top_pos.y));
+    set_textbox_text(frm_top, "txt_w", f2s(s->top_size.x));
+    set_textbox_text(frm_top, "txt_h", f2s(s->top_size.y));
     set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
     
     gui_to_top();
@@ -502,10 +503,11 @@ void animation_editor::import_sprite_top_data(const string &name) {
  */
 void animation_editor::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
-    set_textbox_text(frm_sprite_tra, "txt_x", i2s(s->offset.x));
-    set_textbox_text(frm_sprite_tra, "txt_y", i2s(s->offset.y));
-    set_textbox_text(frm_sprite_tra, "txt_sx", i2s(s->scale.x));
-    set_textbox_text(frm_sprite_tra, "txt_sy", i2s(s->scale.y));
+    set_textbox_text(frm_sprite_tra, "txt_x", f2s(s->offset.x));
+    set_textbox_text(frm_sprite_tra, "txt_y", f2s(s->offset.y));
+    set_textbox_text(frm_sprite_tra, "txt_sx", f2s(s->scale.x));
+    set_textbox_text(frm_sprite_tra, "txt_sy", f2s(s->scale.y));
+    set_angle_picker_angle(frm_sprite_tra, "ang_a", s->angle);
     
     gui_to_sprite_transform();
     emit_status_bar_message("Data imported.", false);
@@ -879,6 +881,9 @@ void animation_editor::save_animation_database() {
         }
         if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
             sprite_node->add(new data_node("scale", p2s(s_ptr->scale)));
+        }
+        if(s_ptr->angle != 0.0) {
+            sprite_node->add(new data_node("angle", f2s(s_ptr->angle)));
         }
         
         if(

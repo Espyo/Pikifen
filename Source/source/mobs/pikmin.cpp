@@ -228,7 +228,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
-        angle, &effects
+        angle + s_ptr->angle, &effects
     );
     
     if(s_ptr->top_visible) {
@@ -238,7 +238,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
             pik_type->bmp_top[maturity],
             pos + top_pos,
             s_ptr->top_size,
-            s_ptr->top_angle + angle,
+            angle + s_ptr->top_angle,
             &effects
         );
     }

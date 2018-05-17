@@ -52,7 +52,7 @@ void pellet::draw(sprite_effect_manager* effect_manager) {
         s_ptr->bitmap,
         draw_pos,
         point(type->radius * 2.0, -1),
-        angle, &effects
+        angle + s_ptr->angle, &effects
     );
     
     draw_bitmap_with_effects(

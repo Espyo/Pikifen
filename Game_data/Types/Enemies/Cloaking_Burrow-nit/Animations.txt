@@ -390,9 +390,10 @@ sprites{
 	}
 	attacking3{
 		file=Cloaking_Burrow-nit.png
-		file_pos=108.00 57.00
+		file_pos=57.00 57.00
 		file_size=50.00 56.00
 		offset=-8.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			face{
 				coords=-2.00 -2.00 0.00
@@ -427,9 +428,9 @@ sprites{
 	}
 	attacking4{
 		file=Cloaking_Burrow-nit.png
-		file_pos=159.00 57.00
+		file_pos=108.00 57.00
 		file_size=92.00 56.00
-		offset=12.50 0.00
+		offset=13.00 0.00
 		hitboxes{
 			face{
 				coords=8.00 0.00 0.00
@@ -463,7 +464,7 @@ sprites{
 	}
 	attacking5{
 		file=Cloaking_Burrow-nit.png
-		file_pos=252.00 57.00
+		file_pos=201.00 57.00
 		file_size=148.00 56.00
 		offset=40.50 0.00
 		hitboxes{
@@ -499,9 +500,8 @@ sprites{
 	}
 	dying1{
 		file=Cloaking_Burrow-nit.png
-		file_pos=0.00 171.00
-		file_size=68.00 56.00
-		offset=0.50 0.00
+		file_pos=0.00 116.00
+		file_size=67.00 52.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00
@@ -574,8 +574,8 @@ sprites{
 	}
 	dying3{
 		file=Cloaking_Burrow-nit.png
-		file_pos=69.00 171.00
-		file_size=68.00 56.00
+		file_pos=69.00 115.00
+		file_size=67.00 54.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00
@@ -611,8 +611,9 @@ sprites{
 	}
 	dying4{
 		file=Cloaking_Burrow-nit.png
-		file_pos=138.00 171.00
+		file_pos=138.00 114.00
 		file_size=65.00 56.00
+		offset=-1.00 0.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00
@@ -648,8 +649,9 @@ sprites{
 	}
 	dying5{
 		file=Cloaking_Burrow-nit.png
-		file_pos=204.00 171.00
+		file_pos=204.00 114.00
 		file_size=64.00 56.00
+		offset=-1.00 0.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00
@@ -685,8 +687,9 @@ sprites{
 	}
 	dying6{
 		file=Cloaking_Burrow-nit.png
-		file_pos=269.00 171.00
+		file_pos=269.00 114.00
 		file_size=64.00 56.00
+		offset=-1.00 0.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00
@@ -722,7 +725,7 @@ sprites{
 	}
 	dying7{
 		file=Cloaking_Burrow-nit.png
-		file_pos=334.00 171.00
+		file_pos=334.00 114.00
 		file_size=64.00 56.00
 		hitboxes{
 			face{
@@ -759,7 +762,7 @@ sprites{
 	}
 	dying8{
 		file=Cloaking_Burrow-nit.png
-		file_pos=399.00 171.00
+		file_pos=399.00 114.00
 		file_size=57.00 56.00
 		offset=-3.50 0.00
 		hitboxes{
@@ -797,7 +800,7 @@ sprites{
 	}
 	dying9{
 		file=Cloaking_Burrow-nit.png
-		file_pos=457.00 171.00
+		file_pos=457.00 114.00
 		file_size=80.00 56.00
 		offset=8.00 0.00
 		hitboxes{
@@ -868,7 +871,7 @@ sprites{
 	}
 	shaking1{
 		file=Cloaking_Burrow-nit.png
-		file_pos=0.00 114.00
+		file_pos=264.00 0.00
 		file_size=60.00 56.00
 		hitboxes{
 			face{
@@ -902,8 +905,10 @@ sprites{
 	}
 	shaking2{
 		file=Cloaking_Burrow-nit.png
-		file_pos=120.00 114.00
+		file_pos=325.00 0.00
 		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=0.05
 		hitboxes{
 			face{
 				coords=2.00 0.00 0.00
@@ -936,8 +941,10 @@ sprites{
 	}
 	shaking3{
 		file=Cloaking_Burrow-nit.png
-		file_pos=61.00 114.00
+		file_pos=325.00 0.00
 		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=6.23
 		hitboxes{
 			face{
 				coords=2.00 0.00 0.00
@@ -970,8 +977,10 @@ sprites{
 	}
 	shaking4{
 		file=Cloaking_Burrow-nit.png
-		file_pos=120.00 114.00
+		file_pos=325.00 0.00
 		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=0.05
 		hitboxes{
 			face{
 				coords=16.00 0.00 -32.00
@@ -1005,8 +1014,10 @@ sprites{
 	}
 	shaking5{
 		file=Cloaking_Burrow-nit.png
-		file_pos=236.00 114.00
-		file_size=56.00 56.00
+		file_pos=325.00 0.00
+		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=0.17
 		hitboxes{
 			face{
 				coords=16.00 0.00 -32.00
@@ -1042,8 +1053,10 @@ sprites{
 	}
 	shaking6{
 		file=Cloaking_Burrow-nit.png
-		file_pos=61.00 114.00
+		file_pos=325.00 0.00
 		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=6.23
 		hitboxes{
 			face{
 				coords=16.00 0.00 -32.00
@@ -1081,8 +1094,10 @@ sprites{
 	}
 	shaking7{
 		file=Cloaking_Burrow-nit.png
-		file_pos=179.00 114.00
-		file_size=56.00 56.00
+		file_pos=325.00 0.00
+		file_size=58.00 56.00
+		offset=-1.00 0.00
+		angle=6.11
 		hitboxes{
 			face{
 				coords=16.00 0.00 -32.00
@@ -1118,7 +1133,7 @@ sprites{
 	}
 	eating1{
 		file=Cloaking_Burrow-nit.png
-		file_pos=401.00 57.00
+		file_pos=350.00 57.00
 		file_size=67.00 56.00
 		hitboxes{
 			face{
@@ -1152,7 +1167,7 @@ sprites{
 	}
 	eating2{
 		file=Cloaking_Burrow-nit.png
-		file_pos=469.00 57.00
+		file_pos=418.00 57.00
 		file_size=68.00 56.00
 		offset=0.50 0.00
 		hitboxes{
@@ -1187,7 +1202,7 @@ sprites{
 	}
 	emerging1{
 		file=Cloaking_Burrow-nit.png
-		file_pos=206.00 0.00
+		file_pos=224.00 0.00
 		file_size=39.00 56.00
 		hitboxes{
 			face{
@@ -1222,8 +1237,9 @@ sprites{
 	}
 	emerging2{
 		file=Cloaking_Burrow-nit.png
-		file_pos=246.00 0.00
-		file_size=42.00 56.00
+		file_pos=224.00 0.00
+		file_size=39.00 56.00
+		angle=0.05
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1257,8 +1273,9 @@ sprites{
 	}
 	emerging3{
 		file=Cloaking_Burrow-nit.png
-		file_pos=289.00 0.00
-		file_size=42.00 56.00
+		file_pos=224.00 0.00
+		file_size=39.00 56.00
+		angle=6.23
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1292,7 +1309,7 @@ sprites{
 	}
 	emerging4{
 		file=Cloaking_Burrow-nit.png
-		file_pos=332.00 0.00
+		file_pos=184.00 0.00
 		file_size=39.00 56.00
 		offset=-4.00 0.00
 		hitboxes{
@@ -1328,7 +1345,7 @@ sprites{
 	}
 	emerging5{
 		file=Cloaking_Burrow-nit.png
-		file_pos=372.00 0.00
+		file_pos=137.00 0.00
 		file_size=46.00 56.00
 		offset=-8.00 0.00
 		hitboxes{
@@ -1399,9 +1416,10 @@ sprites{
 	}
 	moving2{
 		file=Cloaking_Burrow-nit.png
-		file_pos=137.00 0.00
+		file_pos=68.00 0.00
 		file_size=68.00 56.00
 		offset=0.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			face{
 				coords=-2.00 0.00 0.00

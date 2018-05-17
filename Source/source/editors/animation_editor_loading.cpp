@@ -833,6 +833,7 @@ void animation_editor::load() {
                 cur_sprite->file_size.y * cur_sprite->scale.y
             )
         );
+        cur_sprite_tc.set_angle(cur_sprite->angle);
         state = EDITOR_STATE_SPRITE_TRANSFORM;
         sprite_transform_to_gui();
         change_to_right_frame();
@@ -1062,11 +1063,11 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_add(
         "txt_x",
-        new lafi::textbox(""), 37.5, 16
+        new lafi::textbox(), 37.5, 16
     );
     frm_sprite_tra->easy_add(
         "txt_y",
-        new lafi::textbox(""), 37.5, 16
+        new lafi::textbox(), 37.5, 16
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1075,16 +1076,25 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_add(
         "txt_sx",
-        new lafi::textbox(""), 37.5, 16
+        new lafi::textbox(), 37.5, 16
     );
     frm_sprite_tra->easy_add(
         "txt_sy",
-        new lafi::textbox(""), 37.5, 16
+        new lafi::textbox(), 37.5, 16
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
         "chk_ratio",
         new lafi::checkbox("Keep aspect ratio", true), 100, 16
+    );
+    frm_sprite_tra->easy_row();
+    frm_sprite_tra->easy_add(
+        "lbl_angle",
+        new lafi::label("Angle:"), 50, 16
+    );
+    frm_sprite_tra->easy_add(
+        "ang_a",
+        new lafi::angle_picker(), 50, 24
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1105,7 +1115,7 @@ void animation_editor::load() {
     frm_sprite_comp->easy_row();
     frm_sprite_comp->easy_add(
         "but_compare",
-        new lafi::button(""), 100, 24
+        new lafi::button(), 100, 24
     );
     frm_sprite_comp->easy_row();
     frm_sprite_comp->easy_add(
@@ -1152,27 +1162,32 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["txt_x"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_x"]->description =
-        "In-game, offset by this much, horizontally.";
+        "Offset the sprite's graphic by this much, horizontally.";
         
     frm_sprite_tra->widgets["txt_y"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_y"]->description =
-        "In-game, offset by this much, vertically.";
+        "Offset the sprite's graphic by this much, vertically.";
         
     frm_sprite_tra->widgets["txt_sx"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_sx"]->description =
-        "In-game sprite width.";
+        "Scale the sprite's graphic width by this.";
         
     frm_sprite_tra->widgets["txt_sy"]->lose_focus_handler =
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_sy"]->description =
-        "In-game sprite height.";
+        "Scale the sprite's graphic height by this.";
         
     frm_sprite_tra->widgets["chk_ratio"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;
     frm_sprite_tra->widgets["chk_ratio"]->description =
         "Lock width/height proportion when changing either one.";
+        
+    frm_sprite_tra->widgets["ang_a"]->lose_focus_handler =
+        lambda_save_sprite_tra;
+    frm_sprite_tra->widgets["ang_a"]->description =
+        "Rotate the sprite's graphic by this angle.";
         
     frm_sprite_tra->widgets["chk_compare"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;
@@ -1722,7 +1737,7 @@ void animation_editor::load() {
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
         "txt_add",
-        new lafi::textbox(""), 80, 16
+        new lafi::textbox(), 80, 16
     );
     frm_body_parts->easy_add(
         "but_add",
@@ -1748,7 +1763,7 @@ void animation_editor::load() {
     );
     frm_body_parts->easy_add(
         "lbl_nr",
-        new lafi::label(""), 50, 16
+        new lafi::label(), 50, 16
     );
     y = frm_body_parts->easy_row();
     
@@ -1763,7 +1778,7 @@ void animation_editor::load() {
     );
     frm_body_part->easy_add(
         "txt_name",
-        new lafi::textbox(""), 70, 16
+        new lafi::textbox(), 70, 16
     );
     frm_body_part->easy_row();
     frm_body_part->easy_add(
@@ -1954,7 +1969,7 @@ void animation_editor::load() {
     frm_tools->easy_row();
     frm_tools->easy_add(
         "but_rename_anim_name",
-        new lafi::button(""), 100, 24
+        new lafi::button(), 100, 24
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
@@ -1977,7 +1992,7 @@ void animation_editor::load() {
     frm_tools->easy_row();
     frm_tools->easy_add(
         "but_rename_sprite_name",
-        new lafi::button(""), 100, 24
+        new lafi::button(), 100, 24
     );
     frm_tools->easy_row();
     frm_tools->easy_add(

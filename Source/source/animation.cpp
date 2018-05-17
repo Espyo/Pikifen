@@ -562,6 +562,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                     "scale"
                 )->get_value_or_default("1 1")
             );
+        new_s->angle = s2f(sprite_node->get_child_by_name("angle")->value);
         new_s->file = sprite_node->get_child_by_name("file")->value;
         new_s->set_bitmap(
             new_s->file, new_s->file_pos, new_s->file_size,
