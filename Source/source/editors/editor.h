@@ -81,6 +81,9 @@ protected:
         ICON_ORIGIN,
         ICON_MOB_RADIUS,
         ICON_PIKMIN_SILHOUETTE,
+        ICON_ANIMATIONS,
+        ICON_SPRITES,
+        ICON_BODY_PARTS,
         
         N_EDITOR_ICONS
     };

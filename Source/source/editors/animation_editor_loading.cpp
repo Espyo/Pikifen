@@ -74,27 +74,33 @@ void animation_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add(
         "but_anims",
-        new lafi::button("Edit animations"), 100, 32
+        new lafi::button("Animations", "", editor_icons[ICON_ANIMATIONS]),
+        50, 48
     );
-    frm_object->easy_row();
     frm_object->easy_add(
         "but_sprites",
-        new lafi::button("Edit sprites"), 100, 32
+        new lafi::button("Sprites", "", editor_icons[ICON_SPRITES]),
+        50, 48
     );
     frm_object->easy_row();
     frm_object->easy_add(
+        "dum_1", new lafi::dummy(), 25, 48
+    );
+    frm_object->easy_add(
         "but_body_parts",
-        new lafi::button("Edit body parts"), 100, 32
+        new lafi::button("Body parts", "", editor_icons[ICON_BODY_PARTS]),
+        50, 48
     );
     frm_object->easy_row();
     frm_object->easy_add(
         "but_tools",
-        new lafi::button("Special tools"), 100, 32
+        new lafi::button("Special tools", "", editor_icons[ICON_TOOLS]),
+        50, 48
     );
-    frm_object->easy_row();
     frm_object->easy_add(
         "but_options",
-        new lafi::button("Options"), 100, 32
+        new lafi::button("Options", "", editor_icons[ICON_OPTIONS]),
+        50, 48
     );
     frm_object->easy_row();
     frm_object->easy_add(
