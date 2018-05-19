@@ -61,6 +61,10 @@ point get_closest_point_in_line(
     const point &l1, const point &l2, const point &p,
     float* segment_ratio = NULL
 );
+void get_transformed_rectangle_bounding_box(
+    const point &center, const point &dimensions, const float angle,
+    point* min_coords, point* max_coords
+);
 float linear_dist_to_angular(const float linear_dist, const float radius);
 void move_point(
     const point &start, const point &target,

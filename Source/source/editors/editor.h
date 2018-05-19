@@ -212,7 +212,10 @@ protected:
     void leave();
     void populate_picker(const string &filter);
     void update_canvas_coordinates();
-    void update_status_bar(const bool omit_coordinates = false);
+    void update_status_bar(
+        const bool omit_coordinates = false,
+        const bool reverse_y_coordinate = false
+    );
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     virtual void custom_picker_cancel_action();

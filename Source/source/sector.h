@@ -404,9 +404,6 @@ sector* get_sector(
 void get_sector_bounding_box(
     sector* s_ptr, point* min_coords, point* max_coords
 );
-void get_shadow_bounding_box(
-    tree_shadow* s_ptr, point* min_coords, point* max_coords
-);
 bool is_edge_valid(edge* l);
 bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);

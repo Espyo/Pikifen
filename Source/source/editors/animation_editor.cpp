@@ -58,10 +58,11 @@ animation_editor::animation_editor() :
     cur_maturity(0),
     cur_sprite(NULL),
     hitboxes_visible(true),
+    loaded_mob_type(nullptr),
     mob_radius_visible(false),
     origin_visible(true),
     pikmin_silhouette_visible(false),
-    loaded_mob_type(nullptr) {
+    side_view(false) {
     
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
@@ -147,11 +148,6 @@ void animation_editor::do_drawing() {
     al_clear_to_color(al_map_rgb(128, 144, 128));
     
     sprite* s = NULL;
-    bool draw_origin = origin_visible;
-    bool draw_hitboxes = hitboxes_visible;
-    bool draw_mob_radius = mob_radius_visible;
-    bool draw_pikmin_silhouette = pikmin_silhouette_visible;
-    
     if(state == EDITOR_STATE_ANIMATION) {
         if(cur_frame_nr != INVALID) {
             string name =
@@ -169,6 +165,11 @@ void animation_editor::do_drawing() {
         s = cur_sprite;
         
     }
+    
+    bool draw_origin = origin_visible;
+    bool draw_hitboxes = hitboxes_visible;
+    bool draw_mob_radius = mob_radius_visible;
+    bool draw_pikmin_silhouette = pikmin_silhouette_visible;
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
         draw_hitboxes = false;
@@ -244,50 +245,22 @@ void animation_editor::do_drawing() {
         
     } else if(s) {
     
-        if(!comparison_above) {
-            draw_comparison();
-        }
-        
-        if(s->bitmap) {
-            ALLEGRO_COLOR tint;
-            if(
-                state == EDITOR_STATE_SPRITE_TRANSFORM &&
-                comparison && comparison_tint &&
-                comparison_sprite && comparison_sprite->bitmap
-            ) {
-                tint = al_map_rgb(0, 128, 255);
-            } else {
-                tint = al_map_rgb(255, 255, 255);
-            }
-            draw_bitmap(
-                s->bitmap, s->offset,
-                point(
-                    s->file_size.x * s->scale.x,
-                    s->file_size.y * s->scale.y
-                ),
-                s->angle, tint
-            );
-        }
-        
-        if(
-            s->top_visible && loaded_mob_type
-            && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
-        ) {
-            draw_bitmap(
-                top_bmp[cur_maturity],
-                s->top_pos, s->top_size,
-                s->top_angle
-            );
+        if(side_view && state == EDITOR_STATE_HITBOXES) {
+            draw_side_view_sprite(s);
+        } else {
+            draw_top_down_view_sprite(s);
         }
         
         if(draw_hitboxes) {
+            unsigned char hitbox_outline_alpha =
+                63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
             size_t n_hitboxes = s->hitboxes.size();
+            
             for(size_t h = 0; h < n_hitboxes; ++h) {
                 hitbox* h_ptr = &s->hitboxes[h];
-                
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
-                unsigned char hitbox_outline_alpha =
-                    63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+                float hitbox_outline_thickness =
+                    (cur_hitbox_nr == h ? 3 / cam_zoom : 2 / cam_zoom);
                     
                 if(h_ptr->type == HITBOX_TYPE_NORMAL) {
                     hitbox_color = al_map_rgba(0, 128, 0, 128);
@@ -300,51 +273,32 @@ void animation_editor::do_drawing() {
                     hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
                 }
                 
-                al_draw_filled_circle(
-                    h_ptr->pos.x,
-                    h_ptr->pos.y,
-                    h_ptr->radius,
-                    hitbox_color
-                );
+                if(cur_hitbox_nr == h) {
+                    hitbox_outline_color =
+                        change_alpha(hitbox_color, hitbox_outline_alpha);
+                }
                 
-                al_draw_circle(
-                    h_ptr->pos.x,
-                    h_ptr->pos.y,
-                    h_ptr->radius,
-                    (
-                        cur_hitbox_nr == h ?
-                        change_alpha(
-                            hitbox_outline_color,
-                            hitbox_outline_alpha
-                        ) :
-                        hitbox_outline_color
-                    ),
-                    (
-                        cur_hitbox_nr == h ?
-                        3 / cam_zoom :
-                        2 / cam_zoom
-                    )
-                );
+                if(side_view && state == EDITOR_STATE_HITBOXES) {
+                    draw_side_view_hitbox(
+                        h_ptr, hitbox_color,
+                        hitbox_outline_color, hitbox_outline_thickness
+                    );
+                } else {
+                    draw_top_down_view_hitbox(
+                        h_ptr, hitbox_color,
+                        hitbox_outline_color, hitbox_outline_thickness
+                    );
+                }
             }
-        }
-        
-        if(comparison_above) {
-            draw_comparison();
         }
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
             cur_sprite_tc.draw_handles();
-        } else if(
-            state == EDITOR_STATE_TOP &&
-            cur_sprite && cur_sprite->top_visible
-        ) {
+        } else if(state == EDITOR_STATE_TOP && s->top_visible) {
             top_tc.draw_handles();
-        } else if(state == EDITOR_STATE_HITBOXES) {
-            if(cur_sprite && cur_hitbox) {
-                cur_hitbox_tc.draw_handles();
-            }
+        } else if(state == EDITOR_STATE_HITBOXES && cur_hitbox) {
+            cur_hitbox_tc.draw_handles();
         }
-        
     }
     
     if(draw_origin) {
@@ -370,10 +324,11 @@ void animation_editor::do_drawing() {
     }
     
     if(draw_mob_radius && loaded_mob_type) {
-        al_draw_circle(
-            0, 0, loaded_mob_type->radius,
-            al_map_rgb(240, 240, 240), 1 / cam_zoom
-        );
+        if(side_view && state == EDITOR_STATE_HITBOXES) {
+            //The radius isn't meant to be shown in side view.
+        } else {
+            draw_top_down_view_mob_radius(loaded_mob_type);
+        }
     }
     
     if(draw_pikmin_silhouette) {
@@ -381,11 +336,12 @@ void animation_editor::do_drawing() {
         if(loaded_mob_type) {
             x_offset += loaded_mob_type->radius;
         }
-        draw_bitmap(
-            bmp_pikmin_silhouette, point(x_offset, 0),
-            point(-1, standard_pikmin_height),
-            0, al_map_rgba(240, 240, 240, 160)
-        );
+        
+        if(side_view && state == EDITOR_STATE_HITBOXES) {
+            draw_side_view_pikmin_silhouette(x_offset);
+        } else {
+            draw_top_down_view_pikmin_silhouette(x_offset);
+        }
     }
     
     al_reset_clipping_rectangle();
@@ -423,6 +379,182 @@ void animation_editor::draw_comparison() {
             comparison_sprite->angle, tint
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a hitbox on the canvas in the sideways view.
+ */
+void animation_editor::draw_side_view_hitbox(
+    hitbox* h_ptr, const ALLEGRO_COLOR &color,
+    const ALLEGRO_COLOR &outline_color, const float outline_thickness
+) {
+    al_draw_filled_rectangle(
+        h_ptr->pos.x - h_ptr->radius,
+        -h_ptr->z,
+        h_ptr->pos.x + h_ptr->radius,
+        -h_ptr->z - h_ptr->height,
+        color
+    );
+    
+    al_draw_rectangle(
+        h_ptr->pos.x - h_ptr->radius,
+        -h_ptr->z,
+        h_ptr->pos.x + h_ptr->radius,
+        -h_ptr->z - h_ptr->height,
+        outline_color, outline_thickness
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a Pikmin silhouette on the canvas in the sideways view.
+ */
+void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
+    draw_bitmap(
+        bmp_pikmin_silhouette,
+        point(x_offset, -standard_pikmin_height / 2.0),
+        point(-1, standard_pikmin_height),
+        0, al_map_rgba(240, 240, 240, 160)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sprite on the canvas in the sideways view.
+ */
+void animation_editor::draw_side_view_sprite(sprite* s) {
+    point min, max;
+    ALLEGRO_COLOR color = al_map_rgba(0, 0, 0, 0);
+    
+    get_transformed_rectangle_bounding_box(
+        s->offset, s->file_size * s->scale, s->angle,
+        &min, &max
+    );
+    max.y = 0; //Bottom aligns with the floor.
+    
+    if(loaded_mob_type) {
+        color = loaded_mob_type->main_color;
+        min.y = loaded_mob_type->height;
+    } else {
+        min.y = max.x - min.x;
+    }
+    if(color.a == 0) {
+        color = al_map_rgb(128, 32, 128);
+    }
+    min.y = -min.y; //Up is negative Y.
+    al_draw_filled_rectangle(min.x, min.y, max.x, max.y, color);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a hitbox on the canvas in the standard top-down view.
+ */
+void animation_editor::draw_top_down_view_hitbox(
+    hitbox* h_ptr, const ALLEGRO_COLOR &color,
+    const ALLEGRO_COLOR &outline_color, const float outline_thickness
+) {
+    al_draw_filled_circle(
+        h_ptr->pos.x, h_ptr->pos.y, h_ptr->radius, color
+    );
+    
+    al_draw_circle(
+        h_ptr->pos.x, h_ptr->pos.y,
+        h_ptr->radius, outline_color, outline_thickness
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the mob radius on the canvas in the standard top-down view.
+ */
+void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
+    al_draw_circle(
+        0, 0, mt->radius,
+        al_map_rgb(240, 240, 240), 1 / cam_zoom
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a Pikmin silhouette on the canvas in the standard top-down view.
+ */
+void animation_editor::draw_top_down_view_pikmin_silhouette(
+    const float x_offset
+) {
+    draw_bitmap(
+        bmp_pikmin_silhouette, point(x_offset, 0),
+        point(-1, standard_pikmin_height),
+        0, al_map_rgba(240, 240, 240, 160)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sprite on the canvas in the standard top-down view.
+ */
+void animation_editor::draw_top_down_view_sprite(sprite* s) {
+    if(!comparison_above) {
+        draw_comparison();
+    }
+    
+    if(s->bitmap) {
+        ALLEGRO_COLOR tint;
+        if(
+            state == EDITOR_STATE_SPRITE_TRANSFORM &&
+            comparison && comparison_tint &&
+            comparison_sprite && comparison_sprite->bitmap
+        ) {
+            tint = al_map_rgb(0, 128, 255);
+        } else {
+            tint = al_map_rgb(255, 255, 255);
+        }
+        draw_bitmap(
+            s->bitmap, s->offset,
+            point(
+                s->file_size.x * s->scale.x,
+                s->file_size.y * s->scale.y
+            ),
+            s->angle, tint
+        );
+    }
+    
+    if(
+        s->top_visible && loaded_mob_type
+        && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+    ) {
+        draw_bitmap(
+            top_bmp[cur_maturity],
+            s->top_pos, s->top_size,
+            s->top_angle
+        );
+    }
+    
+    if(comparison_above) {
+        draw_comparison();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Enters the side view mode.
+ */
+void animation_editor::enter_side_view() {
+    side_view = true;
+    set_checkbox_check(frm_hitboxes, "chk_side_view", true);
+    update_cur_hitbox_tc();
+    cur_hitbox_tc.keep_aspect_ratio = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Exits the side view mode.
+ */
+void animation_editor::exit_side_view() {
+    side_view = false;
+    set_checkbox_check(frm_hitboxes, "chk_side_view", false);
+    update_cur_hitbox_tc();
+    cur_hitbox_tc.keep_aspect_ratio = true;
 }
 
 

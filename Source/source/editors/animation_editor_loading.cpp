@@ -1250,6 +1250,11 @@ void animation_editor::load() {
     );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
+        "chk_side_view",
+        new lafi::checkbox("Use side view"), 100, 16
+    );
+    frm_hitboxes->easy_row();
+    frm_hitboxes->easy_add(
         "lbl_n",
         new lafi::label("Hitbox:"), 30, 24
     );
@@ -1475,6 +1480,17 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_import"]->description =
         "Import hitbox data from another sprite.";
+        
+    frm_hitboxes->widgets["chk_side_view"]->left_mouse_click_handler =
+    [this] (lafi::widget * c, int, int) {
+        if(((lafi::checkbox*) c)->checked) {
+            enter_side_view();
+        } else {
+            exit_side_view();
+        }
+    };
+    frm_hitboxes->widgets["chk_side_view"]->description =
+        "Use a side view of the object, to adjust hitboxes vertically.";
         
     frm_hitbox->register_accelerator(
         ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,

@@ -2220,8 +2220,9 @@ void area_editor::goto_problem() {
     } else if(problem_type == EPT_INVALID_SHADOW) {
     
         point min_coords, max_coords;
-        get_shadow_bounding_box(
-            problem_shadow_ptr, &min_coords, &max_coords
+        get_transformed_rectangle_bounding_box(
+            problem_shadow_ptr->center, problem_shadow_ptr->size,
+            problem_shadow_ptr->angle, &min_coords, &max_coords
         );
         center_camera(min_coords, max_coords);
     }

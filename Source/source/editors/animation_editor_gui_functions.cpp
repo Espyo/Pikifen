@@ -82,15 +82,37 @@ void animation_editor::create_new_from_picker(const string &name) {
  */
 void animation_editor::cur_hitbox_tc_to_gui() {
     if(!cur_sprite && !cur_hitbox) return;
-    set_textbox_text(
-        frm_hitbox, "txt_x", f2s(cur_hitbox_tc.get_center().x)
-    );
-    set_textbox_text(
-        frm_hitbox, "txt_y", f2s(cur_hitbox_tc.get_center().y)
-    );
-    set_textbox_text(
-        frm_hitbox, "txt_r", f2s(cur_hitbox_tc.get_size().x / 2.0)
-    );
+    
+    if(side_view) {
+        set_textbox_text(
+            frm_hitbox, "txt_x", f2s(cur_hitbox_tc.get_center().x)
+        );
+        set_textbox_text(
+            frm_hitbox, "txt_r", f2s(cur_hitbox_tc.get_size().x / 2.0)
+        );
+        set_textbox_text(
+            frm_hitbox, "txt_z",
+            f2s(
+                -(
+                    cur_hitbox_tc.get_center().y +
+                    cur_hitbox_tc.get_size().y / 2.0
+                )
+            )
+        );
+        set_textbox_text(
+            frm_hitbox, "txt_h", f2s(cur_hitbox_tc.get_size().y)
+        );
+    } else {
+        set_textbox_text(
+            frm_hitbox, "txt_x", f2s(cur_hitbox_tc.get_center().x)
+        );
+        set_textbox_text(
+            frm_hitbox, "txt_y", f2s(cur_hitbox_tc.get_center().y)
+        );
+        set_textbox_text(
+            frm_hitbox, "txt_r", f2s(cur_hitbox_tc.get_size().x / 2.0)
+        );
+    }
     gui_to_hitbox();
 }
 
@@ -286,10 +308,7 @@ void animation_editor::hitbox_to_gui() {
     }
     
     if(cur_hitbox) {
-        cur_hitbox_tc.set_center(cur_hitbox->pos);
-        cur_hitbox_tc.set_size(
-            point(cur_hitbox->radius * 2, cur_hitbox->radius * 2)
-        );
+        update_cur_hitbox_tc();
     }
 }
 
@@ -861,6 +880,31 @@ void animation_editor::top_tc_to_gui() {
         frm_top, "ang_angle", top_tc.get_angle()
     );
     gui_to_top();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the current hitbox's transformation controller, based on whether
+ * we're using the side view or not.
+ */
+void animation_editor::update_cur_hitbox_tc() {
+    if(!cur_hitbox) return;
+    if(side_view) {
+        cur_hitbox_tc.set_center(
+            point(
+                cur_hitbox->pos.x,
+                (-(cur_hitbox->height / 2.0)) - cur_hitbox->z
+            )
+        );
+        cur_hitbox_tc.set_size(
+            point(cur_hitbox->radius * 2, cur_hitbox->height)
+        );
+    } else {
+        cur_hitbox_tc.set_center(cur_hitbox->pos);
+        cur_hitbox_tc.set_size(
+            point(cur_hitbox->radius * 2, cur_hitbox->radius * 2)
+        );
+    }
 }
 
 

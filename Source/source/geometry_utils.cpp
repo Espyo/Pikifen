@@ -311,6 +311,54 @@ point get_closest_point_in_line(
 
 
 /* ----------------------------------------------------------------------------
+ * Gets the bounding box coordinates of a rectangle that has undergone
+ * translation, scale, and/or rotation transformations, and places it
+ * in the specified point structs.
+ */
+void get_transformed_rectangle_bounding_box(
+    const point &center, const point &dimensions, const float angle,
+    point* min_coords, point* max_coords
+) {
+
+    if(!min_coords || !max_coords) return;
+    bool got_min_x = false;
+    bool got_max_x = false;
+    bool got_min_y = false;
+    bool got_max_y = false;
+    
+    for(unsigned char p = 0; p < 4; ++p) {
+        point corner, final_corner;
+        
+        if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5);
+        else                 corner.x = center.x + (dimensions.x * 0.5);
+        if(p == 0 || p == 2) corner.y = center.y - (dimensions.y * 0.5);
+        else                 corner.y = center.y + (dimensions.y * 0.5);
+        
+        corner -= center;
+        final_corner = rotate_point(corner, angle);
+        final_corner += center;
+        
+        if(final_corner.x < min_coords->x || !got_min_x) {
+            min_coords->x = final_corner.x;
+            got_min_x = true;
+        }
+        if(final_corner.y < min_coords->y || !got_min_y) {
+            min_coords->y = final_corner.y;
+            got_min_y = true;
+        }
+        if(final_corner.x > max_coords->x || !got_max_x) {
+            max_coords->x = final_corner.x;
+            got_max_x = true;
+        }
+        if(final_corner.y > max_coords->y || !got_max_y) {
+            max_coords->y = final_corner.y;
+            got_max_y = true;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts linear distance to angular distance.
  */
 float linear_dist_to_angular(const float linear_dist, const float radius) {

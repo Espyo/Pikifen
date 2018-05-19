@@ -115,6 +115,7 @@ private:
     //Disambiguation for the exact kind of picker. Use PICKER_DISAMBIG_*.
     unsigned char             picker_disambig;
     bool                      pikmin_silhouette_visible;
+    bool                      side_view;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
     transformation_controller top_tc;
@@ -124,6 +125,21 @@ private:
     void cur_hitbox_tc_to_gui();
     void cur_sprite_tc_to_gui();
     void draw_comparison();
+    void draw_side_view_hitbox(
+        hitbox* h_ptr, const ALLEGRO_COLOR &color,
+        const ALLEGRO_COLOR &outline_color, const float outline_thickness
+    );
+    void draw_side_view_pikmin_silhouette(const float x_offset);
+    void draw_side_view_sprite(sprite* s);
+    void draw_top_down_view_hitbox(
+        hitbox* h_ptr, const ALLEGRO_COLOR &color,
+        const ALLEGRO_COLOR &outline_color, const float outline_thickness
+    );
+    void draw_top_down_view_mob_radius(mob_type* mt);
+    void draw_top_down_view_pikmin_silhouette(const float x_offset);
+    void draw_top_down_view_sprite(sprite* s);
+    void enter_side_view();
+    void exit_side_view();
     string get_cut_path(const string &p);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
@@ -144,6 +160,7 @@ private:
         const int x, const int y, const int bmp_w, const int bmp_h
     );
     void top_tc_to_gui();
+    void update_cur_hitbox_tc();
     void update_hitboxes();
     void update_stats();
     

@@ -1772,52 +1772,6 @@ sector* get_sector(
 
 
 /* ----------------------------------------------------------------------------
- * Places the bounding box coordinates of a shadow
- * on the specified point structs.
- */
-void get_shadow_bounding_box(
-    tree_shadow* s_ptr, point* min_coords, point* max_coords
-) {
-
-    if(!min_coords || !max_coords) return;
-    bool got_min_x = false;
-    bool got_max_x = false;
-    bool got_min_y = false;
-    bool got_max_y = false;
-    
-    for(unsigned char p = 0; p < 4; ++p) {
-        point corner, final_corner;
-        
-        if(p == 0 || p == 1) corner.x = s_ptr->center.x - (s_ptr->size.x * 0.5);
-        else                 corner.x = s_ptr->center.x + (s_ptr->size.x * 0.5);
-        if(p == 0 || p == 2) corner.y = s_ptr->center.y - (s_ptr->size.y * 0.5);
-        else                 corner.y = s_ptr->center.y + (s_ptr->size.y * 0.5);
-        
-        corner -= s_ptr->center;
-        final_corner = rotate_point(corner, s_ptr->angle);
-        final_corner += s_ptr->center;
-        
-        if(final_corner.x < min_coords->x || !got_min_x) {
-            min_coords->x = final_corner.x;
-            got_min_x = true;
-        }
-        if(final_corner.y < min_coords->y || !got_min_y) {
-            min_coords->y = final_corner.y;
-            got_min_y = true;
-        }
-        if(final_corner.x > max_coords->x || !got_max_x) {
-            max_coords->x = final_corner.x;
-            got_max_x = true;
-        }
-        if(final_corner.y > max_coords->y || !got_max_y) {
-            max_coords->y = final_corner.y;
-            got_max_y = true;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns whether or not an edge is valid.
  * An edge is valid if it has non-NULL vertexes.
  */

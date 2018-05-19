@@ -739,8 +739,9 @@ void area_editor::do_drawing() {
             
             if(state == EDITOR_STATE_DETAILS) {
                 point min_coords, max_coords;
-                get_shadow_bounding_box(
-                    s_ptr, &min_coords, &max_coords
+                get_transformed_rectangle_bounding_box(
+                    s_ptr->center, s_ptr->size, s_ptr->angle,
+                    &min_coords, &max_coords
                 );
                 
                 if(selected_shadow != s_ptr) {

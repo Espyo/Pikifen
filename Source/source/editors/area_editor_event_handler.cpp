@@ -781,7 +781,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 point min_coords, max_coords;
-                get_shadow_bounding_box(s_ptr, &min_coords, &max_coords);
+                get_transformed_rectangle_bounding_box(
+                    s_ptr->center, s_ptr->size, s_ptr->angle,
+                    &min_coords, &max_coords
+                );
                 
                 if(
                     mouse_cursor_w.x >= min_coords.x &&

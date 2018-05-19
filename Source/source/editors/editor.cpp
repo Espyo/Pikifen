@@ -750,7 +750,9 @@ void editor::update_canvas_coordinates() {
 /* ----------------------------------------------------------------------------
  * Updates the status bar.
  */
-void editor::update_status_bar(const bool omit_coordinates) {
+void editor::update_status_bar(
+    const bool omit_coordinates, const bool reverse_y_coordinate
+) {
     string new_text;
     if(status_override_timer.time_left > 0.0f) {
         new_text = status_override_text;
@@ -768,7 +770,10 @@ void editor::update_status_bar(const bool omit_coordinates) {
                 "to show information about it here!)";
         } else if(!omit_coordinates) {
             new_text =
-                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
+                "(" + i2s(mouse_cursor_w.x) + "," +
+                i2s(
+                    reverse_y_coordinate ? -mouse_cursor_w.y : mouse_cursor_w.y
+                ) + ")";
         }
     }
     

@@ -57,8 +57,31 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             } else {
                 for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
                     hitbox* h_ptr = &cur_sprite->hitboxes[h];
-                    dist d(mouse_cursor_w, h_ptr->pos);
-                    if(d <= h_ptr->radius) {
+                    
+                    bool clicked_this_one = false;
+                    if(side_view) {
+                        if(
+                            bbox_check(
+                                point(
+                                    h_ptr->pos.x - h_ptr->radius,
+                                    -h_ptr->z - h_ptr->height
+                                ),
+                                point(
+                                    h_ptr->pos.x + h_ptr->radius,
+                                    -h_ptr->z
+                                ),
+                                mouse_cursor_w, 1 / cam_zoom
+                            )
+                        ) {
+                            clicked_this_one = true;
+                        }
+                    } else {
+                        if(dist(mouse_cursor_w, h_ptr->pos) <= h_ptr->radius) {
+                            clicked_this_one = true;
+                        }
+                    }
+                    
+                    if(clicked_this_one) {
                         gui_to_hitbox();
                         cur_hitbox_nr = h;
                         cur_hitbox = &cur_sprite->hitboxes[h];
@@ -238,7 +261,10 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &mouse_cursor_w.x, &mouse_cursor_w.y
     );
     
-    update_status_bar(state == EDITOR_STATE_SPRITE_BITMAP);
+    update_status_bar(
+        state == EDITOR_STATE_SPRITE_BITMAP,
+        state == EDITOR_STATE_HITBOXES && side_view
+    );
 }
 
 
