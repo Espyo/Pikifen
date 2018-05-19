@@ -525,7 +525,7 @@ void animation_editor::load() {
         }
     };
     frm_anim->widgets["but_play"]->description =
-        "Play or pause the animation.";
+        "Play or pause the animation. (Spacebar)";
         
     frm_anim->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2205,42 +2205,42 @@ void animation_editor::load() {
         }
     };
     frm_toolbar->widgets["but_load"]->description =
-        "Load the object from the text file.";
+        "Load the object from the text file. (Ctrl+L)";
         
     frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_animation_database();
     };
     frm_toolbar->widgets["but_save"]->description =
-        "Save the object to the text file.";
+        "Save the object to the text file. (Ctrl+S)";
         
     frm_toolbar->widgets["but_toggle_origin"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         origin_visible = !origin_visible;
     };
     frm_toolbar->widgets["but_toggle_origin"]->description =
-        "Toggle visibility of the center-point (origin).";
+        "Toggle visibility of the center-point (origin). (Ctrl+O)";
         
     frm_toolbar->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hitboxes_visible = !hitboxes_visible;
     };
     frm_toolbar->widgets["but_toggle_hitboxes"]->description =
-        "Toggle visibility of the hitboxes, if any.";
+        "Toggle visibility of the hitboxes, if any. (Ctrl+H)";
         
     frm_toolbar->widgets["but_toggle_mob_radius"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mob_radius_visible = !mob_radius_visible;
     };
     frm_toolbar->widgets["but_toggle_mob_radius"]->description =
-        "Toggle visibility of the mob's radius, if applicable.";
+        "Toggle visibility of the mob's radius, if applicable. (Ctrl+R)";
         
     frm_toolbar->widgets["but_toggle_pik_sil"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         pikmin_silhouette_visible = !pikmin_silhouette_visible;
     };
     frm_toolbar->widgets["but_toggle_pik_sil"]->description =
-        "Toggle visibility of a lying Pikmin silhouette.";
+        "Toggle visibility of a lying Pikmin silhouette. (Ctrl+P)";
         
     frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2268,7 +2268,7 @@ void animation_editor::load() {
         }
     };
     frm_toolbar->widgets["but_quit"]->description =
-        "Quit the animation editor.";
+        "Quit the animation editor. (Ctrl+Q)";
         
     disable_widget(frm_toolbar->widgets["but_load"]);
     disable_widget(frm_toolbar->widgets["but_save"]);

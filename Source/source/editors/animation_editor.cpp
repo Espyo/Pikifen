@@ -1227,22 +1227,3 @@ void animation_editor::update_hitboxes() {
         );
     }
 }
-
-
-/* ----------------------------------------------------------------------------
- * Updates the transformations, with the current camera coordinates, zoom, etc.
- */
-void animation_editor::update_transformations() {
-    //World coordinates to screen coordinates.
-    world_to_screen_transform = identity_transform;
-    al_translate_transform(
-        &world_to_screen_transform,
-        -cam_pos.x + canvas_br.x / 2.0 / cam_zoom,
-        -cam_pos.y + canvas_br.y / 2.0 / cam_zoom
-    );
-    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
-    
-    //Screen coordinates to world coordinates.
-    screen_to_world_transform = world_to_screen_transform;
-    al_invert_transform(&screen_to_world_transform);
-}

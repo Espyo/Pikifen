@@ -15,16 +15,111 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
+ * Handles a key being "char"-typed.
+ */
+void animation_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        cam_pos.x += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+        cam_pos.y -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        cam_pos.y += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
+        zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
+        zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
+        if(cam_zoom == 1.0f) {
+            cam_pos.x = 0.0f;
+            cam_pos.y = 0.0f;
+        } else {
+            zoom(1.0f, false);
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles a key being pressed down.
  */
 void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
-    if(
-        state == EDITOR_STATE_SPRITE_TRANSFORM &&
-        ev.keyboard.keycode == ALLEGRO_KEY_C &&
-        is_ctrl_pressed
-    ) {
-        comparison = !comparison;
-        sprite_transform_to_gui();
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+        if(state == EDITOR_STATE_SPRITE_TRANSFORM && is_ctrl_pressed) {
+            comparison = !comparison;
+            sprite_transform_to_gui();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_H && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_load"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_O && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_toggle_origin"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_toggle_pik_sil"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_quit"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_toggle_mob_radius"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_save"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+        frm_anim->widgets["but_play"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+        if(!cur_sprite && !cur_sprite->bitmap) return;
+        point cmin, cmax;
+        get_transformed_rectangle_bounding_box(
+            cur_sprite->offset, cur_sprite->file_size * cur_sprite->scale,
+            cur_sprite->angle, &cmin, &cmax
+        );
+        
+        if(cur_sprite->top_visible) {
+            point top_min, top_max;
+            get_transformed_rectangle_bounding_box(
+                cur_sprite->top_pos, cur_sprite->top_size,
+                cur_sprite->top_angle,
+                &top_min, &top_max
+            );
+            cmin.x = min(cmin.x, top_min.x);
+            cmin.y = min(cmin.y, top_min.y);
+            cmax.x = max(cmax.x, top_max.x);
+            cmax.y = max(cmax.y, top_max.y);
+        }
+        
+        for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
+            hitbox* h_ptr = &cur_sprite->hitboxes[h];
+            cmin.x = min(cmin.x, h_ptr->pos.x - h_ptr->radius);
+            cmin.y = min(cmin.y, h_ptr->pos.y - h_ptr->radius);
+            cmax.x = max(cmax.x, h_ptr->pos.x + h_ptr->radius);
+            cmax.y = max(cmax.y, h_ptr->pos.y + h_ptr->radius);
+        }
+        
+        center_camera(cmin, cmax);
     }
 }
 

@@ -26,8 +26,6 @@ const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
-//How much to zoom in/out with the keyboard keys.
-const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //Maximum number of points that a circle sector can be created with.
 const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum grid interval.
@@ -277,37 +275,6 @@ void area_editor::cancel_layout_moving() {
         (*v)->y = pre_move_vertex_coords[*v].y;
     }
     clear_layout_moving();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Centers the camera so that these four points are in view.
- * A bit of padding is added, so that, for instance, the top-left
- * point isn't exactly on the top-left of the screen,
- * where it's hard to see.
- */
-void area_editor::center_camera(
-    const point &min_coords, const point &max_coords
-) {
-    point min_c = min_coords;
-    point max_c = max_coords;
-    if(min_c == max_c) {
-        min_c = min_c - 2.0;
-        max_c = max_c + 2.0;
-    }
-    
-    float width = max_c.x - min_c.x;
-    float height = max_c.y - min_c.y;
-    
-    cam_pos.x = floor(min_c.x + width  / 2);
-    cam_pos.y = floor(min_c.y + height / 2);
-    
-    float z;
-    if(width > height) z = canvas_br.x / width;
-    else z = canvas_br.y / height;
-    z -= z * 0.1;
-    
-    zoom(z, false);
 }
 
 
@@ -3584,25 +3551,6 @@ void area_editor::update_texture_suggestions(const string &n) {
             texture_suggestions.begin() + texture_suggestions.size() - 1
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the transformations, with the current camera coordinates, zoom, etc.
- */
-void area_editor::update_transformations() {
-    //World coordinates to screen coordinates.
-    world_to_screen_transform = identity_transform;
-    al_translate_transform(
-        &world_to_screen_transform,
-        -cam_pos.x + canvas_br.x / 2.0 / cam_zoom,
-        -cam_pos.y + canvas_br.y / 2.0 / cam_zoom
-    );
-    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
-    
-    //Screen coordinates to world coordinates.
-    screen_to_world_transform = world_to_screen_transform;
-    al_invert_transform(&screen_to_world_transform);
 }
 
 

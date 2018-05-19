@@ -165,6 +165,7 @@ private:
     void update_stats();
     
     //Input handler functions.
+    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
     virtual void handle_key_down(const ALLEGRO_EVENT &ev);
     virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
     virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
@@ -217,7 +218,6 @@ public:
     virtual void do_drawing();
     virtual void load();
     virtual void unload();
-    virtual void update_transformations();
     
 };
 

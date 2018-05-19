@@ -143,7 +143,6 @@ private:
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         DEBUG_TEXT_SCALE;
     static const unsigned char DEF_REFERENCE_ALPHA;
-    static const float         KEYBOARD_CAM_ZOOM;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
     static const float         MAX_GRID_INTERVAL;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
@@ -367,9 +366,6 @@ private:
     void cancel_layout_drawing();
     void cancel_layout_moving();
     void calculate_preview_path();
-    void center_camera(
-        const point &min_coords, const point &max_coords
-    );
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -526,7 +522,6 @@ public:
     virtual void do_drawing();
     virtual void load();
     virtual void unload();
-    virtual void update_transformations();
     
     string auto_load_area;
     

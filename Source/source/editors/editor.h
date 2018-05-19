@@ -36,6 +36,7 @@ protected:
 
     static const int   EDITOR_ICON_BMP_PADDING;
     static const int   EDITOR_ICON_BMP_SIZE;
+    static const float KEYBOARD_CAM_ZOOM;
     static const float DOUBLE_CLICK_TIMEOUT;
     static const float MOUSE_DRAG_CONFIRM_RANGE;
     static const float STATUS_OVERRIDE_IMPORTANT_DURATION;
@@ -197,6 +198,9 @@ protected:
     float                   zoom_min_level;
     
     bool check_new_unsaved_changes(lafi::widget* caller_widget);
+    void center_camera(
+        const point &min_coords, const point &max_coords
+    );
     void close_changes_warning();
     void create_changes_warning_frame();
     void create_picker_frame();
@@ -291,6 +295,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
+    virtual void update_transformations();
 };
 
 #endif //ifndef EDITOR_INCLUDED

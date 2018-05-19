@@ -20,6 +20,10 @@
  * Handles a key being "char"-typed.
  */
 void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
         
@@ -37,6 +41,14 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
         zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
+        if(cam_zoom == 1.0f) {
+            cam_pos.x = 0.0f;
+            cam_pos.y = 0.0f;
+        } else {
+            zoom(1.0f, false);
+        }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         debug_edge_nrs = !debug_edge_nrs;
@@ -101,7 +113,83 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+    if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
+        frm_paths->widgets["rad_one_way"]->simulate_click();
+        frm_stt->widgets["rad_offset"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_2) {
+        frm_paths->widgets["rad_normal"]->simulate_click();
+        frm_stt->widgets["rad_scale"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_3) {
+        frm_stt->widgets["rad_angle"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            if(state == EDITOR_STATE_LAYOUT) {
+                selected_edges.insert(
+                    cur_area_data.edges.begin(), cur_area_data.edges.end()
+                );
+                selected_sectors.insert(
+                    cur_area_data.sectors.begin(), cur_area_data.sectors.end()
+                );
+                selected_vertexes.insert(
+                    cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
+                );
+                sector_to_gui();
+                
+            } else if(state == EDITOR_STATE_MOBS) {
+                selected_mobs.insert(
+                    cur_area_data.mob_generators.begin(),
+                    cur_area_data.mob_generators.end()
+                );
+                mob_to_gui();
+                
+            } else if(state == EDITOR_STATE_PATHS) {
+                selected_path_stops.insert(
+                    cur_area_data.path_stops.begin(),
+                    cur_area_data.path_stops.end()
+                );
+                path_to_gui();
+            }
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_circle"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_D) {
+        if(!moving && !selecting) {
+            frm_mobs->widgets["but_duplicate"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
+        frm_layout->widgets["but_sel_filter"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_new"]->simulate_click();
+            frm_mobs->widgets["but_new"]->simulate_click();
+            frm_paths->widgets["but_draw"]->simulate_click();
+            frm_details->widgets["but_new"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_quit"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_reference"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_save"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            frm_toolbar->widgets["but_undo"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
         if(
             state == EDITOR_STATE_LAYOUT ||
             state == EDITOR_STATE_ASA ||
@@ -149,54 +237,13 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
             }
         }
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
-    
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            if(state == EDITOR_STATE_LAYOUT) {
-                selected_edges.insert(
-                    cur_area_data.edges.begin(), cur_area_data.edges.end()
-                );
-                selected_sectors.insert(
-                    cur_area_data.sectors.begin(), cur_area_data.sectors.end()
-                );
-                selected_vertexes.insert(
-                    cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
-                );
-                sector_to_gui();
-                
-            } else if(state == EDITOR_STATE_MOBS) {
-                selected_mobs.insert(
-                    cur_area_data.mob_generators.begin(),
-                    cur_area_data.mob_generators.end()
-                );
-                mob_to_gui();
-                
-            } else if(state == EDITOR_STATE_PATHS) {
-                selected_path_stops.insert(
-                    cur_area_data.path_stops.begin(),
-                    cur_area_data.path_stops.end()
-                );
-                path_to_gui();
-            }
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_rem"]->simulate_click();
+            frm_mobs->widgets["but_del"]->simulate_click();
+            frm_paths->widgets["but_del"]->simulate_click();
+            frm_details->widgets["but_del"]->simulate_click();
         }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
-    
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            frm_toolbar->widgets["but_undo"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
-    
-        frm_toolbar->widgets["but_save"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
-    
-        frm_toolbar->widgets["but_quit"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
-    
-        frm_toolbar->widgets["but_reference"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
         bool got_something = false;
@@ -256,54 +303,6 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         if(!got_something) return;
         
         center_camera(min_coords, max_coords);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
-    
-        if(!moving && !selecting) {
-            frm_layout->widgets["but_new"]->simulate_click();
-            frm_mobs->widgets["but_new"]->simulate_click();
-            frm_paths->widgets["but_draw"]->simulate_click();
-            frm_details->widgets["but_new"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
-    
-        if(!moving && !selecting) {
-            frm_layout->widgets["but_circle"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_D) {
-    
-        if(!moving && !selecting) {
-            frm_mobs->widgets["but_duplicate"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
-    
-        if(!moving && !selecting) {
-            frm_layout->widgets["but_rem"]->simulate_click();
-            frm_mobs->widgets["but_del"]->simulate_click();
-            frm_paths->widgets["but_del"]->simulate_click();
-            frm_details->widgets["but_del"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
-    
-        frm_layout->widgets["but_sel_filter"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
-    
-        frm_paths->widgets["rad_one_way"]->simulate_click();
-        frm_stt->widgets["rad_offset"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_2) {
-    
-        frm_paths->widgets["rad_normal"]->simulate_click();
-        frm_stt->widgets["rad_scale"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_3) {
-    
-        frm_stt->widgets["rad_angle"]->simulate_click();
         
     }
 }

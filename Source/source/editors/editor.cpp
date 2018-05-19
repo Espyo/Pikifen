@@ -29,6 +29,8 @@ const int editor::EDITOR_ICON_BMP_PADDING = 1;
 const int editor::EDITOR_ICON_BMP_SIZE = 24;
 //Time until the next click is no longer considered a double-click.
 const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
+//How much to zoom in/out with the keyboard keys.
+const float editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //If the mouse is dragged outside of this range, that's a real drag.
 const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //How long to override the status bar text for, for important messages.
@@ -83,6 +85,37 @@ editor::editor() :
  * Destroys an instance of the editor class.
  */
 editor::~editor() {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Centers the camera so that these four points are in view.
+ * A bit of padding is added, so that, for instance, the top-left
+ * point isn't exactly on the top-left of the screen,
+ * where it's hard to see.
+ */
+void editor::center_camera(
+    const point &min_coords, const point &max_coords
+) {
+    point min_c = min_coords;
+    point max_c = max_coords;
+    if(min_c == max_c) {
+        min_c = min_c - 2.0;
+        max_c = max_c + 2.0;
+    }
+    
+    float width = max_c.x - min_c.x;
+    float height = max_c.y - min_c.y;
+    
+    cam_pos.x = floor(min_c.x + width  / 2);
+    cam_pos.y = floor(min_c.y + height / 2);
+    
+    float z;
+    if(width > height) z = (canvas_br.x - canvas_tl.x) / width;
+    else z = (canvas_br.y - canvas_tl.y) / height;
+    z -= z * 0.1;
+    
+    zoom(z, false);
 }
 
 
@@ -778,6 +811,29 @@ void editor::update_status_bar(
     }
     
     lbl_status_bar->text = new_text;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the transformations, with the current camera coordinates, zoom, etc.
+ */
+void editor::update_transformations() {
+    //World coordinates to screen coordinates.
+    point canvas_center(
+        (canvas_tl.x + canvas_br.x) / 2.0,
+        (canvas_tl.y + canvas_br.y) / 2.0
+    );
+    world_to_screen_transform = identity_transform;
+    al_translate_transform(
+        &world_to_screen_transform,
+        -cam_pos.x + canvas_center.x / cam_zoom,
+        -cam_pos.y + canvas_center.y / cam_zoom
+    );
+    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    
+    //Screen coordinates to world coordinates.
+    screen_to_world_transform = world_to_screen_transform;
+    al_invert_transform(&screen_to_world_transform);
 }
 
 
