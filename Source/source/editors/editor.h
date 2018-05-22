@@ -206,6 +206,8 @@ protected:
     void create_picker_frame();
     void create_status_bar();
     void create_toolbar_frame();
+    void do_logic_pre();
+    void do_logic_post();
     void draw_unsaved_changes_warning();
     void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
@@ -290,8 +292,8 @@ public:
     editor();
     ~editor();
     
-    virtual void do_logic();
     virtual void do_drawing() = 0;
+    virtual void do_logic() = 0;
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();

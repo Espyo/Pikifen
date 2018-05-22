@@ -776,7 +776,7 @@ void area_editor::delete_selected_path_elements() {
  * Handles the logic part of the main loop of the area editor.
  */
 void area_editor::do_logic() {
-    editor::do_logic();
+    editor::do_logic_pre();
     
     path_preview_timer.tick(delta_t);
     new_sector_error_tint_timer.tick(delta_t);
@@ -788,6 +788,7 @@ void area_editor::do_logic() {
     
     selection_effect += SELECTION_EFFECT_SPEED * delta_t;
     
+    editor::do_logic_post();
 }
 
 

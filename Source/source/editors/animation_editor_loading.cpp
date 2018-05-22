@@ -31,7 +31,6 @@ void animation_editor::load() {
     fade_mgr.start_fade(true, nullptr);
     
     update_canvas_coordinates();
-    state = EDITOR_STATE_MAIN;
     file_path.clear();
     
     load_custom_particle_generators(false);
@@ -188,7 +187,6 @@ void animation_editor::load() {
     //History -- declarations.
     frm_history =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_history->hide();
     gui->add("frm_history", frm_history);
     
     frm_history->easy_row();
@@ -287,7 +285,6 @@ void animation_editor::load() {
     //Animations -- declarations.
     frm_anims =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_anims->hide();
     gui->add("frm_anims", frm_anims);
     
     frm_anims->easy_row();
@@ -663,7 +660,6 @@ void animation_editor::load() {
     //Sprites -- declarations.
     frm_sprites =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_sprites->hide();
     gui->add("frm_sprites", frm_sprites);
     
     frm_sprites->easy_row();
@@ -875,7 +871,6 @@ void animation_editor::load() {
     //Sprite bitmap -- declarations.
     frm_sprite_bmp =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_sprite_bmp->hide();
     gui->add("frm_sprite_bmp", frm_sprite_bmp);
     
     frm_sprite_bmp->easy_row();
@@ -1049,7 +1044,6 @@ void animation_editor::load() {
     //Sprite transform -- declarations.
     frm_sprite_tra =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_sprite_tra->hide();
     gui->add("frm_sprite_tra", frm_sprite_tra);
     
     frm_sprite_tra->easy_row();
@@ -1227,7 +1221,6 @@ void animation_editor::load() {
     //Hitboxes -- declarations.
     frm_hitboxes =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_hitboxes->hide();
     gui->add("frm_hitboxes", frm_hitboxes);
     
     frm_hitboxes->easy_row();
@@ -1327,7 +1320,6 @@ void animation_editor::load() {
     
     frm_normal_h =
         new lafi::frame(canvas_br.x, y, scr_w, scr_h);
-    frm_normal_h->hide();
     frm_hitbox->add("frm_normal_h", frm_normal_h);
     
     frm_normal_h->easy_row();
@@ -1358,7 +1350,6 @@ void animation_editor::load() {
     
     frm_attack_h =
         new lafi::frame(canvas_br.x, y, scr_w, scr_h);
-    frm_attack_h->hide();
     frm_hitbox->add("frm_attack_h", frm_attack_h);
     
     frm_attack_h->easy_row();
@@ -1590,7 +1581,6 @@ void animation_editor::load() {
     //Pikmin top -- declarations.
     frm_top =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_top->hide();
     gui->add("frm_top", frm_top);
     
     frm_top->easy_row();
@@ -1723,7 +1713,6 @@ void animation_editor::load() {
     //Body parts -- declarations.
     frm_body_parts =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_body_parts->hide();
     gui->add("frm_body_parts", frm_body_parts);
     
     frm_body_parts->easy_row();
@@ -1947,7 +1936,6 @@ void animation_editor::load() {
     //Tools -- declarations.
     frm_tools =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    frm_tools->hide();
     gui->add("frm_tools", frm_tools);
     
     frm_tools->easy_row();
@@ -2276,6 +2264,8 @@ void animation_editor::load() {
     create_picker_frame();
     create_status_bar();
     
+    state = EDITOR_STATE_MAIN;
+    change_to_right_frame();
     update_stats();
     
     loaded_content_yet = false;

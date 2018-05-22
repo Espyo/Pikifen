@@ -236,7 +236,7 @@ void editor::create_picker_frame() {
  */
 void editor::create_status_bar() {
     lbl_status_bar =
-        new lafi::label(0, canvas_br.y, canvas_br.x, scr_h);
+        new lafi::label(0, canvas_br.y, canvas_br.x, scr_h, "", 0, true);
     gui->add("lbl_status_bar", lbl_status_bar);
 }
 
@@ -253,9 +253,19 @@ void editor::create_toolbar_frame() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the area editor.
+ * Handles the logic part of the main loop of the area editor. This is meant to
+ * be run after the editor's own logic code.
  */
-void editor::do_logic() {
+void editor::do_logic_post() {
+    fade_mgr.tick(delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the logic part of the main loop of the area editor. This is meant to
+ * be run before the editor's own logic code.
+ */
+void editor::do_logic_pre() {
     gui->tick(delta_t);
     
     update_transformations();
@@ -267,7 +277,6 @@ void editor::do_logic() {
     
     unsaved_changes_warning_timer.tick(delta_t);
     status_override_timer.tick(delta_t);
-    fade_mgr.tick(delta_t);
 }
 
 
@@ -943,16 +952,20 @@ bool editor::transformation_controller::handle_mouse_down(const point pos) {
             return true;
         }
     }
-    dist d(center, pos);
-    if(
-        d >= radius - ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0 &&
-        d <= radius + ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0
-    ) {
-        moving_handle = 9;
-        pre_rotation_angle = angle;
-        pre_rotation_mouse_angle = ::get_angle(center, pos);
-        return true;
+    
+    if(allow_rotation) {
+        dist d(center, pos);
+        if(
+            d >= radius - ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0 &&
+            d <= radius + ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0
+        ) {
+            moving_handle = 9;
+            pre_rotation_angle = angle;
+            pre_rotation_mouse_angle = ::get_angle(center, pos);
+            return true;
+        }
     }
+    
     return false;
 }
 

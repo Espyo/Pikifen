@@ -92,7 +92,7 @@ animation_editor::animation_editor() :
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
-    editor::do_logic();
+    editor::do_logic_pre();
     
     if(
         anim_playing && state == EDITOR_STATE_ANIMATION &&
@@ -128,6 +128,7 @@ void animation_editor::do_logic() {
         comparison_blink_show = true;
     }
     
+    editor::do_logic_post();
 }
 
 
