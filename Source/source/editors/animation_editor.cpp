@@ -606,8 +606,12 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
             cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
         }
     }
-    cur_hitbox_nr = 0;
+    cur_hitbox_nr = INVALID;
     cur_hitbox = NULL;
+    if(!cur_sprite->hitboxes.empty()) {
+        cur_hitbox_nr = 0;
+        cur_hitbox = &cur_sprite->hitboxes[0];
+    }
     hitbox_to_gui();
     emit_status_bar_message("Data imported.", false);
 }

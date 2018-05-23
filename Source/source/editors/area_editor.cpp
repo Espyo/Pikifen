@@ -677,7 +677,9 @@ void area_editor::create_area() {
 /* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given its name.
  */
-void area_editor::create_new_from_picker(const string &name) {
+void area_editor::create_new_from_picker(
+    const size_t picker_id, const string &name
+) {
     string new_area_path =
         AREAS_FOLDER_PATH + "/" + name;
     ALLEGRO_FS_ENTRY* new_area_folder_entry =

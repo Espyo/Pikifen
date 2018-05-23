@@ -243,14 +243,14 @@ void animation_editor::load() {
         
     frm_history->widgets["but_object"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_MOB_TYPES, false);
+        open_picker(PICKER_LOAD_MOB_TYPE, false);
     };
     frm_history->widgets["but_object"]->description =
         "Load the animations of an object type.";
         
     frm_history->widgets["but_global"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS, false);
+        open_picker(PICKER_LOAD_GLOBAL_ANIM, false);
     };
     frm_history->widgets["but_global"]->description =
         "Load a global generic animation.";
@@ -481,7 +481,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
         this->frm_anims->hide();
-        open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
+        open_picker(PICKER_EDIT_ANIMATION, true);
     };
     frm_anims->widgets["but_anim"]->description =
         "Pick an animation to edit.";
@@ -607,7 +607,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
         this->frm_anims->hide();
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_SET_FRAME_SPRITE, false);
     };
     frm_frame->widgets["but_sprite"]->description =
         "Pick the sprite to use for this frame.";
@@ -755,8 +755,7 @@ void animation_editor::load() {
         
     frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        picker_disambig = PICKER_DISAMBIG_LOAD;
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, true);
+        open_picker(PICKER_EDIT_SPRITE, true);
     };
     frm_sprites->widgets["but_sprite"]->description =
         "Pick a sprite to edit.";
@@ -811,8 +810,7 @@ void animation_editor::load() {
         
     frm_sprite->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        picker_disambig = PICKER_DISAMBIG_IMPORT;
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_IMPORT_SPRITE, false);
     };
     frm_sprite->widgets["but_import"]->description =
         "Import the data from another sprite.";
@@ -964,7 +962,7 @@ void animation_editor::load() {
     
     frm_sprite_bmp->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_IMPORT_SPRITE_BITMAP, false);
     };
     frm_sprite_bmp->widgets["but_import"]->description =
         "Import bitmap data from a different sprite.";
@@ -1153,8 +1151,7 @@ void animation_editor::load() {
         
     frm_sprite_tra->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        picker_disambig = PICKER_DISAMBIG_IMPORT;
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_IMPORT_SPRITE_TRANSFORMATION, false);
     };
     frm_sprite_tra->widgets["but_import"]->description =
         "Import transformation data from a different sprite.";
@@ -1196,8 +1193,7 @@ void animation_editor::load() {
         
     frm_sprite_comp->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        picker_disambig = PICKER_DISAMBIG_COMPARISON;
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_COMPARE_SPRITE, false);
     };
     frm_sprite_comp->widgets["but_compare"]->description =
         "Sprite to compare with.";
@@ -1467,7 +1463,7 @@ void animation_editor::load() {
         
     frm_hitboxes->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_IMPORT_SPRITE_HITBOXES, false);
     };
     frm_hitboxes->widgets["but_import"]->description =
         "Import hitbox data from another sprite.";
@@ -1662,10 +1658,10 @@ void animation_editor::load() {
         
     frm_top->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_IMPORT_SPRITE_TOP, false);
     };
     frm_top->widgets["but_import"]->description =
-        "Import transformation data from a different sprite.";
+        "Import top data from a different sprite.";
         
     frm_top->widgets["chk_visible"]->left_mouse_click_handler =
         lambda_save_top_click;
@@ -2052,7 +2048,7 @@ void animation_editor::load() {
         
     frm_tools->widgets["but_rename_anim_name"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, false);
+        open_picker(PICKER_RENAME_ANIMATION, false);
     };
     frm_tools->widgets["but_rename_anim_name"]->description =
         "Pick an animation to rename.";
@@ -2069,7 +2065,7 @@ void animation_editor::load() {
         
     frm_tools->widgets["but_rename_sprite_name"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+        open_picker(PICKER_RENAME_SPRITE, false);
     };
     frm_tools->widgets["but_rename_sprite_name"]->description =
         "Pick a sprite to rename.";

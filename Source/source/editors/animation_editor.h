@@ -44,16 +44,19 @@ private:
     };
     
     enum ANIMATION_EDITOR_PICKER_TYPES {
-        ANIMATION_EDITOR_PICKER_MOB_TYPES,
-        ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS,
-        ANIMATION_EDITOR_PICKER_ANIMATION,
-        ANIMATION_EDITOR_PICKER_SPRITE,
-    };
-    
-    enum PICKER_DISAMBIGS {
-        PICKER_DISAMBIG_LOAD,
-        PICKER_DISAMBIG_IMPORT,
-        PICKER_DISAMBIG_COMPARISON,
+        PICKER_LOAD_MOB_TYPE,
+        PICKER_LOAD_GLOBAL_ANIM,
+        PICKER_EDIT_ANIMATION,
+        PICKER_SET_FRAME_SPRITE,
+        PICKER_EDIT_SPRITE,
+        PICKER_IMPORT_SPRITE,
+        PICKER_IMPORT_SPRITE_BITMAP,
+        PICKER_IMPORT_SPRITE_TRANSFORMATION,
+        PICKER_IMPORT_SPRITE_HITBOXES,
+        PICKER_IMPORT_SPRITE_TOP,
+        PICKER_COMPARE_SPRITE,
+        PICKER_RENAME_ANIMATION,
+        PICKER_RENAME_SPRITE,
     };
     
     static const float ZOOM_MAX_LEVEL_EDITOR;
@@ -112,8 +115,6 @@ private:
     mob_type*                 loaded_mob_type;
     bool                      mob_radius_visible;
     bool                      origin_visible;
-    //Disambiguation for the exact kind of picker. Use PICKER_DISAMBIG_*.
-    unsigned char             picker_disambig;
     bool                      pikmin_silhouette_visible;
     bool                      side_view;
     //Top bitmaps for the current Pikmin type.
@@ -165,20 +166,20 @@ private:
     void update_stats();
     
     //Input handler functions.
-    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_key_char(const ALLEGRO_EVENT &ev);
+    void handle_key_down(const ALLEGRO_EVENT &ev);
+    void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    void handle_mmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_rmb_down(const ALLEGRO_EVENT &ev);
+    void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     void pan_cam(const ALLEGRO_EVENT &ev);
     void reset_cam_xy(const ALLEGRO_EVENT &ev);
     void reset_cam_zoom(const ALLEGRO_EVENT &ev);
@@ -203,10 +204,14 @@ private:
     void gui_to_sprite_transform();
     void gui_to_top();
     
-    virtual void hide_all_frames();
-    virtual void change_to_right_frame();
-    virtual void create_new_from_picker(const string &name);
-    virtual void pick(const string &name, const string &category);
+    void hide_all_frames();
+    void change_to_right_frame();
+    void create_new_from_picker(
+        const size_t pipcker_id, const string &name
+    );
+    void pick(
+        const size_t picker_id, const string &name, const string &category
+    );
     
 public:
 
@@ -214,10 +219,10 @@ public:
     
     string auto_load_anim;
     
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual void load();
-    virtual void unload();
+    void do_logic();
+    void do_drawing();
+    void load();
+    void unload();
     
 };
 

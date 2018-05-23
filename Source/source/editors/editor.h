@@ -31,6 +31,7 @@ using namespace std;
 class editor : public game_state {
 private:
     vector<pair<string, string> > picker_elements;
+    size_t cur_picker_id;
     
 protected:
 
@@ -183,7 +184,6 @@ protected:
     bool                    mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point                   mouse_drag_start;
-    size_t                  picker_type;
     //Current state.
     size_t                  state;
     //Current sub-state.
@@ -211,8 +211,8 @@ protected:
     void draw_unsaved_changes_warning();
     void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
-        const vector<pair<string, string> > &elements, const string &title,
-        const bool can_make_new
+        const size_t id, const vector<pair<string, string> > &elements,
+        const string &title, const bool can_make_new
     );
     bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
@@ -227,8 +227,12 @@ protected:
     virtual void custom_picker_cancel_action();
     virtual void hide_all_frames() = 0;
     virtual void change_to_right_frame() = 0;
-    virtual void create_new_from_picker(const string &name) = 0;
-    virtual void pick(const string &name, const string &category) = 0;
+    virtual void create_new_from_picker(
+        const size_t picker_id, const string &name
+    ) = 0;
+    virtual void pick(
+        const size_t picker_id, const string &name, const string &category
+    ) = 0;
     
     //Input handler functions.
     virtual void handle_key_char(const ALLEGRO_EVENT &ev);

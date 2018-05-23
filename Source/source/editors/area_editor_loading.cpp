@@ -118,7 +118,7 @@ void area_editor::load() {
     frm_main->widgets["but_area"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
-            open_picker(AREA_EDITOR_PICKER_AREA);
+            open_picker(PICKER_LOAD_AREA);
         }
     };
     frm_main->widgets["but_area"]->description =
@@ -377,7 +377,7 @@ void area_editor::load() {
         
     frm_info->widgets["but_weather"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_WEATHER);
+        open_picker(PICKER_SET_WEATHER);
     };
     frm_info->widgets["but_weather"]->description =
         "The weather condition to use.";
@@ -856,14 +856,14 @@ void area_editor::load() {
         
     frm_asb->widgets["but_sector_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
+        open_picker(PICKER_SET_SECTOR_TYPE);
     };
     frm_asb->widgets["but_sector_type"]->description =
         "Change the type of sector.";
         
     frm_asb->widgets["but_h_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_HAZARD);
+        open_picker(PICKER_ADD_SECTOR_HAZARD);
     };
     frm_asb->widgets["but_h_add"]->description =
         "Add a new hazard to the list.";
@@ -1331,7 +1331,7 @@ void area_editor::load() {
         
     frm_mob->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
+        open_picker(PICKER_SET_MOB_TYPE);
     };
     frm_mob->widgets["but_type"]->description =
         "Choose this object's type.";
@@ -2461,7 +2461,7 @@ void area_editor::load() {
     loaded_content_yet = false;
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
-    open_picker(AREA_EDITOR_PICKER_AREA);
+    open_picker(PICKER_LOAD_AREA);
     update_status_bar();
     problem_type = EPT_NONE_YET;
     

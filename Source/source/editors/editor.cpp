@@ -50,6 +50,7 @@ const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
  * Initializes editor class stuff.
  */
 editor::editor() :
+    cur_picker_id(0),
     double_click_time(0),
     frm_picker(nullptr),
     frm_toolbar(nullptr),
@@ -205,7 +206,7 @@ void editor::create_picker_frame() {
             get_textbox_text(this->frm_picker, "txt_text");
         if(name.empty()) return;
         
-        this->create_new_from_picker(name);
+        this->create_new_from_picker(cur_picker_id, name);
         
         made_new_changes = true;
         
@@ -387,12 +388,23 @@ void editor::emit_status_bar_message(
 
 /* ----------------------------------------------------------------------------
  * Populates and opens the frame where you pick from a list.
+ * picker_id:    ID of the picker that is being generated.
+ * elements:     List of elements to populate the picker with. This is a list
+ *   of string+string pairs, where the first element is the
+ *   category name (optional), and the second is the name
+ *   of the element proper.
+ * title:        Title of the picker, to place above the list. This is normally
+ *   a request to the user, like "Pick an area.".
+ * can_make_new: If true, the user can create a new element, by writing its
+ *   name on the textbox, and pressing the "+" button.
  */
 void editor::generate_and_open_picker(
-    const vector<pair<string, string> > &elements,
+    const size_t picker_id, const vector<pair<string, string> > &elements,
     const string &title, const bool can_make_new
 ) {
 
+    cur_picker_id = picker_id;
+    
     hide_all_frames();
     frm_picker->show();
     frm_toolbar->hide();
@@ -748,7 +760,7 @@ void editor::populate_picker(const string &filter) {
         b->left_mouse_click_handler =
         [name, category, this] (lafi::widget*, int, int) {
             this->frm_picker->hide();
-            pick(name, category);
+            pick(cur_picker_id, name, category);
         };
         b->autoscroll = true;
         

@@ -92,11 +92,11 @@ private:
     };
     
     enum AREA_EDITOR_PICKER_TYPES {
-        AREA_EDITOR_PICKER_AREA,
-        AREA_EDITOR_PICKER_SECTOR_TYPE,
-        AREA_EDITOR_PICKER_HAZARD,
-        AREA_EDITOR_PICKER_MOB_TYPE,
-        AREA_EDITOR_PICKER_WEATHER,
+        PICKER_LOAD_AREA,
+        PICKER_SET_WEATHER,
+        PICKER_SET_SECTOR_TYPE,
+        PICKER_ADD_SECTOR_HAZARD,
+        PICKER_SET_MOB_TYPE,
     };
     
     enum EDITOR_PROBLEM_TYPES {
@@ -376,7 +376,7 @@ private:
     void clear_texture_suggestions();
     void clear_undo_history();
     void create_area();
-    void create_new_from_picker(const string &name);
+    void create_new_from_picker(const size_t picker_id, const string &name);
     void delete_current_hazard();
     void delete_selected_path_elements();
     void draw_cross_section_sector(
@@ -434,7 +434,9 @@ private:
     );
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
-    void pick(const string &name, const string &category);
+    void pick(
+        const size_t picker_id, const string &name, const string &category
+    );
     area_data* prepare_state();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
@@ -471,20 +473,20 @@ private:
     void update_undo_history();
     
     //Input handler functions.
-    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_key_char(const ALLEGRO_EVENT &ev);
+    void handle_key_down(const ALLEGRO_EVENT &ev);
+    void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    void handle_mmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_rmb_down(const ALLEGRO_EVENT &ev);
+    void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     void pan_cam(const ALLEGRO_EVENT &ev);
     void reset_cam_xy(const ALLEGRO_EVENT &ev);
     void reset_cam_zoom(const ALLEGRO_EVENT &ev);
@@ -515,13 +517,13 @@ private:
     void stt_to_gui();
     void update_main_frame();
     
-    virtual void custom_picker_cancel_action();
+    void custom_picker_cancel_action();
     
 public:
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual void load();
-    virtual void unload();
+    void do_logic();
+    void do_drawing();
+    void load();
+    void unload();
     
     string auto_load_area;
     

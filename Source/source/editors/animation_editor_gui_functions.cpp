@@ -57,13 +57,19 @@ void animation_editor::change_to_right_frame() {
 /* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given the item's name.
  */
-void animation_editor::create_new_from_picker(const string &name) {
-    if(state == EDITOR_STATE_ANIMATION) {
+void animation_editor::create_new_from_picker(
+    const size_t picker_id, const string &name
+) {
+    if(
+        picker_id == PICKER_EDIT_ANIMATION
+    ) {
         if(anims.find_animation(name) != INVALID) return;
         anims.animations.push_back(new animation(name));
-        pick(name, "");
+        pick(picker_id, name, "");
         
-    } else if(state == EDITOR_STATE_SPRITE) {
+    } else if(
+        picker_id == PICKER_EDIT_SPRITE
+    ) {
         if(anims.find_sprite(name) != INVALID) return;
         anims.sprites.push_back(new sprite(name));
         anims.sprites.back()->create_hitboxes(
@@ -71,7 +77,7 @@ void animation_editor::create_new_from_picker(const string &name) {
             loaded_mob_type ? loaded_mob_type->height : 128,
             loaded_mob_type ? loaded_mob_type->radius : 32
         );
-        pick(name, "");
+        pick(picker_id, name, "");
         
     }
 }
@@ -659,17 +665,18 @@ void animation_editor::hide_all_frames() {
 
 /* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
- * For the type of content, use animation_editor::ANIMATION_EDITOR_PICKER_*.
+ * For the ID of the picker, use animation_editor::PICKER_*.
+ * The content to use is decided from that.
  */
 void animation_editor::open_picker(
-    const unsigned char type, const bool can_make_new
+    const unsigned char id, const bool can_make_new
 ) {
     vector<pair<string, string> > elements;
     string title;
     
-    picker_type = type;
-    
-    if(type == ANIMATION_EDITOR_PICKER_MOB_TYPES) {
+    if(
+        id == PICKER_LOAD_MOB_TYPE
+    ) {
         for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
             //0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
@@ -684,34 +691,68 @@ void animation_editor::open_picker(
             }
         }
         title = "Choose an object type.";
-    } else if(type == ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS) {
+        
+    } else if(
+        id == PICKER_LOAD_GLOBAL_ANIM
+    ) {
         vector<string> files =
             folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
         for(size_t f = 0; f < files.size(); ++f) {
             elements.push_back(make_pair("", files[f]));
         }
         title = "Choose an animation.";
-    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+        
+    } else if(
+        id == PICKER_EDIT_ANIMATION ||
+        id == PICKER_RENAME_ANIMATION
+    ) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             elements.push_back(make_pair("", anims.animations[a]->name));
         }
         title = "Choose an animation.";
-    } else if(type == ANIMATION_EDITOR_PICKER_SPRITE) {
+        
+    } else if(
+        id == PICKER_EDIT_SPRITE ||
+        id == PICKER_SET_FRAME_SPRITE ||
+        id == PICKER_IMPORT_SPRITE ||
+        id == PICKER_IMPORT_SPRITE_BITMAP ||
+        id == PICKER_IMPORT_SPRITE_TRANSFORMATION ||
+        id == PICKER_IMPORT_SPRITE_HITBOXES ||
+        id == PICKER_IMPORT_SPRITE_TOP ||
+        id == PICKER_COMPARE_SPRITE ||
+        id == PICKER_RENAME_SPRITE
+    ) {
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(
+                id == PICKER_IMPORT_SPRITE ||
+                id == PICKER_IMPORT_SPRITE_BITMAP ||
+                id == PICKER_IMPORT_SPRITE_TRANSFORMATION ||
+                id == PICKER_IMPORT_SPRITE_HITBOXES ||
+                id == PICKER_IMPORT_SPRITE_TOP ||
+                id == PICKER_COMPARE_SPRITE
+            ) {
+                if(anims.sprites[s] == cur_sprite) continue;
+            }
             elements.push_back(make_pair("", anims.sprites[s]->name));
         }
         title = "Choose a sprite.";
+        
     }
     
-    generate_and_open_picker(elements, title, can_make_new);
+    generate_and_open_picker(id, elements, title, can_make_new);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Picks an item and closes the list picker frame.
+ * Picks an element from the picker, closes the picker, and then
+ * does something with the chosen element.
  */
-void animation_editor::pick(const string &name, const string &category) {
-    if(picker_type == ANIMATION_EDITOR_PICKER_MOB_TYPES) {
+void animation_editor::pick(
+    const size_t picker_id, const string &name, const string &category
+) {
+    if(
+        picker_id == PICKER_LOAD_MOB_TYPE
+    ) {
         loaded_mob_type =
             mob_categories.get_from_pname(category)->get_type(name);
             
@@ -721,63 +762,80 @@ void animation_editor::pick(const string &name, const string &category) {
             loaded_mob_type->folder_name + "/Animations.txt";
         load_animation_database(true);
         
-    } else if(picker_type == ANIMATION_EDITOR_PICKER_GLOBAL_ANIMS) {
+    } else if(
+        picker_id == PICKER_LOAD_GLOBAL_ANIM
+    ) {
         loaded_mob_type = NULL;
         file_path = ANIMATIONS_FOLDER_PATH + "/" + name;
         load_animation_database(true);
         
-    } else if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        if(state == EDITOR_STATE_TOOLS) {
-            set_button_text(frm_tools, "but_rename_anim_name", name);
-        } else {
-            cur_anim = anims.animations[anims.find_animation(name)];
-            cur_frame_nr =
-                (cur_anim->frames.size()) ? 0 : INVALID;
-            cur_hitbox = NULL;
-            cur_hitbox_nr = INVALID;
-            animation_to_gui();
-        }
+    } else if(
+        picker_id == PICKER_EDIT_ANIMATION
+    ) {
+        cur_anim = anims.animations[anims.find_animation(name)];
+        cur_frame_nr =
+            (cur_anim->frames.size()) ? 0 : INVALID;
+        cur_hitbox = NULL;
+        cur_hitbox_nr = INVALID;
+        animation_to_gui();
         
-    } else if(picker_type == ANIMATION_EDITOR_PICKER_SPRITE) {
-        if(state == EDITOR_STATE_ANIMATION) {
-            cur_anim->frames[cur_frame_nr].sprite_name =
-                name;
-            cur_anim->frames[cur_frame_nr].sprite_ptr =
-                anims.sprites[anims.find_sprite(name)];
-            frame_to_gui();
-        } else if(state == EDITOR_STATE_SPRITE_BITMAP) {
-            import_sprite_file_data(name);
-        } else if(
-            state == EDITOR_STATE_SPRITE_TRANSFORM &&
-            picker_disambig == PICKER_DISAMBIG_COMPARISON
-        ) {
-            comparison_sprite = anims.sprites[anims.find_sprite(name)];
-            sprite_transform_to_gui();
-        } else if(
-            state == EDITOR_STATE_SPRITE_TRANSFORM &&
-            picker_disambig == PICKER_DISAMBIG_IMPORT
-        ) {
-            import_sprite_transformation_data(name);
-        } else if(state == EDITOR_STATE_TOP) {
-            import_sprite_top_data(name);
-        } else if(state == EDITOR_STATE_TOOLS) {
-            set_button_text(frm_tools, "but_rename_sprite_name", name);
-        } else if(state == EDITOR_STATE_HITBOXES) {
-            import_sprite_hitbox_data(name);
-        } else if(
-            state == EDITOR_STATE_SPRITE &&
-            picker_disambig == PICKER_DISAMBIG_LOAD
-        ) {
-            pick_sprite(name);
-        } else if(
-            state == EDITOR_STATE_SPRITE &&
-            picker_disambig == PICKER_DISAMBIG_IMPORT
-        ) {
-            import_sprite_file_data(name);
-            import_sprite_transformation_data(name);
-            import_sprite_hitbox_data(name);
-            import_sprite_top_data(name);
-        }
+    } else if(
+        picker_id == PICKER_EDIT_SPRITE
+    ) {
+        pick_sprite(name);
+        
+    } else if(
+        picker_id == PICKER_SET_FRAME_SPRITE
+    ) {
+        cur_anim->frames[cur_frame_nr].sprite_name =
+            name;
+        cur_anim->frames[cur_frame_nr].sprite_ptr =
+            anims.sprites[anims.find_sprite(name)];
+        frame_to_gui();
+        
+    } else if(
+        picker_id == PICKER_IMPORT_SPRITE
+    ) {
+        import_sprite_file_data(name);
+        import_sprite_transformation_data(name);
+        import_sprite_hitbox_data(name);
+        import_sprite_top_data(name);
+        
+    } else if(
+        picker_id == PICKER_IMPORT_SPRITE_BITMAP
+    ) {
+        import_sprite_file_data(name);
+        
+    } else if(
+        picker_id == PICKER_IMPORT_SPRITE_TRANSFORMATION
+    ) {
+        import_sprite_transformation_data(name);
+        
+    } else if(
+        picker_id == PICKER_IMPORT_SPRITE_HITBOXES
+    ) {
+        import_sprite_hitbox_data(name);
+        
+    } else if(
+        picker_id == PICKER_IMPORT_SPRITE_TOP
+    ) {
+        import_sprite_top_data(name);
+        
+    } else if(
+        picker_id == PICKER_COMPARE_SPRITE
+    ) {
+        comparison_sprite = anims.sprites[anims.find_sprite(name)];
+        sprite_transform_to_gui();
+        
+    } else if(
+        picker_id == PICKER_RENAME_ANIMATION
+    ) {
+        set_button_text(frm_tools, "but_rename_anim_name", name);
+        
+    } else if(
+        picker_id == PICKER_RENAME_SPRITE
+    ) {
+        set_button_text(frm_tools, "but_rename_sprite_name", name);
         
     }
     
