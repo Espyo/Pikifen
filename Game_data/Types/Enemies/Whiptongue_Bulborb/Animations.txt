@@ -391,6 +391,7 @@ sprites{
 		file_pos=172.00 0.00
 		file_size=171.00 105.00
 		offset=33.00 -3.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 -2.00 0.00
@@ -441,6 +442,7 @@ sprites{
 		file_pos=344.00 0.00
 		file_size=171.00 114.00
 		offset=33.00 -6.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 -0.00 0.00
@@ -641,6 +643,7 @@ sprites{
 		file_pos=683.00 0.00
 		file_size=162.00 102.00
 		offset=31.00 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
@@ -691,6 +694,7 @@ sprites{
 		file_pos=846.00 0.00
 		file_size=162.00 106.00
 		offset=31.00 2.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
@@ -1409,6 +1413,7 @@ sprites{
 		file_pos=326.00 335.00
 		file_size=171.00 102.00
 		offset=33.00 8.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=-1.77 8.76 -32.00
@@ -1457,6 +1462,7 @@ sprites{
 		file_pos=498.00 324.00
 		file_size=167.00 115.00
 		offset=30.00 16.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=-1.00 16.00 -32.00

@@ -1082,6 +1082,19 @@ void animation_editor::load() {
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
+        "dum_1",
+        new lafi::dummy(), 25, 16
+    );
+    frm_sprite_tra->easy_add(
+        "but_flip_x",
+        new lafi::button("Flip X"), 37.5, 16
+    );
+    frm_sprite_tra->easy_add(
+        "but_flip_y",
+        new lafi::button("Flip Y"), 37.5, 16
+    );
+    frm_sprite_tra->easy_row();
+    frm_sprite_tra->easy_add(
         "chk_ratio",
         new lafi::checkbox("Keep aspect ratio", true), 100, 16
     );
@@ -1175,6 +1188,24 @@ void animation_editor::load() {
         lambda_save_sprite_tra;
     frm_sprite_tra->widgets["txt_sy"]->description =
         "Scale the sprite's graphic height by this.";
+        
+    frm_sprite_tra->widgets["but_flip_x"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_sprite->scale.x = -cur_sprite->scale.x;
+        set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
+        frm_sprite_tra->widgets["txt_sx"]->call_lose_focus_handler();
+    };
+    frm_sprite_tra->widgets["but_flip_x"]->description =
+        "Flip the sprite around on the X axis.";
+        
+    frm_sprite_tra->widgets["but_flip_y"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_sprite->scale.y = -cur_sprite->scale.y;
+        set_textbox_text(frm_sprite_tra, "txt_sy", f2s(cur_sprite->scale.y));
+        frm_sprite_tra->widgets["txt_sy"]->call_lose_focus_handler();
+    };
+    frm_sprite_tra->widgets["but_flip_y"]->description =
+        "Flip the sprite around on the Y axis.";
         
     frm_sprite_tra->widgets["chk_ratio"]->left_mouse_click_handler =
         lambda_save_sprite_tra_click;

@@ -171,6 +171,7 @@ sprites{
 		file_pos=0.00 4.00
 		file_size=20.00 27.00
 		offset=-9.00 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -207,6 +208,7 @@ sprites{
 		file_pos=21.00 2.00
 		file_size=33.00 29.00
 		offset=-4.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -243,6 +245,7 @@ sprites{
 		file_pos=55.00 0.00
 		file_size=36.00 31.00
 		offset=4.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -279,6 +282,7 @@ sprites{
 		file_pos=92.00 3.00
 		file_size=26.00 28.00
 		offset=9.00 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -381,6 +385,7 @@ sprites{
 		file=Female_Sheargrub.png
 		file_pos=78.00 63.00
 		file_size=38.00 26.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00

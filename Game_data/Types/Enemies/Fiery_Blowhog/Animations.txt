@@ -411,6 +411,7 @@ sprites{
 		file_pos=111.00 0.00
 		file_size=110.00 58.00
 		offset=20.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -460,6 +461,7 @@ sprites{
 		file_pos=222.00 0.00
 		file_size=109.00 58.00
 		offset=20.00 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -509,6 +511,7 @@ sprites{
 		file_pos=332.00 0.00
 		file_size=110.00 58.00
 		offset=20.50 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -558,6 +561,7 @@ sprites{
 		file_pos=443.00 0.00
 		file_size=111.00 58.00
 		offset=21.00 0.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00

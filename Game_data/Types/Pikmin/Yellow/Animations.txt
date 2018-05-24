@@ -577,7 +577,7 @@ sprites{
 		file_pos=21.00 0.00
 		file_size=32.00 36.00
 		offset=-0.50 0.00
-		scale=0.50 0.50
+		scale=0.50 -0.50
 		top_visible=true
 		top_pos=-4.00 2.00
 		top_size=5.50 10.00

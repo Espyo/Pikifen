@@ -631,6 +631,7 @@ sprites{
 		file_pos=489.00 89.00
 		file_size=145.00 90.00
 		offset=1.25 1.25
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -973,6 +974,7 @@ sprites{
 		file=Electric_Water_Dumple.png
 		file_pos=560.00 187.00
 		file_size=141.00 83.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00

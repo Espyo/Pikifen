@@ -414,6 +414,7 @@ sprites{
 		file_pos=259.00 51.00
 		file_size=67.00 52.00
 		offset=-1.00 -1.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -665,6 +666,7 @@ sprites{
 		file=Water_Dumple.png
 		file_pos=269.00 107.00
 		file_size=66.00 47.00
+		scale=1.00 -1.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
