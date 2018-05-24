@@ -505,11 +505,11 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             cur_hitbox.knockback_outward =
                 s2b(
                     hitbox_node->get_child_by_name(
-                        "outward"
+                        "knockback_outward"
                     )->get_value_or_default("false")
                 );
             cur_hitbox.knockback_angle =
-                s2f(hitbox_node->get_child_by_name("angle")->value);
+                s2f(hitbox_node->get_child_by_name("knockback_angle")->value);
             cur_hitbox.knockback =
                 s2f(
                     hitbox_node->get_child_by_name(

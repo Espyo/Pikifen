@@ -26,8 +26,7 @@ sprites{
 				radius=48.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -37,7 +36,6 @@ sprites{
 				type=2
 				value=0.00
 				hazards=poison
-				angle=0.00
 			}
 		}
 	}
@@ -53,8 +51,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=poison
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -64,7 +61,6 @@ sprites{
 				type=1
 				value=0.00
 				hazards=poison
-				angle=0.00
 			}
 		}
 	}

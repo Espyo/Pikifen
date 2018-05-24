@@ -62,8 +62,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			hit{
@@ -72,8 +71,7 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -90,7 +88,6 @@ sprites{
 				type=1
 				value=30.00
 				hazards=fire
-				angle=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -98,8 +95,7 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -116,7 +112,6 @@ sprites{
 				type=1
 				value=30.00
 				hazards=fire
-				angle=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -125,7 +120,6 @@ sprites{
 				type=0
 				value=1.00
 				hazards=fire
-				angle=0.00
 			}
 		}
 	}
@@ -141,7 +135,6 @@ sprites{
 				type=1
 				value=30.00
 				hazards=fire
-				angle=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -150,8 +143,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=fire
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -168,7 +160,6 @@ sprites{
 				type=1
 				value=30.00
 				hazards=fire
-				angle=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -177,8 +168,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=fire
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -195,7 +185,6 @@ sprites{
 				type=1
 				value=1.00
 				hazards=fire
-				angle=0.00
 			}
 			hit{
 				coords=0.00 0.00 0.00
@@ -203,8 +192,7 @@ sprites{
 				radius=24.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -220,8 +208,7 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			hit{
@@ -230,8 +217,7 @@ sprites{
 				radius=24.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}

@@ -123,8 +123,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -133,8 +132,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -151,8 +149,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -161,8 +158,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -179,8 +175,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -189,8 +184,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -208,8 +202,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -218,8 +211,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -237,8 +229,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -247,8 +238,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -266,8 +256,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -276,8 +265,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -295,8 +283,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -305,8 +292,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -324,8 +310,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -334,8 +319,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -353,8 +337,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -363,8 +346,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -381,8 +363,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -391,8 +372,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -409,8 +389,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -419,8 +398,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -437,8 +415,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -447,8 +424,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -465,8 +441,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -475,8 +450,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -493,8 +467,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -503,8 +476,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -521,8 +493,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -531,8 +502,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -550,8 +520,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -560,8 +529,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -579,8 +547,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -589,8 +556,7 @@ sprites{
 				radius=32.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -606,8 +572,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -616,8 +581,7 @@ sprites{
 				radius=32.00
 				type=1
 				value=0.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -633,8 +597,7 @@ sprites{
 				radius=16.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			gas{
@@ -644,7 +607,6 @@ sprites{
 				type=1
 				value=0.00
 				hazards=poison
-				angle=0.00
 			}
 		}
 	}

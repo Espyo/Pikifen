@@ -36,8 +36,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			center_zap{
@@ -47,8 +46,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -58,8 +56,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left_zap{
@@ -69,8 +66,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -80,8 +76,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right_zap{
@@ -91,8 +86,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -102,8 +96,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left_zap{
@@ -113,8 +106,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -124,8 +116,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right_zap{
@@ -135,8 +126,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -153,8 +143,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			center_zap{
@@ -164,8 +153,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -175,8 +163,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left_zap{
@@ -186,8 +173,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -197,8 +183,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right_zap{
@@ -208,8 +193,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -219,8 +203,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left_zap{
@@ -230,8 +213,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -241,8 +223,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right_zap{
@@ -252,8 +233,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -270,8 +250,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			center_zap{
@@ -281,8 +260,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -292,8 +270,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left_zap{
@@ -303,8 +280,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -314,8 +290,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right_zap{
@@ -325,8 +300,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -336,8 +310,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left_zap{
@@ -347,8 +320,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -358,8 +330,7 @@ sprites{
 				type=0
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right_zap{
@@ -369,8 +340,7 @@ sprites{
 				type=1
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -387,8 +357,7 @@ sprites{
 				type=2
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			center_zap{
@@ -398,8 +367,7 @@ sprites{
 				type=2
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -409,8 +377,7 @@ sprites{
 				type=2
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left_zap{
@@ -420,8 +387,7 @@ sprites{
 				type=2
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -431,8 +397,7 @@ sprites{
 				type=2
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right_zap{
@@ -442,8 +407,7 @@ sprites{
 				type=2
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -453,8 +417,7 @@ sprites{
 				type=2
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left_zap{
@@ -464,8 +427,7 @@ sprites{
 				type=2
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -475,8 +437,7 @@ sprites{
 				type=2
 				value=1.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right_zap{
@@ -486,8 +447,7 @@ sprites{
 				type=2
 				value=0.00
 				hazards=stunning_electricity
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}

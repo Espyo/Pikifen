@@ -27,8 +27,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -38,8 +37,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -49,8 +47,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -60,8 +57,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -71,8 +67,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -88,8 +83,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_left{
@@ -98,8 +92,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			far_right{
@@ -108,8 +101,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_left{
@@ -118,8 +110,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			near_right{
@@ -128,8 +119,7 @@ sprites{
 				radius=28.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}

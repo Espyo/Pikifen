@@ -64,7 +64,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -81,7 +80,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -98,7 +96,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -115,7 +112,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -132,7 +128,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -149,7 +144,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -166,7 +160,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -184,7 +177,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -202,7 +194,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -220,7 +211,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -238,7 +228,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -256,7 +245,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}
@@ -274,7 +262,6 @@ sprites{
 				type=1
 				value=60.00
 				hazards=crush
-				angle=0.00
 				knockback=2.00
 			}
 		}

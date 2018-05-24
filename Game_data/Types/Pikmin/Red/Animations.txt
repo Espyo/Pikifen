@@ -138,8 +138,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -148,8 +147,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -170,8 +168,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -180,8 +177,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -202,8 +198,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -212,8 +207,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -234,8 +228,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -244,8 +237,7 @@ sprites{
 				radius=8.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -267,8 +259,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -277,8 +268,7 @@ sprites{
 				radius=8.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -300,8 +290,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -310,8 +299,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -332,8 +320,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -342,8 +329,7 @@ sprites{
 				radius=8.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -365,8 +351,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -375,8 +360,7 @@ sprites{
 				radius=5.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -397,8 +381,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -407,8 +390,7 @@ sprites{
 				radius=10.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -429,8 +411,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -439,8 +420,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -461,8 +441,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -471,8 +450,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -493,8 +471,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -503,8 +480,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -525,8 +501,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -535,8 +510,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -557,8 +531,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -567,8 +540,7 @@ sprites{
 				radius=5.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -589,8 +561,7 @@ sprites{
 				radius=4.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			body{
@@ -599,8 +570,7 @@ sprites{
 				radius=5.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -622,7 +592,6 @@ sprites{
 				radius=8.00
 				type=1
 				value=12.00
-				angle=0.00
 			}
 			body{
 				coords=2.00 0.00 0.00
@@ -630,8 +599,7 @@ sprites{
 				radius=6.00
 				type=0
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}

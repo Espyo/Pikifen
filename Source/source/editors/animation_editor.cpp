@@ -1072,7 +1072,10 @@ void animation_editor::save_animation_database() {
                 hitbox_node->add(
                     new data_node("value", f2s(h_ptr->value))
                 );
-                if(h_ptr->type == HITBOX_TYPE_NORMAL && h_ptr->can_pikmin_latch) {
+                if(
+                    h_ptr->type == HITBOX_TYPE_NORMAL &&
+                    h_ptr->can_pikmin_latch
+                ) {
                     hitbox_node->add(
                         new data_node(
                             "can_pikmin_latch", b2s(h_ptr->can_pikmin_latch)
@@ -1086,11 +1089,16 @@ void animation_editor::save_animation_database() {
                 }
                 if(h_ptr->knockback_outward) {
                     hitbox_node->add(
-                        new data_node("outward", b2s(h_ptr->knockback_outward))
+                        new data_node(
+                            "knockback_outward",
+                            b2s(h_ptr->knockback_outward)
+                        )
                     );
                 }
                 hitbox_node->add(
-                    new data_node("angle", f2s(h_ptr->knockback_angle))
+                    new data_node(
+                        "knockback_angle", f2s(h_ptr->knockback_angle)
+                    )
                 );
                 if(h_ptr->knockback != 0) {
                     hitbox_node->add(
@@ -1099,7 +1107,9 @@ void animation_editor::save_animation_database() {
                 }
                 if(h_ptr->wither_chance > 0) {
                     hitbox_node->add(
-                        new data_node("wither_chance", i2s(h_ptr->wither_chance))
+                        new data_node(
+                            "wither_chance", i2s(h_ptr->wither_chance)
+                        )
                     );
                 }
             }

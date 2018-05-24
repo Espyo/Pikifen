@@ -163,8 +163,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -173,8 +172,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -192,8 +190,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -202,8 +199,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -221,8 +217,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -231,8 +226,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -250,8 +244,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -260,8 +253,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -279,8 +271,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -289,8 +280,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -308,8 +298,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -318,8 +307,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -337,8 +325,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -347,7 +334,6 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				angle=0.00
 				knockback=1.00
 			}
 		}
@@ -365,8 +351,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -375,7 +360,6 @@ sprites{
 				radius=32.00
 				type=1
 				value=30.00
-				angle=0.00
 				knockback=1.00
 			}
 		}
@@ -393,8 +377,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -403,8 +386,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -423,8 +405,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -433,8 +414,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -451,8 +431,7 @@ sprites{
 				radius=42.00
 				type=1
 				value=30.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 				wither_chance=5
 			}
@@ -462,8 +441,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -480,8 +458,7 @@ sprites{
 				radius=42.00
 				type=1
 				value=30.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 				wither_chance=5
 			}
@@ -491,8 +468,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -509,8 +485,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -519,8 +494,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -538,8 +512,7 @@ sprites{
 				type=0
 				value=1.00
 				can_pikmin_latch=true
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -548,8 +521,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -565,8 +537,7 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -575,8 +546,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -592,8 +562,7 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -602,8 +571,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -619,8 +587,7 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -629,8 +596,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -646,8 +612,7 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -656,8 +621,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
@@ -674,8 +638,7 @@ sprites{
 				radius=29.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 			mouth{
@@ -684,8 +647,7 @@ sprites{
 				radius=12.00
 				type=2
 				value=1.00
-				outward=true
-				angle=0.00
+				knockback_outward=true
 				knockback=1.00
 			}
 		}
