@@ -44,7 +44,7 @@ void animation_editor::change_to_right_frame() {
     } else if(state == EDITOR_STATE_TOP) {
         frm_top->show();
     } else if(state == EDITOR_STATE_LOAD) {
-        frm_history->show();
+        frm_load->show();
     } else if(state == EDITOR_STATE_TOOLS) {
         frm_tools->show();
     } else if(state == EDITOR_STATE_OPTIONS) {
@@ -63,20 +63,22 @@ void animation_editor::create_new_from_picker(
     if(
         picker_id == PICKER_EDIT_ANIMATION
     ) {
-        if(anims.find_animation(name) != INVALID) return;
-        anims.animations.push_back(new animation(name));
+        if(anims.find_animation(name) == INVALID) {
+            anims.animations.push_back(new animation(name));
+        }
         pick(picker_id, name, "");
         
     } else if(
         picker_id == PICKER_EDIT_SPRITE
     ) {
-        if(anims.find_sprite(name) != INVALID) return;
-        anims.sprites.push_back(new sprite(name));
-        anims.sprites.back()->create_hitboxes(
-            &anims,
-            loaded_mob_type ? loaded_mob_type->height : 128,
-            loaded_mob_type ? loaded_mob_type->radius : 32
-        );
+        if(anims.find_sprite(name) == INVALID) {
+            anims.sprites.push_back(new sprite(name));
+            anims.sprites.back()->create_hitboxes(
+                &anims,
+                loaded_mob_type ? loaded_mob_type->height : 128,
+                loaded_mob_type ? loaded_mob_type->radius : 32
+            );
+        }
         pick(picker_id, name, "");
         
     }
@@ -650,7 +652,7 @@ void animation_editor::gui_to_top() {
 void animation_editor::hide_all_frames() {
     frm_main->hide();
     frm_picker->hide();
-    frm_history->hide();
+    frm_load->hide();
     frm_anims->hide();
     frm_sprites->hide();
     frm_sprite_bmp->hide();
@@ -865,7 +867,7 @@ void animation_editor::pick_sprite(const string &name) {
  */
 void animation_editor::populate_history() {
     lafi::frame* f =
-        (lafi::frame*) frm_history->widgets["frm_list"];
+        (lafi::frame*) frm_load->widgets["frm_list"];
         
     while(!f->widgets.empty()) {
         f->remove(f->widgets.begin()->first);

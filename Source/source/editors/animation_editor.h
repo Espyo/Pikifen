@@ -66,7 +66,7 @@ private:
     //GUI widgets.
     lafi::frame* frm_main;
     lafi::frame* frm_object;
-    lafi::frame* frm_history;
+    lafi::frame* frm_load;
     lafi::frame* frm_anims;
     lafi::frame* frm_anim;
     lafi::frame* frm_frame;
@@ -84,6 +84,8 @@ private:
     lafi::frame* frm_body_part;
     lafi::frame* frm_tools;
     lafi::frame* frm_options;
+    lafi::style* faded_style;
+    lafi::style* gui_style;
     
     
     animation_database        anims;

@@ -121,6 +121,10 @@ void save_creator_tools();
 void save_options();
 void save_screenshot();
 vector<string> semicolon_list_to_vector(const string &s);
+int show_message_box(
+    ALLEGRO_DISPLAY* display, char const* title, char const* heading,
+    char const* text, char const* buttons, int flags
+);
 void signal_handler(const int signum);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,

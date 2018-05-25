@@ -808,6 +808,8 @@ void animation_editor::load_animation_database(const bool update_history) {
     change_to_right_frame();
     loaded_content_yet = true;
     update_stats();
+    
+    emit_status_bar_message("Loaded successfully.", false);
 }
 
 
@@ -1095,11 +1097,13 @@ void animation_editor::save_animation_database() {
                         )
                     );
                 }
-                hitbox_node->add(
-                    new data_node(
-                        "knockback_angle", f2s(h_ptr->knockback_angle)
-                    )
-                );
+                if(h_ptr->knockback_angle != 0) {
+                    hitbox_node->add(
+                        new data_node(
+                            "knockback_angle", f2s(h_ptr->knockback_angle)
+                        )
+                    );
+                }
                 if(h_ptr->knockback != 0) {
                     hitbox_node->add(
                         new data_node("knockback", f2s(h_ptr->knockback))
@@ -1126,7 +1130,22 @@ void animation_editor::save_animation_database() {
         
     }
     
-    file_node.save_file(file_path);
+    if(!file_node.save_file(file_path)) {
+        show_message_box(
+            NULL, "Save failed!",
+            "Could not save the animation!",
+            (
+                "An error occured while saving the animation to the file \"" +
+                file_path + "\". Make sure that the folder it is saving to "
+                "exists and it is not read-only, and try again."
+            ).c_str(),
+            NULL,
+            ALLEGRO_MESSAGEBOX_WARN
+        );
+        emit_status_bar_message("Could not save the animation!", true);
+    } else {
+        emit_status_bar_message("Saved successfully.", false);
+    }
     made_new_changes = false;
 }
 
@@ -1161,7 +1180,8 @@ void animation_editor::unload() {
     editor::unload();
     
     anims.destroy();
-    delete(gui->style);
+    delete(gui_style);
+    delete(faded_style);
     //TODO warning: deleting object of polymorphic class type 'lafi::gui'
     //which has non-virtual destructor might cause undefined behaviour
     //[-Wdelete-non-virtual-dtor]

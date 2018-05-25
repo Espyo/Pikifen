@@ -2988,7 +2988,7 @@ void area_editor::save_area(const bool to_backup) {
     bool data_save_ok = data_file.save_file(data_file_name);
     
     if(!geo_save_ok || !data_save_ok) {
-        al_show_native_message_box(
+        show_message_box(
             NULL, "Save failed!",
             "Could not save the area!",
             (
@@ -2999,9 +2999,6 @@ void area_editor::save_area(const bool to_backup) {
             NULL,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        //Reset the locale, which gets set by Allegro's native dialogs...
-        //and breaks s2f().
-        setlocale(LC_ALL, "C");
         
         emit_status_bar_message("Could not save the area!", true);
         

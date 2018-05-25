@@ -181,8 +181,8 @@ private:
     lafi::frame* frm_tools;
     lafi::frame* frm_stt;
     lafi::frame* frm_options;
-    lafi::style* gui_style;
     lafi::style* faded_style;
+    lafi::style* gui_style;
     
     //Time left until a backup is generated.
     timer backup_timer;

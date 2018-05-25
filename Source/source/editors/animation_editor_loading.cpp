@@ -40,14 +40,21 @@ void animation_editor::load() {
     load_spike_damage_types();
     load_mob_types(false);
     
-    lafi::style* s =
+    gui_style =
         new lafi::style(
         al_map_rgb(192, 192, 208),
         al_map_rgb(32, 32, 64),
         al_map_rgb(96, 128, 160),
         font_builtin
     );
-    gui = new lafi::gui(scr_w, scr_h, s);
+    faded_style =
+        new lafi::style(
+        al_map_rgb(192, 192, 208),
+        al_map_rgb(128, 128, 160),
+        al_map_rgb(96, 128, 160),
+        font_builtin
+    );
+    gui = new lafi::gui(scr_w, scr_h, gui_style);
     
     
     //Main -- declarations.
@@ -93,7 +100,7 @@ void animation_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add(
         "but_tools",
-        new lafi::button("Special tools", "", editor_icons[ICON_TOOLS]),
+        new lafi::button("Tools", "", editor_icons[ICON_TOOLS]),
         50, 48
     );
     frm_object->easy_add(
@@ -184,78 +191,78 @@ void animation_editor::load() {
         "Options for the area editor.";
         
         
-    //History -- declarations.
-    frm_history =
+    //Load -- declarations.
+    frm_load =
         new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
-    gui->add("frm_history", frm_history);
+    gui->add("frm_load", frm_load);
     
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "lbl_load",
         new lafi::label("Load:"), 100, 16
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "but_object",
         new lafi::button("Object animation"), 100, 32
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "but_global",
         new lafi::button("Global animation"), 100, 32
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "but_browse",
         new lafi::button("Other..."), 100, 32
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "dum_1",
         new lafi::dummy(), 100, 12
     );
-    frm_history->easy_row();
-    frm_history->easy_add(
+    frm_load->easy_row();
+    frm_load->easy_add(
         "lbl_hist",
         new lafi::label("History:"), 100, 16
     );
-    y = frm_history->easy_row();
-    frm_history->add(
+    y = frm_load->easy_row();
+    frm_load->add(
         "frm_list",
         new lafi::frame(canvas_br.x, y, scr_w, scr_h)
     );
     
     
-    //History -- properties.
-    frm_history->widgets["but_back"]->left_mouse_click_handler =
+    //Load -- properties.
+    frm_load->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         frm_toolbar->show();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
-    frm_history->widgets["but_back"]->description =
+    frm_load->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_history->widgets["but_object"]->left_mouse_click_handler =
+    frm_load->widgets["but_object"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(PICKER_LOAD_MOB_TYPE, false);
     };
-    frm_history->widgets["but_object"]->description =
+    frm_load->widgets["but_object"]->description =
         "Load the animations of an object type.";
         
-    frm_history->widgets["but_global"]->left_mouse_click_handler =
+    frm_load->widgets["but_global"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(PICKER_LOAD_GLOBAL_ANIM, false);
     };
-    frm_history->widgets["but_global"]->description =
+    frm_load->widgets["but_global"]->description =
         "Load a global generic animation.";
         
-    frm_history->widgets["but_browse"]->left_mouse_click_handler =
+    frm_load->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string last_file_opened;
         if(animation_editor_history.size()) {
@@ -278,7 +285,7 @@ void animation_editor::load() {
         loaded_mob_type = NULL;
         load_animation_database(true);
     };
-    frm_history->widgets["but_browse"]->description =
+    frm_load->widgets["but_browse"]->description =
         "Pick a file to load or create.";
         
         
@@ -291,6 +298,10 @@ void animation_editor::load() {
     frm_anims->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_anims->easy_add(
+        "lbl_panel_name",
+        new lafi::label("ANIMATIONS", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_anims->easy_row();
     frm_anims->easy_add(
@@ -458,9 +469,16 @@ void animation_editor::load() {
     frm_anims->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_anims->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_anims->widgets["but_del_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(!cur_anim) return;
+        if(!cur_anim) {
+            emit_status_bar_message(
+                "You have to select an animation to delete!", false
+            );
+            return;
+        }
         anims.animations.erase(
             anims.animations.begin() +
             anims.find_animation(cur_anim->name)
@@ -667,6 +685,10 @@ void animation_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_sprites->easy_add(
+        "lbl_panel_name",
+        new lafi::label("SPRITES", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_sprites->easy_row();
     frm_sprites->easy_add(
         "lbl_sprite",
@@ -753,6 +775,8 @@ void animation_editor::load() {
     frm_sprites->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_sprites->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(PICKER_EDIT_SPRITE, true);
@@ -794,7 +818,12 @@ void animation_editor::load() {
         
     frm_sprite->widgets["but_del_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(!cur_sprite) return;
+        if(!cur_sprite) {
+            emit_status_bar_message(
+                "You have to select a sprite to delete!", false
+            );
+            return;
+        }
         anims.sprites.erase(
             anims.sprites.begin() + anims.find_sprite(cur_sprite->name)
         );
@@ -875,6 +904,10 @@ void animation_editor::load() {
     frm_sprite_bmp->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_sprite_bmp->easy_add(
+        "lbl_panel_name",
+        new lafi::label("BITMAP", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
@@ -959,6 +992,8 @@ void animation_editor::load() {
         state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
     };
+    
+    frm_sprite_bmp->widgets["lbl_panel_name"]->style = faded_style;
     
     frm_sprite_bmp->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1048,6 +1083,10 @@ void animation_editor::load() {
     frm_sprite_tra->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_sprite_tra->easy_add(
+        "lbl_panel_name",
+        new lafi::label("TRANSFORM", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_sprite_tra->easy_row();
     frm_sprite_tra->easy_add(
@@ -1162,6 +1201,8 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["but_back"]->description =
         "Go back to the sprite editor.";
         
+    frm_sprite_tra->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_sprite_tra->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(PICKER_IMPORT_SPRITE_TRANSFORMATION, false);
@@ -1254,6 +1295,10 @@ void animation_editor::load() {
     frm_hitboxes->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_hitboxes->easy_add(
+        "lbl_panel_name",
+        new lafi::label("HITBOXES", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
@@ -1454,6 +1499,8 @@ void animation_editor::load() {
     frm_hitboxes->widgets["but_back"]->description =
         "Go back to the frame editor.";
         
+    frm_hitboxes->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_hitboxes->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         gui_to_hitbox();
@@ -1615,6 +1662,10 @@ void animation_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_top->easy_add(
+        "lbl_panel_name",
+        new lafi::label("PIKMIN TOP", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_top->easy_row();
     frm_top->easy_add(
         "but_import",
@@ -1687,6 +1738,8 @@ void animation_editor::load() {
     frm_top->widgets["but_back"]->description =
         "Go back to the sprite editor.";
         
+    frm_top->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_top->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(PICKER_IMPORT_SPRITE_TOP, false);
@@ -1746,6 +1799,10 @@ void animation_editor::load() {
     frm_body_parts->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_body_parts->easy_add(
+        "lbl_panel_name",
+        new lafi::label("BODY PARTS", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
@@ -1840,6 +1897,8 @@ void animation_editor::load() {
     frm_body_parts->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_body_parts->widgets["lbl_panel_name"]->style = faded_style;
+    
     ((lafi::textbox*) frm_body_parts->widgets["txt_add"])->enter_key_widget =
         frm_body_parts->widgets["but_add"];
     frm_body_parts->widgets["txt_add"]->description =
@@ -1970,6 +2029,10 @@ void animation_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_tools->easy_add(
+        "lbl_panel_name",
+        new lafi::label("TOOLS", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_tools->easy_row();
     frm_tools->easy_add(
         "lbl_resize",
@@ -2057,6 +2120,8 @@ void animation_editor::load() {
     frm_tools->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_tools->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier. (0.5=half, 2=double, etc.)";
         
@@ -2122,6 +2187,10 @@ void animation_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_options->easy_add(
+        "lbl_panel_name",
+        new lafi::label("OPTIONS", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_options->easy_row();
     frm_options->easy_add(
         "chk_mmb_pan",
@@ -2148,6 +2217,8 @@ void animation_editor::load() {
     frm_options->widgets["but_back"]->description =
         "Close the options.";
         
+    frm_options->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["chk_mmb_pan"]->description =

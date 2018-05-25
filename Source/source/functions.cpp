@@ -199,7 +199,7 @@ vector<string> folder_to_vector(
         
             string entry_name =
                 standardize_path(al_get_fs_entry_name(entry));
-            
+                
             //Only save what's after the final slash.
             size_t pos = entry_name.find_last_of("/");
             if(pos != string::npos) {
@@ -645,7 +645,7 @@ vector<string> prompt_file_dialog(
             patterns.c_str(), mode
         );
     al_show_native_file_dialog(display, dialog);
-        
+    
     //Reset the locale, which gets set by Allegro's native dialogs...
     //and breaks s2f().
     setlocale(LC_ALL, "C");
@@ -990,6 +990,28 @@ vector<string> semicolon_list_to_vector(const string &s) {
         parts[p] = trim_spaces(parts[p]);
     }
     return parts;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Shows a native message box. It is better to call this rather than
+ * al_show_native_message_box() directly because it does not reset the locale
+ * after it is done.
+ * The parameters are the same ones you'd pass to the Allegro function.
+ */
+int show_message_box(
+    ALLEGRO_DISPLAY* display, char const* title, char const* heading,
+    char const* text, char const* buttons, int flags
+) {
+    int ret =
+        al_show_native_message_box(
+            display, title, heading, text, buttons, flags
+        );
+    //Reset the locale, which gets set by Allegro's native dialogs...
+    //and breaks s2f().
+    setlocale(LC_ALL, "C");
+    
+    return ret;
 }
 
 
