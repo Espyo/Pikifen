@@ -269,6 +269,8 @@ void animation_editor::hitbox_to_gui() {
         set_textbox_text(frm_hitbox, "txt_z", f2s(cur_hitbox->z));
         set_textbox_text(frm_hitbox, "txt_h", f2s(cur_hitbox->height));
         set_textbox_text(frm_hitbox, "txt_r", f2s(cur_hitbox->radius));
+    } else {
+        set_label_text(frm_hitboxes, "lbl_name", "");
     }
     
     open_hitbox_type(cur_hitbox ? cur_hitbox->type : 255);

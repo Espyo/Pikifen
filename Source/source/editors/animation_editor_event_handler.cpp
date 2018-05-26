@@ -128,7 +128,9 @@ void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-
+    if(state == EDITOR_STATE_HITBOXES) {
+        handle_lmb_down(ev);
+    }
 }
 
 
@@ -146,14 +148,19 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(state == EDITOR_STATE_HITBOXES) {
-        if(cur_sprite && cur_hitbox) {
-            if(cur_hitbox_tc.handle_mouse_down(mouse_cursor_w)) {
+        if(cur_sprite) {
+            bool tc_handled = false;
+            if(cur_hitbox) {
+                tc_handled = cur_hitbox_tc.handle_mouse_down(mouse_cursor_w);
+            }
+            
+            if(tc_handled) {
                 cur_hitbox_tc_to_gui();
             } else {
+                vector<size_t> clicked_hitboxes;
                 for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
                     hitbox* h_ptr = &cur_sprite->hitboxes[h];
                     
-                    bool clicked_this_one = false;
                     if(side_view) {
                         if(
                             bbox_check(
@@ -168,22 +175,42 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                                 mouse_cursor_w, 1 / cam_zoom
                             )
                         ) {
-                            clicked_this_one = true;
+                            clicked_hitboxes.push_back(h);
                         }
                     } else {
                         if(dist(mouse_cursor_w, h_ptr->pos) <= h_ptr->radius) {
-                            clicked_this_one = true;
+                            clicked_hitboxes.push_back(h);
+                        }
+                    }
+                }
+                
+                if(clicked_hitboxes.empty()) {
+                    cur_hitbox = NULL;
+                    cur_hitbox_nr = INVALID;
+                    hitbox_to_gui();
+                    
+                } else {
+                    size_t cur_hitbox_nr_index = INVALID;
+                    for(size_t i = 0; i < clicked_hitboxes.size(); ++i) {
+                        if(cur_hitbox_nr == clicked_hitboxes[i]) {
+                            cur_hitbox_nr_index = i;
+                            break;
                         }
                     }
                     
-                    if(clicked_this_one) {
-                        gui_to_hitbox();
-                        cur_hitbox_nr = h;
-                        cur_hitbox = &cur_sprite->hitboxes[h];
-                        hitbox_to_gui();
-                        
-                        made_new_changes = true;
+                    if(cur_hitbox_nr_index == INVALID) {
+                        cur_hitbox_nr_index = clicked_hitboxes[0];
                     }
+                    
+                    cur_hitbox_nr_index =
+                        sum_and_wrap(
+                            cur_hitbox_nr_index, 1, clicked_hitboxes.size()
+                        );
+                    cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
+                    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+                    hitbox_to_gui();
+                    
+                    made_new_changes = true;
                 }
             }
         }
