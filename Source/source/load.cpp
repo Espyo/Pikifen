@@ -13,7 +13,7 @@
 
 #include "load.h"
 
-#include "editors/area_editor.h"
+#include "editors/area_editor/editor.h"
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"

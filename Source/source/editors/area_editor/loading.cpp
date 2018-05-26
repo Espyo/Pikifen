@@ -13,20 +13,20 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "area_editor.h"
-#include "../LAFI/angle_picker.h"
-#include "../LAFI/button.h"
-#include "../LAFI/checkbox.h"
-#include "../LAFI/gui.h"
-#include "../LAFI/label.h"
-#include "../LAFI/minor.h"
-#include "../LAFI/radio_button.h"
-#include "../LAFI/scrollbar.h"
-#include "../LAFI/style.h"
-#include "../LAFI/textbox.h"
-#include "../functions.h"
-#include "../load.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../LAFI/angle_picker.h"
+#include "../../LAFI/button.h"
+#include "../../LAFI/checkbox.h"
+#include "../../LAFI/gui.h"
+#include "../../LAFI/label.h"
+#include "../../LAFI/minor.h"
+#include "../../LAFI/radio_button.h"
+#include "../../LAFI/scrollbar.h"
+#include "../../LAFI/style.h"
+#include "../../LAFI/textbox.h"
+#include "../../functions.h"
+#include "../../load.h"
+#include "../../vars.h"
 
 
 /* ----------------------------------------------------------------------------

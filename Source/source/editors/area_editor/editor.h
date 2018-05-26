@@ -14,9 +14,9 @@
 
 #include <deque>
 
-#include "editor.h"
-#include "../LAFI/frame.h"
-#include "../LAFI/label.h"
+#include "../editor.h"
+#include "../../LAFI/frame.h"
+#include "../../LAFI/label.h"
 
 using namespace std;
 

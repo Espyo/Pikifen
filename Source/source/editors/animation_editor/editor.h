@@ -16,13 +16,13 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "editor.h"
-#include "../animation.h"
-#include "../game_state.h"
-#include "../hitbox.h"
-#include "../LAFI/gui.h"
-#include "../LAFI/widget.h"
-#include "../misc_structs.h"
+#include "../editor.h"
+#include "../../animation.h"
+#include "../../game_state.h"
+#include "../../hitbox.h"
+#include "../../LAFI/gui.h"
+#include "../../LAFI/widget.h"
+#include "../../misc_structs.h"
 
 using namespace std;
 

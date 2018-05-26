@@ -21,8 +21,8 @@
 
 #include "init.h"
 
-#include "editors/area_editor.h"
-#include "editors/animation_editor.h"
+#include "editors/area_editor/editor.h"
+#include "editors/animation_editor/editor.h"
 #include "controls.h"
 #include "data_file.h"
 #include "functions.h"

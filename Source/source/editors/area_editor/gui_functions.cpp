@@ -11,16 +11,16 @@
 
 #include <algorithm>
 
-#include "area_editor.h"
-#include "../LAFI/angle_picker.h"
-#include "../LAFI/button.h"
-#include "../LAFI/checkbox.h"
-#include "../LAFI/image.h"
-#include "../LAFI/radio_button.h"
-#include "../LAFI/scrollbar.h"
-#include "../LAFI/textbox.h"
-#include "../functions.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../LAFI/angle_picker.h"
+#include "../../LAFI/button.h"
+#include "../../LAFI/checkbox.h"
+#include "../../LAFI/image.h"
+#include "../../LAFI/radio_button.h"
+#include "../../LAFI/scrollbar.h"
+#include "../../LAFI/textbox.h"
+#include "../../functions.h"
+#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Loads the current advanced sector appearance data onto the GUI.

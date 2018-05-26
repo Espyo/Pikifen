@@ -26,7 +26,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "backtrace.h"
-#include "editors/animation_editor.h"
+#include "editors/animation_editor/editor.h"
 #include "const.h"
 #include "data_file.h"
 #include "drawing.h"

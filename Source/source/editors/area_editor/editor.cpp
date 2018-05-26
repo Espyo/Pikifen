@@ -13,10 +13,10 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "area_editor.h"
-#include "../functions.h"
-#include "../load.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../functions.h"
+#include "../../load.h"
+#include "../../vars.h"
 
 using namespace std;
 

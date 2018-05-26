@@ -9,10 +9,10 @@
  * Animation editor event handler function.
  */
 
-#include "animation_editor.h"
-#include "../LAFI/textbox.h"
-#include "../functions.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../LAFI/textbox.h"
+#include "../../functions.h"
+#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed.

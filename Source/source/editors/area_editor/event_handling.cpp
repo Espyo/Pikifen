@@ -12,9 +12,9 @@
 #include <algorithm>
 #include <allegro5/allegro.h>
 
-#include "area_editor.h"
-#include "../functions.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../functions.h"
+#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed.

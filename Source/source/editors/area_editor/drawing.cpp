@@ -11,10 +11,13 @@
 
 #include <algorithm>
 
-#include "area_editor.h"
-#include "../drawing.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../drawing.h"
+#include "../../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Handles the drawing part of the main loop of the area editor.
+ */
 void area_editor::do_drawing() {
     gui->draw();
     

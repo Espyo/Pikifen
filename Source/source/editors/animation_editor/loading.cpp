@@ -9,17 +9,17 @@
  * Animation editor loading function.
  */
 
-#include "animation_editor.h"
-#include "../LAFI/angle_picker.h"
-#include "../LAFI/button.h"
-#include "../LAFI/checkbox.h"
-#include "../LAFI/frame.h"
-#include "../LAFI/minor.h"
-#include "../LAFI/radio_button.h"
-#include "../LAFI/textbox.h"
-#include "../functions.h"
-#include "../load.h"
-#include "../vars.h"
+#include "editor.h"
+#include "../../LAFI/angle_picker.h"
+#include "../../LAFI/button.h"
+#include "../../LAFI/checkbox.h"
+#include "../../LAFI/frame.h"
+#include "../../LAFI/minor.h"
+#include "../../LAFI/radio_button.h"
+#include "../../LAFI/textbox.h"
+#include "../../functions.h"
+#include "../../load.h"
+#include "../../vars.h"
 
 
 /* ----------------------------------------------------------------------------

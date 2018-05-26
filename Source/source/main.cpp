@@ -23,8 +23,8 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "editors/animation_editor.h"
-#include "editors/area_editor.h"
+#include "editors/animation_editor/editor.h"
+#include "editors/area_editor/editor.h"
 #include "const.h"
 #include "controls.h"
 #include "drawing.h"
