@@ -119,12 +119,15 @@ private:
     bool                      mob_radius_visible;
     bool                      origin_visible;
     bool                      pikmin_silhouette_visible;
+    point                     pre_sprite_bmp_cam_pos;
+    float                     pre_sprite_bmp_cam_zoom;
     bool                      side_view;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
     transformation_controller top_tc;
     
     //General functions.
+    void center_camera_on_sprite_bitmap();
     ALLEGRO_BITMAP* create_hitbox_bitmap();
     void cur_hitbox_tc_to_gui();
     void cur_sprite_tc_to_gui();

@@ -163,7 +163,12 @@ void sprite::set_bitmap(
     if(bitmap) al_destroy_bitmap(bitmap);
     parent_bmp = NULL;
     bitmap = NULL;
-    if(file_name.empty()) return;
+    if(file_name.empty()) {
+        file.clear();
+        this->file_size = point();
+        this->file_pos = point();
+        return;
+    }
     
     parent_bmp = bitmaps.get(file_name, node);
     if(parent_bmp) {

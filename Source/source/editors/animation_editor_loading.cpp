@@ -906,6 +906,9 @@ void animation_editor::load() {
     frm_sprite->widgets["but_bitmap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_SPRITE_BITMAP;
+        pre_sprite_bmp_cam_pos = cam_pos;
+        pre_sprite_bmp_cam_zoom = cam_zoom;
+        center_camera_on_sprite_bitmap();
         sprite_bmp_to_gui();
         change_to_right_frame();
     };
@@ -1034,6 +1037,11 @@ void animation_editor::load() {
     );
     frm_sprite_bmp->easy_row();
     frm_sprite_bmp->easy_add(
+        "chk_add",
+        new lafi::checkbox("Add to selection"), 100, 16
+    );
+    frm_sprite_bmp->easy_row();
+    frm_sprite_bmp->easy_add(
         "but_clear",
         new lafi::button("Clear selection"), 100, 16
     );
@@ -1048,6 +1056,8 @@ void animation_editor::load() {
         "Go back to the sprite editor.";
     frm_sprite_bmp->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        cam_pos = pre_sprite_bmp_cam_pos;
+        cam_zoom = pre_sprite_bmp_cam_zoom;
         state = EDITOR_STATE_SPRITE;
         change_to_right_frame();
     };
@@ -1123,6 +1133,9 @@ void animation_editor::load() {
     frm_sprite_bmp->widgets["txt_h"]->description =
         "Height of the sprite, in the file.";
         
+    frm_sprite_bmp->widgets["chk_add"]->description =
+        "Add to the existing selection instead of replacing it.";
+        
     frm_sprite_bmp->widgets["but_clear"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_sprite->file_pos = point();
@@ -1130,7 +1143,7 @@ void animation_editor::load() {
         sprite_bmp_to_gui();
     };
     frm_sprite_bmp->widgets["but_clear"]->description =
-        "Clear the selection so you can start your clicks over.";
+        "Clear the selection so you can start over.";
         
         
     //Sprite transform -- declarations.

@@ -128,7 +128,7 @@ void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(state == EDITOR_STATE_HITBOXES) {
+    if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
         handle_lmb_down(ev);
     }
 }
@@ -230,9 +230,14 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
         if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
         
+        bool add = get_checkbox_check(frm_sprite_bmp, "chk_add");
+        
         point selection_tl;
         point selection_br;
-        if(cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) {
+        if(
+            (cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) ||
+            !add
+        ) {
             selection_tl = bmp_click_pos;
             selection_br = bmp_click_pos;
         } else {

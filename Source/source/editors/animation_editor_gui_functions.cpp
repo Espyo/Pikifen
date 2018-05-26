@@ -569,6 +569,7 @@ void animation_editor::gui_to_sprite_bmp() {
     ) {
         //Changed something image-wise. Recreate it.
         cur_sprite->set_bitmap(new_file, new_f_pos, new_f_size);
+        center_camera_on_sprite_bitmap();
     }
     
     last_file_used = new_file;

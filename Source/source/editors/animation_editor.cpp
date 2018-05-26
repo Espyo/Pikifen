@@ -89,6 +89,25 @@ animation_editor::animation_editor() :
 
 
 /* ----------------------------------------------------------------------------
+ * Centers the camera on the sprite's parent bitmap, so the user can choose
+ * what part of the bitmap they want to use for the sprite.
+ */
+void animation_editor::center_camera_on_sprite_bitmap() {
+    if(cur_sprite && cur_sprite->parent_bmp) {
+        int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
+        int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
+        int bmp_x = -bmp_w / 2.0;
+        int bmp_y = -bmp_h / 2.0;
+        
+        center_camera(point(bmp_x, bmp_y), point(bmp_x + bmp_w, bmp_y + bmp_h));
+    } else {
+        cam_zoom = 1.0f;
+        cam_pos = point();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
@@ -176,72 +195,78 @@ void animation_editor::do_drawing() {
         draw_hitboxes = false;
     }
     
-    if(state == EDITOR_STATE_SPRITE_BITMAP && s && s->parent_bmp) {
-    
+    if(state == EDITOR_STATE_SPRITE_BITMAP) {
         draw_origin = false;
         draw_hitboxes = false;
         draw_mob_radius = false;
         draw_pikmin_silhouette = false;
         
-        int bmp_w = al_get_bitmap_width(s->parent_bmp);
-        int bmp_h = al_get_bitmap_height(s->parent_bmp);
-        int bmp_x = -bmp_w / 2.0;
-        int bmp_y = -bmp_h / 2.0;
-        al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
-        
-        point scene_tl = point(-1, -1);
-        point scene_br = point(canvas_br.x + 1, canvas_br.y + 1);
-        al_transform_coordinates(
-            &screen_to_world_transform, &scene_tl.x, &scene_tl.y
-        );
-        al_transform_coordinates(
-            &screen_to_world_transform, &scene_br.x, &scene_br.y
-        );
-        
-        for(unsigned char x = 0; x < 3; ++x) {
-            point rec_tl, rec_br;
-            if(x == 0) {
-                rec_tl.x = scene_tl.x;
-                rec_br.x = bmp_x + s->file_pos.x;
-            } else if(x == 1) {
-                rec_tl.x = bmp_x + s->file_pos.x;
-                rec_br.x = bmp_x + s->file_pos.x + s->file_size.x;
-            } else {
-                rec_tl.x = bmp_x + s->file_pos.x + s->file_size.x;
-                rec_br.x = scene_br.x;
-            }
-            for(unsigned char y = 0; y < 3; ++y) {
-                if(x == 1 && y == 1) continue;
-                if(y == 0) {
-                    rec_tl.y = scene_tl.y;
-                    rec_br.y = bmp_y + s->file_pos.y;
-                } else if(y == 1) {
-                    rec_tl.y = bmp_y + s->file_pos.y;
-                    rec_br.y = bmp_y + s->file_pos.y + s->file_size.y;
+        if(s && s->parent_bmp) {
+            draw_origin = false;
+            draw_hitboxes = false;
+            draw_mob_radius = false;
+            draw_pikmin_silhouette = false;
+            
+            int bmp_w = al_get_bitmap_width(s->parent_bmp);
+            int bmp_h = al_get_bitmap_height(s->parent_bmp);
+            int bmp_x = -bmp_w / 2.0;
+            int bmp_y = -bmp_h / 2.0;
+            al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
+            
+            point scene_tl = point(-1, -1);
+            point scene_br = point(canvas_br.x + 1, canvas_br.y + 1);
+            al_transform_coordinates(
+                &screen_to_world_transform, &scene_tl.x, &scene_tl.y
+            );
+            al_transform_coordinates(
+                &screen_to_world_transform, &scene_br.x, &scene_br.y
+            );
+            
+            for(unsigned char x = 0; x < 3; ++x) {
+                point rec_tl, rec_br;
+                if(x == 0) {
+                    rec_tl.x = scene_tl.x;
+                    rec_br.x = bmp_x + s->file_pos.x;
+                } else if(x == 1) {
+                    rec_tl.x = bmp_x + s->file_pos.x;
+                    rec_br.x = bmp_x + s->file_pos.x + s->file_size.x;
                 } else {
-                    rec_tl.y = bmp_y + s->file_pos.y + s->file_size.y;
-                    rec_br.y = scene_br.y;
+                    rec_tl.x = bmp_x + s->file_pos.x + s->file_size.x;
+                    rec_br.x = scene_br.x;
                 }
-                
-                al_draw_filled_rectangle(
-                    rec_tl.x, rec_tl.y,
-                    rec_br.x, rec_br.y,
-                    al_map_rgba(0, 0, 0, 128)
+                for(unsigned char y = 0; y < 3; ++y) {
+                    if(x == 1 && y == 1) continue;
+                    if(y == 0) {
+                        rec_tl.y = scene_tl.y;
+                        rec_br.y = bmp_y + s->file_pos.y;
+                    } else if(y == 1) {
+                        rec_tl.y = bmp_y + s->file_pos.y;
+                        rec_br.y = bmp_y + s->file_pos.y + s->file_size.y;
+                    } else {
+                        rec_tl.y = bmp_y + s->file_pos.y + s->file_size.y;
+                        rec_br.y = scene_br.y;
+                    }
+                    
+                    al_draw_filled_rectangle(
+                        rec_tl.x, rec_tl.y,
+                        rec_br.x, rec_br.y,
+                        al_map_rgba(0, 0, 0, 128)
+                    );
+                }
+            }
+            
+            if(s->file_size.x > 0 && s->file_size.y > 0) {
+            
+                unsigned char outline_alpha =
+                    255 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+                al_draw_rectangle(
+                    bmp_x + s->file_pos.x + 0.5,
+                    bmp_y + s->file_pos.y + 0.5,
+                    bmp_x + s->file_pos.x + s->file_size.x - 0.5,
+                    bmp_y + s->file_pos.y + s->file_size.y - 0.5,
+                    al_map_rgba(224, 192, 0, outline_alpha), 1.0
                 );
             }
-        }
-        
-        if(s->file_size.x > 0 && s->file_size.y > 0) {
-        
-            unsigned char outline_alpha =
-                255 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
-            al_draw_rectangle(
-                bmp_x + s->file_pos.x + 0.5,
-                bmp_y + s->file_pos.y + 0.5,
-                bmp_x + s->file_pos.x + s->file_size.x - 0.5,
-                bmp_y + s->file_pos.y + s->file_size.y - 0.5,
-                al_map_rgba(224, 192, 0, outline_alpha), 1.0
-            );
         }
         
     } else if(s) {
@@ -706,6 +731,13 @@ void animation_editor::sprite_bmp_flood_fill(
  * Loads the animation database for the current object.
  */
 void animation_editor::load_animation_database(const bool update_history) {
+    if(state == EDITOR_STATE_SPRITE_BITMAP) {
+        //Ideally, states would be handled by a state machine, and this
+        //logic would be placed in the sprite bitmap state's "on exit" code...
+        cam_pos = pre_sprite_bmp_cam_pos;
+        cam_zoom = pre_sprite_bmp_cam_zoom;
+    }
+    
     file_path = standardize_path(file_path);
     
     anims.destroy();
