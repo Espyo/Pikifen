@@ -583,6 +583,21 @@ string animation_editor::get_cut_path(const string &p) {
 
 
 /* ----------------------------------------------------------------------------
+ * Imports the animation data from a different animation to the current.
+ */
+void animation_editor::import_animation_data(const string &name) {
+    animation* a = anims.animations[anims.find_animation(name)];
+    
+    cur_anim->frames = a->frames;
+    cur_anim->hit_rate = a->hit_rate;
+    cur_anim->loop_frame = a->loop_frame;
+    
+    animation_to_gui();
+    emit_status_bar_message("Data imported.", false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Imports the sprite file data from a different sprite to the current.
  */
 void animation_editor::import_sprite_file_data(const string &name) {

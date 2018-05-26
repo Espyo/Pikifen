@@ -47,6 +47,7 @@ private:
         PICKER_LOAD_MOB_TYPE,
         PICKER_LOAD_GLOBAL_ANIM,
         PICKER_EDIT_ANIMATION,
+        PICKER_IMPORT_ANIMATION,
         PICKER_SET_FRAME_SPRITE,
         PICKER_EDIT_SPRITE,
         PICKER_IMPORT_SPRITE,
@@ -144,6 +145,7 @@ private:
     void enter_side_view();
     void exit_side_view();
     string get_cut_path(const string &p);
+    void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
     void import_sprite_top_data(const string &name);
@@ -152,6 +154,7 @@ private:
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
+    void pick_animation(const string &name);
     void pick_sprite(const string &name);
     void rename_animation();
     void rename_sprite();

@@ -241,6 +241,12 @@ void animation_editor::load() {
     //Load -- properties.
     frm_load->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        //If the user canceled out without picking anything yet, then they want
+        //to leave the animation editor.
+        if(!loaded_content_yet) {
+            leave();
+            return;
+        }
         frm_toolbar->show();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
@@ -306,11 +312,7 @@ void animation_editor::load() {
     frm_anims->easy_row();
     frm_anims->easy_add(
         "lbl_anim",
-        new lafi::label("Animation:"), 85, 16
-    );
-    frm_anims->easy_add(
-        "but_del_anim",
-        new lafi::button("", "", editor_icons[ICON_REMOVE]), 15, 32
+        new lafi::label("Animation:"), 100, 16
     );
     frm_anims->easy_row();
     frm_anims->easy_add(
@@ -322,6 +324,23 @@ void animation_editor::load() {
     frm_anim =
         new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_anims->add("frm_anim", frm_anim);
+    frm_anim->easy_row();
+    frm_anim->easy_add(
+        "but_prev_anim",
+        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
+    );
+    frm_anim->easy_add(
+        "but_next_anim",
+        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
+    );
+    frm_anim->easy_add(
+        "but_del_anim",
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 15, 32
+    );
+    frm_anim->easy_add(
+        "but_import",
+        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
+    );
     frm_anim->easy_row();
     frm_anim->easy_add(
         "lin_1",
@@ -471,7 +490,48 @@ void animation_editor::load() {
         
     frm_anims->widgets["lbl_panel_name"]->style = faded_style;
     
-    frm_anims->widgets["but_del_anim"]->left_mouse_click_handler =
+    frm_anims->widgets["but_anim"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        this->frm_anims->hide();
+        open_picker(PICKER_EDIT_ANIMATION, true);
+    };
+    frm_anims->widgets["but_anim"]->description =
+        "Pick an animation to edit.";
+        
+    frm_anim->widgets["but_prev_anim"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_anim && !anims.animations.empty()) {
+            pick_animation(anims.animations[0]->name);
+        } else {
+            size_t a = 0;
+            for(; a < anims.animations.size(); ++a) {
+                if(anims.animations[a]->name == cur_anim->name) break;
+            }
+            a = sum_and_wrap(a, -1, anims.animations.size());
+            pick_animation(anims.animations[a]->name);
+        }
+    };
+    frm_anim->widgets["but_prev_anim"]->description =
+        "Jump to the previous animation in the list.";
+        
+    frm_anim->widgets["but_next_anim"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_anim && !anims.animations.empty()) {
+            pick_animation(anims.animations[0]->name);
+        } else {
+            size_t a = 0;
+            for(; a < anims.animations.size(); ++a) {
+                if(anims.animations[a]->name == cur_anim->name) break;
+            }
+            a = sum_and_wrap(a, 1, anims.animations.size());
+            pick_animation(anims.animations[a]->name);
+        }
+    };
+    frm_anim->widgets["but_next_anim"]->description =
+        "Jump to the next animation in the list.";
+        
+    frm_anim->widgets["but_del_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_anim) {
             emit_status_bar_message(
@@ -492,17 +552,15 @@ void animation_editor::load() {
         made_new_changes = true;
         emit_status_bar_message("Animation deleted.", false);
     };
-    frm_anims->widgets["but_del_anim"]->description =
+    frm_anim->widgets["but_del_anim"]->description =
         "Delete the current animation.";
         
-    frm_anims->widgets["but_anim"]->left_mouse_click_handler =
+    frm_anim->widgets["but_import"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        this->frm_anims->hide();
-        open_picker(PICKER_EDIT_ANIMATION, true);
+        open_picker(PICKER_IMPORT_ANIMATION, false);
     };
-    frm_anims->widgets["but_anim"]->description =
-        "Pick an animation to edit.";
+    frm_anim->widgets["but_import"]->description =
+        "Import the data from another animation.";
         
     frm_anim->widgets["txt_loop"]->lose_focus_handler =
         lambda_gui_to_animation;
@@ -594,6 +652,7 @@ void animation_editor::load() {
         }
         frame_to_gui();
         made_new_changes = true;
+        frm_frame->widgets["but_sprite"]->simulate_click();
     };
     frm_anim->widgets["but_add"]->description =
         "Add a new frame after the current one (via copy).";
@@ -2362,11 +2421,11 @@ void animation_editor::load() {
     create_picker_frame();
     create_status_bar();
     
-    state = EDITOR_STATE_MAIN;
-    change_to_right_frame();
-    update_stats();
-    
     loaded_content_yet = false;
+    populate_history();
+    frm_toolbar->hide();
+    state = EDITOR_STATE_LOAD;
+    change_to_right_frame();
     
     if(!auto_load_anim.empty()) {
         loaded_mob_type = NULL;

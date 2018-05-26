@@ -706,6 +706,7 @@ void animation_editor::open_picker(
         
     } else if(
         id == PICKER_EDIT_ANIMATION ||
+        id == PICKER_IMPORT_ANIMATION ||
         id == PICKER_RENAME_ANIMATION
     ) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
@@ -774,12 +775,12 @@ void animation_editor::pick(
     } else if(
         picker_id == PICKER_EDIT_ANIMATION
     ) {
-        cur_anim = anims.animations[anims.find_animation(name)];
-        cur_frame_nr =
-            (cur_anim->frames.size()) ? 0 : INVALID;
-        cur_hitbox = NULL;
-        cur_hitbox_nr = INVALID;
-        animation_to_gui();
+        pick_animation(name);
+        
+    } else if(
+        picker_id == PICKER_IMPORT_ANIMATION
+    ) {
+        import_animation_data(name);
         
     } else if(
         picker_id == PICKER_EDIT_SPRITE
@@ -847,7 +848,21 @@ void animation_editor::pick(
 
 
 /* ----------------------------------------------------------------------------
- * Picks a sprite.
+ * Picks an animation to edit.
+ */
+void animation_editor::pick_animation(const string &name) {
+    cur_anim = anims.animations[anims.find_animation(name)];
+    cur_frame_nr =
+        (cur_anim->frames.size()) ? 0 : INVALID;
+    cur_sprite = NULL;
+    cur_hitbox = NULL;
+    cur_hitbox_nr = INVALID;
+    animation_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Picks a sprite to edit.
  */
 void animation_editor::pick_sprite(const string &name) {
     cur_sprite = anims.sprites[anims.find_sprite(name)];
