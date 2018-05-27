@@ -1078,33 +1078,27 @@ void animation_editor::load() {
         
     frm_sprite_bmp->widgets["but_file"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        unsigned char result = 0;
         vector<string> f =
-            prompt_file_dialog(
-                GRAPHICS_FOLDER_PATH + "/",
+            prompt_file_dialog_locked_to_folder(
+                GRAPHICS_FOLDER_PATH,
                 "Please choose the bitmap to get the sprites from.",
                 "*.png",
                 ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                ALLEGRO_FILECHOOSER_PICTURES
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
             );
             
-        if(f.empty() || f[0].empty()) {
-            return;
-        }
-        
-        size_t folder_pos = f[0].find(GRAPHICS_FOLDER_PATH);
-        if(folder_pos == string::npos) {
-            //This isn't in the graphics folder!
+        if(result == 1) {
+            //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the graphics folder!",
                 true
             );
             return;
-        } else {
-            f[0] =
-                f[0].substr(
-                    folder_pos + GRAPHICS_FOLDER_PATH.size() + 1,
-                    string::npos
-                );
+        } else if(result == 2) {
+            //User canceled.
+            return;
         }
         
         set_textbox_text(this->frm_sprite_bmp, "txt_file", f[0]);

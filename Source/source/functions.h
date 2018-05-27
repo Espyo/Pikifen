@@ -112,6 +112,10 @@ vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
     const string &patterns, const int mode
 );
+vector<string> prompt_file_dialog_locked_to_folder(
+    const string &folder, const string &title,
+    const string &patterns, const int mode, unsigned char* result
+);
 float randomf(float min, float max);
 int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);

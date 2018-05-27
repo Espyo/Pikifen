@@ -272,7 +272,11 @@ void area_editor::load() {
     );
     frm_info->easy_add(
         "txt_bg_bitmap",
-        new lafi::textbox(), 60, 16
+        new lafi::textbox(), 45, 16
+    );
+    frm_info->easy_add(
+        "but_bg_browse",
+        new lafi::button("..."), 15, 16
     );
     frm_info->easy_row();
     frm_info->easy_add(
@@ -386,8 +390,39 @@ void area_editor::load() {
         
     frm_info->widgets["txt_bg_bitmap"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_bitmap"]->description =
-        "File name of the texture to use as a background, extension included."
-        " e.g. \"Kitchen_floor.jpg\"";
+        "File name of the texture to use as a background, in the "
+        "Textures folder. Extension included. e.g. \"Kitchen_floor.jpg\"";
+        
+    frm_info->widgets["but_bg_browse"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        unsigned char result = 0;
+        vector<string> f =
+            prompt_file_dialog_locked_to_folder(
+                TEXTURES_FOLDER_PATH,
+                "Please choose the texture to use for the background.",
+                "*.*",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
+            );
+            
+        if(result == 1) {
+            //File doesn't belong to the folder.
+            emit_status_bar_message(
+                "The chosen image is not in the textures folder!",
+                true
+            );
+            return;
+        } else if(result == 2) {
+            //User canceled.
+            return;
+        }
+        
+        set_textbox_text(this->frm_info, "txt_bg_bitmap", f[0]);
+        this->frm_info->widgets["txt_bg_bitmap"]->call_lose_focus_handler();
+    };
+    frm_info->widgets["but_bg_browse"]->description =
+        "Browse for a file to use, in the textures folder.";
         
     frm_info->widgets["txt_bg_color"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_color"]->description =
@@ -395,7 +430,8 @@ void area_editor::load() {
         
     frm_info->widgets["txt_bg_dist"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_dist"]->description =
-        "How far away the background is. 2 is a good value.";
+        "How far away the background is. Affects paralax scrolling. "
+        "2 is a good value.";
         
     frm_info->widgets["txt_bg_zoom"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_zoom"]->description =
@@ -920,7 +956,11 @@ void area_editor::load() {
     );
     frm_texture->add(
         "txt_name",
-        new lafi::textbox(canvas_br.x + 8, 40, scr_w - 48, 56)
+        new lafi::textbox(canvas_br.x + 8, 40, scr_w - 88, 56)
+    );
+    frm_texture->add(
+        "but_browse",
+        new lafi::button(scr_w - 80, 32, scr_w - 48, 64, "...")
     );
     frm_texture->add(
         "but_ok",
@@ -948,6 +988,36 @@ void area_editor::load() {
     };
     frm_texture->widgets["but_back"]->description =
         "Cancel.";
+        
+    frm_texture->widgets["but_browse"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        unsigned char result = 0;
+        vector<string> f =
+            prompt_file_dialog_locked_to_folder(
+                TEXTURES_FOLDER_PATH,
+                "Please choose the texture to use for the sector floor.",
+                "*.*",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
+            );
+            
+        if(result == 1) {
+            //File doesn't belong to the folder.
+            emit_status_bar_message(
+                "The chosen image is not in the textures folder!",
+                true
+            );
+            return;
+        } else if(result == 2) {
+            //User canceled.
+            return;
+        }
+        
+        set_textbox_text(this->frm_texture, "txt_name", f[0]);
+    };
+    frm_texture->widgets["but_browse"]->description =
+        "Browse for a file to use, in the textures folder.";
         
     frm_texture->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1554,7 +1624,11 @@ void area_editor::load() {
     );
     frm_shadow->easy_add(
         "txt_file",
-        new lafi::textbox(), 75, 16
+        new lafi::textbox(), 60, 16
+    );
+    frm_shadow->easy_add(
+        "but_browse",
+        new lafi::button("..."), 15, 16
     );
     frm_shadow->easy_row();
     frm_shadow->easy_add(
@@ -1680,6 +1754,37 @@ void area_editor::load() {
         lambda_gui_to_details;
     frm_shadow->widgets["txt_file"]->description =
         "File name for the shadow's texture.";
+        
+    frm_shadow->widgets["but_browse"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        unsigned char result = 0;
+        vector<string> f =
+            prompt_file_dialog_locked_to_folder(
+                TEXTURES_FOLDER_PATH,
+                "Please choose the texture to use for the tree shadow.",
+                "*.png",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
+            );
+            
+        if(result == 1) {
+            //File doesn't belong to the folder.
+            emit_status_bar_message(
+                "The chosen image is not in the textures folder!",
+                true
+            );
+            return;
+        } else if(result == 2) {
+            //User canceled.
+            return;
+        }
+        
+        set_textbox_text(this->frm_shadow, "txt_file", f[0]);
+        this->frm_shadow->widgets["txt_file"]->call_lose_focus_handler();
+    };
+    frm_shadow->widgets["but_browse"]->description =
+        "Browse for a file to use, in the textures folder.";
         
     frm_shadow->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_details;

@@ -666,6 +666,46 @@ vector<string> prompt_file_dialog(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates and opens an Allegro native file dialog, and returns
+ * the user's choice(s), but confines the results to a specific folder.
+ * The result pointer returns 0 on success, 1 if the one or more choices
+ * do not belong to the specified folder, and 2 if the user canceled.
+ * The folder argument is the folder to lock to, without the ending slash.
+ * The other arguments are the same you'd pass to prompt_file_dialog().
+ * The list of choices that are returned only have the file name, not the
+ * rest of the path. Choices can also be contained inside subfolders of the
+ * specified folder.
+ */
+vector<string> prompt_file_dialog_locked_to_folder(
+    const string &folder, const string &title,
+    const string &patterns, const int mode, unsigned char* result
+) {
+    vector<string> f =
+        prompt_file_dialog(folder + "/", title, patterns, mode);
+        
+    if(f.empty() || f[0].empty()) {
+        *result = 2;
+        return vector<string>();
+    }
+    
+    for(size_t fi = 0; fi < f.size(); ++fi) {
+        size_t folder_pos = f[0].find(folder);
+        if(folder_pos == string::npos) {
+            //This isn't in the specified folder!
+            *result = 1;
+            return vector<string>();
+        } else {
+            f[fi] =
+                f[fi].substr(folder_pos + folder.size() + 1, string::npos);
+        }
+    }
+    
+    *result = 0;
+    return f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a random float between the provided range, inclusive.
  */
 float randomf(float min, float max) {
