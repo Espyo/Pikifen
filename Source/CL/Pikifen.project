@@ -76,6 +76,8 @@
     <File Name="../source/code_debug.h"/>
     <File Name="../source/code_debug.cpp"/>
     <File Name="../source/backtrace.h"/>
+    <File Name="../source/replay.h"/>
+    <File Name="../source/replay.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>

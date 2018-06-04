@@ -539,6 +539,7 @@ void gameplay::do_gameplay_logic() {
     }
     
     hud_items.tick(delta_t);
+    replay_timer.tick(delta_t);
     
     //Print framerate.
     if(show_framerate) {

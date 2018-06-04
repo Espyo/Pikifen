@@ -36,6 +36,8 @@ private:
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     ALLEGRO_BITMAP* bmp_sun;
     
+    timer replay_timer;
+    
     void do_aesthetic_logic();
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,

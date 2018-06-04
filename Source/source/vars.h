@@ -42,6 +42,7 @@
 #include "mobs/info_spot.h"
 #include "mobs/nectar.h"
 #include "mobs/pellet.h"
+#include "replay.h"
 #include "status.h"
 #include "mobs/treasure.h"
 #include "weather.h"
@@ -356,6 +357,7 @@ extern int scr_w;
 extern ALLEGRO_TRANSFORM screen_to_world_transform;
 extern sector_types_manager sector_types;
 extern unsigned int selected_spray;
+extern replay session_replay;
 extern unsigned char ship_beam_ring_color[3];
 extern bool ship_beam_ring_color_up[3];
 extern map<string, ship_type*> ship_types;

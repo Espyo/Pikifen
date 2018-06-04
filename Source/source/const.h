@@ -99,6 +99,8 @@ const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 const float MOB_SHADOW_Y_MULT = 0.2f;
 //Number of maturities.
 const size_t N_MATURITIES = 3;
+//How frequently should a replay state be saved.
+const float REPLAY_SAVE_FREQUENCY = 1.0f;
 //Red color's index moves these many units per second.
 //(Green is fast and blue is faster still).
 const unsigned int SHIP_BEAM_RING_COLOR_SPEED = 255;

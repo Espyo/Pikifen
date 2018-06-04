@@ -208,6 +208,22 @@ void gameplay::load() {
         }
     }
     
+    //TODO Uncomment this when replays are implemented.
+    /*
+    replay_timer = timer(
+        REPLAY_SAVE_FREQUENCY,
+    [this] () {
+        this->replay_timer.start();
+        vector<mob*> obstacles; //TODO
+        session_replay.add_state(
+            leaders, pikmin_list, enemies, treasures, onions, obstacles,
+            cur_leader_nr
+        );
+    }
+    );
+    replay_timer.start();
+    session_replay.clear();*/
+    
     al_hide_mouse_cursor(display);
     
     area_title_fade_timer.start();
