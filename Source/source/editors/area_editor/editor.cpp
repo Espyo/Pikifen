@@ -957,6 +957,18 @@ unsigned char area_editor::find_problems() {
         
     }
     
+    //Bridge mob that is not on a bridge sector.
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        if(m_ptr->category->id == MOB_CATEGORY_BRIDGES) {
+            sector* s_ptr = get_sector(m_ptr->pos, NULL, false);
+            if(s_ptr->type != SECTOR_TYPE_BRIDGE) {
+                problem_mob_ptr = m_ptr;
+                return EPT_SECTORLESS_BRIDGE;
+            }
+        }
+    }
+    
     //Path stops out of bounds.
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
@@ -2159,7 +2171,8 @@ void area_editor::goto_problem() {
     } else if(
         problem_type == EPT_TYPELESS_MOB ||
         problem_type == EPT_MOB_OOB ||
-        problem_type == EPT_MOB_IN_WALL
+        problem_type == EPT_MOB_IN_WALL ||
+        problem_type == EPT_SECTORLESS_BRIDGE
     ) {
     
         if(!problem_mob_ptr) {
@@ -2291,6 +2304,7 @@ void area_editor::load_area(const bool from_backup) {
     }
     
     load_reference();
+    update_main_frame();
     
     made_new_changes = false;
     

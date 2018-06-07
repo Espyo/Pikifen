@@ -111,17 +111,17 @@ void animation_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_n_anims",
-        new lafi::label(), 100, 12
+        new lafi::label(), 100, 8
     );
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_n_sprites",
-        new lafi::label(), 100, 12
+        new lafi::label(), 100, 8
     );
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_n_body_parts",
-        new lafi::label(), 100, 12
+        new lafi::label(), 100, 8
     );
     frm_object->easy_row();
     

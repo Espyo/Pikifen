@@ -111,6 +111,7 @@ private:
         EPT_TYPELESS_MOB,         //Mob with no type.
         EPT_MOB_OOB,              //Mob out of bounds.
         EPT_MOB_IN_WALL,          //Mob stuck in a wall.
+        EPT_SECTORLESS_BRIDGE,    //Bridge mob missing a bridge sector.
         EPT_LONE_PATH_STOP,       //A path stop is all by itself.
         EPT_PATH_STOP_OOB,        //A path stop is out of bounds.
         EPT_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.

@@ -171,11 +171,11 @@ void area_editor::change_to_right_frame() {
  * GUI functions for clearing the data for the current area.
  */
 void area_editor::clear_current_area_gui() {
-    set_button_text(frm_main, "but_area", cur_area_name);
     frm_area->show();
     enable_widget(frm_toolbar->widgets["but_save"]);
     frm_paths->widgets["lbl_path_dist"]->hide();
     set_checkbox_check(frm_paths, "chk_show_path", false);
+    update_main_frame();
 }
 
 
@@ -1109,6 +1109,21 @@ void area_editor::review_to_gui() {
         lbl_prob_title_2->text = "in wall!";
         
         
+    } else if(problem_type == EPT_SECTORLESS_BRIDGE) {
+    
+        if(!problem_mob_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Bridge mob on";
+        lbl_prob_title_2->text = "wrong sector!";
+        lbl_prob_desc->text =
+            "This bridge mob should be on a sector of the "
+            "\"Bridge\" type.";
+            
+            
     } else if(problem_type == EPT_LONE_PATH_STOP) {
     
         if(!problem_path_stop_ptr) {
@@ -1267,4 +1282,21 @@ void area_editor::update_main_frame() {
         frm_area->show();
     }
     set_button_text(frm_main, "but_area", cur_area_name);
+    
+    set_label_text(
+        frm_area, "lbl_n_sectors",
+        "Sectors: " + i2s(cur_area_data.sectors.size())
+    );
+    set_label_text(
+        frm_area, "lbl_n_vertexes",
+        "Vertexes: " + i2s(cur_area_data.vertexes.size())
+    );
+    set_label_text(
+        frm_area, "lbl_n_mobs",
+        "Objects: " + i2s(cur_area_data.mob_generators.size())
+    );
+    set_label_text(
+        frm_area, "lbl_n_path_stops",
+        "Path stops: " + i2s(cur_area_data.path_stops.size())
+    );
 }

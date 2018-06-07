@@ -112,6 +112,26 @@ void area_editor::load() {
         new lafi::button("Options", "", editor_icons[ICON_OPTIONS]), 50, 48
     );
     frm_area->easy_row();
+    frm_area->easy_add(
+        "lbl_n_sectors",
+        new lafi::label(), 100, 8
+    );
+    frm_area->easy_row();
+    frm_area->easy_add(
+        "lbl_n_vertexes",
+        new lafi::label(), 100, 8
+    );
+    frm_area->easy_row();
+    frm_area->easy_add(
+        "lbl_n_mobs",
+        new lafi::label(), 100, 8
+    );
+    frm_area->easy_row();
+    frm_area->easy_add(
+        "lbl_n_path_stops",
+        new lafi::label(), 100, 8
+    );
+    frm_area->easy_row();
     
     
     //Main -- properties.
