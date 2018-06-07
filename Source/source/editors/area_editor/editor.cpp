@@ -601,7 +601,7 @@ void area_editor::clear_undo_history() {
  */
 void area_editor::create_area() {
     clear_current_area();
-    disable_widget(frm_tools->widgets["but_load"]);
+    disable_widget(frm_toolbar->widgets["but_reload"]);
     
     //Create a sector for it.
     clear_layout_drawing();
@@ -2296,7 +2296,7 @@ void area_editor::load_area(const bool from_backup) {
     
     clear_undo_history();
     update_undo_history();
-    enable_widget(frm_tools->widgets["but_load"]);
+    enable_widget(frm_toolbar->widgets["but_reload"]);
     
     cam_zoom = 1.0f;
     cam_pos = point();
@@ -3009,7 +3009,7 @@ void area_editor::save_area(const bool to_backup) {
     }
     
     backup_timer.start(area_editor_backup_interval);
-    enable_widget(frm_tools->widgets["but_load"]);
+    enable_widget(frm_toolbar->widgets["but_reload"]);
     
     save_reference();
     

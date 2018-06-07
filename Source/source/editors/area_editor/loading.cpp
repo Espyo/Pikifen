@@ -2080,11 +2080,6 @@ void area_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "but_load",
-        new lafi::button("Reload area"), 100, 24
-    );
-    frm_tools->easy_row();
-    frm_tools->easy_add(
         "but_backup",
         new lafi::button("Load auto-backup"), 100, 24
     );
@@ -2186,15 +2181,6 @@ void area_editor::load() {
         lambda_gui_to_tools;
     frm_tools->widgets["bar_ref_alpha"]->description =
         "How see-through the reference is.";
-        
-    frm_tools->widgets["but_load"]->left_mouse_click_handler =
-    [this] (lafi::widget * w, int, int) {
-        if(!check_new_unsaved_changes(w)) {
-            this->load_area(false);
-        }
-    };
-    frm_tools->widgets["but_load"]->description =
-        "Discard all changes made and load the area again.";
         
     frm_tools->widgets["but_backup"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
@@ -2476,6 +2462,21 @@ void area_editor::load() {
     
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
+        "but_reload",
+        new lafi::button("", "", editor_icons[ICON_LOAD]), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_save",
+        new lafi::button("", "", editor_icons[ICON_SAVE]), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "dum_1",
+        new lafi::dummy(), 12, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_undo",
         new lafi::button("", "", editor_icons[ICON_UNDO]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2486,8 +2487,13 @@ void area_editor::load() {
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
-        "but_save",
-        new lafi::button("", "", editor_icons[ICON_SAVE]), 32, 32,
+        "dum_2",
+        new lafi::dummy(), 12, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
+        "but_help",
+        new lafi::button("", "", editor_icons[ICON_HELP]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
@@ -2499,6 +2505,27 @@ void area_editor::load() {
     
     
     //Bottom bar -- properties.
+    frm_toolbar->widgets["but_reload"]->left_mouse_click_handler =
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
+            this->load_area(false);
+        }
+    };
+    frm_toolbar->widgets["but_reload"]->description =
+        "Discard all changes made and load the area again. (Ctrl+L)";
+        
+    frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        save_area(false);
+        save_reference();
+        clear_selection();
+        state = EDITOR_STATE_MAIN;
+        change_to_right_frame();
+        made_new_changes = false;
+    };
+    frm_toolbar->widgets["but_save"]->description =
+        "Save the area onto the files. (Ctrl+S)";
+        
     frm_toolbar->widgets["but_undo"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         undo();
@@ -2513,17 +2540,24 @@ void area_editor::load() {
     frm_toolbar->widgets["but_reference"]->description =
         "Toggle the visibility of the reference. (Ctrl+R)";
         
-    frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        save_area(false);
-        save_reference();
-        clear_selection();
-        state = EDITOR_STATE_MAIN;
-        change_to_right_frame();
-        made_new_changes = false;
+        string help_str =
+            "To create an area, start by drawing its layout. For this, "
+            "you draw the polygons that make up the geometry of the area. "
+            "These polygons cannot overlap, and a polygon whose floor is "
+            "higher than its neighbor's makes a wall. After that, place "
+            "objects where you want, specify the carrying paths, add "
+            "details, and try it out.\n\n"
+            "If you need more help on how to use the area editor, "
+            "check out the tutorial on\n" + AREA_EDITOR_TUTORIAL_URL;
+        al_show_native_message_box(
+            display, "Help", "Area editor help",
+            help_str.c_str(), NULL, 0
+        );
     };
-    frm_toolbar->widgets["but_save"]->description =
-        "Save the area onto the files. (Ctrl+S)";
+    frm_toolbar->widgets["but_help"]->description =
+        "Display some information about the area editor.";
         
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {

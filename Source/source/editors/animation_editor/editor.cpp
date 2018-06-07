@@ -354,7 +354,7 @@ void animation_editor::load_animation_database(const bool update_history) {
         }
     }
     
-    enable_widget(frm_toolbar->widgets["but_load"]);
+    enable_widget(frm_toolbar->widgets["but_reload"]);
     enable_widget(frm_toolbar->widgets["but_save"]);
     frm_hitboxes->hide();
     frm_top->hide();

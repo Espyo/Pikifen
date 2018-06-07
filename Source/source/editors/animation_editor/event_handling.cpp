@@ -70,7 +70,7 @@ void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_load"]->simulate_click();
+        frm_toolbar->widgets["but_reload"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_O && is_ctrl_pressed) {
         frm_toolbar->widgets["but_toggle_origin"]->simulate_click();

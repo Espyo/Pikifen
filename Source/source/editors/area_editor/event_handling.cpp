@@ -167,6 +167,9 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
         frm_layout->widgets["but_sel_filter"]->simulate_click();
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_reload"]->simulate_click();
+        
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
         if(!moving && !selecting) {
             frm_layout->widgets["but_new"]->simulate_click();

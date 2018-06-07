@@ -2297,7 +2297,7 @@ void animation_editor::load() {
     
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
-        "but_load",
+        "but_reload",
         new lafi::button("", "", editor_icons[ICON_LOAD]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
@@ -2350,14 +2350,14 @@ void animation_editor::load() {
     
     
     //Toolbar -- properties.
-    frm_toolbar->widgets["but_load"]->left_mouse_click_handler =
+    frm_toolbar->widgets["but_reload"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
             load_animation_database(false);
         }
     };
-    frm_toolbar->widgets["but_load"]->description =
-        "Load the object from the text file. (Ctrl+L)";
+    frm_toolbar->widgets["but_reload"]->description =
+        "Discard all changes made and load the file again. (Ctrl+L)";
         
     frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2422,7 +2422,7 @@ void animation_editor::load() {
     frm_toolbar->widgets["but_quit"]->description =
         "Quit the animation editor. (Ctrl+Q)";
         
-    disable_widget(frm_toolbar->widgets["but_load"]);
+    disable_widget(frm_toolbar->widgets["but_reload"]);
     disable_widget(frm_toolbar->widgets["but_save"]);
     
     create_picker_frame();
