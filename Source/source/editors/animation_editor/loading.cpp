@@ -2188,6 +2188,8 @@ void animation_editor::load() {
         
     frm_tools->widgets["lbl_panel_name"]->style = faded_style;
     
+    ((lafi::textbox*) frm_tools->widgets["txt_resize"])->enter_key_widget =
+        frm_tools->widgets["but_resize"];
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier. (0.5=half, 2=double, etc.)";
         
@@ -2198,6 +2200,8 @@ void animation_editor::load() {
     frm_tools->widgets["but_resize"]->description =
         "Resize all in-game X/Y and W/H by the given amount.";
         
+    ((lafi::textbox*) frm_tools->widgets["txt_set_scales"])->enter_key_widget =
+        frm_tools->widgets["but_set_scales"];
     frm_tools->widgets["txt_set_scales"]->description =
         "New scale.";
         
@@ -2215,6 +2219,8 @@ void animation_editor::load() {
     frm_tools->widgets["but_rename_anim_name"]->description =
         "Pick an animation to rename.";
         
+    ((lafi::textbox*) frm_tools->widgets["txt_rename_anim"])->enter_key_widget =
+        frm_tools->widgets["but_rename_anim_ok"];
     frm_tools->widgets["txt_rename_anim"]->description =
         "Insert the animation's new name here.";
         
@@ -2232,6 +2238,9 @@ void animation_editor::load() {
     frm_tools->widgets["but_rename_sprite_name"]->description =
         "Pick a sprite to rename.";
         
+    (
+        (lafi::textbox*) frm_tools->widgets["txt_rename_sprite"]
+    )->enter_key_widget = frm_tools->widgets["but_rename_sprite_ok"];
     frm_tools->widgets["txt_rename_sprite"]->description =
         "Insert the sprite's new name here.";
         
@@ -2297,6 +2306,11 @@ void animation_editor::load() {
     
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
+        "but_quit",
+        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_reload",
         new lafi::button("", "", editor_icons[ICON_LOAD]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2341,15 +2355,19 @@ void animation_editor::load() {
         new lafi::button("", "", editor_icons[ICON_HELP]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_toolbar->easy_add(
-        "but_quit",
-        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
-        lafi::EASY_FLAG_WIDTH_PX
-    );
     frm_toolbar->easy_row(4, 4, 4);
     
     
     //Toolbar -- properties.
+    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
+            leave();
+        }
+    };
+    frm_toolbar->widgets["but_quit"]->description =
+        "Quit the animation editor. (Ctrl+Q)";
+        
     frm_toolbar->widgets["but_reload"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
@@ -2405,22 +2423,13 @@ void animation_editor::load() {
             "their frames with the sprites.\n\n"
             "If you need more help on how to use the animation editor, "
             "check out the tutorial on\n" + ANIMATION_EDITOR_TUTORIAL_URL;
-        al_show_native_message_box(
+        show_message_box(
             display, "Help", "Animation editor help",
             help_str.c_str(), NULL, 0
         );
     };
     frm_toolbar->widgets["but_help"]->description =
         "Display some information about the animation editor.";
-        
-    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
-    [this] (lafi::widget * w, int, int) {
-        if(!check_new_unsaved_changes(w)) {
-            leave();
-        }
-    };
-    frm_toolbar->widgets["but_quit"]->description =
-        "Quit the animation editor. (Ctrl+Q)";
         
     disable_widget(frm_toolbar->widgets["but_reload"]);
     disable_widget(frm_toolbar->widgets["but_save"]);

@@ -279,19 +279,36 @@ void animation_editor::draw_side_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, const float outline_thickness
 ) {
+    float dummy = 0;
+    float z_to_use = h_ptr->z;
+    float h_to_use = h_ptr->height;
+    
+    if(h_ptr->height == 0) {
+        //Set the coordinates to the screen top and screen bottom. Add some
+        //padding just to make sure.
+        z_to_use = scr_h + 1;
+        h_to_use = 0 - 1;
+        al_transform_coordinates(&screen_to_world_transform, &dummy, &z_to_use);
+        al_transform_coordinates(&screen_to_world_transform, &dummy, &h_to_use);
+        //The height is the height from the top of the screen to the bottom.
+        h_to_use = z_to_use - h_to_use;
+        //Z needs to be flipped.
+        z_to_use = -z_to_use;
+    }
+    
     al_draw_filled_rectangle(
         h_ptr->pos.x - h_ptr->radius,
-        -h_ptr->z,
+        -z_to_use,
         h_ptr->pos.x + h_ptr->radius,
-        -h_ptr->z - h_ptr->height,
+        -z_to_use - h_to_use,
         color
     );
     
     al_draw_rectangle(
         h_ptr->pos.x - h_ptr->radius,
-        -h_ptr->z,
+        -z_to_use,
         h_ptr->pos.x + h_ptr->radius,
-        -h_ptr->z - h_ptr->height,
+        -z_to_use - h_to_use,
         outline_color, outline_thickness
     );
 }

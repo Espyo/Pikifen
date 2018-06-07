@@ -757,7 +757,7 @@ string replace_all(string s, string search, string replacement) {
 void report_fatal_error(const string &s, data_node* dn) {
     log_error(s, dn);
     
-    al_show_native_message_box(
+    show_message_box(
         NULL, "Fatal error!",
         "Pikifen has encountered a fatal error!",
         s.c_str(),
@@ -1095,7 +1095,7 @@ void signal_handler(const int signum) {
         
     log_error(error_str);
     
-    al_show_native_message_box(
+    show_message_box(
         NULL, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! Please read the readme file to know what you "

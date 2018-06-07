@@ -32,7 +32,7 @@ sprites{
 			}
 			far_left{
 				coords=0.00 -70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -42,7 +42,7 @@ sprites{
 			}
 			far_right{
 				coords=0.00 70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -52,7 +52,7 @@ sprites{
 			}
 			near_left{
 				coords=0.00 -35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -62,7 +62,7 @@ sprites{
 			}
 			near_right{
 				coords=0.00 35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -79,7 +79,7 @@ sprites{
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
-				height=0.00
+				height=128.00
 				radius=28.00
 				type=2
 				value=1.00

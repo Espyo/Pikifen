@@ -51,7 +51,7 @@ sprites{
 			}
 			near_left{
 				coords=0.00 -35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -61,7 +61,7 @@ sprites{
 			}
 			near_left_zap{
 				coords=0.00 -35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=1
 				value=0.00
@@ -71,7 +71,7 @@ sprites{
 			}
 			near_right{
 				coords=0.00 35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -81,7 +81,7 @@ sprites{
 			}
 			near_right_zap{
 				coords=0.00 35.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=1
 				value=0.00
@@ -91,7 +91,7 @@ sprites{
 			}
 			far_left{
 				coords=0.00 -70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -101,7 +101,7 @@ sprites{
 			}
 			far_left_zap{
 				coords=0.00 -70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=1
 				value=0.00
@@ -111,7 +111,7 @@ sprites{
 			}
 			far_right{
 				coords=0.00 70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=0
 				value=1.00
@@ -121,7 +121,7 @@ sprites{
 			}
 			far_right_zap{
 				coords=0.00 70.00 0.00
-				height=128.00
+				height=0.00
 				radius=28.00
 				type=1
 				value=0.00

@@ -2199,6 +2199,8 @@ void area_editor::load() {
     frm_tools->widgets["but_stt"]->description =
         "Allows you to transform the sectors's textures with the mouse.";
         
+    ((lafi::textbox*) frm_tools->widgets["txt_resize"])->enter_key_widget =
+        frm_tools->widgets["but_resize"];
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier (0.5 = half, 2 = double).";
         
@@ -2207,6 +2209,7 @@ void area_editor::load() {
         lafi::textbox* txt_resize =
             (lafi::textbox*) frm_tools->widgets["txt_resize"];
         float mult = s2f(txt_resize->text);
+        txt_resize->text.clear();
         resize_everything(mult);
     };
     frm_tools->widgets["but_resize"]->description =
@@ -2462,6 +2465,11 @@ void area_editor::load() {
     
     frm_toolbar->easy_row(4, 4, 4);
     frm_toolbar->easy_add(
+        "but_quit",
+        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_reload",
         new lafi::button("", "", editor_icons[ICON_LOAD]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2496,15 +2504,19 @@ void area_editor::load() {
         new lafi::button("", "", editor_icons[ICON_HELP]), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
     );
-    frm_toolbar->easy_add(
-        "but_quit",
-        new lafi::button("", "", editor_icons[ICON_QUIT]), 32, 32,
-        lafi::EASY_FLAG_WIDTH_PX
-    );
     frm_toolbar->easy_row(4, 4, 4);
     
     
     //Bottom bar -- properties.
+    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
+    [this] (lafi::widget * w, int, int) {
+        if(!check_new_unsaved_changes(w)) {
+            leave();
+        }
+    };
+    frm_toolbar->widgets["but_quit"]->description =
+        "Quit the area editor. (Ctrl+Q)";
+        
     frm_toolbar->widgets["but_reload"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
@@ -2551,22 +2563,13 @@ void area_editor::load() {
             "details, and try it out.\n\n"
             "If you need more help on how to use the area editor, "
             "check out the tutorial on\n" + AREA_EDITOR_TUTORIAL_URL;
-        al_show_native_message_box(
+        show_message_box(
             display, "Help", "Area editor help",
             help_str.c_str(), NULL, 0
         );
     };
     frm_toolbar->widgets["but_help"]->description =
         "Display some information about the area editor.";
-        
-    frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
-    [this] (lafi::widget * w, int, int) {
-        if(!check_new_unsaved_changes(w)) {
-            leave();
-        }
-    };
-    frm_toolbar->widgets["but_quit"]->description =
-        "Quit the area editor. (Ctrl+Q)";
         
         
     create_picker_frame();

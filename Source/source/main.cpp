@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     
     //Panic check: is there a Game_data folder?
     if(folder_to_vector(GAME_DATA_FOLDER_PATH, true).empty()) {
-        al_show_native_message_box(
+        show_message_box(
             NULL, "Game_data folder not found!",
             "Game_data folder not found!",
             "Could not find the \"Game_data\" folder! "
