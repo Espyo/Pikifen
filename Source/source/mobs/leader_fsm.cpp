@@ -10,6 +10,7 @@
  */
 
 #include "../functions.h"
+#include "../gameplay.h"
 #include "leader.h"
 #include "leader_fsm.h"
 #include "leader_type.h"
@@ -1299,7 +1300,7 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         fade_mgr.start_fade(
             false,
         []() {
-            change_game_state(GAME_STATE_MAIN_MENU);
+            ((gameplay*) game_states[GAME_STATE_GAME])->leave();
         }
         );
     } else if(cur_leader_ptr == m) {

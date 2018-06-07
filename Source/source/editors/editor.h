@@ -86,6 +86,7 @@ protected:
         ICON_ANIMATIONS,
         ICON_SPRITES,
         ICON_BODY_PARTS,
+        ICON_PLAY,
         
         N_EDITOR_ICONS
     };

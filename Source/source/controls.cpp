@@ -385,8 +385,8 @@ void gameplay::handle_button(
             is_input_allowed = false;
             fade_mgr.start_fade(
                 false,
-            [] () {
-                change_game_state(GAME_STATE_MAIN_MENU);
+            [this] () {
+                this->leave();
             }
             );
             

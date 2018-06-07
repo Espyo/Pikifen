@@ -136,6 +136,7 @@ extern bool animation_editor_mmb_pan;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
 extern bool area_editor_mmb_pan;
+extern string area_editor_quick_play;
 extern bool area_editor_show_edge_length;
 extern size_t area_editor_undo_limit;
 extern unsigned char area_editor_view_mode;

@@ -444,7 +444,7 @@ private:
     );
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
-    void save_area(const bool to_backup);
+    bool save_area(const bool to_backup);
     void save_backup();
     void save_reference();
     void select_different_hazard(const bool next);

@@ -2500,6 +2500,11 @@ void area_editor::load() {
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
+        "but_play",
+        new lafi::button("", "", editor_icons[ICON_PLAY]), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "dum_1",
         new lafi::dummy(), 12, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2531,6 +2536,7 @@ void area_editor::load() {
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
+            area_editor_quick_play.clear();
             leave();
         }
     };
@@ -2549,7 +2555,6 @@ void area_editor::load() {
     frm_toolbar->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_area(false);
-        save_reference();
         clear_selection();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
@@ -2557,6 +2562,16 @@ void area_editor::load() {
     };
     frm_toolbar->widgets["but_save"]->description =
         "Save the area onto the files. (Ctrl+S)";
+        
+    frm_toolbar->widgets["but_play"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        area_editor_quick_play = cur_area_name;
+        if(!save_area(false)) return;
+        leave();
+    };
+    frm_toolbar->widgets["but_play"]->description =
+        "Save, quit, and start playing the area. Leaving will return "
+        "to the editor. (Ctrl+P)";
         
     frm_toolbar->widgets["but_undo"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2635,7 +2650,11 @@ void area_editor::load() {
     load_mob_types(false);
     load_weather();
     
-    if(!auto_load_area.empty()) {
+    if(!area_editor_quick_play.empty()) {
+        cur_area_name = area_editor_quick_play;
+        area_editor_quick_play.clear();
+        load_area(false);
+    } else if(!auto_load_area.empty()) {
         cur_area_name = auto_load_area;
         load_area(false);
     }

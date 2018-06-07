@@ -694,7 +694,12 @@ bool editor::is_mouse_in_gui(const point &mouse_coords) {
  */
 void editor::leave() {
     fade_mgr.start_fade(false, [] () {
-        change_game_state(GAME_STATE_MAIN_MENU);
+        if(area_editor_quick_play.empty()) {
+            change_game_state(GAME_STATE_MAIN_MENU);
+        } else {
+            area_to_load = area_editor_quick_play;
+            change_game_state(GAME_STATE_GAME);
+        }
     });
 }
 

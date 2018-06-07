@@ -178,6 +178,9 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
             frm_details->widgets["but_new"]->simulate_click();
         }
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_play"]->simulate_click();
+        
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
         frm_toolbar->widgets["but_quit"]->simulate_click();
         

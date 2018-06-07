@@ -73,6 +73,9 @@ private:
     
 public:
     gameplay();
+    
+    void leave();
+    
     virtual void load();
     virtual void unload();
     virtual void handle_controls(const ALLEGRO_EVENT &ev);

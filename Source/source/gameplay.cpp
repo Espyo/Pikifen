@@ -120,6 +120,18 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
 
 
 /* ----------------------------------------------------------------------------
+ * Leaves the gameplay state, returning to the main menu, or wherever else.
+ */
+void gameplay::leave() {
+    if(area_editor_quick_play.empty()) {
+        change_game_state(GAME_STATE_MAIN_MENU);
+    } else {
+        change_game_state(GAME_STATE_AREA_EDITOR);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the "gameplay" state into memory.
  */
 void gameplay::load() {

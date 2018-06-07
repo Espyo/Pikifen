@@ -2701,8 +2701,9 @@ void area_editor::resize_everything(const float mult) {
 /* ----------------------------------------------------------------------------
  * Saves the area onto the disk.
  * to_backup: If false, save normally. If true, save to an auto-backup file.
+ * Returns true on success, false on failure.
  */
-void area_editor::save_area(const bool to_backup) {
+bool area_editor::save_area(const bool to_backup) {
 
     //Before we start, let's get rid of unused sectors.
     for(size_t s = 0; s < cur_area_data.sectors.size(); ) {
@@ -2979,7 +2980,6 @@ void area_editor::save_area(const bool to_backup) {
     );
     
     
-    
     //Finally, save.
     string geometry_file_name;
     string data_file_name;
@@ -3026,6 +3026,8 @@ void area_editor::save_area(const bool to_backup) {
     enable_widget(frm_toolbar->widgets["but_reload"]);
     
     save_reference();
+    
+    return geo_save_ok && data_save_ok;
     
 }
 
