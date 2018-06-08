@@ -36,24 +36,24 @@ enemy::enemy(
 /* ----------------------------------------------------------------------------
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
-void enemy::draw(sprite_effect_manager* effect_manager) {
+void enemy::draw(bitmap_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
     point draw_pos = get_sprite_center(s_ptr);
     point draw_size = get_sprite_dimensions(s_ptr);
     
-    sprite_effect_manager effects;
+    bitmap_effect_manager effects;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        add_delivery_sprite_effect(
+        add_delivery_bitmap_effect(
             &effects, script_timer.get_ratio_left(),
             ((onion*) carrying_target)->oni_type->pik_type->main_color
         );
     }
     
-    add_status_sprite_effects(&effects);
-    add_sector_brightness_sprite_effect(&effects);
+    add_status_bitmap_effects(&effects);
+    add_sector_brightness_bitmap_effect(&effects);
     
     draw_bitmap_with_effects(
         s_ptr->bitmap,

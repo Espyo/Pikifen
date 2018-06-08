@@ -1569,25 +1569,25 @@ void draw_bitmap_in_box(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a bitmap, applying sprite effects.
+ * Draws a bitmap, applying bitmap effects.
  * bmp:      The bitmap.
  * center:   Center coordinates.
  * size:     Final width and height.
  *   Make this -1 on one of them to keep the aspect ratio from the other.
  * angle:    Angle to rotate the bitmap by.
- * effects:  Sprite effect manager with the effects.
+ * effects:  Bitmap effect manager with the effects.
  */
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle,
-    sprite_effect_manager* effects
+    bitmap_effect_manager* effects
 ) {
 
     if(!bmp) {
         bmp = bmp_error;
     }
     
-    sprite_effect_props final_props = effects->get_final_properties();
+    bitmap_effect_props final_props = effects->get_final_properties();
     
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
     point scale(
@@ -2741,7 +2741,7 @@ void draw_sector_texture(
 /* ----------------------------------------------------------------------------
  * Draws a status effect's bitmap.
  */
-void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
+void draw_status_effect_bmp(mob* m, bitmap_effect_manager* effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     if(status_bmp) {

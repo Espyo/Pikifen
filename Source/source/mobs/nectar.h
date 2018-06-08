@@ -30,7 +30,7 @@ public:
     
     nectar(const point &pos, const string &vars);
     
-    virtual void draw(sprite_effect_manager* effect_manager = NULL);
+    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef NECTAR_INCLUDED

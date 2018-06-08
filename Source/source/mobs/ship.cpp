@@ -29,7 +29,7 @@ ship::ship(const point &pos, ship_type* type, float angle, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws a ship.
  */
-void ship::draw(sprite_effect_manager* effect_manager) {
+void ship::draw(bitmap_effect_manager* effect_manager) {
 
     mob::draw();
     

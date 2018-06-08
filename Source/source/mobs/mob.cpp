@@ -113,14 +113,14 @@ mob::mob(
 
 
 /* ----------------------------------------------------------------------------
- * Adds a sprite effect to the manager, responsible for shading the
+ * Adds a bitmap effect to the manager, responsible for shading the
  * mob when it is in a shaded sector.
  */
-void mob::add_sector_brightness_sprite_effect(sprite_effect_manager* manager) {
+void mob::add_sector_brightness_bitmap_effect(bitmap_effect_manager* manager) {
     if(center_sector->brightness == 255) return;
     
-    sprite_effect se;
-    sprite_effect_props props;
+    bitmap_effect se;
+    bitmap_effect_props props;
     
     props.tint_color = map_gray(center_sector->brightness);
     
@@ -130,19 +130,19 @@ void mob::add_sector_brightness_sprite_effect(sprite_effect_manager* manager) {
 
 
 /* ----------------------------------------------------------------------------
- * Adds a sprite effect to the manager, responsible for color
+ * Adds a bitmap effect to the manager, responsible for color
  * and scaling the mob when it is being delivered to an Onion.
  */
-void mob::add_delivery_sprite_effect(
-    sprite_effect_manager* manager, const float delivery_time_ratio_left,
+void mob::add_delivery_bitmap_effect(
+    bitmap_effect_manager* manager, const float delivery_time_ratio_left,
     const ALLEGRO_COLOR &onion_color
 ) {
 
-    sprite_effect se;
-    sprite_effect_props props_half;
-    sprite_effect_props props_end;
+    bitmap_effect se;
+    bitmap_effect_props props_half;
+    bitmap_effect_props props_end;
     
-    se.add_keyframe(0, sprite_effect_props());
+    se.add_keyframe(0, bitmap_effect_props());
     
     props_half.glow_color = onion_color;
     se.add_keyframe(0.5, props_half);
@@ -157,9 +157,9 @@ void mob::add_delivery_sprite_effect(
 
 
 /* ----------------------------------------------------------------------------
- * Adds the sprite effects caused by the status effects to the manager.
+ * Adds the bitmap effects caused by the status effects to the manager.
  */
-void mob::add_status_sprite_effects(sprite_effect_manager* manager) {
+void mob::add_status_bitmap_effects(bitmap_effect_manager* manager) {
     for(size_t s = 0; s < statuses.size(); ++s) {
         status_type* t = this->statuses[s].type;
         if(
@@ -171,8 +171,8 @@ void mob::add_status_sprite_effects(sprite_effect_manager* manager) {
             continue;
         }
         
-        sprite_effect se;
-        sprite_effect_props props;
+        bitmap_effect se;
+        bitmap_effect_props props;
         props.tint_color = t->tint;
         
         se.add_keyframe(0, props);
@@ -639,7 +639,7 @@ void mob::delete_old_status_effects() {
  * effect_manager: Use this effect manager.
  *   If NULL, an effect manager is created inside exclusively for the function.
  */
-void mob::draw(sprite_effect_manager* effect_manager) {
+void mob::draw(bitmap_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     
@@ -648,15 +648,15 @@ void mob::draw(sprite_effect_manager* effect_manager) {
     bool internal_effect_manager = false;
     
     if(!effect_manager) {
-        effect_manager = new sprite_effect_manager();
+        effect_manager = new bitmap_effect_manager();
         internal_effect_manager = true;
     }
     
     point draw_pos = get_sprite_center(s_ptr);
     point draw_size = get_sprite_dimensions(s_ptr);
     
-    add_status_sprite_effects(effect_manager);
-    add_sector_brightness_sprite_effect(effect_manager);
+    add_status_bitmap_effects(effect_manager);
+    add_sector_brightness_bitmap_effect(effect_manager);
     
     draw_bitmap_with_effects(
         s_ptr->bitmap,

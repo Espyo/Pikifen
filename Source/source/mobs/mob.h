@@ -336,7 +336,7 @@ public:
     
     
     void tick();
-    virtual void draw(sprite_effect_manager* effect_manager = NULL);
+    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
     
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool add, const bool ratio, const float amount);
@@ -382,7 +382,7 @@ public:
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
-    void add_status_sprite_effects(sprite_effect_manager* manager);
+    void add_status_bitmap_effects(bitmap_effect_manager* manager);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
     virtual void receive_disable_from_status(const unsigned char flags);
@@ -394,9 +394,9 @@ public:
     //Drawing tools.
     point get_sprite_center(sprite* s);
     point get_sprite_dimensions(sprite* s, float* scale = NULL);
-    void add_sector_brightness_sprite_effect(sprite_effect_manager* manager);
-    void add_delivery_sprite_effect(
-        sprite_effect_manager* manager, const float delivery_time_ratio_left,
+    void add_sector_brightness_bitmap_effect(bitmap_effect_manager* manager);
+    void add_delivery_bitmap_effect(
+        bitmap_effect_manager* manager, const float delivery_time_ratio_left,
         const ALLEGRO_COLOR &onion_color
     );
     

@@ -49,7 +49,7 @@ void draw_bitmap_in_box(
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle,
-    sprite_effect_manager* effects
+    bitmap_effect_manager* effects
 );
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
@@ -94,7 +94,7 @@ void draw_scaled_text(
     const point &where, const point &scale,
     const int flags, const unsigned char valign, const string &text
 );
-void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects);
+void draw_status_effect_bmp(mob* m, bitmap_effect_manager* effects);
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const int flags, const unsigned char valign,

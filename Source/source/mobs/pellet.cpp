@@ -31,18 +31,18 @@ pellet::pellet(
 /* ----------------------------------------------------------------------------
  * Draws a pellet, with the number and all.
  */
-void pellet::draw(sprite_effect_manager* effect_manager) {
+void pellet::draw(bitmap_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
     point draw_pos = get_sprite_center(s_ptr);
     
-    sprite_effect_manager effects;
-    add_sector_brightness_sprite_effect(&effects);
+    bitmap_effect_manager effects;
+    add_sector_brightness_bitmap_effect(&effects);
     
     if(fsm.cur_state->id == PELLET_STATE_BEING_DELIVERED) {
-        add_delivery_sprite_effect(
+        add_delivery_bitmap_effect(
             &effects, script_timer.get_ratio_left(),
             ((onion*) carrying_target)->oni_type->pik_type->main_color
         );

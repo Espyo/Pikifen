@@ -371,8 +371,8 @@ void leader::swap_held_pikmin(mob* new_pik) {
 /* ----------------------------------------------------------------------------
  * Draw a leader mob.
  */
-void leader::draw(sprite_effect_manager* effect_manager) {
-    sprite_effect_manager effects;
+void leader::draw(bitmap_effect_manager* effect_manager) {
+    bitmap_effect_manager effects;
     
     mob::draw(&effects);
     

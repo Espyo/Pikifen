@@ -28,12 +28,12 @@ nectar::nectar(const point &pos, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws the nectar mob.
  */
-void nectar::draw(sprite_effect_manager* effect_manager) {
+void nectar::draw(bitmap_effect_manager* effect_manager) {
     float radius =
         type->radius * (amount_left + nectar_amount) / (nectar_amount * 2) * 2;
         
-    sprite_effect_manager effects;
-    add_sector_brightness_sprite_effect(&effects);
+    bitmap_effect_manager effects;
+    add_sector_brightness_bitmap_effect(&effects);
     
     draw_bitmap_with_effects(
         bmp_nectar,

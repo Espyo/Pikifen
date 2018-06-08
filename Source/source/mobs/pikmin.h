@@ -79,7 +79,7 @@ public:
     );
     ~pikmin();
     
-    virtual void draw(sprite_effect_manager* effect_manager = NULL);
+    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
     virtual float get_base_speed();
     
     pikmin_type* pik_type;

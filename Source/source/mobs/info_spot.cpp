@@ -40,9 +40,9 @@ info_spot::info_spot(
 /* ----------------------------------------------------------------------------
  * Draw the info spot.
  */
-void info_spot::draw(sprite_effect_manager* effect_manager) {
-    sprite_effect_manager effects;
-    add_sector_brightness_sprite_effect(&effects);
+void info_spot::draw(bitmap_effect_manager* effect_manager) {
+    bitmap_effect_manager effects;
+    add_sector_brightness_bitmap_effect(&effects);
     
     draw_bitmap_with_effects(
         bmp_info_spot,

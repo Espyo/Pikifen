@@ -792,9 +792,9 @@ void fade_manager::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes a sprite effect properties struct.
+ * Initializes a bitmap effect properties struct.
  */
-sprite_effect_props::sprite_effect_props() :
+bitmap_effect_props::bitmap_effect_props() :
     translation(0, 0),
     rotation(0),
     scale(1, 1),
@@ -805,9 +805,9 @@ sprite_effect_props::sprite_effect_props() :
 
 
 /* ----------------------------------------------------------------------------
- * Initializes a sprite effect struct.
+ * Initializes a bitmap effect struct.
  */
-sprite_effect::sprite_effect() :
+bitmap_effect::bitmap_effect() :
     cur_time(0) {
     
 }
@@ -817,8 +817,8 @@ sprite_effect::sprite_effect() :
  * Adds a keyframe to the effect.
  * i.e. What the properties should be at a given point in time.
  */
-void sprite_effect::add_keyframe(
-    const float time, const sprite_effect_props &props
+void bitmap_effect::add_keyframe(
+    const float time, const bitmap_effect_props &props
 ) {
     keyframes[time] = props;
 }
@@ -827,7 +827,7 @@ void sprite_effect::add_keyframe(
 /* ----------------------------------------------------------------------------
  * Sets the current life time on the effect.
  */
-void sprite_effect::set_cur_time(const float cur_time) {
+void bitmap_effect::set_cur_time(const float cur_time) {
     this->cur_time = cur_time;
 }
 
@@ -836,7 +836,7 @@ void sprite_effect::set_cur_time(const float cur_time) {
  * Returns what the properties should be at the specified time.
  * These values are interpolated using the keyframes.
  */
-sprite_effect_props sprite_effect::get_final_properties() {
+bitmap_effect_props bitmap_effect::get_final_properties() {
     assert(!keyframes.empty());
     
     if(keyframes.size() == 1) {
@@ -846,8 +846,8 @@ sprite_effect_props sprite_effect::get_final_properties() {
         //Find the previous and next keyframes.
         float prev_time = 0;
         float next_time = 0;
-        sprite_effect_props* prev_keyframe = &keyframes[0];
-        sprite_effect_props* next_keyframe = NULL;
+        bitmap_effect_props* prev_keyframe = &keyframes[0];
+        bitmap_effect_props* next_keyframe = NULL;
         for(auto k = keyframes.begin(); k != keyframes.end(); ++k) {
             if(k->first > cur_time) {
                 next_keyframe = &k->second;
@@ -860,7 +860,7 @@ sprite_effect_props sprite_effect::get_final_properties() {
         }
         if(!next_keyframe) next_keyframe = prev_keyframe;
         
-        sprite_effect_props final_props;
+        bitmap_effect_props final_props;
         final_props.translation.x =
             interpolate_number(
                 cur_time, prev_time, next_time,
@@ -905,23 +905,23 @@ sprite_effect_props sprite_effect::get_final_properties() {
 /* ----------------------------------------------------------------------------
  * Adds an effect to the manager.
  */
-void sprite_effect_manager::add_effect(sprite_effect effect) {
+void bitmap_effect_manager::add_effect(bitmap_effect effect) {
     effects.push_back(effect);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the final sprite effect properties, at the current time.
+ * Returns the final bitmap effect properties, at the current time.
  * This is a combination of all current effects.
  */
-sprite_effect_props sprite_effect_manager::get_final_properties() {
-    sprite_effect_props final_props;
+bitmap_effect_props bitmap_effect_manager::get_final_properties() {
+    bitmap_effect_props final_props;
     ALLEGRO_COLOR glow_color_sum;
     glow_color_sum = al_map_rgba(0, 0, 0, 0);
     size_t n_glow_colors = 0;
     
     for(size_t e = 0; e < effects.size(); ++e) {
-        sprite_effect_props props = effects[e].get_final_properties();
+        bitmap_effect_props props = effects[e].get_final_properties();
         
         final_props.translation = final_props.translation + props.translation;
         final_props.rotation += props.rotation;

@@ -66,8 +66,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
         3. Remember that the engine only finds the image in one folder. General images go in Game_data/Graphics, and textures go in Game_data/Graphics/Textures.
     
-    Why is Olimar moving when I'm not touching the analog stick?
-        You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if you only wiggle it a bit.
+    Why does the engine think I'm touching the analog stick when I'm not?
+        You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.
     
     Why do I see everything in a single line when I open a text file with Notepad?
         Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use. Install Notepad++ and start using that instead, since it's better in every way.
@@ -89,6 +89,9 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         1. Having some content to play with means people can try out the engine and its features without having to download or create content.
         2. The existing content serves as a basis for new content. If you're having trouble placing a bridge, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red bulborb and recolor it.
     
+    Why do some enemies act a bit differently from how they do in the canon games?
+        It could either be an engine limitation (since Pikifen isn't as complex as a Nintendo product), or it could've been a change I made on purpose. The engine's content isn't meant to mirror the canon content exactly, and sometimes, I make slight changes to features and content that I think will make for a funner, fairer experience.
+    
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     
@@ -96,7 +99,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         It's the style choice I went with for the packaged content, but anybody can style the textures, HUD, and objects in any way they want.
         In my opinion, Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
         The objects are simple, and based off of vector graphics, so it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots and put them in-game.
-        An alternative style that could work all around is pixel art for everything.
+        An alternative style that could maybe work all around is pixel art for everything.
     
     Why didn't you use textures and sounds from the Pikmin games?
         1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
@@ -106,7 +109,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     
     Why 2D?
         3D would be MUCH harder for everyone. You can get something convincing with 2D alone.
-        A 3D engine would be much harder to create, and the content creators would have a much harder time creating models, areas, etc. that look good in 3D.
+        A 3D engine would be much harder to develop, and the content creators would have a much harder time creating models, areas, etc. that look good in 3D.
     
     Will you ever add X?
         Depends. If it's an area or enemy or something, the content creators are meant to do that, not me. Though I might still add it for the sake of demonstration. But if it's something like a feature, ask me!
@@ -117,7 +120,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     
     I'm having a hard time understanding X.
         Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.
-        If you contact me, I can help you with your problem, as well as change stuff to make it easier to follow in the future.
+        If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.
     
 ===============
 4) Compiling

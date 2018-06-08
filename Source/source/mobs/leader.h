@@ -97,7 +97,7 @@ public:
         const float angle, const string &vars
     );
     
-    virtual void draw(sprite_effect_manager* effect_manager = NULL);
+    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
     
     void signal_group_move_start();
     void signal_group_move_end();

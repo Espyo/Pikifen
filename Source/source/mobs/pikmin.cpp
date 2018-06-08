@@ -200,7 +200,7 @@ void pikmin::tick_class_specifics() {
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
-void pikmin::draw(sprite_effect_manager* effect_manager) {
+void pikmin::draw(bitmap_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     
@@ -213,13 +213,13 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
         fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
-    sprite_effect_manager effects;
-    add_sector_brightness_sprite_effect(&effects);
-    add_status_sprite_effects(&effects);
+    bitmap_effect_manager effects;
+    add_sector_brightness_bitmap_effect(&effects);
+    add_status_bitmap_effects(&effects);
     
     if(is_idle) {
-        sprite_effect idle_effect;
-        sprite_effect_props idle_effect_props;
+        bitmap_effect idle_effect;
+        bitmap_effect_props idle_effect_props;
         idle_effect_props.glow_color = pik_type->main_color;
         idle_effect.add_keyframe(0, idle_effect_props);
         effects.add_effect(idle_effect);
