@@ -2520,6 +2520,11 @@ void area_editor::load() {
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
+        "but_snap",
+        new lafi::button(), 32, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "dum_2",
         new lafi::dummy(), 12, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2587,6 +2592,11 @@ void area_editor::load() {
     frm_toolbar->widgets["but_reference"]->description =
         "Toggle the visibility of the reference. (Ctrl+R)";
         
+    frm_toolbar->widgets["but_snap"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        change_snap_mode(sum_and_wrap(snap_mode, 1, N_SNAP_MODES));
+    };
+    
     frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string help_str =
@@ -2641,6 +2651,7 @@ void area_editor::load() {
     open_picker(PICKER_LOAD_AREA);
     update_status_bar();
     problem_type = EPT_NONE_YET;
+    change_snap_mode(SNAP_GRID);
     
     load_custom_particle_generators(false);
     load_spike_damage_types();

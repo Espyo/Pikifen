@@ -1355,7 +1355,8 @@ void vertex::remove_edge(edge* e_ptr) {
  * the specified point, as well as their distances to said point.
  * point:        Coordinates of the point.
  * all_vertexes: Vector with all of the vertexes in the area.
- * merge_radius: Minimum radius to merge.
+ * merge_radius: Minimum radius to merge. This does not take the camera zoom
+ *   level into account.
  */
 vector<pair<dist, vertex*> > get_merge_vertexes(
     const point &pos, vector<vertex*> &all_vertexes, const float merge_radius

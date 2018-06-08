@@ -87,6 +87,10 @@ protected:
         ICON_SPRITES,
         ICON_BODY_PARTS,
         ICON_PLAY,
+        ICON_SNAP_GRID,
+        ICON_SNAP_VERTEXES,
+        ICON_SNAP_EDGES,
+        ICON_SNAP_NOTHING,
         
         N_EDITOR_ICONS
     };

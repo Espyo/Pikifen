@@ -133,6 +133,14 @@ private:
         N_SELECTION_FILTERS,
     };
     
+    enum SNAP_MODES {
+        SNAP_GRID,
+        SNAP_VERTEXES,
+        SNAP_EDGES,
+        SNAP_NOTHING,
+        N_SNAP_MODES,
+    };
+    
     enum VIEW_MODES {
         VIEW_MODE_TEXTURES,
         VIEW_MODE_WIREFRAME,
@@ -142,6 +150,8 @@ private:
     };
     
     static const float         CROSS_SECTION_POINT_RADIUS;
+    static const float         CURSOR_SNAP_DISTANCE;
+    static const float         CURSOR_SNAP_UPDATE_INTERVAL;
     static const float         DEBUG_TEXT_SCALE;
     static const unsigned char DEF_REFERENCE_ALPHA;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
@@ -201,6 +211,10 @@ private:
     string cur_area_name;
     //When showing a hazard in the list, this is the index of the current one.
     size_t cur_hazard_nr;
+    //Last known cursor snap position for heavy snap modes.
+    point cursor_snap_cache;
+    //Time left to update the cursor snap position for heavy snap modes.
+    timer cursor_snap_timer;
     //Debug tool -- show the edge numbers?
     bool debug_edge_nrs;
     //Debug tool -- show the sector numbers?
@@ -337,6 +351,8 @@ private:
     bool show_reference;
     //Render the tree shadows?
     bool show_shadows;
+    //Current cursor snapping mode.
+    unsigned char snap_mode;
     //Starting coordinates of a sector texture transformer drag.
     point stt_drag_start;
     //Original angle of the sector in the sector texture transformer.
@@ -367,6 +383,7 @@ private:
     void cancel_layout_drawing();
     void cancel_layout_moving();
     void calculate_preview_path();
+    void change_snap_mode(const size_t new_mode);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -453,7 +470,7 @@ private:
     void select_tree_shadow(tree_shadow* v);
     void select_vertex(vertex* v);
     void set_new_circle_sector_points();
-    point snap_to_grid(const point &p);
+    point snap_point(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
         const pair<path_stop*, path_stop*> &l1,

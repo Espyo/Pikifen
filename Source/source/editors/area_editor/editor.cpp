@@ -15,6 +15,7 @@
 
 #include "editor.h"
 #include "../../functions.h"
+#include "../../LAFI/button.h"
 #include "../../load.h"
 #include "../../vars.h"
 
@@ -22,6 +23,10 @@ using namespace std;
 
 //Radius to use when drawing a cross-section point.
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
+//Minimum distance between the cursor and something snappable for it to snap.
+const float area_editor::CURSOR_SNAP_DISTANCE = 80.0f;
+//The cursor snap for heavy modes updates these many times a second.
+const float area_editor::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
@@ -138,6 +143,7 @@ area_editor::layout_drawing_node::layout_drawing_node() :
  */
 area_editor::area_editor() :
     backup_timer(area_editor_backup_interval),
+    cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
     debug_triangulation(false),
@@ -275,6 +281,37 @@ void area_editor::cancel_layout_moving() {
         (*v)->y = pre_move_vertex_coords[*v].y;
     }
     clear_layout_moving();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes the current cursor snap mode and updates the button icon
+ * and description.
+ */
+void area_editor::change_snap_mode(const size_t new_mode) {
+    snap_mode = new_mode;
+    
+    ALLEGRO_BITMAP* new_button_icon = NULL;
+    string new_mode_name;
+    
+    if(snap_mode == SNAP_GRID) {
+        new_mode_name = "Grid";
+        new_button_icon = editor_icons[ICON_SNAP_GRID];
+    } else if(snap_mode == SNAP_VERTEXES) {
+        new_mode_name = "Vertexes";
+        new_button_icon = editor_icons[ICON_SNAP_VERTEXES];
+    } else if(snap_mode == SNAP_EDGES) {
+        new_mode_name = "Edges";
+        new_button_icon = editor_icons[ICON_SNAP_EDGES];
+    } else if(snap_mode == SNAP_NOTHING) {
+        new_mode_name = "Off. Shift also disables snapping";
+        new_button_icon = editor_icons[ICON_SNAP_NOTHING];
+    }
+    
+    lafi::button* but = (lafi::button*) frm_toolbar->widgets["but_snap"];
+    but->description =
+        "Current cursor snapping mode: " + new_mode_name + ". (Ctrl+N)";
+    but->icon = new_button_icon;
 }
 
 
@@ -780,6 +817,7 @@ void area_editor::delete_selected_path_elements() {
 void area_editor::do_logic() {
     editor::do_logic_pre();
     
+    cursor_snap_timer.tick(delta_t);
     path_preview_timer.tick(delta_t);
     new_sector_error_tint_timer.tick(delta_t);
     undo_save_lock_timer.tick(delta_t);
@@ -3211,15 +3249,91 @@ void area_editor::set_new_circle_sector_points() {
 
 
 /* ----------------------------------------------------------------------------
- * Snaps a point to the nearest grid space.
+ * Snaps a point to the nearest available snapping space, based on the
+ * current snap mode.
  */
-point area_editor::snap_to_grid(const point &p) {
+point area_editor::snap_point(const point &p) {
     if(is_shift_pressed) return p;
-    return
-        point(
-            round(p.x / area_editor_grid_interval) * area_editor_grid_interval,
-            round(p.y / area_editor_grid_interval) * area_editor_grid_interval
-        );
+    
+    if(snap_mode == SNAP_GRID) {
+        return
+            point(
+                round(p.x / area_editor_grid_interval) *
+                area_editor_grid_interval,
+                round(p.y / area_editor_grid_interval) *
+                area_editor_grid_interval
+            );
+            
+    } else if(snap_mode == SNAP_VERTEXES) {
+        if(cursor_snap_timer.time_left > 0.0f) {
+            return cursor_snap_cache;
+        }
+        cursor_snap_timer.start();
+        
+        vector<pair<dist, vertex*> > v =
+            get_merge_vertexes(
+                p, cur_area_data.vertexes,
+                CURSOR_SNAP_DISTANCE / cam_zoom
+            );
+        if(v.empty()) {
+            cursor_snap_cache = p;
+            return p;
+        } else {
+            sort(
+                v.begin(), v.end(),
+            [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+                return v1.first < v2.first;
+            }
+            );
+            
+            point ret(v[0].second->x, v[0].second->y);
+            cursor_snap_cache = ret;
+            return ret;
+        }
+        
+    } else if(snap_mode == SNAP_EDGES) {
+        if(cursor_snap_timer.time_left > 0.0f) {
+            return cursor_snap_cache;
+        }
+        cursor_snap_timer.start();
+        
+        dist closest_dist;
+        point closest_point = p;
+        bool got_one = false;
+        
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = cur_area_data.edges[e];
+            float r;
+            
+            point edge_p =
+                get_closest_point_in_line(
+                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                    p, &r
+                );
+                
+            if(r < 0.0f) {
+                edge_p = point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
+            } else if(r > 1.0f) {
+                edge_p = point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
+            }
+            
+            dist d(p, edge_p);
+            if(d > CURSOR_SNAP_DISTANCE / cam_zoom) continue;
+            
+            if(!got_one || d < closest_dist) {
+                got_one = true;
+                closest_dist = d;
+                closest_point = edge_p;
+            }
+        }
+        
+        cursor_snap_cache = closest_point;
+        return closest_point;
+        
+    }
+    
+    return p;
 }
 
 

@@ -839,7 +839,7 @@ void area_editor::do_drawing() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            point hotspot = snap_to_grid(mouse_cursor_w);
+            point hotspot = snap_point(mouse_cursor_w);
             
             al_draw_line(
                 drawing_nodes.back().snapped_spot.x,
@@ -902,7 +902,7 @@ void area_editor::do_drawing() {
     //Path drawing.
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(path_drawing_stop_1) {
-            point hotspot = snap_to_grid(mouse_cursor_w);
+            point hotspot = snap_point(mouse_cursor_w);
             al_draw_line(
                 path_drawing_stop_1->pos.x,
                 path_drawing_stop_1->pos.y,
@@ -941,7 +941,7 @@ void area_editor::do_drawing() {
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
         point marker = mouse_cursor_w;
-        marker = snap_to_grid(marker);
+        marker = snap_point(marker);
         al_draw_line(
             marker.x - 16, marker.y, marker.x + 16, marker.y,
             al_map_rgb(255, 255, 255), 1.0 / cam_zoom

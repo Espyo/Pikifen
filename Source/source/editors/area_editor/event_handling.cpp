@@ -171,11 +171,15 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         frm_toolbar->widgets["but_reload"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
-        if(!moving && !selecting) {
-            frm_layout->widgets["but_new"]->simulate_click();
-            frm_mobs->widgets["but_new"]->simulate_click();
-            frm_paths->widgets["but_draw"]->simulate_click();
-            frm_details->widgets["but_new"]->simulate_click();
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_snap"]->simulate_click();
+        } else {
+            if(!moving && !selecting) {
+                frm_layout->widgets["but_new"]->simulate_click();
+                frm_mobs->widgets["but_new"]->simulate_click();
+                frm_paths->widgets["but_draw"]->simulate_click();
+                frm_details->widgets["but_new"]->simulate_click();
+            }
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
@@ -376,7 +380,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
     
         //Drawing the layout.
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         
         //First, check if the user is trying to undo the previous node.
         if(
@@ -421,7 +425,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
     
         //Create a new circular sector.
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         
         if(new_circle_sector_step == 0) {
             new_circle_sector_center = hotspot;
@@ -458,7 +462,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         //Create a mob where the cursor is.
         register_change("object creation");
         sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         
         mob_category* category_to_use = last_mob_category;
         if(!category_to_use) {
@@ -484,7 +488,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         //Duplicate the current mobs to where the cursor is.
         register_change("object duplication");
         sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         
         point selection_tl = (*selected_mobs.begin())->pos;
         point selection_br = selection_tl;
@@ -520,7 +524,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
     
         //Drawing a path.
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         path_stop* clicked_stop = get_path_stop_under_point(hotspot);
         
         if(path_drawing_stop_1) {
@@ -566,7 +570,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         //Create a new shadow where the cursor is.
         register_change("tree shadow creation");
         sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         
         tree_shadow* new_shadow = new tree_shadow(hotspot);
         new_shadow->bitmap = bmp_error;
@@ -1004,7 +1008,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
         point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
         point closest_vertex_new_p =
-            snap_to_grid(move_closest_vertex_start_pos + mouse_offset);
+            snap_point(move_closest_vertex_start_pos + mouse_offset);
         point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
         for(
             auto v = selected_vertexes.begin();
@@ -1028,7 +1032,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
         point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
         point closest_mob_new_p =
-            snap_to_grid(move_closest_mob_start_pos + mouse_offset);
+            snap_point(move_closest_mob_start_pos + mouse_offset);
         point offset = closest_mob_new_p - move_closest_mob_start_pos;
         for(
             auto m = selected_mobs.begin();
@@ -1051,7 +1055,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
         point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
         point closest_stop_new_p =
-            snap_to_grid(move_closest_stop_start_pos + mouse_offset);
+            snap_point(move_closest_stop_start_pos + mouse_offset);
         point offset = closest_stop_new_p - move_closest_stop_start_pos;
         for(
             auto s = selected_path_stops.begin();
@@ -1074,7 +1078,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             area_data* prepared_state = prepare_state();
             if(
                 !selected_shadow_transformation.handle_mouse_move(
-                    snap_to_grid(mouse_cursor_w)
+                    snap_point(mouse_cursor_w)
                 )
             ) {
                 forget_prepared_state(prepared_state);
@@ -1099,13 +1103,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     
         //Move path preview checkpoints.
         path_preview_checkpoints[moving_path_preview_checkpoint] =
-            snap_to_grid(mouse_cursor_w);
+            snap_point(mouse_cursor_w);
         path_preview_timer.start(false);
         
     } else if(state == EDITOR_STATE_TOOLS) {
         //Move reference handle.
         reference_transformation.handle_mouse_move(
-            snap_to_grid(mouse_cursor_w)
+            snap_point(mouse_cursor_w)
         );
         tools_to_gui();
         
@@ -1139,7 +1143,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         //Move cross-section points.
         if(moving_cross_section_point != -1) {
             cross_section_points[moving_cross_section_point] =
-                snap_to_grid(mouse_cursor_w);
+                snap_point(mouse_cursor_w);
         }
         
     }
@@ -1222,7 +1226,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     update_status_bar();
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-        point hotspot = snap_to_grid(mouse_cursor_w);
+        point hotspot = snap_point(mouse_cursor_w);
         if(new_circle_sector_step == 1) {
             new_circle_sector_anchor = hotspot;
         } else {
