@@ -157,17 +157,30 @@ struct path_link {
 
 
 /* ----------------------------------------------------------------------------
- * Information about a sector's texture.
+ * Data about one of the tangible floors in a sector.
+ * A sector normally only has one floor, but it can have an overhang, like
+ * a bridge, above the main floor.
+ * Imagine a floor is like a solid block -- it has a top, which is the actual
+ * floor mobs walk on, and a bottom.
+ * Floor 0 of a sector should always be the main floor, and 1 should be
+ * the optional, floating floor.
  */
-struct sector_texture_info {
-    point scale; //Texture scale.
-    point translation; //Translation.
-    float rot; //Rotation.
-    ALLEGRO_BITMAP* bitmap;
-    ALLEGRO_COLOR tint;
-    string file_name;
+struct sector_floor {
+    //Sector it belongs to.
+    sector* s_ptr;
+    //Floor height.
+    float z;
+    //Z of the bottom side. Assumed -infinity for the main floor.
+    float bottom_z;
     
-    sector_texture_info();
+    point texture_scale;
+    point texture_translation;
+    float texture_rot;
+    ALLEGRO_BITMAP* texture_bitmap;
+    ALLEGRO_COLOR texture_tint;
+    string texture_file_name;
+    
+    sector_floor(sector* s_ptr = NULL);
 };
 
 
@@ -182,11 +195,9 @@ struct sector_texture_info {
 struct sector {
     unsigned char type;
     bool is_bottomless_pit;
-    float z; //Height.
     string tag;
     unsigned char brightness;
     
-    sector_texture_info texture_info;
     bool fade;
     bool always_cast_shadow;
     
@@ -194,6 +205,9 @@ struct sector {
     vector<hazard*> hazards; //For gameplay.
     bool hazard_floor;
     liquid* associated_liquid;
+    
+    sector_floor floors[2];
+    unsigned char n_floors;
     
     vector<size_t> edge_nrs;
     vector<edge*> edges;

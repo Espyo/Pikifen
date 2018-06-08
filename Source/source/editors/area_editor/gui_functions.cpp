@@ -37,12 +37,12 @@ void area_editor::asa_to_gui() {
     
     sector* s_ptr = *selected_sectors.begin();
     
-    set_textbox_text(frm_asa, "txt_x", f2s(s_ptr->texture_info.translation.x));
-    set_textbox_text(frm_asa, "txt_y", f2s(s_ptr->texture_info.translation.y));
-    set_textbox_text(frm_asa, "txt_sx", f2s(s_ptr->texture_info.scale.x));
-    set_textbox_text(frm_asa, "txt_sy", f2s(s_ptr->texture_info.scale.y));
-    set_angle_picker_angle(frm_asa, "ang_a", s_ptr->texture_info.rot);
-    set_textbox_text(frm_asa, "txt_tint", c2s(s_ptr->texture_info.tint));
+    set_textbox_text(frm_asa, "txt_x", f2s(s_ptr->floors[0].texture_translation.x));
+    set_textbox_text(frm_asa, "txt_y", f2s(s_ptr->floors[0].texture_translation.y));
+    set_textbox_text(frm_asa, "txt_sx", f2s(s_ptr->floors[0].texture_scale.x));
+    set_textbox_text(frm_asa, "txt_sy", f2s(s_ptr->floors[0].texture_scale.y));
+    set_angle_picker_angle(frm_asa, "ang_a", s_ptr->floors[0].texture_rot);
+    set_textbox_text(frm_asa, "txt_tint", c2s(s_ptr->floors[0].texture_tint));
     set_textbox_text(frm_asa, "txt_brightness", i2s(s_ptr->brightness));
     ((lafi::scrollbar*) frm_asa->widgets["bar_brightness"])->set_value(
         s_ptr->brightness, false
@@ -240,25 +240,25 @@ void area_editor::gui_to_asa() {
     gui_to_var_helper h;
     
     h.register_point(
-        &s_ptr->texture_info.translation,
+        &s_ptr->floors[0].texture_translation,
         point(
             s2f(get_textbox_text(frm_asa, "txt_x")),
             s2f(get_textbox_text(frm_asa, "txt_y"))
         )
     );
     h.register_point(
-        &s_ptr->texture_info.scale,
+        &s_ptr->floors[0].texture_scale,
         point(
             s2f(get_textbox_text(frm_asa, "txt_sx")),
             s2f(get_textbox_text(frm_asa, "txt_sy"))
         )
     );
     h.register_float(
-        &s_ptr->texture_info.rot,
+        &s_ptr->floors[0].texture_rot,
         get_angle_picker_angle(frm_asa, "ang_a")
     );
     h.register_color(
-        &s_ptr->texture_info.tint,
+        &s_ptr->floors[0].texture_tint,
         s2c(get_textbox_text(frm_asa, "txt_tint"))
     );
     h.register_uchar(
@@ -531,14 +531,14 @@ void area_editor::gui_to_sector() {
     gui_to_var_helper h;
     
     h.register_float(
-        &s_ptr->z,
+        &s_ptr->floors[0].z,
         s2f(get_textbox_text(frm_sector, "txt_z"))
     );
     h.register_bool(
         &s_ptr->fade,
         get_radio_selection(frm_sector, "rad_fade")
     );
-    string new_texture = s_ptr->texture_info.file_name;
+    string new_texture = s_ptr->floors[0].texture_file_name;
     h.register_string(
         &new_texture,
         get_button_text(frm_sector, "but_texture")
@@ -1193,7 +1193,7 @@ void area_editor::sector_to_gui() {
         
         sector* s_ptr = *selected_sectors.begin();
         
-        set_textbox_text(frm_sector, "txt_z", f2s(s_ptr->z));
+        set_textbox_text(frm_sector, "txt_z", f2s(s_ptr->floors[0].z));
         
         if(s_ptr->fade) {
             set_radio_selection(frm_sector, "rad_fade", true);
@@ -1203,7 +1203,7 @@ void area_editor::sector_to_gui() {
         } else {
             set_radio_selection(frm_sector, "rad_texture", true);
             set_button_text(
-                frm_sector, "but_texture", s_ptr->texture_info.file_name
+                frm_sector, "but_texture", s_ptr->floors[0].texture_file_name
             );
             enable_widget(frm_sector->widgets["but_texture"]);
             

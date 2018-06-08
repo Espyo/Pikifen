@@ -129,7 +129,10 @@ void gameplay::do_aesthetic_logic() {
         get_sector(leader_cursor_w, NULL, true);
     if(cursor_sector) {
         cursor_height_diff_light =
-            (cursor_sector->z - cur_leader_ptr->z) * 0.0033;
+            (
+                cursor_sector->floors[cursor_sector->n_floors - 1].z -
+                cur_leader_ptr->z
+            ) * 0.0033;
         cursor_height_diff_light =
             clamp(cursor_height_diff_light, -0.33f, 0.33f);
     }
@@ -158,7 +161,8 @@ void gameplay::do_aesthetic_logic() {
             
             if(max_throw_z > 0) {
                 throw_can_reach_cursor =
-                    cursor_sector->z < cur_leader_ptr->z + max_throw_z;
+                    cursor_sector->floors[cursor_sector->n_floors - 1].z <
+                    cur_leader_ptr->z + max_throw_z;
             }
         }
     }
@@ -628,10 +632,16 @@ void gameplay::do_gameplay_logic() {
             "Sector under mouse: " +
             (mouse_sector ? "" : "None") + "\n";
         if(mouse_sector) {
+            str += "  Z:";
+            for(unsigned char f = 0; f < mouse_sector->n_floors; ++f) {
+                str += " " + f2s(mouse_sector->floors[0].z);
+            }
             str +=
-                "  Z: " + f2s(mouse_sector->z) + "\n"
-                "  Texture: " +
-                mouse_sector->texture_info.file_name;
+                "\n"
+                "  Texture:";
+            for(unsigned char f = 0; f < mouse_sector->n_floors; ++f) {
+                str += " " + mouse_sector->floors[f].texture_file_name;
+            }
         }
         print_info(str);
     }

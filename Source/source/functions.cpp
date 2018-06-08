@@ -53,8 +53,13 @@ bool casts_shadow(sector* s1, sector* s2) {
     if(!s1 || !s2) return false;
     if(s1->is_bottomless_pit) return false;
     if(s2->is_bottomless_pit) return false;
-    if(s1->z > s2->z && s1->always_cast_shadow) return true;
-    if(s1->z <= s2->z + SECTOR_STEP) return false;
+    if(
+        s1->floors[0].z > s2->floors[0].z &&
+        s1->always_cast_shadow
+    ) return true;
+    if(
+        s1->floors[0].z <= s2->floors[0].z + SECTOR_STEP
+    ) return false;
     return true;
 }
 
@@ -120,12 +125,14 @@ float clamp(const float number, const float minimum, const float maximum) {
 void clear_area_textures() {
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
-        if(
-            s_ptr->texture_info.bitmap &&
-            s_ptr->texture_info.bitmap != bmp_error
-        ) {
-            textures.detach(s_ptr->texture_info.file_name);
-            s_ptr->texture_info.bitmap = NULL;
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            if(
+                s_ptr->floors[f].texture_bitmap &&
+                s_ptr->floors[f].texture_bitmap != bmp_error
+            ) {
+                textures.detach(s_ptr->floors[f].texture_file_name);
+                s_ptr->floors[f].texture_bitmap = NULL;
+            }
         }
     }
 }

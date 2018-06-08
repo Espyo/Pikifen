@@ -846,9 +846,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         stt_sector = get_sector(mouse_cursor_w, NULL, false);
         if(stt_sector) {
             moving = true;
-            stt_orig_angle = stt_sector->texture_info.rot;
-            stt_orig_offset = stt_sector->texture_info.translation;
-            stt_orig_scale = stt_sector->texture_info.scale;
+            //TODO add support to the upper floor.
+            stt_orig_angle = stt_sector->floors[0].texture_rot;
+            stt_orig_offset = stt_sector->floors[0].texture_translation;
+            stt_orig_scale = stt_sector->floors[0].texture_scale;
         }
         
     } else if(state == EDITOR_STATE_REVIEW && show_cross_section) {
@@ -1140,26 +1141,27 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_STT) {
         //Move sector texture transformation property.
+        //TODO Add support for floating floors.
         if(stt_sector && moving) {
             if(stt_mode == 0) {
                 register_change("texture offset change");
                 point diff = (mouse_cursor_w - stt_drag_start);
-                diff = rotate_point(diff, -stt_sector->texture_info.rot);
-                diff = diff / stt_sector->texture_info.scale;
-                stt_sector->texture_info.translation = stt_orig_offset + diff;
+                diff = rotate_point(diff, -stt_sector->floors[0].texture_rot);
+                diff = diff / stt_sector->floors[0].texture_scale;
+                stt_sector->floors[0].texture_translation = stt_orig_offset + diff;
             } else if(stt_mode == 1) {
                 register_change("texture scale change");
                 point diff = (mouse_cursor_w - stt_drag_start);
-                diff = rotate_point(diff, -stt_sector->texture_info.rot);
+                diff = rotate_point(diff, -stt_sector->floors[0].texture_rot);
                 point drag_start_rot =
-                    rotate_point(stt_drag_start, -stt_sector->texture_info.rot);
+                    rotate_point(stt_drag_start, -stt_sector->floors[0].texture_rot);
                 diff = diff / drag_start_rot * stt_orig_scale;
-                stt_sector->texture_info.scale = stt_orig_scale + diff;
+                stt_sector->floors[0].texture_scale = stt_orig_scale + diff;
             } else {
                 register_change("texture angle change");
                 float drag_start_a = get_angle(point(), stt_drag_start);
                 float cursor_a = get_angle(point(), mouse_cursor_w);
-                stt_sector->texture_info.rot =
+                stt_sector->floors[0].texture_rot =
                     stt_orig_angle + (cursor_a - drag_start_a);
             }
         }

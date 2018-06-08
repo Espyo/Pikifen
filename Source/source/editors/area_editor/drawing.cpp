@@ -35,14 +35,15 @@ void area_editor::do_drawing() {
         area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
         !cur_area_data.sectors.empty()
     ) {
-        lowest_sector_z = cur_area_data.sectors[0]->z;
+        //TODO add support for upper floors.
+        lowest_sector_z = cur_area_data.sectors[0]->floors[0].z;
         highest_sector_z = lowest_sector_z;
         
         for(size_t s = 1; s < cur_area_data.sectors.size(); ++s) {
             lowest_sector_z =
-                min(lowest_sector_z, cur_area_data.sectors[s]->z);
+                min(lowest_sector_z, cur_area_data.sectors[s]->floors[0].z);
             highest_sector_z =
-                max(highest_sector_z, cur_area_data.sectors[s]->z);
+                max(highest_sector_z, cur_area_data.sectors[s]->floors[0].z);
         }
     }
     
@@ -158,10 +159,11 @@ void area_editor::do_drawing() {
                                 255
                             );
                     } else if(view_heightmap) {
+                        //TODO Add support for the floating floors.
                         unsigned char g =
                             interpolate_number(
-                                s_ptr->z, lowest_sector_z, highest_sector_z,
-                                0, 224
+                                s_ptr->floors[0].z,
+                                lowest_sector_z, highest_sector_z, 0, 224
                             );
                         av[v].color =
                             al_map_rgba(g, g + 31, g, 255);
@@ -315,9 +317,10 @@ void area_editor::do_drawing() {
         
         if(
             !one_sided &&
-            e_ptr->sectors[0]->z == e_ptr->sectors[1]->z &&
+            e_ptr->sectors[0]->floors[0].z == e_ptr->sectors[1]->floors[0].z &&
             e_ptr->sectors[0]->type == e_ptr->sectors[1]->type
         ) {
+            //TODO Add support for floating floors.
             same_z = true;
         }
         
@@ -956,6 +959,7 @@ void area_editor::do_drawing() {
     
     //Cross-section graph.
     if(state == EDITOR_STATE_REVIEW && show_cross_section) {
+        //TODO Add support for floating floors.
     
         dist cross_section_world_length(
             cross_section_points[0], cross_section_points[1]
@@ -1052,11 +1056,11 @@ void area_editor::do_drawing() {
                     if(
                         splits[sp].sector_ptrs[se] &&
                         (
-                            splits[sp].sector_ptrs[se]->z < lowest_z ||
+                            splits[sp].sector_ptrs[se]->floors[0].z < lowest_z ||
                             !got_lowest_z
                         )
                     ) {
-                        lowest_z = splits[sp].sector_ptrs[se]->z;
+                        lowest_z = splits[sp].sector_ptrs[se]->floors[0].z;
                         got_lowest_z = true;
                     }
                 }
@@ -1098,7 +1102,7 @@ void area_editor::do_drawing() {
                     ) / 2.0;
                 float pikmin_silhouette_pivot_y =
                     cross_section_window_end.y - 8 -
-                    ((central_sector->z - lowest_z) * proportion);
+                    ((central_sector->floors[0].z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
                     bmp_pikmin_silhouette,
                     al_map_rgba(255, 255, 255, 128),
@@ -1227,7 +1231,7 @@ void area_editor::draw_cross_section_sector(
         end_ratio;
     float rectangle_y =
         cross_section_window_end.y - 8 -
-        ((sector_ptr->z - lowest_z) * proportion);
+        ((sector_ptr->floors[0].z - lowest_z) * proportion);
         
     al_draw_filled_rectangle(
         rectangle_x1, rectangle_y,

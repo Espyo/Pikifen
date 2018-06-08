@@ -72,6 +72,8 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     pg.duration_deviation = 0.25;
     pg.emit(particles);
     
+    //TODO open on the top floor, not the main one.
+    /*
     for(size_t s = 0; s < b_ptr->secs.size(); s++) {
         sector* s_ptr = b_ptr->secs[s];
         
@@ -99,6 +101,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
     }
+    */
 }
 
 

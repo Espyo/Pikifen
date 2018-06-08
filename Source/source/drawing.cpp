@@ -1235,10 +1235,12 @@ void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
             continue;
         }
         
+        float floor_z = mob_ptr->ground_floor->z;
+        
         draw_mob_shadow(
             mob_ptr->pos,
             mob_ptr->type->radius * 2,
-            mob_ptr->z - mob_ptr->ground_sector->z,
+            mob_ptr->z - floor_z,
             shadow_stretch
         );
     }
@@ -1776,22 +1778,22 @@ void draw_liquid(
     }
     
     //Layer 1 - Transparent wobbling ground texture.
-    if(s_ptr->texture_info.bitmap) {
+    if(s_ptr->floors[0].texture_bitmap) {
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -s_ptr->texture_info.translation.x,
-            -s_ptr->texture_info.translation.y,
-            1.0 / s_ptr->texture_info.scale.x,
-            1.0 / s_ptr->texture_info.scale.y,
-            -s_ptr->texture_info.rot
+            -s_ptr->floors[0].texture_translation.x,
+            -s_ptr->floors[0].texture_translation.y,
+            1.0 / s_ptr->floors[0].texture_scale.x,
+            1.0 / s_ptr->floors[0].texture_scale.y,
+            -s_ptr->floors[0].texture_rot
         );
         
         float ground_wobble =
             -sin(area_time_passed * LIQUID_WOBBLE_TIME_SCALE) *
             LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
-            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.5;
+            al_get_bitmap_height(s_ptr->floors[0].texture_bitmap) * 0.5;
             
         for(size_t v = 0; v < n_vertexes; ++v) {
         
@@ -1815,7 +1817,7 @@ void draw_liquid(
         }
         
         al_draw_prim(
-            av, NULL, s_ptr->texture_info.bitmap,
+            av, NULL, s_ptr->floors[0].texture_bitmap,
             0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
@@ -2302,7 +2304,10 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
         float shadow_length =
-            get_wall_shadow_length(other_sector->z - s_ptr->z);
+            get_wall_shadow_length(
+                other_sector->floors[0].z -
+                s_ptr->floors[0].z
+            );
             
         /*
          * We need to record the two vertexes of the edge as
@@ -2408,7 +2413,10 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                     //makes it easier to calculate things later on.
                     neighbor_shadow_length[v] =
                         neighbor_shadow[v] ?
-                        get_wall_shadow_length(other_sector->z - s_ptr->z) :
+                        get_wall_shadow_length(
+                            other_sector->floors[0].z -
+                            s_ptr->floors[0].z
+                        ) :
                         shadow_length;
                 }
             }
@@ -2643,19 +2651,19 @@ void draw_sector_texture(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_texture_info* texture_info_to_use =
-            &texture_sector[t]->texture_info;
+        sector_floor* floor_to_use =
+            &texture_sector[t]->floors[0];
             
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         if(texture_sector[t]) {
             al_build_transform(
                 &tra,
-                -texture_info_to_use->translation.x,
-                -texture_info_to_use->translation.y,
-                1.0 / texture_info_to_use->scale.x,
-                1.0 / texture_info_to_use->scale.y,
-                -texture_info_to_use->rot
+                -floor_to_use->texture_translation.x,
+                -floor_to_use->texture_translation.y,
+                1.0 / floor_to_use->texture_scale.x,
+                1.0 / floor_to_use->texture_scale.y,
+                -floor_to_use->texture_rot
             );
         }
         
@@ -2708,10 +2716,10 @@ void draw_sector_texture(
             av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    texture_sector[t]->texture_info.tint.r * brightness_mult,
-                    texture_sector[t]->texture_info.tint.g * brightness_mult,
-                    texture_sector[t]->texture_info.tint.b * brightness_mult,
-                    texture_sector[t]->texture_info.tint.a * alpha_mult *
+                    texture_sector[t]->floors[0].texture_tint.r * brightness_mult,
+                    texture_sector[t]->floors[0].texture_tint.g * brightness_mult,
+                    texture_sector[t]->floors[0].texture_tint.b * brightness_mult,
+                    texture_sector[t]->floors[0].texture_tint.a * alpha_mult *
                     opacity
                 );
         }
@@ -2725,8 +2733,8 @@ void draw_sector_texture(
         
         ALLEGRO_BITMAP* tex =
             texture_sector[t] ?
-            texture_sector[t]->texture_info.bitmap :
-            texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
+            texture_sector[t]->floors[0].texture_bitmap :
+            texture_sector[t == 0 ? 1 : 0]->floors[0].texture_bitmap;
             
         al_draw_prim(
             av, NULL, tex,

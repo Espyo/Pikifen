@@ -962,14 +962,14 @@ unsigned char area_editor::find_problems() {
                 if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) in_wall = true;
                 else {
                     if(
-                        e_ptr->sectors[0]->z >
-                        e_ptr->sectors[1]->z + SECTOR_STEP
+                        e_ptr->sectors[0]->floors[0].z >
+                        e_ptr->sectors[1]->floors[0].z + SECTOR_STEP
                     ) {
                         in_wall = true;
                     }
                     if(
-                        e_ptr->sectors[1]->z >
-                        e_ptr->sectors[0]->z + SECTOR_STEP
+                        e_ptr->sectors[1]->floors[0].z >
+                        e_ptr->sectors[0]->floors[0].z + SECTOR_STEP
                     ) {
                         in_wall = true;
                     }
@@ -1031,14 +1031,15 @@ unsigned char area_editor::find_problems() {
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
     
         sector* s_ptr = cur_area_data.sectors[s];
-        if(s_ptr->edges.empty()) continue;
-        if(
-            s_ptr->texture_info.file_name.empty() &&
-            !s_ptr->is_bottomless_pit && !s_ptr->fade
-        ) {
-            problem_string = "";
-            problem_sector_ptr = s_ptr;
-            return EPT_UNKNOWN_TEXTURE;
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            if(f == 0 && (s_ptr->is_bottomless_pit || s_ptr->fade)) {
+                continue;
+            }
+            if(s_ptr->floors[f].texture_file_name.empty()) {
+                problem_string = "";
+                problem_sector_ptr = s_ptr;
+                return EPT_UNKNOWN_TEXTURE;
+            }
         }
     }
     
@@ -1050,17 +1051,18 @@ unsigned char area_editor::find_problems() {
         sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->edges.empty()) continue;
         
-        if(s_ptr->texture_info.file_name.empty()) continue;
-        
-        if(
-            find(
-                texture_file_names.begin(), texture_file_names.end(),
-                s_ptr->texture_info.file_name
-            ) == texture_file_names.end()
-        ) {
-            problem_string = s_ptr->texture_info.file_name;
-            problem_sector_ptr = s_ptr;
-            return EPT_UNKNOWN_TEXTURE;
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            if(s_ptr->floors[f].texture_file_name.empty()) continue;
+            if(
+                find(
+                    texture_file_names.begin(), texture_file_names.end(),
+                    s_ptr->floors[f].texture_file_name
+                ) == texture_file_names.end()
+            ) {
+                problem_string = s_ptr->floors[f].texture_file_name;
+                problem_sector_ptr = s_ptr;
+                return EPT_UNKNOWN_TEXTURE;
+            }
         }
     }
     
@@ -1170,7 +1172,7 @@ void area_editor::finish_layout_drawing() {
         outer_sector->clone(new_sector);
         update_sector_texture(
             new_sector,
-            outer_sector->texture_info.file_name
+            outer_sector->floors[0].texture_file_name
         );
     } else {
         if(!texture_suggestions.empty()) {
@@ -2298,7 +2300,8 @@ void area_editor::homogenize_selected_sectors() {
     for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
         if(s == selected_sectors.begin()) continue;
         base->clone(*s);
-        update_sector_texture(*s, base->texture_info.file_name);
+        update_sector_texture(*s, base->floors[0].texture_file_name);
+        //TODO Add support for the floating floors.
     }
 }
 
@@ -2317,9 +2320,11 @@ void area_editor::load_area(const bool from_backup) {
     vector<pair<string, size_t> > texture_uses_vector;
     
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        string n = cur_area_data.sectors[s]->texture_info.file_name;
-        if(n.empty()) continue;
-        texture_uses_map[n]++;
+        for(unsigned char f = 0; f < cur_area_data.sectors[s]->n_floors; ++f) {
+            string n = cur_area_data.sectors[s]->floors[f].texture_file_name;
+            if(n.empty()) continue;
+            texture_uses_map[n]++;
+        }
     }
     for(auto u = texture_uses_map.begin(); u != texture_uses_map.end(); ++u) {
         texture_uses_vector.push_back(make_pair(u->first, u->second));
@@ -2706,8 +2711,10 @@ void area_editor::resize_everything(const float mult) {
     
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
-        s_ptr->texture_info.scale *= mult;
-        s_ptr->texture_info.translation *= mult;
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            s_ptr->floors[f].texture_scale *= mult;
+            s_ptr->floors[f].texture_translation *= mult;
+        }
         s_ptr->triangles.clear();
         triangulate(s_ptr, NULL, false, false);
     }
@@ -2791,6 +2798,7 @@ bool area_editor::save_area(const bool to_backup) {
     }
     
     //Sectors.
+    //TODO Add support for the floating floors.
     data_node* sectors_node = new data_node("sectors", "");
     geometry_file.add(sectors_node);
     
@@ -2809,7 +2817,7 @@ bool area_editor::save_area(const bool to_backup) {
                 new data_node("is_bottomless_pit", "true")
             );
         }
-        sector_node->add(new data_node("z", f2s(s_ptr->z)));
+        sector_node->add(new data_node("z", f2s(s_ptr->floors[0].z)));
         if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) {
             sector_node->add(
                 new data_node("brightness", i2s(s_ptr->brightness))
@@ -2839,55 +2847,55 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(!s_ptr->texture_info.file_name.empty()) {
+        if(!s_ptr->floors[0].texture_file_name.empty()) {
             sector_node->add(
                 new data_node(
                     "texture",
-                    s_ptr->texture_info.file_name
+                    s_ptr->floors[0].texture_file_name
                 )
             );
         }
         
-        if(s_ptr->texture_info.rot != 0) {
+        if(s_ptr->floors[0].texture_rot != 0) {
             sector_node->add(
                 new data_node(
                     "texture_rotate",
-                    f2s(s_ptr->texture_info.rot)
+                    f2s(s_ptr->floors[0].texture_rot)
                 )
             );
         }
         if(
-            s_ptr->texture_info.scale.x != 1 ||
-            s_ptr->texture_info.scale.y != 1
+            s_ptr->floors[0].texture_scale.x != 1 ||
+            s_ptr->floors[0].texture_scale.y != 1
         ) {
             sector_node->add(
                 new data_node(
                     "texture_scale",
-                    f2s(s_ptr->texture_info.scale.x) + " " +
-                    f2s(s_ptr->texture_info.scale.y)
+                    f2s(s_ptr->floors[0].texture_scale.x) + " " +
+                    f2s(s_ptr->floors[0].texture_scale.y)
                 )
             );
         }
         if(
-            s_ptr->texture_info.translation.x != 0 ||
-            s_ptr->texture_info.translation.y != 0
+            s_ptr->floors[0].texture_translation.x != 0 ||
+            s_ptr->floors[0].texture_translation.y != 0
         ) {
             sector_node->add(
                 new data_node(
                     "texture_trans",
-                    f2s(s_ptr->texture_info.translation.x) + " " +
-                    f2s(s_ptr->texture_info.translation.y)
+                    f2s(s_ptr->floors[0].texture_translation.x) + " " +
+                    f2s(s_ptr->floors[0].texture_translation.y)
                 )
             );
         }
         if(
-            s_ptr->texture_info.tint.r != 1.0 ||
-            s_ptr->texture_info.tint.g != 1.0 ||
-            s_ptr->texture_info.tint.b != 1.0 ||
-            s_ptr->texture_info.tint.a != 1.0
+            s_ptr->floors[0].texture_tint.r != 1.0 ||
+            s_ptr->floors[0].texture_tint.g != 1.0 ||
+            s_ptr->floors[0].texture_tint.b != 1.0 ||
+            s_ptr->floors[0].texture_tint.a != 1.0
         ) {
             sector_node->add(
-                new data_node("texture_tint", c2s(s_ptr->texture_info.tint))
+                new data_node("texture_tint", c2s(s_ptr->floors[0].texture_tint))
             );
         }
         
@@ -3639,9 +3647,10 @@ void area_editor::update_reference(const string &new_file_name) {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
-    textures.detach(s_ptr->texture_info.file_name);
-    s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap = textures.get(file_name);
+    //TODO Add support for floating floors.
+    textures.detach(s_ptr->floors[0].texture_file_name);
+    s_ptr->floors[0].texture_file_name = file_name;
+    s_ptr->floors[0].texture_bitmap = textures.get(file_name);
 }
 
 

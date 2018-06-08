@@ -376,7 +376,12 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                     if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
-                            (e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) &&
+                            (
+                                e_ptr->sectors[0]->floors[0].z ==
+                                e_ptr->sectors[1]->floors[0].z
+                            ) &&
+                            e_ptr->sectors[0]->n_floors == 1 &&
+                            e_ptr->sectors[1]->n_floors == 1 &&
                             e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                             e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
@@ -717,9 +722,12 @@ void area_data::clone(area_data &other) {
         sector* s_ptr = sectors[s];
         sector* os_ptr = other.sectors[s];
         s_ptr->clone(os_ptr);
-        os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
-        os_ptr->texture_info.bitmap =
-            textures.get(s_ptr->texture_info.file_name, NULL, false);
+        
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            os_ptr->floors[f].texture_file_name = s_ptr->floors[f].texture_file_name;
+            os_ptr->floors[f].texture_bitmap =
+                textures.get(s_ptr->floors[f].texture_file_name, NULL, false);
+        }
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -976,13 +984,16 @@ mob_gen::mob_gen(
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
     is_bottomless_pit(false),
-    z(0),
+    n_floors(1),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
     always_cast_shadow(false),
     hazard_floor(true),
     associated_liquid(nullptr) {
     
+    floors[0].bottom_z = -INFINITY;
+    floors[0].s_ptr = this;
+    floors[1].s_ptr = this;
 }
 
 
@@ -1008,15 +1019,18 @@ void sector::add_edge(edge* e_ptr, const size_t e_nr) {
 void sector::clone(sector* new_sector) {
     new_sector->type = type;
     new_sector->is_bottomless_pit = is_bottomless_pit;
-    new_sector->z = z;
     new_sector->tag = tag;
     new_sector->hazard_floor = hazard_floor;
     new_sector->hazards_str = hazards_str;
     new_sector->brightness = brightness;
-    new_sector->texture_info.scale = texture_info.scale;
-    new_sector->texture_info.translation = texture_info.translation;
-    new_sector->texture_info.rot = texture_info.rot;
-    new_sector->texture_info.tint = texture_info.tint;
+    new_sector->n_floors = n_floors;
+    for(size_t f = 0; f < n_floors; ++f) {
+        new_sector->floors[f].z = floors[f].z;
+        new_sector->floors[f].texture_scale = floors[f].texture_scale;
+        new_sector->floors[f].texture_translation = floors[f].texture_translation;
+        new_sector->floors[f].texture_rot = floors[f].texture_rot;
+        new_sector->floors[f].texture_tint = floors[f].texture_tint;
+    }
     new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
 }
@@ -1116,22 +1130,24 @@ void sector::remove_edge(edge* e_ptr) {
  * Destroys a sector.
  */
 sector::~sector() {
-    for(size_t t = 0; t < 2; ++t) {
-        if(texture_info.bitmap && texture_info.bitmap != bmp_error) {
-            bitmaps.detach(texture_info.file_name);
+    for(size_t f = 0; f < 2; ++f) {
+        if(floors[f].texture_bitmap && floors[f].texture_bitmap != bmp_error) {
+            bitmaps.detach(floors[f].texture_file_name);
         }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a sector texture's info struct.
+ * Creates a sector floor struct.
  */
-sector_texture_info::sector_texture_info() :
-    scale(1.0, 1.0),
-    rot(0),
-    bitmap(nullptr),
-    tint(al_map_rgb(255, 255, 255)) {
+sector_floor::sector_floor(sector* s_ptr) :
+    s_ptr(s_ptr),
+    z(0),
+    texture_scale(1.0, 1.0),
+    texture_rot(0),
+    texture_bitmap(nullptr),
+    texture_tint(al_map_rgb(255, 255, 255)) {
 }
 
 

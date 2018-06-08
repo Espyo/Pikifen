@@ -50,7 +50,7 @@ mob::mob(
     intended_turn_pos(nullptr),
     z_cap(FLT_MAX),
     home(pos),
-    ground_sector(nullptr),
+    ground_floor(nullptr),
     center_sector(nullptr),
     gravity_mult(1.0f),
     push_amount(0),
@@ -88,11 +88,11 @@ mob::mob(
     
     sector* sec = get_sector(pos, nullptr, true);
     if(sec) {
-        z = sec->z;
+        ground_floor = &(sec->floors[0]);
+        z = sec->floors[0].z;
     } else {
         to_delete = true;
     }
-    ground_sector = sec;
     center_sector = sec;
     
     if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
@@ -757,6 +757,17 @@ void mob::finish_dying() {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if the mob is colliding against a floor. This only checks the
+ * vertical aspect, i.e. Zs and heights.
+ */
+bool mob::check_floor_collision(sector_floor* floor_ptr) {
+    if(z > floor_ptr->z) return false;
+    if(z + type->height < floor_ptr->bottom_z) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob focus on m2.
  */
 void mob::focus_on_mob(mob* m) {
@@ -1015,8 +1026,8 @@ void mob::release_chomped_pikmin() {
 void mob::respawn() {
     pos = home;
     center_sector = get_sector(pos, NULL, true);
-    ground_sector = center_sector;
-    z = center_sector->z + 100;
+    ground_floor = &(center_sector->floors[center_sector->n_floors - 1]);
+    z = ground_floor->z + 100;
 }
 
 
@@ -1294,7 +1305,7 @@ void mob::tick_misc_logic() {
  * falling because of gravity, moving forward, etc.
  */
 void mob::tick_physics() {
-    if(!ground_sector) {
+    if(!ground_floor) {
         //Object is placed out of bounds.
         return;
     }
@@ -1305,8 +1316,8 @@ void mob::tick_physics() {
     
     point new_pos = pos;
     float new_z = z;
-    sector* new_ground_sector = ground_sector;
-    float pre_move_ground_z = ground_sector->z;
+    sector_floor* new_ground_floor = ground_floor;
+    float pre_move_ground_z = ground_floor->z;
     
     point move_speed = speed;
     
@@ -1350,8 +1361,11 @@ void mob::tick_physics() {
                 if(chase_teleport_z) {
                     z = *chase_teleport_z;
                 }
-                ground_sector = sec;
+                ground_floor = &(sec->floors[0]);
                 center_sector = sec;
+                if(sec->n_floors > 1 && sec->floors[1].z < z) {
+                    ground_floor = &(sec->floors[1]);
+                }
                 speed.x = speed.y = speed_z = 0;
                 pos = final_target_pos;
                 finished_moving = true;
@@ -1403,7 +1417,7 @@ void mob::tick_physics() {
     
         if(move_speed.x == 0 && move_speed.y == 0) break;
         
-        //Start by checking sector collisions.
+        //Start by checking sector collisions. Or rather, floor collisions.
         //For this, we will only check if the mob is intersecting
         //with any edge. With this, we trust that mobs can't go so fast
         //that they're fully on one side of an edge in one frame,
@@ -1414,24 +1428,33 @@ void mob::tick_physics() {
         new_pos.x = pos.x + delta_t* move_speed.x;
         new_pos.y = pos.y + delta_t* move_speed.y;
         new_z = z;
-        new_ground_sector = ground_sector;
+        
+        new_ground_floor = ground_floor;
         set<edge*> intersecting_edges;
         
-        //Get the sector the mob will be on.
+        //Get the sector the mob's center will be on.
         sector* new_center_sector = get_sector(new_pos, NULL, true);
-        sector* step_sector = new_center_sector;
+        sector_floor* step_floor = &(new_center_sector->floors[0]);
+        if(new_center_sector->n_floors > 1 && new_center_sector->floors[1].z < z) {
+            step_floor = &(new_center_sector->floors[1]);
+        }
         
         if(!new_center_sector) {
             //Out of bounds. No movement.
             break;
-        } else {
-            new_ground_sector = new_center_sector;
         }
         
-        if(z < new_center_sector->z) {
-            //If it'd end up under the ground, refuse the move.
-            break;
+        new_ground_floor = step_floor;
+        
+        //If it'd end up inside a floor, refuse the move.
+        bool goes_inside = false;
+        for(unsigned char f = 0; f < new_center_sector->n_floors; ++f) {
+            if(check_floor_collision(&new_center_sector->floors[f])) {
+                goes_inside = true;
+                break;
+            }
         }
+        if(goes_inside) break;
         
         //Before checking the edges, let's consult the blockmap and look at
         //the edges in the same block the mob is on.
@@ -1500,44 +1523,63 @@ void mob::tick_physics() {
                         
                         if(!is_edge_blocking) {
                             if(
-                                e_ptr->sectors[0]->z < z &&
-                                e_ptr->sectors[1]->z < z
+                                e_ptr->sectors[0]->floors[e_ptr->sectors[0]->n_floors - 1].z < z &&
+                                e_ptr->sectors[1]->floors[e_ptr->sectors[1]->n_floors - 1].z < z
                             ) {
-                                //An edge whose sectors are below the mob?
+                                //An edge whose floors are below the mob?
                                 //No collision here.
-                                continue;
-                            }
-                            if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
-                                //No difference in floor height = no wall.
-                                //Ignore this.
                                 continue;
                             }
                         }
                         
-                        sector* tallest_sector; //Tallest of the two.
+                        //Figure out what is the tallest floor the mob can step on.
+                        sector_floor* tallest_floor = NULL; //Tallest floor of the two sectors.
                         if(
                             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
                         ) {
-                            tallest_sector = e_ptr->sectors[1];
+                            if(
+                                e_ptr->sectors[1]->n_floors == 2 &&
+                                e_ptr->sectors[1]->floors[1].z < z
+                            ) {
+                                tallest_floor = &(e_ptr->sectors[1]->floors[1]);
+                            } else {
+                                tallest_floor = &(e_ptr->sectors[1]->floors[0]);
+                            }
                             
                         } else if(
                             e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                         ) {
-                            tallest_sector = e_ptr->sectors[0];
+                            if(
+                                e_ptr->sectors[0]->n_floors == 2 &&
+                                e_ptr->sectors[0]->floors[1].z < z
+                            ) {
+                                tallest_floor = &(e_ptr->sectors[0]->floors[1]);
+                            } else {
+                                tallest_floor = &(e_ptr->sectors[0]->floors[0]);
+                            }
                             
                         } else {
-                            if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
-                                tallest_sector = e_ptr->sectors[0];
-                            } else {
-                                tallest_sector = e_ptr->sectors[1];
+                            for(unsigned char s = 0; s < 2; ++s) {
+                                for(unsigned char f = 0; f < e_ptr->sectors[s]->n_floors; ++f) {
+                                    if(e_ptr->sectors[s]->floors[f].bottom_z > z + type->height) {
+                                        //This floor is too high up. The mob won't walk on it.
+                                        continue;
+                                    }
+                                    if(
+                                        !tallest_floor ||
+                                        e_ptr->sectors[s]->floors[f].z > tallest_floor->z
+                                    ) {
+                                        tallest_floor = &(e_ptr->sectors[s]->floors[f]);
+                                    }
+                                }
                             }
                         }
                         
                         if(
-                            tallest_sector->z > new_ground_sector->z &&
-                            tallest_sector->z <= z
+                            tallest_floor->z > new_ground_floor->z &&
+                            tallest_floor->z <= z
                         ) {
-                            new_ground_sector = tallest_sector;
+                            new_ground_floor = tallest_floor;
                         }
                         
                         //Check if it can go up this step.
@@ -1547,10 +1589,10 @@ void mob::tick_physics() {
                         //encountered of all edges crossed.
                         if(
                             !was_thrown &&
-                            tallest_sector->z <= z + SECTOR_STEP &&
-                            tallest_sector->z > step_sector->z
+                            tallest_floor->z <= z + SECTOR_STEP &&
+                            tallest_floor->z > step_floor->z
                         ) {
-                            step_sector = tallest_sector;
+                            step_floor = tallest_floor;
                         }
                         
                         //Add this edge to the list of intersections, then.
@@ -1575,11 +1617,11 @@ void mob::tick_physics() {
         
         if(!successful_move) break;
         
-        if(step_sector->z > new_ground_sector->z) {
-            new_ground_sector = step_sector;
+        if(step_floor->z > new_ground_floor->z) {
+            new_ground_floor = step_floor;
         }
         
-        if(z < step_sector->z) new_z = step_sector->z;
+        if(z < step_floor->z) new_z = step_floor->z;
         
         //Check wall angles and heights to check which of these edges
         //really are wall collisions.
@@ -1601,9 +1643,11 @@ void mob::tick_physics() {
             
             if(!is_edge_wall) {
                 for(unsigned char s = 0; s < 2; s++) {
-                    if(e_ptr->sectors[s]->z > new_z) {
-                        is_edge_wall = true;
-                        wall_sector = s;
+                    for(unsigned char f = 0; f < e_ptr->sectors[s]->n_floors; ++f) {
+                        if(check_floor_collision(&(e_ptr->sectors[s]->floors[f]))) {
+                            is_edge_wall = true;
+                            wall_sector = s;
+                        }
                     }
                 }
             }
@@ -1620,11 +1664,11 @@ void mob::tick_physics() {
             if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
                 if(
                     (
-                        e_ptr->sectors[0]->z > new_z ||
+                        e_ptr->sectors[0]->floors[0].z > new_z ||
                         e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
                     ) &&
                     (
-                        e_ptr->sectors[1]->z > new_z ||
+                        e_ptr->sectors[1]->floors[0].z > new_z ||
                         e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                     )
                 ) {
@@ -1632,8 +1676,10 @@ void mob::tick_physics() {
                 }
             }
             
-            //Ok, there's obviously been a collision, so let's work out what
-            //wall the mob will slide on.
+            successful_move = false;
+            touched_wall = true;
+            //Ok, at this point, there's clearly been a collision,
+            //so let's work out what wall the mob will slide on.
             
             //The wall's normal is the direction the wall is facing.
             //i.e. the direction from the top floor to the bottom floor.
@@ -1684,11 +1730,6 @@ void mob::tick_physics() {
                 }
                 
             }
-            
-            //By the way, if we got to this point, that means there are real
-            //collisions happening. Let's mark this move as unsuccessful.
-            successful_move = false;
-            touched_wall = true;
         }
         
         //If the mob is just slamming against the wall head-on, perpendicularly,
@@ -1707,7 +1748,7 @@ void mob::tick_physics() {
             //Good news, the mob can move to this new spot freely.
             pos = new_pos;
             z = new_z;
-            ground_sector = new_ground_sector;
+            ground_floor = new_ground_floor;
             center_sector = new_center_sector;
             finished_moving = true;
             
@@ -1746,33 +1787,36 @@ void mob::tick_physics() {
     
     //Vertical movement.
     
-    //If the current ground is one step (or less) below
-    //the previous ground, just instantly go down the step.
+    //If the current floor is one step (or less) below
+    //the previous floor, just instantly go down the step.
     if(
-        pre_move_ground_z - ground_sector->z <= SECTOR_STEP &&
+        pre_move_ground_z - ground_floor->z <= SECTOR_STEP &&
         z == pre_move_ground_z
     ) {
-        z = ground_sector->z;
+        z = ground_floor->z;
     }
     
-    //Landing on a bottomless pit or hazardous floor.
+    //Landing on a floor. Also, check for hazards and the bottomless pit.
     hazard* new_on_hazard = NULL;
     z += delta_t* speed_z;
-    if(z <= ground_sector->z) {
-        z = ground_sector->z;
+    if(z <= ground_floor->z) {
+        z = ground_floor->z;
         speed_z = 0;
         was_thrown = false;
         fsm.run_event(MOB_EVENT_LANDED);
-        if(ground_sector->is_bottomless_pit) {
-            fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
-        }
         
-        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
-            fsm.run_event(
-                MOB_EVENT_TOUCHED_HAZARD,
-                (void*) ground_sector->hazards[h]
-            );
-            new_on_hazard = ground_sector->hazards[h];
+        if(ground_floor->bottom_z == -INFINITY) {
+            if(ground_floor->s_ptr->is_bottomless_pit) {
+                fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
+            }
+            
+            for(size_t h = 0; h < ground_floor->s_ptr->hazards.size(); ++h) {
+                fsm.run_event(
+                    MOB_EVENT_TOUCHED_HAZARD,
+                    (void*) ground_floor->s_ptr->hazards[h]
+                );
+                new_on_hazard = ground_floor->s_ptr->hazards[h];
+            }
         }
     }
     
@@ -1786,7 +1830,7 @@ void mob::tick_physics() {
     
     //Gravity.
     if(gravity_mult > 0) {
-        if(z > ground_sector->z) {
+        if(z > ground_floor->z) {
             speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
         } else {
             speed_z = 0;
@@ -1796,13 +1840,13 @@ void mob::tick_physics() {
     }
     
     //On a sector that has a hazard that is not on the floor.
-    if(z > ground_sector->z && !ground_sector->hazard_floor) {
-        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+    if(z > ground_floor->z && !ground_floor->s_ptr->hazard_floor) {
+        for(size_t h = 0; h < ground_floor->s_ptr->hazards.size(); ++h) {
             fsm.run_event(
                 MOB_EVENT_TOUCHED_HAZARD,
-                (void*) ground_sector->hazards[h]
+                (void*) ground_floor->s_ptr->hazards[h]
             );
-            new_on_hazard = ground_sector->hazards[h];
+            new_on_hazard = ground_floor->s_ptr->hazards[h];
         }
     }
     
@@ -1815,7 +1859,7 @@ void mob::tick_physics() {
     on_hazard = new_on_hazard;
     
     //Quick panic check: if it's somehow inside the ground, pop it out.
-    z = max(z, ground_sector->z);
+    z = max(z, ground_floor->z);
 }
 
 

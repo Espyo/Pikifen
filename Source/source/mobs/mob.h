@@ -248,8 +248,8 @@ public:
     float z_cap;
     //Starting coordinates; what the mob calls "home".
     point home;
-    //The highest ground below the entire mob.
-    sector* ground_sector;
+    //The highest floor below the entire mob.
+    sector_floor* ground_floor;
     //Sector that the mob's center is on.
     sector* center_sector;
     //Multiply the mob's gravity by this.
@@ -351,6 +351,7 @@ public:
     void apply_knockback(const float knockback, const float knockback_angle);
     void calculate_carrying_destination(mob* added, mob* removed);
     void cause_spike_damage(mob* victim, const bool is_ingestion);
+    inline bool check_floor_collision(sector_floor* floor_ptr);
     size_t get_latched_pikmin_amount();
     float get_latched_pikmin_weight();
     void focus_on_mob(mob* m);

@@ -159,6 +159,8 @@ void load_area(
     }
     
     //Sectors.
+    //TODO Add support for floating floors.
+    /*
     size_t n_sectors =
         geometry_file.get_child_by_name(
             "sectors"
@@ -248,7 +250,7 @@ void load_area(
             );
             
         cur_area_data.sectors.push_back(new_sector);
-    }
+    }*/
     
     //Mobs.
     size_t n_mobs =
@@ -446,6 +448,9 @@ void load_area(
  */
 void load_area_textures() {
     //TODO will this still be needed after area editor v2?
+    
+    //TODO Add support for floating floors.
+    /*
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         
@@ -456,6 +461,7 @@ void load_area_textures() {
                 textures.get(s_ptr->texture_info.file_name, NULL);
         }
     }
+    */
 }
 
 
@@ -1462,13 +1468,16 @@ void unload_area() {
  */
 void unload_area_textures() {
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        
+        //TODO Add support for floating floors.
+        /*
         sector* s_ptr = cur_area_data.sectors[s];
         
         if(s_ptr->texture_info.file_name.empty()) continue;
         
         textures.detach(s_ptr->texture_info.file_name);
         s_ptr->texture_info.file_name.clear();
-        s_ptr->texture_info.bitmap = NULL;
+        s_ptr->texture_info.bitmap = NULL;*/
     }
 }
 
