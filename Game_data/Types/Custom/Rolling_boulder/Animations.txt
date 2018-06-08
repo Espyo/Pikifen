@@ -58,8 +58,8 @@ sprites{
 		file_size=64.00 64.00
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=128.00
+				coords=0.00 0.00 -0.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -75,7 +75,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -91,7 +91,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -107,7 +107,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -123,7 +123,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -139,7 +139,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -155,7 +155,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=64.00
 				radius=32.00
 				type=1
 				value=60.00
@@ -171,8 +171,8 @@ sprites{
 		scale=0.25 0.25
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=128.00
+				coords=0.00 0.00 -0.00
+				height=16.00
 				radius=8.00
 				type=1
 				value=60.00
@@ -189,7 +189,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=24.00
 				radius=12.00
 				type=1
 				value=60.00
@@ -206,7 +206,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=32.00
 				radius=16.00
 				type=1
 				value=60.00
@@ -223,7 +223,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=40.00
 				radius=20.00
 				type=1
 				value=60.00
@@ -240,7 +240,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=48.00
 				radius=24.00
 				type=1
 				value=60.00
@@ -257,7 +257,7 @@ sprites{
 		hitboxes{
 			rock{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=56.00
 				radius=28.00
 				type=1
 				value=60.00

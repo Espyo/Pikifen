@@ -246,8 +246,8 @@ sprites{
 				knockback=1.00
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
+				coords=13.00 0.00 -12.00
+				height=48.00
 				radius=7.00
 				type=1
 				value=20.00

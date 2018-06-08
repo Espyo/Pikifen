@@ -163,8 +163,8 @@ sprites{
 		scale=0.50 0.50
 		hitboxes{
 			fist{
-				coords=10.00 10.00 0.00
-				height=128.00
+				coords=10.00 10.00 -0.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -173,7 +173,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -191,7 +191,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=10.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -200,7 +200,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -218,7 +218,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=0.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -227,7 +227,7 @@ sprites{
 			}
 			body{
 				coords=-10.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -245,7 +245,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=0.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -254,7 +254,7 @@ sprites{
 			}
 			body{
 				coords=-8.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -271,7 +271,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=10.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -280,7 +280,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -298,7 +298,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=0.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -307,7 +307,7 @@ sprites{
 			}
 			body{
 				coords=-16.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -325,7 +325,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=0.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -334,7 +334,7 @@ sprites{
 			}
 			body{
 				coords=-12.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -351,7 +351,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=10.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -360,7 +360,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -377,7 +377,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=10.00 10.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -386,7 +386,7 @@ sprites{
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -403,15 +403,15 @@ sprites{
 		scale=0.50 0.50
 		hitboxes{
 			fist{
-				coords=22.00 3.00 0.00
-				height=128.00
+				coords=22.00 3.00 -20.00
+				height=86.00
 				radius=14.00
 				type=1
 				value=8.00
 			}
 			body{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00
@@ -429,7 +429,7 @@ sprites{
 		hitboxes{
 			fist{
 				coords=-5.00 8.00 0.00
-				height=128.00
+				height=46.00
 				radius=8.00
 				type=2
 				value=1.00
@@ -438,7 +438,7 @@ sprites{
 			}
 			body{
 				coords=-10.00 0.00 0.00
-				height=128.00
+				height=46.00
 				radius=16.00
 				type=0
 				value=1.00

@@ -330,7 +330,7 @@ sprites{
 			}
 			mouth{
 				coords=57.00 0.00 -20.00
-				height=40.00
+				height=70.00
 				radius=32.00
 				type=1
 				value=30.00
@@ -356,7 +356,7 @@ sprites{
 			}
 			mouth{
 				coords=65.00 0.00 -20.00
-				height=40.00
+				height=70.00
 				radius=32.00
 				type=1
 				value=30.00
@@ -427,7 +427,7 @@ sprites{
 		hitboxes{
 			body{
 				coords=1.00 0.00 -16.00
-				height=40.00
+				height=70.00
 				radius=42.00
 				type=1
 				value=30.00
@@ -454,7 +454,7 @@ sprites{
 		hitboxes{
 			body{
 				coords=1.00 0.00 -16.00
-				height=40.00
+				height=70.00
 				radius=42.00
 				type=1
 				value=30.00

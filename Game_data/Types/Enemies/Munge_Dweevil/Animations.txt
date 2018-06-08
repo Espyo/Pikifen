@@ -128,7 +128,7 @@ sprites{
 			}
 			gas{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=48.00
 				radius=32.00
 				type=2
 				value=1.00
@@ -180,7 +180,7 @@ sprites{
 			}
 			gas{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=48.00
 				radius=32.00
 				type=2
 				value=1.00
@@ -368,7 +368,7 @@ sprites{
 			}
 			gas{
 				coords=0.00 0.00 0.00
-				height=128.00
+				height=48.00
 				radius=32.00
 				type=2
 				value=1.00
@@ -576,8 +576,8 @@ sprites{
 				knockback=1.00
 			}
 			gas{
-				coords=0.00 0.00 -64.00
-				height=128.00
+				coords=0.00 0.00 -32.00
+				height=108.00
 				radius=32.00
 				type=1
 				value=0.00
@@ -602,7 +602,7 @@ sprites{
 			}
 			gas{
 				coords=0.00 0.00 -32.00
-				height=64.00
+				height=108.00
 				radius=70.00
 				type=1
 				value=0.00

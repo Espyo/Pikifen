@@ -551,7 +551,7 @@ sprites{
 			}
 			mouth{
 				coords=102.00 0.00 -40.00
-				height=128.00
+				height=200.00
 				radius=38.00
 				type=1
 				value=30.00
@@ -586,7 +586,7 @@ sprites{
 			}
 			mouth{
 				coords=95.00 4.00 -40.00
-				height=128.00
+				height=200.00
 				radius=38.00
 				type=1
 				value=30.00
@@ -780,7 +780,7 @@ sprites{
 		hitboxes{
 			body{
 				coords=50.00 -8.00 -32.00
-				height=128.00
+				height=192.00
 				radius=60.00
 				type=1
 				value=0.00
@@ -791,7 +791,7 @@ sprites{
 			}
 			back{
 				coords=-13.00 0.00 -32.00
-				height=128.00
+				height=192.00
 				radius=64.00
 				type=1
 				value=0.00
@@ -819,7 +819,7 @@ sprites{
 		hitboxes{
 			body{
 				coords=50.00 8.00 -32.00
-				height=128.00
+				height=192.00
 				radius=60.00
 				type=1
 				value=0.00
@@ -829,7 +829,7 @@ sprites{
 			}
 			back{
 				coords=-13.00 0.00 -32.00
-				height=128.00
+				height=192.00
 				radius=64.00
 				type=1
 				value=0.00
