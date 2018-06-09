@@ -99,6 +99,8 @@ const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 const float MOB_SHADOW_Y_MULT = 0.2f;
 //Number of maturities.
 const size_t N_MATURITIES = 3;
+//When an opponent is hit, it takes this long to be possible to hit it again.
+const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 //How frequently should a replay state be saved.
 const float REPLAY_SAVE_FREQUENCY = 1.0f;
 //Red color's index moves these many units per second.

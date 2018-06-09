@@ -54,6 +54,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     b_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
     b_ptr->start_dying();
     b_ptr->finish_dying();
+    b_ptr->tangible = false;
     
     particle p(
         PARTICLE_TYPE_BITMAP, m->pos,

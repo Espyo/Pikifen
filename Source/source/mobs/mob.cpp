@@ -282,6 +282,7 @@ bool mob::attack(
     float attacker_offense = 0;
     float defense_multiplier = 1;
     
+    //First, check if this mob cannot be damaged.
     if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
         //This hitbox can't be damaged! Abort!
         return false;
@@ -294,6 +295,16 @@ bool mob::attack(
         return false;
     }
     
+    for(size_t h = 0; h < hit_opponents.size(); ++h) {
+        if(hit_opponents[h].second == victim) {
+            //This opponent has already been hit by this mob recently.
+            //Don't let it attack again. This stops the same attack from
+            //hitting every single frame.
+            return false;
+        }
+    }
+    
+    //Calculate the damage.
     if(attack_h) {
         attacker_offense = attack_h->value;
     } else {
@@ -317,13 +328,19 @@ bool mob::attack(
     
     total_damage = attacker_offense * (1.0 / defense_multiplier);
     
+    //Actually perform the damage and script-related events.
     victim->set_health(true, false, -total_damage);
     
     hitbox_interaction ev_info(this, victim_h, attack_h);
     victim->fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
     
     victim->cause_spike_damage(victim, false);
+    
+    //Final setup.
     victim->itch_damage += total_damage;
+    hit_opponents.push_back(
+        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, victim)
+    );
     
     //Smack particle effect.
     point smack_p_pos =
@@ -1038,8 +1055,6 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
     animation* new_anim = anim.anim_db->animations[final_nr];
     anim.cur_anim = new_anim;
     anim.start();
-    
-    hit_opponents.clear();
 }
 
 
@@ -1188,10 +1203,18 @@ void mob::tick_animation() {
     
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
-        hit_opponents.clear();
     }
     for(size_t s = 0; s < frame_signals.size(); ++s) {
         fsm.run_event(MOB_EVENT_FRAME_SIGNAL, &frame_signals[s]);
+    }
+    
+    for(size_t h = 0; h < hit_opponents.size();) {
+        hit_opponents[h].first -= delta_t;
+        if(hit_opponents[h].first <= 0.0f) {
+            hit_opponents.erase(hit_opponents.begin() + h);
+        } else {
+            ++h;
+        }
     }
 }
 
@@ -1330,6 +1353,7 @@ void mob::tick_physics() {
                     z = *chase_teleport_z;
                 }
                 ground_sector = sec;
+                center_sector = sec;
                 speed.x = speed.y = speed_z = 0;
                 pos = final_target_pos;
                 finished_moving = true;

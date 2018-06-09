@@ -971,24 +971,6 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     ) {
                         //Confirmed damage.
                         
-                        //Check if the attack already hit this mob.
-                        bool already_hit = false;
-                        for(
-                            size_t ho = 0;
-                            ho < m2_ptr->hit_opponents.size();
-                            ++ho
-                        ) {
-                            if(m2_ptr->hit_opponents[ho] == m_ptr) {
-                                already_hit = true;
-                                break;
-                            }
-                        }
-                        if(already_hit) {
-                            continue;
-                        } else {
-                            m2_ptr->hit_opponents.push_back(m_ptr);
-                        }
-                        
                         //Hazard resistance check.
                         if(
                             !h2_ptr->hazards.empty() &&

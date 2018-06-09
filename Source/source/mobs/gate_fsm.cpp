@@ -53,6 +53,7 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     m->set_animation(GATE_ANIM_DESTROYED);
     m->start_dying();
     m->finish_dying();
+    m->tangible = false;
     
     particle p(
         PARTICLE_TYPE_BITMAP, m->pos,
