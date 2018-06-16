@@ -403,9 +403,9 @@ sprites{
 		scale=0.50 0.50
 		hitboxes{
 			fist{
-				coords=22.00 3.00 -20.00
+				coords=18.00 5.00 -20.00
 				height=86.00
-				radius=14.00
+				radius=10.00
 				type=1
 				value=8.00
 			}

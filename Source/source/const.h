@@ -97,6 +97,8 @@ const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,
 //the shadow goes these many units to the side.
 const float MOB_SHADOW_Y_MULT = 0.2f;
+//The higher the mob's Z, the more its sprite growths, as per this factor.
+const float MOB_SPRITE_Z_GROWTH_FACTOR = 0.0005;
 //Number of maturities.
 const size_t N_MATURITIES = 3;
 //When an opponent is hit, it takes this long to be possible to hit it again.

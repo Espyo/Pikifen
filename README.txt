@@ -90,7 +90,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         2. The existing content serves as a basis for new content. If you're having trouble placing a bridge, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red bulborb and recolor it.
     
     Why do some enemies act a bit differently from how they do in the canon games?
-        It could either be an engine limitation (since Pikifen isn't as complex as a Nintendo product), or it could've been a change I made on purpose. The engine's content isn't meant to mirror the canon content exactly, and sometimes, I make slight changes to features and content that I think will make for a funner, fairer experience.
+        It could either be an engine limitation (since Pikifen isn't as complex as a Nintendo product), or it could've been a change I made on purpose. The engine's content isn't meant to mirror the canon content exactly, and sometimes, I make slight changes to features and content because I think it will make for a funner, fairer experience, because it's needed to be more readable in a top-down format, etc.
     
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.

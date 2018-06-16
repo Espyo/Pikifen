@@ -896,7 +896,7 @@ point mob::get_sprite_dimensions(sprite* s, float* scale) {
     dim.y *= s->scale.y;
     
     float sucking_mult = 1.0;
-    float height_mult = 1 + z * 0.0001;
+    float height_mult = 1 + z * MOB_SPRITE_Z_GROWTH_FACTOR;
     
     float final_scale = sucking_mult * height_mult;
     if(scale) *scale = final_scale;
