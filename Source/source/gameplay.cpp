@@ -135,6 +135,8 @@ void gameplay::leave() {
  * Loads the "gameplay" state into memory.
  */
 void gameplay::load() {
+    size_t errors_reported_at_start = errors_reported_today;
+    
     ready_for_input = false;
     
     draw_loading_screen("", "", 1.0f);
@@ -251,6 +253,13 @@ void gameplay::load() {
     }
         );
         
+    if(errors_reported_today > errors_reported_at_start) {
+        print_info(
+            "ERRORS FOUND!\n"
+            "See \"" + ERROR_LOG_FILE_PATH + "\"."
+        );
+    }
+    
     //Debug stuff for convenience.
     //TODO remove.
     for(size_t s = 0; s < spray_types.size(); ++s) {

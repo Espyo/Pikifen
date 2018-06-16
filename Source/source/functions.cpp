@@ -591,8 +591,7 @@ void log_error(string s, data_node* d) {
     
     cout << s;
     
-    if(no_error_logs_today) {
-        no_error_logs_today = false;
+    if(errors_reported_today == 0) {
         s =
             "\n" +
             get_current_time(true) +
@@ -618,6 +617,8 @@ void log_error(string s, data_node* d) {
         al_fwrite(file_o, prev_error_log + s);
         al_fclose(file_o);
     }
+    
+    errors_reported_today++;
 }
 
 
@@ -1083,7 +1084,7 @@ void signal_handler(const int signum) {
     for(size_t s = 0; s < bt.size(); ++s) {
         error_str += "    " + bt[s] + "\n";
     }
-    if(!no_error_logs_today) {
+    if(errors_reported_today > 0) {
         error_str += "  Error log has messages!\n";
     }
     error_str +=

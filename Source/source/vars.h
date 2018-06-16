@@ -230,6 +230,8 @@ extern float day_minutes_start;
 extern double delta_t;
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
+//How many errors have been reported this application session.
+extern size_t errors_reported_today;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
 extern fade_manager fade_mgr;
@@ -320,8 +322,6 @@ extern size_t nectar_amount;
 extern vector<nectar*> nectars;
 //How far a leader can go to auto-pluck the next Pikmin.
 extern float next_pluck_range;
-//Have there been no errors in this play session?
-extern bool no_error_logs_today;
 extern float onion_open_range;
 extern map<string, onion_type*> onion_types;
 extern vector<onion*> onions;

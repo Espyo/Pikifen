@@ -1219,6 +1219,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
     r("on_frame_signal",        MOB_EVENT_FRAME_SIGNAL);
     r("on_itch",                MOB_EVENT_ITCH);
+    r("on_land",                MOB_EVENT_LANDED);
     r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
     r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
