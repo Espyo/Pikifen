@@ -240,9 +240,12 @@ protected:
     ) = 0;
     
     //Input handler functions.
-    virtual void handle_key_char(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_up(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_down_canvas(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_up_anywhere(const ALLEGRO_EVENT &ev);
+    virtual void handle_key_up_canvas(const ALLEGRO_EVENT &ev);
     virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
     virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
     virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);

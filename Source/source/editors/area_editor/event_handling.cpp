@@ -17,40 +17,14 @@
 #include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed.
+ * Handles a key being "char"-typed anywhere.
  */
-void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
+void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        cam_pos.x += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-        cam_pos.y -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        cam_pos.y += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
-        zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
-        zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
-        if(cam_zoom == 1.0f) {
-            cam_pos.x = 0.0f;
-            cam_pos.y = 0.0f;
-        } else {
-            zoom(1.0f, false);
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+    if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
             emit_status_bar_message(
@@ -98,6 +72,47 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
             );
         }
         
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a key being "char"-typed on the canvas exclusively.
+ */
+void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        cam_pos.x += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+        cam_pos.y -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        cam_pos.y += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
+        zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
+        zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
+        if(cam_zoom == 1.0f) {
+            cam_pos.x = 0.0f;
+            cam_pos.y = 0.0f;
+        } else {
+            zoom(1.0f, false);
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_X) {
+        frm_toolbar->widgets["but_snap"]->simulate_click();
+        
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
         undo_layout_drawing_node();
         
@@ -106,9 +121,41 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles a key being pressed down.
+ * Handles a key being pressed down anywhere.
  */
-void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
+void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_reload"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_play"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_quit"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_reference"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
+        frm_toolbar->widgets["but_save"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            frm_toolbar->widgets["but_undo"]->simulate_click();
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a key being pressed down on the canvas exclusively.
+ */
+void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
     }
@@ -167,84 +214,12 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
         frm_layout->widgets["but_sel_filter"]->simulate_click();
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_reload"]->simulate_click();
-        
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
-        if(is_ctrl_pressed) {
-            frm_toolbar->widgets["but_snap"]->simulate_click();
-        } else {
-            if(!moving && !selecting) {
-                frm_layout->widgets["but_new"]->simulate_click();
-                frm_mobs->widgets["but_new"]->simulate_click();
-                frm_paths->widgets["but_draw"]->simulate_click();
-                frm_details->widgets["but_new"]->simulate_click();
-            }
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_play"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_quit"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_reference"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_save"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            frm_toolbar->widgets["but_undo"]->simulate_click();
-        }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-        if(
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
-        ) {
-            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-                cancel_circle_sector();
-            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
-                cancel_layout_drawing();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
-                cancel_layout_moving();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-            
-        } else if(state == EDITOR_STATE_MOBS) {
-            if(
-                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-                sub_state == EDITOR_SUB_STATE_NEW_MOB
-            ) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-            
-        } else if(state == EDITOR_STATE_PATHS) {
-            if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-        } else if(state == EDITOR_STATE_DETAILS) {
-            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                selected_shadow = NULL;
-            }
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_new"]->simulate_click();
+            frm_mobs->widgets["but_new"]->simulate_click();
+            frm_paths->widgets["but_draw"]->simulate_click();
+            frm_details->widgets["but_new"]->simulate_click();
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
@@ -313,6 +288,56 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         if(!got_something) return;
         
         center_camera(min_coords, max_coords);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+        if(
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        ) {
+            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+                cancel_circle_sector();
+            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+                cancel_layout_drawing();
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
+                cancel_layout_moving();
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+            if(
+                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+                sub_state == EDITOR_SUB_STATE_NEW_MOB
+            ) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+            
+        } else if(state == EDITOR_STATE_PATHS) {
+            if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+        } else if(state == EDITOR_STATE_DETAILS) {
+            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                selected_shadow = NULL;
+            }
+        } else if(state == EDITOR_STATE_MAIN) {
+            frm_toolbar->widgets["but_quit"]->simulate_click();
+        }
         
     }
 }

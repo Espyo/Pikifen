@@ -549,8 +549,16 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             
         }
         
+        handle_key_down_anywhere(ev);
         if(!is_gui_focused) {
-            handle_key_down(ev);
+            handle_key_down_canvas(ev);
+        }
+        
+        if(
+            !(frm_picker->flags & lafi::FLAG_INVISIBLE) &&
+            ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE
+        ) {
+            frm_picker->widgets["but_back"]->simulate_click();
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -569,13 +577,15 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             
         }
         
+        handle_key_up_anywhere(ev);
         if(!is_gui_focused) {
-            handle_key_up(ev);
+            handle_key_up_canvas(ev);
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        handle_key_char_anywhere(ev);
         if(!is_gui_focused) {
-            handle_key_char(ev);
+            handle_key_char_canvas(ev);
         }
         
     }
@@ -583,9 +593,12 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
 
 
 //Input handler functions.
-void editor::handle_key_char(const ALLEGRO_EVENT &ev) {}
-void editor::handle_key_down(const ALLEGRO_EVENT &ev) {}
-void editor::handle_key_up(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {}
+void editor::handle_key_up_canvas(const ALLEGRO_EVENT &ev) {}
 void editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
 void editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
 void editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}

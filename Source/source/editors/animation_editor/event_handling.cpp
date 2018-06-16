@@ -15,9 +15,9 @@
 #include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed.
+ * Handles a key being "char"-typed on the canvas exclusively.
  */
-void animation_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
+void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
     }
@@ -48,25 +48,25 @@ void animation_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
             zoom(1.0f, false);
         }
         
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles a key being pressed down.
- */
-void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
-    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }
-    
-    if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM && is_ctrl_pressed) {
             comparison = !comparison;
             sprite_transform_to_gui();
         }
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_H && is_ctrl_pressed) {
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a key being pressed down anywhere.
+ */
+void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_H && is_ctrl_pressed) {
         frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
@@ -87,7 +87,19 @@ void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
         frm_toolbar->widgets["but_save"]->simulate_click();
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a key being pressed down on the canvas exclusively.
+ */
+void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
+    if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
         frm_anim->widgets["but_play"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
@@ -120,6 +132,14 @@ void animation_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         }
         
         center_camera(cmin, cmax);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+        if(state == EDITOR_STATE_MAIN) {
+            frm_toolbar->widgets["but_quit"]->simulate_click();
+        } else if (state == EDITOR_STATE_LOAD) {
+            frm_load->widgets["but_back"]->simulate_click();
+        }
+        
     }
 }
 

@@ -132,7 +132,7 @@ public:
     
     frame(
         const string &sn = "", const size_t si = INVALID,
-        sprite* sp = NULL, const float d = 0, const size_t s = INVALID
+        sprite* sp = NULL, const float d = 0.1, const size_t s = INVALID
     );
 };
 

@@ -310,7 +310,7 @@ void area_editor::change_snap_mode(const size_t new_mode) {
     
     lafi::button* but = (lafi::button*) frm_toolbar->widgets["but_snap"];
     but->description =
-        "Current cursor snapping mode: " + new_mode_name + ". (Ctrl+N)";
+        "Current cursor snapping mode: " + new_mode_name + ". (X)";
     but->icon = new_button_icon;
 }
 

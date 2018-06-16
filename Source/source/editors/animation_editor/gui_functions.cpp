@@ -837,11 +837,13 @@ void animation_editor::pick(
         picker_id == PICKER_RENAME_ANIMATION
     ) {
         set_button_text(frm_tools, "but_rename_anim_name", name);
+        set_textbox_text(frm_tools, "txt_rename_anim", name);
         
     } else if(
         picker_id == PICKER_RENAME_SPRITE
     ) {
         set_button_text(frm_tools, "but_rename_sprite_name", name);
+        set_textbox_text(frm_tools, "txt_rename_sprite", name);
         
     }
     

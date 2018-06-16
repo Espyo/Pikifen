@@ -174,8 +174,9 @@ private:
     void update_stats();
     
     //Input handler functions.
-    void handle_key_char(const ALLEGRO_EVENT &ev);
-    void handle_key_down(const ALLEGRO_EVENT &ev);
+    void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
+    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);
+    void handle_key_down_canvas(const ALLEGRO_EVENT &ev);
     void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
     void handle_lmb_down(const ALLEGRO_EVENT &ev);
     void handle_lmb_drag(const ALLEGRO_EVENT &ev);
