@@ -41,11 +41,11 @@ const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 animation_editor::animation_editor() :
     anim_playing(false),
     comparison(false),
-    comparison_sprite(nullptr),
+    comparison_above(true),
     comparison_blink(true),
     comparison_blink_show(true),
     comparison_blink_timer(0),
-    comparison_above(true),
+    comparison_sprite(nullptr),
     comparison_tint(true),
     cur_anim(NULL),
     cur_body_part_nr(INVALID),

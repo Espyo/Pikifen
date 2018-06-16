@@ -28,10 +28,10 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 14;
+const unsigned char VERSION_MINOR = 15;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 23;
-const unsigned char VERSION_MONTH = 04;
+const unsigned char VERSION_DAY   = 16;
+const unsigned char VERSION_MONTH = 06;
 const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
 const string ANIMATION_EDITOR_TUTORIAL_URL =

@@ -818,13 +818,6 @@ void animation_editor::load() {
     
     
     //Sprites -- properties.
-    auto lambda_sprite_transform = [this] (lafi::widget*, int, int) {
-        state = EDITOR_STATE_SPRITE_TRANSFORM;
-        change_to_right_frame();
-        comparison_sprite = NULL;
-        sprite_transform_to_gui();
-    };
-    
     frm_sprites->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_MAIN;
@@ -2275,10 +2268,6 @@ void animation_editor::load() {
     
     
     //Options -- properties.
-    auto lambda_gui_to_options =
-    [this] (lafi::widget*) {
-        gui_to_options();
-    };
     auto lambda_gui_to_options_click =
     [this] (lafi::widget*, int, int) {
         gui_to_options();

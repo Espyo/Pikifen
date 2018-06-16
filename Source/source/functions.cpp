@@ -20,6 +20,7 @@
 #include <math.h>
 #include <sstream>
 #include <stdlib.h>
+#include <signal.h>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
@@ -1381,3 +1382,30 @@ point s2p(const string &s) {
     }
     return p;
 }
+
+
+#if defined(_WIN32)
+
+string strsignal(const int signum) {
+    if(signum == SIGINT) {
+        return "SIGINT";
+    } else if(signum == SIGILL) {
+        return "SIGILL";
+    } else if(signum == SIGFPE) {
+        return "SIGFPE";
+    } else if(signum == SIGSEGV) {
+        return "SIGSEGV";
+    } else if(signum == SIGTERM) {
+        return "SIGTERM";
+    } else if(signum == SIGBREAK) {
+        return "SIGBREAK";
+    } else if(signum == SIGABRT) {
+        return "SIGABRT";
+    } else if(signum == SIGABRT_COMPAT) {
+        return "SIGABRT_COMPAT";
+    } else {
+        return "Unknown";
+    }
+}
+
+#endif //if defined(_WIN32)

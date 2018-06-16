@@ -284,8 +284,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         al_unlock_bitmap(cur_sprite->parent_bmp);
         
         size_t p;
-        for(size_t y = 0; y < bmp_h; ++y) {
-            for(size_t x = 0; x < bmp_w; ++x) {
+        for(size_t y = 0; y < (size_t) bmp_h; ++y) {
+            for(size_t x = 0; x < (size_t) bmp_w; ++x) {
                 p = y * bmp_w + x;
                 if(!selection_pixels[p]) continue;
                 selection_tl.x = min(selection_tl.x, (float) x);

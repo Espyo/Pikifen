@@ -62,17 +62,33 @@ void replay::add_state(
     replay_state* new_state_ptr = &(states[states.size() - 1]);
     
     vector<mob*> new_state_mobs;
-    new_state_mobs.insert(new_state_mobs.end(), leader_list.begin(), leader_list.end());
-    new_state_mobs.insert(new_state_mobs.end(), pikmin_list.begin(), pikmin_list.end());
-    new_state_mobs.insert(new_state_mobs.end(), enemy_list.begin(), enemy_list.end());
-    new_state_mobs.insert(new_state_mobs.end(), treasure_list.begin(), treasure_list.end());
-    new_state_mobs.insert(new_state_mobs.end(), onion_list.begin(), onion_list.end());
-    new_state_mobs.insert(new_state_mobs.end(), obstacle_list.begin(), obstacle_list.end());
+    new_state_mobs.insert(
+        new_state_mobs.end(), leader_list.begin(), leader_list.end()
+    );
+    new_state_mobs.insert(
+        new_state_mobs.end(), pikmin_list.begin(), pikmin_list.end()
+    );
+    new_state_mobs.insert(
+        new_state_mobs.end(), enemy_list.begin(), enemy_list.end()
+    );
+    new_state_mobs.insert(
+        new_state_mobs.end(), treasure_list.begin(), treasure_list.end()
+    );
+    new_state_mobs.insert(
+        new_state_mobs.end(), onion_list.begin(), onion_list.end()
+    );
+    new_state_mobs.insert(
+        new_state_mobs.end(), obstacle_list.begin(), obstacle_list.end()
+    );
     
     if(!prev_state_mobs.empty()) {
         for(size_t pm = 0; pm < prev_state_mobs.size(); ++pm) {
             //Is this mob in the list of new mobs?
-            auto m = find(new_state_mobs.begin(), new_state_mobs.end(), prev_state_mobs[pm]);
+            auto m =
+                find(
+                    new_state_mobs.begin(), new_state_mobs.end(),
+                    prev_state_mobs[pm]
+                );
             if(m == new_state_mobs.end()) {
                 //It isn't. That means it was removed.
                 replay_event ev(REPLAY_EVENT_REMOVED, pm);
@@ -82,7 +98,11 @@ void replay::add_state(
         
         for(size_t m = 0; m < new_state_mobs.size(); ++m) {
             //Is this mob in the list of previous mobs?
-            auto pm = find(prev_state_mobs.begin(), prev_state_mobs.end(), new_state_mobs[m]);
+            auto pm =
+                find(
+                    prev_state_mobs.begin(), prev_state_mobs.end(),
+                    new_state_mobs[m]
+                );
             if(pm == prev_state_mobs.end()) {
                 //It isn't. That means it's new.
                 replay_event ev(REPLAY_EVENT_ADDED, m);

@@ -1593,7 +1593,11 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
         p_ptr->focused_mob->get_closest_hitbox(
             p_ptr->pos, HITBOX_TYPE_NORMAL, &d
         );
-    float h_z = closest_h->z + p_ptr->focused_mob->z;
+    float h_z = 0;
+    
+    if(closest_h) {
+        h_z = closest_h->z + p_ptr->focused_mob->z;
+    }
     
     if(
         !closest_h || !closest_h->can_pikmin_latch ||

@@ -283,7 +283,7 @@ bool mob::attack(
     float defense_multiplier = 1;
     
     //First, check if this mob cannot be damaged.
-    if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
+    if(victim_h->type != HITBOX_TYPE_NORMAL) {
         //This hitbox can't be damaged! Abort!
         return false;
     }
@@ -311,13 +311,11 @@ bool mob::attack(
         attacker_offense = 1;
     }
     
-    if(victim_h) {
-        if(victim_h->value == 0.0f) {
-            //Hah, this hitbox is invulnerable!
-            return false;
-        }
-        defense_multiplier = victim_h->value;
+    if(victim_h->value == 0.0f) {
+        //Hah, this hitbox is invulnerable!
+        return false;
     }
+    defense_multiplier = victim_h->value;
     
     for(size_t s = 0; s < statuses.size(); ++s) {
         attacker_offense *= statuses[s].type->attack_multiplier;

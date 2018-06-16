@@ -155,4 +155,8 @@ double s2f(const string &s);
 int s2i(const string &s);
 point s2p(const string &s);
 
+#if defined(_WIN32)
+string strsignal(const int signum);
+#endif //#if defined(_WIN32)
+
 #endif //ifndef FUNCTIONS_H

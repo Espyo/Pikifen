@@ -31,6 +31,18 @@
     <Filter Include="Source Files\editors">
       <UniqueIdentifier>{91f31192-c25c-4ee8-a0c4-3d29b28fb1c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\editors\animation_editor">
+      <UniqueIdentifier>{2a00390a-7e61-43bb-afd2-d5a13ea6d7fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors\area_editor">
+      <UniqueIdentifier>{91ddc615-fb4c-40f8-b1b0-c4a68671809e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors\animation_editor">
+      <UniqueIdentifier>{26b0a7e1-9cb4-4afd-98c4-5b125504b0b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors\area_editor">
+      <UniqueIdentifier>{d6360336-2bec-4df6-8bb6-f643ca1816db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\LAFI\angle_picker.h">
@@ -234,12 +246,6 @@
     <ClInclude Include="..\source\liquid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\editors\animation_editor.h">
-      <Filter>Header Files\editors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\editors\area_editor.h">
-      <Filter>Header Files\editors</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\editors\editor.h">
       <Filter>Header Files\editors</Filter>
     </ClInclude>
@@ -262,6 +268,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\backtrace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\animation_editor\editor.h">
+      <Filter>Header Files\editors\animation_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\area_editor\editor.h">
+      <Filter>Header Files\editors\area_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\replay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -471,27 +486,6 @@
     <ClCompile Include="..\source\liquid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor_event_handler.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor_loading.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_drawing.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_event_handler.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_loading.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\editors\editor.cpp">
       <Filter>Source Files\editors</Filter>
     </ClCompile>
@@ -513,8 +507,38 @@
     <ClCompile Include="..\source\gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_gui_functions.cpp">
-      <Filter>Source Files\editors</Filter>
+    <ClCompile Include="..\source\editors\animation_editor\drawing.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\editor.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\event_handling.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\gui_functions.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\loading.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\drawing.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\editor.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\event_handling.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\gui_functions.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\loading.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\replay.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

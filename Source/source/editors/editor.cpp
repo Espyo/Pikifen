@@ -913,8 +913,8 @@ const float editor::transformation_controller::ROTATION_HANDLE_THICKNESS = 8.0;
  * Creates a transformation controller.
  */
 editor::transformation_controller::transformation_controller() :
-    size(point(16, 16)),
     moving_handle(-1),
+    size(point(16, 16)),
     angle(0),
     keep_aspect_ratio(true),
     allow_rotation(false) {

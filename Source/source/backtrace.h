@@ -30,14 +30,13 @@ const size_t BACKTRACE_DEMANGLE_BUFFER_SIZE = 512;
 string demangle_symbol(const string &symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
     size_t module_size = 0;
-    size_t name_start = string::npos;
     size_t name_size = 0;
     size_t offset_start = string::npos;
     size_t offset_size = 0;
     string ret;
     
 #ifdef DARWIN //Mac OS.
-    name_start = symbol.find(" _");
+    size_t name_start = symbol.find(" _");
     if(name_start != string::npos) {
         module_size = name_start;
         name_start = name_start + 1;
@@ -51,7 +50,7 @@ string demangle_symbol(const string &symbol) {
         }
     }
 #else //Linux.
-    name_start = symbol.find("(");
+    size_t name_start = symbol.find("(");
     if(name_start != string::npos) {
         module_size = name_start;
         name_start = name_start + 1;
@@ -74,7 +73,7 @@ string demangle_symbol(const string &symbol) {
         int demangle_status;
         char* demangled_name =
             abi::__cxa_demangle(mangled_name.c_str(), NULL, NULL, &demangle_status);
-        
+            
         if(demangle_status == 0) {
             ret =
                 module_str + " " + demangled_name + " + " + offset_str;

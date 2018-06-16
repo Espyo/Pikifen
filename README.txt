@@ -161,8 +161,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
             Nintendo
         Support and beta-testing
             My friends at Pikipedia and Pikmin Fanon
+                Special shoutout to Neo, Kman, Scruffy
             My friends at Brawl Snapshots
-            Pretty much everyone over on the Pikmin subreddit
+                Special shoutout to Gaming98, Deku, FATBEN
+        Beta-testing
+            Gaming98, Deku
         Everything else
             André 'Espyo' Silva
         Tools used
