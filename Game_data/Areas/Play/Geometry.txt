@@ -2792,7 +2792,7 @@ mobs{
 	}
 	Enemy{
 		type=Fiery Blowhog
-		p=384.00 -1024.00
+		p=-672.00 -608.00
 		angle=1.89
 	}
 	Custom{
@@ -2829,6 +2829,10 @@ mobs{
 		type=Armored Cannon Beetle
 		p=-224.00 -1760.00
 		angle=4.25
+	}
+	Enemy{
+		type=Yellow Wollywog
+		p=-32.00 -1120.00
 	}
 }
 path_stops{

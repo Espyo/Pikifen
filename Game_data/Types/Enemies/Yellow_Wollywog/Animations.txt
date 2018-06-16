@@ -1,0 +1,944 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.15
+			}
+			idling2{
+				duration=0.15
+			}
+			idling{
+				duration=0.15
+			}
+			idling3{
+				duration=0.15
+			}
+		}
+	}
+	croaking{
+		frames{
+			idling{
+				duration=0.10
+			}
+			croak1{
+				duration=0.10
+			}
+			croak2{
+				duration=0.10
+			}
+			croak1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	turning{
+		frames{
+			idling{
+				duration=0.10
+			}
+			turning1{
+				duration=0.10
+			}
+			turning2{
+				duration=0.10
+			}
+			turning1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			turning3{
+				duration=0.10
+			}
+			turning4{
+				duration=0.10
+			}
+			turning3{
+				duration=0.10
+			}
+		}
+	}
+	jumping_forward{
+		frames{
+			jump_forward{
+				duration=0.30
+			}
+		}
+	}
+	jumping_up{
+		loop_frame=1
+		frames{
+			jump_up_damage{
+				duration=0.04
+			}
+			jump_up{
+				duration=0.10
+			}
+		}
+	}
+	floating{
+		loop_frame=2
+		frames{
+			jump_up{
+				duration=0.10
+			}
+			floating1{
+				duration=0.10
+			}
+			floating2{
+				duration=0.10
+			}
+		}
+	}
+	falling{
+		frames{
+			falling1{
+				duration=0.10
+			}
+			falling2{
+				duration=0.10
+			}
+			falling3{
+				duration=0.10
+			}
+			falling4{
+				duration=0.10
+			}
+		}
+	}
+	landing{
+		frames{
+			landing{
+				duration=0.10
+			}
+			floating2{
+				duration=0.40
+			}
+			squatting{
+				duration=0.10
+			}
+			idling{
+				duration=0.60
+			}
+		}
+	}
+	dying{
+		loop_frame=5
+		frames{
+			idling{
+				duration=0.10
+			}
+			dying1{
+				duration=0.10
+			}
+			dying2{
+				duration=0.70
+			}
+			dying3{
+				duration=0.20
+			}
+			dying4{
+				duration=0.10
+			}
+			dying5{
+				duration=1.00
+			}
+		}
+	}
+	squatting{
+		frames{
+			squatting{
+				duration=0.20
+			}
+		}
+	}
+	landing_forward{
+		frames{
+			jump_forward2{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	struggling{
+		frames{
+			idling{
+				duration=0.10
+			}
+			struggling1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			struggling2{
+				duration=0.10
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 0.00
+		file_size=90.00 90.00
+		offset=5.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	idling2{
+		file=Yellow_Wollywog.png
+		file_pos=91.00 0.00
+		file_size=89.00 88.00
+		offset=4.50 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	idling3{
+		file=Yellow_Wollywog.png
+		file_pos=181.00 0.00
+		file_size=91.00 92.00
+		offset=5.50 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	croak1{
+		file=Yellow_Wollywog.png
+		file_pos=273.00 0.00
+		file_size=93.00 90.00
+		offset=6.50 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	croak2{
+		file=Yellow_Wollywog.png
+		file_pos=367.00 0.00
+		file_size=97.00 90.00
+		offset=8.50 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	turning1{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 91.00
+		file_size=90.00 95.00
+		offset=5.00 2.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	turning2{
+		file=Yellow_Wollywog.png
+		file_pos=91.00 93.00
+		file_size=90.00 100.00
+		offset=5.00 3.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	turning3{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 91.00
+		file_size=90.00 95.00
+		offset=5.00 -2.00
+		scale=1.00 -1.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	turning4{
+		file=Yellow_Wollywog.png
+		file_pos=91.00 93.00
+		file_size=90.00 100.00
+		offset=5.00 -3.00
+		scale=1.00 -1.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	squatting{
+		file=Yellow_Wollywog.png
+		file_pos=182.00 93.00
+		file_size=85.00 96.00
+		offset=5.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	jump_forward{
+		file=Yellow_Wollywog.png
+		file_pos=268.00 93.00
+		file_size=92.00 66.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	jump_forward2{
+		file=Yellow_Wollywog.png
+		file_pos=361.00 91.00
+		file_size=90.00 86.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	jump_up{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 322.00
+		file_size=91.00 66.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=20.00
+				radius=40.00
+				type=2
+				value=20.00
+				knockback_outward=true
+				wither_chance=20
+			}
+		}
+	}
+	floating1{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 389.00
+		file_size=87.00 110.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	floating2{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 187.00
+		file_size=87.00 134.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	falling1{
+		file=Yellow_Wollywog.png
+		file_pos=88.00 194.00
+		file_size=87.00 134.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 -100.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=40.00
+				hazards=crush
+				knockback_outward=true
+				knockback=0.01
+			}
+		}
+	}
+	falling2{
+		file=Yellow_Wollywog.png
+		file_pos=176.00 194.00
+		file_size=87.00 134.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 -100.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=40.00
+				hazards=crush
+				knockback_outward=true
+				knockback=0.01
+			}
+		}
+	}
+	falling3{
+		file=Yellow_Wollywog.png
+		file_pos=264.00 194.00
+		file_size=87.00 134.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 -100.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=40.00
+				hazards=crush
+				knockback_outward=true
+				knockback=0.01
+			}
+		}
+	}
+	falling4{
+		file=Yellow_Wollywog.png
+		file_pos=352.00 194.00
+		file_size=87.00 134.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 -100.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=40.00
+				hazards=crush
+				knockback_outward=true
+				knockback=0.01
+			}
+		}
+	}
+	landing{
+		file=Yellow_Wollywog.png
+		file_pos=92.00 329.00
+		file_size=120.00 136.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=3.00 0.00 0.00
+				height=100.00
+				radius=48.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=3.00 0.00 -0.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=0.00
+				knockback_outward=true
+				knockback=0.01
+				wither_chance=20
+			}
+		}
+	}
+	dying1{
+		file=Yellow_Wollywog.png
+		file_pos=213.00 329.00
+		file_size=83.00 80.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	dying2{
+		file=Yellow_Wollywog.png
+		file_pos=297.00 329.00
+		file_size=80.00 82.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=0.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	dying3{
+		file=Yellow_Wollywog.png
+		file_pos=378.00 329.00
+		file_size=85.00 97.00
+		offset=0.00 -3.00
+		hitboxes{
+			body{
+				coords=-5.00 7.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=-5.00 7.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	dying4{
+		file=Yellow_Wollywog.png
+		file_pos=213.00 410.00
+		file_size=81.00 105.00
+		hitboxes{
+			body{
+				coords=0.00 7.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=0.00 7.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	dying5{
+		file=Yellow_Wollywog.png
+		file_pos=295.00 427.00
+		file_size=93.00 102.00
+		hitboxes{
+			body{
+				coords=6.00 2.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=6.00 2.00 0.00
+				height=100.00
+				radius=40.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	jump_up_damage{
+		file=Yellow_Wollywog.png
+		file_pos=0.00 322.00
+		file_size=91.00 66.00
+		offset=4.00 0.00
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=40.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 -0.00
+				height=100.00
+				radius=48.00
+				type=1
+				value=20.00
+				knockback_outward=true
+				knockback=0.01
+				wither_chance=20
+			}
+		}
+	}
+	struggling1{
+		file=Yellow_Wollywog.png
+		file_pos=91.00 0.00
+		file_size=89.00 88.00
+		offset=5.00 0.00
+		angle=0.09
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	struggling2{
+		file=Yellow_Wollywog.png
+		file_pos=181.00 0.00
+		file_size=91.00 92.00
+		offset=5.00 0.00
+		angle=6.20
+		hitboxes{
+			body{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=0
+				value=1.00
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.00
+			}
+			damage{
+				coords=7.00 0.00 0.00
+				height=100.00
+				radius=42.00
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+}
+body_parts{
+	body
+	damage
+}

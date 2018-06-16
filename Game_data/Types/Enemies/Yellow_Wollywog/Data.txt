@@ -1,0 +1,24 @@
+name = Yellow Wollywog
+
+allow_ground_attacks = true
+drops_corpse = true
+health_regen = 0
+height = 100
+itch_damage = 20
+itch_time = 4
+max_carriers = 14
+max_health = 1600
+move_speed = 250
+pikmin_seeds = 8
+pushable = true
+pushes = true
+radius = 40
+reaches {
+    search = 250 360
+    align = 250 2
+    jump = 150 2
+}
+rotation_speed = 80
+territory_radius = 500
+value = 30
+weight = 7

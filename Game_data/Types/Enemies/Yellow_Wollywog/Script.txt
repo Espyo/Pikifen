@@ -1,0 +1,271 @@
+first_state = idling
+death_state = dying
+
+init {
+    set_var returning false
+    set_var has_focus false
+}
+
+script {
+    idling {
+        on_enter {
+            set_var returning false
+            set_var has_focus false
+            set_animation idling
+            stop
+            set_near_reach search
+            set_timer randomly 2 6
+        }
+        on_leave {
+            set_timer 0
+        }
+        on_opponent_in_reach {
+            focus mob
+            set_state turning
+        }
+        on_far_from_home {
+            set_state returning_turning
+        }
+        on_timer {
+            set_state croaking
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    croaking {
+        on_enter {
+            set_animation croaking
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+    
+    turning {
+        on_enter {
+            set_animation turning
+            stop
+            turn focused_mob
+            set_near_reach align
+            set_far_reach search
+        }
+        on_opponent_in_reach {
+            stop
+            focus mob
+            set_var has_focus true
+            set_state ready
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    ready {
+        on_enter {
+            stop
+            set_animation idling
+            set_near_reach jump
+            set_far_reach align
+        }
+        on_opponent_in_reach {
+            set_state squatting
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    squatting {
+        on_enter {
+            stop
+            if latched_pikmin_weight >= 30
+                set_state struggling
+            else
+                set_animation squatting
+            end_if
+        }
+        on_animation_end {
+            set_state jumping_up_1
+        }
+    }
+    
+    jumping_up_1 {
+        on_enter {
+            set_gravity -2
+            set_timer 0.2
+            set_animation jumping_up
+            if var has_focus = true
+                move focused_mob_position
+            end_if
+        }
+        on_reach_destination {
+            stop
+        }
+        on_timer {
+            set_state jumping_up_2
+        }
+    }
+    
+    jumping_up_2 {
+        on_enter {
+            stop vertically
+            set_gravity -0.2
+            set_timer 0.8
+        }
+        on_reach_destination {
+            stop
+        }
+        on_timer {
+            set_state floating
+        }
+    }
+    
+    floating {
+        on_enter {
+            set_gravity 0
+            stop vertically
+            set_timer 1
+            set_animation floating
+        }
+        on_timer {
+            set_state falling
+        }
+    }
+    
+    falling {
+        on_enter {
+            set_gravity 1.5
+            set_animation falling
+        }
+        on_land {
+            set_state landing
+        }
+    }
+    
+    landing {
+        on_enter {
+            set_gravity 1
+            set_animation landing
+            start_particles dust_explosion 0 0
+        }
+        on_animation_end {
+            set_state resting
+        }
+    }
+    
+    shaking {
+        on_enter {
+            set_var has_focus false
+            set_state squatting
+        }
+    }
+    
+    struggling {
+        on_enter {
+            set_animation struggling
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+    
+    resting {
+        on_enter {
+            stop
+            set_animation idling
+            set_timer 1.5
+        }
+        on_timer {
+            set_state idling
+        }
+    }
+    
+    returning_turning {
+        on_enter {
+            turn home
+            set_timer 2
+            set_animation turning
+        }
+        on_timer {
+            set_state returning_squatting
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    returning_squatting {
+        on_enter {
+            set_animation squatting
+        }
+        on_animation_end {
+            set_state returning_jumping
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    returning_jumping {
+        on_enter {
+            move home
+            set_animation jumping_forward
+        }
+        on_reach_destination {
+            set_state returning_finishing
+        }
+        on_animation_end {
+            set_state returning_landing
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    returning_landing {
+        on_enter {
+            stop
+            set_animation landing_forward
+        }
+        on_animation_end {
+            set_state returning_squatting
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    returning_finishing {
+        on_enter {
+            stop
+            set_animation landing_forward
+        }
+        on_animation_end {
+            set_state resting
+        }
+        on_itch {
+            set_state shaking
+        }
+    }
+    
+    dying {
+        on_enter {
+            set_gravity 1
+            stop
+            stop vertically
+            set_animation dying
+            start_dying
+        }
+        on_animation_end {
+            finish_dying
+        }
+    }
+}
