@@ -2615,6 +2615,7 @@ void draw_sector_texture(
     
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
+    sector_floor* texture_floors[2] = {NULL, NULL};
     
     if(s_ptr->fade) {
         s_ptr->get_texture_merge_sectors(
@@ -2651,19 +2652,19 @@ void draw_sector_texture(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_floor* floor_to_use =
-            &texture_sector[t]->floors[0];
+        texture_floors[t] =
+            &texture_sector[t]->floors[texture_sector[t]->n_floors - 1];
             
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         if(texture_sector[t]) {
             al_build_transform(
                 &tra,
-                -floor_to_use->texture_translation.x,
-                -floor_to_use->texture_translation.y,
-                1.0 / floor_to_use->texture_scale.x,
-                1.0 / floor_to_use->texture_scale.y,
-                -floor_to_use->texture_rot
+                -texture_floors[t]->texture_translation.x,
+                -texture_floors[t]->texture_translation.y,
+                1.0 / texture_floors[t]->texture_scale.x,
+                1.0 / texture_floors[t]->texture_scale.y,
+                -texture_floors[t]->texture_rot
             );
         }
         
@@ -2716,10 +2717,10 @@ void draw_sector_texture(
             av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    texture_sector[t]->floors[0].texture_tint.r * brightness_mult,
-                    texture_sector[t]->floors[0].texture_tint.g * brightness_mult,
-                    texture_sector[t]->floors[0].texture_tint.b * brightness_mult,
-                    texture_sector[t]->floors[0].texture_tint.a * alpha_mult *
+                    texture_floors[t]->texture_tint.r * brightness_mult,
+                    texture_floors[t]->texture_tint.g * brightness_mult,
+                    texture_floors[t]->texture_tint.b * brightness_mult,
+                    texture_floors[t]->texture_tint.a * alpha_mult *
                     opacity
                 );
         }
@@ -2732,9 +2733,9 @@ void draw_sector_texture(
         }
         
         ALLEGRO_BITMAP* tex =
-            texture_sector[t] ?
-            texture_sector[t]->floors[0].texture_bitmap :
-            texture_sector[t == 0 ? 1 : 0]->floors[0].texture_bitmap;
+            texture_floors[t] ?
+            texture_floors[t]->texture_bitmap :
+            texture_floors[t == 0 ? 1 : 0]->texture_bitmap;
             
         al_draw_prim(
             av, NULL, tex,

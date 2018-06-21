@@ -634,7 +634,7 @@ void gameplay::do_gameplay_logic() {
         if(mouse_sector) {
             str += "  Z:";
             for(unsigned char f = 0; f < mouse_sector->n_floors; ++f) {
-                str += " " + f2s(mouse_sector->floors[0].z);
+                str += " " + f2s(mouse_sector->floors[f].z);
             }
             str +=
                 "\n"

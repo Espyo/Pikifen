@@ -759,10 +759,20 @@ void mob::finish_dying() {
 /* ----------------------------------------------------------------------------
  * Checks if the mob is colliding against a floor. This only checks the
  * vertical aspect, i.e. Zs and heights.
+ * z:      Z to use.
+ * equals: If true, also checks if the Zs are equal, instead of just
+ *   checking less than or greater than.
  */
-bool mob::check_floor_collision(sector_floor* floor_ptr) {
-    if(z > floor_ptr->z) return false;
-    if(z + type->height < floor_ptr->bottom_z) return false;
+bool mob::check_floor_collision(
+    sector_floor* floor_ptr, const float z, const bool equals
+) {
+    if(equals) {
+        if(z > floor_ptr->z) return false;
+        if(z + type->height < floor_ptr->bottom_z) return false;
+    } else {
+        if(z >= floor_ptr->z) return false;
+        if(z + type->height <= floor_ptr->bottom_z) return false;
+    }
     return true;
 }
 
@@ -1435,7 +1445,7 @@ void mob::tick_physics() {
         //Get the sector the mob's center will be on.
         sector* new_center_sector = get_sector(new_pos, NULL, true);
         sector_floor* step_floor = &(new_center_sector->floors[0]);
-        if(new_center_sector->n_floors > 1 && new_center_sector->floors[1].z < z) {
+        if(new_center_sector->n_floors > 1 && new_center_sector->floors[1].z <= z) {
             step_floor = &(new_center_sector->floors[1]);
         }
         
@@ -1449,7 +1459,7 @@ void mob::tick_physics() {
         //If it'd end up inside a floor, refuse the move.
         bool goes_inside = false;
         for(unsigned char f = 0; f < new_center_sector->n_floors; ++f) {
-            if(check_floor_collision(&new_center_sector->floors[f])) {
+            if(check_floor_collision(&new_center_sector->floors[f], z, false)) {
                 goes_inside = true;
                 break;
             }
@@ -1644,7 +1654,7 @@ void mob::tick_physics() {
             if(!is_edge_wall) {
                 for(unsigned char s = 0; s < 2; s++) {
                     for(unsigned char f = 0; f < e_ptr->sectors[s]->n_floors; ++f) {
-                        if(check_floor_collision(&(e_ptr->sectors[s]->floors[f]))) {
+                        if(check_floor_collision(&(e_ptr->sectors[s]->floors[f]), new_z, false)) {
                             is_edge_wall = true;
                             wall_sector = s;
                         }

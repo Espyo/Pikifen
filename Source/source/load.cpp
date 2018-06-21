@@ -159,8 +159,6 @@ void load_area(
     }
     
     //Sectors.
-    //TODO Add support for floating floors.
-    /*
     size_t n_sectors =
         geometry_file.get_child_by_name(
             "sectors"
@@ -188,39 +186,70 @@ void load_area(
                 )->get_value_or_default(i2s(DEF_SECTOR_BRIGHTNESS))
             );
         new_sector->tag = sector_data->get_child_by_name("tag")->value;
-        new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
+        new_sector->floors[0].z = s2f(sector_data->get_child_by_name("z")->value);
         new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
         new_sector->always_cast_shadow =
             s2b(
                 sector_data->get_child_by_name("always_cast_shadow")->value
             );
             
-        new_sector->texture_info.file_name =
+        new_sector->floors[0].texture_file_name =
             sector_data->get_child_by_name("texture")->value;
-        new_sector->texture_info.rot =
+        new_sector->floors[0].texture_rot =
             s2f(sector_data->get_child_by_name("texture_rotate")->value);
             
         vector<string> scales =
             split(sector_data->get_child_by_name("texture_scale")->value);
         if(scales.size() >= 2) {
-            new_sector->texture_info.scale.x = s2f(scales[0]);
-            new_sector->texture_info.scale.y = s2f(scales[1]);
+            new_sector->floors[0].texture_scale.x = s2f(scales[0]);
+            new_sector->floors[0].texture_scale.y = s2f(scales[1]);
         }
         vector<string> translations =
             split(sector_data->get_child_by_name("texture_trans")->value);
         if(translations.size() >= 2) {
-            new_sector->texture_info.translation.x = s2f(translations[0]);
-            new_sector->texture_info.translation.y = s2f(translations[1]);
+            new_sector->floors[0].texture_translation.x = s2f(translations[0]);
+            new_sector->floors[0].texture_translation.y = s2f(translations[1]);
         }
-        new_sector->texture_info.tint =
+        new_sector->floors[0].texture_tint =
             s2c(
                 sector_data->get_child_by_name("texture_tint")->
                 get_value_or_default("255 255 255")
             );
+        
+        string floor_2_z = sector_data->get_child_by_name("z2")->value;
+        if(!floor_2_z.empty()) {
+            new_sector->n_floors = 2;
+            new_sector->floors[1].z = s2f(floor_2_z);
+            new_sector->floors[1].bottom_z =
+                s2f(sector_data->get_child_by_name("bottom_z2")->value);
+            new_sector->floors[1].texture_file_name =
+                sector_data->get_child_by_name("texture2")->value;
+            new_sector->floors[1].texture_rot =
+                s2f(sector_data->get_child_by_name("texture_rotate2")->value);
+            scales =
+                split(sector_data->get_child_by_name("texture_scale2")->value);
+            if(scales.size() >= 2) {
+                new_sector->floors[1].texture_scale.x = s2f(scales[0]);
+                new_sector->floors[1].texture_scale.y = s2f(scales[1]);
+            }
+            translations =
+                split(sector_data->get_child_by_name("texture_trans2")->value);
+            if(translations.size() >= 2) {
+                new_sector->floors[1].texture_translation.x = s2f(translations[0]);
+                new_sector->floors[1].texture_translation.y = s2f(translations[1]);
+            }
+            new_sector->floors[1].texture_tint =
+                s2c(
+                    sector_data->get_child_by_name("texture_tint2")->
+                    get_value_or_default("255 255 255")
+                );
+        }
             
         if(!new_sector->fade) {
-            new_sector->texture_info.bitmap =
-                textures.get(new_sector->texture_info.file_name, NULL);
+            for(unsigned char f = 0; f < 2; ++f) {
+                new_sector->floors[f].texture_bitmap =
+                    textures.get(new_sector->floors[f].texture_file_name, NULL);
+            }
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -250,7 +279,7 @@ void load_area(
             );
             
         cur_area_data.sectors.push_back(new_sector);
-    }*/
+    }
     
     //Mobs.
     size_t n_mobs =

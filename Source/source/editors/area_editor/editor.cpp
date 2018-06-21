@@ -2798,7 +2798,6 @@ bool area_editor::save_area(const bool to_backup) {
     }
     
     //Sectors.
-    //TODO Add support for the floating floors.
     data_node* sectors_node = new data_node("sectors", "");
     geometry_file.add(sectors_node);
     
@@ -2847,56 +2846,63 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(!s_ptr->floors[0].texture_file_name.empty()) {
-            sector_node->add(
-                new data_node(
-                    "texture",
-                    s_ptr->floors[0].texture_file_name
-                )
-            );
+        if(s_ptr->n_floors == 2) {
+            sector_node->add(new data_node("z2", f2s(s_ptr->floors[1].z)));
+            sector_node->add(new data_node("bottom_z2", f2s(s_ptr->floors[1].bottom_z)));
         }
-        
-        if(s_ptr->floors[0].texture_rot != 0) {
-            sector_node->add(
-                new data_node(
-                    "texture_rotate",
-                    f2s(s_ptr->floors[0].texture_rot)
-                )
-            );
-        }
-        if(
-            s_ptr->floors[0].texture_scale.x != 1 ||
-            s_ptr->floors[0].texture_scale.y != 1
-        ) {
-            sector_node->add(
-                new data_node(
-                    "texture_scale",
-                    f2s(s_ptr->floors[0].texture_scale.x) + " " +
-                    f2s(s_ptr->floors[0].texture_scale.y)
-                )
-            );
-        }
-        if(
-            s_ptr->floors[0].texture_translation.x != 0 ||
-            s_ptr->floors[0].texture_translation.y != 0
-        ) {
-            sector_node->add(
-                new data_node(
-                    "texture_trans",
-                    f2s(s_ptr->floors[0].texture_translation.x) + " " +
-                    f2s(s_ptr->floors[0].texture_translation.y)
-                )
-            );
-        }
-        if(
-            s_ptr->floors[0].texture_tint.r != 1.0 ||
-            s_ptr->floors[0].texture_tint.g != 1.0 ||
-            s_ptr->floors[0].texture_tint.b != 1.0 ||
-            s_ptr->floors[0].texture_tint.a != 1.0
-        ) {
-            sector_node->add(
-                new data_node("texture_tint", c2s(s_ptr->floors[0].texture_tint))
-            );
+        for(unsigned char f = 0; f < s_ptr->n_floors; ++f) {
+            if(!s_ptr->floors[f].texture_file_name.empty()) {
+                sector_node->add(
+                    new data_node(
+                        "texture" + string(f > 0 ? "2" : ""),
+                        s_ptr->floors[f].texture_file_name
+                    )
+                );
+            }
+            
+            if(s_ptr->floors[f].texture_rot != 0) {
+                sector_node->add(
+                    new data_node(
+                        "texture_rotate" + string(f > 0 ? "2" : ""),
+                        f2s(s_ptr->floors[f].texture_rot)
+                    )
+                );
+            }
+            if(
+                s_ptr->floors[f].texture_scale.x != 1 ||
+                s_ptr->floors[f].texture_scale.y != 1
+            ) {
+                sector_node->add(
+                    new data_node(
+                        "texture_scale" + string(f > 0 ? "2" : ""),
+                        f2s(s_ptr->floors[f].texture_scale.x) + " " +
+                        f2s(s_ptr->floors[f].texture_scale.y)
+                    )
+                );
+            }
+            if(
+                s_ptr->floors[f].texture_translation.x != 0 ||
+                s_ptr->floors[f].texture_translation.y != 0
+            ) {
+                sector_node->add(
+                    new data_node(
+                        "texture_trans" + string(f > 0 ? "2" : ""),
+                        f2s(s_ptr->floors[f].texture_translation.x) + " " +
+                        f2s(s_ptr->floors[f].texture_translation.y)
+                    )
+                );
+            }
+            if(
+                s_ptr->floors[f].texture_tint.r != 1.0 ||
+                s_ptr->floors[f].texture_tint.g != 1.0 ||
+                s_ptr->floors[f].texture_tint.b != 1.0 ||
+                s_ptr->floors[f].texture_tint.a != 1.0
+            ) {
+                sector_node->add(
+                    new data_node("texture_tint" + string(f > 0 ? "2" : ""),
+                    c2s(s_ptr->floors[f].texture_tint))
+                );
+            }
         }
         
     }
