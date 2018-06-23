@@ -165,8 +165,7 @@ private:
     void save_animation_database();
     void set_all_sprite_scales();
     void sprite_bmp_flood_fill(
-        ALLEGRO_BITMAP* bmp, bool* selection_pixels,
-        const int x, const int y, const int bmp_w, const int bmp_h
+        ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
     );
     void top_tc_to_gui();
     void update_cur_hitbox_tc();

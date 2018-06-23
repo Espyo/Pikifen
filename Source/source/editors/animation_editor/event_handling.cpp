@@ -278,7 +278,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         sprite_bmp_flood_fill(
             cur_sprite->parent_bmp, selection_pixels,
-            bmp_click_pos.x, bmp_click_pos.y, bmp_w, bmp_h
+            bmp_click_pos.x, bmp_click_pos.y
         );
         
         al_unlock_bitmap(cur_sprite->parent_bmp);

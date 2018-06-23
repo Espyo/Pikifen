@@ -560,8 +560,10 @@ void animation_editor::gui_to_sprite_bmp() {
     new_f_size.y =
         s2i(get_textbox_text(frm_sprite_bmp, "txt_h"));
         
+    bool is_new_image = cur_sprite->file != new_file;
+    
     if(
-        cur_sprite->file != new_file ||
+        is_new_image ||
         cur_sprite->file_pos.x != new_f_pos.x ||
         cur_sprite->file_pos.y != new_f_pos.y ||
         cur_sprite->file_size.x != new_f_size.x ||
@@ -569,6 +571,10 @@ void animation_editor::gui_to_sprite_bmp() {
     ) {
         //Changed something image-wise. Recreate it.
         cur_sprite->set_bitmap(new_file, new_f_pos, new_f_size);
+    }
+    
+    if(is_new_image) {
+        //New image? Might as well re-center the camera.
         center_camera_on_sprite_bitmap();
     }
     
