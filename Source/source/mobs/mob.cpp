@@ -1717,8 +1717,6 @@ void mob::tick_physics() {
             if(doing_slide) {
                 //We already tried sliding, and we still hit something...
                 //Let's just stop completely. This mob can't go forward.
-                speed.x = 0;
-                speed.y = 0;
                 finished_moving = true;
                 
             } else {

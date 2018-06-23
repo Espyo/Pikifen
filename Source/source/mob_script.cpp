@@ -984,6 +984,11 @@ bool mob_action::run(
             angle = vf[3];
         }
         
+        if(!get_sector(xy, NULL, true)) {
+            //Spawn out of bounds? No way!
+            return false;
+        }
+        
         mob* new_mob =
             create_mob(
                 type_ptr->category,
