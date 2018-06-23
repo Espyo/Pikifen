@@ -72,7 +72,9 @@ string demangle_symbol(const string &symbol) {
         
         int demangle_status;
         char* demangled_name =
-            abi::__cxa_demangle(mangled_name.c_str(), NULL, NULL, &demangle_status);
+            abi::__cxa_demangle(
+                mangled_name.c_str(), NULL, NULL, &demangle_status
+            );
             
         if(demangle_status == 0) {
             ret =
