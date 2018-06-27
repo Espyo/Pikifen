@@ -1041,8 +1041,10 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    l_ptr->holding_pikmin = (mob*) info1;
-    l_ptr->group->sort(l_ptr->holding_pikmin->subgroup_type_ptr);
+    l_ptr->hold(
+        (mob*) info1, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE
+    );
+    l_ptr->group->sort(m->subgroup_type_ptr);
 }
 
 
@@ -1051,7 +1053,7 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader* leader_ptr = (leader*) m;
-    mob* holding_ptr = leader_ptr->holding_pikmin;
+    mob* holding_ptr = leader_ptr->holding[0];
     
     holding_ptr->fsm.run_event(MOB_EVENT_THROWN);
     
@@ -1091,7 +1093,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->was_thrown = true;
     
     holding_ptr->leave_group();
-    leader_ptr->holding_pikmin = NULL;
+    leader_ptr->release(holding_ptr);
     
     sfx_throw.stop();
     sfx_throw.play(0, false);
@@ -1104,8 +1106,8 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    if(!l_ptr->holding_pikmin) return;
-    l_ptr->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
+    if(l_ptr->holding.empty()) return;
+    l_ptr->holding[0]->fsm.run_event(MOB_EVENT_RELEASED);
 }
 
 
@@ -1130,7 +1132,8 @@ void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
  * When a leader gently releases the held mob.
  */
 void leader_fsm::release(mob* m, void* info1, void* info2) {
-    ((leader*) m)->holding_pikmin = NULL;
+    if(m->holding.empty()) return;
+    m->release(m->holding[0]);
 }
 
 

@@ -832,18 +832,42 @@ hitbox* mob::get_hitbox(const size_t nr) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a mob is meant to be held by a hitbox, this function returns where
+ * in the hitbox the mob currently is.
+ * mob_to_hold:  The mob that will be held.
+ * h_ptr:        Pointer to the hitbox to check.
+ * offset_dist:  The distance from the center of the hitbox is returned here.
+ *   1 means the full radius.
+ * offset_angle: The angle the mob to hold makes with the hitbox's center is
+ *   returned here.
+ */
+void mob::get_hitbox_hold_point(
+    mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
+) {
+    point actual_h_pos = rotate_point(h_ptr->pos, angle);
+    actual_h_pos += pos;
+    
+    point pos_dif = mob_to_hold->pos - actual_h_pos;
+    coordinates_to_angle(pos_dif, offset_angle, offset_dist);
+    
+    //Relative to 0 degrees.
+    *offset_angle -= angle;
+    //Distance in units to distance in percentage.
+    *offset_dist /= h_ptr->radius;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns how many Pikmin are currently latched on to this mob.
  */
 size_t mob::get_latched_pikmin_amount() {
     size_t total = 0;
     for(size_t p = 0; p < pikmin_list.size(); ++p) {
         pikmin* p_ptr = pikmin_list[p];
-        if(
-            p_ptr->focused_mob == this &&
-            p_ptr->connected_hitbox_nr != INVALID
-        ) {
-            total++;
-        }
+        if(p_ptr->focused_mob != this) continue;
+        if(p_ptr->holder.m != this) continue;
+        if(!p_ptr->latched) continue;
+        total++;
     }
     return total;
 }
@@ -857,12 +881,10 @@ float mob::get_latched_pikmin_weight() {
     float total = 0;
     for(size_t p = 0; p < pikmin_list.size(); ++p) {
         pikmin* p_ptr = pikmin_list[p];
-        if(
-            p_ptr->focused_mob == this &&
-            p_ptr->connected_hitbox_nr != INVALID
-        ) {
-            total += p_ptr->type->weight;
-        }
+        if(p_ptr->focused_mob != this) continue;
+        if(p_ptr->holder.m != this) continue;
+        if(!p_ptr->latched) continue;
+        total += p_ptr->type->weight;
     }
     return total;
 }
@@ -920,6 +942,25 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
         return sp->bitmap;
     }
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts holding the specified mob.
+ * m:            Mob to start holding.
+ * hitbox_nr:    Number of the hitbox to hold on. INVALID for mob center.
+ * offset_dist:  Distance from the hitbox/body center. 1 is full radius.
+ * offset_angle: Hitbox/body angle from which the mob will be held.
+ */
+void mob::hold(
+    mob* m, const size_t hitbox_nr,
+    const float offset_dist, const float offset_angle
+) {
+    holding.push_back(m);
+    m->holder.m = this;
+    m->holder.hitbox_nr = hitbox_nr;
+    m->holder.offset_dist = offset_dist;
+    m->holder.offset_angle = offset_angle;
 }
 
 
@@ -1006,6 +1047,21 @@ void mob::release_chomped_pikmin() {
         chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
     }
     chomping_pikmin.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stop holding a mob.
+ */
+void mob::release(mob* m) {
+    for(size_t h = 0; h < holding.size(); ++h) {
+        if(holding[h] == m) {
+            holding.erase(holding.begin() + h);
+            break;
+        }
+    }
+    
+    m->holder.clear();
 }
 
 
@@ -1336,6 +1392,13 @@ void mob::tick_physics() {
             (double) fabs(angle_dif)
         );
         
+    if(holder.m) {
+        point final_pos = holder.get_final_pos(&z);
+        z += 1.0f; //Added visibility for latched Pikmin.
+        face(get_angle(final_pos, holder.m->pos), NULL);
+        chase(final_pos, NULL, true);
+    }
+    
     if(chasing) {
         point final_target_pos = get_chase_target();
         
@@ -1378,8 +1441,8 @@ void mob::tick_physics() {
             move_speed.x = cos(movement_angle) * move_amount;
             move_speed.y = sin(movement_angle) * move_amount;
         }
+        
     }
-    
     
     //If another mob is pushing it.
     if(push_amount != 0.0f) {
@@ -2086,6 +2149,70 @@ bool carry_info_struct::is_full() {
  */
 carry_info_struct::~carry_info_struct() {
     //TODO
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob-holding information struct.
+ */
+hold_info_struct::hold_info_struct() :
+    m(nullptr),
+    hitbox_nr(INVALID),
+    offset_dist(0),
+    offset_angle(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the information.
+ */
+void hold_info_struct::clear() {
+    m = NULL;
+    hitbox_nr = INVALID;
+    offset_dist = 0;
+    offset_angle = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the final coordinates this mob should be at.
+ */
+point hold_info_struct::get_final_pos(float* final_z) {
+    if(!m) return point();
+    
+    hitbox* h_ptr = NULL;
+    if(hitbox_nr != INVALID) {
+        h_ptr = m->get_hitbox(hitbox_nr);
+    }
+    
+    point final_pos;
+    
+    if(h_ptr) {
+        //Hitbox.
+        final_pos = rotate_point(h_ptr->pos, m->angle);
+        final_pos += m->pos;
+        
+        final_pos +=
+            angle_to_coordinates(
+                offset_angle + m->angle,
+                offset_dist * h_ptr->radius
+            );
+        *final_z = h_ptr->z;
+    } else {
+        //Body center.
+        final_pos = m->pos;
+        
+        final_pos +=
+            angle_to_coordinates(
+                offset_angle + m->angle,
+                offset_dist * m->type->radius
+            );
+        *final_z = m->z;
+    }
+    
+    return final_pos;
 }
 
 

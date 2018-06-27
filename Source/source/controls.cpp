@@ -303,7 +303,7 @@ void gameplay::handle_button(
                 //Now check if the leader should grab a Pikmin.
                 if(!done) {
                     if(
-                        !cur_leader_ptr->holding_pikmin &&
+                        cur_leader_ptr->holding.empty() &&
                         cur_leader_ptr->group->cur_standby_type &&
                         !closest_group_member_distant
                     ) {
@@ -319,8 +319,7 @@ void gameplay::handle_button(
                 }
                 
             } else { //Button release.
-                mob* holding_ptr = cur_leader_ptr->holding_pikmin;
-                if(holding_ptr) {
+                if(!cur_leader_ptr->holding.empty()) {
                     cur_leader_ptr->fsm.run_event(LEADER_EVENT_THROW);
                 }
             }
@@ -368,7 +367,7 @@ void gameplay::handle_button(
             *             / \ \ *  *
             ***********************/
             
-            if(!is_down || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down) return;
             
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_DISMISS);
             
@@ -400,7 +399,7 @@ void gameplay::handle_button(
             *             '-'  *
             *******************/
             
-            if(!is_down || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down) return;
             
             if(spray_types.size() == 1 || spray_types.size() == 2) {
                 size_t spray_nr = 0;
@@ -411,7 +410,7 @@ void gameplay::handle_button(
             
         } else if(button == BUTTON_USE_SPRAY_2) {
         
-            if(!is_down || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down) return;
             
             if(spray_types.size() == 2) {
                 size_t spray_nr = 1;
@@ -425,7 +424,7 @@ void gameplay::handle_button(
             button == BUTTON_PREV_SPRAY
         ) {
         
-            if(!is_down || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down) return;
             
             if(spray_types.size() > 2) {
                 if(button == BUTTON_NEXT_SPRAY) {
@@ -441,7 +440,7 @@ void gameplay::handle_button(
             
         } else if(button == BUTTON_USE_SPRAY) {
         
-            if(!is_down || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down) return;
             
             if(spray_types.size() > 2) {
                 cur_leader_ptr->fsm.run_event(
@@ -530,7 +529,7 @@ void gameplay::handle_button(
                 
             bool switch_successful;
             
-            if(!cur_leader_ptr->holding_pikmin) {
+            if(cur_leader_ptr->holding.empty()) {
                 //If the leader isn't holding anybody.
                 switch_successful =
                     cur_leader_ptr->group->set_next_cur_standby_type(
@@ -593,14 +592,14 @@ void gameplay::handle_button(
             
             if(
                 !is_down ||
-                !cur_leader_ptr->holding_pikmin ||
-                cur_leader_ptr->holding_pikmin->type->category->id !=
+                cur_leader_ptr->holding.empty() ||
+                cur_leader_ptr->holding[0]->type->category->id !=
                 MOB_CATEGORY_PIKMIN
             ) {
                 return;
             }
             
-            pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding_pikmin;
+            pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding[0];
             
             pikmin* closest_members[N_MATURITIES];
             dist closest_dists[N_MATURITIES];

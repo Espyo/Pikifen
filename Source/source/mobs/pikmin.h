@@ -84,15 +84,6 @@ public:
     
     pikmin_type* pik_type;
     
-    //Number of the hitbox the Pikmin is attached to.
-    size_t connected_hitbox_nr;
-    //Distance percentage from the center of the hitbox
-    //to the Pikmin's position.
-    float connected_hitbox_dist;
-    //Angle the Pikmin makes with the center of the hitbox
-    //(with the hitbox' owner at 0 degrees).
-    float connected_hitbox_angle;
-    
     //Mob that it is carrying.
     mob* carrying_mob;
     //Carrying spot reserved for it.
@@ -107,9 +98,8 @@ public:
     //If true, someone's already coming to pluck this Pikmin.
     //This is to let other leaders know that they should pick a different one.
     bool pluck_reserved;
-    
-    void set_connected_hitbox_info(hitbox* i_ptr, mob* mob_ptr);
-    void teleport_to_connected_hitbox();
+    //Is this Pikmin latched on to a mob?
+    bool latched;
     
     virtual bool can_receive_status(status_type* s);
     virtual void receive_disable_from_status(const unsigned char flags);

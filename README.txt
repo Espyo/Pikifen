@@ -3,7 +3,7 @@
 A fan-made Pikmin engine that allows users to create and play their own Pikmin content.
 
 This project, formerly called "Pikmin fangame engine", is still under construction, so expect weird things to happen.
-You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by contacting me, Espyo, via IRC on DarkMyst's #pikipedia, or via Discord on the Pikcord server.
+You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by contacting me, Espyo. You can find contacts in the Pikmin Fanon page.
 
 ===============
 1) Controls

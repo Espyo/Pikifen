@@ -79,7 +79,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -118,7 +117,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -164,7 +162,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
@@ -217,7 +214,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
@@ -255,7 +251,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -286,7 +281,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::land_on_mob);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -335,7 +329,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -378,7 +371,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -413,7 +405,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -456,7 +447,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::forget_carriable_object);
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -503,7 +493,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
     }
@@ -527,7 +516,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -571,7 +559,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
     }
@@ -580,8 +567,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::prepare_to_attack);
         }
-        efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(pikmin_fsm::tick_latched);
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::unlatch);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -595,7 +582,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -613,11 +599,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("grabbed_by_enemy", PIKMIN_STATE_GRABBED_BY_ENEMY); {
-        efc.new_event(MOB_EVENT_RELEASED); {
-            efc.change_state("idling");
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::be_grabbed_by_enemy);
         }
-        efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(pikmin_fsm::tick_grabbed_by_enemy);
+        efc.new_event(MOB_EVENT_RELEASED); {
+            efc.run(pikmin_fsm::be_released);
+            efc.change_state("idling");
         }
     }
     
@@ -629,7 +616,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stand_still);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -835,18 +821,25 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    mob* mob_ptr = (mob*) info1;
+    mob* ene_ptr = (mob*) info1;
     hitbox* h_ptr = (hitbox*) info2;
     
-    pik_ptr->set_connected_hitbox_info(h_ptr, mob_ptr);
+    float h_offset_dist;
+    float h_offset_angle;
+    ene_ptr->get_hitbox_hold_point(
+        pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
+    );
+    ene_ptr->hold(
+        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle
+    );
     
-    pik_ptr->focused_mob = mob_ptr;
+    pik_ptr->focused_mob = ene_ptr;
+    ene_ptr->chomping_pikmin.push_back(m);
     
     sfx_pikmin_caught.play(0.2, 0);
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     pik_ptr->leave_group();
     
-    mob_ptr->chomping_pikmin.push_back(m);
 }
 
 
@@ -920,9 +913,10 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is gently released by a leader.
+ * When a Pikmin is gently released by a leader or enemy.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
+    m->focused_mob->release(m);
 }
 
 
@@ -932,7 +926,7 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
 void pikmin_fsm::notify_leader_release(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = ((pikmin*) m);
     if(!pik_ptr->following_group) return;
-    if(((leader*) (pik_ptr->following_group))->holding_pikmin != m) return;
+    if(pik_ptr->holder.m != pik_ptr->following_group) return;
     pik_ptr->following_group->fsm.run_event(LEADER_EVENT_RELEASE);
 }
 
@@ -1320,13 +1314,21 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
         return;
     }
     
-    pik_ptr->connected_hitbox_nr = h_ptr->body_part_index;
     pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
     
     pik_ptr->focused_mob = mob_ptr;
-    pik_ptr->set_connected_hitbox_info(h_ptr, mob_ptr);
+    
+    float h_offset_dist;
+    float h_offset_angle;
+    mob_ptr->get_hitbox_hold_point(
+        pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
+    );
+    mob_ptr->hold(
+        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle
+    );
     
     pik_ptr->was_thrown = false;
+    pik_ptr->latched = true;
     
     pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
     
@@ -1350,28 +1352,6 @@ void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::lose_latched_mob(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a frame has passed while the Pikmin is being grabbed by an enemy.
- */
-void pikmin_fsm::tick_grabbed_by_enemy(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    if(!pik_ptr->focused_mob) return;
-    
-    pik_ptr->teleport_to_connected_hitbox();
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a frame has passed while the Pikmin is latched on to an enemy.
- */
-void pikmin_fsm::tick_latched(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    if(!pik_ptr->focused_mob) return;
-    
-    pik_ptr->teleport_to_connected_hitbox();
 }
 
 
@@ -1614,6 +1594,15 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
         pikmin_fsm::land_on_mob(m, &hti, NULL);
         
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin stops latching on to an enemy.
+ */
+void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
+    m->focused_mob->release(m);
+    ((pikmin*) m)->latched = false;
 }
 
 

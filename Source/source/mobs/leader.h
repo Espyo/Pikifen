@@ -70,6 +70,8 @@ enum LEADER_ANIMATIONS {
     LEADER_ANIM_SPRAYING,
 };
 
+const float LEADER_HELD_MOB_ANGLE = M_PI;
+const float LEADER_HELD_MOB_DIST = 1.2f;
 const float LEADER_INVULN_PERIOD = 1.5f;
 
 
@@ -83,8 +85,6 @@ private:
     
 public:
     leader_type* lea_type;
-    
-    mob* holding_pikmin;
     
     bool auto_plucking;
     pikmin* pluck_target;

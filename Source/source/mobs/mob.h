@@ -178,6 +178,27 @@ struct carry_info_struct {
 
 
 /* ----------------------------------------------------------------------------
+ * Structure with information about how this mob is currently being held by
+ * another, if it is.
+ */
+struct hold_info_struct {
+    //Points to the mob holding the current one, if any.
+    mob* m;
+    //ID of the hitbox the mob is attached to.
+    //If INVALID, it's attached to the mob center.
+    size_t hitbox_nr;
+    //Ratio of distance from the hitbox/body center. 1 is the full radius.
+    float offset_dist;
+    //Angle the mob makes with the center of the hitbox/body.
+    float offset_angle;
+    
+    hold_info_struct();
+    void clear();
+    point get_final_pos(float* final_z);
+};
+
+
+/* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
  * an object in the game world. It can move, follow a point,
@@ -305,6 +326,10 @@ public:
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.
     size_t cur_path_stop_nr;
+    //If it's being held by another mob, the information is kept here.
+    hold_info_struct holder;
+    //List of mobs it is holding.
+    vector<mob*> holding;
     
     //Other properties.
     //Incremental ID. Used for minor things.
@@ -351,11 +376,19 @@ public:
     void apply_knockback(const float knockback, const float knockback_angle);
     void calculate_carrying_destination(mob* added, mob* removed);
     void cause_spike_damage(mob* victim, const bool is_ingestion);
+    void get_hitbox_hold_point(
+        mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
+    );
     size_t get_latched_pikmin_amount();
     float get_latched_pikmin_weight();
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void leave_group();
+    void hold(
+        mob* m, const size_t hitbox_nr,
+        const float offset_dist, const float offset_angle
+    );
+    void release(mob* m);
     bool should_attack(mob* m);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);

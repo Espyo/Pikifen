@@ -26,7 +26,6 @@ leader::leader(
 ) :
     mob(pos, type, angle, vars),
     lea_type(type),
-    holding_pikmin(nullptr),
     auto_plucking(false),
     pluck_target(nullptr),
     queued_pluck_cancel(false),
@@ -351,18 +350,20 @@ void leader::dismiss() {
  * Swaps out the currently held Pikmin for a different one.
  */
 void leader::swap_held_pikmin(mob* new_pik) {
-    if(!holding_pikmin) return;
+    if(holding.empty()) return;
     
-    mob_event* old_pik_ev = holding_pikmin->fsm.get_event(MOB_EVENT_RELEASED);
+    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EVENT_RELEASED);
     mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
     
     group->sort(new_pik->subgroup_type_ptr);
     
     if(!old_pik_ev || !new_pik_ev) return;
     
-    old_pik_ev->run(holding_pikmin);
+    old_pik_ev->run(holding[0]);
     new_pik_ev->run(new_pik);
-    holding_pikmin = new_pik;
+    
+    release(holding[0]);
+    hold(new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE);
     
     sfx_switch_pikmin.play(0, false);
 }
@@ -516,7 +517,7 @@ void leader::tick_class_specifics() {
             }
             group->follow_mode = true;
             
-        } else if(is_moving_group || holding_pikmin) {
+        } else if(is_moving_group || !holding.empty()) {
             group->follow_mode = true;
             
         } else {
@@ -581,13 +582,6 @@ void leader::tick_class_specifics() {
             );
             group->anchor += mov * delta_t;
         }
-    }
-    
-    if(holding_pikmin) {
-        holding_pikmin->pos.x = pos.x + cos(angle + M_PI) * type->radius;
-        holding_pikmin->pos.y = pos.y + sin(angle + M_PI) * type->radius;
-        holding_pikmin->z = z;
-        holding_pikmin->angle = angle;
     }
     
     

@@ -136,24 +136,21 @@ void gameplay::do_aesthetic_logic() {
     
     //Whether the held Pikmin can reach the cursor.
     throw_can_reach_cursor = true;
-    if(cur_leader_ptr->holding_pikmin) {
-    
+    if(!cur_leader_ptr->holding.empty()) {
+        mob* held_mob = cur_leader_ptr->holding[0];
+        
         if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
             throw_can_reach_cursor = false;
             
         } else {
             float max_throw_z = 0;
-            size_t cat = cur_leader_ptr->holding_pikmin->type->category->id;
+            size_t cat = held_mob->type->category->id;
             if(cat == MOB_CATEGORY_PIKMIN) {
                 max_throw_z =
-                    (
-                        (pikmin*) cur_leader_ptr->holding_pikmin
-                    )->pik_type->max_throw_height;
+                    ((pikmin*) held_mob)->pik_type->max_throw_height;
             } else if(cat == MOB_CATEGORY_LEADERS) {
                 max_throw_z =
-                    (
-                        (leader*) cur_leader_ptr->holding_pikmin
-                    )->lea_type->max_throw_height;
+                    ((leader*) held_mob)->lea_type->max_throw_height;
             }
             
             if(max_throw_z > 0) {
@@ -382,7 +379,10 @@ void gameplay::do_gameplay_logic() {
         ************************************/
         
         size_t n_members = cur_leader_ptr->group->members.size();
-        closest_group_member = cur_leader_ptr->holding_pikmin;
+        closest_group_member = NULL;
+        if(!cur_leader_ptr->holding.empty()) {
+            closest_group_member = cur_leader_ptr->holding[0];
+        }
         closest_group_member_distant = false;
         
         if(n_members > 0 && !closest_group_member) {
@@ -905,16 +905,17 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     
                     bool collided = false;
                     
-                    if(m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-                        //Pikmin latched on to a hitbox are obviously
-                        //touching it.
-                        pikmin* p_ptr = (pikmin*) m2_ptr;
-                        if(
-                            m2_ptr->focused_mob == m_ptr &&
-                            p_ptr->connected_hitbox_nr == h1
-                        ) {
-                            collided = true;
-                        }
+                    if(
+                        (
+                            m_ptr->holder.m == m2_ptr &&
+                            m_ptr->holder.hitbox_nr == h2
+                        ) || (
+                            m2_ptr->holder.m == m_ptr &&
+                            m2_ptr->holder.hitbox_nr == h1
+                        )
+                    ) {
+                        //Mobs held by a hitbox are obviously touching it.
+                        collided = true;
                     }
                     
                     if(!collided) {
@@ -939,8 +940,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     }
                     
                     if(!collided) continue;
-                    //Collision confirmed!
                     
+                    //Collision confirmed!
                     if(
                         hitbox_touch_n_ev &&
                         !reported_n_ev &&

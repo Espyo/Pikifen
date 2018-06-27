@@ -30,9 +30,6 @@ pikmin::pikmin(
 ) :
     mob(pos, type, angle, vars),
     pik_type(type),
-    connected_hitbox_nr(INVALID),
-    connected_hitbox_dist(0),
-    connected_hitbox_angle(0),
     carrying_mob(NULL),
     carrying_spot(0),
     missed_attack_ptr(nullptr),
@@ -67,60 +64,6 @@ pikmin::~pikmin() { }
 float pikmin::get_base_speed() {
     float base = mob::get_base_speed();
     return base + (base * this->maturity * maturity_speed_mult);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the info for when a Pikmin is connected to a hitbox
- * (e.g. latching on, being carried by a mouth, ...)
- * h_ptr: Hitbox of the other mob.
- * m:     The other mob.
- */
-void pikmin::set_connected_hitbox_info(hitbox* h_ptr, mob* mob_ptr) {
-    if(!h_ptr) return;
-    
-    point actual_h_pos = rotate_point(h_ptr->pos, mob_ptr->angle);
-    actual_h_pos += mob_ptr->pos;
-    
-    point pos_dif = pos - actual_h_pos;
-    coordinates_to_angle(
-        pos_dif, &connected_hitbox_angle, &connected_hitbox_dist
-    );
-    
-    //Relative to 0 degrees.
-    connected_hitbox_angle -= mob_ptr->angle;
-    //Distance in units to distance in percentage.
-    connected_hitbox_dist /= h_ptr->radius;
-    connected_hitbox_nr = h_ptr->body_part_index;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Teleports the Pikmin to the hitbox it is connected to.
- */
-void pikmin::teleport_to_connected_hitbox() {
-    speed.x = speed.y = speed_z = 0;
-    
-    hitbox* h_ptr =
-        focused_mob->get_hitbox(connected_hitbox_nr);
-    if(h_ptr) {
-        point actual_h_pos = rotate_point(h_ptr->pos, focused_mob->angle);
-        actual_h_pos += focused_mob->pos;
-        
-        point final_pos =
-            angle_to_coordinates(
-                connected_hitbox_angle + focused_mob->angle,
-                connected_hitbox_dist * h_ptr->radius
-            );
-        final_pos += actual_h_pos;
-        
-        chase(final_pos, NULL, true);
-        
-        face(get_angle(pos, focused_mob->pos), NULL);
-        //Force the Z to be above the mob, so it'll always appear above it.
-        z = focused_mob->z + 1;
-        
-    }
 }
 
 

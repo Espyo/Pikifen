@@ -70,11 +70,10 @@ void stop_carrying(          mob* m, void* info1, void* info2);
 void start_chasing_leader(   mob* m, void* info1, void* info2);
 void stop_in_group(          mob* m, void* info1, void* info2);
 void tick_attacking_grounded(mob* m, void* info1, void* info2);
-void tick_grabbed_by_enemy(  mob* m, void* info1, void* info2);
-void tick_latched(           mob* m, void* info1, void* info2);
 void touched_hazard(         mob* m, void* info1, void* info2);
 void touched_spray(          mob* m, void* info1, void* info2);
 void try_latching(           mob* m, void* info1, void* info2);
+void unlatch(                mob* m, void* info1, void* info2);
 void update_in_group_chasing(mob* m, void* info1, void* info2);
 }
 
