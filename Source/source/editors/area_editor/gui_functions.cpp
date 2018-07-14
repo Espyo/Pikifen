@@ -679,6 +679,17 @@ void area_editor::mob_to_gui() {
             frm_mob, "but_type", m_ptr->type ? m_ptr->type->name : ""
         );
         
+        set_label_text(
+            frm_mob, "lbl_links",
+            i2s(m_ptr->links.size()) + " " +
+            (m_ptr->links.size() == 1 ? "link" : "links")
+        );
+        if(m_ptr->links.empty()) {
+            disable_widget(frm_mob->widgets["but_del_link"]);
+        } else {
+            enable_widget(frm_mob->widgets["but_del_link"]);
+        }
+        
     } else if(selected_mobs.size() > 1 && !selection_homogenized) {
         frm_mob_multi->show();
         

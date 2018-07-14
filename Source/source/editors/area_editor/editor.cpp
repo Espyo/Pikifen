@@ -41,6 +41,8 @@ const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
 const float area_editor::MIN_GRID_INTERVAL = 2.0;
+//Thickness to use when drawing a mob link line.
+const float area_editor::MOB_LINK_THICKNESS = 2.0f;
 //How long to tint the new sector's line(s) red for.
 const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
@@ -750,6 +752,51 @@ void area_editor::custom_picker_cancel_action() {
     if(!loaded_content_yet) {
         leave();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the selected mobs.
+ */
+void area_editor::delete_selected_mobs() {
+    if(selected_mobs.empty()) {
+        emit_status_bar_message(
+            "You have to select mobs to delete!", false
+        );
+        return;
+    }
+    
+    register_change("object deletion");
+    for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
+    
+        size_t m_i = 0;
+        for(; m_i < cur_area_data.mob_generators.size(); ++m_i) {
+            if(cur_area_data.mob_generators[m_i] == *sm) break;
+        }
+        
+        //Check all links to this stop.
+        for(size_t m2 = 0; m2 < cur_area_data.mob_generators.size(); ++m2) {
+            mob_gen* m2_ptr = cur_area_data.mob_generators[m2];
+            for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
+            
+                if(m2_ptr->link_nrs[l] > m_i) {
+                    m2_ptr->link_nrs[l]--;
+                }
+                
+                if(m2_ptr->links[l] == *sm) {
+                    m2_ptr->links.erase(m2_ptr->links.begin() + l);
+                    m2_ptr->link_nrs.erase(m2_ptr->link_nrs.begin() + l);
+                }
+            }
+        }
+        
+        cur_area_data.mob_generators.erase(
+            cur_area_data.mob_generators.begin() + m_i
+        );
+        delete *sm;
+    }
+    
+    clear_selection();
 }
 
 
@@ -1630,6 +1677,15 @@ void area_editor::finish_layout_moving() {
 
 
 /* ----------------------------------------------------------------------------
+ * Forgets a pre-prepared area state that was almost ready to be added to
+ * the undo history.
+ */
+void area_editor::forget_prepared_state(area_data* prepared_state) {
+    delete prepared_state;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a sector common to all vertexes and edges.
  * A sector is considered this if a vertex has it as a sector of
  * a neighboring edge, or if a vertex is inside it.
@@ -1897,15 +1953,6 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
 
 
 /* ----------------------------------------------------------------------------
- * Forgets a pre-prepared area state that was almost ready to be added to
- * the undo history.
- */
-void area_editor::forget_prepared_state(area_data* prepared_state) {
-    delete prepared_state;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns all sectors affected by the specified vertexes.
  * This includes the NULL sector.
  */
@@ -1990,6 +2037,41 @@ edge* area_editor::get_closest_edge_to_angle(
         *closest_edge_angle = best_edge_angle;
     }
     return best_edge;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns true if there are path links currently under the specified point.
+ * data1 takes the info of the found link. If there's also a link in
+ * the opposite direction, data2 gets that data, otherwise data2 gets filled
+ * with NULLs.
+ */
+bool area_editor::get_mob_link_under_point(
+    const point &p,
+    pair<mob_gen*, mob_gen*>* data1, pair<mob_gen*, mob_gen*>* data2
+) {
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+            mob_gen* m2_ptr = m_ptr->links[l];
+            if(
+                circle_intersects_line(p, 8 / cam_zoom, m_ptr->pos, m2_ptr->pos)
+            ) {
+                *data1 = make_pair(m_ptr, m2_ptr);
+                *data2 = make_pair((mob_gen*) NULL, (mob_gen*) NULL);
+                
+                for(size_t l2 = 0; l2 < m2_ptr->links.size(); ++l2) {
+                    if(m2_ptr->links[l2] == m_ptr) {
+                        *data2 = make_pair(m2_ptr, m_ptr);
+                        break;
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    
+    return false;
 }
 
 
@@ -2285,6 +2367,8 @@ void area_editor::homogenize_selected_mobs() {
         m_ptr->type = base->type;
         m_ptr->angle = base->angle;
         m_ptr->vars = base->vars;
+        m_ptr->links = base->links;
+        m_ptr->link_nrs = base->link_nrs;
     }
 }
 
@@ -2925,6 +3009,17 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
+        string links_str;
+        for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
+            if(l > 0) links_str += " ";
+            links_str += i2s(m_ptr->link_nrs[l]);
+        }
+        
+        if(!links_str.empty()) {
+            mob_node->add(
+                new data_node("links", links_str)
+            );
+        }
     }
     
     //Path stops.

@@ -1307,6 +1307,19 @@ void area_editor::load() {
         new lafi::textbox(), 100, 16
     );
     frm_mob->easy_row();
+    frm_mob->easy_add(
+        "lbl_links",
+        new lafi::label(), 60, 32
+    );
+    frm_mob->easy_add(
+        "but_new_link",
+        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
+    );
+    frm_mob->easy_add(
+        "but_del_link",
+        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
+    );
+    frm_mob->easy_row();
     
     frm_mob_multi =
         new lafi::frame(canvas_br.x, y, scr_w, scr_h);
@@ -1379,25 +1392,7 @@ void area_editor::load() {
         
     frm_mobs->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(selected_mobs.empty()) {
-            emit_status_bar_message(
-                "You have to select mobs to delete!", false
-            );
-            return;
-        }
-        register_change("object deletion");
-        for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
-            for(size_t mg = 0; mg < cur_area_data.mob_generators.size(); ++mg) {
-                if(cur_area_data.mob_generators[mg] == *sm) {
-                    cur_area_data.mob_generators.erase(
-                        cur_area_data.mob_generators.begin() + mg
-                    );
-                    delete *sm;
-                    break;
-                }
-            }
-        }
-        clear_selection();
+        delete_selected_mobs();
     };
     frm_mobs->widgets["but_del"]->description =
         "Delete the selected objects. (Delete)";
@@ -1435,6 +1430,34 @@ void area_editor::load() {
         lambda_gui_to_mob;
     frm_mob->widgets["txt_vars"]->description =
         "Extra variables (e.g.: \"sleep=y;jumping=n\").";
+        
+    frm_mob->widgets["but_new_link"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            sub_state = EDITOR_SUB_STATE_ADD_MOB_LINK;
+        }
+    };
+    frm_mob->widgets["but_new_link"]->description =
+        "Create a new link by clicking on another object.";
+        
+    frm_mob->widgets["but_del_link"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if((*selected_mobs.begin())->links.empty()) {
+            emit_status_bar_message(
+                "This mob has no links to delete!", false
+            );
+            return;
+        }
+        if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            sub_state = EDITOR_SUB_STATE_DEL_MOB_LINK;
+        }
+    };
+    frm_mob->widgets["but_del_link"]->description =
+        "Remove a link by clicking on it or on the linked object.";
         
     frm_mob_multi->widgets["but_ok"]->description =
         "Confirm that you want all selected objects to be similar.";

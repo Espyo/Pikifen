@@ -113,6 +113,18 @@ size_t area_data::find_edge_nr(const edge* e_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Scans the list of mob generators and retrieves the number of
+ * the specified mob generator. Returns INVALID if not found.
+ */
+size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) {
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        if(mob_generators[m] == m_ptr) return m;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Scans the list of sectors and retrieves the number of the specified sector.
  * Returns INVALID if not found.
  */

@@ -245,12 +245,10 @@ struct vertex {
 
 
 /* ----------------------------------------------------------------------------
- * This structure holds the information for
- * a mob's generation. It's a mob on the editor
- * and area file, but it doesn't have the
- * data of a LIVING mob. This only holds its
- * position and type data, plus some other
- * tiny things.
+ * This structure holds the information for a mob's generation.
+ * It is a mob's representation on the editor and in the area file,
+ * but it doesn't have the data of a LIVING mob. This only holds its
+ * position and type data, plus some other tiny things.
  */
 struct mob_gen {
     mob_category* category;
@@ -259,6 +257,8 @@ struct mob_gen {
     point pos;
     float angle;
     string vars;
+    vector<mob_gen*> links; //Cache for performance.
+    vector<size_t> link_nrs;
     
     mob_gen(
         mob_category* category = NULL, const point &pos = point(),
@@ -335,6 +335,7 @@ struct area_data {
     void connect_sector_edges(sector* s_ptr);
     void connect_vertex_edges(vertex* v_ptr);
     size_t find_edge_nr(const edge* e_ptr);
+    size_t find_mob_gen_nr(const mob_gen* m_ptr);
     size_t find_sector_nr(const sector* s_ptr);
     size_t find_vertex_nr(const vertex* v_ptr);
     void fix_edge_nrs(edge* e_ptr);

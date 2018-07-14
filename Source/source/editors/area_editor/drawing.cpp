@@ -482,6 +482,46 @@ void area_editor::do_drawing() {
     }
     
     //Mobs.
+    if(state == EDITOR_STATE_MOBS) {
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = cur_area_data.mob_generators[m];
+            mob_gen* m2_ptr = NULL;
+            
+            for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+                m2_ptr = m_ptr->links[l];
+                
+                al_draw_line(
+                    m_ptr->pos.x, m_ptr->pos.y,
+                    m2_ptr->pos.x, m2_ptr->pos.y,
+                    al_map_rgb(160, 224, 64),
+                    MOB_LINK_THICKNESS / cam_zoom
+                );
+                
+                if(cam_zoom >= 0.25) {
+                    point pivot;
+                    pivot.x =
+                        m_ptr->pos.x + (m2_ptr->pos.x - m_ptr->pos.x) * 0.55;
+                    pivot.y =
+                        m_ptr->pos.y + (m2_ptr->pos.y - m_ptr->pos.y) * 0.55;
+                    float angle =
+                        get_angle(m_ptr->pos, m2_ptr->pos);
+                    const float delta =
+                        (MOB_LINK_THICKNESS * 4) / cam_zoom;
+                        
+                    al_draw_filled_triangle(
+                        pivot.x + cos(angle) * delta,
+                        pivot.y + sin(angle) * delta,
+                        pivot.x + cos(angle + M_PI_2) * delta,
+                        pivot.y + sin(angle + M_PI_2) * delta,
+                        pivot.x + cos(angle - M_PI_2) * delta,
+                        pivot.y + sin(angle - M_PI_2) * delta,
+                        al_map_rgb(160, 224, 64)
+                    );
+                }
+            }
+        }
+    }
+    
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         
@@ -937,17 +977,38 @@ void area_editor::do_drawing() {
         sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR ||
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
         sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
         point marker = mouse_cursor_w;
-        marker = snap_point(marker);
+        
+        if(sub_state != EDITOR_SUB_STATE_ADD_MOB_LINK) {
+            marker = snap_point(marker);
+        }
+        
         al_draw_line(
             marker.x - 16, marker.y, marker.x + 16, marker.y,
             al_map_rgb(255, 255, 255), 1.0 / cam_zoom
         );
         al_draw_line(
             marker.x, marker.y - 16, marker.x, marker.y + 16,
+            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+        );
+    }
+    
+    //Delete thing marker.
+    if(
+        sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        point marker = mouse_cursor_w;
+        
+        al_draw_line(
+            marker.x - 16, marker.y - 16, marker.x + 16, marker.y + 16,
+            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+        );
+        al_draw_line(
+            marker.x - 16, marker.y + 16, marker.x + 16, marker.y - 16,
             al_map_rgb(255, 255, 255), 1.0 / cam_zoom
         );
     }

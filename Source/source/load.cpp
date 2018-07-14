@@ -251,8 +251,10 @@ void load_area(
     }
     
     //Mobs.
+    vector<pair<size_t, size_t> > mob_links_buffer;
     size_t n_mobs =
         geometry_file.get_child_by_name("mobs")->get_nr_of_children();
+        
     for(size_t m = 0; m < n_mobs; ++m) {
     
         data_node* mob_node =
@@ -272,6 +274,12 @@ void load_area(
         mob_ptr->category = mob_categories.get_from_name(mob_node->name);
         string mt = mob_node->get_child_by_name("type")->value;
         mob_ptr->type = mob_ptr->category->get_type(mt);
+        
+        vector<string> link_strs =
+            split(mob_node->get_child_by_name("links")->value);
+        for(size_t l = 0; l < link_strs.size(); ++l) {
+            mob_links_buffer.push_back(make_pair(m, s2i(link_strs[l])));
+        }
         
         bool problem = false;
         
@@ -306,6 +314,15 @@ void load_area(
         } else {
             delete mob_ptr;
         }
+    }
+    
+    for(size_t l = 0; l < mob_links_buffer.size(); ++l) {
+        size_t f = mob_links_buffer[l].first;
+        size_t s = mob_links_buffer[l].second;
+        cur_area_data.mob_generators[f]->links.push_back(
+            cur_area_data.mob_generators[s]
+        );
+        cur_area_data.mob_generators[f]->link_nrs.push_back(s);
     }
     
     //Path stops.

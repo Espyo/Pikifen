@@ -86,6 +86,8 @@ private:
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
         EDITOR_SUB_STATE_NEW_MOB,
         EDITOR_SUB_STATE_DUPLICATE_MOB,
+        EDITOR_SUB_STATE_ADD_MOB_LINK,
+        EDITOR_SUB_STATE_DEL_MOB_LINK,
         EDITOR_SUB_STATE_PATH_DRAWING,
         EDITOR_SUB_STATE_NEW_SHADOW,
         EDITOR_SUB_STATE_TEXTURE_VIEW,
@@ -159,6 +161,7 @@ private:
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
     static const unsigned char MIN_CIRCLE_SECTOR_POINTS;
     static const float         MIN_GRID_INTERVAL;
+    static const float         MOB_LINK_THICKNESS;
     static const float         NEW_SECTOR_ERROR_TINT_DURATION;
     static const float         PATH_LINK_THICKNESS;
     static const float         PATH_PREVIEW_CHECKPOINT_RADIUS;
@@ -396,6 +399,7 @@ private:
     void create_area();
     void create_new_from_picker(const size_t picker_id, const string &name);
     void delete_current_hazard();
+    void delete_selected_mobs();
     void delete_selected_path_elements();
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,
@@ -432,6 +436,10 @@ private:
     edge* get_edge_under_point(const point &p, edge* after = NULL);
     vector<edge_intersection> get_intersecting_edges();
     float get_mob_gen_radius(mob_gen* m);
+    bool get_mob_link_under_point(
+        const point &p,
+        pair<mob_gen*, mob_gen*>* data1, pair<mob_gen*, mob_gen*>* data2
+    );
     mob_gen* get_mob_under_point(const point &p);
     bool get_path_link_under_point(
         const point &p,

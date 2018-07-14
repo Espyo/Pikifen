@@ -164,12 +164,30 @@ void gameplay::load() {
     }
     
     //Generate mobs.
+    vector<mob*> mobs_per_gen;
+    
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         
-        create_mob(
-            m_ptr->category, m_ptr->pos, m_ptr->type, m_ptr->angle, m_ptr->vars
+        mobs_per_gen.push_back(
+            create_mob(
+                m_ptr->category, m_ptr->pos, m_ptr->type,
+                m_ptr->angle, m_ptr->vars
+            )
         );
+    }
+    
+    //Mob links.
+    //Because mobs can create other mobs when loaded, mob gen number X
+    //does not necessarily correspond to mob number X. Hence, we need
+    //to keep the pointers to the created mobs in a vector, and use this
+    //to link the mobs by (generator) number.
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        
+        for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
+            mobs_per_gen[m]->links.push_back(mobs_per_gen[m_ptr->link_nrs[l]]);
+        }
     }
     
     //Sort leaders.

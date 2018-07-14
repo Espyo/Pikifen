@@ -248,6 +248,8 @@ public:
     size_t far_reach;
     //Index or the reach to use for "focused mob out of reach" events.
     size_t near_reach;
+    //Mobs it is linked to.
+    vector<mob*> links;
     
     //Movement and other physics.
     //Coordinates.
