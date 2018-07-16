@@ -1077,6 +1077,17 @@ void mob::respawn() {
 
 
 /* ----------------------------------------------------------------------------
+ * Sends a message to another mob. This calls the mob's "message received"
+ * event, with the message as data.
+ */
+void mob::send_message(mob* receiver, string &msg) {
+    mob_event* ev = q_get_event(receiver, MOB_EVENT_RECEIVE_MESSAGE);
+    if(!ev) return;
+    ev->run(receiver, (void*) &msg, (void*) this);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the mob's animation.
  * nr:        Animation number.
  *   It's the animation instance number from the database.

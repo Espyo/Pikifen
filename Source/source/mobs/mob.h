@@ -395,6 +395,7 @@ public:
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);
     void release_chomped_pikmin();
+    void send_message(mob* receiver, string &msg);
     void start_dying();
     void finish_dying();
     void respawn();

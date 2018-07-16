@@ -136,12 +136,16 @@ mob_action::mob_action(
                     vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN);
                 } else if(v_words[0] == "latched_pikmin_weight") {
                     vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT);
+                } else if(v_words[0] == "message") {
+                    vi.push_back(MOB_ACTION_COMPARAND_MESSAGE);
                 } else if(v_words[0] == "mob_category") {
                     vi.push_back(MOB_ACTION_COMPARAND_MOB_CATEGORY);
                 } else if(v_words[0] == "mob_type") {
                     vi.push_back(MOB_ACTION_COMPARAND_MOB_TYPE);
                 } else if(v_words[0] == "other_body_part") {
                     vi.push_back(MOB_ACTION_COMPARAND_OTHER_BODY_PART);
+                } else if(v_words[0] == "sender") {
+                    vi.push_back(MOB_ACTION_COMPARAND_MESSAGE_SENDER);
                 } else {
                     log_error(
                         "Unknown comparand \"" + v_words[0] + "\"!",
@@ -246,6 +250,27 @@ mob_action::mob_action(
     } else if(n == "release") {
     
         type = MOB_ACTION_RELEASE;
+        
+        
+    } else if(n == "send_message") {
+    
+        type = MOB_ACTION_SEND_MESSAGE;
+        if(v_words.size() >= 2) {
+        
+            vf.push_back(s2f(v_words[0]));
+            string msg;
+            for(size_t w = 1; w < v_words.size(); ++w) {
+                msg += v_words[w] + " ";
+            }
+            vs.push_back(trim_spaces(msg));
+            
+        } else {
+            log_error(
+                "The message sending action needs to know the distance "
+                "and the message!"
+            );
+            valid = false;
+        }
         
         
     } else if(n == "set_animation") {
@@ -760,6 +785,14 @@ bool mob_action::run(
                 lhs = i2s(m->get_latched_pikmin_amount());
             } else if(vi[2] == MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT) {
                 lhs = i2s(m->get_latched_pikmin_weight());
+            } else if(vi[2] == MOB_ACTION_COMPARAND_MESSAGE) {
+                if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+                    lhs = *((string*) custom_data_1);
+                }
+            } else if(vi[2] == MOB_ACTION_COMPARAND_MESSAGE_SENDER) {
+                if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+                    lhs = ((mob*) custom_data_2)->type->name;
+                }
             } else if(vi[2] == MOB_ACTION_COMPARAND_MOB_CATEGORY) {
                 if(
                     parent_event == MOB_EVENT_TOUCHED_OBJECT ||
@@ -891,6 +924,24 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_RELEASE) {
     
         m->release_chomped_pikmin();
+        
+        
+    } else if(type == MOB_ACTION_SEND_MESSAGE) {
+    
+        if(vf[0] == 0.0f) {
+            //Send to linked mobs.
+            for(size_t l = 0; l < m->links.size(); ++l) {
+                if(m->links[l] == m) continue;
+                m->send_message(m->links[l], vs[0]);
+            }
+        } else {
+            //Send to nearby mobs.
+            for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
+                if(mobs[m2] == m) continue;
+                if(dist(m->pos, mobs[m2]->pos) > vf[0]) continue;
+                m->send_message(mobs[m2], vs[0]);
+            }
+        }
         
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
@@ -1228,6 +1279,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
     r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
+    r("on_receive_message",     MOB_EVENT_RECEIVE_MESSAGE);
     r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
     r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
