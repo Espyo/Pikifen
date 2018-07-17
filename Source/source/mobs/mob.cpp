@@ -82,7 +82,8 @@ mob::mob(
     on_hazard(nullptr),
     dead(false),
     chomp_max(0),
-    disabled_state_flags(0) {
+    disabled_state_flags(0),
+    parent(nullptr) {
     
     next_mob_id++;
     
@@ -230,6 +231,11 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
  * Applies a status effect's effects.
  */
 void mob::apply_status_effect(status_type* s, const bool refill) {
+    if(parent && parent->relay_statuses) {
+        parent->m->apply_status_effect(s, refill);
+        if(!parent->handle_statuses) return;
+    }
+    
     if(!can_receive_status(s)) return;
     
     //Check if the mob is already under this status.
@@ -278,6 +284,13 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
 bool mob::attack(
     mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
 ) {
+    if(victim->parent && victim->parent->relay_damage) {
+        bool ret = attack(victim->parent->m, attack_h, victim_h, damage);
+        if(!victim->parent->handle_damage) {
+            return ret;
+        }
+    }
+    
     float total_damage = 0;
     float attacker_offense = 0;
     float defense_multiplier = 1;
@@ -2542,6 +2555,20 @@ void group_info::sort(subgroup_type* leading_type) {
     
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Initializes a parent mob information struct.
+ */
+parent_mob_info::parent_mob_info() :
+    m(nullptr),
+    handle_damage(false),
+    relay_damage(false),
+    handle_statuses(false),
+    relay_statuses(false),
+    handle_events(false),
+    relay_events(false) {
+    
+}
 
 
 /* ----------------------------------------------------------------------------

@@ -1152,6 +1152,13 @@ bool mob_action::run(
  * custom_data_2: custom argument #2 to pass to the code.
  */
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
+    if(m->parent && m->parent->relay_events) {
+        m->parent->m->fsm.run_event(type, custom_data_1, custom_data_2);
+        if(!m->parent->handle_events) {
+            return;
+        }
+    }
+    
     for(size_t a = 0; a < actions.size(); ++a) {
     
         if(actions[a]->type == MOB_ACTION_IF) {

@@ -199,6 +199,22 @@ struct hold_info_struct {
 
 
 /* ----------------------------------------------------------------------------
+ * Structure with information about this mob's parent, if any.
+ */
+struct parent_mob_info {
+    mob* m;
+    bool handle_damage;
+    bool relay_damage;
+    bool handle_statuses;
+    bool relay_statuses;
+    bool handle_events;
+    bool relay_events;
+    
+    parent_mob_info();
+};
+
+
+/* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
  * an object in the game world. It can move, follow a point,
@@ -360,6 +376,8 @@ public:
     size_t chomp_max;
     //If the mob is currently "disabled", these flags specify behavior.
     unsigned char disabled_state_flags;
+    //If this mob is a sub-mob, this points to the parent mob.
+    parent_mob_info* parent;
     
     
     void tick();
