@@ -210,7 +210,7 @@ struct parent_mob_info {
     bool handle_events;
     bool relay_events;
     
-    parent_mob_info();
+    parent_mob_info(mob* m);
 };
 
 
@@ -266,6 +266,8 @@ public:
     size_t near_reach;
     //Mobs it is linked to.
     vector<mob*> links;
+    //Last mob it spawned in the script, if any.
+    mob* last_mob_spawned;
     
     //Movement and other physics.
     //Coordinates.

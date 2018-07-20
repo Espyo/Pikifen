@@ -33,6 +33,7 @@ typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 //Types of script action.
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
+    MOB_ACTION_ADOPT,
     MOB_ACTION_DELETE,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,
@@ -40,6 +41,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_IF,
     MOB_ACTION_INC_VAR,
+    MOB_ACTION_LINK_WITH_SPAWN,
     MOB_ACTION_MOVE,
     MOB_ACTION_PLAY_SOUND,
     MOB_ACTION_RANDOMIZE_VAR,
@@ -65,6 +67,13 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SWALLOW,
     MOB_ACTION_TELEPORT,
     MOB_ACTION_TURN,
+};
+
+//Link with spawn action sub-types.
+enum MOB_ACTION_LINK_WITH_SPAWN_TYPES {
+    MOB_ACTION_LINK_WITH_SPAWN_O2S,
+    MOB_ACTION_LINK_WITH_SPAWN_S2O,
+    MOB_ACTION_LINK_WITH_SPAWN_BOTH,
 };
 
 //Swallowing action sub-types.

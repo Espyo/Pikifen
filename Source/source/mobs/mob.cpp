@@ -42,6 +42,7 @@ mob::mob(
     itch_time(0),
     far_reach(INVALID),
     near_reach(INVALID),
+    last_mob_spawned(nullptr),
     pos(pos),
     z(0),
     speed_z(0),
@@ -2079,6 +2080,7 @@ void mob::change_maturity_amount_from_status(const int amount) {}
 mob::~mob() {
     if(carry_info) delete carry_info;
     if(group) delete group;
+    if(parent) delete parent;
 }
 
 
@@ -2559,8 +2561,8 @@ void group_info::sort(subgroup_type* leading_type) {
 /* ----------------------------------------------------------------------------
  * Initializes a parent mob information struct.
  */
-parent_mob_info::parent_mob_info() :
-    m(nullptr),
+parent_mob_info::parent_mob_info(mob* m) :
+    m(m),
     handle_damage(false),
     relay_damage(false),
     handle_statuses(false),
