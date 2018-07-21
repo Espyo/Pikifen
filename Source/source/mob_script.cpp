@@ -466,7 +466,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SPAWN;
         
-        if(v.empty()) {
+        if(v_words.size() < 6) {
             valid = false;
             log_error(
                 "This \"spawn\" is badly formed! Format: \"spawn <object name> "

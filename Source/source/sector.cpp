@@ -630,8 +630,9 @@ void area_data::clear() {
     tree_shadows.clear();
     bmap.clear();
     
-    if(!bg_bmp_file_name.empty()) {
-        bitmaps.detach(bg_bmp_file_name);
+    if(bg_bmp) {
+        bitmaps.detach(bg_bmp);
+        bg_bmp = NULL;
     }
     
     name.clear();

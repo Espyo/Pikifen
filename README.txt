@@ -49,78 +49,85 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 ===============
 3) FAQ and troubleshooting
 ===============
-    Why did it crash?
-        First of all, are you using the most recent version of the engine? You should try upgrading if you're not.
-        If you got a message telling you to read the readme, then please open the file "Error_log.txt" in the engine's "User_data" folder.
-            Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
-            If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
-        Other than that, here are some possible solutions and workarounds:
-            * Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
+    Playing problem troubleshooting
+        Why did it crash?
+            First of all, are you using the most recent version of the engine? You should try upgrading if you're not.
+            If you got a message telling you to read the readme, then please open the file "Error_log.txt" in the engine's "User_data" folder.
+                Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
+                If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
+            Other than that, here are some possible solutions and workarounds:
+                * Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
+        
+        Why can't I see the game window?
+            Because windows sometimes break under Windows.
+            Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+        
+        Why is it so slow?
+            It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
+            Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.
+        
+        Why are some parts of the logic and physics so broken?
+            Because their code is still under construction.
+        
+        Why does the engine think I'm touching the analog stick when I'm not?
+            You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.
+        
+        Why are some textures black, but not HUD elements?
+            Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.
     
-    Why can't I see the game window?
-        Because windows sometimes break under Windows.
-        Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    Content creation troubleshooting
+        Why do I see everything in a single line when I open a text file with Notepad?
+            Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use. Install Notepad++ and start using that instead, since it's better in every way.
+        
+        Why are my graphics showing up as black and violet patterns?
+            1. Remember that file names are case sensitive. Lowercase and uppercase matter.
+            2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
+            3. Remember that the engine only finds the image in one folder. General images go in Game_data/Graphics, and textures go in Game_data/Graphics/Textures.
+        
+        I'm having a hard time understanding X.
+            Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.
+            If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.
+        
+    Engine development questions
+        What is there left to do?
+            It's hard to say, but the Pikmin Fanon page has a rough roadmap.
+        
+        If the engine is just meant to be the game's logic, why does it come with so many enemies, graphics, etc.?
+            1. Having some content to play with means people can try out the engine and its features without having to download or create content.
+            2. The existing content serves as a basis for new content. If you're having trouble placing a bridge, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red bulborb and recolor it.
+        
+        Why do some enemies act a bit differently from how they do in the canon games?
+            It could either be an engine limitation (since Pikifen isn't as complex as a Nintendo product), or it could've been a change I made on purpose. The engine's content isn't meant to mirror the canon content exactly, and sometimes, I make slight changes to features and content because I think it will make for a funner, fairer experience, because it's needed to be more readable in a top-down format, etc.
+        
+        Why are the animations so clunky and the graphics so simple?
+            I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
+        
+        Why are the textures and HUD all shiny and realistic, but the objects are simplistic?
+            It's the style choice I went with for the packaged content, but anybody can style the textures, HUD, and objects in any way they want.
+            In my opinion, Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
+            The objects are simple, and based off of vector graphics, so it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots and put them in-game.
+            An alternative style that could maybe work all around is pixel art for everything.
+        
+        Why didn't you use textures and sounds from the Pikmin games?
+            1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
+            2. Should something happen to the engine, I can rebrand it, and release the assets as they are.
+            3. If somebody wants to add a sound effect from the series, depending on the game, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible. But if all sounds are custom-made, this isn't really a problem. This applies to a lesser degree to textures and such as well.
+            4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
+        
+        Why 2D?
+            3D would be MUCH harder for everyone. You can get something convincing with 2D alone.
+            A 3D engine would be much harder to develop, and the content creators would have a much harder time creating models, areas, etc. that look good in 3D.
+        
+        Will you ever add X?
+            Depends. If it's an area or enemy or something, the content creators are meant to do that, not me. Though I might still add it for the sake of demonstration. But if it's something like a feature, ask me!
+        
+        Why do some updates make previously created content incompatible for such small reasons?
+            I believe that making the way things work, are organized, are named, etc. consistent is the key to understanding the engine. If I give a feature a certain name, but later on, rework it and figure out a better name for it, I will rename it (and break some compatibilities in the process), because I want the feature to be intuitive. If it kept the old name, it would confuse newcomers. I don't like making content incompatible, but I think it's a small price to pay for the sake of making everyone able to juice the most out of the engine.
+        
+        Is it possible to add Winged Pikmin?
+            No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
+            Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
     
-    Why are my graphics showing up as black and violet patterns?
-        1. Remember that file names are case sensitive. Lowercase and uppercase matter.
-        2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
-        3. Remember that the engine only finds the image in one folder. General images go in Game_data/Graphics, and textures go in Game_data/Graphics/Textures.
-    
-    Why does the engine think I'm touching the analog stick when I'm not?
-        You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.
-    
-    Why do I see everything in a single line when I open a text file with Notepad?
-        Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use. Install Notepad++ and start using that instead, since it's better in every way.
-    
-    Why is it so slow?
-        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
-        Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.
-    
-    Why are some parts of the logic and physics so broken?
-        Because their code is still under construction.
-    
-    Why are some textures black, but not HUD elements?
-        Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.
-    
-    What is there left to do?
-        It's hard to say, but the Pikmin Fanon page has a rough roadmap.
-    
-    If the engine is just meant to be the game's logic, why does it come with so many enemies, graphics, etc.?
-        1. Having some content to play with means people can try out the engine and its features without having to download or create content.
-        2. The existing content serves as a basis for new content. If you're having trouble placing a bridge, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red bulborb and recolor it.
-    
-    Why do some enemies act a bit differently from how they do in the canon games?
-        It could either be an engine limitation (since Pikifen isn't as complex as a Nintendo product), or it could've been a change I made on purpose. The engine's content isn't meant to mirror the canon content exactly, and sometimes, I make slight changes to features and content because I think it will make for a funner, fairer experience, because it's needed to be more readable in a top-down format, etc.
-    
-    Why are the animations so clunky and the graphics so simple?
-        I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
-    
-    Why are the textures and HUD all shiny and realistic, but the objects are simplistic?
-        It's the style choice I went with for the packaged content, but anybody can style the textures, HUD, and objects in any way they want.
-        In my opinion, Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
-        The objects are simple, and based off of vector graphics, so it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots and put them in-game.
-        An alternative style that could maybe work all around is pixel art for everything.
-    
-    Why didn't you use textures and sounds from the Pikmin games?
-        1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
-        2. Should something happen to the engine, I can rebrand it, and release the assets as they are.
-        3. If somebody wants to add a sound effect from the series, depending on the game, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible. But if all sounds are custom-made, this isn't really a problem. This applies to a lesser degree to textures and such as well.
-        4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
-    
-    Why 2D?
-        3D would be MUCH harder for everyone. You can get something convincing with 2D alone.
-        A 3D engine would be much harder to develop, and the content creators would have a much harder time creating models, areas, etc. that look good in 3D.
-    
-    Will you ever add X?
-        Depends. If it's an area or enemy or something, the content creators are meant to do that, not me. Though I might still add it for the sake of demonstration. But if it's something like a feature, ask me!
-    
-    Is it possible to add Winged Pikmin?
-        No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
-        Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
-    
-    I'm having a hard time understanding X.
-        Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.
-        If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.
     
 ===============
 4) Compiling
