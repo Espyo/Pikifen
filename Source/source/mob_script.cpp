@@ -270,6 +270,17 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "receive_status") {
+    
+        type = MOB_ACTION_RECEIVE_STATUS;
+        if(status_types.find(v) == status_types.end()) {
+            log_error("Unknown status effect \"" + v + "\"!", dn);
+            valid = false;
+        } else {
+            vs.push_back(v);
+        }
+        
+        
     } else if(n == "release") {
     
         type = MOB_ACTION_RELEASE;
@@ -987,6 +998,11 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_RANDOMIZE_VAR) {
     
         m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
+        
+        
+    } else if(type == MOB_ACTION_RECEIVE_STATUS) {
+    
+        m->apply_status_effect(&status_types[vs[0]], true);
         
         
     } else if(type == MOB_ACTION_RELEASE) {

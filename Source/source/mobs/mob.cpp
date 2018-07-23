@@ -647,7 +647,7 @@ void mob::chase(
  * Deletes all status effects asking to be deleted.
  */
 void mob::delete_old_status_effects() {
-    for(size_t s = 0; s < this->statuses.size(); ) {
+    for(size_t s = 0; s < statuses.size(); ) {
         if(statuses[s].to_delete) {
             if(statuses[s].type->causes_panic) {
                 lose_panic_from_status();
@@ -655,7 +655,7 @@ void mob::delete_old_status_effects() {
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
             }
-            this->statuses.erase(this->statuses.begin() + s);
+            statuses.erase(statuses.begin() + s);
         } else {
             ++s;
         }
