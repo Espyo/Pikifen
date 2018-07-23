@@ -664,38 +664,87 @@ void mob::delete_old_status_effects() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the mob. This can be overwritten by child classes.
- * effect_manager: Use this effect manager.
- *   If NULL, an effect manager is created inside exclusively for the function.
+ * Draws the entirety of the mob. This means the mob itself, any limbs, etc.
+ * effect_manager: Effect manager to use, if any.
  */
 void mob::draw(bitmap_effect_manager* effect_manager) {
 
+    draw_mob(effect_manager);
+    
+    if(parent) {
+        if(parent->limb_bmp) {
+            point parent_end;
+            if(parent->limb_parent_body_part == INVALID) {
+                parent_end = parent->m->pos;
+            } else {
+                parent_end =
+                    parent->m->get_hitbox(
+                        parent->limb_parent_body_part
+                    )->get_cur_pos(parent->m->pos, parent->m->angle);
+            }
+            
+            point child_end;
+            if(parent->limb_child_body_part == INVALID) {
+                child_end = pos;
+            } else {
+                child_end =
+                    get_hitbox(
+                        parent->limb_child_body_part
+                    )->get_cur_pos(pos, angle);
+            }
+            
+            float p2c_angle = get_angle(parent_end, child_end);
+            
+            if(parent->limb_parent_offset) {
+                parent_end +=
+                    rotate_point(
+                        point(parent->limb_parent_offset, 0), p2c_angle
+                    );
+            }
+            if(parent->limb_child_offset) {
+                child_end -=
+                    rotate_point(
+                        point(parent->limb_child_offset, 0), p2c_angle
+                    );
+            }
+            
+            float length = dist(parent_end, child_end).to_float();
+            
+            draw_bitmap_with_effects(
+                parent->limb_bmp,
+                (parent_end + child_end) / 2,
+                point(length, parent->limb_thickness),
+                p2c_angle,
+                effect_manager
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws just the mob. This is a generic function, and can be overwritten
+ * by child classes.
+ * effect_manager: Effect manager to use, if any.
+ */
+void mob::draw_mob(bitmap_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     
     if(!s_ptr) return;
     
-    bool internal_effect_manager = false;
-    
-    if(!effect_manager) {
-        effect_manager = new bitmap_effect_manager();
-        internal_effect_manager = true;
+    if(effect_manager) {
+        add_status_bitmap_effects(effect_manager);
+        add_sector_brightness_bitmap_effect(effect_manager);
     }
     
     point draw_pos = get_sprite_center(s_ptr);
     point draw_size = get_sprite_dimensions(s_ptr);
-    
-    add_status_bitmap_effects(effect_manager);
-    add_sector_brightness_bitmap_effect(effect_manager);
     
     draw_bitmap_with_effects(
         s_ptr->bitmap,
         draw_pos, draw_size,
         angle + s_ptr->angle, effect_manager
     );
-    
-    if(internal_effect_manager) {
-        delete effect_manager;
-    }
 }
 
 
@@ -815,11 +864,9 @@ hitbox* mob::get_closest_hitbox(const point &p, const size_t h_type, dist* d) {
         hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
-        point h_pos = rotate_point(h_ptr->pos, angle);
         float d =
             dist(
-                point(p.x - pos.x, p.y - pos.y),
-                h_pos
+                h_ptr->get_cur_pos(pos, angle), p
             ).to_float() - h_ptr->radius;
         if(closest_hitbox == NULL || d < closest_hitbox_dist) {
             closest_hitbox_dist = d;
@@ -858,8 +905,7 @@ hitbox* mob::get_hitbox(const size_t nr) {
 void mob::get_hitbox_hold_point(
     mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
 ) {
-    point actual_h_pos = rotate_point(h_ptr->pos, angle);
-    actual_h_pos += pos;
+    point actual_h_pos = h_ptr->get_cur_pos(pos, angle);
     
     point pos_dif = mob_to_hold->pos - actual_h_pos;
     coordinates_to_angle(pos_dif, offset_angle, offset_dist);
@@ -2568,7 +2614,13 @@ parent_mob_info::parent_mob_info(mob* m) :
     handle_statuses(false),
     relay_statuses(false),
     handle_events(false),
-    relay_events(false) {
+    relay_events(false),
+    limb_bmp(nullptr),
+    limb_thickness(32.0),
+    limb_parent_body_part(INVALID),
+    limb_parent_offset(0),
+    limb_child_body_part(INVALID),
+    limb_child_offset(0) {
     
 }
 

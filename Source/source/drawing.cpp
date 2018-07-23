@@ -1576,6 +1576,7 @@ void draw_bitmap_in_box(
  *   Make this -1 on one of them to keep the aspect ratio from the other.
  * angle:    Angle to rotate the bitmap by.
  * effects:  Bitmap effect manager with the effects.
+ *   If NULL, no effects are used.
  */
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const point &center,
@@ -1587,7 +1588,10 @@ void draw_bitmap_with_effects(
         bmp = bmp_error;
     }
     
-    bitmap_effect_props final_props = effects->get_final_properties();
+    bitmap_effect_props final_props;
+    if(effects) {
+        final_props = effects->get_final_properties();
+    }
     
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
     point scale(

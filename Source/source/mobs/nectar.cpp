@@ -28,7 +28,7 @@ nectar::nectar(const point &pos, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws the nectar mob.
  */
-void nectar::draw(bitmap_effect_manager* effect_manager) {
+void nectar::draw_mob(bitmap_effect_manager* effect_manager) {
     float radius =
         type->radius * (amount_left + nectar_amount) / (nectar_amount * 2) * 2;
         

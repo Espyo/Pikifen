@@ -38,7 +38,7 @@ public:
         const point &pos, enemy_type* type,
         const float angle, const string &vars
     );
-    void draw(bitmap_effect_manager* effect_manager = NULL);
+    void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
     virtual bool can_receive_status(status_type* s);
     

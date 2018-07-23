@@ -796,6 +796,10 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                                 h_ptr->pos.y * m2_angle_cos
                             )
                         );
+                        //It's more optimized to get the hitbox position here
+                        //instead of calling hitbox::get_cur_pos because
+                        //we already know the sin and cosine, so they don't
+                        //need to be re-calculated.
                         
                         dist hd(m_ptr->pos, h_pos);
                         if(hd < m_ptr->type->radius + h_ptr->radius) {
@@ -900,6 +904,10 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                             h2_ptr->pos.y * m2_angle_cos
                         )
                     );
+                    //It's more optimized to get the hitbox positions here
+                    //instead of calling hitbox::get_cur_pos because
+                    //we already know the sin and cosine, so they don't
+                    //need to be re-calculated.
                     float m1_h_z = m_ptr->z + h1_ptr->z;
                     float m2_h_z = m2_ptr->z + h2_ptr->z;
                     

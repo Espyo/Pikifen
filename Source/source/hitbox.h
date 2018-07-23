@@ -78,6 +78,7 @@ public:
         const point &pos = point(), const float z = 0,
         const float height = 128, const float radius = 32
     );
+    point get_cur_pos(const point &mob_pos, const float &mob_angle);
 };
 
 #endif //ifndef HITBOX_INCLUDED

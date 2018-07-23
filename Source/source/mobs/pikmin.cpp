@@ -143,7 +143,7 @@ void pikmin::tick_class_specifics() {
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
-void pikmin::draw(bitmap_effect_manager* effect_manager) {
+void pikmin::draw_mob(bitmap_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     

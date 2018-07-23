@@ -372,10 +372,10 @@ void leader::swap_held_pikmin(mob* new_pik) {
 /* ----------------------------------------------------------------------------
  * Draw a leader mob.
  */
-void leader::draw(bitmap_effect_manager* effect_manager) {
+void leader::draw_mob(bitmap_effect_manager* effect_manager) {
     bitmap_effect_manager effects;
     
-    mob::draw(&effects);
+    mob::draw_mob(&effects);
     
     sprite* s_ptr = anim.get_cur_sprite();
     point draw_pos = get_sprite_center(s_ptr);

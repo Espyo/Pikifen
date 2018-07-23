@@ -29,9 +29,9 @@ ship::ship(const point &pos, ship_type* type, float angle, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws a ship.
  */
-void ship::draw(bitmap_effect_manager* effect_manager) {
+void ship::draw_mob(bitmap_effect_manager* effect_manager) {
 
-    mob::draw();
+    mob::draw_mob();
     
     al_draw_circle(
         beam_final_pos.x,

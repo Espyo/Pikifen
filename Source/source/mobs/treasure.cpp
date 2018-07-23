@@ -36,7 +36,7 @@ treasure::treasure(
 /* ----------------------------------------------------------------------------
  * Draws a treasure.
  */
-void treasure::draw(bitmap_effect_manager* effect_manager) {
+void treasure::draw_mob(bitmap_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     

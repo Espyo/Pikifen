@@ -36,7 +36,7 @@ enemy::enemy(
 /* ----------------------------------------------------------------------------
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
-void enemy::draw(bitmap_effect_manager* effect_manager) {
+void enemy::draw_mob(bitmap_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     

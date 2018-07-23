@@ -57,7 +57,7 @@ public:
         const point &pos, onion_type* type,
         const float angle, const string &vars
     );
-    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
     void spew();
 };

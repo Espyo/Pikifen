@@ -210,6 +210,14 @@ struct parent_mob_info {
     bool handle_events;
     bool relay_events;
     
+    //Limbs are visible connective textures between both mobs.
+    ALLEGRO_BITMAP* limb_bmp;
+    float limb_thickness;
+    size_t limb_parent_body_part;
+    float limb_parent_offset;
+    size_t limb_child_body_part;
+    float limb_child_offset;
+    
     parent_mob_info(mob* m);
 };
 
@@ -383,7 +391,8 @@ public:
     
     
     void tick();
-    virtual void draw(bitmap_effect_manager* effect_manager = NULL);
+    void draw(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool add, const bool ratio, const float amount);
