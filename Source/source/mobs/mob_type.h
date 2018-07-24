@@ -51,9 +51,54 @@ public:
         float angle_1;
         float radius_2;
         float angle_2;
+        
         reach_struct() :
             radius_1(-1), angle_1(-1),
             radius_2(-1), angle_2(-1) { }
+    };
+    
+    struct spawn_struct {
+        string name;
+        string mob_type_name;
+        bool relative;
+        point coords_xy;
+        float coords_z;
+        float angle;
+        string vars;
+        
+        spawn_struct() :
+            relative(true),
+            coords_z(0),
+            angle(0) {}
+    };
+    
+    struct child_struct {
+        string body_part_name;
+        
+        bool handle_damage;
+        bool relay_damage;
+        bool handle_events;
+        bool relay_events;
+        bool handle_statuses;
+        bool relay_statuses;
+        
+        string limb_bmp_filename;
+        float limb_thickness;
+        string limb_parent_body_part;
+        float limb_parent_offset;
+        string limb_child_body_part;
+        float limb_child_offset;
+        
+        child_struct() :
+            handle_damage(false),
+            relay_damage(false),
+            handle_events(false),
+            relay_events(false),
+            handle_statuses(false),
+            relay_statuses(false),
+            limb_thickness(32.0f),
+            limb_parent_offset(0),
+            limb_child_offset(0) {}
     };
     
     //Technical things.
@@ -83,6 +128,8 @@ public:
     float health_regen; //Health points per second.
     float territory_radius;
     vector<reach_struct> reaches;
+    vector<spawn_struct> spawns;
+    vector<child_struct> children;
     size_t max_carriers;
     float weight;          //Pikmin strength needed to carry it.
     float itch_damage;

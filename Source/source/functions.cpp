@@ -1303,9 +1303,9 @@ string f2s(const float f) {
 }
 
 
-//Converts a point to a string.
-string p2s(const point &p) {
-    return f2s(p.x) + " " + f2s(p.y);
+//Converts a point to a string. If z is present, the third word is placed there.
+string p2s(const point &p, float* z) {
+    return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
 }
 
 
@@ -1370,8 +1370,8 @@ double s2f(const string &s) {
 int s2i(const string &s) { return s2f(s); }
 
 
-//Converts a string to a point.
-point s2p(const string &s) {
+//Converts a string to a point. If z is present, the third word is placed there.
+point s2p(const string &s, float* z) {
     vector<string> words = split(s);
     point p;
     if(words.size() >= 1) {
@@ -1379,6 +1379,9 @@ point s2p(const string &s) {
     }
     if(words.size() >= 2) {
         p.y = s2f(words[1]);
+    }
+    if(z && words.size() >= 3) {
+        *z = s2f(words[2]);
     }
     return p;
 }

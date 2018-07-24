@@ -774,11 +774,7 @@ void animation_editor::save_animation_database() {
                 hitboxes_node->add(hitbox_node);
                 
                 hitbox_node->add(
-                    new data_node(
-                        "coords",
-                        f2s(h_ptr->pos.x) + " " + f2s(h_ptr->pos.y) +
-                        " " + f2s(h_ptr->z)
-                    )
+                    new data_node("coords", p2s(h_ptr->pos, &h_ptr->z))
                 );
                 hitbox_node->add(
                     new data_node("height", f2s(h_ptr->height))

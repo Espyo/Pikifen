@@ -381,6 +381,39 @@ void load_mob_type_from_file(
         mt->reaches.push_back(new_reach);
     }
     
+    data_node* spawns_node = file.get_child_by_name("spawns");
+    size_t n_spawns = spawns_node->get_nr_of_children();
+    for(size_t s = 0; s < n_spawns; ++s) {
+    
+        data_node* spawn_node = spawns_node->get_child(s);
+        reader_setter rs(spawn_node);
+        mob_type::spawn_struct new_spawn;
+        string coords_str;
+        
+        new_spawn.name =
+            spawn_node->name;
+        rs.set("object", new_spawn.mob_type_name);
+        rs.set("relative", new_spawn.relative);
+        rs.set("coordinates", coords_str);
+        rs.set("angle", new_spawn.angle);
+        rs.set("vars", new_spawn.vars);
+        
+        if(!coords_str.empty()) {
+            new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
+        }
+        new_spawn.angle = deg_to_rad(new_spawn.angle);
+        
+        mt->spawns.push_back(new_spawn);
+    }
+    
+    data_node* children_node = file.get_child_by_name("children");
+    size_t n_children = children_node->get_nr_of_children();
+    for(size_t c = 0; c < n_children; ++c) {
+    
+        mob_type::child_struct new_child;
+        //TODO
+    }
+    
     if(load_resources) {
         data_node anim_file = load_data_file(folder + "/Animations.txt");
         mt->anims = load_animation_database_from_file(&anim_file);

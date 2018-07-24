@@ -466,78 +466,15 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SPAWN;
         
-        if(v_words.size() < 6) {
-            valid = false;
-            log_error(
-                "This \"spawn\" is badly formed! Format: \"spawn <object name> "
-                "<relative/absolute> <x> <y> <z> <angle> "
-                "[<script variables>]\".", dn
-            );
-            return;
-        }
-        
-        size_t params_word = v_words.size();
-        for(size_t w = 0; w < v_words.size(); ++w) {
-            if(v_words[w].find("=") != string::npos) {
-                //Found a word that has an equals in it,
-                //so this is the spawned object's extra script data.
-                if(v_words[w] == "=") {
-                    //If it's the full word, that means the user split the
-                    //parameter and the equals.
-                    params_word = w - 1;
-                } else {
-                    params_word = w;
-                }
-                break;
+        for(size_t s = 0; s < mt->spawns.size(); ++s) {
+            if(mt->spawns[s].name == v) {
+                vi.push_back(s);
+                return;
             }
         }
         
-        string object_name;
-        bool relative = true;
-        float x, y, z, a;
-        for(size_t w = 0; w < params_word - 5; ++w) {
-            object_name += v_words[w] + " ";
-        }
-        if(object_name.empty()) {
-            valid = false;
-        } else {
-            object_name.erase(object_name.size() - 1);
-            
-            if(v_words[params_word - 5] == "relative") {
-                relative = true;
-            } else if(v_words[params_word - 5] == "absolute") {
-                relative = false;
-            } else {
-                valid = false;
-            }
-            x = s2f(v_words[params_word - 4]);
-            y = s2f(v_words[params_word - 3]);
-            z = s2f(v_words[params_word - 2]);
-            a = deg_to_rad(s2f(v_words[params_word - 1]));
-            
-            vs.push_back(object_name);
-            vi.push_back(
-                relative ?
-                MOB_ACTION_NUMERICAL_RELATIVE : MOB_ACTION_NUMERICAL_ABSOLUTE
-            );
-            vf.push_back(x);
-            vf.push_back(y);
-            vf.push_back(z);
-            vf.push_back(a);
-            if(params_word < v_words.size()) {
-                vs.push_back(
-                    v.substr(v.find(v_words[params_word]), string::npos)
-                );
-            }
-        }
-        
-        if(!valid) {
-            log_error(
-                "This \"spawn\" is badly formed! Format: \"spawn <object name> "
-                "<relative/absolute> <x> <y> <z> <angle> "
-                "[<script variables>]\".", dn
-            );
-        }
+        log_error("Spawn info block \"" + v + "\" not found!", dn);
+        valid = false;
         
         
     } else if(n == "start_chomping") {
@@ -1095,8 +1032,10 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SPAWN) {
     
+        mob_type::spawn_struct* info = &m->type->spawns[vi[0]];
+        
         //First, find the mob.
-        mob_type* type_ptr = mob_categories.find_mob_type(vs[0]);
+        mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
         if(!type_ptr) return false;
         if(
             type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
@@ -1109,14 +1048,14 @@ bool mob_action::run(
         float z = 0;
         float angle = 0;
         
-        if(vi[0] == MOB_ACTION_NUMERICAL_RELATIVE) {
-            xy = m->pos + rotate_point(point(vf[0], vf[1]), m->angle);
-            z = m->z + vf[2];
-            angle = m->angle + vf[3];
+        if(info->relative) {
+            xy = m->pos + rotate_point(info->coords_xy, m->angle);
+            z = m->z + info->coords_z;
+            angle = m->angle + info->angle;
         } else {
-            xy = point(vf[0], vf[1]);
-            z = vf[2];
-            angle = vf[3];
+            xy = info->coords_xy;
+            z = info->coords_z;
+            angle = info->angle;
         }
         
         if(!get_sector(xy, NULL, true)) {
@@ -1130,7 +1069,7 @@ bool mob_action::run(
                 xy,
                 type_ptr,
                 angle,
-                vs.size() >= 2 ? vs[1] : ""
+                info->vars
             );
             
         m->last_mob_spawned->z = z;

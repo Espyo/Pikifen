@@ -148,12 +148,12 @@ void al_fwrite(ALLEGRO_FILE* f, string s);
 string b2s(const bool b);
 string c2s(const ALLEGRO_COLOR &c);
 string f2s(const float f);
-string p2s(const point &p);
+string p2s(const point &p, float* z = NULL);
 bool s2b(const string &s);
 ALLEGRO_COLOR s2c(const string &s);
 double s2f(const string &s);
 int s2i(const string &s);
-point s2p(const string &s);
+point s2p(const string &s, float* z = NULL);
 
 #if defined(_WIN32)
 string strsignal(const int signum);

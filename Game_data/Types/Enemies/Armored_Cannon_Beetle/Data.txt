@@ -17,6 +17,14 @@ reaches {
     search = 300 180
     attack = 300 5
 }
+spawns {
+    boulder {
+        object = Rolling boulder
+        relative = true
+        coordinates = 180 0 0
+        angle = 0
+    }
+}
 rotation_speed = 40
 territory_radius = 300
 value = 200

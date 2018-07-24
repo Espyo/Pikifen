@@ -482,13 +482,11 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 hitboxes_node->get_child(h);
             hitbox cur_hitbox = hitbox();
             
-            vector<string> coords =
-                split(hitbox_node->get_child_by_name("coords")->value);
-            if(coords.size() >= 3) {
-                cur_hitbox.pos.x = s2f(coords[0]);
-                cur_hitbox.pos.y = s2f(coords[1]);
-                cur_hitbox.z = s2f(coords[2]);
-            }
+            cur_hitbox.pos =
+                s2p(
+                    hitbox_node->get_child_by_name("coords")->value,
+                    &cur_hitbox.z
+                );
             cur_hitbox.height =
                 s2f(hitbox_node->get_child_by_name("height")->value);
             cur_hitbox.radius =

@@ -120,7 +120,7 @@ script {
         }
         on_frame_signal {
             start_particles dust_spit 180 0
-            spawn Rolling boulder relative 180 0 0 0
+            spawn boulder
         }
         on_animation_end {
             set_state idling

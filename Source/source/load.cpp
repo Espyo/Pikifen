@@ -262,9 +262,7 @@ void load_area(
             
         mob_gen* mob_ptr = new mob_gen();
         
-        vector<string> coords = split(mob_node->get_child_by_name("p")->value);
-        mob_ptr->pos.x = (coords.size() >= 1 ? s2f(coords[0]) : 0);
-        mob_ptr->pos.y = (coords.size() >= 2 ? s2f(coords[1]) : 0);
+        mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
         mob_ptr->angle =
             s2f(
                 mob_node->get_child_by_name("angle")->get_value_or_default("0")
