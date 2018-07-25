@@ -73,7 +73,12 @@ public:
     };
     
     struct child_struct {
-        string body_part_name;
+        string name;
+        string spawn_name;
+        bool parent_holds;
+        string hold_body_part;
+        float hold_offset_dist;
+        float hold_offset_angle;
         
         bool handle_damage;
         bool relay_damage;

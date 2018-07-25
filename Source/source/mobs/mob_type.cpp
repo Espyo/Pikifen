@@ -390,8 +390,7 @@ void load_mob_type_from_file(
         mob_type::spawn_struct new_spawn;
         string coords_str;
         
-        new_spawn.name =
-            spawn_node->name;
+        new_spawn.name = spawn_node->name;
         rs.set("object", new_spawn.mob_type_name);
         rs.set("relative", new_spawn.relative);
         rs.set("coordinates", coords_str);
@@ -410,8 +409,32 @@ void load_mob_type_from_file(
     size_t n_children = children_node->get_nr_of_children();
     for(size_t c = 0; c < n_children; ++c) {
     
+        data_node* child_node = children_node->get_child(c);
+        reader_setter rs(child_node);
         mob_type::child_struct new_child;
-        //TODO
+        
+        new_child.name = child_node->name;
+        rs.set("spawn", new_child.spawn_name);
+        rs.set("parent_holds", new_child.parent_holds);
+        rs.set("hold_body_part", new_child.hold_body_part);
+        rs.set("hold_offset_distance", new_child.hold_offset_dist);
+        rs.set("hold_offset_angle", new_child.hold_offset_angle);
+        rs.set("handle_damage", new_child.handle_damage);
+        rs.set("relay_damage", new_child.relay_damage);
+        rs.set("handle_events", new_child.handle_events);
+        rs.set("relay_events", new_child.relay_events);
+        rs.set("handle_statuses", new_child.handle_statuses);
+        rs.set("relay_statuses", new_child.relay_statuses);
+        rs.set("limb_bitmap", new_child.limb_bmp_filename);
+        rs.set("limb_thickness", new_child.limb_thickness);
+        rs.set("limb_parent_body_part", new_child.limb_parent_body_part);
+        rs.set("limb_parent_offset", new_child.limb_parent_offset);
+        rs.set("limb_child_body_part", new_child.limb_child_body_part);
+        rs.set("limb_child_offset", new_child.limb_child_offset);
+        
+        new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
+        
+        mt->children.push_back(new_child);
     }
     
     if(load_resources) {

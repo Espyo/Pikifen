@@ -33,7 +33,6 @@ typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 //Types of script action.
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
-    MOB_ACTION_ADOPT,
     MOB_ACTION_DELETE,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,

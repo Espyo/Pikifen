@@ -48,12 +48,7 @@ mob_action::mob_action(
         v = trim_spaces(v);
     }
     
-    if(n == "adopt_spawn") {
-    
-        type = MOB_ACTION_ADOPT;
-        vs = v_words;
-        
-    } else if(n == "delete") {
+    if(n == "delete") {
     
         type = MOB_ACTION_DELETE;
         
@@ -704,34 +699,7 @@ bool mob_action::run(
         return false;
     }
     
-    if(type == MOB_ACTION_ADOPT) {
-    
-        if(m->last_mob_spawned) {
-            if(!m->last_mob_spawned->parent) {
-                m->last_mob_spawned->parent = new parent_mob_info(m);
-            } else {
-                m->last_mob_spawned->parent->m = m;
-            }
-            
-            for(size_t s = 0; s < vs.size(); ++s) {
-                if(vs[s] == "handle_damage") {
-                    m->last_mob_spawned->parent->handle_damage = true;
-                } else if(vs[s] == "handle_events") {
-                    m->last_mob_spawned->parent->handle_events = true;
-                } else if(vs[s] == "handle_statuses") {
-                    m->last_mob_spawned->parent->handle_statuses = true;
-                } else if(vs[s] == "relay_damage") {
-                    m->last_mob_spawned->parent->relay_damage = true;
-                } else if(vs[s] == "relay_events") {
-                    m->last_mob_spawned->parent->relay_events = true;
-                } else if(vs[s] == "relay_statuses") {
-                    m->last_mob_spawned->parent->relay_statuses = true;
-                }
-            }
-        }
-        
-        
-    } else if(type == MOB_ACTION_DELETE) {
+    if(type == MOB_ACTION_DELETE) {
     
         m->to_delete = true;
         
@@ -1032,55 +1000,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SPAWN) {
     
-        mob_type::spawn_struct* info = &m->type->spawns[vi[0]];
-        
-        //First, find the mob.
-        mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
-        if(!type_ptr) return false;
-        if(
-            type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-            pikmin_list.size() >= max_pikmin_in_field
-        ) {
-            return false;
-        }
-        
-        point xy;
-        float z = 0;
-        float angle = 0;
-        
-        if(info->relative) {
-            xy = m->pos + rotate_point(info->coords_xy, m->angle);
-            z = m->z + info->coords_z;
-            angle = m->angle + info->angle;
-        } else {
-            xy = info->coords_xy;
-            z = info->coords_z;
-            angle = info->angle;
-        }
-        
-        if(!get_sector(xy, NULL, true)) {
-            //Spawn out of bounds? No way!
-            return false;
-        }
-        
-        m->last_mob_spawned =
-            create_mob(
-                type_ptr->category,
-                xy,
-                type_ptr,
-                angle,
-                info->vars
-            );
-            
-        m->last_mob_spawned->z = z;
-        
-        if(type_ptr->category->id == MOB_CATEGORY_TREASURES) {
-            //This way, treasures that fall into the abyss respawn at the
-            //spawner mob's original spot.
-            m->last_mob_spawned->home = m->home;
-        } else {
-            m->last_mob_spawned->home = xy;
-        }
+        return m->spawn(&m->type->spawns[vi[0]]);
         
         
     } else if(type == MOB_ACTION_START_DYING) {

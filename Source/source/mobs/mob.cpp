@@ -111,6 +111,57 @@ mob::mob(
         }
     }
     fsm.set_state(type->first_state_nr);
+    
+    for(size_t c = 0; c < type->children.size(); ++c) {
+        mob_type::child_struct* child_info = &type->children[c];
+        
+        mob_type::spawn_struct* spawn_info = NULL;
+        for(size_t s = 0; s < type->spawns.size(); ++s) {
+            if(type->spawns[s].name == child_info->spawn_name) {
+                spawn_info = &type->spawns[s];
+                break;
+            }
+        }
+        
+        if(!spawn_info) {
+            log_error(
+                "Object \"" + type->name + "\" tried to spawn a child with the "
+                "spawn name \"" + child_info->spawn_name + "\", but that name "
+                "does not exist!"
+            );
+            continue;
+        }
+        
+        if(!spawn(spawn_info)) continue;
+        
+        parent_mob_info* p_info = new parent_mob_info(this);
+        last_mob_spawned->parent = p_info;
+        p_info->handle_damage = child_info->handle_damage;
+        p_info->relay_damage = child_info->relay_damage;
+        p_info->handle_events = child_info->handle_events;
+        p_info->relay_events = child_info->relay_events;
+        p_info->handle_statuses = child_info->handle_statuses;
+        p_info->relay_statuses = child_info->relay_statuses;
+        p_info->limb_bmp = bitmaps.get(child_info->limb_bmp_filename);
+        p_info->limb_thickness = child_info->limb_thickness;
+        p_info->limb_parent_body_part =
+            type->anims.find_body_part(child_info->limb_parent_body_part);
+        p_info->limb_parent_offset = child_info->limb_parent_offset;
+        p_info->limb_child_body_part =
+            last_mob_spawned->type->anims.find_body_part(
+                child_info->limb_child_body_part
+            );
+        p_info->limb_child_offset = child_info->limb_child_offset;
+        
+        if(child_info->parent_holds) {
+            hold(
+                last_mob_spawned,
+                type->anims.find_body_part(child_info->hold_body_part),
+                child_info->hold_offset_dist,
+                child_info->hold_offset_angle
+            );
+        }
+    }
 }
 
 
@@ -1253,6 +1304,62 @@ bool mob::should_attack(mob* v) {
         //Only Pikmin and projectiles can hurt obstacles.
         return false;
     }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the current mob spawn a new mob.
+ */
+bool mob::spawn(mob_type::spawn_struct* info) {
+    //First, find the mob.
+    mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
+    if(!type_ptr) return false;
+    if(
+        type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
+        pikmin_list.size() >= max_pikmin_in_field
+    ) {
+        return false;
+    }
+    
+    point new_xy;
+    float new_z = 0;
+    float new_angle = 0;
+    
+    if(info->relative) {
+        new_xy = pos + rotate_point(info->coords_xy, angle);
+        new_z = z + info->coords_z;
+        new_angle = angle + info->angle;
+    } else {
+        new_xy = info->coords_xy;
+        new_z = info->coords_z;
+        new_angle = info->angle;
+    }
+    
+    if(!get_sector(new_xy, NULL, true)) {
+        //Spawn out of bounds? No way!
+        return false;
+    }
+    
+    last_mob_spawned =
+        create_mob(
+            type_ptr->category,
+            new_xy,
+            type_ptr,
+            new_angle,
+            info->vars
+        );
+        
+    last_mob_spawned->z = new_z;
+    
+    if(type_ptr->category->id == MOB_CATEGORY_TREASURES) {
+        //This way, treasures that fall into the abyss respawn at the
+        //spawner mob's original spot.
+        last_mob_spawned->home = home;
+    } else {
+        last_mob_spawned->home = new_xy;
+    }
+    
     return true;
 }
 

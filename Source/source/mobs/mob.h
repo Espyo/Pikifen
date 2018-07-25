@@ -425,6 +425,7 @@ public:
     void swallow_chomped_pikmin(size_t nr);
     void release_chomped_pikmin();
     void send_message(mob* receiver, string &msg);
+    bool spawn(mob_type::spawn_struct* info);
     void start_dying();
     void finish_dying();
     void respawn();
