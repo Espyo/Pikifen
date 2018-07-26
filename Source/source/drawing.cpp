@@ -1253,7 +1253,8 @@ void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
             !bbox_check(
                 cam_box[0], cam_box[1],
                 mob_ptr->pos, mob_ptr->type->radius
-            )
+            ) &&
+            !mob_ptr->parent
         ) {
             //Off-camera.
             continue;

@@ -42,7 +42,6 @@ mob::mob(
     itch_time(0),
     far_reach(INVALID),
     near_reach(INVALID),
-    last_mob_spawned(nullptr),
     pos(pos),
     z(0),
     speed_z(0),
@@ -132,10 +131,11 @@ mob::mob(
             continue;
         }
         
-        if(!spawn(spawn_info)) continue;
+        mob* new_mob = spawn(spawn_info);
+        if(!new_mob) continue;
         
         parent_mob_info* p_info = new parent_mob_info(this);
-        last_mob_spawned->parent = p_info;
+        new_mob->parent = p_info;
         p_info->handle_damage = child_info->handle_damage;
         p_info->relay_damage = child_info->relay_damage;
         p_info->handle_events = child_info->handle_events;
@@ -148,18 +148,25 @@ mob::mob(
             type->anims.find_body_part(child_info->limb_parent_body_part);
         p_info->limb_parent_offset = child_info->limb_parent_offset;
         p_info->limb_child_body_part =
-            last_mob_spawned->type->anims.find_body_part(
+            new_mob->type->anims.find_body_part(
                 child_info->limb_child_body_part
             );
         p_info->limb_child_offset = child_info->limb_child_offset;
         
         if(child_info->parent_holds) {
             hold(
-                last_mob_spawned,
+                new_mob,
                 type->anims.find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
                 child_info->hold_offset_angle
             );
+        }
+        
+        if(child_info->link_parent_to_child) {
+            links.push_back(new_mob);
+        }
+        if(child_info->link_child_to_parent) {
+            new_mob->links.push_back(this);
         }
     }
 }
@@ -720,6 +727,8 @@ void mob::delete_old_status_effects() {
  */
 void mob::draw(bitmap_effect_manager* effect_manager) {
 
+    if(hide) return;
+    
     draw_mob(effect_manager);
     
     if(parent) {
@@ -1311,15 +1320,15 @@ bool mob::should_attack(mob* v) {
 /* ----------------------------------------------------------------------------
  * Makes the current mob spawn a new mob.
  */
-bool mob::spawn(mob_type::spawn_struct* info) {
+mob* mob::spawn(mob_type::spawn_struct* info) {
     //First, find the mob.
     mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
-    if(!type_ptr) return false;
+    if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
         pikmin_list.size() >= max_pikmin_in_field
     ) {
-        return false;
+        return NULL;
     }
     
     point new_xy;
@@ -1338,10 +1347,10 @@ bool mob::spawn(mob_type::spawn_struct* info) {
     
     if(!get_sector(new_xy, NULL, true)) {
         //Spawn out of bounds? No way!
-        return false;
+        return NULL;
     }
     
-    last_mob_spawned =
+    mob* new_mob =
         create_mob(
             type_ptr->category,
             new_xy,
@@ -1350,17 +1359,17 @@ bool mob::spawn(mob_type::spawn_struct* info) {
             info->vars
         );
         
-    last_mob_spawned->z = new_z;
+    new_mob->z = new_z;
     
     if(type_ptr->category->id == MOB_CATEGORY_TREASURES) {
         //This way, treasures that fall into the abyss respawn at the
         //spawner mob's original spot.
-        last_mob_spawned->home = home;
+        new_mob->home = home;
     } else {
-        last_mob_spawned->home = new_xy;
+        new_mob->home = new_xy;
     }
     
-    return true;
+    return new_mob;
 }
 
 
@@ -2793,6 +2802,11 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         for(size_t m = 0; m < mobs.size(); ++m) {
             if(mobs[m]->focused_mob == m_ptr) {
                 mobs[m]->focused_mob = NULL;
+            }
+            if(mobs[m]->parent && mobs[m]->parent->m == m_ptr) {
+                delete mobs[m]->parent;
+                mobs[m]->parent = NULL;
+                mobs[m]->to_delete = true;
             }
         }
         

@@ -79,6 +79,8 @@ public:
         string hold_body_part;
         float hold_offset_dist;
         float hold_offset_angle;
+        bool link_parent_to_child;
+        bool link_child_to_parent;
         
         bool handle_damage;
         bool relay_damage;
@@ -95,6 +97,11 @@ public:
         float limb_child_offset;
         
         child_struct() :
+            parent_holds(false),
+            hold_offset_dist(0.0f),
+            hold_offset_angle(0.0f),
+            link_parent_to_child(false),
+            link_child_to_parent(false),
             handle_damage(false),
             relay_damage(false),
             handle_events(false),

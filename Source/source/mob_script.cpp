@@ -182,25 +182,6 @@ mob_action::mob_action(
             vs = v_words;
         }
         
-    } else if(n == "link_with_spawn") {
-    
-        type = MOB_ACTION_LINK_WITH_SPAWN;
-        
-        if(v == "object_to_spawn") {
-            vi.push_back(MOB_ACTION_LINK_WITH_SPAWN_O2S);
-        } else if(v == "spawn_to_object") {
-            vi.push_back(MOB_ACTION_LINK_WITH_SPAWN_S2O);
-        } else if(v == "both_ways") {
-            vi.push_back(MOB_ACTION_LINK_WITH_SPAWN_BOTH);
-        } else {
-            log_error(
-                "You need to specify the type of link! Use "
-                "\"object_to_spawn\", \"spawn_to_object\", or "
-                "\"both_ways\".", dn
-            );
-            valid = false;
-        }
-        
     } else if(n == "move") {
     
         type = MOB_ACTION_MOVE;
@@ -843,24 +824,6 @@ bool mob_action::run(
         int nr = s2i(m->vars[vs[0]]);
         m->set_var(vs[0], i2s(nr + 1));
         
-        
-    } else if(type == MOB_ACTION_LINK_WITH_SPAWN) {
-    
-        if(m->last_mob_spawned) {
-            if(
-                vi[0] == MOB_ACTION_LINK_WITH_SPAWN_O2S ||
-                vi[0] == MOB_ACTION_LINK_WITH_SPAWN_BOTH
-            ) {
-                m->links.push_back(m->last_mob_spawned);
-            }
-            
-            if(
-                vi[0] == MOB_ACTION_LINK_WITH_SPAWN_S2O ||
-                vi[0] == MOB_ACTION_LINK_WITH_SPAWN_BOTH
-            ) {
-                m->last_mob_spawned->links.push_back(m);
-            }
-        }
         
     } else if(type == MOB_ACTION_MOVE) {
     
