@@ -396,6 +396,8 @@ void load_mob_type_from_file(
         rs.set("coordinates", coords_str);
         rs.set("angle", new_spawn.angle);
         rs.set("vars", new_spawn.vars);
+        rs.set("link_object_to_spawn", new_spawn.link_object_to_spawn);
+        rs.set("link_spawn_to_object", new_spawn.link_spawn_to_object);
         
         if(!coords_str.empty()) {
             new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
@@ -419,8 +421,6 @@ void load_mob_type_from_file(
         rs.set("hold_body_part", new_child.hold_body_part);
         rs.set("hold_offset_distance", new_child.hold_offset_dist);
         rs.set("hold_offset_angle", new_child.hold_offset_angle);
-        rs.set("link_parent_to_child", new_child.link_parent_to_child);
-        rs.set("link_child_to_parent", new_child.link_child_to_parent);
         rs.set("handle_damage", new_child.handle_damage);
         rs.set("relay_damage", new_child.relay_damage);
         rs.set("handle_events", new_child.handle_events);

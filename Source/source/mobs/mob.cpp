@@ -161,13 +161,6 @@ mob::mob(
                 child_info->hold_offset_angle
             );
         }
-        
-        if(child_info->link_parent_to_child) {
-            links.push_back(new_mob);
-        }
-        if(child_info->link_child_to_parent) {
-            new_mob->links.push_back(this);
-        }
     }
 }
 
@@ -1367,6 +1360,13 @@ mob* mob::spawn(mob_type::spawn_struct* info) {
         new_mob->home = home;
     } else {
         new_mob->home = new_xy;
+    }
+    
+    if(info->link_object_to_spawn) {
+        links.push_back(new_mob);
+    }
+    if(info->link_spawn_to_object) {
+        new_mob->links.push_back(this);
     }
     
     return new_mob;
