@@ -163,6 +163,7 @@ script {
     
     falling_asleep {
         on_enter {
+            stop
             set_animation falling_asleep
         }
         on_animation_end {

@@ -130,6 +130,7 @@ script {
     
     floating {
         on_enter {
+            stop
             set_gravity 0
             stop vertically
             set_timer 1

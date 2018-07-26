@@ -124,10 +124,10 @@ void pikmin::tick_class_specifics() {
             pik_type->radius * 2, 2.0f
         );
         par.bitmap = bmp_pikmin_spirit;
-        par.speed.x = 0;
-        par.speed.y = -50;
-        par.friction = 0.5;
-        par.gravity = 0;
+        par.speed.x = randomf(-20, 20);
+        par.speed.y = randomf(-70, -30);
+        par.friction = 0.8;
+        par.gravity = -0.2;
         par.color = pik_type->main_color;
         particles.add(par);
         
