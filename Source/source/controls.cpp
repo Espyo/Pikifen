@@ -282,7 +282,8 @@ void gameplay::handle_button(
                             pikmin_in_onions[pik_type]--;
                             create_mob(
                                 mob_categories.get(MOB_CATEGORY_PIKMIN),
-                                close_to_onion_to_open->pos, pik_type, 0, ""
+                                close_to_onion_to_open->pos, pik_type, 0,
+                                "maturity=0"
                             );
                         }
                         done = true;
@@ -336,7 +337,48 @@ void gameplay::handle_button(
                 //Button pressed.
                 //Cancel auto-pluck, lying down, etc.
                 cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
-                cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
+                
+                if(close_to_onion_to_open) {
+                    //Temporary feature to allow Pikmin to be
+                    //stowed in the Onion.
+                    pikmin_type* pik_type =
+                        close_to_onion_to_open->oni_type->pik_type;
+                        
+                    //Get a Pikmin of that type, preferring lower maturities.
+                    pikmin* pik_to_stow = NULL;
+                    for(size_t mat = 0; mat < N_MATURITIES; ++mat) {
+                        for(
+                            size_t p = 0;
+                            p < cur_leader_ptr->group->members.size(); ++p
+                        ) {
+                            mob* m_ptr = cur_leader_ptr->group->members[p];
+                            if(
+                                m_ptr->type->category->id !=
+                                MOB_CATEGORY_PIKMIN
+                            ) {
+                                continue;
+                            }
+                            
+                            pikmin* p_ptr = (pikmin*) m_ptr;
+                            if(p_ptr->maturity != mat) continue;
+                            if(p_ptr->pik_type != pik_type) continue;
+                            
+                            pik_to_stow = p_ptr;
+                            break;
+                        }
+                        
+                        if(pik_to_stow) break;
+                    }
+                    
+                    if(!pik_to_stow) return;
+                    pik_to_stow->leave_group();
+                    pik_to_stow->to_delete = true;
+                    pikmin_in_onions[pik_type]++;
+                    
+                } else {
+                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
+                    
+                }
                 
             } else {
                 //Button released.
