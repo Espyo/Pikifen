@@ -706,6 +706,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
+    ((pikmin*) m)->is_seed_or_sprout = true;
 }
 
 
@@ -726,6 +727,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->unpushable = false;
+    pik->is_seed_or_sprout = false;
     m->set_timer(0);
 }
 

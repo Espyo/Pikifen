@@ -1306,6 +1306,13 @@ bool mob::should_attack(mob* v) {
         //Only Pikmin and projectiles can hurt obstacles.
         return false;
     }
+    if(
+        v->type->category->id == MOB_CATEGORY_PIKMIN &&
+        ((pikmin*) v)->is_seed_or_sprout
+    ) {
+        //Seed/sprout Pikmin should not be attacked or targetted.
+        return false;
+    }
     return true;
 }
 

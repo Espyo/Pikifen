@@ -797,6 +797,7 @@ void area_editor::delete_selected_mobs() {
     }
     
     clear_selection();
+    sub_state = EDITOR_SUB_STATE_NONE;
 }
 
 

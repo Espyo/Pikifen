@@ -34,6 +34,7 @@ pikmin::pikmin(
     carrying_spot(0),
     missed_attack_ptr(nullptr),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
+    is_seed_or_sprout(false),
     pluck_reserved(false) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);

@@ -95,6 +95,8 @@ public:
     
     //0: leaf. 1: bud. 2: flower.
     unsigned char maturity;
+    //Is this Pikmin currently a seed or a sprout?
+    bool is_seed_or_sprout;
     //If true, someone's already coming to pluck this Pikmin.
     //This is to let other leaders know that they should pick a different one.
     bool pluck_reserved;
