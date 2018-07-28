@@ -52,6 +52,7 @@ mob::mob(
     home(pos),
     ground_sector(nullptr),
     center_sector(nullptr),
+    standing_on_mob(nullptr),
     gravity_mult(1.0f),
     push_amount(0),
     push_angle(0),
@@ -1832,11 +1833,42 @@ void mob::tick_physics() {
         
         if(!successful_move) break;
         
-        if(step_sector->z > new_ground_sector->z) {
-            new_ground_sector = step_sector;
+        //Check also if it can go on top of another mob.
+        standing_on_mob = NULL;
+        
+        for(size_t m = 0; m < mobs.size(); ++m) {
+            mob* m_ptr = mobs[m];
+            if(!m_ptr->type->standable) {
+                continue;
+            }
+            if(m_ptr == this) {
+                continue;
+            }
+            if(z < m_ptr->z + m_ptr->type->height - SECTOR_STEP) {
+                continue;
+            }
+            if(z > m_ptr->z + m_ptr->type->height) {
+                continue;
+            }
+            
+            dist d(new_pos, m_ptr->pos);
+            if(d > type->radius + m_ptr->type->radius) {
+                continue;
+            }
+            
+            standing_on_mob = m_ptr;
         }
         
-        if(z < step_sector->z) new_z = step_sector->z;
+        if(standing_on_mob) {
+            new_z = standing_on_mob->z + standing_on_mob->type->height;
+        } else {
+            if(step_sector->z > new_ground_sector->z) {
+                new_ground_sector = step_sector;
+            }
+            
+            if(z < step_sector->z) new_z = step_sector->z;
+        }
+        
         
         //Check wall angles and heights to check which of these edges
         //really are wall collisions.
@@ -2001,19 +2033,23 @@ void mob::tick_physics() {
     
     //Vertical movement.
     
-    //If the current ground is one step (or less) below
-    //the previous ground, just instantly go down the step.
-    if(
-        pre_move_ground_z - ground_sector->z <= SECTOR_STEP &&
-        z == pre_move_ground_z
-    ) {
-        z = ground_sector->z;
+    if(!standing_on_mob) {
+        //If the current ground is one step (or less) below
+        //the previous ground, just instantly go down the step.
+        if(
+            pre_move_ground_z - ground_sector->z <= SECTOR_STEP &&
+            z == pre_move_ground_z
+        ) {
+            z = ground_sector->z;
+        }
     }
     
     //Landing on a bottomless pit or hazardous floor.
     hazard* new_on_hazard = NULL;
     z += delta_t* speed_z;
-    if(z <= ground_sector->z) {
+    if(standing_on_mob) {
+        z = standing_on_mob->z + standing_on_mob->type->height;
+    } else if(z <= ground_sector->z) {
         z = ground_sector->z;
         speed_z = 0;
         was_thrown = false;

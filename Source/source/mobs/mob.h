@@ -299,6 +299,8 @@ public:
     sector* ground_sector;
     //Sector that the mob's center is on.
     sector* center_sector;
+    //Mob this mob is standing on top of, if any.
+    mob* standing_on_mob;
     //Multiply the mob's gravity by this.
     float gravity_mult;
     //How much it's being pushed by another mob.
