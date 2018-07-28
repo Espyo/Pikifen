@@ -1101,20 +1101,8 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     
     if(p_ptr->invuln_period.time_left > 0) return;
     
-    if(info->mob2->anim.cur_anim == p_ptr->missed_attack_ptr) {
-        //In a previous frame, we had already considered this animation a miss.
-        return;
-    }
-    
-    unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
-    if(hit_rate == 0) return;
-    
-    unsigned char hit_roll = randomi(0, 100);
-    if(hit_roll > hit_rate) {
-        //This attack was randomly decided to be a miss.
-        //Record this animation so it won't be considered a hit next frame.
-        p_ptr->missed_attack_ptr = info->mob2->anim.cur_anim;
-        p_ptr->missed_attack_timer.start();
+    if(!p_ptr->process_attack_miss(info)) {
+        //It has been decided that this attack missed.
         return;
     }
     
@@ -1508,10 +1496,21 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a Pikmin touches a hazard.
  * info1: Pointer to the hazard type.
+ * info2: Pointer to the hitbox that caused this, if any.
  */
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     hazard* h = (hazard*) info1;
+    
+    if(info2) {
+        //This is an attack.
+        hitbox_interaction* h_info = (hitbox_interaction*) info2;
+        if(!p->process_attack_miss(h_info)) {
+            //It has been decided that this attack missed.
+            return;
+        }
+    }
+    
     if(h->associated_liquid) {
         bool already_generating = false;
         for(size_t g = 0; g < m->particle_generators.size(); ++g) {

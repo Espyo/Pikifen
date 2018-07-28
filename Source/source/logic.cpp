@@ -1036,9 +1036,14 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                             size_t h = 0;
                             h < h2_ptr->hazards.size(); ++h
                         ) {
+                            hitbox_interaction ev_info =
+                                hitbox_interaction(
+                                    m2_ptr, h1_ptr, h2_ptr
+                                );
                             hitbox_touch_haz_ev->run(
                                 m_ptr,
-                                (void*) h2_ptr->hazards[h]
+                                (void*) h2_ptr->hazards[h],
+                                (void*) &ev_info
                             );
                         }
                         reported_haz_ev = true;

@@ -218,6 +218,35 @@ bool pikmin::can_receive_status(status_type* s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if the attack should miss, and returns the result.
+ * If it was already decided that it missed in a previous frame, that's a
+ * straight no. If not, it will roll with the hit rate to check.
+ * If the attack is a miss, it also registers the miss, so that we can keep
+ * memory of it for the next frames.
+ */
+bool pikmin::process_attack_miss(hitbox_interaction* info) {
+    if(info->mob2->anim.cur_anim == missed_attack_ptr) {
+        //In a previous frame, we had already considered this animation a miss.
+        return false;
+    }
+    
+    unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
+    if(hit_rate == 0) return false;
+    
+    unsigned char hit_roll = randomi(0, 100);
+    if(hit_roll > hit_rate) {
+        //This attack was randomly decided to be a miss.
+        //Record this animation so it won't be considered a hit next frame.
+        missed_attack_ptr = info->mob2->anim.cur_anim;
+        missed_attack_timer.start();
+        return false;
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handler for when a status effect causes "disabled".
  */
 void pikmin::receive_disable_from_status(const unsigned char flags) {

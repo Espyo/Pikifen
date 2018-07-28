@@ -79,9 +79,6 @@ public:
     );
     ~pikmin();
     
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
-    virtual float get_base_speed();
-    
     pikmin_type* pik_type;
     
     //Mob that it is carrying.
@@ -103,12 +100,16 @@ public:
     //Is this Pikmin latched on to a mob?
     bool latched;
     
+    bool process_attack_miss(hitbox_interaction* info);
+    
     virtual bool can_receive_status(status_type* s);
+    virtual void change_maturity_amount_from_status(const int amount);
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual float get_base_speed();
+    virtual void lose_panic_from_status();
     virtual void receive_disable_from_status(const unsigned char flags);
     virtual void receive_flailing_from_status();
     virtual void receive_panic_from_status();
-    virtual void lose_panic_from_status();
-    virtual void change_maturity_amount_from_status(const int amount);
 };
 
 

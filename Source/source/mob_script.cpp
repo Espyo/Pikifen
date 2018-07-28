@@ -128,6 +128,8 @@ mob_action::mob_action(
                     vi.push_back(MOB_ACTION_COMPARAND_CHOMPED_PIKMIN);
                 } else if(v_words[0] == "day_minutes") {
                     vi.push_back(MOB_ACTION_COMPARAND_DAY_MINUTES);
+                } else if(v_words[0] == "field_pikmin") {
+                    vi.push_back(MOB_ACTION_COMPARAND_FIELD_PIKMIN);
                 } else if(v_words[0] == "frame_signal") {
                     vi.push_back(MOB_ACTION_COMPARAND_FRAME_SIGNAL);
                 } else if(v_words[0] == "health") {
@@ -722,6 +724,8 @@ bool mob_action::run(
                 lhs = i2s(m->chomping_pikmin.size());
             } else if(vi[2] == MOB_ACTION_COMPARAND_DAY_MINUTES) {
                 lhs = i2s(day_minutes);
+            } else if(vi[2] == MOB_ACTION_COMPARAND_FIELD_PIKMIN) {
+                lhs = i2s(pikmin_list.size());
             } else if(vi[2] == MOB_ACTION_COMPARAND_FRAME_SIGNAL) {
                 if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
                     lhs = i2s(*((size_t*) custom_data_1));
