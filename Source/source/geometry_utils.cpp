@@ -261,6 +261,48 @@ bool circle_intersects_line(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a circle is touching a rotated rectangle or not.
+ * circle:               Coordinates of the circle.
+ * radius:               Radius of the circle.
+ * rectangle:            Central coordinates of the rectangle.
+ * rect_dim:             Dimensions of the rectangle.
+ * rect_angle:           Angle the rectangle is facing.
+ * overlap_dist:         If not NULL, the amount of overlap is returned here.
+ * rectangle_side_angle: If not NULL, the angle of the side of the rectangle
+ *   that the circle is on, aligned to the sides of the rectangle, is
+ *   returned here.
+ */
+bool circle_intersects_rectangle(
+    const point &circle, const float radius,
+    const point &rectangle, const point &rect_dim,
+    const float rect_angle,
+    float* overlap_dist, float* rectangle_side_angle
+) {
+    point circle_rel_pos = circle - rectangle;
+    
+    circle_rel_pos = rotate_point(circle_rel_pos, -rect_angle);
+    
+    point nearest(
+        clamp(circle_rel_pos.x, -rect_dim.x / 2.0, rect_dim.x / 2.0),
+        clamp(circle_rel_pos.y, -rect_dim.y / 2.0, rect_dim.y / 2.0)
+    );
+    
+    float d = dist(circle_rel_pos, nearest).to_float();
+    if(overlap_dist) {
+        *overlap_dist = radius - d;
+    }
+    
+    if(rectangle_side_angle) {
+        float angle = get_angle(nearest, circle_rel_pos);
+        angle = floor((angle + M_PI_4) / M_PI_2) * M_PI_2;
+        *rectangle_side_angle = angle + rect_angle;
+    }
+    
+    return d < radius;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts an angle from degrees to radians.
  */
 float deg_to_rad(const float deg) {

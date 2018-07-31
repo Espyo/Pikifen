@@ -55,6 +55,12 @@ bool circle_intersects_line(
     const point &line_p1, const point &line_p2,
     float* lix = NULL, float* liy = NULL
 );
+bool circle_intersects_rectangle(
+    const point &circle, const float cr,
+    const point &rectangle, const point &rect_dim,
+    const float rect_angle,
+    float* overlap_dist = NULL, float* rectangle_side_angle = NULL
+);
 float deg_to_rad(const float rad);
 float get_angle(const point &center, const point &focus);
 point get_closest_point_in_line(

@@ -135,6 +135,7 @@ public:
     bool pushable; //Can be pushed by other mobs.
     bool pushes_with_hitboxes; //Is the push via hitbox, or mob radius?
     bool standable;
+    point rectangular_dim;
     
     //Behavior things.
     float max_health;

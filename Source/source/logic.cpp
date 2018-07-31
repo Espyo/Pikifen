@@ -692,7 +692,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             );
             
         //Check touches. This does not use hitboxes,
-        //only the object radii.
+        //only the object radii (or rectangular width/height).
         mob_event* touch_op_ev =
             q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
         mob_event* touch_le_ev =
@@ -720,11 +720,37 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     );
             }
             
+            bool xy_collision = false;
             if(
-                z_touch &&
-                m2_ptr->tangible &&
-                d <= (m_ptr->type->radius + m2_ptr->type->radius)
+                m_ptr->type->rectangular_dim.x != 0 &&
+                m2_ptr->type->rectangular_dim.x != 0
             ) {
+                //Rectangle vs rectangle.
+                //Not supported.
+                xy_collision = false;
+            } else if(m_ptr->type->rectangular_dim.x != 0) {
+                //Rectangle vs circle.
+                xy_collision =
+                    circle_intersects_rectangle(
+                        m2_ptr->pos, m2_ptr->type->radius,
+                        m_ptr->pos, m_ptr->type->rectangular_dim,
+                        m_ptr->angle
+                    );
+            } else if(m2_ptr->type->rectangular_dim.x != 0) {
+                //Circle vs rectangle.
+                xy_collision =
+                    circle_intersects_rectangle(
+                        m_ptr->pos, m_ptr->type->radius,
+                        m2_ptr->pos, m2_ptr->type->rectangular_dim,
+                        m2_ptr->angle
+                    );
+            } else {
+                //Circle vs circle.
+                xy_collision =
+                    d <= (m_ptr->type->radius + m2_ptr->type->radius);
+            }
+            
+            if(z_touch && m2_ptr->tangible && xy_collision) {
                 if(touch_ob_ev) {
                     touch_ob_ev->run(m_ptr, (void*) m2_ptr);
                 }
@@ -816,16 +842,48 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                     }
                 }
                 
-            } else if(d <= m_ptr->type->radius + m2_ptr->type->radius) {
-                //Push with the object radius.
+            } else {
+                bool xy_collision = false;
+                float temp_push_amount = 0;
+                float temp_push_angle = 0;
+                if(
+                    m_ptr->type->rectangular_dim.x != 0 &&
+                    m2_ptr->type->rectangular_dim.x != 0
+                ) {
+                    //Rectangle vs rectangle.
+                    //Not supported.
+                } else if(m_ptr->type->rectangular_dim.x != 0) {
+                    //Rectangle vs circle.
+                    xy_collision =
+                        circle_intersects_rectangle(
+                            m2_ptr->pos, m2_ptr->type->radius,
+                            m_ptr->pos, m_ptr->type->rectangular_dim,
+                            m_ptr->angle, &temp_push_amount, &temp_push_angle
+                        );
+                } else if(m2_ptr->type->rectangular_dim.x != 0) {
+                    //Circle vs rectangle.
+                    xy_collision =
+                        circle_intersects_rectangle(
+                            m_ptr->pos, m_ptr->type->radius,
+                            m2_ptr->pos, m2_ptr->type->rectangular_dim,
+                            m2_ptr->angle, &temp_push_amount, &temp_push_angle
+                        );
+                } else {
+                    //Circle vs circle.
+                    xy_collision =
+                        d <= (m_ptr->type->radius + m2_ptr->type->radius);
+                    temp_push_amount =
+                        fabs(
+                            d.to_float() - m_ptr->type->radius -
+                            m2_ptr->type->radius
+                        );
+                    temp_push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
+                }
                 
-                push_amount =
-                    fabs(
-                        d.to_float() - m_ptr->type->radius -
-                        m2_ptr->type->radius
-                    );
-                push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
-                
+                if(xy_collision) {
+                    push_amount = temp_push_amount;
+                    push_angle = temp_push_angle;
+                }
             }
             
             //If the mob is inside the other,

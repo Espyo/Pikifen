@@ -297,6 +297,7 @@ void load_mob_type_from_file(
     rs.set("rotation_speed",         mt->rotation_speed);
     rs.set("territory_radius",       mt->territory_radius);
     rs.set("radius",                 mt->radius);
+    rs.set("rectangular_dimensions", mt->rectangular_dim);
     rs.set("height",                 mt->height);
     rs.set("weight",                 mt->weight);
     rs.set("pushes",                 mt->pushes);
