@@ -412,6 +412,7 @@ public:
     );
     size_t get_latched_pikmin_amount();
     float get_latched_pikmin_weight();
+    bool is_off_camera();
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void leave_group();

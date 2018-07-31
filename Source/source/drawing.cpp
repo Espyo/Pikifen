@@ -1224,13 +1224,7 @@ void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
             continue;
         }
         
-        if(
-            !bmp_output &&
-            !bbox_check(
-                cam_box[0], cam_box[1],
-                mob_ptr->pos, mob_ptr->type->radius
-            )
-        ) {
+        if(!bmp_output && mob_ptr->is_off_camera()) {
             //Off-camera.
             continue;
         }
@@ -1248,14 +1242,7 @@ void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
     for(size_t m = 0; m < sorted_mobs.size(); ++m) {
         mob_ptr = sorted_mobs[m];
         
-        if(
-            !bmp_output &&
-            !bbox_check(
-                cam_box[0], cam_box[1],
-                mob_ptr->pos, mob_ptr->type->radius
-            ) &&
-            !mob_ptr->parent
-        ) {
+        if(!bmp_output && mob_ptr->is_off_camera()) {
             //Off-camera.
             continue;
         }
@@ -2216,6 +2203,35 @@ void draw_notification(
     );
     
     al_use_transform(&old);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a rotated rectangle.
+ * center:     Center of the rectangle.
+ * dimensions: Width and height of the rectangle.
+ * angle:      Angle the rectangle is facing.
+ * color:      Color to use.
+ * thickness:  Thickness to use.
+ */
+void draw_rotated_rectangle(
+    const point &center, const point &dimensions,
+    const float angle, const ALLEGRO_COLOR &color, const float thickness
+) {
+    ALLEGRO_TRANSFORM rot_transform, old_transform;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    al_identity_transform(&rot_transform);
+    al_rotate_transform(&rot_transform, angle);
+    al_translate_transform(&rot_transform, center.x, center.y);
+    al_compose_transform(&rot_transform, &old_transform);
+    
+    al_use_transform(&rot_transform); {
+        al_draw_rectangle(
+            -dimensions.x / 2.0, -dimensions.y / 2.0,
+            dimensions.x / 2.0, dimensions.y / 2.0,
+            color, thickness
+        );
+    }; al_use_transform(&old_transform);
 }
 
 

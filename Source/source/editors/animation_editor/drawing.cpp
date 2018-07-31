@@ -378,8 +378,15 @@ void animation_editor::draw_top_down_view_hitbox(
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
         0, 0, mt->radius,
-        al_map_rgb(240, 240, 240), 1 / cam_zoom
+        al_map_rgb(240, 240, 240), 1.0 / cam_zoom
     );
+    if(mt->rectangular_dim.x != 0) {
+        al_draw_rectangle(
+            -mt->rectangular_dim.x / 2.0, -mt->rectangular_dim.y / 2.0,
+            mt->rectangular_dim.x / 2.0, mt->rectangular_dim.y / 2.0,
+            al_map_rgb(240, 240, 240), 1.0 / cam_zoom
+        );
+    }
 }
 
 

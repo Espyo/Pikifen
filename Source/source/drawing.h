@@ -79,6 +79,10 @@ void draw_notification(
     const point &where, const string &text,
     control_info* control = NULL
 );
+void draw_rotated_rectangle(
+    const point &center, const point &dimensions,
+    const float angle, const ALLEGRO_COLOR &color, const float thickness
+);
 void draw_sector_shadows(
     sector* s_ptr, const point &where, const float scale
 );

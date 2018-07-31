@@ -1079,6 +1079,24 @@ void mob::hold(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a mob is completely off-camera.
+ */
+bool mob::is_off_camera() {
+    if(parent) return false;
+    
+    float m_radius;
+    if(type->rectangular_dim.x == 0) {
+        m_radius = type->radius;
+    } else {
+        m_radius =
+            max(type->rectangular_dim.x / 2.0, type->rectangular_dim.y / 2.0);
+    }
+    
+    return !bbox_check(cam_box[0], cam_box[1], pos, m_radius);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if a mob is resistant to a list of hazards, given the list
  * of hazards.
  */
@@ -1851,9 +1869,44 @@ void mob::tick_physics() {
                 continue;
             }
             
-            dist d(new_pos, m_ptr->pos);
-            if(d > type->radius + m_ptr->type->radius) {
+            //Check if they collide on X+Y.
+            if(
+                type->rectangular_dim.x != 0 &&
+                m_ptr->type->rectangular_dim.x != 0
+            ) {
+                //Rectangle vs rectangle.
+                //Not supported.
                 continue;
+            } else if(type->rectangular_dim.x != 0) {
+                //Rectangle vs circle.
+                if(
+                    !circle_intersects_rectangle(
+                        m_ptr->pos, m_ptr->type->radius,
+                        new_pos, type->rectangular_dim,
+                        angle
+                    )
+                ) {
+                    continue;
+                }
+            } else if(m_ptr->type->rectangular_dim.x != 0) {
+                //Circle vs rectangle.
+                if(
+                    !circle_intersects_rectangle(
+                        new_pos, type->radius,
+                        m_ptr->pos, m_ptr->type->rectangular_dim,
+                        m_ptr->angle
+                    )
+                ) {
+                    continue;
+                }
+            } else {
+                //Circle vs circle.
+                if(
+                    dist(new_pos, m_ptr->pos) >
+                    (type->radius + m_ptr->type->radius)
+                ) {
+                    continue;
+                }
             }
             
             standing_on_mob = m_ptr;
@@ -2049,6 +2102,9 @@ void mob::tick_physics() {
     z += delta_t* speed_z;
     if(standing_on_mob) {
         z = standing_on_mob->z + standing_on_mob->type->height;
+        speed_z = 0;
+        was_thrown = false;
+        fsm.run_event(MOB_EVENT_LANDED);
     } else if(z <= ground_sector->z) {
         z = ground_sector->z;
         speed_z = 0;
@@ -2077,7 +2133,7 @@ void mob::tick_physics() {
     
     //Gravity.
     if(gravity_mult > 0) {
-        if(z > ground_sector->z) {
+        if(z > ground_sector->z && !standing_on_mob) {
             speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
         } else {
             speed_z = 0;
