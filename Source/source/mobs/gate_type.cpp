@@ -25,7 +25,6 @@ gate_type::gate_type() :
     blocks_carrier_pikmin = true;
     projectiles_can_damage = false;
     pushes = true;
-    pushes_with_hitboxes = true;
     
     gate_fsm::create_fsm(this);
 }
