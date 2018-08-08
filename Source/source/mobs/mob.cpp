@@ -143,7 +143,9 @@ mob::mob(
         p_info->relay_events = child_info->relay_events;
         p_info->handle_statuses = child_info->handle_statuses;
         p_info->relay_statuses = child_info->relay_statuses;
-        p_info->limb_bmp = bitmaps.get(child_info->limb_bmp_filename);
+        if(!child_info->limb_bmp_filename.empty()) {
+            p_info->limb_bmp = bitmaps.get(child_info->limb_bmp_filename);
+        }
         p_info->limb_thickness = child_info->limb_thickness;
         p_info->limb_parent_body_part =
             type->anims.find_body_part(child_info->limb_parent_body_part);
@@ -686,7 +688,7 @@ void mob::chase(
     this->chase_orig_coords = orig_coords;
     this->chase_teleport = teleport;
     this->chase_teleport_z = teleport_z;
-    this->chase_free_move = free_move;
+    this->chase_free_move = free_move || type->can_free_move;
     this->chase_target_dist = target_distance;
     this->chase_speed = (speed == -1 ? get_base_speed() : speed);
     

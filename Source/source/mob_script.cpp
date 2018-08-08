@@ -197,6 +197,10 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
         } else if(v == "home") {
             vi.push_back(MOB_ACTION_MOVE_HOME);
+        } else if(v == "like_arachnorb_foot") {
+            vi.push_back(MOB_ACTION_MOVE_LIKE_ARACHNORB_FOOT);
+        } else if(v == "linked_mob_average") {
+            vi.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
         } else if(v == "randomly") {
             vi.push_back(MOB_ACTION_MOVE_RANDOMLY);
         } else if(v_words[0] == "relative") {
@@ -847,6 +851,58 @@ bool mob_action::run(
             
         } else if(vi[0] == MOB_ACTION_MOVE_HOME) {
             m->chase(m->home, NULL, false);
+            
+        } else if(vi[0] == MOB_ACTION_MOVE_LIKE_ARACHNORB_FOOT) {
+            if(!m->parent) return false;
+            if(m->parent->limb_parent_body_part == INVALID) return false;
+            
+            float parent_dist =
+                dist(m->parent->m->pos, m->pos).to_float();
+            float parent_angle =
+                get_angle(m->parent->m->pos, m->pos);
+            float limb_bp_direction =
+                get_angle(
+                    m->parent->m->pos,
+                    m->parent->m->get_hitbox(
+                        m->parent->limb_parent_body_part
+                    )->get_cur_pos(m->parent->m->pos, m->parent->m->angle)
+                );
+                
+            float new_dist =
+                parent_dist + randomf(-m->type->radius, m->type->radius);
+            new_dist =
+                clamp(
+                    new_dist,
+                    m->parent->m->type->radius + m->type->radius * 1.5,
+                    m->parent->m->type->radius + m->type->radius * 3
+                );
+                
+            float new_angle =
+                parent_angle + randomf(-(M_PI / 8), M_PI / 8);
+            new_angle =
+                clamp(
+                    new_angle,
+                    limb_bp_direction - (M_PI / 8),
+                    limb_bp_direction + (M_PI / 8)
+                );
+                
+            m->chase(
+                m->parent->m->pos +
+                angle_to_coordinates(new_angle, new_dist),
+                NULL, false
+            );
+            
+            
+        } else if(vi[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
+            if(m->links.empty()) return false;
+            
+            point des;
+            for(size_t l = 0; l < m->links.size(); ++l) {
+                des += m->links[l]->pos;
+            }
+            des = des / m->links.size();
+            
+            m->chase(des, NULL, false);
             
         } else if(vi[0] == MOB_ACTION_MOVE_RANDOMLY) {
             m->chase(

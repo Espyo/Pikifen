@@ -38,6 +38,7 @@ mob_type::mob_type(size_t category_id) :
     height(0),
     move_speed(0),
     rotation_speed(DEF_ROTATION_SPEED),
+    can_free_move(false),
     always_active(false),
     pushes(false),
     pushable(false),
@@ -295,6 +296,7 @@ void load_mob_type_from_file(
     rs.set("itch_time",              mt->itch_time);
     rs.set("move_speed",             mt->move_speed);
     rs.set("rotation_speed",         mt->rotation_speed);
+    rs.set("can_free_move",          mt->can_free_move);
     rs.set("territory_radius",       mt->territory_radius);
     rs.set("radius",                 mt->radius);
     rs.set("rectangular_dimensions", mt->rectangular_dim);
