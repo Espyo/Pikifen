@@ -58,7 +58,7 @@ const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Color of a selected element, or the selection box.
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
-const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
+const float area_editor::SELECTION_EFFECT_SPEED = TAU * 2;
 //Wait this long before letting a new repeat undo operation be saved.
 const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
@@ -3296,14 +3296,14 @@ void area_editor::set_new_circle_sector_points() {
         
     size_t n_points = MAX_CIRCLE_SECTOR_POINTS;
     if(angle_dif > 0) {
-        n_points = round((M_PI * 2) / angle_dif);
+        n_points = round(TAU / angle_dif);
     }
     n_points =
         clamp(n_points, MIN_CIRCLE_SECTOR_POINTS, MAX_CIRCLE_SECTOR_POINTS);
         
     new_circle_sector_points.clear();
     for(size_t p = 0; p < n_points; ++p) {
-        float delta_a = ((M_PI * 2) / n_points) * p;
+        float delta_a = (TAU / n_points) * p;
         new_circle_sector_points.push_back(
             point(
                 new_circle_sector_center.x +

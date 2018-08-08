@@ -53,7 +53,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     particle_generator pg(0, p, 15);
     pg.number_deviation = 5;
     pg.angle = 0;
-    pg.angle_deviation = M_PI;
+    pg.angle_deviation = TAU / 2;
     pg.total_speed = 70;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;

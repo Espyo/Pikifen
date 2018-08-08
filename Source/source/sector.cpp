@@ -1559,7 +1559,8 @@ TRIANGULATION_ERRORS get_polys(
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
         
-        float prev_angle = M_PI; //At the start, assume the angle is 0 (right).
+        //At the start, assume the angle is left.
+        float prev_angle = TAU / 2;
         
         if(!doing_outer) {
             inners->push_back(polygon());
@@ -1567,7 +1568,7 @@ TRIANGULATION_ERRORS get_polys(
         
         while(!poly_done) {
         
-            float base_angle = prev_angle - M_PI; //The angle we came from.
+            float base_angle = prev_angle - TAU / 2; //The angle we came from.
             
             //For every edge attached to this vertex, find the closest one
             //that hasn't been done, in the direction of travel.
@@ -1903,7 +1904,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
             point(next_v->x, next_v->y)
         );
         
-    return get_angle_cw_dif(angle_prev, angle_next) < M_PI;
+    return get_angle_cw_dif(angle_prev, angle_next) < TAU / 2;
 }
 
 
@@ -2456,7 +2457,7 @@ vector<path_stop*> dijkstra(
 float get_angle_cw_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
-    if(a1 > a2) a1 -= M_PI * 2;
+    if(a1 > a2) a1 -= TAU;
     return a2 - a1;
 }
 
@@ -2467,7 +2468,7 @@ float get_angle_cw_dif(float a1, float a2) {
 float get_angle_smallest_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
-    return M_PI - abs(abs(a1 - a2) - M_PI);
+    return TAU / 2 - abs(abs(a1 - a2) - TAU / 2);
 }
 
 

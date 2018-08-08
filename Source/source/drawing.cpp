@@ -241,7 +241,7 @@ void gameplay::draw_cursor(
                 for(unsigned char d2 = 0; d2 < 16; ++d2) {
                     unsigned char current_dot = d2 * 6 + d;
                     float angle =
-                        M_PI * 2 / n_dots *
+                        TAU / n_dots *
                         current_dot -
                         WHISTLE_DOT_SPIN_SPEED * area_time_passed;
                         
@@ -1741,7 +1741,7 @@ void draw_health(
         );
     }
     al_draw_filled_pieslice(
-        center.x, center.y, radius, -M_PI_2, -ratio * M_PI * 2, c
+        center.x, center.y, radius, -TAU / 4, -ratio * TAU, c
     );
     if(!just_chart) {
         al_draw_circle(
@@ -2349,8 +2349,8 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                 point(ev[0]->x, ev[0]->y),
                 point(ev[1]->x, ev[1]->y)
             ).to_float();
-        float e_cos_front = cos(e_angle - M_PI_2);
-        float e_sin_front = sin(e_angle - M_PI_2);
+        float e_cos_front = cos(e_angle - TAU / 4);
+        float e_sin_front = sin(e_angle - TAU / 4);
         
         //Record the first two vertexes of the shadow.
         for(size_t v = 0; v < 2; ++v) {
@@ -2374,11 +2374,11 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
          */
         
         //Angle of the neighbors, from the common vertex to the other.
-        float neighbor_angles[2] = {M_PI_2, M_PI_2};
+        float neighbor_angles[2] = {TAU / 4, TAU / 4};
         //Difference between angle of current edge and neighbors.
         float neighbor_angle_difs[2] = {0, 0};
         //Midway angle.
-        float mid_angles[2] = {M_PI_2, M_PI_2};
+        float mid_angles[2] = {TAU / 4, TAU / 4};
         //Is this neighbor casting a shadow to the same sector?
         bool neighbor_shadow[2] = {false, false};
         //Length of the neighbor's shadow.
@@ -2408,7 +2408,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                     
                 float d;
                 if(v == 0) d = get_angle_cw_dif(ve_angle, e_angle);
-                else d = get_angle_cw_dif(e_angle + M_PI, ve_angle);
+                else d = get_angle_cw_dif(e_angle + TAU / 2, ve_angle);
                 
                 if(
                     d < neighbor_angle_difs[v] ||
@@ -2439,7 +2439,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         for(unsigned char n = 0; n < 2; ++n) {
             neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
             mid_angles[n] =
-                (n == 0 ? neighbor_angles[n] : e_angle + M_PI) +
+                (n == 0 ? neighbor_angles[n] : e_angle + TAU / 2) +
                 neighbor_angle_difs[n] / 2;
         }
         
@@ -2451,7 +2451,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         
         for(unsigned char v = 0; v < 2; ++v) {
         
-            if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
+            if(neighbor_angle_difs[v] < TAU / 2 && neighbor_shadow[v]) {
                 //If the shadow of the current and neighbor edges
                 //meet at less than 180 degrees, and the neighbor casts
                 //a shadow, then both this shadow and the neighbor's
@@ -2508,7 +2508,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                 //than 180, draw a "join" between both
                 //edge's shadows. Like a kneecap.
                 
-                if(neighbor_angle_difs[v] > M_PI_2) {
+                if(neighbor_angle_difs[v] > TAU / 4) {
                     shadow_point[v].x =
                         av[v].x + e_cos_front * shadow_length;
                     shadow_point[v].y =
@@ -2522,7 +2522,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                     extra_av[v * 4 + 1].y = shadow_point[v].y;
                     extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
                     
-                    if(neighbor_angle_difs[v] > M_PI) {
+                    if(neighbor_angle_difs[v] > TAU / 2) {
                         float shadow_length_mid =
                             (shadow_length + neighbor_shadow_length[v]) / 2.0f;
                             
@@ -2829,7 +2829,7 @@ float ease(const unsigned char method, const float n) {
     case EASE_OUT:
         return 1 - (pow((1 - n), 3));
     case EASE_UP_AND_DOWN:
-        return sin(n * M_PI);
+        return sin(n * TAU / 2);
     }
     
     return n;

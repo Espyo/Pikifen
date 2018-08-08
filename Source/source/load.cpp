@@ -1455,7 +1455,7 @@ void load_weather() {
             interval(
                 weather_node->get_child_by_name(
                     "precipitation_angle"
-                )->get_value_or_default(f2s((M_PI + M_PI_2)))
+                )->get_value_or_default(f2s((TAU * 0.75)))
             );
             
         //Save it in the map.

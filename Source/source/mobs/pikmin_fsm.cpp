@@ -753,7 +753,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.number_deviation = 1;
         pg.size_deviation = 8;
         pg.angle = 0;
-        pg.angle_deviation = M_PI;
+        pg.angle_deviation = TAU / 2;
         pg.total_speed = 40;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
@@ -777,7 +777,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.number_deviation = 1;
         pg.size_deviation = 8;
         pg.angle = 0;
-        pg.angle_deviation = M_PI;
+        pg.angle_deviation = TAU / 2;
         pg.total_speed = 50;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
@@ -977,7 +977,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pg.number_deviation = 1;
     pg.size_deviation = 4;
     pg.angle = 0;
-    pg.angle_deviation = M_PI;
+    pg.angle_deviation = TAU / 2;
     pg.total_speed = 50;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.25;

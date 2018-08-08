@@ -168,11 +168,11 @@ void radio_button_button::draw_self() {
     al_draw_filled_circle(x1 + w / 2, y1 + h / 2, w / 2, get_bg_color());
     al_draw_arc(
         x1 + w / 2, y1 + h / 2, w / 2,
-        -M_PI * 0.25, M_PI, get_lighter_bg_color(), 1
+        -(TAU / 8), TAU / 2, get_lighter_bg_color(), 1
     );
     al_draw_arc(
         x1 + w / 2, y1 + h / 2, w / 2,
-        M_PI * 0.75,  M_PI, get_darker_bg_color(), 1
+        (TAU / 4 + TAU / 8),  TAU / 2, get_darker_bg_color(), 1
     );
     
     if(selected) {

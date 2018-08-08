@@ -34,6 +34,10 @@ const unsigned char VERSION_DAY   = 23;
 const unsigned char VERSION_MONTH = 06;
 const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
+
+const size_t INVALID = UINT32_MAX;
+const float TAU = M_PI * 2;
+
 const string ANIMATION_EDITOR_TUTORIAL_URL =
     "http://www.pikminfanon.com/Pikifen/Creating_animations";
 const string AREA_EDITOR_TUTORIAL_URL =
@@ -44,7 +48,7 @@ const size_t ANIMATION_EDITOR_HISTORY_SIZE = 6;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
 //How fast the "invalid cursor" effect goes, per second.
-const float CURSOR_INVALID_EFFECT_SPEED = M_PI * 4.0f;
+const float CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float CURSOR_SAVE_INTERVAL = 0.03f;
 //Number of positions of the cursor to keep track of.
@@ -82,7 +86,7 @@ const float GROUP_SHUFFLE_DIST = 40.0f;
 //used when calculating group spots.
 const float GROUP_SPOT_INTERVAL = 2.0f;
 //The idle glow spins these many radians per second.
-const float IDLE_GLOW_SPIN_SPEED = M_PI_2;
+const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //How long the on-screen info is printed for.
 const float INFO_PRINT_DURATION = 5.0f;
 //How long to wait before starting to move the on-screen info.
@@ -114,14 +118,14 @@ const float SMACK_PARTICLE_DUR = 0.1f;
 const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
 //Tree shadows sway this much away from their neutral position.
 const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
-//Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
-const float TREE_SHADOW_SWAY_SPEED = M_PI_4;
+//Tree shadows sway this much per second (TAU = full back-and-forth cycle).
+const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_PARTICLE_INTERVAL = 0.02f;
 //Seconds that need to pass before another dot is added.
 const float WHISTLE_DOT_INTERVAL = 0.03;
 //A whistle dot spins these many radians a second.
-const float WHISTLE_DOT_SPIN_SPEED = M_PI_2;
+const float WHISTLE_DOT_SPIN_SPEED = TAU / 4;
 //Time the whistle animations take to fade out.
 const float WHISTLE_FADE_TIME = 0.1f;
 //Whistle rings move these many units per second.
@@ -260,7 +264,5 @@ const unsigned char WHISTLE_RING_COLORS[N_WHISTLE_RING_COLORS][3] = {
     {0,   255, 0  },
     {128, 255, 0  }
 };
-
-const size_t INVALID = UINT32_MAX;
 
 #endif //ifndef CONST_INCLUDED

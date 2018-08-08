@@ -66,7 +66,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     pg.number_deviation = 1;
     pg.size_deviation = 16;
     pg.angle = 0;
-    pg.angle_deviation = M_PI;
+    pg.angle_deviation = TAU / 2;
     pg.total_speed = 75;
     pg.total_speed_deviation = 15;
     pg.duration_deviation = 0.25;

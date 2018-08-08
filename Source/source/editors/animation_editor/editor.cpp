@@ -139,7 +139,7 @@ void animation_editor::do_logic() {
         animation_to_gui();
     }
     
-    cur_hitbox_alpha += M_PI * 3 * delta_t;
+    cur_hitbox_alpha += TAU * 1.5 * delta_t;
     
     if(comparison_blink) {
         comparison_blink_timer.tick(delta_t);

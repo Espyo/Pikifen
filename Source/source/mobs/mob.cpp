@@ -277,7 +277,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
         speed.x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed_z = MOB_KNOCKBACK_V_POWER;
-        face(get_angle(point(), point(speed)) + M_PI, NULL);
+        face(get_angle(point(), point(speed)) + TAU / 2, NULL);
     }
 }
 
@@ -1418,7 +1418,7 @@ void mob::start_dying() {
     particle_generator pg(0, p, 25);
     pg.number_deviation = 5;
     pg.angle = 0;
-    pg.angle_deviation = M_PI;
+    pg.angle_deviation = TAU / 2;
     pg.total_speed = 100;
     pg.total_speed_deviation = 40;
     pg.duration_deviation = 0.5;
@@ -1584,17 +1584,17 @@ void mob::tick_physics() {
     float radius_to_use = type->radius;
     
     //Change the facing angle to the angle the mob wants to face.
-    if(angle > M_PI)  angle -= M_PI * 2;
-    if(angle < -M_PI) angle += M_PI * 2;
+    if(angle > TAU / 2)  angle -= TAU;
+    if(angle < -TAU / 2) angle += TAU;
     if(intended_turn_pos) {
         intended_turn_angle = get_angle(pos, *intended_turn_pos);
     }
-    if(intended_turn_angle > M_PI)  intended_turn_angle -= M_PI * 2;
-    if(intended_turn_angle < -M_PI) intended_turn_angle += M_PI * 2;
+    if(intended_turn_angle > TAU / 2)  intended_turn_angle -= TAU;
+    if(intended_turn_angle < -TAU / 2) intended_turn_angle += TAU;
     
     float angle_dif = intended_turn_angle - angle;
-    if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
-    if(angle_dif < -M_PI) angle_dif += M_PI * 2;
+    if(angle_dif > TAU / 2)  angle_dif -= TAU;
+    if(angle_dif < -TAU / 2) angle_dif += TAU;
     
     float movement_speed_mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); ++s) {
@@ -1996,13 +1996,13 @@ void mob::tick_physics() {
                     );
                     
                 if(wall_sector == 0) {
-                    wall_normal = normalize_angle(wall_angle + M_PI_2);
+                    wall_normal = normalize_angle(wall_angle + TAU / 4);
                 } else {
-                    wall_normal = normalize_angle(wall_angle - M_PI_2);
+                    wall_normal = normalize_angle(wall_angle - TAU / 4);
                 }
                 
                 float nd = get_angle_cw_dif(wall_normal, move_angle);
-                if(nd < M_PI_2 || nd > M_PI + M_PI_2) {
+                if(nd < TAU * 0.25 || nd > TAU * 0.75) {
                     //If the difference between the movement and the wall's
                     //normal is this, that means we came FROM the wall.
                     //No way! There has to be an edge that makes more sense.
@@ -2012,12 +2012,12 @@ void mob::tick_physics() {
                 //If we were to slide on this edge, this would be
                 //the slide angle.
                 float tentative_slide_angle;
-                if(nd < M_PI) {
+                if(nd < TAU / 2) {
                     //Coming in from the "left" of the normal. Slide right.
-                    tentative_slide_angle = wall_normal + M_PI_2;
+                    tentative_slide_angle = wall_normal + TAU / 4;
                 } else {
                     //Coming in from the "right" of the normal. Slide left.
-                    tentative_slide_angle = wall_normal - M_PI_2;
+                    tentative_slide_angle = wall_normal - TAU / 4;
                 }
                 
                 float sd =
@@ -2038,7 +2038,7 @@ void mob::tick_physics() {
         //If the mob is just slamming against the wall head-on, perpendicularly,
         //then forget any idea about sliding.
         //It'd just be awkwardly walking in place.
-        if(!successful_move && slide_angle_dif > M_PI_2 - 0.05) {
+        if(!successful_move && slide_angle_dif > TAU / 4 - 0.05) {
             doing_slide = true;
         }
         
@@ -2069,7 +2069,7 @@ void mob::tick_physics() {
                 //To limit the speed, we should use a cross-product of the
                 //movement and slide vectors.
                 //But nuts to that, this is just as nice, and a lot simpler!
-                total_move_speed *= 1 - (slide_angle_dif / M_PI);
+                total_move_speed *= 1 - (slide_angle_dif / TAU / 2);
                 move_speed =
                     angle_to_coordinates(
                         slide_angle, total_move_speed
@@ -2375,7 +2375,7 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     is_moving(false) {
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
-        float angle = (M_PI * 2) / m->type->max_carriers * c;
+        float angle = TAU / m->type->max_carriers * c;
         point p(
             cos(angle) * (m->type->radius + standard_pikmin_radius),
             sin(angle) * (m->type->radius + standard_pikmin_radius)
@@ -2589,9 +2589,9 @@ void group_info::init_spots(mob* affected_mob_ptr) {
             atan2(actual_diameter, middle_distance * 2.0f) * 2.0;
             
         //Finally, we can calculate where the other spots are.
-        size_t n_spots_on_wheel = floor(M_PI * 2 / angular_dist);
+        size_t n_spots_on_wheel = floor(TAU / angular_dist);
         //Get a better angle. One that can evenly distribute the spots.
-        float angle = M_PI * 2.0 / n_spots_on_wheel;
+        float angle = TAU / n_spots_on_wheel;
         
         for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
             alpha_spots.push_back(

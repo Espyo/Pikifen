@@ -1,6 +1,9 @@
 #ifndef LAFI_CONST_INCLUDED
 #define LAFI_CONST_INCLUDED
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
@@ -47,6 +50,8 @@ enum DRAW_LINE_SIDES {
 enum EASY_FLAGS {
     EASY_FLAG_WIDTH_PX = 1,  //Width is in pixels, not percentage.
 };
+
+const float TAU = M_PI * 2;
 
 }
 

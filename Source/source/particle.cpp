@@ -112,17 +112,17 @@ void particle::draw() {
             0, change_alpha(
                 color,
                 fabs(
-                    sin((time / duration) * M_PI)
+                    sin((time / duration) * TAU / 2)
                 ) * color.a * 255
             )
         );
         
     } else if(type == PARTICLE_TYPE_ENEMY_SPIRIT) {
-        float s = sin((time / duration) * M_PI);
+        float s = sin((time / duration) * TAU / 2);
         draw_bitmap(
             bitmap,
             point(pos.x + s * 16, pos.y),
-            point(size, -1), s * M_PI,
+            point(size, -1), s * TAU / 2,
             change_alpha(
                 color, fabs(s) * color.a * 255
             )

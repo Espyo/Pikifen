@@ -412,8 +412,8 @@ void area_editor::do_drawing() {
             draw_debug_text(
                 al_map_rgb(192, 255, 192),
                 point(
-                    middle.x + cos(angle + M_PI_2) * 4,
-                    middle.y + sin(angle + M_PI_2) * 4
+                    middle.x + cos(angle + TAU / 4) * 4,
+                    middle.y + sin(angle + TAU / 4) * 4
                 ),
                 (
                     e_ptr->sector_nrs[0] == INVALID ?
@@ -426,8 +426,8 @@ void area_editor::do_drawing() {
             draw_debug_text(
                 al_map_rgb(192, 255, 192),
                 point(
-                    middle.x + cos(angle - M_PI_2) * 4,
-                    middle.y + sin(angle - M_PI_2) * 4
+                    middle.x + cos(angle - TAU / 4) * 4,
+                    middle.y + sin(angle - TAU / 4) * 4
                 ),
                 (
                     e_ptr->sector_nrs[1] == INVALID ?
@@ -511,10 +511,10 @@ void area_editor::do_drawing() {
                     al_draw_filled_triangle(
                         pivot.x + cos(angle) * delta,
                         pivot.y + sin(angle) * delta,
-                        pivot.x + cos(angle + M_PI_2) * delta,
-                        pivot.y + sin(angle + M_PI_2) * delta,
-                        pivot.x + cos(angle - M_PI_2) * delta,
-                        pivot.y + sin(angle - M_PI_2) * delta,
+                        pivot.x + cos(angle + TAU / 4) * delta,
+                        pivot.y + sin(angle + TAU / 4) * delta,
+                        pivot.x + cos(angle - TAU / 4) * delta,
+                        pivot.y + sin(angle - TAU / 4) * delta,
                         al_map_rgb(160, 224, 64)
                     );
                 }
@@ -557,13 +557,13 @@ void area_editor::do_drawing() {
         float tx1 = m_ptr->pos.x + lrw;
         float ty1 = m_ptr->pos.y + lrh;
         float tx2 =
-            tx1 + cos(m_ptr->angle - (M_PI_2 + M_PI_4)) * radius * 0.5;
+            tx1 + cos(m_ptr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float ty2 =
-            ty1 + sin(m_ptr->angle - (M_PI_2 + M_PI_4)) * radius * 0.5;
+            ty1 + sin(m_ptr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float tx3 =
-            tx1 + cos(m_ptr->angle + (M_PI_2 + M_PI_4)) * radius * 0.5;
+            tx1 + cos(m_ptr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
         float ty3 =
-            ty1 + sin(m_ptr->angle + (M_PI_2 + M_PI_4)) * radius * 0.5;
+            ty1 + sin(m_ptr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
             
         al_draw_filled_triangle(
             tx1, ty1,
@@ -628,10 +628,10 @@ void area_editor::do_drawing() {
                     al_draw_filled_triangle(
                         mid_x + cos(angle) * delta,
                         mid_y + sin(angle) * delta,
-                        mid_x + cos(angle + M_PI_2) * delta,
-                        mid_y + sin(angle + M_PI_2) * delta,
-                        mid_x + cos(angle - M_PI_2) * delta,
-                        mid_y + sin(angle - M_PI_2) * delta,
+                        mid_x + cos(angle + TAU / 4) * delta,
+                        mid_y + sin(angle + TAU / 4) * delta,
+                        mid_x + cos(angle - TAU / 4) * delta,
+                        mid_y + sin(angle - TAU / 4) * delta,
                         al_map_rgb(192, 128, 224)
                     );
                 }

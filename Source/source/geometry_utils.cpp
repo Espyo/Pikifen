@@ -294,7 +294,7 @@ bool circle_intersects_rectangle(
     
     if(rectangle_side_angle) {
         float angle = get_angle(nearest, circle_rel_pos);
-        angle = floor((angle + M_PI_4) / M_PI_2) * M_PI_2;
+        angle = floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
         *rectangle_side_angle = angle + rect_angle;
     }
     
@@ -447,11 +447,11 @@ void move_point(
 
 
 /* ----------------------------------------------------------------------------
- * Normalizes an angle so that it's between 0 and M_PI * 2.
+ * Normalizes an angle so that it's between 0 and TAU (M_PI * 2).
  */
 float normalize_angle(float a) {
-    a = fmod((double) a, M_PI * 2);
-    if(a < 0) a += M_PI * 2;
+    a = fmod((double) a, TAU);
+    if(a < 0) a += TAU;
     return a;
 }
 

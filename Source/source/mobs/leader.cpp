@@ -41,7 +41,7 @@ leader::leader(
 
 
 //Members cannot go past this range from the angle of dismissal.
-const float DISMISS_ANGLE_RANGE = M_PI;
+const float DISMISS_ANGLE_RANGE = TAU / 2;
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
 //Dismissed groups must have this much distance between them/the leader.
@@ -297,7 +297,7 @@ void leader::dismiss() {
                 destination = subgroups_info[s].center;
             } else {
                 float member_angle =
-                    ((float) cur_row_spot_nr / cur_row_spots) * M_PI * 2;
+                    ((float) cur_row_spot_nr / cur_row_spots) * TAU;
                 destination =
                     subgroups_info[s].center +
                     angle_to_coordinates(
@@ -537,7 +537,7 @@ void leader::tick_class_specifics() {
                         point(
                             -(type->radius + GROUP_SPOT_INTERVAL * 2),
                             0
-                        ), group_move_angle + M_PI
+                        ), group_move_angle + TAU / 2
                     );
                 group->anchor = pos + move_anchor_offset;
                 
@@ -550,7 +550,10 @@ void leader::tick_class_specifics() {
                     intensity_dist / (group->radius * 2),
                     1 - (GROUP_MOVE_VERTICAL_SCALE * group_move_magnitude)
                 );
-                al_rotate_transform(&group->transform, group_move_angle + M_PI);
+                al_rotate_transform(
+                    &group->transform,
+                    group_move_angle + TAU / 2
+                );
                 
             } else {
             

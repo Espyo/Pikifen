@@ -135,11 +135,11 @@ void angle_picker::draw_self() {
     al_draw_filled_circle(circle_cx, circle_cy, circle_r, get_bg_color());
     al_draw_arc(
         circle_cx, circle_cy, circle_r,
-        M_PI_2 + M_PI_4, M_PI, get_darker_bg_color(), 1
+        TAU / 4 + TAU / 8, TAU / 2, get_darker_bg_color(), 1
     );
     al_draw_arc(
         circle_cx, circle_cy, circle_r,
-        M_PI_2 + M_PI_4 + M_PI, M_PI, get_lighter_bg_color(), 1
+        TAU / 4 + TAU / 8 + TAU / 2, TAU / 2, get_lighter_bg_color(), 1
     );
     al_draw_line(
         circle_cx, circle_cy,
@@ -181,12 +181,12 @@ void angle_picker::textbox_lose_focus_handler(widget* w) {
 
 
 /* ----------------------------------------------------------------------------
- * Normalizes an angle so that it's between 0 and M_PI * 2.
+ * Normalizes an angle so that it's between 0 and TAU (M_PI * 2).
  */
 float normalize_angle(const float a) {
     float new_angle = a;
-    new_angle = fmod((double) new_angle, M_PI * 2);
-    if(new_angle < 0) new_angle += M_PI * 2;
+    new_angle = fmod((double) new_angle, TAU);
+    if(new_angle < 0) new_angle += TAU;
     return new_angle;
 }
 

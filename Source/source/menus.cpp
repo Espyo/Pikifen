@@ -237,7 +237,7 @@ void main_menu::load() {
                 pik.pos.y += scr_h * 1.2;
             }
             
-            pik.angle = randomf(0, M_PI * 2);
+            pik.angle = randomf(0, TAU);
             pik.speed = randomf(logo_pikmin_min_speed, logo_pikmin_max_speed);
             pik.sway_speed =
                 randomf(logo_pikmin_sway_min_speed, logo_pikmin_sway_max_speed);

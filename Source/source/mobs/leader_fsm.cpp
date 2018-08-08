@@ -1156,7 +1156,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     if(spray_amounts[spray_nr] == 0) return;
     
     float shoot_angle =
-        cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
+        cursor_angle + ((spray_types[spray_nr].angle) ? TAU / 2 : 0);
         
     unordered_set<mob*> affected_mobs;
     if(spray_types[spray_nr].group) {

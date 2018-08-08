@@ -878,12 +878,12 @@ bool mob_action::run(
                 );
                 
             float new_angle =
-                parent_angle + randomf(-(M_PI / 8), M_PI / 8);
+                parent_angle + randomf(-TAU / 16, TAU / 16);
             new_angle =
                 clamp(
                     new_angle,
-                    limb_bp_direction - (M_PI / 8),
-                    limb_bp_direction + (M_PI / 8)
+                    limb_bp_direction - (TAU / 16),
+                    limb_bp_direction + (TAU / 16)
                 );
                 
             m->chase(
@@ -1101,7 +1101,7 @@ bool mob_action::run(
         } else if(vi[0] == MOB_ACTION_TURN_HOME) {
             m->face(get_angle(m->pos, m->home), NULL);
         } else if(vi[0] == MOB_ACTION_TURN_RANDOMLY) {
-            m->face(randomf(0, M_PI * 2), NULL);
+            m->face(randomf(0, TAU), NULL);
         }
         
         
