@@ -704,6 +704,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
  * When a Pikmin becomes a seed or a sprout.
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
+    m->leave_group();
     m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
     ((pikmin*) m)->is_seed_or_sprout = true;
@@ -1558,6 +1559,11 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
         m->apply_status_effect(s->effects[e], false);
+    }
+    
+    if(s->buries_pikmin) {
+        //TODO make sure this only buries opposing Pikmin.
+        m->fsm.set_state(PIKMIN_STATE_SPROUT, NULL, NULL);
     }
 }
 

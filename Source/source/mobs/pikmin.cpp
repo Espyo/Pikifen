@@ -218,6 +218,28 @@ bool pikmin::can_receive_status(status_type* s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles a status effect being applied.
+ */
+void pikmin::handle_status_effect(status_type* s) {
+    if(s->causes_disable) {
+        disabled_state_flags =
+            s->disabled_state_inedible ? DISABLED_STATE_FLAG_INEDIBLE : 0;
+        fsm.set_state(PIKMIN_STATE_DISABLED);
+    } else if(s->causes_panic) {
+        fsm.set_state(PIKMIN_STATE_PANICKING);
+    } else if(s->causes_flailing) {
+        fsm.set_state(PIKMIN_STATE_FLAILING);
+    }
+
+    if(s->maturity_change_amount != 0) {
+        int new_maturity = maturity + s->maturity_change_amount;
+        new_maturity = clamp(new_maturity, 0, 2);
+        maturity = new_maturity;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if the attack should miss, and returns the result.
  * If it was already decided that it missed in a previous frame, that's a
  * straight no. If not, it will roll with the hit rate to check.
@@ -247,31 +269,6 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when a status effect causes "disabled".
- */
-void pikmin::receive_disable_from_status(const unsigned char flags) {
-    disabled_state_flags = flags;
-    fsm.set_state(PIKMIN_STATE_DISABLED);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handler for when a status effect causes "flailing".
- */
-void pikmin::receive_flailing_from_status() {
-    fsm.set_state(PIKMIN_STATE_FLAILING);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handler for when a status effect causes "panic".
- */
-void pikmin::receive_panic_from_status() {
-    fsm.set_state(PIKMIN_STATE_PANICKING);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handler for when a status effect no longer causes "panic".
  */
 void pikmin::lose_panic_from_status() {
@@ -279,14 +276,4 @@ void pikmin::lose_panic_from_status() {
         fsm.set_state(PIKMIN_STATE_IDLING);
         pikmin_fsm::stand_still(this, NULL, NULL);
     }
-}
-
-/* ----------------------------------------------------------------------------
- * Handler for when a status effect changes maturity.
- * amount: Amount to increase or decrease.
- */
-void pikmin::change_maturity_amount_from_status(const int amount) {
-    int new_maturity = maturity + amount;
-    new_maturity = clamp(new_maturity, 0, 2);
-    maturity = new_maturity;
 }

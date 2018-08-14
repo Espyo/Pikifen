@@ -1245,6 +1245,7 @@ void load_spray_types(const bool load_resources) {
         rs.set("angle_range", st.angle_range);
         rs.set("color", st.main_color);
         rs.set("berries_needed", st.berries_needed);
+        rs.set("buries_pikmin", st.buries_pikmin);
         
         st.angle = deg_to_rad(st.angle);
         st.angle_range = deg_to_rad(st.angle_range);
@@ -1287,6 +1288,7 @@ void load_status_types(const bool load_resources) {
         rs.set("attack_multiplier",       st.attack_multiplier);
         rs.set("defense_multiplier",      st.defense_multiplier);
         rs.set("disables_attack",         st.disables_attack);
+        rs.set("turns_invisible",         st.turns_invisible);
         rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);
         rs.set("animation",               st.animation_name);
         rs.set("animation_mob_scale",     st.animation_mob_scale);

@@ -308,16 +308,12 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     
     //This status is not already inflicted. Let's do so.
     this->statuses.push_back(status(s));
-    if(s->causes_disable) {
-        receive_disable_from_status(
-            (s->disabled_state_inedible ? DISABLED_STATE_FLAG_INEDIBLE : 0)
-        );
-    } else if(s->causes_panic) {
-        receive_panic_from_status();
-    } else if(s->causes_flailing) {
-        receive_flailing_from_status();
+    handle_status_effect(s);
+    
+    if(s->turns_invisible) {
+        has_invisibility_status = true;
     }
-    change_maturity_amount_from_status(s->maturity_change_amount);
+    
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
         pg.follow_pos = &this->pos;
@@ -713,6 +709,13 @@ void mob::delete_old_status_effects() {
         } else {
             ++s;
         }
+    }
+    
+    //Update some flags.
+    has_invisibility_status = false;
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        if(statuses[s].type->turns_invisible) has_invisibility_status = true;
+        break;
     }
 }
 
@@ -2332,12 +2335,9 @@ void mob::unfocus_from_mob() {
 }
 
 
-bool mob::can_receive_status(status_type* s) { return false; };
-void mob::receive_disable_from_status(const unsigned char flags) {}
-void mob::receive_flailing_from_status() {}
-void mob::receive_panic_from_status() {}
+bool mob::can_receive_status(status_type* s) { return false; }
+void mob::handle_status_effect(status_type* s) {}
 void mob::lose_panic_from_status() {}
-void mob::change_maturity_amount_from_status(const int amount) {}
 
 
 mob::~mob() {

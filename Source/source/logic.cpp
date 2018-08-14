@@ -1134,7 +1134,10 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             }
         }
         
-        if(m2_ptr->health > 0 && m_ptr->near_reach != INVALID) {
+        if(
+            m2_ptr->health > 0 && m_ptr->near_reach != INVALID &&
+            !m2_ptr->has_invisibility_status
+        ) {
             //Check reaches.
             
             mob_event* obir_ev =

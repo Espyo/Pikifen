@@ -370,6 +370,8 @@ public:
     unsigned char team;
     //If it should be hidden (no shadow, no health).
     bool hide;
+    //Is invisible due to a status effect. Cache for performance.
+    bool has_invisibility_status;
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
     //Status effects currently inflicted on the mob.
@@ -452,11 +454,8 @@ public:
     void add_status_bitmap_effects(bitmap_effect_manager* manager);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
-    virtual void receive_disable_from_status(const unsigned char flags);
-    virtual void receive_flailing_from_status();
-    virtual void receive_panic_from_status();
-    virtual void lose_panic_from_status();
-    virtual void change_maturity_amount_from_status(const int amount);
+    virtual void handle_status_effect(status_type* s);
+    virtual void lose_panic_from_status(); //TODO Replace with handle_lose_status()?
     
     //Drawing tools.
     point get_sprite_center(sprite* s);

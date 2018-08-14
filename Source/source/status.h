@@ -53,6 +53,7 @@ struct status_type {
     float defense_multiplier;
     float anim_speed_multiplier;
     bool disables_attack;
+    bool turns_invisible;
     
     //We need to know this in order to remove the particle generator later.
     bool generates_particles;

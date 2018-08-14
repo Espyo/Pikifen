@@ -46,6 +46,9 @@ public:
     //0 means there are no berries for this spray type.
     size_t berries_needed;
     
+    //Extra effects.
+    bool buries_pikmin;
+    
     spray_type();
 };
 
