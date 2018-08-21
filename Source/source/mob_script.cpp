@@ -618,6 +618,8 @@ mob_action::mob_action(
                     "the angle!"
                 );
             }
+        } else if(v == "arachnorb_head_logic") {
+            vi.push_back(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
         } else if(v == "focused_mob") {
             vi.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
         } else if(v == "home") {
@@ -873,17 +875,17 @@ bool mob_action::run(
             new_dist =
                 clamp(
                     new_dist,
-                    m->parent->m->type->radius + m->type->radius * 1.5,
-                    m->parent->m->type->radius + m->type->radius * 3
+                    m->parent->m->type->radius + m->type->radius * 1.25,
+                    m->parent->m->type->radius + m->type->radius * 4
                 );
                 
             float new_angle =
-                parent_angle + randomf(-TAU / 16, TAU / 16);
+                parent_angle + randomf(-TAU / 12, TAU / 12);
             new_angle =
                 clamp(
                     new_angle,
-                    limb_bp_direction - (TAU / 16),
-                    limb_bp_direction + (TAU / 16)
+                    limb_bp_direction - (TAU / 12),
+                    limb_bp_direction + (TAU / 12)
                 );
                 
             m->chase(
@@ -1096,6 +1098,8 @@ bool mob_action::run(
             m->face(vf[0], NULL);
         } else if(vi[0] == MOB_ACTION_TURN_RELATIVE) {
             m->face(m->angle + vf[0], NULL);
+        } else if(vi[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
+            m->arachnorb_head_turn_logic();
         } else if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
             m->face(0, &m->focused_mob->pos);
         } else if(vi[0] == MOB_ACTION_TURN_HOME) {

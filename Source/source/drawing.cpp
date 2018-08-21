@@ -1194,13 +1194,7 @@ void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
     sort(
         sorted_mobs.begin(), sorted_mobs.end(),
     [] (mob * m1, mob * m2) -> bool {
-        if(m1->z == m2->z) {
-            if(m1->type->height == m2->type->height) {
-                return m1->id < m2->id;
-            }
-            return m1->type->height < m2->type->height;
-        }
-        return m1->z < m2->z;
+        return (m1->z + m1->type->height) < (m2->z + m2->type->height);
     }
     );
     

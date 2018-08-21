@@ -325,6 +325,50 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
 
 
 /* ----------------------------------------------------------------------------
+ * Does the logic that arachnorb heads need to turn, based on their
+ * feet's positions.
+ */
+void mob::arachnorb_head_turn_logic() {
+    if(links.empty()) return;
+    
+    float angle_deviation_avg = 0;
+    size_t n_feet = 0;
+    
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(!links[l]->parent) {
+            continue;
+        }
+        if(links[l]->parent->m != this) {
+            continue;
+        }
+        if(links[l]->parent->limb_parent_body_part == INVALID) {
+            continue;
+        }
+        
+        n_feet++;
+        
+        float default_angle =
+            get_angle(
+                point(),
+                get_hitbox(
+                    links[l]->parent->limb_parent_body_part
+                )->pos
+            );
+        float cur_angle =
+            get_angle(pos, links[l]->pos) - angle;
+        float angle_deviation =
+            get_angle_cw_dif(default_angle, cur_angle);
+        if(angle_deviation > M_PI) {
+            angle_deviation -= TAU;
+        }
+        angle_deviation_avg += angle_deviation;
+    }
+    
+    face(angle + (angle_deviation_avg / n_feet), NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob attack another mob.
  * Returns true if the attack was successful.
  * victim:   The mob to be attacked.
@@ -1514,7 +1558,9 @@ void mob::tick_brain() {
                 //time to make it think about how to get there.
                 
                 //Let the mob think about facing the actual target.
-                face(get_angle(pos, final_target_pos), NULL);
+                if(!type->can_free_move) {
+                    face(get_angle(pos, final_target_pos), NULL);
+                }
                 
             } else {
                 //Reached the location. The mob should now think

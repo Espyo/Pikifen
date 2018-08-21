@@ -448,6 +448,8 @@ public:
     point get_chase_target();
     virtual float get_base_speed();
     
+    void arachnorb_head_turn_logic();
+    
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
