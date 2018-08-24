@@ -1,5 +1,5 @@
-name=Testing Area
-subtitle=A testing area for Pikifen
+name=Play
+subtitle=Testing area for Pikifen
 bg_bmp
 bg_color=0 0 0
 bg_dist=2.00

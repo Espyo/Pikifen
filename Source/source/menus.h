@@ -124,6 +124,7 @@ private:
     float time_spent;
     size_t cur_page_nr;
     vector<string> areas_to_pick;
+	vector<string> area_names;
     
     vector<menu_widget*> area_buttons;
     menu_text* cur_page_nr_widget;

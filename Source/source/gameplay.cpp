@@ -12,6 +12,8 @@
 
 #include <algorithm>
 
+#include <allegro5/allegro_native_dialog.h>
+
 #include "gameplay.h"
 
 #include "drawing.h"
@@ -176,6 +178,18 @@ void gameplay::load() {
             )
         );
     }
+	
+	//Panic check -- If there are no leaders, abort.
+	if(leaders.empty()) {
+		show_message_box(
+			display, "No leaders!", "No leaders!",
+			"This area has no leaders! You need at least one "
+			"in order to play.",
+			NULL, ALLEGRO_MESSAGEBOX_WARN
+		);
+		leave();
+		return;
+	}
     
     //Mob links.
     //Because mobs can create other mobs when loaded, mob gen number X
