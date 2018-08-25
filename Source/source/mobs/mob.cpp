@@ -369,6 +369,102 @@ void mob::arachnorb_head_turn_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Does the logic that arachnorb heads need to plan out how to move their feet
+ * for the next set of steps.
+ * goal: Use MOB_ACTION_ARACHNORB_PLAN_LOGIC_*.
+ */
+void mob::arachnorb_plan_logic(const unsigned char goal) {
+    float max_step_distance = s2f(vars["max_step_distance"]);
+    float max_turn_angle = deg_to_rad(s2f(vars["max_turn_angle"]));
+    float min_turn_angle = deg_to_rad(s2f(vars["min_turn_angle"]));
+    if(max_step_distance == 0) {
+        max_step_distance = 100;
+    }
+    if(max_turn_angle == 0) {
+        max_turn_angle = TAU * 0.2;
+    }
+    
+    float amount_to_move = 0;
+    float amount_to_turn = 0;
+    
+    if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME) {
+        amount_to_turn = get_angle_cw_dif(angle, get_angle(pos, home));
+        if(amount_to_turn > TAU / 2)  amount_to_turn -= TAU;
+        if(amount_to_turn < -TAU / 2) amount_to_turn += TAU;
+        
+        if(fabs(amount_to_turn) < TAU * 0.05) {
+            //We can also start moving towards home now.
+            amount_to_move = dist(pos, home).to_float();
+        }
+        
+    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD) {
+        amount_to_move = max_step_distance;
+        
+    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN) {
+        amount_to_turn = randomf(min_turn_angle, TAU * 0.25);
+        
+    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN) {
+        amount_to_turn = randomf(-TAU * 0.25, -min_turn_angle);
+        
+    }
+    
+    amount_to_move = min(amount_to_move, max_step_distance);
+    amount_to_turn =
+        sign(amount_to_turn) * min(fabs(amount_to_turn), max_turn_angle);
+        
+    point destination_pos = pos;
+    float destination_angle = angle + amount_to_turn;
+    normalize_angle(destination_angle);
+    
+    point offset = point(amount_to_move, 0);
+    offset = rotate_point(offset, destination_angle);
+    
+    destination_pos += offset;
+    
+    vars["_destination_pos"] = p2s(destination_pos);
+    vars["_destination_angle"] = f2s(destination_angle);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Does the logic that arachnorb feet need to move to their next spot, based
+ * on variables set by the parent mob (the arachnorb head).
+ */
+void mob::arachnorb_foot_move_logic() {
+    if(!parent) {
+        return;
+    }
+    if(parent->limb_parent_body_part == INVALID) {
+        return;
+    }
+    
+    float feet_normal_distance = s2f(parent->m->vars["feet_normal_distance"]);
+    if(feet_normal_distance == 0) {
+        feet_normal_distance = 175;
+    }
+    
+    float default_angle =
+        get_angle(
+            point(),
+            parent->m->get_hitbox(
+                parent->limb_parent_body_part
+            )->pos
+        );
+        
+    point final_pos = s2p(parent->m->vars["_destination_pos"]);
+    float final_angle = s2f(parent->m->vars["_destination_angle"]);
+    
+    point offset = point(feet_normal_distance, 0);
+    offset = rotate_point(offset, default_angle);
+    offset = rotate_point(offset, final_angle);
+    
+    final_pos += offset;
+    
+    chase(final_pos, NULL, false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob attack another mob.
  * Returns true if the attack was successful.
  * victim:   The mob to be attacked.

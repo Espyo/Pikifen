@@ -48,7 +48,26 @@ mob_action::mob_action(
         v = trim_spaces(v);
     }
     
-    if(n == "delete") {
+    if(n == "arachnorb_plan_logic") {
+    
+        type = MOB_ACTION_ARACHNORB_PLAN_LOGIC;
+        if(v == "home") {
+            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
+        } else if(v == "forward") {
+            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
+        } else if(v == "cw_turn") {
+            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
+        } else if(v == "ccw_turn") {
+            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
+        } else {
+            valid = false;
+            log_error(
+                "The \"arachnorb_plan_logic\" action needs to know what "
+                "the mob wants to do!", dn
+            );
+        }
+        
+    } else if(n == "delete") {
     
         type = MOB_ACTION_DELETE;
         
@@ -56,7 +75,9 @@ mob_action::mob_action(
     
         type = MOB_ACTION_ELSE;
         if(!v.empty()) {
-            log_error("The \"else\" action shouldn't have anything after it!");
+            log_error(
+                "The \"else\" action shouldn't have anything after it!", dn
+            );
         }
         
         
@@ -65,7 +86,8 @@ mob_action::mob_action(
         type = MOB_ACTION_END_IF;
         if(!v.empty()) {
             log_error(
-                "The \"end_if\" action shouldn't have anything after it!"
+                "The \"end_if\" action shouldn't have anything after it!",
+                dn
             );
         }
         
@@ -197,8 +219,8 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
         } else if(v == "home") {
             vi.push_back(MOB_ACTION_MOVE_HOME);
-        } else if(v == "like_arachnorb_foot") {
-            vi.push_back(MOB_ACTION_MOVE_LIKE_ARACHNORB_FOOT);
+        } else if(v == "arachnorb_foot_logic") {
+            vi.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
         } else if(v == "linked_mob_average") {
             vi.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
         } else if(v == "randomly") {
@@ -688,7 +710,11 @@ bool mob_action::run(
         return false;
     }
     
-    if(type == MOB_ACTION_DELETE) {
+    if(type == MOB_ACTION_ARACHNORB_PLAN_LOGIC) {
+    
+        m->arachnorb_plan_logic(vi[0]);
+        
+    } else if(type == MOB_ACTION_DELETE) {
     
         m->to_delete = true;
         
@@ -854,46 +880,8 @@ bool mob_action::run(
         } else if(vi[0] == MOB_ACTION_MOVE_HOME) {
             m->chase(m->home, NULL, false);
             
-        } else if(vi[0] == MOB_ACTION_MOVE_LIKE_ARACHNORB_FOOT) {
-            if(!m->parent) return false;
-            if(m->parent->limb_parent_body_part == INVALID) return false;
-            
-            float parent_dist =
-                dist(m->parent->m->pos, m->pos).to_float();
-            float parent_angle =
-                get_angle(m->parent->m->pos, m->pos);
-            float limb_bp_direction =
-                get_angle(
-                    m->parent->m->pos,
-                    m->parent->m->get_hitbox(
-                        m->parent->limb_parent_body_part
-                    )->get_cur_pos(m->parent->m->pos, m->parent->m->angle)
-                );
-                
-            float new_dist =
-                parent_dist + randomf(-m->type->radius, m->type->radius);
-            new_dist =
-                clamp(
-                    new_dist,
-                    m->parent->m->type->radius + m->type->radius * 1.25,
-                    m->parent->m->type->radius + m->type->radius * 4
-                );
-                
-            float new_angle =
-                parent_angle + randomf(-TAU / 12, TAU / 12);
-            new_angle =
-                clamp(
-                    new_angle,
-                    limb_bp_direction - (TAU / 12),
-                    limb_bp_direction + (TAU / 12)
-                );
-                
-            m->chase(
-                m->parent->m->pos +
-                angle_to_coordinates(new_angle, new_dist),
-                NULL, false
-            );
-            
+        } else if(vi[0] == MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC) {
+            m->arachnorb_foot_move_logic();
             
         } else if(vi[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
             if(m->links.empty()) return false;

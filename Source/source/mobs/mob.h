@@ -449,6 +449,8 @@ public:
     virtual float get_base_speed();
     
     void arachnorb_head_turn_logic();
+    void arachnorb_plan_logic(const unsigned char goal);
+    void arachnorb_foot_move_logic();
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
