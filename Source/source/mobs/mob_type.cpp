@@ -432,7 +432,7 @@ void load_mob_type_from_file(
         rs.set("relay_events", new_child.relay_events);
         rs.set("handle_statuses", new_child.handle_statuses);
         rs.set("relay_statuses", new_child.relay_statuses);
-        rs.set("limb_bitmap", new_child.limb_bmp_filename);
+        rs.set("limb_animation", new_child.limb_anim_name);
         rs.set("limb_thickness", new_child.limb_thickness);
         rs.set("limb_parent_body_part", new_child.limb_parent_body_part);
         rs.set("limb_parent_offset", new_child.limb_parent_offset);

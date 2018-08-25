@@ -211,7 +211,7 @@ struct parent_mob_info {
     bool relay_events;
     
     //Limbs are visible connective textures between both mobs.
-    ALLEGRO_BITMAP* limb_bmp;
+    animation_instance limb_anim;
     float limb_thickness;
     size_t limb_parent_body_part;
     float limb_parent_offset;

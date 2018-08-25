@@ -143,8 +143,29 @@ mob::mob(
         p_info->relay_events = child_info->relay_events;
         p_info->handle_statuses = child_info->handle_statuses;
         p_info->relay_statuses = child_info->relay_statuses;
-        if(!child_info->limb_bmp_filename.empty()) {
-            p_info->limb_bmp = bitmaps.get(child_info->limb_bmp_filename);
+        if(!child_info->limb_anim_name.empty()) {
+            p_info->limb_anim.anim_db = anim.anim_db;
+            animation* anim_to_use = NULL;
+            for(size_t a = 0; a < anim.anim_db->animations.size(); ++a) {
+                if(
+                    anim.anim_db->animations[a]->name ==
+                    child_info->limb_anim_name
+                ) {
+                    anim_to_use = anim.anim_db->animations[a];
+                }
+            }
+            
+            if(anim_to_use) {
+                p_info->limb_anim.cur_anim = anim_to_use;
+                p_info->limb_anim.start();
+            } else {
+                log_error(
+                    "Object \"" + new_mob->type->name + "\", child object of "
+                    "object \"" + type->name + "\", tried to use animation \"" +
+                    child_info->limb_anim_name + "\" for a limb, but that "
+                    "animation doesn't exist in the parent object's animations!"
+                );
+            }
         }
         p_info->limb_thickness = child_info->limb_thickness;
         p_info->limb_parent_body_part =
@@ -870,54 +891,64 @@ void mob::draw(bitmap_effect_manager* effect_manager) {
     
     draw_mob(effect_manager);
     
-    if(parent) {
-        if(parent->limb_bmp) {
-            point parent_end;
-            if(parent->limb_parent_body_part == INVALID) {
-                parent_end = parent->m->pos;
-            } else {
-                parent_end =
-                    parent->m->get_hitbox(
-                        parent->limb_parent_body_part
-                    )->get_cur_pos(parent->m->pos, parent->m->angle);
-            }
-            
-            point child_end;
-            if(parent->limb_child_body_part == INVALID) {
-                child_end = pos;
-            } else {
-                child_end =
-                    get_hitbox(
-                        parent->limb_child_body_part
-                    )->get_cur_pos(pos, angle);
-            }
-            
-            float p2c_angle = get_angle(parent_end, child_end);
-            
-            if(parent->limb_parent_offset) {
-                parent_end +=
-                    rotate_point(
-                        point(parent->limb_parent_offset, 0), p2c_angle
-                    );
-            }
-            if(parent->limb_child_offset) {
-                child_end -=
-                    rotate_point(
-                        point(parent->limb_child_offset, 0), p2c_angle
-                    );
-            }
-            
-            float length = dist(parent_end, child_end).to_float();
-            
-            draw_bitmap_with_effects(
-                parent->limb_bmp,
-                (parent_end + child_end) / 2,
-                point(length, parent->limb_thickness),
-                p2c_angle,
-                effect_manager
-            );
-        }
+    draw_limb(effect_manager);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the limb that connects this mob to its parent.
+ */
+void mob::draw_limb(bitmap_effect_manager* effect_manager) {
+    if(hide) return;
+    if(!parent) return;
+    if(!parent->limb_anim.anim_db) return;
+    sprite* sprite_to_use = parent->limb_anim.get_cur_sprite();
+    if(!sprite_to_use) return;
+    
+    point parent_end;
+    if(parent->limb_parent_body_part == INVALID) {
+        parent_end = parent->m->pos;
+    } else {
+        parent_end =
+            parent->m->get_hitbox(
+                parent->limb_parent_body_part
+            )->get_cur_pos(parent->m->pos, parent->m->angle);
     }
+    
+    point child_end;
+    if(parent->limb_child_body_part == INVALID) {
+        child_end = pos;
+    } else {
+        child_end =
+            get_hitbox(
+                parent->limb_child_body_part
+            )->get_cur_pos(pos, angle);
+    }
+    
+    float p2c_angle = get_angle(parent_end, child_end);
+    
+    if(parent->limb_parent_offset) {
+        parent_end +=
+            rotate_point(
+                point(parent->limb_parent_offset, 0), p2c_angle
+            );
+    }
+    if(parent->limb_child_offset) {
+        child_end -=
+            rotate_point(
+                point(parent->limb_child_offset, 0), p2c_angle
+            );
+    }
+    
+    float length = dist(parent_end, child_end).to_float();
+    
+    draw_bitmap_with_effects(
+        sprite_to_use->bitmap,
+        (parent_end + child_end) / 2,
+        point(length, parent->limb_thickness),
+        p2c_angle,
+        effect_manager
+    );
 }
 
 
@@ -1627,6 +1658,10 @@ void mob::tick_animation() {
         } else {
             ++h;
         }
+    }
+    
+    if(parent && parent->limb_anim.anim_db) {
+        parent->limb_anim.tick(delta_t* mult);
     }
 }
 
@@ -2974,7 +3009,6 @@ parent_mob_info::parent_mob_info(mob* m) :
     relay_statuses(false),
     handle_events(false),
     relay_events(false),
-    limb_bmp(nullptr),
     limb_thickness(32.0),
     limb_parent_body_part(INVALID),
     limb_parent_offset(0),

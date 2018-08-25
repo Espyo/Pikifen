@@ -91,7 +91,7 @@ public:
         bool handle_statuses;
         bool relay_statuses;
         
-        string limb_bmp_filename;
+        string limb_anim_name;
         float limb_thickness;
         string limb_parent_body_part;
         float limb_parent_offset;
