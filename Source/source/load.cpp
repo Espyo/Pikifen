@@ -686,7 +686,6 @@ void load_custom_particle_generators(const bool load_resources) {
         prs.set("size",            base_p.size);
         prs.set("speed",           base_p.speed);
         prs.set("color",           base_p.color);
-        prs.set("before_mobs",     base_p.before_mobs);
         base_p.time = base_p.duration;
         
         particle_generator pg_struct(emission_interval, base_p, number);

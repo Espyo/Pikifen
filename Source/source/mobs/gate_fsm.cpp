@@ -56,7 +56,7 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     m->tangible = false;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
         80, 2.75, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;

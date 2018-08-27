@@ -14,6 +14,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "geometry_utils.h"
+#include "mobs/mob.h"
 #include "particle.h"
 #include "vars.h"
 
@@ -26,8 +27,8 @@
  * priority: Lower priority particles will be removed in favor of higher ones.
  */
 particle::particle(
-    const unsigned char type, const point &pos, const float size,
-    const float duration, const unsigned char priority
+    const unsigned char type, const point &pos, const float z,
+    const float size, const float duration, const unsigned char priority
 ) :
     type(type),
     duration(duration),
@@ -37,9 +38,9 @@ particle::particle(
     size_grow_speed(0.0f),
     time(duration),
     pos(pos),
+    z(z),
     size(size),
     color(al_map_rgb(255, 255, 255)),
-    before_mobs(false),
     priority(priority) {
     
 }
@@ -246,6 +247,14 @@ void particle_manager::add(particle p) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how many are in the list.
+ */
+size_t particle_manager::get_count() {
+    return count;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks all particles in the list.
  */
 void particle_manager::tick_all(const float delta_t) {
@@ -261,15 +270,13 @@ void particle_manager::tick_all(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
- * Draws all particles, if they're meant to be drawn.
- * before_mobs: If true, we're trying to draw the particles
- *   that are meant to appear BEFORE (under) the mobs.
- *   So, you should call this function before and after drawing all mobs,
- *   and set before_mobs to true before, and false after.
- * cam_box:     Only draw particles inside this frame.
+ * Adds the particle pointers to the provided list of world component,
+ * so that the particles can be drawn, after being Z-sorted.
+ * list:           The list to populate.
+ * cam_tl, cam_br: Only draw particles inside this frame.
  */
-void particle_manager::draw_all(
-    const bool before_mobs,
+void particle_manager::fill_component_list(
+    vector<world_component> &list,
     const point &cam_tl, const point &cam_br
 ) {
     for(size_t c = 0; c < count; ++c) {
@@ -287,9 +294,10 @@ void particle_manager::draw_all(
             continue;
         }
         
-        if(before_mobs == particles[c].before_mobs) {
-            particles[c].draw();
-        }
+        world_component wc;
+        wc.particle_ptr = p_ptr;
+        wc.z = p_ptr->z;
+        list.push_back(wc);
     }
 }
 
@@ -325,7 +333,7 @@ particle_generator::particle_generator(
     base_particle(base_particle),
     number(number),
     emission_interval(emission_interval),
-    follow_pos(nullptr),
+    follow_mob(nullptr),
     follow_angle(nullptr),
     number_deviation(0),
     duration_deviation(0),
@@ -344,8 +352,9 @@ particle_generator::particle_generator(
  * Ticks one game frame of logic.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
-    if(follow_pos) {
-        base_particle.pos = *follow_pos;
+    if(follow_mob) {
+        base_particle.pos = follow_mob->pos;
+        base_particle.z = follow_mob->z + follow_mob->type->height;
     }
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {

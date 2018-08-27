@@ -955,14 +955,13 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->pos,
+                PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = bmp_wave_ring;
             p.size_grow_speed = m->type->radius * 4;
-            p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow_pos = &m->pos;
+            pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
@@ -1042,7 +1041,8 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     l_ptr->hold(
-        (mob*) info1, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE
+        (mob*) info1, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        false
     );
     l_ptr->group->sort(m->subgroup_type_ptr);
 }
@@ -1202,7 +1202,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -1565,13 +1565,13 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->pos,
+        PARTICLE_TYPE_CIRCLE, m->pos, m->z,
         m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_pos = &m->pos;
+    pg.follow_mob = m;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }

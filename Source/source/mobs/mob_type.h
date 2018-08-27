@@ -97,6 +97,7 @@ public:
         float limb_parent_offset;
         string limb_child_body_part;
         float limb_child_offset;
+        unsigned char limb_draw_method;
         
         child_struct() :
             parent_holds(false),

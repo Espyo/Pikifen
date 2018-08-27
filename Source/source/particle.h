@@ -14,6 +14,10 @@
 
 #include <allegro5/allegro.h>
 
+#include "world_component.h"
+
+class mob;
+
 enum PARTICLE_TYPES {
     PARTICLE_TYPE_SQUARE,
     PARTICLE_TYPE_CIRCLE,
@@ -50,6 +54,8 @@ struct particle {
     float time;
     //Current coordinates.
     point pos;
+    //Current Z.
+    float z;
     //Current size, in diameter.
     float size;
     //Current movement speed.
@@ -58,15 +64,14 @@ struct particle {
     ALLEGRO_COLOR color;
     
     //Other stuff.
-    //If true, this is only drawn if drawing before mobs. Else, after.
-    bool before_mobs;
     //Priority. If we reached the particle limit, only spawn
     //this particle if it can replace a lower-priority one.
     unsigned char priority;
     
     particle(
         const unsigned char type = PARTICLE_TYPE_BITMAP,
-        const point &pos = point(), const float size = 0.0f,
+        const point &pos = point(), const float z = 0.0f,
+        const float size = 0.0f,
         const float duration = 0.0f, const unsigned char priority = 255
     );
     void tick(const float delta_t);
@@ -93,12 +98,13 @@ private:
     
 public:
     void add(particle p);
-    void tick_all(const float delta_t);
-    void draw_all(
-        const bool before_mobs,
+    void clear();
+    void fill_component_list(
+        vector<world_component> &list,
         const point &cam_tl = point(), const point &cam_br = point()
     );
-    void clear();
+    size_t get_count();
+    void tick_all(const float delta_t);
     
     particle_manager(const size_t &max_nr = 0);
     particle_manager &operator=(const particle_manager &pg);
@@ -124,9 +130,9 @@ public:
     size_t number;
     //Interval at which to emit a new one. 0 means once only.
     float emission_interval;
-    //Follow the given coordinates. e.g. a mob's position.
-    point* follow_pos;
-    //Offset the follow coordinates by this.
+    //Follow the given mob's coordinates.
+    mob* follow_mob;
+    //Offset the follow mob coordinates by this.
     point follow_pos_offset;
     //Follow the given angle. e.g. a mob's angle.
     float* follow_angle;

@@ -176,13 +176,14 @@ mob::mob(
                 child_info->limb_child_body_part
             );
         p_info->limb_child_offset = child_info->limb_child_offset;
+        p_info->limb_draw_method = child_info->limb_draw_method;
         
         if(child_info->parent_holds) {
             hold(
                 new_mob,
                 type->anims.find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
-                child_info->hold_offset_angle
+                child_info->hold_offset_angle, false
             );
         }
     }
@@ -337,7 +338,7 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
-        pg.follow_pos = &this->pos;
+        pg.follow_mob = this;
         pg.follow_angle = &this->angle;
         pg.reset();
         particle_generators.push_back(pg);
@@ -573,11 +574,11 @@ bool mob::attack(
     sfx_attack.play(0.06, false, 0.6f);
     particle smack_p(
         PARTICLE_TYPE_SMACK, smack_p_pos,
+        max(victim->z + victim->type->height, z + type->height),
         64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
     );
     smack_p.bitmap = bmp_smack;
     smack_p.color = al_map_rgb(255, 160, 128);
-    smack_p.before_mobs = false;
     particles.add(smack_p);
     
     if(damage) *damage = total_damage;
@@ -815,6 +816,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     if(type->spike_damage->particle_gen) {
         particle_generator pg = *(type->spike_damage->particle_gen);
         pg.base_particle.pos = victim->pos;
+        pg.base_particle.z = victim->z + victim->type->height;
         pg.emit(particles);
     }
 }
@@ -890,8 +892,6 @@ void mob::draw(bitmap_effect_manager* effect_manager) {
     if(hide) return;
     
     draw_mob(effect_manager);
-    
-    draw_limb(effect_manager);
 }
 
 
@@ -1029,7 +1029,7 @@ void mob::finish_dying() {
             e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
         particle par(
-            PARTICLE_TYPE_ENEMY_SPIRIT, pos,
+            PARTICLE_TYPE_ENEMY_SPIRIT, pos, INFINITY,
             clamp(
                 type->radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
                 ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
@@ -1241,16 +1241,19 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
  * hitbox_nr:    Number of the hitbox to hold on. INVALID for mob center.
  * offset_dist:  Distance from the hitbox/body center. 1 is full radius.
  * offset_angle: Hitbox/body angle from which the mob will be held.
+ * above_holder: Is the mob meant to appear above the holder?
  */
 void mob::hold(
     mob* m, const size_t hitbox_nr,
-    const float offset_dist, const float offset_angle
+    const float offset_dist, const float offset_angle,
+    const bool above_holder
 ) {
     holding.push_back(m);
     m->holder.m = this;
     m->holder.hitbox_nr = hitbox_nr;
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
+    m->holder.above_holder = above_holder;
 }
 
 
@@ -1586,7 +1589,10 @@ void mob::start_dying() {
     intended_turn_pos = NULL;
     gravity_mult = 1.0;
     
-    particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
+    particle p(
+        PARTICLE_TYPE_BITMAP, pos, z + type->height,
+        64, 1.5, PARTICLE_PRIORITY_LOW
+    );
     p.bitmap = bmp_sparkle;
     p.color = al_map_rgb(255, 192, 192);
     particle_generator pg(0, p, 25);
@@ -2626,7 +2632,8 @@ hold_info_struct::hold_info_struct() :
     m(nullptr),
     hitbox_nr(INVALID),
     offset_dist(0),
-    offset_angle(0) {
+    offset_angle(0),
+    above_holder(false) {
     
 }
 
@@ -3013,7 +3020,8 @@ parent_mob_info::parent_mob_info(mob* m) :
     limb_parent_body_part(INVALID),
     limb_parent_offset(0),
     limb_child_body_part(INVALID),
-    limb_child_offset(0) {
+    limb_child_offset(0),
+    limb_draw_method(LIMB_DRAW_ABOVE_CHILD) {
     
 }
 

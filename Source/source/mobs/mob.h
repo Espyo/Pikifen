@@ -191,6 +191,8 @@ struct hold_info_struct {
     float offset_dist;
     //Angle the mob makes with the center of the hitbox/body.
     float offset_angle;
+    //Is the mob drawn above the holder?
+    bool above_holder;
     
     hold_info_struct();
     void clear();
@@ -217,6 +219,7 @@ struct parent_mob_info {
     float limb_parent_offset;
     size_t limb_child_body_part;
     float limb_child_offset;
+    unsigned char limb_draw_method;
     
     parent_mob_info(mob* m);
 };
@@ -394,6 +397,7 @@ public:
     
     void tick();
     void draw(bitmap_effect_manager* effect_manager = NULL);
+    void draw_limb(bitmap_effect_manager* effect_manager = NULL);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
     void set_animation(const size_t nr, const bool pre_named = true);
@@ -420,7 +424,8 @@ public:
     void leave_group();
     void hold(
         mob* m, const size_t hitbox_nr,
-        const float offset_dist, const float offset_angle
+        const float offset_dist, const float offset_angle,
+        const bool above_holder
     );
     void release(mob* m);
     bool should_attack(mob* m);

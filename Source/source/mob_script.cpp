@@ -1032,7 +1032,7 @@ bool mob_action::run(
             ) {
                 particle_generator pg = custom_particle_generators[vs[0]];
                 pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
-                pg.follow_pos = &m->pos;
+                pg.follow_mob = m;
                 pg.follow_angle = &m->angle;
                 pg.follow_pos_offset = point(vf[0], vf[1]);
                 pg.reset();

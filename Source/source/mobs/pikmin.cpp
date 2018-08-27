@@ -121,7 +121,7 @@ void pikmin::tick_class_specifics() {
         pikmin_fsm::notify_leader_release(this, NULL, NULL);
         
         particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, pos,
+            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, INFINITY,
             pik_type->radius * 2, 2.0f
         );
         par.bitmap = bmp_pikmin_spirit;
@@ -230,7 +230,7 @@ void pikmin::handle_status_effect(status_type* s) {
     } else if(s->causes_flailing) {
         fsm.set_state(PIKMIN_STATE_FLAILING);
     }
-
+    
     if(s->maturity_change_amount != 0) {
         int new_maturity = maturity + s->maturity_change_amount;
         new_maturity = clamp(new_maturity, 0, 2);

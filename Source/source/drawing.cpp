@@ -57,43 +57,21 @@ void gameplay::do_game_drawing(
         //Layer 1 -- Background.
         draw_background(bmp_output);
         
-        //Layer 2 -- Area layout.
-        draw_layout(bmp_output, world_to_screen_drawing_transform);
+        //Layer 2 -- World components.
+        al_use_transform(&world_to_screen_drawing_transform);
+        draw_world_components(bmp_output);
         
-        //Layer 3 -- Particles before mobs.
-        if(!(bmp_output && !creator_tool_area_image_mobs)) {
-            if(!bmp_output) {
-                particles.draw_all(true, cam_box[0], cam_box[1]);
-            } else {
-                particles.draw_all(true);
-            }
-        }
-        
-        //Layer 4 -- Mobs.
-        if(!(bmp_output && !creator_tool_area_image_mobs)) {
-            draw_mobs(bmp_output);
-        }
-        
-        //Layer 5 -- Particles after mobs.
-        if(!(bmp_output && !creator_tool_area_image_mobs)) {
-            if(!bmp_output) {
-                particles.draw_all(false, cam_box[0], cam_box[1]);
-            } else {
-                particles.draw_all(false);
-            }
-        }
-        
-        //Layer 6 -- In-game text.
+        //Layer 3 -- In-game text.
         if(!bmp_output) {
             draw_ingame_text();
         }
         
-        //Layer 7 -- Precipitation.
+        //Layer 4 -- Precipitation.
         if(!bmp_output) {
             draw_precipitation();
         }
         
-        //Layer 8 -- Tree shadows.
+        //Layer 5 -- Tree shadows.
         if(!(bmp_output && !creator_tool_area_image_shadows)) {
             draw_tree_shadows();
         }
@@ -104,20 +82,20 @@ void gameplay::do_game_drawing(
             return;
         }
         
-        //Layer 9 -- Lighting filter.
+        //Layer 6 -- Lighting filter.
         draw_lighting_filter();
         
-        //Layer 10 -- Cursor.
+        //Layer 7 -- Cursor.
         draw_cursor(world_to_screen_drawing_transform);
         
-        //Layer 11 -- HUD
+        //Layer 8 -- HUD
         if(cur_message.empty()) {
             draw_hud();
         } else {
             draw_message_box();
         }
         
-        //Layer 12 -- System stuff.
+        //Layer 9 -- System stuff.
         draw_system_stuff();
         
     } else { //Paused.
@@ -860,6 +838,27 @@ void gameplay::draw_ingame_text() {
                 mob_ptr->health, mob_ptr->type->max_health
             );
         }
+        
+        //Creator tool -- draw hitboxes.
+        if(creator_tool_hitboxes) {
+            sprite* s = mob_ptr->anim.get_cur_sprite();
+            if(s) {
+                for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                    hitbox* h_ptr = &s->hitboxes[h];
+                    ALLEGRO_COLOR hc;
+                    if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                        hc = al_map_rgba(0, 128, 0, 192); //Green.
+                    } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                        hc = al_map_rgba(128, 0, 0, 192); //Red.
+                    } else {
+                        hc = al_map_rgba(128, 128, 0, 192); //Yellow.
+                    }
+                    point p =
+                        mob_ptr->pos + rotate_point(h_ptr->pos, mob_ptr->angle);
+                    al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
+                }
+            }
+        }
     }
     
     bool done = false;
@@ -971,39 +970,6 @@ void gameplay::draw_ingame_text() {
             "Call a Pikmin", &controls[0][click_control_id]
         );
         done = true;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the area layout: sectors, wall shadows, etc.
- */
-void gameplay::draw_layout(
-    ALLEGRO_BITMAP* bmp_output,
-    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
-) {
-    al_use_transform(&world_to_screen_drawing_transform);
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
-        
-        if(
-            !bmp_output &&
-            !rectangles_intersect(
-                s_ptr->bbox[0], s_ptr->bbox[1],
-                cam_box[0], cam_box[1]
-            )
-        ) {
-            //Off-camera.
-            continue;
-        }
-        
-        draw_sector_texture(s_ptr, point(), 1.0f, 1.0f);
-        
-        if(s_ptr->associated_liquid) {
-            draw_liquid(s_ptr, point(), 1.0f);
-        }
-        
-        draw_sector_shadows(s_ptr, point(), 1.0f);
     }
 }
 
@@ -1186,90 +1152,6 @@ void gameplay::draw_message_box() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the mobs.
- */
-void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
-    vector<mob*> sorted_mobs;
-    sorted_mobs = mobs;
-    sort(
-        sorted_mobs.begin(), sorted_mobs.end(),
-    [] (mob * m1, mob * m2) -> bool {
-        return (m1->z + m1->type->height) < (m2->z + m2->type->height);
-    }
-    );
-    
-    float shadow_stretch = 0;
-    
-    if(day_minutes < 60 * 5 || day_minutes > 60 * 20) {
-        shadow_stretch = 1;
-    } else if(day_minutes < 60 * 12) {
-        shadow_stretch = 1 - ((day_minutes - 60 * 5) / (60 * 12 - 60 * 5));
-    } else {
-        shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
-    }
-    
-    mob* mob_ptr = NULL;
-    //Draw the mob shadows.
-    al_hold_bitmap_drawing(true);
-    for(size_t m = 0; m < sorted_mobs.size(); ++m) {
-        mob_ptr = sorted_mobs[m];
-        
-        if(!mob_ptr->type->casts_shadow || mob_ptr->hide) {
-            continue;
-        }
-        
-        if(!bmp_output && mob_ptr->is_off_camera()) {
-            //Off-camera.
-            continue;
-        }
-        
-        draw_mob_shadow(
-            mob_ptr->pos,
-            mob_ptr->type->radius * 2,
-            mob_ptr->z - mob_ptr->ground_sector->z,
-            shadow_stretch
-        );
-    }
-    al_hold_bitmap_drawing(false);
-    
-    //And now the mobs themselves.
-    for(size_t m = 0; m < sorted_mobs.size(); ++m) {
-        mob_ptr = sorted_mobs[m];
-        
-        if(!bmp_output && mob_ptr->is_off_camera()) {
-            //Off-camera.
-            continue;
-        }
-        
-        mob_ptr->draw();
-        
-        //Creator tool -- draw hitboxes.
-        if(creator_tool_hitboxes) {
-            sprite* s = mob_ptr->anim.get_cur_sprite();
-            if(s) {
-                for(size_t h = 0; h < s->hitboxes.size(); ++h) {
-                    hitbox* h_ptr = &s->hitboxes[h];
-                    ALLEGRO_COLOR hc;
-                    if(h_ptr->type == HITBOX_TYPE_NORMAL) {
-                        hc = al_map_rgba(0, 128, 0, 192); //Green.
-                    } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                        hc = al_map_rgba(128, 0, 0, 192); //Red.
-                    } else {
-                        hc = al_map_rgba(128, 128, 0, 192); //Yellow.
-                    }
-                    point p =
-                        mob_ptr->pos +
-                        rotate_point(h_ptr->pos, mob_ptr->angle);
-                    al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
-                }
-            }
-        }
-    }
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the precipitation.
  */
 void gameplay::draw_precipitation() {
@@ -1337,6 +1219,178 @@ void gameplay::draw_tree_shadows() {
             s_ptr->size,
             s_ptr->angle, map_alpha(alpha)
         );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the components that make up the game world: layout, objects, etc.
+ */
+void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
+    vector<world_component> components;
+    //Let's reserve some space. We might need more or less,
+    //but this is a nice estimate.
+    components.reserve(
+        cur_area_data.sectors.size() + //Sectors
+        mobs.size() + //Mob shadows
+        mobs.size() + //Mobs
+        particles.get_count() //Particles
+    );
+    
+    //Sectors.
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        
+        if(
+            !bmp_output &&
+            !rectangles_intersect(
+                s_ptr->bbox[0], s_ptr->bbox[1],
+                cam_box[0], cam_box[1]
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
+        world_component c;
+        c.sector_ptr = s_ptr;
+        c.z = s_ptr->z;
+        components.push_back(c);
+    }
+    
+    //Particles.
+    particles.fill_component_list(components, cam_box[0], cam_box[1]);
+    
+    //Mobs.
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* mob_ptr = mobs[m];
+        
+        if(!bmp_output && mob_ptr->is_off_camera()) {
+            //Off-camera.
+            continue;
+        }
+        
+        if(mob_ptr->hide) continue;
+        
+        //Shadows.
+        if(mob_ptr->type->casts_shadow) {
+            world_component c;
+            c.mob_shadow_ptr = mob_ptr;
+            if(mob_ptr->standing_on_mob) {
+                c.z =
+                    mob_ptr->standing_on_mob->z +
+                    mob_ptr->standing_on_mob->type->height;
+            } else {
+                c.z = mob_ptr->ground_sector->z;
+            }
+            components.push_back(c);
+        }
+        
+        //Limbs.
+        if(mob_ptr->parent && mob_ptr->parent->limb_anim.anim_db) {
+            unsigned char method = mob_ptr->parent->limb_draw_method;
+            world_component c;
+            c.mob_limb_ptr = mob_ptr;
+            
+            if(method == LIMB_DRAW_BELOW_BOTH) {
+                c.z = min(mob_ptr->z, mob_ptr->parent->m->z);
+            } else if(method == LIMB_DRAW_BELOW_CHILD) {
+                c.z = mob_ptr->z;
+            } else if(method == LIMB_DRAW_BELOW_PARENT) {
+                c.z = mob_ptr->parent->m->z;
+            } else if(method == LIMB_DRAW_ABOVE_PARENT) {
+                c.z =
+                    mob_ptr->parent->m->z +
+                    mob_ptr->parent->m->type->height +
+                    0.001;
+            } else if(method == LIMB_DRAW_ABOVE_CHILD) {
+                c.z = mob_ptr->z + mob_ptr->type->height + 0.001;
+            } else if(method == LIMB_DRAW_ABOVE_BOTH) {
+                c.z =
+                    max(
+                        mob_ptr->parent->m->z +
+                        mob_ptr->parent->m->type->height +
+                        0.001,
+                        mob_ptr->z + mob_ptr->type->height + 0.001
+                    );
+            }
+            
+            components.push_back(c);
+        }
+        
+        //The mob proper.
+        world_component c;
+        c.mob_ptr = mob_ptr;
+        if(mob_ptr->holder.m && mob_ptr->holder.above_holder) {
+            c.z = mob_ptr->holder.m->z + mob_ptr->holder.m->type->height + 0.01;
+        } else {
+            c.z = mob_ptr->z + mob_ptr->type->height;
+        }
+        components.push_back(c);
+        
+    }
+    
+    //Time to draw!
+    for(size_t c = 0; c < components.size(); ++c) {
+        components[c].nr = c;
+    }
+    
+    sort(
+        components.begin(), components.end(),
+    [] (world_component c1, world_component c2) -> bool {
+        if(c1.z == c2.z) {
+            return c1.nr < c2.nr;
+        }
+        return c1.z < c2.z;
+    }
+    );
+    
+    float mob_shadow_stretch = 0;
+    
+    if(day_minutes < 60 * 5 || day_minutes > 60 * 20) {
+        mob_shadow_stretch = 1;
+    } else if(day_minutes < 60 * 12) {
+        mob_shadow_stretch = 1 - ((day_minutes - 60 * 5) / (60 * 12 - 60 * 5));
+    } else {
+        mob_shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
+    }
+    
+    for(size_t c = 0; c < components.size(); ++c) {
+        world_component* c_ptr = &components[c];
+        
+        if(c_ptr->sector_ptr) {
+        
+            draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
+            
+            if(c_ptr->sector_ptr->associated_liquid) {
+                draw_liquid(c_ptr->sector_ptr, point(), 1.0f);
+            }
+            
+            draw_sector_shadows(c_ptr->sector_ptr, point(), 1.0f);
+            
+        } else if(c_ptr->mob_shadow_ptr) {
+        
+            draw_mob_shadow(
+                c_ptr->mob_shadow_ptr->pos,
+                c_ptr->mob_shadow_ptr->type->radius * 2,
+                c_ptr->mob_shadow_ptr->z -
+                c_ptr->mob_shadow_ptr->ground_sector->z,
+                mob_shadow_stretch
+            );
+            
+        } else if(c_ptr->mob_limb_ptr) {
+        
+            c_ptr->mob_limb_ptr->draw_limb();
+            
+        } else if(c_ptr->mob_ptr) {
+        
+            c_ptr->mob_ptr->draw();
+            
+        } else if(c_ptr->particle_ptr) {
+        
+            c_ptr->particle_ptr->draw();
+            
+        }
     }
 }
 

@@ -420,6 +420,8 @@ void load_mob_type_from_file(
         reader_setter rs(child_node);
         mob_type::child_struct new_child;
         
+        string limb_draw_method;
+        
         new_child.name = child_node->name;
         rs.set("spawn", new_child.spawn_name);
         rs.set("parent_holds", new_child.parent_holds);
@@ -438,8 +440,22 @@ void load_mob_type_from_file(
         rs.set("limb_parent_offset", new_child.limb_parent_offset);
         rs.set("limb_child_body_part", new_child.limb_child_body_part);
         rs.set("limb_child_offset", new_child.limb_child_offset);
+        rs.set("limb_draw_method", limb_draw_method);
         
         new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
+        if(limb_draw_method == "below_both") {
+            new_child.limb_draw_method = LIMB_DRAW_BELOW_BOTH;
+        } else if(limb_draw_method == "below_child") {
+            new_child.limb_draw_method = LIMB_DRAW_BELOW_CHILD;
+        } else if(limb_draw_method == "below_parent") {
+            new_child.limb_draw_method = LIMB_DRAW_BELOW_PARENT;
+        } else if(limb_draw_method == "above_parent") {
+            new_child.limb_draw_method = LIMB_DRAW_ABOVE_PARENT;
+        } else if(limb_draw_method == "above_child") {
+            new_child.limb_draw_method = LIMB_DRAW_ABOVE_CHILD;
+        } else if(limb_draw_method == "above_both") {
+            new_child.limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+        }
         
         mt->children.push_back(new_child);
     }

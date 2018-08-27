@@ -46,7 +46,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     o_ptr->spew_queue += seeds;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height - 0.01,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;

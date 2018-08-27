@@ -745,7 +745,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a burst of particles to symbolize the maturation.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = bmp_sparkle;
@@ -768,7 +768,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a dribble of particles to symbolize the regression.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = bmp_sparkle;
@@ -833,7 +833,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
         pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
     );
     ene_ptr->hold(
-        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle
+        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle, true
     );
     
     pik_ptr->focused_mob = ene_ptr;
@@ -903,13 +903,13 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_THROWN);
     
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->pos,
+        PARTICLE_TYPE_CIRCLE, m->pos, m->z,
         m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_pos = &m->pos;
+    pg.follow_mob = m;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }
@@ -966,17 +966,17 @@ void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
  * When a Pikmin seed lands on the ground.
  */
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
-    //Generate a dribble of particles to symbolize the regression.
+    //Generate the rock particles that come out.
     particle pa(
-        PARTICLE_TYPE_BITMAP, m->pos,
-        8, 1, PARTICLE_PRIORITY_LOW
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
+        4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = bmp_rock;
     pa.color = al_map_rgb(160, 80, 32);
-    pa.gravity = 100;
+    pa.gravity = 50;
     particle_generator pg(0, pa, 8);
     pg.number_deviation = 1;
-    pg.size_deviation = 4;
+    pg.size_deviation = 2;
     pg.angle = 0;
     pg.angle_deviation = TAU / 2;
     pg.total_speed = 50;
@@ -1317,7 +1317,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
         pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
     );
     mob_ptr->hold(
-        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle
+        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle, true
     );
     
     pik_ptr->was_thrown = false;
@@ -1526,14 +1526,13 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->pos,
+                PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = bmp_wave_ring;
             p.size_grow_speed = m->type->radius * 4;
-            p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow_pos = &m->pos;
+            pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }

@@ -55,7 +55,7 @@ void ship::heal_leader(leader* l) {
     
     particle p(
         PARTICLE_TYPE_BITMAP,
-        l->pos, 16, 3,
+        l->pos, l->z + l->type->height, 16, 3,
         PARTICLE_PRIORITY_LOW
     );
     p.bitmap = bmp_sparkle;
@@ -65,7 +65,6 @@ void ship::heal_leader(leader* l) {
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;
     g.pos_deviation = point(l->type->radius, l->type->radius);
-    //g.speed_deviation = point(0, 8);
     g.emit(particles);
 }
 
