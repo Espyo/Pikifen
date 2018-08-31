@@ -920,7 +920,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_RECEIVE_STATUS) {
     
-        m->apply_status_effect(&status_types[vs[0]], true);
+        m->apply_status_effect(&status_types[vs[0]], true, false);
         
         
     } else if(type == MOB_ACTION_RELEASE) {

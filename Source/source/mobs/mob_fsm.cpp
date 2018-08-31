@@ -28,7 +28,7 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     hazard* h = (hazard*) info1;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
-        m->apply_status_effect(h->effects[e], false);
+        m->apply_status_effect(h->effects[e], false, false);
     }
 }
 
@@ -40,7 +40,7 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
-        m->apply_status_effect(s->effects[e], false);
+        m->apply_status_effect(s->effects[e], false, false);
     }
 }
 

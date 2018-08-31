@@ -307,13 +307,24 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
 /* ----------------------------------------------------------------------------
  * Applies a status effect's effects.
  */
-void mob::apply_status_effect(status_type* s, const bool refill) {
-    if(parent && parent->relay_statuses) {
-        parent->m->apply_status_effect(s, refill);
+void mob::apply_status_effect(
+    status_type* s, const bool refill, const bool given_by_parent
+) {
+    if(parent && parent->relay_statuses && !given_by_parent) {
+        parent->m->apply_status_effect(s, refill, false);
         if(!parent->handle_statuses) return;
     }
     
-    if(!can_receive_status(s)) return;
+    if(!given_by_parent && !can_receive_status(s)) {
+        return;
+    }
+    
+    //Let's start by sending the status to the child mobs.
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        if(mobs[m]->parent && mobs[m]->parent->m == this) {
+            mobs[m]->apply_status_effect(s, refill, true);
+        }
+    }
     
     //Check if the mob is already under this status.
     for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
@@ -884,7 +895,7 @@ void mob::delete_old_status_effects() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the entirety of the mob. This means the mob itself, any limbs, etc.
+ * Draws the entirety of the mob.
  * effect_manager: Effect manager to use, if any.
  */
 void mob::draw(bitmap_effect_manager* effect_manager) {

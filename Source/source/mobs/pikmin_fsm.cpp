@@ -1544,7 +1544,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     if(p->invuln_period.time_left > 0) return;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
-        p->apply_status_effect(h->effects[e], false);
+        p->apply_status_effect(h->effects[e], false, false);
     }
 }
 
@@ -1557,7 +1557,7 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
-        m->apply_status_effect(s->effects[e], false);
+        m->apply_status_effect(s->effects[e], false, false);
     }
     
     if(s->buries_pikmin) {
