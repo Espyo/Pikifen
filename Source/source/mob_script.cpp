@@ -400,6 +400,21 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "set_limb_animation") {
+    
+        type = MOB_ACTION_SET_LIMB_ANIMATION;
+        
+        if(v.empty()) {
+            log_error(
+                "The \"set_limb_animation\" action needs to know the "
+                "name of the animation!", dn
+            );
+            valid = false;
+        } else {
+            vs.push_back(v);
+        }
+        
+        
     } else if(n == "set_state" && states) {
     
         type = MOB_ACTION_SET_STATE;
@@ -951,15 +966,6 @@ bool mob_action::run(
         m->set_animation(vi[0], false);
         
         
-    } else if(type == MOB_ACTION_START_CHOMPING) {
-    
-        m->chomp_max = vi[0];
-        m->chomp_body_parts.clear();
-        for(size_t p = 1; p < vi.size(); ++p) {
-            m->chomp_body_parts.push_back(vi[p]);
-        }
-        
-        
     } else if(type == MOB_ACTION_SET_FAR_REACH) {
     
         m->far_reach = vi[0];
@@ -986,6 +992,16 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_NEAR_REACH) {
     
         m->near_reach = vi[0];
+        
+    } else if(type == MOB_ACTION_SET_LIMB_ANIMATION) {
+    
+        if(!m->parent) return false;
+        if(!m->parent->limb_anim.anim_db) return false;
+        size_t a = m->parent->limb_anim.anim_db->find_animation(vs[0]);
+        if(a == INVALID) return false;
+        m->parent->limb_anim.cur_anim =
+            m->parent->limb_anim.anim_db->animations[a];
+        m->parent->limb_anim.start();
         
     } else if(type == MOB_ACTION_SET_STATE) {
     
@@ -1019,6 +1035,15 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_START_DYING) {
     
         m->start_dying();
+        
+        
+    } else if(type == MOB_ACTION_START_CHOMPING) {
+    
+        m->chomp_max = vi[0];
+        m->chomp_body_parts.clear();
+        for(size_t p = 1; p < vi.size(); ++p) {
+            m->chomp_body_parts.push_back(vi[p]);
+        }
         
         
     } else if(type == MOB_ACTION_START_PARTICLES) {

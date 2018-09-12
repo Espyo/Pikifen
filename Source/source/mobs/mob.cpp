@@ -1827,7 +1827,7 @@ void mob::tick_physics() {
                 }
                 ground_sector = sec;
                 center_sector = sec;
-                speed.x = speed.y = speed_z = 0;
+                speed.x = speed.y = 0;
                 pos = final_target_pos;
                 finished_moving = true;
             }

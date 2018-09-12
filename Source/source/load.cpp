@@ -669,15 +669,16 @@ void load_custom_particle_generators(const bool load_resources) {
         grs.set("number", number);
         
         prs.set("bitmap", bitmap_name);
-        if(load_resources) {
-            base_p.bitmap =
-                bitmaps.get(bitmap_name, p_node->get_child_by_name("bitmap"));
-        }
-        
-        if(base_p.bitmap) {
-            base_p.type = PARTICLE_TYPE_BITMAP;
-        } else {
+        if(bitmap_name.empty()) {
             base_p.type = PARTICLE_TYPE_CIRCLE;
+        } else {
+            if(load_resources) {
+                base_p.bitmap =
+                    bitmaps.get(
+                        bitmap_name, p_node->get_child_by_name("bitmap")
+                    );
+            }
+            base_p.type = PARTICLE_TYPE_BITMAP;
         }
         prs.set("duration",        base_p.duration);
         prs.set("friction",        base_p.friction);
