@@ -302,8 +302,9 @@ void load_mob_type_from_file(
     rs.set("rectangular_dimensions", mt->rectangular_dim);
     rs.set("height",                 mt->height);
     rs.set("weight",                 mt->weight);
-    rs.set("pushes",                 mt->pushes);
     rs.set("pushable",               mt->pushable);
+    rs.set("pushes",                 mt->pushes);
+    rs.set("pushes_with_hitboxes",   mt->pushes_with_hitboxes);
     rs.set("standable",              mt->standable);
     rs.set("show_health",            mt->show_health);
     rs.set("casts_shadow",           mt->casts_shadow);

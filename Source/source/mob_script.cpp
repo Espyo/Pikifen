@@ -213,6 +213,8 @@ mob_action::mob_action(
         if(v.empty()) {
             valid = false;
             log_error("The move action has no location specified!", dn);
+        } else if(v == "away_from_focused_mob") {
+            vi.push_back(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
         } else if(v == "focused_mob") {
             vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB);
         } else if(v == "focused_mob_position") {
@@ -878,7 +880,17 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_MOVE) {
     
-        if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
+        if(vi[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
+            if(m->focused_mob) {
+                float a = get_angle(m->pos, m->focused_mob->pos);
+                point offset = point(2000, 0);
+                offset = rotate_point(offset, a + TAU / 2.0);
+                m->chase(m->pos + offset, NULL, false);
+            } else {
+                m->stop_chasing();
+            }
+            
+        } else if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(point(), &m->focused_mob->pos, false);
             } else {
