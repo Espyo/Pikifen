@@ -1,0 +1,160 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	landing{
+		frames{
+			landing{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	dying{
+		loop_frame=5
+		frames{
+			idling{
+				duration=0.60
+			}
+			crumbling1{
+				duration=0.50
+			}
+			crumbling2{
+				duration=0.40
+			}
+			crumbling3{
+				duration=0.40
+			}
+			crumbling4{
+				duration=0.30
+			}
+			crumbling5{
+				duration=0.30
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Beady_Long_Legs.png
+		file_pos=422.00 286.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=0
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	landing{
+		file=Beady_Long_Legs.png
+		file_pos=422.00 286.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=40.00
+				type=1
+				value=60.00
+				hazards=crush
+				knockback_outward=true
+				knockback=0.50
+			}
+		}
+	}
+	crumbling1{
+		file=Beady_Long_Legs.png
+		file_pos=498.00 286.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	crumbling2{
+		file=Beady_Long_Legs.png
+		file_pos=574.00 286.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	crumbling3{
+		file=Beady_Long_Legs.png
+		file_pos=650.00 286.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	crumbling4{
+		file=Beady_Long_Legs.png
+		file_pos=422.00 362.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+	crumbling5{
+		file=Beady_Long_Legs.png
+		file_pos=498.00 362.00
+		file_size=75.00 75.00
+		hitboxes{
+			foot{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=37.50
+				type=2
+				value=1.00
+				knockback_outward=true
+				knockback=1.00
+			}
+		}
+	}
+}
+body_parts{
+	foot
+}

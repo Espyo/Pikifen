@@ -1,0 +1,105 @@
+name = Beady Long Legs
+
+allow_ground_attacks = false
+can_free_move = true
+health_regen = 0.4
+height = 420
+itch_damage = 50
+itch_time = 4
+max_health = 2000
+move_speed = 100
+radius = 71
+spawns {
+    foot_fr {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = 120 120
+        vars = id=fr
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_fl {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = 120 -120
+        vars = id=fl
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_br {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = -120 120
+        vars = id=br
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+    foot_bl {
+        object = Beady Long Legs foot
+        relative = true
+        coordinates = -120 -120
+        vars = id=bl
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+}
+children {
+    foot_fr {
+        spawn = foot_fr
+        handle_damage = false
+        relay_damage = true
+        handle_statuses = false
+        relay_statuses = true
+        limb_animation = limb_idling
+        limb_parent_body_part = front_right
+        limb_parent_offset = 4
+        limb_child_offset = -60
+        limb_thickness = 22
+        limb_draw_method = above_both
+    }
+    foot_fl {
+        spawn = foot_fl
+        handle_damage = false
+        relay_damage = true
+        handle_statuses = false
+        relay_statuses = true
+        limb_animation = limb_idling
+        limb_parent_body_part = front_left
+        limb_parent_offset = 4
+        limb_child_offset = -60
+        limb_thickness = 22
+        limb_draw_method = above_both
+    }
+    foot_br {
+        spawn = foot_br
+        handle_damage = false
+        relay_damage = true
+        handle_statuses = false
+        relay_statuses = true
+        limb_animation = limb_idling
+        limb_parent_body_part = back_right
+        limb_parent_offset = 4
+        limb_child_offset = -60
+        limb_thickness = 22
+        limb_draw_method = above_both
+    }
+    foot_bl {
+        spawn = foot_bl
+        handle_damage = false
+        relay_damage = true
+        handle_statuses = false
+        relay_statuses = true
+        limb_animation = limb_idling
+        limb_parent_body_part = back_left
+        limb_parent_offset = 4
+        limb_child_offset = -60
+        limb_thickness = 22
+        limb_draw_method = above_both
+    }
+}
+reaches {
+    ambush = 300 360
+}
+rotation_speed = 30
+territory_radius = 300
+value = 300

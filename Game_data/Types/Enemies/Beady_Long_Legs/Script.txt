@@ -1,0 +1,181 @@
+first_state = hidden
+death_state = dying1
+states_ignoring_death = dying1; dying2
+
+init {
+    set_var max_step_distance 100
+    set_var max_turn_angle 75
+    set_var min_turn_angle 20
+    set_var feet_normal_distance 175
+    set_var can_rest false
+}
+
+script {
+    hidden {
+        on_enter {
+            set_animation idling
+            set_hiding true
+            set_near_reach ambush
+        }
+        on_opponent_in_reach {
+            set_state ambushing
+        }
+    }
+    
+    ambushing {
+        on_enter {
+            set_hiding false
+            teleport relative 0 0 1000
+            set_gravity 1
+            send_message 0 ambush
+            set_animation idling
+        }
+        on_receive_message {
+            set_state resting
+        }
+    }
+    
+    resting {
+        on_enter {
+            set_animation resting
+        }
+        on_animation_end {
+            set_var can_rest false
+            set_state deciding
+        }
+        on_tick {
+            move linked_mob_average
+            turn arachnorb_head_logic
+        }
+        on_far_from_home {
+            set_var must_turn_home true
+        }
+    }
+    
+    deciding {
+        on_enter {
+            set_animation pausing
+        }
+        on_far_from_home {
+            arachnorb_plan_logic home
+            set_state move_fr
+        }
+        on_itch {
+            set_state shaking
+        }
+        on_animation_end {
+            randomize_var decision 1 2
+            if var decision = 1
+                randomize_var decision 1 3
+                if var decision = 1
+                    arachnorb_plan_logic forward
+                    set_state move_fr
+                end_if
+                if var decision = 2
+                    arachnorb_plan_logic cw_turn
+                    set_state move_fr
+                end_if
+                if var decision = 3
+                    arachnorb_plan_logic ccw_turn
+                    set_state move_fr
+                end_if
+                
+            else
+                if var can_rest = true
+                    set_state resting
+                else
+                    arachnorb_plan_logic forward
+                    set_state move_fr
+                end_if
+            end_if
+        }
+    }
+    
+    move_fr {
+        on_enter {
+            set_var can_rest true
+            set_animation idling
+            send_message 0 move_fr
+        }
+        on_tick {
+            move linked_mob_average
+            turn arachnorb_head_logic
+        }
+        on_receive_message {
+            set_state move_fl
+        }
+    }
+    
+    move_fl {
+        on_enter {
+            send_message 0 move_fl
+            set_timer 1
+        }
+        on_tick {
+            move linked_mob_average
+            turn arachnorb_head_logic
+        }
+        on_receive_message {
+            set_state move_br
+        }
+    }
+    
+    move_br {
+        on_enter {
+            send_message 0 move_br
+            set_timer 1
+        }
+        on_tick {
+            move linked_mob_average
+            turn arachnorb_head_logic
+        }
+        on_receive_message {
+            set_state move_bl
+        }
+    }
+    
+    move_bl {
+        on_enter {
+            send_message 0 move_bl
+            set_timer 1
+        }
+        on_tick {
+            move linked_mob_average
+            turn arachnorb_head_logic
+        }
+        on_receive_message {
+            set_state deciding
+        }
+    }
+    
+    shaking {
+        on_enter {
+            set_animation shaking
+        }
+        on_animation_end {
+            set_state deciding
+        }
+    }
+    
+    dying1 {
+        on_enter {
+            set_animation dying1
+            start_dying
+        }
+        on_animation_end {
+            set_state dying2
+        }
+    }
+    
+    dying2 {
+        on_enter {
+            set_animation dying2
+            start_particles beady_long_legs_crumbling 0 0
+            send_message 0 die
+        }
+        on_animation_end {
+            finish_dying
+            delete
+        }
+    }
+}

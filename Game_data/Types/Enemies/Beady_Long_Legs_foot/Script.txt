@@ -1,0 +1,141 @@
+first_state = hidden
+
+init {
+    
+}
+
+script {
+    hidden {
+        on_enter {
+            set_animation idling
+            set_hiding true
+        }
+        on_receive_message {
+            set_hiding false
+            teleport relative 0 0 1000
+            set_gravity 1
+            set_state ambushing
+        }
+    }
+    
+    ambushing {
+        on_land {
+            send_message 0 landed
+            start_particles dust_explosion 0 0
+            set_state idling
+        }
+    }
+    
+    idling {
+        on_enter {
+            set_animation idling
+        }
+        on_receive_message {
+            if var id = fr
+                if message = move_fr
+                    move arachnorb_foot_logic
+                    set_state rising
+                end_if
+            end_if
+            if var id = fl
+                if message = move_fl
+                    move arachnorb_foot_logic
+                    set_state rising
+                end_if
+            end_if
+            if var id = br
+                if message = move_br
+                    move arachnorb_foot_logic
+                    set_state rising
+                end_if
+            end_if
+            if var id = bl
+                if message = move_bl
+                    move arachnorb_foot_logic
+                    set_state rising
+                end_if
+            end_if
+            
+            if message = die
+                set_state dying
+            end_if
+        }
+    }
+    
+    rising {
+        on_enter {
+            set_gravity -1
+            set_timer 0.4
+        }
+        on_reach_destination {
+            stop
+        }
+        on_timer {
+            set_state floating
+        }
+        on_receive_message {
+            if message = die
+                set_state dying
+            end_if
+        }
+    }
+    
+    floating {
+        on_enter {
+            set_gravity 0
+            stop vertically
+            set_timer 0.2
+        }
+        on_reach_destination {
+            stop
+        }
+        on_timer {
+            set_state falling
+        }
+        on_receive_message {
+            if message = die
+                set_state dying
+            end_if
+        }
+    }
+    
+    falling {
+        on_enter {
+            set_gravity 2
+            stop
+        }
+        on_land {
+            set_state landing
+        }
+        on_receive_message {
+            if message = die
+                set_state dying
+            end_if
+        }
+    }
+    
+    landing {
+        on_enter {
+            set_animation landing
+            send_message 0 landed
+            start_particles dust_explosion 0 0
+        }
+        on_animation_end {
+            set_state idling
+        }
+        on_receive_message {
+            if message = die
+                set_state dying
+            end_if
+        }
+    }
+    
+    dying {
+        on_enter {
+            set_gravity 1
+            stop
+            set_animation dying
+            set_limb_animation limb_dying
+        }
+    }
+}
