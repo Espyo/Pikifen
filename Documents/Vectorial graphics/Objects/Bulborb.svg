@@ -16,6 +16,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Bulborb.svg">
+  <title
+     id="title1326">Red Bulborb spritesheet</title>
   <defs
      id="defs4743">
     <linearGradient
@@ -1962,8 +1964,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-366.39408"
-     inkscape:cy="-199.57677"
+     inkscape:cx="400.60592"
+     inkscape:cy="-211.57677"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1995,7 +1997,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Red Bulborb spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Red Bulborb and Dwarf Red Bulborb pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

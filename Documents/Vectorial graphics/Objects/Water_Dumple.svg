@@ -17,6 +17,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Water_Dumple.svg">
+  <title
+     id="title2948">Water Dumple spritesheet</title>
   <defs
      id="defs4">
     <linearGradient
@@ -8285,9 +8287,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="-109.58866"
-     inkscape:cy="-748.48754"
+     inkscape:zoom="0.59696389"
+     inkscape:cx="535.46667"
+     inkscape:cy="-731.19998"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -8321,7 +8323,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Water Dumple spritesheet</dc:title>
+        <dc:description>Spritesheet for the Water Dumple and Electric Water Dumple pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

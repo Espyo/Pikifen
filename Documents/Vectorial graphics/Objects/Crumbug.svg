@@ -17,6 +17,8 @@
    id="svg8"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Crumbug.svg">
+  <title
+     id="title1017">Crumbug spritesheet</title>
   <defs
      id="defs2">
     <linearGradient
@@ -854,9 +856,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="-615.873"
-     inkscape:cy="-231.09181"
+     inkscape:zoom="6.1356785"
+     inkscape:cx="67.499999"
+     inkscape:cy="-16.499979"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -888,7 +890,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Crumbug spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Crumbug pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

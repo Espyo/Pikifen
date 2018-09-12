@@ -2050,12 +2050,12 @@ void mob::tick_physics() {
         
         if(!successful_move) break;
         
-        //Check also if it can go on top of another mob.
+        //Check also if it can walk on top of another mob.
         standing_on_mob = NULL;
         
         for(size_t m = 0; m < mobs.size(); ++m) {
             mob* m_ptr = mobs[m];
-            if(!m_ptr->type->standable) {
+            if(!m_ptr->type->walkable) {
                 continue;
             }
             if(m_ptr == this) {

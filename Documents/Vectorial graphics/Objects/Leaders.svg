@@ -16,6 +16,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Leaders.svg">
+  <title
+     id="title1771">Leader spritesheets</title>
   <defs
      id="defs7093">
     <linearGradient
@@ -2704,9 +2706,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="-664.4576"
-     inkscape:cy="384.34439"
+     inkscape:zoom="1.8774189"
+     inkscape:cx="141"
+     inkscape:cy="232.50006"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -2742,7 +2744,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Leader spritesheets</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:description>Spritesheet for the various leaders pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
       </cc:Work>
     </rdf:RDF>
   </metadata>

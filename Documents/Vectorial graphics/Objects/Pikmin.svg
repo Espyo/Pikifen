@@ -19,6 +19,8 @@
    inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Documents/Vectorial graphics/Objects/Pikmin.svg.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
+  <title
+     id="title1827">Pikmin spritesheets</title>
   <defs
      id="defs4">
     <linearGradient
@@ -2008,9 +2010,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="-44.267963"
-     inkscape:cy="-202.6195"
+     inkscape:zoom="1.2615053"
+     inkscape:cx="199"
+     inkscape:cy="-104.98492"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -2055,7 +2057,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Pikmin spritesheets</dc:title>
+        <dc:description>Spritesheet for the various Pikmin types pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

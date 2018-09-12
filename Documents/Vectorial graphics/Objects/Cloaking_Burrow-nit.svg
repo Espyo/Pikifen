@@ -16,6 +16,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Cloaking_Burrow-nit.svg">
+  <title
+     id="title1239">Cloaking Burrow-nit spritesheet</title>
   <defs
      id="defs4">
     <linearGradient
@@ -1715,9 +1717,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313709"
-     inkscape:cx="344.41592"
-     inkscape:cy="-30.633898"
+     inkscape:zoom="2.1458699"
+     inkscape:cx="252.5"
+     inkscape:cy="-69.000061"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1753,7 +1755,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title>Cloaking Burrow-nit spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Cloaking Burrow-nit pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

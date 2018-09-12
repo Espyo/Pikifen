@@ -43,7 +43,7 @@ mob_type::mob_type(size_t category_id) :
     pushes(false),
     pushable(false),
     pushes_with_hitboxes(false),
-    standable(false),
+    walkable(false),
     max_health(0),
     health_regen(0),
     territory_radius(0),
@@ -305,7 +305,7 @@ void load_mob_type_from_file(
     rs.set("pushable",               mt->pushable);
     rs.set("pushes",                 mt->pushes);
     rs.set("pushes_with_hitboxes",   mt->pushes_with_hitboxes);
-    rs.set("standable",              mt->standable);
+    rs.set("walkable",               mt->walkable);
     rs.set("show_health",            mt->show_health);
     rs.set("casts_shadow",           mt->casts_shadow);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);

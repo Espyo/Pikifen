@@ -20,6 +20,8 @@
    inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
+  <title
+     id="title878">White Spectralid spritesheet</title>
   <defs
      id="defs4">
     <linearGradient
@@ -166,9 +168,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="63.399568"
-     inkscape:cy="-68.558977"
+     inkscape:zoom="5.3844572"
+     inkscape:cx="-3.7333333"
+     inkscape:cy="-46.93333"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -199,7 +201,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>White Spectralid spritesheet</dc:title>
+        <dc:description>Spritesheet for the White Spectralid pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

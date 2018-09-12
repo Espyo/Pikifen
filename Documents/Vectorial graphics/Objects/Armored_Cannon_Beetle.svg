@@ -17,6 +17,8 @@
    id="svg837"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Armored_Cannon_Beetle.svg">
+  <title
+     id="title2363">Armored Cannon Beetle spritesheet</title>
   <defs
      id="defs831">
     <linearGradient
@@ -5465,8 +5467,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35355339"
-     inkscape:cx="-573.12784"
-     inkscape:cy="-779.41999"
+     inkscape:cx="597.84099"
+     inkscape:cy="-909.52764"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -5501,7 +5503,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Armored Cannon Beetle spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>Spritesheet for the Armored Cannon Beetle pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
       </cc:Work>
     </rdf:RDF>
   </metadata>

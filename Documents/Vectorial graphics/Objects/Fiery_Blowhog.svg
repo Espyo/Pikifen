@@ -17,6 +17,8 @@
    id="svg8"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Fiery_Blowhog.svg">
+  <title
+     id="title1429">Fiery Blowhog spritesheet</title>
   <defs
      id="defs2">
     <linearGradient
@@ -2287,9 +2289,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="6.58146"
-     inkscape:cy="-168.70162"
+     inkscape:zoom="1.5645161"
+     inkscape:cx="323.99997"
+     inkscape:cy="-143.00001"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
@@ -2324,7 +2326,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Fiery Blowhog spritesheet</dc:title>
+        <dc:description>Spritesheet for the Fiery Blowhog pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

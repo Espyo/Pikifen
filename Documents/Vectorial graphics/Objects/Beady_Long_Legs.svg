@@ -17,6 +17,8 @@
    viewBox="0 0 793.7007874 1122.519685"
    height="297mm"
    width="210mm">
+  <title
+     id="title3902">Beady Long Legs spritesheet</title>
   <sodipodi:namedview
      inkscape:snap-global="true"
      inkscape:measure-end="2,-155"
@@ -40,8 +42,8 @@
      showgrid="false"
      inkscape:current-layer="layer1"
      inkscape:document-units="px"
-     inkscape:cy="-119.8943"
-     inkscape:cx="268.40036"
+     inkscape:cy="-122.8943"
+     inkscape:cx="300.40036"
      inkscape:zoom="1"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -14605,7 +14607,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Beady Long Legs spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Beady Long Legs pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

@@ -15,8 +15,10 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg5829"
    version="1.1"
-   inkscape:version="0.92.2 (unknown)"
+   inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Effects.svg">
+  <title
+     id="title1001">Effect and particle spritesheet</title>
   <defs
      id="defs5831">
     <linearGradient
@@ -638,9 +640,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.2371128"
-     inkscape:cx="304.07474"
-     inkscape:cy="217.31732"
+     inkscape:zoom="1.7042744"
+     inkscape:cx="356.44971"
+     inkscape:cy="122.66669"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -668,7 +670,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Effect and particle spritesheet</dc:title>
+        <dc:description>Spritesheet for the various particles and effects pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

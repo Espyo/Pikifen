@@ -20,6 +20,8 @@
    inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
+  <title
+     id="title2207">Yellow Wollywog spritesheet</title>
   <defs
      id="defs1581">
     <inkscape:path-effect
@@ -4765,9 +4767,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="245.89389"
-     inkscape:cy="-148.51458"
+     inkscape:zoom="1.556089"
+     inkscape:cx="216"
+     inkscape:cy="-248.51094"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -4803,7 +4805,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Yellow Wollywog spritesheet</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the Yellow Wollywog pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

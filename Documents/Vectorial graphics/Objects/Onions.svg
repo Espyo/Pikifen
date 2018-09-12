@@ -16,6 +16,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Onions.svg">
+  <title
+     id="title902">Onion spritesheets</title>
   <defs
      id="defs6168">
     <radialGradient
@@ -341,9 +343,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="-217.62011"
-     inkscape:cy="356.28897"
+     inkscape:zoom="1.5663508"
+     inkscape:cx="69.43126"
+     inkscape:cy="279.8042"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -373,7 +375,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Onion spritesheets</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the various Onions pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>

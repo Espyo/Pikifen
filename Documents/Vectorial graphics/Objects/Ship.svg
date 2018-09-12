@@ -16,6 +16,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Ship.svg">
+  <title
+     id="title866">Ship spritesheets</title>
   <defs
      id="defs6595">
     <linearGradient
@@ -230,9 +232,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="117.56647"
-     inkscape:cy="92.416131"
+     inkscape:zoom="7.7256625"
+     inkscape:cx="68.5"
+     inkscape:cy="56.499991"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -262,7 +264,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Ship spritesheets</dc:title>
+        <dc:description>Spritesheet for the various ships pre-packaged pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

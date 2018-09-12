@@ -136,7 +136,7 @@ public:
     bool pushes; //Blocks passage of other mobs.
     bool pushable; //Can be pushed by other mobs.
     bool pushes_with_hitboxes; //Is the push via hitbox, or mob radius?
-    bool standable;
+    bool walkable;
     point rectangular_dim;
     
     //Behavior things.

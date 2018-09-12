@@ -17,6 +17,8 @@
    version="1.1"
    inkscape:version="0.92.3 (unknown)"
    sodipodi:docname="Sheargrubs.svg">
+  <title
+     id="title922">Sheargrub spritesheets</title>
   <defs
      id="defs4">
     <linearGradient
@@ -440,9 +442,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.99999996"
-     inkscape:cx="-284.98856"
-     inkscape:cy="33.965321"
+     inkscape:zoom="5.8105965"
+     inkscape:cx="60.266666"
+     inkscape:cy="62.400005"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -472,7 +474,20 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Sheargrub spritesheets</dc:title>
+        <cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>Pikifen spritesheet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>Spritesheet for the various Sheargrubs pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>
