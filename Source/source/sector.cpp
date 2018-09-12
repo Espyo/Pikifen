@@ -2635,11 +2635,12 @@ TRIANGULATION_ERRORS triangulate(
     //as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
     
-    s_ptr->triangles.clear();
     vector<vertex*> vertexes_left = outer_poly;
     vector<size_t> ears;
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;
+    s_ptr->triangles.clear();
+    s_ptr->triangles.reserve(vertexes_left.size() - 2);
     
     //Begin by making a list of all concave, convex and ear vertexes.
     get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);

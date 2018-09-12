@@ -2014,17 +2014,37 @@ void animation_editor::load() {
     [this] (lafi::widget * t) {
         string new_name = ((lafi::textbox*) t)->text;
         if(new_name.empty()) {
+            emit_status_bar_message(
+                "A body part's name can't be empty!", false
+            );
             body_part_to_gui();
             return;
         }
         for(size_t b = 0; b < anims.body_parts.size(); ++b) {
             if(b == cur_body_part_nr) continue;
             if(anims.body_parts[b]->name == new_name) {
+                emit_status_bar_message(
+                    "Another body part already has the name \"" + new_name +
+                    "\"!", false
+                );
                 body_part_to_gui();
                 return;
             }
         }
+        string old_name = anims.body_parts[cur_body_part_nr]->name;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            for(size_t h = 0; h < anims.sprites[s]->hitboxes.size(); ++h) {
+                if(anims.sprites[s]->hitboxes[h].body_part_name == old_name) {
+                    anims.sprites[s]->hitboxes[h].body_part_name = new_name;
+                }
+            }
+        }
         anims.body_parts[cur_body_part_nr]->name = new_name;
+        
+        emit_status_bar_message(
+            "Successfully renamed the body part \"" + old_name + "\" to \"" +
+            new_name + "\".", false
+        );
         update_hitboxes();
         body_part_to_gui();
         made_new_changes = true;
@@ -2429,6 +2449,7 @@ void animation_editor::load() {
     loaded_content_yet = false;
     populate_history();
     frm_toolbar->hide();
+    side_view = false;
     state = EDITOR_STATE_LOAD;
     change_to_right_frame();
     

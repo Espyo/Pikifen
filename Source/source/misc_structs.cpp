@@ -364,19 +364,22 @@ dist::dist(const float d) :
  * Returns the regular distance as a number.
  */
 float dist::to_float() {
-    if(has_normal_distance) {
-        return normal_distance;
-    } else {
+    if(!has_normal_distance) {
         normal_distance = sqrt(distance_squared);
         has_normal_distance = true;
-        return normal_distance;
     }
+    return normal_distance;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Distance comparisons and plain operations.
  */
+dist &dist::operator =(const float d) {
+    distance_squared = d * d;
+    normal_distance = d;
+    has_normal_distance = true;
+}
 bool dist::operator<(const float d2) {
     return distance_squared < (d2 * d2);
 }

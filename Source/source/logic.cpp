@@ -716,7 +716,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 z_touch =
                     !(
                         (m2_ptr->z > m_ptr->z + m_ptr->type->height) ||
-                        (m2_ptr->z + m2_ptr->type->height < m2_ptr->z)
+                        (m2_ptr->z + m2_ptr->type->height < m_ptr->z)
                     );
             }
             
@@ -824,7 +824,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         );
                         //It's more optimized to get the hitbox position here
                         //instead of calling hitbox::get_cur_pos because
-                        //we already know the sin and cosine, so they don't
+                        //we already know the sine and cosine, so they don't
                         //need to be re-calculated.
                         
                         dist hd(m_ptr->pos, h_pos);

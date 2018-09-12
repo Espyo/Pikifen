@@ -130,8 +130,14 @@ struct button_manager {
 /* ----------------------------------------------------------------------------
  * A distance.
  * Basically this is just a number, but for optimization's sake,
- * This number is actually the distance SQUARED.
- * It's better to compare two squared distances than square-rooting them both.
+ * this number is actually the distance SQUARED.
+ * It's faster to compare two squared distances than square-rooting them both,
+ * since sqrt() is so costly. If we do need to sqrt() a number, we keep it in
+ * a cache inside the class, so that we can use it at will next time.
+ * Fun fact, keeping an extra boolean in the class that indicates whether or
+ * not the sqrt()'d number is in cache is around twice as fast as keeping
+ * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
+ * to INFINITY if it is uncached.
  */
 struct dist {
 private:
@@ -142,7 +148,7 @@ private:
 public:
     dist(const point &p1, const point &p2);
     dist(const float d = 0.0f);
-    float to_float();
+    dist &operator =(const float d);
     bool operator <(const float d2);
     bool operator <(const dist &d2);
     bool operator <=(const float d2);
@@ -156,6 +162,7 @@ public:
     bool operator !=(const float d2);
     bool operator !=(const dist &d2);
     void operator +=(const dist &d2);
+    float to_float();
 };
 
 
