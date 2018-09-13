@@ -332,6 +332,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -379,7 +380,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::be_dismissed);
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -421,7 +424,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::be_dismissed);
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -516,6 +521,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -675,6 +681,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run(leader_fsm::start_waking_up);
+            efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
     }
@@ -735,7 +742,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::start_waking_up);
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -779,6 +788,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -801,6 +811,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
         }
     }
     
@@ -1117,6 +1128,7 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::punch(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PUNCHING);
+    m->intended_turn_angle = m->angle;
 }
 
 

@@ -97,6 +97,7 @@ void onion::call_pikmin() {
     }
 }
 
+const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
 /* ----------------------------------------------------------------------------
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
@@ -130,7 +131,7 @@ void onion::spew() {
     new_pikmin->maturity = 0;
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
-    
+    next_spew_angle = normalize_angle(next_spew_angle);
 }
 
 

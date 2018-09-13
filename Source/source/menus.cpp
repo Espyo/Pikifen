@@ -1167,19 +1167,19 @@ void area_menu::load() {
         change_game_state(GAME_STATE_GAME);
         return;
     }
-	
-	for(size_t a = 0; a < areas_to_pick.size(); ++a) {
-		string actual_name = areas_to_pick[a];
-		data_node data(AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt");
-		if(data.file_was_opened) {
-			string s = data.get_child_by_name("name")->value;
-			if(!s.empty()) {
-				actual_name = s;
-			}
-		}
-		
-		area_names.push_back(actual_name);
-	}
+    
+    for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+        string actual_name = areas_to_pick[a];
+        data_node data(AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt");
+        if(data.file_was_opened) {
+            string s = data.get_child_by_name("name")->value;
+            if(!s.empty()) {
+                actual_name = s;
+            }
+        }
+        
+        area_names.push_back(actual_name);
+    }
     
     //Resources.
     bmp_menu_bg = load_bmp(asset_file_names.main_menu);
@@ -1290,7 +1290,7 @@ void area_menu::unload() {
     menu_widgets.clear();
     area_buttons.clear();
     areas_to_pick.clear();
-	area_names.clear();
+    area_names.clear();
     cur_page_nr_widget = NULL;
     
 }
@@ -1365,9 +1365,11 @@ void area_menu::update() {
     size_t list_nr = 0;
     for(; list_nr < 8 && area_nr < areas_to_pick.size(); ++area_nr, ++list_nr) {
         string area_name = area_names[area_nr];
+        string area_folder = areas_to_pick[area_nr];
         
-        ((menu_button*) area_buttons[list_nr])->click_handler = [area_name] () {
-            area_to_load = area_name;
+        ((menu_button*) area_buttons[list_nr])->click_handler =
+        [area_name, area_folder] () {
+            area_to_load = area_folder;
             fade_mgr.start_fade(false, [] () {
                 change_game_state(GAME_STATE_GAME);
             });

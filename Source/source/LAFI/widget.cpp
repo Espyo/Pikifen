@@ -326,6 +326,7 @@ void widget::draw() {
  */
 void widget::simulate_click() {
     if(is_disabled()) return;
+    parent->give_focus(this);
     call_left_mouse_click_handler(0, 0);
 }
 

@@ -890,7 +890,7 @@ void gameplay::draw_ingame_text() {
                 cur_leader_ptr->pos.y -
                 cur_leader_ptr->type->radius
             ),
-            "Stop plucking", &controls[0][whistle_control_id]
+            "Stop", &controls[0][whistle_control_id]
         );
         done = true;
     }
