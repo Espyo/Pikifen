@@ -12,6 +12,7 @@ script {
         }
         on_receive_message {
             set_hiding false
+            start_height_effect
             teleport relative 0 0 1000
             set_gravity 1
             set_state ambushing
@@ -21,6 +22,7 @@ script {
     ambushing {
         on_land {
             send_message 0 landed
+            stop_height_effect
             start_particles dust_explosion 0 0
             set_state idling
         }
@@ -64,6 +66,7 @@ script {
     
     rising {
         on_enter {
+            start_height_effect
             set_gravity -1
             set_timer 0.4
         }
@@ -116,6 +119,7 @@ script {
     
     landing {
         on_enter {
+            stop_height_effect
             set_animation landing
             send_message 0 landed
             start_particles dust_explosion 0 0

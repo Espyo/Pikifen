@@ -375,6 +375,8 @@ public:
     bool hide;
     //Is invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
+    //If not INFINITY, compare the Z with this to shrink/grow the sprite.
+    float height_effect_pivot;
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
     //Status effects currently inflicted on the mob.
@@ -431,6 +433,8 @@ public:
     bool should_attack(mob* m);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);
+    void start_height_effect();
+    void stop_height_effect();
     void release_chomped_pikmin();
     void send_message(mob* receiver, string &msg);
     mob* spawn(mob_type::spawn_struct* info);

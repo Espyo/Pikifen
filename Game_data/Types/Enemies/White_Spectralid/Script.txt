@@ -56,6 +56,7 @@ script {
     
     flying {
         on_enter {
+            start_height_effect
             set_animation flapping
             set_gravity -2
             set_timer 0.3

@@ -99,6 +99,7 @@ script {
     
     jumping_up_1 {
         on_enter {
+            start_height_effect
             set_gravity -2
             set_timer 0.2
             set_animation jumping_up
@@ -153,6 +154,7 @@ script {
     
     landing {
         on_enter {
+            stop_height_effect
             set_gravity 1
             set_animation landing
             start_particles dust_explosion 0 0

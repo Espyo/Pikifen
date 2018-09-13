@@ -80,6 +80,7 @@ mob::mob(
     invuln_period(0),
     team(MOB_TEAM_DECORATION),
     hide(false),
+    height_effect_pivot(INFINITY),
     on_hazard(nullptr),
     dead(false),
     chomp_max(0),
@@ -300,6 +301,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
         speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         speed_z = MOB_KNOCKBACK_V_POWER;
         face(get_angle(point(), point(speed)) + TAU / 2, NULL);
+        start_height_effect();
     }
 }
 
@@ -1217,7 +1219,18 @@ point mob::get_sprite_dimensions(sprite* s, float* scale) {
     dim.y *= s->scale.y;
     
     float sucking_mult = 1.0;
-    float height_mult = 1 + z * MOB_SPRITE_Z_GROWTH_FACTOR;
+    float height_mult = 1.0;
+    
+    if(height_effect_pivot != INFINITY) {
+        height_mult +=
+            (z - height_effect_pivot) * MOB_HEIGHT_EFFECT_FACTOR;
+    }
+    height_mult = max(height_mult, 1.0f);
+    if(ground_sector->is_bottomless_pit && height_mult == 1.0f) {
+        height_mult =
+            (z - ground_sector->z) /
+            (height_effect_pivot - ground_sector->z);
+    }
     
     float final_scale = sucking_mult * height_mult;
     if(scale) *scale = final_scale;
@@ -1618,6 +1631,23 @@ void mob::start_dying() {
 
 
 /* ----------------------------------------------------------------------------
+ * From here on out, the mob's Z changes will be reflected in the height
+ * effect.
+ */
+void mob::start_height_effect() {
+    height_effect_pivot = z;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * From here on out, stop using the height effect.
+ */
+void mob::stop_height_effect() {
+    height_effect_pivot = INFINITY;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes a mob not follow any target any more.
  */
 void mob::stop_chasing() {
@@ -1752,6 +1782,12 @@ void mob::tick_misc_logic() {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
             ++g;
+        }
+    }
+    
+    if(ground_sector->is_bottomless_pit) {
+        if(height_effect_pivot == INFINITY) {
+            height_effect_pivot = z;
         }
     }
 }
@@ -2296,29 +2332,38 @@ void mob::tick_physics() {
         }
     }
     
-    //Landing on a bottomless pit or hazardous floor.
-    hazard* new_on_hazard = NULL;
+    //Gravity.
+    speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+    
+    //Actual movement.
     z += delta_t* speed_z;
-    if(standing_on_mob) {
-        z = standing_on_mob->z + standing_on_mob->type->height;
-        speed_z = 0;
-        was_thrown = false;
-        fsm.run_event(MOB_EVENT_LANDED);
-    } else if(z <= ground_sector->z) {
-        z = ground_sector->z;
-        speed_z = 0;
-        was_thrown = false;
-        fsm.run_event(MOB_EVENT_LANDED);
-        if(ground_sector->is_bottomless_pit) {
-            fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
-        }
-        
-        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
-            fsm.run_event(
-                MOB_EVENT_TOUCHED_HAZARD,
-                (void*) ground_sector->hazards[h]
-            );
-            new_on_hazard = ground_sector->hazards[h];
+    
+    //Landing.
+    hazard* new_on_hazard = NULL;
+    if(speed_z <= 0) {
+        if(standing_on_mob) {
+            z = standing_on_mob->z + standing_on_mob->type->height;
+            speed_z = 0;
+            was_thrown = false;
+            fsm.run_event(MOB_EVENT_LANDED);
+        } else if(z <= ground_sector->z) {
+            z = ground_sector->z;
+            speed_z = 0;
+            was_thrown = false;
+            fsm.run_event(MOB_EVENT_LANDED);
+            stop_height_effect();
+            
+            if(ground_sector->is_bottomless_pit) {
+                fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
+            }
+            
+            for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+                fsm.run_event(
+                    MOB_EVENT_TOUCHED_HAZARD,
+                    (void*) ground_sector->hazards[h]
+                );
+                new_on_hazard = ground_sector->hazards[h];
+            }
         }
     }
     
@@ -2328,17 +2373,6 @@ void mob::tick_physics() {
         z_cap = FLT_MAX;
     } else if(z_cap < FLT_MAX) {
         z = min(z, z_cap);
-    }
-    
-    //Gravity.
-    if(gravity_mult > 0) {
-        if(z > ground_sector->z && !standing_on_mob) {
-            speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
-        } else {
-            speed_z = 0;
-        }
-    } else {
-        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
     }
     
     //On a sector that has a hazard that is not on the floor.

@@ -1308,6 +1308,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
+    pik_ptr->stop_height_effect();
     
     pik_ptr->focused_mob = mob_ptr;
     

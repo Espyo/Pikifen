@@ -25,12 +25,14 @@ script {
     ambushing {
         on_enter {
             set_hiding false
+            start_height_effect
             teleport relative 0 0 1000
             set_gravity 1
             send_message 0 ambush
             set_animation idling
         }
         on_receive_message {
+            stop_height_effect
             set_state resting
         }
     }

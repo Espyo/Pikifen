@@ -537,6 +537,11 @@ mob_action::mob_action(
         type = MOB_ACTION_START_DYING;
         
         
+    } else if(n == "start_height_effect") {
+    
+        type = MOB_ACTION_START_HEIGHT_EFFECT;
+        
+        
     } else if(n == "start_particles") {
     
         type = MOB_ACTION_START_PARTICLES;
@@ -576,6 +581,11 @@ mob_action::mob_action(
     } else if(n == "stop_chomping") {
     
         type = MOB_ACTION_STOP_CHOMPING;
+        
+        
+    } else if(n == "stop_height_effect") {
+    
+        type = MOB_ACTION_STOP_HEIGHT_EFFECT;
         
         
     } else if(n == "stop_particles") {
@@ -1058,6 +1068,11 @@ bool mob_action::run(
         }
         
         
+    } else if(type == MOB_ACTION_START_HEIGHT_EFFECT) {
+    
+        m->start_height_effect();
+        
+        
     } else if(type == MOB_ACTION_START_PARTICLES) {
     
         if(vs.empty()) {
@@ -1093,6 +1108,11 @@ bool mob_action::run(
     
         m->chomp_max = 0;
         m->chomp_body_parts.clear();
+        
+        
+    } else if(type == MOB_ACTION_STOP_HEIGHT_EFFECT) {
+    
+        m->stop_height_effect();
         
         
     } else if(type == MOB_ACTION_STOP_PARTICLES) {

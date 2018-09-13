@@ -1086,7 +1086,8 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->z_cap =
         m->z + get_max_throw_height(holding_ptr->speed_z);
-        
+    holding_ptr->start_height_effect();
+    
     holding_ptr->angle = angle;
     holding_ptr->face(angle, NULL);
     
