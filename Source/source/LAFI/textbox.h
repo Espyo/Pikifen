@@ -37,6 +37,8 @@ public:
     size_t tab_index;
     //If you press the Enter key, simulate a click on this widget.
     widget* enter_key_widget;
+    //When there's no text, write this.
+    string placeholder;
     
     function<void(widget* w)> change_handler;
     

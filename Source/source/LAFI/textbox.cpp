@@ -27,7 +27,7 @@ textbox::textbox(
     editable(true),
     multi_line(false),
     enter_key_widget(nullptr),
-    change_handler(nullptr){
+    change_handler(nullptr) {
     
     tab_index = cur_tab_index++;
 }
@@ -100,16 +100,23 @@ void textbox::draw_self() {
     if(style->text_font) {
         int text_start = x1 + 2 - scroll_x;
         
+        string text_to_use = text;
+        ALLEGRO_COLOR text_color_to_use = get_fg_color();
+        if(text.empty() && !placeholder.empty()) {
+            text_to_use = placeholder;
+            text_color_to_use.a = 0.25f;
+        }
+        
         if(parent->focused_widget == this) {
             al_draw_filled_rectangle(
                 text_start + al_get_text_width(
                     style->text_font,
-                    text.substr(0, min(sel_start, sel_end)).c_str()
+                    text_to_use.substr(0, min(sel_start, sel_end)).c_str()
                 ),
                 y1 + 2,
                 text_start + al_get_text_width(
                     style->text_font,
-                    text.substr(0, max(sel_start, sel_end)).c_str()
+                    text_to_use.substr(0, max(sel_start, sel_end)).c_str()
                 ),
                 y2 - 2,
                 get_alt_color()
@@ -117,15 +124,15 @@ void textbox::draw_self() {
         }
         
         al_draw_text(
-            style->text_font, get_fg_color(), text_start,
+            style->text_font, text_color_to_use, text_start,
             (y2 + y1) / 2  - al_get_font_line_height(style->text_font) / 2, 0,
-            text.c_str()
+            text_to_use.c_str()
         );
         
         if(parent->focused_widget == this && cursor_visible) {
             unsigned int cursor_x =
                 al_get_text_width(
-                    style->text_font, text.substr(0, cursor).c_str()
+                    style->text_font, text_to_use.substr(0, cursor).c_str()
                 );
                 
             al_draw_line(

@@ -413,8 +413,12 @@ void editor::generate_and_open_picker(
     set_textbox_text(frm_picker, "txt_text", "");
     
     if(can_make_new) {
+        ((lafi::textbox*) frm_picker->widgets["txt_text"])->placeholder =
+            "(enter search term / new name)";
         enable_widget(frm_picker->widgets["but_new"]);
     } else {
+        ((lafi::textbox*) frm_picker->widgets["txt_text"])->placeholder =
+            "(enter search term)";
         disable_widget(frm_picker->widgets["but_new"]);
     }
     
