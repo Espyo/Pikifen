@@ -178,18 +178,18 @@ void gameplay::load() {
             )
         );
     }
-	
-	//Panic check -- If there are no leaders, abort.
-	if(leaders.empty()) {
-		show_message_box(
-			display, "No leaders!", "No leaders!",
-			"This area has no leaders! You need at least one "
-			"in order to play.",
-			NULL, ALLEGRO_MESSAGEBOX_WARN
-		);
-		leave();
-		return;
-	}
+    
+    //Panic check -- If there are no leaders, abort.
+    if(leaders.empty()) {
+        show_message_box(
+            display, "No leaders!", "No leaders!",
+            "This area has no leaders! You need at least one "
+            "in order to play.",
+            NULL, ALLEGRO_MESSAGEBOX_WARN
+        );
+        leave();
+        return;
+    }
     
     //Mob links.
     //Because mobs can create other mobs when loaded, mob gen number X
@@ -420,7 +420,6 @@ void gameplay::unload() {
     al_show_mouse_cursor(display);
     
     cur_leader_ptr = NULL;
-    pikmin_in_onions.clear();
     
     cam_pos = cam_final_pos = point();
     cam_zoom = cam_final_zoom = 1.0f;

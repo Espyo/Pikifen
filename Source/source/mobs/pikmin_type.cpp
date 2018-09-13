@@ -84,9 +84,6 @@ void pikmin_type::load_parameters(data_node* file) {
         rs.set("sprout_evolution_time_" + i2s(m + 1), sprout_evolution_time[m]);
     }
     
-    pikmin_in_onions[this] =
-        s2i(file->get_child_by_name("onion_starting_number")->value);
-        
     max_throw_height =
         get_max_throw_height(get_throw_z_speed(throw_strength_mult));
 }

@@ -334,7 +334,6 @@ extern vector<point> precipitation;
 extern timer precipitation_timer;
 extern float pikmin_chase_range;
 extern float pikmin_grab_range;
-extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*> pikmin_list;
 extern vector<pikmin_type*> pikmin_order;
 extern vector<string> pikmin_order_strings;

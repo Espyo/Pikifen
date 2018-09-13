@@ -43,6 +43,8 @@ protected:
 public:
     onion_type* oni_type;
     bool activated;
+    //How many Pikmin are inside, per maturity.
+    size_t pikmin_inside[N_MATURITIES];
     size_t spew_queue; //TODO this needs to be a proper queue (Master Onion).
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
@@ -59,7 +61,9 @@ public:
     );
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
+    void call_pikmin();
     void spew();
+    void stow_pikmin();
 };
 
 #endif //ifndef ONION_INCLUDED

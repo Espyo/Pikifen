@@ -46,6 +46,17 @@ onion::onion(
         if(spew_queue == 0) return; next_spew_timer.start(); spew();
     };
     
+    for(size_t m = 0; m < N_MATURITIES; ++m) {
+        pikmin_inside[m] = 0;
+    }
+    
+    vector<string> pikmin_inside_vars =
+        split(get_var_value(vars, "pikmin_inside", ""));
+        
+    for(size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES; ++m) {
+        pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
+    }
+    
     set_animation(ANIM_IDLING);
 }
 
@@ -59,6 +70,33 @@ const float ONION_SPEW_V_SPEED = 600.0f;
 //An Onion-spat seed starts with this Z offset from the Onion.
 const float NEW_SEED_Z_OFFSET = 320.0f;
 
+
+/* ----------------------------------------------------------------------------
+ * Temporary feature to allow Pikmin to be called from the Onion.
+ * Calls out a Pikmin from inside the Onion, if possible.
+ * Gives priority to the higher maturities.
+ */
+void onion::call_pikmin() {
+
+    if(pikmin_list.size() >= max_pikmin_in_field) return;
+    
+    for(size_t m = 0; m < N_MATURITIES; ++m) {
+        //Let's check the maturities in reverse order.
+        size_t cur_m = N_MATURITIES - m - 1;
+        
+        if(pikmin_inside[cur_m] == 0) continue;
+        
+        pikmin_inside[cur_m]--;
+        create_mob(
+            mob_categories.get(MOB_CATEGORY_PIKMIN),
+            pos, oni_type->pik_type, 0,
+            "maturity=" + i2s(cur_m)
+        );
+        
+        return;
+    }
+}
+
 /* ----------------------------------------------------------------------------
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
@@ -69,7 +107,7 @@ void onion::spew() {
     unsigned total_after = pikmin_list.size() + 1;
     
     if(total_after > max_pikmin_in_field) {
-        pikmin_in_onions[oni_type->pik_type]++;
+        pikmin_inside[0]++;
         return;
     }
     
@@ -93,6 +131,41 @@ void onion::spew() {
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Temporary feature to allow Pikmin to be stowed in the Onion.
+ * Stows away a Pikmin in the current leader's group, if possible.
+ * Gives priority to the lower maturities.
+ */
+void onion::stow_pikmin() {
+    //Find a Pikmin of that type, preferring lower maturities.
+    pikmin* pik_to_stow = NULL;
+    size_t maturity = 0;
+    for(; maturity < N_MATURITIES; ++maturity) {
+        for(size_t p = 0; p < cur_leader_ptr->group->members.size(); ++p) {
+            mob* mob_ptr = cur_leader_ptr->group->members[p];
+            if(mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN) {
+                continue;
+            }
+            
+            pikmin* p_ptr = (pikmin*) mob_ptr;
+            if(p_ptr->maturity != maturity) continue;
+            if(p_ptr->pik_type != oni_type->pik_type) continue;
+            
+            pik_to_stow = p_ptr;
+            break;
+        }
+        
+        if(pik_to_stow) break;
+    }
+    
+    if(!pik_to_stow) return;
+    
+    pik_to_stow->leave_group();
+    pik_to_stow->to_delete = true;
+    pikmin_inside[maturity]++;
 }
 
 
