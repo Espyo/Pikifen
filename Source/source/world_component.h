@@ -14,9 +14,9 @@
 
 #include <cstdio>
 
-class sector;
+struct sector;
 class mob;
-class particle;
+struct particle;
 
 /* ----------------------------------------------------------------------------
  * Something that makes up the interactable game world and can be drawn.

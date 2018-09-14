@@ -279,6 +279,9 @@
     <ClInclude Include="..\source\replay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\world_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikifen.rc">
@@ -538,6 +541,9 @@
       <Filter>Source Files\editors\area_editor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\replay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\world_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

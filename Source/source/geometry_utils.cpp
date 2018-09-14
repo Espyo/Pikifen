@@ -450,7 +450,7 @@ void move_point(
  * Normalizes an angle so that it's between 0 and TAU (M_PI * 2).
  */
 float normalize_angle(float a) {
-    a = fmod((double) a, TAU);
+    a = fmod(a, (float) TAU);
     if(a < 0) a += TAU;
     return a;
 }

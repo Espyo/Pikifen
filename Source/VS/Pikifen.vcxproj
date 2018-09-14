@@ -164,6 +164,7 @@
     <ClInclude Include="..\source\status.h" />
     <ClInclude Include="..\source\vars.h" />
     <ClInclude Include="..\source\weather.h" />
+    <ClInclude Include="..\source\world_component.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikifen.rc" />
@@ -255,6 +256,7 @@
     <ClCompile Include="..\source\status.cpp" />
     <ClCompile Include="..\source\vars.cpp" />
     <ClCompile Include="..\source\weather.cpp" />
+    <ClCompile Include="..\source\world_component.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

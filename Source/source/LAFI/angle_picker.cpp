@@ -185,7 +185,7 @@ void angle_picker::textbox_lose_focus_handler(widget* w) {
  */
 float normalize_angle(const float a) {
     float new_angle = a;
-    new_angle = fmod((double) new_angle, TAU);
+    new_angle = fmod(new_angle, (float) TAU);
     if(new_angle < 0) new_angle += TAU;
     return new_angle;
 }

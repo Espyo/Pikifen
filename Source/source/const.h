@@ -28,14 +28,15 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 15;
-const unsigned char VERSION_REV   = 1;
-const unsigned char VERSION_DAY   = 23;
-const unsigned char VERSION_MONTH = 06;
+const unsigned char VERSION_MINOR = 16;
+const unsigned char VERSION_REV   = 0;
+const unsigned char VERSION_DAY   = 14;
+const unsigned char VERSION_MONTH = 9;
 const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
 
 const size_t INVALID = UINT32_MAX;
+const float LARGE_FLOAT = 999999.0f;
 const float TAU = M_PI * 2;
 
 const string ANIMATION_EDITOR_TUTORIAL_URL =

@@ -375,7 +375,7 @@ public:
     bool hide;
     //Is invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
-    //If not INFINITY, compare the Z with this to shrink/grow the sprite.
+    //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot;
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
@@ -470,7 +470,8 @@ public:
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
     virtual void handle_status_effect(status_type* s);
-    virtual void lose_panic_from_status(); //TODO Replace with handle_lose_status()?
+    //TODO Replace lose_panic_from_status() with handle_lose_status()?
+    virtual void lose_panic_from_status();
     
     //Drawing tools.
     point get_sprite_center(sprite* s);

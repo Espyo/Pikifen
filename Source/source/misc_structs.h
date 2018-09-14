@@ -137,7 +137,7 @@ struct button_manager {
  * Fun fact, keeping an extra boolean in the class that indicates whether or
  * not the sqrt()'d number is in cache is around twice as fast as keeping
  * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
- * to INFINITY if it is uncached.
+ * to LARGE_FLOAT if it is uncached.
  */
 struct dist {
 private:

@@ -80,7 +80,7 @@ mob::mob(
     invuln_period(0),
     team(MOB_TEAM_DECORATION),
     hide(false),
-    height_effect_pivot(INFINITY),
+    height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
     dead(false),
     chomp_max(0),
@@ -1042,7 +1042,7 @@ void mob::finish_dying() {
             e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
         particle par(
-            PARTICLE_TYPE_ENEMY_SPIRIT, pos, INFINITY,
+            PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
             clamp(
                 type->radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
                 ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
@@ -1221,7 +1221,7 @@ point mob::get_sprite_dimensions(sprite* s, float* scale) {
     float sucking_mult = 1.0;
     float height_mult = 1.0;
     
-    if(height_effect_pivot != INFINITY) {
+    if(height_effect_pivot != LARGE_FLOAT) {
         height_mult +=
             (z - height_effect_pivot) * MOB_HEIGHT_EFFECT_FACTOR;
     }
@@ -1643,7 +1643,7 @@ void mob::start_height_effect() {
  * From here on out, stop using the height effect.
  */
 void mob::stop_height_effect() {
-    height_effect_pivot = INFINITY;
+    height_effect_pivot = LARGE_FLOAT;
 }
 
 
@@ -1797,7 +1797,7 @@ void mob::tick_misc_logic() {
     }
     
     if(ground_sector->is_bottomless_pit) {
-        if(height_effect_pivot == INFINITY) {
+        if(height_effect_pivot == LARGE_FLOAT) {
             height_effect_pivot = z;
         }
     }

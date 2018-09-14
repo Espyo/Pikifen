@@ -15,8 +15,8 @@
  * Initializes a world component struct.
  */
 world_component::world_component() :
-    mob_ptr(nullptr),
+    sector_ptr(nullptr),
     mob_shadow_ptr(nullptr),
     mob_limb_ptr(nullptr),
-    sector_ptr(nullptr) {
+    mob_ptr(nullptr) {
 }

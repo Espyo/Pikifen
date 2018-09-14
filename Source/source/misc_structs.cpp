@@ -379,6 +379,7 @@ dist &dist::operator =(const float d) {
     distance_squared = d * d;
     normal_distance = d;
     has_normal_distance = true;
+    return *this;
 }
 bool dist::operator<(const float d2) {
     return distance_squared < (d2 * d2);

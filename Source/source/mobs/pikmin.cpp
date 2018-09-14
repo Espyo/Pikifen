@@ -121,7 +121,7 @@ void pikmin::tick_class_specifics() {
         pikmin_fsm::notify_leader_release(this, NULL, NULL);
         
         particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, INFINITY,
+            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
             pik_type->radius * 2, 2.0f
         );
         par.bitmap = bmp_pikmin_spirit;
