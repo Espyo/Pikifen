@@ -1287,6 +1287,7 @@ void load_status_types(const bool load_resources) {
         rs.set("speed_multiplier",        st.speed_multiplier);
         rs.set("attack_multiplier",       st.attack_multiplier);
         rs.set("defense_multiplier",      st.defense_multiplier);
+        rs.set("maturity_change_amount",  st.maturity_change_amount);
         rs.set("disables_attack",         st.disables_attack);
         rs.set("turns_invisible",         st.turns_invisible);
         rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);

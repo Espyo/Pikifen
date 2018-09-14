@@ -13,7 +13,6 @@ icon = Red_Pikmin_icon.png
 main_color = 255 0 0
 max_health = 100
 move_speed = 110
-onion_starting_number = 10
 pushable = true
 pushes = false
 radius = 5

@@ -2441,14 +2441,17 @@ mobs{
 	Onion{
 		type=Red Onion
 		p=192.00 352.00
+		vars=pikmin_inside=3 3 4
 	}
 	Onion{
 		type=Yellow Onion
 		p=416.00 416.00
+		vars=pikmin_inside=3 3 4
 	}
 	Onion{
 		type=Blue Onion
 		p=128.00 576.00
+		vars=pikmin_inside=3 3 4
 	}
 	Treasure{
 		type=Billiards Ball

@@ -213,6 +213,8 @@ mob_action::mob_action(
         if(v.empty()) {
             valid = false;
             log_error("The move action has no location specified!", dn);
+        } else if(v == "arachnorb_foot_logic") {
+            vi.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
         } else if(v == "away_from_focused_mob") {
             vi.push_back(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
         } else if(v == "focused_mob") {
@@ -221,8 +223,6 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
         } else if(v == "home") {
             vi.push_back(MOB_ACTION_MOVE_HOME);
-        } else if(v == "arachnorb_foot_logic") {
-            vi.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
         } else if(v == "linked_mob_average") {
             vi.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
         } else if(v == "randomly") {

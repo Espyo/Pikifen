@@ -498,13 +498,19 @@ void area_editor::do_drawing() {
                 );
                 
                 if(cam_zoom >= 0.25) {
-                    point pivot;
-                    pivot.x =
-                        m_ptr->pos.x + (m2_ptr->pos.x - m_ptr->pos.x) * 0.55;
-                    pivot.y =
-                        m_ptr->pos.y + (m2_ptr->pos.y - m_ptr->pos.y) * 0.55;
                     float angle =
                         get_angle(m_ptr->pos, m2_ptr->pos);
+                    point start = point(m_ptr->type->radius, 0);
+                    start = rotate_point(start, angle);
+                    start += m_ptr->pos;
+                    point end = point(m2_ptr->type->radius, 0);
+                    end = rotate_point(end, angle + TAU / 2.0);
+                    end += m2_ptr->pos;
+                    
+                    point pivot(
+                        start.x + (end.x - start.x) * 0.55,
+                        start.y + (end.y - start.y) * 0.55
+                    );
                     const float delta =
                         (MOB_LINK_THICKNESS * 4) / cam_zoom;
                         

@@ -1670,11 +1670,22 @@ void mob::stop_chasing() {
  * take over the rest, to make you move.
  */
 void mob::tick() {
+    //Since the mob could be marked for deletion after any little
+    //interaction with the world, and since doing logic on a mob that already
+    //forgot some things due to deletion is dangerous... Let's constantly
+    //check if the mob is scheduled for deletion, and bail if so.
+    
+    if(to_delete) return;
     tick_brain();
+    if(to_delete) return;
     tick_physics();
+    if(to_delete) return;
     tick_misc_logic();
+    if(to_delete) return;
     tick_animation();
+    if(to_delete) return;
     tick_script();
+    if(to_delete) return;
     tick_class_specifics();
 }
 
