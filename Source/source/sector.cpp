@@ -2640,7 +2640,9 @@ TRIANGULATION_ERRORS triangulate(
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;
     s_ptr->triangles.clear();
-    s_ptr->triangles.reserve(vertexes_left.size() - 2);
+    if(vertexes_left.size() > 3) {
+        s_ptr->triangles.reserve(vertexes_left.size() - 2);
+    }
     
     //Begin by making a list of all concave, convex and ear vertexes.
     get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);

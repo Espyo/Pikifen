@@ -538,7 +538,7 @@ void area_editor::do_drawing() {
             c = al_map_rgb(192, 32, 32);
         }
         
-        if(m_ptr->type->rectangular_dim.x != 0) {
+        if(m_ptr->type && m_ptr->type->rectangular_dim.x != 0) {
             draw_rotated_rectangle(
                 m_ptr->pos, m_ptr->type->rectangular_dim,
                 m_ptr->angle, c, 1.0 / cam_zoom
