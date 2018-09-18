@@ -587,7 +587,7 @@ bool mob::attack(
     sfx_attack.play(0.06, false, 0.6f);
     particle smack_p(
         PARTICLE_TYPE_SMACK, smack_p_pos,
-        max(victim->z + victim->type->height, z + type->height),
+        max(victim->z + victim->type->height + 1, z + type->height + 1),
         64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
     );
     smack_p.bitmap = bmp_smack;
@@ -975,10 +975,12 @@ void mob::draw_mob(bitmap_effect_manager* effect_manager) {
     
     if(!s_ptr) return;
     
-    if(effect_manager) {
-        add_status_bitmap_effects(effect_manager);
-        add_sector_brightness_bitmap_effect(effect_manager);
+    bitmap_effect_manager internal_manager;
+    if(!effect_manager) {
+        effect_manager = &internal_manager;
     }
+    add_status_bitmap_effects(effect_manager);
+    add_sector_brightness_bitmap_effect(effect_manager);
     
     point draw_pos = get_sprite_center(s_ptr);
     point draw_size = get_sprite_dimensions(s_ptr);
@@ -1614,7 +1616,7 @@ void mob::start_dying() {
     gravity_mult = 1.0;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, pos, z + type->height,
+        PARTICLE_TYPE_BITMAP, pos, z + type->height + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = bmp_sparkle;

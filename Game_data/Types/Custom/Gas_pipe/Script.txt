@@ -5,7 +5,7 @@ script{
     shooting {
         on_enter {
             set_animation shooting
-            start_particles gas_pipe 0 0
+            start_particles gas_pipe 0 0 24
         }
     }
     destroyed {

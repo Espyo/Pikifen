@@ -144,7 +144,7 @@ script {
             set_animation moving_hot
             set_timer 1
             move randomly
-            start_particles steam 0 0
+            start_particles steam 0 0 101
         }
         on_timer {
             move randomly

@@ -354,7 +354,7 @@ particle_generator::particle_generator(
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
     if(follow_mob) {
         base_particle.pos = follow_mob->pos;
-        base_particle.z = follow_mob->z + follow_mob->type->height;
+        base_particle.z = follow_mob->z;
     }
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {
@@ -370,11 +370,13 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
  */
 void particle_generator::emit(particle_manager &manager) {
     point base_p_pos = base_particle.pos;
+    float base_p_z = base_particle.z;
     point offs = follow_pos_offset;
     if(follow_angle) {
         offs = rotate_point(offs, *follow_angle);
     }
     base_p_pos += offs;
+    base_p_z += follow_z_offset;
     
     if(
         base_p_pos.x < cam_box[0].x ||
@@ -412,6 +414,7 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-pos_deviation.x, pos_deviation.x);
         new_p.pos.y +=
             randomf(-pos_deviation.y, pos_deviation.y);
+        new_p.z = base_p_z;
         new_p.size =
             max(
                 0.0f,

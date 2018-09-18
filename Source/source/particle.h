@@ -134,6 +134,8 @@ public:
     mob* follow_mob;
     //Offset the follow mob coordinates by this.
     point follow_pos_offset;
+    //Offset the follow mob Z by this.
+    float follow_z_offset;
     //Follow the given angle. e.g. a mob's angle.
     float* follow_angle;
     

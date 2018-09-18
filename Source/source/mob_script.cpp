@@ -545,11 +545,10 @@ mob_action::mob_action(
     } else if(n == "start_particles") {
     
         type = MOB_ACTION_START_PARTICLES;
-        if(v_words.size() < 3) {
+        if(v_words.empty()) {
             log_error(
-                "This \"start_particles\" is badly formed! Format: "
-                "\"start_particles\" <generator name> "
-                "<x offset> <y offset>\".", dn
+                "The \"start_particles\" action needs to know the "
+                "particle generator name!", dn
             );
             valid = false;
         } else {
@@ -563,8 +562,22 @@ mob_action::mob_action(
                 valid = false;
             } else {
                 vs.push_back(v_words[0]);
-                vf.push_back(s2f(v_words[1]));
-                vf.push_back(s2f(v_words[2]));
+                
+                if(v_words.size() >= 2) {
+                    vf.push_back(s2f(v_words[1]));
+                } else {
+                    vf.push_back(0.0f);
+                }
+                if(v_words.size() >= 3) {
+                    vf.push_back(s2f(v_words[2]));
+                } else {
+                    vf.push_back(0.0f);
+                }
+                if(v_words.size() >= 4) {
+                    vf.push_back(s2f(v_words[3]));
+                } else {
+                    vf.push_back(0.0f);
+                }
             }
         }
         
@@ -1087,6 +1100,7 @@ bool mob_action::run(
                 pg.follow_mob = m;
                 pg.follow_angle = &m->angle;
                 pg.follow_pos_offset = point(vf[0], vf[1]);
+                pg.follow_z_offset = vf[2];
                 pg.reset();
                 m->particle_generators.push_back(pg);
             }
