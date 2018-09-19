@@ -20,7 +20,7 @@ script {
             set_timer 0
         }
         on_opponent_in_reach {
-            focus mob
+            focus trigger
             set_state turning
         }
         on_far_from_home {
@@ -53,7 +53,7 @@ script {
         }
         on_opponent_in_reach {
             stop
-            focus mob
+            focus trigger
             set_var has_focus true
             set_state ready
         }

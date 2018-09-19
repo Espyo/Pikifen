@@ -173,7 +173,7 @@ public:
     //Used by the special mob types, as it is not possible to control
     //which type of mob to create without a list.
     function < mob* (
-        const point pos, const float angle, const string &vars
+        const point pos, const float angle, const string &vars, mob* parent
     ) > create_mob_func;
     function < void(mob*) > erase_mob_func;
     function < void(data_node* file) > load_parameters_func;

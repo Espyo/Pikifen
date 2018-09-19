@@ -56,7 +56,7 @@ public:
     
     onion(
         const point &pos, onion_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     

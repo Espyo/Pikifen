@@ -174,7 +174,7 @@ void gameplay::load() {
         mobs_per_gen.push_back(
             create_mob(
                 m_ptr->category, m_ptr->pos, m_ptr->type,
-                m_ptr->angle, m_ptr->vars
+                m_ptr->angle, m_ptr->vars, NULL
             )
         );
     }

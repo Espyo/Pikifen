@@ -101,6 +101,22 @@ mob_action::mob_action(
     
         type = MOB_ACTION_FOCUS;
         
+        if(v.empty()) {
+            log_error("The \"focus\" action needs to know the target!", dn);
+            valid = false;
+            
+        } else if(v == "parent") {
+            vi.push_back(MOB_ACTION_FOCUS_PARENT);
+            
+        } else if(v == "trigger") {
+            vi.push_back(MOB_ACTION_FOCUS_TRIGGER);
+            
+        } else {
+            log_error("Unknown focus target \"" + v + "\"!", dn);
+            valid = false;
+            
+        }
+        
         
     } else if(n == "if") {
     
@@ -770,7 +786,25 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_FOCUS) {
     
-        m->focused_mob = (mob*) custom_data_1;
+        if(vi[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
+            m->focused_mob = m->parent->m;
+            
+        } else if(vi[0] == MOB_ACTION_FOCUS_TRIGGER) {
+            if(
+                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+                parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
+                parent_event == MOB_EVENT_PIKMIN_LANDED ||
+                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                parent_event == MOB_EVENT_TOUCHED_OPPONENT
+            ) {
+                m->focused_mob = (mob*) custom_data_1;
+                
+            } else if(
+                parent_event == MOB_EVENT_RECEIVE_MESSAGE
+            ) {
+                m->focused_mob = (mob*) custom_data_2;
+            }
+        }
         
         
     } else if(type == MOB_ACTION_FINISH_DYING) {
@@ -1064,7 +1098,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SPAWN) {
     
-        return m->spawn(&m->type->spawns[vi[0]]);
+        return m->spawn(&m->type->spawns[vi[0]], false);
         
         
     } else if(type == MOB_ACTION_START_DYING) {

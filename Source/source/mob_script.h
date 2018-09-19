@@ -96,6 +96,12 @@ enum MOB_ACTION_TURN_TYPES {
     MOB_ACTION_TURN_RELATIVE,
 };
 
+//Focus action sub-types.
+enum MOB_ACTION_FOCUS_TYPES {
+    MOB_ACTION_FOCUS_TRIGGER,
+    MOB_ACTION_FOCUS_PARENT,
+};
+
 //If action left-hand side content types.
 enum MOB_ACTION_IF_LHS_TYPE {
     MOB_ACTION_IF_LHS_VAR,

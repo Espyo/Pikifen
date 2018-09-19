@@ -21,7 +21,7 @@ script {
             set_timer randomly 0.8 1.2
         }
         on_opponent_in_reach {
-            focus mob
+            focus trigger
             set_state chasing
         }
         on_far_from_home {
@@ -98,7 +98,7 @@ script {
         }
         on_opponent_in_reach {
             if var ignoring = false
-                focus mob
+                focus trigger
                 set_state chasing
             end_if
         }

@@ -36,7 +36,7 @@ public:
     unsigned int text_w; //Used instead of calculating the width every time.
     
     info_spot(
-        const point &pos, const float angle, const string &vars
+        const point &pos, const float angle, const string &vars, mob* parent
     );
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };

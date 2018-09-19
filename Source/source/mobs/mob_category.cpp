@@ -56,7 +56,7 @@ mob_type* none_category::create_type() { return NULL; }
 void none_category::register_type(mob_type* type) { }
 mob* none_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) { return NULL; }
 void none_category::erase_mob(mob* m) { }
 void none_category::clear_types() { }
@@ -216,9 +216,9 @@ void pikmin_category::register_type(mob_type* type) {
  */
 mob* pikmin_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    pikmin* m = new pikmin(pos, (pikmin_type*) type, angle, vars);
+    pikmin* m = new pikmin(pos, (pikmin_type*) type, angle, vars, parent);
     pikmin_list.push_back(m);
     return m;
 }
@@ -301,9 +301,9 @@ void enemy_category::register_type(mob_type* type) {
  */
 mob* enemy_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    enemy* m = new enemy(pos, (enemy_type*) type, angle, vars);
+    enemy* m = new enemy(pos, (enemy_type*) type, angle, vars, parent);
     enemies.push_back(m);
     return m;
 }
@@ -386,9 +386,9 @@ void leader_category::register_type(mob_type* type) {
  */
 mob* leader_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    leader* m = new leader(pos, (leader_type*) type, angle, vars);
+    leader* m = new leader(pos, (leader_type*) type, angle, vars, parent);
     leaders.push_back(m);
     return m;
 }
@@ -471,9 +471,9 @@ void onion_category::register_type(mob_type* type) {
  */
 mob* onion_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    onion* m = new onion(pos, (onion_type*) type, angle, vars);
+    onion* m = new onion(pos, (onion_type*) type, angle, vars, parent);
     onions.push_back(m);
     return m;
 }
@@ -556,9 +556,9 @@ void pellet_category::register_type(mob_type* type) {
  */
 mob* pellet_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    pellet* m = new pellet(pos, (pellet_type*) type, angle, vars);
+    pellet* m = new pellet(pos, (pellet_type*) type, angle, vars, parent);
     pellets.push_back(m);
     return m;
 }
@@ -641,9 +641,9 @@ void ship_category::register_type(mob_type* type) {
  */
 mob* ship_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    ship* m = new ship(pos, (ship_type*) type, angle, vars);
+    ship* m = new ship(pos, (ship_type*) type, angle, vars, parent);
     ships.push_back(m);
     return m;
 }
@@ -726,9 +726,9 @@ void treasure_category::register_type(mob_type* type) {
  */
 mob* treasure_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    treasure* m = new treasure(pos, (treasure_type*) type, angle, vars);
+    treasure* m = new treasure(pos, (treasure_type*) type, angle, vars, parent);
     treasures.push_back(m);
     return m;
 }
@@ -811,9 +811,9 @@ void gate_category::register_type(mob_type* type) {
  */
 mob* gate_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    gate* m = new gate(pos, (gate_type*) type, angle, vars);
+    gate* m = new gate(pos, (gate_type*) type, angle, vars, parent);
     gates.push_back(m);
     return m;
 }
@@ -896,9 +896,9 @@ void bridge_category::register_type(mob_type* type) {
  */
 mob* bridge_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    bridge* m = new bridge(pos, (bridge_type*) type, angle, vars);
+    bridge* m = new bridge(pos, (bridge_type*) type, angle, vars, parent);
     bridges.push_back(m);
     return m;
 }
@@ -981,9 +981,9 @@ void special_category::register_type(mob_type* type) {
  */
 mob* special_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    mob* m = new mob(pos, type, angle, vars);
+    mob* m = new mob(pos, type, angle, vars, parent);
     return m;
 }
 
@@ -1061,9 +1061,9 @@ void custom_category::register_type(mob_type* type) {
  */
 mob* custom_category::create_mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
-    mob* m = new mob(pos, type, angle, vars);
+    mob* m = new mob(pos, type, angle, vars, parent);
     return m;
 }
 

@@ -20,9 +20,9 @@
  * Creates an info spot mob.
  */
 info_spot::info_spot(
-    const point &pos, const float angle, const string &vars
+    const point &pos, const float angle, const string &vars, mob* parent
 ) :
-    mob(pos, spec_mob_types["Info spot"], angle, vars),
+    mob(pos, spec_mob_types["Info spot"], angle, vars, parent),
     text(get_var_value(vars, "text", "")),
     opens_box(s2b(get_var_value(vars, "opens_box", "0"))),
     text_w(0) {

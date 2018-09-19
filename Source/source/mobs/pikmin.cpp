@@ -26,9 +26,9 @@ static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
  */
 pikmin::pikmin(
     const point &pos, pikmin_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) :
-    mob(pos, type, angle, vars),
+    mob(pos, type, angle, vars, parent),
     pik_type(type),
     carrying_mob(NULL),
     carrying_spot(0),

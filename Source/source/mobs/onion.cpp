@@ -23,9 +23,10 @@ using namespace std;
  * Creates an Onion mob.
  */
 onion::onion(
-    const point &pos, onion_type* type, const float angle, const string &vars
+    const point &pos, onion_type* type, const float angle, const string &vars,
+    mob* parent
 ) :
-    mob(pos, type, angle, vars),
+    mob(pos, type, angle, vars, parent),
     oni_type(type),
     activated(true),
     spew_queue(0),
@@ -90,7 +91,7 @@ void onion::call_pikmin() {
         create_mob(
             mob_categories.get(MOB_CATEGORY_PIKMIN),
             pos, oni_type->pik_type, 0,
-            "maturity=" + i2s(cur_m)
+            "maturity=" + i2s(cur_m), NULL
         );
         
         return;
@@ -117,7 +118,7 @@ void onion::spew() {
             (pikmin*)
             create_mob(
                 mob_categories.get(MOB_CATEGORY_PIKMIN),
-                pos, oni_type->pik_type, next_spew_angle, ""
+                pos, oni_type->pik_type, next_spew_angle, "", NULL
             )
         );
     float horizontal_strength =

@@ -48,7 +48,7 @@ script {
             if var homing = true
                 if mob_category = Leader
                     if var has_target = false
-                        focus
+                        focus trigger
                         move focused_mob
                         set_var has_target true
                     end_if

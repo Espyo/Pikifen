@@ -30,7 +30,7 @@ size_t next_mob_id = 0;
  */
 mob::mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) :
     type(type),
     to_delete(false),
@@ -98,6 +98,10 @@ mob::mob(
     ground_sector = sec;
     center_sector = sec;
     
+    if(parent) {
+        this->parent = new parent_mob_info(parent);
+    }
+    
     if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
@@ -133,11 +137,10 @@ mob::mob(
             continue;
         }
         
-        mob* new_mob = spawn(spawn_info);
+        mob* new_mob = spawn(spawn_info, true);
         if(!new_mob) continue;
         
-        parent_mob_info* p_info = new parent_mob_info(this);
-        new_mob->parent = p_info;
+        parent_mob_info* p_info = new_mob->parent;
         p_info->handle_damage = child_info->handle_damage;
         p_info->relay_damage = child_info->relay_damage;
         p_info->handle_events = child_info->handle_events;
@@ -968,7 +971,7 @@ void mob::draw_limb(bitmap_effect_manager* effect_manager) {
 /* ----------------------------------------------------------------------------
  * Draws just the mob. This is a generic function, and can be overwritten
  * by child classes.
- * effect_manager: Effect manager to use, if any.
+ * effect_manager: Effect manager to base on.
  */
 void mob::draw_mob(bitmap_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
@@ -1543,8 +1546,9 @@ bool mob::should_attack(mob* v) {
 
 /* ----------------------------------------------------------------------------
  * Makes the current mob spawn a new mob.
+ * is_child: If true, the spawn is a child mob of this mob.
  */
-mob* mob::spawn(mob_type::spawn_struct* info) {
+mob* mob::spawn(mob_type::spawn_struct* info, const bool is_child) {
     //First, find the mob.
     mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
     if(!type_ptr) return NULL;
@@ -1580,7 +1584,8 @@ mob* mob::spawn(mob_type::spawn_struct* info) {
             new_xy,
             type_ptr,
             new_angle,
-            info->vars
+            info->vars,
+            (is_child ? this : NULL)
         );
         
     new_mob->z = new_z;
@@ -3114,13 +3119,13 @@ void calculate_knockback(
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) {
     mob* m_ptr = NULL;
     if(type->create_mob_func) {
-        m_ptr = type->create_mob_func(pos, angle, vars);
+        m_ptr = type->create_mob_func(pos, angle, vars, parent);
     } else {
-        m_ptr = category->create_mob(pos, type, angle, vars);
+        m_ptr = category->create_mob(pos, type, angle, vars, parent);
     }
     mobs.push_back(m_ptr);
     return m_ptr;

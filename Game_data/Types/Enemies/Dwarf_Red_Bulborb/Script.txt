@@ -16,7 +16,7 @@ script {
         }
         on_opponent_in_reach {
             if var ignoring = false
-                focus mob
+                focus trigger
                 set_state turning
             end_if
         }
@@ -51,7 +51,7 @@ script {
             set_timer randomly 1.5 2.5
         }
         on_opponent_in_reach {
-            focus mob
+            focus trigger
             set_state turning
         }
         on_reach_destination {
@@ -78,7 +78,7 @@ script {
         }
         on_opponent_in_reach {
             stop
-            focus mob
+            focus trigger
             set_state chasing
         }
         on_focus_off_reach {
@@ -180,7 +180,7 @@ script {
         }
         on_opponent_in_reach {
             if var ignoring = false
-                focus mob
+                focus trigger
                 set_state turning
             end_if
         }

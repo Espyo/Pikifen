@@ -8,4 +8,4 @@ move_speed = 250
 pushable = true
 pushes = true
 radius = 37.5
-rotation_speed = 0
+rotation_speed = 200

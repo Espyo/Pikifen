@@ -28,7 +28,7 @@ class nectar : public mob {
 public:
     unsigned char amount_left;
     
-    nectar(const point &pos, const string &vars);
+    nectar(const point &pos, const string &vars, mob* parent);
     
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };

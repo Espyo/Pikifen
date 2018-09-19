@@ -244,7 +244,7 @@ protected:
 public:
     mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual ~mob(); //Needed so that typeid works.
     
@@ -437,7 +437,7 @@ public:
     void stop_height_effect();
     void release_chomped_pikmin();
     void send_message(mob* receiver, string &msg);
-    mob* spawn(mob_type::spawn_struct* info);
+    mob* spawn(mob_type::spawn_struct* info, const bool is_child);
     void start_dying();
     void finish_dying();
     void respawn();
@@ -495,7 +495,7 @@ void cause_hitbox_damage(
 );
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 

@@ -60,7 +60,7 @@ public:
     virtual void register_type(mob_type* type) = 0;
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     ) = 0;
     virtual void erase_mob(mob* m) = 0;
     virtual void clear_types() = 0;
@@ -108,7 +108,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -128,7 +128,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -148,7 +148,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -168,7 +168,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -188,7 +188,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -208,7 +208,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -228,7 +228,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -248,7 +248,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -268,7 +268,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -288,7 +288,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -308,7 +308,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();
@@ -328,7 +328,7 @@ public:
     virtual void register_type(mob_type* type);
     virtual mob* create_mob(
         const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     virtual void erase_mob(mob* m);
     virtual void clear_types();

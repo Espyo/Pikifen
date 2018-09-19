@@ -22,9 +22,9 @@
  */
 leader::leader(
     const point &pos, leader_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars, mob* parent
 ) :
-    mob(pos, type, angle, vars),
+    mob(pos, type, angle, vars, parent),
     lea_type(type),
     auto_plucking(false),
     pluck_target(nullptr),

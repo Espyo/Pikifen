@@ -10,7 +10,7 @@ script {
             set_far_reach fear
         }
         on_opponent_in_reach {
-            focus opponent
+            focus trigger
             set_state panicking
         }
         on_itch {

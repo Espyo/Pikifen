@@ -36,7 +36,7 @@ script {
         }
         on_opponent_in_reach {
             if var ignoring = false
-                focus mob
+                focus trigger
                 set_state turning
             end_if
         }
@@ -58,7 +58,7 @@ script {
         }
         on_opponent_in_reach {
             stop
-            focus mob
+            focus trigger
             set_state chasing
         }
         on_focus_off_reach {
@@ -155,7 +155,7 @@ script {
         }
         on_opponent_in_reach {
             if var ignoring = false
-                focus mob
+                focus trigger
                 set_state turning
             end_if
         }

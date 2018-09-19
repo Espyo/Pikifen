@@ -9,6 +9,8 @@ script {
         on_enter {
             set_animation idling
             set_hiding true
+            focus parent
+            turn focused_mob
         }
         on_receive_message {
             set_hiding false
@@ -31,6 +33,9 @@ script {
     idling {
         on_enter {
             set_animation idling
+        }
+        on_tick {
+            turn focused_mob
         }
         on_receive_message {
             if var id = fr
@@ -72,6 +77,9 @@ script {
         }
         on_reach_destination {
             stop
+        }
+        on_tick {
+            turn focused_mob
         }
         on_timer {
             set_state floating

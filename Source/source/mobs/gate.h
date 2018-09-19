@@ -42,7 +42,7 @@ public:
     
     gate(
         const point &pos, gate_type* type,
-        const float angle, const string &vars
+        const float angle, const string &vars, mob* parent
     );
     
 };

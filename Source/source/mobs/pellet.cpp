@@ -17,9 +17,10 @@
  * Creates a pellet mob.
  */
 pellet::pellet(
-    const point &pos, pellet_type* type, const float angle, const string &vars
+    const point &pos, pellet_type* type, const float angle, const string &vars,
+    mob* parent
 ) :
-    mob(pos, type, angle, vars),
+    mob(pos, type, angle, vars, parent),
     pel_type(type) {
     
     become_carriable(false);
