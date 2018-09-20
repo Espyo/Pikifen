@@ -50,7 +50,7 @@ sprites{
 				coords=0.00 0.00 0.00
 				height=64.00
 				radius=37.50
-				type=0
+				type=2
 				value=1.00
 				knockback_outward=true
 				knockback=1.00

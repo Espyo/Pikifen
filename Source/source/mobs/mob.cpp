@@ -921,6 +921,13 @@ void mob::draw_limb(bitmap_effect_manager* effect_manager) {
     sprite* sprite_to_use = parent->limb_anim.get_cur_sprite();
     if(!sprite_to_use) return;
     
+    bitmap_effect_manager internal_manager;
+    if(!effect_manager) {
+        effect_manager = &internal_manager;
+    }
+    add_status_bitmap_effects(effect_manager);
+    add_sector_brightness_bitmap_effect(effect_manager);
+    
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
         parent_end = parent->m->pos;
