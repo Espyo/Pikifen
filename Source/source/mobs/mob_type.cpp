@@ -264,7 +264,8 @@ void create_special_mob_types() {
     nectar_mt->radius = 8;
     nectar_mt->create_mob_func =
         [] (
-            const point pos, const float angle, const string & vars, mob * parent
+            const point pos, const float angle,
+            const string & vars, mob * parent
     ) -> mob* {
         nectar* m = new nectar(pos, vars, parent);
         nectars.push_back(m);
