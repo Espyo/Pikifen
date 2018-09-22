@@ -514,6 +514,34 @@ mob_action::mob_action(
         valid = false;
         
         
+    } else if(n == "stabilize_z") {
+    
+        type = MOB_ACTION_STABILIZE_Z;
+        
+        if(v_words.size() >= 2) {
+            if(v_words[0] == "highest") {
+                vi.push_back(MOB_ACTION_STABILIZE_Z_HIGHEST);
+            } else if(v_words[0] == "lowest") {
+                vi.push_back(MOB_ACTION_STABILIZE_Z_LOWEST);
+            } else {
+                log_error(
+                    "Unknown reference in the \"stabilize_z\" action: \"" +
+                    v_words[0] + "\"!", dn
+                );
+                valid = false;
+            }
+            
+            vf.push_back(s2f(v_words[1]));
+        } else {
+            log_error(
+                "The \"stabilize_z\" action needs to know if the stabilization "
+                "is regarding the higest or lowest linked object, and needs "
+                "to know a Z offset!", dn
+            );
+            valid = false;
+        }
+        
+        
     } else if(n == "start_chomping") {
     
         type = MOB_ACTION_START_CHOMPING;
@@ -1099,6 +1127,27 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SPAWN) {
     
         return m->spawn(&m->type->spawns[vi[0]], false);
+        
+        
+    } else if(type == MOB_ACTION_STABILIZE_Z) {
+    
+        if(m->links.empty()) return false;
+        float best_match_z = m->links[0]->z;
+        for(size_t l = 1; l < m->links.size(); ++l) {
+            if(
+                vi[0] == MOB_ACTION_STABILIZE_Z_HIGHEST &&
+                m->links[l]->z > best_match_z
+            ) {
+                best_match_z = m->links[l]->z;
+            } else if(
+                vi[0] == MOB_ACTION_STABILIZE_Z_LOWEST &&
+                m->links[l]->z < best_match_z
+            ) {
+                best_match_z = m->links[l]->z;
+            }
+        }
+        
+        m->z = best_match_z + vf[0];
         
         
     } else if(type == MOB_ACTION_START_DYING) {

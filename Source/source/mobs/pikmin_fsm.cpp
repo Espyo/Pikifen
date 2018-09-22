@@ -1046,7 +1046,9 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     mob* o_ptr = (mob*) info1;
     if(o_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
-        if(!((enemy*) info1)->ene_type->allow_ground_attacks) return;
+        enemy* e_ptr = (enemy*) info1;
+        if(!e_ptr->ene_type->allow_ground_attacks) return;
+        if(e_ptr->z > m->z + m->type->height) return;
     }
     
     m->focus_on_mob((mob*) info1);
