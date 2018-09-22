@@ -308,6 +308,32 @@ mob_action::mob_action(
         type = MOB_ACTION_RELEASE;
         
         
+    } else if(n == "remove_status") {
+    
+        type = MOB_ACTION_REMOVE_STATUS;
+        if(!v.empty()) {
+            bool exists = false;
+            for(auto s = status_types.begin(); s != status_types.end(); s++) {
+                if(s->first == v) {
+                    exists = true;
+                    break;
+                }
+            }
+            if(exists) {
+                vs.push_back(v);
+            } else {
+                log_error("Unknown status effect \"" + v + "\"!", dn);
+                valid = false;
+            }
+        } else {
+            log_error(
+                "The \"remove_status\" action needs to know the status "
+                "effect's name!", dn
+            );
+            valid = false;
+        }
+        
+        
     } else if(n == "send_message") {
     
         type = MOB_ACTION_SEND_MESSAGE;
@@ -1038,6 +1064,15 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_RELEASE) {
     
         m->release_chomped_pikmin();
+        
+        
+    } else if(type == MOB_ACTION_REMOVE_STATUS) {
+    
+        for(size_t s = 0; s < m->statuses.size(); ++s) {
+            if(m->statuses[s].type->name == vs[0]) {
+                m->statuses[s].to_delete = true;
+            }
+        }
         
         
     } else if(type == MOB_ACTION_SEND_MESSAGE) {
