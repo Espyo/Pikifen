@@ -20,6 +20,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
+#include "utils/math_utils.h"
+
 using namespace std;
 
 /*
@@ -37,7 +39,6 @@ const unsigned int  VERSION_YEAR  = 18; //The year is 2000 + this.
 
 const size_t INVALID = UINT32_MAX;
 const float LARGE_FLOAT = 999999.0f;
-const float TAU = M_PI * 2;
 
 const string ANIMATION_EDITOR_TUTORIAL_URL =
     "http://www.pikminfanon.com/Pikifen/Creating_animations";

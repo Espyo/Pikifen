@@ -13,7 +13,7 @@
 
 #include "drawing.h"
 #include "functions.h"
-#include "geometry_utils.h"
+#include "utils/geometry_utils.h"
 #include "mobs/mob.h"
 #include "particle.h"
 #include "vars.h"

@@ -20,9 +20,10 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "geometry_utils.h"
+#include "data_file.h"
 #include "mobs/mob_category.h"
 #include "particle.h"
+#include "utils/geometry_utils.h"
 
 class mob;
 class pikmin_type;
@@ -123,46 +124,6 @@ struct button_manager {
         const size_t id, const string &name, const string &option_name,
         const string &default_control_str
     );
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * A distance.
- * Basically this is just a number, but for optimization's sake,
- * this number is actually the distance SQUARED.
- * It's faster to compare two squared distances than square-rooting them both,
- * since sqrt() is so costly. If we do need to sqrt() a number, we keep it in
- * a cache inside the class, so that we can use it at will next time.
- * Fun fact, keeping an extra boolean in the class that indicates whether or
- * not the sqrt()'d number is in cache is around twice as fast as keeping
- * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
- * to LARGE_FLOAT if it is uncached.
- */
-struct dist {
-private:
-    float distance_squared;
-    float normal_distance;
-    bool has_normal_distance;
-    
-public:
-    dist(const point &p1, const point &p2);
-    dist(const float d = 0.0f);
-    dist &operator =(const float d);
-    bool operator <(const float d2);
-    bool operator <(const dist &d2);
-    bool operator <=(const float d2);
-    bool operator <=(const dist &d2);
-    bool operator >(const float d2);
-    bool operator >(const dist &d2);
-    bool operator >=(const float d2);
-    bool operator >=(const dist &d2);
-    bool operator ==(const float d2);
-    bool operator ==(const dist &d2);
-    bool operator !=(const float d2);
-    bool operator !=(const dist &d2);
-    void operator +=(const dist &d2);
-    float to_float();
 };
 
 

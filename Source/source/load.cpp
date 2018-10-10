@@ -18,6 +18,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "init.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 

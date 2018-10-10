@@ -12,6 +12,7 @@
 #include "editor.h"
 #include "../../LAFI/textbox.h"
 #include "../../functions.h"
+#include "../../utils/string_utils.h"
 #include "../../vars.h"
 
 /* ----------------------------------------------------------------------------

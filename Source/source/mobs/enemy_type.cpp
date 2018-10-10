@@ -11,6 +11,7 @@
 
 #include "enemy_type.h"
 #include "../functions.h"
+#include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a type of enemy.

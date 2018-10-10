@@ -14,6 +14,7 @@
 #include "treasure.h"
 #include "treasure_fsm.h"
 #include "treasure_type.h"
+#include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a type of treasure.

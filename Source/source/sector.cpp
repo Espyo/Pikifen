@@ -19,7 +19,7 @@
 
 #include "editors/area_editor/editor.h"
 #include "functions.h"
-#include "geometry_utils.h"
+#include "utils/geometry_utils.h"
 #include "sector.h"
 #include "vars.h"
 
@@ -2497,77 +2497,6 @@ void get_cce(
             ears.push_back(convex_vertexes[c]);
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * ur: Returns the distance from the start of line 2 in which
- *   the intersection happens.
- *   This is a ratio, so 0 is the start, 1 is the end of the line.
- *   Oh, and the r stands for ray.
- * ul: Same as ur, but for line 1.
- */
-bool lines_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* ur, float* ul
-) {
-
-    float div =
-        (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
-        (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
-        
-    if(div != 0) {
-    
-        float local_ul, local_ur;
-        
-        //Calculate the intersection distance from the line.
-        local_ul =
-            (
-                (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
-                (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
-            ) / div;
-        if(ul) *ul = local_ul;
-        
-        //Calculate the intersection distance from the ray.
-        local_ur =
-            (
-                (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
-                (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
-            ) / div;
-        if(ur) *ur = local_ur;
-        
-        //Return whether they intersect.
-        return
-            (local_ur >= 0) && (local_ur <= 1) &&
-            (local_ul >= 0) && (local_ul <= 1);
-            
-    } else {
-        //No intersection.
-        return false;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * insersection: Return the intersection point here, if not NULL.
- */
-bool lines_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
-) {
-    float ur;
-    if(intersection) {
-        intersection->x = 0.0f;
-        intersection->y = 0.0f;
-    }
-    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return NULL;
-    if(intersection) {
-        intersection->x = l2p1.x + (l2p2.x - l2p1.x) * ur;
-        intersection->y = l2p1.y + (l2p2.y - l2p1.y) * ur;
-    }
-    return true;
 }
 
 

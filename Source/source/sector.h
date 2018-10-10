@@ -418,14 +418,6 @@ bool is_point_in_triangle(
     const point &p, const point &tp1, const point &tp2, const point &tp3,
     bool loq
 );
-bool lines_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* ur, float* ul
-);
-bool lines_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
-);
 TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
     const bool clear_lone_edges

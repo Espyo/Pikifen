@@ -16,6 +16,7 @@
 
 #include "animation.h"
 #include "functions.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 using namespace std;

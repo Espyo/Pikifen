@@ -16,6 +16,7 @@
 #include "functions.h"
 #include "gameplay.h"
 #include "mobs/pikmin.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;

@@ -15,7 +15,6 @@
 #pragma warning(disable : 4996)
 
 #include <algorithm>
-#include <iomanip>
 #include <iostream>
 #include <math.h>
 #include <sstream>
@@ -34,17 +33,8 @@
 #include "functions.h"
 #include "init.h"
 #include "menus.h"
+#include "utils/string_utils.h"
 #include "vars.h"
-
-/* ----------------------------------------------------------------------------
- * Boxes a string so that it becomes a specific size.
- * Truncates if it's too big, pads with spaces if it's too small.
- */
-string box_string(const string &s, const size_t size) {
-    string spaces = string(size, ' ');
-    return (s + spaces).substr(0, size);
-}
-
 
 /* ----------------------------------------------------------------------------
  * Does sector s1 cast a shadow onto sector s2?
@@ -107,14 +97,6 @@ void change_game_state(unsigned int new_state) {
 
 
 /* ----------------------------------------------------------------------------
- * Limits the given number to the given range, inclusive.
- */
-float clamp(const float number, const float minimum, const float maximum) {
-    return min(maximum, max(minimum, number));
-}
-
-
-/* ----------------------------------------------------------------------------
  * Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
@@ -128,40 +110,6 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap = NULL;
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the angle and magnitude of vector coordinates.
- * coordinates: The coordinates.
- * angle:       Variable to return the angle to.
- * magnitude:   Variable to return the magnitude to.
- */
-void coordinates_to_angle(
-    const point &coordinates, float* angle, float* magnitude
-) {
-    if(angle) {
-        *angle = atan2(coordinates.y, coordinates.x);
-    }
-    if(magnitude) {
-        *magnitude = dist(point(0, 0), coordinates).to_float();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a random number, between 0 and 1, but it's deterministic
- * if you use the same seed. i.e., if you feed it X, it
- * will always return Y. Because of its simplicity and predictability,
- * it should only be used for tiny details with unimportant randomness.
- * seed: The seed number.
- */
-float deterministic_random(const unsigned int seed) {
-    //This was built pretty much ad-hoc.
-    return
-        (
-            ((seed * 1234567890L + (seed << 4)) % (seed ^ 981524)) % 65536
-        ) / 65535.0f;
 }
 
 
@@ -282,6 +230,9 @@ mob* get_closest_mob_to_cursor() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns a string representing the current date and time.
+ */
 string get_current_time(const bool slashes_for_day) {
     time_t tt;
     time(&tt);
@@ -566,17 +517,6 @@ ALLEGRO_COLOR interpolate_color(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the interpolation of the value between two positions.
- */
-float interpolate_number(
-    const float p, const float p1, const float p2,
-    const float v1, const float v2
-) {
-    return v1 + ((p - p1) / (float) (p2 - p1)) * (v2 - v1);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Prints something onto the error log.
  * s: String that represents the error.
  * d: If not null, this will be used to obtain the file name
@@ -620,6 +560,15 @@ void log_error(string s, data_node* d) {
     }
     
     errors_reported_today++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts a point to a string.
+ * If z is present, the third word is placed there.
+ */
+string p2s(const point &p, float* z) {
+    return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
 }
 
 
@@ -708,26 +657,6 @@ vector<string> prompt_file_dialog_locked_to_folder(
 
 
 /* ----------------------------------------------------------------------------
- * Returns a random float between the provided range, inclusive.
- */
-float randomf(float min, float max) {
-    if(min == max) return min;
-    if(min > max) swap(min, max);
-    return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a random integer between the provided range, inclusive.
- */
-int randomi(int min, int max) {
-    if(min == max) return min;
-    if(min > max) swap(min, max);
-    return ((rand()) % (max - min + 1)) + min;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Basically, it destroys and recreates a bitmap.
  * The main purpose of this is to update its mipmap.
  * b: The bitmap.
@@ -736,20 +665,6 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
     ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
     al_destroy_bitmap(b);
     return fixed_mipmap;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Replaces all instances of x with y.
- */
-string replace_all(string s, string search, string replacement) {
-    size_t pos = s.find(search);
-    while(pos != string::npos) {
-        s.replace(pos, search.size(), replacement);
-        pos = s.find(search, pos + replacement.size());
-    };
-    
-    return s;
 }
 
 
@@ -769,6 +684,26 @@ void report_fatal_error(const string &s, data_node* dn) {
     
     exit(-1);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts a string to a point.
+ * If z is present, the third word is placed there.
+ */
+point s2p(const string &s, float* z) {
+    vector<string> words = split(s);
+    point p;
+    if(words.size() >= 1) {
+        p.x = s2f(words[0]);
+    }
+    if(words.size() >= 2) {
+        p.y = s2f(words[1]);
+    }
+    if(z && words.size() >= 3) {
+        *z = s2f(words[2]);
+    }
+    return p;
 }
 
 
@@ -1111,55 +1046,6 @@ void signal_handler(const int signum) {
 
 
 /* ----------------------------------------------------------------------------
- * Splits a string into several substrings, by the specified delimiter.
- * text:        The string to split.
- * del:         The delimiter. Default is space.
- * inc_empty:   If true, include empty substrings on the vector.
- *   i.e. if two delimiters come together in a row,
- *   keep an empty substring between.
- * inc_del:     If true, include the delimiters on the vector as a substring.
- */
-vector<string> split(
-    string text, const string &del, const bool inc_empty, const bool inc_del
-) {
-    vector<string> v;
-    size_t pos;
-    size_t del_size = del.size();
-    
-    do {
-        pos = text.find(del);
-        if (pos != string::npos) {  //If it DID find the delimiter.
-            //Get the text between the start and the delimiter.
-            string sub = text.substr(0, pos);
-            
-            //Add the text before the delimiter to the vector.
-            if(sub != "" || inc_empty)
-                v.push_back(sub);
-                
-            //Add the delimiter to the vector, but only if requested.
-            if(inc_del)
-                v.push_back(del);
-                
-            //Delete everything before the delimiter,
-            //including the delimiter itself, and search again.
-            text.erase(text.begin(), text.begin() + pos + del_size);
-        }
-    } while (pos != string::npos);
-    
-    //Text after the final delimiter.
-    //(If there is one. If not, it's just the whole string.)
-    
-    //If it's a blank string,
-    //only add it if we want empty strings.
-    if (text != "" || inc_empty) {
-        v.push_back(text);
-    }
-    
-    return v;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Standardizes a path, making it use forward slashes instead of backslashes,
  * and removing excess slashes at the end.
  */
@@ -1205,46 +1091,6 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
 
 
 /* ----------------------------------------------------------------------------
- * Converts an entire string into lowercase.
- */
-string str_to_lower(string s) {
-    unsigned short n_characters = s.size();
-    for(unsigned short c = 0; c < n_characters; ++c) {
-        s[c] = tolower(s[c]);
-    }
-    return s;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Converts an entire string into uppercase.
- */
-string str_to_upper(string s) {
-    unsigned short n_characters = s.size();
-    for(unsigned short c = 0; c < n_characters; ++c) {
-        s[c] = toupper(s[c]);
-    }
-    return s;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sums a number to another (even if negative), and then
- * wraps that number across a limit, applying a modulus operation.
- * nr:         Base number.
- * sum:        Number to add (or subtract).
- * wrap_limit: Wrap between [0 - wrap_limit[.
- */
-int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
-    int final_nr = nr + sum;
-    while(final_nr < 0) {
-        final_nr += wrap_limit;
-    }
-    return final_nr % wrap_limit;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Updates the history list for the animation editor,
  * adding a new entry or bumping it up.
  */
@@ -1284,39 +1130,10 @@ void update_animation_editor_history(const string &n) {
 void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
 
 
-//Converts a boolean to a string, returning either "true" or "false".
-string b2s(const bool b) { return b ? "true" : "false"; }
-
-
 //Converts a color to its string representation.
 string c2s(const ALLEGRO_COLOR &c) {
     return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
            (c.a == 1 ? "" : " " + i2s(c.a * 255));
-}
-
-
-//Converts a float to a string, with 2 decimal places.
-string f2s(const float f) {
-    std::stringstream s;
-    s << std::fixed << ::setprecision(2) << f;
-    return s.str();
-}
-
-
-//Converts a point to a string. If z is present, the third word is placed there.
-string p2s(const point &p, float* z) {
-    return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
-}
-
-
-//Converts a string to a boolean, judging by
-//the English language words that represent true and false.
-bool s2b(const string &s) {
-    string s2 = s;
-    s2 = str_to_lower(s2);
-    s2 = trim_spaces(s2);
-    if(s2 == "yes" || s2 == "true" || s2 == "y" || s2 == "t") return true;
-    else return (s2i(s2) != 0);
 }
 
 
@@ -1354,36 +1171,6 @@ ALLEGRO_COLOR s2c(const string &s) {
             ((components.size() > 3) ? s2i(components[3]) : 255)
         );
     return c;
-}
-
-
-//Converts a string to a float,
-//trimming the spaces and accepting commas or points.
-double s2f(const string &s) {
-    string s2 = trim_spaces(s);
-    replace(s2.begin(), s2.end(), ',', '.');
-    return atof(s2.c_str());
-}
-
-
-//Converts a string to an integer.
-int s2i(const string &s) { return s2f(s); }
-
-
-//Converts a string to a point. If z is present, the third word is placed there.
-point s2p(const string &s, float* z) {
-    vector<string> words = split(s);
-    point p;
-    if(words.size() >= 1) {
-        p.x = s2f(words[0]);
-    }
-    if(words.size() >= 2) {
-        p.y = s2f(words[1]);
-    }
-    if(z && words.size() >= 3) {
-        *z = s2f(words[2]);
-    }
-    return p;
 }
 
 

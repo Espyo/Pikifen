@@ -17,6 +17,8 @@
 
 #include <allegro5/allegro.h>
 
+#include "../utils/geometry_utils.h"
+
 
 using namespace std;
 

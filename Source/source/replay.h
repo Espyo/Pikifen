@@ -16,13 +16,13 @@
 
 #include <allegro5/allegro.h>
 
-#include "geometry_utils.h"
 #include "mobs/enemy.h"
 #include "mobs/leader.h"
 #include "mobs/mob.h"
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "mobs/treasure.h"
+#include "utils/geometry_utils.h"
 
 using namespace std;
 

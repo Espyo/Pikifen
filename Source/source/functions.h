@@ -38,12 +38,6 @@
 //but if it's the last, it retrieves the first.
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
-//Converts an integer (or long) to a string.
-#define i2s(n) to_string((long long) (n))
-
-//Returns a string with a number, adding a leading zero if it's less than 10.
-#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
-
 //Returns a white color with the specified alpha.
 #define map_alpha(a) al_map_rgba(255, 255, 255, (a))
 
@@ -55,12 +49,6 @@
 //to access them directly than to call a function.
 #define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state->events[(ev_type)])
 
-//Rounds a number. Ugh, why do I even have to create this.
-#define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
-
-//Returns the sign (1 or -1) of a number.
-#define sign(n) (((n) >= 0) ? 1 : -1)
-
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range(p) \
     (((p)->following_group == cur_leader_ptr && group_move_magnitude) ? \
@@ -68,17 +56,11 @@
 
 
 
-string box_string(const string &s, const size_t size);
 bool casts_shadow(sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
-float clamp(const float number, const float minimum, const float maximum);
 void clear_area_textures();
-void coordinates_to_angle(
-    const point &coordinates, float* angle, float* magnitude
-);
-float deterministic_random(const unsigned int seed);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
@@ -102,10 +84,6 @@ ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2
 );
-float interpolate_number(
-    const float p, const float p1, const float p2,
-    const float v1, const float v2
-);
 void log_error(string s, data_node* d = NULL);
 void print_info(const string &t);
 vector<string> prompt_file_dialog(
@@ -116,10 +94,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
     const string &patterns, const int mode, unsigned char* result
 );
-float randomf(float min, float max);
-int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
-string replace_all(string s, string search, string replacement);
 void report_fatal_error(const string &s, data_node* dn = NULL);
 void save_creator_tools();
 void save_options();
@@ -130,29 +105,17 @@ int show_message_box(
     char const* text, char const* buttons, int flags
 );
 void signal_handler(const int signum);
-vector<string> split(
-    string text, const string &del = " ", const bool inc_empty = false,
-    const bool inc_del = false
-);
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
-string str_to_lower(string s);
-string str_to_upper(string s);
-int sum_and_wrap(const int nr, const int sum, const int wrap_limit);
 void unload_hazards();
 void unload_status_types();
 void update_animation_editor_history(const string &n = "");
 
 
 void al_fwrite(ALLEGRO_FILE* f, string s);
-string b2s(const bool b);
 string c2s(const ALLEGRO_COLOR &c);
-string f2s(const float f);
-string p2s(const point &p, float* z = NULL);
-bool s2b(const string &s);
 ALLEGRO_COLOR s2c(const string &s);
-double s2f(const string &s);
-int s2i(const string &s);
+string p2s(const point &p, float* z = NULL);
 point s2p(const string &s, float* z = NULL);
 
 #if defined(_WIN32)

@@ -379,7 +379,7 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * s:         The original string.
  * left_only: If true, only trim the spaces at the left.
  */
-string trim_spaces(const string &s, const bool left_only) {
+string data_node::trim_spaces(const string &s, const bool left_only) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {

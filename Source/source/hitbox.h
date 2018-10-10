@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "const.h"
-#include "geometry_utils.h"
+#include "utils/geometry_utils.h"
 
 /*
  * You can read more about hitboxes

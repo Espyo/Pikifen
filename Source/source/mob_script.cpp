@@ -21,6 +21,7 @@
 #include "mob_script.h"
 #include "mobs/mob_type.h"
 #include "particle.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------

@@ -13,10 +13,11 @@
 
 #include "../drawing.h"
 #include "../functions.h"
-#include "../geometry_utils.h"
+#include "../utils/geometry_utils.h"
 #include "mob.h"
 #include "pikmin.h"
 #include "pikmin_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;

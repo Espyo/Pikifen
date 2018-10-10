@@ -13,8 +13,9 @@
 
 #include "../drawing.h"
 #include "../functions.h"
-#include "../geometry_utils.h"
+#include "../utils/geometry_utils.h"
 #include "onion.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 using namespace std;

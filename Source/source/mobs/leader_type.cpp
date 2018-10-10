@@ -15,6 +15,7 @@
 #include "../load.h"
 #include "mob_fsm.h"
 #include "../const.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

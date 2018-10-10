@@ -17,6 +17,7 @@
 #include "../../functions.h"
 #include "../../LAFI/button.h"
 #include "../../load.h"
+#include "../../utils/string_utils.h"
 #include "../../vars.h"
 
 using namespace std;

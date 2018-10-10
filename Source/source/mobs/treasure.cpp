@@ -13,6 +13,7 @@
 #include "../functions.h"
 #include "ship.h"
 #include "treasure.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

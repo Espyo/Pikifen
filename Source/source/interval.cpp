@@ -11,6 +11,7 @@
 
 #include "functions.h"
 #include "interval.h"
+#include "utils/string_utils.h"
 
 //TODO document these functions.
 

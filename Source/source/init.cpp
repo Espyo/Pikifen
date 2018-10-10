@@ -30,6 +30,7 @@
 #include "gameplay.h"
 #include "menus.h"
 #include "mob_script.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 

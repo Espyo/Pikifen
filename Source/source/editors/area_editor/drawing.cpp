@@ -13,6 +13,7 @@
 
 #include "editor.h"
 #include "../../drawing.h"
+#include "../../utils/string_utils.h"
 #include "../../vars.h"
 
 /* ----------------------------------------------------------------------------

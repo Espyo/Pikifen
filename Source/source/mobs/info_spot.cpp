@@ -14,6 +14,7 @@
 #include "../drawing.h"
 #include "../functions.h"
 #include "info_spot.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

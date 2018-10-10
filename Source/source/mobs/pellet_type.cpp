@@ -13,6 +13,7 @@
 #include "mob_fsm.h"
 #include "pellet_fsm.h"
 #include "pellet_type.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

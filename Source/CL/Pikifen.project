@@ -18,6 +18,14 @@
  }]]]>
     </Plugin>
   </Plugins>
+  <VirtualDirectory Name="utils">
+    <File Name="../source/utils/string_utils.cpp"/>
+    <File Name="../source/utils/string_utils.h"/>
+    <File Name="../source/utils/math_utils.h"/>
+    <File Name="../source/utils/math_utils.cpp"/>
+    <File Name="../source/utils/geometry_utils.h"/>
+    <File Name="../source/utils/geometry_utils.cpp"/>
+  </VirtualDirectory>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="source">
@@ -69,8 +77,6 @@
     <File Name="../source/hazard.cpp"/>
     <File Name="../source/liquid.cpp"/>
     <File Name="../source/liquid.h"/>
-    <File Name="../source/geometry_utils.h"/>
-    <File Name="../source/geometry_utils.cpp"/>
     <File Name="../source/load.h"/>
     <File Name="../source/load.cpp"/>
     <File Name="../source/gameplay.h"/>

@@ -22,6 +22,7 @@
 #include "pellet_type.h"
 #include "pikmin_type.h"
 #include "treasure_type.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 using namespace std;

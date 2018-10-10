@@ -7,6 +7,7 @@
  *
  * === FILE DESCRIPTION ===
  * Header for geometry-related utility functions.
+ * These don't contain logic specific to the Pikifen project.
  */
 
 #ifndef GEOMETRY_UTILS_INCLUDED
@@ -15,6 +16,9 @@
 #define _USE_MATH_DEFINES
 #include <cstddef>
 #include <math.h>
+#include <string>
+
+using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Simple 2D point.
@@ -41,6 +45,46 @@ struct point {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * A distance.
+ * Basically this is just a number, but for optimization's sake,
+ * this number is actually the distance SQUARED.
+ * It's faster to compare two squared distances than square-rooting them both,
+ * since sqrt() is so costly. If we do need to sqrt() a number, we keep it in
+ * a cache inside the class, so that we can use it at will next time.
+ * Fun fact, keeping an extra boolean in the class that indicates whether or
+ * not the sqrt()'d number is in cache is around twice as fast as keeping
+ * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
+ * to LARGE_FLOAT if it is uncached.
+ */
+struct dist {
+private:
+    float distance_squared;
+    float normal_distance;
+    bool has_normal_distance;
+    
+public:
+    dist(const point &p1, const point &p2);
+    dist(const float d = 0.0f);
+    dist &operator =(const float d);
+    bool operator <(const float d2);
+    bool operator <(const dist &d2);
+    bool operator <=(const float d2);
+    bool operator <=(const dist &d2);
+    bool operator >(const float d2);
+    bool operator >(const dist &d2);
+    bool operator >=(const float d2);
+    bool operator >=(const dist &d2);
+    bool operator ==(const float d2);
+    bool operator ==(const dist &d2);
+    bool operator !=(const float d2);
+    bool operator !=(const dist &d2);
+    void operator +=(const dist &d2);
+    float to_float();
+};
+
+
+
 point angle_to_coordinates(
     const float angle, const float magnitude
 );
@@ -61,6 +105,9 @@ bool circle_intersects_rectangle(
     const float rect_angle,
     float* overlap_dist = NULL, float* rectangle_side_angle = NULL
 );
+void coordinates_to_angle(
+    const point &coordinates, float* angle, float* magnitude
+);
 float deg_to_rad(const float rad);
 float get_angle(const point &center, const point &focus);
 point get_closest_point_in_line(
@@ -72,6 +119,14 @@ void get_transformed_rectangle_bounding_box(
     point* min_coords, point* max_coords
 );
 float linear_dist_to_angular(const float linear_dist, const float radius);
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    float* ur, float* ul
+);
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+);
 void move_point(
     const point &start, const point &target,
     const float speed, const float reach_radius, point* mov,

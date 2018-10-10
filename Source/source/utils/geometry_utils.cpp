@@ -7,12 +7,14 @@
  *
  * === FILE DESCRIPTION ===
  * Geometry-related utility functions.
+ * These don't contain logic specific to the Pikifen project.
  */
 
 #include <algorithm>
 
 #include "geometry_utils.h"
-#include "functions.h"
+#include "math_utils.h"
+#include "../misc_structs.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -152,6 +154,99 @@ const bool point::operator !=(const point &p) const {
  */
 const point point::operator *(const float m) const {
     return point(x * m, y * m);
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new distance number, given two points.
+ */
+dist::dist(const point &p1, const point &p2) :
+    distance_squared(
+        (p2.x - p1.x) * (p2.x - p1.x) +
+        (p2.y - p1.y) * (p2.y - p1.y)
+    ),
+    normal_distance(0),
+    has_normal_distance(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new distance number, given a non-squared distance.
+ */
+dist::dist(const float d) :
+    distance_squared(d * d),
+    normal_distance(d),
+    has_normal_distance(true) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the regular distance as a number.
+ */
+float dist::to_float() {
+    if(!has_normal_distance) {
+        normal_distance = sqrt(distance_squared);
+        has_normal_distance = true;
+    }
+    return normal_distance;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Distance comparisons and plain operations.
+ */
+dist &dist::operator =(const float d) {
+    distance_squared = d * d;
+    normal_distance = d;
+    has_normal_distance = true;
+    return *this;
+}
+bool dist::operator<(const float d2) {
+    return distance_squared < (d2 * d2);
+}
+bool dist::operator>(const float d2) {
+    return distance_squared > (d2 * d2);
+}
+bool dist::operator==(const float d2) {
+    return distance_squared == (d2 * d2);
+}
+bool dist::operator<=(const float d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const float d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const float d2) {
+    return !operator==(d2);
+}
+bool dist::operator<(const dist &d2) {
+    return distance_squared < d2.distance_squared;
+}
+bool dist::operator>(const dist &d2) {
+    return distance_squared > d2.distance_squared;
+}
+bool dist::operator==(const dist &d2) {
+    return distance_squared == d2.distance_squared;
+}
+bool dist::operator<=(const dist &d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const dist &d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const dist &d2) {
+    return !operator==(d2);
+}
+void dist::operator+=(const dist &d2) {
+    distance_squared += d2.distance_squared;
+    if(has_normal_distance && d2.has_normal_distance) {
+        normal_distance += d2.normal_distance;
+    } else {
+        has_normal_distance = false;
+    }
 }
 
 
@@ -303,6 +398,24 @@ bool circle_intersects_rectangle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the angle and magnitude of vector coordinates.
+ * coordinates: The coordinates.
+ * angle:       Variable to return the angle to.
+ * magnitude:   Variable to return the magnitude to.
+ */
+void coordinates_to_angle(
+    const point &coordinates, float* angle, float* magnitude
+) {
+    if(angle) {
+        *angle = atan2(coordinates.y, coordinates.x);
+    }
+    if(magnitude) {
+        *magnitude = dist(point(0, 0), coordinates).to_float();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts an angle from degrees to radians.
  */
 float deg_to_rad(const float deg) {
@@ -405,6 +518,77 @@ void get_transformed_rectangle_bounding_box(
  */
 float linear_dist_to_angular(const float linear_dist, const float radius) {
     return 2 * atan(linear_dist / (2 * radius));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the two line segments intersect.
+ * ur: Returns the distance from the start of line 2 in which
+ *   the intersection happens.
+ *   This is a ratio, so 0 is the start, 1 is the end of the line.
+ *   Oh, and the r stands for ray.
+ * ul: Same as ur, but for line 1.
+ */
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    float* ur, float* ul
+) {
+
+    float div =
+        (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
+        (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
+        
+    if(div != 0) {
+    
+        float local_ul, local_ur;
+        
+        //Calculate the intersection distance from the line.
+        local_ul =
+            (
+                (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
+                (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
+            ) / div;
+        if(ul) *ul = local_ul;
+        
+        //Calculate the intersection distance from the ray.
+        local_ur =
+            (
+                (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
+                (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
+            ) / div;
+        if(ur) *ur = local_ur;
+        
+        //Return whether they intersect.
+        return
+            (local_ur >= 0) && (local_ur <= 1) &&
+            (local_ul >= 0) && (local_ul <= 1);
+            
+    } else {
+        //No intersection.
+        return false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the two line segments intersect.
+ * insersection: Return the intersection point here, if not NULL.
+ */
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+) {
+    float ur;
+    if(intersection) {
+        intersection->x = 0.0f;
+        intersection->y = 0.0f;
+    }
+    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return NULL;
+    if(intersection) {
+        intersection->x = l2p1.x + (l2p2.x - l2p1.x) * ur;
+        intersection->y = l2p1.y + (l2p2.y - l2p1.y) * ur;
+    }
+    return true;
 }
 
 

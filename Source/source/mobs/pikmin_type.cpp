@@ -16,6 +16,7 @@
 #include "leader.h"
 #include "../mob_script.h"
 #include "pikmin_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =

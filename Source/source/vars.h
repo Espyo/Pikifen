@@ -24,7 +24,7 @@
 #include "controls.h"
 #include "game_state.h"
 #include "mobs/gate.h"
-#include "geometry_utils.h"
+#include "utils/geometry_utils.h"
 #include "hitbox.h"
 #include "LAFI/gui.h"
 #include "LAFI/label.h"

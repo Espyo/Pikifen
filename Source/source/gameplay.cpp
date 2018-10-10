@@ -20,6 +20,7 @@
 #include "functions.h"
 #include "load.h"
 #include "misc_structs.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 //How long the HUD moves for when the area is entered.

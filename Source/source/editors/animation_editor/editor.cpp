@@ -26,6 +26,8 @@
 #include "../../LAFI/scrollbar.h"
 #include "../../LAFI/textbox.h"
 #include "../../load.h"
+#include "../../utils/math_utils.h"
+#include "../../utils/string_utils.h"
 #include "../../misc_structs.h"
 #include "../../vars.h"
 

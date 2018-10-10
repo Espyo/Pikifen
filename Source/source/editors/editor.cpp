@@ -11,7 +11,6 @@
 
 #include "editor.h"
 #include "../drawing.h"
-#include "../functions.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
 #include "../LAFI/checkbox.h"
@@ -20,6 +19,8 @@
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/textbox.h"
 #include "../load.h"
+#include "../utils/math_utils.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 

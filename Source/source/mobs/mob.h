@@ -259,7 +259,7 @@ public:
     animation_instance anim;
     //Finite-state machine.
     mob_fsm fsm;
-    //The timer.
+    //The script-controlled timer.
     timer script_timer;
     //Variables.
     map<string, string> vars;

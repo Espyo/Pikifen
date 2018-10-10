@@ -60,6 +60,8 @@ private:
     vector<data_node*> dummy_children;
     data_node* create_dummy();
     
+    string trim_spaces(const string &s, const bool left_only = false);
+    
 public:
     string name;    //The node's name.
     string value;   //And its value.
@@ -113,6 +115,5 @@ public:
 
 
 void getline(ALLEGRO_FILE* file, string &line);
-string trim_spaces(const string &s, const bool left_only = false);
 
 #endif //ifndef DATA_FILE_INCLUDED

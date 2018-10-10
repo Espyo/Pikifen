@@ -13,6 +13,7 @@
 #include "ship.h"
 #include "ship_fsm.h"
 #include "ship_type.h"
+#include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a type of ship.

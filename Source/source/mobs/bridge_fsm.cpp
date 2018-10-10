@@ -13,6 +13,7 @@
 #include "bridge.h"
 #include "bridge_fsm.h"
 #include "mob_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
