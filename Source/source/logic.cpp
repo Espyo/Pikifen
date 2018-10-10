@@ -675,6 +675,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     };
     
     vector<pending_intermob_event> pending_intermob_events;
+    mob_state* state_before = m_ptr->fsm.cur_state;
     
     size_t n_mobs = mobs.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
@@ -1215,17 +1216,17 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     }
     );
     
-    mob_state* state_before = m_ptr->fsm.cur_state;
     for(size_t e = 0; e < pending_intermob_events.size(); ++e) {
-        if(!pending_intermob_events[e].event_ptr) continue;
-        pending_intermob_events[e].event_ptr->run(
-            m_ptr, (void*) pending_intermob_events[e].mob_ptr
-        );
         if(m_ptr->fsm.cur_state != state_before) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
             break;
         }
+        if(!pending_intermob_events[e].event_ptr) continue;
+        pending_intermob_events[e].event_ptr->run(
+            m_ptr, (void*) pending_intermob_events[e].mob_ptr
+        );
+        
     }
     
 }

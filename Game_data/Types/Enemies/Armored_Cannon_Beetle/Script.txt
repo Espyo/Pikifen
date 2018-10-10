@@ -31,6 +31,7 @@ script {
             set_timer randomly 1.5 2.5
         }
         on_opponent_in_reach {
+            focus trigger
             set_state turning
         }
     }
@@ -60,6 +61,7 @@ script {
             set_state returning
         }
         on_opponent_in_reach {
+            focus trigger
             set_state turning
         }
     }
@@ -73,6 +75,7 @@ script {
             set_state idling
         }
         on_opponent_in_reach {
+            focus trigger
             set_state turning
         }
     }
@@ -81,7 +84,6 @@ script {
         on_enter {
             stop
             set_animation moving
-            focus trigger
             turn focused_mob
             set_near_reach attack
             set_far_reach search
