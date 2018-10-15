@@ -110,13 +110,22 @@ void coordinates_to_angle(
 );
 float deg_to_rad(const float rad);
 float get_angle(const point &center, const point &focus);
+float get_angle_cw_dif(float a1, float a2);
+float get_angle_smallest_dif(float a1, float a2);
 point get_closest_point_in_line(
     const point &l1, const point &l2, const point &p,
     float* segment_ratio = NULL
 );
+float get_point_sign(
+    const point &p, const point &lp1, const point &lp2
+);
 void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, const float angle,
     point* min_coords, point* max_coords
+);
+bool is_point_in_triangle(
+    const point &p, const point &tp1, const point &tp2, const point &tp3,
+    bool loq
 );
 float linear_dist_to_angular(const float linear_dist, const float radius);
 bool lines_intersect(

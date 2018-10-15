@@ -1545,15 +1545,6 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a point's sign on a line segment,
- * used for detecting if it's inside a triangle.
- */
-float get_point_sign(const point &p, const point &lp1, const point &lp2) {
-    return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the outer polygon and inner polygons of a sector,
  * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
@@ -1858,44 +1849,6 @@ bool is_point_in_sector(const point &p, sector* s_ptr) {
     }
     
     return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a triangle or not.
- * p:      The point to check.
- * tp*:    Coordinates of the triangle's points.
- * loq:    Less or equal.
- *   Different code requires different precision for on-line cases.
- *   Just...don't overthink this, I added this based on what worked and didn't.
- * Thanks go to
- *   http://stackoverflow.com/questions/2049582/
- *   how-to-determine-a-point-in-a-triangle
- */
-bool is_point_in_triangle(
-    const point &p, const point &tp1, const point &tp2, const point &tp3,
-    const bool loq
-) {
-
-    bool b1, b2, b3;
-    
-    float f1, f2, f3;
-    
-    f1 = get_point_sign(p, tp1, tp2);
-    f2 = get_point_sign(p, tp2, tp3);
-    f3 = get_point_sign(p, tp3, tp1);
-    
-    if(loq) {
-        b1 = f1 <= 0.0f;
-        b2 = f2 <= 0.0f;
-        b3 = f3 <= 0.0f;
-    } else {
-        b1 = f1 < 0.0f;
-        b2 = f2 < 0.0f;
-        b3 = f3 < 0.0f;
-    }
-    
-    return ((b1 == b2) && (b2 == b3));
 }
 
 
@@ -2489,27 +2442,6 @@ vector<path_stop*> dijkstra(
         if(obstacles_found) obstacles_found->clear();
         return vector<path_stop*>();
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the clockwise distance between a1 and a2, in radians.
- */
-float get_angle_cw_dif(float a1, float a2) {
-    a1 = normalize_angle(a1);
-    a2 = normalize_angle(a2);
-    if(a1 > a2) a1 -= TAU;
-    return a2 - a1;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the smallest distance between two angles.
- */
-float get_angle_smallest_dif(float a1, float a2) {
-    a1 = normalize_angle(a1);
-    a2 = normalize_angle(a2);
-    return TAU / 2 - abs(abs(a1 - a2) - TAU / 2);
 }
 
 

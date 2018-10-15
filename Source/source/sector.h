@@ -374,8 +374,6 @@ vector<path_stop*> dijkstra(
     const bool ignore_obstacles,
     unordered_set<mob*>* obstacles_found, float* total_dist
 );
-float get_angle_cw_dif(float a1, float a2);
-float get_angle_smallest_dif(float a1, float a2);
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
@@ -388,9 +386,6 @@ vector<path_stop*> get_path(
     unordered_set<mob*>* obstacles_found, bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
-float get_point_sign(
-    const point &p, const point &lp1, const point &lp2
-);
 TRIANGULATION_ERRORS get_polys(
     sector* s, polygon* outer, vector<polygon>* inners,
     set<edge*>* lone_edges, const bool check_vertex_reuse
@@ -414,10 +409,6 @@ bool is_vertex_ear(
     const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr
 );
 bool is_point_in_sector(const point &p, sector* s_ptr);
-bool is_point_in_triangle(
-    const point &p, const point &tp1, const point &tp2, const point &tp3,
-    bool loq
-);
 TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
     const bool clear_lone_edges
