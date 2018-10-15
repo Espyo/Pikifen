@@ -325,21 +325,54 @@ void area_data::generate_blockmap() {
     generate_edges_blockmap(edges);
     
     
-    //If at this point, there's any block without a sector, that means
-    //that the block has no edges. It has, however, a single sector (or NULL),
-    //so use the triangle method to get the sector. Checking the center is
-    //just a good a spot as any.
+    /* If at this point, there's any block that's missing a sector,
+     * that means we couldn't figure out the sectors due to the edges it has
+     * alone. But the block still has a sector (or NULL). So we need another
+     * way to figure it out.
+     * We know the following things that can speed up the process:
+     * * The blocks at the edges of the blockmap have the NULL sector as the
+     *     only candidate.
+     * * If a block's neighbor only has one sector, then this block has that
+     *     same sector.
+     * If we can't figure out the sector the easy way, then we have to use the
+     * triangle method to get the sector. Using the center of the blockmap is
+     * just as good a checking spot as any.
+     */
     for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
         for(size_t by = 0; by < bmap.n_rows; ++by) {
         
-            if(bmap.sectors[bx][by].empty()) {
+            if(!bmap.sectors[bx][by].empty()) continue;
             
-                point corner = bmap.get_top_left_corner(bx, by);
-                corner += BLOCKMAP_BLOCK_SIZE * 0.5;
-                bmap.sectors[bx][by].insert(
-                    get_sector(corner, NULL, false)
-                );
+            if(
+                bx == 0 || by == 0 ||
+                bx == bmap.n_cols - 1 || by == bmap.n_cols - 1
+            ) {
+                bmap.sectors[bx][by].insert(NULL);
+                continue;
             }
+            
+            if(bmap.sectors[bx - 1][by].size() == 1) {
+                bmap.sectors[bx][by].insert(*bmap.sectors[bx - 1][by].begin());
+                continue;
+            }
+            if(bmap.sectors[bx + 1][by].size() == 1) {
+                bmap.sectors[bx][by].insert(*bmap.sectors[bx + 1][by].begin());
+                continue;
+            }
+            if(bmap.sectors[bx][by - 1].size() == 1) {
+                bmap.sectors[bx][by].insert(*bmap.sectors[bx][by - 1].begin());
+                continue;
+            }
+            if(bmap.sectors[bx][by + 1].size() == 1) {
+                bmap.sectors[bx][by].insert(*bmap.sectors[bx][by + 1].begin());
+                continue;
+            }
+            
+            point corner = bmap.get_top_left_corner(bx, by);
+            corner += BLOCKMAP_BLOCK_SIZE * 0.5;
+            bmap.sectors[bx][by].insert(
+                get_sector(corner, NULL, false)
+            );
         }
     }
 }
@@ -1772,6 +1805,14 @@ sector* get_sector(
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = cur_area_data.sectors[s];
             
+            if(
+                p.x < s_ptr->bbox[0].x ||
+                p.x > s_ptr->bbox[1].x ||
+                p.y < s_ptr->bbox[0].y ||
+                p.y > s_ptr->bbox[1].y
+            ) {
+                continue;
+            }
             if(is_point_in_sector(p, s_ptr)) {
                 if(sector_nr) *sector_nr = s;
                 return s_ptr;
