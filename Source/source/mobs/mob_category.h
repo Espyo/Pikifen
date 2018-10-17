@@ -71,6 +71,7 @@ public:
         const size_t id, const string &name, const string &plural_name,
         const string &folder, const ALLEGRO_COLOR editor_color
     );
+    virtual ~mob_category();
     
 };
 
@@ -116,6 +117,7 @@ public:
     virtual void clear_types();
     
     none_category();
+    ~none_category();
 };
 
 
@@ -136,6 +138,7 @@ public:
     virtual void clear_types();
     
     pikmin_category();
+    ~pikmin_category();
 };
 
 
@@ -156,6 +159,7 @@ public:
     virtual void clear_types();
     
     enemy_category();
+    ~enemy_category();
 };
 
 
@@ -176,6 +180,7 @@ public:
     virtual void clear_types();
     
     leader_category();
+    ~leader_category();
 };
 
 
@@ -196,6 +201,7 @@ public:
     virtual void clear_types();
     
     onion_category();
+    ~onion_category();
 };
 
 
@@ -216,6 +222,7 @@ public:
     virtual void clear_types();
     
     pellet_category();
+    ~pellet_category();
 };
 
 
@@ -236,6 +243,7 @@ public:
     virtual void clear_types();
     
     ship_category();
+    ~ship_category();
 };
 
 
@@ -256,6 +264,7 @@ public:
     virtual void clear_types();
     
     treasure_category();
+    ~treasure_category();
 };
 
 
@@ -276,6 +285,7 @@ public:
     virtual void clear_types();
     
     gate_category();
+    ~gate_category();
 };
 
 
@@ -296,6 +306,7 @@ public:
     virtual void clear_types();
     
     bridge_category();
+    ~bridge_category();
 };
 
 
@@ -316,6 +327,7 @@ public:
     virtual void clear_types();
     
     special_category();
+    ~special_category();
 };
 
 
@@ -336,6 +348,7 @@ public:
     virtual void clear_types();
     
     custom_category();
+    ~custom_category();
 };
 
 

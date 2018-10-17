@@ -183,7 +183,7 @@ public:
     
     //General functions.
     mob_type(size_t category_id);
-    ~mob_type();
+    virtual ~mob_type();
     virtual void load_parameters(data_node* file);
     virtual void load_resources(data_node* file);
     virtual anim_conversion_vector get_anim_conversions();

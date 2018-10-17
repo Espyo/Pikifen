@@ -302,7 +302,7 @@ protected:
 public:
 
     editor();
-    ~editor();
+    virtual ~editor();
     
     virtual void do_drawing() = 0;
     virtual void do_logic() = 0;

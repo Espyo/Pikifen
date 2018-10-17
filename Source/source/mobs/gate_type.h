@@ -29,6 +29,7 @@ enum GATE_ANIMATIONS {
 class gate_type : public mob_type {
 public:
     gate_type();
+    ~gate_type();
     anim_conversion_vector get_anim_conversions();
 };
 

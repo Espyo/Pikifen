@@ -39,3 +39,6 @@ anim_conversion_vector gate_type::get_anim_conversions() {
     v.push_back(make_pair(GATE_ANIM_DESTROYED, "destroyed"));
     return v;
 }
+
+
+gate_type::~gate_type() { }

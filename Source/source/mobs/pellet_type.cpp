@@ -77,3 +77,6 @@ anim_conversion_vector pellet_type::get_anim_conversions() {
 void pellet_type::unload_resources() {
     bitmaps.detach(bmp_number);
 }
+
+
+pellet_type::~pellet_type() { }

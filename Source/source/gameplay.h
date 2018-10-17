@@ -69,6 +69,7 @@ private:
     
 public:
     gameplay();
+    ~gameplay();
     
     void leave();
     

@@ -34,6 +34,7 @@ public:
     bool allow_ground_attacks;
     
     enemy_type();
+    ~enemy_type();
     
     void load_parameters(data_node* file);
 };

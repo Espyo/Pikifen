@@ -140,3 +140,6 @@ void pikmin_type::unload_resources() {
     bitmaps.detach(bmp_maturity_icon[1]);
     bitmaps.detach(bmp_maturity_icon[2]);
 }
+
+
+pikmin_type::~pikmin_type() { }

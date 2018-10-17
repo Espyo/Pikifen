@@ -556,6 +556,7 @@ public:
     string auto_load_area;
     
     area_editor();
+    ~area_editor();
 };
 
 

@@ -3821,3 +3821,6 @@ area_editor::texture_suggestion::texture_suggestion(
 void area_editor::texture_suggestion::destroy() {
     textures.detach(name);
 }
+
+
+area_editor::~area_editor() { }

@@ -224,6 +224,7 @@ private:
 public:
 
     animation_editor();
+    ~animation_editor();
     
     string auto_load_anim;
     

@@ -113,3 +113,6 @@ void leader_type::unload_resources() {
     sfx_name_call.destroy();
     sfx_whistle.destroy();
 }
+
+
+leader_type::~leader_type() { }

@@ -47,3 +47,6 @@ anim_conversion_vector ship_type::get_anim_conversions() {
     v.push_back(make_pair(SHIP_ANIM_IDLING, "idling"));
     return v;
 }
+
+
+ship_type::~ship_type() { }

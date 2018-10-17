@@ -35,6 +35,9 @@ mob_category::mob_category(
 }
 
 
+mob_category::~mob_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a "none" category.
  */
@@ -60,6 +63,7 @@ mob* none_category::create_mob(
 ) { return NULL; }
 void none_category::erase_mob(mob* m) { }
 void none_category::clear_types() { }
+none_category::~none_category() { }
 
 
 
@@ -247,6 +251,8 @@ void pikmin_category::clear_types() {
     pikmin_types.clear();
 }
 
+pikmin_category::~pikmin_category() { }
+
 
 /* ----------------------------------------------------------------------------
  * Creates an enemy category.
@@ -331,6 +337,9 @@ void enemy_category::clear_types() {
     }
     enemy_types.clear();
 }
+
+
+enemy_category::~enemy_category() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -418,6 +427,9 @@ void leader_category::clear_types() {
 }
 
 
+leader_category::~leader_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates an Onion category.
  */
@@ -501,6 +513,9 @@ void onion_category::clear_types() {
     }
     onion_types.clear();
 }
+
+
+onion_category::~onion_category() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -588,6 +603,9 @@ void pellet_category::clear_types() {
 }
 
 
+pellet_category::~pellet_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a ship category.
  */
@@ -671,6 +689,9 @@ void ship_category::clear_types() {
     }
     ship_types.clear();
 }
+
+
+ship_category::~ship_category() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -758,6 +779,9 @@ void treasure_category::clear_types() {
 }
 
 
+treasure_category::~treasure_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a gate category.
  */
@@ -841,6 +865,9 @@ void gate_category::clear_types() {
     }
     gate_types.clear();
 }
+
+
+gate_category::~gate_category() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -928,6 +955,9 @@ void bridge_category::clear_types() {
 }
 
 
+bridge_category::~bridge_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a category for the special mob types.
  */
@@ -1008,6 +1038,9 @@ void special_category::clear_types() {
 }
 
 
+special_category::~special_category() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a category for the custom mob types.
  */
@@ -1086,3 +1119,6 @@ void custom_category::clear_types() {
     }
     custom_mob_types.clear();
 }
+
+
+custom_category::~custom_category() { }

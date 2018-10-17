@@ -84,6 +84,9 @@ void menu_widget::start_juicy_grow() {
 }
 
 
+menu_widget::~menu_widget() { }
+
+
 /* ----------------------------------------------------------------------------
  * Creates a clickable button widget.
  */
@@ -141,8 +144,9 @@ void menu_button::draw(const float time_spent) {
 }
 
 
-void menu_button::on_click() {}
+void menu_button::on_click() { }
 bool menu_button::is_clickable() { return enabled; }
+menu_button::~menu_button() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -213,6 +217,7 @@ void menu_checkbox::draw(const float time_spent) {
 
 void menu_checkbox::on_click() { checked = !checked; }
 bool menu_checkbox::is_clickable() { return enabled; }
+menu_checkbox::~menu_checkbox() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -260,5 +265,6 @@ void menu_text::draw(const float time_spent) {
 }
 
 
-void menu_text::on_click() {}
+void menu_text::on_click() { }
 bool menu_text::is_clickable() { return false; }
+menu_text::~menu_text() { }

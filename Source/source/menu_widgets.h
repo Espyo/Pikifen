@@ -44,6 +44,7 @@ public:
         const point &center = point(), const point &size = point(),
         const function<void()> &click_handler = nullptr
     );
+    virtual ~menu_widget();
     virtual void tick(const float time);
     virtual void draw(const float time_spent) = 0;
     virtual bool is_clickable() = 0;
@@ -71,6 +72,7 @@ public:
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );
+    ~menu_button();
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
 };
@@ -93,6 +95,7 @@ public:
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_LEFT
     );
+    ~menu_checkbox();
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
 };
@@ -113,6 +116,7 @@ public:
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );
+    ~menu_text();
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
 };

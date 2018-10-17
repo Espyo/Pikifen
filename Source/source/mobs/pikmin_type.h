@@ -51,6 +51,7 @@ public:
     ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES];
     
     pikmin_type();
+    ~pikmin_type();
     void load_parameters(data_node* file);
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions();

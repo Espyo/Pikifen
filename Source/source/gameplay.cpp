@@ -520,3 +520,6 @@ void gameplay::do_logic() {
 void gameplay::do_drawing() {
     do_game_drawing();
 }
+
+
+gameplay::~gameplay() { }

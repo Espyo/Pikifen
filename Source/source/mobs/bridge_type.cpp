@@ -74,3 +74,6 @@ void bridge_type::unload_resources() {
     textures.detach(main_texture_file_name);
     textures.detach(rail_texture_file_name);
 }
+
+
+bridge_type::~bridge_type() { }

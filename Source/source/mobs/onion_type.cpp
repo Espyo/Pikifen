@@ -49,3 +49,6 @@ anim_conversion_vector onion_type::get_anim_conversions() {
     v.push_back(make_pair(ANIM_IDLING, "idling"));
     return v;
 }
+
+
+onion_type::~onion_type() { }

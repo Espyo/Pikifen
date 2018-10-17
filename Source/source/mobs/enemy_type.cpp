@@ -48,3 +48,6 @@ void enemy_type::load_parameters(data_node* file) {
         );
         
 }
+
+
+enemy_type::~enemy_type() { }

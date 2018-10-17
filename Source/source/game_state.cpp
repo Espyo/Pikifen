@@ -217,3 +217,4 @@ void game_state::handle_menu_button(
 
 
 void game_state::update_transformations() { }
+game_state::~game_state() { }

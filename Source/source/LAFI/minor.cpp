@@ -71,8 +71,14 @@ dummy::dummy() : widget() {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a dummy widget.
+ * Draws a dummy widget.
  */
 void dummy::draw_self() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a dummy widget.
+ */
+dummy::~dummy() { }
 
 }

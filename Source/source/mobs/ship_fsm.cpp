@@ -40,9 +40,9 @@ void ship_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When a ship receives a mob carried by Pikmin.
+ * info1: Pointer to a float indicating the value.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
-    float pokos = *((float*) info1);
     ship* s_ptr = (ship*) m;
     
     particle p(

@@ -30,6 +30,7 @@ public:
     float value;
     
     treasure_type();
+    ~treasure_type();
     void load_parameters(data_node* file);
     anim_conversion_vector get_anim_conversions();
 };

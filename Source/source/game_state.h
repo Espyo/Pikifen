@@ -60,6 +60,7 @@ public:
     );
     
     game_state();
+    virtual ~game_state();
     virtual void load() = 0;
     virtual void unload() = 0;
     virtual void handle_controls(const ALLEGRO_EVENT &ev) = 0;

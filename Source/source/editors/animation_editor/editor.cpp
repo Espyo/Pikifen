@@ -978,3 +978,6 @@ void animation_editor::update_hitboxes() {
         );
     }
 }
+
+
+animation_editor::~animation_editor() { }
