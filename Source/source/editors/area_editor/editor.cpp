@@ -3113,6 +3113,9 @@ bool area_editor::save_area(const bool to_backup) {
     data_file.add(
         new data_node("notes", cur_area_data.notes)
     );
+    data_file.add(
+        new data_node("spray_amounts", cur_area_data.spray_amounts)
+    );
     
     
     //Finally, save.

@@ -94,7 +94,7 @@ void area_editor::asb_to_gui() {
         disable_widget(frm_asb->widgets["but_h_next"]);
         
     } else {
-        vector<string> list = split(s_ptr->hazards_str, ";");
+        vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
         if(cur_hazard_nr >= list.size()) {
             cur_hazard_nr = list.size() - 1;
         }
@@ -188,7 +188,7 @@ void area_editor::delete_current_hazard() {
     
     sector* s_ptr = *selected_sectors.begin();
     
-    vector<string> list = split(s_ptr->hazards_str, ";");
+    vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
     s_ptr->hazards_str.clear();
     for(size_t h = 0; h < list.size(); ++h) {
         if(h == cur_hazard_nr) continue;
@@ -451,6 +451,10 @@ void area_editor::gui_to_info() {
         &cur_area_data.notes,
         get_textbox_text(frm_info, "txt_notes")
     );
+    h.register_string(
+        &cur_area_data.spray_amounts,
+        get_textbox_text(frm_info, "txt_sprays")
+    );
     
     if(!h.all_equal()) {
         register_change("area info change");
@@ -652,6 +656,7 @@ void area_editor::info_to_gui() {
     set_textbox_text(frm_info, "txt_creator", cur_area_data.creator);
     set_textbox_text(frm_info, "txt_version", cur_area_data.version);
     set_textbox_text(frm_info, "txt_notes", cur_area_data.notes);
+    set_textbox_text(frm_info, "txt_sprays", cur_area_data.spray_amounts);
     
 }
 
@@ -836,7 +841,7 @@ void area_editor::pick(
     } else if(picker_id == PICKER_ADD_SECTOR_HAZARD) {
         register_change("hazard addition");
         sector* s_ptr = *selected_sectors.begin();
-        vector<string> list = split(s_ptr->hazards_str, ";");
+        vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
         if(!s_ptr->hazards_str.empty()) {
             s_ptr->hazards_str += ";";
         }
@@ -1233,7 +1238,7 @@ void area_editor::sector_to_gui() {
  */
 void area_editor::select_different_hazard(const bool next) {
     sector* s_ptr = *selected_sectors.begin();
-    vector<string> list = split(s_ptr->hazards_str, ";");
+    vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
     cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
     cur_hazard_nr = sum_and_wrap(cur_hazard_nr, next ? 1 : -1, list.size());
     asb_to_gui();

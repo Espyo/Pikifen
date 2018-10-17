@@ -242,6 +242,32 @@ void gameplay::load() {
     day_minutes = day_minutes_start;
     area_time_passed = 0;
     
+    vector<string> spray_amount_name_strs;
+    vector<string> spray_amount_value_strs;
+    get_var_vectors(
+        cur_area_data.spray_amounts,
+        spray_amount_name_strs, spray_amount_value_strs
+    );
+    
+    for(size_t s = 0; s < spray_amount_name_strs.size(); ++s) {
+        size_t spray_id = 0;
+        for(; spray_id < spray_types.size(); ++spray_id) {
+            if(spray_types[spray_id].name == spray_amount_name_strs[s]) {
+                break;
+            }
+        }
+        if(spray_id == spray_types.size()) {
+            log_error(
+                "Unknown spray type \"" + spray_amount_name_strs[s] + "\", "
+                "while trying to set the starting number of sprays for "
+                "area \"" + cur_area_data.name + "\"!", NULL
+            );
+            continue;
+        }
+        
+        spray_amounts[spray_id] = s2i(spray_amount_value_strs[s]);
+    }
+    
     for(size_t c = 0; c < controls[0].size(); ++c) {
         if(controls[0][c].action == BUTTON_THROW) {
             click_control_id = c;
@@ -291,12 +317,6 @@ void gameplay::load() {
             "ERRORS FOUND!\n"
             "See \"" + ERROR_LOG_FILE_PATH + "\"."
         );
-    }
-    
-    //Debug stuff for convenience.
-    //TODO remove.
-    for(size_t s = 0; s < spray_types.size(); ++s) {
-        spray_amounts[s] = 20;
     }
     
 }

@@ -63,6 +63,8 @@ void load_area(
         data_file.get_child_by_name("version")->value;
     cur_area_data.notes =
         data_file.get_child_by_name("notes")->value;
+    cur_area_data.spray_amounts =
+        data_file.get_child_by_name("spray_amounts")->value;
         
     if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
     if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
@@ -572,7 +574,7 @@ void load_control(
         file.get_child_by_name(
             "p" + i2s((player + 1)) + "_" + name
         )->get_value_or_default((player == 0) ? def : "");
-    vector<string> possible_controls = split(s, ";");
+    vector<string> possible_controls = semicolon_list_to_vector(s);
     size_t n_possible_controls = possible_controls.size();
     
     for(size_t c = 0; c < n_possible_controls; ++c) {

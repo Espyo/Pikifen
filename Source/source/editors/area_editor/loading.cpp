@@ -366,6 +366,28 @@ void area_editor::load() {
         new lafi::textbox(), 70, 16
     );
     frm_info->easy_row();
+    frm_info->easy_add(
+        "lin_gameplay_1",
+        new lafi::line(), 20, 24
+    );
+    frm_info->easy_add(
+        "lbl_gameplay",
+        new lafi::label("Gameplay", ALLEGRO_ALIGN_CENTER), 60, 16
+    );
+    frm_info->easy_add(
+        "lin_gameplay_2",
+        new lafi::line(), 20, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_sprays",
+        new lafi::label("Sprays:"), 30, 16
+    );
+    frm_info->easy_add(
+        "txt_sprays",
+        new lafi::textbox(), 70, 16
+    );
+    frm_info->easy_row();
     
     
     //Info -- properties.
@@ -469,6 +491,10 @@ void area_editor::load() {
     frm_info->widgets["txt_notes"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_notes"]->description =
         "Extra notes or comments about the area, if any.";
+        
+    frm_info->widgets["txt_sprays"]->lose_focus_handler = lambda_gui_to_info;
+    frm_info->widgets["txt_sprays"]->description =
+        "Spray amounts. e.g. \"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\".";
         
         
     //Layout -- declarations.

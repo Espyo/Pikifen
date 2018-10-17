@@ -8,3 +8,4 @@ weather=Normal
 creator=Espyo
 version=0.12
 notes=Sorry for how weird the area is! It merely exists to test the engine's features.
+spray_amounts=Ultra-Spicy Spray=20;Ultra-Bitter Spray=20

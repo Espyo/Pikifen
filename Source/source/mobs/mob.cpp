@@ -109,11 +109,11 @@ mob::mob(
         type->init_actions[a]->run(this, NULL, NULL, MOB_EVENT_UNKNOWN);
     }
     if(!vars.empty()) {
-        vector<string> vars_strings = split(vars, ";");
-        for(size_t v = 0; v < vars_strings.size(); ++v) {
-            vector<string> parts = split(vars_strings[v], "=");
-            if(parts.size() < 2) continue;
-            this->vars[parts[0]] = parts[1];
+        vector<string> var_name_strings;
+        vector<string> var_value_strings;
+        get_var_vectors(vars, var_name_strings, var_value_strings);
+        for(size_t v = 0; v < var_name_strings.size(); ++v) {
+            this->vars[var_name_strings[v]] = var_value_strings[v];
         }
     }
     fsm.set_state(type->first_state_nr);

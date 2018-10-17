@@ -78,6 +78,10 @@ float get_throw_z_speed(const float strength_multiplier);
 string get_var_value(
     const string &vars_string, const string &var, const string &def
 );
+void get_var_vectors(
+    const string &vars_string,
+    vector<string> &var_names, vector<string> &var_values
+);
 float get_wall_shadow_length(const float height_difference);
 vector<pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(

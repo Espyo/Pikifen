@@ -426,6 +426,32 @@ string get_var_value(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Given a string representation of mob script variables,
+ * returns two vectors: one for the variable names, and one for their values.
+ */
+void get_var_vectors(
+    const string &vars_string,
+    vector<string> &var_names, vector<string> &var_values
+) {
+    vector<string> raw_vars = semicolon_list_to_vector(vars_string);
+    
+    for(size_t v = 0; v < raw_vars.size(); ++v) {
+        vector<string> raw_parts = split(raw_vars[v], "=");
+        if(raw_parts.size() == 0) {
+            var_names.push_back("");
+        } else {
+            var_names.push_back(trim_spaces(raw_parts[0]));
+        }
+        if(raw_parts.size() == 1) {
+            var_values.push_back("");
+        } else {
+            var_values.push_back(trim_spaces(raw_parts[1]));
+        }
+    }
+}
+
+
 //Maximum length a wall shadow can be.
 const float MAX_WALL_SHADOW_LENGTH = 50.0f;
 //Minimum length a wall shadow can be.

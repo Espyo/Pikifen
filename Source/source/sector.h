@@ -323,6 +323,7 @@ struct area_data {
     string creator;
     string version;
     string notes;
+    string spray_amounts;
     
     weather weather_condition;
     string weather_name;
