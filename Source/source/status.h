@@ -58,6 +58,8 @@ struct status_type {
     //We need to know this in order to remove the particle generator later.
     bool generates_particles;
     particle_generator* particle_gen;
+    point particle_offset_pos;
+    float particle_offset_z;
     string animation_name;
     float animation_mob_scale;
     animation_database anim_db;

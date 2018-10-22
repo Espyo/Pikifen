@@ -1196,6 +1196,11 @@ void load_spike_damage_types() {
                 );
             } else {
                 s_type.particle_gen = &custom_particle_generators[pg_name];
+                s_type.particle_offset_pos =
+                    s2p(
+                        type_node->get_child_by_name("particle_offset")->value,
+                        &s_type.particle_offset_z
+                    );
             }
         }
         
@@ -1277,6 +1282,8 @@ void load_status_types(const bool load_resources) {
         
         st.name = s_node->name;
         
+        string particle_offset_str;
+        
         reader_setter rs(s_node);
         rs.set("color",                   st.color);
         rs.set("tint",                    st.tint);
@@ -1296,6 +1303,7 @@ void load_status_types(const bool load_resources) {
         rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);
         rs.set("animation",               st.animation_name);
         rs.set("animation_mob_scale",     st.animation_mob_scale);
+        rs.set("particle_offset",         particle_offset_str);
         
         st.affects = 0;
         if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
@@ -1322,6 +1330,8 @@ void load_status_types(const bool load_resources) {
             } else {
                 st.generates_particles = true;
                 st.particle_gen = &custom_particle_generators[pg_name];
+                st.particle_offset_pos =
+                    s2p(particle_offset_str, &st.particle_offset_z);
             }
         }
         

@@ -6,6 +6,7 @@ burned {
     color = 255 0 0
     health_change_ratio = -0.3
     particle_generator = smoke
+    particle_offset = 0 0 32
     removable_with_whistle = true
     speed_multiplier = 2.0
     tint = 255 192 192
@@ -27,6 +28,7 @@ bubbled {
     color = 0 255 255
     health_change_ratio = -0.3
     particle_generator = bubble_hazard
+    particle_offset = 0 0 32
     removable_with_whistle = true
     speed_multiplier = 2.0
 }
@@ -61,6 +63,7 @@ poisoned {
     removable_with_whistle = true
     speed_multiplier = 2.0
     particle_generator = poison_gas
+    particle_offset = 0 0 32
 }
 
 inked {

@@ -356,6 +356,8 @@ void mob::apply_status_effect(
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
         pg.follow_mob = this;
+        pg.follow_pos_offset = s->particle_offset_pos;
+        pg.follow_z_offset = s->particle_offset_z;
         pg.follow_angle = &this->angle;
         pg.reset();
         particle_generators.push_back(pg);
@@ -832,8 +834,10 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     
     if(type->spike_damage->particle_gen) {
         particle_generator pg = *(type->spike_damage->particle_gen);
-        pg.base_particle.pos = victim->pos;
-        pg.base_particle.z = victim->z + victim->type->height;
+        pg.base_particle.pos =
+            victim->pos + type->spike_damage->particle_offset_pos;
+        pg.base_particle.z =
+            victim->z + type->spike_damage->particle_offset_z;
         pg.emit(particles);
     }
 }
