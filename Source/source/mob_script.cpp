@@ -919,7 +919,8 @@ bool mob_action::run(
                     parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                     parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
                     parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                    parent_event == MOB_EVENT_OPPONENT_IN_REACH
+                    parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
+                    parent_event == MOB_EVENT_PIKMIN_LANDED
                 ) {
                     lhs = ((mob*) custom_data_1)->type->name;
                 }

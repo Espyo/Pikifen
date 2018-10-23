@@ -345,7 +345,7 @@ void area_data::generate_blockmap() {
             
             if(
                 bx == 0 || by == 0 ||
-                bx == bmap.n_cols - 1 || by == bmap.n_cols - 1
+                bx == bmap.n_cols - 1 || by == bmap.n_rows - 1
             ) {
                 bmap.sectors[bx][by].insert(NULL);
                 continue;
