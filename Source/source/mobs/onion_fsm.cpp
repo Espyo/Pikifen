@@ -13,6 +13,7 @@
 #include "onion.h"
 #include "onion_fsm.h"
 #include "../particle.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -31,13 +32,19 @@ void onion_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_ONION_STATES);
+    engine_assert(
+        typ->states.size() == N_ONION_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_ONION_STATES) + " in enum."
+    );
 }
 
 /* ----------------------------------------------------------------------------
  * When an Onion receives a mob, carried by Pikmin.
  */
 void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     size_t seeds = (size_t) info1;
     onion* o_ptr = (onion*) m;
     

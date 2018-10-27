@@ -14,6 +14,7 @@
 #include "mob_fsm.h"
 #include "pikmin.h"
 #include "pikmin_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -696,7 +697,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_PIKMIN_STATES);
+    engine_assert(
+        typ->states.size() == N_PIKMIN_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_PIKMIN_STATES) + " in enum."
+    );
 }
 
 
@@ -716,6 +721,8 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
  * info1: Pointer to the leader that is plucking.
  */
 void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     pikmin* pik = (pikmin*) m;
     mob* lea = (mob*) info1;
     
@@ -823,6 +830,9 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
  * info2: Pointer to the hitbox that grabbed.
  */
 void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    engine_assert(info2 != NULL, "");
+    
     pikmin* pik_ptr = (pikmin*) m;
     mob* ene_ptr = (mob*) info1;
     hitbox* h_ptr = (hitbox*) info2;
@@ -851,6 +861,8 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
  * info1: Pointer to the world coordinates to go to.
  */
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     m->chase(
         *((point*) info1),
         NULL,
@@ -1044,6 +1056,8 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
  * info1: Pointer to the opponent.
  */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     mob* o_ptr = (mob*) info1;
     if(o_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
         enemy* e_ptr = (enemy*) info1;
@@ -1099,6 +1113,8 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hitbox touch information structure.
  */
 void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hitbox_interaction* info = (hitbox_interaction*) info1;
     pikmin* p_ptr = (pikmin*) m;
     
@@ -1160,6 +1176,8 @@ void pikmin_fsm::get_up(mob* m, void* info1, void* info2) {
  * info1: Pointer to the mob to carry.
  */
 void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     mob* carriable_mob = (mob*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
@@ -1238,6 +1256,7 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
+    engine_assert(p->carrying_mob != NULL, "");
     
     p->carrying_mob->carry_info->spot_info[p->carrying_spot].state =
         CARRY_SPOT_FREE;
@@ -1283,6 +1302,8 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
  * When a Pikmin is meant to reel back to unleash an attack.
  */
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, "");
+    
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACKING);
     p->face(0, &p->focused_mob->pos);
@@ -1294,6 +1315,8 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hitbox touch information structure.
  */
 void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     pikmin* pik_ptr = (pikmin*) m;
     hitbox_interaction* info = (hitbox_interaction*) info1;
     mob* mob_ptr = info->mob2;
@@ -1336,6 +1359,8 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
  * info1: Points to the hazard.
  */
 void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
@@ -1409,6 +1434,8 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
  * info1: Points to the hitbox.
  */
 void pikmin_fsm::check_disabled_edible(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     if(m->disabled_state_flags & DISABLED_STATE_FLAG_INEDIBLE) return;
     pikmin_fsm::be_grabbed_by_enemy(m, info1, info2);
     m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
@@ -1420,6 +1447,8 @@ void pikmin_fsm::check_disabled_edible(mob* m, void* info1, void* info2) {
  * info1: Points to the hazard that the Pikmin left.
  */
 void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hazard* h_ptr = (hazard*) info1;
     
     for(size_t s = 0; s < m->statuses.size(); ++s) {
@@ -1503,6 +1532,8 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
  * info2: Pointer to the hitbox that caused this, if any.
  */
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     pikmin* p = (pikmin*) m;
     hazard* h = (hazard*) info1;
     
@@ -1557,6 +1588,8 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
  * info1: Pointer to the spray type.
  */
 void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
@@ -1575,6 +1608,8 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
  * If it fails, it just tries a grounded attack.
  */
 void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, "");
+    
     pikmin* p_ptr = (pikmin*) m;
     
     p_ptr->stop_chasing();
@@ -1612,6 +1647,8 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
  * When the Pikmin stops latching on to an enemy.
  */
 void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, "");
+    
     m->focused_mob->release(m);
     ((pikmin*) m)->latched = false;
 }

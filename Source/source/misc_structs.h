@@ -294,6 +294,10 @@ struct spike_damage_type {
     bool is_damage_ratio;
     //Particle generator to use to generate particles, if any.
     particle_generator* particle_gen;
+    //Offset the particles by this much, horizontally.
+    point particle_offset_pos;
+    //Offset the particles by this much, vertically.
+    float particle_offset_z;
     
     spike_damage_type() :
         damage(0),

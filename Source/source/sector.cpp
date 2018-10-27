@@ -21,6 +21,7 @@
 #include "functions.h"
 #include "utils/geometry_utils.h"
 #include "sector.h"
+#include "utils/string_utils.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -487,7 +488,10 @@ void area_data::remove_vertex(const size_t v_nr) {
                 e_ptr->vertex_nrs[v]--;
             } else {
                 //This should never happen.
-                assert(e_ptr->vertex_nrs[v] != v_nr);
+                engine_assert(
+                    e_ptr->vertex_nrs[v] != v_nr,
+                    i2s(e_ptr->vertex_nrs[v]) + " " + i2s(v_nr)
+                );
             }
         }
     }
@@ -522,7 +526,10 @@ void area_data::remove_edge(const size_t e_nr) {
                 v_ptr->edge_nrs[e]--;
             } else {
                 //This should never happen.
-                assert(v_ptr->edge_nrs[e] != e_nr);
+                engine_assert(
+                    v_ptr->edge_nrs[e] != e_nr,
+                    i2s(v_ptr->edge_nrs[e]) + " " + i2s(e_nr)
+                );
             }
         }
     }
@@ -536,7 +543,10 @@ void area_data::remove_edge(const size_t e_nr) {
                 s_ptr->edge_nrs[e]--;
             } else {
                 //This should never happen.
-                assert(s_ptr->edge_nrs[e] != e_nr);
+                engine_assert(
+                    s_ptr->edge_nrs[e] != e_nr,
+                    i2s(s_ptr->edge_nrs[e]) + " " + i2s(e_nr)
+                );
             }
         }
     }
@@ -571,7 +581,10 @@ void area_data::remove_sector(const size_t s_nr) {
                 e_ptr->sector_nrs[s]--;
             } else {
                 //This should never happen.
-                assert(e_ptr->sector_nrs[s] != s_nr);
+                engine_assert(
+                    e_ptr->sector_nrs[s] != s_nr,
+                    i2s(e_ptr->sector_nrs[s]) + " " + i2s(s_nr)
+                );
             }
         }
     }
@@ -598,16 +611,21 @@ void area_data::remove_sector(const sector* s_ptr) {
 void area_data::check_stability() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
-        assert(v_ptr->edges.size() == v_ptr->edge_nrs.size());
+        engine_assert(
+            v_ptr->edges.size() == v_ptr->edge_nrs.size(),
+            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_nrs.size())
+        );
         for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-            assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]]);
+            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]], "");
         }
     }
     
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; ++v) {
-            assert(e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]]);
+            engine_assert(
+                e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]], ""
+            );
         }
         
         for(size_t s = 0; s < 2; ++s) {
@@ -618,15 +636,18 @@ void area_data::check_stability() {
             ) {
                 continue;
             }
-            assert(s_ptr == sectors[e_ptr->sector_nrs[s]]);
+            engine_assert(s_ptr == sectors[e_ptr->sector_nrs[s]], "");
         }
     }
     
     for(size_t s = 0; s < sectors.size(); ++s) {
         sector* s_ptr = sectors[s];
-        assert(s_ptr->edges.size() == s_ptr->edge_nrs.size());
+        engine_assert(
+            s_ptr->edges.size() == s_ptr->edge_nrs.size(),
+            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_nrs.size())
+        );
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]]);
+            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]], "");
         }
     }
 }

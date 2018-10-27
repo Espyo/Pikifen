@@ -15,6 +15,7 @@
 #include "leader_fsm.h"
 #include "leader_type.h"
 #include "mob_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 
@@ -819,7 +820,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_LEADER_STATES);
+    engine_assert(
+        typ->states.size() == N_LEADER_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_LEADER_STATES) + " in enum."
+    );
 }
 
 
@@ -945,6 +950,8 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hazard.
  */
 void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
     
@@ -985,6 +992,8 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
  * info1: Pointer to the spray type.
  */
 void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     leader* l = (leader*) m;
     spray_type* s = (spray_type*) info1;
     
@@ -999,6 +1008,8 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
  * info1: Pointer to the movement info structure.
  */
 void leader_fsm::move(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
     point final_coords;
@@ -1050,6 +1061,8 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
  * info1: Pointer to the mob.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     leader* l_ptr = (leader*) m;
     l_ptr->hold(
         (mob*) info1, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
@@ -1065,6 +1078,8 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
 void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader* leader_ptr = (leader*) m;
     mob* holding_ptr = leader_ptr->holding[0];
+    
+    engine_assert(holding_ptr != NULL, "");
     
     holding_ptr->fsm.run_event(MOB_EVENT_THROWN);
     
@@ -1240,6 +1255,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
  * info1: Points to the hazard.
  */
 void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
@@ -1253,6 +1270,8 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
  * info2: If not NULL, that means this leader is inactive.
  */
 void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     if(m->invuln_period.time_left > 0.0f) return;
     m->invuln_period.start();
     
@@ -1374,6 +1393,8 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     group_info* leader_group_ptr = m->following_group->group;
+    engine_assert(leader_group_ptr != NULL, "");
+    
     float distance =
         m->following_group->type->radius +
         m->type->radius + standard_pikmin_radius;
@@ -1432,6 +1453,8 @@ void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
  * info1: Pointer to the Pikmin to be plucked.
  */
 void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     leader* lea_ptr = (leader*) m;
     pikmin* pik_ptr = (pikmin*) info1;
     
@@ -1463,6 +1486,8 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
+    engine_assert(l_ptr->pluck_target != NULL, "");
+    
     l_ptr->pluck_target->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
     l_ptr->pluck_target->pluck_reserved = false;
     l_ptr->pluck_target = nullptr;

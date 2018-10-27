@@ -13,6 +13,7 @@
 #include "../particle.h"
 #include "ship.h"
 #include "ship_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -34,7 +35,11 @@ void ship_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_SHIP_STATES);
+    engine_assert(
+        typ->states.size() == N_SHIP_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_SHIP_STATES) + " in enum."
+    );
 }
 
 
@@ -43,6 +48,8 @@ void ship_fsm::create_fsm(mob_type* typ) {
  * info1: Pointer to a float indicating the value.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     ship* s_ptr = (ship*) m;
     
     particle p(

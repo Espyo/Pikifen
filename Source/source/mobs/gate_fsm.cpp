@@ -13,6 +13,7 @@
 #include "gate.h"
 #include "gate_fsm.h"
 #include "mob_fsm.h"
+#include "../utils/string_utils.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -42,7 +43,11 @@ void gate_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_GATE_STATES);
+    engine_assert(
+        typ->states.size() == N_GATE_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_GATE_STATES) + " in enum."
+    );
 }
 
 

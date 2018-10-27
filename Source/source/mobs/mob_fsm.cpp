@@ -13,6 +13,7 @@
 
 #include "../const.h"
 #include "enemy.h"
+#include "../functions.h"
 #include "mob.h"
 #include "mob_fsm.h"
 #include "onion.h"
@@ -25,6 +26,8 @@
  */
 class cause_spike_damage;
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hazard* h = (hazard*) info1;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
@@ -37,6 +40,8 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
  * Generic handler for a mob touching a spray.
  */
 void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
@@ -52,6 +57,8 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     enemy* e_ptr = (enemy*) m;
     onion* o_ptr = (onion*) e_ptr->carrying_target;
     
+    engine_assert(o_ptr != NULL, "");
+    
     size_t seeds = e_ptr->ene_type->pikmin_seeds;
     
     o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
@@ -64,6 +71,8 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  * Event handler that makes a mob lose health by being damaged by another.
  */
 void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
     hitbox_interaction* info = (hitbox_interaction*) info1;
     info->mob2->attack(m, info->h2, info->h1, NULL);
 }

@@ -114,6 +114,59 @@ void clear_area_textures() {
 
 
 /* ----------------------------------------------------------------------------
+ * Purposely crashes the engine, reporting as much information as possible to
+ * the logs. Used when a fatal problem occurs.
+ * reason:      Explanation of the type of crash (assert, SIGSEGV, etc.).
+ * info:        Any extra information to report to the logs.
+ * exit_status: Program exit status.
+ */
+void crash(const string &reason, const string &info, const int exit_status) {
+
+    if(display) {
+        ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(display);
+        if(backbuffer) {
+            al_save_bitmap(
+                ("Crash " + get_current_time(false) + ".png").c_str(),
+                backbuffer
+            );
+        }
+    }
+    
+    string error_str = "Program crash!\n";
+    error_str +=
+        "  Reason: " + reason + ".\n"
+        "  Info: " + info + "\n"
+        "  Time: " + get_current_time(true) + ".\n";
+    if(errors_reported_today > 0) {
+        error_str += "  Error log has messages!\n";
+    }
+    error_str +=
+        "  Game state: " + (
+            cur_game_state_nr == INVALID ? "None" : i2s(cur_game_state_nr)
+        ) + ". delta_t: " + (
+            delta_t == 0.0f ? "0" :
+            f2s(delta_t) + " (" + f2s(1 / delta_t) + " FPS)"
+        ) + ".\n"
+        "  Mob count: " + i2s(mobs.size()) + ". "
+        "Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
+        i2s(bitmaps.get_total_calls()) + " total calls).";
+        
+    log_error(error_str);
+    
+    show_message_box(
+        NULL, "Program crash!",
+        "Pikifen has crashed!",
+        "Sorry about that! Please read the readme file to know what you "
+        "can do to help me fix it. Thanks!",
+        NULL,
+        ALLEGRO_MESSAGEBOX_ERROR
+    );
+    
+    exit(exit_status);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
  * folder_name: Name of the folder.
  * folders:     If true, only read folders. If false, only read files.
@@ -1031,43 +1084,18 @@ void signal_handler(const int signum) {
     }
     already_handling_signal = true;
     
-    al_save_bitmap(
-        ("Crash " + get_current_time(false) + ".png").c_str(),
-        al_get_backbuffer(display)
-    );
-    
-    string signal_name(strsignal(signum));
-    string error_str =
-        "Program crash!\n"
-        "  Time: " + get_current_time(true) + ". "
-        "Signal " + i2s(signum) + " (" + signal_name + "). "
-        "Backtrace:\n";
+    string bt_str = "Backtrace:\n";
     vector<string> bt = get_backtrace();
     for(size_t s = 0; s < bt.size(); ++s) {
-        error_str += "    " + bt[s] + "\n";
+        bt_str += "    " + bt[s] + "\n";
     }
-    if(errors_reported_today > 0) {
-        error_str += "  Error log has messages!\n";
+    if(bt_str.back() == '\n') {
+        bt_str.pop_back();
     }
-    error_str +=
-        "  Game state: " + i2s(cur_game_state_nr) + ". "
-        "delta_t: " + f2s(delta_t) + " (" + f2s(1 / delta_t) + " FPS).\n"
-        "  Mob count: " + i2s(mobs.size()) + ". "
-        "Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
-        i2s(bitmaps.get_total_calls()) + " total calls).";
-        
-    log_error(error_str);
+    string signal_name(strsignal(signum));
+    string type_str = "Signal " + i2s(signum) + " (" + signal_name + ")";
     
-    show_message_box(
-        NULL, "Program crash!",
-        "Pikifen has crashed!",
-        "Sorry about that! Please read the readme file to know what you "
-        "can do to help me fix it. Thanks!",
-        NULL,
-        ALLEGRO_MESSAGEBOX_ERROR
-    );
-    
-    exit(signum);
+    crash(type_str, bt_str, signum);
 }
 
 

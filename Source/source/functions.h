@@ -23,12 +23,27 @@
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "sector.h"
+#include "vars.h"
 
 //Disables an enabled widget.
 #define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
 
 //Enables a disabled widget.
 #define enable_widget(w) (w)->flags &= ~lafi::FLAG_DISABLED;
+
+//A custom-made assertion.
+#define engine_assert(expr, message) \
+    if(!(expr)) { \
+        string info = "\"" #expr "\", in "; \
+        info += __ASSERT_FUNCTION; \
+        info += " ("; \
+        info += __FILE__; \
+        info += ":"; \
+        info += to_string((int) (__LINE__)); \
+        info += "). Extra info: "; \
+        info += message; \
+        crash("Assert", info, 1); \
+    }
 
 //Returns the previous element in a vector,
 //but if it's the first, it retrieves the last.
@@ -61,6 +76,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
 void clear_area_textures();
+void crash(const string &reason, const string &info, const int exit_status);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );

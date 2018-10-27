@@ -14,6 +14,7 @@
 #include "onion.h"
 #include "pellet.h"
 #include "pellet_fsm.h"
+#include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the pellet's logic.
@@ -80,7 +81,11 @@ void pellet_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idle_waiting");
     
     //Check if the number in the enum and the total match up.
-    assert(typ->states.size() == N_PELLET_STATES);
+    engine_assert(
+        typ->states.size() == N_PELLET_STATES,
+        i2s(typ->states.size()) + " registered, " +
+        i2s(N_PELLET_STATES) + " in enum."
+    );
 }
 
 
@@ -91,6 +96,8 @@ void pellet_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     size_t seeds = 0;
     pellet* p_ptr = (pellet*) m;
     onion* o_ptr = (onion*) p_ptr->carrying_target;
+    
+    engine_assert(o_ptr != NULL, "");
     
     if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
         seeds = p_ptr->pel_type->match_seeds;
