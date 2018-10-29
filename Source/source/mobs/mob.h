@@ -27,7 +27,6 @@
 
 using namespace std;
 
-struct group_spot_info;
 class mob_type;
 class mob;
 

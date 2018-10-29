@@ -13,10 +13,11 @@
 #define DRAWING_INCLUDED
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 
 #include "controls.h"
-#include "functions.h"
+#include "misc_structs.h"
 
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;

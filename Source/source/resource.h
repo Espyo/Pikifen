@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 //Microsoft Visual C++ generated include file.
-//Used by Pikmin_fangame_engine.rc
+//Used by Pikifen.rc
 //
 #define IDI_ICON1                       101
 

@@ -18,7 +18,6 @@
 #include "mob.h"
 #include "pikmin.h"
 #include "ship.h"
-#include "../status.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 

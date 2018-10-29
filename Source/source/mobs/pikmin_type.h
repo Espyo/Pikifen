@@ -23,8 +23,6 @@
 
 using namespace std;
 
-class leader;
-
 /* ----------------------------------------------------------------------------
  * Pikmin types, almost the basic meat of the fangames.
  * The canon ones (at the time of writing this) are

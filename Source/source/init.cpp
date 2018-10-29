@@ -24,7 +24,6 @@
 #include "editors/area_editor/editor.h"
 #include "editors/animation_editor/editor.h"
 #include "controls.h"
-#include "data_file.h"
 #include "functions.h"
 #include "game_state.h"
 #include "gameplay.h"

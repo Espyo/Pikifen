@@ -12,9 +12,8 @@
 #include <algorithm>
 
 #include "../const.h"
-#include "enemy.h"
 #include "../functions.h"
-#include "mob.h"
+#include "enemy.h"
 #include "mob_fsm.h"
 #include "onion.h"
 #include "pikmin.h"
@@ -24,7 +23,6 @@
 /* ----------------------------------------------------------------------------
  * Generic handler for a mob touching a hazard.
  */
-class cause_spike_damage;
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, "");
     

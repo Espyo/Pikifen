@@ -127,8 +127,6 @@ int show_message_box(
 void signal_handler(const int signum);
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
-void unload_hazards();
-void unload_status_types();
 void update_animation_editor_history(const string &n = "");
 
 

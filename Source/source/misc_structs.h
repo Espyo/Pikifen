@@ -25,9 +25,7 @@
 #include "particle.h"
 #include "utils/geometry_utils.h"
 
-class mob;
 class pikmin_type;
-struct mob_gen;
 
 using namespace std;
 

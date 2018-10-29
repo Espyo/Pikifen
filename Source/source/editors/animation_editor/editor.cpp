@@ -15,7 +15,6 @@
 #include <allegro5/allegro.h>
 
 #include "editor.h"
-#include "../../animation.h"
 #include "../../functions.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
@@ -28,7 +27,6 @@
 #include "../../load.h"
 #include "../../utils/math_utils.h"
 #include "../../utils/string_utils.h"
-#include "../../misc_structs.h"
 #include "../../vars.h"
 
 

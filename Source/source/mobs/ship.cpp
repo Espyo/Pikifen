@@ -11,6 +11,7 @@
 
 #include "../drawing.h"
 #include "../utils/geometry_utils.h"
+#include "leader.h"
 #include "ship.h"
 #include "../vars.h"
 

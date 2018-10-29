@@ -56,6 +56,7 @@ void load_weather();
 void unload_area();
 void unload_area_textures();
 void unload_custom_particle_generators();
+void unload_hazards();
 void unload_liquids();
 void unload_misc_resources();
 void unload_spike_damage_types();
