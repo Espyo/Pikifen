@@ -3633,6 +3633,9 @@ void area_editor::undo() {
     non_simples.clear();
     change_to_right_frame();
     
+    path_preview.clear(); //Clear so it doesn't reference deleted stops.
+    path_preview_timer.start(false);
+    
     made_new_changes = true;
 }
 

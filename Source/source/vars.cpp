@@ -222,7 +222,7 @@ bool mouse_moves_cursor[MAX_PLAYERS] = {true, false, false, false};
 size_t nectar_amount = 5;
 vector<nectar*> nectars;
 float next_pluck_range = 160.0f;
-float onion_open_range = 64.0f;
+float onion_open_range = 24.0f;
 map<string, onion_type*> onion_types;
 vector<onion*> onions;
 unsigned char particle_quality = 2;

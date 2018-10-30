@@ -2444,6 +2444,13 @@ vector<path_stop*> dijkstra(
         vector<path_stop*> shortest_path =
             dijkstra(start_node, end_node, true, NULL, &td);
             
+        if(shortest_path.empty()) {
+            //No path found...
+            if(total_dist) *total_dist = 0;
+            if(obstacles_found) obstacles_found->clear();
+            return vector<path_stop*>();
+        }
+        
         vector<path_stop*> final_path;
         
         //Now, trim the path such that it ends at the closest obstacle.
