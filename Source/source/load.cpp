@@ -1287,6 +1287,7 @@ void load_status_types(const bool load_resources) {
         reader_setter rs(s_node);
         rs.set("color",                   st.color);
         rs.set("tint",                    st.tint);
+        rs.set("glow",                    st.glow);
         rs.set("removable_with_whistle",  st.removable_with_whistle);
         rs.set("auto_remove_time",        st.auto_remove_time);
         rs.set("health_change_ratio",     st.health_change_ratio);

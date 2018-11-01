@@ -35,6 +35,7 @@ struct status_type {
     unsigned char affects;
     ALLEGRO_COLOR color;
     ALLEGRO_COLOR tint;
+    ALLEGRO_COLOR glow;
     
     bool removable_with_whistle;
     float auto_remove_time;

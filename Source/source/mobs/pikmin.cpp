@@ -165,7 +165,7 @@ void pikmin::draw_mob(bitmap_effect_manager* effect_manager) {
     if(is_idle) {
         bitmap_effect idle_effect;
         bitmap_effect_props idle_effect_props;
-        idle_effect_props.glow_color = pik_type->main_color;
+        idle_effect_props.glow_color = al_map_rgb(255, 255, 255);
         idle_effect.add_keyframe(0, idle_effect_props);
         effects.add_effect(idle_effect);
     }

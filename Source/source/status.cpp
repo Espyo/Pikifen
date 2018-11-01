@@ -22,6 +22,7 @@ status_type::status_type() :
     affects(0),
     color(al_map_rgba(0, 0, 0, 0)),
     tint(al_map_rgb(255, 255, 255)),
+    glow(al_map_rgba(0, 0, 0, 0)),
     removable_with_whistle(false),
     auto_remove_time(0.0f),
     health_change_ratio(0.0f),

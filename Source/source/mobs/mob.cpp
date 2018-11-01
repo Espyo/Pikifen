@@ -248,7 +248,8 @@ void mob::add_status_bitmap_effects(bitmap_effect_manager* manager) {
             t->tint.r == 1.0f &&
             t->tint.g == 1.0f &&
             t->tint.b == 1.0f &&
-            t->tint.a == 1.0f
+            t->tint.a == 1.0f &&
+            t->glow.a == 0.0f
         ) {
             continue;
         }
@@ -256,6 +257,7 @@ void mob::add_status_bitmap_effects(bitmap_effect_manager* manager) {
         bitmap_effect se;
         bitmap_effect_props props;
         props.tint_color = t->tint;
+        props.glow_color = t->glow;
         
         se.add_keyframe(0, props);
         manager->add_effect(se);
