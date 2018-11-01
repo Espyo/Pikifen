@@ -94,7 +94,7 @@ public:
     
     leader(
         const point &pos, leader_type* type,
-        const float angle, const string &vars, mob* parent
+        const float angle, const string &vars
     );
     
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);

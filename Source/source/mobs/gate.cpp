@@ -17,9 +17,9 @@
  */
 gate::gate(
     const point &pos, gate_type* type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) :
-    mob(pos, type, angle, vars, parent),
+    mob(pos, type, angle, vars),
     gat_type(type),
     sec(get_sector(pos, nullptr, true)) {
     

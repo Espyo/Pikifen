@@ -30,7 +30,7 @@ size_t next_mob_id = 0;
  */
 mob::mob(
     const point &pos, mob_type* type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) :
     type(type),
     to_delete(false),
@@ -98,99 +98,7 @@ mob::mob(
     ground_sector = sec;
     center_sector = sec;
     
-    if(parent) {
-        this->parent = new parent_mob_info(parent);
-    }
-    
     if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
-    
-    for(size_t a = 0; a < type->init_actions.size(); ++a) {
-        type->init_actions[a]->run(this, NULL, NULL, MOB_EVENT_UNKNOWN);
-    }
-    if(!vars.empty()) {
-        vector<string> var_name_strings;
-        vector<string> var_value_strings;
-        get_var_vectors(vars, var_name_strings, var_value_strings);
-        for(size_t v = 0; v < var_name_strings.size(); ++v) {
-            this->vars[var_name_strings[v]] = var_value_strings[v];
-        }
-    }
-    fsm.set_state(type->first_state_nr);
-    
-    for(size_t c = 0; c < type->children.size(); ++c) {
-        mob_type::child_struct* child_info = &type->children[c];
-        
-        mob_type::spawn_struct* spawn_info = NULL;
-        for(size_t s = 0; s < type->spawns.size(); ++s) {
-            if(type->spawns[s].name == child_info->spawn_name) {
-                spawn_info = &type->spawns[s];
-                break;
-            }
-        }
-        
-        if(!spawn_info) {
-            log_error(
-                "Object \"" + type->name + "\" tried to spawn a child with the "
-                "spawn name \"" + child_info->spawn_name + "\", but that name "
-                "does not exist!"
-            );
-            continue;
-        }
-        
-        mob* new_mob = spawn(spawn_info, true);
-        if(!new_mob) continue;
-        
-        parent_mob_info* p_info = new_mob->parent;
-        p_info->handle_damage = child_info->handle_damage;
-        p_info->relay_damage = child_info->relay_damage;
-        p_info->handle_events = child_info->handle_events;
-        p_info->relay_events = child_info->relay_events;
-        p_info->handle_statuses = child_info->handle_statuses;
-        p_info->relay_statuses = child_info->relay_statuses;
-        if(!child_info->limb_anim_name.empty()) {
-            p_info->limb_anim.anim_db = anim.anim_db;
-            animation* anim_to_use = NULL;
-            for(size_t a = 0; a < anim.anim_db->animations.size(); ++a) {
-                if(
-                    anim.anim_db->animations[a]->name ==
-                    child_info->limb_anim_name
-                ) {
-                    anim_to_use = anim.anim_db->animations[a];
-                }
-            }
-            
-            if(anim_to_use) {
-                p_info->limb_anim.cur_anim = anim_to_use;
-                p_info->limb_anim.start();
-            } else {
-                log_error(
-                    "Object \"" + new_mob->type->name + "\", child object of "
-                    "object \"" + type->name + "\", tried to use animation \"" +
-                    child_info->limb_anim_name + "\" for a limb, but that "
-                    "animation doesn't exist in the parent object's animations!"
-                );
-            }
-        }
-        p_info->limb_thickness = child_info->limb_thickness;
-        p_info->limb_parent_body_part =
-            type->anims.find_body_part(child_info->limb_parent_body_part);
-        p_info->limb_parent_offset = child_info->limb_parent_offset;
-        p_info->limb_child_body_part =
-            new_mob->type->anims.find_body_part(
-                child_info->limb_child_body_part
-            );
-        p_info->limb_child_offset = child_info->limb_child_offset;
-        p_info->limb_draw_method = child_info->limb_draw_method;
-        
-        if(child_info->parent_holds) {
-            hold(
-                new_mob,
-                type->anims.find_body_part(child_info->hold_body_part),
-                child_info->hold_offset_dist,
-                child_info->hold_offset_angle, false
-            );
-        }
-    }
 }
 
 
@@ -1559,9 +1467,8 @@ bool mob::should_attack(mob* v) {
 
 /* ----------------------------------------------------------------------------
  * Makes the current mob spawn a new mob.
- * is_child: If true, the spawn is a child mob of this mob.
  */
-mob* mob::spawn(mob_type::spawn_struct* info, const bool is_child) {
+mob* mob::spawn(mob_type::spawn_struct* info) {
     //First, find the mob.
     mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
     if(!type_ptr) return NULL;
@@ -1597,8 +1504,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, const bool is_child) {
             new_xy,
             type_ptr,
             new_angle,
-            info->vars,
-            (is_child ? this : NULL)
+            info->vars
         );
         
     new_mob->z = new_z;
@@ -3132,14 +3038,108 @@ void calculate_knockback(
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) {
     mob* m_ptr = NULL;
     if(type->create_mob_func) {
-        m_ptr = type->create_mob_func(pos, angle, vars, parent);
+        m_ptr = type->create_mob_func(pos, angle, vars);
     } else {
-        m_ptr = category->create_mob(pos, type, angle, vars, parent);
+        m_ptr = category->create_mob(pos, type, angle, vars);
     }
+    
+    for(size_t a = 0; a < type->init_actions.size(); ++a) {
+        type->init_actions[a]->run(m_ptr, NULL, NULL, MOB_EVENT_UNKNOWN);
+    }
+    if(!vars.empty()) {
+        vector<string> var_name_strings;
+        vector<string> var_value_strings;
+        get_var_vectors(vars, var_name_strings, var_value_strings);
+        for(size_t v = 0; v < var_name_strings.size(); ++v) {
+            m_ptr->vars[var_name_strings[v]] = var_value_strings[v];
+        }
+    }
+    m_ptr->fsm.set_state(
+        m_ptr->fsm.first_state_override != INVALID ?
+        m_ptr->fsm.first_state_override :
+        type->first_state_nr
+    );
+    
+    for(size_t c = 0; c < type->children.size(); ++c) {
+        mob_type::child_struct* child_info = &type->children[c];
+        
+        mob_type::spawn_struct* spawn_info = NULL;
+        for(size_t s = 0; s < type->spawns.size(); ++s) {
+            if(type->spawns[s].name == child_info->spawn_name) {
+                spawn_info = &type->spawns[s];
+                break;
+            }
+        }
+        
+        if(!spawn_info) {
+            log_error(
+                "Object \"" + type->name + "\" tried to spawn a child with the "
+                "spawn name \"" + child_info->spawn_name + "\", but that name "
+                "does not exist!"
+            );
+            continue;
+        }
+        
+        mob* new_mob = m_ptr->spawn(spawn_info);
+        if(!new_mob) continue;
+        
+        parent_mob_info* p_info = new parent_mob_info(m_ptr);
+        new_mob->parent = p_info;
+        p_info->handle_damage = child_info->handle_damage;
+        p_info->relay_damage = child_info->relay_damage;
+        p_info->handle_events = child_info->handle_events;
+        p_info->relay_events = child_info->relay_events;
+        p_info->handle_statuses = child_info->handle_statuses;
+        p_info->relay_statuses = child_info->relay_statuses;
+        if(!child_info->limb_anim_name.empty()) {
+            p_info->limb_anim.anim_db = m_ptr->anim.anim_db;
+            animation* anim_to_use = NULL;
+            for(size_t a = 0; a < m_ptr->anim.anim_db->animations.size(); ++a) {
+                if(
+                    m_ptr->anim.anim_db->animations[a]->name ==
+                    child_info->limb_anim_name
+                ) {
+                    anim_to_use = m_ptr->anim.anim_db->animations[a];
+                }
+            }
+            
+            if(anim_to_use) {
+                p_info->limb_anim.cur_anim = anim_to_use;
+                p_info->limb_anim.start();
+            } else {
+                log_error(
+                    "Object \"" + new_mob->type->name + "\", child object of "
+                    "object \"" + type->name + "\", tried to use animation \"" +
+                    child_info->limb_anim_name + "\" for a limb, but that "
+                    "animation doesn't exist in the parent object's animations!"
+                );
+            }
+        }
+        p_info->limb_thickness = child_info->limb_thickness;
+        p_info->limb_parent_body_part =
+            type->anims.find_body_part(child_info->limb_parent_body_part);
+        p_info->limb_parent_offset = child_info->limb_parent_offset;
+        p_info->limb_child_body_part =
+            new_mob->type->anims.find_body_part(
+                child_info->limb_child_body_part
+            );
+        p_info->limb_child_offset = child_info->limb_child_offset;
+        p_info->limb_draw_method = child_info->limb_draw_method;
+        
+        if(child_info->parent_holds) {
+            m_ptr->hold(
+                new_mob,
+                type->anims.find_body_part(child_info->hold_body_part),
+                child_info->hold_offset_dist,
+                child_info->hold_offset_angle, false
+            );
+        }
+    }
+    
     mobs.push_back(m_ptr);
     return m_ptr;
 }

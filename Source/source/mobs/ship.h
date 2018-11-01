@@ -33,7 +33,7 @@ public:
     
     ship(
         const point &pos, ship_type* type, float angle,
-        const string &vars, mob* parent
+        const string &vars
     );
     
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);

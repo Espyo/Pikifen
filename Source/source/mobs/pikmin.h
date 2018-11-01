@@ -75,7 +75,7 @@ protected:
 public:
     pikmin(
         const point &pos, pikmin_type* type,
-        const float angle, const string &vars, mob* parent
+        const float angle, const string &vars
     );
     ~pikmin();
     

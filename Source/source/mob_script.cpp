@@ -1163,7 +1163,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SPAWN) {
     
-        return m->spawn(&m->type->spawns[vi[0]], false);
+        return m->spawn(&m->type->spawns[vi[0]]);
         
         
     } else if(type == MOB_ACTION_STABILIZE_Z) {
@@ -1541,7 +1541,8 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
  * Creates a new mob FSM.
  */
 mob_fsm::mob_fsm(mob* m) :
-    cur_state(nullptr) {
+    cur_state(nullptr),
+    first_state_override(INVALID) {
     
     if(!m) return;
     this->m = m;

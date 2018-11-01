@@ -27,9 +27,9 @@ static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
  */
 pikmin::pikmin(
     const point &pos, pikmin_type* type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) :
-    mob(pos, type, angle, vars, parent),
+    mob(pos, type, angle, vars),
     pik_type(type),
     carrying_mob(NULL),
     carrying_spot(0),
@@ -41,7 +41,7 @@ pikmin::pikmin(
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO
     if(s2b(get_var_value(vars, "sprout", "0"))) {
-        fsm.set_state(PIKMIN_STATE_SPROUT);
+        fsm.first_state_override = PIKMIN_STATE_SPROUT;
     }
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);

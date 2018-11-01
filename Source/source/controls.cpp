@@ -119,8 +119,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     
                     create_mob(
                         mob_categories.get(MOB_CATEGORY_PIKMIN),
-                        mouse_cursor_w, new_pikmin_type, 0, "maturity=flower",
-                        NULL
+                        mouse_cursor_w, new_pikmin_type, 0, "maturity=flower"
                     );
                 }
                 

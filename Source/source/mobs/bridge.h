@@ -41,7 +41,7 @@ public:
     
     bridge(
         const point &pos, bridge_type* bri_type,
-        const float angle, const string &vars, mob* parent
+        const float angle, const string &vars
     );
     
 };

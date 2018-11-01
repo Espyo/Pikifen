@@ -21,9 +21,9 @@
  */
 treasure::treasure(
     const point &pos, treasure_type* type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) :
-    mob(pos, type, angle, vars, parent),
+    mob(pos, type, angle, vars),
     tre_type(type),
     buried(s2f(get_var_value(vars, "buried", "0"))) {
     

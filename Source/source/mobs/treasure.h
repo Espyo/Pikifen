@@ -52,7 +52,7 @@ public:
     
     treasure(
         const point &pos, treasure_type* type,
-        const float angle, const string &vars, mob* parent
+        const float angle, const string &vars
     );
     void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };

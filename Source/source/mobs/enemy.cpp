@@ -20,9 +20,9 @@
  */
 enemy::enemy(
     const point &pos, enemy_type* type, const float angle,
-    const string &vars, mob* parent
+    const string &vars
 ) :
-    mob(pos, type, angle, vars, parent),
+    mob(pos, type, angle, vars),
     ene_type(type),
     spawn_delay(s2f(get_var_value(vars, "spawn_delay", "0"))),
     respawn_days_left(0),

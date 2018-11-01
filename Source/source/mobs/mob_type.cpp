@@ -243,10 +243,9 @@ void create_special_mob_types() {
     info_spot_mt->radius = 16;
     info_spot_mt->create_mob_func =
         [] (
-            const point pos, const float angle, const string & vars,
-            mob * parent
+            const point pos, const float angle, const string & vars
     ) -> mob* {
-        info_spot* m = new info_spot(pos, angle, vars, parent);
+        info_spot* m = new info_spot(pos, angle, vars);
         info_spots.push_back(m);
         return m;
     };
@@ -266,9 +265,9 @@ void create_special_mob_types() {
     nectar_mt->create_mob_func =
         [] (
             const point pos, const float angle,
-            const string & vars, mob * parent
+            const string & vars
     ) -> mob* {
-        nectar* m = new nectar(pos, vars, parent);
+        nectar* m = new nectar(pos, vars);
         nectars.push_back(m);
         return m;
     };

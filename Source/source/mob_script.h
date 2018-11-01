@@ -376,6 +376,8 @@ public:
     vector<size_t> pre_named_conversions;
     //Knowing the previous states' names helps with debugging.
     string prev_state_names[STATE_HISTORY_SIZE];
+    //If this is INVALID, use the mob type's first state nr. Else, use this.
+    size_t first_state_override;
     
     mob_event* get_event(const size_t type);
     void run_event(

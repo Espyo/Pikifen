@@ -18,9 +18,9 @@
  */
 bridge::bridge(
     const point &pos, bridge_type* bri_type,
-    const float angle, const string &vars, mob* parent
+    const float angle, const string &vars
 ) :
-    mob(pos, bri_type, angle, vars, parent),
+    mob(pos, bri_type, angle, vars),
     bri_type(bri_type) {
     
     //Search neighboring sectors.
