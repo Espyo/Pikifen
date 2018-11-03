@@ -31,7 +31,7 @@ using namespace std;
  */
 const unsigned char VERSION_MAJOR = 0;
 const unsigned char VERSION_MINOR = 16;
-const unsigned char VERSION_REV   = 1;
+const unsigned char VERSION_REV   = 2;
 
 
 const size_t INVALID = UINT32_MAX;

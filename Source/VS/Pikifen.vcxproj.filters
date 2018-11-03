@@ -43,6 +43,12 @@
     <Filter Include="Source Files\editors\area_editor">
       <UniqueIdentifier>{d6360336-2bec-4df6-8bb6-f643ca1816db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{ea860411-d16b-4643-b25e-a2298857db2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{31b9afe0-5f29-46b0-a323-38eeafe191d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\LAFI\angle_picker.h">
@@ -258,9 +264,6 @@
     <ClInclude Include="..\source\mobs\bridge_type.h">
       <Filter>Header Files\mobs</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\geometry_utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\load.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -281,6 +284,15 @@
     </ClInclude>
     <ClInclude Include="..\source\world_component.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\geometry_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\math_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\string_utils.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -501,9 +513,6 @@
     <ClCompile Include="..\source\mobs\bridge_type.cpp">
       <Filter>Source Files\mobs</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\geometry_utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\load.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -545,6 +554,15 @@
     </ClCompile>
     <ClCompile Include="..\source\world_component.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\geometry_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\math_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\string_utils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

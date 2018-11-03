@@ -35,11 +35,11 @@
 #define engine_assert(expr, message) \
     if(!(expr)) { \
         string info = "\"" #expr "\", in "; \
-        info += __ASSERT_FUNCTION; \
+        info += __FUNCTION__; \
         info += " ("; \
         info += __FILE__; \
         info += ":"; \
-        info += to_string((int) (__LINE__)); \
+        info += to_string((long long) (__LINE__)); \
         info += "). Extra info: "; \
         info += message; \
         crash("Assert", info, 1); \
