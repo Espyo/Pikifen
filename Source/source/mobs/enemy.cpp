@@ -18,13 +18,10 @@
 /* ----------------------------------------------------------------------------
  * Creates an enemy mob.
  */
-enemy::enemy(
-    const point &pos, enemy_type* type, const float angle,
-    const string &vars
-) :
-    mob(pos, type, angle, vars),
+enemy::enemy(const point &pos, enemy_type* type, const float angle) :
+    mob(pos, type, angle),
     ene_type(type),
-    spawn_delay(s2f(get_var_value(vars, "spawn_delay", "0"))),
+    spawn_delay(0),
     respawn_days_left(0),
     respawns_after_x_days(0),
     appears_after_day(0),
@@ -73,4 +70,13 @@ void enemy::draw_mob(bitmap_effect_manager* effect_manager) {
  */
 bool enemy::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_ENEMIES;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void enemy::read_script_vars(const string &vars) {
+    mob::read_script_vars(vars);
+    spawn_delay = s2f(get_var_value(vars, "spawn_delay", "0"));
 }

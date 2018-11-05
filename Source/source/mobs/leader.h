@@ -92,10 +92,7 @@ public:
     
     bool is_in_walking_anim;
     
-    leader(
-        const point &pos, leader_type* type,
-        const float angle, const string &vars
-    );
+    leader(const point &pos, leader_type* type, const float angle);
     
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     

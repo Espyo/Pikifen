@@ -58,8 +58,7 @@ mob_type* none_category::get_type(const string &name) { return NULL; }
 mob_type* none_category::create_type() { return NULL; }
 void none_category::register_type(mob_type* type) { }
 mob* none_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) { return NULL; }
 void none_category::erase_mob(mob* m) { }
 void none_category::clear_types() { }
@@ -219,10 +218,9 @@ void pikmin_category::register_type(mob_type* type) {
  * Creates a Pikmin and adds it to the list of Pikmin.
  */
 mob* pikmin_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    pikmin* m = new pikmin(pos, (pikmin_type*) type, angle, vars);
+    pikmin* m = new pikmin(pos, (pikmin_type*) type, angle);
     pikmin_list.push_back(m);
     return m;
 }
@@ -306,10 +304,9 @@ void enemy_category::register_type(mob_type* type) {
  * Creates an enemy and adds it to the list of enemies.
  */
 mob* enemy_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    enemy* m = new enemy(pos, (enemy_type*) type, angle, vars);
+    enemy* m = new enemy(pos, (enemy_type*) type, angle);
     enemies.push_back(m);
     return m;
 }
@@ -394,10 +391,9 @@ void leader_category::register_type(mob_type* type) {
  * Creates a leader and adds it to the list of leaders.
  */
 mob* leader_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    leader* m = new leader(pos, (leader_type*) type, angle, vars);
+    leader* m = new leader(pos, (leader_type*) type, angle);
     leaders.push_back(m);
     return m;
 }
@@ -482,10 +478,9 @@ void onion_category::register_type(mob_type* type) {
  * Creates an Onion and adds it to the list of Onions.
  */
 mob* onion_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    onion* m = new onion(pos, (onion_type*) type, angle, vars);
+    onion* m = new onion(pos, (onion_type*) type, angle);
     onions.push_back(m);
     return m;
 }
@@ -570,10 +565,9 @@ void pellet_category::register_type(mob_type* type) {
  * Creates a pellet and adds it to the list of pellets.
  */
 mob* pellet_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    pellet* m = new pellet(pos, (pellet_type*) type, angle, vars);
+    pellet* m = new pellet(pos, (pellet_type*) type, angle);
     pellets.push_back(m);
     return m;
 }
@@ -658,10 +652,9 @@ void ship_category::register_type(mob_type* type) {
  * Creates a ship and adds it to the list of ships.
  */
 mob* ship_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    ship* m = new ship(pos, (ship_type*) type, angle, vars);
+    ship* m = new ship(pos, (ship_type*) type, angle);
     ships.push_back(m);
     return m;
 }
@@ -746,10 +739,9 @@ void treasure_category::register_type(mob_type* type) {
  * Creates a treasure and adds it to the list of treasures.
  */
 mob* treasure_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    treasure* m = new treasure(pos, (treasure_type*) type, angle, vars);
+    treasure* m = new treasure(pos, (treasure_type*) type, angle);
     treasures.push_back(m);
     return m;
 }
@@ -834,10 +826,9 @@ void gate_category::register_type(mob_type* type) {
  * Creates a gate and adds it to the list of gates.
  */
 mob* gate_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    gate* m = new gate(pos, (gate_type*) type, angle, vars);
+    gate* m = new gate(pos, (gate_type*) type, angle);
     gates.push_back(m);
     return m;
 }
@@ -922,10 +913,9 @@ void bridge_category::register_type(mob_type* type) {
  * Creates a bridge and adds it to the list of bridges.
  */
 mob* bridge_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    bridge* m = new bridge(pos, (bridge_type*) type, angle, vars);
+    bridge* m = new bridge(pos, (bridge_type*) type, angle);
     bridges.push_back(m);
     return m;
 }
@@ -1010,10 +1000,9 @@ void special_category::register_type(mob_type* type) {
  * Creates a special mob and adds it to the list of special mobs.
  */
 mob* special_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    mob* m = new mob(pos, type, angle, vars);
+    mob* m = new mob(pos, type, angle);
     return m;
 }
 
@@ -1093,10 +1082,9 @@ void custom_category::register_type(mob_type* type) {
  * Creates a custom mob and adds it to the list of custom mobs.
  */
 mob* custom_category::create_mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle
 ) {
-    mob* m = new mob(pos, type, angle, vars);
+    mob* m = new mob(pos, type, angle);
     return m;
 }
 

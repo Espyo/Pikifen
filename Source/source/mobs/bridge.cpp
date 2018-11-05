@@ -16,11 +16,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a bridge mob.
  */
-bridge::bridge(
-    const point &pos, bridge_type* bri_type,
-    const float angle, const string &vars
-) :
-    mob(pos, bri_type, angle, vars),
+bridge::bridge(const point &pos, bridge_type* bri_type, const float angle) :
+    mob(pos, bri_type, angle),
     bri_type(bri_type) {
     
     //Search neighboring sectors.

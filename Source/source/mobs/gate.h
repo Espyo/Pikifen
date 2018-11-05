@@ -40,10 +40,7 @@ public:
     gate_type* gat_type;
     sector* sec;
     
-    gate(
-        const point &pos, gate_type* type,
-        const float angle, const string &vars
-    );
+    gate(const point &pos, gate_type* type,const float angle);
     
 };
 

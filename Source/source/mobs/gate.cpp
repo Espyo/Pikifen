@@ -15,11 +15,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a gate mob.
  */
-gate::gate(
-    const point &pos, gate_type* type,
-    const float angle, const string &vars
-) :
-    mob(pos, type, angle, vars),
+gate::gate(const point &pos, gate_type* type,const float angle) :
+    mob(pos, type, angle),
     gat_type(type),
     sec(get_sector(pos, nullptr, true)) {
     

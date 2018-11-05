@@ -73,10 +73,7 @@ protected:
     virtual void tick_class_specifics();
     
 public:
-    pikmin(
-        const point &pos, pikmin_type* type,
-        const float angle, const string &vars
-    );
+    pikmin(const point &pos, pikmin_type* type,const float angle);
     ~pikmin();
     
     pikmin_type* pik_type;
@@ -107,6 +104,7 @@ public:
     virtual float get_base_speed();
     virtual void lose_panic_from_status();
     virtual void handle_status_effect(status_type* s);
+    virtual void read_script_vars(const string &vars);
 };
 
 

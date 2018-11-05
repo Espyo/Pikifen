@@ -54,11 +54,9 @@ public:
     //The Onion's alpha.
     unsigned char seethrough;
     
-    onion(
-        const point &pos, onion_type* type,
-        const float angle, const string &vars
-    );
+    onion(const point &pos, onion_type* type,const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void read_script_vars(const string &vars);
     
     void call_pikmin();
     void spew();

@@ -20,12 +20,8 @@
 /* ----------------------------------------------------------------------------
  * Creates an info spot mob.
  */
-info_spot::info_spot(
-    const point &pos, const float angle, const string &vars
-) :
-    mob(pos, spec_mob_types["Info spot"], angle, vars),
-    text(get_var_value(vars, "text", "")),
-    opens_box(s2b(get_var_value(vars, "opens_box", "0"))),
+info_spot::info_spot(const point &pos, const float angle) :
+    mob(pos, spec_mob_types["Info spot"], angle),
     text_w(0) {
     
     text = replace_all(text, "\\n", "\n");
@@ -50,4 +46,14 @@ void info_spot::draw_mob(bitmap_effect_manager* effect_manager) {
         pos, point(type->radius * 2, type->radius * 2),
         0, &effects
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void info_spot::read_script_vars(const string &vars) {
+    mob::read_script_vars(vars);
+    text = get_var_value(vars, "text", "");
+    opens_box = s2b(get_var_value(vars, "opens_box", "0"));
 }

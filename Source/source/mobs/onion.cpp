@@ -23,10 +23,8 @@ using namespace std;
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.
  */
-onion::onion(
-    const point &pos, onion_type* type, const float angle, const string &vars
-) :
-    mob(pos, type, angle, vars),
+onion::onion(const point &pos, onion_type* type, const float angle) :
+    mob(pos, type, angle),
     oni_type(type),
     activated(true),
     spew_queue(0),
@@ -49,13 +47,6 @@ onion::onion(
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         pikmin_inside[m] = 0;
-    }
-    
-    vector<string> pikmin_inside_vars =
-        split(get_var_value(vars, "pikmin_inside", ""));
-        
-    for(size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES; ++m) {
-        pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
     }
     
     set_animation(ANIM_IDLING);
@@ -97,6 +88,21 @@ void onion::call_pikmin() {
         return;
     }
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void onion::read_script_vars(const string &vars) {
+    mob::read_script_vars(vars);
+    vector<string> pikmin_inside_vars =
+        split(get_var_value(vars, "pikmin_inside", ""));
+        
+    for(size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES; ++m) {
+        pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
+    }
+}
+
 
 const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
 /* ----------------------------------------------------------------------------

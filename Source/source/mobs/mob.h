@@ -242,10 +242,9 @@ protected:
     
 public:
     mob(
-        const point &pos, mob_type* type,
-        const float angle, const string &vars
+        const point &pos, mob_type* type, const float angle
     );
-    virtual ~mob(); //Needed so that typeid works.
+    virtual ~mob();
     
     //Basic information.
     //The type of mob -- Olimar, Red Bulborb, etc.
@@ -471,6 +470,7 @@ public:
     virtual void handle_status_effect(status_type* s);
     //TODO Replace lose_panic_from_status() with handle_lose_status()?
     virtual void lose_panic_from_status();
+    virtual void read_script_vars(const string &vars);
     
     //Drawing tools.
     point get_sprite_center(sprite* s);

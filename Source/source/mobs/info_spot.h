@@ -35,10 +35,9 @@ public:
     bool opens_box;
     unsigned int text_w; //Used instead of calculating the width every time.
     
-    info_spot(
-        const point &pos, const float angle, const string &vars
-    );
+    info_spot(const point &pos, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void read_script_vars(const string &vars);
 };
 
 #endif //ifndef INFO_SPOT_INCLUDED

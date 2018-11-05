@@ -35,10 +35,7 @@ class pellet : public mob {
 public:
     pellet_type* pel_type;
     
-    pellet(
-        const point &pos, pellet_type* type,
-        const float angle, const string &vars
-    );
+    pellet(const point &pos, pellet_type* type,const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 

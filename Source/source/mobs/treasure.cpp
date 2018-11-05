@@ -19,13 +19,10 @@
 /* ----------------------------------------------------------------------------
  * Creates a treasure.
  */
-treasure::treasure(
-    const point &pos, treasure_type* type,
-    const float angle, const string &vars
-) :
-    mob(pos, type, angle, vars),
+treasure::treasure(const point &pos, treasure_type* type, const float angle) :
+    mob(pos, type, angle),
     tre_type(type),
-    buried(s2f(get_var_value(vars, "buried", "0"))) {
+    buried(false) {
     
     become_carriable(true);
     
@@ -59,4 +56,13 @@ void treasure::draw_mob(bitmap_effect_manager* effect_manager) {
         point(type->radius * 2.0, -1),
         angle + s_ptr->angle, &effects
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void treasure::read_script_vars(const string &vars) {
+    mob::read_script_vars(vars);
+    buried = s2f(get_var_value(vars, "buried", "0"));
 }

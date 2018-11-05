@@ -28,10 +28,7 @@ size_t next_mob_id = 0;
 /* ----------------------------------------------------------------------------
  * Creates a mob of no particular type.
  */
-mob::mob(
-    const point &pos, mob_type* type,
-    const float angle, const string &vars
-) :
+mob::mob(const point &pos, mob_type* type, const float angle) :
     type(type),
     to_delete(false),
     anim(&type->anims),
@@ -1245,6 +1242,14 @@ bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void mob::read_script_vars(const string &vars) {
+
 }
 
 
@@ -3042,14 +3047,16 @@ mob* create_mob(
 ) {
     mob* m_ptr = NULL;
     if(type->create_mob_func) {
-        m_ptr = type->create_mob_func(pos, angle, vars);
+        m_ptr = type->create_mob_func(pos, angle);
     } else {
-        m_ptr = category->create_mob(pos, type, angle, vars);
+        m_ptr = category->create_mob(pos, type, angle);
     }
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
         type->init_actions[a]->run(m_ptr, NULL, NULL, MOB_EVENT_UNKNOWN);
     }
+    
+    m_ptr->read_script_vars(vars);
     if(!vars.empty()) {
         vector<string> var_name_strings;
         vector<string> var_value_strings;
@@ -3058,6 +3065,7 @@ mob* create_mob(
             m_ptr->vars[var_name_strings[v]] = var_value_strings[v];
         }
     }
+    
     m_ptr->fsm.set_state(
         m_ptr->fsm.first_state_override != INVALID ?
         m_ptr->fsm.first_state_override :

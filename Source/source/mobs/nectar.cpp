@@ -18,8 +18,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a nectar mob.
  */
-nectar::nectar(const point &pos, const string &vars) :
-    mob(pos, spec_mob_types["Nectar"], 0, vars),
+nectar::nectar(const point &pos) :
+    mob(pos, spec_mob_types["Nectar"], 0),
     amount_left(nectar_amount) {
     
 }

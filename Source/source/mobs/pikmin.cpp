@@ -25,24 +25,18 @@ static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin mob.
  */
-pikmin::pikmin(
-    const point &pos, pikmin_type* type,
-    const float angle, const string &vars
-) :
-    mob(pos, type, angle, vars),
+pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
+    mob(pos, type, angle),
     pik_type(type),
     carrying_mob(NULL),
     carrying_spot(0),
     missed_attack_ptr(nullptr),
-    maturity(s2i(get_var_value(vars, "maturity", "2"))),
+    maturity(2),
     is_seed_or_sprout(false),
     pluck_reserved(false) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO
-    if(s2b(get_var_value(vars, "sprout", "0"))) {
-        fsm.first_state_override = PIKMIN_STATE_SPROUT;
-    }
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
     near_reach = 0;
@@ -236,6 +230,18 @@ void pikmin::handle_status_effect(status_type* s) {
         int new_maturity = maturity + s->maturity_change_amount;
         new_maturity = clamp(new_maturity, 0, 2);
         maturity = new_maturity;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void pikmin::read_script_vars(const string &vars) {
+    mob::read_script_vars(vars);
+    maturity = s2i(get_var_value(vars, "maturity", "2"));
+    if(s2b(get_var_value(vars, "sprout", "0"))) {
+        fsm.first_state_override = PIKMIN_STATE_SPROUT;
     }
 }
 

@@ -20,11 +20,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a leader mob.
  */
-leader::leader(
-    const point &pos, leader_type* type,
-    const float angle, const string &vars
-) :
-    mob(pos, type, angle, vars),
+leader::leader(const point &pos, leader_type* type, const float angle) :
+    mob(pos, type, angle),
     lea_type(type),
     auto_plucking(false),
     pluck_target(nullptr),

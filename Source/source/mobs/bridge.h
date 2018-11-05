@@ -39,10 +39,7 @@ public:
     bridge_type* bri_type;
     vector<sector*> secs;
     
-    bridge(
-        const point &pos, bridge_type* bri_type,
-        const float angle, const string &vars
-    );
+    bridge(const point &pos, bridge_type* bri_type, const float angle);
     
 };
 

@@ -50,11 +50,9 @@ public:
     treasure_type* tre_type;
     float buried; //0: fully unburried. 1: fully buried.
     
-    treasure(
-        const point &pos, treasure_type* type,
-        const float angle, const string &vars
-    );
+    treasure(const point &pos, treasure_type* type, const float angle);
     void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void read_script_vars(const string &vars);
 };
 
 #endif //ifndef TREASURE_INCLUDED
