@@ -75,7 +75,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
-    team(MOB_TEAM_DECORATION),
+    team(MOB_TEAM_PROP),
     hide(false),
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
@@ -1249,7 +1249,19 @@ bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
  * Reads the provided script variables, if any, and does stuff with them.
  */
 void mob::read_script_vars(const string &vars) {
-
+    string team_str = get_var_value(vars, "team", "");
+    if(!team_str.empty()) {
+        size_t team_nr = string_to_team_nr(team_str);
+        if(team_nr == INVALID) {
+            log_error(
+                "Unknown team name \"" + team_str + "\", when trying to "
+                "create a mob of type " + type->name + ", at coordinates " +
+                p2s(pos) + "!", NULL
+            );
+        } else {
+            team = team_nr;
+        }
+    }
 }
 
 
@@ -1432,12 +1444,12 @@ void mob::set_var(const string &name, const string &value) {
  * Should this mob attack v? Teams and other factors are used to decide this.
  */
 bool mob::should_attack(mob* v) {
-    if(team == v->team && team != MOB_TEAM_NONE) {
+    if(team == v->team && team != MOB_TEAM_NEUTRAL) {
         //Teammates can't hurt each other.
         return false;
     }
-    if(v->team == MOB_TEAM_DECORATION) {
-        //Decoration isn't meant to be hurt.
+    if(v->team == MOB_TEAM_PROP) {
+        //Props aren't meant to be hurt.
         return false;
     }
     if(type->is_projectile && !v->type->projectiles_can_damage) {
@@ -1464,6 +1476,14 @@ bool mob::should_attack(mob* v) {
         ((pikmin*) v)->is_seed_or_sprout
     ) {
         //Seed/sprout Pikmin should not be attacked or targetted.
+        return false;
+    }
+    if(v->team == MOB_TEAM_TOP) {
+        //Top of the foodchain cannot be hurt.
+        return false;
+    }
+    if(team == MOB_TEAM_BOTTOM) {
+        //Bottom of the foodchain cannot attack.
         return false;
     }
     return true;
@@ -3190,4 +3210,38 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     mobs.erase(find(mobs.begin(), mobs.end(), m_ptr));
     
     delete m_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts a string to the numeric representation of a team.
+ * Returns INVALID if the string is not valid.
+ */
+size_t string_to_team_nr(const string &team_str) {
+    if(team_str == "top") {
+        return MOB_TEAM_TOP;
+    } else if(team_str == "neutral") {
+        return MOB_TEAM_NEUTRAL;
+    } else if(team_str == "player_1") {
+        return MOB_TEAM_PLAYER_1;
+    } else if(team_str == "player_2") {
+        return MOB_TEAM_PLAYER_2;
+    } else if(team_str == "player_3") {
+        return MOB_TEAM_PLAYER_3;
+    } else if(team_str == "player_4") {
+        return MOB_TEAM_PLAYER_4;
+    } else if(team_str == "enemy_1") {
+        return MOB_TEAM_ENEMY_1;
+    } else if(team_str == "enemy_2") {
+        return MOB_TEAM_ENEMY_2;
+    } else if(team_str == "enemy_3") {
+        return MOB_TEAM_ENEMY_3;
+    } else if(team_str == "obstacle") {
+        return MOB_TEAM_OBSTACLE;
+    } else if(team_str == "bottom") {
+        return MOB_TEAM_BOTTOM;
+    } else if(team_str == "prop") {
+        return MOB_TEAM_PROP;
+    }
+    return INVALID;
 }

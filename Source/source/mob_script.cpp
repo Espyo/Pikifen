@@ -489,6 +489,24 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "set_team") {
+    
+        type = MOB_ACTION_SET_TEAM;
+        if(!v.empty()) {
+            size_t team_nr = string_to_team_nr(v);
+            if(team_nr != INVALID) {
+                vi.push_back(team_nr);
+            } else {
+                log_error("Unknown team name \"" + v + "\"!", dn);
+                valid = false;
+            }
+        } else {
+            log_error(
+                "The \"set_team\" action needs to know the team name!", dn
+            );
+            valid = false;
+        }
+        
     } else if(n == "set_timer") {
     
         type = MOB_ACTION_SET_TIMER;
@@ -1145,6 +1163,11 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_TANGIBLE) {
     
         m->tangible = (bool) vi[0];
+        
+        
+    } else if(type == MOB_ACTION_SET_TEAM) {
+    
+        m->team = vi[0];
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {

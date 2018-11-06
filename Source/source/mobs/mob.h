@@ -43,18 +43,23 @@ const float THROW_DISTANCE_MULTIPLIER = 0.49f;
 const float THROW_STRENGTH_MULTIPLIER = 0.457f;
 
 enum MOB_TEAMS {
+    //Can hurt everything, cannot be hurt.
+    MOB_TEAM_TOP,
     //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
-    MOB_TEAM_NONE,
+    MOB_TEAM_NEUTRAL,
     MOB_TEAM_PLAYER_1,
     MOB_TEAM_PLAYER_2,
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
     MOB_TEAM_ENEMY_1,
     MOB_TEAM_ENEMY_2,
+    MOB_TEAM_ENEMY_3,
     //Can only be hurt by Pikmin.
     MOB_TEAM_OBSTACLE,
+    //Can only be hurt, cannot hurt.
+    MOB_TEAM_BOTTOM,
     //Cannot be hurt or targeted by anything.
-    MOB_TEAM_DECORATION,
+    MOB_TEAM_PROP,
 };
 
 enum MOB_PARTICLE_GENERATOR_IDS {
@@ -497,5 +502,6 @@ mob* create_mob(
     const float angle, const string &vars
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
+size_t string_to_team_nr(const string &team_str);
 
 #endif //ifndef MOB_INCLUDED
