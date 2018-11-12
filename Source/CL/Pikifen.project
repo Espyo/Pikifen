@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/custom_category.cpp"/>
+    <File Name="../source/mob_categories/custom_category.h"/>
+    <File Name="../source/mob_categories/special_category.cpp"/>
+    <File Name="../source/mob_categories/special_category.h"/>
+    <File Name="../source/mob_categories/bridge_category.cpp"/>
+    <File Name="../source/mob_categories/bridge_category.h"/>
+    <File Name="../source/mob_categories/gate_category.cpp"/>
+    <File Name="../source/mob_categories/gate_category.h"/>
+    <File Name="../source/mob_categories/treasure_category.cpp"/>
+    <File Name="../source/mob_categories/treasure_category.h"/>
+    <File Name="../source/mob_categories/ship_category.cpp"/>
+    <File Name="../source/mob_categories/ship_category.h"/>
+    <File Name="../source/mob_categories/pellet_category.cpp"/>
+    <File Name="../source/mob_categories/pellet_category.h"/>
+    <File Name="../source/mob_categories/onion_category.cpp"/>
+    <File Name="../source/mob_categories/onion_category.h"/>
+    <File Name="../source/mob_categories/leader_category.cpp"/>
+    <File Name="../source/mob_categories/leader_category.h"/>
+    <File Name="../source/mob_categories/enemy_category.cpp"/>
+    <File Name="../source/mob_categories/enemy_category.h"/>
+    <File Name="../source/mob_categories/pikmin_category.cpp"/>
+    <File Name="../source/mob_categories/pikmin_category.h"/>
+    <File Name="../source/mobs/mob_category.h"/>
+    <File Name="../source/mobs/mob_category.cpp"/>
+  </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
@@ -179,8 +205,6 @@
     <File Name="../source/mobs/bridge_fsm.h"/>
     <File Name="../source/mobs/bridge_type.cpp"/>
     <File Name="../source/mobs/bridge_type.h"/>
-    <File Name="../source/mobs/mob_category.cpp"/>
-    <File Name="../source/mobs/mob_category.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

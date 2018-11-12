@@ -12,6 +12,7 @@
 #ifndef SHIP_INCLUDED
 #define SHIP_INCLUDED
 
+#include "leader.h"
 #include "mob.h"
 #include "ship_type.h"
 
