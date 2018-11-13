@@ -190,6 +190,8 @@ vector<info_spot*> info_spots;
 bool intended_scr_fullscreen = DEF_SCR_FULLSCREEN;
 int intended_scr_h = DEF_SCR_H;
 int intended_scr_w = DEF_SCR_W;
+vector<interactable*> interactables;
+map<string, interactable_type*> interactable_types;
 bool is_game_running = true;
 bool is_input_allowed = false;
 float joystick_min_deadzone = 0.2f;

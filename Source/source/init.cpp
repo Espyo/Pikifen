@@ -32,6 +32,7 @@
 #include "mob_categories/custom_category.h"
 #include "mob_categories/enemy_category.h"
 #include "mob_categories/gate_category.h"
+#include "mob_categories/interactable_category.h"
 #include "mob_categories/leader_category.h"
 #include "mob_categories/onion_category.h"
 #include "mob_categories/pellet_category.h"
@@ -503,6 +504,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_BRIDGES, new bridge_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_INTERACTABLES, new interactable_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_CUSTOM, new custom_category()

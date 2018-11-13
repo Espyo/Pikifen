@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
+    </Plugin>
+    <Plugin Name="CppCheck"/>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/interactable_category.cpp"/>
+    <File Name="../source/mob_categories/interactable_category.h"/>
     <File Name="../source/mob_categories/custom_category.cpp"/>
     <File Name="../source/mob_categories/custom_category.h"/>
     <File Name="../source/mob_categories/special_category.cpp"/>
@@ -26,24 +46,6 @@
     <File Name="../source/mobs/mob_category.h"/>
     <File Name="../source/mobs/mob_category.cpp"/>
   </VirtualDirectory>
-  <Plugins>
-    <Plugin Name="qmake">
-      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
-    </Plugin>
-    <Plugin Name="CppCheck"/>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
   <VirtualDirectory Name="utils">
     <File Name="../source/utils/string_utils.cpp"/>
     <File Name="../source/utils/string_utils.h"/>
@@ -143,6 +145,10 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/interactable_type.cpp"/>
+    <File Name="../source/mobs/interactable_type.h"/>
+    <File Name="../source/mobs/interactable.cpp"/>
+    <File Name="../source/mobs/interactable.h"/>
     <File Name="../source/mobs/ship_type.cpp"/>
     <File Name="../source/mobs/onion_type.h"/>
     <File Name="../source/mobs/leader.cpp"/>

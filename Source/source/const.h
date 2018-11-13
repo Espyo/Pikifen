@@ -164,16 +164,18 @@ const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
 const string BRIDGES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Bridges";
+const string CUSTOM_MOB_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Custom";
 const string ENEMIES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Enemies";
+const string INTERACTABLES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Interactables";
 const string GATES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Gates";
 const string GRAPHICS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Graphics";
 const string LEADERS_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Leaders";
-const string CUSTOM_MOB_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Custom";
 const string ONIONS_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Onions";
 const string OTHER_TYPES_FOLDER_PATH =

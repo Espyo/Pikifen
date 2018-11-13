@@ -40,6 +40,8 @@
 #include "spray_type.h"
 #include "mobs/bridge.h"
 #include "mobs/info_spot.h"
+#include "mobs/interactable.h"
+#include "mobs/interactable_type.h"
 #include "mobs/nectar.h"
 #include "mobs/pellet.h"
 #include "replay.h"
@@ -277,6 +279,8 @@ extern vector<info_spot*> info_spots;
 extern bool intended_scr_fullscreen;
 extern int intended_scr_h;
 extern int intended_scr_w;
+extern vector<interactable*> interactables;
+extern map<string, interactable_type*> interactable_types;
 extern bool is_game_running;
 //Is input enabled in general, for reasons outside the ready_for_input variable?
 extern bool is_input_allowed;
