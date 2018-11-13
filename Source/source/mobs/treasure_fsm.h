@@ -12,7 +12,7 @@
 #ifndef TREASURE_FSM_INCLUDED
 #define TREASURE_FSM_INCLUDED
 
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the treasure's finite state machine and behavior.

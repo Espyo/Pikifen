@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/treasure_type.h"/>
+    <File Name="../source/mob_types/treasure_type.cpp"/>
+    <File Name="../source/mob_types/ship_type.h"/>
+    <File Name="../source/mob_types/ship_type.cpp"/>
+    <File Name="../source/mob_types/pikmin_type.h"/>
+    <File Name="../source/mob_types/pikmin_type.cpp"/>
+    <File Name="../source/mob_types/pellet_type.h"/>
+    <File Name="../source/mob_types/pellet_type.cpp"/>
+    <File Name="../source/mob_types/onion_type.h"/>
+    <File Name="../source/mob_types/onion_type.cpp"/>
+    <File Name="../source/mob_types/mob_type.h"/>
+    <File Name="../source/mob_types/mob_type.cpp"/>
+    <File Name="../source/mob_types/leader_type.h"/>
+    <File Name="../source/mob_types/leader_type.cpp"/>
+    <File Name="../source/mob_types/interactable_type.h"/>
+    <File Name="../source/mob_types/interactable_type.cpp"/>
+    <File Name="../source/mob_types/gate_type.h"/>
+    <File Name="../source/mob_types/gate_type.cpp"/>
+    <File Name="../source/mob_types/enemy_type.h"/>
+    <File Name="../source/mob_types/enemy_type.cpp"/>
+    <File Name="../source/mob_types/bridge_type.h"/>
+    <File Name="../source/mob_types/bridge_type.cpp"/>
+  </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
@@ -43,8 +67,8 @@
     <File Name="../source/mob_categories/enemy_category.h"/>
     <File Name="../source/mob_categories/pikmin_category.cpp"/>
     <File Name="../source/mob_categories/pikmin_category.h"/>
-    <File Name="../source/mobs/mob_category.h"/>
-    <File Name="../source/mobs/mob_category.cpp"/>
+    <File Name="../source/mob_categories/mob_category.h"/>
+    <File Name="../source/mob_categories/mob_category.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="utils">
     <File Name="../source/utils/string_utils.cpp"/>
@@ -145,16 +169,11 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
-    <File Name="../source/mobs/interactable_type.cpp"/>
-    <File Name="../source/mobs/interactable_type.h"/>
     <File Name="../source/mobs/interactable.cpp"/>
     <File Name="../source/mobs/interactable.h"/>
-    <File Name="../source/mobs/ship_type.cpp"/>
-    <File Name="../source/mobs/onion_type.h"/>
     <File Name="../source/mobs/leader.cpp"/>
     <File Name="../source/mobs/onion_fsm.cpp"/>
     <File Name="../source/mobs/ship.cpp"/>
-    <File Name="../source/mobs/treasure_type.cpp"/>
     <File Name="../source/mobs/treasure_fsm.h"/>
     <File Name="../source/mobs/onion_fsm.h"/>
     <File Name="../source/mobs/onion.cpp"/>
@@ -167,50 +186,33 @@
     <File Name="../source/mobs/info_spot.cpp"/>
     <File Name="../source/mobs/pikmin_fsm.cpp"/>
     <File Name="../source/mobs/pikmin_fsm.h"/>
-    <File Name="../source/mobs/onion_type.cpp"/>
-    <File Name="../source/mobs/ship_type.h"/>
     <File Name="../source/mobs/mob_fsm.h"/>
     <File Name="../source/mobs/mob.cpp"/>
-    <File Name="../source/mobs/gate_type.h"/>
-    <File Name="../source/mobs/enemy_type.h"/>
     <File Name="../source/mobs/gate_fsm.h"/>
-    <File Name="../source/mobs/mob_type.cpp"/>
     <File Name="../source/mobs/nectar.cpp"/>
     <File Name="../source/mobs/pellet_fsm.h"/>
-    <File Name="../source/mobs/leader_type.cpp"/>
     <File Name="../source/mobs/nectar.h"/>
-    <File Name="../source/mobs/pikmin_type.cpp"/>
     <File Name="../source/mobs/mob_fsm.cpp"/>
     <File Name="../source/mobs/mob.h"/>
-    <File Name="../source/mobs/gate_type.cpp"/>
-    <File Name="../source/mobs/treasure_type.h"/>
     <File Name="../source/mobs/ship.h"/>
     <File Name="../source/mobs/treasure.h"/>
     <File Name="../source/mobs/pellet.h"/>
     <File Name="../source/mobs/info_spot.h"/>
-    <File Name="../source/mobs/enemy_type.cpp"/>
     <File Name="../source/mobs/pikmin.h"/>
     <File Name="../source/mobs/treasure_fsm.cpp"/>
-    <File Name="../source/mobs/pikmin_type.h"/>
     <File Name="../source/mobs/gate.cpp"/>
     <File Name="../source/mobs/onion.h"/>
     <File Name="../source/mobs/ship_fsm.cpp"/>
-    <File Name="../source/mobs/leader_type.h"/>
-    <File Name="../source/mobs/pellet_type.h"/>
     <File Name="../source/mobs/pellet.cpp"/>
     <File Name="../source/mobs/enemy.cpp"/>
-    <File Name="../source/mobs/mob_type.h"/>
     <File Name="../source/mobs/leader_fsm.h"/>
     <File Name="../source/mobs/pellet_fsm.cpp"/>
     <File Name="../source/mobs/bridge.cpp"/>
     <File Name="../source/mobs/ship_fsm.h"/>
     <File Name="../source/mobs/treasure.cpp"/>
-    <File Name="../source/mobs/pellet_type.cpp"/>
     <File Name="../source/mobs/bridge.h"/>
     <File Name="../source/mobs/bridge_fsm.cpp"/>
     <File Name="../source/mobs/bridge_fsm.h"/>
-    <File Name="../source/mobs/bridge_type.cpp"/>
-    <File Name="../source/mobs/bridge_type.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

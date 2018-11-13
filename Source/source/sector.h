@@ -22,8 +22,8 @@
 
 #include "const.h"
 #include "hazard.h"
-#include "mobs/mob_category.h"
-#include "mobs/mob_type.h"
+#include "mob_categories/mob_category.h"
+#include "mob_types/mob_type.h"
 #include "weather.h"
 
 using namespace std;

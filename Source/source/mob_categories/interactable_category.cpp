@@ -12,7 +12,7 @@
 #include <algorithm>
 
 #include "interactable_category.h"
-#include "../mobs/interactable_type.h"
+#include "../mob_types/interactable_type.h"
 #include "../vars.h"
 
 
@@ -97,9 +97,6 @@ void interactable_category::clear_types() {
         auto t = interactable_types.begin();
         t != interactable_types.end(); ++t
     ) {
-        //TODO warning: deleting object of polymorphic class type 'interactable_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     interactable_types.clear();

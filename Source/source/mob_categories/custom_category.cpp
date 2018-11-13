@@ -85,9 +85,6 @@ void custom_category::erase_mob(mob* m) { }
  */
 void custom_category::clear_types() {
     for(auto t = custom_mob_types.begin(); t != custom_mob_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'mob_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     custom_mob_types.clear();

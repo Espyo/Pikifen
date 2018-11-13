@@ -91,9 +91,6 @@ void pellet_category::erase_mob(mob* m) {
  */
 void pellet_category::clear_types() {
     for(auto t = pellet_types.begin(); t != pellet_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'pellet_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     pellet_types.clear();

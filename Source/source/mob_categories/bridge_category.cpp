@@ -91,9 +91,6 @@ void bridge_category::erase_mob(mob* m) {
  */
 void bridge_category::clear_types() {
     for(auto t = bridge_types.begin(); t != bridge_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'bridge_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     bridge_types.clear();

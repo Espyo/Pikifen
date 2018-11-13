@@ -91,9 +91,6 @@ void gate_category::erase_mob(mob* m) {
  */
 void gate_category::clear_types() {
     for(auto t = gate_types.begin(); t != gate_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'gate_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     gate_types.clear();

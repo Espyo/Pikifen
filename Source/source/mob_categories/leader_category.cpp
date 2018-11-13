@@ -91,9 +91,6 @@ void leader_category::erase_mob(mob* m) {
  */
 void leader_category::clear_types() {
     for(auto t = leader_types.begin(); t != leader_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'leader_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     leader_types.clear();

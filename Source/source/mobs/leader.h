@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "leader_type.h"
+#include "../mob_types/leader_type.h"
 #include "mob.h"
 
 class pikmin;

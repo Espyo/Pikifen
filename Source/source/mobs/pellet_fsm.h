@@ -12,7 +12,7 @@
 #ifndef PELLET_FSM_INCLUDED
 #define PELLET_FSM_INCLUDED
 
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the Onion's finite state machine and behavior.

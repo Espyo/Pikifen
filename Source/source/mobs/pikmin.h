@@ -17,7 +17,7 @@ class leader;
 #include "enemy.h"
 #include "leader.h"
 #include "onion.h"
-#include "pikmin_type.h"
+#include "../mob_types/pikmin_type.h"
 
 enum PIKMIN_STATES {
     PIKMIN_STATE_IN_GROUP_CHASING,
@@ -73,7 +73,7 @@ protected:
     virtual void tick_class_specifics();
     
 public:
-    pikmin(const point &pos, pikmin_type* type,const float angle);
+    pikmin(const point &pos, pikmin_type* type, const float angle);
     ~pikmin();
     
     pikmin_type* pik_type;

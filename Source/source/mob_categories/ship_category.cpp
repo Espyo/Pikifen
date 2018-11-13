@@ -91,9 +91,6 @@ void ship_category::erase_mob(mob* m) {
  */
 void ship_category::clear_types() {
     for(auto t = ship_types.begin(); t != ship_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'ship_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     ship_types.clear();

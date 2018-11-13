@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include "gate_type.h"
+#include "../mob_types/gate_type.h"
 #include "mob.h"
 #include "../sector.h"
 
@@ -40,7 +40,7 @@ public:
     gate_type* gat_type;
     sector* sec;
     
-    gate(const point &pos, gate_type* type,const float angle);
+    gate(const point &pos, gate_type* type, const float angle);
     
 };
 

@@ -20,7 +20,7 @@
 #include "../animation.h"
 #include "../data_file.h"
 #include "../misc_structs.h"
-#include "mob_category.h"
+#include "../mob_categories/mob_category.h"
 #include "../mob_script.h"
 
 using namespace std;

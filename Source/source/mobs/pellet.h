@@ -13,8 +13,8 @@
 #define PELLET_INCLUDED
 
 #include "mob.h"
-#include "pellet_type.h"
-#include "pikmin_type.h"
+#include "../mob_types/pellet_type.h"
+#include "../mob_types/pikmin_type.h"
 
 enum PELLET_STATES {
     PELLET_STATE_IDLE_WAITING,
@@ -35,7 +35,7 @@ class pellet : public mob {
 public:
     pellet_type* pel_type;
     
-    pellet(const point &pos, pellet_type* type,const float angle);
+    pellet(const point &pos, pellet_type* type, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 

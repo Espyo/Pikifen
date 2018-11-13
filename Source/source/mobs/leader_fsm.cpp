@@ -13,7 +13,7 @@
 #include "../gameplay.h"
 #include "leader.h"
 #include "leader_fsm.h"
-#include "leader_type.h"
+#include "../mob_types/leader_type.h"
 #include "mob_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"

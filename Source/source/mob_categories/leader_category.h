@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include "../mobs/mob_category.h"
+#include "../mob_categories/mob_category.h"
 
 using namespace std;
 

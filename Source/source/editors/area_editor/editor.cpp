@@ -3662,9 +3662,6 @@ void area_editor::unload() {
     
     delete(gui_style);
     delete(faded_style);
-    //TODO warning: deleting object of polymorphic class type 'lafi::gui'
-    //which has non-virtual destructor might cause undefined behaviour
-    //[-Wdelete-non-virtual-dtor]
     delete(gui);
     
     unload_hazards();

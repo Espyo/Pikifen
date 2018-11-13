@@ -12,7 +12,7 @@
 #ifndef ENEMY_INCLUDED
 #define ENEMY_INCLUDED
 
-#include "enemy_type.h"
+#include "../mob_types/enemy_type.h"
 #include "mob.h"
 
 /* ----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public:
     unsigned int appears_before_day;
     unsigned int appears_every_x_days;
     
-    enemy(const point &pos, enemy_type* type,const float angle);
+    enemy(const point &pos, enemy_type* type, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     virtual void read_script_vars(const string &vars);
     

@@ -9,8 +9,8 @@
  * Gate type class and gate type-related functions.
  */
 
-#include "gate.h"
-#include "gate_fsm.h"
+#include "../mobs/gate.h"
+#include "../mobs/gate_fsm.h"
 #include "gate_type.h"
 #include "../mob_script.h"
 

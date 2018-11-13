@@ -574,10 +574,6 @@ void destroy_event_things(
  */
 void destroy_game_states() {
     for(size_t s = 0; s < N_GAME_STATES; s++) {
-        //TODO create the missing destructors for each state type.
-        //TODO warning: deleting object of abstract class type
-        //'game_state' which has non-virtual destructor will cause
-        //undefined behaviour [-Wdelete-non-virtual-dtor]
         delete game_states[s];
     }
 }

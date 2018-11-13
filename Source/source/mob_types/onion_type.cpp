@@ -10,8 +10,8 @@
  */
 
 #include "../functions.h"
-#include "onion.h"
-#include "onion_fsm.h"
+#include "../mobs/onion.h"
+#include "../mobs/onion_fsm.h"
 #include "onion_type.h"
 #include "../vars.h"
 

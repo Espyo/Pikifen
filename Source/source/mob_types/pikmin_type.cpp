@@ -13,14 +13,14 @@
 
 #include "../const.h"
 #include "../functions.h"
-#include "leader.h"
+#include "../mobs/leader.h"
 #include "../mob_script.h"
-#include "pikmin_fsm.h"
+#include "../mobs/pikmin_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 
 const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
-    { 2 * 60, 2 * 60, 3 * 60 };
+{ 2 * 60, 2 * 60, 3 * 60 };
 
 /* ----------------------------------------------------------------------------
  * Creates a type of Pikmin.
@@ -68,7 +68,7 @@ pikmin_type::pikmin_type() :
  * Loads parameters from a data file.
  */
 void pikmin_type::load_parameters(data_node* file) {
-    
+
     reader_setter rs(file);
     
     rs.set("throw_strength_mult", throw_strength_mult);

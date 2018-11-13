@@ -91,9 +91,6 @@ void pikmin_category::erase_mob(mob* m) {
  */
 void pikmin_category::clear_types() {
     for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'pikmin_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     pikmin_types.clear();

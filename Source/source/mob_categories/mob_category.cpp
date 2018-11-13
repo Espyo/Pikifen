@@ -11,9 +11,9 @@
 
 #include <algorithm>
 
-#include "mob.h"
+#include "../mobs/mob.h"
 #include "mob_category.h"
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 #include "../functions.h"
 #include "../vars.h"
 
@@ -156,9 +156,6 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) {
  */
 void mob_category_manager::clear() {
     for(size_t c = 0; c < categories.size(); ++c) {
-        //TODO warning: deleting object of abstract class type 'mob_category'
-        //which has non-virtual destructor will cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete categories[c];
     }
     categories.clear();

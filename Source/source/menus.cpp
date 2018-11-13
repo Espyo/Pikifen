@@ -268,9 +268,6 @@ void main_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        //TODO warning: deleting object of abstract class type 'menu_widget'
-        //which has non-virtual destructor will cause
-        //undefined behaviour [-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();
@@ -527,9 +524,6 @@ void options_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        //TODO warning: deleting object of abstract class type 'menu_widget'
-        //which has non-virtual destructor will cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();
@@ -906,9 +900,6 @@ void controls_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        //TODO warning: deleting object of abstract class type 'menu_widget'
-        //which has non-virtual destructor will cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();
@@ -1283,9 +1274,6 @@ void area_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        //TODO warning: deleting object of abstract class type 'menu_widget'
-        //which has non-virtual destructor will cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();

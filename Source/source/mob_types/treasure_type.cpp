@@ -10,9 +10,9 @@
  */
 
 #include "../functions.h"
-#include "mob_fsm.h"
-#include "treasure.h"
-#include "treasure_fsm.h"
+#include "../mobs/mob_fsm.h"
+#include "../mobs/treasure.h"
+#include "../mobs/treasure_fsm.h"
 #include "treasure_type.h"
 #include "../utils/string_utils.h"
 

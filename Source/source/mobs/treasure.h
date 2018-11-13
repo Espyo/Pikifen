@@ -14,7 +14,7 @@
 
 #include "mob.h"
 #include "pikmin.h"
-#include "treasure_type.h"
+#include "../mob_types/treasure_type.h"
 
 enum TREASURE_STATES {
     TREASURE_STATE_IDLE_WAITING,

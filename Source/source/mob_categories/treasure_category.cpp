@@ -91,9 +91,6 @@ void treasure_category::erase_mob(mob* m) {
  */
 void treasure_category::clear_types() {
     for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type
-        //'treasure_type' which has non-virtual destructor might cause
-        //undefined behaviour [-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     treasure_types.clear();

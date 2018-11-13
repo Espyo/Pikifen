@@ -12,7 +12,7 @@
 #ifndef PIKMIN_FSM_INCLUDED
 #define PIKMIN_FSM_INCLUDED
 
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the Pikmin's finite state machine and behavior.

@@ -10,8 +10,8 @@
  */
 
 #include "../functions.h"
-#include "ship.h"
-#include "ship_fsm.h"
+#include "../mobs/ship.h"
+#include "../mobs/ship_fsm.h"
 #include "ship_type.h"
 #include "../utils/string_utils.h"
 

@@ -503,9 +503,6 @@ void widget::remove(const string &child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
     
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
-    //TODO warning: deleting object of abstract class type 'lafi::widget'
-    //which has non-virtual destructor will cause undefined behaviour
-    //[-Wdelete-non-virtual-dtor]
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
 }

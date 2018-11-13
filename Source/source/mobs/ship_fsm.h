@@ -12,7 +12,7 @@
 #ifndef SHIP_FSM_INCLUDED
 #define SHIP_FSM_INCLUDED
 
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the ship's finite state machine and behavior.

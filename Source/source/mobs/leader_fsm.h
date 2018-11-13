@@ -13,7 +13,7 @@
 #define LEADER_FSM_INCLUDED
 
 #include "mob.h"
-#include "mob_type.h"
+#include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the leader's finite state machine and behavior.

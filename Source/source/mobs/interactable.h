@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "interactable_type.h"
+#include "../mob_types/interactable_type.h"
 #include "mob.h"
 
 class interactable : public mob {

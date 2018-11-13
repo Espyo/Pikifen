@@ -91,9 +91,6 @@ void enemy_category::erase_mob(mob* m) {
  */
 void enemy_category::clear_types() {
     for(auto t = enemy_types.begin(); t != enemy_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'enemy_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     enemy_types.clear();

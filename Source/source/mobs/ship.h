@@ -14,7 +14,7 @@
 
 #include "leader.h"
 #include "mob.h"
-#include "ship_type.h"
+#include "../mob_types/ship_type.h"
 
 enum SHIP_STATES {
     SHIP_STATE_IDLING,

@@ -16,7 +16,7 @@
 #include "enemy_type.h"
 #include "leader_type.h"
 #include "../load.h"
-#include "mob_fsm.h"
+#include "../mobs/mob_fsm.h"
 #include "mob_type.h"
 #include "onion_type.h"
 #include "pellet_type.h"

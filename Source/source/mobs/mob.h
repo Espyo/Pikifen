@@ -21,7 +21,7 @@
 #include "../misc_structs.h"
 #include "../mob_script.h"
 #include "../particle.h"
-#include "pikmin_type.h"
+#include "../mob_types/pikmin_type.h"
 #include "../sector.h"
 #include "../status.h"
 

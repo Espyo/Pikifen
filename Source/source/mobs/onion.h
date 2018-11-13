@@ -17,8 +17,8 @@
 
 #include "../misc_structs.h"
 #include "mob.h"
-#include "pikmin_type.h"
-#include "onion_type.h"
+#include "../mob_types/pikmin_type.h"
+#include "../mob_types/onion_type.h"
 
 enum ONION_STATES {
     ONION_STATE_IDLING,
@@ -54,7 +54,7 @@ public:
     //The Onion's alpha.
     unsigned char seethrough;
     
-    onion(const point &pos, onion_type* type,const float angle);
+    onion(const point &pos, onion_type* type, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     virtual void read_script_vars(const string &vars);
     

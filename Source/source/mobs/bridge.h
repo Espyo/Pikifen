@@ -12,7 +12,7 @@
 #ifndef BRIDGE_INCLUDED
 #define BRIDGE_INCLUDED
 
-#include "bridge_type.h"
+#include "../mob_types/bridge_type.h"
 #include "mob.h"
 
 enum BRIDGE_STATES {

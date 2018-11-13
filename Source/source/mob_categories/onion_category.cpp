@@ -91,9 +91,6 @@ void onion_category::erase_mob(mob* m) {
  */
 void onion_category::clear_types() {
     for(auto t = onion_types.begin(); t != onion_types.end(); ++t) {
-        //TODO warning: deleting object of polymorphic class type 'onion_type'
-        //which has non-virtual destructor might cause undefined behaviour
-        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     onion_types.clear();
