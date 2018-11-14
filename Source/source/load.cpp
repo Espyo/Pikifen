@@ -273,6 +273,8 @@ void load_area(
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
         
         mob_ptr->category = mob_categories.get_from_name(mob_node->name);
+        if(!mob_ptr->category) continue;
+        
         string mt = mob_node->get_child_by_name("type")->value;
         mob_ptr->type = mob_ptr->category->get_type(mt);
         

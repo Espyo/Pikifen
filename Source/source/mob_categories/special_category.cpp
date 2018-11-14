@@ -16,7 +16,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a category for the special mob types.
+ * Creates an instance of the category for the special mob types.
  */
 special_category::special_category() :
     mob_category(

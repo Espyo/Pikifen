@@ -15,11 +15,13 @@
 
 #include "mob_type.h"
 
-/*
+
+/* ----------------------------------------------------------------------------
  * A type of "interactable" mob. This can be a readable sign, a switch, etc.
  */
 class interactable_type : public mob_type {
 public:
+    string prompt_text;
     interactable_type();
     ~interactable_type();
     

@@ -11,6 +11,9 @@
 
 #include "interactable.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a new interactable mob.
+ */
 interactable::interactable(
     const point &pos, interactable_type* type, const float angle
 ):

@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a pellet category.
+ * Creates an instance of the pellet category.
  */
 pellet_category::pellet_category() :
     mob_category(

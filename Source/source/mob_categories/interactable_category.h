@@ -21,7 +21,7 @@ using namespace std;
 
 
 /* ----------------------------------------------------------------------------
- * Mob category for the bridges.
+ * Mob category for the objects that can be interacted with by leaders.
  */
 class interactable_category : public mob_category {
 public:

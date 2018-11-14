@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a ship category.
+ * Creates an instance of the ship category.
  */
 ship_category::ship_category() :
     mob_category(

@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates an enemy category.
+ * Creates an instance of the enemy category.
  */
 enemy_category::enemy_category() :
     mob_category(

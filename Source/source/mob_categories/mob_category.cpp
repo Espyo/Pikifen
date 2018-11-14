@@ -20,7 +20,7 @@
 using namespace std;
 
 /* ----------------------------------------------------------------------------
- * Initializes a mob category.
+ * Initializes an instance of a mob category.
  */
 mob_category::mob_category(
     const size_t id, const string &name, const string &plural_name,

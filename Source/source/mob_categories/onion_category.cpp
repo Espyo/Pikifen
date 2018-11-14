@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates an Onion category.
+ * Creates an instance of the Onion category.
  */
 onion_category::onion_category() :
     mob_category(

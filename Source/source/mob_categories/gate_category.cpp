@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a gate category.
+ * Creates an instance of the gate category.
  */
 gate_category::gate_category() :
     mob_category(

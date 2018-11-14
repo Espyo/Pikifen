@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a treasure category.
+ * Creates an instance of the treasure category.
  */
 treasure_category::treasure_category() :
     mob_category(

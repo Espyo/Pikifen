@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a leader category.
+ * Creates an instance of the leader category.
  */
 leader_category::leader_category() :
     mob_category(

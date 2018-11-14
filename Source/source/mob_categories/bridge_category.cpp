@@ -17,7 +17,7 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a bridge category.
+ * Creates an instance of the bridge category.
  */
 bridge_category::bridge_category() :
     mob_category(

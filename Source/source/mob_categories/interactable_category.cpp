@@ -17,11 +17,11 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates an interactable category.
+ * Creates an instance of the interactable mob category.
  */
 interactable_category::interactable_category() :
     mob_category(
-        MOB_CATEGORY_INTERACTABLES, "interactable", "interactables",
+        MOB_CATEGORY_INTERACTABLES, "Interactable", "Interactables",
         INTERACTABLES_FOLDER_PATH, al_map_rgb(115, 230, 194)
     ) {
     

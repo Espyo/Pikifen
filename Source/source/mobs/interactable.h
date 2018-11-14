@@ -17,8 +17,14 @@
 #include "../mob_types/interactable_type.h"
 #include "mob.h"
 
+
+/* ----------------------------------------------------------------------------
+ * A mob that the current leader can interact with.
+ */
 class interactable : public mob {
 public:
+    interactable_type* int_type;
+    
     interactable(const point &pos, interactable_type* type, const float angle);
 };
 
