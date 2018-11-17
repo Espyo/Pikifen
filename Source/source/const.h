@@ -166,6 +166,8 @@ const string BRIDGES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Bridges";
 const string CUSTOM_MOB_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Custom";
+const string DROPS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Drops";
 const string ENEMIES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Enemies";
 const string INTERACTABLES_FOLDER_PATH =

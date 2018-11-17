@@ -146,6 +146,8 @@ float day_minutes_start = 60 * 7;
 double delta_t = 0;
 ALLEGRO_DISPLAY* display = NULL;
 bool draw_cursor_trail = true;
+vector<drop*> drops;
+map<string, drop_type*> drop_types;
 size_t errors_reported_today = 0;
 map<string, enemy_type*> enemy_types;
 vector<enemy*> enemies;

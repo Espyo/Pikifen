@@ -30,6 +30,7 @@
 #include "menus.h"
 #include "mob_categories/bridge_category.h"
 #include "mob_categories/custom_category.h"
+#include "mob_categories/drop_category.h"
 #include "mob_categories/enemy_category.h"
 #include "mob_categories/gate_category.h"
 #include "mob_categories/interactable_category.h"
@@ -492,6 +493,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_PELLETS, new pellet_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_DROPS, new drop_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_SPECIAL, new special_category()

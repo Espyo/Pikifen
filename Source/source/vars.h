@@ -34,6 +34,8 @@
 #include "particle.h"
 #include "mobs/pikmin.h"
 #include "mob_types/pikmin_type.h"
+#include "mobs/drop.h"
+#include "mob_types/drop_type.h"
 #include "sector.h"
 #include "mobs/ship.h"
 #include "mob_types/ship_type.h"
@@ -230,6 +232,8 @@ extern float day_minutes_start;
 extern double delta_t;
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
+extern vector<drop*> drops;
+extern map<string, drop_type*> drop_types;
 //How many errors have been reported this application session.
 extern size_t errors_reported_today;
 extern map<string, enemy_type*> enemy_types;
