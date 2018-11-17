@@ -23,7 +23,7 @@ enum DROP_ANIMATIONS {
     DROP_ANIM_IDLING,
     DROP_ANIM_FALLING,
     DROP_ANIM_LANDING,
-    DROP_ANIM_TOUCHED,
+    DROP_ANIM_BUMPED,
 };
 
 enum DROP_CONSUMERS {
@@ -48,13 +48,12 @@ public:
     size_t total_doses;
     int increase_amount;
     spray_type* spray_type_to_increase;
-    status* status_to_give;
+    status_type* status_to_give;
     
     drop_type();
     ~drop_type();
-    void load_resources(data_node* file);
+    void load_parameters(data_node* file);
     anim_conversion_vector get_anim_conversions();
-    void unload_resources();
 };
 
 #endif //ifndef DROP_TYPE_INCLUDED
