@@ -913,29 +913,21 @@ void gameplay::draw_ingame_text() {
         done = true;
     }
     
-    //Info spot notification.
+    //Interactable mob notification.
     if(
         !done &&
-        close_to_spot_to_read &&
+        close_to_interactable_to_use &&
         click_control_id != INVALID
     ) {
         float pivot_y =
-            close_to_spot_to_read->pos.y - close_to_spot_to_read->type->radius;
-        if(!close_to_spot_to_read->opens_box) {
-            draw_notification(
-                point(close_to_spot_to_read->pos.x, pivot_y),
-                close_to_spot_to_read->text, NULL
-            );
-            done = true;
-            
-        } else if(click_control_id != INVALID) {
-            draw_notification(
-                point(close_to_spot_to_read->pos.x, pivot_y),
-                "Read", &controls[0][click_control_id]
-            );
-            done = true;
-            
-        }
+            close_to_interactable_to_use->pos.y -
+            close_to_interactable_to_use->type->radius;
+        draw_notification(
+            point(close_to_interactable_to_use->pos.x, pivot_y),
+            close_to_interactable_to_use->int_type->prompt_text,
+            &controls[0][click_control_id]
+        );
+        done = true;
     }
     
     //Pikmin pluck notification.

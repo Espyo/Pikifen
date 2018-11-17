@@ -359,13 +359,13 @@ void gameplay::do_gameplay_logic() {
             
             closest_d = 0;
             d = 0;
-            close_to_spot_to_read = NULL;
+            close_to_interactable_to_use = NULL;
             if(!done) {
-                for(size_t i = 0; i < info_spots.size(); ++i) {
-                    d = dist(cur_leader_ptr->pos, info_spots[i]->pos);
-                    if(d > info_spot_trigger_range) continue;
-                    if(d < closest_d || !close_to_spot_to_read) {
-                        close_to_spot_to_read = info_spots[i];
+                for(size_t i = 0; i < interactables.size(); ++i) {
+                    d = dist(cur_leader_ptr->pos, interactables[i]->pos);
+                    if(d > interactables[i]->int_type->trigger_range) continue;
+                    if(d < closest_d || !close_to_interactable_to_use) {
+                        close_to_interactable_to_use = interactables[i];
                         closest_d = d;
                         done = true;
                     }

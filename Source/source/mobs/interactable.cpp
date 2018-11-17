@@ -17,6 +17,7 @@
 interactable::interactable(
     const point &pos, interactable_type* type, const float angle
 ):
-    mob(pos, type, angle) {
+    mob(pos, type, angle),
+    int_type(type) {
     
 }

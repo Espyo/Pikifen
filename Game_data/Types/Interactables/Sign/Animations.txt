@@ -1,0 +1,17 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.10
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Sign.png
+		file_pos=0.00 0.00
+		file_size=32.00 32.00
+	}
+}
+body_parts

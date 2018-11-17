@@ -1,0 +1,8 @@
+name = Sign
+
+height = 16
+prompt_text = Read
+pushable = false
+pushes = false
+radius = 16
+trigger_range = 64

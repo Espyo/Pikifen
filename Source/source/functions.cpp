@@ -1112,10 +1112,13 @@ string standardize_path(const string &path) {
 /* ----------------------------------------------------------------------------
  * Starts the display of a text message.
  * If the text is empty, it closes the message box.
+ * Any newline characters or slashes followed by n ("\n") will be used to
+ * separate the message into lines.
  * text:        Text to display.
  * speaker_bmp: Bitmap representing the speaker.
  */
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
+    text = replace_all(text, "\\n", "\n");
     if(text.size()) if(text.back() == '\n') text.pop_back();
     cur_message = text;
     cur_message_char = 0;

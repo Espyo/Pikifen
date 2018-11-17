@@ -856,7 +856,6 @@ void load_game_config() {
     rs.set("pluck_range", pluck_range);
     rs.set("whistle_growth_speed", whistle_growth_speed);
     
-    rs.set("info_spot_trigger_range", info_spot_trigger_range);
     rs.set("message_char_interval", message_char_interval);
     rs.set("zoom_max_level", zoom_max_level);
     rs.set("zoom_min_level", zoom_min_level);
@@ -976,7 +975,6 @@ void load_misc_graphics() {
     bmp_cursor_invalid = load_bmp(   asset_file_names.cursor_invalid);
     bmp_enemy_spirit = load_bmp(     asset_file_names.enemy_spirit);
     bmp_idle_glow = load_bmp(        asset_file_names.idle_glow);
-    bmp_info_spot = load_bmp(        "Info_spot.png"); //TODO
     bmp_mouse_cursor = load_bmp(     asset_file_names.mouse_cursor);
     bmp_mouse_wd_icon = load_bmp(    asset_file_names.mouse_wd_icon);
     bmp_mouse_wu_icon = load_bmp(    asset_file_names.mouse_wu_icon);
@@ -1551,7 +1549,6 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_enemy_spirit);
     al_destroy_bitmap(bmp_icon);
     al_destroy_bitmap(bmp_idle_glow);
-    al_destroy_bitmap(bmp_info_spot);
     al_destroy_bitmap(bmp_mouse_wd_icon);
     al_destroy_bitmap(bmp_mouse_wu_icon);
     al_destroy_bitmap(bmp_mouse_cursor);

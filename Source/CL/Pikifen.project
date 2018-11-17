@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
+    </Plugin>
+    <Plugin Name="CppCheck"/>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="mob_types">
     <File Name="../source/mob_types/treasure_type.h"/>
     <File Name="../source/mob_types/treasure_type.cpp"/>
@@ -24,24 +42,6 @@
     <File Name="../source/mob_types/bridge_type.h"/>
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
-  <Plugins>
-    <Plugin Name="qmake">
-      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
-    </Plugin>
-    <Plugin Name="CppCheck"/>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
   <VirtualDirectory Name="mob_categories">
     <File Name="../source/mob_categories/interactable_category.cpp"/>
     <File Name="../source/mob_categories/interactable_category.h"/>
@@ -183,7 +183,6 @@
     <File Name="../source/mobs/gate.h"/>
     <File Name="../source/mobs/leader_fsm.cpp"/>
     <File Name="../source/mobs/leader.h"/>
-    <File Name="../source/mobs/info_spot.cpp"/>
     <File Name="../source/mobs/pikmin_fsm.cpp"/>
     <File Name="../source/mobs/pikmin_fsm.h"/>
     <File Name="../source/mobs/mob_fsm.h"/>
@@ -197,7 +196,6 @@
     <File Name="../source/mobs/ship.h"/>
     <File Name="../source/mobs/treasure.h"/>
     <File Name="../source/mobs/pellet.h"/>
-    <File Name="../source/mobs/info_spot.h"/>
     <File Name="../source/mobs/pikmin.h"/>
     <File Name="../source/mobs/treasure_fsm.cpp"/>
     <File Name="../source/mobs/gate.cpp"/>

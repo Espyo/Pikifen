@@ -279,13 +279,13 @@ void gameplay::handle_button(
                     }
                 }
                 
-                //Now check if the leader should read an info spot.
+                //Now check if the leader should interact with an interactable.
                 if(!done) {
-                    if(
-                        close_to_spot_to_read &&
-                        close_to_spot_to_read->opens_box
-                    ) {
-                        start_message(close_to_spot_to_read->text, NULL);
+                    if(close_to_interactable_to_use) {
+                        string msg = "interact";
+                        cur_leader_ptr->send_message(
+                            close_to_interactable_to_use, msg
+                        );
                         done = true;
                     }
                 }

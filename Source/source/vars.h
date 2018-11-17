@@ -39,7 +39,6 @@
 #include "mob_types/ship_type.h"
 #include "spray_type.h"
 #include "mobs/bridge.h"
-#include "mobs/info_spot.h"
 #include "mobs/interactable.h"
 #include "mob_types/interactable_type.h"
 #include "mobs/nectar.h"
@@ -59,7 +58,6 @@ extern ALLEGRO_BITMAP* bmp_enemy_spirit;
 extern ALLEGRO_BITMAP* bmp_group_move_arrow;
 extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
-extern ALLEGRO_BITMAP* bmp_info_spot;
 extern ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_mouse_wd_icon;
@@ -170,7 +168,7 @@ extern size_t click_control_id;
 extern onion* close_to_onion_to_open;
 extern pikmin* close_to_pikmin_to_pluck;
 extern ship* close_to_ship_to_heal;
-extern info_spot* close_to_spot_to_read;
+extern interactable* close_to_interactable_to_use;
 extern mob* closest_group_member;
 extern bool closest_group_member_distant;
 extern string creator_tool_area_image_name;
@@ -274,8 +272,6 @@ extern ALLEGRO_TRANSFORM identity_transform;
 extern float idle_task_range;
 extern string info_print_text;
 extern timer info_print_timer;
-extern float info_spot_trigger_range;
-extern vector<info_spot*> info_spots;
 extern bool intended_scr_fullscreen;
 extern int intended_scr_h;
 extern int intended_scr_w;

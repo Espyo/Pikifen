@@ -22,9 +22,12 @@
 class interactable_type : public mob_type {
 public:
     string prompt_text;
+    float trigger_range;
+    
     interactable_type();
     ~interactable_type();
     
+    void load_parameters(data_node* file);
 };
 
 #endif //ifndef INTERACTABLE_TYPE_INCLUDED

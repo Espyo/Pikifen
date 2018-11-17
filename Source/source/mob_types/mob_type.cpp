@@ -237,26 +237,6 @@ void load_mob_types(mob_category* category, bool load_resources) {
 void create_special_mob_types() {
     mob_category* cat = mob_categories.get(MOB_CATEGORY_SPECIAL);
     
-    //Info spot.
-    mob_type* info_spot_mt = new mob_type(MOB_CATEGORY_SPECIAL);
-    info_spot_mt->name = "Info spot";
-    info_spot_mt->radius = 16;
-    info_spot_mt->create_mob_func =
-        [] (
-            const point pos, const float angle
-    ) -> mob* {
-        info_spot* m = new info_spot(pos, angle);
-        info_spots.push_back(m);
-        return m;
-    };
-    info_spot_mt->erase_mob_func =
-    [] (mob * m) {
-        info_spots.erase(
-            find(info_spots.begin(), info_spots.end(), (info_spot*) m)
-        );
-    };
-    cat->register_type(info_spot_mt);
-    
     //Nectar.
     mob_type* nectar_mt = new mob_type(MOB_CATEGORY_SPECIAL);
     nectar_mt->name = "Nectar";

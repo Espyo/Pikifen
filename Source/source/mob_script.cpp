@@ -544,6 +544,21 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "show_message_from_var") {
+    
+        type = MOB_ACTION_SHOW_MESSAGE_FROM_VAR;
+        
+        if(v.empty()) {
+            log_error(
+                "\"show_message_from_var\" needs to know the "
+                "name of the variable that holds the text!", dn
+            );
+            valid = false;
+        } else {
+            vs.push_back(v);
+        }
+        
+        
     } else if(n == "spawn") {
     
         type = MOB_ACTION_SPAWN;
@@ -1182,6 +1197,11 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_VAR) {
     
         m->set_var(vs[0], vs[1]);
+        
+        
+    } else if(type == MOB_ACTION_SHOW_MESSAGE_FROM_VAR) {
+    
+        start_message(m->vars[vs[0]], NULL);
         
         
     } else if(type == MOB_ACTION_SPAWN) {

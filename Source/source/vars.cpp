@@ -23,7 +23,6 @@ ALLEGRO_BITMAP* bmp_enemy_spirit = NULL;
 ALLEGRO_BITMAP* bmp_group_move_arrow = NULL;
 ALLEGRO_BITMAP* bmp_icon = NULL;
 ALLEGRO_BITMAP* bmp_idle_glow = NULL;
-ALLEGRO_BITMAP* bmp_info_spot = NULL;
 ALLEGRO_BITMAP* bmp_message_box = NULL;
 ALLEGRO_BITMAP* bmp_mouse_cursor = NULL;
 ALLEGRO_BITMAP* bmp_mouse_button_icon[3] = {NULL, NULL, NULL};
@@ -98,7 +97,7 @@ size_t click_control_id = INVALID;
 onion* close_to_onion_to_open = NULL;
 pikmin* close_to_pikmin_to_pluck = NULL;
 ship* close_to_ship_to_heal = NULL;
-info_spot* close_to_spot_to_read = NULL;
+interactable* close_to_interactable_to_use = NULL;
 mob* closest_group_member = NULL;
 bool closest_group_member_distant = false;
 vector<vector<control_info> > controls;
@@ -185,8 +184,6 @@ timer info_print_timer =
         INFO_PRINT_DURATION,
 [] () { info_print_text.clear(); }
     );
-float info_spot_trigger_range = 64.0f;
-vector<info_spot*> info_spots;
 bool intended_scr_fullscreen = DEF_SCR_FULLSCREEN;
 int intended_scr_h = DEF_SCR_H;
 int intended_scr_w = DEF_SCR_W;

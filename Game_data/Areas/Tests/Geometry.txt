@@ -1186,8 +1186,8 @@ sectors{
 	}
 }
 mobs{
-	Special{
-		type=Info spot
+	Interactable{
+		type=Sign
 		p=-64.00 128.00
 	}
 	Leader{
