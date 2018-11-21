@@ -170,15 +170,6 @@ public:
     spike_damage_type* spike_damage;
     map<spike_damage_type*, float> spike_damage_vulnerabilities;
     
-    //Used by the special mob types, as it is not possible to control
-    //which type of mob to create without a list.
-    function < mob* (const point pos, const float angle) > create_mob_func;
-    function < void(mob*) > erase_mob_func;
-    function < void(data_node* file) > load_parameters_func;
-    function < void(data_node* file) > load_resources_func;
-    function < anim_conversion_vector() > get_anim_conversions_func;
-    function < void() > unload_resources_func;
-    
     //General functions.
     mob_type(size_t category_id);
     virtual ~mob_type();

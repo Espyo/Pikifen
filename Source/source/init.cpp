@@ -39,7 +39,6 @@
 #include "mob_categories/pellet_category.h"
 #include "mob_categories/pikmin_category.h"
 #include "mob_categories/ship_category.h"
-#include "mob_categories/special_category.h"
 #include "mob_categories/treasure_category.h"
 #include "mob_script.h"
 #include "utils/string_utils.h"
@@ -496,9 +495,6 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_DROPS, new drop_category()
-    );
-    mob_categories.register_category(
-        MOB_CATEGORY_SPECIAL, new special_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_SHIPS, new ship_category()

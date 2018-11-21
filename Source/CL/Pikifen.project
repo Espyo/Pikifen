@@ -51,8 +51,6 @@
     <File Name="../source/mob_categories/interactable_category.h"/>
     <File Name="../source/mob_categories/custom_category.cpp"/>
     <File Name="../source/mob_categories/custom_category.h"/>
-    <File Name="../source/mob_categories/special_category.cpp"/>
-    <File Name="../source/mob_categories/special_category.h"/>
     <File Name="../source/mob_categories/bridge_category.cpp"/>
     <File Name="../source/mob_categories/bridge_category.h"/>
     <File Name="../source/mob_categories/gate_category.cpp"/>
@@ -196,9 +194,7 @@
     <File Name="../source/mobs/mob_fsm.h"/>
     <File Name="../source/mobs/mob.cpp"/>
     <File Name="../source/mobs/gate_fsm.h"/>
-    <File Name="../source/mobs/nectar.cpp"/>
     <File Name="../source/mobs/pellet_fsm.h"/>
-    <File Name="../source/mobs/nectar.h"/>
     <File Name="../source/mobs/mob_fsm.cpp"/>
     <File Name="../source/mobs/mob.h"/>
     <File Name="../source/mobs/ship.h"/>

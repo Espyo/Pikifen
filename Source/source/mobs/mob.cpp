@@ -3065,12 +3065,7 @@ mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars
 ) {
-    mob* m_ptr = NULL;
-    if(type->create_mob_func) {
-        m_ptr = type->create_mob_func(pos, angle);
-    } else {
-        m_ptr = category->create_mob(pos, type, angle);
-    }
+    mob* m_ptr = category->create_mob(pos, type, angle);
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
         type->init_actions[a]->run(m_ptr, NULL, NULL, MOB_EVENT_UNKNOWN);
@@ -3202,11 +3197,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         m_ptr->fsm.set_state(INVALID);
     }
     
-    if(m_ptr->type->erase_mob_func) {
-        m_ptr->type->erase_mob_func(m_ptr);
-    } else {
-        m_ptr->type->category->erase_mob(m_ptr);
-    }
+    m_ptr->type->category->erase_mob(m_ptr);
     mobs.erase(find(mobs.begin(), mobs.end(), m_ptr));
     
     delete m_ptr;

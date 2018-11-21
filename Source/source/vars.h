@@ -43,7 +43,6 @@
 #include "mobs/bridge.h"
 #include "mobs/interactable.h"
 #include "mob_types/interactable_type.h"
-#include "mobs/nectar.h"
 #include "mobs/pellet.h"
 #include "replay.h"
 #include "status.h"
@@ -64,7 +63,6 @@ extern ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_mouse_wd_icon;
 extern ALLEGRO_BITMAP* bmp_mouse_wu_icon;
-extern ALLEGRO_BITMAP* bmp_nectar;
 extern ALLEGRO_BITMAP* bmp_notification;
 extern ALLEGRO_BITMAP* bmp_pikmin_silhouette;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
@@ -321,9 +319,6 @@ extern point mouse_cursor_s;
 extern point mouse_cursor_w;
 extern bool mouse_cursor_valid;
 extern bool mouse_moves_cursor[MAX_PLAYERS];
-//A drop of nectar starts with this amount.
-extern size_t nectar_amount;
-extern vector<nectar*> nectars;
 //How far a leader can go to auto-pluck the next Pikmin.
 extern float next_pluck_range;
 extern float onion_open_range;

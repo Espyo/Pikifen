@@ -59,8 +59,7 @@ mob_type::mob_type(size_t category_id) :
     is_projectile(false),
     blocks_carrier_pikmin(false),
     projectiles_can_damage(true),
-    spike_damage(nullptr),
-    create_mob_func(nullptr) {
+    spike_damage(nullptr) {
     
 }
 
@@ -81,30 +80,19 @@ mob_type::~mob_type() {
 /* ----------------------------------------------------------------------------
  * Loads parameters from a data file, if any.
  */
-void mob_type::load_parameters(data_node* file) {
-    if(load_parameters_func) {
-        load_parameters_func(file);
-    }
-}
+void mob_type::load_parameters(data_node* file) { }
 
 
 /* ----------------------------------------------------------------------------
  * Loads any resources into memory, if any.
  */
-void mob_type::load_resources(data_node* file) {
-    if(load_resources_func) {
-        load_resources_func(file);
-    }
-}
+void mob_type::load_resources(data_node* file) { }
 
 
 /* ----------------------------------------------------------------------------
  * Specifies what animation conversions there are, if any.
  */
 anim_conversion_vector mob_type::get_anim_conversions() {
-    if(get_anim_conversions_func) {
-        return get_anim_conversions_func();
-    }
     return anim_conversion_vector();
 }
 
@@ -112,27 +100,13 @@ anim_conversion_vector mob_type::get_anim_conversions() {
 /* ----------------------------------------------------------------------------
  * Unloads loaded resources from memory.
  */
-void mob_type::unload_resources() {
-    if(unload_resources_func) {
-        unload_resources_func();
-    }
-}
+void mob_type::unload_resources() { }
 
 
 /* ----------------------------------------------------------------------------
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {
-    //Special mob types.
-    create_special_mob_types();
-    for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
-        string folder = SPECIAL_MOBS_FOLDER_PATH + "/" + mt->first;
-        data_node file(folder + "/Data.txt");
-        if(!file.file_was_opened) continue;
-        
-        load_mob_type_from_file(mt->second, file, load_resources, folder);
-    }
-    
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* category = mob_categories.get(c);
@@ -228,35 +202,6 @@ void load_mob_types(mob_category* category, bool load_resources) {
         
     }
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates the special mob types.
- */
-void create_special_mob_types() {
-    mob_category* cat = mob_categories.get(MOB_CATEGORY_SPECIAL);
-    
-    //Nectar.
-    mob_type* nectar_mt = new mob_type(MOB_CATEGORY_SPECIAL);
-    nectar_mt->name = "Nectar";
-    nectar_mt->always_active = true;
-    nectar_mt->radius = 8;
-    nectar_mt->create_mob_func =
-        [] (
-            const point pos, const float angle
-    ) -> mob* {
-        nectar* m = new nectar(pos);
-        nectars.push_back(m);
-        return m;
-    };
-    nectar_mt->erase_mob_func =
-    [] (mob * m) {
-        nectars.erase(
-            find(nectars.begin(), nectars.end(), (nectar*) m)
-        );
-    };
-    cat->register_type(nectar_mt);
 }
 
 

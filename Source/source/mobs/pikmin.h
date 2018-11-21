@@ -71,9 +71,6 @@ const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
  * The eponymous Pikmin.
  */
 class pikmin : public mob {
-protected:
-    virtual void tick_class_specifics();
-    
 public:
     pikmin(const point &pos, pikmin_type* type, const float angle);
     ~pikmin();
@@ -108,6 +105,7 @@ public:
     virtual void lose_panic_from_status();
     virtual void handle_status_effect(status_type* s);
     virtual void read_script_vars(const string &vars);
+    virtual void tick_class_specifics();
 };
 
 

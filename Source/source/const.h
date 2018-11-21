@@ -186,8 +186,6 @@ const string PELLETS_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Pellets";
 const string PIKMIN_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Pikmin";
-const string SPECIAL_MOBS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Special";
 const string SHIPS_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Ships";
 const string TEXTURES_FOLDER_PATH =

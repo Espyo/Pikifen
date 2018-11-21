@@ -124,8 +124,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         Why do some updates make previously created content incompatible for such small reasons?
             I believe that making the way things work, are organized, are named, etc. consistent is the key to understanding the engine. If I give a feature a certain name, but later on, rework it and figure out a better name for it, I will rename it (and break some compatibilities in the process), because I want the feature to be intuitive. If it kept the old name, it would confuse newcomers. I don't like making content incompatible, but I think it's a small price to pay for the sake of making everyone able to juice the most out of the engine.
         
+        Why are some features so customizable and others so strict?
+            It's very hard to balance responsibility and power when creating a feature. I want to give the developer as much power as possible, but that also increases the developer's responsibility to learn how the feature works in detail, and to use it properly. To try to make it easy for anyone to create content, I have to lower the responsibility and power of some features.
+        
         Is it possible to add Winged Pikmin?
-            No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
+            Unlikely. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
             Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
     
     

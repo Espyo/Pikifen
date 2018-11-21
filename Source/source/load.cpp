@@ -845,7 +845,6 @@ void load_game_config() {
     rs.set("max_pikmin_in_field", max_pikmin_in_field);
     rs.set("maturity_power_mult", maturity_power_mult);
     rs.set("maturity_speed_mult", maturity_speed_mult);
-    rs.set("nectar_amount", nectar_amount);
     
     rs.set("can_throw_leaders", can_throw_leaders);
     rs.set("cursor_max_dist", cursor_max_dist);
@@ -980,7 +979,6 @@ void load_misc_graphics() {
     bmp_mouse_wu_icon = load_bmp(    asset_file_names.mouse_wu_icon);
     bmp_notification = load_bmp(     asset_file_names.notification);
     bmp_group_move_arrow = load_bmp( asset_file_names.group_move_arrow);
-    bmp_nectar = load_bmp(           "Nectar.png"); //TODO
     bmp_pikmin_silhouette = load_bmp(asset_file_names.pikmin_silhouette);
     bmp_pikmin_spirit = load_bmp(    asset_file_names.pikmin_spirit);
     bmp_rock = load_bmp(             asset_file_names.rock);
@@ -1554,7 +1552,6 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_mouse_cursor);
     al_destroy_bitmap(bmp_notification);
     al_destroy_bitmap(bmp_group_move_arrow);
-    al_destroy_bitmap(bmp_nectar);
     al_destroy_bitmap(bmp_pikmin_spirit);
     al_destroy_bitmap(bmp_rock);
     al_destroy_bitmap(bmp_shadow);
