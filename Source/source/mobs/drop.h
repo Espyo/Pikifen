@@ -34,9 +34,13 @@ enum DROP_STATES {
 class drop : public mob {
 public:
     drop_type* dro_type;
+    float cur_scale;
     size_t doses_left;
     
     drop(const point &pos, drop_type* dro_type, const float angle);
+    
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void tick_class_specifics();
     
 };
 

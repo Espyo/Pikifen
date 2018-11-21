@@ -124,6 +124,7 @@ anim_conversion_vector pikmin_type::get_anim_conversions() {
     v.push_back(make_pair(PIKMIN_ANIM_SPROUT,    "sprout"));
     v.push_back(make_pair(PIKMIN_ANIM_PLUCKING,  "plucking"));
     v.push_back(make_pair(PIKMIN_ANIM_LYING,     "lying"));
+    v.push_back(make_pair(PIKMIN_ANIM_DRINKING,  "drinking"));
     return v;
 }
 

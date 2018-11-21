@@ -283,6 +283,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,
     //When the mob receives an object that was carried to it.
     MOB_EVENT_RECEIVE_DELIVERY,
+    //When the mob touches a drop that it can consume.
+    MOB_EVENT_TOUCHED_DROP,
     
     //Events that only leaders can really handle.
     

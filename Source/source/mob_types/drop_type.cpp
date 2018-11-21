@@ -23,8 +23,9 @@ drop_type::drop_type() :
     effect(DROP_EFFECT_MATURATE),
     total_doses(1),
     increase_amount(2),
-    spray_type_to_increase(nullptr),
-    status_to_give(nullptr) {
+    spray_type_to_increase(INVALID),
+    status_to_give(nullptr),
+    shrink_speed(40.0f) {
     
     drop_fsm::create_fsm(this);
 }
@@ -50,6 +51,7 @@ void drop_type::load_parameters(data_node* file) {
     rs.set("increase_amount", increase_amount);
     rs.set("spray_type_to_increase", spray_name_str);
     rs.set("status_to_give", status_name_str);
+    rs.set("shrink_speed", shrink_speed);
     
     if(consumer_str == "pikmin") {
         consumer = DROP_CONSUMER_PIKMIN;
@@ -69,14 +71,14 @@ void drop_type::load_parameters(data_node* file) {
         log_error("Unknown drop effect \"" + effect_str + "\"!", file);
     }
     
-    if(!spray_name_str.empty()) {
+    if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
         for(size_t s = 0; s < spray_types.size(); ++s) {
             if(spray_types[s].name == spray_name_str) {
-                spray_type_to_increase = &spray_types[s];
+                spray_type_to_increase = s;
                 break;
             }
         }
-        if(!spray_type_to_increase) {
+        if(spray_type_to_increase == INVALID) {
             log_error("Unknown spray type \"" + spray_name_str + "\"!", file);
         }
     }
@@ -89,6 +91,12 @@ void drop_type::load_parameters(data_node* file) {
             log_error("Unknown status type \"" + status_name_str + "\"!", file);
         }
     }
+    
+    if(total_doses == 0) {
+        log_error("The number of total doses cannot be zero!", file);
+    }
+    
+    shrink_speed /= 100.0f;
 }
 
 

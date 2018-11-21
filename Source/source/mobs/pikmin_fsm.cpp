@@ -91,6 +91,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -180,6 +183,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -341,6 +347,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -382,6 +391,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -687,6 +699,33 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("drinking", PIKMIN_STATE_DRINKING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::start_drinking);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::finish_drinking);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
         }
     }
     
@@ -1142,7 +1181,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     if(info->h2->wither_chance > 0 && p_ptr->maturity > 0) {
         unsigned char wither_roll = randomi(0, 100);
         if(wither_roll < info->h2->wither_chance) {
-            p_ptr->maturity--;
+            p_ptr->increase_maturity(-1);
         }
     }
     
@@ -1247,6 +1286,27 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin finishes drinking the drop it was drinking.
+ */
+void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, "");
+    pikmin* p_ptr = (pikmin*) m;
+    drop* d_ptr = (drop*) m->focused_mob;
+    
+    if(d_ptr->dro_type->effect == DROP_EFFECT_MATURATE) {
+        p_ptr->increase_maturity(d_ptr->dro_type->increase_amount);
+        
+    } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+        p_ptr->apply_status_effect(
+            d_ptr->dro_type->status_to_give, true, false
+        );
+    }
+    
+    m->unfocus_from_mob();
 }
 
 
@@ -1487,6 +1547,18 @@ void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
     m->chase(cur_leader_ptr->pos, NULL, false, NULL, true);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin starts drinking the drop it touched.
+ * info1: Pointer to the drop mob.
+ */
+void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
+    m->leave_group();
+    m->stop_chasing();
+    m->focus_on_mob((mob*) info1);
+    m->set_animation(PIKMIN_ANIM_DRINKING);
 }
 
 

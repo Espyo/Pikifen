@@ -97,6 +97,7 @@ anim_conversion_vector leader_type::get_anim_conversions() {
     v.push_back(make_pair(LEADER_ANIM_PAIN,         "pain"));
     v.push_back(make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
     v.push_back(make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
+    v.push_back(make_pair(LEADER_ANIM_DRINKING,     "drinking"));
     return v;
 }
 

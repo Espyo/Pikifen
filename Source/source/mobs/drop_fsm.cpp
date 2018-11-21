@@ -75,6 +75,9 @@ void drop_fsm::create_fsm(mob_type* typ) {
 void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     drop* d_ptr = (drop*) m;
     mob* toucher = (mob*) info1;
+    bool will_drink = false;
+    
+    if(d_ptr->doses_left == 0) return;
     
     //Check if a compatible mob touched it.
     if(
@@ -83,7 +86,16 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to drink it.
-        //TODO
+        pikmin* p_ptr = (pikmin*) toucher;
+        
+        if(
+            d_ptr->dro_type->effect == DROP_EFFECT_MATURATE &&
+            p_ptr->maturity < N_MATURITIES - 1
+        ) {
+            will_drink = true;
+        } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+            will_drink = true;
+        }
         
         
     } else if(
@@ -92,15 +104,34 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to drink it.
-        //TODO
+        leader* l_ptr = (leader*) toucher;
+        if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
+            will_drink = true;
+        } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+            will_drink = true;
+        }
         
-    } else {
+    }
     
-        //Not a compatible mob. Just a bump.
+    mob_event* ev = NULL;
+    
+    if(will_drink) {
+        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_DROP);
+    }
+    
+    if(!ev) {
+        //Turns out it can't drink in this state after all.
+        will_drink = false;
+    }
+    
+    if(will_drink) {
+        ev->run(toucher, (void*) m);
+        d_ptr->doses_left--;
+    } else {
+        //This mob won't drink it. Just a bump.
         if(m->fsm.cur_state->id != DROP_STATE_BUMPED) {
             m->fsm.set_state(DROP_STATE_BUMPED, info1, info2);
         }
-        
     }
 }
 

@@ -37,12 +37,13 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_CARRYING,
     PIKMIN_STATE_ATTACKING_GROUNDED,
     PIKMIN_STATE_ATTACKING_LATCHED,
-    PIKMIN_STATE_CELEBRATING,
     PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
     PIKMIN_STATE_GOING_TO_OPPONENT,
     PIKMIN_STATE_DISABLED,
     PIKMIN_STATE_FLAILING,
     PIKMIN_STATE_PANICKING,
+    PIKMIN_STATE_DRINKING,
+    PIKMIN_STATE_CELEBRATING,
     
     N_PIKMIN_STATES
 };
@@ -58,6 +59,7 @@ enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_SPROUT,
     PIKMIN_ANIM_PLUCKING,
     PIKMIN_ANIM_LYING,
+    PIKMIN_ANIM_DRINKING,
 };
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
@@ -98,6 +100,7 @@ public:
     bool latched;
     
     bool process_attack_miss(hitbox_interaction* info);
+    void increase_maturity(const int amount);
     
     virtual bool can_receive_status(status_type* s);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);

@@ -1,0 +1,8 @@
+name = Nectar
+
+consumer = pikmin
+effect = maturate
+increase_amount = 2
+radius = 16
+shrink_speed = 40
+total_doses = 10

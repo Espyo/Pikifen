@@ -47,8 +47,9 @@ public:
     unsigned char effect;
     size_t total_doses;
     int increase_amount;
-    spray_type* spray_type_to_increase;
+    size_t spray_type_to_increase;
     status_type* status_to_give;
+    float shrink_speed;
     
     drop_type();
     ~drop_type();

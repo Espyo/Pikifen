@@ -125,6 +125,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -166,6 +169,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -198,6 +204,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
@@ -242,6 +251,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.run(leader_fsm::notify_pikmin_release);
+            efc.run(leader_fsm::release);
+            efc.change_state("drinking");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::notify_pikmin_release);
             efc.run(leader_fsm::release);
@@ -264,6 +278,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_DROP); {
+            efc.change_state("drinking");
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -816,6 +833,33 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("drinking", LEADER_STATE_DRINKING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(leader_fsm::start_drinking);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(leader_fsm::finish_drinking);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+    }
+    
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idling");
     
@@ -1125,6 +1169,43 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     sfx_throw.stop();
     sfx_throw.play(0, false);
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader finishes drinking the drop it was drinking.
+ */
+void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, "");
+    drop* d_ptr = (drop*) m->focused_mob;
+    
+    if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
+        spray_amounts[d_ptr->dro_type->spray_type_to_increase] =
+            max(
+                (long long)
+                spray_amounts[d_ptr->dro_type->spray_type_to_increase] +
+                d_ptr->dro_type->increase_amount,
+                (long long) 0
+            );
+    } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+        m->apply_status_effect(
+            d_ptr->dro_type->status_to_give, true, false
+        );
+    }
+    
+    m->unfocus_from_mob();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader starts drinking the drop it touched.
+ * info1: Pointer to the drop mob.
+ */
+void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
+    m->leave_group();
+    m->stop_chasing();
+    m->focus_on_mob((mob*) info1);
+    m->set_animation(LEADER_ANIM_DRINKING);
 }
 
 

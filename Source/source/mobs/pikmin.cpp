@@ -226,11 +226,17 @@ void pikmin::handle_status_effect(status_type* s) {
         fsm.set_state(PIKMIN_STATE_FLAILING);
     }
     
-    if(s->maturity_change_amount != 0) {
-        int new_maturity = maturity + s->maturity_change_amount;
-        new_maturity = clamp(new_maturity, 0, 2);
-        maturity = new_maturity;
-    }
+    increase_maturity(s->maturity_change_amount);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Increases (or decreases) the Pikmin's maturity by the given amount.
+ * This makes sure that the maturity doesn't overflow.
+ */
+void pikmin::increase_maturity(const int amount) {
+    int new_maturity = maturity + amount;
+    maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
 }
 
 

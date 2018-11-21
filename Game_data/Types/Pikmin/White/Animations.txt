@@ -120,6 +120,13 @@ animations{
 			}
 		}
 	}
+	drinking{
+		frames{
+			thrown1{
+				duration=1.00
+			}
+		}
+	}
 }
 sprites{
 	sprout1{
