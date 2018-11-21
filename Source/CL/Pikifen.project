@@ -19,6 +19,8 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/converter_type.cpp"/>
+    <File Name="../source/mob_types/converter_type.h"/>
     <File Name="../source/mob_types/drop_type.cpp"/>
     <File Name="../source/mob_types/drop_type.h"/>
     <File Name="../source/mob_types/treasure_type.h"/>
@@ -45,6 +47,8 @@
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/converter_category.cpp"/>
+    <File Name="../source/mob_categories/converter_category.h"/>
     <File Name="../source/mob_categories/drop_category.cpp"/>
     <File Name="../source/mob_categories/drop_category.h"/>
     <File Name="../source/mob_categories/interactable_category.cpp"/>
@@ -171,6 +175,10 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/converter_fsm.cpp"/>
+    <File Name="../source/mobs/converter_fsm.h"/>
+    <File Name="../source/mobs/converter.cpp"/>
+    <File Name="../source/mobs/converter.h"/>
     <File Name="../source/mobs/drop_fsm.h"/>
     <File Name="../source/mobs/drop_fsm.cpp"/>
     <File Name="../source/mobs/drop.cpp"/>

@@ -22,7 +22,7 @@
 drop_category::drop_category() :
     mob_category(
         MOB_CATEGORY_DROPS, "Drop", "Drops",
-        DROPS_FOLDER_PATH, al_map_rgb(219, 218, 135)
+        DROPS_FOLDER_PATH, al_map_rgb(220, 220, 135)
     ) {
     
 }
@@ -65,7 +65,7 @@ void drop_category::register_type(mob_type* type) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a drop and adds it to the list of drop.
+ * Creates a drop and adds it to the list of drops.
  */
 mob* drop_category::create_mob(
     const point &pos, mob_type* type, const float angle

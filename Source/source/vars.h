@@ -34,6 +34,8 @@
 #include "particle.h"
 #include "mobs/pikmin.h"
 #include "mob_types/pikmin_type.h"
+#include "mobs/converter.h"
+#include "mob_types/converter_type.h"
 #include "mobs/drop.h"
 #include "mob_types/drop_type.h"
 #include "sector.h"
@@ -163,7 +165,6 @@ extern ALLEGRO_COLOR carrying_color_stop;
 extern float carrying_speed_base_mult;
 extern float carrying_speed_max_mult;
 extern float carrying_speed_weight_mult;
-extern vector<vector<control_info> > controls;
 extern size_t click_control_id;
 extern onion* close_to_onion_to_open;
 extern pikmin* close_to_pikmin_to_pluck;
@@ -171,6 +172,9 @@ extern ship* close_to_ship_to_heal;
 extern interactable* close_to_interactable_to_use;
 extern mob* closest_group_member;
 extern bool closest_group_member_distant;
+extern vector<vector<control_info> > controls;
+extern vector<converter*> converters;
+extern map<string, converter_type*> converter_types;
 extern string creator_tool_area_image_name;
 extern bool creator_tool_area_image_shadows;
 extern int creator_tool_area_image_size;

@@ -164,6 +164,8 @@ const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
 const string BRIDGES_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Bridges";
+const string CONVERTERS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Converters";
 const string CUSTOM_MOB_FOLDER_PATH =
     TYPES_FOLDER_PATH + "/Custom";
 const string DROPS_FOLDER_PATH =
