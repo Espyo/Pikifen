@@ -18,6 +18,10 @@
 
 enum CONVERTER_STATES {
     CONVERTER_STATE_IDLING,
+    CONVERTER_STATE_CLOSING,
+    CONVERTER_STATE_SPITTING,
+    CONVERTER_STATE_OPENING,
+    CONVERTER_STATE_WILTING,
     
     N_CONVERTER_STATES,
 };
@@ -32,7 +36,20 @@ class converter : public mob {
 public:
     converter_type* con_type;
     
+    size_t amount_in_buffer;
+    size_t output_pikmin_left;
+    pikmin_type* current_type;
+    size_t current_type_nr;
+    timer type_change_timer;
+    timer auto_conversion_timer;
+    float next_spew_angle;
+    
+    void change_type();
+    void close();
+    void spew();
+    
     converter(const point &pos, converter_type* con_type, const float angle);
+    virtual void tick_class_specifics();
     
 };
 

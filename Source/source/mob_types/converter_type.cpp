@@ -18,7 +18,13 @@
  * Creates a type of converter.
  */
 converter_type::converter_type() :
-    mob_type(MOB_CATEGORY_CONVERTERS) {
+    mob_type(MOB_CATEGORY_CONVERTERS),
+    type_change_interval(3.0f),
+    total_pikmin_output(5),
+    pikmin_per_conversion(1),
+    buffer_size(5),
+    same_type_counts_for_output(false),
+    auto_conversion_timeout(5.0f) {
     
     converter_fsm::create_fsm(this);
 }
@@ -31,7 +37,42 @@ converter_type::~converter_type() { }
  * Loads parameters from a data file.
  */
 void converter_type::load_parameters(data_node* file) {
-
+    reader_setter rs(file);
+    
+    string pikmin_types_str;
+    
+    rs.set("available_pikmin_types", pikmin_types_str);
+    rs.set("type_change_interval", type_change_interval);
+    rs.set("total_pikmin_output", total_pikmin_output);
+    rs.set("pikmin_per_conversion", pikmin_per_conversion);
+    rs.set("same_type_counts_for_output", same_type_counts_for_output);
+    rs.set("buffer_size", buffer_size);
+    rs.set("auto_conversion_timeout", auto_conversion_timeout);
+    
+    vector<string> pikmin_types_strs =
+        semicolon_list_to_vector(pikmin_types_str);
+        
+    mob_category* pik_cat = mob_categories.get(MOB_CATEGORY_PIKMIN);
+    
+    for(size_t t = 0; t < pikmin_types_strs.size(); ++t) {
+        mob_type* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
+        
+        if(type_ptr) {
+            available_pikmin_types.push_back((pikmin_type*) type_ptr);
+        } else {
+            log_error(
+                "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",
+                file
+            );
+        }
+    }
+    
+    if(available_pikmin_types.empty()) {
+        log_error(
+            "A converter needs to have at least one available Pikmin type!",
+            file
+        );
+    }
 }
 
 
@@ -40,5 +81,10 @@ void converter_type::load_parameters(data_node* file) {
  */
 anim_conversion_vector converter_type::get_anim_conversions() {
     anim_conversion_vector v;
+    v.push_back(make_pair(CONVERTER_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(CONVERTER_ANIM_CLOSING, "closing"));
+    v.push_back(make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
+    v.push_back(make_pair(CONVERTER_ANIM_OPENING, "opening"));
+    v.push_back(make_pair(CONVERTER_ANIM_WILTING, "wilting"));
     return v;
 }

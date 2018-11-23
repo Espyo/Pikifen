@@ -49,7 +49,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     onion* o_ptr = (onion*) m;
     
     o_ptr->full_spew_timer.start();
-    o_ptr->next_spew_timer.time_left = 0.0f;
+    o_ptr->next_spew_timer.stop();
     o_ptr->spew_queue += seeds;
     
     particle p(

@@ -3622,7 +3622,7 @@ void area_editor::undo() {
     delete undo_history[0].first;
     undo_history.pop_front();
     
-    undo_save_lock_timer.time_left = 0;
+    undo_save_lock_timer.stop();
     update_undo_history();
     
     clear_selection();

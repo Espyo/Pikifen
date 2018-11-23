@@ -125,6 +125,10 @@ int show_message_box(
     char const* text, char const* buttons, int flags
 );
 void signal_handler(const int signum);
+void spew_pikmin_seed(
+    const point pos, const float z, pikmin_type* pik_type,
+    const float angle, const float horizontal_speed, const float vertical_speed
+);
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 void update_animation_editor_history(const string &n = "");

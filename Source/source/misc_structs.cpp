@@ -606,6 +606,14 @@ void timer::start(const float new_duration) {
 
 
 /* ----------------------------------------------------------------------------
+ * Stops a timer, without executing the on_end callback.
+ */
+void timer::stop() {
+    time_left = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks a timer.
  * amount: Time to tick.
  */

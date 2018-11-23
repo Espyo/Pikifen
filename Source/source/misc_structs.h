@@ -41,6 +41,7 @@ struct timer {
     ~timer();
     void start(const bool can_restart = true);
     void start(const float new_duration);
+    void stop();
     void tick(const float amount);
     float get_ratio_left();
 };

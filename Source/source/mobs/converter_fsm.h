@@ -21,7 +21,13 @@
  */
 namespace converter_fsm {
 void create_fsm(mob_type* typ);
-
+void become_idle(mob* m, void* info1, void* info2);
+void die(mob* m, void* info1, void* info2);
+void handle_pikmin(mob* m, void* info1, void* info2);
+void open(mob* m, void* info1, void* info2);
+void open_or_wilt(mob* m, void* info1, void* info2);
+void spew(mob* m, void* info1, void* info2);
+void wilt(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef CONVERTER_FSM_INCLUDED

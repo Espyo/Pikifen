@@ -53,16 +53,6 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
 }
 
 
-//An Onion-spat seed is this quick, horizontally.
-const float ONION_SPEW_H_SPEED = 80.0f;
-//Deviate the seed's horizontal speed by this much, more or less.
-const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
-//An Onion-spat seed is this quick, vertically.
-const float ONION_SPEW_V_SPEED = 600.0f;
-//An Onion-spat seed starts with this Z offset from the Onion.
-const float NEW_SEED_Z_OFFSET = 320.0f;
-
-
 /* ----------------------------------------------------------------------------
  * Temporary feature to allow Pikmin to be called from the Onion.
  * Calls out a Pikmin from inside the Onion, if possible.
@@ -104,7 +94,18 @@ void onion::read_script_vars(const string &vars) {
 }
 
 
+//An Onion-spat seed starts with this Z offset from the Onion.
+const float ONION_NEW_SEED_Z_OFFSET = 320.0f;
+//After spitting a seed, the next seed's angle shifts by this much.
 const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
+//An Onion-spat seed is this quick, horizontally.
+const float ONION_SPEW_H_SPEED = 80.0f;
+//Deviate the seed's horizontal speed by this much, more or less.
+const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
+//An Onion-spat seed is this quick, vertically.
+const float ONION_SPEW_V_SPEED = 600.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
@@ -119,23 +120,13 @@ void onion::spew() {
         return;
     }
     
-    pikmin* new_pikmin =
-        (
-            (pikmin*)
-            create_mob(
-                mob_categories.get(MOB_CATEGORY_PIKMIN),
-                pos, oni_type->pik_type, next_spew_angle, ""
-            )
-        );
     float horizontal_strength =
         ONION_SPEW_H_SPEED +
         randomf(-ONION_SPEW_H_SPEED_DEVIATION, ONION_SPEW_H_SPEED_DEVIATION);
-    new_pikmin->z = z + NEW_SEED_Z_OFFSET;
-    new_pikmin->speed.x = cos(next_spew_angle) * horizontal_strength;
-    new_pikmin->speed.y = sin(next_spew_angle) * horizontal_strength;
-    new_pikmin->speed_z = ONION_SPEW_V_SPEED;
-    new_pikmin->fsm.set_state(PIKMIN_STATE_SEED);
-    new_pikmin->maturity = 0;
+    spew_pikmin_seed(
+        pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->pik_type,
+        next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
+    );
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
     next_spew_angle = normalize_angle(next_spew_angle);

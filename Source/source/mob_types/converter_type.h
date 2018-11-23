@@ -15,9 +15,14 @@
 #include <allegro5/allegro.h>
 
 #include "mob_type.h"
+#include "pikmin_type.h"
 
 enum CONVERTER_ANIMATIONS {
     CONVERTER_ANIM_IDLING,
+    CONVERTER_ANIM_CLOSING,
+    CONVERTER_ANIM_SPITTING,
+    CONVERTER_ANIM_OPENING,
+    CONVERTER_ANIM_WILTING,
 };
 
 
@@ -27,8 +32,15 @@ enum CONVERTER_ANIMATIONS {
  */
 class converter_type : public mob_type {
 public:
-
-
+    vector<pikmin_type*> available_pikmin_types;
+    float type_change_interval;
+    size_t total_pikmin_output;
+    size_t pikmin_per_conversion;
+    size_t buffer_size;
+    bool same_type_counts_for_output;
+    float auto_conversion_timeout;
+    size_t max_pikmin_spawn_requirement;
+    
     converter_type();
     ~converter_type();
     void load_parameters(data_node* file);

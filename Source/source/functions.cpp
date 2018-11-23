@@ -1099,6 +1099,30 @@ void signal_handler(const int signum) {
 
 
 /* ----------------------------------------------------------------------------
+ * Spews out a Pikmin from a given point. Used by Onions and converters.
+ */
+void spew_pikmin_seed(
+    const point pos, const float z, pikmin_type* pik_type,
+    const float angle, const float horizontal_speed, const float vertical_speed
+) {
+    pikmin* new_pikmin =
+        (
+            (pikmin*)
+            create_mob(
+                mob_categories.get(MOB_CATEGORY_PIKMIN),
+                pos, pik_type, angle, ""
+            )
+        );
+    new_pikmin->z = z;
+    new_pikmin->speed.x = cos(angle) * horizontal_speed;
+    new_pikmin->speed.y = sin(angle) * horizontal_speed;
+    new_pikmin->speed_z = vertical_speed;
+    new_pikmin->fsm.set_state(PIKMIN_STATE_SEED);
+    new_pikmin->maturity = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Standardizes a path, making it use forward slashes instead of backslashes,
  * and removing excess slashes at the end.
  */

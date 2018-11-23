@@ -128,7 +128,7 @@ void editor::center_camera(
  * caller_widget: Widget that summoned this warning.
  */
 bool editor::check_new_unsaved_changes(lafi::widget* caller_widget) {
-    unsaved_changes_warning_timer.time_left = 0;
+    unsaved_changes_warning_timer.stop();
     
     if(!made_new_changes) return false;
     made_new_changes = false;
