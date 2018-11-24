@@ -27,6 +27,18 @@ void converter_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_PIKMIN_LANDED); {
             efc.run(converter_fsm::handle_pikmin);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+            efc.run(converter_fsm::handle_object_touch);
+        }
+    }
+    
+    efc.new_state("bumping", CONVERTER_STATE_BUMPING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(converter_fsm::bumped);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("closing");
+        }
     }
     
     efc.new_state("closing", CONVERTER_STATE_CLOSING); {
@@ -81,8 +93,30 @@ void converter_fsm::create_fsm(mob_type* typ) {
 void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
     converter* c_ptr = (converter*) m;
     
-    c_ptr->set_animation(CONVERTER_ANIM_IDLING);
+    c_ptr->set_animation(
+        c_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+        )
+    );
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_IDLING;
     c_ptr->type_change_timer.start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Does a little bumpy animation after a leader touches it.
+ */
+void converter_fsm::bumped(mob* m, void* info1, void* info2) {
+    converter* c_ptr = (converter*) m;
+    
+    c_ptr->set_animation(
+        c_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_BUMPING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+        )
+    );
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPING;
+    c_ptr->type_change_timer.stop();
+    c_ptr->auto_conversion_timer.stop();
 }
 
 
@@ -91,6 +125,17 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void converter_fsm::die(mob* m, void* info1, void* info2) {
     m->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an object bumping against it.
+ */
+void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
+    mob* bumper = (mob*) info1;
+    if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
+        m->fsm.set_state(CONVERTER_STATE_BUMPING);
+    }
 }
 
 
@@ -145,7 +190,13 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
  * Makes the converter open up.
  */
 void converter_fsm::open(mob* m, void* info1, void* info2) {
-    m->set_animation(CONVERTER_ANIM_OPENING);
+    converter* c_ptr = (converter*) m;
+    c_ptr->set_animation(
+        c_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+        )
+    );
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_OPENING;
 }
 
 
@@ -169,7 +220,12 @@ void converter_fsm::open_or_wilt(mob* m, void* info1, void* info2) {
 void converter_fsm::spew(mob* m, void* info1, void* info2) {
     converter* c_ptr = (converter*) m;
     
-    c_ptr->set_animation(CONVERTER_ANIM_SPITTING);
+    c_ptr->set_animation(
+        c_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+        )
+    );
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_SPITTING;
     c_ptr->spew();
 }
 
@@ -178,5 +234,12 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
  * Makes the converter start wilting.
  */
 void converter_fsm::wilt(mob* m, void* info1, void* info2) {
-    m->set_animation(CONVERTER_ANIM_WILTING);
+    converter* c_ptr = (converter*) m;
+    
+    c_ptr->set_animation(
+        c_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_WILTING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+        )
+    );
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_WILTING;
 }

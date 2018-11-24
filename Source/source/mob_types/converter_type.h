@@ -18,11 +18,20 @@
 #include "pikmin_type.h"
 
 enum CONVERTER_ANIMATIONS {
+    /* Because converters can have multiple animations that do the same thing,
+     * due to the different types, there are actually
+     * N_CONVERTER_ANIMS * <number of types> in total.
+     * The first bunch of animations are for the first type, the second bunch
+     * are for the second type, etc.
+     */
     CONVERTER_ANIM_IDLING,
+    CONVERTER_ANIM_BUMPING,
     CONVERTER_ANIM_CLOSING,
     CONVERTER_ANIM_SPITTING,
     CONVERTER_ANIM_OPENING,
     CONVERTER_ANIM_WILTING,
+    
+    N_CONVERTER_ANIMS,
 };
 
 
@@ -30,7 +39,7 @@ enum CONVERTER_ANIMATIONS {
  * A type of converter, which is a mob that can convert Pikmin from one type
  * to another.
  */
-class converter_type : public mob_type {
+class converter_type : public mob_type, public mob_type_with_anim_groups {
 public:
     vector<pikmin_type*> available_pikmin_types;
     float type_change_interval;

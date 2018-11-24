@@ -204,6 +204,7 @@ public:
     animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);
     
+    void set_anim(animation* new_anim, const size_t new_anim_nr);
     void start();
     bool tick(const float time, vector<size_t>* signals = NULL);
     sprite* get_cur_sprite();

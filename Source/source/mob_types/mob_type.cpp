@@ -104,6 +104,32 @@ void mob_type::unload_resources() { }
 
 
 /* ----------------------------------------------------------------------------
+ * Grabs an animation conversion vector, filled with base animations,
+ * and outputs one that combines all base animations with their groups.
+ */
+anim_conversion_vector
+mob_type_with_anim_groups::get_anim_conversions_with_groups(
+    const anim_conversion_vector &v, const size_t base_anim_total
+) {
+    anim_conversion_vector new_v;
+    
+    for(size_t g = 0; g < animation_group_suffixes.size(); ++g) {
+        for(size_t c = 0; c < v.size(); ++c) {
+            new_v.push_back(
+                make_pair(
+                    g * base_anim_total + v[c].first,
+                    v[c].second + animation_group_suffixes[g]
+                )
+            );
+        }
+    }
+    
+    return new_v;
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {

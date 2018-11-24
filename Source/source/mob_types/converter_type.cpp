@@ -40,8 +40,10 @@ void converter_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     
     string pikmin_types_str;
+    string type_animation_suffixes_str;
     
     rs.set("available_pikmin_types", pikmin_types_str);
+    rs.set("type_animation_suffixes", type_animation_suffixes_str);
     rs.set("type_change_interval", type_change_interval);
     rs.set("total_pikmin_output", total_pikmin_output);
     rs.set("pikmin_per_conversion", pikmin_per_conversion);
@@ -49,11 +51,10 @@ void converter_type::load_parameters(data_node* file) {
     rs.set("buffer_size", buffer_size);
     rs.set("auto_conversion_timeout", auto_conversion_timeout);
     
+    mob_category* pik_cat = mob_categories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
         semicolon_list_to_vector(pikmin_types_str);
         
-    mob_category* pik_cat = mob_categories.get(MOB_CATEGORY_PIKMIN);
-    
     for(size_t t = 0; t < pikmin_types_strs.size(); ++t) {
         mob_type* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
         
@@ -67,10 +68,26 @@ void converter_type::load_parameters(data_node* file) {
         }
     }
     
+    animation_group_suffixes =
+        semicolon_list_to_vector(type_animation_suffixes_str);
+        
+    if(available_pikmin_types.size() == 1 && animation_group_suffixes.empty()) {
+        //Let's make life easier. This is a one-type converter,
+        //so no need to involve suffixes.
+        animation_group_suffixes.push_back("");
+    }
+    
     if(available_pikmin_types.empty()) {
         log_error(
             "A converter needs to have at least one available Pikmin type!",
             file
+        );
+    }
+    
+    if(animation_group_suffixes.size() != available_pikmin_types.size()) {
+        log_error(
+            "The number of animation type suffixes needs to match the "
+            "number of available Pikmin types!", file
         );
     }
 }
@@ -81,10 +98,14 @@ void converter_type::load_parameters(data_node* file) {
  */
 anim_conversion_vector converter_type::get_anim_conversions() {
     anim_conversion_vector v;
+    
     v.push_back(make_pair(CONVERTER_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(CONVERTER_ANIM_BUMPING, "bumping"));
     v.push_back(make_pair(CONVERTER_ANIM_CLOSING, "closing"));
     v.push_back(make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
     v.push_back(make_pair(CONVERTER_ANIM_OPENING, "opening"));
     v.push_back(make_pair(CONVERTER_ANIM_WILTING, "wilting"));
-    return v;
+    v.push_back(make_pair(CONVERTER_ANIM_IDLING, "idling"));
+    
+    return get_anim_conversions_with_groups(v, N_CONVERTER_ANIMS);
 }

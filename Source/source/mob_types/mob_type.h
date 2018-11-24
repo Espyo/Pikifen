@@ -181,6 +181,25 @@ public:
 };
 
 
+/* A mob type that has animation groups.
+ * These have a series of "base" animations, like idling, dying, etc.,
+ * but can also have several looks for these same base animations.
+ * So in practice, it can have an idling blue animation, idling yellow,
+ * dying red, etc. Because this would otherwise be a nightmare to organize,
+ * this base class comes with some helpful functions and members.
+ * A "group" is the "look" mentioned before, so "red", "yellow", "blue", etc.
+ * The mob type should load a parameter somewhere that lists what suffixes to
+ * use for each group when loading animation names from the animation database.
+ */
+class mob_type_with_anim_groups {
+public:
+    vector<string> animation_group_suffixes;
+    anim_conversion_vector get_anim_conversions_with_groups(
+        const anim_conversion_vector &v, const size_t base_anim_total
+    );
+};
+
+
 void create_special_mob_types();
 void load_mob_types(mob_category* category, bool load_resources);
 void load_mob_types(bool load_resources);

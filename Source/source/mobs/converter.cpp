@@ -48,6 +48,15 @@ void converter::change_type() {
             con_type->available_pikmin_types.size()
         );
     current_type = con_type->available_pikmin_types[current_type_nr];
+    
+    set_animation(
+        get_animation_nr_from_base_and_group(
+            cur_base_anim_nr, N_CONVERTER_ANIMS, current_type_nr
+        ),
+        true, false
+    );
+    
+    type_change_timer.start();
 }
 
 
@@ -56,7 +65,12 @@ void converter::change_type() {
  */
 void converter::close() {
     fsm.set_state(CONVERTER_STATE_CLOSING);
-    set_animation(CONVERTER_ANIM_CLOSING);
+    set_animation(
+        get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_CLOSING, N_CONVERTER_ANIMS, current_type_nr
+        )
+    );
+    cur_base_anim_nr = CONVERTER_ANIM_CLOSING;
     auto_conversion_timer.stop();
 }
 

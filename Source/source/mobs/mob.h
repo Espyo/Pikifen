@@ -405,7 +405,10 @@ public:
     void draw_limb(bitmap_effect_manager* effect_manager = NULL);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     
-    void set_animation(const size_t nr, const bool pre_named = true);
+    void set_animation(
+        const size_t nr,
+        const bool pre_named = true, const bool auto_start = true
+    );
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
@@ -486,6 +489,20 @@ public:
         const ALLEGRO_COLOR &onion_color
     );
     
+};
+
+
+/* See mob_type_with_anim_groups.
+ */
+class mob_with_anim_groups {
+public:
+    size_t cur_base_anim_nr;
+    size_t get_animation_nr_from_base_and_group(
+        const size_t base_anim_nr, const size_t group_nr,
+        const size_t base_anim_total
+    );
+    
+    mob_with_anim_groups();
 };
 
 

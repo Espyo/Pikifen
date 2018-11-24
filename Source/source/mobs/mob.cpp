@@ -1367,11 +1367,14 @@ void mob::send_message(mob* receiver, string &msg) {
 
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
- * nr:        Animation number.
+ * nr:         Animation number.
  *   It's the animation instance number from the database.
- * pre_named: If true, the animation has already been named in-engine.
+ * pre_named:  If true, the animation has already been named in-engine.
+ * auto_start: After the change, start the new animation from time 0.
  */
-void mob::set_animation(const size_t nr, const bool pre_named) {
+void mob::set_animation(
+    const size_t nr, const bool pre_named, const bool auto_start
+) {
     if(nr >= type->anims.animations.size()) return;
     
     size_t final_nr;
@@ -1397,7 +1400,10 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
     
     animation* new_anim = anim.anim_db->animations[final_nr];
     anim.cur_anim = new_anim;
-    anim.start();
+    
+    if(auto_start || anim.cur_frame_index >= anim.cur_anim->frames.size()) {
+        anim.start();
+    }
 }
 
 
@@ -2534,6 +2540,28 @@ mob::~mob() {
     if(carry_info) delete carry_info;
     if(group) delete group;
     if(parent) delete parent;
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the members of a mob with anim groups.
+ */
+mob_with_anim_groups::mob_with_anim_groups() :
+    cur_base_anim_nr(INVALID) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of an animation, given a base animation number and
+ * group number.
+ */
+size_t mob_with_anim_groups::get_animation_nr_from_base_and_group(
+    const size_t base_anim_nr, const size_t group_nr,
+    const size_t base_anim_total
+) {
+    return group_nr * base_anim_total + base_anim_nr;
 }
 
 
