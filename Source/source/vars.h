@@ -39,6 +39,10 @@
 #include "mobs/drop.h"
 #include "mob_types/drop_type.h"
 #include "sector.h"
+#include "mobs/pile.h"
+#include "mob_types/pile_type.h"
+#include "mobs/resource.h"
+#include "mob_types/resource_type.h"
 #include "mobs/ship.h"
 #include "mob_types/ship_type.h"
 #include "spray_type.h"
@@ -341,6 +345,8 @@ extern vector<pikmin*> pikmin_list;
 extern vector<pikmin_type*> pikmin_order;
 extern vector<string> pikmin_order_strings;
 extern map<string, pikmin_type*> pikmin_types;
+extern vector<pile*> piles;
+extern map<string, pile_type*> pile_types;
 extern float pluck_range;
 //If true, the whistle radius is merely drawn as a circle.
 //Used to improve performance.
@@ -354,6 +360,8 @@ extern double prev_frame_time;
 extern bool ready_for_input;
 //Is delta_t meant to be reset for the next frame?
 extern bool reset_delta_t;
+extern vector<resource*> resources;
+extern map<string, resource_type*> resource_types;
 extern bool scr_fullscreen;
 extern int scr_h;
 extern int scr_w;

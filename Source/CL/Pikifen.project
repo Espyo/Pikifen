@@ -19,6 +19,10 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/pile_type.cpp"/>
+    <File Name="../source/mob_types/pile_type.h"/>
+    <File Name="../source/mob_types/resource_type.cpp"/>
+    <File Name="../source/mob_types/resource_type.h"/>
     <File Name="../source/mob_types/converter_type.cpp"/>
     <File Name="../source/mob_types/converter_type.h"/>
     <File Name="../source/mob_types/drop_type.cpp"/>
@@ -47,6 +51,10 @@
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/pile_category.cpp"/>
+    <File Name="../source/mob_categories/pile_category.h"/>
+    <File Name="../source/mob_categories/resource_category.cpp"/>
+    <File Name="../source/mob_categories/resource_category.h"/>
     <File Name="../source/mob_categories/converter_category.cpp"/>
     <File Name="../source/mob_categories/converter_category.h"/>
     <File Name="../source/mob_categories/drop_category.cpp"/>
@@ -175,6 +183,14 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/pile_fsm.cpp"/>
+    <File Name="../source/mobs/pile_fsm.h"/>
+    <File Name="../source/mobs/pile.cpp"/>
+    <File Name="../source/mobs/pile.h"/>
+    <File Name="../source/mobs/resource_fsm.cpp"/>
+    <File Name="../source/mobs/resource_fsm.h"/>
+    <File Name="../source/mobs/resource.cpp"/>
+    <File Name="../source/mobs/resource.h"/>
     <File Name="../source/mobs/converter_fsm.cpp"/>
     <File Name="../source/mobs/converter_fsm.h"/>
     <File Name="../source/mobs/converter.cpp"/>

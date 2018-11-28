@@ -29,7 +29,7 @@ ship_type::ship_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parametes from a data file.
+ * Loads parameters from a data file.
  */
 void ship_type::load_parameters(data_node* file) {
     can_heal = file->get_child_by_name("can_heal");
