@@ -52,16 +52,13 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
  * Generic handler for when a mob was delivered to an Onion/ship.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    enemy* e_ptr = (enemy*) m;
-    onion* o_ptr = (onion*) e_ptr->carrying_target;
+    engine_assert(m->carrying_target != NULL, "");
     
-    engine_assert(o_ptr != NULL, "");
+    m->carrying_target->fsm.run_event(
+        MOB_EVENT_RECEIVE_DELIVERY, (void*) m
+    );
     
-    size_t seeds = e_ptr->ene_type->pikmin_seeds;
-    
-    o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
-    
-    e_ptr->to_delete = true;
+    m->to_delete = true;
 }
 
 
@@ -270,7 +267,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         } else {
             //Go to the final destination.
             float target_distance = 3.0f;
-            if(m->carry_info->carry_to_ship) {
+            if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
                 //Because the ship's beam can be offset, and because
                 //the ship is normally in the way, let's consider a
                 //"reached destination" event if the treasure is

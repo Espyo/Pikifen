@@ -1227,6 +1227,14 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     dist closest_spot_dist;
     carrier_spot_struct* closest_spot_ptr = NULL;
     
+    //If this is the first Pikmin to go to the carriable mob, rotate
+    //the points such that 0 faces this Pikmin instead.
+    if(carriable_mob->carry_info->is_empty()) {
+        carriable_mob->carry_info->rotate_points(
+            get_angle(carriable_mob->pos, pik_ptr->pos)
+        );
+    }
+    
     for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
         carrier_spot_struct* s_ptr = &carriable_mob->carry_info->spot_info[s];
         if(s_ptr->state != CARRY_SPOT_FREE) continue;

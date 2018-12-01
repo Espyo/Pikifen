@@ -13,6 +13,7 @@
 #define RESOURCE_INCLUDED
 
 #include "mob.h"
+#include "pile.h"
 #include "../mob_types/resource_type.h"
 
 enum RESOURCE_STATES {
@@ -33,6 +34,7 @@ class resource : public mob {
 public:
 
     resource_type* res_type;
+    pile* origin_pile;
     
     resource(const point &pos, resource_type* type, const float angle);
     void draw_mob(bitmap_effect_manager* effect_manager = NULL);

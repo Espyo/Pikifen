@@ -75,7 +75,7 @@ void treasure_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::start_being_delivered);
         }
         efc.new_event(MOB_EVENT_TIMER); {
-            efc.run(treasure_fsm::handle_delivery);
+            efc.run(gen_mob_fsm::handle_delivery);
         }
     }
     
@@ -89,20 +89,6 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         i2s(typ->states.size()) + " registered, " +
         i2s(N_TREASURE_STATES) + " in enum."
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a treasure gets delivered to a ship.
- */
-void treasure_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    treasure* t_ptr = (treasure*) m;
-    ship* s_ptr = (ship*) t_ptr->carrying_target;
-    float value = t_ptr->tre_type->value;
-    
-    s_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) &value);
-    
-    t_ptr->to_delete = true;
 }
 
 

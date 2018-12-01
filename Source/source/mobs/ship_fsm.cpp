@@ -44,13 +44,40 @@ void ship_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When a ship receives a mob carried by Pikmin.
- * info1: Pointer to a float indicating the value.
+ * When a ship finishes receiving a mob carried by Pikmin.
+ * info1: Pointer to the mob.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, "");
     
+    mob* delivery = (mob*) info1;
     ship* s_ptr = (ship*) m;
+    
+    if(delivery->type->category->id == MOB_CATEGORY_TREASURES) {
+        //TODO
+    } else if(delivery->type->category->id == MOB_CATEGORY_RESOURCES) {
+        resource* r_ptr = (resource*) delivery;
+        if(
+            r_ptr->res_type->delivery_result ==
+            RESOURCE_DELIVERY_RESULT_ADD_POINTS
+        ) {
+            //TODO
+        } else if(
+            r_ptr->res_type->delivery_result ==
+            RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS
+        ) {
+            size_t type_nr = r_ptr->res_type->spray_to_concoct;
+            spray_stats[type_nr].nr_ingredients++;
+            if(
+                spray_stats[type_nr].nr_ingredients >=
+                spray_types[type_nr].ingredients_needed
+            ) {
+                spray_stats[type_nr].nr_ingredients -=
+                    spray_types[type_nr].ingredients_needed;
+                spray_stats[type_nr].nr_sprays++;
+            }
+        }
+    }
     
     particle p(
         PARTICLE_TYPE_BITMAP, s_ptr->beam_final_pos,

@@ -36,6 +36,9 @@ void resource_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.change_state("idle_moving");
         }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(resource_fsm::lose_momentum);
+        }
     }
     
     efc.new_state("idle_moving", RESOURCE_STATE_IDLE_MOVING); {
@@ -72,7 +75,7 @@ void resource_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::start_being_delivered);
         }
         efc.new_event(MOB_EVENT_TIMER); {
-            efc.run(resource_fsm::handle_delivery);
+            efc.run(gen_mob_fsm::handle_delivery);
         }
     }
     
@@ -90,10 +93,12 @@ void resource_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When a resource gets delivered to a ship.
+ * When the resource lands from being launched in the air.
  */
-void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    //TODO
+void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
+    m->speed.x = 0;
+    m->speed.y = 0;
+    m->speed_z = 0;
 }
 
 
@@ -101,6 +106,7 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  * When a resource starts idling, waiting to be carried.
  */
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
-    m->become_carriable(false);
-    m->set_animation(RESOURCE_ANIM_IDLING);
+    resource* r_ptr = (resource*) m;
+    r_ptr->become_carriable(r_ptr->origin_pile->pil_type->carrying_destination);
+    r_ptr->set_animation(RESOURCE_ANIM_IDLING);
 }

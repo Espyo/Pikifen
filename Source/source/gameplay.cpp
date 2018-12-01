@@ -150,7 +150,9 @@ void gameplay::load() {
     
     //Initializing game things.
     size_t n_spray_types = spray_types.size();
-    for(size_t s = 0; s < n_spray_types; ++s) { spray_amounts.push_back(0); }
+    for(size_t s = 0; s < n_spray_types; ++s) {
+        spray_stats.push_back(spray_stats_struct());
+    }
     
     load_area(area_to_load, false, false);
     load_area_textures();
@@ -265,7 +267,7 @@ void gameplay::load() {
             continue;
         }
         
-        spray_amounts[spray_id] = s2i(spray_amount_value_strs[s]);
+        spray_stats[spray_id].nr_sprays = s2i(spray_amount_value_strs[s]);
     }
     
     for(size_t c = 0; c < controls[0].size(); ++c) {
@@ -457,7 +459,7 @@ void gameplay::unload() {
     unload_area_textures();
     unload_area();
     
-    spray_amounts.clear();
+    spray_stats.clear();
     particles.clear();
     
     unload_game_content();

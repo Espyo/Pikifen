@@ -27,12 +27,14 @@ enum PILE_STATES {
  * Pikmin attack it in some form, and it ends up yeilding a resource, bit by
  * bit, until it is exhausted.
  */
-class pile : public mob {
+class pile : public mob, public mob_with_anim_groups {
 public:
 
     pile_type* pil_type;
+    size_t amount;
     
     pile(const point &pos, pile_type* type, const float angle);
+    virtual void read_script_vars(const string &vars);
 };
 
 #endif //ifndef PILE_INCLUDED

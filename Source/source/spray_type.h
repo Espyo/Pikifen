@@ -42,9 +42,9 @@ public:
     //Bitmap for the spray count.
     ALLEGRO_BITMAP* bmp_spray;
     
-    //How many berries are needed in order to concot a new spray.
-    //0 means there are no berries for this spray type.
-    size_t berries_needed;
+    //How many ingredients are needed in order to concot a new spray.
+    //0 means there are no ingredients for this spray type.
+    size_t ingredients_needed;
     
     //Extra effects.
     bool buries_pikmin;

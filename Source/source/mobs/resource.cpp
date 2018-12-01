@@ -18,7 +18,8 @@
  */
 resource::resource(const point &pos, resource_type* type, const float angle) :
     mob(pos, type, angle),
-    res_type(type) {
+    res_type(type),
+    origin_pile(nullptr) {
     
 }
 

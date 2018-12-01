@@ -39,14 +39,28 @@ void onion_fsm::create_fsm(mob_type* typ) {
     );
 }
 
+
 /* ----------------------------------------------------------------------------
- * When an Onion receives a mob, carried by Pikmin.
+ * When an Onion finishes receiving a mob carried by Pikmin.
+ * info1: Pointer to the mob.
  */
 void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, "");
     
-    size_t seeds = (size_t) info1;
+    mob* delivery = (mob*) info1;
     onion* o_ptr = (onion*) m;
+    size_t seeds = 0;
+    
+    if(delivery->type->category->id == MOB_CATEGORY_ENEMIES) {
+        seeds = ((enemy*) delivery)->ene_type->pikmin_seeds;
+    } else if(delivery->type->category->id == MOB_CATEGORY_PELLETS) {
+        pellet* p_ptr = (pellet*) delivery;
+        if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
+            seeds = p_ptr->pel_type->match_seeds;
+        } else {
+            seeds = p_ptr->pel_type->non_match_seeds;
+        }
+    }
     
     o_ptr->full_spew_timer.start();
     o_ptr->next_spew_timer.stop();

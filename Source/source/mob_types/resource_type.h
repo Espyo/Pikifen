@@ -17,9 +17,16 @@
 #include "../data_file.h"
 #include "../misc_structs.h"
 #include "mob_type.h"
+#include "../spray_type.h"
 
 enum RESOURCE_ANIMATIONS {
     RESOURCE_ANIM_IDLING,
+};
+
+enum RESOURCE_DELIVERY_RESULTS {
+    RESOURCE_DELIVERY_RESULT_DAMAGE_MOB,
+    RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS,
+    RESOURCE_DELIVERY_RESULT_ADD_POINTS,
 };
 
 /* ----------------------------------------------------------------------------
@@ -27,7 +34,14 @@ enum RESOURCE_ANIMATIONS {
  */
 class resource_type : public mob_type {
 public:
-
+    bool vanish_on_drop;
+    bool return_to_pile_on_vanish;
+    float time_to_vanish;
+    size_t delivery_result;
+    float damage_mob_amount;
+    size_t spray_to_concoct;
+    float point_amount;
+    
     resource_type();
     ~resource_type();
     void load_parameters(data_node* file);

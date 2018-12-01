@@ -513,9 +513,10 @@ bool mob::attack(
 
 /* ----------------------------------------------------------------------------
  * Sets up data for a mob to become carriable.
+ * destination: Where to carry it. Use CARRY_DESTINATION_*.
  */
-void mob::become_carriable(const bool to_ship) {
-    carry_info = new carry_info_struct(this, to_ship);
+void mob::become_carriable(const size_t destination) {
+    carry_info = new carry_info_struct(this, destination);
 }
 
 
@@ -552,7 +553,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
-    if(carry_info->carry_to_ship) {
+    if(carry_info->destination == CARRY_DESTINATION_SHIP) {
     
         ship* closest_ship = NULL;
         dist closest_ship_dist;
@@ -577,6 +578,18 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
             return;
         }
         
+        return;
+    }
+    
+    //Now, if it's towards a linked mob, just go there.
+    if(carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
+        if(!links.empty()) {
+            carry_info->final_destination = carrying_target->pos;
+            carrying_target = links[0];
+        } else {
+            carrying_target = NULL;
+            carry_info->stuck_state = 1;
+        }
         return;
     }
     
@@ -2579,13 +2592,13 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about carrying.
- * m:             The mob this info belongs to.
- * max_carriers:  The maximum number of carrier Pikmin.
- * carry_to_ship: If true, this mob is delivered to a ship. Otherwise, an Onion.
+ * m:                 The mob this info belongs to.
+ * max_carriers:      The maximum number of carrier Pikmin.
+ * carry_destination: Where to deliver the mob. Use CARRY_DESTINATION_*.
  */
-carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
+carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     m(m),
-    carry_to_ship(carry_to_ship),
+    destination(destination),
     cur_carrying_strength(0),
     cur_n_carriers(0),
     go_straight(false),
@@ -2637,6 +2650,35 @@ float carry_info_struct::get_speed() {
             (cur_n_carriers / (float) spot_info.size()) *
             (1 - carrying_speed_base_mult)
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Rotates all points in the struct, making it so spot 0 faces the specified
+ * angle away from the mob.
+ * This is useful when the first Pikmin is coming, to make the first carry
+ * spot be closer to that Pikmin.
+ */
+void carry_info_struct::rotate_points(const float angle) {
+    for(size_t s = 0; s < spot_info.size(); ++s) {
+        float s_angle = angle + (TAU / m->type->max_carriers * s);
+        point p(
+            cos(s_angle) * (m->type->radius + standard_pikmin_radius),
+            sin(s_angle) * (m->type->radius + standard_pikmin_radius)
+        );
+        spot_info[s].pos = p;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns true if no spot is reserved or used. False otherwise.
+ */
+bool carry_info_struct::is_empty() {
+    for(size_t s = 0; s < spot_info.size(); ++s) {
+        if(spot_info[s].state != CARRY_SPOT_FREE) return false;
+    }
+    return true;
 }
 
 
@@ -3088,12 +3130,24 @@ void calculate_knockback(
 /* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  * Returns the new mob.
+ * category:            The category the new mob belongs to.
+ * pos:                 Initial position.
+ * type:                Type of the new mob.
+ * angle:               Initial facing angle.
+ * vars:                Script variables.
+ * code_after_creation: Code to run right after the mob is created, if any.
+ *   This is run before any scripting takes place.
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars,
+    function<void(mob*)> code_after_creation
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
+    
+    if(code_after_creation) {
+        code_after_creation(m_ptr);
+    }
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
         type->init_actions[a]->run(m_ptr, NULL, NULL, MOB_EVENT_UNKNOWN);

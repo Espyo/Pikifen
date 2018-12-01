@@ -17,6 +17,7 @@
 #include "../data_file.h"
 #include "../misc_structs.h"
 #include "mob_type.h"
+#include "resource_type.h"
 
 enum PILE_ANIMATIONS {
     PILE_ANIM_IDLING,
@@ -25,9 +26,15 @@ enum PILE_ANIMATIONS {
 /* ----------------------------------------------------------------------------
  * A type of resource pile (gold nugget pile, Burgeoning Spiderwort, etc.).
  */
-class pile_type : public mob_type {
+class pile_type : public mob_type, public mob_type_with_anim_groups {
 public:
-
+    resource_type* contents;
+    size_t carrying_destination;
+    float recharge_interval;
+    int recharge_amount;
+    size_t max_amount;
+    float health_per_resource;
+    
     pile_type();
     ~pile_type();
     void load_parameters(data_node* file);

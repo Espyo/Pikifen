@@ -93,6 +93,12 @@ enum CARRY_SPOT_STATES {
     CARRY_SPOT_USED,
 };
 
+enum CARRY_DESTINATIONS {
+    CARRY_DESTINATION_SHIP,
+    CARRY_DESTINATION_ONION,
+    CARRY_DESTINATION_LINKED_MOB,
+};
+
 
 /* ----------------------------------------------------------------------------
  * Information about a spot in a group.
@@ -149,9 +155,8 @@ struct carrier_spot_struct {
  */
 struct carry_info_struct {
     mob* m;
-    //If true, this is carried to the ship.
-    //Otherwise, it's carried to an Onion.
-    bool carry_to_ship;
+    //Where to deliver it to. Use CARRY_DESTINATION_*.
+    size_t destination;
     
     vector<carrier_spot_struct> spot_info;
     
@@ -174,9 +179,11 @@ struct carry_info_struct {
     unsigned char stuck_state;
     bool is_moving;
     
-    carry_info_struct(mob* m, const bool carry_to_ship);
+    carry_info_struct(mob* m, const size_t destination);
+    bool is_empty();
     bool is_full();
     float get_speed();
+    void rotate_points(const float angle);
     ~carry_info_struct();
 };
 
@@ -387,7 +394,18 @@ public:
     //Hazard of the sector the mob is currently on.
     hazard* on_hazard;
     //Is it completely dead? Health = 0 isn't necessarily dead; could be dying.
-    bool dead;
+    bool dead;/*
+ * Copyright (c) Andre 'Espyo' Silva 2013-2018.
+ * The following source file belongs to the open-source project
+ * Pikifen. Please read the included
+ * README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the mob class and mob-related functions.
+ */
+
+
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
     //Mobs it is chomping.
@@ -413,7 +431,7 @@ public:
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
     
-    void become_carriable(const bool to_ship);
+    void become_carriable(const size_t destination);
     void become_uncarriable();
     
     bool attack(mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage);
@@ -516,7 +534,8 @@ void cause_hitbox_damage(
 );
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars
+    const float angle, const string &vars,
+    function<void(mob*)> code_after_creation = nullptr
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 size_t string_to_team_nr(const string &team_str);

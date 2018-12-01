@@ -151,7 +151,6 @@ extern float area_time_passed;
 extern timer area_title_fade_timer;
 //Name of the area to load, from the area select.
 extern string area_to_load;
-extern vector<unsigned int> berries;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern vector<bridge*> bridges;
@@ -379,8 +378,8 @@ extern bool smooth_scaling;
 extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
 extern map<string, spike_damage_type> spike_damage_types;
-//How many of each spray the player has.
-extern vector<unsigned long> spray_amounts;
+//How many of each spray/ingredients the player has.
+extern vector<spray_stats_struct> spray_stats;
 extern vector<spray_type> spray_types;
 extern float standard_pikmin_height;
 extern float standard_pikmin_radius;

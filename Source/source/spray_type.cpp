@@ -21,7 +21,7 @@ spray_type::spray_type() :
     angle_range(0),
     main_color(al_map_rgba(0, 0, 0, 0)),
     bmp_spray(nullptr),
-    berries_needed(0),
+    ingredients_needed(10),
     buries_pikmin(false) {
     
 }

@@ -1250,7 +1250,7 @@ void load_spray_types(const bool load_resources) {
         rs.set("distance_range", st.distance_range);
         rs.set("angle_range", st.angle_range);
         rs.set("color", st.main_color);
-        rs.set("berries_needed", st.berries_needed);
+        rs.set("ingredients_needed", st.ingredients_needed);
         rs.set("buries_pikmin", st.buries_pikmin);
         
         st.angle = deg_to_rad(st.angle);

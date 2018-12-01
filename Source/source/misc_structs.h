@@ -401,4 +401,15 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Contains info about the current amount of sprays and ingredients
+ * for the available spray types.
+ */
+struct spray_stats_struct {
+    size_t nr_sprays;
+    size_t nr_ingredients;
+    spray_stats_struct() : nr_sprays(0), nr_ingredients(0) { }
+};
+
+
 #endif //ifndef MISC_STRUCTS_INCLUDED

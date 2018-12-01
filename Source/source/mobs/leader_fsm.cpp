@@ -1180,10 +1180,10 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     drop* d_ptr = (drop*) m->focused_mob;
     
     if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        spray_amounts[d_ptr->dro_type->spray_type_to_increase] =
+        spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays =
             max(
                 (long long)
-                spray_amounts[d_ptr->dro_type->spray_type_to_increase] +
+                spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays +
                 d_ptr->dro_type->increase_amount,
                 (long long) 0
             );
@@ -1262,7 +1262,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
     
-    if(spray_amounts[spray_nr] == 0) return;
+    if(spray_stats[spray_nr].nr_sprays == 0) return;
     
     float shoot_angle =
         cursor_angle + ((spray_types[spray_nr].angle) ? TAU / 2 : 0);
@@ -1325,7 +1325,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.size_deviation = 0.5;
     pg.emit(particles);
     
-    spray_amounts[spray_nr]--;
+    spray_stats[spray_nr].nr_sprays--;
     
     m->set_animation(LEADER_ANIM_SPRAYING);
 }

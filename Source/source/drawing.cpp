@@ -655,7 +655,7 @@ void gameplay::draw_hud() {
                 font_counter, al_map_rgb(255, 255, 255),
                 point(i_center.x - i_size.x / 2.0, i_center.y),
                 ALLEGRO_ALIGN_LEFT, 1, i_size,
-                "x" + i2s(spray_amounts[top_spray_nr])
+                "x" + i2s(spray_stats[top_spray_nr].nr_sprays)
             );
         }
         
@@ -699,7 +699,7 @@ void gameplay::draw_hud() {
                     font_counter, al_map_rgb(255, 255, 255),
                     point(i_center.x - i_size.x / 2.0, i_center.y),
                     ALLEGRO_ALIGN_LEFT, 1, i_size,
-                    "x" + i2s(spray_amounts[1])
+                    "x" + i2s(spray_stats[1].nr_sprays)
                 );
             }
             
@@ -796,7 +796,10 @@ void gameplay::draw_ingame_text() {
                 ALLEGRO_COLOR color;
                 bool valid = false;
                 if(mob_ptr->carry_info->is_moving) {
-                    if(mob_ptr->carry_info->carry_to_ship) {
+                    if(
+                        mob_ptr->carry_info->destination ==
+                        CARRY_DESTINATION_SHIP
+                    ) {
                         color = carrying_color_move;
                         valid = true;
                     } else if(mob_ptr->carrying_target) {
@@ -819,6 +822,23 @@ void gameplay::draw_ingame_text() {
                     mob_ptr->carry_info->cur_carrying_strength,
                     mob_ptr->type->weight,
                     color
+                );
+            }
+        }
+        
+        for(size_t p = 0; p < piles.size(); ++p) {
+            pile* p_ptr = piles[p];
+            if(p_ptr->amount > 0) {
+                draw_text_lines(
+                    font_main,
+                    carrying_color_stop,
+                    point(
+                        p_ptr->pos.x,
+                        p_ptr->pos.y - p_ptr->type->radius - font_main_h * 1.25
+                    ),
+                    ALLEGRO_ALIGN_CENTER,
+                    1,
+                    i2s(p_ptr->amount)
                 );
             }
         }
