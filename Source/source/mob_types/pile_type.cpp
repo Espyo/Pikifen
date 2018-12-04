@@ -21,7 +21,6 @@
 pile_type::pile_type() :
     mob_type(MOB_CATEGORY_PILES),
     contents(nullptr),
-    carrying_destination(CARRY_DESTINATION_SHIP),
     max_amount(1),
     recharge_interval(0.0f),
     recharge_amount(0),
@@ -37,10 +36,8 @@ pile_type::pile_type() :
 void pile_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     string contents_str;
-    string carrying_destination_str;
     string size_animation_suffixes_str;
     rs.set("contents", contents_str);
-    rs.set("carrying_destination", carrying_destination_str);
     rs.set("recharge_interval", recharge_interval);
     rs.set("recharge_amount", recharge_amount);
     rs.set("max_amount", max_amount);
@@ -53,17 +50,6 @@ void pile_type::load_parameters(data_node* file) {
     } else {
         log_error(
             "Unknown resource type \"" + contents_str + "\"!", file
-        );
-    }
-    
-    if(carrying_destination_str == "ship") {
-        carrying_destination = CARRY_DESTINATION_SHIP;
-    } else if(carrying_destination_str == "linked_mob") {
-        carrying_destination = CARRY_DESTINATION_LINKED_MOB;
-    } else {
-        log_error(
-            "Unknown carrying destination \"" +
-            carrying_destination_str + "\"!", file
         );
     }
     

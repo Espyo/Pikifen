@@ -584,8 +584,8 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     //Now, if it's towards a linked mob, just go there.
     if(carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
         if(!links.empty()) {
-            carry_info->final_destination = carrying_target->pos;
             carrying_target = links[0];
+            carry_info->final_destination = carrying_target->pos;
         } else {
             carrying_target = NULL;
             carry_info->stuck_state = 1;

@@ -36,7 +36,8 @@ class resource_type : public mob_type {
 public:
     bool vanish_on_drop;
     bool return_to_pile_on_vanish;
-    float time_to_vanish;
+    float vanish_delay;
+    size_t carrying_destination;
     size_t delivery_result;
     float damage_mob_amount;
     size_t spray_to_concoct;

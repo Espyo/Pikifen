@@ -96,6 +96,7 @@ public:
     //Is this Pikmin latched on to a mob?
     bool latched;
     
+    void force_carry(mob* m);
     bool process_attack_miss(hitbox_interaction* info);
     void increase_maturity(const int amount);
     

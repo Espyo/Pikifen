@@ -38,6 +38,7 @@ public:
     
     resource(const point &pos, resource_type* type, const float angle);
     void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    void vanish();
 };
 
 #endif //ifndef RESOURCE_INCLUDED

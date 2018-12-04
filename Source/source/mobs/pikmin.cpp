@@ -54,6 +54,20 @@ pikmin::~pikmin() { }
 
 
 /* ----------------------------------------------------------------------------
+ * Forces the Pikmin to start carrying the given mob.
+ * This quickly runs over several steps in the usual FSM logic, just to
+ * instantly get to the end result.
+ * As such, be careful when using it.
+ */
+void pikmin::force_carry(mob* m) {
+    pikmin_fsm::go_to_carriable_object(this, (void*) m, NULL);
+    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT);
+    pikmin_fsm::reach_carriable_object(this, NULL, NULL);
+    fsm.set_state(PIKMIN_STATE_CARRYING);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a Pikmin's base speed, without status effects and the like.
  * This depends on the maturity.
  */

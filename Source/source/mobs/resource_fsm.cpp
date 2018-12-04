@@ -39,10 +39,14 @@ void resource_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(resource_fsm::lose_momentum);
         }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(resource_fsm::vanish);
+        }
     }
     
     efc.new_state("idle_moving", RESOURCE_STATE_IDLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(resource_fsm::handle_start_moving);
             efc.run(gen_mob_fsm::carry_begin_move);
             efc.run(gen_mob_fsm::set_next_target);
         }
@@ -56,6 +60,7 @@ void resource_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.run(resource_fsm::handle_dropped);
             efc.change_state("idle_waiting");
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
@@ -75,6 +80,7 @@ void resource_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::start_being_delivered);
         }
         efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(resource_fsm::handle_delivery);
             efc.run(gen_mob_fsm::handle_delivery);
         }
     }
@@ -93,6 +99,47 @@ void resource_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
+ * When the resource is fully delivered. This should only run code that cannot
+ * be handled by ships or Onions.
+ */
+void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
+    resource* r_ptr = (resource*) m;
+    if(
+        r_ptr->res_type->delivery_result ==
+        RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
+    ) {
+        r_ptr->links[0]->set_health(
+            true, false, -r_ptr->res_type->damage_mob_amount
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the resource is dropped.
+ */
+void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
+    resource* r_ptr = (resource*) m;
+    if(!r_ptr->res_type->vanish_on_drop) return;
+    
+    if(r_ptr->res_type->vanish_delay == 0) {
+        resource_fsm::vanish(m, info1, info2);
+    } else {
+        r_ptr->set_timer(r_ptr->res_type->vanish_delay);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the resource starts moving.
+ */
+void resource_fsm::handle_start_moving(mob* m, void* info1, void* info2) {
+    resource* r_ptr = (resource*) m;
+    r_ptr->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When the resource lands from being launched in the air.
  */
 void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
@@ -107,6 +154,22 @@ void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  */
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* r_ptr = (resource*) m;
-    r_ptr->become_carriable(r_ptr->origin_pile->pil_type->carrying_destination);
+    r_ptr->become_carriable(r_ptr->res_type->carrying_destination);
     r_ptr->set_animation(RESOURCE_ANIM_IDLING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Vanishes, either disappearing for good, or returning to its origin pile.
+ */
+void resource_fsm::vanish(mob* m, void* info1, void* info2) {
+    resource* r_ptr = (resource*) m;
+    if(r_ptr->res_type->return_to_pile_on_vanish) {
+        r_ptr->origin_pile->health +=
+            r_ptr->origin_pile->pil_type->health_per_resource;
+        r_ptr->origin_pile->amount++;
+    }
+    
+    r_ptr->become_uncarriable();
+    r_ptr->to_delete = true;
 }

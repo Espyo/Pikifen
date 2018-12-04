@@ -22,7 +22,8 @@ resource_type::resource_type() :
     mob_type(MOB_CATEGORY_RESOURCES),
     vanish_on_drop(false),
     return_to_pile_on_vanish(false),
-    time_to_vanish(0.0f),
+    vanish_delay(0.0f),
+    carrying_destination(CARRY_DESTINATION_SHIP),
     delivery_result(RESOURCE_DELIVERY_RESULT_ADD_POINTS),
     damage_mob_amount(1.0f),
     spray_to_concoct(INVALID),
@@ -37,15 +38,29 @@ resource_type::resource_type() :
  */
 void resource_type::load_parameters(data_node* file) {
     reader_setter rs(file);
+    string carrying_destination_str;
     string delivery_result_str;
     string spray_to_concoct_str;
+    
     rs.set("vanish_on_drop", vanish_on_drop);
     rs.set("return_to_pile_on_vanish", return_to_pile_on_vanish);
-    rs.set("time_to_vanish", time_to_vanish);
+    rs.set("vanish_delay", vanish_delay);
+    rs.set("carrying_destination", carrying_destination_str);
     rs.set("delivery_result", delivery_result_str);
     rs.set("damage_mob_amount", damage_mob_amount);
     rs.set("spray_to_concoct", spray_to_concoct_str);
     rs.set("point_amount", point_amount);
+    
+    if(carrying_destination_str == "ship") {
+        carrying_destination = CARRY_DESTINATION_SHIP;
+    } else if(carrying_destination_str == "linked_mob") {
+        carrying_destination = CARRY_DESTINATION_LINKED_MOB;
+    } else {
+        log_error(
+            "Unknown carrying destination \"" +
+            carrying_destination_str + "\"!", file
+        );
+    }
     
     if(delivery_result_str == "damage_mob") {
         delivery_result = RESOURCE_DELIVERY_RESULT_DAMAGE_MOB;

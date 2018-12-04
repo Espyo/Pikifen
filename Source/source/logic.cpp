@@ -682,6 +682,8 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs[m2];
+        if(m2_ptr->to_delete) continue;
+        
         float m1_angle_sin = sin(m_ptr->angle);
         float m1_angle_cos = cos(m_ptr->angle);
         float m2_angle_sin = sin(m2_ptr->angle);

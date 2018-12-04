@@ -29,7 +29,6 @@ enum PILE_ANIMATIONS {
 class pile_type : public mob_type, public mob_type_with_anim_groups {
 public:
     resource_type* contents;
-    size_t carrying_destination;
     float recharge_interval;
     int recharge_amount;
     size_t max_amount;
