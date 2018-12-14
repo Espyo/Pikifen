@@ -24,7 +24,9 @@ pile_type::pile_type() :
     max_amount(1),
     recharge_interval(0.0f),
     recharge_amount(0),
-    health_per_resource(1.0f) {
+    health_per_resource(1.0f),
+    show_amount(true),
+    delete_on_empty(true) {
     
     pile_fsm::create_fsm(this);
 }
@@ -43,6 +45,8 @@ void pile_type::load_parameters(data_node* file) {
     rs.set("max_amount", max_amount);
     rs.set("health_per_resource", health_per_resource);
     rs.set("size_animation_suffixes", size_animation_suffixes_str);
+    rs.set("show_amount", show_amount);
+    rs.set("delete_on_empty", delete_on_empty);
     
     auto res_type = resource_types.find(contents_str);
     if(res_type != resource_types.end()) {
@@ -71,8 +75,10 @@ void pile_type::load_parameters(data_node* file) {
  */
 anim_conversion_vector pile_type::get_anim_conversions() {
     anim_conversion_vector v;
+    
     v.push_back(make_pair(PILE_ANIM_IDLING, "idling"));
-    return v;
+    
+    return get_anim_conversions_with_groups(v, N_PILE_ANIMS);
 }
 
 

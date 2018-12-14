@@ -24,6 +24,23 @@ pile::pile(const point &pos, pile_type* type, const float angle) :
     amount(type->max_amount) {
     
     team = MOB_TEAM_OBSTACLE;
+    
+    recharge_timer =
+    timer(pil_type->recharge_interval, [this] () { this->recharge(); });
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes the amount in the pile, and updates the appropriate variables.
+ */
+void pile::change_amount(const int change) {
+    if(change < 0 && amount == 0) return;
+    if(change > 0 && amount == pil_type->max_amount) return;
+    
+    amount += change;
+    set_health(true, false, change * pil_type->health_per_resource);
+    
+    update();
 }
 
 
@@ -33,7 +50,68 @@ pile::pile(const point &pos, pile_type* type, const float angle) :
 void pile::read_script_vars(const string &vars) {
     mob::read_script_vars(vars);
     amount = s2i(get_var_value(vars, "amount", i2s(pil_type->max_amount)));
-    amount = min(amount, pil_type->max_amount);
+    amount = clamp(amount, 0, pil_type->max_amount);
     
     health = pil_type->health_per_resource * amount;
+    
+    update();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds some more to the pile from a periodic recharge.
+ */
+void pile::recharge() {
+    recharge_timer.start();
+    change_amount(pil_type->recharge_amount);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks some logic specific to piles.
+ */
+void pile::tick_class_specifics() {
+    recharge_timer.tick(delta_t);
+    
+    if(amount == 0 && pil_type->delete_on_empty) {
+        //Ready to delete. Unless it's being used, that is.
+        
+        for(size_t r = 0; r < resources.size(); ++r) {
+            if(resources[r]->origin_pile == this) {
+                return;
+            }
+        }
+        
+        to_delete = true;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the animation to the right one, the recharge timer, and
+ * some other things.
+ */
+void pile::update() {
+    amount = clamp(amount, 0, pil_type->max_amount);
+    
+    if(amount == pil_type->max_amount) {
+        recharge_timer.stop();
+    }
+    
+    size_t anim_amount_nr = 0;
+    size_t n_groups = pil_type->animation_group_suffixes.size();
+    if(n_groups > 1 && amount > 0) {
+        anim_amount_nr =
+            ceil(
+                (n_groups - 1) *
+                ((float) amount / (float) pil_type->max_amount)
+            );
+        anim_amount_nr = clamp(anim_amount_nr, 0, n_groups - 1);
+    }
+    set_animation(
+        get_animation_nr_from_base_and_group(
+            PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
+        ),
+        true, false
+    );
 }

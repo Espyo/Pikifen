@@ -21,6 +21,8 @@
 
 enum PILE_ANIMATIONS {
     PILE_ANIM_IDLING,
+    
+    N_PILE_ANIMS,
 };
 
 /* ----------------------------------------------------------------------------
@@ -33,6 +35,8 @@ public:
     int recharge_amount;
     size_t max_amount;
     float health_per_resource;
+    bool show_amount;
+    bool delete_on_empty;
     
     pile_type();
     ~pile_type();

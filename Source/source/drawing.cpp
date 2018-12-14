@@ -831,7 +831,7 @@ void gameplay::draw_ingame_text() {
         
         for(size_t p = 0; p < piles.size(); ++p) {
             pile* p_ptr = piles[p];
-            if(p_ptr->amount > 0) {
+            if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
                     font_main,
                     carrying_color_stop,

@@ -32,9 +32,15 @@ public:
 
     pile_type* pil_type;
     size_t amount;
+    timer recharge_timer;
+    
+    void change_amount(const int change);
+    void recharge();
+    void update();
     
     pile(const point &pos, pile_type* type, const float angle);
     virtual void read_script_vars(const string &vars);
+    virtual void tick_class_specifics();
 };
 
 #endif //ifndef PILE_INCLUDED

@@ -57,6 +57,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     pile* p_ptr = (pile*) m;
     
+    size_t amount_before = p_ptr->amount;
     int intended_amount =
         ceil(p_ptr->health / p_ptr->pil_type->health_per_resource);
     int amount_to_spawn = p_ptr->amount - intended_amount;
@@ -117,6 +118,11 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     p_ptr->amount = intended_amount;
+    
+    if(amount_before == p_ptr->pil_type->max_amount) {
+        p_ptr->recharge_timer.start();
+    }
+    p_ptr->update();
 }
 
 
@@ -124,5 +130,6 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
  * When a pile starts idling.
  */
 void pile_fsm::become_idle(mob* m, void* info1, void* info2) {
-    m->set_animation(PILE_ANIM_IDLING);
+    pile* p_ptr = (pile*) m;
+    p_ptr->update();
 }

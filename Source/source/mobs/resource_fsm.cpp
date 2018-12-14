@@ -165,9 +165,7 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
 void resource_fsm::vanish(mob* m, void* info1, void* info2) {
     resource* r_ptr = (resource*) m;
     if(r_ptr->res_type->return_to_pile_on_vanish) {
-        r_ptr->origin_pile->health +=
-            r_ptr->origin_pile->pil_type->health_per_resource;
-        r_ptr->origin_pile->amount++;
+        r_ptr->origin_pile->change_amount(+1);
     }
     
     r_ptr->become_uncarriable();
