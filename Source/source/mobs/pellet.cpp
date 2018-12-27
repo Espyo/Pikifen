@@ -20,7 +20,7 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     mob(pos, type, angle),
     pel_type(type) {
     
-    become_carriable(false);
+    become_carriable(CARRY_DESTINATION_ONION);
     
     set_animation(ANIM_IDLING);
 }
@@ -40,9 +40,10 @@ void pellet::draw_mob(bitmap_effect_manager* effect_manager) {
     add_sector_brightness_bitmap_effect(&effects);
     
     if(fsm.cur_state->id == PELLET_STATE_BEING_DELIVERED) {
+        onion* o_ptr = (onion*) path_info->target_mob;
         add_delivery_bitmap_effect(
             &effects, script_timer.get_ratio_left(),
-            ((onion*) carrying_target)->oni_type->pik_type->main_color
+            o_ptr->oni_type->pik_type->main_color
         );
     }
     

@@ -24,7 +24,7 @@ treasure::treasure(const point &pos, treasure_type* type, const float angle) :
     tre_type(type),
     buried(false) {
     
-    become_carriable(true);
+    become_carriable(CARRY_DESTINATION_SHIP);
     
     set_animation(ANIM_IDLING);
     

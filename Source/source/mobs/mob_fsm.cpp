@@ -52,9 +52,10 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
  * Generic handler for when a mob was delivered to an Onion/ship.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    engine_assert(m->carrying_target != NULL, "");
+    engine_assert(m->path_info != NULL, "");
+    engine_assert(m->path_info->target_mob != NULL, "");
     
-    m->carrying_target->fsm.run_event(
+    m->path_info->target_mob->fsm.run_event(
         MOB_EVENT_RECEIVE_DELIVERY, (void*) m
     );
     
@@ -96,11 +97,6 @@ void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * Event handler for a Pikmin being added as a carrier.
  */
 void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
-    if(!info1) {
-        m->calculate_carrying_destination(NULL, NULL);
-        return;
-    }
-    
     pikmin* pik_ptr = (pikmin*) info1;
     
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
@@ -110,7 +106,10 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     
     m->chase_speed = m->carry_info->get_speed();
     
-    m->calculate_carrying_destination(pik_ptr, NULL);
+    m->calculate_carrying_destination(
+        pik_ptr, NULL,
+        &m->carry_info->intended_mob, &m->carry_info->intended_point
+    );
 }
 
 
@@ -118,11 +117,6 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
  * Event handler for a carrier Pikmin being removed.
  */
 void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
-    if(!info1) {
-        m->calculate_carrying_destination(NULL, NULL);
-        return;
-    }
-    
     pikmin* pik_ptr = (pikmin*) info1;
     
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;
@@ -132,7 +126,10 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     
     m->chase_speed = m->carry_info->get_speed();
     
-    m->calculate_carrying_destination(NULL, pik_ptr);
+    m->calculate_carrying_destination(
+        NULL, pik_ptr,
+        &m->carry_info->intended_mob, &m->carry_info->intended_point
+    );
 }
 
 
@@ -141,40 +138,26 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
  * or update its path.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
-    unordered_set<mob*> obs;
-    bool go_straight = false;
-    vector<path_stop*> old_path = m->path;
-    
-    if(m->carrying_target) {
-        m->path =
-            get_path(
-                m->pos, m->carry_info->final_destination,
-                &obs, &go_straight, NULL
-            );
-        m->carry_info->obstacle_ptrs = obs;
-        m->carry_info->go_straight = go_straight;
-        
-        if(
-            m->path.size() >= 2 &&
-            m->cur_path_stop_nr < old_path.size() &&
-            m->path[1] == old_path[m->cur_path_stop_nr]
-        ) {
-            //If the second stop of the old path is the
-            //same as the stop it was already going towards,
-            //then just go there right away, instead of doing a back-and-forth.
-            m->cur_path_stop_nr = 0;
-        } else {
-            m->cur_path_stop_nr = INVALID;
-        }
-        
-        if(m->path.empty() && !go_straight) {
-            m->carry_info->stuck_state = 1;
-        } else {
-            m->carry_info->stuck_state = 0;
-        }
-    }
+    vector<path_stop*> old_path;
+    size_t old_path_stop_nr;
     
     m->carry_info->is_moving = true;
+    
+    if(m->carry_info->intended_mob == NULL) {
+        m->carry_info->stuck_state = 1;
+        return;
+    }
+    
+    m->follow_path(m->carry_info->intended_point, true);
+    
+    m->path_info->target_point = m->carry_info->intended_point;
+    m->path_info->target_mob = m->carry_info->intended_mob;
+    
+    if(m->path_info->path.empty() && !m->path_info->go_straight) {
+        m->carry_info->stuck_state = 1;
+    } else {
+        m->carry_info->stuck_state = 0;
+    }
 }
 
 
@@ -183,9 +166,9 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
+    if(!m->path_info) return;
     m->carry_info->is_moving = false;
-    m->carry_info->final_destination = point();
-    m->carry_info->obstacle_ptrs.clear();
+    m->stop_following_path();
     m->stop_chasing();
 }
 
@@ -235,9 +218,12 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
  * When a mob sets the next target when following a path.
  */
 void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
-    m->cur_path_stop_nr =
-        (m->cur_path_stop_nr == INVALID ? 0 : m->cur_path_stop_nr + 1);
-        
+    if(m->path_info->cur_path_stop_nr == INVALID) {
+        m->path_info->cur_path_stop_nr = 0;
+    } else {
+        m->path_info->cur_path_stop_nr++;
+    }
+    
     if(m->carry_info->stuck_state > 0) {
         //Stuck... Let's go back and forth between point A and B.
         float final_x = m->pos.x;
@@ -255,10 +241,10 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
             m->carry_info->get_speed() * CARRYING_STUCK_SPEED_MULT
         );
         
-    } else if(m->cur_path_stop_nr == m->path.size()) {
+    } else if(m->path_info->cur_path_stop_nr == m->path_info->path.size()) {
         //Reached the final stop.
         
-        if(!m->carry_info->obstacle_ptrs.empty()) {
+        if(!m->path_info->obstacle_ptrs.empty()) {
             //If there's an obstacle in the path, the last stop on the path
             //actually means it's the last possible stop before the obstacle.
             //Meaning the object should get stuck.
@@ -273,22 +259,23 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
                 //"reached destination" event if the treasure is
                 //covering the beam, and not necessarily if the treasure
                 //is on the same coordinates as the beam.
+                ship* s_ptr = (ship*) m->path_info->target_mob;
                 target_distance =
                     max(
                         m->type->radius -
-                        ((ship*) m->carrying_target)->shi_type->beam_radius,
+                        s_ptr->shi_type->beam_radius,
                         3.0f
                     );
             }
             m->chase(
-                m->carry_info->final_destination,
+                m->path_info->target_point,
                 NULL, false, NULL, true, target_distance,
                 m->carry_info->get_speed()
             );
             
         }
         
-    } else if(m->cur_path_stop_nr == m->path.size() + 1) {
+    } else if(m->path_info->cur_path_stop_nr == m->path_info->path.size() + 1) {
         //Reached the final destination.
         //Send event.
         m->stop_chasing();
@@ -298,7 +285,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         //Reached a stop.
         //Go to the next.
         m->chase(
-            m->path[m->cur_path_stop_nr]->pos,
+            m->path_info->path[m->path_info->cur_path_stop_nr]->pos,
             NULL, false, NULL, true, 3.0f,
             m->carry_info->get_speed()
         );

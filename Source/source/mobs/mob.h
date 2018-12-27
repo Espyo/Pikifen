@@ -154,8 +154,9 @@ struct carrier_spot_struct {
  * the mob should be carried.
  */
 struct carry_info_struct {
+    //Mob that this struct belongs to.
     mob* m;
-    //Where to deliver it to. Use CARRY_DESTINATION_*.
+    //Generic type of delivery destination. Use CARRY_DESTINATION_*.
     size_t destination;
     
     vector<carrier_spot_struct> spot_info;
@@ -168,16 +169,15 @@ struct carry_info_struct {
     //of spaces reserved. A Pikmin could be on its way to its spot,
     //not necessarily there already.
     size_t cur_n_carriers;
-    point final_destination;
-    //If there is no clear path, this points to all obstacles found.
-    unordered_set<mob*> obstacle_ptrs;
-    //If true, it's best to go straight to the end point
-    //instead of taking a path.
-    bool go_straight;
     //Are the Pikmin stuck with nowhere to go?
     //0: no. 1: going to the alternative point, 2: going back to the start.
     unsigned char stuck_state;
+    //Is the object moving at the moment?
     bool is_moving;
+    //When the object begins moving, the idea is to carry it to this mob.
+    mob* intended_mob;
+    //When the object begins moving, the idea is to carry it to this point.
+    point intended_point;
     
     carry_info_struct(mob* m, const size_t destination);
     bool is_empty();
@@ -185,6 +185,31 @@ struct carry_info_struct {
     float get_speed();
     void rotate_points(const float angle);
     ~carry_info_struct();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Structure with information on how to travel through the path graph that
+ * the mob intends to travel.
+ */
+struct path_info_struct {
+    //Mob that this struct belongs to.
+    mob* m;
+    //Final target, if it is a mob.
+    mob* target_mob;
+    //Target location.
+    point target_point;
+    //Path to take the mob to while being carried.
+    vector<path_stop*> path;
+    //Index of the current stop in the projected carrying path.
+    size_t cur_path_stop_nr;
+    //If there is no clear path, this points to all obstacles found.
+    unordered_set<mob*> obstacle_ptrs;
+    //If true, it's best to go straight to the target point
+    //instead of taking a path.
+    bool go_straight;
+    
+    path_info_struct(mob* m, const point &target);
 };
 
 
@@ -361,12 +386,9 @@ public:
     //Structure holding information on how this mob should be carried.
     //If NULL, it cannot be carried.
     carry_info_struct* carry_info;
-    //Where to deliver this mob to, if it's being carried.
-    mob* carrying_target;
-    //Path to take the mob to while being carried.
-    vector<path_stop*> path;
-    //Index of the current stop in the projected carrying path.
-    size_t cur_path_stop_nr;
+    //Information about the path it is following, if any.
+    path_info_struct* path_info;
+    
     //If it's being held by another mob, the information is kept here.
     hold_info_struct holder;
     //List of mobs it is holding.
@@ -394,18 +416,7 @@ public:
     //Hazard of the sector the mob is currently on.
     hazard* on_hazard;
     //Is it completely dead? Health = 0 isn't necessarily dead; could be dying.
-    bool dead;/*
- * Copyright (c) Andre 'Espyo' Silva 2013-2018.
- * The following source file belongs to the open-source project
- * Pikifen. Please read the included
- * README and LICENSE files for more information.
- * Pikmin is copyright (c) Nintendo.
- *
- * === FILE DESCRIPTION ===
- * Header for the mob class and mob-related functions.
- */
-
-
+    bool dead;
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
     //Mobs it is chomping.
@@ -437,7 +448,9 @@ public:
     bool attack(mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage);
     void add_to_group(mob* new_member);
     void apply_knockback(const float knockback, const float knockback_angle);
-    void calculate_carrying_destination(mob* added, mob* removed);
+    bool calculate_carrying_destination(
+        mob* added, mob* removed, mob** target_mob, point* target_point
+    );
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void get_hitbox_hold_point(
         mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
@@ -477,6 +490,8 @@ public:
         const float speed = -1
     );
     void stop_chasing();
+    void follow_path(const point &target, const bool can_continue = true);
+    void stop_following_path();
     void face(const float new_angle, point* new_pos);
     point get_chase_target();
     virtual float get_base_speed();

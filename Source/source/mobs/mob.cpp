@@ -70,8 +70,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group(nullptr),
     group_spot_index(INVALID),
     carry_info(nullptr),
-    carrying_target(nullptr),
-    cur_path_stop_nr(INVALID),
+    path_info(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -542,14 +541,20 @@ void mob::become_uncarriable() {
 
 
 /* ----------------------------------------------------------------------------
- * Updates carrying data, begins moving if needed, etc.
- * added:   The Pikmin that got added, if any.
- * removed: The Pikmin that got removed, if any.
+ * Calculates the final carrying target, and the final carrying position,
+ * given the sort of carry destination, what Pikmin are holding on, and what
+ * Pikmin got added or removed.
+ * Returns true on success, false if there are no available targets or if
+ *   something went wrong.
+ * added:        The Pikmin that got added, if any.
+ * removed:      The Pikmin that got removed, if any.
+ * target_mob:   Return the target mob (if any) here.
+ * target_point: Return the target point here.
  */
-void mob::calculate_carrying_destination(mob* added, mob* removed) {
-    if(!carry_info) return;
-    
-    carry_info->stuck_state = 0;
+bool mob::calculate_carrying_destination(
+    mob* added, mob* removed, mob** target_mob, point* target_point
+) {
+    if(!carry_info) return false;
     
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
@@ -569,28 +574,27 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         }
         
         if(closest_ship) {
-            carry_info->final_destination = closest_ship->beam_final_pos;
-            carrying_target = closest_ship;
+            *target_mob = closest_ship;
+            *target_point = closest_ship->beam_final_pos;
+            return true;
             
         } else {
-            carrying_target = NULL;
-            carry_info->stuck_state = 1;
-            return;
+            *target_mob = NULL;
+            return false;
         }
-        
-        return;
     }
     
     //Now, if it's towards a linked mob, just go there.
     if(carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
         if(!links.empty()) {
-            carrying_target = links[0];
-            carry_info->final_destination = carrying_target->pos;
+            *target_mob = links[0];
+            *target_point = (*target_mob)->pos;
+            return true;
+            
         } else {
-            carrying_target = NULL;
-            carry_info->stuck_state = 1;
+            *target_mob = NULL;
+            return false;
         }
-        return;
     }
     
     //If it's meant for an Onion, we need to decide which Onion, based on
@@ -602,7 +606,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     vector<pikmin_type*> majority_types;
     unordered_set<pikmin_type*> available_onions;
     
-    //First, check what Onions even are available.
+    //First, check which Onions are even available.
     for(size_t o = 0; o < onions.size(); o++) {
         onion* o_ptr = onions[o];
         if(o_ptr->activated) {
@@ -612,9 +616,8 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     
     if(available_onions.empty()) {
         //No Onions?! Well...make the Pikmin stuck.
-        carrying_target = NULL;
-        carry_info->stuck_state = 1;
-        return;
+        *target_mob = NULL;
+        return false;
     }
     
     //Count how many of each type there are carrying.
@@ -720,8 +723,10 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     }
     
     //Finally, set the destination data.
-    carry_info->final_destination = onions[onion_nr]->pos;
-    carrying_target = onions[onion_nr];
+    *target_mob = onions[onion_nr];
+    *target_point = (*target_mob)->pos;
+    
+    return true;
 }
 
 
@@ -793,6 +798,53 @@ void mob::chase(
     
     chasing = true;
     reached_destination = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the mob start following a path. This populates the path_info
+ * class member, and calculates a path to take.
+ * target:       Target point to reach.
+ * can_continue: If true, it is possible for the new path to continue from where
+ *   the old one left off, if there was an old one.
+ */
+void mob::follow_path(const point &target, const bool can_continue) {
+    vector<path_stop*> old_path;
+    size_t old_path_stop_nr = INVALID;
+    
+    if(can_continue && path_info) {
+        old_path = path_info->path;
+        old_path_stop_nr = path_info->cur_path_stop_nr;
+    }
+    
+    if(path_info) {
+        delete path_info;
+    }
+    
+    path_info = new path_info_struct(this, target);
+    
+    if(can_continue && old_path.size() >= 2 && path_info->path.size() >= 2) {
+        path_stop* next_stop = old_path[old_path_stop_nr];
+        for(size_t s = 1; s < path_info->path.size(); ++s) {
+            if(path_info->path[s] == next_stop) {
+                //If before, the mob was already heading towards this stop,
+                //then just continue the new journey from there.
+                path_info->cur_path_stop_nr = s - 1;
+                break;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the mob stop following a path graph.
+ */
+void mob::stop_following_path() {
+    if(!path_info) return;
+    
+    delete path_info;
+    path_info = NULL;
 }
 
 
@@ -974,7 +1026,7 @@ void mob::finish_dying() {
         //TODO move this to the enemy class.
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
-            become_carriable(false);
+            become_carriable(CARRY_DESTINATION_ONION);
             e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
         particle par(
@@ -2518,10 +2570,10 @@ void mob::tick_script() {
     }
     
     //Being carried, but has an obstacle.
-    if(carry_info) {
+    if(path_info) {
         for(
-            auto o = carry_info->obstacle_ptrs.begin();
-            o != carry_info->obstacle_ptrs.end();
+            auto o = path_info->obstacle_ptrs.begin();
+            o != path_info->obstacle_ptrs.end();
             ++o
         ) {
             if((*o)->health == 0) {
@@ -2601,9 +2653,9 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     destination(destination),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    go_straight(false),
     stuck_state(0),
-    is_moving(false) {
+    is_moving(false),
+    intended_mob(nullptr) {
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = TAU / m->type->max_carriers * c;
@@ -2698,6 +2750,20 @@ bool carry_info_struct::is_full() {
  */
 carry_info_struct::~carry_info_struct() {
     //TODO
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an instance of a structure with info about the mob's path-following.
+ */
+path_info_struct::path_info_struct(mob* m, const point &target) :
+    m(m),
+    target_mob(nullptr),
+    cur_path_stop_nr(INVALID),
+    go_straight(false) {
+    
+    path = get_path(m->pos, target, &obstacle_ptrs, &go_straight, NULL);
 }
 
 

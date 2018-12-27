@@ -97,6 +97,6 @@ void treasure_fsm::create_fsm(mob_type* typ) {
  */
 void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
     m->become_uncarriable(); //Force all Pikmin to let go.
-    m->become_carriable(true);
+    m->become_carriable(CARRY_DESTINATION_SHIP);
     m->respawn();
 }
