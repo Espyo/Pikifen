@@ -605,7 +605,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
     efc.new_state("sleeping_moving", LEADER_STATE_SLEEPING_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
@@ -621,14 +620,66 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+            efc.change_state("sleeping_stuck");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::carry_reach_destination);
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run(leader_fsm::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run(leader_fsm::unfocus);
+            efc.change_state("inactive_sleeping_moving");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+            efc.run(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("sleeping_stuck", LEADER_STATE_SLEEPING_STUCK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_become_stuck);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("sleeping_moving");
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run(leader_fsm::start_waking_up);
@@ -709,7 +760,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
     ); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
@@ -725,14 +775,70 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+            efc.change_state("inactive_sleeping_stuck");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::carry_reach_destination);
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run(leader_fsm::start_waking_up);
+            efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run(leader_fsm::focus);
+            efc.change_state("sleeping_moving");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+            efc.run(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::start_waking_up);
+            efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("idling");
+        }
+    }
+    
+    efc.new_state(
+        "inactive_sleeping_stuck", LEADER_STATE_INACTIVE_SLEEPING_STUCK
+    ); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_become_stuck);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("sleeping_moving");
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run(leader_fsm::start_waking_up);

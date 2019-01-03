@@ -40,7 +40,7 @@ void pellet::draw_mob(bitmap_effect_manager* effect_manager) {
     add_sector_brightness_bitmap_effect(&effects);
     
     if(fsm.cur_state->id == PELLET_STATE_BEING_DELIVERED) {
-        onion* o_ptr = (onion*) path_info->target_mob;
+        onion* o_ptr = (onion*) focused_mob;
         add_delivery_bitmap_effect(
             &effects, script_timer.get_ratio_left(),
             o_ptr->oni_type->pik_type->main_color

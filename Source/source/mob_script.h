@@ -276,6 +276,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_CARRY_BEGIN_MOVE,
     //When the mob needs to stop moving, as it's no longer being carried.
     MOB_EVENT_CARRY_STOP_MOVE,
+    //When the mob being carried becomes stuck.
+    MOB_EVENT_CARRY_STUCK,
     //When the mob was sucessfully delivered
     //to its destination after being carried.
     MOB_EVENT_CARRY_DELIVERED,

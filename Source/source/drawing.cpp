@@ -805,10 +805,10 @@ void gameplay::draw_ingame_text() {
                     ) {
                         color = carrying_color_move;
                         valid = true;
-                    } else if(mob_ptr->path_info->target_mob) {
+                    } else if(mob_ptr->carry_info->intended_mob) {
                         color =
                             (
-                                (onion*) (mob_ptr->path_info->target_mob)
+                                (onion*) (mob_ptr->carry_info->intended_mob)
                             )->oni_type->pik_type->main_color;
                         valid = true;
                     }

@@ -48,7 +48,6 @@ void resource_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(resource_fsm::handle_start_moving);
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
@@ -65,13 +64,38 @@ void resource_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.run(gen_mob_fsm::carry_begin_move);
-            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::carry_reach_destination);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+            efc.change_state("idle_stuck");
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
+        }
+    }
+    
+    efc.new_state("idle_stuck", RESOURCE_STATE_IDLE_STUCK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_become_stuck);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.run(resource_fsm::handle_dropped);
+            efc.change_state("idle_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("idle_moving");
         }
     }
     

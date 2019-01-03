@@ -71,6 +71,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group_spot_index(INVALID),
     carry_info(nullptr),
     path_info(nullptr),
+    circling_info(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -804,11 +805,17 @@ void mob::chase(
 /* ----------------------------------------------------------------------------
  * Makes the mob start following a path. This populates the path_info
  * class member, and calculates a path to take.
- * target:       Target point to reach.
- * can_continue: If true, it is possible for the new path to continue from where
- *   the old one left off, if there was an old one.
+ * target:                Target point to reach.
+ * can_continue:          If true, it is possible for the new path to continue
+ *   from where the old one left off, if there was an old one.
+ * speed:                 Speed at which to travel. -1 uses the mob's speed.
+ * final_target_distance: For the final chase, from the last path stop to
+ *   the destination, use this for the target distance parameter.
  */
-void mob::follow_path(const point &target, const bool can_continue) {
+void mob::follow_path(
+    const point &target, const bool can_continue,
+    const float speed, const float final_target_distance
+) {
     vector<path_stop*> old_path;
     size_t old_path_stop_nr = INVALID;
     
@@ -822,6 +829,7 @@ void mob::follow_path(const point &target, const bool can_continue) {
     }
     
     path_info = new path_info_struct(this, target);
+    path_info->final_target_distance = final_target_distance;
     
     if(can_continue && old_path.size() >= 2 && path_info->path.size() >= 2) {
         path_stop* next_stop = old_path[old_path_stop_nr];
@@ -829,10 +837,22 @@ void mob::follow_path(const point &target, const bool can_continue) {
             if(path_info->path[s] == next_stop) {
                 //If before, the mob was already heading towards this stop,
                 //then just continue the new journey from there.
-                path_info->cur_path_stop_nr = s - 1;
+                path_info->cur_path_stop_nr = s;
                 break;
             }
         }
+    }
+    
+    if(path_info->go_straight) {
+        chase(
+            target, NULL, false, NULL, true,
+            path_info->final_target_distance, speed
+        );
+    } else if(!path_info->path.empty()) {
+        chase(
+            path_info->path[path_info->cur_path_stop_nr]->pos,
+            NULL, false, NULL, true, 3.0f, speed
+        );
     }
 }
 
@@ -843,8 +863,48 @@ void mob::follow_path(const point &target, const bool can_continue) {
 void mob::stop_following_path() {
     if(!path_info) return;
     
+    stop_chasing();
+    
     delete path_info;
     path_info = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the mob start circling around a point or another mob.
+ * m:             The mob to circle around.
+ *   If NULL, circle around a point instead.
+ * p:             The point to circle around, if any.
+ * radius:        Circle these many units around the target.
+ * clockwise:     Circle clockwise or counter-clockwise?
+ * speed:         Speed at which to move.
+ * can_free_move: Can the mob move freely, or only forward?
+ */
+void mob::circle_around(
+    mob* m, const point &p, const float radius, const bool clockwise,
+    const float speed, const bool can_free_move
+) {
+    if(!circling_info) {
+        circling_info = new circling_info_struct(this);
+    }
+    circling_info->circling_mob = m;
+    circling_info->circling_point = p;
+    circling_info->radius = radius;
+    circling_info->clockwise = clockwise;
+    circling_info->speed = speed;
+    circling_info->can_free_move = can_free_move;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the mob stop circling around a point or another mob.
+ */
+void mob::stop_circling() {
+    if(circling_info) {
+        delete circling_info;
+        circling_info = NULL;
+        stop_chasing();
+    }
 }
 
 
@@ -1753,36 +1813,102 @@ void mob::tick_animation() {
  * thinking about where to move next and such.
  */
 void mob::tick_brain() {
+    //Circling around something.
+    if(circling_info) {
+        point center =
+            circling_info->circling_mob ?
+            circling_info->circling_mob->pos :
+            circling_info->circling_point;
+            
+        float new_angle =
+            get_angle(center, pos) +
+            linear_dist_to_angular(
+                circling_info->speed, circling_info->radius
+            ) *
+            (circling_info->clockwise ? 1 : -1);
+            
+        chase(
+            center + angle_to_coordinates(new_angle, circling_info->radius),
+            NULL, false, NULL,
+            circling_info->can_free_move,
+            3.0f,
+            circling_info->speed
+        );
+    }
+    
     //Chasing a target.
     if(chasing && !chase_teleport && speed_z == 0) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
         
-        if(!chase_teleport) {
-        
-            if(
-                dist(pos, final_target_pos) > chase_target_dist
-            ) {
-                //If it still hasn't reached its target
-                //(or close enough to the target),
-                //time to make it think about how to get there.
-                
-                //Let the mob think about facing the actual target.
-                if(!type->can_free_move) {
-                    face(get_angle(pos, final_target_pos), NULL);
+        if(
+            dist(pos, final_target_pos) > chase_target_dist
+        ) {
+            //If it still hasn't reached its target
+            //(or close enough to the target),
+            //time to make it think about how to get there.
+            
+            //Let the mob think about facing the actual target.
+            if(!type->can_free_move) {
+                face(get_angle(pos, final_target_pos), NULL);
+            }
+            
+        } else {
+            //Reached the chase location.
+            
+            bool stuck_at_obstacle = false;
+            if(path_info) {
+                path_info->cur_path_stop_nr++;
+                if(path_info->cur_path_stop_nr == path_info->path.size()) {
+                    //Reached the final stop of the path, but not the goal.
+                    
+                    if(!path_info->obstacle_ptrs.empty()) {
+                        //If there's an obstacle in the path, the last stop
+                        //on the path actually means it's the last possible
+                        //stop before the obstacle. Meaning the object
+                        //is now facing an obstacle.
+                        stuck_at_obstacle = true;
+                        reached_destination = true;
+                        
+                    } else {
+                        //Time to head towards the actual goal.
+                        chase(
+                            path_info->target_point,
+                            NULL, false, NULL, true,
+                            path_info->final_target_distance, chase_speed
+                        );
+                    }
+                    
+                } else if(
+                    path_info->cur_path_stop_nr == path_info->path.size() + 1
+                ) {
+                    //Reached the final destination.
+                    reached_destination = true;
+                    
+                } else {
+                    //Reached a stop while traversing the path.
+                    //Think about going to the next.
+                    chase(
+                        path_info->path[path_info->cur_path_stop_nr]->pos,
+                        NULL, false, NULL, true, 3.0f, chase_speed
+                    );
                 }
                 
             } else {
-                //Reached the location. The mob should now think
-                //about stopping.
-                
-                chase_speed = 0;
                 reached_destination = true;
-                fsm.run_event(MOB_EVENT_REACHED_DESTINATION);
             }
             
+            if(reached_destination) {
+                //Reached the final destination. Think about stopping.
+                chase_speed = 0;
+                fsm.run_event(
+                    MOB_EVENT_REACHED_DESTINATION,
+                    (stuck_at_obstacle ? (void*) stuck_at_obstacle : NULL)
+                );
+            }
         }
+        
     }
 }
 
@@ -2569,11 +2695,29 @@ void mob::tick_script() {
         }
     }
     
-    //Being carried, but has an obstacle.
+    //Following a path, and an obstacle was destroyed.
     if(path_info) {
         for(
             auto o = path_info->obstacle_ptrs.begin();
             o != path_info->obstacle_ptrs.end();
+            ++o
+        ) {
+            if((*o)->health == 0) {
+                follow_path(
+                    path_info->target_point,
+                    true, chase_speed,
+                    path_info->final_target_distance
+                );
+                break;
+            }
+        }
+    }
+    
+    //Being carried, is stuck, and an obstacle was destroyed.
+    if(carry_info && carry_info->is_stuck) {
+        for(
+            auto o = carry_info->obstacle_ptrs.begin();
+            o != carry_info->obstacle_ptrs.end();
             ++o
         ) {
             if((*o)->health == 0) {
@@ -2653,7 +2797,7 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     destination(destination),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    stuck_state(0),
+    is_stuck(false),
     is_moving(false),
     intended_mob(nullptr) {
     
@@ -2759,11 +2903,26 @@ carry_info_struct::~carry_info_struct() {
  */
 path_info_struct::path_info_struct(mob* m, const point &target) :
     m(m),
-    target_mob(nullptr),
-    cur_path_stop_nr(INVALID),
+    target_point(target),
+    cur_path_stop_nr(0),
     go_straight(false) {
     
     path = get_path(m->pos, target, &obstacle_ptrs, &go_straight, NULL);
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an instance of a structure with info about the mob's circling.
+ */
+circling_info_struct::circling_info_struct(mob* m) :
+    m(m),
+    circling_mob(nullptr),
+    radius(0),
+    clockwise(true),
+    speed(0),
+    can_free_move(false) {
+    
 }
 
 

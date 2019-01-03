@@ -52,10 +52,9 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
  * Generic handler for when a mob was delivered to an Onion/ship.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    engine_assert(m->path_info != NULL, "");
-    engine_assert(m->path_info->target_mob != NULL, "");
+    engine_assert(m->focused_mob != NULL, "");
     
-    m->path_info->target_mob->fsm.run_event(
+    m->focused_mob->fsm.run_event(
         MOB_EVENT_RECEIVE_DELIVERY, (void*) m
     );
     
@@ -133,6 +132,29 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
 }
 
 
+const float CARRY_STUCK_CIRCLING_RADIUS = 32.0f;
+/* ----------------------------------------------------------------------------
+ * When it's time to become stuck and move in circles.
+ */
+void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
+    m->carry_info->is_stuck = true;
+    m->carry_info->obstacle_ptrs = m->path_info->obstacle_ptrs;
+    m->stop_following_path();
+    
+    //When circling around, make the pivot point a bit far away from where
+    //the mob currently is, so that the mob doesn't awkwardly have to go the
+    //distance where the circling is meant to take place.
+    //It will still have to travel some, but even making the pivot just a bit
+    //far away already helps reduce this effect.
+    m->circle_around(
+        NULL, m->pos + point(CARRY_STUCK_CIRCLING_RADIUS / 2, 0),
+        CARRY_STUCK_CIRCLING_RADIUS, true,
+        m->carry_info->get_speed(),
+        true
+    );
+}
+
+
 /* ----------------------------------------------------------------------------
  * When it's time to check if a carried object should begin moving,
  * or update its path.
@@ -144,19 +166,35 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
     if(m->carry_info->intended_mob == NULL) {
-        m->carry_info->stuck_state = 1;
+        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
         return;
     }
     
-    m->follow_path(m->carry_info->intended_point, true);
+    float target_distance = 3.0f;
+    if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
+        //Because the ship's beam can be offset, and because
+        //the ship is normally in the way, let's consider a
+        //"reached destination" event if the treasure is
+        //covering the beam, and not necessarily if the treasure
+        //is on the same coordinates as the beam.
+        ship* s_ptr = (ship*) m->carry_info->intended_mob;
+        target_distance =
+            max(
+                m->type->radius -
+                s_ptr->shi_type->beam_radius,
+                3.0f
+            );
+    }
+    
+    m->follow_path(
+        m->carry_info->intended_point, true,
+        m->carry_info->get_speed(), target_distance
+    );
     
     m->path_info->target_point = m->carry_info->intended_point;
-    m->path_info->target_mob = m->carry_info->intended_mob;
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
-        m->carry_info->stuck_state = 1;
-    } else {
-        m->carry_info->stuck_state = 0;
+        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
     }
 }
 
@@ -177,7 +215,6 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
  * When a Pikmin checks if it should start carrying the mob.
  */
 void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
-
     if(m->carry_info->cur_carrying_strength >= m->type->weight) {
         m->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
     }
@@ -208,6 +245,7 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
  * When a mob starts the process of being delivered to an Onion/ship.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
+    m->focus_on_mob(m->carry_info->intended_mob);
     m->tangible = false;
     m->become_uncarriable();
     m->set_timer(DELIVERY_SUCK_TIME);
@@ -215,80 +253,26 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a mob sets the next target when following a path.
+ * When a mob is no longer stuck waiting to be carried.
  */
-void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
-    if(m->path_info->cur_path_stop_nr == INVALID) {
-        m->path_info->cur_path_stop_nr = 0;
+void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
+    m->carry_info->is_stuck = false;
+    m->carry_info->obstacle_ptrs.clear();
+    m->stop_circling();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a mob reaches the destination or an obstacle when carrying.
+ * info1: If not NULL, then it's impossible to progress because of an obstacle.
+ */
+void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
+    if(info1) {
+        //Stuck...
+        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
     } else {
-        m->path_info->cur_path_stop_nr++;
-    }
-    
-    if(m->carry_info->stuck_state > 0) {
-        //Stuck... Let's go back and forth between point A and B.
-        float final_x = m->pos.x;
-        if(m->carry_info->stuck_state == 1) {
-            m->carry_info->stuck_state = 2;
-            final_x += CARRYING_STUCK_SWAY_AMOUNT;
-        } else {
-            m->carry_info->stuck_state = 1;
-            final_x -= CARRYING_STUCK_SWAY_AMOUNT;
-        }
-        
-        m->chase(
-            point(final_x, m->pos.y),
-            NULL, false, NULL, true, 3.0f,
-            m->carry_info->get_speed() * CARRYING_STUCK_SPEED_MULT
-        );
-        
-    } else if(m->path_info->cur_path_stop_nr == m->path_info->path.size()) {
-        //Reached the final stop.
-        
-        if(!m->path_info->obstacle_ptrs.empty()) {
-            //If there's an obstacle in the path, the last stop on the path
-            //actually means it's the last possible stop before the obstacle.
-            //Meaning the object should get stuck.
-            m->carry_info->stuck_state = 1;
-            
-        } else {
-            //Go to the final destination.
-            float target_distance = 3.0f;
-            if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
-                //Because the ship's beam can be offset, and because
-                //the ship is normally in the way, let's consider a
-                //"reached destination" event if the treasure is
-                //covering the beam, and not necessarily if the treasure
-                //is on the same coordinates as the beam.
-                ship* s_ptr = (ship*) m->path_info->target_mob;
-                target_distance =
-                    max(
-                        m->type->radius -
-                        s_ptr->shi_type->beam_radius,
-                        3.0f
-                    );
-            }
-            m->chase(
-                m->path_info->target_point,
-                NULL, false, NULL, true, target_distance,
-                m->carry_info->get_speed()
-            );
-            
-        }
-        
-    } else if(m->path_info->cur_path_stop_nr == m->path_info->path.size() + 1) {
-        //Reached the final destination.
-        //Send event.
-        m->stop_chasing();
+        //Successful delivery!
+        m->stop_following_path();
         m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
-        
-    } else {
-        //Reached a stop.
-        //Go to the next.
-        m->chase(
-            m->path_info->path[m->path_info->cur_path_stop_nr]->pos,
-            NULL, false, NULL, true, 3.0f,
-            m->carry_info->get_speed()
-        );
-        
     }
 }

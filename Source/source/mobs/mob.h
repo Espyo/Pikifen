@@ -169,9 +169,10 @@ struct carry_info_struct {
     //of spaces reserved. A Pikmin could be on its way to its spot,
     //not necessarily there already.
     size_t cur_n_carriers;
+    //When stuck, look out for these obstacles. They may fix the situation.
+    unordered_set<mob*> obstacle_ptrs;
     //Are the Pikmin stuck with nowhere to go?
-    //0: no. 1: going to the alternative point, 2: going back to the start.
-    unsigned char stuck_state;
+    bool is_stuck;
     //Is the object moving at the moment?
     bool is_moving;
     //When the object begins moving, the idea is to carry it to this mob.
@@ -195,21 +196,46 @@ struct carry_info_struct {
 struct path_info_struct {
     //Mob that this struct belongs to.
     mob* m;
-    //Final target, if it is a mob.
-    mob* target_mob;
     //Target location.
     point target_point;
     //Path to take the mob to while being carried.
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.
     size_t cur_path_stop_nr;
-    //If there is no clear path, this points to all obstacles found.
+    //List of all obstacles located somewhere in the path.
     unordered_set<mob*> obstacle_ptrs;
     //If true, it's best to go straight to the target point
     //instead of taking a path.
     bool go_straight;
+    //For the chase from the final path stop to the target, use this
+    //value in the target_distance parameter.
+    float final_target_distance;
     
     path_info_struct(mob* m, const point &target);
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Structure with information about what mob or point that this
+ * mob is circling around, if any.
+ */
+struct circling_info_struct {
+    //Mob that this struct belongs to.
+    mob* m;
+    //Mob that it is circling.
+    mob* circling_mob;
+    //Point that it is circling, if it's not circling a mob.
+    point circling_point;
+    //Radius at which to circle around.
+    float radius;
+    //Is it circling clockwise?
+    bool clockwise;
+    //Speed at which to move.
+    float speed;
+    //Can the mob move freely, or only forward?
+    bool can_free_move;
+    
+    circling_info_struct(mob* m);
 };
 
 
@@ -371,6 +397,10 @@ public:
     float chase_speed;
     //If true, the mob successfully reached its intended destination.
     bool reached_destination;
+    //Information about the path it is following, if any.
+    path_info_struct* path_info;
+    //Information about the mob/point it's circling, if any.
+    circling_info_struct* circling_info;
     
     //Group things.
     //The current mob is following this mob's group.
@@ -386,8 +416,6 @@ public:
     //Structure holding information on how this mob should be carried.
     //If NULL, it cannot be carried.
     carry_info_struct* carry_info;
-    //Information about the path it is following, if any.
-    path_info_struct* path_info;
     
     //If it's being held by another mob, the information is kept here.
     hold_info_struct holder;
@@ -490,8 +518,16 @@ public:
         const float speed = -1
     );
     void stop_chasing();
-    void follow_path(const point &target, const bool can_continue = true);
+    void follow_path(
+        const point &target, const bool can_continue = true,
+        const float speed = -1.0f, const float final_target_distance = 3
+    );
     void stop_following_path();
+    void circle_around(
+        mob* m, const point &p, const float radius, const bool clockwise,
+        const float speed, const bool can_free_move
+    );
+    void stop_circling();
     void face(const float new_angle, point* new_pos);
     point get_chase_target();
     virtual float get_base_speed();
