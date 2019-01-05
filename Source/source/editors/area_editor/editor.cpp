@@ -1438,6 +1438,11 @@ void area_editor::finish_layout_drawing() {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     
+    //Calculate the bounding box of this sector, now that it's finished.
+    get_sector_bounding_box(
+        new_sector, &new_sector->bbox[0], &new_sector->bbox[1]
+    );
+    
     //Select the new sector, making it ready for editing.
     clear_selection();
     select_sector(new_sector);

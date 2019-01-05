@@ -1088,6 +1088,8 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.tint = texture_info.tint;
     new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
+    new_sector->bbox[0] = bbox[0];
+    new_sector->bbox[1] = bbox[1];
 }
 
 
