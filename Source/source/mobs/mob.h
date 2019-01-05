@@ -179,6 +179,12 @@ struct carry_info_struct {
     mob* intended_mob;
     //When the object begins moving, the idea is to carry it to this point.
     point intended_point;
+    //Is the Pikmin meant to return somewhere after carrying?
+    bool must_return;
+    //Location to return true.
+    point return_point;
+    //Distance from the return point to stop at.
+    float return_dist;
     
     carry_info_struct(mob* m, const size_t destination);
     bool is_empty();

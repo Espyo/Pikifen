@@ -132,7 +132,7 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
         r_ptr->res_type->delivery_result ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
     ) {
-        r_ptr->links[0]->set_health(
+        r_ptr->focused_mob->set_health(
             true, false, -r_ptr->res_type->damage_mob_amount
         );
     }
@@ -178,7 +178,15 @@ void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  */
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* r_ptr = (resource*) m;
+    
     r_ptr->become_carriable(r_ptr->res_type->carrying_destination);
+    r_ptr->carry_info->must_return = true;
+    r_ptr->carry_info->return_point = r_ptr->origin_pile->pos;
+    r_ptr->carry_info->return_dist =
+        r_ptr->origin_pile->type->radius +
+        standard_pikmin_radius +
+        idle_task_range / 2.0f;
+        
     r_ptr->set_animation(RESOURCE_ANIM_IDLING);
 }
 

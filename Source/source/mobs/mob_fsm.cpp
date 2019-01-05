@@ -138,8 +138,12 @@ const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
  * When it's time to become stuck and move in circles.
  */
 void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
+    engine_assert(m->carry_info != NULL, "");
+    
     m->carry_info->is_stuck = true;
-    m->carry_info->obstacle_ptrs = m->path_info->obstacle_ptrs;
+    if(m->path_info) {
+        m->carry_info->obstacle_ptrs = m->path_info->obstacle_ptrs;
+    }
     m->stop_following_path();
     
     m->circle_around(
@@ -240,6 +244,13 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
  * When a mob starts the process of being delivered to an Onion/ship.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
+    for(size_t p = 0; p < m->carry_info->spot_info.size(); ++p) {
+        mob* p_ptr = m->carry_info->spot_info[p].pik_ptr;
+        if(p_ptr) {
+            p_ptr->fsm.run_event(MOB_EVENT_FINISHED_CARRYING);
+        }
+    }
+    
     m->focus_on_mob(m->carry_info->intended_mob);
     m->tangible = false;
     m->become_uncarriable();
@@ -251,8 +262,10 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
  * When a mob is no longer stuck waiting to be carried.
  */
 void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
-    m->carry_info->is_stuck = false;
-    m->carry_info->obstacle_ptrs.clear();
+    if(m->carry_info) {
+        m->carry_info->is_stuck = false;
+        m->carry_info->obstacle_ptrs.clear();
+    }
     m->stop_circling();
 }
 

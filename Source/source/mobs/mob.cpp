@@ -1861,7 +1861,7 @@ void mob::tick_brain() {
             //Reached the chase location.
             
             bool stuck_at_obstacle = false;
-            if(path_info) {
+            if(path_info && !path_info->go_straight) {
                 path_info->cur_path_stop_nr++;
                 if(path_info->cur_path_stop_nr == path_info->path.size()) {
                     //Reached the final stop of the path, but not the goal.
@@ -2802,7 +2802,9 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     cur_n_carriers(0),
     is_stuck(false),
     is_moving(false),
-    intended_mob(nullptr) {
+    intended_mob(nullptr),
+    must_return(false),
+    return_dist(0) {
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = TAU / m->type->max_carriers * c;

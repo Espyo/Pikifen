@@ -520,9 +520,43 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
-            efc.change_state("idling");
+            efc.run(pikmin_fsm::finish_carrying);
         }
         efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("returning", PIKMIN_STATE_RETURNING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::start_returning);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::stand_still);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -1066,6 +1100,8 @@ void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
  * When a Pikmin is meant to stand still in place.
  */
 void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
+    m->stop_circling();
+    m->stop_following_path();
     m->stop_chasing();
     m->speed.x = m->speed.y = 0;
 }
@@ -1315,6 +1351,24 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     }
     
     m->unfocus_from_mob();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin successfully finishes carrying an object.
+ */
+void pikmin_fsm::finish_carrying(mob* m, void* info1, void* info2) {
+    pikmin* p = (pikmin*) m;
+    engine_assert(p->carrying_mob != NULL, "");
+    
+    if(p->carrying_mob->carry_info->must_return) {
+        //The Pikmin should return somewhere (like a pile).
+        p->fsm.set_state(PIKMIN_STATE_RETURNING, (void*) p->carrying_mob);
+        
+    } else {
+        //The Pikmin can just sit and chill.
+        p->fsm.set_state(PIKMIN_STATE_IDLING);
+    }
 }
 
 
@@ -1577,6 +1631,26 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin must start returning to the carried object's return point.
+ * info1: Pointer to the mob that used to be carried.
+ */
+void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
+    pikmin* p_ptr = (pikmin*) m;
+    mob* carried_mob = (mob*) info1;
+    
+    p_ptr->follow_path(
+        carried_mob->carry_info->return_point,
+        false,
+        p_ptr->get_base_speed(),
+        carried_mob->carry_info->return_dist
+    );
+    p_ptr->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 
