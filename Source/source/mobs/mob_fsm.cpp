@@ -132,7 +132,8 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
 }
 
 
-const float CARRY_STUCK_CIRCLING_RADIUS = 32.0f;
+const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
+const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
 /* ----------------------------------------------------------------------------
  * When it's time to become stuck and move in circles.
  */
@@ -141,15 +142,9 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
     m->carry_info->obstacle_ptrs = m->path_info->obstacle_ptrs;
     m->stop_following_path();
     
-    //When circling around, make the pivot point a bit far away from where
-    //the mob currently is, so that the mob doesn't awkwardly have to go the
-    //distance where the circling is meant to take place.
-    //It will still have to travel some, but even making the pivot just a bit
-    //far away already helps reduce this effect.
     m->circle_around(
-        NULL, m->pos + point(CARRY_STUCK_CIRCLING_RADIUS / 2, 0),
-        CARRY_STUCK_CIRCLING_RADIUS, true,
-        m->carry_info->get_speed(),
+        NULL, m->pos, CARRY_STUCK_CIRCLING_RADIUS, true,
+        m->carry_info->get_speed() * CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
 }

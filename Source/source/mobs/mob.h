@@ -234,6 +234,8 @@ struct circling_info_struct {
     float speed;
     //Can the mob move freely, or only forward?
     bool can_free_move;
+    //Angle of the circle to go to.
+    float cur_angle;
     
     circling_info_struct(mob* m);
 };

@@ -893,6 +893,8 @@ void mob::circle_around(
     circling_info->clockwise = clockwise;
     circling_info->speed = speed;
     circling_info->can_free_move = can_free_move;
+    circling_info->cur_angle =
+        get_angle((m ? m->pos : p), pos);
 }
 
 
@@ -1820,15 +1822,16 @@ void mob::tick_brain() {
             circling_info->circling_mob->pos :
             circling_info->circling_point;
             
-        float new_angle =
-            get_angle(center, pos) +
+        circling_info->cur_angle +=
             linear_dist_to_angular(
-                circling_info->speed, circling_info->radius
+                circling_info->speed * delta_t, circling_info->radius
             ) *
             (circling_info->clockwise ? 1 : -1);
             
         chase(
-            center + angle_to_coordinates(new_angle, circling_info->radius),
+            center + angle_to_coordinates(
+                circling_info->cur_angle, circling_info->radius
+            ),
             NULL, false, NULL,
             circling_info->can_free_move,
             3.0f,
@@ -2921,7 +2924,8 @@ circling_info_struct::circling_info_struct(mob* m) :
     radius(0),
     clockwise(true),
     speed(0),
-    can_free_move(false) {
+    can_free_move(false),
+    cur_angle(0) {
     
 }
 
