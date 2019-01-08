@@ -58,6 +58,8 @@ const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 //Default area editor undo history size limit.
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
+//Default editor mouse drag threshold range.
+const size_t DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 //Default leader punch strength.
 const float DEF_PUNCH_STRENGTH = 2.0f;
 //The default rotation speed of a mob type.

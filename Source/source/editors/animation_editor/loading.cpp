@@ -2287,9 +2287,22 @@ void animation_editor::load() {
         new lafi::checkbox("Use MMB to pan"), 100, 16
     );
     frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_drag_threshold",
+        new lafi::label("Drag threshold"), 70, 16
+    );
+    frm_options->easy_add(
+        "txt_drag_threshold",
+        new lafi::textbox(), 30, 16
+    );
+    frm_options->easy_row();
     
     
     //Options -- properties.
+    auto lambda_gui_to_options =
+    [this] (lafi::widget*) {
+        gui_to_options();
+    };
     auto lambda_gui_to_options_click =
     [this] (lafi::widget*, int, int) {
         gui_to_options();
@@ -2310,6 +2323,11 @@ void animation_editor::load() {
     frm_options->widgets["chk_mmb_pan"]->description =
         "Use the middle mouse button to pan the camera "
         "(and RMB to reset camera/zoom).";
+        
+    frm_options->widgets["txt_drag_threshold"]->lose_focus_handler =
+        lambda_gui_to_options;
+    frm_options->widgets["txt_drag_threshold"]->description =
+        "Mouse must move these many pixels to be considered a drag.";
         
         
     //Toolbar -- declarations.

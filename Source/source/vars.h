@@ -138,10 +138,8 @@ extern asset_file_names_struct asset_file_names;
 //General globals.
 
 extern vector<string> animation_editor_history;
-extern bool animation_editor_mmb_pan;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
-extern bool area_editor_mmb_pan;
 extern string area_editor_quick_play;
 extern bool area_editor_show_edge_length;
 extern size_t area_editor_undo_limit;
@@ -239,6 +237,8 @@ extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
 extern vector<drop*> drops;
 extern map<string, drop_type*> drop_types;
+extern bool editor_mmb_pan;
+extern float editor_mouse_drag_threshold;
 //How many errors have been reported this application session.
 extern size_t errors_reported_today;
 extern map<string, enemy_type*> enemy_types;

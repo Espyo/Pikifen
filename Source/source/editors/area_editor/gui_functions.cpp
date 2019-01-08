@@ -518,8 +518,10 @@ void area_editor::gui_to_options() {
     area_editor_undo_limit =
         s2i(get_textbox_text(frm_options, "txt_undo_limit"));
         
-    area_editor_mmb_pan =
+    editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
+    editor_mouse_drag_threshold =
+        s2i(get_textbox_text(frm_options, "txt_drag_threshold"));
         
     update_undo_history();
     
@@ -811,7 +813,10 @@ void area_editor::options_to_gui() {
     set_textbox_text(
         frm_options, "txt_undo_limit", i2s(area_editor_undo_limit)
     );
-    set_checkbox_check(frm_options, "chk_mmb_pan", area_editor_mmb_pan);
+    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
+    set_textbox_text(
+        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
+    );
 }
 
 

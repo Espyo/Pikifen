@@ -32,8 +32,6 @@ const int editor::EDITOR_ICON_BMP_SIZE = 24;
 const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
 const float editor::KEYBOARD_CAM_ZOOM = 0.25f;
-//If the mouse is dragged outside of this range, that's a real drag.
-const float editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //How long to override the status bar text for, for important messages.
 const float editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
 //How long to override the status bar text for, for unimportant messages.
@@ -514,8 +512,8 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
         if(
-            fabs(ev.mouse.x - mouse_drag_start.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
-            fabs(ev.mouse.y - mouse_drag_start.y) >= MOUSE_DRAG_CONFIRM_RANGE
+            fabs(ev.mouse.x - mouse_drag_start.x) >= editor_mouse_drag_threshold ||
+            fabs(ev.mouse.y - mouse_drag_start.y) >= editor_mouse_drag_threshold
         ) {
             mouse_drag_confirmed = true;
         }

@@ -929,22 +929,12 @@ void save_options() {
     //Other options.
     file.add(
         new data_node(
-            "animation_editor_mmb_pan", b2s(animation_editor_mmb_pan)
-        )
-    );
-    file.add(
-        new data_node(
             "area_editor_backup_interval", f2s(area_editor_backup_interval)
         )
     );
     file.add(
         new data_node(
             "area_editor_grid_interval", i2s(area_editor_grid_interval)
-        )
-    );
-    file.add(
-        new data_node(
-            "area_editor_mmb_pan", b2s(area_editor_mmb_pan)
         )
     );
     file.add(
@@ -965,6 +955,16 @@ void save_options() {
     file.add(
         new data_node(
             "draw_cursor_trail", b2s(draw_cursor_trail)
+        )
+    );
+    file.add(
+        new data_node(
+            "editor_mmb_pan", b2s(editor_mmb_pan)
+        )
+    );
+    file.add(
+        new data_node(
+            "editor_mouse_drag_threshold", i2s(editor_mouse_drag_threshold)
         )
     );
     file.add(new data_node("fps", i2s(game_fps)));

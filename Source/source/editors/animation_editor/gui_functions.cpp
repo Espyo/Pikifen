@@ -328,7 +328,10 @@ void animation_editor::hitbox_to_gui() {
  * Loads the options data onto the GUI.
  */
 void animation_editor::options_to_gui() {
-    set_checkbox_check(frm_options, "chk_mmb_pan", animation_editor_mmb_pan);
+    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
+    set_textbox_text(
+        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
+    );
 }
 
 
@@ -533,8 +536,10 @@ void animation_editor::gui_to_hitbox() {
  * Saves the options data to memory using info on the gui.
  */
 void animation_editor::gui_to_options() {
-    animation_editor_mmb_pan =
+    editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
+    editor_mouse_drag_threshold =
+        s2i(get_textbox_text(frm_options, "txt_drag_threshold"));
         
     save_options();
     options_to_gui();

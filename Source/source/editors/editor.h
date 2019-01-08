@@ -39,7 +39,6 @@ protected:
     static const int   EDITOR_ICON_BMP_SIZE;
     static const float KEYBOARD_CAM_ZOOM;
     static const float DOUBLE_CLICK_TIMEOUT;
-    static const float MOUSE_DRAG_CONFIRM_RANGE;
     static const float STATUS_OVERRIDE_IMPORTANT_DURATION;
     static const float STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     static const float UNSAVED_CHANGES_WARNING_DURATION;
