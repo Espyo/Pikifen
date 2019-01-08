@@ -266,7 +266,7 @@ void editor::do_logic_post() {
  * be run before the editor's own logic code.
  */
 void editor::do_logic_pre() {
-    gui->tick(delta_t);
+    //TODO gui->tick(delta_t);
     
     update_transformations();
     
@@ -430,6 +430,7 @@ void editor::generate_and_open_picker(
  * Handles an Allegro event for control-related things.
  */
 void editor::handle_controls(const ALLEGRO_EVENT &ev) {
+    return; //TODO
     if(fade_mgr.is_fading()) return;
     
     gui->handle_event(ev);

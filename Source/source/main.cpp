@@ -22,6 +22,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "editors/area_editor_imgui/editor.h"
 #include "const.h"
 #include "controls.h"
 #include "drawing.h"
@@ -119,7 +120,7 @@ int main(int argc, char** argv) {
         creator_tool_auto_start_mode == "area_editor"
     ) {
         (
-            (area_editor*)
+            (area_editor_imgui*)
             game_states[GAME_STATE_AREA_EDITOR]
         )->auto_load_area = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_AREA_EDITOR);
@@ -143,6 +144,7 @@ int main(int argc, char** argv) {
         
         al_wait_for_event(logic_queue, &ev);
         
+        game_states[cur_game_state_nr]->handle_event(&ev);
         game_states[cur_game_state_nr]->handle_controls(ev);
         
         if(

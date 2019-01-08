@@ -20,9 +20,9 @@
 
 #include "init.h"
 
-#include "controls.h"
+#include "editors/area_editor_imgui/editor.h"
 #include "editors/animation_editor/editor.h"
-#include "editors/area_editor/editor.h"
+#include "controls.h"
 #include "functions.h"
 #include "gameplay.h"
 #include "game_state.h"
@@ -353,7 +353,7 @@ void init_game_states() {
     game_states[GAME_STATE_GAME] = new gameplay();
     game_states[GAME_STATE_OPTIONS_MENU] = new options_menu();
     game_states[GAME_STATE_CONTROLS_MENU] = new controls_menu();
-    game_states[GAME_STATE_AREA_EDITOR] = new area_editor();
+    game_states[GAME_STATE_AREA_EDITOR] = new area_editor_imgui();
     game_states[GAME_STATE_ANIMATION_EDITOR] = new animation_editor();
 }
 
