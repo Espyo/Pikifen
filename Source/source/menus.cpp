@@ -634,14 +634,11 @@ void options_menu::update() {
         }
     }
     
-    if(current_r_index == INVALID) {
-        resolution_widget->text = "Resolution: Custom";
-    } else {
-        resolution_widget->text =
-            "Resolution: " +
-            i2s(intended_scr_w) + "x" +
-            i2s(intended_scr_h);
-    }
+    resolution_widget->text =
+        "Resolution: " +
+        i2s(intended_scr_w) + "x" +
+        i2s(intended_scr_h) +
+        (current_r_index == INVALID ? " (Custom)" : "");
     
     fullscreen_widget->checked = intended_scr_fullscreen;
 }

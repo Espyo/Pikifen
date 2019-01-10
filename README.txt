@@ -130,8 +130,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         Is it possible to add Winged Pikmin?
             Unlikely. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
             Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
-    
-    
+
 ===============
 4) Compiling
 ===============
@@ -152,7 +151,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 5) Changelog
 ===============
     See http://www.pikminfanon.com/Pikifen/Changelog
-    
+
 ===============
 6) Tips
 ===============

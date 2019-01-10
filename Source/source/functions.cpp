@@ -125,7 +125,10 @@ void crash(const string &reason, const string &info, const int exit_status) {
         ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(display);
         if(backbuffer) {
             al_save_bitmap(
-                ("Crash " + get_current_time(false) + ".png").c_str(),
+                (
+                    USER_DATA_FOLDER_PATH + "/" +
+                    "Crash_" + get_current_time(false) + ".png"
+                ).c_str(),
                 backbuffer
             );
         }
