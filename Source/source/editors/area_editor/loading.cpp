@@ -1632,6 +1632,17 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         show_path_preview = !show_path_preview;
         if(show_path_preview) {
+            if(path_preview_checkpoints[0].x == LARGE_FLOAT) {
+                //No previous location. Place them on-camera.
+                path_preview_checkpoints[0].x =
+                    cam_pos.x - DEF_AREA_EDITOR_GRID_INTERVAL;
+                path_preview_checkpoints[0].y =
+                    cam_pos.y;
+                path_preview_checkpoints[1].x =
+                    cam_pos.x + DEF_AREA_EDITOR_GRID_INTERVAL;
+                path_preview_checkpoints[1].y =
+                    cam_pos.y;
+            }
             calculate_preview_path();
             this->frm_paths->widgets["lbl_path_dist"]->show();
         } else {
@@ -2041,6 +2052,20 @@ void area_editor::load() {
     frm_review->widgets["chk_cross_section"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
         show_cross_section = ((lafi::checkbox*) c)->checked;
+        if(
+            show_cross_section &&
+            cross_section_checkpoints[0].x == LARGE_FLOAT
+        ) {
+            //No previous location. Place them on-camera.
+            cross_section_checkpoints[0].x =
+                cam_pos.x - DEF_AREA_EDITOR_GRID_INTERVAL;
+            cross_section_checkpoints[0].y =
+                cam_pos.y;
+            cross_section_checkpoints[1].x =
+                cam_pos.x + DEF_AREA_EDITOR_GRID_INTERVAL;
+            cross_section_checkpoints[1].y =
+                cam_pos.y;
+        }
         review_to_gui();
     };
     frm_review->widgets["chk_cross_section"]->description =
@@ -2690,8 +2715,6 @@ void area_editor::load() {
     last_mob_type = NULL;
     show_closest_stop = false;
     show_path_preview = false;
-    path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    path_preview_checkpoints[1] = point(+DEF_AREA_EDITOR_GRID_INTERVAL, 0);
     clear_selection();
     selected_shadow = NULL;
     selection_homogenized = false;

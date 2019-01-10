@@ -945,7 +945,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         for(unsigned char p = 0; p < 2; ++p) {
             if(
                 bbox_check(
-                    cross_section_points[p], mouse_cursor_w,
+                    cross_section_checkpoints[p], mouse_cursor_w,
                     CROSS_SECTION_POINT_RADIUS / cam_zoom
                 )
             ) {
@@ -1256,7 +1256,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     } else if(state == EDITOR_STATE_REVIEW) {
         //Move cross-section points.
         if(moving_cross_section_point != -1) {
-            cross_section_points[moving_cross_section_point] =
+            cross_section_checkpoints[moving_cross_section_point] =
                 snap_point(mouse_cursor_w);
         }
         

@@ -537,10 +537,11 @@ void area_editor::clear_current_area() {
     show_cross_section_grid = false;
     show_path_preview = false;
     path_preview.clear();
-    path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    path_preview_checkpoints[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    cross_section_points[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    cross_section_points[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    //LARGE_FLOAT means they were never given a previous position.
+    path_preview_checkpoints[0] = point(LARGE_FLOAT, LARGE_FLOAT);
+    path_preview_checkpoints[1] = point(LARGE_FLOAT, LARGE_FLOAT);
+    cross_section_checkpoints[0] = point(LARGE_FLOAT, LARGE_FLOAT);
+    cross_section_checkpoints[1] = point(LARGE_FLOAT, LARGE_FLOAT);
     
     clear_texture_suggestions();
     

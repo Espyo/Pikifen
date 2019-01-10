@@ -201,7 +201,7 @@ private:
     //Time left until a backup is generated.
     timer backup_timer;
     //Where the cross-section tool points are.
-    point cross_section_points[2];
+    point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
     point cross_section_window_start;
     //Cross-section window's end coordinates.

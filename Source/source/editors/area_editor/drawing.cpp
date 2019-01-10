@@ -826,19 +826,19 @@ void area_editor::do_drawing() {
             string letter = (p == 0 ? "A" : "B");
             
             al_draw_filled_rectangle(
-                cross_section_points[p].x -
+                cross_section_checkpoints[p].x -
                 (CROSS_SECTION_POINT_RADIUS / cam_zoom),
-                cross_section_points[p].y -
+                cross_section_checkpoints[p].y -
                 (CROSS_SECTION_POINT_RADIUS / cam_zoom),
-                cross_section_points[p].x +
+                cross_section_checkpoints[p].x +
                 (CROSS_SECTION_POINT_RADIUS / cam_zoom),
-                cross_section_points[p].y +
+                cross_section_checkpoints[p].y +
                 (CROSS_SECTION_POINT_RADIUS / cam_zoom),
                 al_map_rgb(255, 255, 32)
             );
             draw_scaled_text(
                 font_builtin, al_map_rgb(0, 64, 64),
-                cross_section_points[p],
+                cross_section_checkpoints[p],
                 point(
                     POINT_LETTER_TEXT_SCALE / cam_zoom,
                     POINT_LETTER_TEXT_SCALE / cam_zoom
@@ -848,10 +848,10 @@ void area_editor::do_drawing() {
             );
         }
         al_draw_line(
-            cross_section_points[0].x,
-            cross_section_points[0].y,
-            cross_section_points[1].x,
-            cross_section_points[1].y,
+            cross_section_checkpoints[0].x,
+            cross_section_checkpoints[0].y,
+            cross_section_checkpoints[1].x,
+            cross_section_checkpoints[1].y,
             al_map_rgb(255, 0, 0), 3.0 / cam_zoom
         );
     }
@@ -1034,7 +1034,7 @@ void area_editor::do_drawing() {
     if(state == EDITOR_STATE_REVIEW && show_cross_section) {
     
         dist cross_section_world_length(
-            cross_section_points[0], cross_section_points[1]
+            cross_section_checkpoints[0], cross_section_checkpoints[1]
         );
         float proportion =
             (cross_section_window_end.x - cross_section_window_start.x) /
@@ -1055,9 +1055,9 @@ void area_editor::do_drawing() {
         }
         
         sector* cs_left_sector =
-            get_sector(cross_section_points[0], NULL, false);
+            get_sector(cross_section_checkpoints[0], NULL, false);
         sector* cs_right_sector =
-            get_sector(cross_section_points[1], NULL, false);
+            get_sector(cross_section_checkpoints[1], NULL, false);
         struct split_info {
             sector* sector_ptrs[2];
             float ur;
@@ -1085,10 +1085,10 @@ void area_editor::do_drawing() {
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     ),
                     point(
-                        cross_section_points[0].x, cross_section_points[0].y
+                        cross_section_checkpoints[0].x, cross_section_checkpoints[0].y
                     ),
                     point(
-                        cross_section_points[1].x, cross_section_points[1].y
+                        cross_section_checkpoints[1].x, cross_section_checkpoints[1].y
                     ),
                     &ur, &ul
                 )
@@ -1238,7 +1238,7 @@ void area_editor::do_drawing() {
         
         float cursor_segment_ratio = 0;
         get_closest_point_in_line(
-            cross_section_points[0], cross_section_points[1],
+            cross_section_checkpoints[0], cross_section_checkpoints[1],
             point(mouse_cursor_w.x, mouse_cursor_w.y),
             &cursor_segment_ratio
         );
