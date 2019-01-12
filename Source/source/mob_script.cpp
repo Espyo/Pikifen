@@ -14,10 +14,11 @@
 #include <algorithm>
 #include <iostream>
 
+#include "mob_script.h"
+
 #include "functions.h"
 #include "mobs/mob.h"
-#include "mobs/mob_fsm.h"
-#include "mob_script.h"
+#include "mob_fsms/gen_mob_fsm.h"
 #include "mob_types/mob_type.h"
 #include "particle.h"
 #include "utils/string_utils.h"

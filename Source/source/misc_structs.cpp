@@ -12,11 +12,12 @@
 #include <algorithm>
 #include <climits>
 
+#include "misc_structs.h"
+
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
 #include "load.h"
-#include "misc_structs.h"
 #include "utils/string_utils.h"
 #include "vars.h"
 

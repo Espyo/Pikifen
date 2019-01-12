@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "ship_category.h"
+
 #include "../mobs/ship.h"
 #include "../vars.h"
 

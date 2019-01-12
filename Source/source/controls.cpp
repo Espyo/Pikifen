@@ -15,8 +15,9 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "const.h"
 #include "controls.h"
+
+#include "const.h"
 #include "drawing.h"
 #include "functions.h"
 #include "gameplay.h"

@@ -8,13 +8,14 @@
  * Pikmin finite state machine logic.
  */
 
+#include "pikmin_fsm.h"
+
 #include "../functions.h"
 #include "../hazard.h"
-#include "mob_fsm.h"
-#include "pikmin.h"
-#include "pikmin_fsm.h"
+#include "../mobs/pikmin.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the Pikmin's logic.

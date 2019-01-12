@@ -18,6 +18,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 
+#include "utils/geometry_utils.h"
+
 using namespace std;
 
 class menu_widget {

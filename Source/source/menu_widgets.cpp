@@ -13,8 +13,9 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "drawing.h"
 #include "menu_widgets.h"
+
+#include "drawing.h"
 #include "vars.h"
 
 const float menu_widget::ICON_SWAY_DELTA = 1.0f;

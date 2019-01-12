@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "pellet_category.h"
+
 #include "../mobs/pellet.h"
 #include "../vars.h"
 

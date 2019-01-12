@@ -8,12 +8,13 @@
  * Treasure class and treasure-related functions.
  */
 
+#include "treasure.h"
+
 #include "../drawing.h"
 #include "../functions.h"
-#include "ship.h"
-#include "treasure.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "ship.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a treasure.

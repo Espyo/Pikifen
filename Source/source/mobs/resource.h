@@ -11,9 +11,9 @@
 #ifndef RESOURCE_INCLUDED
 #define RESOURCE_INCLUDED
 
+#include "../mob_types/resource_type.h"
 #include "mob.h"
 #include "pile.h"
-#include "../mob_types/resource_type.h"
 
 enum RESOURCE_STATES {
     RESOURCE_STATE_IDLE_WAITING,

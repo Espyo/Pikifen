@@ -19,8 +19,8 @@
 #include "../animation.h"
 #include "../misc_structs.h"
 #include "../mob_script.h"
-#include "../particle.h"
 #include "../mob_types/pikmin_type.h"
+#include "../particle.h"
 #include "../sector.h"
 #include "../status.h"
 

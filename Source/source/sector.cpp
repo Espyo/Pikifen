@@ -16,10 +16,11 @@
 #include <queue>
 #include <unordered_set>
 
+#include "sector.h"
+
 #include "editors/area_editor/editor.h"
 #include "functions.h"
 #include "utils/geometry_utils.h"
-#include "sector.h"
 #include "utils/string_utils.h"
 #include "vars.h"
 

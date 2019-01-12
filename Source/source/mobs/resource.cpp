@@ -8,8 +8,9 @@
  * Resource class and resource-related functions.
  */
 
-#include "../drawing.h"
 #include "resource.h"
+
+#include "../drawing.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

@@ -8,9 +8,10 @@
  * Converter finite state machine logic.
  */
 
-#include "converter.h"
 #include "converter_fsm.h"
+
 #include "../functions.h"
+#include "../mobs/converter.h"
 #include "../utils/string_utils.h"
 
 

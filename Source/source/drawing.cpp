@@ -11,9 +11,10 @@
 #include <algorithm>
 #include <typeinfo>
 
+#include "drawing.h"
+
 #include "animation.h"
 #include "const.h"
-#include "drawing.h"
 #include "functions.h"
 #include "gameplay.h"
 #include "utils/geometry_utils.h"

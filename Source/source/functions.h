@@ -18,9 +18,9 @@
 #include "controls.h"
 #include "data_file.h"
 #include "mobs/leader.h"
-#include "mob_script.h"
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
+#include "mob_script.h"
 #include "sector.h"
 #include "vars.h"
 

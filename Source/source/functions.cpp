@@ -16,19 +16,20 @@
 #include <algorithm>
 #include <iostream>
 #include <math.h>
+#include <signal.h>
 #include <sstream>
 #include <stdlib.h>
-#include <signal.h>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "functions.h"
+
 #include "backtrace.h"
-#include "editors/animation_editor/editor.h"
 #include "const.h"
 #include "drawing.h"
-#include "functions.h"
+#include "editors/animation_editor/editor.h"
 #include "init.h"
 #include "menus.h"
 #include "utils/string_utils.h"

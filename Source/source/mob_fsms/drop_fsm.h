@@ -11,7 +11,6 @@
 #ifndef DROP_FSM_INCLUDED
 #define DROP_FSM_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/mob_type.h"
 
 

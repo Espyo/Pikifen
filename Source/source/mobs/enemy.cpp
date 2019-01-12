@@ -8,9 +8,10 @@
  * Enemy class and enemy-related functions.
  */
 
+#include "enemy.h"
+
 #include "../drawing.h"
 #include "../functions.h"
-#include "enemy.h"
 #include "../utils/math_utils.h"
 #include "../utils/string_utils.h"
 

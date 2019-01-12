@@ -8,12 +8,13 @@
  * Bridge finite state machine logic.
  */
 
-#include "../functions.h"
-#include "bridge.h"
 #include "bridge_fsm.h"
-#include "mob_fsm.h"
+
+#include "../functions.h"
+#include "../mobs/bridge.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the bridge's logic.

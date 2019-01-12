@@ -11,7 +11,6 @@
 #ifndef CONVERTER_FSM_INCLUDED
 #define CONVERTER_FSM_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/mob_type.h"
 
 

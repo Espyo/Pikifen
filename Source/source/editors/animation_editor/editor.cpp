@@ -14,6 +14,7 @@
 #include <allegro5/allegro.h>
 
 #include "editor.h"
+
 #include "../../functions.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
@@ -24,6 +25,7 @@
 #include "../../LAFI/scrollbar.h"
 #include "../../LAFI/textbox.h"
 #include "../../load.h"
+#include "../../mob_categories/pikmin_category.h"
 #include "../../utils/math_utils.h"
 #include "../../utils/string_utils.h"
 #include "../../vars.h"

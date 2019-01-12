@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "resource_category.h"
+
 #include "../mobs/resource.h"
 #include "../vars.h"
 

@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "leader_category.h"
+
 #include "../mobs/leader.h"
 #include "../vars.h"
 

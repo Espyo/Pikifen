@@ -11,7 +11,7 @@
 #ifndef GEN_MOB_FSM_INCLUDED
 #define GEN_MOB_FSM_INCLUDED
 
-#include "mob.h"
+#include "../mobs/mob.h"
 
 /* ----------------------------------------------------------------------------
  * Functions about the generic mob's finite state machine and behavior.

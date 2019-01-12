@@ -14,8 +14,8 @@
 #include <string>
 
 #include "../mob_types/gate_type.h"
-#include "mob.h"
 #include "../sector.h"
+#include "mob.h"
 
 using namespace std;
 

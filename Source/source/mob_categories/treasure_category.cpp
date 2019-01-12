@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "treasure_category.h"
+
 #include "../mobs/treasure.h"
 #include "../vars.h"
 

@@ -13,6 +13,8 @@
 #include <allegro5/allegro_native_dialog.h>
 
 #include "editor.h"
+
+#include "../../functions.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -23,7 +25,6 @@
 #include "../../LAFI/scrollbar.h"
 #include "../../LAFI/style.h"
 #include "../../LAFI/textbox.h"
-#include "../../functions.h"
 #include "../../load.h"
 #include "../../utils/string_utils.h"
 #include "../../vars.h"

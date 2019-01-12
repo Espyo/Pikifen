@@ -10,15 +10,16 @@
 
 #include <algorithm>
 
+#include "mob.h"
+
 #include "../const.h"
 #include "../drawing.h"
 #include "../functions.h"
 #include "../utils/geometry_utils.h"
-#include "mob.h"
-#include "pikmin.h"
-#include "ship.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "pikmin.h"
+#include "ship.h"
 
 
 size_t next_mob_id = 0;

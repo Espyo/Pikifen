@@ -10,13 +10,14 @@
 
 #include <algorithm>
 
+#include "gen_mob_fsm.h"
+
 #include "../const.h"
 #include "../functions.h"
-#include "enemy.h"
-#include "mob_fsm.h"
-#include "onion.h"
-#include "pikmin.h"
-#include "ship.h"
+#include "../mobs/enemy.h"
+#include "../mobs/onion.h"
+#include "../mobs/pikmin.h"
+#include "../mobs/ship.h"
 #include "../spray_type.h"
 
 /* ----------------------------------------------------------------------------

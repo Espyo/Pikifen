@@ -8,9 +8,10 @@
  * Onion finite state machine logic.
  */
 
-#include "../functions.h"
-#include "onion.h"
 #include "onion_fsm.h"
+
+#include "../functions.h"
+#include "../mobs/onion.h"
 #include "../particle.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"

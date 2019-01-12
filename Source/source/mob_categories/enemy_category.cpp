@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "enemy_category.h"
+
 #include "../mobs/enemy.h"
 #include "../vars.h"
 

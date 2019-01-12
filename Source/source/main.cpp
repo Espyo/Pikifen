@@ -15,27 +15,20 @@
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "editors/animation_editor/editor.h"
-#include "editors/area_editor/editor.h"
 #include "const.h"
 #include "controls.h"
 #include "drawing.h"
+#include "editors/animation_editor/editor.h"
+#include "editors/area_editor/editor.h"
 #include "functions.h"
 #include "init.h"
-#include "LAFI/button.h"
-#include "LAFI/checkbox.h"
-#include "LAFI/frame.h"
-#include "LAFI/label.h"
-#include "LAFI/radio_button.h"
-#include "LAFI/scrollbar.h"
-#include "LAFI/textbox.h"
 #include "load.h"
 #include "menus.h"
 #include "sector.h"

@@ -13,6 +13,7 @@
 #include <allegro5/allegro_native_dialog.h>
 
 #include "editor.h"
+
 #include "../../functions.h"
 #include "../../LAFI/button.h"
 #include "../../load.h"

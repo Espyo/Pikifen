@@ -163,42 +163,10 @@ const string AREAS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Areas";
 const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
-const string BRIDGES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Bridges";
-const string CONVERTERS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Converters";
-const string CUSTOM_MOB_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Custom";
-const string DROPS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Drops";
-const string ENEMIES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Enemies";
-const string INTERACTABLES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Interactables";
-const string GATES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Gates";
 const string GRAPHICS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Graphics";
-const string LEADERS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Leaders";
-const string ONIONS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Onions";
-const string OTHER_TYPES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Others";
-const string PELLETS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Pellets";
-const string PIKMIN_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Pikmin";
-const string PILES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Piles";
-const string RESOURCES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Resources";
-const string SHIPS_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Ships";
 const string TEXTURES_FOLDER_PATH =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
-const string TREASURES_FOLDER_PATH =
-    TYPES_FOLDER_PATH + "/Treasures";
 
 const string CONFIG_FILE =
     MISC_FOLDER_PATH + "/Config.txt";

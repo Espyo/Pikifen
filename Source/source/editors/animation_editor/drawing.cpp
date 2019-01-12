@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "editor.h"
+
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../vars.h"

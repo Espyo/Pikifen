@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "onion_category.h"
+
 #include "../mobs/onion.h"
 #include "../vars.h"
 

@@ -12,6 +12,7 @@
 #include <allegro5/allegro.h>
 
 #include "editor.h"
+
 #include "../../functions.h"
 #include "../../vars.h"
 

@@ -10,19 +10,20 @@
 
 #include <algorithm>
 
+#include "mob_type.h"
+
 #include "../const.h"
 #include "../functions.h"
+#include "../load.h"
+#include "../mob_fsms/gen_mob_fsm.h"
+#include "../utils/string_utils.h"
+#include "../vars.h"
 #include "enemy_type.h"
 #include "leader_type.h"
-#include "../load.h"
-#include "../mobs/mob_fsm.h"
-#include "mob_type.h"
 #include "onion_type.h"
 #include "pellet_type.h"
 #include "pikmin_type.h"
 #include "treasure_type.h"
-#include "../utils/string_utils.h"
-#include "../vars.h"
 
 using namespace std;
 

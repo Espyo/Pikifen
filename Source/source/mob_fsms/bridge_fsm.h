@@ -5,23 +5,22 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the gate finite state machine logic.
+ * Header for the bridge finite state machine logic.
  */
 
-#ifndef GATE_FSM_INCLUDED
-#define GATE_FSM_INCLUDED
+#ifndef BRIDGE_FSM_INCLUDED
+#define BRIDGE_FSM_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------
- * Functions about the gate's finite state machine and behavior.
+ * Functions about the bridge's finite state machine and behavior.
  */
-namespace gate_fsm {
+namespace bridge_fsm {
 void create_fsm(mob_type* typ);
 
 void open(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
 };
 
-#endif //ifndef GATE_FSM_INCLUDED
+#endif //ifndef BRIDGE_FSM_INCLUDED

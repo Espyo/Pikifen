@@ -13,10 +13,11 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "menus.h"
+
 #include "drawing.h"
 #include "functions.h"
 #include "load.h"
-#include "menus.h"
 #include "utils/string_utils.h"
 #include "vars.h"
 

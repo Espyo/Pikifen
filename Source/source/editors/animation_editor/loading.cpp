@@ -9,6 +9,7 @@
  */
 
 #include "editor.h"
+
 #include "../../functions.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"

@@ -14,9 +14,9 @@
 #include <allegro5/allegro.h>
 
 #include "../data_file.h"
-#include "mob_type.h"
 #include "../spray_type.h"
 #include "../status.h"
+#include "mob_type.h"
 
 enum DROP_ANIMATIONS {
     DROP_ANIM_IDLING,

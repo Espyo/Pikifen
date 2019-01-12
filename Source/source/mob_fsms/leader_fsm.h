@@ -11,7 +11,6 @@
 #ifndef LEADER_FSM_INCLUDED
 #define LEADER_FSM_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/mob_type.h"
 
 /* ----------------------------------------------------------------------------

@@ -10,10 +10,11 @@
 
 #include <algorithm>
 
-#include "../mobs/mob.h"
 #include "mob_category.h"
-#include "../mob_types/mob_type.h"
+
 #include "../functions.h"
+#include "../mobs/mob.h"
+#include "../mob_types/mob_type.h"
 #include "../vars.h"
 
 using namespace std;

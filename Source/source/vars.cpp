@@ -11,6 +11,7 @@
 #include <limits.h>
 
 #include "vars.h"
+
 #include "const.h"
 
 using namespace std;

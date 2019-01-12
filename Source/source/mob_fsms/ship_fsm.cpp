@@ -8,10 +8,11 @@
  * Ship finite state machine logic.
  */
 
-#include "../functions.h"
-#include "../particle.h"
-#include "ship.h"
 #include "ship_fsm.h"
+
+#include "../functions.h"
+#include "../mobs/ship.h"
+#include "../particle.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 

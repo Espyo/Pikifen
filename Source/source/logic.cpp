@@ -10,10 +10,11 @@
 
 #include <algorithm>
 
+#include "gameplay.h"
+
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
-#include "gameplay.h"
 #include "mobs/pikmin.h"
 #include "utils/string_utils.h"
 #include "vars.h"

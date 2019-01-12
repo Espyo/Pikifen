@@ -14,9 +14,13 @@
 #include <string>
 #include <vector>
 
+#include "../const.h"
 #include "../mob_categories/mob_category.h"
 
 using namespace std;
+
+
+const string DROPS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Drops";
 
 
 /* ----------------------------------------------------------------------------

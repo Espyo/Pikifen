@@ -8,9 +8,10 @@
  * Pellet class and pellet-related functions.
  */
 
+#include "pellet.h"
+
 #include "../drawing.h"
 #include "../functions.h"
-#include "pellet.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a pellet mob.

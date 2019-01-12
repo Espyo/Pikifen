@@ -8,10 +8,11 @@
  * Pellet type class and pellet type-related functions.
  */
 
-#include "../functions.h"
-#include "../mobs/mob_fsm.h"
-#include "../mobs/pellet_fsm.h"
 #include "pellet_type.h"
+
+#include "../functions.h"
+#include "../mob_fsms/gen_mob_fsm.h"
+#include "../mob_fsms/pellet_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 

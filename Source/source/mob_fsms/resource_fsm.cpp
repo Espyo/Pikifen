@@ -8,11 +8,12 @@
  * Resource finite state machine logic.
  */
 
-#include "../functions.h"
-#include "mob_fsm.h"
-#include "resource.h"
 #include "resource_fsm.h"
+
+#include "../functions.h"
+#include "../mobs/resource.h"
 #include "../utils/string_utils.h"
+#include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the resource's logic.

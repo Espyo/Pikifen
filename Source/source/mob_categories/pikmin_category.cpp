@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "pikmin_category.h"
+
 #include "../mobs/pikmin.h"
 #include "../vars.h"
 

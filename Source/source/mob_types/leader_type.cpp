@@ -8,12 +8,13 @@
  * Leader type class and leader type-related functions.
  */
 
-#include "../functions.h"
-#include "../mobs/leader_fsm.h"
 #include "leader_type.h"
-#include "../load.h"
-#include "../mobs/mob_fsm.h"
+
 #include "../const.h"
+#include "../functions.h"
+#include "../load.h"
+#include "../mob_fsms/gen_mob_fsm.h"
+#include "../mob_fsms/leader_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 

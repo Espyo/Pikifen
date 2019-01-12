@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <VirtualDirectory Name="mob_fsms">
+    <File Name="../source/mob_fsms/bridge_fsm.cpp"/>
+    <File Name="../source/mob_fsms/bridge_fsm.h"/>
+    <File Name="../source/mob_fsms/converter_fsm.cpp"/>
+    <File Name="../source/mob_fsms/converter_fsm.h"/>
+    <File Name="../source/mob_fsms/drop_fsm.cpp"/>
+    <File Name="../source/mob_fsms/drop_fsm.h"/>
+    <File Name="../source/mob_fsms/gate_fsm.cpp"/>
+    <File Name="../source/mob_fsms/gate_fsm.h"/>
+    <File Name="../source/mob_fsms/gen_mob_fsm.cpp"/>
+    <File Name="../source/mob_fsms/gen_mob_fsm.h"/>
+    <File Name="../source/mob_fsms/leader_fsm.cpp"/>
+    <File Name="../source/mob_fsms/leader_fsm.h"/>
+    <File Name="../source/mob_fsms/onion_fsm.cpp"/>
+    <File Name="../source/mob_fsms/onion_fsm.h"/>
+    <File Name="../source/mob_fsms/pellet_fsm.cpp"/>
+    <File Name="../source/mob_fsms/pellet_fsm.h"/>
+    <File Name="../source/mob_fsms/pikmin_fsm.cpp"/>
+    <File Name="../source/mob_fsms/pikmin_fsm.h"/>
+    <File Name="../source/mob_fsms/pile_fsm.cpp"/>
+    <File Name="../source/mob_fsms/pile_fsm.h"/>
+    <File Name="../source/mob_fsms/resource_fsm.cpp"/>
+    <File Name="../source/mob_fsms/resource_fsm.h"/>
+    <File Name="../source/mob_fsms/ship_fsm.cpp"/>
+    <File Name="../source/mob_fsms/ship_fsm.h"/>
+    <File Name="../source/mob_fsms/treasure_fsm.cpp"/>
+    <File Name="../source/mob_fsms/treasure_fsm.h"/>
+  </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
@@ -183,62 +211,36 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
-    <File Name="../source/mobs/pile_fsm.cpp"/>
-    <File Name="../source/mobs/pile_fsm.h"/>
     <File Name="../source/mobs/pile.cpp"/>
     <File Name="../source/mobs/pile.h"/>
-    <File Name="../source/mobs/resource_fsm.cpp"/>
-    <File Name="../source/mobs/resource_fsm.h"/>
     <File Name="../source/mobs/resource.cpp"/>
     <File Name="../source/mobs/resource.h"/>
-    <File Name="../source/mobs/converter_fsm.cpp"/>
-    <File Name="../source/mobs/converter_fsm.h"/>
     <File Name="../source/mobs/converter.cpp"/>
     <File Name="../source/mobs/converter.h"/>
-    <File Name="../source/mobs/drop_fsm.h"/>
-    <File Name="../source/mobs/drop_fsm.cpp"/>
     <File Name="../source/mobs/drop.cpp"/>
     <File Name="../source/mobs/drop.h"/>
     <File Name="../source/mobs/interactable.cpp"/>
     <File Name="../source/mobs/interactable.h"/>
     <File Name="../source/mobs/leader.cpp"/>
-    <File Name="../source/mobs/onion_fsm.cpp"/>
     <File Name="../source/mobs/ship.cpp"/>
-    <File Name="../source/mobs/treasure_fsm.h"/>
-    <File Name="../source/mobs/onion_fsm.h"/>
     <File Name="../source/mobs/onion.cpp"/>
-    <File Name="../source/mobs/gate_fsm.cpp"/>
     <File Name="../source/mobs/enemy.h"/>
     <File Name="../source/mobs/pikmin.cpp"/>
     <File Name="../source/mobs/gate.h"/>
-    <File Name="../source/mobs/leader_fsm.cpp"/>
     <File Name="../source/mobs/leader.h"/>
-    <File Name="../source/mobs/pikmin_fsm.cpp"/>
-    <File Name="../source/mobs/pikmin_fsm.h"/>
-    <File Name="../source/mobs/mob_fsm.h"/>
     <File Name="../source/mobs/mob.cpp"/>
-    <File Name="../source/mobs/gate_fsm.h"/>
-    <File Name="../source/mobs/pellet_fsm.h"/>
-    <File Name="../source/mobs/mob_fsm.cpp"/>
     <File Name="../source/mobs/mob.h"/>
     <File Name="../source/mobs/ship.h"/>
     <File Name="../source/mobs/treasure.h"/>
     <File Name="../source/mobs/pellet.h"/>
     <File Name="../source/mobs/pikmin.h"/>
-    <File Name="../source/mobs/treasure_fsm.cpp"/>
     <File Name="../source/mobs/gate.cpp"/>
     <File Name="../source/mobs/onion.h"/>
-    <File Name="../source/mobs/ship_fsm.cpp"/>
     <File Name="../source/mobs/pellet.cpp"/>
     <File Name="../source/mobs/enemy.cpp"/>
-    <File Name="../source/mobs/leader_fsm.h"/>
-    <File Name="../source/mobs/pellet_fsm.cpp"/>
     <File Name="../source/mobs/bridge.cpp"/>
-    <File Name="../source/mobs/ship_fsm.h"/>
     <File Name="../source/mobs/treasure.cpp"/>
     <File Name="../source/mobs/bridge.h"/>
-    <File Name="../source/mobs/bridge_fsm.cpp"/>
-    <File Name="../source/mobs/bridge_fsm.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

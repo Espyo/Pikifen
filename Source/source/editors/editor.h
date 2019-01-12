@@ -14,10 +14,10 @@
 #include <string>
 #include <vector>
 
+#include "../game_state.h"
 #include "../LAFI/frame.h"
 #include "../LAFI/gui.h"
 #include "../LAFI/label.h"
-#include "../game_state.h"
 #include "../misc_structs.h"
 
 using namespace std;

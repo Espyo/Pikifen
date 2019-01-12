@@ -9,6 +9,7 @@
  */
 
 #include "interactable_type.h"
+
 #include "../utils/string_utils.h"
 
 

@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "gate_category.h"
+
 #include "../mobs/gate.h"
 #include "../vars.h"
 

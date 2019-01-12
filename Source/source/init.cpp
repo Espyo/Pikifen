@@ -12,20 +12,20 @@
 #include <csignal>
 
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
 #include "init.h"
 
-#include "editors/area_editor/editor.h"
-#include "editors/animation_editor/editor.h"
 #include "controls.h"
+#include "editors/animation_editor/editor.h"
+#include "editors/area_editor/editor.h"
 #include "functions.h"
-#include "game_state.h"
 #include "gameplay.h"
+#include "game_state.h"
 #include "menus.h"
 #include "mob_categories/bridge_category.h"
 #include "mob_categories/converter_category.h"

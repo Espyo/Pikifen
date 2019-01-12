@@ -8,10 +8,11 @@
  * Ship type class and ship type-related functions.
  */
 
+#include "ship_type.h"
+
 #include "../functions.h"
 #include "../mobs/ship.h"
-#include "../mobs/ship_fsm.h"
-#include "ship_type.h"
+#include "../mob_fsms/ship_fsm.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

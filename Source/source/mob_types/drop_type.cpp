@@ -9,8 +9,9 @@
  */
 
 #include "drop_type.h"
-#include "../mobs/drop_fsm.h"
+
 #include "../functions.h"
+#include "../mob_fsms/drop_fsm.h"
 
 
 /* ----------------------------------------------------------------------------

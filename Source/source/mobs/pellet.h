@@ -11,9 +11,9 @@
 #ifndef PELLET_INCLUDED
 #define PELLET_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/pellet_type.h"
 #include "../mob_types/pikmin_type.h"
+#include "mob.h"
 
 enum PELLET_STATES {
     PELLET_STATE_IDLE_WAITING,

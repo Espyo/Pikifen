@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "interactable_category.h"
+
 #include "../mob_types/interactable_type.h"
 #include "../vars.h"
 

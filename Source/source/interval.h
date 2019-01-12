@@ -12,6 +12,7 @@
 #define INTERVAL_INCLUDED
 
 #include <cfloat>
+#include <string>
 #include <vector>
 
 using namespace std;

@@ -15,8 +15,8 @@
 
 #include "../data_file.h"
 #include "../misc_structs.h"
-#include "mob_type.h"
 #include "../spray_type.h"
+#include "mob_type.h"
 
 enum RESOURCE_ANIMATIONS {
     RESOURCE_ANIM_IDLING,

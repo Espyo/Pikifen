@@ -13,10 +13,10 @@
 
 class leader;
 
+#include "../mob_types/pikmin_type.h"
 #include "enemy.h"
 #include "leader.h"
 #include "onion.h"
-#include "../mob_types/pikmin_type.h"
 
 enum PIKMIN_STATES {
     PIKMIN_STATE_IN_GROUP_CHASING,

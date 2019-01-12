@@ -8,11 +8,12 @@
  * Treasure type class and treasure type-related functions.
  */
 
-#include "../functions.h"
-#include "../mobs/mob_fsm.h"
-#include "../mobs/treasure.h"
-#include "../mobs/treasure_fsm.h"
 #include "treasure_type.h"
+
+#include "../functions.h"
+#include "../mobs/treasure.h"
+#include "../mob_fsms/gen_mob_fsm.h"
+#include "../mob_fsms/treasure_fsm.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

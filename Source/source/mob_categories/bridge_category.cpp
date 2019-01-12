@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "bridge_category.h"
+
 #include "../mobs/bridge.h"
 #include "../vars.h"
 

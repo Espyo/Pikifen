@@ -11,9 +11,10 @@
 #ifndef SHIP_INCLUDED
 #define SHIP_INCLUDED
 
-#include "leader.h"
 #include "mob.h"
+
 #include "../mob_types/ship_type.h"
+#include "leader.h"
 
 enum SHIP_STATES {
     SHIP_STATE_IDLING,

@@ -8,14 +8,15 @@
  * Leader finite state machine logic.
  */
 
+#include "leader_fsm.h"
+
 #include "../functions.h"
 #include "../gameplay.h"
-#include "leader.h"
-#include "leader_fsm.h"
+#include "../mobs/leader.h"
 #include "../mob_types/leader_type.h"
-#include "mob_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "gen_mob_fsm.h"
 
 
 /* ----------------------------------------------------------------------------

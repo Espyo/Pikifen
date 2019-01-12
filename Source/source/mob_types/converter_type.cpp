@@ -9,8 +9,9 @@
  */
 
 #include "converter_type.h"
-#include "../mobs/converter_fsm.h"
+
 #include "../functions.h"
+#include "../mob_fsms/converter_fsm.h"
 
 
 /* ----------------------------------------------------------------------------

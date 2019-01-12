@@ -8,9 +8,10 @@
  * Bridge type class and bridge type-related functions.
  */
 
-#include "../mobs/bridge.h"
-#include "../mobs/bridge_fsm.h"
 #include "bridge_type.h"
+
+#include "../mobs/bridge.h"
+#include "../mob_fsms/bridge_fsm.h"
 #include "../mob_script.h"
 #include "../vars.h"
 

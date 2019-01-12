@@ -8,10 +8,11 @@
  * Resource type class and resource type-related functions.
  */
 
+#include "resource_type.h"
+
 #include "../functions.h"
 #include "../mobs/resource.h"
-#include "../mobs/resource_fsm.h"
-#include "resource_type.h"
+#include "../mob_fsms/resource_fsm.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

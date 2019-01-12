@@ -8,8 +8,9 @@
  * Interval class and interval-related functions.
  */
 
-#include "functions.h"
 #include "interval.h"
+
+#include "functions.h"
 #include "utils/string_utils.h"
 
 //TODO document these functions.

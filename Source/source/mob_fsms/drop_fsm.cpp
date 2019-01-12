@@ -8,9 +8,10 @@
  * Drop finite state machine logic.
  */
 
-#include "drop.h"
 #include "drop_fsm.h"
+
 #include "../functions.h"
+#include "../mobs/drop.h"
 #include "../utils/string_utils.h"
 
 

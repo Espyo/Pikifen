@@ -15,9 +15,9 @@
 #include <math.h>
 
 #include "../misc_structs.h"
-#include "mob.h"
-#include "../mob_types/pikmin_type.h"
 #include "../mob_types/onion_type.h"
+#include "../mob_types/pikmin_type.h"
+#include "mob.h"
 
 enum ONION_STATES {
     ONION_STATE_IDLING,

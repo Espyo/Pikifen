@@ -9,6 +9,8 @@
  */
 
 #include "editor.h"
+
+#include "../../functions.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -16,7 +18,6 @@
 #include "../../LAFI/radio_button.h"
 #include "../../LAFI/scrollbar.h"
 #include "../../LAFI/textbox.h"
-#include "../../functions.h"
 #include "../../utils/string_utils.h"
 #include "../../vars.h"
 

@@ -11,8 +11,8 @@
 #ifndef PILE_INCLUDED
 #define PILE_INCLUDED
 
-#include "mob.h"
 #include "../mob_types/pile_type.h"
+#include "mob.h"
 
 enum PILE_STATES {
     PILE_STATE_IDLING,

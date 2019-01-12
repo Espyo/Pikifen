@@ -8,12 +8,13 @@
  * Gate finite state machine logic.
  */
 
-#include "../functions.h"
-#include "gate.h"
 #include "gate_fsm.h"
-#include "mob_fsm.h"
+
+#include "../functions.h"
+#include "../mobs/gate.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
+#include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the gate's logic.

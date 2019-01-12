@@ -10,10 +10,11 @@
 
 #include <algorithm>
 
-#include "../const.h"
-#include "../functions.h"
-#include "../drawing.h"
 #include "leader.h"
+
+#include "../const.h"
+#include "../drawing.h"
+#include "../functions.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

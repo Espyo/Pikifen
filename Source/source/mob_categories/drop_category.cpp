@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "drop_category.h"
+
 #include "../mobs/drop.h"
 #include "../vars.h"
 

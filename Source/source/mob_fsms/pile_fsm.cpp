@@ -10,12 +10,13 @@
 
 #include <algorithm>
 
+#include "pile_fsm.h"
+
 #include "../const.h"
 #include "../functions.h"
-#include "mob_fsm.h"
-#include "pile.h"
-#include "pile_fsm.h"
+#include "../mobs/pile.h"
 #include "../utils/string_utils.h"
+#include "gen_mob_fsm.h"
 
 using namespace std;
 

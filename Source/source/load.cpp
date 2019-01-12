@@ -12,9 +12,9 @@
 
 #include "load.h"
 
-#include "editors/area_editor/editor.h"
 #include "const.h"
 #include "drawing.h"
+#include "editors/area_editor/editor.h"
 #include "functions.h"
 #include "init.h"
 #include "utils/string_utils.h"

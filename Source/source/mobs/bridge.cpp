@@ -9,6 +9,7 @@
  */
 
 #include "bridge.h"
+
 #include "../functions.h"
 #include "../vars.h"
 

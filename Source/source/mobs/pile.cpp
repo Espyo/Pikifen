@@ -8,11 +8,12 @@
  * Pile class and pile-related functions.
  */
 
+#include "pile.h"
+
 #include "../drawing.h"
 #include "../functions.h"
-#include "pile.h"
-#include "../vars.h"
 #include "../utils/string_utils.h"
+#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a pile.

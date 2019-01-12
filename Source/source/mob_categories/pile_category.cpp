@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "pile_category.h"
+
 #include "../mobs/pile.h"
 #include "../vars.h"
 

@@ -10,11 +10,12 @@
 
 #include <algorithm>
 
+#include "particle.h"
+
 #include "drawing.h"
 #include "functions.h"
-#include "utils/geometry_utils.h"
 #include "mobs/mob.h"
-#include "particle.h"
+#include "utils/geometry_utils.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------

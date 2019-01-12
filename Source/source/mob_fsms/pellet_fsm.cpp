@@ -5,23 +5,24 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Treasure finite state machine logic.
+ * Pellet finite state machine logic.
  */
+
+#include "pellet_fsm.h"
 
 #include "../functions.h"
-#include "mob_fsm.h"
-#include "treasure.h"
-#include "treasure_fsm.h"
+#include "../mobs/onion.h"
+#include "../mobs/pellet.h"
 #include "../utils/string_utils.h"
-#include "ship.h"
+#include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
- * Creates the finite state machine for the treasure's logic.
+ * Creates the finite state machine for the pellet's logic.
  */
-void treasure_fsm::create_fsm(mob_type* typ) {
+void pellet_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
-    efc.new_state("idle_waiting", TREASURE_STATE_IDLE_WAITING); {
+    efc.new_state("idle_waiting", PELLET_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_stop_move);
         }
@@ -37,7 +38,7 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("idle_moving", TREASURE_STATE_IDLE_MOVING); {
+    efc.new_state("idle_moving", PELLET_STATE_IDLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_begin_move);
         }
@@ -59,18 +60,15 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.run(gen_mob_fsm::carry_reach_destination);
         }
-        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
-            efc.change_state("being_delivered");
-        }
         efc.new_event(MOB_EVENT_CARRY_STUCK); {
             efc.change_state("idle_stuck");
         }
-        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run(treasure_fsm::respawn);
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.change_state("being_delivered");
         }
     }
     
-    efc.new_state("idle_stuck", TREASURE_STATE_IDLE_STUCK); {
+    efc.new_state("idle_stuck", PELLET_STATE_IDLE_STUCK); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_become_stuck);
         }
@@ -90,12 +88,9 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.change_state("idle_moving");
         }
-        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run(treasure_fsm::respawn);
-        }
     }
     
-    efc.new_state("being_delivered", TREASURE_STATE_BEING_DELIVERED); {
+    efc.new_state("being_delivered", PELLET_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::start_being_delivered);
         }
@@ -110,18 +105,8 @@ void treasure_fsm::create_fsm(mob_type* typ) {
     
     //Check if the number in the enum and the total match up.
     engine_assert(
-        typ->states.size() == N_TREASURE_STATES,
+        typ->states.size() == N_PELLET_STATES,
         i2s(typ->states.size()) + " registered, " +
-        i2s(N_TREASURE_STATES) + " in enum."
+        i2s(N_PELLET_STATES) + " in enum."
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a treasure falls into a bottomless pit and should respawn.
- */
-void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
-    m->become_uncarriable(); //Force all Pikmin to let go.
-    m->become_carriable(CARRY_DESTINATION_SHIP);
-    m->respawn();
 }
