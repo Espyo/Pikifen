@@ -23,11 +23,11 @@
 #include "../particle.h"
 #include "../sector.h"
 #include "../status.h"
+#include "mob_utils.h"
 
 using namespace std;
 
 class mob_type;
-class mob;
 
 extern size_t next_mob_id;
 
@@ -40,6 +40,25 @@ const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 const float THROW_DISTANCE_MULTIPLIER = 0.49f;
 //When a leader throws a Pikmin, multiply the strength by this.
 const float THROW_STRENGTH_MULTIPLIER = 0.457f;
+
+enum DISABLED_STATE_FLAGS {
+    //The Pikmin cannot be eaten by enemies.
+    DISABLED_STATE_FLAG_INEDIBLE = 1,
+};
+
+enum MOB_PARTICLE_GENERATOR_IDS {
+    MOB_PARTICLE_GENERATOR_NONE,
+    //Custom particle generator issued by the script.
+    MOB_PARTICLE_GENERATOR_SCRIPT,
+    //Trail effect left behind by a throw.
+    MOB_PARTICLE_GENERATOR_THROW,
+    //Ring-shaped wave when going in water.
+    MOB_PARTICLE_GENERATOR_WAVE_RING,
+    
+    //Specific status effects are numbered starting on this.
+    //So make sure this is the last on the enum.
+    MOB_PARTICLE_GENERATOR_STATUS,
+};
 
 enum MOB_TEAMS {
     //Can hurt everything, cannot be hurt.
@@ -59,238 +78,6 @@ enum MOB_TEAMS {
     MOB_TEAM_BOTTOM,
     //Cannot be hurt or targeted by anything.
     MOB_TEAM_PROP,
-};
-
-enum MOB_PARTICLE_GENERATOR_IDS {
-    MOB_PARTICLE_GENERATOR_NONE,
-    //Custom particle generator issued by the script.
-    MOB_PARTICLE_GENERATOR_SCRIPT,
-    //Trail effect left behind by a throw.
-    MOB_PARTICLE_GENERATOR_THROW,
-    //Ring-shaped wave when going in water.
-    MOB_PARTICLE_GENERATOR_WAVE_RING,
-    
-    //Specific status effects are numbered starting on this.
-    //So make sure this is the last on the enum.
-    MOB_PARTICLE_GENERATOR_STATUS,
-};
-
-enum DISABLED_STATE_FLAGS {
-    //The Pikmin cannot be eaten by enemies.
-    DISABLED_STATE_FLAG_INEDIBLE = 1,
-};
-
-enum PARTICLE_PRIORITIES {
-    PARTICLE_PRIORITY_LOW,
-    PARTICLE_PRIORITY_MEDIUM,
-    PARTICLE_PRIORITY_HIGH,
-};
-
-enum CARRY_SPOT_STATES {
-    CARRY_SPOT_FREE,
-    CARRY_SPOT_RESERVED,
-    CARRY_SPOT_USED,
-};
-
-enum CARRY_DESTINATIONS {
-    CARRY_DESTINATION_SHIP,
-    CARRY_DESTINATION_ONION,
-    CARRY_DESTINATION_LINKED_MOB,
-};
-
-
-/* ----------------------------------------------------------------------------
- * Information about a spot in a group.
- */
-struct group_spot {
-    point pos; //Relative to the anchor.
-    mob* mob_ptr;
-    group_spot(const point &p = point(), mob* m = NULL) :
-        pos(p), mob_ptr(m) {}
-};
-
-
-/* ----------------------------------------------------------------------------
- * Information on a mob's group.
- * This includes a list of its members,
- * and the location and info of the spots in the
- * circle, when the members are following the mob.
- */
-struct group_info {
-    vector<mob*> members;
-    vector<group_spot> spots;
-    float radius;
-    point anchor; //Position of element 0 of the group (frontmost member).
-    ALLEGRO_TRANSFORM transform;
-    subgroup_type* cur_standby_type;
-    bool follow_mode;
-    
-    void init_spots(mob* affected_mob_ptr = NULL);
-    void sort(subgroup_type* leading_type);
-    point get_average_member_pos();
-    point get_spot_offset(const size_t spot_index);
-    void reassign_spots();
-    bool set_next_cur_standby_type(const bool move_backwards);
-    group_info(mob* leader_ptr);
-};
-
-
-/* ----------------------------------------------------------------------------
- * Information on a carrying spot around a mob's perimeter.
- */
-struct carrier_spot_struct {
-    unsigned char state;
-    //Relative coordinates of each spot.
-    //They avoid calculating several sines and cosines over and over.
-    point pos;
-    mob* pik_ptr;
-    carrier_spot_struct(const point &pos);
-};
-
-
-/* ----------------------------------------------------------------------------
- * Structure with information on how
- * the mob should be carried.
- */
-struct carry_info_struct {
-    //Mob that this struct belongs to.
-    mob* m;
-    //Generic type of delivery destination. Use CARRY_DESTINATION_*.
-    size_t destination;
-    
-    vector<carrier_spot_struct> spot_info;
-    
-    //This is to avoid going through the vector
-    //only to find out the total strength.
-    float cur_carrying_strength;
-    //Likewise, this is to avoid going through the vector
-    //only to find out the number. Note that this is the number
-    //of spaces reserved. A Pikmin could be on its way to its spot,
-    //not necessarily there already.
-    size_t cur_n_carriers;
-    //When stuck, look out for these obstacles. They may fix the situation.
-    unordered_set<mob*> obstacle_ptrs;
-    //Are the Pikmin stuck with nowhere to go?
-    bool is_stuck;
-    //Is the object moving at the moment?
-    bool is_moving;
-    //When the object begins moving, the idea is to carry it to this mob.
-    mob* intended_mob;
-    //When the object begins moving, the idea is to carry it to this point.
-    point intended_point;
-    //Is the Pikmin meant to return somewhere after carrying?
-    bool must_return;
-    //Location to return true.
-    point return_point;
-    //Distance from the return point to stop at.
-    float return_dist;
-    
-    carry_info_struct(mob* m, const size_t destination);
-    bool is_empty();
-    bool is_full();
-    float get_speed();
-    void rotate_points(const float angle);
-    ~carry_info_struct();
-};
-
-
-/* ----------------------------------------------------------------------------
- * Structure with information on how to travel through the path graph that
- * the mob intends to travel.
- */
-struct path_info_struct {
-    //Mob that this struct belongs to.
-    mob* m;
-    //Target location.
-    point target_point;
-    //Path to take the mob to while being carried.
-    vector<path_stop*> path;
-    //Index of the current stop in the projected carrying path.
-    size_t cur_path_stop_nr;
-    //List of all obstacles located somewhere in the path.
-    unordered_set<mob*> obstacle_ptrs;
-    //If true, it's best to go straight to the target point
-    //instead of taking a path.
-    bool go_straight;
-    //For the chase from the final path stop to the target, use this
-    //value in the target_distance parameter.
-    float final_target_distance;
-    
-    path_info_struct(mob* m, const point &target);
-};
-
-
-/* ----------------------------------------------------------------------------
- * Structure with information about what mob or point that this
- * mob is circling around, if any.
- */
-struct circling_info_struct {
-    //Mob that this struct belongs to.
-    mob* m;
-    //Mob that it is circling.
-    mob* circling_mob;
-    //Point that it is circling, if it's not circling a mob.
-    point circling_point;
-    //Radius at which to circle around.
-    float radius;
-    //Is it circling clockwise?
-    bool clockwise;
-    //Speed at which to move.
-    float speed;
-    //Can the mob move freely, or only forward?
-    bool can_free_move;
-    //Angle of the circle to go to.
-    float cur_angle;
-    
-    circling_info_struct(mob* m);
-};
-
-
-/* ----------------------------------------------------------------------------
- * Structure with information about how this mob is currently being held by
- * another, if it is.
- */
-struct hold_info_struct {
-    //Points to the mob holding the current one, if any.
-    mob* m;
-    //ID of the hitbox the mob is attached to.
-    //If INVALID, it's attached to the mob center.
-    size_t hitbox_nr;
-    //Ratio of distance from the hitbox/body center. 1 is the full radius.
-    float offset_dist;
-    //Angle the mob makes with the center of the hitbox/body.
-    float offset_angle;
-    //Is the mob drawn above the holder?
-    bool above_holder;
-    
-    hold_info_struct();
-    void clear();
-    point get_final_pos(float* final_z);
-};
-
-
-/* ----------------------------------------------------------------------------
- * Structure with information about this mob's parent, if any.
- */
-struct parent_mob_info {
-    mob* m;
-    bool handle_damage;
-    bool relay_damage;
-    bool handle_statuses;
-    bool relay_statuses;
-    bool handle_events;
-    bool relay_events;
-    
-    //Limbs are visible connective textures between both mobs.
-    animation_instance limb_anim;
-    float limb_thickness;
-    size_t limb_parent_body_part;
-    float limb_parent_offset;
-    size_t limb_child_body_part;
-    float limb_child_offset;
-    unsigned char limb_draw_method;
-    
-    parent_mob_info(mob* m);
 };
 
 
@@ -581,21 +368,5 @@ public:
     mob_with_anim_groups();
 };
 
-
-void calculate_knockback(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h, float* knockback, float* angle
-);
-void cause_hitbox_damage(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h, float* total_damage
-);
-mob* create_mob(
-    mob_category* category, const point &pos, mob_type* type,
-    const float angle, const string &vars,
-    function<void(mob*)> code_after_creation = nullptr
-);
-void delete_mob(mob* m, const bool complete_destruction = false);
-size_t string_to_team_nr(const string &team_str);
 
 #endif //ifndef MOB_INCLUDED

@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
+    </Plugin>
+    <Plugin Name="CppCheck"/>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="mob_fsms">
     <File Name="../source/mob_fsms/bridge_fsm.cpp"/>
     <File Name="../source/mob_fsms/bridge_fsm.h"/>
@@ -28,24 +46,6 @@
     <File Name="../source/mob_fsms/treasure_fsm.cpp"/>
     <File Name="../source/mob_fsms/treasure_fsm.h"/>
   </VirtualDirectory>
-  <Plugins>
-    <Plugin Name="qmake">
-      <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
-    </Plugin>
-    <Plugin Name="CppCheck"/>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
   <VirtualDirectory Name="mob_types">
     <File Name="../source/mob_types/pile_type.cpp"/>
     <File Name="../source/mob_types/pile_type.h"/>
@@ -211,6 +211,8 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/mob_utils.cpp"/>
+    <File Name="../source/mobs/mob_utils.h"/>
     <File Name="../source/mobs/pile.cpp"/>
     <File Name="../source/mobs/pile.h"/>
     <File Name="../source/mobs/resource.cpp"/>

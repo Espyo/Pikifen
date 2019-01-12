@@ -27,6 +27,12 @@ enum PARTICLE_TYPES {
     PARTICLE_TYPE_SMACK,
 };
 
+enum PARTICLE_PRIORITIES {
+    PARTICLE_PRIORITY_LOW,
+    PARTICLE_PRIORITY_MEDIUM,
+    PARTICLE_PRIORITY_HIGH,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A particle is best described with examples:
