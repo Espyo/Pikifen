@@ -52,6 +52,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_SET_HEALTH,
     MOB_ACTION_SET_HIDING,
+    MOB_ACTION_SET_HOLDABLE,
     MOB_ACTION_SET_LIMB_ANIMATION,
     MOB_ACTION_SET_NEAR_REACH,
     MOB_ACTION_SET_STATE,
@@ -199,6 +200,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUS_OFF_REACH,
     //When a frame of animation sends a signal.
     MOB_EVENT_FRAME_SIGNAL,
+    //When it just got held by another mob.
+    MOB_EVENT_HELD,
     //When it has been damaged enough to want to shake.
     MOB_EVENT_ITCH,
     //When it leaves a hazard in a sector.
@@ -213,6 +216,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_REACHED_DESTINATION,
     //When it receives a message from another mob.
     MOB_EVENT_RECEIVE_MESSAGE,
+    //When it is safely released from the leader's/enemy's grasp.
+    MOB_EVENT_RELEASED,
     //When it gets touched by a leader.
     MOB_EVENT_TOUCHED_ACTIVE_LEADER,
     //When it touches a hazard (sector or hitbox).
@@ -238,9 +243,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_DISMISSED,
     //When it is thrown.
     MOB_EVENT_THROWN,
-    //When it is released from the leader's/enemy's grasp
-    //(e.g. swap for another Pikmin while holding)
-    MOB_EVENT_RELEASED,
     //When it lands on the ground.
     MOB_EVENT_LANDED,
     //When it is near a task (Pikmin only).

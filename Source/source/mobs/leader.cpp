@@ -356,7 +356,6 @@ void leader::swap_held_pikmin(mob* new_pik) {
     
     if(!old_pik_ev || !new_pik_ev) return;
     
-    old_pik_ev->run(holding[0]);
     new_pik_ev->run(new_pik);
     
     release(holding[0]);

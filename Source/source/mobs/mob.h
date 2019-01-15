@@ -46,6 +46,13 @@ enum DISABLED_STATE_FLAGS {
     DISABLED_STATE_FLAG_INEDIBLE = 1,
 };
 
+enum HOLDABILITY_FLAGS {
+    //The mob can be held by Pikmin.
+    HOLDABLE_BY_PIKMIN = 1,
+    //The mob can be held by enemies.
+    HOLDABLE_BY_ENEMIES = 2,
+};
+
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.
@@ -247,6 +254,8 @@ public:
     size_t chomp_max;
     //If the mob is currently "disabled", these flags specify behavior.
     unsigned char disabled_state_flags;
+    //Flags indicating if and how the mob can be held by other mobs.
+    unsigned char holdability_flags;
     //If this mob is a sub-mob, this points to the parent mob.
     parent_mob_info* parent;
     

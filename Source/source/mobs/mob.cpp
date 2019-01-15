@@ -82,6 +82,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     dead(false),
     chomp_max(0),
     disabled_state_flags(0),
+    holdability_flags(0),
     parent(nullptr) {
     
     next_mob_id++;
@@ -1297,6 +1298,7 @@ void mob::hold(
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
     m->holder.above_holder = above_holder;
+    m->fsm.run_event(MOB_EVENT_HELD, (void*) this);
 }
 
 
@@ -1405,6 +1407,7 @@ void mob::read_script_vars(const string &vars) {
 void mob::release(mob* m) {
     for(size_t h = 0; h < holding.size(); ++h) {
         if(holding[h] == m) {
+            m->fsm.run_event(MOB_EVENT_RELEASED, (void*) this);
             holding.erase(holding.begin() + h);
             break;
         }

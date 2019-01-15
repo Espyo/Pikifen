@@ -445,6 +445,35 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "set_holdable") {
+    
+        type = MOB_ACTION_SET_HOLDABLE;
+        
+        if(v.empty()) {
+            valid = false;
+            log_error(
+                "The set_holdable action needs to know the new rules!", dn
+            );
+        } else {
+            unsigned char final_flags = 0;
+            for(size_t word_nr = 0; word_nr < v_words.size(); ++word_nr) {
+            
+                if(v_words[word_nr] == "unholdable") {
+                    final_flags = 0;
+                    break;
+                    
+                } else if(v_words[word_nr] == "pikmin") {
+                    final_flags |= HOLDABLE_BY_PIKMIN;
+                    
+                } else if(v_words[word_nr] == "enemies") {
+                    final_flags |= HOLDABLE_BY_ENEMIES;
+                }
+            }
+            
+            vi.push_back(final_flags);
+        }
+        
+        
     } else if(n == "set_limb_animation") {
     
         type = MOB_ACTION_SET_LIMB_ANIMATION;
@@ -1137,6 +1166,7 @@ bool mob_action::run(
     
         m->far_reach = vi[0];
         
+        
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
         m->gravity_mult = vf[0];
@@ -1154,6 +1184,11 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_SET_HIDING) {
     
         m->hide = vi[0];
+        
+        
+    } else if(type == MOB_ACTION_SET_HOLDABLE) {
+    
+        m->holdability_flags = vi[0];
         
         
     } else if(type == MOB_ACTION_SET_NEAR_REACH) {
@@ -1465,26 +1500,28 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     else if(n == (name)) type = (number)
     
     string n = d->name;
-    if(n == "on_enter")  type = MOB_EVENT_ON_ENTER;
-    r("on_leave",               MOB_EVENT_ON_LEAVE);
-    r("on_tick",                MOB_EVENT_ON_TICK);
-    r("on_animation_end",       MOB_EVENT_ANIMATION_END);
-    r("on_damage",              MOB_EVENT_DAMAGE);
-    r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
-    r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
-    r("on_frame_signal",        MOB_EVENT_FRAME_SIGNAL);
-    r("on_itch",                MOB_EVENT_ITCH);
-    r("on_land",                MOB_EVENT_LANDED);
-    r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
-    r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
-    r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
-    r("on_receive_message",     MOB_EVENT_RECEIVE_MESSAGE);
-    r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
-    r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
-    r("on_touch_object",        MOB_EVENT_TOUCHED_OBJECT);
-    r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);
-    r("on_touch_wall",          MOB_EVENT_TOUCHED_WALL);
-    r("on_timer",               MOB_EVENT_TIMER);
+    if(n == "on_enter") type = MOB_EVENT_ON_ENTER;
+    r("on_leave",              MOB_EVENT_ON_LEAVE);
+    r("on_tick",               MOB_EVENT_ON_TICK);
+    r("on_animation_end",      MOB_EVENT_ANIMATION_END);
+    r("on_damage",             MOB_EVENT_DAMAGE);
+    r("on_far_from_home",      MOB_EVENT_FAR_FROM_HOME);
+    r("on_focus_off_reach",    MOB_EVENT_FOCUS_OFF_REACH);
+    r("on_frame_signal",       MOB_EVENT_FRAME_SIGNAL);
+    r("on_held",               MOB_EVENT_HELD);
+    r("on_itch",               MOB_EVENT_ITCH);
+    r("on_land",               MOB_EVENT_LANDED);
+    r("on_object_in_reach",    MOB_EVENT_OBJECT_IN_REACH);
+    r("on_opponent_in_reach",  MOB_EVENT_OPPONENT_IN_REACH);
+    r("on_pikmin_land",        MOB_EVENT_PIKMIN_LANDED);
+    r("on_receive_message",    MOB_EVENT_RECEIVE_MESSAGE);
+    r("on_released",           MOB_EVENT_RELEASED);
+    r("on_reach_destination",  MOB_EVENT_REACHED_DESTINATION);
+    r("on_touch_hazard",       MOB_EVENT_TOUCHED_HAZARD);
+    r("on_touch_object",       MOB_EVENT_TOUCHED_OBJECT);
+    r("on_touch_opponent",     MOB_EVENT_TOUCHED_OPPONENT);
+    r("on_touch_wall",         MOB_EVENT_TOUCHED_WALL);
+    r("on_timer",              MOB_EVENT_TIMER);
     else {
         type = MOB_EVENT_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", d);
