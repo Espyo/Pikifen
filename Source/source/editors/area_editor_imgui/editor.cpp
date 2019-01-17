@@ -1,8 +1,7 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2018.
- * The following source file belongs to the open-source project
- * Pikifen. Please read the included
- * README and LICENSE files for more information.
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
@@ -14,12 +13,13 @@
 #include <allegro5/allegro_native_dialog.h>
 
 #include "editor.h"
+
+#include "../../functions.h"
 #include "../../imgui/imgui.h"
 #include "../../imgui/imgui_impl_allegro5.h"
-#include "../../vars.h"
-#include "../../functions.h"
 #include "../../load.h"
 #include "../../utils/string_utils.h"
+#include "../../vars.h"
 
 using namespace std;
 
@@ -566,8 +566,8 @@ void area_editor_imgui::clear_current_area() {
     path_preview.clear();
     path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
     path_preview_checkpoints[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    cross_section_points[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
-    cross_section_points[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    cross_section_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    cross_section_checkpoints[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
     
     clear_texture_suggestions();
     
@@ -2375,6 +2375,17 @@ void area_editor_imgui::load() {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     ImGui::StyleColorsDark();
     ImGui_ImplAllegro5_Init(display);
+
+    imgui_canvas_column_separator_x = -1;
+
+    if(!area_editor_quick_play.empty()) {
+        cur_area_name = area_editor_quick_play;
+        area_editor_quick_play.clear();
+        load_area(false);
+    } else if(!auto_load_area.empty()) {
+        cur_area_name = auto_load_area;
+        load_area(false);
+    }
 }
 
 
@@ -3462,6 +3473,45 @@ vertex* area_editor_imgui::split_edge(edge* e_ptr, const point &where) {
 
 
 /* ----------------------------------------------------------------------------
+ * Splits a path link into two, near the specified point, and returns the
+ * newly-created path stop. The new stop gets added to the current area.
+ */
+path_stop* area_editor_imgui::split_path_link(
+    const pair<path_stop*, path_stop*> &l1,
+    const pair<path_stop*, path_stop*> &l2,
+    const point &where
+) {
+    bool normal_link = (l2.first != NULL);
+    point new_s_pos =
+        get_closest_point_in_line(
+            l1.first->pos, l1.second->pos,
+            where
+        );
+        
+    //Create the new stop.
+    path_stop* new_s_ptr = new path_stop(new_s_pos);
+    cur_area_data.path_stops.push_back(new_s_ptr);
+    
+    //Delete the old links.
+    l1.first->remove_link(l1.second);
+    if(normal_link) {
+        l2.first->remove_link(l2.second);
+    }
+    
+    //Create the new links.
+    l1.first->add_link(new_s_ptr, normal_link);
+    new_s_ptr->add_link(l1.second, normal_link);
+    
+    //Fix the dangling path stop numbers in the links.
+    cur_area_data.fix_path_stop_nrs(l1.first);
+    cur_area_data.fix_path_stop_nrs(l1.second);
+    cur_area_data.fix_path_stop_nrs(new_s_ptr);
+    
+    return new_s_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Procedure to start moving the selected mobs.
  */
 void area_editor_imgui::start_mob_move() {
@@ -3730,18 +3780,18 @@ void area_editor_imgui::update_texture_suggestions(const string &n) {
  * the undo history.
  */
 void area_editor_imgui::update_undo_history() {
-    lafi::widget* b = frm_toolbar->widgets["but_undo"];
+    //lafi::widget* b = frm_toolbar->widgets["but_undo"]; //TODO
     
     while(undo_history.size() > area_editor_undo_limit) {
         undo_history.pop_back();
     };
     
     if(undo_history.empty()) {
-        disable_widget(b);
+        //TODO disable_widget(b);
     } else {
-        enable_widget(b);
-        b->description = "Undo: " + undo_history[0].second + ".";
-        update_status_bar();
+        //TODO enable_widget(b);
+        //TODO b->description = "Undo: " + undo_history[0].second + ".";
+        //TODO update_status_bar();
     }
 }
 

@@ -171,6 +171,8 @@ protected:
     bool                    holding_m1;
     bool                    holding_m2;
     bool                    holding_m3;
+    //Current X coordinate of the ImGui column separator for the canvas/panel.
+    int imgui_canvas_column_separator_x;
     //Is Ctrl pressed down?
     bool                    is_ctrl_pressed;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?

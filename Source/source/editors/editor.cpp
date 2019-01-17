@@ -57,6 +57,7 @@ editor::editor() :
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
+    imgui_canvas_column_separator_x(0),
     is_ctrl_pressed(false),
     is_gui_focused(false),
     is_shift_pressed(false),
@@ -430,10 +431,9 @@ void editor::generate_and_open_picker(
  * Handles an Allegro event for control-related things.
  */
 void editor::handle_controls(const ALLEGRO_EVENT &ev) {
-    return; //TODO
     if(fade_mgr.is_fading()) return;
     
-    gui->handle_event(ev);
+    //gui->handle_event(ev); //TODO
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
@@ -460,7 +460,7 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
         mouse_drag_confirmed = false;
         
-        gui->lose_focus();
+        //gui->lose_focus(); //TODO
         is_gui_focused = false;
         
         if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
@@ -816,9 +816,19 @@ void editor::unload() {
  * Updates the variables that hold the canvas's coordinates.
  */
 void editor::update_canvas_coordinates() {
+    if(
+        imgui_canvas_column_separator_x < 1.0f ||
+        imgui_canvas_column_separator_x > scr_w - 1.0f
+    ) {
+        //Panic check: if the separator has crazy values, it's
+        //likely not set properly.
+        canvas_br.x = scr_w * 0.675;
+    } else {
+        canvas_br.x = imgui_canvas_column_separator_x;
+    }
+
     canvas_tl.x = 0;
     canvas_tl.y = 40;
-    canvas_br.x = scr_w * 0.675;
     canvas_br.y = scr_h - 16;
 }
 
@@ -829,6 +839,7 @@ void editor::update_canvas_coordinates() {
 void editor::update_status_bar(
     const bool omit_coordinates, const bool reverse_y_coordinate
 ) {
+    return; //TODO
     string new_text;
     if(status_override_timer.time_left > 0.0f) {
         new_text = status_override_text;

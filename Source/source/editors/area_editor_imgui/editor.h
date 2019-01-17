@@ -1,8 +1,7 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2018.
- * The following source file belongs to the open-source project
- * Pikifen. Please read the included
- * README and LICENSE files for more information.
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
@@ -62,6 +61,34 @@ private:
     };
     
     
+    enum EDITOR_STATES {
+        EDITOR_STATE_INFO,
+        EDITOR_STATE_MAIN,
+        EDITOR_STATE_LAYOUT,
+        EDITOR_STATE_ASB,
+        EDITOR_STATE_TEXTURE,
+        EDITOR_STATE_ASA,
+        EDITOR_STATE_MOBS,
+        EDITOR_STATE_PATHS,
+        EDITOR_STATE_DETAILS,
+        EDITOR_STATE_REVIEW,
+        EDITOR_STATE_TOOLS,
+        EDITOR_STATE_STT,
+        EDITOR_STATE_OPTIONS,
+    };
+    
+    enum EDITOR_SUB_STATES {
+        EDITOR_SUB_STATE_NONE,
+        EDITOR_SUB_STATE_DRAWING,
+        EDITOR_SUB_STATE_CIRCLE_SECTOR,
+        EDITOR_SUB_STATE_NEW_MOB,
+        EDITOR_SUB_STATE_DUPLICATE_MOB,
+        EDITOR_SUB_STATE_ADD_MOB_LINK,
+        EDITOR_SUB_STATE_DEL_MOB_LINK,
+        EDITOR_SUB_STATE_PATH_DRAWING,
+        EDITOR_SUB_STATE_NEW_SHADOW,
+        EDITOR_SUB_STATE_TEXTURE_VIEW,
+    };
     
     enum EDITOR_PROBLEM_TYPES {
         EPT_NONE_YET,
@@ -140,7 +167,7 @@ private:
     //Time left until a backup is generated.
     timer backup_timer;
     //Where the cross-section tool points are.
-    point cross_section_points[2];
+    point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
     point cross_section_window_start;
     //Cross-section window's end coordinates.
@@ -408,6 +435,11 @@ private:
     void set_new_circle_sector_points();
     point snap_point(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
+    path_stop* split_path_link(
+        const pair<path_stop*, path_stop*> &l1,
+        const pair<path_stop*, path_stop*> &l2,
+        const point &where
+    );
     void start_mob_move();
     void start_path_stop_move();
     void start_shadow_move();
@@ -419,6 +451,27 @@ private:
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
+
+    //Input handler functions.
+    void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
+    void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
+    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);
+    void handle_key_down_canvas(const ALLEGRO_EVENT &ev);
+    void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_lmb_down(const ALLEGRO_EVENT &ev);
+    void handle_lmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_lmb_up(const ALLEGRO_EVENT &ev);
+    void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_mmb_down(const ALLEGRO_EVENT &ev);
+    void handle_mmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
+    void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
+    void handle_rmb_down(const ALLEGRO_EVENT &ev);
+    void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void pan_cam(const ALLEGRO_EVENT &ev);
+    void reset_cam_xy(const ALLEGRO_EVENT &ev);
+    void reset_cam_zoom(const ALLEGRO_EVENT &ev);
     
 public:
     string auto_load_area;

@@ -1,8 +1,7 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2018.
- * The following source file belongs to the open-source project
- * Pikifen. Please read the included
- * README and LICENSE files for more information.
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ * The following source file belongs to the open-source project Pikifen.
+ * Please read the included README and LICENSE files for more information.
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
@@ -10,6 +9,7 @@
  */
 
 #include "editor.h"
+
 #include "../../imgui/imgui.h"
 #include "../../imgui/imgui_impl_allegro5.h"
 #include "../../vars.h"
@@ -41,6 +41,14 @@ void area_editor_imgui::process_gui() {
 
     ImGui::NextColumn();
 
+    if(imgui_canvas_column_separator_x == -1) {
+        imgui_canvas_column_separator_x = scr_w * 0.675; 
+        ImGui::SetColumnWidth(0, imgui_canvas_column_separator_x);
+    } else {
+        imgui_canvas_column_separator_x = ImGui::GetColumnOffset(1);
+    }
+    update_canvas_coordinates();
+
     ImGui::BeginChild("cp", ImVec2(200, 0));
 
     ImGui::Text("Editing area AAAAA");
@@ -56,5 +64,4 @@ void area_editor_imgui::process_gui() {
 
     ImGui::End();
     
-    ImGui::ShowDemoWindow(NULL);
 }
