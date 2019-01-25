@@ -83,6 +83,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     chomp_max(0),
     disabled_state_flags(0),
     holdability_flags(0),
+    pikmin_interest(PIKMIN_INTEREST_NONE),
     parent(nullptr) {
     
     next_mob_id++;
@@ -1965,6 +1966,16 @@ void mob::tick_misc_logic() {
         if(height_effect_pivot == LARGE_FLOAT) {
             height_effect_pivot = z;
         }
+    }
+    
+    //Interest for Pikmin.
+    pikmin_interest = PIKMIN_INTEREST_NONE;
+    
+    if(
+        holdability_flags & HOLDABLE_BY_PIKMIN &&
+        !holder.m
+    ) {
+        pikmin_interest = PIKMIN_INTEREST_HOLDABLE;
     }
 }
 

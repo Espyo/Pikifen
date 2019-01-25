@@ -175,6 +175,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
+        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
+            efc.run(pikmin_fsm::go_to_interesting_mob);
+            efc.change_state("going_to_interesting_mob");
+        }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
         }
@@ -229,6 +233,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
+        }
+        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
+            efc.run(pikmin_fsm::go_to_interesting_mob);
+            efc.change_state("going_to_interesting_mob");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -332,6 +340,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
+        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
+            efc.run(pikmin_fsm::go_to_interesting_mob);
+            efc.change_state("going_to_interesting_mob");
+        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
@@ -368,6 +380,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
+        }
+        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
+            efc.run(pikmin_fsm::go_to_interesting_mob);
+            efc.change_state("going_to_interesting_mob");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -477,6 +493,44 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state(
+        "going_to_interesting_mob", PIKMIN_STATE_GOING_TO_INTERESTING_MOB
+    ); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run(pikmin_fsm::reach_interesting_mob);
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.change_state("sighing");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
     efc.new_state("sighing", PIKMIN_STATE_SIGHING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::stand_still);
@@ -542,6 +596,16 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("picking_up", PIKMIN_STATE_PICKING_UP); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::start_picking_up);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run(pikmin_fsm::finish_picking_up);
+            efc.change_state("idling");
         }
     }
     
@@ -1257,6 +1321,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     pik_ptr->carrying_mob = carriable_mob;
+    pik_ptr->leave_group();
     pik_ptr->stop_chasing();
     
     size_t closest_spot = INVALID;
@@ -1285,7 +1350,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         }
     }
     
-    pik_ptr->focused_mob = carriable_mob;
+    pik_ptr->focus_on_mob(carriable_mob);
     pik_ptr->carrying_spot = closest_spot;
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
@@ -1293,10 +1358,36 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->chase(
         closest_spot_ptr->pos, &carriable_mob->pos,
         false, nullptr, false,
-        pik_ptr->type->radius * 1.2
+        pik_ptr->type->radius + carriable_mob->type->radius
     );
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    
+    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to go towards an interesting object.
+ * info1: Pointer to the mob of interest.
+ */
+void pikmin_fsm::go_to_interesting_mob(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
+    mob* int_mob = (mob*) info1;
+    pikmin* pik_ptr = (pikmin*) m;
+    
     pik_ptr->leave_group();
+    pik_ptr->stop_chasing();
+    
+    m->focus_on_mob(int_mob);
+    
+    m->chase(
+        point(), &int_mob->pos,
+        false, nullptr, false,
+        pik_ptr->type->radius + int_mob->type->radius
+    );
+    
+    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
@@ -1330,6 +1421,25 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin reaches an interesting object.
+ */
+void pikmin_fsm::reach_interesting_mob(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    mob* int_mob = pik_ptr->focused_mob;
+    
+    if(
+        int_mob->pikmin_interest == PIKMIN_INTEREST_HOLDABLE &&
+        m->holding.empty()
+    ) {
+        //TODO make sure other Pikmin can't grab the same mob.
+        //A mob to grab! Go get it.
+        m->focus_on_mob(int_mob);
+        m->fsm.set_state(PIKMIN_STATE_PICKING_UP);
+    }
 }
 
 
@@ -1387,6 +1497,15 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
         
     p->carrying_mob = NULL;
     p->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to forget the interesting object it was going for.
+ */
+void pikmin_fsm::forget_interesting_mob(mob* m, void* info1, void* info2) {
+    m->unfocus_from_mob();
+    m->set_timer(0);
 }
 
 
@@ -1547,6 +1666,25 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //before coming to a stop. Otherwise the Pikmin would stop nearly
     //on the edge of the water, and that just looks bad.
     m->set_timer(1.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin starts picking some object up to hold it.
+ */
+void pikmin_fsm::start_picking_up(mob* m, void* info1, void* info2) {
+    m->stop_chasing();
+    m->set_animation(PIKMIN_ANIM_PICKING_UP);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin finishes picking some object up to hold it.
+ */
+void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
+    m->focused_mob->pikmin_interest = PIKMIN_INTEREST_NONE;
+    m->hold(m->focused_mob, INVALID, m->type->radius / 2, 0, true);
+    m->unfocus_from_mob();
 }
 
 

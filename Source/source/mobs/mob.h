@@ -87,6 +87,11 @@ enum MOB_TEAMS {
     MOB_TEAM_PROP,
 };
 
+enum PIKMIN_INTERESTS {
+    PIKMIN_INTEREST_NONE,
+    PIKMIN_INTEREST_HOLDABLE,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
@@ -256,6 +261,8 @@ public:
     unsigned char disabled_state_flags;
     //Flags indicating if and how the mob can be held by other mobs.
     unsigned char holdability_flags;
+    //If this mob is interesting for a Pikmin, this specifies how.
+    unsigned char pikmin_interest;
     //If this mob is a sub-mob, this points to the parent mob.
     parent_mob_info* parent;
     

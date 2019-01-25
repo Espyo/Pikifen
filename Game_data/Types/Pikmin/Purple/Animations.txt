@@ -127,6 +127,16 @@ animations{
 			}
 		}
 	}
+	picking_up{
+		frames{
+			thrown1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
 }
 sprites{
 	sprout1{

@@ -1201,6 +1201,22 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             );
             
         }
+        
+        //Find an interesting mob.
+        mob_event* nio_event =
+            q_get_event(m_ptr, MOB_EVENT_NEAR_INTERESTING_MOB);
+        if(
+            nio_event &&
+            m2_ptr->pikmin_interest != PIKMIN_INTEREST_NONE &&
+            d <=
+            m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
+        ) {
+            pending_intermob_events.push_back(
+                pending_intermob_event(
+                    d, nio_event, m2_ptr
+                )
+            );
+        }
     }
     
     //Check the pending inter-mob events.
