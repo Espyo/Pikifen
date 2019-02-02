@@ -1186,9 +1186,12 @@ bool mob_action::run(
         m->hide = vi[0];
         
         
-    } else if(type == MOB_ACTION_SET_HOLDABLE) {
+    } else if(
+        type == MOB_ACTION_SET_HOLDABLE &&
+        typeid(*m) == typeid(tool)
+    ) {
     
-        m->holdability_flags = vi[0];
+        ((tool*) m)->holdability_flags = vi[0];
         
         
     } else if(type == MOB_ACTION_SET_NEAR_REACH) {

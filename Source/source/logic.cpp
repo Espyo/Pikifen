@@ -1202,20 +1202,23 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             
         }
         
-        //Find an interesting mob.
-        mob_event* nio_event =
-            q_get_event(m_ptr, MOB_EVENT_NEAR_INTERESTING_MOB);
+        //Find a tool mob.
+        mob_event* nto_event =
+            q_get_event(m_ptr, MOB_EVENT_NEAR_TOOL);
         if(
-            nio_event &&
-            m2_ptr->pikmin_interest != PIKMIN_INTEREST_NONE &&
+            nto_event &&
             d <=
-            m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
+            m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr) &&
+            typeid(*m2_ptr) == typeid(tool)
         ) {
-            pending_intermob_events.push_back(
-                pending_intermob_event(
-                    d, nio_event, m2_ptr
-                )
-            );
+            tool* too_ptr = (tool*) m2_ptr;
+            if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
+                //Another Pikmin is already going for it. Ignore it.
+            } else {
+                pending_intermob_events.push_back(
+                    pending_intermob_event(d, nto_event, m2_ptr)
+                );
+            }
         }
     }
     

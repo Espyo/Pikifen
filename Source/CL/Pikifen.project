@@ -47,6 +47,8 @@
     <File Name="../source/mob_fsms/treasure_fsm.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/tool_type.cpp"/>
+    <File Name="../source/mob_types/tool_type.h"/>
     <File Name="../source/mob_types/pile_type.cpp"/>
     <File Name="../source/mob_types/pile_type.h"/>
     <File Name="../source/mob_types/resource_type.cpp"/>
@@ -79,6 +81,8 @@
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/tool_category.cpp"/>
+    <File Name="../source/mob_categories/tool_category.h"/>
     <File Name="../source/mob_categories/pile_category.cpp"/>
     <File Name="../source/mob_categories/pile_category.h"/>
     <File Name="../source/mob_categories/resource_category.cpp"/>
@@ -211,6 +215,8 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/tool.cpp"/>
+    <File Name="../source/mobs/tool.h"/>
     <File Name="../source/mobs/mob_utils.cpp"/>
     <File Name="../source/mobs/mob_utils.h"/>
     <File Name="../source/mobs/pile.cpp"/>

@@ -38,14 +38,8 @@
 #include "mobs/pile.h"
 #include "mobs/resource.h"
 #include "mobs/ship.h"
+#include "mobs/tool.h"
 #include "mobs/treasure.h"
-#include "mob_types/converter_type.h"
-#include "mob_types/drop_type.h"
-#include "mob_types/interactable_type.h"
-#include "mob_types/pikmin_type.h"
-#include "mob_types/pile_type.h"
-#include "mob_types/resource_type.h"
-#include "mob_types/ship_type.h"
 #include "particle.h"
 #include "replay.h"
 #include "sector.h"
@@ -385,6 +379,8 @@ extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
 extern bmp_manager textures;
 extern bool throw_can_reach_cursor;
+extern map<string, tool_type*> tool_types;
+extern vector<tool*> tools;
 extern float transition_time;
 extern bool transition_fade_in;
 extern map<string, treasure_type*> treasure_types;

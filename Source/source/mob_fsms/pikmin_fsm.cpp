@@ -175,9 +175,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
-        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
-            efc.run(pikmin_fsm::go_to_interesting_mob);
-            efc.change_state("going_to_interesting_mob");
+        efc.new_event(MOB_EVENT_NEAR_TOOL); {
+            efc.run(pikmin_fsm::go_to_tool);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -234,9 +233,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
-        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
-            efc.run(pikmin_fsm::go_to_interesting_mob);
-            efc.change_state("going_to_interesting_mob");
+        efc.new_event(MOB_EVENT_NEAR_TOOL); {
+            efc.run(pikmin_fsm::go_to_tool);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -340,9 +338,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
-        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
-            efc.run(pikmin_fsm::go_to_interesting_mob);
-            efc.change_state("going_to_interesting_mob");
+        efc.new_event(MOB_EVENT_NEAR_TOOL); {
+            efc.run(pikmin_fsm::go_to_tool);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
@@ -381,9 +378,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
-        efc.new_event(MOB_EVENT_NEAR_INTERESTING_MOB); {
-            efc.run(pikmin_fsm::go_to_interesting_mob);
-            efc.change_state("going_to_interesting_mob");
+        efc.new_event(MOB_EVENT_NEAR_TOOL); {
+            efc.run(pikmin_fsm::go_to_tool);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -494,26 +490,26 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state(
-        "going_to_interesting_mob", PIKMIN_STATE_GOING_TO_INTERESTING_MOB
+        "going_to_tool", PIKMIN_STATE_GOING_TO_TOOL
     ); {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run(pikmin_fsm::reach_interesting_mob);
+            efc.change_state("picking_up");
         }
         efc.new_event(MOB_EVENT_TIMER); {
-            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::forget_tool);
             efc.change_state("sighing");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
-            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::forget_tool);
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::forget_tool);
             efc.run(pikmin_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::forget_tool);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -526,7 +522,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run(pikmin_fsm::forget_interesting_mob);
+            efc.run(pikmin_fsm::forget_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
     }
@@ -857,7 +853,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
-            efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -1039,7 +1034,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(pikmin_fsm::land_while_holding);
-            efc.change_state("idling_h");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
             efc.run(pikmin_fsm::land_on_mob_while_holding);
@@ -1407,11 +1401,20 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
  * Depending on what it is, it might drop it.
  */
 void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
+    engine_assert(!m->holding.empty(), "");
+    
+    tool* too_ptr = (tool*) * (m->holding.begin());
+    
     m->set_animation(PIKMIN_ANIM_IDLING);
     
     pikmin_fsm::stand_still(m, NULL, NULL);
     
-    //TODO
+    if(too_ptr->too_type->dropped_when_pikmin_lands) {
+        m->release(too_ptr);
+        m->fsm.set_state(PIKMIN_STATE_IDLING);
+    } else {
+        m->fsm.set_state(PIKMIN_STATE_IDLING_H);
+    }
 }
 
 
@@ -1687,29 +1690,41 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin needs to go towards an interesting object.
- * info1: Pointer to the mob of interest.
+ * When a Pikmin needs to go towards a tool mob.
+ * info1: Pointer to the tool.
  */
-void pikmin_fsm::go_to_interesting_mob(mob* m, void* info1, void* info2) {
+void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, "");
     
-    mob* int_mob = (mob*) info1;
+    tool* too_ptr = (tool*) info1;
     pikmin* pik_ptr = (pikmin*) m;
+    
+    if(too_ptr->reserved && too_ptr->reserved != pik_ptr) {
+        //Another Pikmin is already going for it. Ignore it.
+        return;
+    }
+    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
+        //Can't hold this. Forget it.
+        return;
+    }
+    
+    too_ptr->reserved = pik_ptr;
     
     pik_ptr->leave_group();
     pik_ptr->stop_chasing();
     
-    m->focus_on_mob(int_mob);
+    m->focus_on_mob(too_ptr);
     
     m->chase(
-        point(), &int_mob->pos,
+        point(), &too_ptr->pos,
         false, nullptr, false,
-        pik_ptr->type->radius + int_mob->type->radius
+        pik_ptr->type->radius + too_ptr->type->radius
     );
     
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
-    
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_TOOL);
+    
 }
 
 
@@ -1741,25 +1756,6 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin reaches an interesting object.
- */
-void pikmin_fsm::reach_interesting_mob(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    mob* int_mob = pik_ptr->focused_mob;
-    
-    if(
-        int_mob->pikmin_interest == PIKMIN_INTEREST_HOLDABLE &&
-        m->holding.empty()
-    ) {
-        //TODO make sure other Pikmin can't grab the same mob.
-        //A mob to grab! Go get it.
-        m->focus_on_mob(int_mob);
-        m->fsm.set_state(PIKMIN_STATE_PICKING_UP);
-    }
 }
 
 
@@ -1821,9 +1817,9 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is meant to forget the interesting object it was going for.
+ * When a Pikmin is meant to forget a tool object it was going for.
  */
-void pikmin_fsm::forget_interesting_mob(mob* m, void* info1, void* info2) {
+void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     m->set_timer(0);
 }
@@ -1921,8 +1917,19 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, "");
+    engine_assert(!m->holding.empty(), "");
     
-    //TODO
+    pikmin* pik_ptr = (pikmin*) m;
+    tool* too_ptr = (tool*) (*m->holding.begin());
+    
+    pik_ptr->was_thrown = false;
+    pik_ptr->latched = true;
+    
+    if(too_ptr->too_type->dropped_when_pikmin_lands_on_mob) {
+        //TODO give the tool info about where in the mob it landed.
+        m->release(too_ptr);
+        m->fsm.set_state(PIKMIN_STATE_IDLING);
+    }
 }
 
 
@@ -2013,7 +2020,13 @@ void pikmin_fsm::start_picking_up(mob* m, void* info1, void* info2) {
  * When a Pikmin finishes picking some object up to hold it.
  */
 void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
-    m->focused_mob->pikmin_interest = PIKMIN_INTEREST_NONE;
+    tool* too_ptr = (tool*) (m->focused_mob);
+    
+    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
+        m->fsm.set_state(PIKMIN_STATE_IDLING);
+        return;
+    }
+    
     m->hold(m->focused_mob, INVALID, m->type->radius / 2, 0, true);
     m->unfocus_from_mob();
 }
@@ -2232,6 +2245,14 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
  * If not, it should drop the object and get grabbed like normal.
  */
 void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
+    assert(!m->holding.empty());
+    
+    tool* too_ptr = (tool*) * (m->holding.begin());
+    if(!too_ptr->too_type->can_be_hotswapped) {
+        m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY);
+        return;
+    }
+    
     //TODO
 }
 

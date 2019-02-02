@@ -261,9 +261,10 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FINISHED_CARRYING,
     //When the Pikmin is near an object that can be carried.
     MOB_EVENT_NEAR_CARRIABLE_OBJECT,
-    //When the Pikmin is near an object of miscellaneous interest.
-    MOB_EVENT_NEAR_INTERESTING_MOB,
+    //When the Pikmin is near a tool object.
+    MOB_EVENT_NEAR_TOOL,
     //When it has reached its carrying spot on the carriable object.
+    //TODO replace with MOB_EVENT_REACHED_DESTINATION?
     MOB_EVENT_REACHED_CARRIABLE_OBJECT,
     //When one of its attack hitboxes touches another mob's normal hitbox.
     MOB_EVENT_HITBOX_TOUCH_N,

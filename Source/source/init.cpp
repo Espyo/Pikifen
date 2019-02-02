@@ -41,6 +41,7 @@
 #include "mob_categories/pile_category.h"
 #include "mob_categories/resource_category.h"
 #include "mob_categories/ship_category.h"
+#include "mob_categories/tool_category.h"
 #include "mob_categories/treasure_category.h"
 #include "mob_script.h"
 #include "utils/string_utils.h"
@@ -506,6 +507,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_PILES, new pile_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_TOOLS, new tool_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_SHIPS, new ship_category()
