@@ -164,6 +164,7 @@ void pikmin::draw_mob(bitmap_effect_manager* effect_manager) {
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
+        fsm.cur_state->id == PIKMIN_STATE_IDLING_H ||
         fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
     bitmap_effect_manager effects;

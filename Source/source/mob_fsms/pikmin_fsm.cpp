@@ -605,7 +605,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.run(pikmin_fsm::finish_picking_up);
-            efc.change_state("idling");
+            efc.change_state("idling_h");
         }
     }
     
@@ -828,6 +828,313 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("celebrating", PIKMIN_STATE_CELEBRATING); {
+    }
+    
+    //TODO code for dropping the held object on hurt, knocked back, hazard, etc.
+    efc.new_state("in_group_chasing_h", PIKMIN_STATE_IN_GROUP_CHASING_H); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::start_chasing_leader);
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader_h");
+        }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.run(pikmin_fsm::update_in_group_chasing);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("in_group_stopped_h");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
+            efc.change_state("group_move_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run(pikmin_fsm::be_dismissed);
+            efc.change_state("going_to_dismiss_spot_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("in_group_stopped_h", PIKMIN_STATE_IN_GROUP_STOPPED_H); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader_h");
+        }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
+            efc.change_state("group_move_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run(pikmin_fsm::be_dismissed);
+            efc.change_state("going_to_dismiss_spot_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("group_move_chasing_h", PIKMIN_STATE_GROUP_MOVE_CHASING_H); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::start_chasing_leader);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::set_idle_task_reach);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(pikmin_fsm::update_in_group_chasing);
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader_h");
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("group_move_stopped_h");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run(pikmin_fsm::be_dismissed);
+            efc.change_state("going_to_dismiss_spot_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("group_move_stopped_h", PIKMIN_STATE_GROUP_MOVE_STOPPED_H); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::set_idle_task_reach);
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader_h");
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("group_move_stopped_h");
+        }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("group_move_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run(pikmin_fsm::be_dismissed);
+            efc.change_state("going_to_dismiss_spot_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("grabbed_by_leader_h", PIKMIN_STATE_GRABBED_BY_LEADER_H); {
+        efc.new_event(MOB_EVENT_THROWN); {
+            efc.run(pikmin_fsm::be_thrown);
+            efc.change_state("thrown_h");
+        }
+        efc.new_event(MOB_EVENT_RELEASED); {
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::notify_leader_release);
+            efc.run(pikmin_fsm::be_released);
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::notify_leader_release);
+            efc.run(pikmin_fsm::be_released);
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("thrown_h", PIKMIN_STATE_THROWN_H); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::stop_being_thrown);
+        }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(pikmin_fsm::land_while_holding);
+            efc.change_state("idling_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+            efc.run(pikmin_fsm::land_on_mob_while_holding);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state(
+        "going_to_dismiss_spot_h", PIKMIN_STATE_GOING_TO_DISMISS_SPOT_H
+    ); {
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::going_to_dismiss_spot);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_timer);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run(pikmin_fsm::reach_dismiss_spot);
+            efc.change_state("idling_h");
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(pikmin_fsm::reach_dismiss_spot);
+            efc.change_state("idling_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("idling_h", PIKMIN_STATE_IDLING_H); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::become_idle);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::stop_being_idle);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_ACTIVE_LEADER); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing_h");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::try_held_item_hotswap);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
     }
     
     typ->states = efc.finish();
@@ -1092,6 +1399,19 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     
     pikmin_fsm::stand_still(m, NULL, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a thrown Pikmin lands while holding something.
+ * Depending on what it is, it might drop it.
+ */
+void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_IDLING);
+    
+    pikmin_fsm::stand_still(m, NULL, NULL);
+    
+    //TODO
 }
 
 
@@ -1596,6 +1916,17 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a thrown Pikmin lands on a mob, whilst holding something.
+ * info1: Pointer to the hitbox touch information structure.
+ */
+void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, "");
+    
+    //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin leaves a hazardous sector.
  * info1: Points to the hazard.
  */
@@ -1892,6 +2223,16 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
         //TODO make sure this only buries opposing Pikmin.
         m->fsm.set_state(PIKMIN_STATE_SPROUT, NULL, NULL);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin gets grabbed by an enemy. It should try to swap places
+ * with the object that it is holding, instead, if possible.
+ * If not, it should drop the object and get grabbed like normal.
+ */
+void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
+    //TODO
 }
 
 
