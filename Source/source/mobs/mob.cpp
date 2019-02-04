@@ -814,6 +814,32 @@ void mob::chase(
 
 
 /* ----------------------------------------------------------------------------
+ * Makes a mob chomp another mob. Mostly applicable for enemies chomping
+ * on Pikmin.
+ */
+void mob::chomp(mob* m, hitbox* hitbox_info) {
+    if(m->type->category->id == MOB_CATEGORY_TOOLS) {
+        if(!(((tool*) m)->holdability_flags & HOLDABLE_BY_ENEMIES)) {
+            //Enemies can't chomp this tool right now.
+            return;
+        }
+    }
+    
+    float h_offset_dist;
+    float h_offset_angle;
+    get_hitbox_hold_point(
+        m, hitbox_info, &h_offset_dist, &h_offset_angle
+    );
+    hold(
+        m, hitbox_info->body_part_index, h_offset_dist, h_offset_angle, true
+    );
+    
+    m->focus_on_mob(this);
+    chomping_mobs.push_back(m);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob start circling around a point or another mob.
  * m:             The mob to circle around.
  *   If NULL, circle around a point instead.
@@ -1420,10 +1446,10 @@ void mob::release(mob* m) {
  * Safely releases all chomped Pikmin.
  */
 void mob::release_chomped_pikmin() {
-    for(size_t p = 0; p < chomping_pikmin.size(); ++p) {
-        chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
+    for(size_t p = 0; p < chomping_mobs.size(); ++p) {
+        chomping_mobs[p]->fsm.run_event(MOB_EVENT_RELEASED);
     }
-    chomping_pikmin.clear();
+    chomping_mobs.clear();
 }
 
 
@@ -1545,9 +1571,9 @@ void mob::set_var(const string &name, const string &value) {
 
 
 /* ----------------------------------------------------------------------------
- * Should this mob attack v? Teams and other factors are used to decide this.
+ * Can this mob damage v? Teams and other factors are used to decide this.
  */
-bool mob::should_attack(mob* v) {
+bool mob::can_damage(mob* v) {
     if(team == v->team && team != MOB_TEAM_NEUTRAL) {
         //Teammates can't hurt each other.
         return false;
@@ -1745,14 +1771,14 @@ void mob::stop_height_effect() {
  */
 void mob::swallow_chomped_pikmin(const size_t nr) {
 
-    size_t total = min(nr, chomping_pikmin.size());
+    size_t total = min(nr, chomping_mobs.size());
     
     for(size_t p = 0; p < total; ++p) {
-        chomping_pikmin[p]->set_health(false, false, 0.0f);
-        chomping_pikmin[p]->dead = true;
-        chomping_pikmin[p]->cause_spike_damage(this, true);
+        chomping_mobs[p]->set_health(false, false, 0.0f);
+        chomping_mobs[p]->dead = true;
+        chomping_mobs[p]->cause_spike_damage(this, true);
     }
-    chomping_pikmin.clear();
+    chomping_mobs.clear();
 }
 
 
@@ -2018,7 +2044,8 @@ void mob::tick_physics() {
     if(holder.m) {
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
-        face(get_angle(final_pos, holder.m->pos), NULL);
+        angle = get_angle(final_pos, holder.m->pos), NULL;
+        intended_turn_angle = angle;
         chase(final_pos, NULL, true);
     }
     
@@ -2753,6 +2780,18 @@ void mob::tick_script() {
  */
 void mob::unfocus_from_mob() {
     focused_mob = nullptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Does this mob want to attack mob v? Teams and other factors are used to
+ * decide this.
+ */
+bool mob::wants_to_attack(mob* v) {
+    if(v->team == MOB_TEAM_TOOL) {
+        return false;
+    }
+    return can_damage(v);
 }
 
 

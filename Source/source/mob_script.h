@@ -36,6 +36,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_DELETE,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,
+    MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_FOCUS,
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_IF,
@@ -202,6 +203,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FRAME_SIGNAL,
     //When it just got held by another mob.
     MOB_EVENT_HELD,
+    //When one of its normal hitboxes touches another mob's eating hitbox.
+    MOB_EVENT_HITBOX_TOUCH_EAT,
     //When it has been damaged enough to want to shake.
     MOB_EVENT_ITCH,
     //When it leaves a hazard in a sector.
@@ -270,8 +273,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_HITBOX_TOUCH_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.
     MOB_EVENT_HITBOX_TOUCH_N_A,
-    //When one of its normal hitboxes touches another mob's eating hitbox.
-    MOB_EVENT_HITBOX_TOUCH_EAT,
     //When a Pikmin was added to the list of Pikmin carrying this mob.
     MOB_EVENT_CARRIER_ADDED,
     //When a Pikmin was removed from the list of Pikmin carrying this mob.

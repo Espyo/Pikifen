@@ -81,6 +81,8 @@ enum MOB_TEAMS {
     MOB_TEAM_ENEMY_3,
     //Can only be hurt by Pikmin.
     MOB_TEAM_OBSTACLE,
+    //Can be hurt by anything, but nothing WANTS to hurt it.
+    MOB_TEAM_TOOL,
     //Can only be hurt, cannot hurt.
     MOB_TEAM_BOTTOM,
     //Cannot be hurt or targeted by anything.
@@ -248,9 +250,9 @@ public:
     bool dead;
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
-    //Mobs it is chomping.
-    vector<mob*> chomping_pikmin;
-    //Max mobs it can chomp in the current attack.
+    //List of mobs currently in its mouth, i.e., chomped.
+    vector<mob*> chomping_mobs;
+    //Max number of mobs it can chomp in the current attack.
     size_t chomp_max;
     //If the mob is currently "disabled", these flags specify behavior.
     unsigned char disabled_state_flags;
@@ -281,6 +283,7 @@ public:
         mob* added, mob* removed, mob** target_mob, point* target_point
     );
     void cause_spike_damage(mob* victim, const bool is_ingestion);
+    void chomp(mob* m, hitbox* hitbox_info);
     void get_hitbox_hold_point(
         mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
     );
@@ -296,7 +299,8 @@ public:
         const bool above_holder
     );
     void release(mob* m);
-    bool should_attack(mob* m);
+    bool can_damage(mob* m);
+    bool wants_to_attack(mob* m);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();

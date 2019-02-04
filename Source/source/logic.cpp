@@ -758,7 +758,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                 if(touch_ob_ev) {
                     touch_ob_ev->run(m_ptr, (void*) m2_ptr);
                 }
-                if(touch_op_ev && m_ptr->should_attack(m2_ptr)) {
+                if(touch_op_ev && m_ptr->wants_to_attack(m2_ptr)) {
                     touch_op_ev->run(m_ptr, (void*) m2_ptr);
                 }
                 if(
@@ -1051,7 +1051,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         }
                         
                         //Should this mob even attack this other mob?
-                        if(!m2_ptr->should_attack(m_ptr)) {
+                        if(!m2_ptr->can_damage(m_ptr)) {
                             continue;
                         }
                     }
@@ -1062,7 +1062,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                         !reported_eat_ev &&
                         !disable_attack_status &&
                         h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                        m2_ptr->chomping_pikmin.size() <
+                        m2_ptr->chomping_mobs.size() <
                         m2_ptr->chomp_max &&
                         find(
                             m2_ptr->chomp_body_parts.begin(),
@@ -1171,7 +1171,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
                             )
                         );
                     }
-                    if(opir_ev && m_ptr->should_attack(m2_ptr)) {
+                    if(opir_ev && m_ptr->wants_to_attack(m2_ptr)) {
                         pending_intermob_events.push_back(
                             pending_intermob_event(
                                 d, opir_ev, m2_ptr

@@ -119,6 +119,11 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "get_chomped") {
+    
+        type = MOB_ACTION_GET_CHOMPED;
+        
+        
     } else if(n == "if") {
     
         //TODO make this use integers instead of strings, eventually?
@@ -892,19 +897,10 @@ bool mob_action::run(
         m->to_delete = true;
         
         
-    } else if(type == MOB_ACTION_SWALLOW) {
-    
-        if(vi[0] == MOB_ACTION_SWALLOW_ALL) {
-            m->swallow_chomped_pikmin(m->chomping_pikmin.size());
-        } else {
-            m->swallow_chomped_pikmin(vi[1]);
-        }
-        
-        
     } else if(type == MOB_ACTION_FOCUS) {
     
         if(vi[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
-            m->focused_mob = m->parent->m;
+            m->focus_on_mob(m->parent->m);
             
         } else if(vi[0] == MOB_ACTION_FOCUS_TRIGGER) {
             if(
@@ -914,12 +910,12 @@ bool mob_action::run(
                 parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                 parent_event == MOB_EVENT_TOUCHED_OPPONENT
             ) {
-                m->focused_mob = (mob*) custom_data_1;
+                m->focus_on_mob((mob*) custom_data_1);
                 
             } else if(
                 parent_event == MOB_EVENT_RECEIVE_MESSAGE
             ) {
-                m->focused_mob = (mob*) custom_data_2;
+                m->focus_on_mob((mob*) custom_data_2);
             }
         }
         
@@ -927,6 +923,14 @@ bool mob_action::run(
     } else if(type == MOB_ACTION_FINISH_DYING) {
     
         m->finish_dying();
+        
+        
+    } else if(
+        type == MOB_ACTION_GET_CHOMPED &&
+        parent_event == MOB_EVENT_HITBOX_TOUCH_EAT
+    ) {
+    
+        ((mob*) custom_data_1)->chomp(m, (hitbox*) custom_data_2);
         
         
     } else if(type == MOB_ACTION_IF) {
@@ -944,7 +948,7 @@ bool mob_action::run(
             vi.size() >= 3 && !vs.empty()
         ) {
             if(vi[2] == MOB_ACTION_COMPARAND_CHOMPED_PIKMIN) {
-                lhs = i2s(m->chomping_pikmin.size());
+                lhs = i2s(m->chomping_mobs.size());
             } else if(vi[2] == MOB_ACTION_COMPARAND_DAY_MINUTES) {
                 lhs = i2s(day_minutes);
             } else if(vi[2] == MOB_ACTION_COMPARAND_FIELD_PIKMIN) {
@@ -1335,6 +1339,15 @@ bool mob_action::run(
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
         
         
+    } else if(type == MOB_ACTION_SWALLOW) {
+    
+        if(vi[0] == MOB_ACTION_SWALLOW_ALL) {
+            m->swallow_chomped_pikmin(m->chomping_mobs.size());
+        } else {
+            m->swallow_chomped_pikmin(vi[1]);
+        }
+        
+        
     } else if(type == MOB_ACTION_TELEPORT) {
     
         m->stop_chasing();
@@ -1512,6 +1525,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     r("on_focus_off_reach",    MOB_EVENT_FOCUS_OFF_REACH);
     r("on_frame_signal",       MOB_EVENT_FRAME_SIGNAL);
     r("on_held",               MOB_EVENT_HELD);
+    r("on_hitbox_touch_eat",   MOB_EVENT_HITBOX_TOUCH_EAT);
     r("on_itch",               MOB_EVENT_ITCH);
     r("on_land",               MOB_EVENT_LANDED);
     r("on_object_in_reach",    MOB_EVENT_OBJECT_IN_REACH);

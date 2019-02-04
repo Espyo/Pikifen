@@ -745,6 +745,10 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
             }
         }
         
+        while(!m_ptr->holding.empty()) {
+            m_ptr->release(m_ptr->holding[0]);
+        }
+        
         m_ptr->fsm.set_state(INVALID);
     }
     
@@ -782,6 +786,8 @@ size_t string_to_team_nr(const string &team_str) {
         return MOB_TEAM_OBSTACLE;
     } else if(team_str == "bottom") {
         return MOB_TEAM_BOTTOM;
+    } else if(team_str == "tool") {
+        return MOB_TEAM_TOOL;
     } else if(team_str == "prop") {
         return MOB_TEAM_PROP;
     }
