@@ -1424,8 +1424,11 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
+    pikmin* p_ptr = (pikmin*) m;
     
     m->release(*m->holding.begin());
+    m->subgroup_type_ptr =
+        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type);
 }
 
 
@@ -2050,6 +2053,10 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
         return;
     }
     
+    m->subgroup_type_ptr =
+        subgroup_types.get_type(
+            SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
+        );
     m->hold(m->focused_mob, INVALID, m->type->radius / 2, 0, true);
     m->unfocus_from_mob();
 }

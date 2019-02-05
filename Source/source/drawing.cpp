@@ -469,24 +469,24 @@ void gameplay::draw_hud() {
     //Standby group member.
     ALLEGRO_BITMAP* standby_bmp = NULL;
     ALLEGRO_BITMAP* standby_mat_bmp = NULL;
-    if(closest_group_member) {
-        if(
-            closest_group_member->type->category->id ==
-            MOB_CATEGORY_PIKMIN
-        ) {
+    if(closest_group_member && cur_leader_ptr->group->cur_standby_type) {
+        SUBGROUP_TYPE_CATEGORIES c =
+            cur_leader_ptr->group->cur_standby_type->get_category();
+            
+        if(c == SUBGROUP_TYPE_CATEGORY_LEADER) {
+            leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
+            standby_bmp = l_ptr->lea_type->bmp_icon;
+            
+        } else if(c == SUBGROUP_TYPE_CATEGORY_PIKMIN) {
             pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
-            standby_bmp = p_ptr->pik_type->bmp_icon;
+            standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
             standby_mat_bmp =
                 p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                 
-        } else if(
-            closest_group_member->type->category->id ==
-            MOB_CATEGORY_LEADERS
-        ) {
-            leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
-            standby_bmp = l_ptr->lea_type->bmp_icon;
+        } else {
+            standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+            
         }
-        
     }
     if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
     

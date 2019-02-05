@@ -11,6 +11,7 @@
 #include "tool_type.h"
 
 #include "../utils/string_utils.h"
+#include "../vars.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -39,4 +40,12 @@ void tool_type::load_parameters(data_node* file) {
         s2b(
             file->get_child_by_name("dropped_when_pikmin_lands_on_mob")->value
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads resources into memory.
+ */
+void tool_type::load_resources(data_node* file) {
+    bmp_icon = bitmaps.get(file->get_child_by_name("icon")->value, file);
 }

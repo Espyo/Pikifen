@@ -361,7 +361,7 @@ public:
 enum SUBGROUP_TYPE_CATEGORIES {
     SUBGROUP_TYPE_CATEGORY_PIKMIN,
     SUBGROUP_TYPE_CATEGORY_LEADER,
-    SUBGROUP_TYPE_CATEGORY_BOMB,
+    SUBGROUP_TYPE_CATEGORY_TOOL,
 };
 struct subgroup_type_manager;
 
@@ -373,8 +373,12 @@ struct subgroup_type {
 private:
     friend subgroup_type_manager;
     SUBGROUP_TYPE_CATEGORIES category;
-    pikmin_type* pik_type;
-    subgroup_type() : pik_type(nullptr) { }
+    mob_type* specific_type;
+    ALLEGRO_BITMAP* icon;
+    subgroup_type() : specific_type(nullptr), icon(nullptr) { }
+public:
+    SUBGROUP_TYPE_CATEGORIES get_category() { return category; }
+    ALLEGRO_BITMAP* get_icon() { return icon; }
 };
 
 
@@ -387,11 +391,12 @@ private:
 public:
     void register_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        pikmin_type* pik_type = NULL
+        mob_type* specific_type = NULL,
+        ALLEGRO_BITMAP* icon = NULL
     );
     subgroup_type* get_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        pikmin_type* pik_type = NULL
+        mob_type* specific_type = NULL
     );
     subgroup_type* get_first_type();
     subgroup_type* get_prev_type(subgroup_type* sgt);

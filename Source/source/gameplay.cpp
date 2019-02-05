@@ -339,12 +339,26 @@ void gameplay::load_game_content() {
     //Mob types.
     load_mob_types(true);
     
+    //Register leader sub-group types.
     for(size_t p = 0; p < pikmin_order.size(); ++p) {
         subgroup_types.register_type(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p]
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p],
+            pikmin_order[p]->bmp_icon
         );
     }
-    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_BOMB);
+    
+    vector<string> tool_types_vector;
+    for(auto t = tool_types.begin(); t != tool_types.end(); ++t) {
+        tool_types_vector.push_back(t->first);
+    }
+    sort(tool_types_vector.begin(), tool_types_vector.end());
+    for(size_t t = 0; t < tool_types_vector.size(); ++t) {
+        tool_type* tt_ptr = tool_types[tool_types_vector[t]];
+        subgroup_types.register_type(
+            SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
+        );
+    }
+    
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     
 }

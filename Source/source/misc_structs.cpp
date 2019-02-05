@@ -876,17 +876,20 @@ bitmap_effect_props bitmap_effect_manager::get_final_properties() {
 
 /* ----------------------------------------------------------------------------
  * Registers a new type of subgroup.
- * category: The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * pik_type: Type of Pikmin. Only necessary for Pikmin category.
+ * category:      The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * specific_type: Specific type of mob, if you want to specify further.
+ * icon:          If not NULL, use this icon to represent this subgroup.
  */
 void subgroup_type_manager::register_type(
     const SUBGROUP_TYPE_CATEGORIES category,
-    pikmin_type* pik_type
+    mob_type* specific_type,
+    ALLEGRO_BITMAP* icon
 ) {
     subgroup_type* new_sg_type = new subgroup_type();
     
     new_sg_type->category = category;
-    new_sg_type->pik_type = pik_type;
+    new_sg_type->specific_type = specific_type;
+    new_sg_type->icon = icon;
     
     types.push_back(new_sg_type);
 }
@@ -895,16 +898,19 @@ void subgroup_type_manager::register_type(
 /* ----------------------------------------------------------------------------
  * Returns the type of subgroup corresponding to the parameters.
  * Returns NULL if not found.
- * category: The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * pik_type: Type of Pikmin. Only necessary for Pikmin category.
+ * category:      The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * specific_type: Specific type of mob, if you want to specify further.
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
-    pikmin_type* pik_type
+    mob_type* specific_type
 ) {
     for(size_t t = 0; t < types.size(); ++t) {
         subgroup_type* t_ptr = types[t];
-        if(t_ptr->category == category && t_ptr->pik_type == pik_type) {
+        if(
+            t_ptr->category == category &&
+            t_ptr->specific_type == specific_type
+        ) {
             return t_ptr;
         }
     }

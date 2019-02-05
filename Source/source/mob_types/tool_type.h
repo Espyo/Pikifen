@@ -23,10 +23,12 @@ public:
     bool can_be_hotswapped;
     bool dropped_when_pikmin_lands;
     bool dropped_when_pikmin_lands_on_mob;
+    ALLEGRO_BITMAP* bmp_icon;
     
     tool_type();
     ~tool_type();
     void load_parameters(data_node* file);
+    void load_resources(data_node* file);
 };
 
 #endif //ifndef TOOL_TYPE_INCLUDED
