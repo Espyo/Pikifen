@@ -4,16 +4,18 @@ dismiss_sfx = Louie_dismiss.ogg
 height = 46
 main_color = 64 192 255
 max_carriers = 5
-max_health = 300
+max_health = 2000
 move_speed = 130
 name_call_sfx = Louie_name_call.ogg
 pluck_delay = 0.6
 pushable = true
 pushes = false
-resistances = poison
 rotation_speed = 360
 radius = 16
 throw_strength_mult = 0.7
+vulnerabilities {
+    poison = 0
+}
 weight = 1
 whistle_sfx = Louie_whistle.ogg
 icon = Louie_icon.png

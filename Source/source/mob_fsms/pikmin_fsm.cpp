@@ -2245,9 +2245,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
     }
     
-    for(size_t r = 0; r < p->type->resistances.size(); ++r) {
-        if(p->type->resistances[r] == h) return; //Immune!
-    }
+    if(p->is_resistant_to_hazard(h)) return;
     if(p->invuln_period.time_left > 0) return;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {

@@ -4,7 +4,7 @@ dismiss_sfx = President_dismiss.ogg
 height = 46
 main_color = 64 32 192
 max_carriers = 5
-max_health = 300
+max_health = 2000
 move_speed = 130
 name_call_sfx = President_name_call.ogg
 pluck_delay = 0.6
@@ -12,8 +12,10 @@ pushable = true
 pushes = false
 rotation_speed = 360
 radius = 16
-resistances = poison
 throw_strength_mult = 0.7
+vulnerabilities {
+    poison = 0
+}
 weight = 1
 whistle_sfx = President_whistle.ogg
 icon = President_icon.png

@@ -166,7 +166,8 @@ public:
     bool is_projectile;
     bool blocks_carrier_pikmin;
     bool projectiles_can_damage;
-    vector<hazard*> resistances;
+    float default_vulnerability;
+    map<hazard*, float> hazard_vulnerabilities;
     spike_damage_type* spike_damage;
     map<spike_damage_type*, float> spike_damage_vulnerabilities;
     

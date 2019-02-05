@@ -19,11 +19,14 @@ sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
 radius = 5
-resistances = fatal_electricity; stunning_electricity
 throw_strength_mult = 1.1
 top_leaf = Leaf_top.png
 top_bud = White_bud_top.png
 top_flower = White_flower_top.png
+vulnerabilities {
+    fatal_electricity = 0
+    stunning_electricity = 0
+}
 icon_leaf = Leaf_icon.png
 icon_bud = Bud_icon.png
 icon_flower = Flower_icon.png

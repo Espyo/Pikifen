@@ -477,7 +477,9 @@ bool mob::attack(
         //Hah, this hitbox is invulnerable!
         return false;
     }
-    defense_multiplier = victim_h->value;
+    
+    defense_multiplier = victim->type->default_vulnerability;
+    defense_multiplier *= victim_h->value;
     
     for(size_t s = 0; s < statuses.size(); ++s) {
         attacker_offense *= statuses[s].type->attack_multiplier;
@@ -1346,25 +1348,29 @@ bool mob::is_off_camera() {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if a mob is resistant to a list of hazards, given the list
- * of hazards.
+ * Checks if a mob is resistant to a given hazard. Their default vulnerability
+ * is also considered.
+ */
+bool mob::is_resistant_to_hazard(hazard* h_ptr) {
+    float vulnerability_value = type->default_vulnerability;
+    auto vul = type->hazard_vulnerabilities.find(h_ptr);
+    if(vul != type->hazard_vulnerabilities.end()) {
+        vulnerability_value = vul->second;
+    }
+    
+    return vulnerability_value == 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a mob is resistant to all of the hazards inside a given list.
  */
 bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
     size_t n_matches = 0;
     for(size_t h = 0; h < hazards.size(); ++h) {
-        for(size_t r = 0; r < type->resistances.size(); ++r) {
-            if(hazards[h] == type->resistances[r]) {
-                n_matches++;
-                break;
-            }
-        }
+        if(!is_resistant_to_hazard(hazards[h])) return false;
     }
-    if(n_matches == hazards.size()) {
-        //The mob can resist all
-        //of these hazards!
-        return true;
-    }
-    return false;
+    return true;
 }
 
 
@@ -1596,9 +1602,10 @@ bool mob::can_damage(mob* v) {
     if(
         v->team == MOB_TEAM_OBSTACLE &&
         type->category->id != MOB_CATEGORY_PIKMIN &&
+        type->category->id != MOB_CATEGORY_TOOLS &&
         !type->is_projectile
     ) {
-        //Only Pikmin and projectiles can hurt obstacles.
+        //Only Pikmin, tools, and projectiles can hurt obstacles.
         return false;
     }
     if(

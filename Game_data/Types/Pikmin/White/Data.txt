@@ -20,11 +20,13 @@ sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
 sprout_evolution_time_3 = 180
 radius = 5
-resistances = poison
 spike_damage = poison
 top_leaf = Leaf_top.png
 top_bud = Pink_bud_top.png
 top_flower = Pink_flower_top.png
+vulnerabilities {
+    poison = 0
+}
 icon_leaf = Leaf_icon.png
 icon_bud = Pink_bud_icon.png
 icon_flower = Pink_flower_icon.png

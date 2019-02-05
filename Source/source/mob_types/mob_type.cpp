@@ -59,6 +59,7 @@ mob_type::mob_type(size_t category_id) :
     is_projectile(false),
     blocks_carrier_pikmin(false),
     projectiles_can_damage(true),
+    default_vulnerability(1.0f),
     spike_damage(nullptr) {
     
 }
@@ -269,9 +270,25 @@ void load_mob_type_from_file(
     rs.set("is_projectile",          mt->is_projectile);
     rs.set("blocks_carrier_pikmin",  mt->blocks_carrier_pikmin);
     rs.set("projectiles_can_damage", mt->projectiles_can_damage);
+    rs.set("default_vulnerability",  mt->default_vulnerability);
     rs.set("spike_damage",           spike_damage_name);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
+    
+    data_node* vulnerabilities_node = file.get_child_by_name("vulnerabilities");
+    for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); ++h) {
+        data_node* vulnerability_node = vulnerabilities_node->get_child(h);
+        auto hazard_it = hazards.find(vulnerability_node->name);
+        if(hazard_it == hazards.end()) {
+            log_error(
+                "Unknown hazard \"" + vulnerability_node->name + "\"!",
+                vulnerability_node
+            );
+        } else {
+            mt->hazard_vulnerabilities[&(hazard_it->second)] =
+                s2f(vulnerability_node->value) / 100;
+        }
+    }
     
     auto sd_it = spike_damage_types.find(spike_damage_name);
     if(!spike_damage_name.empty()) {
@@ -282,17 +299,6 @@ void load_mob_type_from_file(
             );
         } else {
             mt->spike_damage = &(sd_it->second);
-        }
-    }
-    
-    data_node* hazards_node = file.get_child_by_name("resistances");
-    vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
-    for(size_t h = 0; h < hazards_strs.size(); ++h) {
-        string hazard_name = hazards_strs[h];
-        if(hazards.find(hazard_name) == hazards.end()) {
-            log_error("Unknown hazard \"" + hazard_name + "\"!", hazards_node);
-        } else {
-            mt->resistances.push_back(&(hazards[hazard_name]));
         }
     }
     

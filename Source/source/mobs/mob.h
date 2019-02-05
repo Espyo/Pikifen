@@ -301,6 +301,7 @@ public:
     void release(mob* m);
     bool can_damage(mob* m);
     bool wants_to_attack(mob* m);
+    bool is_resistant_to_hazard(hazard* h_ptr);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
