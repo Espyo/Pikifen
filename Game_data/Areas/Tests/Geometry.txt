@@ -1432,6 +1432,19 @@ mobs{
 		p=-576.00 576.00
 		vars=sprout=true
 	}
+	Tool{
+		type=Bomb rock
+		p=-192.00 192.00
+	}
+	Enemy{
+		type=Cloaking Burrow-nit
+		p=0.00 576.00
+		angle=3.14
+	}
+	Tool{
+		type=Bomb rock
+		p=-64.00 576.00
+	}
 }
 path_stops{
 	s{

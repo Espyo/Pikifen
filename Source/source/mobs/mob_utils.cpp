@@ -520,7 +520,7 @@ point hold_info_struct::get_final_pos(float* final_z) {
                 offset_angle + m->angle,
                 offset_dist * h_ptr->radius
             );
-        *final_z = h_ptr->z;
+        *final_z = m->z + h_ptr->z;
     } else {
         //Body center.
         final_pos = m->pos;

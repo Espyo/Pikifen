@@ -2051,6 +2051,7 @@ void mob::tick_physics() {
     if(holder.m) {
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
+        speed_z = 0;
         angle = get_angle(final_pos, holder.m->pos), NULL;
         intended_turn_angle = angle;
         chase(final_pos, NULL, true);

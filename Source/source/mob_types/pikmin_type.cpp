@@ -34,7 +34,7 @@ pikmin_type::pikmin_type() :
     can_fly(false),
     can_swim(false),
     can_latch(true),
-    can_carry_bomb_rocks(false),
+    can_carry_tools(true),
     bmp_icon(nullptr) {
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
@@ -71,7 +71,7 @@ void pikmin_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     
     rs.set("throw_strength_mult", throw_strength_mult);
-    rs.set("can_carry_bomb_rocks", can_carry_bomb_rocks);
+    rs.set("can_carry_tools", can_carry_tools);
     rs.set("can_dig", can_dig);
     rs.set("can_latch", can_latch);
     rs.set("can_swim", can_swim);

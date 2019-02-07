@@ -38,7 +38,7 @@ public:
     bool can_fly;
     bool can_swim;
     bool can_latch;
-    bool can_carry_bomb_rocks;
+    bool can_carry_tools;
     float sprout_evolution_time[N_MATURITIES];
     //Top (leaf/bud/flower) bitmap for each maturity.
     ALLEGRO_BITMAP* bmp_top[N_MATURITIES];

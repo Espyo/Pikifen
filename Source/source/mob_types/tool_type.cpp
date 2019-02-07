@@ -19,9 +19,11 @@
  */
 tool_type::tool_type() :
     mob_type(MOB_CATEGORY_TOOLS),
+    bmp_icon(NULL),
     can_be_hotswapped(true),
     dropped_when_pikmin_lands(true),
-    dropped_when_pikmin_lands_on_mob(false) {
+    dropped_when_pikmin_lands_on_opponent(false),
+    stuck_when_pikmin_lands_on_opponent(false) {
     
 }
 
@@ -36,9 +38,17 @@ void tool_type::load_parameters(data_node* file) {
         s2b(
             file->get_child_by_name("dropped_when_pikmin_lands")->value
         );
-    dropped_when_pikmin_lands_on_mob =
+    dropped_when_pikmin_lands_on_opponent =
         s2b(
-            file->get_child_by_name("dropped_when_pikmin_lands_on_mob")->value
+            file->get_child_by_name(
+                "dropped_when_pikmin_lands_on_opponent"
+            )->value
+        );
+    stuck_when_pikmin_lands_on_opponent =
+        s2b(
+            file->get_child_by_name(
+                "stuck_when_pikmin_lands_on_opponent"
+            )->value
         );
 }
 

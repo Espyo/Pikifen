@@ -1723,6 +1723,10 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
         //Another Pikmin is already going for it. Ignore it.
         return;
     }
+    if(!pik_ptr->pik_type->can_carry_tools) {
+        //This Pikmin can't carry tools. Forget it.
+        return;
+    }
     if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
         //Can't hold this. Forget it.
         return;
@@ -1944,15 +1948,33 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     engine_assert(!m->holding.empty(), "");
     
     pikmin* pik_ptr = (pikmin*) m;
+    hitbox_interaction* info = (hitbox_interaction*) info1;
     tool* too_ptr = (tool*) (*m->holding.begin());
     
-    pik_ptr->was_thrown = false;
-    pik_ptr->latched = true;
+    if(!m->can_damage(info->mob2)) return;
     
-    if(too_ptr->too_type->dropped_when_pikmin_lands_on_mob) {
-        //TODO give the tool info about where in the mob it landed.
+    pik_ptr->was_thrown = false;
+    
+    if(too_ptr->too_type->dropped_when_pikmin_lands_on_opponent) {
         pikmin_fsm::release_tool(m, info1, info2);
         m->fsm.set_state(PIKMIN_STATE_IDLING);
+        
+        if(too_ptr->too_type->stuck_when_pikmin_lands_on_opponent && info->h2) {
+            too_ptr->speed.x = too_ptr->speed.y = too_ptr->speed_z = 0;
+            too_ptr->stop_height_effect();
+            
+            too_ptr->focused_mob = info->mob2;
+            
+            float h_offset_dist;
+            float h_offset_angle;
+            info->mob2->get_hitbox_hold_point(
+                too_ptr, info->h2, &h_offset_dist, &h_offset_angle
+            );
+            info->mob2->hold(
+                too_ptr, info->h2->body_part_index,
+                h_offset_dist, h_offset_angle, true
+            );
+        }
     }
 }
 

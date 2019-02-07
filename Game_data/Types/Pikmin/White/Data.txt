@@ -1,6 +1,6 @@
 name = White Pikmin
 
-can_carry_bomb_rocks = no
+can_carry_tools = true
 can_dig = yes
 can_latch = yes
 can_swim = no

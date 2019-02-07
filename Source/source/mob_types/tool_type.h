@@ -20,10 +20,11 @@
 class tool_type : public mob_type {
 public:
 
+    ALLEGRO_BITMAP* bmp_icon;
     bool can_be_hotswapped;
     bool dropped_when_pikmin_lands;
-    bool dropped_when_pikmin_lands_on_mob;
-    ALLEGRO_BITMAP* bmp_icon;
+    bool dropped_when_pikmin_lands_on_opponent;
+    bool stuck_when_pikmin_lands_on_opponent;
     
     tool_type();
     ~tool_type();
