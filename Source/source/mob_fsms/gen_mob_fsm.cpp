@@ -24,7 +24,7 @@
  * Generic handler for a mob touching a hazard.
  */
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     hazard* h = (hazard*) info1;
     
@@ -38,7 +38,7 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
  * Generic handler for a mob touching a spray.
  */
 void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     spray_type* s = (spray_type*) info1;
     
@@ -52,7 +52,7 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
  * Generic handler for when a mob was delivered to an Onion/ship.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, "");
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     m->focused_mob->fsm.run_event(
         MOB_EVENT_RECEIVE_DELIVERY, (void*) m
@@ -66,7 +66,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  * Event handler that makes a mob lose health by being damaged by another.
  */
 void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     hitbox_interaction* info = (hitbox_interaction*) info1;
     info->mob2->attack(m, info->h2, info->h1, NULL);
@@ -138,7 +138,7 @@ const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
  * When it's time to become stuck and move in circles.
  */
 void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
-    engine_assert(m->carry_info != NULL, "");
+    engine_assert(m->carry_info != NULL, m->print_state_history());
     
     m->carry_info->is_stuck = true;
     if(m->path_info) {

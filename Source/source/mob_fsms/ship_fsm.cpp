@@ -48,7 +48,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
  * info1: Pointer to the mob.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     mob* delivery = (mob*) info1;
     ship* s_ptr = (ship*) m;

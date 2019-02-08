@@ -1413,6 +1413,29 @@ void mob::leave_group() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a string containing the FSM state history for this mob.
+ * This is used for debugging crashes.
+ */
+string mob::print_state_history() {
+    string str = "State history: ";
+    
+    if(fsm.cur_state) {
+        str += fsm.cur_state->name;
+    } else {
+        str += "No current state!";
+        return str;
+    }
+    
+    for(size_t s = 0; s < STATE_HISTORY_SIZE; ++s) {
+        str += ", " + fsm.prev_state_names[s];
+    }
+    str += ".";
+    
+    return str;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
 void mob::read_script_vars(const string &vars) {

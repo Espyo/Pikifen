@@ -1100,7 +1100,7 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
  * info1: Pointer to the hazard.
  */
 void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
@@ -1142,7 +1142,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
  * info1: Pointer to the spray type.
  */
 void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     leader* l = (leader*) m;
     spray_type* s = (spray_type*) info1;
@@ -1158,7 +1158,7 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
  * info1: Pointer to the movement info structure.
  */
 void leader_fsm::move(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
@@ -1211,7 +1211,7 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
  * info1: Pointer to the mob.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     leader* l_ptr = (leader*) m;
     l_ptr->hold(
@@ -1229,7 +1229,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader* leader_ptr = (leader*) m;
     mob* holding_ptr = leader_ptr->holding[0];
     
-    engine_assert(holding_ptr != NULL, "");
+    engine_assert(holding_ptr != NULL, m->print_state_history());
     
     holding_ptr->fsm.run_event(MOB_EVENT_THROWN);
     
@@ -1282,7 +1282,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
  * When a leader finishes drinking the drop it was drinking.
  */
 void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, "");
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
     drop* d_ptr = (drop*) m->focused_mob;
     
     if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
@@ -1442,7 +1442,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
  * info1: Points to the hazard.
  */
 void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
@@ -1457,7 +1457,7 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
  * info2: If not NULL, that means this leader is inactive.
  */
 void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     if(m->invuln_period.time_left > 0.0f) return;
     m->invuln_period.start();
@@ -1580,7 +1580,7 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     group_info* leader_group_ptr = m->following_group->group;
-    engine_assert(leader_group_ptr != NULL, "");
+    engine_assert(leader_group_ptr != NULL, m->print_state_history());
     
     float distance =
         m->following_group->type->radius +
@@ -1640,7 +1640,7 @@ void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
  * info1: Pointer to the Pikmin to be plucked.
  */
 void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, "");
+    engine_assert(info1 != NULL, m->print_state_history());
     
     leader* lea_ptr = (leader*) m;
     pikmin* pik_ptr = (pikmin*) info1;
@@ -1673,7 +1673,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    engine_assert(l_ptr->pluck_target != NULL, "");
+    engine_assert(l_ptr->pluck_target != NULL, m->print_state_history());
     
     l_ptr->pluck_target->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
     l_ptr->pluck_target->pluck_reserved = false;

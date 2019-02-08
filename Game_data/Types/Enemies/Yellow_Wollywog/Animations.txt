@@ -608,7 +608,7 @@ sprites{
 			}
 			damage{
 				coords=7.00 0.00 -100.00
-				height=100.00
+				height=64.00
 				radius=48.00
 				type=1
 				value=40.00
@@ -635,7 +635,7 @@ sprites{
 			}
 			damage{
 				coords=7.00 0.00 -100.00
-				height=100.00
+				height=64.00
 				radius=48.00
 				type=1
 				value=40.00
@@ -662,7 +662,7 @@ sprites{
 			}
 			damage{
 				coords=7.00 0.00 -100.00
-				height=100.00
+				height=64.00
 				radius=48.00
 				type=1
 				value=40.00
@@ -689,7 +689,7 @@ sprites{
 			}
 			damage{
 				coords=7.00 0.00 -100.00
-				height=100.00
+				height=64.00
 				radius=48.00
 				type=1
 				value=40.00

@@ -364,6 +364,8 @@ public:
         const ALLEGRO_COLOR &onion_color
     );
     
+    string print_state_history();
+    
 };
 
 
