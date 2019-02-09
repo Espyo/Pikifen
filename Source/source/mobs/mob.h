@@ -324,6 +324,7 @@ public:
         const float speed = -1
     );
     void stop_chasing();
+    void stop_turning();
     void follow_path(
         const point &target, const bool can_continue = true,
         const float speed = -1.0f, const float final_target_distance = 3

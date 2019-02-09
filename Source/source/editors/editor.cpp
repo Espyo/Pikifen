@@ -1033,11 +1033,6 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
         return true;
     }
     
-    point aligned_handle_pos = get_handle_pos(moving_handle);
-    al_transform_coordinates(
-        &align_transform,
-        &aligned_handle_pos.x, &aligned_handle_pos.y
-    );
     point aligned_cursor_pos = pos;
     al_transform_coordinates(
         &align_transform,

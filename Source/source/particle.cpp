@@ -334,6 +334,7 @@ particle_generator::particle_generator(
     number(number),
     emission_interval(emission_interval),
     follow_mob(nullptr),
+    follow_z_offset(0),
     follow_angle(nullptr),
     number_deviation(0),
     duration_deviation(0),

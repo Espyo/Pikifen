@@ -1330,7 +1330,7 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::punch(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PUNCHING);
-    m->intended_turn_angle = m->angle;
+    m->stop_turning();
 }
 
 

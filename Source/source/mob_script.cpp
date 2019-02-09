@@ -1316,8 +1316,7 @@ bool mob_action::run(
     
         if(vi.empty()) {
             m->stop_chasing();
-            m->intended_turn_angle = m->angle;
-            m->intended_turn_pos = NULL;
+            m->stop_turning();
         } else {
             m->speed_z = 0;
         }

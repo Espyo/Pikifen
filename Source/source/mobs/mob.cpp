@@ -1720,8 +1720,7 @@ void mob::start_dying() {
     set_health(false, false, 0.0f);
     
     stop_chasing();
-    intended_turn_angle = angle;
-    intended_turn_pos = NULL;
+    stop_turning();
     gravity_mult = 1.0;
     
     particle p(
@@ -1792,6 +1791,15 @@ void mob::stop_following_path() {
  */
 void mob::stop_height_effect() {
     height_effect_pivot = LARGE_FLOAT;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes a mob stop wanting to turn towards some direciton.
+ */
+void mob::stop_turning() {
+    intended_turn_angle = angle;
+    intended_turn_pos = NULL;
 }
 
 
@@ -2076,7 +2084,7 @@ void mob::tick_physics() {
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
         angle = get_angle(final_pos, holder.m->pos), NULL;
-        intended_turn_angle = angle;
+        stop_turning();
         chase(final_pos, NULL, true);
     }
     
