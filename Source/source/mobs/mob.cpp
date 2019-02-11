@@ -1708,6 +1708,12 @@ mob* mob::spawn(mob_type::spawn_struct* info) {
     if(info->link_spawn_to_object) {
         new_mob->links.push_back(this);
     }
+    if(info->momentum != 0) {
+        float a = randomf(0, TAU);
+        new_mob->speed.x = cos(a) * info->momentum;
+        new_mob->speed.y = sin(a) * info->momentum;
+        new_mob->speed_z = info->momentum * 7;
+    }
     
     return new_mob;
 }

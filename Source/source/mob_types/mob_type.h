@@ -67,13 +67,15 @@ public:
         string vars;
         bool link_object_to_spawn;
         bool link_spawn_to_object;
+        float momentum;
         
         spawn_struct() :
             relative(true),
             coords_z(0),
             angle(0),
             link_object_to_spawn(false),
-            link_spawn_to_object(false) {}
+            link_spawn_to_object(false),
+            momentum(0) {}
     };
     
     struct child_struct {

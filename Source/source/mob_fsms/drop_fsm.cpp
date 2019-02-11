@@ -20,14 +20,6 @@
  */
 void drop_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-    efc.new_state("idling", DROP_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(drop_fsm::set_idling_anim);
-        }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
-            efc.run(drop_fsm::on_touched);
-        }
-    }
     efc.new_state("falling", DROP_STATE_FALLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(drop_fsm::set_falling_anim);
@@ -38,10 +30,18 @@ void drop_fsm::create_fsm(mob_type* typ) {
     }
     efc.new_state("landing", DROP_STATE_LANDING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(drop_fsm::set_landing_anim);
+            efc.run(drop_fsm::land);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idling");
+        }
+    }
+    efc.new_state("idling", DROP_STATE_IDLING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(drop_fsm::set_idling_anim);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+            efc.run(drop_fsm::on_touched);
         }
     }
     efc.new_state("bumped", DROP_STATE_BUMPED); {
@@ -58,7 +58,7 @@ void drop_fsm::create_fsm(mob_type* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idling");
+    typ->first_state_nr = fix_states(typ->states, "falling");
     
     //Check if the number in the enum and the total match up.
     engine_assert(
@@ -66,6 +66,15 @@ void drop_fsm::create_fsm(mob_type* typ) {
         i2s(typ->states.size()) + " registered, " +
         i2s(N_DROP_STATES) + " in enum."
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the drop lands on the floor.
+ */
+void drop_fsm::land(mob* m, void* info1, void* info2) {
+    m->stop_chasing();
+    m->set_animation(DROP_ANIM_LANDING);
 }
 
 
@@ -157,12 +166,4 @@ void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
  */
 void drop_fsm::set_idling_anim(mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_IDLING);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the animation to the "landing" one.
- */
-void drop_fsm::set_landing_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(DROP_ANIM_LANDING);
 }

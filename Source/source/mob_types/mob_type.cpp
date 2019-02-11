@@ -366,6 +366,7 @@ void load_mob_type_from_file(
         rs.set("vars", new_spawn.vars);
         rs.set("link_object_to_spawn", new_spawn.link_object_to_spawn);
         rs.set("link_spawn_to_object", new_spawn.link_spawn_to_object);
+        rs.set("momentum", new_spawn.momentum);
         
         if(!coords_str.empty()) {
             new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
