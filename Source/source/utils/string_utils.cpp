@@ -38,6 +38,21 @@ string f2s(const float f) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if the contents of a string are a number or not.
+ */
+bool is_number(const string &s) {
+    unsigned char ch;
+    for(size_t c = 0; c < s.size(); ++c) {
+        ch = s[c];
+        if((ch < '0' || ch > '9') && ch != '-' && ch != ',' && ch != '.') {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Replaces all instances of x with y.
  */
 string replace_all(string s, string search, string replacement) {

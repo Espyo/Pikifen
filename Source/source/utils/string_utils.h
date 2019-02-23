@@ -23,6 +23,7 @@ using namespace std;
 string box_string(const string &s, const size_t size);
 string b2s(const bool b);
 string f2s(const float f);
+bool is_number(const string &s);
 string replace_all(string s, string search, string replacement);
 bool s2b(const string &s);
 double s2f(const string &s);
