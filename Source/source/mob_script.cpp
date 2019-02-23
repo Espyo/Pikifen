@@ -174,80 +174,39 @@ mob_action::mob_action(
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
-        if(v_words.size() >= 4 && v_words[0] == "var") {
-            vi.push_back(MOB_ACTION_IF_LHS_VAR);
-            v_words.erase(v_words.begin());
-        } else {
-            vi.push_back(MOB_ACTION_IF_LHS_INFO);
-        }
+        /* vi[0] contains the operator.
+         * vi[1] contains the type of LHS comparand.
+         * vi[2] contains the type of RHS comparand.
+         * vs[0] contains the LHS comparand.
+         * vs[1] contains the RHS comparand.
+         */
         
-        if(v_words.size() >= 3) {
-            if(v_words[1] == "=") {
-                vi.push_back(MOB_ACTION_IF_OP_EQUAL);
-            } else if(v_words[1] == "!=") {
-                vi.push_back(MOB_ACTION_IF_OP_NOT);
-            } else if(v_words[1] == "<") {
-                vi.push_back(MOB_ACTION_IF_OP_LESS);
-            } else if(v_words[1] == ">") {
-                vi.push_back(MOB_ACTION_IF_OP_MORE);
-            } else if(v_words[1] == "<=") {
-                vi.push_back(MOB_ACTION_IF_OP_LESS_E);
-            } else if(v_words[1] == ">=") {
-                vi.push_back(MOB_ACTION_IF_OP_MORE_E);
-            } else {
-                log_error(
-                    "Unknown operator \"" + v_words[2] + "\"!",
-                    dn
-                );
-                valid = false;
-            }
+        //Find the operator first, since that's the easiest part.
+        size_t operator_pos = string::npos;
+        unsigned char operator_size = 0;
+        if((operator_pos = v.find(" = ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_EQUAL);
+            operator_size = 3;
             
-            string rhs =
-                v.substr(v.find(v_words[1]) + v_words[1].size(), string::npos);
-            rhs = trim_spaces(rhs);
+        } else if((operator_pos = v.find(" != ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_NOT);
+            operator_size = 4;
             
-            if(vi[0] == MOB_ACTION_IF_LHS_VAR) {
-                vs.push_back(v_words[0]);
-                
-            } else {
+        } else if((operator_pos = v.find(" < ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_LESS);
+            operator_size = 3;
             
-                if(v_words[0] == "body_part") {
-                    vi.push_back(MOB_ACTION_COMPARAND_BODY_PART);
-                } else if(v_words[0] == "chomped_pikmin") {
-                    vi.push_back(MOB_ACTION_COMPARAND_CHOMPED_PIKMIN);
-                } else if(v_words[0] == "day_minutes") {
-                    vi.push_back(MOB_ACTION_COMPARAND_DAY_MINUTES);
-                } else if(v_words[0] == "field_pikmin") {
-                    vi.push_back(MOB_ACTION_COMPARAND_FIELD_PIKMIN);
-                } else if(v_words[0] == "frame_signal") {
-                    vi.push_back(MOB_ACTION_COMPARAND_FRAME_SIGNAL);
-                } else if(v_words[0] == "health") {
-                    vi.push_back(MOB_ACTION_COMPARAND_HEALTH);
-                } else if(v_words[0] == "latched_pikmin") {
-                    vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN);
-                } else if(v_words[0] == "latched_pikmin_weight") {
-                    vi.push_back(MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT);
-                } else if(v_words[0] == "message") {
-                    vi.push_back(MOB_ACTION_COMPARAND_MESSAGE);
-                } else if(v_words[0] == "mob_category") {
-                    vi.push_back(MOB_ACTION_COMPARAND_MOB_CATEGORY);
-                } else if(v_words[0] == "mob_type") {
-                    vi.push_back(MOB_ACTION_COMPARAND_MOB_TYPE);
-                } else if(v_words[0] == "other_body_part") {
-                    vi.push_back(MOB_ACTION_COMPARAND_OTHER_BODY_PART);
-                } else if(v_words[0] == "sender") {
-                    vi.push_back(MOB_ACTION_COMPARAND_MESSAGE_SENDER);
-                } else {
-                    log_error(
-                        "Unknown comparand \"" + v_words[0] + "\"!",
-                        dn
-                    );
-                    valid = false;
-                }
-                
-            }
+        } else if((operator_pos = v.find(" > ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_MORE);
+            operator_size = 3;
             
-            vs.push_back(rhs);
+        } else if((operator_pos = v.find(" <= ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_LESS_E);
+            operator_size = 4;
+            
+        } else if((operator_pos = v.find(" >= ")) != string::npos) {
+            vi.push_back(MOB_ACTION_IF_OP_MORE_E);
+            operator_size = 4;
             
         } else {
             log_error(
@@ -256,7 +215,67 @@ mob_action::mob_action(
                 dn
             );
             valid = false;
+            return;
+            
         }
+        
+        //Now, we can gather the left-hand side, and the right-hand side.
+        string lhs = v.substr(0, operator_pos);
+        string rhs = v.substr(operator_pos + operator_size, string::npos);
+        
+        lhs = trim_spaces(lhs);
+        rhs = trim_spaces(rhs);
+        
+        //Examine the left-hand side.
+        if(lhs.size() >= 4 && lhs.substr(0, 4) == "var ") {
+            vi.push_back(MOB_ACTION_IF_LHS_VAR);
+            lhs = trim_spaces(lhs.substr(4, string::npos), true);
+        } else if(lhs == "body_part") {
+            vi.push_back(MOB_ACTION_IF_LHS_BODY_PART);
+        } else if(lhs == "chomped_pikmin") {
+            vi.push_back(MOB_ACTION_IF_LHS_CHOMPED_PIKMIN);
+        } else if(lhs == "day_minutes") {
+            vi.push_back(MOB_ACTION_IF_LHS_DAY_MINUTES);
+        } else if(lhs == "field_pikmin") {
+            vi.push_back(MOB_ACTION_IF_LHS_FIELD_PIKMIN);
+        } else if(lhs == "frame_signal") {
+            vi.push_back(MOB_ACTION_IF_LHS_FRAME_SIGNAL);
+        } else if(lhs == "health") {
+            vi.push_back(MOB_ACTION_IF_LHS_HEALTH);
+        } else if(lhs == "latched_pikmin") {
+            vi.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN);
+        } else if(lhs == "latched_pikmin_weight") {
+            vi.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT);
+        } else if(lhs == "message") {
+            vi.push_back(MOB_ACTION_IF_LHS_MESSAGE);
+        } else if(lhs == "mob_category") {
+            vi.push_back(MOB_ACTION_IF_LHS_MOB_CATEGORY);
+        } else if(lhs == "mob_type") {
+            vi.push_back(MOB_ACTION_IF_LHS_MOB_TYPE);
+        } else if(lhs == "other_body_part") {
+            vi.push_back(MOB_ACTION_IF_LHS_OTHER_BODY_PART);
+        } else if(lhs == "sender") {
+            vi.push_back(MOB_ACTION_IF_LHS_MESSAGE_SENDER);
+        } else {
+            log_error(
+                "Unknown comparand \"" + lhs + "\"!",
+                dn
+            );
+            valid = false;
+            return;
+        }
+        
+        //Now, examine the right-hand side.
+        if(rhs.size() >= 4 && rhs.substr(0, 4) == "var ") {
+            vi.push_back(MOB_ACTION_IF_RHS_VAR);
+            rhs = trim_spaces(rhs.substr(4, string::npos), true);
+        } else {
+            vi.push_back(MOB_ACTION_IF_RHS_CONST);
+        }
+        
+        //Finally, save both.
+        vs.push_back(lhs);
+        vs.push_back(rhs);
         
         
     } else if(n == "increment_var") {
@@ -1031,117 +1050,114 @@ bool mob_action::run(
     
         string lhs;
         string rhs;
-        if(
-            vi[0] == MOB_ACTION_IF_LHS_VAR &&
-            vs.size() >= 2
-        ) {
+        
+        if(vi[1] == MOB_ACTION_IF_LHS_VAR) {
             lhs = m->vars[vs[0]];
-            rhs = vs[1];
-        } else if(
-            vi[0] == MOB_ACTION_IF_LHS_INFO &&
-            vi.size() >= 3 && !vs.empty()
-        ) {
-            if(vi[2] == MOB_ACTION_COMPARAND_CHOMPED_PIKMIN) {
-                lhs = i2s(m->chomping_mobs.size());
-            } else if(vi[2] == MOB_ACTION_COMPARAND_DAY_MINUTES) {
-                lhs = i2s(day_minutes);
-            } else if(vi[2] == MOB_ACTION_COMPARAND_FIELD_PIKMIN) {
-                lhs = i2s(pikmin_list.size());
-            } else if(vi[2] == MOB_ACTION_COMPARAND_FRAME_SIGNAL) {
-                if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
-                    lhs = i2s(*((size_t*) custom_data_1));
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_HEALTH) {
-                lhs = i2s(m->health);
-            } else if(vi[2] == MOB_ACTION_COMPARAND_LATCHED_PIKMIN) {
-                lhs = i2s(m->get_latched_pikmin_amount());
-            } else if(vi[2] == MOB_ACTION_COMPARAND_LATCHED_PIKMIN_WEIGHT) {
-                lhs = i2s(m->get_latched_pikmin_weight());
-            } else if(vi[2] == MOB_ACTION_COMPARAND_MESSAGE) {
-                if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-                    lhs = *((string*) custom_data_1);
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_MESSAGE_SENDER) {
-                if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-                    lhs = ((mob*) custom_data_2)->type->name;
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_MOB_CATEGORY) {
-                if(
-                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                    parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                    parent_event == MOB_EVENT_OPPONENT_IN_REACH
-                ) {
-                    lhs = ((mob*) custom_data_1)->type->category->name;
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_MOB_TYPE) {
-                if(
-                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                    parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                    parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-                    parent_event == MOB_EVENT_PIKMIN_LANDED
-                ) {
-                    lhs = ((mob*) custom_data_1)->type->name;
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_BODY_PART) {
-                if(
-                    parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
-                    parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-                    parent_event == MOB_EVENT_DAMAGE
-                ) {
-                    lhs =
-                        (
-                            (hitbox_interaction*) custom_data_1
-                        )->h1->body_part_name;
-                } else if(
-                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                    parent_event == MOB_EVENT_PIKMIN_LANDED
-                ) {
-                    lhs =
-                        m->get_closest_hitbox(
-                            ((mob*) custom_data_1)->pos,
-                            INVALID, NULL
-                        )->body_part_name;
-                }
-            } else if(vi[2] == MOB_ACTION_COMPARAND_OTHER_BODY_PART) {
-                if(
-                    parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
-                    parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-                    parent_event == MOB_EVENT_DAMAGE
-                ) {
-                    lhs =
-                        (
-                            (hitbox_interaction*) custom_data_1
-                        )->h2->body_part_name;
-                } else if(
-                    parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                    parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                    parent_event == MOB_EVENT_PIKMIN_LANDED
-                ) {
-                    lhs =
-                        ((mob*) custom_data_1)->get_closest_hitbox(
-                            m->pos, INVALID, NULL
-                        )->body_part_name;
-                }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
+            lhs = i2s(m->chomping_mobs.size());
+        } else if(vi[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
+            lhs = i2s(day_minutes);
+        } else if(vi[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
+            lhs = i2s(pikmin_list.size());
+        } else if(vi[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
+            if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
+                lhs = i2s(*((size_t*) custom_data_1));
             }
-            rhs = vs[0];
+        } else if(vi[1] == MOB_ACTION_IF_LHS_HEALTH) {
+            lhs = i2s(m->health);
+        } else if(vi[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
+            lhs = i2s(m->get_latched_pikmin_amount());
+        } else if(vi[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
+            lhs = i2s(m->get_latched_pikmin_weight());
+        } else if(vi[1] == MOB_ACTION_IF_LHS_MESSAGE) {
+            if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+                lhs = *((string*) custom_data_1);
+            }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
+            if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+                lhs = ((mob*) custom_data_2)->type->name;
+            }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
+            if(
+                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+                parent_event == MOB_EVENT_OPPONENT_IN_REACH
+            ) {
+                lhs = ((mob*) custom_data_1)->type->category->name;
+            }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
+            if(
+                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+                parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
+                parent_event == MOB_EVENT_PIKMIN_LANDED
+            ) {
+                lhs = ((mob*) custom_data_1)->type->name;
+            }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_BODY_PART) {
+            if(
+                parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+                parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+                parent_event == MOB_EVENT_DAMAGE
+            ) {
+                lhs =
+                    (
+                        (hitbox_interaction*) custom_data_1
+                    )->h1->body_part_name;
+            } else if(
+                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                parent_event == MOB_EVENT_PIKMIN_LANDED
+            ) {
+                lhs =
+                    m->get_closest_hitbox(
+                        ((mob*) custom_data_1)->pos,
+                        INVALID, NULL
+                    )->body_part_name;
+            }
+        } else if(vi[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
+            if(
+                parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+                parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+                parent_event == MOB_EVENT_DAMAGE
+            ) {
+                lhs =
+                    (
+                        (hitbox_interaction*) custom_data_1
+                    )->h2->body_part_name;
+            } else if(
+                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+                parent_event == MOB_EVENT_PIKMIN_LANDED
+            ) {
+                lhs =
+                    ((mob*) custom_data_1)->get_closest_hitbox(
+                        m->pos, INVALID, NULL
+                    )->body_part_name;
+            }
         } else {
             return false;
         }
         
-        if(vi[1] == MOB_ACTION_IF_OP_EQUAL) {
+        if(vi[2] == MOB_ACTION_IF_RHS_VAR) {
+            rhs = m->vars[vs[1]];
+        } else {
+            rhs = vs[1];
+        }
+        
+        if(vi[0] == MOB_ACTION_IF_OP_EQUAL) {
             return (lhs == rhs);
-        } else if(vi[1] == MOB_ACTION_IF_OP_NOT) {
+        } else if(vi[0] == MOB_ACTION_IF_OP_NOT) {
             return (lhs != rhs);
-        } else if(vi[1] == MOB_ACTION_IF_OP_LESS) {
+        } else if(vi[0] == MOB_ACTION_IF_OP_LESS) {
             return (s2i(lhs) < s2i(rhs));
-        } else if(vi[1] == MOB_ACTION_IF_OP_MORE) {
+        } else if(vi[0] == MOB_ACTION_IF_OP_MORE) {
             return (s2i(lhs) > s2i(rhs));
-        } else if(vi[1] == MOB_ACTION_IF_OP_LESS_E) {
+        } else if(vi[0] == MOB_ACTION_IF_OP_LESS_E) {
             return (s2i(lhs) <= s2i(rhs));
-        } else if(vi[1] == MOB_ACTION_IF_OP_MORE_E) {
+        } else if(vi[0] == MOB_ACTION_IF_OP_MORE_E) {
             return (s2i(lhs) >= s2i(rhs));
         }
         
