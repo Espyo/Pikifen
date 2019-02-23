@@ -157,6 +157,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 ===============
     * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
     * To drop a held Pikmin without throwing it, keep holding the throw button, and press the whistle button.
+    * If you're having trouble understanding why your custom mob is acting the way it is, try aiming your cursor at it
+        and using the "mob info" creator tool (5 key, by default).
 
 ===============
 7) Credits

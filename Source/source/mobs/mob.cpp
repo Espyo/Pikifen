@@ -1476,7 +1476,7 @@ void mob::release(mob* m) {
  */
 void mob::release_chomped_pikmin() {
     for(size_t p = 0; p < chomping_mobs.size(); ++p) {
-        chomping_mobs[p]->fsm.run_event(MOB_EVENT_RELEASED);
+        release(chomping_mobs[p]);
     }
     chomping_mobs.clear();
 }

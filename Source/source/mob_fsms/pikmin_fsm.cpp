@@ -1370,9 +1370,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * When a Pikmin is gently released by a leader or enemy.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
-    if(m->focused_mob) {
-        m->focused_mob->release(m);
-    }
+
 }
 
 

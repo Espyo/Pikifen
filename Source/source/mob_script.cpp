@@ -355,7 +355,7 @@ mob_action::mob_action(
         } else {
             log_error(
                 "The message sending action needs to know the distance "
-                "and the message!"
+                "and the message!", dn
             );
             valid = false;
         }
@@ -365,12 +365,23 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_ANIMATION;
         
-        size_t f_pos = mt->anims.find_animation(v);
-        if(f_pos == INVALID) {
-            log_error("Unknown animation \"" + v + "\"!", dn);
+        if(v.empty()) {
+            log_error(
+                "The animation setting action needs to know the animation "
+                "name!", dn
+            );
             valid = false;
         } else {
-            vi.push_back(f_pos);
+            size_t f_pos = mt->anims.find_animation(v_words[0]);
+            if(f_pos == INVALID) {
+                log_error("Unknown animation \"" + v_words[0] + "\"!", dn);
+                valid = false;
+            } else {
+                vi.push_back(f_pos);
+                vi.push_back(
+                    v_words.size() > 1 && v_words[1] == "no_restart"
+                );
+            }
         }
         
         
@@ -1163,7 +1174,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        m->set_animation(vi[0], false);
+        m->set_animation(vi[0], false, vi[1]);
         
         
     } else if(type == MOB_ACTION_SET_FAR_REACH) {

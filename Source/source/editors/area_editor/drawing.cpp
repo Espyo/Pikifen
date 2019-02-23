@@ -683,11 +683,13 @@ void area_editor::do_drawing() {
                 }
             }
             
-            al_draw_line(
-                mouse_cursor_w.x, mouse_cursor_w.y,
-                closest->pos.x, closest->pos.y,
-                al_map_rgb(192, 128, 32), 2.0 / cam_zoom
-            );
+            if(closest) {
+                al_draw_line(
+                    mouse_cursor_w.x, mouse_cursor_w.y,
+                    closest->pos.x, closest->pos.y,
+                    al_map_rgb(192, 128, 32), 2.0 / cam_zoom
+                );
+            }
         }
         
         if(show_path_preview) {
