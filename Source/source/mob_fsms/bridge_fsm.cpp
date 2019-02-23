@@ -21,7 +21,7 @@
  */
 void bridge_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-    efc.new_state("idling", 0); {
+    efc.new_state("idling", BRIDGE_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(bridge_fsm::set_anim);
         }
@@ -33,7 +33,7 @@ void bridge_fsm::create_fsm(mob_type* typ) {
             efc.change_state("destroyed");
         }
     }
-    efc.new_state("destroyed", 1); {
+    efc.new_state("destroyed", BRIDGE_STATE_DESTROYED); {
     
     }
     

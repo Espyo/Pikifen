@@ -141,6 +141,8 @@ float day_minutes = 60 * 7;
 float day_minutes_end = 60 * 19;
 float day_minutes_per_irl_sec = 2;
 float day_minutes_start = 60 * 7;
+map<string, decoration_type*> decoration_types;
+vector<decoration*> decorations;
 double delta_t = 0;
 ALLEGRO_DISPLAY* display = NULL;
 bool draw_cursor_trail = true;

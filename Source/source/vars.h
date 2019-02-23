@@ -28,6 +28,7 @@
 #include "liquid.h"
 #include "mobs/bridge.h"
 #include "mobs/converter.h"
+#include "mobs/decoration.h"
 #include "mobs/drop.h"
 #include "mobs/gate.h"
 #include "mobs/interactable.h"
@@ -224,6 +225,8 @@ extern float day_minutes_end;
 extern float day_minutes_per_irl_sec;
 //The in-game minutes start with this value every day.
 extern float day_minutes_start;
+extern map<string, decoration_type*> decoration_types;
+extern vector<decoration*> decorations;
 //Time between the previous frame and the current.
 extern double delta_t;
 extern ALLEGRO_DISPLAY* display;

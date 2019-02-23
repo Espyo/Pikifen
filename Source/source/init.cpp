@@ -30,6 +30,7 @@
 #include "mob_categories/bridge_category.h"
 #include "mob_categories/converter_category.h"
 #include "mob_categories/custom_category.h"
+#include "mob_categories/decoration_category.h"
 #include "mob_categories/drop_category.h"
 #include "mob_categories/enemy_category.h"
 #include "mob_categories/gate_category.h"
@@ -519,6 +520,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_BRIDGES, new bridge_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_DECORATIONS, new decoration_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_INTERACTABLES, new interactable_category()
