@@ -1,0 +1,17 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.00
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Blue_pellet.png
+		file_pos=0.00 0.00
+		file_size=128.00 128.00
+	}
+}
+body_parts

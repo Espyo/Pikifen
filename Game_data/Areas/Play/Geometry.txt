@@ -2468,19 +2468,19 @@ mobs{
 		vars=opens_box=true;text=This is still a WIP! Keys:\nWASD to move\nMouse to move the cursor\nLeft-click to throw\nRight-click to whistle\nSpace to move the group\nTab to switch leaders\nLeft control to dismiss\nMore info:\nhttp://www.pikminfanon.com/\nPikifen\nand on the included README
 	}
 	Pellet{
-		type=Red 10
+		type=Red 10 pellet
 		p=-32.00 32.00
 	}
 	Pellet{
-		type=Red 1
+		type=Red 1 pellet
 		p=-320.00 -32.00
 	}
 	Pellet{
-		type=Red 20
+		type=Red 20 pellet
 		p=640.00 64.00
 	}
 	Pellet{
-		type=Red 5
+		type=Red 5 pellet
 		p=-0.00 -1216.00
 	}
 	Enemy{

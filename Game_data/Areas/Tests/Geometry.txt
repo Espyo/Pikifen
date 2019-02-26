@@ -1274,7 +1274,7 @@ mobs{
 		p=192.00 -288.00
 	}
 	Pellet{
-		type=Red 5
+		type=Red 5 pellet
 		p=896.00 224.00
 	}
 	Pikmin{

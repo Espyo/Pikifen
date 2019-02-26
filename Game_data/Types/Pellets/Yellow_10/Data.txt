@@ -1,4 +1,4 @@
-name = Red 10 pellet
+name = Yellow 10 pellet
 
 height = 64
 match_seeds = 10
@@ -6,7 +6,7 @@ max_carriers = 20
 non_match_seeds = 5
 number = 10
 number_image = Pellet_10.png
-pikmin_type = Red Pikmin
+pikmin_type = Yellow Pikmin
 pushable = true
 pushes = true
 radius = 48
