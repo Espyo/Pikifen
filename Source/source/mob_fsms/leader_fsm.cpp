@@ -39,6 +39,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::focus);
             efc.change_state("active");
         }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(leader_fsm::stop);
+        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::inactive_be_attacked);
         }
@@ -1179,6 +1182,7 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stop(mob* m, void* info1, void* info2) {
     m->stop_chasing();
+    m->stop_turning();
 }
 
 

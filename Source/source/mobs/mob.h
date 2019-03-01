@@ -258,6 +258,8 @@ public:
     unsigned char disabled_state_flags;
     //If this mob is a sub-mob, this points to the parent mob.
     parent_mob_info* parent;
+    //How long it's been alive for.
+    float time_alive;
     
     
     void tick();
@@ -308,7 +310,7 @@ public:
     void stop_height_effect();
     void release_chomped_pikmin();
     void send_message(mob* receiver, string &msg);
-    mob* spawn(mob_type::spawn_struct* info);
+    mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
     void start_dying();
     void finish_dying();
     void respawn();
@@ -355,6 +357,7 @@ public:
     //TODO Replace lose_panic_from_status() with handle_lose_status()?
     virtual void lose_panic_from_status();
     virtual void read_script_vars(const string &vars);
+    virtual void start_dying_class_specific();
     
     //Drawing tools.
     point get_sprite_center(sprite* s);

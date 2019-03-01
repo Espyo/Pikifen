@@ -33,9 +33,13 @@ public:
     unsigned int appears_before_day;
     unsigned int appears_every_x_days;
     
+    vector<mob_type*> specific_spoils;
+    vector<size_t> random_pellet_spoils;
+    
     enemy(const point &pos, enemy_type* type, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     virtual void read_script_vars(const string &vars);
+    virtual void start_dying_class_specific();
     
     virtual bool can_receive_status(status_type* s);
     

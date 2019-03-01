@@ -1041,9 +1041,11 @@ void save_screenshot() {
 
 /* ----------------------------------------------------------------------------
  * Returns a vector with all items inside a semicolon-separated list.
+ * s:   The string containing the list.
+ * sep: Separator to use, in case you need something else. Default is semicolon.
  */
-vector<string> semicolon_list_to_vector(const string &s) {
-    vector<string> parts = split(s, ";");
+vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
+    vector<string> parts = split(s, sep);
     for(size_t p = 0; p < parts.size(); ++p) {
         parts[p] = trim_spaces(parts[p]);
     }

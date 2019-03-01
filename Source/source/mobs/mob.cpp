@@ -24,6 +24,8 @@
 
 size_t next_mob_id = 0;
 
+const float MOB_PUSH_THROTTLE_TIMEOUT = 5.0f;
+
 
 /* ----------------------------------------------------------------------------
  * Creates a mob of no particular type.
@@ -82,7 +84,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     dead(false),
     chomp_max(0),
     disabled_state_flags(0),
-    parent(nullptr) {
+    parent(nullptr),
+    time_alive(0.0f) {
     
     next_mob_id++;
     
@@ -1651,11 +1654,17 @@ bool mob::can_damage(mob* v) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes the current mob spawn a new mob.
+ * Makes the current mob spawn a new mob, given some spawn information.
+ * info:     Structure with information about how to spawn it.
+ * type_ptr: If NULL, the pointer to the mob type is obtained given its
+ *   name in the information structure. If not NULL, uses this instead.
  */
-mob* mob::spawn(mob_type::spawn_struct* info) {
+mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     //First, find the mob.
-    mob_type* type_ptr = mob_categories.find_mob_type(info->mob_type_name);
+    if(!type_ptr) {
+        mob_categories.find_mob_type(info->mob_type_name);
+    }
+    
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
@@ -1743,6 +1752,8 @@ void mob::start_dying() {
     pg.total_speed_deviation = 40;
     pg.duration_deviation = 0.5;
     pg.emit(particles);
+    
+    start_dying_class_specific();
 }
 
 
@@ -2010,6 +2021,8 @@ void mob::tick_class_specifics() {
  * Performs some logic code for this game frame.
  */
 void mob::tick_misc_logic() {
+    time_alive += delta_t;
+    
     invuln_period.tick(delta_t);
     
     for(size_t s = 0; s < this->statuses.size(); ++s) {
@@ -2145,6 +2158,15 @@ void mob::tick_physics() {
         //Let's place a cap.
         push_amount =
             min(push_amount, (float) ((type->radius / delta_t) - chase_speed));
+            
+        //If the mob spawned recently, throttle its push. This avoids a bundle
+        //of recently-spawned objects from pushing each other with insane force.
+        //Setting the amount to 0 means it'll use the push provided by
+        //MOB_PUSH_EXTRA_AMOUNT exclusively.
+        if(time_alive < MOB_PUSH_THROTTLE_TIMEOUT) {
+            push_amount = 0;
+        }
+        
         move_speed.x +=
             cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
         move_speed.y +=
@@ -2843,6 +2865,7 @@ bool mob::wants_to_attack(mob* v) {
 bool mob::can_receive_status(status_type* s) { return false; }
 void mob::handle_status_effect(status_type* s) {}
 void mob::lose_panic_from_status() {}
+void mob::start_dying_class_specific() { }
 
 
 /* ----------------------------------------------------------------------------

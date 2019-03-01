@@ -244,6 +244,7 @@ mob* create_mob(
     function<void(mob*)> code_after_creation = nullptr
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
+string get_error_message_mob_info(mob* m);
 size_t string_to_team_nr(const string &team_str);
 
 

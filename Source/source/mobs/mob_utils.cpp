@@ -760,6 +760,17 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a string that describes the given mob. Used in error messages
+ * where you have to indicate a specific mob in the area.
+ */
+string get_error_message_mob_info(mob* m) {
+    return
+        "type \"" + m->type->name + "\", coordinates " +
+        p2s(m->pos) + ", area \"" + cur_area_data.name + "\"";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts a string to the numeric representation of a team.
  * Returns INVALID if the string is not valid.
  */
