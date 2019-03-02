@@ -197,7 +197,7 @@ point group_info::get_spot_offset(const size_t spot_index) {
  * (Re-)Initializes the group spots. This resizes it to the current number
  * of group members. Any old group members are moved to the appropriate
  * new spot.
- * new_mob_ptr: If this initialization is because a new mob entered
+ * affected_mob_ptr: If this initialization is because a new mob entered
  *   or left the group, this should point to said mob.
  */
 void group_info::init_spots(mob* affected_mob_ptr) {
@@ -242,9 +242,8 @@ void group_info::init_spots(mob* affected_mob_ptr) {
          * (distance from one point to the other),
          * and the central distance, which is distance between the center
          * and the middle of two spots.
-         */
-        
-        /* We can get the middle distance because we know the actual diameter,
+         *
+         * We can get the middle distance because we know the actual diameter,
          * which should be the size of a Pikmin and one interval unit,
          * and we know the distance from one spot to the center.
          */
@@ -322,18 +321,26 @@ void group_info::init_spots(mob* affected_mob_ptr) {
     if(old_mobs.size() < spots.size()) {
         for(size_t m = 0; m < old_mobs.size(); ++m) {
             spots[m].mob_ptr = old_mobs[m];
+            spots[m].mob_ptr->group_spot_index = m;
         }
         spots[old_mobs.size()].mob_ptr = affected_mob_ptr;
+        affected_mob_ptr->group_spot_index = old_mobs.size();
         
     } else if(old_mobs.size() > spots.size()) {
-        for(size_t m = 0; m < old_mobs.size(); ++m) {
-            if(old_mobs[m] == affected_mob_ptr) continue;
-            spots[m].mob_ptr = old_mobs[m];
+        for(size_t m = 0, s = 0; m < old_mobs.size(); ++m) {
+            if(old_mobs[m] == affected_mob_ptr) {
+                old_mobs[m]->group_spot_index = INVALID;
+                continue;
+            }
+            spots[s].mob_ptr = old_mobs[m];
+            spots[s].mob_ptr->group_spot_index = s;
+            ++s;
         }
         
     } else {
         for(size_t m = 0; m < old_mobs.size(); ++m) {
             spots[m].mob_ptr = old_mobs[m];
+            spots[m].mob_ptr->group_spot_index = m;
         }
     }
 }

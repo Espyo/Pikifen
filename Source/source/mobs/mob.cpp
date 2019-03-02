@@ -1662,7 +1662,7 @@ bool mob::can_damage(mob* v) {
 mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     //First, find the mob.
     if(!type_ptr) {
-        mob_categories.find_mob_type(info->mob_type_name);
+        type_ptr = mob_categories.find_mob_type(info->mob_type_name);
     }
     
     if(!type_ptr) return NULL;

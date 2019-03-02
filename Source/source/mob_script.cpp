@@ -1226,7 +1226,7 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        m->set_animation(vi[0], false, vi[1]);
+        m->set_animation(vi[0], false, vi[1] == 0);
         
         
     } else if(type == MOB_ACTION_SET_FAR_REACH) {

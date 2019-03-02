@@ -2028,7 +2028,7 @@ void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     m->set_animation(PIKMIN_ANIM_WALKING);
-    pikmin_fsm::update_in_group_chasing(m, info1, info2);
+    pikmin_fsm::update_in_group_chasing(m, NULL, NULL);
 }
 
 
