@@ -30,6 +30,7 @@ public:
     ALLEGRO_COLOR tint_random_variation;
     float scale_random_variation;
     float rotation_random_variation;
+    bool random_animation_delay;
     
     decoration_type();
     ~decoration_type();

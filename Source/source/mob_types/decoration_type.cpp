@@ -21,7 +21,8 @@
 decoration_type::decoration_type() :
     mob_type(MOB_CATEGORY_DECORATIONS),
     scale_random_variation(0.0f),
-    rotation_random_variation(0.0f) {
+    rotation_random_variation(0.0f),
+    random_animation_delay(false) {
     
     tint_random_variation = al_map_rgba(0, 0, 0, 0);
     decoration_fsm::create_fsm(this);
@@ -37,6 +38,7 @@ void decoration_type::load_parameters(data_node* file) {
     rs.set("tint_random_variation", tint_random_variation);
     rs.set("scale_random_variation", scale_random_variation);
     rs.set("rotation_random_variation", rotation_random_variation);
+    rs.set("random_animation_delay", random_animation_delay);
     
     rotation_random_variation = deg_to_rad(rotation_random_variation);
 }

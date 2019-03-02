@@ -269,6 +269,24 @@ void animation_instance::start() {
 
 
 /* ----------------------------------------------------------------------------
+ * Skips the current animation instance ahead in time for a random amount of
+ * time. The time is anywhere between 0 and the total duration of the
+ * animation. Frame signals will be ignored.
+ */
+void animation_instance::skip_ahead_randomly() {
+    if(!cur_anim) return;
+    //First, find how long the animation lasts for.
+    
+    float total_duration = 0;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        total_duration += cur_anim->frames[f].duration;
+    }
+    
+    tick(randomf(0, total_duration));
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks the animation with the given amount of time.
  * time:    How many seconds to tick.
  * signals: Any frame that sends a signal adds it here.

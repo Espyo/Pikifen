@@ -205,6 +205,7 @@ public:
     
     void set_anim(animation* new_anim, const size_t new_anim_nr);
     void start();
+    void skip_ahead_randomly();
     bool tick(const float time, vector<size_t>* signals = NULL);
     sprite* get_cur_sprite();
 };

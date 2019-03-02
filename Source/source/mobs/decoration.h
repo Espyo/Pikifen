@@ -33,6 +33,7 @@ public:
     ALLEGRO_COLOR individual_tint;
     float individual_scale;
     float individual_rotation;
+    bool has_done_first_animation;
     
     decoration(const point &pos, decoration_type* dec_type, const float angle);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);

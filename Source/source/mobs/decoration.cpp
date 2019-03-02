@@ -23,7 +23,8 @@ decoration::decoration(
     mob(pos, dec_type, angle),
     dec_type(dec_type),
     individual_scale(1.0f),
-    individual_rotation(0.0f) {
+    individual_rotation(0.0f),
+    has_done_first_animation(false) {
     
     individual_tint = al_map_rgba(255, 255, 255, 255),
     
