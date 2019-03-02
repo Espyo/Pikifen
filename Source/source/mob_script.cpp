@@ -68,51 +68,6 @@ mob_action::mob_action(
             );
         }
         
-    } else if(n == "calculate") {
-    
-        type = MOB_ACTION_CALCULATE;
-        
-        if(v_words.size() < 4) {
-            log_error(
-                "The \"calculate\" action needs to know the variable name and "
-                "the calculation!", dn
-            );
-            valid = false;
-        } else {
-            vs.push_back(v_words[0]);
-            
-            if(v_words[2] == "+") {
-                vi.push_back(MOB_ACTION_CALCULATE_SUM);
-            } else if(v_words[2] == "-") {
-                vi.push_back(MOB_ACTION_CALCULATE_SUBTRACT);
-            } else if(v_words[2] == "*") {
-                vi.push_back(MOB_ACTION_CALCULATE_MULTIPLY);
-            } else if(v_words[2] == "/") {
-                vi.push_back(MOB_ACTION_CALCULATE_DIVIDE);
-            } else if(v_words[2] == "%") {
-                vi.push_back(MOB_ACTION_CALCULATE_MODULO);
-            } else {
-                log_error("Unknown operator \"" + v_words[2] + "\"!", dn);
-                valid = false;
-            }
-            
-            if(is_number(v_words[1])) {
-                vf.push_back(s2f(v_words[1]));
-                vs.push_back("");
-            } else {
-                vf.push_back(0);
-                vs.push_back(v_words[1]);
-            }
-            
-            if(is_number(v_words[3])) {
-                vf.push_back(s2f(v_words[3]));
-                vs.push_back("");
-            } else {
-                vf.push_back(0);
-                vs.push_back(v_words[3]);
-            }
-        }
-        
     } else if(n == "delete") {
     
         type = MOB_ACTION_DELETE;
@@ -277,20 +232,6 @@ mob_action::mob_action(
         vs.push_back(lhs);
         vs.push_back(rhs);
         
-        
-    } else if(n == "increment_var") {
-    
-        type = MOB_ACTION_INC_VAR;
-        
-        if(v_words.empty()) {
-            log_error(
-                "The increment_var action needs to know "
-                "what variable to increment!", dn
-            );
-            valid = false;
-        } else {
-            vs = v_words;
-        }
         
     } else if(n == "move") {
     
@@ -645,11 +586,58 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_VAR;
         
+        bool set_to_value = false;
+        
         if(v_words.size() < 2) {
-            log_error("\"set_var\" needs to know the variable and value!", dn);
+            log_error(
+                "The \"set_var\" action needs to know the variable name and "
+                "what to set it to!", dn
+            );
             valid = false;
+            return;
+        }
+        
+        if(v_words.size() < 4) {
+            set_to_value = true;
+            
         } else {
+            if(v_words[2] == "+") {
+                vi.push_back(MOB_ACTION_SET_VAR_SUM);
+            } else if(v_words[2] == "-") {
+                vi.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
+            } else if(v_words[2] == "*") {
+                vi.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
+            } else if(v_words[2] == "/") {
+                vi.push_back(MOB_ACTION_SET_VAR_DIVIDE);
+            } else if(v_words[2] == "%") {
+                vi.push_back(MOB_ACTION_SET_VAR_MODULO);
+            } else {
+                set_to_value = true;
+            }
+        }
+        
+        if(set_to_value) {
             vs = v_words;
+            vi.push_back(MOB_ACTION_SET_VAR_VALUE);
+            
+        } else {
+            vs.push_back(v_words[0]);
+            
+            if(is_number(v_words[1])) {
+                vf.push_back(s2f(v_words[1]));
+                vs.push_back("");
+            } else {
+                vf.push_back(0);
+                vs.push_back(v_words[1]);
+            }
+            
+            if(is_number(v_words[3])) {
+                vf.push_back(s2f(v_words[3]));
+                vs.push_back("");
+            } else {
+                vf.push_back(0);
+                vs.push_back(v_words[3]);
+            }
         }
         
         
@@ -967,43 +955,6 @@ bool mob_action::run(
     
         m->arachnorb_plan_logic(vi[0]);
         
-    } else if(type == MOB_ACTION_CALCULATE) {
-    
-        float lhs, rhs, result;
-        if(vs[1].empty()) {
-            lhs = vf[0];
-        } else {
-            lhs = s2f(m->vars[vs[1]]);
-        }
-        
-        if(vs[2].empty()) {
-            rhs = vf[1];
-        } else {
-            rhs = s2f(m->vars[vs[2]]);
-        }
-        
-        if(vi[0] == MOB_ACTION_CALCULATE_SUM) {
-            result = lhs + rhs;
-        } else if(vi[0] == MOB_ACTION_CALCULATE_SUBTRACT) {
-            result = lhs - rhs;
-        } else if(vi[0] == MOB_ACTION_CALCULATE_MULTIPLY) {
-            result = lhs * rhs;
-        } else if(vi[0] == MOB_ACTION_CALCULATE_DIVIDE) {
-            if(rhs == 0) {
-                result = 0;
-            } else {
-                result = lhs / rhs;
-            }
-        } else {
-            if(rhs == 0) {
-                result = 0;
-            } else {
-                result = fmod(lhs, rhs);
-            }
-        }
-        
-        m->vars[vs[0]] = f2s(result);
-        
         
     } else if(type == MOB_ACTION_DELETE) {
     
@@ -1148,24 +1099,26 @@ bool mob_action::run(
         }
         
         if(vi[0] == MOB_ACTION_IF_OP_EQUAL) {
-            return (lhs == rhs);
+            if(is_number(lhs)) {
+                return (s2f(lhs) == s2f(rhs));
+            } else {
+                return (lhs == rhs);
+            }
         } else if(vi[0] == MOB_ACTION_IF_OP_NOT) {
-            return (lhs != rhs);
+            if(is_number(lhs)) {
+                return (s2f(lhs) != s2f(rhs));
+            } else {
+                return (lhs != rhs);
+            }
         } else if(vi[0] == MOB_ACTION_IF_OP_LESS) {
-            return (s2i(lhs) < s2i(rhs));
+            return (s2f(lhs) < s2f(rhs));
         } else if(vi[0] == MOB_ACTION_IF_OP_MORE) {
-            return (s2i(lhs) > s2i(rhs));
+            return (s2f(lhs) > s2f(rhs));
         } else if(vi[0] == MOB_ACTION_IF_OP_LESS_E) {
-            return (s2i(lhs) <= s2i(rhs));
+            return (s2f(lhs) <= s2f(rhs));
         } else if(vi[0] == MOB_ACTION_IF_OP_MORE_E) {
-            return (s2i(lhs) >= s2i(rhs));
+            return (s2f(lhs) >= s2f(rhs));
         }
-        
-    } else if(type == MOB_ACTION_INC_VAR) {
-    
-        int nr = s2i(m->vars[vs[0]]);
-        m->set_var(vs[0], i2s(nr + 1));
-        
         
     } else if(type == MOB_ACTION_MOVE) {
     
@@ -1348,7 +1301,45 @@ bool mob_action::run(
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        m->set_var(vs[0], vs[1]);
+        if(vi[0] == MOB_ACTION_SET_VAR_VALUE) {
+            m->set_var(vs[0], vs[1]);
+            
+        } else {
+            float lhs, rhs, result;
+            if(vs[1].empty()) {
+                lhs = vf[0];
+            } else {
+                lhs = s2f(m->vars[vs[1]]);
+            }
+            
+            if(vs[2].empty()) {
+                rhs = vf[1];
+            } else {
+                rhs = s2f(m->vars[vs[2]]);
+            }
+            
+            if(vi[0] == MOB_ACTION_SET_VAR_SUM) {
+                result = lhs + rhs;
+            } else if(vi[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
+                result = lhs - rhs;
+            } else if(vi[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
+                result = lhs * rhs;
+            } else if(vi[0] == MOB_ACTION_SET_VAR_DIVIDE) {
+                if(rhs == 0) {
+                    result = 0;
+                } else {
+                    result = lhs / rhs;
+                }
+            } else {
+                if(rhs == 0) {
+                    result = 0;
+                } else {
+                    result = fmod(lhs, rhs);
+                }
+            }
+            
+            m->vars[vs[0]] = f2s(result);
+        }
         
         
     } else if(type == MOB_ACTION_SHOW_MESSAGE_FROM_VAR) {

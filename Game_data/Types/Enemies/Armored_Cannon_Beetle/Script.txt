@@ -150,7 +150,7 @@ script {
         }
         on_timer {
             move randomly
-            increment_var time_open
+            set_var time_open time_open + 1
             set_timer 1
             if var time_open >= 5
                 set_state moving_cool
@@ -170,7 +170,7 @@ script {
         }
         on_timer {
             move randomly
-            increment_var time_open
+            set_var time_open time_open + 1
             set_timer 1
             if var time_open >= 10
                 set_state closing

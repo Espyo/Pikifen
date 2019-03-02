@@ -71,7 +71,7 @@ script {
             stop vertically
             set_gravity 0
             move randomly
-            increment_var flutters
+            set_var flutters flutters + 1
             if var flutters = 10
                 set_state going_home
             end_if
