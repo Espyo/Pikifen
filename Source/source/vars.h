@@ -170,7 +170,6 @@ extern bool closest_group_member_distant;
 extern vector<vector<control_info> > controls;
 extern vector<converter*> converters;
 extern map<string, converter_type*> converter_types;
-extern string creator_tool_area_image_name;
 extern bool creator_tool_area_image_shadows;
 extern int creator_tool_area_image_size;
 extern bool creator_tool_area_image_mobs;

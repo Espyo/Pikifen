@@ -73,11 +73,14 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             
             if(id == CREATOR_TOOL_AREA_IMAGE) {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
-                if(!al_save_bitmap(creator_tool_area_image_name.c_str(), bmp)) {
+                string file_name =
+                    USER_DATA_FOLDER_PATH + "/Area_" + cur_area_data.name +
+                    "_" + get_current_time(false) + ".png";
+                    
+                if(!al_save_bitmap(file_name.c_str(), bmp)) {
                     log_error(
                         "Could not save the area onto an image,"
-                        " with the name \"" +
-                        creator_tool_area_image_name + "\"!"
+                        " with the name \"" + file_name + "\"!"
                     );
                 }
                 

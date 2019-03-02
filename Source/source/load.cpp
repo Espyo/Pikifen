@@ -625,8 +625,6 @@ void load_creator_tools() {
         }
     }
     
-    creator_tool_area_image_name =
-        file.get_child_by_name("area_image_file_name")->value;
     creator_tool_area_image_mobs =
         s2b(file.get_child_by_name("area_image_mobs")->value);
     creator_tool_area_image_shadows =

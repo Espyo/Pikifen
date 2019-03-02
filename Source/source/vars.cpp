@@ -99,7 +99,6 @@ bool closest_group_member_distant = false;
 vector<vector<control_info> > controls;
 vector<converter*> converters;
 map<string, converter_type*> converter_types;
-string creator_tool_area_image_name = "Area.jpg";
 bool creator_tool_area_image_shadows = true;
 int creator_tool_area_image_size = 2048;
 bool creator_tool_area_image_mobs = true;

@@ -832,11 +832,6 @@ void save_creator_tools() {
     
     file.add(
         new data_node(
-            "area_image_file_name", creator_tool_area_image_name
-        )
-    );
-    file.add(
-        new data_node(
             "area_image_mobs", b2s(creator_tool_area_image_mobs)
         )
     );
@@ -1011,7 +1006,7 @@ void save_screenshot() {
     string base_file_name = "Screenshot " + get_current_time(false);
     
     //Check if a file with this name already exists.
-    vector<string> files = folder_to_vector(".", false);
+    vector<string> files = folder_to_vector(USER_DATA_FOLDER_PATH, false);
     size_t variant_nr = 1;
     string final_file_name = base_file_name;
     bool valid_name = false;
@@ -1033,7 +1028,7 @@ void save_screenshot() {
     } while(!valid_name);
     
     al_save_bitmap(
-        (final_file_name + ".png").c_str(),
+        (USER_DATA_FOLDER_PATH + "/" + final_file_name + ".png").c_str(),
         al_get_backbuffer(display)
     );
 }
