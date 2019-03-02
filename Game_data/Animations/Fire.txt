@@ -2,19 +2,19 @@ animations{
 	normal{
 		frames{
 			1{
-				duration=0.08
+				duration=0.0800
 			}
 			2{
-				duration=0.08
+				duration=0.0800
 			}
 			3{
-				duration=0.08
+				duration=0.0800
 			}
 			4{
-				duration=0.08
+				duration=0.0800
 			}
 			5{
-				duration=0.08
+				duration=0.0800
 			}
 		}
 	}
@@ -22,38 +22,33 @@ animations{
 sprites{
 	1{
 		file=Fire.png
-		file_pos=0.00 0.00
-		file_size=24.00 50.00
-		offset=0.00 -9.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=24.0000 50.0000
+		offset=0.0000 -9.0000
 	}
 	2{
 		file=Fire.png
-		file_pos=26.00 0.00
-		file_size=24.00 50.00
-		offset=0.00 -9.00
-		hitboxes
+		file_pos=26.0000 0.0000
+		file_size=24.0000 50.0000
+		offset=0.0000 -9.0000
 	}
 	3{
 		file=Fire.png
-		file_pos=52.00 0.00
-		file_size=24.00 50.00
-		offset=0.00 -9.00
-		hitboxes
+		file_pos=52.0000 0.0000
+		file_size=24.0000 50.0000
+		offset=0.0000 -9.0000
 	}
 	4{
 		file=Fire.png
-		file_pos=78.00 0.00
-		file_size=24.00 50.00
-		offset=0.00 -9.00
-		hitboxes
+		file_pos=78.0000 0.0000
+		file_size=24.0000 50.0000
+		offset=0.0000 -9.0000
 	}
 	5{
 		file=Fire.png
-		file_pos=104.00 0.00
-		file_size=24.00 50.00
-		offset=0.00 -9.00
-		hitboxes
+		file_pos=104.0000 0.0000
+		file_size=24.0000 50.0000
+		offset=0.0000 -9.0000
 	}
 }
 body_parts

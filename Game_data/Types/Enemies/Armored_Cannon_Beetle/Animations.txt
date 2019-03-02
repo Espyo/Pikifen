@@ -2,261 +2,261 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	moving{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			moving2{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 			moving4{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	bored{
 		frames{
 			idling{
-				duration=0.20
+				duration=0.2000
 			}
 			bored1{
-				duration=0.20
+				duration=0.2000
 			}
 			idling{
-				duration=0.20
+				duration=0.2000
 			}
 			bored2{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
 	inhaling{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale2{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale3{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale4{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale5{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale2{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale3{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale4{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale5{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale2{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale3{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale4{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale5{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	spitting{
 		frames{
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 			spitting2{
-				duration=0.10
+				duration=0.1000
 				signal=0
 			}
 			spitting1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 		}
 	}
 	catching{
 		frames{
 			opening1{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.80
+				duration=0.8000
 			}
 			opening1{
-				duration=0.10
+				duration=0.1000
 			}
 			opening2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.30
+				duration=0.3000
 			}
 		}
 	}
 	moving_hot{
 		frames{
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot1{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot2{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot3{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot4{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	closing_cool{
 		frames{
 			moving_cool1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool3{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool3{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			closing_cool1{
-				duration=0.10
+				duration=0.1000
 				signal=0
 			}
 			closing_cool2{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=1.00
+				duration=1.0000
 			}
 		}
 	}
 	closing_hot{
 		frames{
 			moving_hot1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot3{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot3{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_hot1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_hot{
-				duration=0.10
+				duration=0.1000
 			}
 			closing_hot1{
-				duration=0.10
+				duration=0.1000
 				signal=0
 			}
 			closing_hot2{
-				duration=0.10
+				duration=0.1000
 			}
 			inhale1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=1.00
+				duration=1.0000
 			}
 		}
 	}
@@ -264,19 +264,19 @@ animations{
 		loop_frame=4
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dying3{
-				duration=0.10
+				duration=0.1000
 			}
 			dying4{
-				duration=1.00
+				duration=1.0000
 			}
 		}
 	}
@@ -284,31 +284,31 @@ animations{
 		loop_frame=1
 		frames{
 			cooling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool1{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool2{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool3{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool4{
-				duration=0.10
+				duration=0.1000
 			}
 			moving_cool3{
-				duration=0.10
+				duration=0.1000
 			}
 			idling_cool{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -316,1566 +316,1566 @@ animations{
 sprites{
 	idling{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 0.00
-		file_size=283.00 386.00
-		offset=36.00 0.00
+		file_pos=0.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=284.00 0.00
-		file_size=283.00 386.00
-		offset=36.00 2.00
+		file_pos=284.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 2.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 2.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 2.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 2.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 2.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 2.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 2.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=568.00 0.00
-		file_size=286.00 386.00
-		offset=37.00 4.00
+		file_pos=568.0000 0.0000
+		file_size=286.0000 386.0000
+		offset=37.0000 4.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 4.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 4.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 4.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 4.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 4.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 4.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving3{
 		file=Armored_Cannon_Beetle.png
-		file_pos=284.00 0.00
-		file_size=283.00 386.00
-		offset=36.00 -2.00
-		scale=1.00 -1.00
+		file_pos=284.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 -2.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 -2.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -2.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 -2.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -2.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 -2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 -2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 -2.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 -2.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving4{
 		file=Armored_Cannon_Beetle.png
-		file_pos=568.00 0.00
-		file_size=286.00 386.00
-		offset=37.00 -4.00
-		scale=1.00 -1.00
+		file_pos=568.0000 0.0000
+		file_size=286.0000 386.0000
+		offset=37.0000 -4.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 -4.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -4.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 -4.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -4.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 -4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 -4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 -4.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 -4.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	bored1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=855.00 0.00
-		file_size=283.00 386.00
-		offset=36.00 0.00
+		file_pos=855.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 6.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 6.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 6.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 6.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 6.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 6.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 6.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 6.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	bored2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=855.00 0.00
-		file_size=283.00 386.00
-		offset=36.00 0.00
-		scale=1.00 -1.00
+		file_pos=855.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 0.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 -6.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -6.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 -6.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 -6.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=120.00 -6.00 50.00
-				height=300.00
-				radius=18.00
+				coords=120.0000 -6.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=5.00 -6.00 0.00
-				height=100.00
-				radius=110.00
+				coords=5.0000 -6.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	inhale1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1139.00 0.00
-		file_size=283.00 386.00
-		offset=32.00 0.00
+		file_pos=1139.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=32.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=0.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	inhale2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1423.00 0.00
-		file_size=283.00 386.00
-		offset=28.00 0.00
+		file_pos=1423.0000 0.0000
+		file_size=283.0000 386.0000
+		offset=28.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-26.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-26.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=0.00
+				value=0.0000
 			}
 			hot_flesh{
-				coords=-26.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-26.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=0.00
+				value=0.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=0
-				value=0.00
+				value=0.0000
 			}
 			shell{
-				coords=-4.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	inhale3{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 387.00
-		file_size=284.00 386.00
-		offset=26.00 0.00
+		file_pos=0.0000 387.0000
+		file_size=284.0000 386.0000
+		offset=26.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-30.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-30.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-30.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-30.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=112.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=112.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=0
-				value=0.00
+				value=0.0000
 			}
 			shell{
-				coords=-8.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-8.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	inhale4{
 		file=Armored_Cannon_Beetle.png
-		file_pos=285.00 387.00
-		file_size=283.00 386.00
-		offset=28.00 0.00
+		file_pos=285.0000 387.0000
+		file_size=283.0000 386.0000
+		offset=28.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-26.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-26.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-26.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-26.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=0
-				value=0.00
+				value=0.0000
 			}
 			shell{
-				coords=-4.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	inhale5{
 		file=Armored_Cannon_Beetle.png
-		file_pos=569.00 387.00
-		file_size=284.00 386.00
-		offset=26.00 0.00
+		file_pos=569.0000 387.0000
+		file_size=284.0000 386.0000
+		offset=26.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-30.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-30.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-30.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-30.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=112.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=112.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=0
-				value=0.00
+				value=0.0000
 			}
 			shell{
-				coords=-8.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-8.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	spitting1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=854.00 387.00
-		file_size=283.00 386.00
-		offset=40.00 0.00
+		file_pos=854.0000 387.0000
+		file_size=283.0000 386.0000
+		offset=40.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-14.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-14.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-14.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-14.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=124.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=124.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=9.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=9.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	spitting2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1138.00 387.00
-		file_size=283.00 386.00
-		offset=44.00 0.00
+		file_pos=1138.0000 387.0000
+		file_size=283.0000 386.0000
+		offset=44.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=128.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=128.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=13.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=13.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	opening1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1422.00 387.00
-		file_size=285.00 386.00
-		offset=28.00 0.00
+		file_pos=1422.0000 387.0000
+		file_size=285.0000 386.0000
+		offset=28.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=-4.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	opening2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 774.00
-		file_size=303.00 386.00
-		offset=26.00 0.00
+		file_pos=0.0000 774.0000
+		file_size=303.0000 386.0000
+		offset=26.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=41.84 0.00 0.00
-				height=100.00
-				radius=140.00
+				coords=41.8400 0.0000 0.0000
+				height=100.0000
+				radius=140.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	idling_hot{
 		file=Armored_Cannon_Beetle.png
-		file_pos=304.00 774.00
-		file_size=312.00 386.00
-		offset=22.00 0.00
+		file_pos=304.0000 774.0000
+		file_size=312.0000 386.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 0.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 0.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_hot1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=617.00 774.00
-		file_size=312.00 386.00
-		offset=22.00 2.00
+		file_pos=617.0000 774.0000
+		file_size=312.0000 386.0000
+		offset=22.0000 2.0000
 		hitboxes{
 			flesh{
-				coords=0.00 2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 2.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 2.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_hot2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=930.00 774.00
-		file_size=315.00 386.00
-		offset=23.00 4.00
+		file_pos=930.0000 774.0000
+		file_size=315.0000 386.0000
+		offset=23.0000 4.0000
 		hitboxes{
 			flesh{
-				coords=0.00 4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 4.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 4.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_hot3{
 		file=Armored_Cannon_Beetle.png
-		file_pos=617.00 774.00
-		file_size=312.00 386.00
-		offset=22.00 -2.00
-		scale=1.00 -1.00
+		file_pos=617.0000 774.0000
+		file_size=312.0000 386.0000
+		offset=22.0000 -2.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=0.00 -2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 -2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 -2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 -2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 -2.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 -2.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_hot4{
 		file=Armored_Cannon_Beetle.png
-		file_pos=930.00 774.00
-		file_size=315.00 386.00
-		offset=23.00 -4.00
-		scale=1.00 -1.00
+		file_pos=930.0000 774.0000
+		file_size=315.0000 386.0000
+		offset=23.0000 -4.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=0.00 -4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				hazards=fire
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 -4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=10.00
+				value=10.0000
 				hazards=fire
 			}
 			blowhole{
-				coords=116.00 -4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 -4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 -4.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 -4.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 1548.00
-		file_size=287.00 326.00
-		offset=32.00 0.00
+		file_pos=0.0000 1548.0000
+		file_size=287.0000 326.0000
+		offset=32.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=70.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=70.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=0.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=288.00 1548.00
-		file_size=264.00 338.00
-		offset=26.00 0.00
+		file_pos=288.0000 1548.0000
+		file_size=264.0000 338.0000
+		offset=26.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=-60.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=-60.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=0.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying3{
 		file=Armored_Cannon_Beetle.png
-		file_pos=553.00 1548.00
-		file_size=281.00 232.00
-		offset=-25.00 0.00
+		file_pos=553.0000 1548.0000
+		file_size=281.0000 232.0000
+		offset=-25.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=-70.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=-70.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=0.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying4{
 		file=Armored_Cannon_Beetle.png
-		file_pos=835.00 1548.00
-		file_size=283.00 234.00
-		offset=-36.00 0.00
+		file_pos=835.0000 1548.0000
+		file_size=283.0000 234.0000
+		offset=-36.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=18.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=18.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=-120.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=-120.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=-5.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-5.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	closing_cool1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 1161.00
-		file_size=285.00 386.00
-		offset=35.00 0.00
+		file_pos=0.0000 1161.0000
+		file_size=285.0000 386.0000
+		offset=35.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=41.84 0.00 0.00
-				height=100.00
-				radius=140.00
+				coords=41.8400 0.0000 0.0000
+				height=100.0000
+				radius=140.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 		}
 	}
 	closing_cool2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1141.00 1161.00
-		file_size=285.00 386.00
-		offset=28.00 0.00
+		file_pos=1141.0000 1161.0000
+		file_size=285.0000 386.0000
+		offset=28.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=-4.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 		}
 	}
 	closing_hot1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=0.00 774.00
-		file_size=303.00 386.00
-		offset=26.00 0.00
+		file_pos=0.0000 774.0000
+		file_size=303.0000 386.0000
+		offset=26.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-10.00 0.00 50.00
-				height=100.00
-				radius=100.00
+				coords=-10.0000 0.0000 50.0000
+				height=100.0000
+				radius=100.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=41.84 0.00 0.00
-				height=100.00
-				radius=140.00
+				coords=41.8400 0.0000 0.0000
+				height=100.0000
+				radius=140.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 		}
 	}
 	closing_hot2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1422.00 387.00
-		file_size=285.00 386.00
-		offset=28.00 0.00
+		file_pos=1422.0000 387.0000
+		file_size=285.0000 386.0000
+		offset=28.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=-22.00 0.00 50.00
-				height=100.00
-				radius=80.00
+				coords=-22.0000 0.0000 50.0000
+				height=100.0000
+				radius=80.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=-4.00 0.00 0.00
-				height=100.00
-				radius=110.00
+				coords=-4.0000 0.0000 0.0000
+				height=100.0000
+				radius=110.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=3.14
-				knockback=1.00
+				knockback_angle=3.1400
+				knockback=1.0000
 			}
 		}
 	}
 	cooling{
 		file=Armored_Cannon_Beetle.png
-		file_pos=1246.00 774.00
-		file_size=312.00 386.00
-		offset=22.00 0.00
+		file_pos=1246.0000 774.0000
+		file_size=312.0000 386.0000
+		offset=22.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 0.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 0.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	idling_cool{
 		file=Armored_Cannon_Beetle.png
-		file_pos=286.00 1161.00
-		file_size=283.00 386.00
-		offset=36.00 0.00
+		file_pos=286.0000 1161.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 0.0000
 		hitboxes{
 			flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 0.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 0.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 0.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 0.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 0.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 0.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_cool1{
 		file=Armored_Cannon_Beetle.png
-		file_pos=570.00 1161.00
-		file_size=283.00 386.00
-		offset=36.00 2.00
+		file_pos=570.0000 1161.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 2.0000
 		hitboxes{
 			flesh{
-				coords=0.00 2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 2.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 2.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_cool2{
 		file=Armored_Cannon_Beetle.png
-		file_pos=854.00 1161.00
-		file_size=286.00 386.00
-		offset=37.00 4.00
+		file_pos=854.0000 1161.0000
+		file_size=286.0000 386.0000
+		offset=37.0000 4.0000
 		hitboxes{
 			flesh{
-				coords=0.00 4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 4.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 4.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_cool3{
 		file=Armored_Cannon_Beetle.png
-		file_pos=570.00 1161.00
-		file_size=283.00 386.00
-		offset=36.00 -2.00
-		scale=1.00 -1.00
+		file_pos=570.0000 1161.0000
+		file_size=283.0000 386.0000
+		offset=36.0000 -2.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=0.00 -2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 -2.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -2.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 -2.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 -2.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 -2.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 -2.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving_cool4{
 		file=Armored_Cannon_Beetle.png
-		file_pos=854.00 1161.00
-		file_size=286.00 386.00
-		offset=37.00 -4.00
-		scale=1.00 -1.00
+		file_pos=854.0000 1161.0000
+		file_size=286.0000 386.0000
+		offset=37.0000 -4.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			flesh{
-				coords=0.00 -4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			hot_flesh{
-				coords=0.00 -4.00 50.00
-				height=100.00
-				radius=110.00
+				coords=0.0000 -4.0000 50.0000
+				height=100.0000
+				radius=110.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			blowhole{
-				coords=116.00 -4.00 50.00
-				height=300.00
-				radius=18.00
+				coords=116.0000 -4.0000 50.0000
+				height=300.0000
+				radius=18.0000
 				type=2
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			shell{
-				coords=90.00 -4.00 0.00
-				height=300.00
-				radius=90.00
+				coords=90.0000 -4.0000 0.0000
+				height=300.0000
+				radius=90.0000
 				type=0
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

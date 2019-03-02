@@ -2,26 +2,26 @@ animations{
 	flapping{
 		frames{
 			opened{
-				duration=0.10
+				duration=0.1000
 			}
 			mid{
-				duration=0.10
+				duration=0.1000
 			}
 			closed{
-				duration=0.10
+				duration=0.1000
 			}
 			mid{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	resting{
 		frames{
 			opened{
-				duration=0.80
+				duration=0.8000
 			}
 			mid{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
@@ -29,16 +29,16 @@ animations{
 		loop_frame=3
 		frames{
 			closed{
-				duration=0.50
+				duration=0.5000
 			}
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dead{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
@@ -46,100 +46,100 @@ animations{
 sprites{
 	opened{
 		file=White_Spectralid.png
-		file_pos=0.00 0.00
-		file_size=25.00 32.00
+		file_pos=0.0000 0.0000
+		file_size=25.0000 32.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	mid{
 		file=White_Spectralid.png
-		file_pos=0.00 33.00
-		file_size=25.00 22.00
+		file_pos=0.0000 33.0000
+		file_size=25.0000 22.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	closed{
 		file=White_Spectralid.png
-		file_pos=0.00 56.00
-		file_size=25.00 10.00
+		file_pos=0.0000 56.0000
+		file_size=25.0000 10.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying1{
 		file=White_Spectralid.png
-		file_pos=0.00 67.00
-		file_size=25.00 16.00
-		offset=0.00 -1.00
+		file_pos=0.0000 67.0000
+		file_size=25.0000 16.0000
+		offset=0.0000 -1.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying2{
 		file=White_Spectralid.png
-		file_pos=0.00 84.00
-		file_size=25.00 18.00
-		offset=0.00 -4.00
+		file_pos=0.0000 84.0000
+		file_size=25.0000 18.0000
+		offset=0.0000 -4.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dead{
 		file=White_Spectralid.png
-		file_pos=0.00 103.00
-		file_size=25.00 17.00
-		offset=0.00 -4.00
+		file_pos=0.0000 103.0000
+		file_size=25.0000 17.0000
+		offset=0.0000 -4.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

@@ -2,35 +2,35 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	moving{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			moving2{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 			moving4{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -38,47 +38,47 @@ animations{
 		hit_rate=75
 		frames{
 			attacking1{
-				duration=0.20
+				duration=0.2000
 			}
 			attacking2{
-				duration=0.20
+				duration=0.2000
 			}
 			attacking3{
-				duration=0.20
+				duration=0.2000
 			}
 			grazing2{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
 	eating{
 		frames{
 			chomping1{
-				duration=0.30
+				duration=0.3000
 			}
 			chomping2{
-				duration=0.30
+				duration=0.3000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping4{
-				duration=0.30
+				duration=0.3000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping2{
-				duration=0.30
+				duration=0.3000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping4{
-				duration=0.30
+				duration=0.3000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
@@ -86,25 +86,25 @@ animations{
 		loop_frame=6
 		frames{
 			dying1{
-				duration=0.20
+				duration=0.2000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dying3{
-				duration=1.00
+				duration=1.0000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dying1{
-				duration=0.20
+				duration=0.2000
 			}
 			dying4{
-				duration=0.10
+				duration=0.1000
 			}
 			dying5{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
@@ -112,97 +112,97 @@ animations{
 		hit_rate=50
 		frames{
 			shaking1{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.15
+				duration=0.1500
 			}
 			shaking1{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.15
+				duration=0.1500
 			}
 			shaking1{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.20
+				duration=0.2000
 			}
 			shaking2{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.15
+				duration=0.1500
 			}
 			shaking3{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.15
+				duration=0.1500
 			}
 			shaking2{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.15
+				duration=0.1500
 			}
 			shaking3{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.40
+				duration=0.4000
 			}
 		}
 	}
 	looking{
 		frames{
 			looking2{
-				duration=0.10
+				duration=0.1000
 			}
 			looking1{
-				duration=0.30
+				duration=0.3000
 			}
 			looking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			looking4{
-				duration=0.10
+				duration=0.1000
 			}
 			looking3{
-				duration=0.30
+				duration=0.3000
 			}
 			looking4{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 		}
 	}
 	grazing{
 		frames{
 			grazing1{
-				duration=0.40
+				duration=0.4000
 			}
 			grazing2{
-				duration=0.20
+				duration=0.2000
 			}
 			grazing1{
-				duration=0.40
+				duration=0.4000
 			}
 			grazing3{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
 	crushed{
 		frames{
 			crushed{
-				duration=1.00
+				duration=1.0000
 			}
 		}
 	}
@@ -210,773 +210,773 @@ animations{
 sprites{
 	idling{
 		file=Red_Bulborb.png
-		file_pos=0.00 0.00
-		file_size=153.00 103.00
-		offset=5.00 0.00
-		scale=0.30 0.30
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=5.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving1{
 		file=Red_Bulborb.png
-		file_pos=154.00 0.00
-		file_size=153.00 104.00
-		offset=5.00 -1.00
-		scale=0.30 -0.30
+		file_pos=154.0000 0.0000
+		file_size=153.0000 104.0000
+		offset=5.0000 -1.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=5.00 -1.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 -1.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 -1.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 -1.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving2{
 		file=Red_Bulborb.png
-		file_pos=308.00 0.00
-		file_size=153.00 115.00
-		offset=5.00 -2.00
-		scale=0.30 -0.30
+		file_pos=308.0000 0.0000
+		file_size=153.0000 115.0000
+		offset=5.0000 -2.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=5.00 -2.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 -2.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 -2.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 -2.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving3{
 		file=Red_Bulborb.png
-		file_pos=154.00 0.00
-		file_size=153.00 104.00
-		offset=5.00 1.00
-		scale=0.30 0.30
+		file_pos=154.0000 0.0000
+		file_size=153.0000 104.0000
+		offset=5.0000 1.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 1.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 1.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 1.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 1.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving4{
 		file=Red_Bulborb.png
-		file_pos=308.00 0.00
-		file_size=153.00 115.00
-		offset=5.00 2.00
-		scale=0.30 0.30
+		file_pos=308.0000 0.0000
+		file_size=153.0000 115.0000
+		offset=5.0000 2.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 2.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 2.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 2.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 2.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking1{
 		file=Red_Bulborb.png
-		file_pos=0.00 116.00
-		file_size=160.00 103.00
-		offset=6.00 0.00
-		scale=0.30 0.30
+		file_pos=0.0000 116.0000
+		file_size=160.0000 103.0000
+		offset=6.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=31.00 -2.00 0.00
-				height=32.00
-				radius=6.00
+				coords=31.0000 -2.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking2{
 		file=Red_Bulborb.png
-		file_pos=161.00 116.00
-		file_size=174.00 110.00
-		offset=8.00 0.00
-		scale=0.30 0.30
+		file_pos=161.0000 116.0000
+		file_size=174.0000 110.0000
+		offset=8.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 -1.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 -1.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=33.00 -4.00 0.00
-				height=32.00
-				radius=6.00
+				coords=33.0000 -4.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking3{
 		file=Red_Bulborb.png
-		file_pos=336.00 116.00
-		file_size=174.00 103.00
-		offset=8.00 0.00
-		scale=0.30 0.30
+		file_pos=336.0000 116.0000
+		file_size=174.0000 103.0000
+		offset=8.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=32.00 0.00 -16.00
-				height=64.00
-				radius=16.00
+				coords=32.0000 0.0000 -16.0000
+				height=64.0000
+				radius=16.0000
 				type=1
-				value=20.00
+				value=20.0000
 			}
 		}
 	}
 	attacking4{
 		file=Red_Bulborb.png
-		file_pos=512.00 116.00
-		file_size=163.00 103.00
-		offset=7.00 0.00
-		scale=0.30 0.30
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=7.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=32.00 0.00 -16.00
-				height=64.00
-				radius=16.00
+				coords=32.0000 0.0000 -16.0000
+				height=64.0000
+				radius=16.0000
 				type=1
-				value=20.00
+				value=20.0000
 			}
 		}
 	}
 	chomping1{
 		file=Red_Bulborb.png
-		file_pos=512.00 116.00
-		file_size=163.00 103.00
-		offset=6.00 0.00
-		scale=0.30 0.30
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=6.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=24.00 3.00 0.00
-				height=32.00
-				radius=6.00
+				coords=24.0000 3.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	chomping2{
 		file=Red_Bulborb.png
-		file_pos=0.00 252.00
-		file_size=124.00 103.00
-		scale=0.30 0.30
+		file_pos=0.0000 252.0000
+		file_size=124.0000 103.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=16.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=16.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	chomping3{
 		file=Red_Bulborb.png
-		file_pos=125.00 252.00
-		file_size=100.00 103.00
-		offset=-3.00 0.00
-		scale=0.30 0.30
+		file_pos=125.0000 252.0000
+		file_size=100.0000 103.0000
+		offset=-3.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=12.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=12.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 			}
 		}
 	}
 	chomping4{
 		file=Red_Bulborb.png
-		file_pos=226.00 252.00
-		file_size=115.00 103.00
-		offset=-1.00 0.00
-		scale=0.30 0.30
+		file_pos=226.0000 252.0000
+		file_size=115.0000 103.0000
+		offset=-1.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=8.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=8.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking1{
 		file=Red_Bulborb.png
-		file_pos=0.00 0.00
-		file_size=153.00 103.00
-		offset=5.00 1.00
-		scale=0.30 0.30
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=5.0000 1.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 1.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 1.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 1.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 1.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking2{
 		file=Red_Bulborb.png
-		file_pos=515.00 252.00
-		file_size=159.00 105.00
-		offset=4.00 0.00
-		scale=0.30 0.30
+		file_pos=515.0000 252.0000
+		file_size=159.0000 105.0000
+		offset=4.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=4.00 0.00 -16.00
-				height=64.00
-				radius=30.00
+				coords=4.0000 0.0000 -16.0000
+				height=64.0000
+				radius=30.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 				wither_chance=5
 			}
 			mouth{
-				coords=27.00 3.00 0.00
-				height=32.00
-				radius=6.00
+				coords=27.0000 3.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking3{
 		file=Red_Bulborb.png
-		file_pos=515.00 252.00
-		file_size=159.00 105.00
-		offset=4.00 0.00
-		scale=0.30 -0.30
+		file_pos=515.0000 252.0000
+		file_size=159.0000 105.0000
+		offset=4.0000 0.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=4.00 0.00 -16.00
-				height=64.00
-				radius=30.00
+				coords=4.0000 0.0000 -16.0000
+				height=64.0000
+				radius=30.0000
 				type=1
-				value=0.00
+				value=0.0000
 				knockback_outward=true
-				knockback_angle=4.71
-				knockback=1.00
+				knockback_angle=4.7100
+				knockback=1.0000
 				wither_chance=5
 			}
 			mouth{
-				coords=27.00 -3.00 0.00
-				height=32.00
-				radius=6.00
+				coords=27.0000 -3.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying1{
 		file=Red_Bulborb.png
-		file_pos=0.00 252.00
-		file_size=124.00 103.00
-		scale=0.30 0.30
+		file_pos=0.0000 252.0000
+		file_size=124.0000 103.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=14.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=14.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying2{
 		file=Red_Bulborb.png
-		file_pos=125.00 252.00
-		file_size=100.00 103.00
-		offset=-3.00 0.00
-		scale=0.30 0.30
+		file_pos=125.0000 252.0000
+		file_size=100.0000 103.0000
+		offset=-3.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=9.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=9.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 			}
 		}
 	}
 	dying3{
 		file=Red_Bulborb.png
-		file_pos=226.00 252.00
-		file_size=115.00 103.00
-		offset=-1.00 0.00
-		scale=0.30 0.30
+		file_pos=226.0000 252.0000
+		file_size=115.0000 103.0000
+		offset=-1.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=18.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=8.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=8.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying4{
 		file=Red_Bulborb.png
-		file_pos=0.00 0.00
-		file_size=153.00 103.00
-		offset=5.00 0.00
-		scale=0.30 0.30
+		file_pos=0.0000 0.0000
+		file_size=153.0000 103.0000
+		offset=5.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying5{
 		file=Red_Bulborb.png
-		file_pos=342.00 252.00
-		file_size=172.00 103.00
-		offset=4.00 0.00
-		scale=0.30 0.30
+		file_pos=342.0000 252.0000
+		file_size=172.0000 103.0000
+		offset=4.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	looking1{
 		file=Red_Bulborb.png
-		file_pos=158.00 358.00
-		file_size=135.00 131.00
-		offset=2.00 4.00
-		scale=0.30 0.30
+		file_pos=158.0000 358.0000
+		file_size=135.0000 131.0000
+		offset=2.0000 4.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=3.00 3.00 0.00
-				height=32.00
-				radius=22.00
+				coords=3.0000 3.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=14.00 17.00 0.00
-				height=32.00
-				radius=6.00
+				coords=14.0000 17.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	looking2{
 		file=Red_Bulborb.png
-		file_pos=0.00 358.00
-		file_size=157.00 121.00
-		offset=5.00 3.00
-		scale=0.30 0.30
+		file_pos=0.0000 358.0000
+		file_size=157.0000 121.0000
+		offset=5.0000 3.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=3.00 2.00 0.00
-				height=32.00
-				radius=22.00
+				coords=3.0000 2.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=23.00 10.00 0.00
-				height=32.00
-				radius=6.00
+				coords=23.0000 10.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	looking3{
 		file=Red_Bulborb.png
-		file_pos=158.00 358.00
-		file_size=135.00 131.00
-		offset=2.00 -4.00
-		scale=0.30 -0.30
+		file_pos=158.0000 358.0000
+		file_size=135.0000 131.0000
+		offset=2.0000 -4.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=3.00 -3.00 0.00
-				height=32.00
-				radius=22.00
+				coords=3.0000 -3.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=14.00 -17.00 0.00
-				height=32.00
-				radius=6.00
+				coords=14.0000 -17.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	looking4{
 		file=Red_Bulborb.png
-		file_pos=0.00 358.00
-		file_size=157.00 121.00
-		offset=5.00 -3.00
-		scale=0.30 -0.30
+		file_pos=0.0000 358.0000
+		file_size=157.0000 121.0000
+		offset=5.0000 -3.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=3.00 -2.00 0.00
-				height=32.00
-				radius=22.00
+				coords=3.0000 -2.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=23.00 -10.00 0.00
-				height=32.00
-				radius=6.00
+				coords=23.0000 -10.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crushed{
 		file=Red_Bulborb.png
-		file_pos=295.00 358.00
-		file_size=159.00 163.00
-		offset=6.00 0.00
-		scale=0.30 0.30
+		file_pos=295.0000 358.0000
+		file_size=159.0000 163.0000
+		offset=6.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=6.00 0.00 0.00
-				height=32.00
-				radius=24.00
+				coords=6.0000 0.0000 0.0000
+				height=32.0000
+				radius=24.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	grazing1{
 		file=Red_Bulborb.png
-		file_pos=675.00 252.00
-		file_size=164.00 103.00
-		offset=7.00 0.00
-		scale=0.30 0.30
+		file_pos=675.0000 252.0000
+		file_size=164.0000 103.0000
+		offset=7.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
+				coords=30.0000 0.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	grazing2{
 		file=Red_Bulborb.png
-		file_pos=512.00 116.00
-		file_size=163.00 103.00
-		offset=7.00 0.00
-		scale=0.30 0.30
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=7.0000 0.0000
+		scale=0.3000 0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=26.00 4.00 0.00
-				height=32.00
-				radius=6.00
+				coords=26.0000 4.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 			}
 		}
 	}
 	grazing3{
 		file=Red_Bulborb.png
-		file_pos=512.00 116.00
-		file_size=163.00 103.00
-		offset=7.00 0.00
-		scale=0.30 -0.30
+		file_pos=512.0000 116.0000
+		file_size=163.0000 103.0000
+		offset=7.0000 0.0000
+		scale=0.3000 -0.3000
 		hitboxes{
 			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
+				coords=5.0000 0.0000 0.0000
+				height=32.0000
+				radius=22.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=26.00 -4.00 0.00
-				height=32.00
-				radius=6.00
+				coords=26.0000 -4.0000 0.0000
+				height=32.0000
+				radius=6.0000
 				type=2
-				value=1.00
+				value=1.0000
 			}
 		}
 	}

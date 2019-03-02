@@ -2,7 +2,7 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -10,8 +10,8 @@ animations{
 sprites{
 	idling{
 		file=Sign.png
-		file_pos=0.00 0.00
-		file_size=32.00 32.00
+		file_pos=0.0000 0.0000
+		file_size=32.0000 32.0000
 	}
 }
 body_parts

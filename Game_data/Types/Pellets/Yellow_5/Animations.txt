@@ -2,7 +2,7 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
@@ -10,8 +10,8 @@ animations{
 sprites{
 	idling{
 		file=Yellow_pellet.png
-		file_pos=0.00 0.00
-		file_size=128.00 128.00
+		file_pos=0.0000 0.0000
+		file_size=128.0000 128.0000
 	}
 }
 body_parts

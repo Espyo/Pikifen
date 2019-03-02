@@ -2,14 +2,14 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	destroyed{
 		frames{
 			destroyed{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
@@ -17,72 +17,72 @@ animations{
 sprites{
 	idling{
 		file=Wood_bridge.png
-		file_pos=0.00 0.00
-		file_size=41.00 128.00
+		file_pos=0.0000 0.0000
+		file_size=41.0000 128.0000
 		hitboxes{
 			center{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			left{
-				coords=0.00 48.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 48.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			right{
-				coords=0.00 -48.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 -48.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	destroyed{
 		file
-		file_pos=0.00 0.00
-		file_size=0.00 0.00
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
 		hitboxes{
 			center{
-				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			left{
-				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			right{
-				coords=0.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

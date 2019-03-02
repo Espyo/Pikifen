@@ -2,7 +2,7 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
@@ -10,9 +10,9 @@ animations{
 sprites{
 	idling{
 		file=2_Euro.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		scale=0.81 0.81
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.8100 0.8100
 	}
 }
 body_parts

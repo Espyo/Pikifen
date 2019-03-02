@@ -2,138 +2,138 @@ animations{
 	attacking{
 		frames{
 			grabbing_far{
-				duration=0.10
+				duration=0.1000
 			}
 			grabbing{
-				duration=0.10
+				duration=0.1000
 			}
 			attack{
-				duration=0.30
+				duration=0.3000
 			}
 			grabbing{
-				duration=0.10
+				duration=0.1000
 			}
 			grabbing_far{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
 	sprout{
 		frames{
 			sprout1{
-				duration=0.20
+				duration=0.2000
 			}
 			sprout2{
-				duration=0.20
+				duration=0.2000
 			}
 			sprout1{
-				duration=0.20
+				duration=0.2000
 			}
 			sprout3{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
 	grabbing{
 		frames{
 			grabbing{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	lying{
 		frames{
 			half_lying{
-				duration=0.10
+				duration=0.1000
 			}
 			lying{
-				duration=2.00
+				duration=2.0000
 			}
 			half_lying{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	thrown{
 		frames{
 			thrown1{
-				duration=0.08
+				duration=0.0800
 			}
 			thrown2{
-				duration=0.08
+				duration=0.0800
 			}
 			thrown3{
-				duration=0.08
+				duration=0.0800
 			}
 			thrown4{
-				duration=0.08
+				duration=0.0800
 			}
 		}
 	}
 	walking{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			walking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			walking1{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	plucking{
 		frames{
 			sprout1{
-				duration=0.20
+				duration=0.2000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	carrying{
 		frames{
 			grabbing{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	sighing{
 		frames{
 			thrown1{
-				duration=1.50
+				duration=1.5000
 			}
 			idling{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
 	drinking{
 		frames{
 			thrown1{
-				duration=1.00
+				duration=1.0000
 			}
 		}
 	}
 	picking_up{
 		frames{
 			thrown1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -141,483 +141,483 @@ animations{
 sprites{
 	sprout1{
 		file=Red_Pikmin.png
-		file_pos=196.00 0.00
-		file_size=12.00 12.00
-		scale=0.50 0.50
+		file_pos=196.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=-4.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sprout2{
 		file=Red_Pikmin.png
-		file_pos=196.00 0.00
-		file_size=12.00 12.00
-		scale=0.50 0.50
+		file_pos=196.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.50 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-4.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=-4.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sprout3{
 		file=Red_Pikmin.png
-		file_pos=196.00 0.00
-		file_size=12.00 12.00
-		scale=0.50 0.50
+		file_pos=196.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-3.50 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-3.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=-4.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	grabbing{
 		file=Red_Pikmin.png
-		file_pos=134.00 31.00
-		file_size=28.00 20.00
-		scale=0.50 0.50
+		file_pos=134.0000 31.0000
+		file_size=28.0000 20.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-6.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-6.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-6.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-6.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=8.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	grabbing_far{
 		file=Red_Pikmin.png
-		file_pos=163.00 31.00
-		file_size=42.00 20.00
-		offset=-3.50 0.00
-		scale=0.50 0.50
+		file_pos=163.0000 31.0000
+		file_size=42.0000 20.0000
+		offset=-3.5000 0.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-15.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-15.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-15.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-15.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=8.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	grabbing_near{
 		file=Red_Pikmin.png
-		file_pos=206.00 13.00
-		file_size=26.00 22.00
-		offset=3.50 0.00
-		scale=0.50 0.50
+		file_pos=206.0000 13.0000
+		file_size=26.0000 22.0000
+		offset=3.5000 0.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=12.00 0.00
-		top_size=5.50 10.00
-		top_angle=3.14
+		top_pos=12.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=12.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=2.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	half_lying{
 		file=Red_Pikmin.png
-		file_pos=64.00 0.00
-		file_size=48.00 28.00
-		scale=0.50 0.50
+		file_pos=64.0000 0.0000
+		file_size=48.0000 28.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-13.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-13.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-13.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-13.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=2.00 0.00 0.00
-				height=24.00
-				radius=8.00
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	idling{
 		file=Red_Pikmin.png
-		file_pos=0.00 0.00
-		file_size=28.00 20.00
-		offset=2.00 0.00
-		scale=0.50 0.50
+		file_pos=0.0000 0.0000
+		file_size=28.0000 20.0000
+		offset=2.0000 0.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=5.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	lying{
 		file=Red_Pikmin.png
-		file_pos=113.00 0.00
-		file_size=82.00 30.00
-		scale=0.50 0.50
+		file_pos=113.0000 0.0000
+		file_size=82.0000 30.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-20.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-20.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-20.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-20.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=8.00 0.00 0.00
-				height=24.00
-				radius=10.00
+				coords=8.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	thrown1{
 		file=Red_Pikmin.png
-		file_pos=0.00 21.00
-		file_size=28.00 22.00
-		scale=0.50 0.50
+		file_pos=0.0000 21.0000
+		file_size=28.0000 22.0000
+		scale=0.5000 0.5000
 		top_visible=false
-		top_pos=0.00 0.00
-		top_size=1.00 1.00
-		top_angle=0.00
+		top_pos=0.0000 0.0000
+		top_size=1.0000 1.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-4.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	thrown2{
 		file=Red_Pikmin.png
-		file_pos=29.00 21.00
-		file_size=34.00 20.00
-		scale=0.50 0.50
+		file_pos=29.0000 21.0000
+		file_size=34.0000 20.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-9.00 0.00
-		top_size=5.50 10.00
-		top_angle=0.00
+		top_pos=-9.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-9.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-9.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=2.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	thrown3{
 		file=Red_Pikmin.png
-		file_pos=64.00 29.00
-		file_size=32.00 20.00
-		scale=0.50 0.50
+		file_pos=64.0000 29.0000
+		file_size=32.0000 20.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=3.00 0.00
-		top_size=5.50 10.00
-		top_angle=3.14
+		top_pos=3.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=3.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=3.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	thrown4{
 		file=Red_Pikmin.png
-		file_pos=97.00 31.00
-		file_size=36.00 20.00
-		scale=0.50 0.50
+		file_pos=97.0000 31.0000
+		file_size=36.0000 20.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=10.00 0.00
-		top_size=5.50 10.00
-		top_angle=3.14
+		top_pos=10.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=9.00 0.00 0.00
-				height=24.00
-				radius=4.00
+				coords=9.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=-2.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=-2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking1{
 		file=Red_Pikmin.png
-		file_pos=29.00 0.00
-		file_size=34.00 20.00
-		scale=0.50 0.50
+		file_pos=29.0000 0.0000
+		file_size=34.0000 20.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.00 -1.00
-		top_size=5.50 10.00
-		top_angle=0.35
+		top_pos=-4.0000 -1.0000
+		top_size=5.5000 10.0000
+		top_angle=0.3500
 		hitboxes{
 			top{
-				coords=-4.00 -2.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 -2.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=5.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking2{
 		file=Red_Pikmin.png
-		file_pos=29.00 0.00
-		file_size=34.00 20.00
-		scale=0.50 -0.50
+		file_pos=29.0000 0.0000
+		file_size=34.0000 20.0000
+		scale=0.5000 -0.5000
 		top_visible=true
-		top_pos=-4.00 1.00
-		top_size=5.50 10.00
-		top_angle=5.93
+		top_pos=-4.0000 1.0000
+		top_size=5.5000 10.0000
+		top_angle=5.9300
 		hitboxes{
 			top{
-				coords=-4.00 2.00 0.00
-				height=24.00
-				radius=4.00
+				coords=-4.0000 2.0000 0.0000
+				height=24.0000
+				radius=4.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			body{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=5.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attack{
 		file=Red_Pikmin.png
-		file_pos=206.00 13.00
-		file_size=26.00 22.00
-		offset=3.50 0.00
-		scale=0.50 0.50
+		file_pos=206.0000 13.0000
+		file_size=26.0000 22.0000
+		offset=3.5000 0.0000
+		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=12.00 0.00
-		top_size=5.50 10.00
-		top_angle=3.14
+		top_pos=12.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=12.00 -0.00 0.00
-				height=24.00
-				radius=8.00
+				coords=12.0000 -0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=1
-				value=12.00
+				value=12.0000
 			}
 			body{
-				coords=2.00 0.00 0.00
-				height=24.00
-				radius=6.00
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=6.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

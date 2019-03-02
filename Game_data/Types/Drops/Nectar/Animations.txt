@@ -2,49 +2,49 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	bumped{
 		frames{
 			bumped1{
-				duration=0.14
+				duration=0.1400
 			}
 			idling{
-				duration=0.14
+				duration=0.1400
 			}
 			bumped2{
-				duration=0.14
+				duration=0.1400
 			}
 			idling{
-				duration=0.14
+				duration=0.1400
 			}
 			bumped1{
-				duration=0.14
+				duration=0.1400
 			}
 			idling{
-				duration=0.14
+				duration=0.1400
 			}
 			bumped2{
-				duration=0.14
+				duration=0.1400
 			}
 			idling{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
 	falling{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	landing{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -52,20 +52,20 @@ animations{
 sprites{
 	idling{
 		file=Nectar.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	bumped1{
 		file=Nectar.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		scale=0.97 1.03
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.9700 1.0300
 	}
 	bumped2{
 		file=Nectar.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		scale=1.03 0.97
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=1.0300 0.9700
 	}
 }
 body_parts

@@ -2,51 +2,51 @@ animations{
 	rolling{
 		frames{
 			rolling4{
-				duration=0.10
+				duration=0.1000
 			}
 			rolling5{
-				duration=0.10
+				duration=0.1000
 			}
 			rolling6{
-				duration=0.10
+				duration=0.1000
 			}
 			rolling1{
-				duration=0.10
+				duration=0.1000
 			}
 			rolling2{
-				duration=0.10
+				duration=0.1000
 			}
 			rolling3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	growing{
 		frames{
 			growing1{
-				duration=0.05
+				duration=0.0500
 			}
 			growing2{
-				duration=0.05
+				duration=0.0500
 			}
 			growing3{
-				duration=0.05
+				duration=0.0500
 			}
 			growing4{
-				duration=0.05
+				duration=0.0500
 			}
 			growing5{
-				duration=0.05
+				duration=0.0500
 			}
 			growing6{
-				duration=0.05
+				duration=0.0500
 			}
 		}
 	}
 	destroyed{
 		frames{
 			destroyed{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -54,215 +54,215 @@ animations{
 sprites{
 	rolling1{
 		file=Boulder.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 -0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 -0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	rolling2{
 		file=Boulder.png
-		file_pos=65.00 0.00
-		file_size=64.00 64.00
+		file_pos=65.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	rolling3{
 		file=Boulder.png
-		file_pos=130.00 0.00
-		file_size=64.00 64.00
+		file_pos=130.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	rolling4{
 		file=Boulder.png
-		file_pos=195.00 0.00
-		file_size=64.00 64.00
+		file_pos=195.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	rolling5{
 		file=Boulder.png
-		file_pos=260.00 0.00
-		file_size=64.00 64.00
+		file_pos=260.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	rolling6{
 		file=Boulder.png
-		file_pos=325.00 0.00
-		file_size=64.00 64.00
+		file_pos=325.0000 0.0000
+		file_size=64.0000 64.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	destroyed{
 		file=Boulder.png
-		file_pos=0.00 0.00
-		file_size=0.00 0.00
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=64.00
-				radius=32.00
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing1{
 		file=Boulder.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		scale=0.25 0.25
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.2500 0.2500
 		hitboxes{
 			rock{
-				coords=0.00 0.00 -0.00
-				height=16.00
-				radius=8.00
+				coords=0.0000 0.0000 -0.0000
+				height=16.0000
+				radius=8.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing2{
 		file=Boulder.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		scale=0.35 0.35
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.3500 0.3500
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=24.00
-				radius=12.00
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=12.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing3{
 		file=Boulder.png
-		file_pos=65.00 0.00
-		file_size=64.00 64.00
-		scale=0.50 0.50
+		file_pos=65.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.5000 0.5000
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=16.00
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=16.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing4{
 		file=Boulder.png
-		file_pos=65.00 0.00
-		file_size=64.00 64.00
-		scale=0.63 0.63
+		file_pos=65.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.6300 0.6300
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=40.00
-				radius=20.00
+				coords=0.0000 0.0000 0.0000
+				height=40.0000
+				radius=20.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing5{
 		file=Boulder.png
-		file_pos=130.00 0.00
-		file_size=64.00 64.00
-		scale=0.75 0.75
+		file_pos=130.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.7500 0.7500
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=48.00
-				radius=24.00
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}
 	growing6{
 		file=Boulder.png
-		file_pos=130.00 0.00
-		file_size=64.00 64.00
-		scale=0.88 0.88
+		file_pos=130.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.8800 0.8800
 		hitboxes{
 			rock{
-				coords=0.00 0.00 0.00
-				height=56.00
-				radius=28.00
+				coords=0.0000 0.0000 0.0000
+				height=56.0000
+				radius=28.0000
 				type=1
-				value=60.00
+				value=60.0000
 				hazards=crush
-				knockback=2.00
+				knockback=2.0000
 			}
 		}
 	}

@@ -2,52 +2,52 @@ animations{
 	normal{
 		frames{
 			1{
-				duration=0.08
+				duration=0.0800
 			}
 			2{
-				duration=0.08
+				duration=0.0800
 			}
 			3{
-				duration=0.08
+				duration=0.0800
 			}
 			4{
-				duration=0.08
+				duration=0.0800
 			}
 			5{
-				duration=0.08
+				duration=0.0800
 			}
 			6{
-				duration=0.08
+				duration=0.0800
 			}
 			7{
-				duration=0.08
+				duration=0.0800
 			}
 			8{
-				duration=0.08
+				duration=0.0800
 			}
 			9{
-				duration=0.08
+				duration=0.0800
 			}
 			10{
-				duration=0.08
+				duration=0.0800
 			}
 			11{
-				duration=0.08
+				duration=0.0800
 			}
 			12{
-				duration=0.08
+				duration=0.0800
 			}
 			13{
-				duration=0.08
+				duration=0.0800
 			}
 			14{
-				duration=0.08
+				duration=0.0800
 			}
 			15{
-				duration=0.08
+				duration=0.0800
 			}
 			16{
-				duration=0.08
+				duration=0.0800
 			}
 		}
 	}
@@ -55,99 +55,83 @@ animations{
 sprites{
 	1{
 		file=Water_1.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	2{
 		file=Water_2.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	3{
 		file=Water_3.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	4{
 		file=Water_4.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	5{
 		file=Water_5.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	6{
 		file=Water_6.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	7{
 		file=Water_7.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	8{
 		file=Water_8.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	9{
 		file=Water_9.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	10{
 		file=Water_10.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	11{
 		file=Water_11.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	12{
 		file=Water_12.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	13{
 		file=Water_13.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	14{
 		file=Water_14.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	15{
 		file=Water_15.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 	16{
 		file=Water_16.png
-		file_pos=0.00 0.00
-		file_size=64.00 64.00
-		hitboxes
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
 	}
 }
 body_parts

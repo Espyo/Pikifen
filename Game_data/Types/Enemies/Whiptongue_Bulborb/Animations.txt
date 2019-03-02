@@ -2,66 +2,66 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	walking{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			walking1{
-				duration=0.10
+				duration=0.1000
 			}
 			walking2{
-				duration=0.10
+				duration=0.1000
 			}
 			walking1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			walking3{
-				duration=0.10
+				duration=0.1000
 			}
 			walking4{
-				duration=0.10
+				duration=0.1000
 			}
 			walking3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	sniffing{
 		frames{
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 			sniffing1{
-				duration=0.10
+				duration=0.1000
 			}
 			sniffing2{
-				duration=0.10
+				duration=0.1000
 			}
 			sniffing3{
-				duration=0.50
+				duration=0.5000
 			}
 			sniffing2{
-				duration=0.10
+				duration=0.1000
 			}
 			sniffing4{
-				duration=0.10
+				duration=0.1000
 			}
 			sniffing5{
-				duration=0.50
+				duration=0.5000
 			}
 			sniffing4{
-				duration=0.10
+				duration=0.1000
 			}
 			sniffing1{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -69,74 +69,74 @@ animations{
 		hit_rate=40
 		frames{
 			idling{
-				duration=0.40
+				duration=0.4000
 			}
 			attacking1{
-				duration=0.40
+				duration=0.4000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking1{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking2{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking3{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking4{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking5{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking6{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking7{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking8{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking9{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	chomping{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			chomping1{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping2{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping2{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping1{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping2{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping3{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping2{
-				duration=0.20
+				duration=0.2000
 			}
 			chomping1{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
@@ -144,49 +144,49 @@ animations{
 		hit_rate=90
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking3{
-				duration=0.30
+				duration=0.3000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking4{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking5{
-				duration=0.30
+				duration=0.3000
 			}
 			shaking4{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -194,43 +194,43 @@ animations{
 		loop_frame=12
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.20
+				duration=0.2000
 			}
 			dying3{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dying3{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.10
+				duration=0.1000
 			}
 			dying3{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.20
+				duration=0.2000
 			}
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying4{
-				duration=0.10
+				duration=0.1000
 			}
 			dying5{
-				duration=0.10
+				duration=0.1000
 			}
 			dying6{
-				duration=0.70
+				duration=0.7000
 			}
 		}
 	}
@@ -238,1485 +238,1485 @@ animations{
 sprites{
 	idling{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 0.00
-		file_size=171.00 102.00
-		offset=33.00 0.00
+		file_pos=0.0000 0.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking1{
 		file=Whiptongue_Bulborb.png
-		file_pos=172.00 0.00
-		file_size=171.00 105.00
-		offset=33.00 3.00
+		file_pos=172.0000 0.0000
+		file_size=171.0000 105.0000
+		offset=33.0000 3.0000
 		hitboxes{
 			body{
-				coords=0.00 2.00 0.00
-				height=128.00
-				radius=56.00
+				coords=0.0000 2.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 1.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 1.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking2{
 		file=Whiptongue_Bulborb.png
-		file_pos=344.00 0.00
-		file_size=171.00 114.00
-		offset=33.00 6.00
+		file_pos=344.0000 0.0000
+		file_size=171.0000 114.0000
+		offset=33.0000 6.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 9.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 9.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking3{
 		file=Whiptongue_Bulborb.png
-		file_pos=172.00 0.00
-		file_size=171.00 105.00
-		offset=33.00 -3.00
-		scale=1.00 -1.00
+		file_pos=172.0000 0.0000
+		file_size=171.0000 105.0000
+		offset=33.0000 -3.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=0.00 -2.00 0.00
-				height=128.00
-				radius=56.00
+				coords=0.0000 -2.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 -1.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 -1.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 -3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 -3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	walking4{
 		file=Whiptongue_Bulborb.png
-		file_pos=344.00 0.00
-		file_size=171.00 114.00
-		offset=33.00 -6.00
-		scale=1.00 -1.00
+		file_pos=344.0000 0.0000
+		file_size=171.0000 114.0000
+		offset=33.0000 -6.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=0.00 -0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=0.0000 -0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 -9.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 -9.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 -10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 -10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sniffing1{
 		file=Whiptongue_Bulborb.png
-		file_pos=516.00 0.00
-		file_size=166.00 102.00
-		offset=30.00 0.00
+		file_pos=516.0000 0.0000
+		file_size=166.0000 102.0000
+		offset=30.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sniffing2{
 		file=Whiptongue_Bulborb.png
-		file_pos=683.00 0.00
-		file_size=162.00 102.00
-		offset=31.00 0.00
+		file_pos=683.0000 0.0000
+		file_size=162.0000 102.0000
+		offset=31.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=108.00 -7.00 0.00
-				height=128.00
-				radius=8.00
+				coords=108.0000 -7.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=108.00 -7.00 0.00
-				height=128.00
-				radius=8.00
+				coords=108.0000 -7.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sniffing3{
 		file=Whiptongue_Bulborb.png
-		file_pos=846.00 0.00
-		file_size=162.00 106.00
-		offset=31.00 -2.00
+		file_pos=846.0000 0.0000
+		file_size=162.0000 106.0000
+		offset=31.0000 -2.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 -6.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 -6.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=102.00 -16.00 0.00
-				height=128.00
-				radius=8.00
+				coords=102.0000 -16.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=102.00 -16.00 0.00
-				height=128.00
-				radius=8.00
+				coords=102.0000 -16.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sniffing4{
 		file=Whiptongue_Bulborb.png
-		file_pos=683.00 0.00
-		file_size=162.00 102.00
-		offset=31.00 0.00
-		scale=1.00 -1.00
+		file_pos=683.0000 0.0000
+		file_size=162.0000 102.0000
+		offset=31.0000 0.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=108.00 7.00 0.00
-				height=128.00
-				radius=8.00
+				coords=108.0000 7.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=108.00 7.00 0.00
-				height=128.00
-				radius=8.00
+				coords=108.0000 7.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	sniffing5{
 		file=Whiptongue_Bulborb.png
-		file_pos=846.00 0.00
-		file_size=162.00 106.00
-		offset=31.00 2.00
-		scale=1.00 -1.00
+		file_pos=846.0000 0.0000
+		file_size=162.0000 106.0000
+		offset=31.0000 2.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 6.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 6.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=102.00 16.00 0.00
-				height=128.00
-				radius=8.00
+				coords=102.0000 16.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=102.00 16.00 0.00
-				height=128.00
-				radius=8.00
+				coords=102.0000 16.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking1{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 103.00
-		file_size=166.00 102.00
-		offset=30.00 0.00
+		file_pos=0.0000 103.0000
+		file_size=166.0000 102.0000
+		offset=30.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 -2.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 -2.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 -3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 -3.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 -3.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking2{
 		file=Whiptongue_Bulborb.png
-		file_pos=167.00 106.00
-		file_size=156.00 104.00
-		offset=25.00 -3.00
+		file_pos=167.0000 106.0000
+		file_size=156.0000 104.0000
+		offset=25.0000 -3.0000
 		hitboxes{
 			body{
-				coords=1.00 -2.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 -2.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 -9.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 -9.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=104.00 -9.00 0.00
-				height=128.00
-				radius=8.00
+				coords=104.0000 -9.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=104.00 -9.00 0.00
-				height=128.00
-				radius=8.00
+				coords=104.0000 -9.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking3{
 		file=Whiptongue_Bulborb.png
-		file_pos=324.00 115.00
-		file_size=188.00 104.00
-		offset=41.00 1.00
+		file_pos=324.0000 115.0000
+		file_size=188.0000 104.0000
+		offset=41.0000 1.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=78.00 2.00 0.00
-				height=128.00
-				radius=32.00
+				coords=78.0000 2.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=93.00 4.00 -40.00
-				height=80.00
-				radius=37.00
+				coords=93.0000 4.0000 -40.0000
+				height=80.0000
+				radius=37.0000
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=131.00 -4.00 -40.00
-				height=80.00
-				radius=8.00
+				coords=131.0000 -4.0000 -40.0000
+				height=80.0000
+				radius=8.0000
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking4{
 		file=Whiptongue_Bulborb.png
-		file_pos=516.00 103.00
-		file_size=239.00 105.00
-		offset=66.00 1.00
+		file_pos=516.0000 103.0000
+		file_size=239.0000 105.0000
+		offset=66.0000 1.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=80.22 4.59 0.00
-				height=128.00
-				radius=32.00
+				coords=80.2200 4.5900 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=90.00 4.00 -40.00
-				height=80.00
-				radius=33.00
+				coords=90.0000 4.0000 -40.0000
+				height=80.0000
+				radius=33.0000
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=155.00 4.00 -40.00
-				height=80.00
-				radius=32.00
+				coords=155.0000 4.0000 -40.0000
+				height=80.0000
+				radius=32.0000
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking5{
 		file=Whiptongue_Bulborb.png
-		file_pos=756.00 107.00
-		file_size=293.00 108.00
-		offset=93.00 3.00
+		file_pos=756.0000 107.0000
+		file_size=293.0000 108.0000
+		offset=93.0000 3.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=81.63 9.17 0.00
-				height=128.00
-				radius=32.00
+				coords=81.6300 9.1700 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=153.85 31.37 -40.00
-				height=80.00
-				radius=30.29
+				coords=153.8500 31.3700 -40.0000
+				height=80.0000
+				radius=30.2900
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=212.10 22.10 -40.00
-				height=80.00
-				radius=32.47
+				coords=212.1000 22.1000 -40.0000
+				height=80.0000
+				radius=32.4700
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking6{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 211.00
-		file_size=260.00 140.00
-		offset=77.00 19.00
+		file_pos=0.0000 211.0000
+		file_size=260.0000 140.0000
+		offset=77.0000 19.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=79.51 7.41 0.00
-				height=128.00
-				radius=32.00
+				coords=79.5100 7.4100 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=147.11 28.57 -40.00
-				height=80.00
-				radius=25.19
+				coords=147.1100 28.5700 -40.0000
+				height=80.0000
+				radius=25.1900
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=183.26 62.89 -40.00
-				height=80.00
-				radius=27.36
+				coords=183.2600 62.8900 -40.0000
+				height=80.0000
+				radius=27.3600
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking7{
 		file=Whiptongue_Bulborb.png
-		file_pos=261.00 220.00
-		file_size=216.00 114.00
-		offset=55.00 6.00
+		file_pos=261.0000 220.0000
+		file_size=216.0000 114.0000
+		offset=55.0000 6.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=84.00 14.00 0.00
-				height=128.00
-				radius=32.00
+				coords=84.0000 14.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=143.70 9.08 -40.00
-				height=80.00
-				radius=20.08
+				coords=143.7000 9.0800 -40.0000
+				height=80.0000
+				radius=20.0800
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=151.43 30.44 -40.00
-				height=80.00
-				radius=22.27
+				coords=151.4300 30.4400 -40.0000
+				height=80.0000
+				radius=22.2700
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking8{
 		file=Whiptongue_Bulborb.png
-		file_pos=478.00 220.00
-		file_size=185.00 103.00
-		offset=40.00 0.00
+		file_pos=478.0000 220.0000
+		file_size=185.0000 103.0000
+		offset=40.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=78.10 -6.69 0.00
-				height=128.00
-				radius=32.00
+				coords=78.1000 -6.6900 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=119.06 -27.44 -40.00
-				height=80.00
-				radius=10.45
+				coords=119.0600 -27.4400 -40.0000
+				height=80.0000
+				radius=10.4500
 				type=1
-				value=15.00
+				value=15.0000
 			}
 			tongue2{
-				coords=126.20 -17.11 -40.00
-				height=80.00
-				radius=11.56
+				coords=126.2000 -17.1100 -40.0000
+				height=80.0000
+				radius=11.5600
 				type=1
-				value=15.00
+				value=15.0000
 			}
 		}
 	}
 	attacking9{
 		file=Whiptongue_Bulborb.png
-		file_pos=664.00 216.00
-		file_size=177.00 104.00
-		offset=36.00 1.00
+		file_pos=664.0000 216.0000
+		file_size=177.0000 104.0000
+		offset=36.0000 1.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=80.22 -0.70 0.00
-				height=128.00
-				radius=32.00
+				coords=80.2200 -0.7000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=116.69 -6.00 0.00
-				height=128.00
-				radius=4.93
+				coords=116.6900 -6.0000 0.0000
+				height=128.0000
+				radius=4.9300
 				type=2
-				value=0.50
+				value=0.5000
 			}
 			tongue2{
-				coords=120.83 -8.79 0.00
-				height=128.00
-				radius=4.56
+				coords=120.8300 -8.7900 0.0000
+				height=128.0000
+				radius=4.5600
 				type=2
-				value=0.50
+				value=0.5000
 			}
 		}
 	}
 	chomping1{
 		file=Whiptongue_Bulborb.png
-		file_pos=842.00 216.00
-		file_size=166.00 102.00
-		offset=31.00 0.00
+		file_pos=842.0000 216.0000
+		file_size=166.0000 102.0000
+		offset=31.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=114.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=114.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=114.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=114.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	chomping2{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 352.00
-		file_size=164.00 102.00
-		offset=29.00 0.00
+		file_pos=0.0000 352.0000
+		file_size=164.0000 102.0000
+		offset=29.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=67.45 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=67.4500 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	chomping3{
 		file=Whiptongue_Bulborb.png
-		file_pos=165.00 352.00
-		file_size=160.00 102.00
-		offset=27.00 0.00
+		file_pos=165.0000 352.0000
+		file_size=160.0000 102.0000
+		offset=27.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=64.91 0.08 0.00
-				height=128.00
-				radius=29.46
+				coords=64.9100 0.0800 0.0000
+				height=128.0000
+				radius=29.4600
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=104.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=104.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=104.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=104.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking2{
 		file=Whiptongue_Bulborb.png
-		file_pos=326.00 335.00
-		file_size=171.00 102.00
-		offset=33.00 -8.00
+		file_pos=326.0000 335.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 -8.0000
 		hitboxes{
 			body{
-				coords=-1.77 -8.76 -32.00
-				height=200.00
-				radius=60.57
+				coords=-1.7700 -8.7600 -32.0000
+				height=200.0000
+				radius=60.5700
 				type=1
-				value=30.00
-				knockback_angle=4.71
-				knockback=3.00
+				value=30.0000
+				knockback_angle=4.7100
+				knockback=3.0000
 				wither_chance=10
 			}
 			head{
-				coords=70.00 0.00 -32.00
-				height=200.00
-				radius=36.00
+				coords=70.0000 0.0000 -32.0000
+				height=200.0000
+				radius=36.0000
 				type=1
-				value=30.00
-				knockback_angle=4.71
-				knockback=3.00
+				value=30.0000
+				knockback_angle=4.7100
+				knockback=3.0000
 				wither_chance=10
 			}
 			tongue1{
-				coords=109.00 5.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 5.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=109.00 5.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 5.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking3{
 		file=Whiptongue_Bulborb.png
-		file_pos=498.00 324.00
-		file_size=167.00 115.00
-		offset=30.00 -16.00
+		file_pos=498.0000 324.0000
+		file_size=167.0000 115.0000
+		offset=30.0000 -16.0000
 		hitboxes{
 			body{
-				coords=-1.00 -16.00 -32.00
-				height=200.00
-				radius=60.57
+				coords=-1.0000 -16.0000 -32.0000
+				height=200.0000
+				radius=60.5700
 				type=1
-				value=30.00
-				knockback_angle=4.71
-				knockback=3.00
+				value=30.0000
+				knockback_angle=4.7100
+				knockback=3.0000
 				wither_chance=10
 			}
 			head{
-				coords=70.00 -10.00 -32.00
-				height=200.00
-				radius=36.00
+				coords=70.0000 -10.0000 -32.0000
+				height=200.0000
+				radius=36.0000
 				type=1
-				value=30.00
-				knockback_angle=4.71
-				knockback=3.00
+				value=30.0000
+				knockback_angle=4.7100
+				knockback=3.0000
 				wither_chance=10
 			}
 			tongue1{
-				coords=109.00 10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=109.00 10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking4{
 		file=Whiptongue_Bulborb.png
-		file_pos=326.00 335.00
-		file_size=171.00 102.00
-		offset=33.00 8.00
-		scale=1.00 -1.00
+		file_pos=326.0000 335.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 8.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=-1.77 8.76 -32.00
-				height=200.00
-				radius=60.57
+				coords=-1.7700 8.7600 -32.0000
+				height=200.0000
+				radius=60.5700
 				type=1
-				value=30.00
-				knockback_angle=1.57
-				knockback=3.00
+				value=30.0000
+				knockback_angle=1.5700
+				knockback=3.0000
 				wither_chance=10
 			}
 			head{
-				coords=70.00 0.00 -32.00
-				height=200.00
-				radius=36.00
+				coords=70.0000 0.0000 -32.0000
+				height=200.0000
+				radius=36.0000
 				type=1
-				value=30.00
-				knockback_angle=1.57
-				knockback=3.00
+				value=30.0000
+				knockback_angle=1.5700
+				knockback=3.0000
 				wither_chance=10
 			}
 			tongue1{
-				coords=109.00 -5.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 -5.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=109.00 -5.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 -5.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking5{
 		file=Whiptongue_Bulborb.png
-		file_pos=498.00 324.00
-		file_size=167.00 115.00
-		offset=30.00 16.00
-		scale=1.00 -1.00
+		file_pos=498.0000 324.0000
+		file_size=167.0000 115.0000
+		offset=30.0000 16.0000
+		scale=1.0000 -1.0000
 		hitboxes{
 			body{
-				coords=-1.00 16.00 -32.00
-				height=200.00
-				radius=60.57
+				coords=-1.0000 16.0000 -32.0000
+				height=200.0000
+				radius=60.5700
 				type=1
-				value=30.00
-				knockback_angle=1.57
-				knockback=3.00
+				value=30.0000
+				knockback_angle=1.5700
+				knockback=3.0000
 				wither_chance=10
 			}
 			head{
-				coords=70.00 10.00 -32.00
-				height=200.00
-				radius=36.00
+				coords=70.0000 10.0000 -32.0000
+				height=200.0000
+				radius=36.0000
 				type=1
-				value=30.00
-				knockback_angle=1.57
-				knockback=3.00
+				value=30.0000
+				knockback_angle=1.5700
+				knockback=3.0000
 				wither_chance=10
 			}
 			tongue1{
-				coords=109.00 -10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 -10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=109.00 -10.00 0.00
-				height=128.00
-				radius=8.00
+				coords=109.0000 -10.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying1{
 		file=Whiptongue_Bulborb.png
-		file_pos=666.00 321.00
-		file_size=163.00 102.00
-		offset=29.00 0.00
+		file_pos=666.0000 321.0000
+		file_size=163.0000 102.0000
+		offset=29.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying2{
 		file=Whiptongue_Bulborb.png
-		file_pos=830.00 321.00
-		file_size=144.00 102.00
-		offset=21.00 0.00
+		file_pos=830.0000 321.0000
+		file_size=144.0000 102.0000
+		offset=21.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=52.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=56.19 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=56.1900 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=91.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=91.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=91.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=91.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying3{
 		file=Whiptongue_Bulborb.png
-		file_pos=830.00 321.00
-		file_size=144.00 102.00
-		offset=23.00 0.00
+		file_pos=830.0000 321.0000
+		file_size=144.0000 102.0000
+		offset=23.0000 0.0000
 		hitboxes{
 			body{
-				coords=3.00 0.00 0.00
-				height=128.00
-				radius=52.00
+				coords=3.0000 0.0000 0.0000
+				height=128.0000
+				radius=52.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=58.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=58.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=93.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=93.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=93.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=93.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying4{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 455.00
-		file_size=171.00 102.00
-		offset=33.00 0.00
+		file_pos=0.0000 455.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 0.0000
 		hitboxes{
 			body{
-				coords=1.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=70.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=70.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying5{
 		file=Whiptongue_Bulborb.png
-		file_pos=172.00 455.00
-		file_size=177.00 102.00
-		offset=40.00 0.00
+		file_pos=172.0000 455.0000
+		file_size=177.0000 102.0000
+		offset=40.0000 0.0000
 		hitboxes{
 			body{
-				coords=7.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=7.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=80.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=80.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=120.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=120.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=120.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=120.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying6{
 		file=Whiptongue_Bulborb.png
-		file_pos=350.00 440.00
-		file_size=185.00 102.00
-		offset=50.00 0.00
+		file_pos=350.0000 440.0000
+		file_size=185.0000 102.0000
+		offset=50.0000 0.0000
 		hitboxes{
 			body{
-				coords=18.00 0.00 0.00
-				height=128.00
-				radius=56.00
+				coords=18.0000 0.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=2
-				value=0.80
+				value=0.8000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=95.00 0.00 0.00
-				height=128.00
-				radius=32.00
+				coords=95.0000 0.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=140.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=140.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=140.00 0.00 0.00
-				height=128.00
-				radius=8.00
+				coords=140.0000 0.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking1{
 		file=Whiptongue_Bulborb.png
-		file_pos=0.00 0.00
-		file_size=171.00 102.00
-		offset=33.00 2.00
+		file_pos=0.0000 0.0000
+		file_size=171.0000 102.0000
+		offset=33.0000 2.0000
 		hitboxes{
 			body{
-				coords=1.00 2.00 0.00
-				height=128.00
-				radius=56.00
+				coords=1.0000 2.0000 0.0000
+				height=128.0000
+				radius=56.0000
 				type=0
-				value=0.80
+				value=0.8000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			head{
-				coords=75.00 2.00 0.00
-				height=128.00
-				radius=32.00
+				coords=75.0000 2.0000 0.0000
+				height=128.0000
+				radius=32.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue1{
-				coords=110.00 2.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 2.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			tongue2{
-				coords=110.00 2.00 0.00
-				height=128.00
-				radius=8.00
+				coords=110.0000 2.0000 0.0000
+				height=128.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

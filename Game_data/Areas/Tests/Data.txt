@@ -2,8 +2,8 @@ name=Tests
 subtitle
 bg_bmp
 bg_color=0 0 0
-bg_dist=2.00
-bg_zoom=1.00
+bg_dist=2.0000
+bg_zoom=1.0000
 weather=Normal
 creator
 version

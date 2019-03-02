@@ -2,60 +2,60 @@ animations{
 	moving{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			moving2{
-				duration=0.10
+				duration=0.1000
 			}
 			moving1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 			moving4{
-				duration=0.10
+				duration=0.1000
 			}
 			moving3{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	attacking{
 		frames{
 			attacking1{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking2{
-				duration=0.10
+				duration=0.1000
 			}
 			attacking1{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	eating{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			eating1{
-				duration=0.15
+				duration=0.1500
 			}
 			eating2{
-				duration=0.15
+				duration=0.1500
 			}
 			eating1{
-				duration=0.15
+				duration=0.1500
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -63,19 +63,19 @@ animations{
 		loop_frame=4
 		frames{
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying2{
-				duration=0.20
+				duration=0.2000
 			}
 			dying1{
-				duration=0.10
+				duration=0.1000
 			}
 			dying3{
-				duration=0.10
+				duration=0.1000
 			}
 			dying4{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
@@ -83,324 +83,324 @@ animations{
 sprites{
 	idling{
 		file=Crumbug.png
-		file_pos=0.00 0.00
-		file_size=32.00 32.00
+		file_pos=0.0000 0.0000
+		file_size=32.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving1{
 		file=Crumbug.png
-		file_pos=33.00 0.00
-		file_size=32.00 32.00
+		file_pos=33.0000 0.0000
+		file_size=32.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 -2.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 -2.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving2{
 		file=Crumbug.png
-		file_pos=66.00 0.00
-		file_size=32.00 32.00
+		file_pos=66.0000 0.0000
+		file_size=32.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=12.00 -3.00 0.00
-				height=24.00
-				radius=7.00
+				coords=12.0000 -3.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving3{
 		file=Crumbug.png
-		file_pos=99.00 0.00
-		file_size=33.00 32.00
+		file_pos=99.0000 0.0000
+		file_size=33.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 1.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 1.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	moving4{
 		file=Crumbug.png
-		file_pos=133.00 0.00
-		file_size=34.00 32.00
+		file_pos=133.0000 0.0000
+		file_size=34.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 3.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 3.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking1{
 		file=Crumbug.png
-		file_pos=0.00 33.00
-		file_size=30.00 32.00
+		file_pos=0.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	attacking2{
 		file=Crumbug.png
-		file_pos=31.00 33.00
-		file_size=30.00 32.00
+		file_pos=31.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 -12.00
-				height=48.00
-				radius=7.00
+				coords=13.0000 0.0000 -12.0000
+				height=48.0000
+				radius=7.0000
 				type=1
-				value=20.00
+				value=20.0000
 			}
 		}
 	}
 	eating1{
 		file=Crumbug.png
-		file_pos=0.00 33.00
-		file_size=30.00 32.00
+		file_pos=0.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	eating2{
 		file=Crumbug.png
-		file_pos=31.00 33.00
-		file_size=30.00 32.00
+		file_pos=31.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying1{
 		file=Crumbug.png
-		file_pos=0.00 33.00
-		file_size=30.00 32.00
+		file_pos=0.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying2{
 		file=Crumbug.png
-		file_pos=31.00 33.00
-		file_size=30.00 32.00
+		file_pos=31.0000 33.0000
+		file_size=30.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 0.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying3{
 		file=Crumbug.png
-		file_pos=62.00 33.00
-		file_size=32.00 32.00
+		file_pos=62.0000 33.0000
+		file_size=32.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 2.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 2.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	dying4{
 		file=Crumbug.png
-		file_pos=95.00 33.00
-		file_size=32.00 32.00
+		file_pos=95.0000 33.0000
+		file_size=32.0000 32.0000
 		hitboxes{
 			body{
-				coords=-3.00 0.00 0.00
-				height=24.00
-				radius=14.00
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			mouth{
-				coords=13.00 4.00 0.00
-				height=24.00
-				radius=7.00
+				coords=13.0000 4.0000 0.0000
+				height=24.0000
+				radius=7.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

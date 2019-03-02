@@ -2,14 +2,14 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
 	destroyed{
 		frames{
 			destroyed{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
@@ -17,110 +17,110 @@ animations{
 sprites{
 	idling{
 		file=White_gate.png
-		file_pos=0.00 0.00
-		file_size=48.00 192.00
+		file_pos=0.0000 0.0000
+		file_size=48.0000 192.0000
 		hitboxes{
 			center{
-				coords=0.00 0.00 0.00
-				height=0.00
-				radius=28.00
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			far_left{
-				coords=0.00 -70.00 0.00
-				height=0.00
-				radius=28.00
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			far_right{
-				coords=0.00 70.00 0.00
-				height=0.00
-				radius=28.00
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			near_left{
-				coords=0.00 -35.00 0.00
-				height=0.00
-				radius=28.00
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			near_right{
-				coords=0.00 35.00 0.00
-				height=0.00
-				radius=28.00
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	destroyed{
 		file=White_gate.png
-		file_pos=0.00 0.00
-		file_size=0.00 0.00
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
 		hitboxes{
 			center{
-				coords=0.00 0.00 0.00
-				height=128.00
-				radius=28.00
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=28.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			far_left{
-				coords=0.00 -70.00 0.00
-				height=128.00
-				radius=28.00
+				coords=0.0000 -70.0000 0.0000
+				height=128.0000
+				radius=28.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			far_right{
-				coords=0.00 70.00 0.00
-				height=128.00
-				radius=28.00
+				coords=0.0000 70.0000 0.0000
+				height=128.0000
+				radius=28.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			near_left{
-				coords=0.00 -35.00 0.00
-				height=128.00
-				radius=28.00
+				coords=0.0000 -35.0000 0.0000
+				height=128.0000
+				radius=28.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			near_right{
-				coords=0.00 35.00 0.00
-				height=128.00
-				radius=28.00
+				coords=0.0000 35.0000 0.0000
+				height=128.0000
+				radius=28.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

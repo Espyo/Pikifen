@@ -2,46 +2,46 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	resting{
 		frames{
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 			resting1{
-				duration=0.10
+				duration=0.1000
 			}
 			resting2{
-				duration=0.10
+				duration=0.1000
 			}
 			resting3{
-				duration=1.00
+				duration=1.0000
 			}
 			resting2{
-				duration=0.10
+				duration=0.1000
 			}
 			resting1{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.20
+				duration=0.2000
 			}
 		}
 	}
 	limb_idling{
 		frames{
 			limb{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
 	pausing{
 		frames{
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -49,107 +49,107 @@ animations{
 		hit_rate=75
 		frames{
 			shaking1{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.20
+				duration=0.2000
 			}
 			shaking3{
-				duration=0.50
+				duration=0.5000
 			}
 			shaking1{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking4{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking5{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking6{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking5{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking4{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking7{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking8{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking9{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking10{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking9{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking8{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking2{
-				duration=0.05
+				duration=0.0500
 			}
 			shaking1{
-				duration=0.50
+				duration=0.5000
 			}
 		}
 	}
 	dying1{
 		frames{
 			tense1{
-				duration=0.10
+				duration=0.1000
 			}
 			tense2{
-				duration=0.70
+				duration=0.7000
 			}
 			tense1{
-				duration=0.50
+				duration=0.5000
 			}
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.10
+				duration=0.1000
 			}
 			shaking2{
-				duration=0.10
+				duration=0.1000
 			}
 			idling{
-				duration=0.30
+				duration=0.3000
 			}
 			opening1{
-				duration=0.10
+				duration=0.1000
 			}
 			opening2{
-				duration=0.10
+				duration=0.1000
 			}
 		}
 	}
@@ -157,22 +157,22 @@ animations{
 		loop_frame=5
 		frames{
 			opening2{
-				duration=0.60
+				duration=0.6000
 			}
 			crumbling1{
-				duration=0.50
+				duration=0.5000
 			}
 			crumbling2{
-				duration=0.40
+				duration=0.4000
 			}
 			crumbling3{
-				duration=0.40
+				duration=0.4000
 			}
 			crumbling4{
-				duration=0.30
+				duration=0.3000
 			}
 			crumbling5{
-				duration=0.30
+				duration=0.3000
 			}
 		}
 	}
@@ -180,22 +180,22 @@ animations{
 		loop_frame=5
 		frames{
 			limb{
-				duration=0.60
+				duration=0.6000
 			}
 			limb_crumbling1{
-				duration=0.50
+				duration=0.5000
 			}
 			limb_crumbling2{
-				duration=0.40
+				duration=0.4000
 			}
 			limb_crumbling3{
-				duration=0.40
+				duration=0.4000
 			}
 			limb_crumbling4{
-				duration=0.30
+				duration=0.3000
 			}
 			limb_crumbling5{
-				duration=0.30
+				duration=0.3000
 			}
 		}
 	}
@@ -203,1536 +203,1536 @@ animations{
 sprites{
 	idling{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 429.00
-		file_size=234.00 24.00
+		file_pos=0.0000 429.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking1{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking2{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=6.18
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=6.1800
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=5.01 2.93 132.00
-				height=8.00
-				radius=8.00
+				coords=5.0100 2.9300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=3.07 -5.03 132.00
-				height=8.00
-				radius=8.00
+				coords=3.0700 -5.0300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-3.10 4.49 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.1000 4.4900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-5.04 -3.32 132.00
-				height=8.00
-				radius=8.00
+				coords=-5.0400 -3.3200 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking3{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=5.99
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.9900
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=0
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=6.58 2.59 132.00
-				height=8.00
-				radius=8.00
+				coords=6.5800 2.5900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=2.94 -5.95 132.00
-				height=8.00
-				radius=8.00
+				coords=2.9400 -5.9500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-2.38 5.39 132.00
-				height=8.00
-				radius=8.00
+				coords=-2.3800 5.3900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-5.88 -3.43 132.00
-				height=8.00
-				radius=8.00
+				coords=-5.8800 -3.4300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking4{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=0.36
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.3600
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=2.86 6.09 132.00
-				height=8.00
-				radius=8.00
+				coords=2.8600 6.0900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=6.59 -2.50 132.00
-				height=8.00
-				radius=8.00
+				coords=6.5900 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-5.88 2.36 132.00
-				height=8.00
-				radius=8.00
+				coords=-5.8800 2.3600 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-2.00 -6.54 132.00
-				height=8.00
-				radius=8.00
+				coords=-2.0000 -6.5400 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking5{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=0.66
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.6600
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=2.05 6.25 132.00
-				height=8.00
-				radius=8.00
+				coords=2.0500 6.2500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=7.23 -1.20 132.00
-				height=8.00
-				radius=8.00
+				coords=7.2300 -1.2000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-6.53 2.20 132.00
-				height=8.00
-				radius=8.00
+				coords=-6.5300 2.2000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-1.02 -5.73 132.00
-				height=8.00
-				radius=8.00
+				coords=-1.0200 -5.7300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking6{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=0.91
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=0.9100
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=-1.64 7.13 132.00
-				height=8.00
-				radius=8.00
+				coords=-1.6400 7.1300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=5.48 0.35 132.00
-				height=8.00
-				radius=8.00
+				coords=5.4800 0.3500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-7.89 0.35 132.00
-				height=8.00
-				radius=8.00
+				coords=-7.8900 0.3500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-1.29 -5.73 132.00
-				height=8.00
-				radius=8.00
+				coords=-1.2900 -5.7300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking7{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking8{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=5.96
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.9600
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=5.01 2.93 132.00
-				height=8.00
-				radius=8.00
+				coords=5.0100 2.9300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=3.07 -5.03 132.00
-				height=8.00
-				radius=8.00
+				coords=3.0700 -5.0300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-3.10 4.49 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.1000 4.4900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-5.04 -3.32 132.00
-				height=8.00
-				radius=8.00
+				coords=-5.0400 -3.3200 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking9{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=5.75
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.7500
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=6.41 1.09 132.00
-				height=8.00
-				radius=8.00
+				coords=6.4100 1.0900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=2.16 -6.35 132.00
-				height=8.00
-				radius=8.00
+				coords=2.1600 -6.3500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-1.17 5.79 132.00
-				height=8.00
-				radius=8.00
+				coords=-1.1700 5.7900 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-6.79 -2.25 132.00
-				height=8.00
-				radius=8.00
+				coords=-6.7900 -2.2500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	shaking10{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		angle=5.55
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		angle=5.5500
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=1
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=2.00
+				knockback=2.0000
 				wither_chance=50
 			}
 			front_right{
-				coords=6.11 -0.13 132.00
-				height=8.00
-				radius=8.00
+				coords=6.1100 -0.1300 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=-0.41 -6.35 132.00
-				height=8.00
-				radius=8.00
+				coords=-0.4100 -6.3500 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.04 6.40 132.00
-				height=8.00
-				radius=8.00
+				coords=0.0400 6.4000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-6.63 0.48 132.00
-				height=8.00
-				radius=8.00
+				coords=-6.6300 0.4800 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	resting1{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		scale=0.97 0.97
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9700 0.9700
 		hitboxes{
 			body{
-				coords=0.00 0.00 -25.00
-				height=140.00
-				radius=69.00
+				coords=0.0000 0.0000 -25.0000
+				height=140.0000
+				radius=69.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=3.50 3.50 132.00
-				height=8.00
-				radius=8.00
+				coords=3.5000 3.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=3.50 -3.50 132.00
-				height=8.00
-				radius=8.00
+				coords=3.5000 -3.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-3.50 3.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.5000 3.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-3.50 -3.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.5000 -3.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	resting2{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		scale=0.94 0.94
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9400 0.9400
 		hitboxes{
 			body{
-				coords=0.00 0.00 -50.00
-				height=140.00
-				radius=67.00
+				coords=0.0000 0.0000 -50.0000
+				height=140.0000
+				radius=67.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=3.00 3.00 132.00
-				height=8.00
-				radius=8.00
+				coords=3.0000 3.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=3.00 -3.00 132.00
-				height=8.00
-				radius=8.00
+				coords=3.0000 -3.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-3.00 3.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.0000 3.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-3.00 -3.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-3.0000 -3.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	resting3{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		scale=0.91 0.91
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=0.9100 0.9100
 		hitboxes{
 			body{
-				coords=0.00 0.00 -75.00
-				height=140.00
-				radius=65.00
+				coords=0.0000 0.0000 -75.0000
+				height=140.0000
+				radius=65.0000
 				type=0
-				value=1.00
+				value=1.0000
 				can_pikmin_latch=true
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=2.50 2.50 132.00
-				height=8.00
-				radius=8.00
+				coords=2.5000 2.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=2.50 -2.50 132.00
-				height=8.00
-				radius=8.00
+				coords=2.5000 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-2.50 2.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-2.5000 2.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-2.50 -2.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-2.5000 -2.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	opening1{
 		file=Beady_Long_Legs.png
-		file_pos=143.00 0.00
-		file_size=210.00 142.00
+		file_pos=143.0000 0.0000
+		file_size=210.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	opening2{
 		file=Beady_Long_Legs.png
-		file_pos=354.00 0.00
-		file_size=278.00 142.00
+		file_pos=354.0000 0.0000
+		file_size=278.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	tense1{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		scale=1.05 1.05
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=1.0500 1.0500
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=74.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=74.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	tense2{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 0.00
-		file_size=142.00 142.00
-		scale=1.10 1.10
+		file_pos=0.0000 0.0000
+		file_size=142.0000 142.0000
+		scale=1.1000 1.1000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=78.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=78.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.50 4.50 132.00
-				height=8.00
-				radius=8.00
+				coords=4.5000 4.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.50 -4.50 132.00
-				height=8.00
-				radius=8.00
+				coords=4.5000 -4.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.50 4.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.5000 4.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.50 -4.50 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.5000 -4.5000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crumbling1{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 143.00
-		file_size=278.00 142.00
+		file_pos=0.0000 143.0000
+		file_size=278.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crumbling2{
 		file=Beady_Long_Legs.png
-		file_pos=279.00 143.00
-		file_size=278.00 142.00
+		file_pos=279.0000 143.0000
+		file_size=278.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crumbling3{
 		file=Beady_Long_Legs.png
-		file_pos=558.00 143.00
-		file_size=210.00 142.00
+		file_pos=558.0000 143.0000
+		file_size=210.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crumbling4{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 286.00
-		file_size=210.00 142.00
+		file_pos=0.0000 286.0000
+		file_size=210.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	crumbling5{
 		file=Beady_Long_Legs.png
-		file_pos=211.00 286.00
-		file_size=210.00 142.00
+		file_pos=211.0000 286.0000
+		file_size=210.0000 142.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 0.00
-				height=140.00
-				radius=71.00
+				coords=0.0000 0.0000 0.0000
+				height=140.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=-4.00 4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=-4.00 -4.00 132.00
-				height=8.00
-				radius=8.00
+				coords=-4.0000 -4.0000 132.0000
+				height=8.0000
+				radius=8.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb_crumbling1{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 454.00
-		file_size=234.00 24.00
+		file_pos=0.0000 454.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb_crumbling2{
 		file=Beady_Long_Legs.png
-		file_pos=235.00 454.00
-		file_size=234.00 24.00
+		file_pos=235.0000 454.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb_crumbling3{
 		file=Beady_Long_Legs.png
-		file_pos=470.00 454.00
-		file_size=234.00 24.00
+		file_pos=470.0000 454.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb_crumbling4{
 		file=Beady_Long_Legs.png
-		file_pos=0.00 479.00
-		file_size=234.00 24.00
+		file_pos=0.0000 479.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}
 	limb_crumbling5{
 		file=Beady_Long_Legs.png
-		file_pos=235.00 479.00
-		file_size=234.00 24.00
+		file_pos=235.0000 479.0000
+		file_size=234.0000 24.0000
 		hitboxes{
 			body{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			front_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_right{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 			back_left{
-				coords=0.00 0.00 132.00
-				height=8.00
-				radius=71.00
+				coords=0.0000 0.0000 132.0000
+				height=8.0000
+				radius=71.0000
 				type=2
-				value=1.00
+				value=1.0000
 				knockback_outward=true
-				knockback=1.00
+				knockback=1.0000
 			}
 		}
 	}

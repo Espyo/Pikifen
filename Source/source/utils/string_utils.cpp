@@ -29,10 +29,10 @@ string box_string(const string &s, const size_t size) {
 string b2s(const bool b) { return b ? "true" : "false"; }
 
 
-//Converts a float to a string, with 2 decimal places.
+//Converts a float to a string, with 4 decimal places.
 string f2s(const float f) {
     std::stringstream s;
-    s << std::fixed << ::setprecision(2) << f;
+    s << std::fixed << ::setprecision(4) << f;
     return s.str();
 }
 

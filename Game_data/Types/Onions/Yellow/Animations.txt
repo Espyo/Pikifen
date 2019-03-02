@@ -2,7 +2,7 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.00
+				duration=0.0000
 			}
 		}
 	}
@@ -10,10 +10,10 @@ animations{
 sprites{
 	idling{
 		file=Yellow_Onion.png
-		file_pos=0.00 0.00
-		file_size=370.00 320.00
-		offset=-2.00 0.00
-		scale=0.50 0.50
+		file_pos=0.0000 0.0000
+		file_size=370.0000 320.0000
+		offset=-2.0000 0.0000
+		scale=0.5000 0.5000
 	}
 }
 body_parts
