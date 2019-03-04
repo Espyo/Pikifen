@@ -2149,10 +2149,12 @@ void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
  * info1: Pointer to the drop mob.
  */
 void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
+    mob* drop_ptr = (mob*) info1;
     m->leave_group();
     m->stop_chasing();
-    m->focus_on_mob((mob*) info1);
+    m->focus_on_mob(drop_ptr);
     m->set_animation(PIKMIN_ANIM_DRINKING);
+    m->face(get_angle(m->pos, drop_ptr->pos), NULL);
 }
 
 

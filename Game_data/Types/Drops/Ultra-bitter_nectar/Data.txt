@@ -1,0 +1,9 @@
+name = Ultra-bitter nectar
+
+consumer = leaders
+effect = increase_sprays
+increase_amount = 1
+radius = 20
+shrink_speed = 120
+spray_type_to_increase = Ultra-Bitter Spray
+total_doses = 1
