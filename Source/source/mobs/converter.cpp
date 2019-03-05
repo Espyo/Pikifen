@@ -23,7 +23,7 @@ converter::converter(
     mob(pos, con_type, angle),
     con_type(con_type),
     amount_in_buffer(0),
-    output_pikmin_left(con_type->total_pikmin_output),
+    input_pikmin_left(con_type->total_input_pikmin),
     current_type(con_type->available_pikmin_types[0]),
     current_type_nr(0),
     type_change_timer(con_type->type_change_interval),

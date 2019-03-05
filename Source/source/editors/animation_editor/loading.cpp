@@ -37,6 +37,7 @@ void animation_editor::load() {
     
     load_custom_particle_generators(false);
     load_status_types(false);
+    load_spray_types(false);
     load_liquids(false);
     load_hazards();
     load_spike_damage_types();

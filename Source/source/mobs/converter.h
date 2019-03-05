@@ -21,7 +21,7 @@ enum CONVERTER_STATES {
     CONVERTER_STATE_CLOSING,
     CONVERTER_STATE_SPITTING,
     CONVERTER_STATE_OPENING,
-    CONVERTER_STATE_WILTING,
+    CONVERTER_STATE_DYING,
     
     N_CONVERTER_STATES,
 };
@@ -37,7 +37,7 @@ public:
     converter_type* con_type;
     
     size_t amount_in_buffer;
-    size_t output_pikmin_left;
+    size_t input_pikmin_left;
     pikmin_type* current_type;
     size_t current_type_nr;
     timer type_change_timer;

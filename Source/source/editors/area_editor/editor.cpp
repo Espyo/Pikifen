@@ -3672,6 +3672,7 @@ void area_editor::unload() {
     
     unload_hazards();
     unload_mob_types(false);
+    unload_spray_types();
     unload_status_types(false);
 }
 

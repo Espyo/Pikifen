@@ -37,13 +37,14 @@ void converter_fsm::create_fsm(mob_type* typ) {
             efc.run(converter_fsm::bumped);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run(converter_fsm::finish_being_bumped);
             efc.change_state("closing");
         }
     }
     
     efc.new_state("closing", CONVERTER_STATE_CLOSING); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.change_state("spitting");
+            efc.run(converter_fsm::open_or_spit);
         }
     }
     
@@ -52,7 +53,7 @@ void converter_fsm::create_fsm(mob_type* typ) {
             efc.run(converter_fsm::spew);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run(converter_fsm::open_or_wilt);
+            efc.run(converter_fsm::open_or_die);
         }
     }
     
@@ -65,12 +66,12 @@ void converter_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("wilting", CONVERTER_STATE_WILTING); {
+    efc.new_state("dying", CONVERTER_STATE_DYING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(converter_fsm::wilt);
+            efc.run(converter_fsm::start_dying);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run(converter_fsm::die);
+            efc.run(converter_fsm::finish_dying);
         }
     }
     
@@ -121,9 +122,17 @@ void converter_fsm::bumped(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the converter close after it gets bumped.
+ */
+void converter_fsm::finish_being_bumped(mob* m, void* info1, void* info2) {
+    ((converter*) m)->close();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the converter vanish.
  */
-void converter_fsm::die(mob* m, void* info1, void* info2) {
+void converter_fsm::finish_dying(mob* m, void* info1, void* info2) {
     m->to_delete = true;
 }
 
@@ -156,7 +165,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
         c_ptr->con_type->same_type_counts_for_output ||
         p_ptr->pik_type != c_ptr->current_type
     ) {
-        c_ptr->output_pikmin_left--;
+        c_ptr->input_pikmin_left--;
     }
     c_ptr->type_change_timer.stop();
     c_ptr->auto_conversion_timer.start();
@@ -164,7 +173,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
     p_ptr->to_delete = true;
     
     if(
-        c_ptr->output_pikmin_left == 0 ||
+        c_ptr->input_pikmin_left == 0 ||
         c_ptr->amount_in_buffer == c_ptr->con_type->buffer_size
     ) {
         c_ptr->close();
@@ -201,15 +210,31 @@ void converter_fsm::open(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Changes to the opening state or the wilting state.
+ * Changes to the opening state or the dying state, depending
+ * on whether it can still output Pikmin.
  */
-void converter_fsm::open_or_wilt(mob* m, void* info1, void* info2) {
+void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
     converter* c_ptr = (converter*) m;
     
-    if(c_ptr->output_pikmin_left == 0) {
-        c_ptr->fsm.set_state(CONVERTER_STATE_WILTING);
+    if(c_ptr->input_pikmin_left == 0) {
+        c_ptr->fsm.set_state(CONVERTER_STATE_DYING);
     } else {
         c_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes to the opening state or the spitting state, depending
+ * on whether it has Pikmin in the buffer or not.
+ */
+void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
+    converter* c_ptr = (converter*) m;
+    
+    if(c_ptr->amount_in_buffer == 0) {
+        c_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
+    } else {
+        c_ptr->fsm.set_state(CONVERTER_STATE_SPITTING);
     }
 }
 
@@ -231,15 +256,15 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes the converter start wilting.
+ * Makes the converter start dying.
  */
-void converter_fsm::wilt(mob* m, void* info1, void* info2) {
+void converter_fsm::start_dying(mob* m, void* info1, void* info2) {
     converter* c_ptr = (converter*) m;
     
     c_ptr->set_animation(
         c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_WILTING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_WILTING;
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_DYING;
 }

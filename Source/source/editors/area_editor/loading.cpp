@@ -2744,6 +2744,7 @@ void area_editor::load() {
     load_spike_damage_types();
     load_liquids(false);
     load_status_types(false);
+    load_spray_types(false);
     load_hazards();
     load_mob_types(false);
     load_weather();

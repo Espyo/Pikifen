@@ -21,13 +21,15 @@ namespace converter_fsm {
 void create_fsm(mob_type* typ);
 void become_idle(mob* m, void* info1, void* info2);
 void bumped(mob* m, void* info1, void* info2);
-void die(mob* m, void* info1, void* info2);
+void finish_being_bumped(mob* m, void* info1, void* info2);
+void finish_dying(mob* m, void* info1, void* info2);
 void handle_object_touch(mob* m, void* info1, void* info2);
 void handle_pikmin(mob* m, void* info1, void* info2);
 void open(mob* m, void* info1, void* info2);
-void open_or_wilt(mob* m, void* info1, void* info2);
+void open_or_die(mob* m, void* info1, void* info2);
+void open_or_spit(mob* m, void* info1, void* info2);
 void spew(mob* m, void* info1, void* info2);
-void wilt(mob* m, void* info1, void* info2);
+void start_dying(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef CONVERTER_FSM_INCLUDED

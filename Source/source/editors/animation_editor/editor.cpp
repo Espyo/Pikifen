@@ -903,6 +903,7 @@ void animation_editor::unload() {
     unload_spike_damage_types();
     unload_hazards();
     unload_liquids();
+    unload_spray_types();
     unload_status_types(false);
     unload_custom_particle_generators();
 }

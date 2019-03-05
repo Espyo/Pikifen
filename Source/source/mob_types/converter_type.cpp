@@ -20,7 +20,7 @@
 converter_type::converter_type() :
     mob_type(MOB_CATEGORY_CONVERTERS),
     type_change_interval(3.0f),
-    total_pikmin_output(5),
+    total_input_pikmin(5),
     pikmin_per_conversion(1),
     buffer_size(5),
     same_type_counts_for_output(false),
@@ -45,7 +45,7 @@ void converter_type::load_parameters(data_node* file) {
     rs.set("available_pikmin_types", pikmin_types_str);
     rs.set("type_animation_suffixes", type_animation_suffixes_str);
     rs.set("type_change_interval", type_change_interval);
-    rs.set("total_pikmin_output", total_pikmin_output);
+    rs.set("total_input_pikmin", total_input_pikmin);
     rs.set("pikmin_per_conversion", pikmin_per_conversion);
     rs.set("same_type_counts_for_output", same_type_counts_for_output);
     rs.set("buffer_size", buffer_size);
@@ -104,8 +104,7 @@ anim_conversion_vector converter_type::get_anim_conversions() {
     v.push_back(make_pair(CONVERTER_ANIM_CLOSING, "closing"));
     v.push_back(make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
     v.push_back(make_pair(CONVERTER_ANIM_OPENING, "opening"));
-    v.push_back(make_pair(CONVERTER_ANIM_WILTING, "wilting"));
-    v.push_back(make_pair(CONVERTER_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(CONVERTER_ANIM_DYING, "dying"));
     
     return get_anim_conversions_with_groups(v, N_CONVERTER_ANIMS);
 }

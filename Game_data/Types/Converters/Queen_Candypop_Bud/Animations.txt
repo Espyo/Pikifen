@@ -1,0 +1,686 @@
+animations{
+	idling_r{
+		frames{
+			idling_r{
+				duration=0.2500
+			}
+			idling2_r{
+				duration=0.2500
+			}
+			idling_r{
+				duration=0.2500
+			}
+			idling3_r{
+				duration=0.2500
+			}
+		}
+	}
+	bumping_r{
+		frames{
+			bumping1_r{
+				duration=0.1000
+			}
+			bumping2_r{
+				duration=0.1000
+			}
+			bumping1_r{
+				duration=0.1000
+			}
+			idling_r{
+				duration=0.7000
+			}
+		}
+	}
+	closing_r{
+		frames{
+			closing1_r{
+				duration=0.1000
+			}
+			closing2_r{
+				duration=0.1000
+			}
+			closing4_r{
+				duration=0.1000
+			}
+			closed_r{
+				duration=0.8000
+			}
+		}
+	}
+	spitting_r{
+		frames{
+			closing4_r{
+				duration=0.1000
+			}
+			closed_r{
+				duration=0.3000
+			}
+		}
+	}
+	opening_r{
+		frames{
+			closing4_r{
+				duration=0.1000
+			}
+			closing3_r{
+				duration=0.1000
+			}
+			closing2_r{
+				duration=0.1000
+			}
+			closing1_r{
+				duration=0.1000
+			}
+			idling_r{
+				duration=0.1000
+			}
+		}
+	}
+	dying_r{
+		frames{
+			dying1_r{
+				duration=0.1000
+			}
+			dying2_r{
+				duration=0.1000
+			}
+			dying1_r{
+				duration=0.1000
+			}
+			dying2_r{
+				duration=0.1000
+			}
+			dying1_r{
+				duration=0.1000
+			}
+			dying2_r{
+				duration=0.1000
+			}
+			dying3_r{
+				duration=0.1000
+			}
+			dying4_r{
+				duration=0.1000
+			}
+			dying5_r{
+				duration=0.1000
+			}
+			dying6_r{
+				duration=0.1000
+			}
+			dying7_r{
+				duration=0.1000
+			}
+		}
+	}
+	idling_y{
+		frames{
+			idling_y{
+				duration=0.2500
+			}
+			idling2_y{
+				duration=0.2500
+			}
+			idling_y{
+				duration=0.2500
+			}
+			idling3_y{
+				duration=0.2500
+			}
+		}
+	}
+	bumping_y{
+		frames{
+			bumping1_y{
+				duration=0.1000
+			}
+			bumping2_y{
+				duration=0.1000
+			}
+			bumping1_y{
+				duration=0.1000
+			}
+			idling_y{
+				duration=0.7000
+			}
+		}
+	}
+	closing_y{
+		frames{
+			closing1_y{
+				duration=0.1000
+			}
+			closing2_y{
+				duration=0.1000
+			}
+			closing4_y{
+				duration=0.1000
+			}
+			closed_y{
+				duration=0.8000
+			}
+		}
+	}
+	spitting_y{
+		frames{
+			closing4_y{
+				duration=0.1000
+			}
+			closed_y{
+				duration=0.3000
+			}
+		}
+	}
+	opening_y{
+		frames{
+			closing4_y{
+				duration=0.1000
+			}
+			closing3_y{
+				duration=0.1000
+			}
+			closing2_y{
+				duration=0.1000
+			}
+			closing1_y{
+				duration=0.1000
+			}
+			idling_y{
+				duration=0.1000
+			}
+		}
+	}
+	dying_y{
+		frames{
+			dying1_y{
+				duration=0.1000
+			}
+			dying2_y{
+				duration=0.1000
+			}
+			dying1_y{
+				duration=0.1000
+			}
+			dying2_y{
+				duration=0.1000
+			}
+			dying1_y{
+				duration=0.1000
+			}
+			dying2_y{
+				duration=0.1000
+			}
+			dying3_y{
+				duration=0.1000
+			}
+			dying4_y{
+				duration=0.1000
+			}
+			dying5_y{
+				duration=0.1000
+			}
+			dying6_y{
+				duration=0.1000
+			}
+			dying7_y{
+				duration=0.1000
+			}
+		}
+	}
+	idling_b{
+		frames{
+			idling_b{
+				duration=0.2500
+			}
+			idling2_b{
+				duration=0.2500
+			}
+			idling_b{
+				duration=0.2500
+			}
+			idling3_b{
+				duration=0.2500
+			}
+		}
+	}
+	bumping_b{
+		frames{
+			bumping1_b{
+				duration=0.1000
+			}
+			bumping2_b{
+				duration=0.1000
+			}
+			bumping1_b{
+				duration=0.1000
+			}
+			idling_b{
+				duration=0.7000
+			}
+		}
+	}
+	closing_b{
+		frames{
+			closing1_b{
+				duration=0.1000
+			}
+			closing2_b{
+				duration=0.1000
+			}
+			closing4_b{
+				duration=0.1000
+			}
+			closed_b{
+				duration=0.8000
+			}
+		}
+	}
+	spitting_b{
+		frames{
+			closing4_b{
+				duration=0.1000
+			}
+			closed_b{
+				duration=0.3000
+			}
+		}
+	}
+	opening_b{
+		frames{
+			closing4_b{
+				duration=0.1000
+			}
+			closing3_b{
+				duration=0.1000
+			}
+			closing2_b{
+				duration=0.1000
+			}
+			closing1_b{
+				duration=0.1000
+			}
+			idling_b{
+				duration=0.1000
+			}
+		}
+	}
+	dying_b{
+		frames{
+			dying1_b{
+				duration=0.1000
+			}
+			dying2_b{
+				duration=0.1000
+			}
+			dying1_b{
+				duration=0.1000
+			}
+			dying2_b{
+				duration=0.1000
+			}
+			dying1_b{
+				duration=0.1000
+			}
+			dying2_b{
+				duration=0.1000
+			}
+			dying3_b{
+				duration=0.1000
+			}
+			dying4_b{
+				duration=0.1000
+			}
+			dying5_b{
+				duration=0.1000
+			}
+			dying6_b{
+				duration=0.1000
+			}
+			dying7_b{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	idling2_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.0100 0.9900
+	}
+	idling3_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9900 1.0100
+	}
+	bumping1_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	bumping2_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 326.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0524
+	}
+	closing1_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 326.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing2_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 326.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing3_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing4_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closed_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	dying1_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	dying2_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=6.2657
+	}
+	dying3_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+	}
+	dying4_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 326.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -6.0000
+		scale=0.7500 0.7500
+	}
+	dying5_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 326.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -4.0000
+		scale=0.5000 0.5000
+	}
+	dying6_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 326.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -2.5000
+		scale=0.3000 0.3000
+	}
+	dying7_r{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 326.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -0.8000
+		scale=0.1000 0.1000
+	}
+	idling_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	idling2_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.0100 0.9900
+	}
+	idling3_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9900 1.0100
+	}
+	bumping1_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	bumping2_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 163.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0524
+	}
+	closing1_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 163.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing2_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 163.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing3_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing4_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closed_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	dying1_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	dying2_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=6.2657
+	}
+	dying3_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+	}
+	dying4_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 163.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -6.0000
+		scale=0.7500 0.7500
+	}
+	dying5_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 163.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -4.0000
+		scale=0.5000 0.5000
+	}
+	dying6_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 163.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -2.5000
+		scale=0.3000 0.3000
+	}
+	dying7_y{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 163.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -0.8000
+		scale=0.1000 0.1000
+	}
+	idling_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	idling2_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.0100 0.9900
+	}
+	idling3_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9900 1.0100
+	}
+	bumping1_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	bumping2_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0524
+	}
+	closing1_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 0.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing2_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 0.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing3_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closing4_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	closed_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+	}
+	dying1_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=0.0175
+	}
+	dying2_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=645.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		angle=6.2657
+	}
+	dying3_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=542.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9000 0.9000
+	}
+	dying4_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=439.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -6.0000
+		scale=0.7500 0.7500
+	}
+	dying5_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=316.0000 0.0000
+		file_size=122.0000 162.0000
+		offset=0.0000 -4.0000
+		scale=0.5000 0.5000
+	}
+	dying6_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 0.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -2.5000
+		scale=0.3000 0.3000
+	}
+	dying7_b{
+		file=Queen_Candypop_Bud.png
+		file_pos=171.0000 0.0000
+		file_size=144.0000 162.0000
+		offset=0.0000 -0.8000
+		scale=0.1000 0.1000
+	}
+}
+body_parts

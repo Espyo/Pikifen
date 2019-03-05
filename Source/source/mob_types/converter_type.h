@@ -28,7 +28,7 @@ enum CONVERTER_ANIMATIONS {
     CONVERTER_ANIM_CLOSING,
     CONVERTER_ANIM_SPITTING,
     CONVERTER_ANIM_OPENING,
-    CONVERTER_ANIM_WILTING,
+    CONVERTER_ANIM_DYING,
     
     N_CONVERTER_ANIMS,
 };
@@ -42,7 +42,7 @@ class converter_type : public mob_type, public mob_type_with_anim_groups {
 public:
     vector<pikmin_type*> available_pikmin_types;
     float type_change_interval;
-    size_t total_pikmin_output;
+    size_t total_input_pikmin;
     size_t pikmin_per_conversion;
     size_t buffer_size;
     bool same_type_counts_for_output;
