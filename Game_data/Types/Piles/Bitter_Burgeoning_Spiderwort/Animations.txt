@@ -1,0 +1,421 @@
+animations{
+	idling_0{
+		frames{
+			idling_0{
+				duration=0.3000
+			}
+			idling2_0{
+				duration=0.2000
+			}
+			idling3_0{
+				duration=0.3000
+			}
+			idling2_0{
+				duration=0.2000
+			}
+		}
+	}
+	idling_1{
+		frames{
+			idling_1{
+				duration=0.3000
+			}
+			idling2_1{
+				duration=0.2000
+			}
+			idling3_1{
+				duration=0.3000
+			}
+			idling2_1{
+				duration=0.2000
+			}
+		}
+	}
+	idling_2{
+		frames{
+			idling_2{
+				duration=0.3000
+			}
+			idling2_2{
+				duration=0.2000
+			}
+			idling3_2{
+				duration=0.3000
+			}
+			idling2_2{
+				duration=0.2000
+			}
+		}
+	}
+	idling_3{
+		frames{
+			idling_3{
+				duration=0.3000
+			}
+			idling2_3{
+				duration=0.2000
+			}
+			idling3_3{
+				duration=0.3000
+			}
+			idling2_3{
+				duration=0.2000
+			}
+		}
+	}
+	idling_4{
+		frames{
+			idling_4{
+				duration=0.3000
+			}
+			idling2_4{
+				duration=0.2000
+			}
+			idling3_4{
+				duration=0.3000
+			}
+			idling2_4{
+				duration=0.2000
+			}
+		}
+	}
+	idling_5{
+		frames{
+			idling_5{
+				duration=0.3000
+			}
+			idling2_5{
+				duration=0.2000
+			}
+			idling3_5{
+				duration=0.3000
+			}
+			idling2_5{
+				duration=0.2000
+			}
+		}
+	}
+}
+sprites{
+	idling2_0{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=550.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.0000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_1{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=443.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.0000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_2{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=336.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.0000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_3{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=224.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.5000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_4{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=112.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.5000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_5{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=0.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.5000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_0{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=550.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.5000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_1{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=443.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.5000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_2{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=336.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=38.5000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_3{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=224.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=41.0000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_4{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=112.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=41.0000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_5{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=0.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=41.0000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_0{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=550.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=37.5000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_1{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=443.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=37.5000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_2{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=336.0000 0.0000
+		file_size=106.0000 66.0000
+		offset=37.5000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_3{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=224.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_4{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=112.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_5{
+		file=Bitter_Burgeoning_Spiderwort.png
+		file_pos=0.0000 0.0000
+		file_size=111.0000 66.0000
+		offset=40.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=160.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hit
+}

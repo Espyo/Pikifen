@@ -1,0 +1,19 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Bitter_berry.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		offset=0.0000 0.0000
+		scale=0.1000 0.1000
+	}
+}
+body_parts

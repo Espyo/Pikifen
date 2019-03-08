@@ -1,0 +1,14 @@
+name = Spicy berry
+
+carrying_destination = ship
+delivery_result = increase_ingredients
+height = 28
+max_carriers = 1
+pushable = true
+pushes = false
+radius = 14
+return_to_pile_on_vanish = false
+spray_to_concoct = Ultra-Spicy Spray
+vanish_on_drop = true
+vanish_delay = 10
+weight = 1

@@ -1,0 +1,15 @@
+name = Spicy Burgeoning Spiderwort
+
+contents = Spicy berry
+delete_on_empty = false
+health_per_resource = 200
+height = 160
+max_amount = 5
+pushable = false
+pushes = true
+radius = 5
+recharge_amount = 1
+recharge_interval = 60
+show_amount = false
+show_health = false
+size_animation_suffixes = _0;_1;_2;_3;_4;_5
