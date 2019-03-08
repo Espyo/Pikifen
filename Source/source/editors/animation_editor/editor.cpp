@@ -586,6 +586,7 @@ void animation_editor::rename_animation() {
     if(old_anim_id == INVALID) return;
     
     anims.animations[old_anim_id]->name = new_name;
+    anims.sort_alphabetically();
     
     but_ptr->text = "";
     txt_ptr->text = "";
@@ -632,6 +633,7 @@ void animation_editor::rename_sprite() {
             }
         }
     }
+    anims.sort_alphabetically();
     
     but_ptr->text = "";
     txt_ptr->text = "";

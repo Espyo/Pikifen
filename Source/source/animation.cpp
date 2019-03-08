@@ -387,28 +387,6 @@ size_t animation_database::find_body_part(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the pointers for body parts.
- */
-void animation_database::fix_body_part_pointers() {
-    for(size_t s = 0; s < sprites.size(); ++s) {
-        sprite* s_ptr = sprites[s];
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
-            
-            for(size_t b = 0; b < body_parts.size(); ++b) {
-                body_part* b_ptr = body_parts[b];
-                if(b_ptr->name == h_ptr->body_part_name) {
-                    h_ptr->body_part_index = b;
-                    h_ptr->body_part_ptr = b_ptr;
-                    break;
-                }
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Enemies and such have a regular list of animations.
  * The only way to change these animations is through the script.
  * So animation control is done entirely through game data.
@@ -443,6 +421,56 @@ void animation_database::create_conversions(
     for(size_t c = 0; c < conversions.size(); ++c) {
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the pointers for body parts.
+ */
+void animation_database::fix_body_part_pointers() {
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        sprite* s_ptr = sprites[s];
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            hitbox* h_ptr = &s_ptr->hitboxes[h];
+            
+            for(size_t b = 0; b < body_parts.size(); ++b) {
+                body_part* b_ptr = body_parts[b];
+                if(b_ptr->name == h_ptr->body_part_name) {
+                    h_ptr->body_part_index = b;
+                    h_ptr->body_part_ptr = b_ptr;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sorts all animations and sprites alphabetically, making them more organized.
+ */
+void animation_database::sort_alphabetically() {
+    sort(
+        animations.begin(), animations.end(),
+    [] (animation * a1, animation * a2) {
+        return a1->name < a2->name;
+    }
+    );
+    sort(
+        sprites.begin(), sprites.end(),
+    [] (sprite * s1, sprite * s2) {
+        return s1->name < s2->name;
+    }
+    );
+    
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            frame* f_ptr = &(a_ptr->frames[f]);
+            
+            f_ptr->sprite_index = find_sprite(f_ptr->sprite_name);
+        }
     }
 }
 

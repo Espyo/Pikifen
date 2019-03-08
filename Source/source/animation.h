@@ -184,6 +184,7 @@ public:
     
     void create_conversions(vector<pair<size_t, string> > conversions);
     void fix_body_part_pointers();
+    void sort_alphabetically();
     
     void destroy();
     

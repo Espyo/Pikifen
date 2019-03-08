@@ -66,6 +66,7 @@ void animation_editor::create_new_from_picker(
     ) {
         if(anims.find_animation(name) == INVALID) {
             anims.animations.push_back(new animation(name));
+            anims.sort_alphabetically();
         }
         pick(picker_id, name, "");
         
@@ -79,6 +80,7 @@ void animation_editor::create_new_from_picker(
                 loaded_mob_type ? loaded_mob_type->height : 128,
                 loaded_mob_type ? loaded_mob_type->radius : 32
             );
+            anims.sort_alphabetically();
         }
         pick(picker_id, name, "");
         
