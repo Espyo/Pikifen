@@ -472,6 +472,25 @@ bool mob::attack(
     //Calculate the damage.
     if(attack_h) {
         attacker_offense = attack_h->value;
+        
+        if(!attack_h->hazards.empty()) {
+            float max_vulnerability = 0.0f;
+            for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
+                max_vulnerability =
+                    max(
+                        victim->get_hazard_vulnerability(attack_h->hazards[h]),
+                        max_vulnerability
+                    );
+            }
+            
+            if(max_vulnerability == 0.0f) {
+                //The victim is immune to this hazard!
+                return false;
+            } else {
+                defense_multiplier = 1.0 / max_vulnerability;
+            }
+        }
+        
     } else {
         attacker_offense = 1;
     }
@@ -481,7 +500,6 @@ bool mob::attack(
         return false;
     }
     
-    defense_multiplier = victim->type->default_vulnerability;
     defense_multiplier *= victim_h->value;
     
     for(size_t s = 0; s < statuses.size(); ++s) {
@@ -1174,6 +1192,21 @@ hitbox* mob::get_closest_hitbox(const point &p, const size_t h_type, dist* d) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how vulnerable the mob is to that specific hazard,
+ * or the mob type's default if there is no vulnerability data for that hazard.
+ */
+float mob::get_hazard_vulnerability(hazard* h_ptr) {
+    float vulnerability_value = type->default_vulnerability;
+    auto vul = type->hazard_vulnerabilities.find(h_ptr);
+    if(vul != type->hazard_vulnerabilities.end()) {
+        vulnerability_value = vul->second;
+    }
+    
+    return vulnerability_value;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the hitbox in the current animation with
  * the specified number.
  */
@@ -1351,27 +1384,12 @@ bool mob::is_off_camera() {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if a mob is resistant to a given hazard. Their default vulnerability
- * is also considered.
- */
-bool mob::is_resistant_to_hazard(hazard* h_ptr) {
-    float vulnerability_value = type->default_vulnerability;
-    auto vul = type->hazard_vulnerabilities.find(h_ptr);
-    if(vul != type->hazard_vulnerabilities.end()) {
-        vulnerability_value = vul->second;
-    }
-    
-    return vulnerability_value == 0.0f;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Checks if a mob is resistant to all of the hazards inside a given list.
  */
 bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
     size_t n_matches = 0;
     for(size_t h = 0; h < hazards.size(); ++h) {
-        if(!is_resistant_to_hazard(hazards[h])) return false;
+        if(get_hazard_vulnerability(hazards[h]) != 0.0f) return false;
     }
     return true;
 }
@@ -2862,7 +2880,9 @@ bool mob::wants_to_attack(mob* v) {
 }
 
 
-bool mob::can_receive_status(status_type* s) { return false; }
+bool mob::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_OTHERS;
+}
 void mob::handle_status_effect(status_type* s) {}
 void mob::lose_panic_from_status() {}
 void mob::start_dying_class_specific() { }

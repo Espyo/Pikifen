@@ -46,13 +46,6 @@ enum DISABLED_STATE_FLAGS {
     DISABLED_STATE_FLAG_INEDIBLE = 1,
 };
 
-enum HOLDABILITY_FLAGS {
-    //The mob can be held by Pikmin.
-    HOLDABLE_BY_PIKMIN = 1,
-    //The mob can be held by enemies.
-    HOLDABLE_BY_ENEMIES = 2,
-};
-
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.
@@ -303,7 +296,7 @@ public:
     void release(mob* m);
     bool can_damage(mob* m);
     bool wants_to_attack(mob* m);
-    bool is_resistant_to_hazard(hazard* h_ptr);
+    float get_hazard_vulnerability(hazard* h_ptr);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();

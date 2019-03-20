@@ -11,7 +11,6 @@ smoke {
         size = 16
         speed = 0 -50
         color = 96 64 64 192
-        before_mobs = false
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -38,7 +37,6 @@ bubble_hazard {
         size = 16
         speed = 0 -10
         color = 128 255 255 255
-        before_mobs = false
     }
     duration_deviation = 0.2
     friction_deviation = 0
@@ -65,7 +63,6 @@ poison_gas {
         size = 24
         speed = 0 -10
         color = 128 16 112 192
-        before_mobs = false
     }
     duration_deviation = 0.5
     friction_deviation = 0
@@ -92,7 +89,6 @@ gas_pipe {
         size = 32
         speed = 0 0
         color = 128 16 112 192
-        before_mobs = false
     }
     duration_deviation = 0.5
     friction_deviation = 0
@@ -119,7 +115,6 @@ gas_explosion {
         size = 48
         speed = 0 0
         color = 128 16 112 192
-        before_mobs = false
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -146,7 +141,6 @@ poison_ingestion_explosion {
         size = 24
         speed = 0 0
         color = 128 16 112 255
-        before_mobs = false
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -173,7 +167,6 @@ dust_explosion {
         size = 40
         speed = 0 0
         color = 238 204 170 255
-        before_mobs = true
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -200,7 +193,6 @@ dust_spit {
         size = 24
         speed = 0 0
         color = 238 204 170 255
-        before_mobs = false
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -227,7 +219,6 @@ steam {
         size = 32
         speed = 0 -50
         color = 255 255 255 192
-        before_mobs = false
     }
     duration_deviation = 0.3
     friction_deviation = 0
@@ -254,7 +245,6 @@ dust {
         size = 24
         speed = 0 0
         color = 238 204 170 255
-        before_mobs = true
     }
     duration_deviation = 0.1
     friction_deviation = 0

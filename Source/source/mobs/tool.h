@@ -18,6 +18,14 @@
 #include "pikmin.h"
 
 
+enum HOLDABILITY_FLAGS {
+    //The mob can be held by Pikmin.
+    HOLDABLE_BY_PIKMIN = 1,
+    //The mob can be held by enemies.
+    HOLDABLE_BY_ENEMIES = 2,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A tool for Pikmin.
  * This is anything that a Pikmin can carry to use at a later date.

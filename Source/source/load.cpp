@@ -1311,6 +1311,9 @@ void load_status_types(const bool load_resources) {
         if(s2b(s_node->get_child_by_name("affects_enemies")->value)) {
             st.affects |= STATUS_AFFECTS_ENEMIES;
         }
+        if(s2b(s_node->get_child_by_name("affects_others")->value)) {
+            st.affects |= STATUS_AFFECTS_OTHERS;
+        }
         
         data_node* pg_node = s_node->get_child_by_name("particle_generator");
         string pg_name = pg_node->value;

@@ -2077,7 +2077,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
         subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
-    m->hold(m->focused_mob, INVALID, m->type->radius / 2, 0, true);
+    m->hold(m->focused_mob, INVALID, 4, 0, true);
     m->unfocus_from_mob();
 }
 
@@ -2274,7 +2274,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(p->is_resistant_to_hazard(h)) return;
+    if(p->get_hazard_vulnerability(h) == 0.0f) return;
     if(p->invuln_period.time_left > 0) return;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
