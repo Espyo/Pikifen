@@ -1,0 +1,12 @@
+name = Bomb rock
+
+can_be_hotswapped = true
+dropped_when_pikmin_lands = true
+height = 28
+icon = cpby.png
+max_health = 50
+move_speed = 0
+pushable = true
+pushes = false
+radius = 14
+spike_damage = bomb_rock_explosion

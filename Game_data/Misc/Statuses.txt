@@ -106,3 +106,9 @@ crushed {
     speed_multiplier = 0
     tint = 0 0 0 0
 }
+
+bomb_rock_health_drain {
+    affects_others = true
+    color = 0 0 0
+    health_change_ratio = -0.25
+}

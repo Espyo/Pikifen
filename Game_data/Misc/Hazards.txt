@@ -38,3 +38,7 @@ crush {
     color = 0 0 0
     effects = crushed
 }
+
+explosion {
+    color = 255 128 0
+}

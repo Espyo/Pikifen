@@ -1,0 +1,818 @@
+animations{
+	exploding{
+		frames{
+			exploding1{
+				duration=0.0500
+			}
+			exploding2{
+				duration=0.0500
+			}
+			exploding3{
+				duration=0.0500
+			}
+			exploding4{
+				duration=0.0500
+			}
+			exploding5{
+				duration=0.0500
+			}
+			exploding6{
+				duration=0.0500
+			}
+		}
+	}
+	held{
+		frames{
+			idling_no_hit{
+				duration=0.2000
+			}
+			idling_no_hit2{
+				duration=0.2000
+			}
+			idling_no_hit3{
+				duration=0.2000
+			}
+			idling_no_hit4{
+				duration=0.2000
+			}
+			idling_no_hit5{
+				duration=0.2000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.2000
+			}
+			idling2{
+				duration=0.2000
+			}
+			idling3{
+				duration=0.2000
+			}
+			idling4{
+				duration=0.2000
+			}
+			idling5{
+				duration=0.2000
+			}
+		}
+	}
+	primed{
+		loop_frame=38
+		frames{
+			primed1{
+				duration=0.1000
+			}
+			primed2{
+				duration=0.1000
+			}
+			primed1{
+				duration=0.1000
+			}
+			primed2{
+				duration=0.1000
+			}
+			primed1{
+				duration=0.1000
+			}
+			primed2{
+				duration=0.1000
+			}
+			primed1{
+				duration=0.1000
+			}
+			primed2{
+				duration=0.1000
+			}
+			primed1{
+				duration=0.1000
+			}
+			primed2{
+				duration=0.1000
+			}
+			primed3{
+				duration=0.1000
+			}
+			primed4{
+				duration=0.1000
+			}
+			primed3{
+				duration=0.1000
+			}
+			primed4{
+				duration=0.1000
+			}
+			primed3{
+				duration=0.1000
+			}
+			primed4{
+				duration=0.1000
+			}
+			primed3{
+				duration=0.1000
+			}
+			primed4{
+				duration=0.1000
+			}
+			primed3{
+				duration=0.1000
+			}
+			primed4{
+				duration=0.1000
+			}
+			primed5{
+				duration=0.1000
+			}
+			primed6{
+				duration=0.1000
+			}
+			primed5{
+				duration=0.1000
+			}
+			primed6{
+				duration=0.1000
+			}
+			primed5{
+				duration=0.1000
+			}
+			primed6{
+				duration=0.1000
+			}
+			primed5{
+				duration=0.1000
+			}
+			primed6{
+				duration=0.1000
+			}
+			primed5{
+				duration=0.1000
+			}
+			primed6{
+				duration=0.1000
+			}
+			primed7{
+				duration=0.1000
+			}
+			primed8{
+				duration=0.1000
+			}
+			primed7{
+				duration=0.1000
+			}
+			primed8{
+				duration=0.1000
+			}
+			primed7{
+				duration=0.1000
+			}
+			primed8{
+				duration=0.1000
+			}
+			primed7{
+				duration=0.1000
+			}
+			primed8{
+				duration=0.1000
+			}
+			primed7{
+				duration=0.1000
+			}
+			primed8{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	exploding1{
+		file=Bomb_rock.png
+		file_pos=138.0000 98.0000
+		file_size=68.0000 68.0000
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=34.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding2{
+		file=Bomb_rock.png
+		file_pos=138.0000 29.0000
+		file_size=68.0000 68.0000
+		scale=1.9000 1.9000
+		angle=0.1745
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding3{
+		file=Bomb_rock.png
+		file_pos=207.0000 29.0000
+		file_size=68.0000 68.0000
+		scale=2.1000 2.1000
+		angle=0.2618
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding4{
+		file=Bomb_rock.png
+		file_pos=207.0000 29.0000
+		file_size=68.0000 68.0000
+		scale=2.2000 2.2000
+		angle=0.3491
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding5{
+		file=Bomb_rock.png
+		file_pos=138.0000 98.0000
+		file_size=68.0000 68.0000
+		scale=2.2500 2.2500
+		angle=0.4363
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	exploding6{
+		file=Bomb_rock.png
+		file_pos=207.0000 98.0000
+		file_size=68.0000 68.0000
+		scale=2.2800 2.2800
+		angle=0.5236
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 -48.0000
+				height=96.0000
+				radius=68.0000
+				type=1
+				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
+			}
+		}
+	}
+	idling{
+		file=Bomb_rock.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2{
+		file=Bomb_rock.png
+		file_pos=29.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3{
+		file=Bomb_rock.png
+		file_pos=58.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling4{
+		file=Bomb_rock.png
+		file_pos=87.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling5{
+		file=Bomb_rock.png
+		file_pos=116.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_no_hit{
+		file=Bomb_rock.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_no_hit2{
+		file=Bomb_rock.png
+		file_pos=29.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_no_hit3{
+		file=Bomb_rock.png
+		file_pos=58.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_no_hit4{
+		file=Bomb_rock.png
+		file_pos=87.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_no_hit5{
+		file=Bomb_rock.png
+		file_pos=116.0000 0.0000
+		file_size=28.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed1{
+		file=Bomb_rock.png
+		file_pos=0.0000 29.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed2{
+		file=Bomb_rock.png
+		file_pos=0.0000 29.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed3{
+		file=Bomb_rock.png
+		file_pos=69.0000 29.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed4{
+		file=Bomb_rock.png
+		file_pos=69.0000 29.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed5{
+		file=Bomb_rock.png
+		file_pos=0.0000 98.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed6{
+		file=Bomb_rock.png
+		file_pos=0.0000 98.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed7{
+		file=Bomb_rock.png
+		file_pos=69.0000 98.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	primed8{
+		file=Bomb_rock.png
+		file_pos=69.0000 98.0000
+		file_size=68.0000 68.0000
+		offset=2.0000 1.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=14.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+	explosion
+}

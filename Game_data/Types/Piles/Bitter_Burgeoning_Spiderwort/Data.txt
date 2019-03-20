@@ -13,3 +13,7 @@ recharge_interval = 60
 show_amount = false
 show_health = false
 size_animation_suffixes = _0;_1;_2;_3;_4;_5
+
+vulnerabilities {
+    explosion = 400
+}

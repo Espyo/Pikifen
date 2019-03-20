@@ -1,0 +1,75 @@
+first_state = idling
+death_state = exploding
+
+init {
+    set_var will_be_swallowed false
+}
+
+script {
+    idling {
+        on_enter {
+            set_animation idling
+            set_holdable pikmin enemies
+        }
+        on_damage {
+            set_state primed
+        }
+        on_held {
+            set_state held_by_pikmin
+        }
+        on_hitbox_touch_eat {
+            get_chomped
+            set_state held_by_enemy
+        }
+    }
+    
+    held_by_pikmin {
+        on_enter {
+            set_animation held
+        }
+        on_released {
+            set_state primed
+        }
+    }
+    
+    held_by_enemy {
+        on_enter {
+            set_animation held
+            set_var will_be_swallowed true
+            remove_status bomb_rock_health_drain
+        }
+        on_released {
+            set_state primed
+            set_var will_be_swallowed false
+        }
+    }
+    
+    primed {
+        on_enter {
+            set_animation primed
+            set_holdable enemies
+            receive_status bomb_rock_health_drain
+            stop
+        }
+        on_hitbox_touch_eat {
+            get_chomped
+            set_state held_by_enemy
+        }
+    }
+    
+    exploding {
+        on_enter {
+            if var will_be_swallowed = true
+                delete
+            else
+                start_particles rock_explosion 0 0 32
+                start_particles dark_smoke_explosion 0 0 28
+                start_particles spark_explosion 0 0 28
+                set_animation exploding
+            end_if
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}
