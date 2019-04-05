@@ -1,0 +1,32 @@
+name = 5 Pellet Posy
+
+height = 128
+is_obstacle = true
+max_health = 100
+pushable = false
+pushes = true
+radius = 10
+
+spawns {
+    red {
+        object = Red 5 pellet
+        relative = true
+        coordinates = 64 0 96
+        angle = 270
+        momentum = 10
+    }
+    yellow {
+        object = Yellow 5 pellet
+        relative = true
+        coordinates = 64 0 96
+        angle = 270
+        momentum = 10
+    }
+    blue {
+        object = Blue 5 pellet
+        relative = true
+        coordinates = 64 0 96
+        angle = 270
+        momentum = 10
+    }
+}

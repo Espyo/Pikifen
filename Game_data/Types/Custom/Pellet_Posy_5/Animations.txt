@@ -1,0 +1,738 @@
+animations{
+	blooming{
+		frames{
+			blooming1{
+				duration=0.1000
+			}
+			blooming2{
+				duration=0.1000
+			}
+		}
+	}
+	dying{
+		frames{
+			dying1{
+				duration=0.5000
+			}
+			dying2{
+				duration=0.1000
+			}
+			dying3{
+				duration=0.1000
+			}
+			dying4{
+				duration=0.1000
+			}
+			dying5{
+				duration=0.1000
+			}
+		}
+	}
+	idling_blue{
+		frames{
+			idling_blue{
+				duration=0.3000
+			}
+			idling2_blue{
+				duration=0.3000
+			}
+			idling3_blue{
+				duration=0.3000
+			}
+			idling2_blue{
+				duration=0.3000
+			}
+		}
+	}
+	idling_red{
+		frames{
+			idling_red{
+				duration=0.3000
+			}
+			idling2_red{
+				duration=0.3000
+			}
+			idling3_red{
+				duration=0.3000
+			}
+			idling2_red{
+				duration=0.3000
+			}
+		}
+	}
+	idling_yellow{
+		frames{
+			idling_yellow{
+				duration=0.3000
+			}
+			idling2_yellow{
+				duration=0.3000
+			}
+			idling3_yellow{
+				duration=0.3000
+			}
+			idling2_yellow{
+				duration=0.3000
+			}
+		}
+	}
+	sapling{
+		loop_frame=1
+		frames{
+			sapling1{
+				duration=0.1000
+			}
+			sapling2{
+				duration=0.3000
+			}
+			sapling3{
+				duration=0.3000
+			}
+			sapling4{
+				duration=0.3000
+			}
+			sapling3{
+				duration=0.3000
+			}
+		}
+	}
+	sprout{
+		frames{
+			sprout{
+				duration=0.3000
+			}
+			sprout2{
+				duration=0.3000
+			}
+			sprout3{
+				duration=0.3000
+			}
+			sprout2{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	blooming1{
+		file=Pellet_Posy_common.png
+		file_pos=65.0000 0.0000
+		file_size=24.0000 29.0000
+		offset=5.5000 1.5000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	blooming2{
+		file=Pellet_Posy_common.png
+		file_pos=90.0000 0.0000
+		file_size=31.0000 29.0000
+		offset=9.0000 1.5000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	dying1{
+		file=Pellet_Posy_common.png
+		file_pos=122.0000 0.0000
+		file_size=43.0000 36.0000
+		offset=15.0000 0.0000
+		hitboxes{
+			pellet{
+				coords=24.0000 0.0000 96.0000
+				height=64.0000
+				radius=12.0000
+				type=2
+				value=0.2500
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	dying2{
+		file=Pellet_Posy_common.png
+		file_pos=166.0000 0.0000
+		file_size=51.0000 35.0000
+		offset=19.0000 0.5000
+		hitboxes{
+			pellet{
+				coords=16.0000 0.0000 96.0000
+				height=64.0000
+				radius=12.0000
+				type=2
+				value=0.2500
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	dying3{
+		file=Pellet_Posy_common.png
+		file_pos=218.0000 0.0000
+		file_size=31.0000 27.0000
+		offset=10.0000 0.5000
+		hitboxes{
+			pellet{
+				coords=16.0000 0.0000 96.0000
+				height=64.0000
+				radius=12.0000
+				type=2
+				value=0.2500
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	dying4{
+		file=Pellet_Posy_common.png
+		file_pos=250.0000 0.0000
+		file_size=21.0000 19.0000
+		offset=8.0000 0.0000
+		hitboxes{
+			pellet{
+				coords=16.0000 0.0000 96.0000
+				height=64.0000
+				radius=12.0000
+				type=2
+				value=0.2500
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	dying5{
+		file=Pellet_Posy_common.png
+		file_pos=250.0000 20.0000
+		file_size=10.0000 11.0000
+		offset=3.0000 0.0000
+		hitboxes{
+			pellet{
+				coords=16.0000 0.0000 96.0000
+				height=64.0000
+				radius=12.0000
+				type=2
+				value=0.2500
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=12.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_blue{
+		file=Pellet_Posy_5.png
+		file_pos=234.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.1000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=60.4000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_red{
+		file=Pellet_Posy_5.png
+		file_pos=0.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.1000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=60.4000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling2_yellow{
+		file=Pellet_Posy_5.png
+		file_pos=117.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.1000 0.0000
+		scale=1.0100 1.0000
+		hitboxes{
+			pellet{
+				coords=60.4000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_blue{
+		file=Pellet_Posy_5.png
+		file_pos=234.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=60.7000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_red{
+		file=Pellet_Posy_5.png
+		file_pos=0.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=60.7000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling3_yellow{
+		file=Pellet_Posy_5.png
+		file_pos=117.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=52.7000 0.0000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=60.7000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_blue{
+		file=Pellet_Posy_5.png
+		file_pos=234.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=51.5000 0.0000
+		hitboxes{
+			pellet{
+				coords=60.0000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_red{
+		file=Pellet_Posy_5.png
+		file_pos=0.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=51.5000 0.0000
+		hitboxes{
+			pellet{
+				coords=60.0000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_yellow{
+		file=Pellet_Posy_5.png
+		file_pos=117.0000 0.0000
+		file_size=116.0000 116.0000
+		offset=51.5000 0.0000
+		hitboxes{
+			pellet{
+				coords=60.0000 0.0000 96.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=0.2500
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=96.0000
+				radius=15.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sapling1{
+		file=Pellet_Posy_common.png
+		file_pos=19.0000 0.0000
+		file_size=20.0000 29.0000
+		offset=3.5000 1.5000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sapling2{
+		file=Pellet_Posy_common.png
+		file_pos=40.0000 0.0000
+		file_size=24.0000 29.0000
+		offset=5.5000 1.5000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sapling3{
+		file=Pellet_Posy_common.png
+		file_pos=40.0000 0.0000
+		file_size=24.0000 29.0000
+		offset=5.7500 1.5000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sapling4{
+		file=Pellet_Posy_common.png
+		file_pos=40.0000 0.0000
+		file_size=24.0000 29.0000
+		offset=6.0000 1.5000
+		scale=1.0400 1.0000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sprout{
+		file=Pellet_Posy_common.png
+		file_pos=0.0000 0.0000
+		file_size=18.0000 29.0000
+		offset=2.5000 1.5000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sprout2{
+		file=Pellet_Posy_common.png
+		file_pos=0.0000 0.0000
+		file_size=18.0000 29.0000
+		offset=2.7000 1.5000
+		scale=1.0200 1.0000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	sprout3{
+		file=Pellet_Posy_common.png
+		file_pos=0.0000 0.0000
+		file_size=18.0000 29.0000
+		offset=2.9000 1.5000
+		scale=1.0400 1.0000
+		hitboxes{
+			pellet{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=10.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	pellet
+	body
+}

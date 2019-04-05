@@ -58,7 +58,7 @@ void pellet::draw_mob(bitmap_effect_manager* effect_manager) {
         pel_type->bmp_number,
         draw_pos,
         point(type->radius, -1),
-        0, &effects
+        angle, &effects
     );
     
 }
