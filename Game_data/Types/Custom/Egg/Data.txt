@@ -1,0 +1,30 @@
+name = Egg
+
+height = 40
+is_obstacle = true
+max_health = 50
+pushable = true
+pushes = true
+radius = 15
+show_health = false
+
+spawns {
+    nectar {
+        object = Nectar
+        relative = true
+        coordinates = 0
+        momentum = 100
+    }
+    spicy_drop {
+        object = Ultra-spicy nectar
+        relative = true
+        coordinates = 0
+        momentum = 100
+    }
+    bitter_drop {
+        object = Ultra-bitter nectar
+        relative = true
+        coordinates = 0
+        momentum = 100
+    }
+}

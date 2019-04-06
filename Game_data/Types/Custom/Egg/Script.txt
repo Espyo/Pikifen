@@ -1,0 +1,79 @@
+first_state = idling_healthy
+death_state = destroyed
+
+init {
+    set_var contents random
+}
+
+script {
+    idling_healthy {
+        on_enter {
+            set_animation idling_healthy
+        }
+        on_damage {
+            if health < 16
+                set_state idling_very_broken
+            end_if
+            if health < 32
+                set_state idling_broken
+            end_if
+        }
+    }
+    idling_broken {
+        on_enter {
+            set_animation idling_broken
+        }
+        on_damage {
+            if health < 16
+                set_state idling_very_broken
+            end_if
+        }
+    }
+    idling_very_broken {
+        on_enter {
+            set_animation idling_very_broken
+        }
+    }
+    destroyed {
+        on_enter {
+            set_animation destroyed
+            start_dying
+            start_particles egg_shard_explosion
+            
+            if var contents = random
+                randomize_var c 1 100
+                if var c < 55
+                    set_var contents nectar
+                else
+                    if var c < 90
+                        set_var contents nectar_2
+                    else
+                        if var c < 95
+                            set_var contents spicy_drop
+                        else
+                            set_var contents bitter_drop
+                        end_if
+                    end_if
+                end_if
+            end_if
+            
+            if var contents = nectar
+                spawn nectar
+            end_if
+            if var contents = nectar_2
+                spawn nectar
+                spawn nectar
+            end_if
+            if var contents = spicy_drop
+                spawn spicy_drop
+            end_if
+            if var contents = bitter_drop
+                spawn bitter_drop
+            end_if
+        }
+        on_animation_end {
+            finish_dying
+            delete
+        }
+    }
+}

@@ -1,0 +1,100 @@
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling_broken{
+		frames{
+			idling_broken{
+				duration=0.1000
+			}
+		}
+	}
+	idling_healthy{
+		frames{
+			idling_healthy{
+				duration=0.1000
+			}
+		}
+	}
+	idling_very_broken{
+		frames{
+			idling_very_broken{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=Egg.png
+		file_pos=50.0000 0.0000
+		file_size=24.0000 32.0000
+		scale=1.2000 1.2000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_broken{
+		file=Egg.png
+		file_pos=25.0000 0.0000
+		file_size=24.0000 32.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_healthy{
+		file=Egg.png
+		file_pos=0.0000 0.0000
+		file_size=24.0000 32.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_very_broken{
+		file=Egg.png
+		file_pos=50.0000 0.0000
+		file_size=24.0000 32.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=18.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+}

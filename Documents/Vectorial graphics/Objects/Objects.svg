@@ -22,6 +22,30 @@
      id="defs7877">
     <linearGradient
        inkscape:collect="always"
+       id="egg_shine">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop1883" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop1885" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="egg">
+      <stop
+         style="stop-color:#fafbda;stop-opacity:1"
+         offset="0"
+         id="stop1803" />
+      <stop
+         style="stop-color:#eaedd0;stop-opacity:1"
+         offset="1"
+         id="stop1805" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="Bomb_rock_explosion_mask">
       <stop
          id="stop1826"
@@ -2743,6 +2767,72 @@
          cy="735.36218"
          r="34" />
     </mask>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#egg"
+       id="radialGradient1809"
+       cx="360"
+       cy="834.11218"
+       fx="360"
+       fy="834.11218"
+       r="12"
+       gradientTransform="matrix(1,0,0,1.3333333,0,-278.78739)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#egg_shine"
+       id="radialGradient1889"
+       cx="358.00003"
+       cy="827.11218"
+       fx="358.00003"
+       fy="827.11218"
+       r="12"
+       gradientTransform="matrix(0.50000231,0,0,0.49999907,179.99916,413.80685)"
+       gradientUnits="userSpaceOnUse" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1946">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#use1893"
+         id="use1948"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2015">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#use1958"
+         id="use2017"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#egg"
+       id="radialGradient1809-3"
+       cx="360"
+       cy="834.11218"
+       fx="360"
+       fy="834.11218"
+       r="12"
+       gradientTransform="matrix(1,0,0,1.3333333,-350,-1099.1496)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#egg"
+       id="radialGradient2045"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.3333333,24,-277.78739)"
+       cx="429"
+       cy="831.86218"
+       fx="429"
+       fy="831.86218"
+       r="12" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2751,12 +2841,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="393.60493"
-     inkscape:cy="451.32958"
+     inkscape:zoom="8"
+     inkscape:cx="412.29342"
+     inkscape:cy="206.52874"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
      inkscape:window-x="48"
@@ -2773,7 +2863,7 @@
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
-     showguides="false"
+     showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
@@ -3258,6 +3348,48 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bomb_rock.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect1833"
+       width="24"
+       height="32"
+       x="350"
+       y="820.36218"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect1833"
+       id="use1891"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1891"
+       id="use1956"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg_shard.png"
+       y="841.36218"
+       x="450"
+       height="11"
+       width="12"
+       id="rect2050"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -8229,5 +8361,684 @@
        width="100%"
        height="100%"
        style="opacity:0.25" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1809);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 362,820.36218 c -7,0 -12,13 -12,20 0,7 5,12 12,12 7,0 12,-5 12,-12 0,-7 -5,-20 -12,-20 z"
+       id="path1786"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssss"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       sodipodi:nodetypes="sssss"
+       inkscape:connector-curvature="0"
+       id="path1881"
+       d="m 362,820.36218 c -7,0 -12,13 -12,20 0,7 5,12 12,12 7,0 12,-5 12,-12 0,-7 -5,-20 -12,-20 z"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1889);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path1791"
+       cx="366.5"
+       cy="841.86218"
+       r="0.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1793"
+       transform="matrix(1,0,0,1.5,-7.5,-422.68109)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1795"
+       transform="matrix(1,0,0,1.5,1.5,-427.68109)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1797"
+       transform="translate(-5,6)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1799"
+       transform="matrix(1.5,0,0,2.5,-192,-1273.0433)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1801"
+       transform="translate(-1,-15)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#e7dcc1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path1811"
+       cx="354.5"
+       cy="841.86218"
+       r="0.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use1813"
+       transform="translate(9,-4)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use1815"
+       transform="matrix(1,0,0,1.5,12,-413.68109)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use1817"
+       transform="matrix(1,0,0,2.5,11,-1272.0433)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use1819"
+       transform="translate(7,-19)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8e7537;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path1821"
+       cx="356.5"
+       cy="834.86218"
+       r="0.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1823"
+       transform="matrix(1,0,0,1.5,12.5,-422.68109)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1825"
+       transform="matrix(1,0,0,2.5,3,-1261.0433)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1827"
+       transform="translate(15.5,4.5)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1829"
+       transform="translate(0,12)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1831"
+       transform="translate(9,9)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1786"
+       id="use1893"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1881"
+       id="use1895"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use1898"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1793"
+       id="use1900"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1795"
+       id="use1902"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1797"
+       id="use1904"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1799"
+       id="use1906"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1801"
+       id="use1908"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use1910"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1813"
+       id="use1912"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1815"
+       id="use1914"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1817"
+       id="use1916"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1819"
+       id="use1918"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use1924"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1823"
+       id="use1926"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1825"
+       id="use1928"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1827"
+       id="use1930"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1829"
+       id="use1932"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1831"
+       id="use1934"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#797d51;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 398,825.36133 -8,5 -7,-2.99915 -4,7.99915 4,-6.99915 7,2.99915 8,-5 z m -2,12 -8,10 -7,-5 -5,7 1,1 4,-7 7,5 z"
+       id="path1936"
+       clip-path="url(#clipPath1946)"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1893"
+       id="use1958"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1895"
+       id="use1960"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1898"
+       id="use1962"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1900"
+       id="use1964"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1902"
+       id="use1966"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1904"
+       id="use1968"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1906"
+       id="use1970"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1908"
+       id="use1972"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1910"
+       id="use1974"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1912"
+       id="use1976"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1914"
+       id="use1978"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1916"
+       id="use1980"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1918"
+       id="use1982"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1924"
+       id="use1985"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1926"
+       id="use1987"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1928"
+       id="use1989"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1930"
+       id="use1991"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1932"
+       id="use1993"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1934"
+       id="use1995"
+       transform="translate(25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#797d51;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       clip-path="url(#clipPath2015)"
+       d="m 416,820.36133 -5,2 h -2 l 2,1 7,-2 z m 7,5 -8,4 -7,-3 -4,9 5,-6.99915 4,1.99915 -3,9 9,-2 h -7 l 2,-6 9,-5 z m -16,11 -6,3 5,4.00085 -5,5.99915 1,1 5,-5.99915 6,3.99915 5,-7 3,3 -5,5 7,-5 -4,-4 2,-3 -8,9 -10,-7 z"
+       id="use1997"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient2045);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.59951758;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 450,846.36218 2,-5 3,4 h 4 l -3,-2 5,-2 1,6 -4,5 -5,-1 z"
+       id="path2019"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg_shard.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1821"
+       id="use2054"
+       transform="translate(96,12)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg_shard.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1791"
+       id="use2056"
+       transform="translate(89,7)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg_shard.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1811"
+       id="use2058"
+       transform="translate(105,5)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Egg_shard.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>
