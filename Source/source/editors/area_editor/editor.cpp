@@ -983,7 +983,6 @@ unsigned char area_editor::find_problems() {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         
         if(
-            m_ptr->category->id == MOB_CATEGORY_GATES ||
             m_ptr->category->id == MOB_CATEGORY_BRIDGES
         ) {
             continue;

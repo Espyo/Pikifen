@@ -27,8 +27,6 @@
     <File Name="../source/mob_fsms/converter_fsm.h"/>
     <File Name="../source/mob_fsms/drop_fsm.cpp"/>
     <File Name="../source/mob_fsms/drop_fsm.h"/>
-    <File Name="../source/mob_fsms/gate_fsm.cpp"/>
-    <File Name="../source/mob_fsms/gate_fsm.h"/>
     <File Name="../source/mob_fsms/gen_mob_fsm.cpp"/>
     <File Name="../source/mob_fsms/gen_mob_fsm.h"/>
     <File Name="../source/mob_fsms/leader_fsm.cpp"/>
@@ -77,8 +75,6 @@
     <File Name="../source/mob_types/leader_type.cpp"/>
     <File Name="../source/mob_types/interactable_type.h"/>
     <File Name="../source/mob_types/interactable_type.cpp"/>
-    <File Name="../source/mob_types/gate_type.h"/>
-    <File Name="../source/mob_types/gate_type.cpp"/>
     <File Name="../source/mob_types/enemy_type.h"/>
     <File Name="../source/mob_types/enemy_type.cpp"/>
     <File Name="../source/mob_types/bridge_type.h"/>
@@ -103,8 +99,6 @@
     <File Name="../source/mob_categories/custom_category.h"/>
     <File Name="../source/mob_categories/bridge_category.cpp"/>
     <File Name="../source/mob_categories/bridge_category.h"/>
-    <File Name="../source/mob_categories/gate_category.cpp"/>
-    <File Name="../source/mob_categories/gate_category.h"/>
     <File Name="../source/mob_categories/treasure_category.cpp"/>
     <File Name="../source/mob_categories/treasure_category.h"/>
     <File Name="../source/mob_categories/ship_category.cpp"/>
@@ -242,7 +236,6 @@
     <File Name="../source/mobs/onion.cpp"/>
     <File Name="../source/mobs/enemy.h"/>
     <File Name="../source/mobs/pikmin.cpp"/>
-    <File Name="../source/mobs/gate.h"/>
     <File Name="../source/mobs/leader.h"/>
     <File Name="../source/mobs/mob.cpp"/>
     <File Name="../source/mobs/mob.h"/>
@@ -250,7 +243,6 @@
     <File Name="../source/mobs/treasure.h"/>
     <File Name="../source/mobs/pellet.h"/>
     <File Name="../source/mobs/pikmin.h"/>
-    <File Name="../source/mobs/gate.cpp"/>
     <File Name="../source/mobs/onion.h"/>
     <File Name="../source/mobs/pellet.cpp"/>
     <File Name="../source/mobs/enemy.cpp"/>

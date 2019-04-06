@@ -1,6 +1,0 @@
-name = Electric gate
-
-height = 0
-max_health = 2000
-radius = 32
-rectangular_dimensions = 48 192

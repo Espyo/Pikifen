@@ -2488,7 +2488,7 @@ mobs{
 		p=-133.7300 -368.3900
 		angle=0.5600
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=624.4600 705.1100
 	}
@@ -2779,7 +2779,7 @@ mobs{
 		p=736.0000 -928.0000
 		angle=3.1400
 	}
-	Gate{
+	Custom{
 		type=Electric gate
 		p=560.4600 -960.2500
 	}

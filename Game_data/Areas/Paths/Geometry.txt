@@ -703,33 +703,33 @@ mobs{
 		type=Hocotate ship
 		p=704.0000 416.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=800.0000 -32.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=1248.0000 0.0000
 		angle=4.7100
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=1088.0000 224.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=768.0000 224.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=864.0000 768.0000
 		angle=4.7100
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=1152.0000 992.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=1152.0000 1248.0000
 	}
@@ -737,22 +737,22 @@ mobs{
 		type=Yellow Onion
 		p=864.0000 864.0000
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=288.0000 704.0000
 		angle=4.7100
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=96.0000 704.0000
 		angle=4.7100
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=352.0000 896.0000
 		angle=4.7100
 	}
-	Gate{
+	Custom{
 		type=White bramble gate
 		p=544.0000 896.0000
 		angle=4.7100

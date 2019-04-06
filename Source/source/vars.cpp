@@ -166,8 +166,6 @@ int game_fps = DEF_FPS;
 string game_name;
 map<size_t, game_state*> game_states;
 string game_version;
-vector<gate*> gates;
-map<string, gate_type*> gate_types;
 subgroup_type_manager subgroup_types;
 float group_move_angle = 0;
 vector<float> group_move_arrows;

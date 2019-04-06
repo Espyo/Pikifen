@@ -30,7 +30,6 @@
 #include "mobs/converter.h"
 #include "mobs/decoration.h"
 #include "mobs/drop.h"
-#include "mobs/gate.h"
 #include "mobs/interactable.h"
 #include "mobs/leader.h"
 #include "mobs/onion.h"
@@ -253,8 +252,6 @@ extern int game_fps;
 extern string game_name;
 extern map<size_t, game_state*> game_states;
 extern string game_version;
-extern vector<gate*> gates;
-extern map<string, gate_type*> gate_types;
 extern subgroup_type_manager subgroup_types;
 extern float group_move_angle;
 //Distance of the arrows that appear
