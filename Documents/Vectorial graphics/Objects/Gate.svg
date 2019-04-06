@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="0.92.4 (unknown)"
    sodipodi:docname="Gate.svg"
    inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
    inkscape:export-xdpi="90"
@@ -26,7 +26,31 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
-       id="broken-lamp-9">
+       id="reinforced_wall_shade">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.1254902"
+         offset="0"
+         id="stop1170" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop1172" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="rebar_shade">
+      <stop
+         style="stop-color:#ad5c2d;stop-opacity:1"
+         offset="0"
+         id="stop1142" />
+      <stop
+         style="stop-color:#ad5c2d;stop-opacity:0"
+         offset="1"
+         id="stop1144" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="broken-lamp">
       <stop
          style="stop-color:#ffffc0;stop-opacity:1"
          offset="0"
@@ -73,7 +97,7 @@
        x2="70.123734"
        y2="985.88507"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,2.3999996,-0.80000137,0,830.7094,761.66527)" />
+       gradientTransform="matrix(0,2.2499993,-0.75000121,0,778.78999,779.83391)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#border"
@@ -83,7 +107,7 @@
        x2="56.123734"
        y2="985.88507"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-2.3999996,0,0,-0.80000137,146.69693,1835.0716)" />
+       gradientTransform="matrix(-2.2499993,0,0,-0.75000121,137.52835,1786.1522)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#border"
@@ -93,7 +117,7 @@
        x2="71.123734"
        y2="985.88513"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,-2.3999996,0.80000137,0,-782.70948,1151.0592)" />
+       gradientTransform="matrix(0,-2.2499993,0.75000121,0,-733.79006,1144.8907)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#border"
@@ -103,7 +127,7 @@
        x2="51.123695"
        y2="985.88507"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.3999996,0,0,0.80000137,-98.696834,77.652816)" />
+       gradientTransform="matrix(2.2499993,0,0,0.75000121,-92.528273,138.57229)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -113,7 +137,7 @@
        x2="48.27903"
        y2="977.39252"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -123,7 +147,7 @@
        x2="60.5"
        y2="973.36218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -133,7 +157,7 @@
        x2="63.71875"
        y2="973.72266"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -143,7 +167,7 @@
        x2="66.24192"
        y2="980.93903"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -153,7 +177,7 @@
        x2="78.377037"
        y2="978.31946"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -163,7 +187,7 @@
        x2="48.5"
        y2="981.86218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -173,7 +197,7 @@
        x2="54"
        y2="989.36218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -183,7 +207,7 @@
        x2="59.894924"
        y2="989.09259"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -193,7 +217,7 @@
        x2="68.677177"
        y2="988.69263"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -203,7 +227,7 @@
        x2="77.789169"
        y2="983.0036"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -213,7 +237,7 @@
        x2="90.751305"
        y2="977.43408"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -223,7 +247,7 @@
        x2="103.44176"
        y2="973.41309"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -233,7 +257,7 @@
        x2="102.37964"
        y2="982.05951"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -243,7 +267,7 @@
        x2="86.93502"
        y2="976.00476"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -253,7 +277,7 @@
        x2="92.878334"
        y2="991.27997"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -263,7 +287,7 @@
        x2="108.64124"
        y2="990.37567"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -273,7 +297,7 @@
        x2="113.93605"
        y2="989.95081"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -283,7 +307,7 @@
        x2="114.66452"
        y2="989.25519"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -293,7 +317,7 @@
        x2="116.60268"
        y2="982.83386"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -303,7 +327,7 @@
        x2="126.07782"
        y2="987.34229"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -313,7 +337,7 @@
        x2="106.84283"
        y2="972.10059"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -323,7 +347,7 @@
        x2="109.42188"
        y2="975.73914"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -333,7 +357,7 @@
        x2="115.63973"
        y2="976.37958"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -343,7 +367,7 @@
        x2="121.5"
        y2="972.36218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -353,7 +377,7 @@
        x2="124.29407"
        y2="972.86218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -363,7 +387,7 @@
        x2="127.21875"
        y2="985.31793"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -373,7 +397,7 @@
        x2="137.78194"
        y2="983.41992"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -383,7 +407,7 @@
        x2="142.77385"
        y2="973.11218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -393,7 +417,7 @@
        x2="147.93175"
        y2="973.7688"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -403,7 +427,7 @@
        x2="143.75754"
        y2="984.97925"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -413,7 +437,7 @@
        x2="82.138641"
        y2="990.71576"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -423,7 +447,7 @@
        x2="82.926773"
        y2="982.52637"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -433,7 +457,7 @@
        x2="93.561989"
        y2="972.07086"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -443,7 +467,7 @@
        x2="97.943329"
        y2="976.66278"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -453,7 +477,7 @@
        x2="131.42609"
        y2="975.44354"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -463,7 +487,7 @@
        x2="131.87418"
        y2="978.1889"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -473,7 +497,7 @@
        x2="152.625"
        y2="975.5639"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -483,7 +507,7 @@
        x2="162.59375"
        y2="981.50989"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -493,7 +517,7 @@
        x2="158.78125"
        y2="987.14343"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#round-shade"
@@ -503,10 +527,10 @@
        x2="151.10287"
        y2="989.0575"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,1.4999998,-1.4999998,0,1496.0431,800.36221)" />
+       gradientTransform="matrix(0,1.4062496,-1.4062496,0,1402.5403,816.11228)" />
     <linearGradient
        inkscape:collect="always"
-       id="electric-gate-ring-1">
+       id="electric-gate-ring">
       <stop
          style="stop-color:#404040;stop-opacity:1;"
          offset="0"
@@ -538,46 +562,26 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#electric-gate-ring-1"
-       id="linearGradient4694"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-1.8e-7,-187.99995)"
-       spreadMethod="reflect"
-       x1="104"
-       y1="1002.3622"
-       x2="125"
-       y2="1002.3622" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#flourescent-lamp"
-       id="linearGradient4702"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.05,0,0,2.2499983,-6.2,-1243.451)"
-       spreadMethod="reflect"
-       x1="104"
-       y1="914.58435"
-       x2="124"
-       y2="914.58435" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#broken-lamp-9"
+       xlink:href="#broken-lamp"
        id="linearGradient4799"
        x1="255"
        y1="998.36218"
        x2="271"
        y2="998.36218"
        gradientUnits="userSpaceOnUse"
-       spreadMethod="reflect" />
+       spreadMethod="reflect"
+       gradientTransform="matrix(0.93749709,0,0,0.93749709,0,65.775701)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#broken-lamp-9"
+       xlink:href="#broken-lamp"
        id="linearGradient4811"
        x1="255"
        y1="819.36218"
        x2="271"
        y2="819.36218"
        gradientUnits="userSpaceOnUse"
-       spreadMethod="reflect" />
+       spreadMethod="reflect"
+       gradientTransform="matrix(0.93749709,0,0,0.93749709,0,65.775701)" />
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
@@ -617,6 +621,99 @@
          stdDeviation="4.1"
          id="feGaussianBlur4840" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electric-gate-ring"
+       id="linearGradient1101"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.93749709,0,0,0.93749709,-1.6874948e-7,-110.47371)"
+       x1="104"
+       y1="1002.3622"
+       x2="125"
+       y2="1002.3622"
+       spreadMethod="reflect" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#flourescent-lamp"
+       id="linearGradient1105"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.98437194,0,0,2.1093669,-5.812482,-1099.956)"
+       x1="104"
+       y1="914.58435"
+       x2="124"
+       y2="914.58435"
+       spreadMethod="reflect" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1138">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1126"
+         id="use1140"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#rebar_shade"
+       id="linearGradient1148"
+       x1="398.4375"
+       y1="800.17468"
+       x2="402.1875"
+       y2="801.11218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#reinforced_wall_shade"
+       id="linearGradient1176"
+       x1="388.125"
+       y1="825.48718"
+       x2="388.125"
+       y2="836.73718"
+       gradientUnits="userSpaceOnUse" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1180">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1166"
+         id="use1182"
+         width="100%"
+         height="100%"
+         transform="translate(-1.9798586e-6)" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#reinforced_wall_shade"
+       id="linearGradient1192"
+       x1="394.6875"
+       y1="1008.2997"
+       x2="394.6875"
+       y2="997.04968"
+       gradientUnits="userSpaceOnUse" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1196">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1166"
+         id="use1198"
+         width="100%"
+         height="100%"
+         transform="translate(-1.9798586e-6)" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#rebar_shade"
+       id="linearGradient4933"
+       gradientUnits="userSpaceOnUse"
+       x1="398.4375"
+       y1="800.17468"
+       x2="402.1875"
+       y2="801.11218" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -625,9 +722,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8417881"
-     inkscape:cx="157.33333"
-     inkscape:cy="153.60046"
+     inkscape:zoom="4"
+     inkscape:cx="477.88415"
+     inkscape:cy="194.64145"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -682,71 +779,113 @@
      inkscape:label="Grid"
      style="display:inline">
     <rect
-       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40624976;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253"
-       width="48"
-       height="192"
+       width="44.999992"
+       height="179.99997"
        x="0"
-       y="860.36218" />
+       y="872.36218" />
     <rect
-       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40624988;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3"
-       width="48"
-       height="288"
-       x="100"
-       y="764.36218"
+       width="44.999996"
+       height="270"
+       x="93.74971"
+       y="782.36218"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40624988;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-2"
-       width="48"
-       height="288"
-       x="149"
-       y="764.36218"
+       width="44.999996"
+       height="270"
+       x="139.68721"
+       y="782.36218"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40624988;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-6"
-       width="48"
-       height="288"
-       x="198"
-       y="764.36218"
+       width="44.999996"
+       height="270"
+       x="185.62469"
+       y="782.36218"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40624988;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4253-3-6-7"
-       width="48"
-       height="288"
-       x="247"
-       y="764.36218"
+       width="44.999996"
+       height="270"
+       x="231.56178"
+       y="782.36218"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       y="782.36218"
+       x="375.00003"
+       height="270"
+       width="45"
+       id="rect1055"
+       style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.40625;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect1055"
+       id="use5103"
+       transform="translate(45.937471)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#949494;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 375,827.36221 0.9375,-2.8125 h 43.125 l 0.9375,1.875 -0.9375,12.1875 v 20.625 l 0.9375,10.3125 -0.9375,12.1875 0.9375,16.875 v 23.4375 l -1.875,17.8125 1.875,17.81251 v 14.0625 l -0.9375,22.5 v 10.31248 l 0.9375,2.8125 -0.9375,2.8125 h -43.125 L 375,1007.3622 v -7.49998 l 0.9375,-12.1875 v -16.875 l -0.9375,-8.4375 1.875,-6.5625 -1.875,-20.62501 0.9375,-19.6875 v -12.1875 L 375,893.92471 v -9.375 l 0.9375,-6.5625 -0.9375,-8.4375 v -10.3125 l 0.9375,-19.6875 v -7.5 z"
+       id="path1166"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.50196081;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient1176);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.60085696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect1168"
+       width="45"
+       height="11.250024"
+       x="375"
+       y="825.48718"
+       clip-path="url(#clipPath1180)"
+       transform="translate(1.9798586e-6)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:0.87890607px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect4691"
-       width="39.375"
-       height="183.74997"
-       x="3.75"
-       y="864.86224"
+       width="36.914059"
+       height="172.26556"
+       x="3.5156245"
+       y="876.58099"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="display:inline;fill:#d8d8c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 260,821.3622 -3,-4 20,0 -8,4 -7,-2 z"
+       style="display:inline;fill:#d8d8c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 243.74924,835.80037 -2.81249,-3.74998 h 18.74994 l -7.49997,3.74998 -6.56248,-1.87499 z"
        id="path4801-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -754,8 +893,8 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#d8d8c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 272,993.3622 4,4 -8,0 z"
+       style="fill:#d8d8c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 254.99921,997.04987 3.74999,3.75003 h -7.49998 z"
        id="path4801"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
@@ -767,7 +906,7 @@
        y="0"
        xlink:href="#rect4302"
        id="use4686"
-       transform="translate(49,2.2107222e-5)"
+       transform="translate(45.937357,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -781,26 +920,28 @@
        style="filter:url(#filter4834)"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       width="100%"
+       height="100%" />
     <path
-       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 4.4999978,1014.1122 39.7499942,-14.25 0,11.25 -40.4999926,19.5 z"
+       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 4.2187473,1016.5028 37.2656147,-13.3593 v 10.5468 l -37.9687381,18.2812 z"
        id="path4618"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 26.999994,940.61219 15.749998,33.75002 0,9.75 -8.999999,-3.75 -16.499997,-33.75002 z"
+       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 25.312491,947.59658 14.765621,31.64064 v 9.14062 l -8.437498,-3.51562 -15.468745,-31.64064 z"
        id="path4616"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 12.749996,864.1122 2.25,15 3.749999,29.99999 -14.9999956,7.5 0,-52.49999 z"
+       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 11.953119,875.87785 2.109376,14.0625 3.515623,28.12498 -14.0624941,7.03125 v -49.21873 z"
        id="path4614"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -808,16 +949,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 32.249994,870.8622 11.249998,10.5 -0.75,11.25 -11.999998,-3.75 z"
+       style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 30.234365,882.20598 10.546872,9.84375 -0.703125,10.54687 -11.249997,-3.51562 z"
        id="path4604"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 3.7499994,931.61219 11.2499966,-3.75 9.749999,3 8.999998,-3 -2.249999,-5.25 -28.4999945,-15 z"
+       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 3.5156239,939.15909 10.5468711,-3.51564 9.140622,2.81251 8.437497,-2.81251 -2.109374,-4.92187 -26.7187409,-14.06249 z"
        id="path4307"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -825,8 +966,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 21.749995,951.11219 6.749999,-9.75 11.249999,-12 3.749999,0.75 -5.249999,21.75 -11.249999,4.5 z"
+       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 20.390617,957.44033 6.328123,-9.14062 10.546873,-11.25 3.515624,0.70312 -4.921874,20.39062 -10.546872,4.21875 z"
        id="path4305"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -834,8 +975,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 17.249996,1002.8622 14.999998,-14.99999 10.499998,5.99999 -0.75,0.75 -11.999998,12.75 z"
+       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.171869,1005.956 14.062496,-14.06253 9.843747,5.62499 -0.703126,0.70312 -11.249996,11.95312 z"
        id="path4303"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -843,8 +984,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 4.4999978,1029.1122 9.7499982,-9.75 15.749998,2.25 13.499998,7.5 -1.5,0.75 -20.249997,8.25 11.249998,9.75 -10.499998,2.25 -1.5,-3.75 -17.2499956,-12 z"
+       style="fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 4.2187473,1030.5653 9.1406227,-9.1406 14.76562,2.1094 12.656247,7.0312 -1.406251,0.7031 -18.984369,7.7345 10.546872,9.1406 -9.843747,2.1093 -1.40625,-3.5156 -16.1718681,-11.2499 z"
        id="path4301"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccc"
@@ -852,8 +993,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 3.7499994,930.11219 10.4999966,6.75 29.249996,-17.25 2.25,9 -3.75,2.25 -21.749997,18.75 6.749999,2.25 9.749999,-3.75 5.249999,-0.75 4.5,9 -4.5,6.75 -5.249999,0.75 -3,4.5 3,8.25002 5.249999,3.75 2.25,12.74999 -2.25,1.5 -12.749998,-8.24999 -17.999997,12.74999 -7.4999976,6 0,-12.75 16.4999956,-11.24999 -3.749999,-8.25002 -13.4999965,6.00002 0.7499999,-6.00002 8.2499976,-5.25 -8.9999975,-3.75 z"
+       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 3.5156239,937.75283 9.8437461,6.32813 27.421867,-16.17188 2.109374,8.43751 -3.515625,2.10937 -20.390619,17.57813 6.328124,2.10936 9.140622,-3.51562 4.921873,-0.70312 4.21875,8.43749 -4.21875,6.32813 -4.921873,0.70312 -2.812499,4.21876 2.812499,7.73439 4.921873,3.51562 2.109376,11.95312 -2.109376,1.40624 -11.953121,-7.73436 -16.874995,11.95318 -7.0312461,5.625 v -11.95319 l 15.4687431,-10.54687 -3.515623,-7.73439 -12.6562449,5.62502 0.7031248,-5.62502 7.7343711,-4.92188 -8.4374959,-3.51562 z"
        id="path4289"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccccccccccccccccc"
@@ -861,16 +1002,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4344);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.249996,936.86219 0,5.25 -8.9999983,-4.5 0.7499999,-6 z"
+       style="fill:url(#linearGradient4344);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 13.35937,944.08096 v 4.92187 l -8.4374978,-4.21875 0.7031247,-5.62499 z"
        id="path4336"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,888.8622 -8.249999,-5.25 1.5,-18 -6.749999,-2.25 -6.749999,3 -4.499999,9.75 -12.7499982,0 -0.7499984,10.5 11.2499966,11.25 -8.9999984,5.99999 0,6 25.4999964,16.5 4.499999,-2.25 -10.499999,-18.75 5.25,-6.74999 11.999998,2.99999 3,-5.99999 z"
+       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,899.08098 -7.734372,-4.92188 1.40625,-16.875 -6.328124,-2.10937 -6.328123,2.81249 -4.218748,9.14063 H 4.2187473 l -0.7031234,9.84375 10.5468711,10.54687 -8.4374981,5.62499 v 5.625 l 23.9062431,15.46875 4.218749,-2.10938 -9.843748,-17.57812 4.921874,-6.32812 11.249997,2.8125 2.812499,-5.62499 z"
        id="path4287"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccccccc"
@@ -878,8 +1019,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 3.7499994,997.6122 14.9999956,4.5 11.249999,5.25 14.999998,3 0.75,18 -3.75,1.5 -19.499997,-6 -16.4999974,-8.25 z"
+       style="fill:#e0e0e0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 3.5156239,1001.034 14.0624941,4.2189 10.546872,4.9218 14.062497,2.8125 0.703124,16.875 -3.515625,1.4062 -18.281244,-5.625 -15.4687451,-7.7343 z"
        id="path4291"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
@@ -887,8 +1028,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4157);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 46.499992,861.8622 -4.5,4.5 0,180 4.5,4.5 1.5,-3 0,-183 z"
+       style="fill:url(#linearGradient4157);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 43.593736,873.76848 -4.21875,4.21874 v 168.74998 l 4.21875,4.2188 1.40625,-2.8125 V 876.58098 Z"
        id="path4149"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -896,8 +1037,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4157-9);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 46.499992,1050.8622 -4.5,-4.5 -35.9999944,0 -4.4999978,4.5 2.999998,1.5 38.9999942,0 z"
+       style="fill:url(#linearGradient4157-9);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 43.593736,1050.956 -4.21875,-4.2188 H 5.6249969 l -4.2187473,4.2188 2.8124977,1.4062 H 40.781237 Z"
        id="path4149-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -905,16 +1046,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4354);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 11.999997,967.61219 4.499999,0 -11.2499983,-8.25 0.7499999,6 z"
+       style="fill:url(#linearGradient4354);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 11.249995,972.90907 h 4.218749 l -10.5468718,-7.73437 0.7031247,5.62501 z"
        id="path4346"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4157-1);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.4999998,1050.8622 4.4999978,-4.5 0,-180 -4.4999978,-4.5 -1.4999998,3 0,183 z"
+       style="fill:url(#linearGradient4157-1);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1.4062496,1050.956 4.2187473,-4.2188 V 877.98722 L 1.4062496,873.76848 0,876.58098 v 171.56252 z"
        id="path4149-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -922,8 +1063,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4179);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 35.249993,866.3622 -1.5,17.25 -5.249999,3 2.25,-21 z"
+       style="fill:url(#linearGradient4179);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 33.046864,877.98722 -1.40625,16.17188 -4.921874,2.8125 2.109375,-19.6875 z"
        id="path4171"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -931,8 +1072,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4157-9-7);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.4999998,861.8622 4.4999978,4.5 35.9999944,0 4.5,-4.5 -3,-1.5 -38.9999942,0 z"
+       style="fill:url(#linearGradient4157-9-7);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1.4062496,873.76848 4.2187473,4.21874 H 39.374986 l 4.21875,-4.21874 -2.812499,-1.40625 H 4.2187473 Z"
        id="path4149-6-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc"
@@ -940,8 +1081,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4189);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 28.499994,886.6122 13.499998,8.25 0,-6 -8.249999,-5.25 z"
+       style="fill:url(#linearGradient4189);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 26.71874,896.9716 12.656246,7.73437 v -5.62499 l -7.734372,-4.92188 z"
        id="path4181"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -949,8 +1090,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4199);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,901.61219 -11.249998,-2.99999 -2.25,-4.5 13.499998,3 z"
+       style="fill:url(#linearGradient4199);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,911.03409 -10.546871,-2.8125 -2.109375,-4.21874 12.656246,2.8125 z"
        id="path4191"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -958,8 +1099,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4217);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 28.499994,894.1122 -8.249999,11.24999 5.249999,0 5.25,-6.74999 z"
+       style="fill:url(#linearGradient4217);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 26.71874,904.00285 -7.734373,10.54686 h 4.921874 l 4.921874,-6.32812 z"
        id="path4201"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -967,8 +1108,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4227);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 20.249995,905.36219 13.499998,19.5 2.25,-0.75 -10.499999,-18.75 z"
+       style="fill:url(#linearGradient4227);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 18.984367,914.54971 12.656247,18.28125 2.109375,-0.70313 -9.843748,-17.57812 z"
        id="path4219"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -976,16 +1117,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4245);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 21.749995,866.3622 4.499999,0 -5.999999,15.75 -2.999999,-6 z"
+       style="fill:url(#linearGradient4245);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 20.390617,877.98722 h 4.218749 l -5.624999,14.76563 -2.812498,-5.625 z"
        id="path4237"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4255);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 17.249996,876.1122 2.999999,6 -14.2499974,-0.75 0,-5.25 z"
+       style="fill:url(#linearGradient4255);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.171869,887.12785 2.812498,5.625 -13.3593701,-0.70312 v -4.92188 z"
        id="path4247"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -993,16 +1134,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4266);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,888.8622 8.9999984,9 4.499999,0 -13.4999974,-14.25 z"
+       style="fill:url(#linearGradient4266);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,899.08098 8.4374981,8.43749 h 4.218748 L 5.6249969,894.1591 Z"
        id="path4258"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4276);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.999996,897.8622 4.499999,0 -8.999998,9.74999 -4.4999994,0 0,-3.75 z"
+       style="fill:url(#linearGradient4276);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 14.062495,907.51847 h 4.218748 l -8.4374973,9.14062 H 5.6249969 v -3.51563 z"
        id="path4268"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -1010,8 +1151,8 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4286);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,907.61219 4.4999994,0 23.249996,17.25 -2.249999,1.5 -25.4999964,-16.5 z"
+       style="fill:url(#linearGradient4286);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 5.6249969,916.65909 H 9.8437457 L 31.640614,932.83096 29.53124,934.23721 5.6249969,918.76846 Z"
        id="path4278"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -1019,16 +1160,16 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4296);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,930.86219 0,-4.5 -29.249996,24 7.499999,-0.75 z"
+       style="fill:url(#linearGradient4296);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,938.45596 v -4.21875 l -27.421867,22.5 7.031248,-0.70312 z"
        id="path4288"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4316);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 20.249995,949.61219 6.749999,2.25 3,5.25 -17.249998,-6.75 z"
+       style="fill:url(#linearGradient4316);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 18.984367,956.03409 6.328124,2.10936 2.812499,4.92188 -16.171871,-6.32812 z"
        id="path4298"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -1036,104 +1177,104 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4308);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 26.999994,951.86219 9.749999,-3.75 5.249999,-0.75 0,6.75 -11.999998,3 z"
+       style="fill:url(#linearGradient4308);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 25.312491,958.14345 9.140622,-3.51562 4.921873,-0.70312 v 6.32812 l -11.249996,2.8125 z"
        id="path4300"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4334);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,920.36219 0,3.75 -27.749996,18 0,-5.25 z"
+       style="fill:url(#linearGradient4334);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,928.61221 v 3.51562 l -26.015616,16.875 v -4.92187 z"
        id="path4326"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4364);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 16.499996,967.61219 -10.4999984,7.50002 0,-3.75002 5.9999994,-3.75 z"
+       style="fill:url(#linearGradient4364);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 15.468744,972.90907 -9.8437471,7.03128 v -3.51564 l 5.6249981,-3.51564 z"
        id="path4356"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4374);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,977.36221 10.4999984,-4.50002 2.249999,-3 -12.7499974,4.50002 z"
+       style="fill:url(#linearGradient4374);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,982.04972 9.8437471,-4.21877 2.109374,-2.8125 -11.9531211,4.21877 z"
        id="path4366"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4384);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 18.749995,969.86219 6.749999,11.25002 -5.249999,0 -3.749999,-8.25002 z"
+       style="fill:url(#linearGradient4384);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 17.578118,975.01845 6.328123,10.54689 h -4.921874 l -3.515623,-7.73439 z"
        id="path4376"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4394);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,990.8622 0,6 19.4999964,-15.74999 -5.249999,0 z"
+       style="fill:url(#linearGradient4394);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,994.70596 v 5.62494 L 23.906241,985.56534 h -4.921874 z"
        id="path4386"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4404);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,963.11219 -5.249999,0.75 -2.25,-2.25 7.499999,-2.25 z"
+       style="fill:url(#linearGradient4404);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,968.69033 -4.921873,0.70312 -2.109374,-2.10937 7.031247,-2.10938 z"
        id="path4396"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4414);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 36.749993,963.86219 -2.25,-2.25 -5.249999,6.75 4.499999,0 z"
+       style="fill:url(#linearGradient4414);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 34.453113,969.39345 -2.109374,-2.10937 -4.921874,6.32813 h 4.218749 z"
        id="path4406"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4424);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.249994,968.36219 4.499999,0 3,8.25002 -3,3 z"
+       style="fill:url(#linearGradient4424);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 27.421865,973.61221 h 4.218749 l 2.812499,7.73439 -2.812499,2.8125 z"
        id="path4416"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4434);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 36.749993,976.61221 -3,3 8.249999,6 0,-5.25 z"
+       style="fill:url(#linearGradient4434);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 34.453113,981.3466 -2.812499,2.8125 7.734372,5.62499 v -4.92187 z"
        id="path4426"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4444);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.249994,986.36221 0,-3.75 12.749998,6.75 0,5.24999 z"
+       style="fill:url(#linearGradient4444);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 27.421865,990.48722 v -3.51562 l 11.953121,6.32812 v 4.92186 z"
        id="path4436"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4454);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.249994,982.61221 -22.4999965,17.24999 3.7499995,0 18.749997,-13.49999 z"
+       style="fill:url(#linearGradient4454);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 27.421865,986.9716 -21.0937433,16.1719 h 3.515624 L 27.421865,990.48722 Z"
        id="path4446"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4464);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 6.7499975,999.8622 23.2499965,12.75 0,-5.25 -11.249999,-5.25 -8.249998,-2.25 z"
+       style="fill:url(#linearGradient4464);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.3281217,1003.1435 21.7968683,11.9531 v -4.9219 l -10.546872,-4.9218 -7.7343723,-2.1094 z"
        id="path4456"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -1141,24 +1282,24 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4474);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.999994,1012.6122 11.999998,3.75 0,-6.75 -11.999998,-2.25 z"
+       style="fill:url(#linearGradient4474);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 28.12499,1015.0966 11.249996,3.5156 v -6.3281 l -11.249996,-2.1094 z"
        id="path4466"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4484);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,1029.8622 0,-5.25 -17.999997,-6.75 -1.5,6 z"
+       style="fill:url(#linearGradient4484);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,1031.2684 v -4.9218 l -16.874994,-6.3281 -1.40625,5.6249 z"
        id="path4476"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4494);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 23.999995,1017.8622 -1.5,6 -16.4999974,-8.25 0,-6 z"
+       style="fill:url(#linearGradient4494);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 22.499992,1020.0185 -1.40625,5.6249 -15.4687451,-7.7343 v -5.625 z"
        id="path4486"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -1166,24 +1307,24 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4504);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,930.86219 8.9999984,-3 0,-5.25 -8.9999984,1.5 z"
+       style="fill:url(#linearGradient4504);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,938.45596 8.4374981,-2.81251 v -4.92187 l -8.4374981,1.40625 z"
        id="path4496"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4514);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 14.999996,922.61219 15.749998,4.5 -5.999999,3.75 -9.749999,-3 z"
+       style="fill:url(#linearGradient4514);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 14.062495,930.72158 14.76562,4.21875 -5.624998,3.51563 -9.140622,-2.81251 z"
        id="path4506"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4532);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.999992,936.11219 0,-4.5 -6.749999,13.5 1.5,3 2.25,0 z"
+       style="fill:url(#linearGradient4532);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.374986,943.37784 v -4.21875 l -6.328122,12.65624 1.406249,2.8125 h 2.109375 z"
        id="path4516"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -1191,32 +1332,32 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4542);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 35.249993,945.11219 -11.999998,5.25 3.749999,1.5 9.749999,-3.75 z"
+       style="fill:url(#linearGradient4542);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 33.046864,951.81533 -11.249997,4.92188 3.515624,1.40624 9.140622,-3.51562 z"
        id="path4534"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4552);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.999994,1007.3622 -4.5,-2.25 11.999999,-13.5 4.499999,3 z"
+       style="fill:url(#linearGradient4552);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 28.12499,1010.1747 -4.218749,-2.1093 11.249997,-12.65632 4.218748,2.8125 z"
        id="path4544"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4562);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 32.249994,987.86221 4.499999,2.99999 -13.499998,13.5 -5.25,-2.25 z"
+       style="fill:url(#linearGradient4562);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 30.234365,991.89347 4.218748,2.81249 -12.656246,12.65624 -4.921874,-2.1093 z"
        id="path4554"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4572);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 21.749995,1038.1122 -6.749999,0 19.499997,-10.5 7.499999,2.25 z"
+       style="fill:url(#linearGradient4572);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 20.390617,1039.0029 h -6.328122 l 18.281244,-9.8439 7.031247,2.1094 z"
        id="path4564"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -1224,36 +1365,36 @@
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4582);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 21.749995,1038.1122 9.749999,8.25 -6.749999,0 -8.999999,-8.25 z"
+       style="fill:url(#linearGradient4582);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 20.390617,1039.0029 9.140623,7.7343 h -6.328123 l -8.437498,-7.7343 z"
        id="path4574"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4592);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,1035.8622 0,-3.75 20.2499964,14.25 -5.249999,0 z"
+       style="fill:url(#linearGradient4592);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,1036.8935 v -3.5157 l 18.9843691,13.3594 h -4.921874 z"
        id="path4584"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <path
-       style="fill:url(#linearGradient4602);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 5.9999976,1032.1122 13.4999974,-9.75 -5.249999,-3 -8.2499984,8.25 z"
+       style="fill:url(#linearGradient4602);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749988px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 5.6249969,1033.3778 12.6562461,-9.1406 -4.921873,-2.8125 -7.7343731,7.7343 z"
        id="path4594"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/White_gate.png" />
     <rect
-       style="opacity:1;fill:url(#linearGradient4702);fill-opacity:1;stroke:none;stroke-width:10.39230824;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:url(#linearGradient1105);fill-opacity:1;stroke:none;stroke-width:9.74275875;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4302"
-       width="42"
-       height="191.99989"
-       x="103"
-       y="812.36218"
+       width="39.374878"
+       height="179.99934"
+       x="96.562202"
+       y="827.36285"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -1265,14 +1406,16 @@
        style="filter:url(#filter4830)"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       width="100%"
+       height="100%" />
     <rect
-       style="opacity:1;fill:url(#linearGradient4694);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:url(#linearGradient1101);fill-opacity:1;stroke:none;stroke-width:1.40624559;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4324"
-       width="40"
-       height="4.0000219"
-       x="104"
-       y="812.36218"
+       width="37.499882"
+       height="3.7500088"
+       x="97.499695"
+       y="827.36285"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -1281,25 +1424,25 @@
        y="0"
        xlink:href="#rect4324"
        id="use4367"
-       transform="translate(0,188.00002)"
+       transform="translate(0,176.24947)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="display:inline;opacity:1;fill:#d5aa10;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#d5aa10;fill-opacity:1;stroke:none;stroke-width:1.40624559;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4270"
-       width="48"
-       height="48"
-       x="100"
-       y="764.36218"
+       width="44.999859"
+       height="44.999859"
+       x="93.74971"
+       y="782.36304"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#501800;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 100,764.36133 0,48 48,0 0,-48 z m 2,2.00087 4,0 4,2 3,-2 3,4 5,-3 2,2 2,-3 5,1 4,-1 9,3 3,-3 -1,5 1,5 -1,1 1,6 1,3 -3,1 2,2 -2,3 2,6 1,7 -1,5 -6,-1 -4,2 -5,-2 -6,0 -2,2 -4,-6 -2,5 -4,-3 -4,1 -2,-3 -5,5 2,-4 0,-6 -2,-5 3,-2 2,-6 -3,-3 4,-2 -2,-2 2,-2 -6,-2.875 0,-2.125 2,-1 -2,-2.9375 z"
+       style="fill:#501800;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 93.749709,782.36222 v 44.99986 h 44.999861 v -44.99986 z m 1.874994,1.87581 h 3.749989 l 3.749988,1.875 2.81249,-1.875 2.81249,3.74999 4.68749,-2.81249 1.87499,1.875 1.875,-2.8125 4.68748,0.9375 3.74999,-0.9375 8.43747,2.8125 2.8125,-2.8125 -0.9375,4.68749 0.9375,4.68748 -0.9375,0.9375 0.9375,5.62498 0.93749,2.8125 -2.81249,0.93749 1.875,1.875 -1.875,2.81249 1.875,5.62498 0.93749,6.56248 -0.93749,4.68749 -5.62499,-0.9375 -3.74999,1.87499 -4.68748,-1.87499 h -5.62498 l -1.875,1.87499 -3.74999,-5.62498 -1.87499,4.68749 -3.74999,-2.8125 -3.74999,0.9375 -1.87499,-2.81249 -4.687487,4.68749 1.874994,-3.74999 v -5.62499 l -1.874994,-4.68748 2.812491,-1.87499 1.874996,-5.62499 -2.812493,-2.81249 3.749993,-1.87499 -1.874998,-1.875 1.874998,-1.87499 -5.624987,-2.69531 v -1.99218 l 1.874994,-0.93749 -1.874994,-2.7539 z"
        id="path4530"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccc"
@@ -1311,7 +1454,7 @@
        y="0"
        xlink:href="#rect4270"
        id="use4610"
-       transform="translate(0,240.00002)"
+       transform="translate(0,224.99932)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1322,54 +1465,54 @@
        y="0"
        xlink:href="#path4530"
        id="use4543"
-       transform="matrix(0,-1,1,0,-664.36133,1152.3622)"
+       transform="rotate(-90,228.7497,917.36221)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#202020;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#e0e0e0;fill-opacity:1;stroke:#202020;stroke-width:1.40624559;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4545"
-       width="20"
-       height="26"
-       x="114"
-       y="775.36218"
-       ry="4.0000219"
+       width="18.749941"
+       height="24.374924"
+       x="106.87467"
+       y="792.67548"
+       ry="3.7500088"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#c000c0;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2, 2;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#c000c0;stroke-width:1.87499416;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.87499418, 1.87499418;stroke-dashoffset:0;stroke-opacity:1"
        id="path4583"
        sodipodi:type="arc"
-       sodipodi:cx="112"
-       sodipodi:cy="788.36218"
-       sodipodi:rx="18"
-       sodipodi:ry="18"
+       sodipodi:cx="104.99967"
+       sodipodi:cy="804.86298"
+       sodipodi:rx="16.874949"
+       sodipodi:ry="16.874949"
        sodipodi:start="5.7595865"
        sodipodi:end="0.52359878"
        sodipodi:open="true"
-       d="m 127.58846,779.36218 a 18,18 0 0 1 0,18"
+       d="m 119.61381,796.4255 a 16.874949,16.874949 0 0 1 0,16.87495"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <circle
-       style="opacity:1;fill:#c04040;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#c04040;fill-opacity:1;stroke:none;stroke-width:1.87499416;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4585"
-       cx="117.5"
-       cy="788.36218"
-       r="2.5"
+       cx="110.15591"
+       cy="804.86298"
+       r="2.3437426"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:#c04040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 119.43841,786.79103 10.20316,4.57117 -11.15921,-0.6871 z"
+       style="fill:#c04040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 111.97316,803.39 9.56543,4.28546 -10.46172,-0.64415 z"
        id="path4587"
        inkscape:connector-curvature="0"
-       inkscape:transform-center-x="-6.6109357"
-       inkscape:transform-center-y="0.69231791"
+       inkscape:transform-center-x="-6.1977318"
+       inkscape:transform-center-y="0.64904424"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -1378,7 +1521,7 @@
        y="0"
        xlink:href="#rect4270"
        id="use4640"
-       transform="translate(49,2.227559e-5)"
+       transform="translate(45.937357,2.0883301e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1389,7 +1532,7 @@
        y="0"
        xlink:href="#path4530"
        id="use4668"
-       transform="translate(49,4.2755904e-6)"
+       transform="translate(45.937357,4.0083536e-6)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1400,7 +1543,7 @@
        y="0"
        xlink:href="#rect4545"
        id="use4670"
-       transform="translate(49,2.7559044e-7)"
+       transform="translate(45.937357)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1411,7 +1554,7 @@
        y="0"
        xlink:href="#path4583"
        id="use4672"
-       transform="translate(49,2.7559044e-7)"
+       transform="translate(45.937357)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1422,7 +1565,7 @@
        y="0"
        xlink:href="#path4585"
        id="use4674"
-       transform="translate(49,2.7559044e-7)"
+       transform="translate(45.937357)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1432,10 +1575,10 @@
        x="0"
        y="0"
        xlink:href="#path4587"
-       inkscape:transform-center-x="-6.369889"
-       inkscape:transform-center-y="1.2774117"
+       inkscape:transform-center-x="-15.052994"
+       inkscape:transform-center-y="-14.556859"
        id="use4676"
-       transform="matrix(0.99656025,0.08287144,-0.08287144,0.99656025,114.73855,-7.021488)"
+       transform="rotate(4.7536354,133.07862,1358.2511)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1446,7 +1589,7 @@
        y="0"
        xlink:href="#rect4324"
        id="use4678"
-       transform="translate(49,2.227559e-5)"
+       transform="translate(45.937357,2.0883301e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1457,7 +1600,7 @@
        y="0"
        xlink:href="#use4610"
        id="use4680"
-       transform="translate(49,2.1072221e-6)"
+       transform="translate(45.937357,1.9755146e-6)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1468,7 +1611,7 @@
        y="0"
        xlink:href="#use4543"
        id="use4682"
-       transform="translate(48.99913,4.7244096e-6)"
+       transform="translate(45.936542,4.4291203e-6)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1479,7 +1622,7 @@
        y="0"
        xlink:href="#use4367"
        id="use4684"
-       transform="translate(49,1.0722215e-7)"
+       transform="translate(45.937357)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1490,7 +1633,7 @@
        y="0"
        xlink:href="#rect4302"
        id="use4704"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1504,13 +1647,15 @@
        style="filter:url(#filter4838)"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       width="100%"
+       height="100%" />
     <use
        x="0"
        y="0"
        xlink:href="#rect4324"
        id="use4706"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1521,7 +1666,7 @@
        y="0"
        xlink:href="#use4367"
        id="use4708"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1532,7 +1677,7 @@
        y="0"
        xlink:href="#rect4270"
        id="use4710"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1543,7 +1688,7 @@
        y="0"
        xlink:href="#path4530"
        id="use4712"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1554,7 +1699,7 @@
        y="0"
        xlink:href="#use4610"
        id="use4714"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1565,7 +1710,7 @@
        y="0"
        xlink:href="#use4543"
        id="use4716"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1576,7 +1721,7 @@
        y="0"
        xlink:href="#rect4545"
        id="use4718"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1587,7 +1732,7 @@
        y="0"
        xlink:href="#path4583"
        id="use4720"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1598,7 +1743,7 @@
        y="0"
        xlink:href="#path4585"
        id="use4722"
-       transform="translate(98,2.2107222e-5)"
+       transform="translate(91.874715,2.0725456e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1608,18 +1753,18 @@
        x="0"
        y="0"
        xlink:href="#path4587"
-       inkscape:transform-center-x="-6.8030677"
-       inkscape:transform-center-y="0.22501526"
+       inkscape:transform-center-x="-12.779678"
+       inkscape:transform-center-y="-16.816127"
        id="use4724"
-       transform="matrix(0.99669578,-0.08122509,0.08122509,0.99669578,34.351499,12.144985)"
+       transform="rotate(-4.6589874,156.04763,-324.36009)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:0.75"
-       d="m 116,998.3622 16,-18 -16,-7 18,-28 -4,-17 -11,-6 15,-15 -2,-17 -16,-16 0,-11 9,-9 -11,-7 15,-8 -11,-7 15,-14"
+       style="opacity:0.75;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.74998832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 108.74966,1001.7374 14.99996,-16.87499 -14.99996,-6.56248 16.87495,-26.24992 -3.74999,-15.93745 -10.31247,-5.62498 14.06246,-14.06246 -1.87499,-15.93745 -14.99996,-14.99995 v -10.31247 l 8.43748,-8.43747 -10.31247,-6.56248 14.06245,-7.49998 -10.31246,-6.56248 14.06245,-13.12496"
        id="path4728"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccc"
@@ -1627,16 +1772,16 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:0.75"
-       d="m 162,998.3622 10,-11 -6,-13 20,-9 -25,-13 24,-9 -4,-22 -19,-9 -1,-24 23,-5 -18,-13 17,-6 -19,-13 19,-21 3,-12"
+       style="opacity:0.75;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.74998832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 151.87453,1001.7374 9.37497,-10.31251 -5.62498,-12.18746 18.74994,-8.43748 -23.43743,-12.18746 22.49993,-8.43747 -3.74999,-20.62494 -17.81244,-8.43747 -0.9375,-22.49993 21.56243,-4.68749 -16.87494,-12.18746 15.93745,-5.62498 -17.81245,-12.18746 17.81245,-19.68744 2.81249,-11.24997"
        id="path4740"
        inkscape:connector-curvature="0"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;opacity:0.75"
-       d="m 221,998.3622 -10,-10 2,-19 19,-6 -19,-8 19,-8 -19,-10 9,-14 0,-15 12,-7 -14,-12 13,-10 -5,-14 4,-9 -23,-3 15,-16 -7,-11 3,-8"
+       style="opacity:0.75;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.74998832;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 207.18686,1001.7374 -9.37497,-9.37501 1.87499,-17.81245 17.81244,-5.62498 -17.81244,-7.49998 17.81244,-7.49997 -17.81244,-9.37497 8.43747,-13.12496 v -14.06246 l 11.24997,-6.56248 -13.12496,-11.24996 12.18746,-9.37498 -4.68748,-13.12495 3.74998,-8.43748 -21.56243,-2.81249 14.06246,-14.99995 -6.56248,-10.31247 2.81249,-7.49998"
        id="path4748"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccccccc"
@@ -1648,7 +1793,7 @@
        y="0"
        xlink:href="#use4706"
        id="use4771"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1659,7 +1804,7 @@
        y="0"
        xlink:href="#use4710"
        id="use4773"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1670,7 +1815,7 @@
        y="0"
        xlink:href="#use4712"
        id="use4775"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1681,7 +1826,7 @@
        y="0"
        xlink:href="#use4718"
        id="use4777"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1692,7 +1837,7 @@
        y="0"
        xlink:href="#use4720"
        id="use4779"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1703,7 +1848,7 @@
        y="0"
        xlink:href="#use4722"
        id="use4781"
-       transform="translate(49,-1.7382812e-5)"
+       transform="translate(45.937357,-1.6296336e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1713,10 +1858,10 @@
        x="0"
        y="0"
        xlink:href="#use4724"
-       inkscape:transform-center-x="-4.7100666"
-       inkscape:transform-center-y="-3.8188789"
+       inkscape:transform-center-x="-0.90159061"
+       inkscape:transform-center-y="-24.7728"
        id="use4783"
-       transform="matrix(0.64916074,-0.76065126,0.76065126,0.64916074,-475.09684,440.47925)"
+       transform="rotate(-49.521645,224.95338,755.08552)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1727,7 +1872,7 @@
        y="0"
        xlink:href="#use4708"
        id="use4785"
-       transform="translate(48.99913,-1.7382813e-5)"
+       transform="translate(45.936542,-1.6296337e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1738,7 +1883,7 @@
        y="0"
        xlink:href="#use4714"
        id="use4787"
-       transform="translate(48.99913,-1.7382813e-5)"
+       transform="translate(45.936542,-1.6296337e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
@@ -1749,15 +1894,15 @@
        y="0"
        xlink:href="#use4716"
        id="use4789"
-       transform="translate(48.99913,-1.7382813e-5)"
+       transform="translate(45.936542,-1.6296337e-5)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:url(#linearGradient4799);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 255,1000.3622 0,-6 6,3 5,-5 5,5 6,-3 6,3 4,-3 0,6 z"
+       style="fill:url(#linearGradient4799);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 239.06176,1003.6124 v -5.62503 l 5.62498,2.81253 4.68749,-4.68752 4.68748,4.68752 5.62498,-2.81253 5.62499,2.81253 3.74998,-2.81253 v 5.62503 z"
        id="path4791"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccc"
@@ -1765,13 +1910,244 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:url(#linearGradient4811);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 255,816.3622 0,6 5,-5 6,2 6,-2 4,6 3,-3 5,2 3,-3 0,-3 z"
+       style="fill:url(#linearGradient4811);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749708px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 239.06176,831.11289 v 5.62498 l 4.68748,-4.68748 5.62499,1.87499 5.62498,-1.87499 3.74999,5.62498 2.81249,-2.81249 4.68748,1.87499 2.81249,-2.81249 v -2.81249 z"
        id="path4803"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccc"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <g
+       id="g1162"
+       transform="translate(1.9798586e-6)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         sodipodi:nodetypes="ccccccccccccccccc"
+         inkscape:connector-curvature="0"
+         id="rect1065"
+         d="m 375.00003,782.36218 10.31247,0.93753 10.3125,-0.9375 12.1875,0.9375 8.05505,-0.93753 H 420 v 14.06253 l -1.875,15.9375 1.875,14.0625 -9.375,0.9375 h -6.5625 l -15,-1.875 -14.0625,1.875 0.9375,-3.75 -0.9375,-15 0.9375,-17.8125 z"
+         style="display:inline;opacity:1;fill:#979797;fill-opacity:1;stroke:none;stroke-width:1.40624952;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1108"
+         d="m 395.625,785.17471 -10.3125,2.8125 8.4375,-0.9375 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1110"
+         d="m 380.625,786.11221 -2.8125,-0.9375 0.9375,7.5 v -5.625 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path1112"
+         d="m 382.5,807.67471 15,-12.1875 15.9375,3.75 -15,-2.8125 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1114"
+         d="m 406.875,824.54971 2.8125,-5.625 3.75,-3.75 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1116"
+         d="m 395.625,813.29971 -3.75,2.8125 2.8125,6.5625 -0.9375,-6.5625 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1118"
+         d="m 377.8125,817.04971 0.9375,6.5625 v -6.5625 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a4a4a4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1120"
+         d="m 380.625,797.36221 1.875,-1.875 1.875,-2.8125 -0.9375,3.75 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8f8f8f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1122"
+         d="m 417.1875,787.98721 v 7.5 l -5.625,0.9375 h 6.5625 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8f8f8f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path1124"
+         d="m 402.1875,818.92471 v 3.75 l -1.875,2.8125 3.75,-2.8125 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8f8f8f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <circle
+         r="4.6875"
+         cy="802.04968"
+         cx="399.375"
+         id="path1126"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#6b4d3c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.62449747;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <path
+         clip-path="url(#clipPath1138)"
+         sodipodi:nodetypes="cacccccc"
+         inkscape:connector-curvature="0"
+         id="path1134"
+         d="m 394.6875,802.04971 c 0.48388,-0.9571 1.76984,-2.49953 3.10547,-2.53418 1.42831,-0.0371 3.45703,1.59668 3.45703,2.53418 H 405 v -5.625 h -11.25 v 5.625 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4933);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    </g>
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient1192);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect1184"
+       width="45"
+       height="11.249975"
+       x="375"
+       y="997.04968"
+       clip-path="url(#clipPath1196)"
+       transform="translate(1.9798586e-6)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1162"
+       id="use1164"
+       transform="rotate(90,285.00002,917.3622)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 386.25,841.42471 -5.625,3.75 v 15.9375 l 1.875,-14.0625 z"
+       id="path1200"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 413.4375,867.67471 -15,11.25 1.875,13.125 -0.9375,-12.1875 z"
+       id="path1202"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 389.0625,907.04971 -8.4375,1.875 3.75,22.5 -0.9375,-20.625 z"
+       id="path1204"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 413.4375,932.36221 -8.4375,2.8125 5.625,15 -2.8125,-14.0625 z"
+       id="path1206"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 391.875,945.48722 -8.4375,1.875 -4.6875,6.5625 5.625,-4.6875 z"
+       id="path1208"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 413.4375,970.79972 3.75,0.9375 -6.5625,16.875 z"
+       id="path1210"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 390.9375,973.61222 -9.375,3.75 11.25,-1.875 z"
+       id="path1212"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#9d9d9d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 393.75,989.54972 -2.8125,6.5625 3.75,-4.6875 4.6875,0.9375 z"
+       id="path1214"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 399.375,859.23721 v 8.4375 l -4.6875,8.4375 6.5625,-8.4375 z"
+       id="path4919"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 414.375,887.36221 -4.6875,14.0625 4.6875,-7.5 z"
+       id="path4921"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 388.125,893.92471 -2.8125,4.6875 -3.75,1.875 6.5625,-1.875 z"
+       id="path4923"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 396.5625,923.92471 0.9375,5.625 -2.8125,5.625 3.75,-5.625 z"
+       id="path4925"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 415.3125,954.86222 -15,8.4375 -19.6875,3.75 20.625,-2.81251 z"
+       id="path4927"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8a8a8a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56204772;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 406.875,982.98722 -9.375,1.875 6.5625,0.9375 z"
+       id="path4929"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1162"
+       id="use5109"
+       transform="translate(45.937471)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use1164"
+       id="use5113"
+       transform="translate(45.937471)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Reinforced_wall.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>

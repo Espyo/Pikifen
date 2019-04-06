@@ -436,6 +436,8 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
 bool mob::attack(
     mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
 ) {
+    //TODO refactor, probably when I rethink which mobs want to attack which.
+    
     if(victim->parent && victim->parent->relay_damage) {
         bool ret = attack(victim->parent->m, attack_h, victim_h, damage);
         if(!victim->parent->handle_damage) {
@@ -488,6 +490,15 @@ bool mob::attack(
                 return false;
             } else {
                 defense_multiplier = 1.0 / max_vulnerability;
+            }
+            
+        } else {
+        
+            if(victim->type->default_vulnerability == 0.0f) {
+                //The victim is invulnerable to everything about this attack!
+                return false;
+            } else {
+                defense_multiplier = 1.0 / victim->type->default_vulnerability;
             }
         }
         

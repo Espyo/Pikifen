@@ -1,0 +1,129 @@
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=Reinforced_wall.png
+		file_pos=49.0000 0.0000
+		file_size=48.0000 288.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling{
+		file=Reinforced_wall.png
+		file_pos=0.0000 0.0000
+		file_size=48.0000 288.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	center
+	far_left
+	far_right
+	near_left
+	near_right
+}

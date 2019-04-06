@@ -1423,8 +1423,12 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
 void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
     pikmin* p_ptr = (pikmin*) m;
+    mob* t_ptr = *m->holding.begin();
     
-    m->release(*m->holding.begin());
+    m->release(t_ptr);
+    t_ptr->pos = m->pos;
+    t_ptr->speed = point();
+    t_ptr->push_amount = 0.0f;
     m->subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type);
 }
