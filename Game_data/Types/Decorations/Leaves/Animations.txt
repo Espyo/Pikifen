@@ -1,0 +1,24 @@
+animations{
+	bumped{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Leaves.png
+		file_pos=0.0000 0.0000
+		file_size=68.0000 68.0000
+	}
+}
+body_parts
