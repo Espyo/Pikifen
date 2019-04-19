@@ -1,0 +1,84 @@
+animations{
+	bumped{
+		frames{
+			bumped1{
+				duration=0.1000
+			}
+			bumped2{
+				duration=0.1000
+			}
+			bumped1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			bumped4{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.3000
+			}
+			idling2{
+				duration=0.3000
+			}
+			idling{
+				duration=0.3000
+			}
+			idling3{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped1{
+		file=Shoot.png
+		file_pos=0.0000 285.0000
+		file_size=172.0000 94.0000
+	}
+	bumped2{
+		file=Shoot.png
+		file_pos=0.0000 380.0000
+		file_size=172.0000 94.0000
+	}
+	bumped3{
+		file=Shoot.png
+		file_pos=0.0000 475.0000
+		file_size=172.0000 94.0000
+	}
+	bumped4{
+		file=Shoot.png
+		file_pos=0.0000 570.0000
+		file_size=172.0000 94.0000
+	}
+	idling{
+		file=Shoot.png
+		file_pos=0.0000 0.0000
+		file_size=172.0000 94.0000
+	}
+	idling2{
+		file=Shoot.png
+		file_pos=0.0000 95.0000
+		file_size=172.0000 94.0000
+	}
+	idling3{
+		file=Shoot.png
+		file_pos=0.0000 190.0000
+		file_size=172.0000 94.0000
+	}
+}
+body_parts
