@@ -1,0 +1,88 @@
+animations{
+	bumped{
+		frames{
+			bumped1{
+				duration=0.1000
+			}
+			bumped2{
+				duration=0.1000
+			}
+			bumped1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			bumped4{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.3000
+			}
+			idling2{
+				duration=0.3000
+			}
+			idling{
+				duration=0.3000
+			}
+			idling3{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped1{
+		file=Common_Glowcap.png
+		file_pos=0.0000 113.0000
+		file_size=124.0000 112.0000
+	}
+	bumped2{
+		file=Common_Glowcap.png
+		file_pos=0.0000 226.0000
+		file_size=124.0000 112.0000
+	}
+	bumped3{
+		file=Common_Glowcap.png
+		file_pos=0.0000 113.0000
+		file_size=124.0000 112.0000
+		scale=-1.0000 1.0000
+	}
+	bumped4{
+		file=Common_Glowcap.png
+		file_pos=0.0000 226.0000
+		file_size=124.0000 112.0000
+		scale=-1.0000 1.0000
+	}
+	idling{
+		file=Common_Glowcap.png
+		file_pos=0.0000 0.0000
+		file_size=124.0000 112.0000
+	}
+	idling2{
+		file=Common_Glowcap.png
+		file_pos=0.0000 0.0000
+		file_size=124.0000 112.0000
+		offset=-0.8000 0.0000
+	}
+	idling3{
+		file=Common_Glowcap.png
+		file_pos=0.0000 0.0000
+		file_size=124.0000 112.0000
+		offset=0.8000 0.0000
+	}
+}
+body_parts

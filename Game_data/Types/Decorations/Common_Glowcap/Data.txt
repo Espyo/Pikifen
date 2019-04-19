@@ -1,0 +1,8 @@
+name = Common Glowcap
+
+height = 120
+radius = 24
+random_animation_delay = true
+rotation_random_variation = 360
+size_random_variation = 8
+tint_random_maximum = 224 224 224
