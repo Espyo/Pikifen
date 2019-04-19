@@ -1,0 +1,84 @@
+animations{
+	bumped{
+		frames{
+			bumped1{
+				duration=0.1000
+			}
+			bumped2{
+				duration=0.1000
+			}
+			bumped1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			bumped4{
+				duration=0.1000
+			}
+			bumped3{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.3000
+			}
+			idling2{
+				duration=0.3000
+			}
+			idling{
+				duration=0.3000
+			}
+			idling3{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped1{
+		file=Clover.png
+		file_pos=0.0000 537.0000
+		file_size=199.0000 178.0000
+	}
+	bumped2{
+		file=Clover.png
+		file_pos=0.0000 716.0000
+		file_size=199.0000 178.0000
+	}
+	bumped3{
+		file=Clover.png
+		file_pos=0.0000 895.0000
+		file_size=199.0000 178.0000
+	}
+	bumped4{
+		file=Clover.png
+		file_pos=0.0000 1074.0000
+		file_size=199.0000 178.0000
+	}
+	idling{
+		file=Clover.png
+		file_pos=0.0000 0.0000
+		file_size=199.0000 178.0000
+	}
+	idling2{
+		file=Clover.png
+		file_pos=0.0000 179.0000
+		file_size=199.0000 178.0000
+	}
+	idling3{
+		file=Clover.png
+		file_pos=0.0000 358.0000
+		file_size=199.0000 178.0000
+	}
+}
+body_parts
