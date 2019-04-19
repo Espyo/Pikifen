@@ -25,7 +25,7 @@ void decoration_fsm::create_fsm(mob_type* typ) {
             efc.run(decoration_fsm::become_idle);
         }
         efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
-            efc.change_state("bumped");
+            efc.run(decoration_fsm::check_bump);
         }
     }
     efc.new_state("bumped", DECORATION_STATE_BUMPED); {
@@ -71,4 +71,19 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
     m->set_animation(DECORATION_ANIM_BUMPED);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Check if the decoration should really get bumped.
+ * info1: Pointer to the mob that touched it.
+ */
+void decoration_fsm::check_bump(mob* m, void* info1, void* info2) {
+    mob* toucher = (mob*) info1;
+    if(toucher->speed.x == 0 && toucher->speed.y == 0 && !toucher->chasing) {
+        //Is the other object not currently moving? Let's not get bumped.
+        return;
+    }
+    
+    m->fsm.set_state(DECORATION_STATE_BUMPED);
 }

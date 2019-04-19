@@ -26,23 +26,37 @@ decoration::decoration(
     individual_rotation(0.0f),
     has_done_first_animation(false) {
     
-    individual_tint = al_map_rgba(255, 255, 255, 255),
+    float tint_interpol_ratio = randomf(0.0f, 1.0f);
+    ALLEGRO_COLOR tint_limit = dec_type->tint_random_maximum;
+    tint_limit.a = 1.0f;
     
-    individual_tint.r -= randomf(0, dec_type->tint_random_variation.r);
-    individual_tint.g -= randomf(0, dec_type->tint_random_variation.g);
-    individual_tint.b -= randomf(0, dec_type->tint_random_variation.b);
-    individual_tint.a -= randomf(0, dec_type->tint_random_variation.a);
+    individual_tint =
+        interpolate_color(
+            tint_interpol_ratio, 0.0, 1.0,
+            tint_limit, al_map_rgba(255, 255, 255, 255)
+        );
+        
+    float alpha_interpol_ratio = randomf(0.0f, 1.0f);
+    individual_tint.a =
+        interpolate_number(
+            alpha_interpol_ratio, 0.0f, 1.0f,
+            dec_type->tint_random_maximum.a, 1.0f
+        );
+        
     individual_rotation +=
         randomf(
             -dec_type->rotation_random_variation,
             dec_type->rotation_random_variation
         );
-    individual_scale +=
-        randomf(
-            -dec_type->scale_random_variation,
-            dec_type->scale_random_variation
-        );
         
+    float new_radius =
+        type->radius +
+        randomf(
+            -(dec_type->size_random_variation / 2.0),
+            (dec_type->size_random_variation / 2.0)
+        );
+    individual_scale = new_radius / type->radius;
+    
     team = MOB_TEAM_PROP;
 }
 
@@ -57,6 +71,7 @@ void decoration::draw_mob(bitmap_effect_manager* effect_manager) {
     if(!s_ptr) return;
     
     point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     bitmap_effect_manager effects;
     add_sector_brightness_bitmap_effect(&effects);
@@ -71,8 +86,7 @@ void decoration::draw_mob(bitmap_effect_manager* effect_manager) {
     
     draw_bitmap_with_effects(
         s_ptr->bitmap,
-        draw_pos,
-        point(type->radius * 2.0, -1),
+        draw_pos, draw_size,
         angle + s_ptr->angle, &effects
     );
     

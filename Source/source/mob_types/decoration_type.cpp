@@ -20,11 +20,11 @@
  */
 decoration_type::decoration_type() :
     mob_type(MOB_CATEGORY_DECORATIONS),
-    scale_random_variation(0.0f),
+    size_random_variation(0.0f),
     rotation_random_variation(0.0f),
     random_animation_delay(false) {
     
-    tint_random_variation = al_map_rgba(0, 0, 0, 0);
+    tint_random_maximum = al_map_rgba(0, 0, 0, 0);
     decoration_fsm::create_fsm(this);
 }
 
@@ -35,8 +35,8 @@ decoration_type::decoration_type() :
 void decoration_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     
-    rs.set("tint_random_variation", tint_random_variation);
-    rs.set("scale_random_variation", scale_random_variation);
+    rs.set("tint_random_maximum", tint_random_maximum);
+    rs.set("size_random_variation", size_random_variation);
     rs.set("rotation_random_variation", rotation_random_variation);
     rs.set("random_animation_delay", random_animation_delay);
     
