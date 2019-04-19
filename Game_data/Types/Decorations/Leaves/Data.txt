@@ -5,5 +5,5 @@ height = 2
 radius = 32
 random_animation_delay = true
 rotation_random_variation = 360
-size_random_variation = 16
+scale_random_variation = 0.3
 tint_random_maximum = 224 224 255

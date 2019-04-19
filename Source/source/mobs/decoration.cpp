@@ -49,14 +49,12 @@ decoration::decoration(
             dec_type->rotation_random_variation
         );
         
-    float new_radius =
-        type->radius +
+    individual_scale +=
         randomf(
-            -(dec_type->size_random_variation / 2.0),
-            (dec_type->size_random_variation / 2.0)
+            -dec_type->scale_random_variation,
+            dec_type->scale_random_variation
         );
-    individual_scale = new_radius / type->radius;
-    
+        
     team = MOB_TEAM_PROP;
 }
 

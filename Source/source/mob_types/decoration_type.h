@@ -28,7 +28,7 @@ enum DECORATION_ANIMATIONS {
 class decoration_type : public mob_type {
 public:
     ALLEGRO_COLOR tint_random_maximum;
-    float size_random_variation;
+    float scale_random_variation;
     float rotation_random_variation;
     bool random_animation_delay;
     
