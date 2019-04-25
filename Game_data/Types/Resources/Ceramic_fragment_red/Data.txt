@@ -1,0 +1,14 @@
+name = Ceramic fragment red
+
+carrying_destination = linked_mob
+damage_mob_amount = 1
+delivery_result = damage_mob
+height = 8
+max_carriers = 1
+pushable = true
+pushes = false
+radius = 20
+return_to_pile_on_vanish = true
+vanish_on_drop = true
+vanish_delay = 0
+weight = 1

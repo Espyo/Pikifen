@@ -1,0 +1,15 @@
+name = Ceramic pile red
+
+can_drop_multiple = false
+contents = Ceramic fragment red
+delete_when_finished = true
+health_per_resource = 10
+height = 160
+hide_when_empty = true
+max_amount = 30
+pushable = false
+pushes = true
+radius = 80
+show_amount = true
+show_health = false
+size_animation_suffixes = _empty;_low;_mid;_high

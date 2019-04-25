@@ -1,0 +1,24 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+	destroyed{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+	}
+}
+body_parts

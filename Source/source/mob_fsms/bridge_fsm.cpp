@@ -99,7 +99,6 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         s_ptr->texture_info.rot = m->angle;
         s_ptr->texture_info.scale = point(1.0, 1.0);
         s_ptr->texture_info.tint = al_map_rgb(255, 255, 255);
-        s_ptr->texture_info.translation = point();
         
         cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
