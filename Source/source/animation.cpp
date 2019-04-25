@@ -39,7 +39,6 @@ sprite::sprite(
     bitmap(b),
     hitboxes(h) {
     
-    calculate_hitbox_span();
 }
 
 
@@ -70,7 +69,6 @@ sprite::sprite(
     ),
     hitboxes(h) {
     
-    calculate_hitbox_span();
 }
 
 
@@ -141,7 +139,6 @@ void sprite::create_hitboxes(
             )
         );
     }
-    calculate_hitbox_span();
 }
 
 
@@ -331,7 +328,7 @@ bool animation_instance::tick(const float time, vector<size_t>* signals) {
  */
 sprite* animation_instance::get_cur_sprite() {
     if(!cur_anim) return NULL;
-    if(cur_anim->frames.empty()) return NULL;
+    if(cur_frame_index == INVALID) return NULL;
     return cur_anim->frames[cur_frame_index].sprite_ptr;
 }
 

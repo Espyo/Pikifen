@@ -22,6 +22,24 @@ private:
 
     static const float AREA_INTRO_HUD_MOVE_TIME;
     
+    //When processing inter-mob events, we want the mob to follow them from the
+    //closest mob to the one farthest away. As such, this struct saves data on
+    //a viable mob, its distance, and the corresponding event.
+    //We can then go through a vector of these pending intermob events in order.
+    struct pending_intermob_event {
+        dist d;
+        mob_event* event_ptr;
+        mob* mob_ptr;
+        pending_intermob_event(
+            const dist &d, mob_event* event_ptr, mob* mob_ptr
+        ):
+            d(d),
+            event_ptr(event_ptr),
+            mob_ptr(mob_ptr) {
+            
+        }
+    };
+    
     ALLEGRO_BITMAP* bmp_bubble;
     ALLEGRO_BITMAP* bmp_counter_bubble_group;
     ALLEGRO_BITMAP* bmp_counter_bubble_field;
@@ -64,6 +82,17 @@ private:
     void load_hud_info();
     void load_hud_coordinates(const int item, string data);
     void process_mob_interactions(mob* m_ptr, size_t m);
+    void process_mob_misc_interactions(
+        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+        vector<pending_intermob_event> &pending_intermob_events
+    );
+    void process_mob_reaches(
+        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
+        vector<pending_intermob_event> &pending_intermob_events
+    );
+    void process_mob_touches(
+        mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
+    );
     void unload_game_content();
     
 public:

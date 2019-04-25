@@ -60,7 +60,8 @@ mob_type::mob_type(size_t category_id) :
     blocks_carrier_pikmin(false),
     projectiles_can_damage(true),
     default_vulnerability(1.0f),
-    spike_damage(nullptr) {
+    spike_damage(nullptr),
+    max_span(0.0f) {
     
 }
 
@@ -506,6 +507,22 @@ void load_mob_type_from_file(
         mt->load_resources(&file);
         mt->anims.create_conversions(mt->get_anim_conversions());
     }
+    
+    mt->max_span = mt->radius;
+    
+    if(load_resources) {
+        //Calculate the max span based on the animations's hitboxes.
+        for(size_t s = 0; s < mt->anims.sprites.size(); ++s) {
+            sprite* s_ptr = mt->anims.sprites[s];
+            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+                hitbox* h_ptr = &s_ptr->hitboxes[h];
+                
+                float d = dist(point(0, 0), h_ptr->pos).to_float();
+                d += h_ptr->radius;
+                mt->max_span = max(mt->max_span, d);
+            }
+        }
+    }
 }
 
 
@@ -647,3 +664,6 @@ void mob_type::add_carrying_states() {
     states.insert(states.end(), new_states.begin(), new_states.end());
     
 }
+
+
+mob_type_with_anim_groups::~mob_type_with_anim_groups() { }

@@ -445,10 +445,8 @@ float get_angle_cw_dif(float a1, float a2) {
 /* ----------------------------------------------------------------------------
  * Returns the smallest distance between two angles.
  */
-float get_angle_smallest_dif(float a1, float a2) {
-    a1 = normalize_angle(a1);
-    a2 = normalize_angle(a2);
-    return TAU / 2 - abs(abs(a1 - a2) - TAU / 2);
+float get_angle_smallest_dif(const float a1, const float a2) {
+    return M_PI - abs(abs(normalize_angle(a1) - normalize_angle(a2)) - M_PI);
 }
 
 

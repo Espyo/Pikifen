@@ -964,7 +964,9 @@ void mob::draw_limb(bitmap_effect_manager* effect_manager) {
         parent_end =
             parent->m->get_hitbox(
                 parent->limb_parent_body_part
-            )->get_cur_pos(parent->m->pos, parent->m->angle);
+            )->get_cur_pos(
+                parent->m->pos, parent->m->angle_cos, parent->m->angle_sin
+            );
     }
     
     point child_end;
@@ -974,7 +976,7 @@ void mob::draw_limb(bitmap_effect_manager* effect_manager) {
         child_end =
             get_hitbox(
                 parent->limb_child_body_part
-            )->get_cur_pos(pos, angle);
+            )->get_cur_pos(pos, angle_cos, angle_sin);
     }
     
     float p2c_angle = get_angle(parent_end, child_end);
@@ -1188,7 +1190,7 @@ hitbox* mob::get_closest_hitbox(const point &p, const size_t h_type, dist* d) {
         
         float d =
             dist(
-                h_ptr->get_cur_pos(pos, angle), p
+                h_ptr->get_cur_pos(pos, angle_cos, angle_sin), p
             ).to_float() - h_ptr->radius;
         if(closest_hitbox == NULL || d < closest_hitbox_dist) {
             closest_hitbox_dist = d;
@@ -1242,7 +1244,7 @@ hitbox* mob::get_hitbox(const size_t nr) {
 void mob::get_hitbox_hold_point(
     mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
 ) {
-    point actual_h_pos = h_ptr->get_cur_pos(pos, angle);
+    point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
     
     point pos_dif = mob_to_hold->pos - actual_h_pos;
     coordinates_to_angle(pos_dif, offset_angle, offset_dist);
@@ -1292,9 +1294,8 @@ float mob::get_latched_pikmin_weight() {
  */
 point mob::get_sprite_center(sprite* s) {
     point p;
-    float co = cos(angle), si = sin(angle);
-    p.x = pos.x + co * s->offset.x - si * s->offset.y;
-    p.y = pos.y + si * s->offset.x + co * s->offset.y;
+    p.x = pos.x + angle_cos * s->offset.x - angle_sin * s->offset.y;
+    p.y = pos.y + angle_sin * s->offset.x + angle_cos * s->offset.y;
     return p;
 }
 
@@ -1586,8 +1587,12 @@ void mob::set_animation(
     animation* new_anim = anim.anim_db->animations[final_nr];
     anim.cur_anim = new_anim;
     
-    if(auto_start || anim.cur_frame_index >= anim.cur_anim->frames.size()) {
-        anim.start();
+    if(new_anim->frames.empty()) {
+        anim.cur_frame_index = INVALID;
+    } else {
+        if(auto_start || anim.cur_frame_index >= anim.cur_anim->frames.size()) {
+            anim.start();
+        }
     }
 }
 
@@ -2135,6 +2140,9 @@ void mob::tick_physics() {
         stop_turning();
         chase(final_pos, NULL, true);
     }
+    
+    angle_cos = cos(angle);
+    angle_sin = sin(angle);
     
     if(chasing) {
         point final_target_pos = get_chase_target();

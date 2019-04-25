@@ -253,6 +253,10 @@ public:
     parent_mob_info* parent;
     //How long it's been alive for.
     float time_alive;
+    //Cached value of the angle's cosine.
+    float angle_cos;
+    //Cached value of the angle's sine.
+    float angle_sin;
     
     
     void tick();

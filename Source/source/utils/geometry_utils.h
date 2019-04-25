@@ -110,7 +110,7 @@ void coordinates_to_angle(
 float deg_to_rad(const float rad);
 float get_angle(const point &center, const point &focus);
 float get_angle_cw_dif(float a1, float a2);
-float get_angle_smallest_dif(float a1, float a2);
+float get_angle_smallest_dif(const float a1, const float a2);
 point get_closest_point_in_line(
     const point &l1, const point &l2, const point &p,
     float* segment_ratio = NULL

@@ -173,6 +173,10 @@ public:
     spike_damage_type* spike_damage;
     map<spike_damage_type*, float> spike_damage_vulnerabilities;
     
+    //Caches and such.
+    //How far its hitboxes or radius can reach from the center.
+    float max_span;
+    
     //General functions.
     mob_type(size_t category_id);
     virtual ~mob_type();
@@ -200,6 +204,8 @@ public:
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, const size_t base_anim_total
     );
+    
+    virtual ~mob_type_with_anim_groups();
 };
 
 

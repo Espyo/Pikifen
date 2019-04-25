@@ -1269,6 +1269,8 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->start_height_effect();
     
     holding_ptr->angle = angle;
+    holding_ptr->angle_cos = cos(angle);
+    holding_ptr->angle_sin = sin(angle);
     holding_ptr->face(angle, NULL);
     
     holding_ptr->was_thrown = true;
