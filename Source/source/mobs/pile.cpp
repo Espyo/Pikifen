@@ -73,7 +73,7 @@ void pile::recharge() {
 void pile::tick_class_specifics() {
     recharge_timer.tick(delta_t);
     
-    if(amount == 0 && pil_type->delete_on_empty) {
+    if(amount == 0 && pil_type->delete_when_finished) {
         //Ready to delete. Unless it's being used, that is.
         
         for(size_t r = 0; r < resources.size(); ++r) {
@@ -114,4 +114,14 @@ void pile::update() {
         ),
         true, false
     );
+    
+    if(pil_type->hide_when_empty) {
+        if(amount == 0) {
+            hide = true;
+            tangible = false;
+        } else {
+            hide = false;
+            tangible = true;
+        }
+    }
 }

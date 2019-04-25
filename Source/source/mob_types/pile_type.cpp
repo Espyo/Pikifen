@@ -25,8 +25,10 @@ pile_type::pile_type() :
     recharge_interval(0.0f),
     recharge_amount(0),
     health_per_resource(1.0f),
+    can_drop_multiple(false),
     show_amount(true),
-    delete_on_empty(true) {
+    hide_when_empty(true),
+    delete_when_finished(true) {
     
     pile_fsm::create_fsm(this);
 }
@@ -44,9 +46,11 @@ void pile_type::load_parameters(data_node* file) {
     rs.set("recharge_amount", recharge_amount);
     rs.set("max_amount", max_amount);
     rs.set("health_per_resource", health_per_resource);
+    rs.set("can_drop_multiple", can_drop_multiple);
     rs.set("size_animation_suffixes", size_animation_suffixes_str);
     rs.set("show_amount", show_amount);
-    rs.set("delete_on_empty", delete_on_empty);
+    rs.set("hide_when_empty", hide_when_empty);
+    rs.set("delete_when_finished", delete_when_finished);
     
     auto res_type = resource_types.find(contents_str);
     if(res_type != resource_types.end()) {

@@ -65,6 +65,13 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     
     if(amount_to_spawn == 0) return;
     
+    if(amount_to_spawn > 1 && !p_ptr->pil_type->can_drop_multiple) {
+        //Can't drop multiple? Let's knock that number down.
+        amount_to_spawn = 1;
+        intended_amount = p_ptr->amount - 1;
+        p_ptr->health = p_ptr->pil_type->health_per_resource * intended_amount;
+    }
+    
     resource* resource_to_pick_up = NULL;
     pikmin* pikmin_to_start_carrying = NULL;
     

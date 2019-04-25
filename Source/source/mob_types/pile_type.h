@@ -34,8 +34,10 @@ public:
     int recharge_amount;
     size_t max_amount;
     float health_per_resource;
+    bool can_drop_multiple;
     bool show_amount;
-    bool delete_on_empty;
+    bool hide_when_empty;
+    bool delete_when_finished;
     
     pile_type();
     ~pile_type();

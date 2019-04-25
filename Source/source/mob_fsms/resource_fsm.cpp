@@ -180,13 +180,17 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* r_ptr = (resource*) m;
     
     r_ptr->become_carriable(r_ptr->res_type->carrying_destination);
-    r_ptr->carry_info->must_return = true;
-    r_ptr->carry_info->return_point = r_ptr->origin_pile->pos;
-    r_ptr->carry_info->return_dist =
-        r_ptr->origin_pile->type->radius +
-        standard_pikmin_radius +
-        idle_task_range / 2.0f;
-        
+    if(r_ptr->origin_pile) {
+        r_ptr->carry_info->must_return = true;
+        r_ptr->carry_info->return_point = r_ptr->origin_pile->pos;
+        r_ptr->carry_info->return_dist =
+            r_ptr->origin_pile->type->radius +
+            standard_pikmin_radius +
+            idle_task_range / 2.0f;
+    } else {
+        r_ptr->carry_info->must_return = false;
+    }
+    
     r_ptr->set_animation(RESOURCE_ANIM_IDLING);
 }
 
@@ -196,7 +200,7 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
  */
 void resource_fsm::vanish(mob* m, void* info1, void* info2) {
     resource* r_ptr = (resource*) m;
-    if(r_ptr->res_type->return_to_pile_on_vanish) {
+    if(r_ptr->res_type->return_to_pile_on_vanish && r_ptr->origin_pile) {
         r_ptr->origin_pile->change_amount(+1);
     }
     

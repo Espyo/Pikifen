@@ -32,6 +32,7 @@ void resource::draw_mob(bitmap_effect_manager* effect_manager) {
     if(!s_ptr) return;
     
     point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     bitmap_effect_manager effects;
     add_sector_brightness_bitmap_effect(&effects);
@@ -45,8 +46,7 @@ void resource::draw_mob(bitmap_effect_manager* effect_manager) {
     
     draw_bitmap_with_effects(
         s_ptr->bitmap,
-        draw_pos,
-        point(type->radius * 2.0, -1),
+        draw_pos, draw_size,
         angle + s_ptr->angle, &effects
     );
 }
