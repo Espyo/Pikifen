@@ -22,7 +22,7 @@
 decoration_category::decoration_category() :
     mob_category(
         MOB_CATEGORY_DECORATIONS, "Decoration", "Decorations",
-        DECORATIONS_FOLDER_PATH, al_map_rgb(137, 215, 134)
+        DECORATIONS_FOLDER_PATH, al_map_rgb(160, 180, 160)
     ) {
     
 }
