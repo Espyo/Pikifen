@@ -315,8 +315,9 @@ void gameplay::load() {
         
     if(errors_reported_today > errors_reported_at_start) {
         print_info(
-            "ERRORS FOUND!\n"
-            "See \"" + ERROR_LOG_FILE_PATH + "\"."
+            "\n\n\nERRORS FOUND!\n"
+            "See \"" + ERROR_LOG_FILE_PATH + "\".\n\n\n",
+            20.0f, 3.0f
         );
     }
     

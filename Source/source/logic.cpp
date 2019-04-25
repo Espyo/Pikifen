@@ -548,7 +548,8 @@ void gameplay::do_gameplay_logic() {
         print_info(
             "Average:  " + i2s(framerate_counter) + " FPS\n\n"
             "Now:      " + f2s(1.0 / delta_t) + " FPS\n"
-            "Intended: " + i2s(game_fps) + " FPS"
+            "Intended: " + i2s(game_fps) + " FPS",
+            1.0f, 1.0f
         );
     }
     
@@ -615,7 +616,8 @@ void gameplay::do_gameplay_logic() {
             stateh_str + "\n" +
             health_str + timer_str + "\n" +
             anim_str + "\n" +
-            vars_str
+            vars_str,
+            5.0f, 3.0f
         );
     }
     
@@ -634,7 +636,7 @@ void gameplay::do_gameplay_logic() {
                 "  Texture: " +
                 mouse_sector->texture_info.file_name;
         }
-        print_info(str);
+        print_info(str, 1.0f, 1.0f);
     }
     
     info_print_timer.tick(delta_t);

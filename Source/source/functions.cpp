@@ -655,10 +655,17 @@ string p2s(const point &p, float* z) {
 
 /* ----------------------------------------------------------------------------
  * Prints a bit of info onto the screen, for some seconds.
+ * text:           Text to print. Can use line breaks.
+ * total_duration: Total amount of time in which the text is present.
+ * fade_duration:  When closing, fade out in the last N seconds.
  */
-void print_info(const string &text) {
+void print_info(
+    const string &text, const float total_duration, const float fade_duration
+) {
     info_print_text = text;
-    info_print_timer.start();
+    info_print_duration = total_duration;
+    info_print_fade_duration = fade_duration;
+    info_print_timer.start(total_duration);
 }
 
 

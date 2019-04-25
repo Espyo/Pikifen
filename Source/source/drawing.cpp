@@ -1191,16 +1191,17 @@ void gameplay::draw_precipitation() {
 void gameplay::draw_system_stuff() {
     if(!info_print_text.empty()) {
         float alpha_mult = 1;
-        if(
-            info_print_timer.time_left <
-            INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY
-        ) {
-            alpha_mult =
-                info_print_timer.time_left /
-                (INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY);
+        if(info_print_timer.time_left < info_print_fade_duration) {
+            alpha_mult = info_print_timer.time_left / info_print_fade_duration;
         }
+        
+        size_t n_lines = split(info_print_text, "\n", true).size();
+        int fh = al_get_font_line_height(font_builtin);
+        //We add n_lines - 1 because there is a 1px gap between each line.
+        int total_height = n_lines * fh + (n_lines - 1);
+        
         al_draw_filled_rectangle(
-            0, 0, scr_w, scr_h * 0.3,
+            0, 0, scr_w, total_height + 16,
             al_map_rgba(0, 0, 0, 96 * alpha_mult)
         );
         draw_text_lines(

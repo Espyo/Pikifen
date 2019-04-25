@@ -87,10 +87,6 @@ const float GROUP_SHUFFLE_DIST = 40.0f;
 const float GROUP_SPOT_INTERVAL = 2.0f;
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
-//How long the on-screen info is printed for.
-const float INFO_PRINT_DURATION = 5.0f;
-//How long to wait before starting to fade the on-screen info.
-const float INFO_PRINT_FADE_DELAY = 1.5f;
 //Maximum number of players that can play the game.
 const size_t MAX_PLAYERS = 4;
 //How many pixels the mouse cursor moves, per second,

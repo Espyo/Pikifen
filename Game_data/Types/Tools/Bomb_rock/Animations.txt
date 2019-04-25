@@ -1,6 +1,9 @@
 animations{
 	exploding{
 		frames{
+			flash{
+				duration=0.0500
+			}
 			exploding1{
 				duration=0.0500
 			}
@@ -350,6 +353,32 @@ sprites{
 				hazards=explosion
 				knockback_outward=true
 				knockback=3.0000
+			}
+		}
+	}
+	flash{
+		file=Smack.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=4.0000 4.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			explosion{
+				coords=0.0000 0.0000 0.0000
+				height=28.0000
+				radius=14.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
 			}
 		}
 	}

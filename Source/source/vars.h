@@ -271,6 +271,8 @@ extern hud_item_manager hud_items;
 extern float hud_coords[N_HUD_ITEMS][4];
 extern ALLEGRO_TRANSFORM identity_transform;
 extern float idle_task_range;
+extern float info_print_duration;
+extern float info_print_fade_duration;
 extern string info_print_text;
 extern timer info_print_timer;
 extern bool intended_scr_fullscreen;

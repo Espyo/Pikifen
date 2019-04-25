@@ -179,10 +179,12 @@ hud_item_manager hud_items(N_HUD_ITEMS);
 float hud_coords[N_HUD_ITEMS][4];
 ALLEGRO_TRANSFORM identity_transform;
 float idle_task_range = 50;
+float info_print_duration = 5.0f;
+float info_print_fade_duration = 3.0f;
 string info_print_text;
 timer info_print_timer =
     timer(
-        INFO_PRINT_DURATION,
+        1.0f,
 [] () { info_print_text.clear(); }
     );
 bool intended_scr_fullscreen = DEF_SCR_FULLSCREEN;

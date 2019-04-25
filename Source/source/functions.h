@@ -104,7 +104,11 @@ ALLEGRO_COLOR interpolate_color(
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2
 );
 void log_error(string s, data_node* d = NULL);
-void print_info(const string &t);
+void print_info(
+    const string &text,
+    const float total_duration = 5.0f,
+    const float fade_duration = 3.0f
+);
 vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
     const string &patterns, const int mode
