@@ -673,7 +673,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         }
         
         if(
-            m2_ptr->health == 0 && m_ptr->near_reach != INVALID &&
+            m2_ptr->health != 0 && m_ptr->near_reach != INVALID &&
             !m2_ptr->has_invisibility_status
         ) {
             process_mob_reaches(
@@ -874,36 +874,34 @@ void gameplay::process_mob_touches(
             
             sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
             
-            if(d <= m_ptr->type->radius + s2_ptr->hitbox_span) {
-                for(size_t h = 0; h < s2_ptr->hitboxes.size(); ++h) {
-                    hitbox* h_ptr = &s2_ptr->hitboxes[h];
-                    if(h_ptr->type == HITBOX_TYPE_DISABLED) continue;
-                    point h_pos(
-                        m2_ptr->pos.x + (
-                            h_ptr->pos.x * m2_ptr->angle_cos -
-                            h_ptr->pos.y * m2_ptr->angle_sin
-                        ),
-                        m2_ptr->pos.y + (
-                            h_ptr->pos.x * m2_ptr->angle_sin +
-                            h_ptr->pos.y * m2_ptr->angle_cos
-                        )
-                    );
-                    //It's more optimized to get the hitbox position here
-                    //instead of calling hitbox::get_cur_pos because
-                    //we already know the sine and cosine, so they don't
-                    //need to be re-calculated.
-                    
-                    dist hd(m_ptr->pos, h_pos);
-                    if(hd < m_ptr->type->radius + h_ptr->radius) {
-                        float p =
-                            fabs(
-                                hd.to_float() - m_ptr->type->radius -
-                                h_ptr->radius
-                            );
-                        if(push_amount == 0 || p > push_amount) {
-                            push_amount = p;
-                            push_angle = get_angle(h_pos, m_ptr->pos);
-                        }
+            for(size_t h = 0; h < s2_ptr->hitboxes.size(); ++h) {
+                hitbox* h_ptr = &s2_ptr->hitboxes[h];
+                if(h_ptr->type == HITBOX_TYPE_DISABLED) continue;
+                point h_pos(
+                    m2_ptr->pos.x + (
+                        h_ptr->pos.x * m2_ptr->angle_cos -
+                        h_ptr->pos.y * m2_ptr->angle_sin
+                    ),
+                    m2_ptr->pos.y + (
+                        h_ptr->pos.x * m2_ptr->angle_sin +
+                        h_ptr->pos.y * m2_ptr->angle_cos
+                    )
+                );
+                //It's more optimized to get the hitbox position here
+                //instead of calling hitbox::get_cur_pos because
+                //we already know the sine and cosine, so they don't
+                //need to be re-calculated.
+                
+                dist hd(m_ptr->pos, h_pos);
+                if(hd < m_ptr->type->radius + h_ptr->radius) {
+                    float p =
+                        fabs(
+                            hd.to_float() - m_ptr->type->radius -
+                            h_ptr->radius
+                        );
+                    if(push_amount == 0 || p > push_amount) {
+                        push_amount = p;
+                        push_angle = get_angle(h_pos, m_ptr->pos);
                     }
                 }
             }
@@ -1063,8 +1061,7 @@ void gameplay::process_mob_touches(
     if(
         (hitbox_touch_n_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) &&
         s1_ptr && s2_ptr &&
-        !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty() &&
-        d < s1_ptr->hitbox_span + s2_ptr->hitbox_span
+        !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty()
     ) {
     
         bool reported_n_ev = false;

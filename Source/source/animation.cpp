@@ -89,8 +89,7 @@ sprite::sprite(const sprite &s2) :
     top_angle(s2.top_angle),
     top_visible(s2.top_visible),
     bitmap(NULL),
-    hitboxes(s2.hitboxes),
-    hitbox_span(s2.hitbox_span) {
+    hitboxes(s2.hitboxes) {
     
     set_bitmap(file, file_pos, file_size);
 }
@@ -101,21 +100,6 @@ sprite::sprite(const sprite &s2) :
  */
 sprite::~sprite() {
     set_bitmap("", point(), point());
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates the span of the hitboxes.
- */
-void sprite::calculate_hitbox_span() {
-    hitbox_span = 0;
-    for(size_t h = 0; h < hitboxes.size(); ++h) {
-        hitbox* h_ptr = &hitboxes[h];
-        
-        float d = dist(point(0, 0), h_ptr->pos).to_float();
-        d += h_ptr->radius;
-        hitbox_span = max(hitbox_span, d);
-    }
 }
 
 

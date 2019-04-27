@@ -59,9 +59,6 @@ class animation_database;
  * A sprite in a spritesheet.
  */
 class sprite {
-private:
-    void calculate_hitbox_span();
-    
 public:
     string name;
     //Parent bitmap, normally a spritesheet.
@@ -91,8 +88,6 @@ public:
     ALLEGRO_BITMAP* bitmap;
     //List of hitboxes on this frame.
     vector<hitbox> hitboxes;
-    //How far the hitboxes span from the center.
-    float hitbox_span;
     
     sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,

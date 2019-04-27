@@ -1255,7 +1255,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
             ((leader*) holding_ptr)->lea_type->throw_strength_mult;
     }
     
-    //Regular Pikmin are thrown about 288.88 units high.
+    //Regular Pikmin are thrown about 271 units high.
     holding_ptr->speed.x =
         cos(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
