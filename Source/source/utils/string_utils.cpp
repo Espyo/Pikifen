@@ -9,6 +9,8 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
+#include <assert.h>
+
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
@@ -18,10 +20,18 @@
 /* ----------------------------------------------------------------------------
  * Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
+ * s:        String to box.
+ * size:     Maximum size of the return string.
+ * finisher: This comes after s and before the padding (if any). This must
+ *   always be present, even if that means that s needs to get truncated.
  */
-string box_string(const string &s, const size_t size) {
-    string spaces = string(size, ' ');
-    return (s + spaces).substr(0, size);
+string box_string(const string &s, const size_t size, const string &finisher) {
+    assert(size > finisher.size());
+    size_t core_size = min(s.size(), size - finisher.size());
+    return
+        s.substr(0, core_size) +
+        finisher +
+        string(size - core_size - finisher.size(), ' ');
 }
 
 

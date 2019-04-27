@@ -321,6 +321,9 @@ void gameplay::load() {
         );
     }
     
+    framerate_last_avg_point = 0;
+    framerate_history.clear();
+    
 }
 
 

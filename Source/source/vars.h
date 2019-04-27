@@ -246,8 +246,8 @@ extern unsigned int font_counter_h;
 extern unsigned int font_main_h;
 //Font for the carrying / money values.
 extern ALLEGRO_FONT* font_value;
-extern unsigned int framerate_counter;
-extern timer framerate_update_timer;
+extern vector<float> framerate_history;
+extern size_t framerate_last_avg_point;
 extern int game_fps;
 extern string game_name;
 extern map<size_t, game_state*> game_states;
@@ -366,7 +366,7 @@ extern unsigned char ship_beam_ring_color[3];
 extern bool ship_beam_ring_color_up[3];
 extern map<string, ship_type*> ship_types;
 extern vector<ship*> ships;
-extern bool show_framerate;
+extern bool show_system_info;
 //If false, images that are scaled up and down will look pixelated.
 extern bool smooth_scaling;
 extern single_animation_suite spark_animation;

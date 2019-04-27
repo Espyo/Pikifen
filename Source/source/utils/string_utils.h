@@ -20,7 +20,9 @@ using namespace std;
 //Converts an integer (or long) to a string.
 #define i2s(n) to_string((long long) (n))
 
-string box_string(const string &s, const size_t size);
+string box_string(
+    const string &s, const size_t size, const string &finisher = ""
+);
 string b2s(const bool b);
 string f2s(const float f);
 bool is_number(const string &s);

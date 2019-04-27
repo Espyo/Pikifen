@@ -422,12 +422,6 @@ void init_misc() {
     };
     cursor_save_timer.start();
     
-    framerate_update_timer.on_end = [] () {
-        framerate_update_timer.start();
-        framerate_counter = round(1.0 / delta_t);
-    };
-    framerate_update_timer.start();
-    
     group_move_next_arrow_timer.on_end = [] () {
         group_move_next_arrow_timer.start();
         group_move_arrows.push_back(0);

@@ -38,7 +38,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         
-            show_framerate = !show_framerate;
+            show_system_info = !show_system_info;
             
         } else if(
             creator_tools_enabled &&

@@ -542,63 +542,132 @@ void gameplay::do_gameplay_logic() {
     hud_items.tick(delta_t);
     replay_timer.tick(delta_t);
     
-    //Print framerate.
-    if(show_framerate) {
-        framerate_update_timer.tick(delta_t);
+    //Process and print framerate and system info.
+    if(show_system_info) {
+    
+        framerate_history.push_back(1.0 / delta_t);
+        if(framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
+            framerate_history.erase(framerate_history.begin());
+        }
+        
+        framerate_last_avg_point++;
+        
+        float sample_avg;
+        
+        if(framerate_last_avg_point >= FRAMERATE_AVG_SAMPLE_SIZE) {
+            //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
+            //If we can fit a sample of this size using the most recent
+            //unsampled frames, then use those. Otherwise, keep using the last
+            //block, which starts at framerate_last_avg_point.
+            //This makes it so the average stays the same for a bit of time,
+            //so the player can actually read it.
+            if(framerate_last_avg_point > FRAMERATE_AVG_SAMPLE_SIZE * 2) {
+                framerate_last_avg_point = FRAMERATE_AVG_SAMPLE_SIZE;
+            }
+            float sample_avg_sum = 0;
+            size_t sample_avg_point_count = 0;
+            size_t sample_size =
+                min(
+                    (size_t) FRAMERATE_AVG_SAMPLE_SIZE,
+                    framerate_history.size()
+                );
+                
+            for(size_t f = 0; f < sample_size; ++f) {
+                size_t idx =
+                    framerate_history.size() - framerate_last_avg_point + f;
+                sample_avg_sum += framerate_history[idx];
+                sample_avg_point_count++;
+            }
+            
+            sample_avg = sample_avg_sum / (float) sample_avg_point_count;
+            
+        } else {
+            //If there are less than FRAMERATE_AVG_SAMPLE_SIZE frames in
+            //the history, the average will change every frame until we get
+            //that. This defeats the purpose of a smoothly-updating number,
+            //so until that requirement is filled, let's stick to the oldest
+            //record.
+            sample_avg = framerate_history[0];
+            
+        }
+        
+        string fps_str =
+            box_string(f2s(sample_avg), 12, " avg, ") +
+            box_string(f2s(1.0 / delta_t), 12, " now, ") +
+            i2s(game_fps) + " intended";
+        string n_mobs_str =
+            box_string(i2s(mobs.size()), 7);
+        string n_particles_str =
+            box_string(i2s(particles.get_count()), 7);
+        string resolution_str =
+            i2s(scr_w) + "x" + i2s(scr_h);
+        string area_v_str =
+            cur_area_data.version;
+        string area_creator_str =
+            cur_area_data.creator;
+        string engine_v_str =
+            i2s(VERSION_MAJOR) + "." +
+            i2s(VERSION_MINOR) + "." +
+            i2s(VERSION_REV);
+        string game_v_str =
+            game_version;
+            
         print_info(
-            "Average:  " + i2s(framerate_counter) + " FPS\n\n"
-            "Now:      " + f2s(1.0 / delta_t) + " FPS\n"
-            "Intended: " + i2s(game_fps) + " FPS",
+            "FPS: " + fps_str +
+            "\n"
+            "Mobs: " + n_mobs_str + " Particles: " + n_particles_str +
+            "\n"
+            "Resolution: " + resolution_str +
+            "\n"
+            "Area version " + area_v_str + ", by " + area_creator_str +
+            "\n"
+            "Pikifen version " + engine_v_str +
+            ", game version " + game_v_str,
             1.0f, 1.0f
         );
+        
+    } else {
+        framerate_last_avg_point = 0;
+        framerate_history.clear();
     }
     
     //Print info on a mob.
     if(creator_tool_info_lock) {
         string name_str =
-            box_string("Mob: " + creator_tool_info_lock->type->name, 30);
+            box_string(creator_tool_info_lock->type->name, 26);
         string coords_str =
             box_string(
-                "Coords: " +
-                box_string(f2s(creator_tool_info_lock->pos.x), 7) + " " +
-                box_string(f2s(creator_tool_info_lock->pos.y), 7) + " " +
+                box_string(f2s(creator_tool_info_lock->pos.x), 8, " ") +
+                box_string(f2s(creator_tool_info_lock->pos.y), 8, " ") +
                 box_string(f2s(creator_tool_info_lock->z), 7),
-                30
+                23
             );
-        string stateh_str =
-            "State hist.: " +
+        string state_h_str =
             (
                 creator_tool_info_lock->fsm.cur_state ?
                 creator_tool_info_lock->fsm.cur_state->name :
                 "(None!)"
             );
         for(unsigned char p = 0; p < STATE_HISTORY_SIZE; ++p) {
-            stateh_str +=
-                ", " + creator_tool_info_lock->fsm.prev_state_names[p];
+            state_h_str +=
+                " " + creator_tool_info_lock->fsm.prev_state_names[p];
         }
         string anim_str =
-            box_string(
-                "Animation: " +
-                (creator_tool_info_lock->anim.cur_anim ?
-                 creator_tool_info_lock->anim.cur_anim->name :
-                 "(None!)"),
-                60
-            );
+            creator_tool_info_lock->anim.cur_anim ?
+            creator_tool_info_lock->anim.cur_anim->name :
+            "(None!)";
         string health_str =
             box_string(
-                "Health: " +
-                f2s(creator_tool_info_lock->health) +
+                box_string(f2s(creator_tool_info_lock->health), 6) +
                 " / " +
-                f2s(creator_tool_info_lock->type->max_health),
-                30
+                box_string(
+                    f2s(creator_tool_info_lock->type->max_health), 6
+                ),
+                23
             );
         string timer_str =
-            box_string(
-                "Timer: " +
-                f2s(creator_tool_info_lock->script_timer.time_left),
-                30
-            );
-        string vars_str = "Vars: ";
+            f2s(creator_tool_info_lock->script_timer.time_left);
+        string vars_str;
         if(!creator_tool_info_lock->vars.empty()) {
             for(
                 auto v = creator_tool_info_lock->vars.begin();
@@ -608,15 +677,20 @@ void gameplay::do_gameplay_logic() {
             }
             vars_str.erase(vars_str.size() - 2, 2);
         } else {
-            vars_str += "(None)";
+            vars_str = "(None)";
         }
         
         print_info(
-            name_str + coords_str + "\n" +
-            stateh_str + "\n" +
-            health_str + timer_str + "\n" +
-            anim_str + "\n" +
-            vars_str,
+            "Mob: " + name_str +
+            "Coords: " + coords_str +
+            "\n"
+            "Last states: " + state_h_str +
+            "\n"
+            "Animation: " + anim_str +
+            "\n"
+            "Health: " + health_str + " Timer: " + timer_str +
+            "\n"
+            "Vars: " + vars_str,
             5.0f, 3.0f
         );
     }
@@ -625,17 +699,42 @@ void gameplay::do_gameplay_logic() {
     if(creator_tool_geometry_info) {
         sector* mouse_sector =
             get_sector(mouse_cursor_w, NULL, true);
-        string str =
-            "Mouse coordinates: " + f2s(mouse_cursor_w.x) +
-            ", " + f2s(mouse_cursor_w.y) + "\n"
-            "Sector under mouse: " +
-            (mouse_sector ? "" : "None") + "\n";
+            
+        string coords_str =
+            box_string(f2s(mouse_cursor_w.x), 6) + " " +
+            box_string(f2s(mouse_cursor_w.y), 6);
+        string blockmap_str =
+            box_string(
+                i2s(cur_area_data.bmap.get_col(mouse_cursor_w.x)), 5, " "
+            ) +
+            i2s(cur_area_data.bmap.get_row(mouse_cursor_w.y));
+        string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
-            str +=
-                "  Z: " + f2s(mouse_sector->z) + "\n"
-                "  Texture: " +
+            sector_z_str =
+                box_string(f2s(mouse_sector->z), 6);
+            sector_light_str =
+                box_string(i2s(mouse_sector->brightness), 3);
+            sector_tex_str =
                 mouse_sector->texture_info.file_name;
         }
+        
+        string str =
+            "Mouse coords: " + coords_str +
+            "\n"
+            "Blockmap under mouse: " + blockmap_str +
+            "\n"
+            "Sector under mouse: ";
+            
+        if(mouse_sector) {
+            str +=
+                "\n"
+                "  Z: " + sector_z_str + " Light: " + sector_light_str +
+                "\n"
+                "  Texture: " + sector_tex_str;
+        } else {
+            str += "None";
+        }
+        
         print_info(str, 1.0f, 1.0f);
     }
     

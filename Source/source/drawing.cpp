@@ -1209,6 +1209,28 @@ void gameplay::draw_system_stuff() {
             point(8, 8), 0, 0, info_print_text
         );
     }
+    
+    if(show_system_info) {
+        //Draw the framerate chart.
+        al_draw_filled_rectangle(
+            scr_w - FRAMERATE_HISTORY_SIZE, 0,
+            scr_w, 100,
+            al_map_rgba(0, 0, 0, 192)
+        );
+        for(size_t f = 0; f < framerate_history.size(); ++f) {
+            al_draw_line(
+                scr_w - FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
+                scr_w - FRAMERATE_HISTORY_SIZE + f + 0.5,
+                round(framerate_history[f]),
+                al_map_rgba(24, 96, 192, 192), 1
+            );
+        }
+        al_draw_line(
+            scr_w - FRAMERATE_HISTORY_SIZE, game_fps,
+            scr_w, game_fps,
+            al_map_rgba(128, 224, 128, 48), 1
+        );
+    }
 }
 
 
