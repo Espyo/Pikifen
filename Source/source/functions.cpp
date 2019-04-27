@@ -149,17 +149,53 @@ void crash(const string &reason, const string &info, const int exit_status) {
             delta_t == 0.0f ? "0" :
             f2s(delta_t) + " (" + f2s(1 / delta_t) + " FPS)"
         ) + ".\n"
-        "  Mob count: " + i2s(mobs.size()) + ". "
-        "Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
-        i2s(bitmaps.get_total_calls()) + " total calls).";
+        "  Mob count: " + i2s(mobs.size()) + ". Particle count: " +
+        i2s(particles.get_count()) + ".\n" +
+        "  Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
+        i2s(bitmaps.get_total_calls()) + " total calls).\n" +
+        "  Current leader: " ;
         
+    if(cur_leader_ptr) {
+        error_str +=
+            cur_leader_ptr->type->name + ", at " +
+            p2s(cur_leader_ptr->pos) + ", state history: " +
+            cur_leader_ptr->fsm.cur_state->name;
+        for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
+            error_str += " " + cur_leader_ptr->fsm.prev_state_names[h];
+        }
+        error_str += "\n  10 closest Pikmin to that leader:\n";
+        
+        vector<pikmin*> closest_pikmin = pikmin_list;
+        sort(
+            closest_pikmin.begin(), closest_pikmin.end(),
+        [] (pikmin * p1, pikmin * p2) -> bool {
+            return
+            dist(cur_leader_ptr->pos, p1->pos).to_float() <
+            dist(cur_leader_ptr->pos, p2->pos).to_float();
+        }
+        );
+        
+        for(size_t p = 0; p < min(closest_pikmin.size(), (size_t) 10); ++p) {
+            error_str +=
+                "    " + closest_pikmin[p]->type->name + ", at " +
+                p2s(closest_pikmin[p]->pos) + ", history: " +
+                closest_pikmin[p]->fsm.cur_state->name;
+            for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
+                error_str += " " + closest_pikmin[p]->fsm.prev_state_names[h];
+            }
+            error_str += "\n";
+        }
+    } else {
+        error_str += "none.";
+    }
+    
     log_error(error_str);
     
     show_message_box(
         NULL, "Program crash!",
         "Pikifen has crashed!",
-        "Sorry about that! Please read the readme file to know what you "
-        "can do to help me fix it. Thanks!",
+        "Sorry about that! To help me fix it,"
+        "please read the readme file. Thanks!",
         NULL,
         ALLEGRO_MESSAGEBOX_ERROR
     );
