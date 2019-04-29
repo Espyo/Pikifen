@@ -2356,7 +2356,10 @@ vector<path_stop*> dijkstra(
     //Total obstacles found.
     unordered_set<mob*> total_obstacles;
     
+    
     //Initialize the algorithm.
+    unvisited.reserve(cur_area_data.path_stops.size());
+    
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);

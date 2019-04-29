@@ -1177,44 +1177,15 @@ void gameplay::process_mob_touches(
                 hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
                 if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
-                //Check if m2 is under any status effect
-                //that disables attacks.
-                bool disable_attack_status = false;
-                for(
-                    size_t s = 0;
-                    s < m2_ptr->statuses.size(); ++s
-                ) {
-                    if(m2_ptr->statuses[s].type->disables_attack) {
-                        disable_attack_status = true;
-                        break;
-                    }
-                }
-                
                 //Get the real hitbox locations.
-                point m1_h_pos(
-                    m_ptr->pos.x + (
-                        h1_ptr->pos.x * m_ptr->angle_cos -
-                        h1_ptr->pos.y * m_ptr->angle_sin
-                    ),
-                    m_ptr->pos.y + (
-                        h1_ptr->pos.x * m_ptr->angle_sin +
-                        h1_ptr->pos.y * m_ptr->angle_cos
-                    )
-                );
-                point m2_h_pos(
-                    m2_ptr->pos.x + (
-                        h2_ptr->pos.x * m2_ptr->angle_cos -
-                        h2_ptr->pos.y * m2_ptr->angle_sin
-                    ),
-                    m2_ptr->pos.y + (
-                        h2_ptr->pos.x * m2_ptr->angle_sin +
-                        h2_ptr->pos.y * m2_ptr->angle_cos
-                    )
-                );
-                //It's more optimized to get the hitbox positions here
-                //instead of calling hitbox::get_cur_pos because
-                //we already know the sin and cosine, so they don't
-                //need to be re-calculated.
+                point m1_h_pos =
+                    h1_ptr->get_cur_pos(
+                        m_ptr->pos, m_ptr->angle_cos, m_ptr->angle_sin
+                    );
+                point m2_h_pos =
+                    h2_ptr->get_cur_pos(
+                        m2_ptr->pos, m2_ptr->angle_cos, m2_ptr->angle_sin
+                    );
                 float m1_h_z = m_ptr->z + h1_ptr->z;
                 float m2_h_z = m2_ptr->z + h2_ptr->z;
                 
@@ -1298,6 +1269,16 @@ void gameplay::process_mob_touches(
                     //Should this mob even attack this other mob?
                     if(!m2_ptr->can_damage(m_ptr)) {
                         continue;
+                    }
+                }
+                
+                //Check if m2 is under any status effect
+                //that disables attacks.
+                bool disable_attack_status = false;
+                for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
+                    if(m2_ptr->statuses[s].type->disables_attack) {
+                        disable_attack_status = true;
+                        break;
                     }
                 }
                 

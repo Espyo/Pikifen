@@ -1006,32 +1006,47 @@ unsigned char area_editor::find_problems() {
                 )
             ) {
             
+                if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
+                    continue;
+                }
+                
+                sector* mob_sector = get_sector(m_ptr->pos, NULL, false);
+                
                 bool in_wall = false;
                 
-                if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) in_wall = true;
-                else {
-                    if(
-                        e_ptr->sectors[0]->z >
-                        e_ptr->sectors[1]->z + SECTOR_STEP
-                    ) {
-                        in_wall = true;
-                    }
-                    if(
-                        e_ptr->sectors[1]->z >
-                        e_ptr->sectors[0]->z + SECTOR_STEP
-                    ) {
-                        in_wall = true;
-                    }
-                    if(
-                        e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
-                    ) {
-                        in_wall = true;
-                    }
-                    if(
-                        e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
-                    ) {
-                        in_wall = true;
-                    }
+                if(
+                    !e_ptr->sectors[0] || !e_ptr->sectors[1]
+                ) {
+                    //Either sector is the void, definitely stuck.
+                    in_wall = true;
+                    
+                } else if(
+                    e_ptr->sectors[0] != mob_sector &&
+                    e_ptr->sectors[1] != mob_sector
+                ) {
+                    //It's intersecting with two sectors that aren't
+                    //even the sector it's on? Definitely inside wall.
+                    in_wall = true;
+                    
+                } else if(
+                    e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
+                    e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
+                ) {
+                    //If either sector's of the blocking type, definitely stuck.
+                    in_wall = true;
+                    
+                } else if(
+                    e_ptr->sectors[0] == mob_sector &&
+                    e_ptr->sectors[1]->z > mob_sector->z
+                ) {
+                    in_wall = true;
+                    
+                } else if(
+                    e_ptr->sectors[1] == mob_sector &&
+                    e_ptr->sectors[0]->z > mob_sector->z
+                ) {
+                    in_wall = true;
+                    
                 }
                 
                 if(in_wall) {

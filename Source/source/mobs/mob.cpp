@@ -1106,8 +1106,9 @@ void mob::focus_on_mob(mob* m) {
  * speed:                 Speed at which to travel. -1 uses the mob's speed.
  * final_target_distance: For the final chase, from the last path stop to
  *   the destination, use this for the target distance parameter.
+ * Returns whether or not there is a path available.
  */
-void mob::follow_path(
+bool mob::follow_path(
     const point &target, const bool can_continue,
     const float speed, const float final_target_distance
 ) {
@@ -1148,7 +1149,10 @@ void mob::follow_path(
             path_info->path[path_info->cur_path_stop_nr]->pos,
             NULL, false, NULL, true, 3.0f, speed
         );
+    } else {
+        return false;
     }
+    return true;
 }
 
 

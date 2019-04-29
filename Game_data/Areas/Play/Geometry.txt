@@ -3029,8 +3029,8 @@ mobs{
 	}
 	Enemy{
 		type=Fiery Blowhog
-		p=-672.0000 -608.0000
-		angle=1.8900
+		p=-864.0000 -608.0000
+		angle=2.2143
 	}
 	Custom{
 		type=Fire geyser

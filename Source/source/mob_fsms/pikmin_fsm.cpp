@@ -2183,13 +2183,18 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
     mob* carried_mob = (mob*) info1;
     
-    p_ptr->follow_path(
-        carried_mob->carry_info->return_point,
-        false,
-        p_ptr->get_base_speed(),
-        carried_mob->carry_info->return_dist
-    );
-    p_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    if(
+        p_ptr->follow_path(
+            carried_mob->carry_info->return_point,
+            false,
+            p_ptr->get_base_speed(),
+            carried_mob->carry_info->return_dist
+        )
+    ) {
+        p_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    } else {
+        p_ptr->fsm.set_state(PIKMIN_STATE_IDLING);
+    }
 }
 
 
