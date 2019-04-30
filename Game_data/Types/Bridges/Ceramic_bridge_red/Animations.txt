@@ -16,9 +16,10 @@ animations{
 }
 sprites{
 	idling{
-		file
+		file=Ceramic_bridge_red.png
 		file_pos=0.0000 0.0000
-		file_size=0.0000 0.0000
+		file_size=48.0000 192.0000
+		offset=-24.0000 0.0000
 	}
 }
 body_parts

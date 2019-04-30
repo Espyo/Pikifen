@@ -2630,7 +2630,7 @@ void area_editor::load() {
     frm_toolbar->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget * w, int, int) {
         if(!check_new_unsaved_changes(w)) {
-            area_editor_quick_play.clear();
+            area_editor_quick_play_area.clear();
             leave();
         }
     };
@@ -2659,8 +2659,10 @@ void area_editor::load() {
         
     frm_toolbar->widgets["but_play"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        area_editor_quick_play = cur_area_name;
         if(!save_area(false)) return;
+        area_editor_quick_play_area = cur_area_name;
+        area_editor_quick_play_cam_pos = cam_pos;
+        area_editor_quick_play_cam_z = cam_zoom;
         leave();
     };
     frm_toolbar->widgets["but_play"]->description =
@@ -2749,13 +2751,17 @@ void area_editor::load() {
     load_mob_types(false);
     load_weather();
     
-    if(!area_editor_quick_play.empty()) {
-        cur_area_name = area_editor_quick_play;
-        area_editor_quick_play.clear();
+    if(!area_editor_quick_play_area.empty()) {
+        cur_area_name = area_editor_quick_play_area;
+        area_editor_quick_play_area.clear();
         load_area(false);
+        cam_pos = area_editor_quick_play_cam_pos;
+        cam_zoom = area_editor_quick_play_cam_z;
+        
     } else if(!auto_load_area.empty()) {
         cur_area_name = auto_load_area;
         load_area(false);
+        
     }
     
 }
