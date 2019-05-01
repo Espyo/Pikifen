@@ -310,6 +310,7 @@ public:
     mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
     void start_dying();
     void finish_dying();
+    void process_focused_mob();
     void respawn();
     hitbox* get_hitbox(const size_t nr);
     hitbox* get_closest_hitbox(
