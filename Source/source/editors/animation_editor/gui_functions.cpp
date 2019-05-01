@@ -727,6 +727,11 @@ void animation_editor::open_picker(
         id == PICKER_RENAME_ANIMATION
     ) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
+            if(
+                id == PICKER_IMPORT_ANIMATION
+            ) {
+                if(anims.animations[a] == cur_anim) continue;
+            }
             elements.push_back(make_pair("", anims.animations[a]->name));
         }
         title = "Choose an animation.";

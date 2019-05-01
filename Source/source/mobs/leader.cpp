@@ -581,7 +581,15 @@ void leader::tick_class_specifics() {
         }
     }
     
-    
+    if(health <= 0 && group) {
+        while(!group->members.empty()) {
+            group->members[0]->fsm.run_event(
+                MOB_EVENT_DISMISSED,
+                (void*) & (group->members[0]->pos)
+            );
+            group->members[0]->leave_group();
+        }
+    }
 }
 
 
