@@ -1006,7 +1006,10 @@ unsigned char area_editor::find_problems() {
                 )
             ) {
             
-                if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
+                if(
+                    e_ptr->sectors[0] && e_ptr->sectors[1] &&
+                    e_ptr->sectors[0]->z == e_ptr->sectors[1]->z
+                ) {
                     continue;
                 }
                 
@@ -1647,6 +1650,30 @@ void area_editor::finish_layout_moving() {
         return;
     }
     
+    //If there's a vertex between any dragged vertex and its merge, and this
+    //vertex was meant to be a merge destination itself, then don't do it.
+    //When the first merge happens, this vertex will be gone, and we'll be
+    //unable to use it for the second merge. There are no plans to support
+    //this complex corner case, so abort!
+    for(auto m = merges.begin(); m != merges.end(); ++m) {
+        vertex* crushed_vertex = NULL;
+        if(m->first->is_2nd_degree_neighbor(m->second, &crushed_vertex)) {
+        
+            for(auto m2 = merges.begin(); m2 != merges.end(); ++m2) {
+                if(m2->second == crushed_vertex) {
+                    emit_status_bar_message(
+                        "That move would crush an edge that's in the middle!",
+                        true
+                    );
+                    cancel_layout_moving();
+                    forget_prepared_state(pre_move_area_data);
+                    pre_move_area_data = NULL;
+                    return;
+                }
+            }
+        }
+    }
+    
     //Merge vertexes and split edges now.
     for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
         merges[v->first] =
@@ -1663,7 +1690,7 @@ void area_editor::finish_layout_moving() {
         }
     }
     for(auto m = merges.begin(); m != merges.end(); ++m) {
-        merge_vertex(m->second, m->first, &merge_affected_sectors);
+        merge_vertex(m->first, m->second, &merge_affected_sectors);
     }
     
     affected_sectors.insert(
@@ -1686,6 +1713,10 @@ void area_editor::finish_layout_moving() {
             non_simples[*s] = triangulation_error;
             last_triangulation_error = triangulation_error;
         }
+        
+        get_sector_bounding_box(
+            *s, &((*s)->bbox[0]), &((*s)->bbox[1])
+        );
     }
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
@@ -2575,7 +2606,7 @@ void area_editor::merge_vertex(
                         );
                     }
                     
-                    //Go to the edge's old vertexes and sextors
+                    //Go to the edge's old vertexes and sectors
                     //and tell them that it no longer exists.
                     e_ptr->remove_from_vertexes();
                     e_ptr->remove_from_sectors();
@@ -3643,6 +3674,7 @@ void area_editor::undo() {
     undo_history.pop_front();
     
     undo_save_lock_timer.stop();
+    undo_save_lock_operation.clear();
     update_undo_history();
     
     clear_selection();
@@ -3820,7 +3852,7 @@ void area_editor::update_undo_history() {
         disable_widget(b);
     } else {
         enable_widget(b);
-        b->description = "Undo: " + undo_history[0].second + ".";
+        b->description = "Undo: " + undo_history[0].second + ". (Ctrl+Z)";
         update_status_bar();
     }
 }

@@ -95,7 +95,7 @@ struct blockmap {
 
 /* ----------------------------------------------------------------------------
  * A line segment that delimits a sector -- an edge of a polygon.
- * In Doom, these are what's known as linedefs.
+ * In DOOM, these are what's known as linedefs.
  */
 struct edge {
     vertex* vertexes[2];
@@ -173,7 +173,7 @@ struct sector_texture_info {
 
 
 /* ----------------------------------------------------------------------------
- * A sector, like the ones in Doom.
+ * A sector, like the ones in DOOM.
  * It's composed of edges (linedefs), so it's essentially
  * a polygon. It has a certain height, and its appearance
  * is determined by its floors.
@@ -237,6 +237,7 @@ struct vertex {
     void add_edge(edge* e_ptr, const size_t e_nr);
     edge* get_edge_by_neighbor(vertex* neighbor);
     bool has_edge(edge* e_ptr);
+    bool is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor);
     void remove_edge(edge* e_ptr);
 };
 

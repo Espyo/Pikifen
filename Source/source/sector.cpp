@@ -806,6 +806,8 @@ void area_data::clone(area_data &other) {
                 )
             );
         }
+        os_ptr->bbox[0] = s_ptr->bbox[0];
+        os_ptr->bbox[1] = s_ptr->bbox[1];
     }
     
     for(size_t m = 0; m < mob_generators.size(); ++m) {
@@ -1071,7 +1073,7 @@ void sector::add_edge(edge* e_ptr, const size_t e_nr) {
 
 /* ----------------------------------------------------------------------------
  * Clones a sector's properties onto another,
- * not counting the list of edges or bitmap
+ * not counting the list of edges, bounding box, or bitmap
  * (the file name is cloned too, though).
  */
 void sector::clone(sector* new_sector) {
@@ -1088,8 +1090,6 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.tint = texture_info.tint;
     new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
-    new_sector->bbox[0] = bbox[0];
-    new_sector->bbox[1] = bbox[1];
 }
 
 
@@ -1401,6 +1401,32 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
 bool vertex::has_edge(edge* e_ptr) {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e] == e_ptr) return true;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not this vertex is a second-degree neighbor to the
+ * specified vertex. i.e. they have a shared neighbor between them.
+ * other_v:        The vertex to compare against.
+ * first_neighbor: Return the common neighbor between them here,
+ *   if the result is true.
+ */
+bool vertex::is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor) {
+    //Let's crawl forward through all edges and stop at the second level.
+    //If there is any other_v at that distance, then we found it!
+    
+    for(size_t e1 = 0; e1 < edges.size(); ++e1) {
+        vertex* next_v = edges[e1]->get_other_vertex(this);
+        
+        for(size_t e2 = 0; e2 < next_v->edges.size(); ++e2) {
+            if(next_v->edges[e2]->get_other_vertex(next_v) == other_v) {
+                *first_neighbor = next_v;
+                return true;
+            }
+        }
+        
     }
     return false;
 }
