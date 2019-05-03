@@ -355,6 +355,7 @@ bool circle_intersects_line(
 
 /* ----------------------------------------------------------------------------
  * Returns whether a circle is touching a rotated rectangle or not.
+ * This includes being completely inside the rectangle.
  * circle:               Coordinates of the circle.
  * radius:               Radius of the circle.
  * rectangle:            Central coordinates of the rectangle.
@@ -372,23 +373,69 @@ bool circle_intersects_rectangle(
     float* overlap_dist, float* rectangle_side_angle
 ) {
     point circle_rel_pos = circle - rectangle;
-    
     circle_rel_pos = rotate_point(circle_rel_pos, -rect_angle);
+    point nearest;
     
-    point nearest(
-        clamp(circle_rel_pos.x, -rect_dim.x / 2.0, rect_dim.x / 2.0),
-        clamp(circle_rel_pos.y, -rect_dim.y / 2.0, rect_dim.y / 2.0)
-    );
+    bool inside_x =
+        circle_rel_pos.x > -rect_dim.x / 2.0 &&
+        circle_rel_pos.x < rect_dim.x / 2.0;
+    bool inside_y =
+        circle_rel_pos.y > -rect_dim.y / 2.0 &&
+        circle_rel_pos.y < rect_dim.y / 2.0;
+        
+    if(inside_x && inside_y) {
+        point dist_to_pos(
+            rect_dim.x / 2.0 - circle_rel_pos.x,
+            rect_dim.y / 2.0 - circle_rel_pos.y
+        );
+        point dist_to_neg(
+            -(-rect_dim.x / 2.0 - circle_rel_pos.x),
+            -(-rect_dim.y / 2.0 - circle_rel_pos.y)
+        );
+        float smallest_x = min(dist_to_neg.x, dist_to_pos.x);
+        float smallest_y = min(dist_to_neg.y, dist_to_pos.y);
+        float smallest = min(smallest_x, smallest_y);
+        
+        if(smallest == dist_to_pos.x) {
+            nearest = point(rect_dim.x / 2, circle_rel_pos.y);
+        } else if(smallest == dist_to_neg.x) {
+            nearest = point(-rect_dim.x / 2, circle_rel_pos.y);
+        } else if(smallest == dist_to_pos.y) {
+            nearest = point(circle_rel_pos.x, rect_dim.y / 2);
+        } else if(smallest == dist_to_neg.y) {
+            nearest = point(circle_rel_pos.x, -rect_dim.y / 2);
+        }
+    } else {
+        nearest =
+            point(
+                clamp(circle_rel_pos.x, -rect_dim.x / 2.0, rect_dim.x / 2.0),
+                clamp(circle_rel_pos.y, -rect_dim.y / 2.0, rect_dim.y / 2.0)
+            );
+    }
     
     float d = dist(circle_rel_pos, nearest).to_float();
     if(overlap_dist) {
-        *overlap_dist = radius - d;
+        if(inside_x && inside_y) {
+            *overlap_dist = d + radius;
+        } else {
+            *overlap_dist = radius - d;
+        }
     }
     
     if(rectangle_side_angle) {
-        float angle = get_angle(nearest, circle_rel_pos);
+        float angle;
+        if(inside_x && inside_y) {
+            angle = get_angle(circle_rel_pos, nearest);
+        } else {
+            angle = get_angle(nearest, circle_rel_pos);
+        }
+        
         angle = floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
         *rectangle_side_angle = angle + rect_angle;
+    }
+    
+    if(inside_x && inside_y) {
+        return true;
     }
     
     return d < radius;

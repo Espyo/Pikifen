@@ -2257,7 +2257,7 @@ void mob::tick_physics() {
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
-            min(push_amount, (float) ((type->radius / delta_t) - chase_speed));
+            min(push_amount, (float) (type->radius / delta_t) * 4);
             
         //If the mob spawned recently, throttle its push. This avoids a bundle
         //of recently-spawned objects from pushing each other with insane force.
