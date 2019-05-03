@@ -23,7 +23,8 @@ tool_type::tool_type() :
     can_be_hotswapped(true),
     dropped_when_pikmin_lands(true),
     dropped_when_pikmin_lands_on_opponent(false),
-    stuck_when_pikmin_lands_on_opponent(false) {
+    stuck_when_pikmin_lands_on_opponent(false),
+    pikmin_returns_after_using(true) {
     
 }
 
@@ -48,6 +49,12 @@ void tool_type::load_parameters(data_node* file) {
         s2b(
             file->get_child_by_name(
                 "stuck_when_pikmin_lands_on_opponent"
+            )->value
+        );
+    pikmin_returns_after_using =
+        s2b(
+            file->get_child_by_name(
+                "pikmin_returns_after_using"
             )->value
         );
 }

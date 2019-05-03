@@ -1411,6 +1411,11 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
     if(too_ptr->too_type->dropped_when_pikmin_lands) {
         pikmin_fsm::release_tool(m, info1, info2);
         m->fsm.set_state(PIKMIN_STATE_IDLING);
+        
+        if(too_ptr->too_type->pikmin_returns_after_using) {
+            pikmin_fsm::called(m, NULL, NULL);
+            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        }
     } else {
         m->fsm.set_state(PIKMIN_STATE_IDLING_H);
     }
@@ -1976,6 +1981,11 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
                 too_ptr, info->h2->body_part_index,
                 h_offset_dist, h_offset_angle, true
             );
+        }
+        
+        if(too_ptr->too_type->pikmin_returns_after_using) {
+            pikmin_fsm::called(m, NULL, NULL);
+            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }
     }
 }

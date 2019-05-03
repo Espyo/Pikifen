@@ -2,10 +2,12 @@ name = Bomb rock
 
 can_be_hotswapped = true
 dropped_when_pikmin_lands = true
+dropped_when_pikmin_lands_on_opponent = true
 height = 28
 icon = Bomb_rock_icon.png
 max_health = 50
 move_speed = 0
+pikmin_returns_after_using = true
 pushable = true
 pushes = false
 radius = 14
