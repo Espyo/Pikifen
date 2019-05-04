@@ -113,7 +113,6 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to drink it.
-        leader* l_ptr = (leader*) toucher;
         if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
             will_drink = true;
         } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {

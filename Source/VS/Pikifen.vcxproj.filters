@@ -49,6 +49,24 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{31b9afe0-5f29-46b0-a323-38eeafe191d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\mob_categories">
+      <UniqueIdentifier>{d75c1922-af79-4369-a7ef-18c94f2ffa27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_categories">
+      <UniqueIdentifier>{91a3a60c-589e-4225-bd73-5b2eaf855e2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_fsms">
+      <UniqueIdentifier>{06e24fde-a75b-4364-8a0c-73979c46c475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mob_fsms">
+      <UniqueIdentifier>{f1c238fb-9e7e-46e7-85b7-ddbcfff88ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mob_types">
+      <UniqueIdentifier>{8490a873-eca1-48a8-8ab7-c9684284bea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_types">
+      <UniqueIdentifier>{b4b08773-a25f-41ba-aa0c-0620b8acd4c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\LAFI\angle_picker.h">
@@ -89,69 +107,6 @@
     </ClInclude>
     <ClInclude Include="..\source\LAFI\widget.h">
       <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\bridge.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\enemy.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\enemy_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\gate.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\gate_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\info_spot.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\leader.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\leader_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\mob.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\mob_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\nectar.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\onion.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\onion_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pellet.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pellet_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pikmin.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pikmin_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\ship.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\ship_type.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\treasure.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\treasure_type.h">
-      <Filter>Header Files\mobs</Filter>
     </ClInclude>
     <ClInclude Include="..\source\animation.h">
       <Filter>Header Files</Filter>
@@ -222,30 +177,6 @@
     <ClInclude Include="..\source\weather.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\mobs\gate_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\leader_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\mob_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\onion_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pellet_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\pikmin_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\ship_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\treasure_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\LAFI\image.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
@@ -254,15 +185,6 @@
     </ClInclude>
     <ClInclude Include="..\source\editors\editor.h">
       <Filter>Header Files\editors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\mob_category.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\bridge_fsm.h">
-      <Filter>Header Files\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\mobs\bridge_type.h">
-      <Filter>Header Files\mobs</Filter>
     </ClInclude>
     <ClInclude Include="..\source\load.h">
       <Filter>Header Files</Filter>
@@ -293,6 +215,195 @@
     </ClInclude>
     <ClInclude Include="..\source\utils\string_utils.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\bridge_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\converter_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\custom_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\decoration_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\drop_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\enemy_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\interactable_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\leader_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\mob_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\onion_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pellet_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pikmin_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pile_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\resource_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\ship_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\tool_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\treasure_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\bridge_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\converter_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\decoration_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\drop_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\gen_mob_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\leader_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\onion_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pellet_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pikmin_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pile_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\resource_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\ship_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\treasure_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\bridge_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\converter_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\decoration_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\drop_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\enemy_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\interactable_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\leader_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\mob_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\onion_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pellet_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pikmin_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pile_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\resource_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\ship_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\tool_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\treasure_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\bridge.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\converter.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\decoration.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\drop.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\enemy.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\interactable.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\leader.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\mob.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\mob_utils.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\onion.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pellet.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pikmin.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pile.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\resource.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\ship.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\tool.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\treasure.h">
+      <Filter>Header Files\mobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,69 +452,6 @@
     </ClCompile>
     <ClCompile Include="..\source\LAFI\widget.cpp">
       <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\bridge.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\enemy.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\enemy_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\gate.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\gate_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\info_spot.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\leader.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\leader_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\mob.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\mob_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\nectar.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\onion.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\onion_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pellet.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pellet_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pikmin.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pikmin_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\ship.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\ship_type.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\treasure.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\treasure_type.cpp">
-      <Filter>Source Files\mobs</Filter>
     </ClCompile>
     <ClCompile Include="..\source\animation.cpp">
       <Filter>Source Files</Filter>
@@ -468,30 +516,6 @@
     <ClCompile Include="..\source\weather.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\mobs\gate_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\leader_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\mob_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\onion_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pellet_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\pikmin_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\ship_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\treasure_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\LAFI\image.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
@@ -503,15 +527,6 @@
     </ClCompile>
     <ClCompile Include="..\source\editors\editor.cpp">
       <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\mob_category.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\bridge_fsm.cpp">
-      <Filter>Source Files\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\mobs\bridge_type.cpp">
-      <Filter>Source Files\mobs</Filter>
     </ClCompile>
     <ClCompile Include="..\source\load.cpp">
       <Filter>Source Files</Filter>
@@ -563,6 +578,195 @@
     </ClCompile>
     <ClCompile Include="..\source\utils\string_utils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\bridge_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\converter_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\custom_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\decoration_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\drop_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\enemy_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\interactable_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\leader_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\mob_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\onion_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pellet_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pikmin_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pile_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\resource_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\ship_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\tool_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\treasure_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\bridge_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\converter_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\decoration_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\drop_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\gen_mob_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\leader_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\onion_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pellet_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pikmin_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pile_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\resource_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\ship_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\treasure_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\bridge_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\converter_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\decoration_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\drop_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\enemy_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\interactable_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\leader_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\mob_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\onion_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pellet_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pikmin_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pile_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\resource_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\ship_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\tool_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\treasure_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\bridge.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\converter.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\decoration.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\drop.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\enemy.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\interactable.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\leader.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob_utils.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\onion.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pellet.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pikmin.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pile.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\resource.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\ship.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\tool.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\treasure.cpp">
+      <Filter>Source Files\mobs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -159,9 +159,6 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
  * or update its path.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
-    vector<path_stop*> old_path;
-    size_t old_path_stop_nr;
-    
     m->carry_info->is_moving = true;
     
     if(m->carry_info->intended_mob == NULL) {

@@ -656,15 +656,6 @@
     </clipPath>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rebar_shade"
-       id="linearGradient1148"
-       x1="398.4375"
-       y1="800.17468"
-       x2="402.1875"
-       y2="801.11218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#reinforced_wall_shade"
        id="linearGradient1176"
        x1="388.125"
@@ -722,9 +713,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="477.88415"
-     inkscape:cy="194.64145"
+     inkscape:zoom="1"
+     inkscape:cx="69.157444"
+     inkscape:cy="41.191843"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"

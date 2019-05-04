@@ -21,9 +21,9 @@
 pile_type::pile_type() :
     mob_type(MOB_CATEGORY_PILES),
     contents(nullptr),
-    max_amount(1),
     recharge_interval(0.0f),
     recharge_amount(0),
+    max_amount(1),
     health_per_resource(1.0f),
     can_drop_multiple(false),
     show_amount(true),

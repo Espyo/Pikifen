@@ -11,6 +11,8 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
+#include <vector>
+
 #include <allegro5/allegro.h>
 
 #include "world_component.h"

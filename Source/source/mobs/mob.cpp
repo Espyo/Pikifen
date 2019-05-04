@@ -67,13 +67,13 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     chase_target_dist(0),
     chase_speed(-1),
     reached_destination(false),
+    path_info(nullptr),
+    circling_info(nullptr),
     following_group(nullptr),
     subgroup_type_ptr(nullptr),
     group(nullptr),
     group_spot_index(INVALID),
     carry_info(nullptr),
-    path_info(nullptr),
-    circling_info(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -1403,7 +1403,6 @@ bool mob::is_off_camera() {
  * Checks if a mob is resistant to all of the hazards inside a given list.
  */
 bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
-    size_t n_matches = 0;
     for(size_t h = 0; h < hazards.size(); ++h) {
         if(get_hazard_vulnerability(hazards[h]) != 0.0f) return false;
     }
@@ -2199,7 +2198,7 @@ void mob::tick_physics() {
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
-        angle = get_angle(final_pos, holder.m->pos), NULL;
+        angle = get_angle(final_pos, holder.m->pos);
         stop_turning();
         chase(final_pos, NULL, true);
     }

@@ -1087,10 +1087,12 @@ void area_editor::do_drawing() {
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     ),
                     point(
-                        cross_section_checkpoints[0].x, cross_section_checkpoints[0].y
+                        cross_section_checkpoints[0].x,
+                        cross_section_checkpoints[0].y
                     ),
                     point(
-                        cross_section_checkpoints[1].x, cross_section_checkpoints[1].y
+                        cross_section_checkpoints[1].x,
+                        cross_section_checkpoints[1].y
                     ),
                     &ur, &ul
                 )

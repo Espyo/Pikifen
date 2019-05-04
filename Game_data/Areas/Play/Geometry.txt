@@ -2958,7 +2958,7 @@ mobs{
 	}
 	Treasure{
 		type=2 Euro
-		p=800.0000 320.0000
+		p=960.0000 256.0000
 	}
 	Enemy{
 		type=Female Sheargrub
@@ -3011,7 +3011,7 @@ mobs{
 	}
 	Custom{
 		type=Gas pipe
-		p=608.0000 -736.0000
+		p=576.0000 -768.0000
 	}
 	Enemy{
 		type=Female Sheargrub
@@ -3919,7 +3919,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=576.0000 -1696.0000
+		pos=576.0000 -1632.0000
 		links{
 			nr=46
 		}

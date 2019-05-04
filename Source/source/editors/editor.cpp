@@ -512,8 +512,10 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
         if(
-            fabs(ev.mouse.x - mouse_drag_start.x) >= editor_mouse_drag_threshold ||
-            fabs(ev.mouse.y - mouse_drag_start.y) >= editor_mouse_drag_threshold
+            fabs(ev.mouse.x - mouse_drag_start.x) >=
+            editor_mouse_drag_threshold ||
+            fabs(ev.mouse.y - mouse_drag_start.y) >=
+            editor_mouse_drag_threshold
         ) {
             mouse_drag_confirmed = true;
         }
