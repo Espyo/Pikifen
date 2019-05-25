@@ -240,6 +240,8 @@ void gameplay::load() {
     leader_cursor_w = mouse_cursor_w;
     leader_cursor_s = mouse_cursor_s;
     
+    cur_leader_ptr->stop_whistling();
+    
     day_minutes = day_minutes_start;
     area_time_passed = 0;
     

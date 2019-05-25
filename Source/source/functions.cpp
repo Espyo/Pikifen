@@ -127,7 +127,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
             al_save_bitmap(
                 (
                     USER_DATA_FOLDER_PATH + "/" +
-                    "Crash_" + get_current_time(false) + ".png"
+                    "Crash_" + get_current_time(true) + ".png"
                 ).c_str(),
                 backbuffer
             );
@@ -138,7 +138,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
     error_str +=
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
-        "  Time: " + get_current_time(true) + ".\n";
+        "  Time: " + get_current_time(false) + ".\n";
     if(errors_reported_today > 0) {
         error_str += "  Error log has messages!\n";
     }
@@ -323,19 +323,24 @@ mob* get_closest_mob_to_cursor() {
 
 /* ----------------------------------------------------------------------------
  * Returns a string representing the current date and time.
+ * filename_friendly: If true, slashes become dashes,
+ *   and semicolons become dots.
  */
-string get_current_time(const bool slashes_for_day) {
+string get_current_time(const bool filename_friendly) {
     time_t tt;
     time(&tt);
     struct tm t = *localtime(&tt);
     return
         i2s(t.tm_year + 1900) +
-        (slashes_for_day ? "/" : "-") +
+        (filename_friendly ? "-" : "/") +
         leading_zero(t.tm_mon + 1) +
-        (slashes_for_day ? "/" : "-") +
-        leading_zero(t.tm_mday) + " " +
-        leading_zero(t.tm_hour) + ":" +
-        leading_zero(t.tm_min) + ":" +
+        (filename_friendly ? "-" : "/") +
+        leading_zero(t.tm_mday) +
+        (filename_friendly ? "_" : " ") +
+        leading_zero(t.tm_hour) +
+        (filename_friendly ? "." : ":") +
+        leading_zero(t.tm_min) +
+        (filename_friendly ? "." : ":") +
         leading_zero(t.tm_sec);
 }
 
@@ -652,7 +657,7 @@ void log_error(string s, data_node* d) {
     if(errors_reported_today == 0) {
         s =
             "\n" +
-            get_current_time(true) +
+            get_current_time(false) +
             "; Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV) + "\n" + s;
@@ -1046,7 +1051,7 @@ void save_options() {
  * In other words, dumps a screenshot.
  */
 void save_screenshot() {
-    string base_file_name = "Screenshot " + get_current_time(false);
+    string base_file_name = "Screenshot_" + get_current_time(true);
     
     //Check if a file with this name already exists.
     vector<string> files = folder_to_vector(USER_DATA_FOLDER_PATH, false);

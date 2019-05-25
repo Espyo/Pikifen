@@ -102,6 +102,8 @@ public:
     void signal_group_move_start();
     void signal_group_move_end();
     void dismiss();
+    void start_whistling();
+    void stop_whistling();
     void swap_held_pikmin(mob* new_pik);
     
     virtual bool can_receive_status(status_type* s);

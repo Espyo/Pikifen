@@ -470,29 +470,22 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_HOLDABLE;
         
-        if(v.empty()) {
-            valid = false;
-            log_error(
-                "The set_holdable action needs to know the new rules!", dn
-            );
-        } else {
-            unsigned char final_flags = 0;
-            for(size_t word_nr = 0; word_nr < v_words.size(); ++word_nr) {
-            
-                if(v_words[word_nr] == "unholdable") {
-                    final_flags = 0;
-                    break;
-                    
-                } else if(v_words[word_nr] == "pikmin") {
-                    final_flags |= HOLDABLE_BY_PIKMIN;
-                    
-                } else if(v_words[word_nr] == "enemies") {
-                    final_flags |= HOLDABLE_BY_ENEMIES;
-                }
+        unsigned char final_flags = 0;
+        for(size_t word_nr = 0; word_nr < v_words.size(); ++word_nr) {
+        
+            if(v_words[word_nr] == "unholdable") {
+                final_flags = 0;
+                break;
+                
+            } else if(v_words[word_nr] == "pikmin") {
+                final_flags |= HOLDABLE_BY_PIKMIN;
+                
+            } else if(v_words[word_nr] == "enemies") {
+                final_flags |= HOLDABLE_BY_ENEMIES;
             }
-            
-            vi.push_back(final_flags);
         }
+        
+        vi.push_back(final_flags);
         
         
     } else if(n == "set_limb_animation") {

@@ -985,17 +985,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
  * When a leader begins whistling.
  */
 void leader_fsm::whistle(mob* m, void* info1, void* info2) {
-    leader* l_ptr = (leader*) m;
-    
-    l_ptr->lea_type->sfx_whistle.play(0, false);
-    
-    for(unsigned char d = 0; d < 6; ++d) whistle_dot_radius[d] = -1;
-    whistle_fade_timer.start();
-    whistle_fade_radius = 0;
-    whistling = true;
-    l_ptr->lea_type->sfx_whistle.play(0, false);
-    l_ptr->set_animation(LEADER_ANIM_WHISTLING);
-    l_ptr->script_timer.start(2.5f);
+    ((leader*) m)->start_whistling();
 }
 
 
@@ -1003,16 +993,7 @@ void leader_fsm::whistle(mob* m, void* info1, void* info2) {
  * When a leader stops whistling.
  */
 void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
-    if(!whistling) return;
-    
-    ((leader*) m)->lea_type->sfx_whistle.stop();
-    
-    whistle_fade_timer.start();
-    whistle_fade_radius = whistle_radius;
-    
-    whistling = false;
-    whistle_radius = 0;
-    
+    ((leader*) m)->stop_whistling();
 }
 
 

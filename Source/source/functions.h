@@ -80,7 +80,7 @@ vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
 unsigned char get_blackout_strength();
-string get_current_time(const bool slashes_for_day);
+string get_current_time(const bool filename_friendly);
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
 ALLEGRO_COLOR get_fog_color();

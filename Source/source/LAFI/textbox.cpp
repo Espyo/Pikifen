@@ -324,7 +324,7 @@ void textbox::widget_on_key_char(
         //Other key - insert the character.
         if(keycode == ALLEGRO_KEY_ENTER || keycode == ALLEGRO_KEY_PAD_ENTER) {
             if(enter_key_widget) {
-                enter_key_widget->call_left_mouse_click_handler(0, 0);
+                enter_key_widget->simulate_click();
                 return;
             } else {
                 if(!multi_line) return;

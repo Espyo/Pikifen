@@ -426,6 +426,38 @@ void leader::signal_group_move_start() {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the leader start whistling.
+ */
+void leader::start_whistling() {
+    lea_type->sfx_whistle.play(0, false);
+    
+    for(unsigned char d = 0; d < 6; ++d) whistle_dot_radius[d] = -1;
+    whistle_fade_timer.start();
+    whistle_fade_radius = 0;
+    whistling = true;
+    lea_type->sfx_whistle.play(0, false);
+    set_animation(LEADER_ANIM_WHISTLING);
+    script_timer.start(2.5f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the leader stop whistling.
+ */
+void leader::stop_whistling() {
+    if(!whistling) return;
+    
+    lea_type->sfx_whistle.stop();
+    
+    whistle_fade_timer.start();
+    whistle_fade_radius = whistle_radius;
+    
+    whistling = false;
+    whistle_radius = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Switch active leader.
  */
 void change_to_next_leader(const bool forward, const bool force_success) {
