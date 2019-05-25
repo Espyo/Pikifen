@@ -148,6 +148,7 @@ area_editor::area_editor() :
     backup_timer(area_editor_backup_interval),
     cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
+    debug_path_nrs(false),
     debug_sector_nrs(false),
     debug_triangulation(false),
     debug_vertex_nrs(false),
@@ -1142,7 +1143,7 @@ unsigned char area_editor::find_problems() {
             path_stop* s2_ptr = cur_area_data.path_stops[s2];
             if(s2_ptr == s_ptr) continue;
             
-            if(s2_ptr->has_link(s_ptr)) {
+            if(s2_ptr->get_link(s_ptr) != INVALID) {
                 has_link = true;
                 break;
             }
@@ -2146,7 +2147,7 @@ bool area_editor::get_path_link_under_point(
                 circle_intersects_line(p, 8 / cam_zoom, s_ptr->pos, s2_ptr->pos)
             ) {
                 *data1 = make_pair(s_ptr, s2_ptr);
-                if(s2_ptr->has_link(s_ptr)) {
+                if(s2_ptr->get_link(s_ptr) != INVALID) {
                     *data2 = make_pair(s2_ptr, s_ptr);
                 } else {
                     *data2 = make_pair((path_stop*) NULL, (path_stop*) NULL);
@@ -3557,6 +3558,9 @@ path_stop* area_editor::split_path_link(
     cur_area_data.fix_path_stop_nrs(l1.first);
     cur_area_data.fix_path_stop_nrs(l1.second);
     cur_area_data.fix_path_stop_nrs(new_s_ptr);
+    
+    //Update the distances.
+    new_s_ptr->calculate_dists_plus_neighbors();
     
     return new_s_ptr;
 }

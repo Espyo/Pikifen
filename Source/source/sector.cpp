@@ -1243,7 +1243,7 @@ path_stop::path_stop(const point &pos, const vector<path_link> &links) :
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
     remove_link(other_stop);
-    if(other_stop->has_link(this)) {
+    if(other_stop->get_link(this) != INVALID) {
         other_stop->remove_link(this);
     }
     
@@ -1255,15 +1255,16 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether this stop links to another stop or not.
- * The link is one-way, meaning that if the only link is from the other stop
- * to this one, it will not count.
+ * Returns the index of the link between this stop and another.
+ * The links in memory are one-way, meaning that if the only link
+ * is from the other stop to this one, it will not count.
+ * Returns INVALID if it does not link to that stop.
  */
-bool path_stop::has_link(path_stop* other_stop) {
+size_t path_stop::get_link(path_stop* other_stop) {
     for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l].end_ptr == other_stop) return true;
+        if(links[l].end_ptr == other_stop) return l;
     }
-    return false;
+    return INVALID;
 }
 
 
@@ -1281,20 +1282,31 @@ void path_stop::remove_link(path_stop* other_stop) {
 
 
 /* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors, and does the same
- * for the other paths, if they link back.
+ * Calculates the distance between it and all neighbors.
  */
 void path_stop::calculate_dists() {
     for(size_t l = 0; l < links.size(); ++l) {
+        links[l].calculate_dist(this);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors, and then goes through
+ * the neighbors and updates their distance back to this stop, if that
+ * neighbor links back.
+ */
+void path_stop::calculate_dists_plus_neighbors() {
+    for(size_t l = 0; l < links.size(); ++l) {
         path_link* l_ptr = &links[l];
         l_ptr->calculate_dist(this);
-        
-        for(size_t l2 = 0; l2 < l_ptr->end_ptr->links.size(); ++l2) {
-            path_link* l2_ptr = &l_ptr->end_ptr->links[l2];
-            
-            if(l2_ptr->end_ptr == this) {
-                l2_ptr->calculate_dist(l_ptr->end_ptr);
-            }
+    }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        size_t l_nr = s_ptr->get_link(this);
+        if(l_nr != INVALID) {
+            s_ptr->links[l_nr].calculate_dist(s_ptr);
         }
     }
 }
@@ -2349,7 +2361,7 @@ void depth_first_search(
         path_stop* n_ptr = nodes[n];
         if(n_ptr == start) continue;
         if(visited.find(n_ptr) != visited.end()) continue;
-        if(n_ptr->has_link(start)) {
+        if(n_ptr->get_link(start) != INVALID) {
             links.insert(n_ptr);
         }
     }

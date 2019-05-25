@@ -424,10 +424,7 @@ void load_area(
         cur_area_data.fix_path_stop_pointers(cur_area_data.path_stops[s]);
     }
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            s_ptr->links[l].calculate_dist(s_ptr);
-        }
+        cur_area_data.path_stops[s]->calculate_dists();
     }
     if(!load_for_editor) {
         //Fade sectors that also fade brightness should be

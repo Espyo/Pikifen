@@ -222,6 +222,8 @@ private:
     bool debug_edge_nrs;
     //Debug tool -- show the sector numbers?
     bool debug_sector_nrs;
+    //Debug tool -- show the path numbers?
+    bool debug_path_nrs;
     //Debug tool -- show the triangulation?
     bool debug_triangulation;
     //Debug tool -- show the vertex numbers?

@@ -600,7 +600,8 @@ void area_editor::do_drawing() {
             path_stop* s_ptr = cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
                 path_stop* s2_ptr = s_ptr->links[l].end_ptr;
-                bool one_way = !(s_ptr->links[l].end_ptr->has_link(s_ptr));
+                bool one_way =
+                    s_ptr->links[l].end_ptr->get_link(s_ptr) == INVALID;
                 bool selected =
                     selected_path_links.find(make_pair(s_ptr, s2_ptr)) !=
                     selected_path_links.end();
@@ -621,6 +622,19 @@ void area_editor::do_drawing() {
                     ),
                     PATH_LINK_THICKNESS / cam_zoom
                 );
+                
+                if(debug_path_nrs && (one_way || s < s_ptr->links[l].end_nr)) {
+                    point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
+                    float angle = get_angle(s_ptr->pos, s2_ptr->pos);
+                    draw_debug_text(
+                        al_map_rgb(96, 104, 224),
+                        point(
+                            middle.x + cos(angle + TAU / 4) * 4,
+                            middle.y + sin(angle + TAU / 4) * 4
+                        ),
+                        f2s(s_ptr->links[l].distance)
+                    );
+                }
                 
                 if(one_way) {
                     //Draw a triangle down the middle.
@@ -666,6 +680,12 @@ void area_editor::do_drawing() {
                         SELECTION_COLOR[2],
                         selection_opacity * 255
                     )
+                );
+            }
+            
+            if(debug_path_nrs) {
+                draw_debug_text(
+                    al_map_rgb(80, 192, 192), s_ptr->pos, i2s(s)
                 );
             }
         }

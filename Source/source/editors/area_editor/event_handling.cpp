@@ -72,6 +72,17 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             );
         }
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F5) {
+        debug_path_nrs = !debug_path_nrs;
+        if(debug_path_nrs) {
+            emit_status_bar_message(
+                "Enabled debug path number display.", false
+            );
+        } else {
+            emit_status_bar_message(
+                "Disabled debug path number display.", false
+            );
+        }
     }
 }
 
@@ -663,6 +674,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
                 cur_area_data.fix_path_stop_nrs(next_stop);
                 path_drawing_stop_1 = next_stop;
+                next_stop->calculate_dists_plus_neighbors();
             }
             
         } else {
@@ -1179,6 +1191,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             (*s)->pos.x = orig.x + offset.x;
             (*s)->pos.y = orig.y + offset.y;
         }
+        
+        for(
+            auto s = selected_path_stops.begin();
+            s != selected_path_stops.end(); ++s
+        ) {
+            (*s)->calculate_dists_plus_neighbors();
+        }
+        
         path_preview_timer.start(false);
         
         

@@ -131,9 +131,10 @@ struct path_stop {
         const vector<path_link> &links = vector<path_link>()
     );
     void add_link(path_stop* other_stop, const bool normal);
-    bool has_link(path_stop* other_stop);
+    size_t get_link(path_stop* other_stop);
     void remove_link(path_stop* other_stop);
     void calculate_dists();
+    void calculate_dists_plus_neighbors();
 };
 
 
