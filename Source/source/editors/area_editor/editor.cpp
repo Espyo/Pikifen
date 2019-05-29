@@ -777,7 +777,7 @@ void area_editor::delete_selected_mobs() {
             if(cur_area_data.mob_generators[m_i] == *sm) break;
         }
         
-        //Check all links to this stop.
+        //Check all links to this mob.
         for(size_t m2 = 0; m2 < cur_area_data.mob_generators.size(); ++m2) {
             mob_gen* m2_ptr = cur_area_data.mob_generators[m2];
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
@@ -1376,7 +1376,14 @@ void area_editor::finish_layout_drawing() {
         vertex* v2_ptr = cur_area_data.edges[e]->vertexes[1];
         if(
             is_point_in_sector(point(v1_ptr->x, v1_ptr->y), new_sector) &&
-            is_point_in_sector(point(v2_ptr->x, v2_ptr->y), new_sector)
+            is_point_in_sector(point(v2_ptr->x, v2_ptr->y), new_sector) &&
+            is_point_in_sector(
+                point(
+                    (v1_ptr->x + v2_ptr->x) / 2.0,
+                    (v1_ptr->y + v2_ptr->y) / 2.0
+                ),
+                new_sector
+            )
         ) {
             inner_edges.insert(cur_area_data.edges[e]);
         }
@@ -2687,7 +2694,7 @@ area_data* area_editor::prepare_state() {
  * operation is the same as the previous one's, then it is ignored.
  * This is useful to stop, for instance, a slider
  * drag from saving several dozen operations in the undo history.
- * operation_name:      Name of the operation.
+ * operation_name:     Name of the operation.
  * pre_prepared_state: If you have the area state prepared from elsewhere in
  *   the code, specify it here. Otherwise, it uses the current area state.
  */

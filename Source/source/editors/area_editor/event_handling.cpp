@@ -583,6 +583,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
         }
         
+        register_change("Object link creation");
+        
         m_ptr->links.push_back(target);
         m_ptr->link_nrs.push_back(cur_area_data.find_mob_gen_nr(target));
         
@@ -637,6 +639,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             );
             return;
         } else {
+            register_change("Object link deletion");
             m_ptr->links.erase(m_ptr->links.begin() + link_i);
             m_ptr->link_nrs.erase(m_ptr->link_nrs.begin() + link_i);
         }

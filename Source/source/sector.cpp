@@ -818,6 +818,15 @@ void area_data::clone(area_data &other) {
         om_ptr->pos = m_ptr->pos;
         om_ptr->type = m_ptr->type;
         om_ptr->vars = m_ptr->vars;
+        om_ptr->link_nrs = m_ptr->link_nrs;
+    }
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        mob_gen* om_ptr = other.mob_generators[m];
+        for(size_t l = 0; l < om_ptr->link_nrs.size(); ++l) {
+            om_ptr->links.push_back(
+                other.mob_generators[om_ptr->link_nrs[l]]
+            );
+        }
     }
     
     for(size_t s = 0; s < path_stops.size(); ++s) {
