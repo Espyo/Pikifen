@@ -48,7 +48,7 @@ script {
         }
         on_tick {
             move linked_mob_average
-            stabilize_z highest 350
+            stabilize_z highest 300
             turn arachnorb_head_logic
         }
         on_far_from_home {
@@ -106,7 +106,7 @@ script {
             turn arachnorb_head_logic
         }
         on_receive_message {
-            stabilize_z highest 350
+            stabilize_z highest 300
             set_state move_fl
         }
     }
@@ -121,7 +121,7 @@ script {
             turn arachnorb_head_logic
         }
         on_receive_message {
-            stabilize_z highest 350
+            stabilize_z highest 300
             set_state move_br
         }
     }
@@ -136,7 +136,7 @@ script {
             turn arachnorb_head_logic
         }
         on_receive_message {
-            stabilize_z highest 350
+            stabilize_z highest 300
             set_state move_bl
         }
     }
@@ -151,7 +151,7 @@ script {
             turn arachnorb_head_logic
         }
         on_receive_message {
-            stabilize_z highest 350
+            stabilize_z highest 300
             set_state deciding
         }
     }
