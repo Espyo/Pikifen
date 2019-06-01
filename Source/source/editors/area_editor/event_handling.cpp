@@ -441,7 +441,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
         } else {
         
-            if(
+            check_drawing_line(hotspot);
+            
+            if(drawing_line_error != DRAWING_LINE_NO_ERROR) {
+                handle_line_error();
+                
+            } else if(
                 dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
                 VERTEX_MERGE_RADIUS / cam_zoom
             ) {
@@ -450,12 +455,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             } else {
                 //Add a new node.
-                check_drawing_line(hotspot);
-                if(drawing_line_error == DRAWING_LINE_NO_ERROR) {
-                    drawing_nodes.push_back(layout_drawing_node(this, hotspot));
-                } else {
-                    handle_line_error();
-                }
+                drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                
             }
         }
         

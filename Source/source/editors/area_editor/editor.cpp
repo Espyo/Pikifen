@@ -373,15 +373,22 @@ void area_editor::check_drawing_line(const point &pos) {
         for(size_t n = 0; n < drawing_nodes.size() - 2; ++n) {
             layout_drawing_node* n1_ptr = &drawing_nodes[n];
             layout_drawing_node* n2_ptr = &drawing_nodes[n + 1];
+            point intersection;
             if(
                 lines_intersect(
                     prev_node->snapped_spot, pos,
                     n1_ptr->snapped_spot, n2_ptr->snapped_spot,
-                    NULL, NULL
+                    &intersection
                 )
             ) {
-                drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
-                return;
+                if(
+                    dist(intersection, drawing_nodes.begin()->snapped_spot) >
+                    VERTEX_MERGE_RADIUS / cam_zoom
+                ) {
+                    //Only a problem if this isn't the user's drawing finish.
+                    drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
+                    return;
+                }
             }
         }
         
@@ -401,6 +408,7 @@ void area_editor::check_drawing_line(const point &pos) {
     //rest of the drawing is on.
     
     unordered_set<sector*> common_sectors;
+    
     if(drawing_nodes[0].on_edge) {
         common_sectors.insert(drawing_nodes[0].on_edge->sectors[0]);
         common_sectors.insert(drawing_nodes[0].on_edge->sectors[1]);
@@ -414,21 +422,41 @@ void area_editor::check_drawing_line(const point &pos) {
         //It's all right if this includes the "NULL" sector.
         common_sectors.insert(drawing_nodes[0].on_sector);
     }
+    
     for(size_t n = 1; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         unordered_set<sector*> node_sectors;
-        if(n_ptr->on_edge) {
-            node_sectors.insert(n_ptr->on_edge->sectors[0]);
-            node_sectors.insert(n_ptr->on_edge->sectors[1]);
-        } else if(n_ptr->on_vertex) {
-            for(size_t e = 0; e < n_ptr->on_vertex->edges.size(); ++e) {
-                edge* e_ptr = n_ptr->on_vertex->edges[e];
-                node_sectors.insert(e_ptr->sectors[0]);
-                node_sectors.insert(e_ptr->sectors[1]);
+        
+        if(n_ptr->on_edge || n_ptr->on_vertex) {
+            layout_drawing_node* prev_n_ptr = &drawing_nodes[n - 1];
+            if(!are_nodes_traversable(*n_ptr, *prev_n_ptr)) {
+                //If you can't traverse from this node and the previous, that
+                //means it's a line that goes inside a sector. Only add that
+                //sector to the list. We can know what sector this is
+                //from the line's midpoint.
+                node_sectors.insert(
+                    get_sector(
+                        (n_ptr->snapped_spot + prev_n_ptr->snapped_spot) / 2.0,
+                        NULL, false
+                    )
+                );
             }
-        } else {
-            //Again, it's all right if this includes the "NULL" sector.
-            node_sectors.insert(n_ptr->on_sector);
+        }
+        
+        if(node_sectors.empty()) {
+            if(n_ptr->on_edge) {
+                node_sectors.insert(n_ptr->on_edge->sectors[0]);
+                node_sectors.insert(n_ptr->on_edge->sectors[1]);
+            } else if(n_ptr->on_vertex) {
+                for(size_t e = 0; e < n_ptr->on_vertex->edges.size(); ++e) {
+                    edge* e_ptr = n_ptr->on_vertex->edges[e];
+                    node_sectors.insert(e_ptr->sectors[0]);
+                    node_sectors.insert(e_ptr->sectors[1]);
+                }
+            } else {
+                //Again, it's all right if this includes the "NULL" sector.
+                node_sectors.insert(n_ptr->on_sector);
+            }
         }
         
         for(auto s = common_sectors.begin(); s != common_sectors.end();) {
@@ -522,6 +550,13 @@ void area_editor::clear_current_area() {
     reference_transformation.keep_aspect_ratio = true;
     update_reference("");
     clear_selection();
+    clear_circle_sector();
+    clear_layout_drawing();
+    clear_layout_moving();
+    clear_problems();
+    non_simples.clear();
+    lone_edges.clear();
+    
     clear_area_textures();
     
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
@@ -3694,6 +3729,7 @@ void area_editor::undo() {
     clear_layout_moving();
     clear_problems();
     non_simples.clear();
+    lone_edges.clear();
     change_to_right_frame();
     
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
