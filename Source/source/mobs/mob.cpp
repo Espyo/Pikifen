@@ -1472,65 +1472,6 @@ string mob::print_state_history() {
 
 
 /* ----------------------------------------------------------------------------
- * Processes anything related to the the mob it has in focus.
- */
-void mob::process_focused_mob() {
-    //Check the focused mob.
-    if(focused_mob) {
-    
-        if(focused_mob->health <= 0) {
-            fsm.run_event(MOB_EVENT_FOCUS_DIED);
-            fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
-        }
-        
-        //We have to recheck if the focused mob is not NULL, because
-        //sending MOB_EVENT_FOCUS_DIED could've set this to NULL.
-        if(focused_mob) {
-        
-            mob* focus = focused_mob;
-            
-            mob_event* for_ev =
-                q_get_event(this, MOB_EVENT_FOCUS_OFF_REACH);
-                
-            if(far_reach != INVALID && for_ev) {
-                dist d(pos, focus->pos);
-                float face_diff =
-                    get_angle_smallest_dif(
-                        angle,
-                        get_angle(pos, focus->pos)
-                    );
-                    
-                mob_type::reach_struct* r_ptr =
-                    &type->reaches[far_reach];
-                if(
-                    (
-                        d > r_ptr->radius_1 +
-                        (type->radius + focus->type->radius) ||
-                        face_diff > r_ptr->angle_1 / 2.0f
-                    ) && (
-                        d > r_ptr->radius_2 +
-                        (type->radius + focus->type->radius) ||
-                        face_diff > r_ptr->angle_2 / 2.0f
-                    )
-                    
-                ) {
-                    for_ev->run(this);
-                }
-                
-            }
-        }
-        
-        if(focused_mob) {
-            if(!focused_mob->carry_info) {
-                fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
-            }
-        }
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
 void mob::read_script_vars(const string &vars) {
@@ -2793,6 +2734,59 @@ void mob::tick_script() {
     //Is it dead?
     if(health <= 0 && type->max_health != 0) {
         fsm.run_event(MOB_EVENT_DEATH, this);
+    }
+    
+    //Check the focused mob.
+    if(focused_mob) {
+    
+        if(focused_mob->health <= 0) {
+            fsm.run_event(MOB_EVENT_FOCUS_DIED);
+            fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
+        }
+        
+        //We have to recheck if the focused mob is not NULL, because
+        //sending MOB_EVENT_FOCUS_DIED could've set this to NULL.
+        if(focused_mob) {
+        
+            mob* focus = focused_mob;
+            
+            mob_event* for_ev =
+                q_get_event(this, MOB_EVENT_FOCUS_OFF_REACH);
+                
+            if(far_reach != INVALID && for_ev) {
+                dist d(pos, focus->pos);
+                float face_diff =
+                    get_angle_smallest_dif(
+                        angle,
+                        get_angle(pos, focus->pos)
+                    );
+                    
+                mob_type::reach_struct* r_ptr =
+                    &type->reaches[far_reach];
+                if(
+                    (
+                        d > r_ptr->radius_1 +
+                        (type->radius + focus->type->radius) ||
+                        face_diff > r_ptr->angle_1 / 2.0f
+                    ) && (
+                        d > r_ptr->radius_2 +
+                        (type->radius + focus->type->radius) ||
+                        face_diff > r_ptr->angle_2 / 2.0f
+                    )
+                    
+                ) {
+                    for_ev->run(this);
+                }
+                
+            }
+        }
+        
+        if(focused_mob) {
+            if(!focused_mob->carry_info) {
+                fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+            }
+        }
+        
     }
     
     //Itch event.

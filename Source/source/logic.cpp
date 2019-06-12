@@ -266,22 +266,6 @@ void gameplay::do_gameplay_logic() {
             }
         }
         
-        for(size_t m = 0; m < n_mobs; ++m) {
-            /*
-             * Process focused mobs.
-             * We need to run this after the ticks, because checking the death
-             * of the focused mob is too important, since it could be deleted
-             * shortly after, and nobody likes null pointer exceptions.
-             * We can't process this in the same loop that ticks all mobs
-             * because if we finish processing mob A, and then mob B dies
-             * later on in the script, mob A won't know about it, and then mob B
-             * can get deleted before mob A had a chance to update. As such,
-             * This check should happen after the tick loop of all mobs.
-             */
-            mob* m_ptr = mobs[m];
-            m_ptr->process_focused_mob();
-        }
-        
         for(size_t m = 0; m < n_mobs;) {
             //Mob deletion.
             mob* m_ptr = mobs[m];
