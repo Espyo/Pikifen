@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg7091"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="0.92.4 (unknown)"
    sodipodi:docname="Leaders.svg">
   <title
      id="title1771">Leader spritesheets</title>
@@ -2706,11 +2706,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.8774189"
-     inkscape:cx="141"
-     inkscape:cy="232.50006"
+     inkscape:zoom="1"
+     inkscape:cx="152.46772"
+     inkscape:cy="232.94996"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -2961,21 +2961,30 @@
        width="32"
        height="32"
        x="300"
-       y="1020.3622" />
+       y="1020.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar_icon.png"
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect5016-0-9"
        width="32"
        height="32"
        x="300"
-       y="820.36176" />
+       y="820.36176"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie_icon.png"
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect5016-0-3"
        width="32"
        height="32"
        x="300"
-       y="620.36206" />
+       y="620.36206"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President_icon.png"
+       inkscape:export-xdpi="192"
+       inkscape:export-ydpi="192" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none"
        id="rect3668-4-6"
@@ -6889,7 +6898,7 @@
        id="path3871-2-0-4-7" />
     <path
        style="display:inline;fill:#d6b386;fill-opacity:1;stroke:none"
-       d="m 326.3036,1042.887 c 3.88277,1.8374 5.07231,-5.9318 4.6964,-9.5248 -1.29538,1.2404 -2.08728,3.4017 -3.15274,3.0615"
+       d="m 326.3036,1042.887 c 3.88277,1.8374 5.07231,-5.9318 4.6964,-9.5248 -1.29538,1.2404 -2.08728,3.4017 -3.15274,3.0615 z"
        id="path3844-0-23-2-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
@@ -6946,7 +6955,7 @@
        style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
        id="path4064-8"
        cx="1045.7468"
-       cy="-321.20096"
+       cy="-319.98035"
        r="0.68034261"
        transform="rotate(90)" />
     <path
@@ -6969,10 +6978,10 @@
        sodipodi:nodetypes="ccc" />
     <path
        style="display:inline;fill:url(#radialGradient4684-9);fill-opacity:1;stroke:none"
-       d="m 327.45581,843.25054 c -0.0777,-1.12567 -0.1642,-2.35319 -0.5908,-3.45606 -3.139,-6.04542 -4.15558,-13.09976 -10.36817,-13.24821 -6.2126,0.14845 -7.22918,7.20279 -10.36817,13.24821 -0.0332,3.34021 0.2311,6.12843 2.89484,9.21615 2.89485,1.15202 7.12812,2.66405 10.00817,2.66405 2.88005,0 3.81606,-1.51203 6.1053,-2.66405 2.10629,-2.07334 2.44815,-3.88396 2.31883,-5.76009 z"
+       d="m 327.45581,843.25054 c -0.0777,-1.12567 -0.1642,-2.35319 -0.5908,-3.45606 -3.139,-6.04542 -4.15558,-13.09976 -10.36817,-13.24821 -6.2126,0.14845 -7.22918,7.20279 -10.36817,13.24821 -0.0332,3.34021 0.43426,8.31541 2.89484,9.21615 2.46058,0.90074 7.12812,2.66405 10.00817,2.66405 2.88005,0 3.81606,-1.51203 6.1053,-2.66405 2.10629,-2.07334 2.44815,-3.88396 2.31883,-5.76009 z"
        id="path4464-5"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="sccccccs" />
+       sodipodi:nodetypes="sccczccs" />
     <circle
        style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
        id="path4503-9"
@@ -7114,19 +7123,19 @@
        d="m 1037.9393,-329.3583 a 9.8649683,12.92651 0 0 1 8.8404,6.39615 9.8649683,12.92651 0 0 1 -0.084,13.232 9.8649683,12.92651 0 0 1 -8.9205,6.20208" />
     <path
        style="display:inline;fill:#d6b386;fill-opacity:1;stroke:none"
-       d="m 308.65757,1043.4287 c -6.96872,1.8374 -9.1037,-5.9318 -8.42901,-9.5248 2.32491,1.2404 3.74623,3.4017 5.65849,3.0615"
+       d="m 308.65757,1043.4287 c -6.96872,1.8374 -9.1037,-5.9318 -8.42901,-9.5248 2.32491,1.2404 3.74623,3.4017 5.65849,3.0615 -0.36513,2.3818 0.30701,4.5806 2.77052,6.4633 z"
        id="path3844-0-23-0"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc"
+       sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="display:inline;fill:url(#radialGradient5058);fill-opacity:1;stroke:none"
-       d="m 327.45581,843.25054 c -0.0777,-1.12567 -0.1642,-2.35319 -0.5908,-3.45606 -8.32686,2.32122 -14.34683,-2.71718 -20.73634,0 -0.0332,3.34021 0.2311,6.12843 2.89484,9.21615 2.89485,1.15202 7.12812,2.66405 10.00817,2.66405 2.88005,0 3.81606,-1.51203 6.1053,-2.66405 2.10629,-2.07334 2.44815,-3.88396 2.31883,-5.76009 z"
+       d="m 327.45581,843.25054 c -0.0777,-1.12567 -0.1642,-2.35319 -0.5908,-3.45606 -8.32686,2.32122 -14.34683,-2.71718 -20.73634,0 -0.0332,3.34021 0.43426,8.3154 2.89484,9.21615 2.46058,0.90075 7.12812,2.66405 10.00817,2.66405 2.88005,0 3.81606,-1.51203 6.1053,-2.66405 2.10629,-2.07334 2.44815,-3.88396 2.31883,-5.76009 z"
        id="path4464-5-6"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="scccccs" />
+       sodipodi:nodetypes="scczccs" />
     <path
        style="display:inline;fill:url(#radialGradient4954-1-0);fill-opacity:1;stroke:none"
        id="path4854-0-1"

@@ -2575,11 +2575,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="304.11499"
-     inkscape:cy="369.91112"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="30.089673"
+     inkscape:cy="341.43067"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -2959,9 +2959,9 @@
        height="28"
        x="-6.8212103e-13"
        y="672.36218"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bomb_rock.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bomb_rock_icon.png"
+       inkscape:export-xdpi="219.42999"
+       inkscape:export-ydpi="219.42999" />
     <rect
        y="672.36218"
        x="29"
