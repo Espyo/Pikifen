@@ -21,6 +21,9 @@ script {
             get_chomped
             set_state held_by_enemy
         }
+        on_land {
+            stop
+        }
     }
     
     held_by_pikmin {
