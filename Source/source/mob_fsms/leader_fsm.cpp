@@ -8,6 +8,8 @@
  * Leader finite state machine logic.
  */
 
+#include <algorithm>
+
 #include "leader_fsm.h"
 
 #include "../functions.h"

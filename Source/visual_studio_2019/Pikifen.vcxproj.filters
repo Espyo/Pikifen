@@ -1,0 +1,781 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\editors">
+      <UniqueIdentifier>{8aa2f22b-e9f4-4ba2-9219-0534e3397224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors\animation_editor">
+      <UniqueIdentifier>{1197949b-2406-48d8-b5fc-7445adeed86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors\area_editor">
+      <UniqueIdentifier>{474be91e-8a30-415d-8c50-66d7d5ffd30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LAFI">
+      <UniqueIdentifier>{e8aecf53-bfc7-42d6-84ae-0ef8736e07fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mob_categories">
+      <UniqueIdentifier>{906d8334-4470-472f-a044-8aa67f3b7549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mob_fsms">
+      <UniqueIdentifier>{d4af4dfe-ca5b-4c62-a66e-c6a5c775cbc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mobs">
+      <UniqueIdentifier>{9d51682c-cb8a-4425-84f3-fc24c5f77c90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mob_types">
+      <UniqueIdentifier>{f3c1b54b-731a-411e-b1c5-a843b0f3ea58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{1fde66a3-a8a7-4701-a151-af661b9d18ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors">
+      <UniqueIdentifier>{50162837-2d1a-4d43-9720-c1091abfa5c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors\animation_editor">
+      <UniqueIdentifier>{0c8bb57f-b61f-416f-9dfa-f06e026e09d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors\area_editor">
+      <UniqueIdentifier>{bc32e712-39c3-427c-882a-8ea49fde1b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LAFI">
+      <UniqueIdentifier>{5002db25-7051-436d-94d1-6e6dc2b965c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_categories">
+      <UniqueIdentifier>{c7e82f34-e7ac-4b97-a7f8-2fdc0e7ccbf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_fsms">
+      <UniqueIdentifier>{005cd81a-c74c-439a-b6ca-51ad09d7a8e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mobs">
+      <UniqueIdentifier>{c5491cbb-670e-4d92-be07-9f349cee79ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mob_types">
+      <UniqueIdentifier>{69639323-68bc-4d2d-bf23-062e844e526d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{4f6a75e4-d7b2-4167-b6d3-3364d424a4e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\editors\animation_editor\editor.h">
+      <Filter>Header Files\editors\animation_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\area_editor\editor.h">
+      <Filter>Header Files\editors\area_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\angle_picker.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\button.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\checkbox.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\const.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\frame.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\gui.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\image.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\label.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\minor.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\radio_button.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\scrollbar.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\style.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\textbox.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LAFI\widget.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\bridge_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\converter_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\custom_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\decoration_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\drop_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\enemy_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\interactable_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\leader_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\mob_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\onion_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pellet_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pikmin_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\pile_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\resource_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\ship_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\tool_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\treasure_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\bridge_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\converter_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\decoration_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\drop_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\gen_mob_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\leader_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\onion_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pellet_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pikmin_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\pile_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\resource_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\ship_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\treasure_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\bridge.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\converter.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\decoration.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\drop.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\enemy.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\interactable.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\leader.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\mob.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\mob_utils.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\onion.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pellet.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pikmin.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\pile.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\resource.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\ship.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\tool.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\treasure.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\bridge_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\converter_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\decoration_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\drop_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\enemy_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\interactable_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\leader_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\mob_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\onion_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pellet_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pikmin_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\pile_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\resource_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\ship_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\tool_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\treasure_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\geometry_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\math_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\string_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\backtrace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\code_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\controls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\data_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\drawing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\gameplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hazard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hitbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\init.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\interval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\liquid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\menu_widgets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\menus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\misc_structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\replay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\spray_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\vars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\weather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\world_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\editor.h">
+      <Filter>Header Files\editors</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\editors\animation_editor\drawing.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\editor.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\event_handling.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\gui_functions.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\loading.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\drawing.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\editor.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\event_handling.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\gui_functions.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\loading.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\angle_picker.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\button.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\checkbox.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\frame.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\gui.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\image.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\label.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\minor.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\radio_button.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\scrollbar.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\style.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\textbox.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LAFI\widget.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\bridge_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\converter_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\custom_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\decoration_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\drop_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\enemy_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\interactable_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\leader_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\mob_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\onion_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pellet_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pikmin_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\pile_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\resource_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\ship_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\tool_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\treasure_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\bridge_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\converter_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\decoration_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\drop_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\gen_mob_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\leader_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\onion_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pellet_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pikmin_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\pile_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\resource_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\ship_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\treasure_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\bridge.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\converter.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\decoration.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\drop.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\enemy.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\interactable.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\leader.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob_utils.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\onion.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pellet.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pikmin.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\pile.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\resource.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\ship.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\tool.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\treasure.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\bridge_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\converter_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\decoration_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\drop_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\enemy_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\interactable_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\leader_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\mob_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\onion_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pellet_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pikmin_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\pile_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\resource_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\ship_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\tool_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\treasure_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\geometry_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\math_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\string_utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\code_debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\controls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\data_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\drawing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\gameplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hazard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hitbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\interval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\liquid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\load.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\logic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\menu_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\menus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\misc_structs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\replay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\sector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\spray_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\vars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\weather.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\world_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\editor.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\source\Icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

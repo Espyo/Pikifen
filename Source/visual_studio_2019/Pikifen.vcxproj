@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{6DB9D4DA-ECDF-4E8A-88D6-510A6F51FCCD}</ProjectGuid>
+    <RootNamespace>Pikifen</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Allegro_AddonImage>true</Allegro_AddonImage>
+    <Allegro_AddonTTF>true</Allegro_AddonTTF>
+    <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
+    <Allegro_AddonAudio>true</Allegro_AddonAudio>
+    <Allegro_AddonAcodec>true</Allegro_AddonAcodec>
+    <Allegro_AddonPhysfs>false</Allegro_AddonPhysfs>
+    <Allegro_AddonDialog>true</Allegro_AddonDialog>
+    <Allegro_AddonMemfile>false</Allegro_AddonMemfile>
+    <Allegro_AddonFont>true</Allegro_AddonFont>
+    <Allegro_AddonColor>true</Allegro_AddonColor>
+    <Allegro_AddonVideo>false</Allegro_AddonVideo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Allegro_AddonImage>true</Allegro_AddonImage>
+    <Allegro_AddonTTF>true</Allegro_AddonTTF>
+    <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
+    <Allegro_AddonAudio>true</Allegro_AddonAudio>
+    <Allegro_AddonAcodec>true</Allegro_AddonAcodec>
+    <Allegro_AddonPhysfs>false</Allegro_AddonPhysfs>
+    <Allegro_AddonDialog>true</Allegro_AddonDialog>
+    <Allegro_AddonMemfile>false</Allegro_AddonMemfile>
+    <Allegro_AddonFont>true</Allegro_AddonFont>
+    <Allegro_AddonColor>true</Allegro_AddonColor>
+    <Allegro_AddonVideo>false</Allegro_AddonVideo>
+    <Allegro_LibraryType>StaticMonolithRelease</Allegro_LibraryType>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <CompileAsManaged>false</CompileAsManaged>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_WINDOWS;_CMATH_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>winmm.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>winmm.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\animation.h" />
+    <ClInclude Include="..\source\backtrace.h" />
+    <ClInclude Include="..\source\code_debug.h" />
+    <ClInclude Include="..\source\const.h" />
+    <ClInclude Include="..\source\controls.h" />
+    <ClInclude Include="..\source\data_file.h" />
+    <ClInclude Include="..\source\drawing.h" />
+    <ClInclude Include="..\source\editors\animation_editor\editor.h" />
+    <ClInclude Include="..\source\editors\area_editor\editor.h" />
+    <ClInclude Include="..\source\editors\editor.h" />
+    <ClInclude Include="..\source\functions.h" />
+    <ClInclude Include="..\source\gameplay.h" />
+    <ClInclude Include="..\source\game_state.h" />
+    <ClInclude Include="..\source\hazard.h" />
+    <ClInclude Include="..\source\hitbox.h" />
+    <ClInclude Include="..\source\init.h" />
+    <ClInclude Include="..\source\interval.h" />
+    <ClInclude Include="..\source\LAFI\angle_picker.h" />
+    <ClInclude Include="..\source\LAFI\button.h" />
+    <ClInclude Include="..\source\LAFI\checkbox.h" />
+    <ClInclude Include="..\source\LAFI\const.h" />
+    <ClInclude Include="..\source\LAFI\frame.h" />
+    <ClInclude Include="..\source\LAFI\gui.h" />
+    <ClInclude Include="..\source\LAFI\image.h" />
+    <ClInclude Include="..\source\LAFI\label.h" />
+    <ClInclude Include="..\source\LAFI\minor.h" />
+    <ClInclude Include="..\source\LAFI\radio_button.h" />
+    <ClInclude Include="..\source\LAFI\scrollbar.h" />
+    <ClInclude Include="..\source\LAFI\style.h" />
+    <ClInclude Include="..\source\LAFI\textbox.h" />
+    <ClInclude Include="..\source\LAFI\widget.h" />
+    <ClInclude Include="..\source\liquid.h" />
+    <ClInclude Include="..\source\load.h" />
+    <ClInclude Include="..\source\menus.h" />
+    <ClInclude Include="..\source\menu_widgets.h" />
+    <ClInclude Include="..\source\misc_structs.h" />
+    <ClInclude Include="..\source\mobs\bridge.h" />
+    <ClInclude Include="..\source\mobs\converter.h" />
+    <ClInclude Include="..\source\mobs\decoration.h" />
+    <ClInclude Include="..\source\mobs\drop.h" />
+    <ClInclude Include="..\source\mobs\enemy.h" />
+    <ClInclude Include="..\source\mobs\interactable.h" />
+    <ClInclude Include="..\source\mobs\leader.h" />
+    <ClInclude Include="..\source\mobs\mob.h" />
+    <ClInclude Include="..\source\mobs\mob_utils.h" />
+    <ClInclude Include="..\source\mobs\onion.h" />
+    <ClInclude Include="..\source\mobs\pellet.h" />
+    <ClInclude Include="..\source\mobs\pikmin.h" />
+    <ClInclude Include="..\source\mobs\pile.h" />
+    <ClInclude Include="..\source\mobs\resource.h" />
+    <ClInclude Include="..\source\mobs\ship.h" />
+    <ClInclude Include="..\source\mobs\tool.h" />
+    <ClInclude Include="..\source\mobs\treasure.h" />
+    <ClInclude Include="..\source\mob_categories\bridge_category.h" />
+    <ClInclude Include="..\source\mob_categories\converter_category.h" />
+    <ClInclude Include="..\source\mob_categories\custom_category.h" />
+    <ClInclude Include="..\source\mob_categories\decoration_category.h" />
+    <ClInclude Include="..\source\mob_categories\drop_category.h" />
+    <ClInclude Include="..\source\mob_categories\enemy_category.h" />
+    <ClInclude Include="..\source\mob_categories\interactable_category.h" />
+    <ClInclude Include="..\source\mob_categories\leader_category.h" />
+    <ClInclude Include="..\source\mob_categories\mob_category.h" />
+    <ClInclude Include="..\source\mob_categories\onion_category.h" />
+    <ClInclude Include="..\source\mob_categories\pellet_category.h" />
+    <ClInclude Include="..\source\mob_categories\pikmin_category.h" />
+    <ClInclude Include="..\source\mob_categories\pile_category.h" />
+    <ClInclude Include="..\source\mob_categories\resource_category.h" />
+    <ClInclude Include="..\source\mob_categories\ship_category.h" />
+    <ClInclude Include="..\source\mob_categories\tool_category.h" />
+    <ClInclude Include="..\source\mob_categories\treasure_category.h" />
+    <ClInclude Include="..\source\mob_fsms\bridge_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\converter_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\decoration_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\drop_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\gen_mob_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\leader_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\onion_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\pellet_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\pikmin_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\pile_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\resource_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\ship_fsm.h" />
+    <ClInclude Include="..\source\mob_fsms\treasure_fsm.h" />
+    <ClInclude Include="..\source\mob_script.h" />
+    <ClInclude Include="..\source\mob_types\bridge_type.h" />
+    <ClInclude Include="..\source\mob_types\converter_type.h" />
+    <ClInclude Include="..\source\mob_types\decoration_type.h" />
+    <ClInclude Include="..\source\mob_types\drop_type.h" />
+    <ClInclude Include="..\source\mob_types\enemy_type.h" />
+    <ClInclude Include="..\source\mob_types\interactable_type.h" />
+    <ClInclude Include="..\source\mob_types\leader_type.h" />
+    <ClInclude Include="..\source\mob_types\mob_type.h" />
+    <ClInclude Include="..\source\mob_types\onion_type.h" />
+    <ClInclude Include="..\source\mob_types\pellet_type.h" />
+    <ClInclude Include="..\source\mob_types\pikmin_type.h" />
+    <ClInclude Include="..\source\mob_types\pile_type.h" />
+    <ClInclude Include="..\source\mob_types\resource_type.h" />
+    <ClInclude Include="..\source\mob_types\ship_type.h" />
+    <ClInclude Include="..\source\mob_types\tool_type.h" />
+    <ClInclude Include="..\source\mob_types\treasure_type.h" />
+    <ClInclude Include="..\source\particle.h" />
+    <ClInclude Include="..\source\replay.h" />
+    <ClInclude Include="..\source\resource.h" />
+    <ClInclude Include="..\source\sector.h" />
+    <ClInclude Include="..\source\spray_type.h" />
+    <ClInclude Include="..\source\status.h" />
+    <ClInclude Include="..\source\utils\geometry_utils.h" />
+    <ClInclude Include="..\source\utils\math_utils.h" />
+    <ClInclude Include="..\source\utils\string_utils.h" />
+    <ClInclude Include="..\source\vars.h" />
+    <ClInclude Include="..\source\weather.h" />
+    <ClInclude Include="..\source\world_component.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\animation.cpp" />
+    <ClCompile Include="..\source\code_debug.cpp" />
+    <ClCompile Include="..\source\controls.cpp" />
+    <ClCompile Include="..\source\data_file.cpp" />
+    <ClCompile Include="..\source\drawing.cpp" />
+    <ClCompile Include="..\source\editors\animation_editor\drawing.cpp" />
+    <ClCompile Include="..\source\editors\animation_editor\editor.cpp" />
+    <ClCompile Include="..\source\editors\animation_editor\event_handling.cpp" />
+    <ClCompile Include="..\source\editors\animation_editor\gui_functions.cpp" />
+    <ClCompile Include="..\source\editors\animation_editor\loading.cpp" />
+    <ClCompile Include="..\source\editors\area_editor\drawing.cpp" />
+    <ClCompile Include="..\source\editors\area_editor\editor.cpp" />
+    <ClCompile Include="..\source\editors\area_editor\event_handling.cpp" />
+    <ClCompile Include="..\source\editors\area_editor\gui_functions.cpp" />
+    <ClCompile Include="..\source\editors\area_editor\loading.cpp" />
+    <ClCompile Include="..\source\editors\editor.cpp" />
+    <ClCompile Include="..\source\functions.cpp" />
+    <ClCompile Include="..\source\gameplay.cpp" />
+    <ClCompile Include="..\source\game_state.cpp" />
+    <ClCompile Include="..\source\hazard.cpp" />
+    <ClCompile Include="..\source\hitbox.cpp" />
+    <ClCompile Include="..\source\init.cpp" />
+    <ClCompile Include="..\source\interval.cpp" />
+    <ClCompile Include="..\source\LAFI\angle_picker.cpp" />
+    <ClCompile Include="..\source\LAFI\button.cpp" />
+    <ClCompile Include="..\source\LAFI\checkbox.cpp" />
+    <ClCompile Include="..\source\LAFI\frame.cpp" />
+    <ClCompile Include="..\source\LAFI\gui.cpp" />
+    <ClCompile Include="..\source\LAFI\image.cpp" />
+    <ClCompile Include="..\source\LAFI\label.cpp" />
+    <ClCompile Include="..\source\LAFI\minor.cpp" />
+    <ClCompile Include="..\source\LAFI\radio_button.cpp" />
+    <ClCompile Include="..\source\LAFI\scrollbar.cpp" />
+    <ClCompile Include="..\source\LAFI\style.cpp" />
+    <ClCompile Include="..\source\LAFI\textbox.cpp" />
+    <ClCompile Include="..\source\LAFI\widget.cpp" />
+    <ClCompile Include="..\source\liquid.cpp" />
+    <ClCompile Include="..\source\load.cpp" />
+    <ClCompile Include="..\source\logic.cpp" />
+    <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\menus.cpp" />
+    <ClCompile Include="..\source\menu_widgets.cpp" />
+    <ClCompile Include="..\source\misc_structs.cpp" />
+    <ClCompile Include="..\source\mobs\bridge.cpp" />
+    <ClCompile Include="..\source\mobs\converter.cpp" />
+    <ClCompile Include="..\source\mobs\decoration.cpp" />
+    <ClCompile Include="..\source\mobs\drop.cpp" />
+    <ClCompile Include="..\source\mobs\enemy.cpp" />
+    <ClCompile Include="..\source\mobs\interactable.cpp" />
+    <ClCompile Include="..\source\mobs\leader.cpp" />
+    <ClCompile Include="..\source\mobs\mob.cpp" />
+    <ClCompile Include="..\source\mobs\mob_utils.cpp" />
+    <ClCompile Include="..\source\mobs\onion.cpp" />
+    <ClCompile Include="..\source\mobs\pellet.cpp" />
+    <ClCompile Include="..\source\mobs\pikmin.cpp" />
+    <ClCompile Include="..\source\mobs\pile.cpp" />
+    <ClCompile Include="..\source\mobs\resource.cpp" />
+    <ClCompile Include="..\source\mobs\ship.cpp" />
+    <ClCompile Include="..\source\mobs\tool.cpp" />
+    <ClCompile Include="..\source\mobs\treasure.cpp" />
+    <ClCompile Include="..\source\mob_categories\bridge_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\converter_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\custom_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\decoration_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\drop_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\enemy_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\interactable_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\leader_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\mob_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\onion_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\pellet_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\pikmin_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\pile_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\resource_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\ship_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\tool_category.cpp" />
+    <ClCompile Include="..\source\mob_categories\treasure_category.cpp" />
+    <ClCompile Include="..\source\mob_fsms\bridge_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\converter_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\decoration_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\drop_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\gen_mob_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\leader_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\onion_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\pellet_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\pikmin_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\pile_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\resource_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\ship_fsm.cpp" />
+    <ClCompile Include="..\source\mob_fsms\treasure_fsm.cpp" />
+    <ClCompile Include="..\source\mob_script.cpp" />
+    <ClCompile Include="..\source\mob_types\bridge_type.cpp" />
+    <ClCompile Include="..\source\mob_types\converter_type.cpp" />
+    <ClCompile Include="..\source\mob_types\decoration_type.cpp" />
+    <ClCompile Include="..\source\mob_types\drop_type.cpp" />
+    <ClCompile Include="..\source\mob_types\enemy_type.cpp" />
+    <ClCompile Include="..\source\mob_types\interactable_type.cpp" />
+    <ClCompile Include="..\source\mob_types\leader_type.cpp" />
+    <ClCompile Include="..\source\mob_types\mob_type.cpp" />
+    <ClCompile Include="..\source\mob_types\onion_type.cpp" />
+    <ClCompile Include="..\source\mob_types\pellet_type.cpp" />
+    <ClCompile Include="..\source\mob_types\pikmin_type.cpp" />
+    <ClCompile Include="..\source\mob_types\pile_type.cpp" />
+    <ClCompile Include="..\source\mob_types\resource_type.cpp" />
+    <ClCompile Include="..\source\mob_types\ship_type.cpp" />
+    <ClCompile Include="..\source\mob_types\tool_type.cpp" />
+    <ClCompile Include="..\source\mob_types\treasure_type.cpp" />
+    <ClCompile Include="..\source\particle.cpp" />
+    <ClCompile Include="..\source\replay.cpp" />
+    <ClCompile Include="..\source\sector.cpp" />
+    <ClCompile Include="..\source\spray_type.cpp" />
+    <ClCompile Include="..\source\status.cpp" />
+    <ClCompile Include="..\source\utils\geometry_utils.cpp" />
+    <ClCompile Include="..\source\utils\math_utils.cpp" />
+    <ClCompile Include="..\source\utils\string_utils.cpp" />
+    <ClCompile Include="..\source\vars.cpp" />
+    <ClCompile Include="..\source\weather.cpp" />
+    <ClCompile Include="..\source\world_component.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\source\Icon.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\AllegroDeps.1.10.0.0\build\native\AllegroDeps.targets" Condition="Exists('packages\AllegroDeps.1.10.0.0\build\native\AllegroDeps.targets')" />
+    <Import Project="packages\Allegro.5.2.5.2\build\native\Allegro.targets" Condition="Exists('packages\Allegro.5.2.5.2\build\native\Allegro.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\AllegroDeps.1.10.0.0\build\native\AllegroDeps.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\AllegroDeps.1.10.0.0\build\native\AllegroDeps.targets'))" />
+    <Error Condition="!Exists('packages\Allegro.5.2.5.2\build\native\Allegro.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Allegro.5.2.5.2\build\native\Allegro.targets'))" />
+  </Target>
+</Project>

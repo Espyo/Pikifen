@@ -139,17 +139,36 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 4) Compiling
 ===============
     (You don't need to do this if you download the zip file with the engine already built!)
-    First, download the source, of course.
-    Then, under Linux...
+    First, download the source, of course. Then...
+    
+    Under Windows, with Visual Studio 2019:
+        Open the VS2019 .sln file with Visual Studio 2019.
+        Compile.
+        If you get any errors, try the following troubleshooting tips:
+            If you get "'min': identifier not found" (or 'max'):
+                At the top of the file with the error add, near the other includes, "#include <algorithm>". (I try to fix these errors for Windows builds, but I don't do it often, so bear with me!)
+            If you get tons of "expected an identifier" and "namespace __ has no member --" errors:
+                Try compiling with the Release x64 target.
+            If you get "Element <LanguageStandard> has an invalid value of "Default"":
+                Project properties, C/C++, Language, C++ Language, C++ Language Standard: Set it to the highest available option, hopefully C++ 17.
+            If you don't have the Windows 10 SDK:
+                Right-click the solution, Retarget solution, and choose whatever the most recent option is.
+            It might only work if, during Visual Studio's installation, you've included "MSVC v142 - VS 2019 C++ x64/x86 Build Tools" and "Windows 10 SDK".
+    
+    Under Windows, with Visual Studio 2010:
+        Install Allegro 5 (5.0.10) by following the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        Open the VS2010 .sln file with Visual Studio 2010.
+        Go to the project's properties, have a look around, and see if any attribute needs to be changed to your needs, like the Allegro directories.
+        Compile. Good luck...
+    
+    Under Windows, with another version of Visual Studio:
+        Follow the instructions for Visual Studio 2019, but go to the project properties, General, Platform Toolset, and set it to whatever you have.
+    
+    Under Linux, with g++:
         Install Allegro 5 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
             If you are on Ubuntu, I recommend this link https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853
         On a terminal, go to the engine's root folder and write "make".
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
-    Or under Windows...
-        What are you doing? Just download a pre-built binary, please!
-        ...But if you really must compile it, install Allegro 5 (5.0.10) by following the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
-        Open the .sln with Visual Studio.
-        Compile. Good luck.
 
 ===============
 5) Changelog

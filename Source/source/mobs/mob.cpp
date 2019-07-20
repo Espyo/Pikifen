@@ -409,7 +409,7 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
     
     amount_to_move = min(amount_to_move, max_step_distance);
     amount_to_turn =
-        sign(amount_to_turn) * min(fabs(amount_to_turn), max_turn_angle);
+        sign(amount_to_turn) * min((double) fabs(amount_to_turn), (double) max_turn_angle);
         
     point destination_pos = pos;
     float destination_angle = angle + amount_to_turn;

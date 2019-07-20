@@ -8,6 +8,8 @@
  * Animation editor event handler function.
  */
 
+#include <algorithm>
+
 #include "editor.h"
 
 #include "../../functions.h"
