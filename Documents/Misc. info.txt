@@ -26,7 +26,7 @@ Creating tree leaf shadow textures
     2) Create a new image and place them at will.
     3) When done, turn the image black and white.
     4) Change the image's levels, and raise the input blacks to almost max (such that you only get a silhouette of the leafs).
-    5) Paint the transparents parts between the leafs and edges of the image black (optional, but recommended).
+    5) Paint the transparent parts between the leafs and edges of the image black (optional, but recommended).
     6) Lower this layer's opacity to 50%, more or less.
     7) Do a Gaussian Blur, such that the edges of the leafs aren't well defined, but they're still understandable as leafs (2 or 3 pixel radius might do the trick).
 
@@ -82,20 +82,3 @@ To add a glow to the cursor on GIMP
     Selection blur by 5.
     Bucket fill the selection with white, in a layer under the cursor.
     Set that layer's opacity to 75%.
-
-
-Checklist for making a new enemy:
-    Script
-        Common events for most states.
-            Death.
-            Bottomless pit.
-            "Big damage".
-            Touched hazard.
-    Sprite sheet
-        Add a "palette" of the gradients used to the left of the image.
-    Animations
-        The attack animations must hit close to the enemy as well.
-        Make sure the idle animation is not consisted of solely one boring frame.
-        Check if all instances of the standard "body" hitbox are latchable (if they're meant to).
-        Check if all instances of the standard "attack" hitbox are disabled, except when they're needed.
-        Check if all hitboxes have the correct Z and height.
