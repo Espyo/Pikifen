@@ -8,11 +8,10 @@
  * Drop class and drop related functions.
  */
 
-#include <algorithm>
-
 #include "drop.h"
 
 #include "../vars.h"
+#include <algorithm>
 
 /* ----------------------------------------------------------------------------
  * Creates a drop mob.

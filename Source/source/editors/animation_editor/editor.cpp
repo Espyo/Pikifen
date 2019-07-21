@@ -701,6 +701,11 @@ void animation_editor::save_animation_database() {
                 new data_node("hit_rate", i2s(anims.animations[a]->hit_rate))
             );
         }
+
+		anim_node->add(
+			new data_node("attack_knocks_pikmin", b2s(anims.animations[a]->knocks_pikmin))
+		);
+
         data_node* frames_node = new data_node("frames", "");
         anim_node->add(frames_node);
         

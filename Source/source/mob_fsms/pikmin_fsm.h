@@ -32,6 +32,7 @@ void begin_pluck(              mob* m, void* info1, void* info2);
 void sprout_evolve(            mob* m, void* info1, void* info2);
 void sprout_schedule_evol(     mob* m, void* info1, void* info2);
 void called(                   mob* m, void* info1, void* info2);
+void called_h(                 mob* m, void* info1, void* info2);
 void check_disabled_edible(    mob* m, void* info1, void* info2);
 void check_remove_flailing(    mob* m, void* info1, void* info2);
 void clear_timer(              mob* m, void* info1, void* info2);

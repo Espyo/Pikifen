@@ -194,12 +194,15 @@ frame::frame(
  */
 animation::animation(
     const string &name, const vector<frame> &frames,
-    const size_t loop_frame, const unsigned char hit_rate
+    const size_t loop_frame,
+	const unsigned char hit_rate,
+	const bool knocks_pikmin
 ) :
     name(name),
     frames(frames),
     loop_frame(loop_frame),
-    hit_rate(hit_rate) {
+    hit_rate(hit_rate),
+	knocks_pikmin(knocks_pikmin){
     
 }
 
@@ -642,16 +645,15 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             );
         }
         
-        adb.animations.push_back(
-            new animation(
-                anim_node->name,
-                frames,
-                s2i(anim_node->get_child_by_name("loop_frame")->value),
-                s2i(anim_node->get_child_by_name(
-                        "hit_rate"
-                    )->get_value_or_default("100"))
-            )
-        );
+		adb.animations.push_back(
+			new animation(
+				anim_node->name,
+				frames,
+				s2i(anim_node->get_child_by_name("loop_frame")->value),
+				s2i(anim_node->get_child_by_name("hit_rate")->get_value_or_default("100")),
+				s2b(anim_node->get_child_by_name("attack_knocks_pikmin")->get_value_or_default("true"))
+				)
+			);
     }
     
     return adb;

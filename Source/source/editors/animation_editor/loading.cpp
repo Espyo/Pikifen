@@ -328,139 +328,56 @@ void animation_editor::load() {
         new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_anims->add("frm_anim", frm_anim);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "but_prev_anim",
-        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_next_anim",
-        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_del_anim",
-        new lafi::button("", "", editor_icons[ICON_REMOVE]), 15, 32
-    );
-    frm_anim->easy_add(
-        "but_import",
-        new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32
-    );
+    frm_anim->easy_add("but_prev_anim",new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32);
+    frm_anim->easy_add("but_next_anim",new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32);
+    frm_anim->easy_add("but_del_anim",new lafi::button("", "", editor_icons[ICON_REMOVE]), 15, 32);
+    frm_anim->easy_add("but_import",new lafi::button("", "", editor_icons[ICON_DUPLICATE]), 20, 32);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "lin_1",
-        new lafi::line(), 15, 12
-    );
-    frm_anim->easy_add(
-        "lbl_data",
-        new lafi::label("Animation data", ALLEGRO_ALIGN_CENTER),
-        70, 12
-    );
-    frm_anim->easy_add(
-        "lin_2",
-        new lafi::line(), 15, 12
-    );
+    frm_anim->easy_add("lin_1",new lafi::line(), 15, 12);
+    frm_anim->easy_add("lbl_data",new lafi::label("Animation data", ALLEGRO_ALIGN_CENTER),70, 12);
+    frm_anim->easy_add("lin_2",new lafi::line(), 15, 12);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "lbl_loop",
-        new lafi::label("Loop frame:"), 50, 16
-    );
-    frm_anim->easy_add(
-        "txt_loop",
-        new lafi::textbox(), 50, 16
-    );
+    frm_anim->easy_add("lbl_loop",new lafi::label("Loop frame:"), 50, 16);
+    frm_anim->easy_add("txt_loop",new lafi::textbox(), 50, 16);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "chk_missable",
-        new lafi::checkbox("Missable attack"), 100, 16
-    );
+    frm_anim->easy_add("chk_missable",new lafi::checkbox("Missable attack"), 100, 16);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "dum_1",
-        new lafi::dummy(), 10, 16
-    );
-    frm_anim->easy_add(
-        "lbl_hit_rate",
-        new lafi::label("Hit rate:"), 50, 16
-    );
-    frm_anim->easy_add(
-        "txt_hit_rate",
-        new lafi::textbox(), 30, 16
-    );
-    frm_anim->easy_add(
-        "lbl_hit_rate_p",
-        new lafi::label("%"), 10, 16
-    );
+    frm_anim->easy_add("dum_1",new lafi::dummy(), 10, 16);
+    frm_anim->easy_add("lbl_hit_rate",new lafi::label("Hit rate:"), 50, 16);
+    frm_anim->easy_add("txt_hit_rate",new lafi::textbox(), 30, 16);
+    frm_anim->easy_add("lbl_hit_rate_p",new lafi::label("%"), 10, 16);
+	frm_anim->easy_row();
+	frm_anim->easy_add("chk_knockback", new lafi::checkbox("Knockback animation plays"), 100, 16);
+	frm_anim->easy_row();
+    frm_anim->easy_add("lin_3",new lafi::line(), 25, 12);
+    frm_anim->easy_add("lbl_list",new lafi::label("Frame list", ALLEGRO_ALIGN_CENTER),50, 12);
+    frm_anim->easy_add("lin_4",new lafi::line(), 25, 12);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "lin_3",
-        new lafi::line(), 25, 12
-    );
-    frm_anim->easy_add(
-        "lbl_list",
-        new lafi::label("Frame list", ALLEGRO_ALIGN_CENTER),
-        50, 12
-    );
-    frm_anim->easy_add(
-        "lin_4",
-        new lafi::line(), 25, 12
-    );
+    frm_anim->easy_add("lbl_f_nr",new lafi::label(), 100, 16);
     frm_anim->easy_row();
-    frm_anim->easy_add(
-        "lbl_f_nr",
-        new lafi::label(), 100, 16
-    );
-    frm_anim->easy_row();
-    frm_anim->easy_add(
-        "but_play",
-        new lafi::button("", "", editor_icons[ICON_PLAY_PAUSE]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_prev",
-        new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_next",
-        new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_add",
-        new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32
-    );
-    frm_anim->easy_add(
-        "but_rem",
-        new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32
-    );
+    frm_anim->easy_add("but_play",new lafi::button("", "", editor_icons[ICON_PLAY_PAUSE]), 20, 32);
+    frm_anim->easy_add("but_prev",new lafi::button("", "", editor_icons[ICON_PREVIOUS]), 20, 32);
+    frm_anim->easy_add("but_next",new lafi::button("", "", editor_icons[ICON_NEXT]), 20, 32);
+    frm_anim->easy_add("but_add",new lafi::button("", "", editor_icons[ICON_ADD]), 20, 32);
+    frm_anim->easy_add("but_rem",new lafi::button("", "", editor_icons[ICON_REMOVE]), 20, 32);
     y += frm_anim->easy_row();
     
-    frm_frame =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+    frm_frame = new lafi::frame(canvas_br.x, y, scr_w, scr_h);
     frm_anim->add("frm_frame", frm_frame);
     
     frm_frame->easy_row();
-    frm_frame->easy_add(
-        "lbl_sprite",
-        new lafi::label("Sprite:"), 30, 16
+    frm_frame->easy_add("lbl_sprite",new lafi::label("Sprite:"), 30, 16
     );
-    frm_frame->easy_add(
-        "but_sprite",
-        new lafi::button(), 70, 24
-    );
+    frm_frame->easy_add("but_sprite",new lafi::button(), 70, 24);
     frm_frame->easy_row();
     frm_frame->easy_add(
         "lbl_dur",
         new lafi::label("Duration:"), 40, 16
     );
-    frm_frame->easy_add(
-        "txt_dur",
-        new lafi::textbox(), 60, 16
-    );
+    frm_frame->easy_add("txt_dur",new lafi::textbox(), 60, 16);
     frm_frame->easy_row();
-    frm_frame->easy_add(
-        "chk_signal",
-        new lafi::checkbox("Signal"), 50, 16
-    );
-    frm_frame->easy_add(
-        "txt_signal",
-        new lafi::textbox(), 50, 16
+    frm_frame->easy_add("chk_signal",new lafi::checkbox("Signal"), 50, 16);
+    frm_frame->easy_add("txt_signal",new lafi::textbox(), 50, 16
     );
     frm_frame->easy_row();
     frm_frame->easy_add(
@@ -493,17 +410,14 @@ void animation_editor::load() {
         
     frm_anims->widgets["lbl_panel_name"]->style = faded_style;
     
-    frm_anims->widgets["but_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anims->widgets["but_anim"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         this->frm_anims->hide();
         open_picker(PICKER_EDIT_ANIMATION, true);
     };
-    frm_anims->widgets["but_anim"]->description =
-        "Pick an animation to edit.";
+    frm_anims->widgets["but_anim"]->description = "Pick an animation to edit.";
         
-    frm_anim->widgets["but_prev_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_prev_anim"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(!cur_anim && !anims.animations.empty()) {
             pick_animation(anims.animations[0]->name);
         } else {
@@ -515,11 +429,9 @@ void animation_editor::load() {
             pick_animation(anims.animations[a]->name);
         }
     };
-    frm_anim->widgets["but_prev_anim"]->description =
-        "Jump to the previous animation in the list.";
+    frm_anim->widgets["but_prev_anim"]->description = "Jump to the previous animation in the list.";
         
-    frm_anim->widgets["but_next_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_next_anim"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(!cur_anim && !anims.animations.empty()) {
             pick_animation(anims.animations[0]->name);
         } else {
@@ -531,11 +443,9 @@ void animation_editor::load() {
             pick_animation(anims.animations[a]->name);
         }
     };
-    frm_anim->widgets["but_next_anim"]->description =
-        "Jump to the next animation in the list.";
+    frm_anim->widgets["but_next_anim"]->description = "Jump to the next animation in the list.";
         
-    frm_anim->widgets["but_del_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_del_anim"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(!cur_anim) {
             emit_status_bar_message(
                 "You have to select an animation to delete!", false
@@ -555,38 +465,33 @@ void animation_editor::load() {
         made_new_changes = true;
         emit_status_bar_message("Animation deleted.", false);
     };
-    frm_anim->widgets["but_del_anim"]->description =
-        "Delete the current animation.";
+    frm_anim->widgets["but_del_anim"]->description = "Delete the current animation.";
         
-    frm_anim->widgets["but_import"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_import"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(PICKER_IMPORT_ANIMATION, false);
     };
-    frm_anim->widgets["but_import"]->description =
-        "Import the data from another animation.";
+    frm_anim->widgets["but_import"]->description = "Import the data from another animation.";
         
-    frm_anim->widgets["txt_loop"]->lose_focus_handler =
-        lambda_gui_to_animation;
-    frm_anim->widgets["txt_loop"]->description =
-        "The animation loops back to this frame when it ends.";
+    frm_anim->widgets["txt_loop"]->lose_focus_handler = lambda_gui_to_animation;
+    frm_anim->widgets["txt_loop"]->description = "The animation loops back to this frame when it ends.";
         
-    frm_anim->widgets["chk_missable"]->left_mouse_click_handler =
-    [this] (lafi::widget * c, int, int) {
+    frm_anim->widgets["chk_missable"]->left_mouse_click_handler =[this] (lafi::widget * c, int, int) {
         if(((lafi::checkbox*) c)->checked) {
             set_textbox_text(this->frm_anim, "txt_hit_rate", "50");
         }
         gui_to_animation();
     };
-    frm_anim->widgets["chk_missable"]->description =
-        "Is it an attack that can knock back Pikmin, but miss?";
+    frm_anim->widgets["chk_missable"]->description = "Is it an attack that can knock back Pikmin, but miss?";
+
+	frm_anim->widgets["chk_knockback"]->left_mouse_click_handler = [this](lafi::widget * c, int, int) {
+		gui_to_animation();
+	};
+	frm_anim->widgets["chk_knockback"]->description = "When checked pikmin will play their knockback animation.";
+
+    frm_anim->widgets["txt_hit_rate"]->lose_focus_handler = lambda_gui_to_animation;
+    frm_anim->widgets["txt_hit_rate"]->description = "Chance that a Pikmin will actually be knocked back.";
         
-    frm_anim->widgets["txt_hit_rate"]->lose_focus_handler =
-        lambda_gui_to_animation;
-    frm_anim->widgets["txt_hit_rate"]->description =
-        "Chance that a Pikmin will actually be knocked back.";
-        
-    frm_anim->widgets["but_play"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_play"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(cur_anim->frames.size() < 2) {
             anim_playing = false;
         } else {
@@ -600,11 +505,9 @@ void animation_editor::load() {
             cur_frame_time = 0;
         }
     };
-    frm_anim->widgets["but_play"]->description =
-        "Play or pause the animation. (Spacebar)";
+    frm_anim->widgets["but_play"]->description = "Play or pause the animation. (Spacebar)";
         
-    frm_anim->widgets["but_prev"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_prev"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(!cur_anim->frames.empty()) {
             if(cur_frame_nr == INVALID) {
@@ -616,11 +519,9 @@ void animation_editor::load() {
         }
         frame_to_gui();
     };
-    frm_anim->widgets["but_prev"]->description =
-        "Previous frame.";
+    frm_anim->widgets["but_prev"]->description = "Previous frame.";
         
-    frm_anim->widgets["but_next"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_next"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(!cur_anim->frames.empty()) {
             if(
@@ -635,11 +536,9 @@ void animation_editor::load() {
         }
         frame_to_gui();
     };
-    frm_anim->widgets["but_next"]->description =
-        "Next frame.";
+    frm_anim->widgets["but_next"]->description = "Next frame.";
         
-    frm_anim->widgets["but_add"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_add"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(cur_frame_nr != INVALID) {
             cur_frame_nr++;
@@ -657,11 +556,9 @@ void animation_editor::load() {
         made_new_changes = true;
         frm_frame->widgets["but_sprite"]->simulate_click();
     };
-    frm_anim->widgets["but_add"]->description =
-        "Add a new frame after the current one (via copy).";
+    frm_anim->widgets["but_add"]->description = "Add a new frame after the current one (via copy).";
         
-    frm_anim->widgets["but_rem"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
+    frm_anim->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(cur_frame_nr != INVALID) {
             cur_anim->frames.erase(
@@ -680,8 +577,7 @@ void animation_editor::load() {
         frame_to_gui();
         made_new_changes = true;
     };
-    frm_anim->widgets["but_rem"]->description =
-        "Remove the current frame.";
+    frm_anim->widgets["but_rem"]->description = "Remove the current frame.";
         
     frm_frame->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {

@@ -165,7 +165,6 @@ void animation_editor::animation_to_gui() {
         frm_anim->hide();
     } else {
         frm_anim->show();
-        
         set_button_text(frm_anims, "but_anim", cur_anim->name);
         set_textbox_text(frm_anim, "txt_loop", i2s(cur_anim->loop_frame + 1));
         
@@ -184,6 +183,13 @@ void animation_editor::animation_to_gui() {
             set_textbox_text(frm_anim, "txt_hit_rate", i2s(cur_anim->hit_rate));
             
         }
+
+		if (cur_anim->knocks_pikmin == true) {
+			set_checkbox_check(frm_anim, "chk_knockback", true);
+		}
+		else {
+			set_checkbox_check(frm_anim, "chk_knockback", false);
+		}
         
         frame_to_gui();
     }
@@ -429,19 +435,23 @@ void animation_editor::top_to_gui() {
 void animation_editor::gui_to_animation() {
     if(!cur_anim) return;
     
-    cur_anim->loop_frame =
-        s2i(get_textbox_text(frm_anim, "txt_loop")) - 1;
+    cur_anim->loop_frame = s2i(get_textbox_text(frm_anim, "txt_loop")) - 1;
     if(cur_anim->loop_frame >= cur_anim->frames.size()) {
         cur_anim->loop_frame = 0;
     }
     if(get_checkbox_check(frm_anim, "chk_missable")) {
-        cur_anim->hit_rate =
-            s2i(get_textbox_text(frm_anim, "txt_hit_rate"));
+        cur_anim->hit_rate = s2i(get_textbox_text(frm_anim, "txt_hit_rate"));
         cur_anim->hit_rate = clamp(cur_anim->hit_rate, 0, 100);
     } else {
         cur_anim->hit_rate = 100;
     }
-    
+	if (get_checkbox_check(frm_anim, "chk_knockback")) {
+		cur_anim->knocks_pikmin = get_checkbox_check(frm_anim, "chk_knockback");
+	}
+	else {
+		cur_anim->knocks_pikmin = false;
+	}
+
     gui_to_frame();
     animation_to_gui();
     

@@ -20,6 +20,18 @@
 
 using namespace std;
 
+//An Onion-spat seed starts with this Z offset from the Onion.
+const float ONION_NEW_SEED_Z_OFFSET = 320.0f;
+//After spitting a seed, the next seed's angle shifts by this much.
+const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
+//An Onion-spat seed is this quick, horizontally.
+const float ONION_SPEW_H_SPEED = 80.0f;
+//Deviate the seed's horizontal speed by this much, more or less.
+const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
+//An Onion-spat seed is this quick, vertically.
+const float ONION_SPEW_V_SPEED = 600.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.
  */
@@ -52,7 +64,6 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     set_animation(ANIM_IDLING);
 }
 
-
 /* ----------------------------------------------------------------------------
  * Temporary feature to allow Pikmin to be called from the Onion.
  * Calls out a Pikmin from inside the Onion, if possible.
@@ -61,7 +72,6 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
 void onion::call_pikmin() {
 
     if(pikmin_list.size() >= max_pikmin_in_field) return;
-    
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
         size_t cur_m = N_MATURITIES - m - 1;
@@ -79,7 +89,6 @@ void onion::call_pikmin() {
     }
 }
 
-
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
@@ -92,19 +101,6 @@ void onion::read_script_vars(const string &vars) {
         pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
     }
 }
-
-
-//An Onion-spat seed starts with this Z offset from the Onion.
-const float ONION_NEW_SEED_Z_OFFSET = 320.0f;
-//After spitting a seed, the next seed's angle shifts by this much.
-const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
-//An Onion-spat seed is this quick, horizontally.
-const float ONION_SPEW_H_SPEED = 80.0f;
-//Deviate the seed's horizontal speed by this much, more or less.
-const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
-//An Onion-spat seed is this quick, vertically.
-const float ONION_SPEW_V_SPEED = 600.0f;
-
 
 /* ----------------------------------------------------------------------------
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.

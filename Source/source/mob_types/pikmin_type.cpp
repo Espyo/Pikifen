@@ -58,6 +58,14 @@ pikmin_type::pikmin_type() :
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = pikmin_chase_range;
     reaches.push_back(chase_reach);
+	mob_type::reach_struct w_chase_reach;
+	w_chase_reach.angle_1 = TAU;
+	w_chase_reach.radius_1 = w_pikmin_chase_range;
+	reaches.push_back(w_chase_reach);
+	mob_type::reach_struct w_idle_attack_reach;
+	idle_attack_reach.angle_1 = TAU;
+	idle_attack_reach.radius_1 = w_idle_task_range;
+	reaches.push_back(idle_attack_reach);
     
     pikmin_fsm::create_fsm(this);
 }

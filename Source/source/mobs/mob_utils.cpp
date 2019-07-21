@@ -789,7 +789,7 @@ size_t string_to_team_nr(const string &team_str) {
         return MOB_TEAM_TOP;
     } else if(team_str == "neutral") {
         return MOB_TEAM_NEUTRAL;
-    } else if(team_str == "player_1") {
+	}else if(team_str == "player_1") {
         return MOB_TEAM_PLAYER_1;
     } else if(team_str == "player_2") {
         return MOB_TEAM_PLAYER_2;

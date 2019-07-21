@@ -39,8 +39,10 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     team = MOB_TEAM_PLAYER_1; // TODO
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
-    near_reach = 0;
-    far_reach = 2;
+	if (team == MOB_TEAM_PLAYER_1) {
+		near_reach = 0;
+		far_reach = 2; 
+	}
     
     missed_attack_timer =
         timer(

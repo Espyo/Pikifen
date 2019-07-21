@@ -145,11 +145,15 @@ public:
     //this represents the successful hit rate.
     //100 means it cannot miss and/or is a normal animation.
     unsigned char hit_rate;
-    
+
+	bool knocks_pikmin;
+
     animation(
         const string &name = "",
         const vector<frame> &frames = vector<frame>(),
-        const size_t loop_frame = 0, const unsigned char hit_rate = 100
+        const size_t loop_frame = 0,
+		const unsigned char hit_rate = 100,
+		const bool knocks_pikmin = true
     );
     animation(const animation &a2);
 };

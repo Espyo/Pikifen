@@ -233,9 +233,7 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
 /* ----------------------------------------------------------------------------
  * Applies a status effect's effects.
  */
-void mob::apply_status_effect(
-    status_type* s, const bool refill, const bool given_by_parent
-) {
+void mob::apply_status_effect( status_type* s, const bool refill, const bool given_by_parent) {
     if(parent && parent->relay_statuses && !given_by_parent) {
         parent->m->apply_status_effect(s, refill, false);
         if(!parent->handle_statuses) return;
@@ -409,7 +407,7 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
     
     amount_to_move = min(amount_to_move, max_step_distance);
     amount_to_turn =
-        sign(amount_to_turn) * min((double) fabs(amount_to_turn), (double) max_turn_angle);
+        sign(amount_to_turn) * min((double)fabs(amount_to_turn),(double) max_turn_angle);
         
     point destination_pos = pos;
     float destination_angle = angle + amount_to_turn;
@@ -433,9 +431,7 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
  * victim_h: Victim's hitbox that got hit.
  * damage:   If not NULL, total damage caused is returned here.
  */
-bool mob::attack(
-    mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
-) {
+bool mob::attack(mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage) {
     //TODO refactor, probably when I rethink which mobs want to attack which.
     
     if(victim->parent && victim->parent->relay_damage) {
