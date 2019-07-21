@@ -1,5 +1,6 @@
 animations{
 	attacking{
+		attack_knocks_pikmin=false
 		frames{
 			grabbing_far{
 				duration=0.1000
@@ -19,6 +20,7 @@ animations{
 		}
 	}
 	sprout{
+		attack_knocks_pikmin=true
 		frames{
 			sprout1{
 				duration=0.2000
@@ -35,6 +37,7 @@ animations{
 		}
 	}
 	grabbing{
+		attack_knocks_pikmin=true
 		frames{
 			grabbing{
 				duration=0.0000
@@ -42,6 +45,7 @@ animations{
 		}
 	}
 	idling{
+		attack_knocks_pikmin=true
 		frames{
 			idling{
 				duration=0.0000
@@ -49,6 +53,7 @@ animations{
 		}
 	}
 	lying{
+		attack_knocks_pikmin=true
 		frames{
 			half_lying{
 				duration=0.1000
@@ -62,6 +67,7 @@ animations{
 		}
 	}
 	thrown{
+		attack_knocks_pikmin=true
 		frames{
 			thrown1{
 				duration=0.0800
@@ -78,6 +84,7 @@ animations{
 		}
 	}
 	walking{
+		attack_knocks_pikmin=true
 		frames{
 			idling{
 				duration=0.1000
@@ -94,6 +101,7 @@ animations{
 		}
 	}
 	plucking{
+		attack_knocks_pikmin=true
 		frames{
 			sprout1{
 				duration=0.2000
@@ -104,6 +112,7 @@ animations{
 		}
 	}
 	carrying{
+		attack_knocks_pikmin=true
 		frames{
 			grabbing{
 				duration=0.0000
@@ -111,6 +120,7 @@ animations{
 		}
 	}
 	sighing{
+		attack_knocks_pikmin=true
 		frames{
 			thrown1{
 				duration=1.5000
@@ -121,6 +131,7 @@ animations{
 		}
 	}
 	drinking{
+		attack_knocks_pikmin=true
 		frames{
 			thrown1{
 				duration=1.0000
@@ -128,6 +139,7 @@ animations{
 		}
 	}
 	picking_up{
+		attack_knocks_pikmin=true
 		frames{
 			thrown1{
 				duration=0.1000
