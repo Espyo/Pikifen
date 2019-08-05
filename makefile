@@ -8,8 +8,10 @@ all: $(PROG)
 
 $(PROG): $(OBJS)
 	g++ $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $(PROG)
-#If the above does not work and gives linker errors, use the following line instead.
+# If the above does not work and gives linker errors, use the following line instead.
 #	$(LINK.cc) $(OBJS) -o $(PROG)
+# If you prefer Clang, use the following line instead.
+#   clang++ $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $(PROG)
 
 clean:
 	$(RM) $(OBJS)

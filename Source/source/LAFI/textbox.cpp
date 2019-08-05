@@ -277,7 +277,8 @@ void textbox::widget_on_key_char(
                 auto w = parent->widgets.begin();
                 w != parent->widgets.end(); ++w
             ) {
-                if(typeid(*w->second) == typeid(textbox)) {
+                widget* w_ptr = w->second;
+                if(typeid(*w_ptr) == typeid(textbox)) {
                 
                     if(w->second == this) continue;
                     
