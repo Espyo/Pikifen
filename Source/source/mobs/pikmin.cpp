@@ -260,7 +260,8 @@ void pikmin::increase_maturity(const int amount) {
  */
 void pikmin::read_script_vars(const string &vars) {
     mob::read_script_vars(vars);
-    maturity = s2i(get_var_value(vars, "maturity", "2"));
+    maturity = 0;
+    increase_maturity(s2i(get_var_value(vars, "maturity", "2")));
     if(s2b(get_var_value(vars, "sprout", "0"))) {
         fsm.first_state_override = PIKMIN_STATE_SPROUT;
     }
