@@ -107,7 +107,8 @@ void radio_button::select() {
     
     if(!parent) return;
     for(auto b = parent->widgets.begin(); b != parent->widgets.end(); ++b) {
-        if(typeid(*(b->second)) == typeid(radio_button)) {
+        widget* b_ptr = b->second;
+        if(typeid(*b_ptr) == typeid(radio_button)) {
             radio_button* rb_ptr = (radio_button*) b->second;
             if(rb_ptr->group == group && rb_ptr != this) rb_ptr->unselect();
         }

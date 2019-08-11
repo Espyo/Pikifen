@@ -45,7 +45,7 @@ mob_type::mob_type(size_t category_id) :
     pushable(false),
     pushes_with_hitboxes(false),
     walkable(false),
-    max_health(0),
+    max_health(100),
     health_regen(0),
     territory_radius(0),
     max_carriers(0),

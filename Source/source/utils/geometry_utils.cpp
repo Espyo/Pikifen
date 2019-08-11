@@ -694,7 +694,7 @@ bool lines_intersect(
         intersection->x = 0.0f;
         intersection->y = 0.0f;
     }
-    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return NULL;
+    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return false;
     if(intersection) {
         intersection->x = l2p1.x + (l2p2.x - l2p1.x) * ur;
         intersection->y = l2p1.y + (l2p2.y - l2p1.y) * ur;

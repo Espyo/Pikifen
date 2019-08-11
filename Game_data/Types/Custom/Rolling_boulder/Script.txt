@@ -38,7 +38,9 @@ script {
         }
         on_touch_object {
             if mob_category != Pikmin
-                set_state destroying
+                if mob_category != Decoration
+                    set_state destroying
+                end_if
             end_if
         }
         on_timer {
