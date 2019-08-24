@@ -223,7 +223,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::do_throw);
             efc.change_state("active");
         }
-        efc.new_event(LEADER_EVENT_RELEASE); {
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
             efc.run(leader_fsm::notify_pikmin_release);
             efc.run(leader_fsm::release);
             efc.change_state("active");

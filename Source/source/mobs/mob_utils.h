@@ -148,6 +148,7 @@ struct group_info {
     
     void init_spots(mob* affected_mob_ptr = NULL);
     void sort(subgroup_type* leading_type);
+    void change_standby_type_if_needed();
     point get_average_member_pos();
     point get_spot_offset(const size_t spot_index);
     void reassign_spots();
