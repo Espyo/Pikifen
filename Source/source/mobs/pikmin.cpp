@@ -33,7 +33,9 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     missed_attack_ptr(nullptr),
     maturity(2),
     is_seed_or_sprout(false),
-    pluck_reserved(false) {
+    pluck_reserved(false),
+    latched(false),
+    is_tool_primed_for_whistle(false) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO
