@@ -41,6 +41,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_IF,
     MOB_ACTION_MOVE,
+    MOB_ACTION_ORDER_RELEASE,
     MOB_ACTION_PLAY_SOUND,
     MOB_ACTION_RANDOMIZE_VAR,
     MOB_ACTION_RECEIVE_STATUS,
@@ -258,6 +259,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_THROWN,
     //When it lands on the ground.
     MOB_EVENT_LANDED,
+    //When it is ordered to release whatever it is holding.
+    MOB_EVENT_RELEASE_ORDER,
     //When it is near a task (Pikmin only).
     MOB_EVENT_NEAR_TASK,
     //When it is whistled by a leader.
@@ -317,8 +320,6 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_HOLDING,
     //When the leader throws the Pikmin on their hand.
     LEADER_EVENT_THROW,
-    //When the leader releases the Pikmin on their hand.
-    LEADER_EVENT_RELEASE,
     //When the leader begins whistling.
     LEADER_EVENT_START_WHISTLE,
     //When the leader stops whistling.

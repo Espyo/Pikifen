@@ -281,6 +281,11 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "order_release") {
+    
+        type = MOB_ACTION_ORDER_RELEASE;
+        
+        
     } else if(n == "play_sound") {
     
         type = MOB_ACTION_PLAY_SOUND;
@@ -1172,6 +1177,13 @@ bool mob_action::run(
             point p = rotate_point(point(vf[0], vf[1]), m->angle);
             m->chase(m->pos + p, NULL, false);
             
+        }
+        
+        
+    } else if(type == MOB_ACTION_ORDER_RELEASE) {
+    
+        if(m->holder.m) {
+            m->holder.m->fsm.run_event(MOB_EVENT_RELEASE_ORDER, NULL, NULL);
         }
         
         

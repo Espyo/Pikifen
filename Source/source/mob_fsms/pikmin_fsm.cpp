@@ -816,6 +816,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::start_chasing_leader);
         }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("in_group_chasing");
+        }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader_h");
@@ -858,6 +862,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::stop_in_group);
         }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("in_group_stopped");
+        }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader_h");
@@ -897,6 +905,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::set_group_move_reach);
             efc.run(pikmin_fsm::start_chasing_leader);
+        }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("group_move_chasing");
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
@@ -944,6 +956,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::set_group_move_reach);
             efc.run(pikmin_fsm::stop_in_group);
         }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("group_move_stopped");
+        }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
         }
@@ -990,6 +1006,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_thrown);
             efc.change_state("thrown_h");
         }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("grabbed_by_leader");
+        }
         efc.new_event(MOB_EVENT_RELEASED); {
             efc.change_state("in_group_chasing_h");
         }
@@ -1022,6 +1042,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::stop_being_thrown);
         }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(pikmin_fsm::land_while_holding);
         }
@@ -1049,6 +1073,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("going_to_dismiss_spot_h", PIKMIN_STATE_GOING_TO_DISMISS_SPOT_H); {
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called_h);
+        }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::going_to_dismiss_spot);
@@ -1088,6 +1116,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("idling_h", PIKMIN_STATE_IDLING_H); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::become_idle);
+        }
+        efc.new_event(MOB_EVENT_RELEASE_ORDER); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::stop_being_idle);
@@ -1368,7 +1400,7 @@ void pikmin_fsm::notify_leader_release(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = ((pikmin*) m);
     if(!pik_ptr->following_group) return;
     if(pik_ptr->holder.m != pik_ptr->following_group) return;
-    pik_ptr->following_group->fsm.run_event(LEADER_EVENT_RELEASE);
+    pik_ptr->following_group->fsm.run_event(MOB_EVENT_RELEASE_ORDER);
 }
 
 
@@ -1423,6 +1455,10 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     t_ptr->push_amount = 0.0f;
     m->subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type);
+    if(m->following_group) {
+        m->following_group->group->change_standby_type_if_needed();
+        update_closest_group_member();
+    }
 }
 
 

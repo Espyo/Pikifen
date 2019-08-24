@@ -2747,6 +2747,10 @@ void draw_sector_texture(
             continue;
         }
         
+        if(!texture_sector[t] || texture_sector[t]->is_bottomless_pit) {
+            continue;
+        }
+        
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         

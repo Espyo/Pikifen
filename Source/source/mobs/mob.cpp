@@ -1424,21 +1424,7 @@ void mob::leave_group() {
     
     group_leader->group->init_spots(this);
     
-    //Check if there are no more members of the same type.
-    //If not, choose a new type as the standby!
-    bool last_of_its_type = true;
-    for(size_t m = 0; m < group_leader->group->members.size(); ++m) {
-        if(
-            group_leader->group->members[m]->subgroup_type_ptr ==
-            subgroup_type_ptr
-        ) {
-            last_of_its_type = false;
-            break;
-        }
-    }
-    if(last_of_its_type) {
-        group_leader->group->set_next_cur_standby_type(false);
-    }
+    group_leader->group->change_standby_type_if_needed();
     
     following_group = NULL;
 }

@@ -171,6 +171,22 @@ group_info::group_info(mob* leader_ptr) :
 
 
 /* ----------------------------------------------------------------------------
+ * Changes to a different standby subgroup type in case there are no more
+ * Pikmin of the current one. Or to no type.
+ */
+void group_info::change_standby_type_if_needed() {
+    for(size_t m = 0; m < members.size(); ++m) {
+        if(members[m]->subgroup_type_ptr == cur_standby_type) {
+            //Never mind, there is a member of this subgroup type.
+            return;
+        }
+    }
+    //No members of the current type? Switch to the next.
+    set_next_cur_standby_type(false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the average position of the members.
  */
 point group_info::get_average_member_pos() {

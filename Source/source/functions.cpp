@@ -194,8 +194,8 @@ void crash(const string &reason, const string &info, const int exit_status) {
     show_message_box(
         NULL, "Program crash!",
         "Pikifen has crashed!",
-        "Sorry about that! To help me fix it,"
-        "please read the readme file. Thanks!",
+        "Sorry about that! To help fix this problem, please read the "
+        "FAQ & troubleshooting section of the readme file. Thanks!",
         NULL,
         ALLEGRO_MESSAGEBOX_ERROR
     );
