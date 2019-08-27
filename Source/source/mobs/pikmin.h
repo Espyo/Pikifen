@@ -106,6 +106,8 @@ public:
     bool pluck_reserved;
     //Is this Pikmin latched on to a mob?
     bool latched;
+    //Is the Pikmin holding a tool and ready to drop it on whistle?
+    bool is_tool_primed_for_whistle;
     
     void force_carry(mob* m);
     bool process_attack_miss(hitbox_interaction* info);
