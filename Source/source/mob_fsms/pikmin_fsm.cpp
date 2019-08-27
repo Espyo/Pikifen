@@ -313,7 +313,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("going_to_dismiss_spot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT); {
         efc.new_event(MOB_EVENT_WHISTLED); {
 			efc.run(pikmin_fsm::called);
-			efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::going_to_dismiss_spot);
@@ -1618,8 +1617,7 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
         //if the leader is whistling is a roundabout way... but it works.
         pikmin_fsm::release_tool(m, info1, info2);
     }
-    
-    p_ptr->is_tool_primed_for_whistle = false;
+    pik_ptr->is_tool_primed_for_whistle = false;
 }
 
 
@@ -1715,6 +1713,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
             p_ptr->increase_maturity(-1);
         }
     }
+	//Knocking back pikmin
 	if (info->mob2->anim.cur_anim->knocks_pikmin == true) {
 		m->leave_group();
 		pikmin_fsm::be_released(m, info1, info2);
