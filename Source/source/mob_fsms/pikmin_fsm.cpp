@@ -1125,6 +1125,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stop_being_idle);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
+			efc.run(pikmin_fsm::called_while_holding)
             efc.run(pikmin_fsm::called_h);
         }
         efc.new_event(MOB_EVENT_TOUCHED_ACTIVE_LEADER); {
@@ -1594,6 +1595,28 @@ void pikmin_fsm::called_h(mob* m, void* info1, void* info2) {
 		sfx_pikmin_called.play(0.03, false);
 		m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING_H);
 	}
+}
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is called over by a leader, either by being whistled,
+ * or touched when idling, but while the Pikmin is holding a tool.
+ */
+void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
+	pikmin* pik_ptr = (pikmin*)m;
+	tool* too_ptr = (tool*) * (m->holding.begin());
+
+	if (
+		too_ptr->too_type->dropped_when_pikmin_is_whistled &&
+		pik_ptr->is_tool_primed_for_whistle &&
+		whistling
+		) {
+		//Since this event can be called when the Pikmin is bumped, we must add
+		//a check to only release the tool if it's a real whistle. Checking
+		//if the leader is whistling is a roundabout way... but it works.
+		pikmin_fsm::release_tool(m, info1, info2);
+	}
+
+	p_ptr->is_tool_primed_for_whistle = false;
 }
 
 
