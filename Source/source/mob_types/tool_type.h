@@ -22,7 +22,6 @@ public:
 
     ALLEGRO_BITMAP* bmp_icon;
     bool can_be_hotswapped;
-	bool dropped_when_pikmin_is_whistled;
     bool dropped_when_pikmin_lands;
     bool dropped_when_pikmin_lands_on_opponent;
     bool stuck_when_pikmin_lands_on_opponent;
