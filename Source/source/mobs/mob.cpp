@@ -15,6 +15,7 @@
 #include "../const.h"
 #include "../drawing.h"
 #include "../functions.h"
+#include "../mob_script_action.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"

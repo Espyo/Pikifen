@@ -20,167 +20,14 @@
 using namespace std;
 
 class mob;
+class mob_action;
 class mob_type;
 class mob_state;
 class hitbox;
 
-const unsigned char STATE_HISTORY_SIZE = 3;
-
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
-
-//Types of script action.
-enum MOB_ACTION_TYPES {
-    MOB_ACTION_UNKNOWN,
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC,
-    MOB_ACTION_DELETE,
-    MOB_ACTION_ELSE,
-    MOB_ACTION_END_IF,
-    MOB_ACTION_GET_CHOMPED,
-    MOB_ACTION_FOCUS,
-    MOB_ACTION_FINISH_DYING,
-    MOB_ACTION_IF,
-    MOB_ACTION_MOVE,
-    MOB_ACTION_ORDER_RELEASE,
-    MOB_ACTION_PLAY_SOUND,
-    MOB_ACTION_RANDOMIZE_VAR,
-    MOB_ACTION_RECEIVE_STATUS,
-    MOB_ACTION_RELEASE,
-    MOB_ACTION_REMOVE_STATUS,
-    MOB_ACTION_SEND_MESSAGE,
-    MOB_ACTION_SET_ANIMATION,
-    MOB_ACTION_SET_FAR_REACH,
-    MOB_ACTION_SET_GRAVITY,
-    MOB_ACTION_SET_HEALTH,
-    MOB_ACTION_SET_HIDING,
-    MOB_ACTION_SET_HOLDABLE,
-    MOB_ACTION_SET_LIMB_ANIMATION,
-    MOB_ACTION_SET_NEAR_REACH,
-    MOB_ACTION_SET_STATE,
-    MOB_ACTION_SET_TANGIBLE,
-    MOB_ACTION_SET_TEAM,
-    MOB_ACTION_SET_TIMER,
-    MOB_ACTION_SET_VAR,
-    MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
-    MOB_ACTION_SPAWN,
-    MOB_ACTION_STABILIZE_Z,
-    MOB_ACTION_START_CHOMPING,
-    MOB_ACTION_START_DYING,
-    MOB_ACTION_START_HEIGHT_EFFECT,
-    MOB_ACTION_START_PARTICLES,
-    MOB_ACTION_STOP,
-    MOB_ACTION_STOP_CHOMPING,
-    MOB_ACTION_STOP_HEIGHT_EFFECT,
-    MOB_ACTION_STOP_PARTICLES,
-    MOB_ACTION_SWALLOW,
-    MOB_ACTION_TELEPORT,
-    MOB_ACTION_TURN,
-};
-
-//Arachnorb plan logic action sub-types.
-enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES {
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME,
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD,
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN,
-    MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN,
-};
-
-//Swallowing action sub-types.
-enum MOB_ACTION_SWALLOW_TYPES {
-    MOB_ACTION_SWALLOW_ALL,
-    MOB_ACTION_SWALLOW_NUMBER,
-};
-
-//Face action sub-types.
-enum MOB_ACTION_TURN_TYPES {
-    MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC,
-    MOB_ACTION_TURN_FOCUSED_MOB,
-    MOB_ACTION_TURN_HOME,
-    MOB_ACTION_TURN_RANDOMLY,
-    MOB_ACTION_TURN_ABSOLUTE,
-    MOB_ACTION_TURN_RELATIVE,
-};
-
-//Focus action sub-types.
-enum MOB_ACTION_FOCUS_TYPES {
-    MOB_ACTION_FOCUS_TRIGGER,
-    MOB_ACTION_FOCUS_PARENT,
-};
-
-//If action operator types.
-enum MOB_ACTION_IF_OPERATOR_TYPES {
-    MOB_ACTION_IF_OP_EQUAL,
-    MOB_ACTION_IF_OP_NOT,
-    MOB_ACTION_IF_OP_LESS,
-    MOB_ACTION_IF_OP_MORE,
-    MOB_ACTION_IF_OP_LESS_E,
-    MOB_ACTION_IF_OP_MORE_E,
-};
-
-//If action LHS comparand type.
-enum MOB_ACTION_IF_LHS_TYPES {
-    MOB_ACTION_IF_LHS_VAR,
-    MOB_ACTION_IF_LHS_BODY_PART,
-    MOB_ACTION_IF_LHS_CHOMPED_PIKMIN,
-    MOB_ACTION_IF_LHS_DAY_MINUTES,
-    MOB_ACTION_IF_LHS_FIELD_PIKMIN,
-    MOB_ACTION_IF_LHS_FRAME_SIGNAL,
-    MOB_ACTION_IF_LHS_HEALTH,
-    MOB_ACTION_IF_LHS_LATCHED_PIKMIN,
-    MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT,
-    MOB_ACTION_IF_LHS_MESSAGE,
-    MOB_ACTION_IF_LHS_MESSAGE_SENDER,
-    MOB_ACTION_IF_LHS_MOB_CATEGORY,
-    MOB_ACTION_IF_LHS_MOB_TYPE,
-    MOB_ACTION_IF_LHS_OTHER_BODY_PART,
-};
-
-//If action RHS comparand types.
-enum MOB_ACTION_IF_RHS_TYPES {
-    MOB_ACTION_IF_RHS_VAR,
-    MOB_ACTION_IF_RHS_CONST,
-};
-
-//Moving action sub-types.
-enum MOB_ACTION_MOVE_TYPES {
-    MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB,
-    MOB_ACTION_MOVE_FOCUSED_MOB,
-    MOB_ACTION_MOVE_FOCUSED_MOB_POS,
-    MOB_ACTION_MOVE_HOME,
-    MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC,
-    MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
-    MOB_ACTION_MOVE_COORDS,
-    MOB_ACTION_MOVE_REL_COORDS,
-    MOB_ACTION_MOVE_RANDOMLY,
-};
-
-//Timer action sub-types.
-enum MOB_ACTION_SET_TIMER_TYPES {
-    MOB_ACTION_SET_TIMER_NUMBER,
-    MOB_ACTION_SET_TIMER_RANDOM,
-};
-
-//Set var action sub-types.
-enum MOB_ACTION_SET_VAR_TYPES {
-    MOB_ACTION_SET_VAR_VALUE,
-    MOB_ACTION_SET_VAR_SUM,
-    MOB_ACTION_SET_VAR_SUBTRACT,
-    MOB_ACTION_SET_VAR_MULTIPLY,
-    MOB_ACTION_SET_VAR_DIVIDE,
-    MOB_ACTION_SET_VAR_MODULO,
-};
-
-//Stabilize Z action sub-types.
-enum MOB_ACTION_STABILIZE_Z_TYPES {
-    MOB_ACTION_STABILIZE_Z_HIGHEST,
-    MOB_ACTION_STABILIZE_Z_LOWEST,
-};
-
-//Numerical action sub-types.
-enum MOB_ACTION_NUMERICAL_TYPES {
-    MOB_ACTION_NUMERICAL_ABSOLUTE,
-    MOB_ACTION_NUMERICAL_RELATIVE,
-};
+const unsigned char STATE_HISTORY_SIZE = 3;
 
 //Types of script events.
 enum MOB_EVENT_TYPES {
@@ -344,25 +191,6 @@ enum MOB_EVENT_TYPES {
     N_MOB_EVENTS,
 };
 
-class mob_action {
-public:
-    unsigned char type;
-    custom_action_code code;
-    bool valid;
-    vector<int> vi;
-    vector<float> vf;
-    vector<string> vs;
-    
-    bool run(
-        mob* m, void* custom_data_1, void* custom_data_2,
-        const size_t parent_event
-    );
-    mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
-    mob_action(unsigned char type);
-    mob_action(custom_action_code code);
-};
-
-
 class mob_event {
 public:
     unsigned char type;
@@ -454,12 +282,8 @@ struct hitbox_interaction {
 };
 
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
-void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action*>* actions
-);
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 void unload_script(mob_type* mt);
-bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn);
 
 
 #endif //ifndef MOB_EVENT_INCLUDED

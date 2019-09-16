@@ -13,6 +13,7 @@
 #include "mob_utils.h"
 
 #include "../functions.h"
+#include "../mob_script_action.h"
 #include "../vars.h"
 #include "mob.h"
 

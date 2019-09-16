@@ -1592,7 +1592,7 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
         pikmin_fsm::release_tool(m, info1, info2);
     }
     
-    p_ptr->is_tool_primed_for_whistle = false;
+    pik_ptr->is_tool_primed_for_whistle = false;
 }
 
 

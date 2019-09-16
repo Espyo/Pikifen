@@ -15,6 +15,7 @@
 #include "../const.h"
 #include "../functions.h"
 #include "../load.h"
+#include "../mob_script_action.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
