@@ -9,7 +9,7 @@ init {
 script {
     growing {
         on_enter {
-            move relative 1000 0
+            move_to_relative 1000 0
             set_animation growing
             start_particles dust 0 0
             set_near_reach homing
@@ -30,7 +30,7 @@ script {
         }
         on_tick {
             if var has_target = false
-                move relative 1000 0
+                move_to_relative 1000 0
             end_if
         }
         on_touch_wall {
@@ -51,7 +51,7 @@ script {
                 if mob_category = Leader
                     if var has_target = false
                         focus trigger
-                        move focused_mob
+                        move_to_target focused_mob
                         set_var has_target true
                     end_if
                 end_if

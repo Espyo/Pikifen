@@ -11,13 +11,13 @@ script {
             set_animation moving
             set_timer randomly 0.8 1.2
             set_near_reach search
-            move randomly
+            move_to_target randomly
         }
         on_leave {
             set_timer 0
         }
         on_timer {
-            move randomly
+            move_to_target randomly
             set_timer randomly 0.8 1.2
         }
         on_opponent_in_reach {
@@ -34,7 +34,7 @@ script {
     
     chasing {
         on_enter {
-            move focused_mob
+            move_to_target focused_mob
             set_near_reach attack
             set_far_reach chase
         }
@@ -83,7 +83,7 @@ script {
     
     returning {
         on_enter {
-            move home
+            move_to_target home
             set_timer 2
             set_near_reach search
         }

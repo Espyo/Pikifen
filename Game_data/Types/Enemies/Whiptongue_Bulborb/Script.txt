@@ -28,7 +28,7 @@ script {
     
     exploring {
         on_enter {
-            move randomly
+            move_to_target randomly
             set_animation walking
             set_timer randomly 1.5 2.5
         }
@@ -71,7 +71,7 @@ script {
     chasing {
         on_enter {
             set_animation walking
-            move focused_mob
+            move_to_target focused_mob
             set_near_reach attack
             set_far_reach chase
         }
@@ -128,7 +128,7 @@ script {
     
     returning {
         on_enter {
-            move home
+            move_to_target home
             set_animation walking
             set_timer 2
             set_near_reach search

@@ -224,9 +224,35 @@ mob_action::mob_action(
         vs.push_back(rhs);
         
         
-    } else if(n == "move") {
+    } else if(n == "move_to_absolute") {
+        
+        type = MOB_ACTION_MOVE_TO_ABSOLUTE;
+        
+        if(v_words.size() >= 2) {
+            for(size_t c = 0; c < v_words.size(); ++c) {
+                vf.push_back(s2f(v_words[c]));
+            }
+        } else {
+            valid = false;
+        }
+        
+        
+    } else if(n == "move_to_relative") {
+        
+        type = MOB_ACTION_MOVE_TO_RELATIVE;
+        
+        if(v_words.size() >= 2) {
+            for(size_t c = 0; c < v_words.size(); ++c) {
+                vf.push_back(s2f(v_words[c]));
+            }
+        } else {
+            valid = false;
+        }
+        
+        
+    } else if(n == "move_to_target") {
     
-        type = MOB_ACTION_MOVE;
+        type = MOB_ACTION_MOVE_TO_TARGET;
         
         if(v.empty()) {
             valid = false;
@@ -245,30 +271,11 @@ mob_action::mob_action(
             vi.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
         } else if(v == "randomly") {
             vi.push_back(MOB_ACTION_MOVE_RANDOMLY);
-        } else if(v_words[0] == "relative") {
-            vi.push_back(MOB_ACTION_MOVE_REL_COORDS);
-            v_words.erase(v_words.begin());
-            if(v_words.size() >= 2) {
-                for(size_t c = 0; c < v_words.size(); ++c) {
-                    vf.push_back(s2f(v_words[c]));
-                }
-            } else {
-                valid = false;
-            }
-        } else if(v_words[0] == "absolute") {
-            vi.push_back(MOB_ACTION_MOVE_COORDS);
-            if(v_words.size() >= 2) {
-                for(size_t c = 0; c < v_words.size(); ++c) {
-                    vf.push_back(s2f(v_words[c]));
-                }
-            } else {
-                valid = false;
-            }
         } else {
             valid = false;
         }
         if(!valid) {
-            log_error("Invalid move location \"" + v + "\"!", dn);
+            log_error("Invalid move target \"" + v + "\"!", dn);
         }
         
         
@@ -1122,7 +1129,20 @@ bool mob_action::run(
         break;
         
         
-    } case MOB_ACTION_MOVE: {
+    } case MOB_ACTION_MOVE_TO_ABSOLUTE: {
+        
+        m->chase(point(vf[0], vf[1]), NULL, false);
+        
+        break;
+        
+    } case MOB_ACTION_MOVE_TO_RELATIVE: {
+        
+        point p = rotate_point(point(vf[0], vf[1]), m->angle);
+        m->chase(m->pos + p, NULL, false);
+        
+        break;
+        
+    } case MOB_ACTION_MOVE_TO_TARGET: {
 
         if(vi[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
             if(m->focused_mob) {
@@ -1173,13 +1193,6 @@ bool mob_action::run(
                 ),
                 NULL, false
             );
-            
-        } else if(vi[0] == MOB_ACTION_MOVE_COORDS) {
-            m->chase(point(vf[0], vf[1]), NULL, false);
-            
-        } else if(vi[0] == MOB_ACTION_MOVE_REL_COORDS) {
-            point p = rotate_point(point(vf[0], vf[1]), m->angle);
-            m->chase(m->pos + p, NULL, false);
             
         }
         

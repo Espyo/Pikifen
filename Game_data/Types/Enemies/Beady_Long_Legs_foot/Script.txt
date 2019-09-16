@@ -40,25 +40,25 @@ script {
         on_receive_message {
             if var id = fr
                 if message = move_fr
-                    move arachnorb_foot_logic
+                    move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = fl
                 if message = move_fl
-                    move arachnorb_foot_logic
+                    move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = br
                 if message = move_br
-                    move arachnorb_foot_logic
+                    move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = bl
                 if message = move_bl
-                    move arachnorb_foot_logic
+                    move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if

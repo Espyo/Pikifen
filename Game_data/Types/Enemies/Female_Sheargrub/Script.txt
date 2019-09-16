@@ -54,7 +54,7 @@ script {
     chasing {
         on_enter {
             set_animation moving
-            move focused_mob
+            move_to_target focused_mob
         }
         on_focus_off_reach {
             set_state going_home
@@ -70,7 +70,7 @@ script {
     going_home {
         on_enter {
             set_animation moving
-            move home
+            move_to_target home
         }
         on_reach_destination {
             set_state burying

@@ -104,7 +104,7 @@ script {
             set_timer 0.2
             set_animation jumping_up
             if var has_focus = true
-                move focused_mob_position
+                move_to_target focused_mob_position
             end_if
         }
         on_reach_destination {
@@ -219,7 +219,7 @@ script {
     
     returning_jumping {
         on_enter {
-            move home
+            move_to_target home
             set_animation jumping_forward
         }
         on_reach_destination {

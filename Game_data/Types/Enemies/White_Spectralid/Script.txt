@@ -19,7 +19,7 @@ script {
     
     going_home {
         on_enter {
-            move home
+            move_to_target home
             set_timer 5
         }
         on_reach_destination {
@@ -60,7 +60,7 @@ script {
             set_animation flapping
             set_gravity -2
             set_timer 0.3
-            move randomly
+            move_to_target randomly
             set_var flutters 0
         }
         on_pikmin_land {
@@ -70,7 +70,7 @@ script {
             set_timer 0.3
             stop vertically
             set_gravity 0
-            move randomly
+            move_to_target randomly
             set_var flutters flutters + 1
             if var flutters = 10
                 set_state going_home

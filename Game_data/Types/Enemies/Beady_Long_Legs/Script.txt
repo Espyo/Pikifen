@@ -47,7 +47,7 @@ script {
             set_state deciding
         }
         on_tick {
-            move linked_mob_average
+            move_to_target linked_mob_average
             stabilize_z highest 300
             turn arachnorb_head_logic
         }
@@ -102,7 +102,7 @@ script {
             send_message 0 move_fr
         }
         on_tick {
-            move linked_mob_average
+            move_to_target linked_mob_average
             turn arachnorb_head_logic
         }
         on_receive_message {
@@ -117,7 +117,7 @@ script {
             set_timer 1
         }
         on_tick {
-            move linked_mob_average
+            move_to_target linked_mob_average
             turn arachnorb_head_logic
         }
         on_receive_message {
@@ -132,7 +132,7 @@ script {
             set_timer 1
         }
         on_tick {
-            move linked_mob_average
+            move_to_target linked_mob_average
             turn arachnorb_head_logic
         }
         on_receive_message {
@@ -147,7 +147,7 @@ script {
             set_timer 1
         }
         on_tick {
-            move linked_mob_average
+            move_to_target linked_mob_average
             turn arachnorb_head_logic
         }
         on_receive_message {
