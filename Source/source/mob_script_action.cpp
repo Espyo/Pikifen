@@ -940,18 +940,23 @@ bool mob_action::run(
         return false;
     }
     
-    if(type == MOB_ACTION_ARACHNORB_PLAN_LOGIC) {
-    
+    switch(type) {
+    case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
+
         m->arachnorb_plan_logic(vi[0]);
         
+        break;
         
-    } else if(type == MOB_ACTION_DELETE) {
-    
+        
+    } case MOB_ACTION_DELETE: {
+
         m->to_delete = true;
         
+        break;
         
-    } else if(type == MOB_ACTION_FOCUS) {
-    
+        
+    } case MOB_ACTION_FOCUS: {
+
         if(vi[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
             m->focus_on_mob(m->parent->m);
             
@@ -972,22 +977,27 @@ bool mob_action::run(
             }
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_FINISH_DYING) {
-    
+        
+    } case MOB_ACTION_FINISH_DYING: {
+
         m->finish_dying();
         
-        
-    } else if(
-        type == MOB_ACTION_GET_CHOMPED &&
-        parent_event == MOB_EVENT_HITBOX_TOUCH_EAT
-    ) {
-    
-        ((mob*) custom_data_1)->chomp(m, (hitbox*) custom_data_2);
+        break;
         
         
-    } else if(type == MOB_ACTION_IF) {
-    
+    } case MOB_ACTION_GET_CHOMPED: {
+
+        if(parent_event == MOB_EVENT_HITBOX_TOUCH_EAT) {
+            ((mob*) custom_data_1)->chomp(m, (hitbox*) custom_data_2);
+        }
+        
+        break;
+        
+        
+    } case MOB_ACTION_IF: {
+
         string lhs;
         string rhs;
         
@@ -1109,8 +1119,11 @@ bool mob_action::run(
             return (s2f(lhs) >= s2f(rhs));
         }
         
-    } else if(type == MOB_ACTION_MOVE) {
-    
+        break;
+        
+        
+    } case MOB_ACTION_MOVE: {
+
         if(vi[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
             if(m->focused_mob) {
                 float a = get_angle(m->pos, m->focused_mob->pos);
@@ -1170,40 +1183,52 @@ bool mob_action::run(
             
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_ORDER_RELEASE) {
-    
+        
+    } case MOB_ACTION_ORDER_RELEASE: {
+
         if(m->holder.m) {
             m->holder.m->fsm.run_event(MOB_EVENT_RELEASE_ORDER, NULL, NULL);
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_RANDOMIZE_VAR) {
-    
+        
+    } case MOB_ACTION_RANDOMIZE_VAR: {
+
         m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
         
+        break;
         
-    } else if(type == MOB_ACTION_RECEIVE_STATUS) {
-    
+        
+    } case MOB_ACTION_RECEIVE_STATUS: {
+
         m->apply_status_effect(&status_types[vs[0]], true, false);
         
+        break;
         
-    } else if(type == MOB_ACTION_RELEASE) {
-    
+        
+    } case MOB_ACTION_RELEASE: {
+
         m->release_chomped_pikmin();
         
+        break;
         
-    } else if(type == MOB_ACTION_REMOVE_STATUS) {
-    
+        
+    } case MOB_ACTION_REMOVE_STATUS: {
+
         for(size_t s = 0; s < m->statuses.size(); ++s) {
             if(m->statuses[s].type->name == vs[0]) {
                 m->statuses[s].to_delete = true;
             }
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_SEND_MESSAGE) {
-    
+        
+    } case MOB_ACTION_SEND_MESSAGE: {
+
         if(vf[0] == 0.0f) {
             //Send to linked mobs.
             for(size_t l = 0; l < m->links.size(); ++l) {
@@ -1219,50 +1244,66 @@ bool mob_action::run(
             }
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_ANIMATION) {
-    
+        
+    } case MOB_ACTION_SET_ANIMATION: {
+
         m->set_animation(vi[0], false, vi[1] == 0);
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_FAR_REACH) {
-    
+        
+    } case MOB_ACTION_SET_FAR_REACH: {
+
         m->far_reach = vi[0];
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_GRAVITY) {
-    
+        
+    } case MOB_ACTION_SET_GRAVITY: {
+
         m->gravity_mult = vf[0];
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_HEALTH) {
-    
+        
+    } case MOB_ACTION_SET_HEALTH: {
+
         m->set_health(
             vi[0] == MOB_ACTION_NUMERICAL_RELATIVE,
             false,
             vf[0]
         );
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_HIDING) {
-    
+        
+    } case MOB_ACTION_SET_HIDING: {
+
         m->hide = vi[0];
         
-        
-    } else if(
-        type == MOB_ACTION_SET_HOLDABLE &&
-        typeid(*m) == typeid(tool)
-    ) {
-    
-        ((tool*) m)->holdability_flags = vi[0];
+        break;
         
         
-    } else if(type == MOB_ACTION_SET_NEAR_REACH) {
-    
+    } case MOB_ACTION_SET_HOLDABLE: {
+
+        if(typeid(*m) == typeid(tool)) {
+            ((tool*) m)->holdability_flags = vi[0];
+        }
+        
+        break;
+        
+        
+    } case MOB_ACTION_SET_NEAR_REACH: {
+
         m->near_reach = vi[0];
         
-    } else if(type == MOB_ACTION_SET_LIMB_ANIMATION) {
-    
+        break;
+        
+        
+    } case MOB_ACTION_SET_LIMB_ANIMATION: {
+
         if(!m->parent) return false;
         if(!m->parent->limb_anim.anim_db) return false;
         size_t a = m->parent->limb_anim.anim_db->find_animation(vs[0]);
@@ -1271,32 +1312,43 @@ bool mob_action::run(
             m->parent->limb_anim.anim_db->animations[a];
         m->parent->limb_anim.start();
         
-    } else if(type == MOB_ACTION_SET_STATE) {
-    
+        break;
+        
+        
+    } case MOB_ACTION_SET_STATE: {
+
         m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_TANGIBLE) {
-    
+        
+    } case MOB_ACTION_SET_TANGIBLE: {
+
         m->tangible = (bool) vi[0];
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_TEAM) {
-    
+        
+    } case MOB_ACTION_SET_TEAM: {
+
         m->team = vi[0];
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_TIMER) {
-    
+        
+    } case MOB_ACTION_SET_TIMER: {
+
         if(vi[0] == MOB_ACTION_SET_TIMER_RANDOM) {
             m->set_timer(randomf(vf[0], vf[1]));
         } else {
             m->set_timer(vf[0]);
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_SET_VAR) {
-    
+        
+    } case MOB_ACTION_SET_VAR: {
+
         if(vi[0] == MOB_ACTION_SET_VAR_VALUE) {
             m->set_var(vs[0], vs[1]);
             
@@ -1337,19 +1389,25 @@ bool mob_action::run(
             m->vars[vs[0]] = f2s(result);
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_SHOW_MESSAGE_FROM_VAR) {
-    
+        
+    } case MOB_ACTION_SHOW_MESSAGE_FROM_VAR: {
+
         start_message(m->vars[vs[0]], NULL);
         
+        break;
         
-    } else if(type == MOB_ACTION_SPAWN) {
-    
+        
+    } case MOB_ACTION_SPAWN: {
+
         return m->spawn(&m->type->spawns[vi[0]]);
         
+        break;
         
-    } else if(type == MOB_ACTION_STABILIZE_Z) {
-    
+        
+    } case MOB_ACTION_STABILIZE_Z: {
+
         if(m->links.empty()) return false;
         float best_match_z = m->links[0]->z;
         for(size_t l = 1; l < m->links.size(); ++l) {
@@ -1368,28 +1426,36 @@ bool mob_action::run(
         
         m->z = best_match_z + vf[0];
         
+        break;
         
-    } else if(type == MOB_ACTION_START_DYING) {
-    
+        
+    } case MOB_ACTION_START_DYING: {
+
         m->start_dying();
         
+        break;
         
-    } else if(type == MOB_ACTION_START_CHOMPING) {
-    
+        
+    } case MOB_ACTION_START_CHOMPING: {
+
         m->chomp_max = vi[0];
         m->chomp_body_parts.clear();
         for(size_t p = 1; p < vi.size(); ++p) {
             m->chomp_body_parts.push_back(vi[p]);
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_START_HEIGHT_EFFECT) {
-    
+        
+    } case MOB_ACTION_START_HEIGHT_EFFECT: {
+
         m->start_height_effect();
         
+        break;
         
-    } else if(type == MOB_ACTION_START_PARTICLES) {
-    
+        
+    } case MOB_ACTION_START_PARTICLES: {
+
         if(vs.empty()) {
             m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
         } else {
@@ -1408,9 +1474,11 @@ bool mob_action::run(
             }
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_STOP) {
-    
+        
+    } case MOB_ACTION_STOP: {
+
         if(vi.empty()) {
             m->stop_chasing();
             m->stop_turning();
@@ -1418,34 +1486,44 @@ bool mob_action::run(
             m->speed_z = 0;
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_STOP_CHOMPING) {
-    
+        
+    } case MOB_ACTION_STOP_CHOMPING: {
+
         m->chomp_max = 0;
         m->chomp_body_parts.clear();
         
+        break;
         
-    } else if(type == MOB_ACTION_STOP_HEIGHT_EFFECT) {
-    
+        
+    } case MOB_ACTION_STOP_HEIGHT_EFFECT: {
+
         m->stop_height_effect();
         
+        break;
         
-    } else if(type == MOB_ACTION_STOP_PARTICLES) {
-    
+        
+    } case MOB_ACTION_STOP_PARTICLES: {
+
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
         
+        break;
         
-    } else if(type == MOB_ACTION_SWALLOW) {
-    
+        
+    } case MOB_ACTION_SWALLOW: {
+
         if(vi[0] == MOB_ACTION_SWALLOW_ALL) {
             m->swallow_chomped_pikmin(m->chomping_mobs.size());
         } else {
             m->swallow_chomped_pikmin(vi[1]);
         }
         
+        break;
         
-    } else if(type == MOB_ACTION_TELEPORT) {
-    
+        
+    } case MOB_ACTION_TELEPORT: {
+
         m->stop_chasing();
         point xy;
         float z;
@@ -1460,9 +1538,11 @@ bool mob_action::run(
         m->chase(xy, NULL, true);
         m->z = z;
         
+        break;
         
-    } else if(type == MOB_ACTION_TURN) {
-    
+        
+    } case MOB_ACTION_TURN: {
+
         if(vi[0] == MOB_ACTION_TURN_ABSOLUTE) {
             m->face(vf[0], NULL);
         } else if(vi[0] == MOB_ACTION_TURN_RELATIVE) {
@@ -1477,7 +1557,10 @@ bool mob_action::run(
             m->face(randomf(0, TAU), NULL);
         }
         
+        break;
         
+        
+    }
     }
     
     return false;
