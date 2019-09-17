@@ -10,7 +10,7 @@ script {
             set_animation idling
             set_hiding true
             focus parent
-            turn focused_mob
+            turn_to_target focused_mob
         }
         on_receive_message {
             set_hiding false
@@ -35,7 +35,7 @@ script {
             set_animation idling
         }
         on_tick {
-            turn focused_mob
+            turn_to_target focused_mob
         }
         on_receive_message {
             if var id = fr
@@ -79,7 +79,7 @@ script {
             stop
         }
         on_tick {
-            turn focused_mob
+            turn_to_target focused_mob
         }
         on_timer {
             set_state floating

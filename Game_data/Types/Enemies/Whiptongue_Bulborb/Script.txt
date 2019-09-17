@@ -51,7 +51,7 @@ script {
         on_enter {
             set_animation walking
             stop
-            turn focused_mob
+            turn_to_target focused_mob
             set_near_reach chase
             set_far_reach close
         }

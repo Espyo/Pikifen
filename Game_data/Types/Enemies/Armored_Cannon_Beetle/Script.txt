@@ -84,7 +84,7 @@ script {
         on_enter {
             stop
             set_animation moving
-            turn focused_mob
+            turn_to_target focused_mob
             set_near_reach attack
             set_far_reach search
         }

@@ -49,7 +49,7 @@ script {
         on_tick {
             move_to_target linked_mob_average
             stabilize_z highest 300
-            turn arachnorb_head_logic
+            turn_to_target arachnorb_head_logic
         }
         on_far_from_home {
             set_var must_turn_home true
@@ -103,7 +103,7 @@ script {
         }
         on_tick {
             move_to_target linked_mob_average
-            turn arachnorb_head_logic
+            turn_to_target arachnorb_head_logic
         }
         on_receive_message {
             stabilize_z highest 300
@@ -118,7 +118,7 @@ script {
         }
         on_tick {
             move_to_target linked_mob_average
-            turn arachnorb_head_logic
+            turn_to_target arachnorb_head_logic
         }
         on_receive_message {
             stabilize_z highest 300
@@ -133,7 +133,7 @@ script {
         }
         on_tick {
             move_to_target linked_mob_average
-            turn arachnorb_head_logic
+            turn_to_target arachnorb_head_logic
         }
         on_receive_message {
             stabilize_z highest 300
@@ -148,7 +148,7 @@ script {
         }
         on_tick {
             move_to_target linked_mob_average
-            turn arachnorb_head_logic
+            turn_to_target arachnorb_head_logic
         }
         on_receive_message {
             stabilize_z highest 300

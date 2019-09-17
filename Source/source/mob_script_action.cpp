@@ -873,35 +873,37 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "turn") {
+    } else if(n == "turn_to_absolute") {
     
-        type = MOB_ACTION_TURN;
+        type = MOB_ACTION_TURN_TO_ABSOLUTE;
         
         if(v_words.empty()) {
             valid = false;
-            log_error("The \"turn\" action needs a direction!", dn);
-        } else if(v_words[0] == "absolute") {
-            vi.push_back(MOB_ACTION_TURN_ABSOLUTE);
-            if(v_words.size() >= 2) {
-                vf.push_back(deg_to_rad(s2f(v_words[1])));
-            } else {
-                valid = false;
-                log_error(
-                    "The \"turn\" action with an absolute angle needs "
-                    "the angle!"
-                );
-            }
-        } else if(v_words[0] == "relative") {
-            vi.push_back(MOB_ACTION_TURN_RELATIVE);
-            if(v_words.size() >= 2) {
-                vf.push_back(deg_to_rad(s2f(v_words[1])));
-            } else {
-                valid = false;
-                log_error(
-                    "The \"turn\" action with a relative angle needs "
-                    "the angle!"
-                );
-            }
+            log_error("The \"turn_to_absolute\" action needs a direction!", dn);
+        }
+        
+        vf.push_back(deg_to_rad(s2f(v_words[1])));
+        
+        
+    } else if(n == "turn_to_relative") {
+    
+        type = MOB_ACTION_TURN_TO_RELATIVE;
+        
+        if(v_words.empty()) {
+            valid = false;
+            log_error("The \"turn_to_relative\" action needs a direction!", dn);
+        }
+        
+        vf.push_back(deg_to_rad(s2f(v_words[1])));
+        
+        
+    } else if(n == "turn_to_target") {
+    
+        type = MOB_ACTION_TURN_TO_TARGET;
+        
+        if(v_words.empty()) {
+            valid = false;
+            log_error("The \"turn_to_target\" action needs a direction!", dn);
         } else if(v == "arachnorb_head_logic") {
             vi.push_back(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
         } else if(v == "focused_mob") {
@@ -1591,13 +1593,22 @@ bool mob_action::run(
         break;
         
         
-    } case MOB_ACTION_TURN: {
+    } case MOB_ACTION_TURN_TO_ABSOLUTE: {
 
-        if(vi[0] == MOB_ACTION_TURN_ABSOLUTE) {
-            m->face(vf[0], NULL);
-        } else if(vi[0] == MOB_ACTION_TURN_RELATIVE) {
-            m->face(m->angle + vf[0], NULL);
-        } else if(vi[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
+        m->face(vf[0], NULL);
+        
+        break;
+        
+        
+    } case MOB_ACTION_TURN_TO_RELATIVE: {
+
+        m->face(m->angle + vf[0], NULL);
+        
+        break;
+        
+        
+    } case MOB_ACTION_TURN_TO_TARGET: {
+        if(vi[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
             m->arachnorb_head_turn_logic();
         } else if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
             m->face(0, &m->focused_mob->pos);

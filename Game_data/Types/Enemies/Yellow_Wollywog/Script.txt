@@ -47,7 +47,7 @@ script {
         on_enter {
             set_animation turning
             stop
-            turn focused_mob
+            turn_to_target focused_mob
             set_near_reach align
             set_far_reach search
         }
@@ -193,7 +193,7 @@ script {
     
     returning_turning {
         on_enter {
-            turn home
+            turn_to_target home
             set_timer 2
             set_animation turning
         }
