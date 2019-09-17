@@ -30,7 +30,7 @@ script {
         on_enter {
             move_to_target randomly
             set_animation walking
-            set_timer randomly 1.5 2.5
+            randomize_timer 1.5 2.5
         }
         on_opponent_in_reach {
             focus trigger
@@ -111,7 +111,7 @@ script {
             set_animation chomping
         }
         on_animation_end {
-            swallow all
+            swallow_all
             set_state sniffing
         }
     }

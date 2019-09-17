@@ -68,7 +68,7 @@ script {
         }
         on_timer {
             set_timer 0.3
-            stop vertically
+            stop_vertically
             set_gravity 0
             move_to_target randomly
             set_var flutters flutters + 1

@@ -14,7 +14,7 @@ script {
             set_animation idling
             stop
             set_near_reach search
-            set_timer randomly 2 6
+            randomize_timer 2 6
         }
         on_leave {
             set_timer 0
@@ -117,7 +117,7 @@ script {
     
     jumping_up_2 {
         on_enter {
-            stop vertically
+            stop_vertically
             set_gravity -0.2
             set_timer 0.8
         }
@@ -133,7 +133,7 @@ script {
         on_enter {
             stop
             set_gravity 0
-            stop vertically
+            stop_vertically
             set_timer 1
             set_animation floating
         }
@@ -263,7 +263,7 @@ script {
         on_enter {
             set_gravity 1
             stop
-            stop vertically
+            stop_vertically
             set_animation dying
             start_dying
         }

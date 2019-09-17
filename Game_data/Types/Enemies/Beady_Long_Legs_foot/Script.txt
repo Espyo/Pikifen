@@ -23,7 +23,7 @@ script {
     
     ambushing {
         on_land {
-            send_message 0 landed
+            send_message_to_links landed
             stop_height_effect
             start_particles dust_explosion 0 0
             set_state idling
@@ -94,7 +94,7 @@ script {
     floating {
         on_enter {
             set_gravity 0
-            stop vertically
+            stop_vertically
             set_timer 0.2
         }
         on_reach_destination {
@@ -129,7 +129,7 @@ script {
         on_enter {
             stop_height_effect
             set_animation landing
-            send_message 0 landed
+            send_message_to_links landed
             start_particles dust_explosion 0 0
         }
         on_animation_end {

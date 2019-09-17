@@ -86,7 +86,7 @@ script {
             set_animation eating
         }
         on_animation_end {
-            swallow all
+            swallow_all
             set_state examining
         }
     }

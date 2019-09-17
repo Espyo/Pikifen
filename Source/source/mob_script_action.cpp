@@ -225,7 +225,7 @@ mob_action::mob_action(
         
         
     } else if(n == "move_to_absolute") {
-        
+    
         type = MOB_ACTION_MOVE_TO_ABSOLUTE;
         
         if(v_words.size() >= 2) {
@@ -238,7 +238,7 @@ mob_action::mob_action(
         
         
     } else if(n == "move_to_relative") {
-        
+    
         type = MOB_ACTION_MOVE_TO_RELATIVE;
         
         if(v_words.size() >= 2) {
@@ -306,6 +306,22 @@ mob_action::mob_action(
         }
         
         
+    } else if(n == "randomize_timer") {
+    
+        type = MOB_ACTION_RANDOMIZE_TIMER;
+        
+        if(v_words.size() >= 2) {
+            vf.push_back(s2f(v_words[0]));
+            vf.push_back(s2f(v_words[1]));
+        } else {
+            log_error(
+                "To set a timer randomly, you need to specify the "
+                "minimum and maximum time!", dn
+            );
+            valid = false;
+        }
+        
+        
     } else if(n == "receive_status") {
     
         type = MOB_ACTION_RECEIVE_STATUS;
@@ -348,9 +364,28 @@ mob_action::mob_action(
         }
         
         
-    } else if(n == "send_message") {
+    } else if(n == "send_message_to_links") {
     
-        type = MOB_ACTION_SEND_MESSAGE;
+        type = MOB_ACTION_SEND_MESSAGE_TO_LINKS;
+        if(v_words.size() >= 1) {
+        
+            string msg;
+            for(size_t w = 0; w < v_words.size(); ++w) {
+                msg += v_words[w] + " ";
+            }
+            vs.push_back(trim_spaces(msg));
+            
+        } else {
+            log_error(
+                "The message sending action needs to know the message!", dn
+            );
+            valid = false;
+        }
+        
+        
+    } else if(n == "send_message_to_nearby") {
+    
+        type = MOB_ACTION_SEND_MESSAGE_TO_NEARBY;
         if(v_words.size() >= 2) {
         
             vf.push_back(s2f(v_words[0]));
@@ -553,24 +588,12 @@ mob_action::mob_action(
             valid = false;
         }
         
+        
     } else if(n == "set_timer") {
     
         type = MOB_ACTION_SET_TIMER;
         
-        if(v_words.size() >= 1 && v_words[0] == "randomly") {
-            vi.push_back(MOB_ACTION_SET_TIMER_RANDOM);
-            if(v_words.size() >= 3) {
-                vf.push_back(s2f(v_words[1]));
-                vf.push_back(s2f(v_words[2]));
-            } else {
-                log_error(
-                    "To set a timer randomly, you need to specify the "
-                    "minimum and maximum time!", dn
-                );
-                valid = false;
-            }
-        } else if(v_words.size() >= 1) {
-            vi.push_back(MOB_ACTION_SET_TIMER_NUMBER);
+        if(v_words.size() >= 1) {
             vf.push_back(s2f(v_words[0]));
         } else {
             log_error("No timer amount specified!", dn);
@@ -783,10 +806,6 @@ mob_action::mob_action(
     
         type = MOB_ACTION_STOP;
         
-        if(v == "vertically") {
-            vi.push_back(1);
-        }
-        
         
     } else if(n == "stop_chomping") {
     
@@ -803,16 +822,21 @@ mob_action::mob_action(
         type = MOB_ACTION_STOP_PARTICLES;
         
         
+    } else if(n == "stop_vertically") {
+    
+        type = MOB_ACTION_STOP_VERTICALLY;
+        
+        
     } else if(n == "swallow") {
     
         type = MOB_ACTION_SWALLOW;
         
-        if(v == "all") {
-            vi.push_back(MOB_ACTION_SWALLOW_ALL);
-        } else {
-            vi.push_back(MOB_ACTION_SWALLOW_NUMBER);
-            vi.push_back(s2i(v));
-        }
+        vi.push_back(s2i(v));
+        
+        
+    } else if(n == "swallow_all") {
+    
+        type = MOB_ACTION_SWALLOW_ALL;
         
         
     } else if(n == "teleport") {
@@ -1130,13 +1154,13 @@ bool mob_action::run(
         
         
     } case MOB_ACTION_MOVE_TO_ABSOLUTE: {
-        
+
         m->chase(point(vf[0], vf[1]), NULL, false);
         
         break;
         
     } case MOB_ACTION_MOVE_TO_RELATIVE: {
-        
+
         point p = rotate_point(point(vf[0], vf[1]), m->angle);
         m->chase(m->pos + p, NULL, false);
         
@@ -1215,6 +1239,13 @@ bool mob_action::run(
         break;
         
         
+    } case MOB_ACTION_RANDOMIZE_TIMER: {
+
+        m->set_timer(randomf(vf[0], vf[1]));
+        
+        break;
+        
+        
     } case MOB_ACTION_RECEIVE_STATUS: {
 
         m->apply_status_effect(&status_types[vs[0]], true, false);
@@ -1240,21 +1271,22 @@ bool mob_action::run(
         break;
         
         
-    } case MOB_ACTION_SEND_MESSAGE: {
+    } case MOB_ACTION_SEND_MESSAGE_TO_LINKS: {
 
-        if(vf[0] == 0.0f) {
-            //Send to linked mobs.
-            for(size_t l = 0; l < m->links.size(); ++l) {
-                if(m->links[l] == m) continue;
-                m->send_message(m->links[l], vs[0]);
-            }
-        } else {
-            //Send to nearby mobs.
-            for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
-                if(mobs[m2] == m) continue;
-                if(dist(m->pos, mobs[m2]->pos) > vf[0]) continue;
-                m->send_message(mobs[m2], vs[0]);
-            }
+        for(size_t l = 0; l < m->links.size(); ++l) {
+            if(m->links[l] == m) continue;
+            m->send_message(m->links[l], vs[0]);
+        }
+        
+        break;
+        
+        
+    } case MOB_ACTION_SEND_MESSAGE_TO_NEARBY: {
+
+        for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
+            if(mobs[m2] == m) continue;
+            if(dist(m->pos, mobs[m2]->pos) > vf[0]) continue;
+            m->send_message(mobs[m2], vs[0]);
         }
         
         break;
@@ -1351,11 +1383,7 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_TIMER: {
 
-        if(vi[0] == MOB_ACTION_SET_TIMER_RANDOM) {
-            m->set_timer(randomf(vf[0], vf[1]));
-        } else {
-            m->set_timer(vf[0]);
-        }
+        m->set_timer(vf[0]);
         
         break;
         
@@ -1492,12 +1520,8 @@ bool mob_action::run(
         
     } case MOB_ACTION_STOP: {
 
-        if(vi.empty()) {
-            m->stop_chasing();
-            m->stop_turning();
-        } else {
-            m->speed_z = 0;
-        }
+        m->stop_chasing();
+        m->stop_turning();
         
         break;
         
@@ -1524,13 +1548,23 @@ bool mob_action::run(
         break;
         
         
+    } case MOB_ACTION_STOP_VERTICALLY: {
+
+        m->speed_z = 0;
+        
+        break;
+        
+        
     } case MOB_ACTION_SWALLOW: {
 
-        if(vi[0] == MOB_ACTION_SWALLOW_ALL) {
-            m->swallow_chomped_pikmin(m->chomping_mobs.size());
-        } else {
-            m->swallow_chomped_pikmin(vi[1]);
-        }
+        m->swallow_chomped_pikmin(vi[1]);
+        
+        break;
+        
+        
+    } case MOB_ACTION_SWALLOW_ALL: {
+
+        m->swallow_chomped_pikmin(m->chomping_mobs.size());
         
         break;
         

@@ -28,7 +28,7 @@ script {
             start_height_effect
             teleport relative 0 0 1000
             set_gravity 1
-            send_message 0 ambush
+            send_message_to_links ambush
             set_animation idling
         }
         on_receive_message {
@@ -99,7 +99,7 @@ script {
         on_enter {
             set_var can_rest true
             set_animation idling
-            send_message 0 move_fr
+            send_message_to_links move_fr
         }
         on_tick {
             move_to_target linked_mob_average
@@ -113,7 +113,7 @@ script {
     
     move_fl {
         on_enter {
-            send_message 0 move_fl
+            send_message_to_links move_fl
             set_timer 1
         }
         on_tick {
@@ -128,7 +128,7 @@ script {
     
     move_br {
         on_enter {
-            send_message 0 move_br
+            send_message_to_links move_br
             set_timer 1
         }
         on_tick {
@@ -143,7 +143,7 @@ script {
     
     move_bl {
         on_enter {
-            send_message 0 move_bl
+            send_message_to_links move_bl
             set_timer 1
         }
         on_tick {
@@ -179,7 +179,7 @@ script {
         on_enter {
             set_animation dying2
             start_particles beady_long_legs_crumbling 0 0
-            send_message 0 die
+            send_message_to_links die
         }
         on_animation_end {
             finish_dying
