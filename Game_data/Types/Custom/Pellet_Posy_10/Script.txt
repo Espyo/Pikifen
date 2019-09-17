@@ -17,7 +17,7 @@ script {
         }
         on_timer {
             set_timer 1
-            set_var bloom_time bloom_time - 1
+            calculate bloom_time bloom_time - 1
             if var bloom_time <= 120
                 set_state sapling
             end_if
@@ -31,7 +31,7 @@ script {
         }
         on_timer {
             set_timer 1
-            set_var bloom_time bloom_time - 1
+            calculate bloom_time bloom_time - 1
             if var bloom_time <= 0
                 set_state blooming
             end_if

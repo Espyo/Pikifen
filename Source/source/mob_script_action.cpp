@@ -59,6 +59,50 @@ mob_action::mob_action(
             );
         }
         
+    } else if(n == "calculate") {
+    
+        type = MOB_ACTION_CALCULATE;
+        
+        if(v_words.size() < 4) {
+            log_error(
+                "The \"calculate\" action needs to know the variable name and "
+                "what to set it to!", dn
+            );
+            valid = false;
+            return;
+        }
+        
+        if(v_words[2] == "+") {
+            vi.push_back(MOB_ACTION_SET_VAR_SUM);
+        } else if(v_words[2] == "-") {
+            vi.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
+        } else if(v_words[2] == "*") {
+            vi.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
+        } else if(v_words[2] == "/") {
+            vi.push_back(MOB_ACTION_SET_VAR_DIVIDE);
+        } else if(v_words[2] == "%") {
+            vi.push_back(MOB_ACTION_SET_VAR_MODULO);
+        }
+        
+        vs.push_back(v_words[0]);
+        
+        if(is_number(v_words[1])) {
+            vf.push_back(s2f(v_words[1]));
+            vs.push_back("");
+        } else {
+            vf.push_back(0);
+            vs.push_back(v_words[1]);
+        }
+        
+        if(is_number(v_words[3])) {
+            vf.push_back(s2f(v_words[3]));
+            vs.push_back("");
+        } else {
+            vf.push_back(0);
+            vs.push_back(v_words[3]);
+        }
+        
+        
     } else if(n == "delete") {
     
         type = MOB_ACTION_DELETE;
@@ -605,8 +649,6 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_VAR;
         
-        bool set_to_value = false;
-        
         if(v_words.size() < 2) {
             log_error(
                 "The \"set_var\" action needs to know the variable name and "
@@ -616,48 +658,7 @@ mob_action::mob_action(
             return;
         }
         
-        if(v_words.size() < 4) {
-            set_to_value = true;
-            
-        } else {
-            if(v_words[2] == "+") {
-                vi.push_back(MOB_ACTION_SET_VAR_SUM);
-            } else if(v_words[2] == "-") {
-                vi.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
-            } else if(v_words[2] == "*") {
-                vi.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
-            } else if(v_words[2] == "/") {
-                vi.push_back(MOB_ACTION_SET_VAR_DIVIDE);
-            } else if(v_words[2] == "%") {
-                vi.push_back(MOB_ACTION_SET_VAR_MODULO);
-            } else {
-                set_to_value = true;
-            }
-        }
-        
-        if(set_to_value) {
-            vs = v_words;
-            vi.push_back(MOB_ACTION_SET_VAR_VALUE);
-            
-        } else {
-            vs.push_back(v_words[0]);
-            
-            if(is_number(v_words[1])) {
-                vf.push_back(s2f(v_words[1]));
-                vs.push_back("");
-            } else {
-                vf.push_back(0);
-                vs.push_back(v_words[1]);
-            }
-            
-            if(is_number(v_words[3])) {
-                vf.push_back(s2f(v_words[3]));
-                vs.push_back("");
-            } else {
-                vf.push_back(0);
-                vs.push_back(v_words[3]);
-            }
-        }
+        vs = v_words;
         
         
     } else if(n == "show_message_from_var") {
@@ -975,6 +976,46 @@ bool mob_action::run(
     case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
 
         m->arachnorb_plan_logic(vi[0]);
+        
+        break;
+        
+        
+    } case MOB_ACTION_CALCULATE: {
+
+        float lhs, rhs, result;
+        if(vs[1].empty()) {
+            lhs = vf[0];
+        } else {
+            lhs = s2f(m->vars[vs[1]]);
+        }
+        
+        if(vs[2].empty()) {
+            rhs = vf[1];
+        } else {
+            rhs = s2f(m->vars[vs[2]]);
+        }
+        
+        if(vi[0] == MOB_ACTION_SET_VAR_SUM) {
+            result = lhs + rhs;
+        } else if(vi[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
+            result = lhs - rhs;
+        } else if(vi[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
+            result = lhs * rhs;
+        } else if(vi[0] == MOB_ACTION_SET_VAR_DIVIDE) {
+            if(rhs == 0) {
+                result = 0;
+            } else {
+                result = lhs / rhs;
+            }
+        } else {
+            if(rhs == 0) {
+                result = 0;
+            } else {
+                result = fmod(lhs, rhs);
+            }
+        }
+        
+        m->vars[vs[0]] = f2s(result);
         
         break;
         
@@ -1390,45 +1431,7 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_VAR: {
 
-        if(vi[0] == MOB_ACTION_SET_VAR_VALUE) {
-            m->set_var(vs[0], vs[1]);
-            
-        } else {
-            float lhs, rhs, result;
-            if(vs[1].empty()) {
-                lhs = vf[0];
-            } else {
-                lhs = s2f(m->vars[vs[1]]);
-            }
-            
-            if(vs[2].empty()) {
-                rhs = vf[1];
-            } else {
-                rhs = s2f(m->vars[vs[2]]);
-            }
-            
-            if(vi[0] == MOB_ACTION_SET_VAR_SUM) {
-                result = lhs + rhs;
-            } else if(vi[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
-                result = lhs - rhs;
-            } else if(vi[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
-                result = lhs * rhs;
-            } else if(vi[0] == MOB_ACTION_SET_VAR_DIVIDE) {
-                if(rhs == 0) {
-                    result = 0;
-                } else {
-                    result = lhs / rhs;
-                }
-            } else {
-                if(rhs == 0) {
-                    result = 0;
-                } else {
-                    result = fmod(lhs, rhs);
-                }
-            }
-            
-            m->vars[vs[0]] = f2s(result);
-        }
+        m->set_var(vs[0], vs[1]);
         
         break;
         
