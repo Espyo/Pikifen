@@ -15,7 +15,7 @@ script {
         on_receive_message {
             set_hiding false
             start_height_effect
-            teleport relative 0 0 1000
+            teleport_to_relative 0 0 1000
             set_gravity 1
             set_state ambushing
         }

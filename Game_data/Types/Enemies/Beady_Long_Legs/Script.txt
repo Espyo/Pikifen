@@ -26,7 +26,7 @@ script {
         on_enter {
             set_hiding false
             start_height_effect
-            teleport relative 0 0 1000
+            teleport_to_relative 0 0 1000
             set_gravity 1
             send_message_to_links ambush
             set_animation idling

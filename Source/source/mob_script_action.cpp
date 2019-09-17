@@ -40,7 +40,19 @@ mob_action::mob_action(
         v = trim_spaces(v);
     }
     
-    if(n == "arachnorb_plan_logic") {
+    if(n == "add_health") {
+    
+        type = MOB_ACTION_ADD_HEALTH;
+        
+        if(v_words.empty()) {
+            valid = false;
+            log_error("Invalid health data \"" + v + "\"!", dn);
+        } else {
+            vf.push_back(s2f(v_words[0]));
+        }
+        
+        
+    } else if(n == "arachnorb_plan_logic") {
     
         type = MOB_ACTION_ARACHNORB_PLAN_LOGIC;
         if(v == "home") {
@@ -518,21 +530,11 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SET_HEALTH;
         
-        if(v_words.size() < 2) {
+        if(v_words.empty()) {
             valid = false;
-        } else {
-            if(v_words[0] == "relative") {
-                vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
-            } else if(v_words[0] == "absolute") {
-                vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
-            } else {
-                valid = false;
-            }
-            vf.push_back(s2f(v_words[1]));
-        }
-        
-        if(!valid) {
             log_error("Invalid health data \"" + v + "\"!", dn);
+        } else {
+            vf.push_back(s2f(v_words[0]));
         }
         
         
@@ -840,36 +842,37 @@ mob_action::mob_action(
         type = MOB_ACTION_SWALLOW_ALL;
         
         
-    } else if(n == "teleport") {
+    } else if(n == "teleport_to_absolute") {
     
-        type = MOB_ACTION_TELEPORT;
+        type = MOB_ACTION_TELEPORT_TO_ABSOLUTE;
         
-        if(v.empty()) {
+        if(v_words.size() < 3) {
             valid = false;
             log_error(
-                "The \"teleport\" action needs to know the location!", dn
+                "The \"teleport_to_absolute\" action needs to know "
+                "the location!", dn
             );
         } else {
-            if(v_words[0] == "relative") {
-                vi.push_back(MOB_ACTION_NUMERICAL_RELATIVE);
-                v_words.erase(v_words.begin());
-            } else if(v_words[0] == "absolute") {
-                vi.push_back(MOB_ACTION_NUMERICAL_ABSOLUTE);
-                v_words.erase(v_words.begin());
-            } else {
-                valid = false;
-            }
-            if(v_words.size() < 3) {
-                valid = false;
-                log_error(
-                    "The \"teleport\" action needs to know the "
-                    "X, Y, and Z coordinates!", dn
-                );
-            } else {
-                vf.push_back(s2f(v_words[0]));
-                vf.push_back(s2f(v_words[1]));
-                vf.push_back(s2f(v_words[2]));
-            }
+            vf.push_back(s2f(v_words[0]));
+            vf.push_back(s2f(v_words[1]));
+            vf.push_back(s2f(v_words[2]));
+        }
+        
+        
+    } else if(n == "teleport_to_relative") {
+    
+        type = MOB_ACTION_TELEPORT_TO_RELATIVE;
+        
+        if(v_words.size() < 3) {
+            valid = false;
+            log_error(
+                "The \"teleport_to_relative\" action needs to know "
+                "the location!", dn
+            );
+        } else {
+            vf.push_back(s2f(v_words[0]));
+            vf.push_back(s2f(v_words[1]));
+            vf.push_back(s2f(v_words[2]));
         }
         
         
@@ -975,7 +978,14 @@ bool mob_action::run(
     }
     
     switch(type) {
-    case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
+    case MOB_ACTION_ADD_HEALTH: {
+
+        m->set_health(true, false, vf[0]);
+        
+        break;
+        
+        
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
 
         m->arachnorb_plan_logic(vi[0]);
         
@@ -1358,11 +1368,7 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_HEALTH: {
 
-        m->set_health(
-            vi[0] == MOB_ACTION_NUMERICAL_RELATIVE,
-            false,
-            vf[0]
-        );
+        m->set_health(false, false, vf[0]);
         
         break;
         
@@ -1574,21 +1580,21 @@ bool mob_action::run(
         break;
         
         
-    } case MOB_ACTION_TELEPORT: {
+    } case MOB_ACTION_TELEPORT_TO_ABSOLUTE: {
 
         m->stop_chasing();
-        point xy;
-        float z;
-        if(vi[0] == MOB_ACTION_NUMERICAL_RELATIVE) {
-            point p = rotate_point(point(vf[0], vf[1]), m->angle);
-            xy = m->pos + p;
-            z = m->z + vf[2];
-        } else {
-            xy = point(vf[0], vf[1]);
-            z = vf[2];
-        }
-        m->chase(xy, NULL, true);
-        m->z = z;
+        m->chase(point(vf[0], vf[1]), NULL, true);
+        m->z = vf[2];
+        
+        break;
+        
+        
+    } case MOB_ACTION_TELEPORT_TO_RELATIVE: {
+
+        m->stop_chasing();
+        point p = rotate_point(point(vf[0], vf[1]), m->angle);
+        m->chase(m->pos + p, NULL, true);
+        m->z += vf[2];
         
         break;
         
