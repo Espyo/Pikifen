@@ -20,7 +20,7 @@
 using namespace std;
 
 class mob;
-class mob_action;
+struct mob_action_call;
 class mob_type;
 class mob_state;
 class hitbox;
@@ -194,13 +194,13 @@ enum MOB_EVENT_TYPES {
 class mob_event {
 public:
     unsigned char type;
-    vector<mob_action*> actions;
+    vector<mob_action_call*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    mob_event(data_node* d, const vector<mob_action*> &a);
+    mob_event(data_node* d, const vector<mob_action_call*> &a);
     mob_event(
         const unsigned char t,
-        const vector<mob_action*> &a = vector<mob_action*>()
+        const vector<mob_action_call*> &a = vector<mob_action_call*>()
     );
 };
 

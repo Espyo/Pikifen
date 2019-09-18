@@ -146,7 +146,7 @@ void mob_fsm::run_event(
  * d: the data node.
  * a: its actions.
  */
-mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
+mob_event::mob_event(data_node* d, const vector<mob_action_call*> &a) :
     actions(a) {
     
 #define r(name, number) \
@@ -188,7 +188,7 @@ mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
  * t: the event type.
  * a: its actions.
  */
-mob_event::mob_event(const unsigned char t, const vector<mob_action*> &a) :
+mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
     type(t),
     actions(a) {
     
@@ -303,13 +303,13 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
             if(!ev) continue;
             
             for(size_t a = 0; a < ev->actions.size(); ++a) {
-                mob_action* action = ev->actions[a];
+                mob_action_call* action = ev->actions[a];
                 
                 if(
                     action->type == MOB_ACTION_SET_STATE &&
-                    !action->vs.empty()
+                    !action->s_args.empty()
                 ) {
-                    string state_name = action->vs[0];
+                    string state_name = action->s_args[0];
                     size_t state_nr = 0;
                     bool found_state = false;
                     
@@ -330,9 +330,9 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                         );
                     }
                     
-                    action->vs.clear();
-                    action->vi.clear();
-                    action->vi.push_back(state_nr);
+                    action->s_args.clear();
+                    action->i_args.clear();
+                    action->i_args.push_back(state_nr);
                     
                 }
             }
@@ -368,11 +368,11 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         for(size_t e = 0; e < n_events; ++e) {
         
             data_node* event_node = state_node->get_child(e);
-            vector<mob_action*> actions;
+            vector<mob_action_call*> actions;
             
             for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
                 data_node* action_node = event_node->get_child(a);
-                actions.push_back(new mob_action(action_node, states, mt));
+                actions.push_back(new mob_action_call(action_node, states, mt));
             }
             
             events.push_back(new mob_event(event_node, actions));
@@ -382,8 +382,8 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         }
         
         //Inject a damage event.
-        vector<mob_action*> da_actions;
-        da_actions.push_back(new mob_action(gen_mob_fsm::be_attacked));
+        vector<mob_action_call*> da_actions;
+        da_actions.push_back(new mob_action_call(gen_mob_fsm::be_attacked));
         events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, da_actions));
         
         //Inject a death event.
@@ -396,14 +396,14 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             ) == mt->states_ignoring_death.end() &&
             !mt->death_state_name.empty()
         ) {
-            vector<mob_action*> de_actions;
-            de_actions.push_back(new mob_action(gen_mob_fsm::die));
+            vector<mob_action_call*> de_actions;
+            de_actions.push_back(new mob_action_call(gen_mob_fsm::die));
             events.push_back(new mob_event(MOB_EVENT_DEATH, de_actions));
         }
         
         //Inject a bottomless pit event.
-        vector<mob_action*> bp_actions;
-        bp_actions.push_back(new mob_action(gen_mob_fsm::fall_down_pit));
+        vector<mob_action_call*> bp_actions;
+        bp_actions.push_back(new mob_action_call(gen_mob_fsm::fall_down_pit));
         events.push_back(new mob_event(MOB_EVENT_BOTTOMLESS_PIT, bp_actions));
         
         //Inject a spray event.
@@ -414,8 +414,8 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
                 state_node->name
             ) == mt->states_ignoring_spray.end()
         ) {
-            vector<mob_action*> s_actions;
-            s_actions.push_back(new mob_action(gen_mob_fsm::touch_spray));
+            vector<mob_action_call*> s_actions;
+            s_actions.push_back(new mob_action_call(gen_mob_fsm::touch_spray));
             events.push_back(new mob_event(MOB_EVENT_TOUCHED_SPRAY, s_actions));
         }
         
@@ -515,8 +515,8 @@ void easy_fsm_creator::new_event(const unsigned char type) {
  * the mob's state to something else.
  */
 void easy_fsm_creator::change_state(const string &new_state) {
-    cur_event->actions.push_back(new mob_action(MOB_ACTION_SET_STATE));
-    cur_event->actions.back()->vs.push_back(new_state);
+    cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
+    cur_event->actions.back()->s_args.push_back(new_state);
 }
 
 
@@ -525,7 +525,7 @@ void easy_fsm_creator::change_state(const string &new_state) {
  * runs some custom code.
  */
 void easy_fsm_creator::run(custom_action_code code) {
-    cur_event->actions.push_back(new mob_action(code));
+    cur_event->actions.push_back(new mob_action_call(code));
 }
 
 

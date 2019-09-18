@@ -158,27 +158,27 @@ enum MOB_ACTION_STABILIZE_Z_TYPES {
 };
 
 
-class mob_action {
-public:
+struct mob_action_call {
     unsigned char type;
     custom_action_code code;
     bool valid;
-    vector<int> vi;
-    vector<float> vf;
-    vector<string> vs;
+    vector<int> i_args;
+    vector<float> f_args;
+    vector<string> s_args;
     
     bool run(
         mob* m, void* custom_data_1, void* custom_data_2,
         const size_t parent_event
     );
-    mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
-    mob_action(unsigned char type);
-    mob_action(custom_action_code code);
+    mob_action_call(data_node* dn, vector<mob_state*>* states, mob_type* mt);
+    mob_action_call(unsigned char type);
+    mob_action_call(custom_action_code code);
 };
 
-bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn);
+
+bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn);
 void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action*>* actions
+    mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );
 
 

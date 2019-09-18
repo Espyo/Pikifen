@@ -154,7 +154,7 @@ public:
     float itch_time;
     
     //Script things.
-    vector<mob_action*> init_actions; //Actions to run on spawn.
+    vector<mob_action_call*> init_actions; //Actions to run on spawn.
     vector<mob_state*> states;        //The states, events and actions.
     size_t first_state_nr;            //Number of the state a mob starts at.
     string death_state_name;          //Name of the state to go to on death.

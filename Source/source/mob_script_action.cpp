@@ -22,7 +22,7 @@
  *   vector containing the states.
  * mt:     mob type this action's fsm belongs to.
  */
-mob_action::mob_action(
+mob_action_call::mob_action_call(
     data_node* dn, vector<mob_state*>* states, mob_type* mt
 ) :
     type(MOB_ACTION_UNKNOWN),
@@ -48,7 +48,7 @@ mob_action::mob_action(
             valid = false;
             log_error("Invalid health data \"" + v + "\"!", dn);
         } else {
-            vf.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[0]));
         }
         
         
@@ -56,13 +56,13 @@ mob_action::mob_action(
     
         type = MOB_ACTION_ARACHNORB_PLAN_LOGIC;
         if(v == "home") {
-            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
+            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
         } else if(v == "forward") {
-            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
+            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
         } else if(v == "cw_turn") {
-            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
+            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
         } else if(v == "ccw_turn") {
-            vi.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
+            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
         } else {
             valid = false;
             log_error(
@@ -85,33 +85,33 @@ mob_action::mob_action(
         }
         
         if(v_words[2] == "+") {
-            vi.push_back(MOB_ACTION_SET_VAR_SUM);
+            i_args.push_back(MOB_ACTION_SET_VAR_SUM);
         } else if(v_words[2] == "-") {
-            vi.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
+            i_args.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
         } else if(v_words[2] == "*") {
-            vi.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
+            i_args.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
         } else if(v_words[2] == "/") {
-            vi.push_back(MOB_ACTION_SET_VAR_DIVIDE);
+            i_args.push_back(MOB_ACTION_SET_VAR_DIVIDE);
         } else if(v_words[2] == "%") {
-            vi.push_back(MOB_ACTION_SET_VAR_MODULO);
+            i_args.push_back(MOB_ACTION_SET_VAR_MODULO);
         }
         
-        vs.push_back(v_words[0]);
+        s_args.push_back(v_words[0]);
         
         if(is_number(v_words[1])) {
-            vf.push_back(s2f(v_words[1]));
-            vs.push_back("");
+            f_args.push_back(s2f(v_words[1]));
+            s_args.push_back("");
         } else {
-            vf.push_back(0);
-            vs.push_back(v_words[1]);
+            f_args.push_back(0);
+            s_args.push_back(v_words[1]);
         }
         
         if(is_number(v_words[3])) {
-            vf.push_back(s2f(v_words[3]));
-            vs.push_back("");
+            f_args.push_back(s2f(v_words[3]));
+            s_args.push_back("");
         } else {
-            vf.push_back(0);
-            vs.push_back(v_words[3]);
+            f_args.push_back(0);
+            s_args.push_back(v_words[3]);
         }
         
         
@@ -154,10 +154,10 @@ mob_action::mob_action(
             valid = false;
             
         } else if(v == "parent") {
-            vi.push_back(MOB_ACTION_FOCUS_PARENT);
+            i_args.push_back(MOB_ACTION_FOCUS_PARENT);
             
         } else if(v == "trigger") {
-            vi.push_back(MOB_ACTION_FOCUS_TRIGGER);
+            i_args.push_back(MOB_ACTION_FOCUS_TRIGGER);
             
         } else {
             log_error("Unknown focus target \"" + v + "\"!", dn);
@@ -176,38 +176,38 @@ mob_action::mob_action(
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
-        /* vi[0] contains the operator.
-         * vi[1] contains the type of LHS comparand.
-         * vi[2] contains the type of RHS comparand.
-         * vs[0] contains the LHS comparand.
-         * vs[1] contains the RHS comparand.
+        /* i_args[0] contains the operator.
+         * i_args[1] contains the type of LHS comparand.
+         * i_args[2] contains the type of RHS comparand.
+         * s_args[0] contains the LHS comparand.
+         * s_args[1] contains the RHS comparand.
          */
         
         //Find the operator first, since that's the easiest part.
         size_t operator_pos = string::npos;
         unsigned char operator_size = 0;
         if((operator_pos = v.find(" = ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_EQUAL);
+            i_args.push_back(MOB_ACTION_IF_OP_EQUAL);
             operator_size = 3;
             
         } else if((operator_pos = v.find(" != ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_NOT);
+            i_args.push_back(MOB_ACTION_IF_OP_NOT);
             operator_size = 4;
             
         } else if((operator_pos = v.find(" < ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_LESS);
+            i_args.push_back(MOB_ACTION_IF_OP_LESS);
             operator_size = 3;
             
         } else if((operator_pos = v.find(" > ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_MORE);
+            i_args.push_back(MOB_ACTION_IF_OP_MORE);
             operator_size = 3;
             
         } else if((operator_pos = v.find(" <= ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_LESS_E);
+            i_args.push_back(MOB_ACTION_IF_OP_LESS_E);
             operator_size = 4;
             
         } else if((operator_pos = v.find(" >= ")) != string::npos) {
-            vi.push_back(MOB_ACTION_IF_OP_MORE_E);
+            i_args.push_back(MOB_ACTION_IF_OP_MORE_E);
             operator_size = 4;
             
         } else {
@@ -230,34 +230,34 @@ mob_action::mob_action(
         
         //Examine the left-hand side.
         if(lhs.size() >= 4 && lhs.substr(0, 4) == "var ") {
-            vi.push_back(MOB_ACTION_IF_LHS_VAR);
+            i_args.push_back(MOB_ACTION_IF_LHS_VAR);
             lhs = trim_spaces(lhs.substr(4, string::npos), true);
         } else if(lhs == "body_part") {
-            vi.push_back(MOB_ACTION_IF_LHS_BODY_PART);
+            i_args.push_back(MOB_ACTION_IF_LHS_BODY_PART);
         } else if(lhs == "chomped_pikmin") {
-            vi.push_back(MOB_ACTION_IF_LHS_CHOMPED_PIKMIN);
+            i_args.push_back(MOB_ACTION_IF_LHS_CHOMPED_PIKMIN);
         } else if(lhs == "day_minutes") {
-            vi.push_back(MOB_ACTION_IF_LHS_DAY_MINUTES);
+            i_args.push_back(MOB_ACTION_IF_LHS_DAY_MINUTES);
         } else if(lhs == "field_pikmin") {
-            vi.push_back(MOB_ACTION_IF_LHS_FIELD_PIKMIN);
+            i_args.push_back(MOB_ACTION_IF_LHS_FIELD_PIKMIN);
         } else if(lhs == "frame_signal") {
-            vi.push_back(MOB_ACTION_IF_LHS_FRAME_SIGNAL);
+            i_args.push_back(MOB_ACTION_IF_LHS_FRAME_SIGNAL);
         } else if(lhs == "health") {
-            vi.push_back(MOB_ACTION_IF_LHS_HEALTH);
+            i_args.push_back(MOB_ACTION_IF_LHS_HEALTH);
         } else if(lhs == "latched_pikmin") {
-            vi.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN);
+            i_args.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN);
         } else if(lhs == "latched_pikmin_weight") {
-            vi.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT);
+            i_args.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT);
         } else if(lhs == "message") {
-            vi.push_back(MOB_ACTION_IF_LHS_MESSAGE);
+            i_args.push_back(MOB_ACTION_IF_LHS_MESSAGE);
         } else if(lhs == "mob_category") {
-            vi.push_back(MOB_ACTION_IF_LHS_MOB_CATEGORY);
+            i_args.push_back(MOB_ACTION_IF_LHS_MOB_CATEGORY);
         } else if(lhs == "mob_type") {
-            vi.push_back(MOB_ACTION_IF_LHS_MOB_TYPE);
+            i_args.push_back(MOB_ACTION_IF_LHS_MOB_TYPE);
         } else if(lhs == "other_body_part") {
-            vi.push_back(MOB_ACTION_IF_LHS_OTHER_BODY_PART);
+            i_args.push_back(MOB_ACTION_IF_LHS_OTHER_BODY_PART);
         } else if(lhs == "sender") {
-            vi.push_back(MOB_ACTION_IF_LHS_MESSAGE_SENDER);
+            i_args.push_back(MOB_ACTION_IF_LHS_MESSAGE_SENDER);
         } else {
             log_error(
                 "Unknown comparand \"" + lhs + "\"!",
@@ -269,15 +269,15 @@ mob_action::mob_action(
         
         //Now, examine the right-hand side.
         if(rhs.size() >= 4 && rhs.substr(0, 4) == "var ") {
-            vi.push_back(MOB_ACTION_IF_RHS_VAR);
+            i_args.push_back(MOB_ACTION_IF_RHS_VAR);
             rhs = trim_spaces(rhs.substr(4, string::npos), true);
         } else {
-            vi.push_back(MOB_ACTION_IF_RHS_CONST);
+            i_args.push_back(MOB_ACTION_IF_RHS_CONST);
         }
         
         //Finally, save both.
-        vs.push_back(lhs);
-        vs.push_back(rhs);
+        s_args.push_back(lhs);
+        s_args.push_back(rhs);
         
         
     } else if(n == "move_to_absolute") {
@@ -286,7 +286,7 @@ mob_action::mob_action(
         
         if(v_words.size() >= 2) {
             for(size_t c = 0; c < v_words.size(); ++c) {
-                vf.push_back(s2f(v_words[c]));
+                f_args.push_back(s2f(v_words[c]));
             }
         } else {
             valid = false;
@@ -299,7 +299,7 @@ mob_action::mob_action(
         
         if(v_words.size() >= 2) {
             for(size_t c = 0; c < v_words.size(); ++c) {
-                vf.push_back(s2f(v_words[c]));
+                f_args.push_back(s2f(v_words[c]));
             }
         } else {
             valid = false;
@@ -314,19 +314,19 @@ mob_action::mob_action(
             valid = false;
             log_error("The move action has no location specified!", dn);
         } else if(v == "arachnorb_foot_logic") {
-            vi.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
+            i_args.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
         } else if(v == "away_from_focused_mob") {
-            vi.push_back(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
+            i_args.push_back(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
         } else if(v == "focused_mob") {
-            vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB);
+            i_args.push_back(MOB_ACTION_MOVE_FOCUSED_MOB);
         } else if(v == "focused_mob_position") {
-            vi.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
+            i_args.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
         } else if(v == "home") {
-            vi.push_back(MOB_ACTION_MOVE_HOME);
+            i_args.push_back(MOB_ACTION_MOVE_HOME);
         } else if(v == "linked_mob_average") {
-            vi.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
+            i_args.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
         } else if(v == "randomly") {
-            vi.push_back(MOB_ACTION_MOVE_RANDOMLY);
+            i_args.push_back(MOB_ACTION_MOVE_RANDOMLY);
         } else {
             valid = false;
         }
@@ -356,9 +356,9 @@ mob_action::mob_action(
             );
             valid = false;
         } else {
-            vs.push_back(v_words[0]);
-            vi.push_back(s2i(v_words[1]));
-            vi.push_back(s2i(v_words[2]));
+            s_args.push_back(v_words[0]);
+            i_args.push_back(s2i(v_words[1]));
+            i_args.push_back(s2i(v_words[2]));
         }
         
         
@@ -367,8 +367,8 @@ mob_action::mob_action(
         type = MOB_ACTION_RANDOMIZE_TIMER;
         
         if(v_words.size() >= 2) {
-            vf.push_back(s2f(v_words[0]));
-            vf.push_back(s2f(v_words[1]));
+            f_args.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[1]));
         } else {
             log_error(
                 "To set a timer randomly, you need to specify the "
@@ -385,7 +385,7 @@ mob_action::mob_action(
             log_error("Unknown status effect \"" + v + "\"!", dn);
             valid = false;
         } else {
-            vs.push_back(v);
+            s_args.push_back(v);
         }
         
         
@@ -406,7 +406,7 @@ mob_action::mob_action(
                 }
             }
             if(exists) {
-                vs.push_back(v);
+                s_args.push_back(v);
             } else {
                 log_error("Unknown status effect \"" + v + "\"!", dn);
                 valid = false;
@@ -429,7 +429,7 @@ mob_action::mob_action(
             for(size_t w = 0; w < v_words.size(); ++w) {
                 msg += v_words[w] + " ";
             }
-            vs.push_back(trim_spaces(msg));
+            s_args.push_back(trim_spaces(msg));
             
         } else {
             log_error(
@@ -444,12 +444,12 @@ mob_action::mob_action(
         type = MOB_ACTION_SEND_MESSAGE_TO_NEARBY;
         if(v_words.size() >= 2) {
         
-            vf.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[0]));
             string msg;
             for(size_t w = 1; w < v_words.size(); ++w) {
                 msg += v_words[w] + " ";
             }
-            vs.push_back(trim_spaces(msg));
+            s_args.push_back(trim_spaces(msg));
             
         } else {
             log_error(
@@ -476,8 +476,8 @@ mob_action::mob_action(
                 log_error("Unknown animation \"" + v_words[0] + "\"!", dn);
                 valid = false;
             } else {
-                vi.push_back(f_pos);
-                vi.push_back(
+                i_args.push_back(f_pos);
+                i_args.push_back(
                     v_words.size() > 1 && v_words[1] == "no_restart"
                 );
             }
@@ -493,13 +493,13 @@ mob_action::mob_action(
         }
         
         if(v.empty()) {
-            vi.push_back(INVALID);
+            i_args.push_back(INVALID);
             return;
         }
         
         for(size_t r = 0; r < mt->reaches.size(); ++r) {
             if(mt->reaches[r].name == v) {
-                vi.push_back(r);
+                i_args.push_back(r);
                 return;
             }
         }
@@ -522,7 +522,7 @@ mob_action::mob_action(
                 "new gravity multiplier!", dn
             );
         } else {
-            vf.push_back(s2f(v));
+            f_args.push_back(s2f(v));
         }
         
         
@@ -534,7 +534,7 @@ mob_action::mob_action(
             valid = false;
             log_error("Invalid health data \"" + v + "\"!", dn);
         } else {
-            vf.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[0]));
         }
         
         
@@ -546,7 +546,7 @@ mob_action::mob_action(
             log_error("The hide action needs a true or false value!", dn);
             valid = false;
         } else {
-            vi.push_back(s2b(v));
+            i_args.push_back(s2b(v));
         }
         
         
@@ -569,7 +569,7 @@ mob_action::mob_action(
             }
         }
         
-        vi.push_back(final_flags);
+        i_args.push_back(final_flags);
         
         
     } else if(n == "set_limb_animation") {
@@ -583,7 +583,7 @@ mob_action::mob_action(
             );
             valid = false;
         } else {
-            vs.push_back(v);
+            s_args.push_back(v);
         }
         
         
@@ -593,11 +593,11 @@ mob_action::mob_action(
         
         for(size_t s = 0; s < states->size(); ++s) {
             if(states->at(s)->name == v) {
-                vi.push_back(s);
+                i_args.push_back(s);
                 break;
             }
         }
-        if(vi.empty()) {
+        if(i_args.empty()) {
             log_error("Unknown state \"" + v + "\"!", dn);
         }
         
@@ -612,7 +612,7 @@ mob_action::mob_action(
                 "The set_tangible action needs a true or false value!", dn
             );
         } else {
-            vi.push_back(s2b(v));
+            i_args.push_back(s2b(v));
         }
         
         
@@ -622,7 +622,7 @@ mob_action::mob_action(
         if(!v.empty()) {
             size_t team_nr = string_to_team_nr(v);
             if(team_nr != INVALID) {
-                vi.push_back(team_nr);
+                i_args.push_back(team_nr);
             } else {
                 log_error("Unknown team name \"" + v + "\"!", dn);
                 valid = false;
@@ -640,7 +640,7 @@ mob_action::mob_action(
         type = MOB_ACTION_SET_TIMER;
         
         if(v_words.size() >= 1) {
-            vf.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[0]));
         } else {
             log_error("No timer amount specified!", dn);
             valid = false;
@@ -660,7 +660,7 @@ mob_action::mob_action(
             return;
         }
         
-        vs = v_words;
+        s_args = v_words;
         
         
     } else if(n == "show_message_from_var") {
@@ -674,7 +674,7 @@ mob_action::mob_action(
             );
             valid = false;
         } else {
-            vs.push_back(v);
+            s_args.push_back(v);
         }
         
         
@@ -684,7 +684,7 @@ mob_action::mob_action(
         
         for(size_t s = 0; s < mt->spawns.size(); ++s) {
             if(mt->spawns[s].name == v) {
-                vi.push_back(s);
+                i_args.push_back(s);
                 return;
             }
         }
@@ -699,9 +699,9 @@ mob_action::mob_action(
         
         if(v_words.size() >= 2) {
             if(v_words[0] == "highest") {
-                vi.push_back(MOB_ACTION_STABILIZE_Z_HIGHEST);
+                i_args.push_back(MOB_ACTION_STABILIZE_Z_HIGHEST);
             } else if(v_words[0] == "lowest") {
-                vi.push_back(MOB_ACTION_STABILIZE_Z_LOWEST);
+                i_args.push_back(MOB_ACTION_STABILIZE_Z_LOWEST);
             } else {
                 log_error(
                     "Unknown reference in the \"stabilize_z\" action: \"" +
@@ -710,7 +710,7 @@ mob_action::mob_action(
                 valid = false;
             }
             
-            vf.push_back(s2f(v_words[1]));
+            f_args.push_back(s2f(v_words[1]));
         } else {
             log_error(
                 "The \"stabilize_z\" action needs to know if the stabilization "
@@ -729,7 +729,7 @@ mob_action::mob_action(
             valid = false;
         } else {
             //The first word is the number of Pikmin it can chomp at most.
-            vi.push_back(s2i(v_words[0]));
+            i_args.push_back(s2i(v_words[0]));
             
             for(size_t p = 1; p < v_words.size(); ++p) {
                 size_t p_nr = mt->anims.find_body_part(v_words[p]);
@@ -738,11 +738,11 @@ mob_action::mob_action(
                     log_error("Unknown body part \"" + v_words[p] + "\"!", dn);
                     valid = false;
                 } else {
-                    vi.push_back(p_nr);
+                    i_args.push_back(p_nr);
                 }
             }
             
-            if(vi.size() == 1) {
+            if(i_args.size() == 1) {
                 valid = false;
             }
         }
@@ -784,22 +784,22 @@ mob_action::mob_action(
                 );
                 valid = false;
             } else {
-                vs.push_back(v_words[0]);
+                s_args.push_back(v_words[0]);
                 
                 if(v_words.size() >= 2) {
-                    vf.push_back(s2f(v_words[1]));
+                    f_args.push_back(s2f(v_words[1]));
                 } else {
-                    vf.push_back(0.0f);
+                    f_args.push_back(0.0f);
                 }
                 if(v_words.size() >= 3) {
-                    vf.push_back(s2f(v_words[2]));
+                    f_args.push_back(s2f(v_words[2]));
                 } else {
-                    vf.push_back(0.0f);
+                    f_args.push_back(0.0f);
                 }
                 if(v_words.size() >= 4) {
-                    vf.push_back(s2f(v_words[3]));
+                    f_args.push_back(s2f(v_words[3]));
                 } else {
-                    vf.push_back(0.0f);
+                    f_args.push_back(0.0f);
                 }
             }
         }
@@ -834,7 +834,7 @@ mob_action::mob_action(
     
         type = MOB_ACTION_SWALLOW;
         
-        vi.push_back(s2i(v));
+        i_args.push_back(s2i(v));
         
         
     } else if(n == "swallow_all") {
@@ -853,9 +853,9 @@ mob_action::mob_action(
                 "the location!", dn
             );
         } else {
-            vf.push_back(s2f(v_words[0]));
-            vf.push_back(s2f(v_words[1]));
-            vf.push_back(s2f(v_words[2]));
+            f_args.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[1]));
+            f_args.push_back(s2f(v_words[2]));
         }
         
         
@@ -870,9 +870,9 @@ mob_action::mob_action(
                 "the location!", dn
             );
         } else {
-            vf.push_back(s2f(v_words[0]));
-            vf.push_back(s2f(v_words[1]));
-            vf.push_back(s2f(v_words[2]));
+            f_args.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[1]));
+            f_args.push_back(s2f(v_words[2]));
         }
         
         
@@ -885,7 +885,7 @@ mob_action::mob_action(
             log_error("The \"turn_to_absolute\" action needs a direction!", dn);
         }
         
-        vf.push_back(deg_to_rad(s2f(v_words[1])));
+        f_args.push_back(deg_to_rad(s2f(v_words[1])));
         
         
     } else if(n == "turn_to_relative") {
@@ -897,7 +897,7 @@ mob_action::mob_action(
             log_error("The \"turn_to_relative\" action needs a direction!", dn);
         }
         
-        vf.push_back(deg_to_rad(s2f(v_words[1])));
+        f_args.push_back(deg_to_rad(s2f(v_words[1])));
         
         
     } else if(n == "turn_to_target") {
@@ -908,13 +908,13 @@ mob_action::mob_action(
             valid = false;
             log_error("The \"turn_to_target\" action needs a direction!", dn);
         } else if(v == "arachnorb_head_logic") {
-            vi.push_back(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
+            i_args.push_back(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
         } else if(v == "focused_mob") {
-            vi.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
+            i_args.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
         } else if(v == "home") {
-            vi.push_back(MOB_ACTION_TURN_HOME);
+            i_args.push_back(MOB_ACTION_TURN_HOME);
         } else if(v == "randomly") {
-            vi.push_back(MOB_ACTION_TURN_RANDOMLY);
+            i_args.push_back(MOB_ACTION_TURN_RANDOMLY);
         } else {
             valid = false;
             log_error("Invalid turn target \"" + v + "\"!", dn);
@@ -936,7 +936,7 @@ mob_action::mob_action(
  * Creates a new, empty mob action.
  * type:     the action type.
  */
-mob_action::mob_action(unsigned char type) :
+mob_action_call::mob_action_call(unsigned char type) :
     type(type),
     code(nullptr),
     valid(true) {
@@ -948,7 +948,7 @@ mob_action::mob_action(unsigned char type) :
  * Creates a new mob action that runs custom code.
  * code: the function to run.
  */
-mob_action::mob_action(custom_action_code code) :
+mob_action_call::mob_action_call(custom_action_code code) :
     type(MOB_ACTION_UNKNOWN),
     code(code),
     valid(true) {
@@ -964,7 +964,7 @@ mob_action::mob_action(custom_action_code code) :
  * Return value is only used by the "if" actions, to indicate their
  *   evaluation result.
  */
-bool mob_action::run(
+bool mob_action_call::run(
     mob* m, void* custom_data_1, void* custom_data_2,
     const size_t parent_event
 ) {
@@ -980,14 +980,14 @@ bool mob_action::run(
     switch(type) {
     case MOB_ACTION_ADD_HEALTH: {
 
-        m->set_health(true, false, vf[0]);
+        m->set_health(true, false, f_args[0]);
         
         break;
         
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
 
-        m->arachnorb_plan_logic(vi[0]);
+        m->arachnorb_plan_logic(i_args[0]);
         
         break;
         
@@ -995,25 +995,25 @@ bool mob_action::run(
     } case MOB_ACTION_CALCULATE: {
 
         float lhs, rhs, result;
-        if(vs[1].empty()) {
-            lhs = vf[0];
+        if(s_args[1].empty()) {
+            lhs = f_args[0];
         } else {
-            lhs = s2f(m->vars[vs[1]]);
+            lhs = s2f(m->vars[s_args[1]]);
         }
         
-        if(vs[2].empty()) {
-            rhs = vf[1];
+        if(s_args[2].empty()) {
+            rhs = f_args[1];
         } else {
-            rhs = s2f(m->vars[vs[2]]);
+            rhs = s2f(m->vars[s_args[2]]);
         }
         
-        if(vi[0] == MOB_ACTION_SET_VAR_SUM) {
+        if(i_args[0] == MOB_ACTION_SET_VAR_SUM) {
             result = lhs + rhs;
-        } else if(vi[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
+        } else if(i_args[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
             result = lhs - rhs;
-        } else if(vi[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
+        } else if(i_args[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
             result = lhs * rhs;
-        } else if(vi[0] == MOB_ACTION_SET_VAR_DIVIDE) {
+        } else if(i_args[0] == MOB_ACTION_SET_VAR_DIVIDE) {
             if(rhs == 0) {
                 result = 0;
             } else {
@@ -1027,7 +1027,7 @@ bool mob_action::run(
             }
         }
         
-        m->vars[vs[0]] = f2s(result);
+        m->vars[s_args[0]] = f2s(result);
         
         break;
         
@@ -1041,10 +1041,10 @@ bool mob_action::run(
         
     } case MOB_ACTION_FOCUS: {
 
-        if(vi[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
+        if(i_args[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
             m->focus_on_mob(m->parent->m);
             
-        } else if(vi[0] == MOB_ACTION_FOCUS_TRIGGER) {
+        } else if(i_args[0] == MOB_ACTION_FOCUS_TRIGGER) {
             if(
                 parent_event == MOB_EVENT_OBJECT_IN_REACH ||
                 parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
@@ -1085,33 +1085,33 @@ bool mob_action::run(
         string lhs;
         string rhs;
         
-        if(vi[1] == MOB_ACTION_IF_LHS_VAR) {
-            lhs = m->vars[vs[0]];
-        } else if(vi[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
+        if(i_args[1] == MOB_ACTION_IF_LHS_VAR) {
+            lhs = m->vars[s_args[0]];
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
             lhs = i2s(m->chomping_mobs.size());
-        } else if(vi[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
             lhs = i2s(day_minutes);
-        } else if(vi[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
             lhs = i2s(pikmin_list.size());
-        } else if(vi[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
             if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
                 lhs = i2s(*((size_t*) custom_data_1));
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_HEALTH) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_HEALTH) {
             lhs = i2s(m->health);
-        } else if(vi[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
             lhs = i2s(m->get_latched_pikmin_amount());
-        } else if(vi[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
             lhs = i2s(m->get_latched_pikmin_weight());
-        } else if(vi[1] == MOB_ACTION_IF_LHS_MESSAGE) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_MESSAGE) {
             if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
                 lhs = *((string*) custom_data_1);
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
             if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
                 lhs = ((mob*) custom_data_2)->type->name;
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
             if(
                 parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                 parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -1120,7 +1120,7 @@ bool mob_action::run(
             ) {
                 lhs = ((mob*) custom_data_1)->type->category->name;
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
             if(
                 parent_event == MOB_EVENT_TOUCHED_OBJECT ||
                 parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -1130,7 +1130,7 @@ bool mob_action::run(
             ) {
                 lhs = ((mob*) custom_data_1)->type->name;
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_BODY_PART) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_BODY_PART) {
             if(
                 parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
                 parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
@@ -1151,7 +1151,7 @@ bool mob_action::run(
                         INVALID, NULL
                     )->body_part_name;
             }
-        } else if(vi[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
+        } else if(i_args[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
             if(
                 parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
                 parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
@@ -1175,31 +1175,31 @@ bool mob_action::run(
             return false;
         }
         
-        if(vi[2] == MOB_ACTION_IF_RHS_VAR) {
-            rhs = m->vars[vs[1]];
+        if(i_args[2] == MOB_ACTION_IF_RHS_VAR) {
+            rhs = m->vars[s_args[1]];
         } else {
-            rhs = vs[1];
+            rhs = s_args[1];
         }
         
-        if(vi[0] == MOB_ACTION_IF_OP_EQUAL) {
+        if(i_args[0] == MOB_ACTION_IF_OP_EQUAL) {
             if(is_number(lhs)) {
                 return (s2f(lhs) == s2f(rhs));
             } else {
                 return (lhs == rhs);
             }
-        } else if(vi[0] == MOB_ACTION_IF_OP_NOT) {
+        } else if(i_args[0] == MOB_ACTION_IF_OP_NOT) {
             if(is_number(lhs)) {
                 return (s2f(lhs) != s2f(rhs));
             } else {
                 return (lhs != rhs);
             }
-        } else if(vi[0] == MOB_ACTION_IF_OP_LESS) {
+        } else if(i_args[0] == MOB_ACTION_IF_OP_LESS) {
             return (s2f(lhs) < s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_MORE) {
+        } else if(i_args[0] == MOB_ACTION_IF_OP_MORE) {
             return (s2f(lhs) > s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_LESS_E) {
+        } else if(i_args[0] == MOB_ACTION_IF_OP_LESS_E) {
             return (s2f(lhs) <= s2f(rhs));
-        } else if(vi[0] == MOB_ACTION_IF_OP_MORE_E) {
+        } else if(i_args[0] == MOB_ACTION_IF_OP_MORE_E) {
             return (s2f(lhs) >= s2f(rhs));
         }
         
@@ -1208,20 +1208,20 @@ bool mob_action::run(
         
     } case MOB_ACTION_MOVE_TO_ABSOLUTE: {
 
-        m->chase(point(vf[0], vf[1]), NULL, false);
+        m->chase(point(f_args[0], f_args[1]), NULL, false);
         
         break;
         
     } case MOB_ACTION_MOVE_TO_RELATIVE: {
 
-        point p = rotate_point(point(vf[0], vf[1]), m->angle);
+        point p = rotate_point(point(f_args[0], f_args[1]), m->angle);
         m->chase(m->pos + p, NULL, false);
         
         break;
         
     } case MOB_ACTION_MOVE_TO_TARGET: {
 
-        if(vi[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
+        if(i_args[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
             if(m->focused_mob) {
                 float a = get_angle(m->pos, m->focused_mob->pos);
                 point offset = point(2000, 0);
@@ -1231,27 +1231,27 @@ bool mob_action::run(
                 m->stop_chasing();
             }
             
-        } else if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(point(), &m->focused_mob->pos, false);
             } else {
                 m->stop_chasing();
             }
             
-        } else if(vi[0] == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
             if(m->focused_mob) {
                 m->chase(m->focused_mob->pos, NULL, false);
             } else {
                 m->stop_chasing();
             }
             
-        } else if(vi[0] == MOB_ACTION_MOVE_HOME) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_HOME) {
             m->chase(m->home, NULL, false);
             
-        } else if(vi[0] == MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC) {
             m->arachnorb_foot_move_logic();
             
-        } else if(vi[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
             if(m->links.empty()) return false;
             
             point des;
@@ -1262,7 +1262,7 @@ bool mob_action::run(
             
             m->chase(des, NULL, false);
             
-        } else if(vi[0] == MOB_ACTION_MOVE_RANDOMLY) {
+        } else if(i_args[0] == MOB_ACTION_MOVE_RANDOMLY) {
             m->chase(
                 point(
                     m->pos.x + randomf(-1000, 1000),
@@ -1287,21 +1287,21 @@ bool mob_action::run(
         
     } case MOB_ACTION_RANDOMIZE_VAR: {
 
-        m->vars[vs[0]] = i2s(randomi(vi[0], vi[1]));
+        m->vars[s_args[0]] = i2s(randomi(i_args[0], i_args[1]));
         
         break;
         
         
     } case MOB_ACTION_RANDOMIZE_TIMER: {
 
-        m->set_timer(randomf(vf[0], vf[1]));
+        m->set_timer(randomf(f_args[0], f_args[1]));
         
         break;
         
         
     } case MOB_ACTION_RECEIVE_STATUS: {
 
-        m->apply_status_effect(&status_types[vs[0]], true, false);
+        m->apply_status_effect(&status_types[s_args[0]], true, false);
         
         break;
         
@@ -1316,7 +1316,7 @@ bool mob_action::run(
     } case MOB_ACTION_REMOVE_STATUS: {
 
         for(size_t s = 0; s < m->statuses.size(); ++s) {
-            if(m->statuses[s].type->name == vs[0]) {
+            if(m->statuses[s].type->name == s_args[0]) {
                 m->statuses[s].to_delete = true;
             }
         }
@@ -1328,7 +1328,7 @@ bool mob_action::run(
 
         for(size_t l = 0; l < m->links.size(); ++l) {
             if(m->links[l] == m) continue;
-            m->send_message(m->links[l], vs[0]);
+            m->send_message(m->links[l], s_args[0]);
         }
         
         break;
@@ -1338,8 +1338,8 @@ bool mob_action::run(
 
         for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
             if(mobs[m2] == m) continue;
-            if(dist(m->pos, mobs[m2]->pos) > vf[0]) continue;
-            m->send_message(mobs[m2], vs[0]);
+            if(dist(m->pos, mobs[m2]->pos) > f_args[0]) continue;
+            m->send_message(mobs[m2], s_args[0]);
         }
         
         break;
@@ -1347,35 +1347,35 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_ANIMATION: {
 
-        m->set_animation(vi[0], false, vi[1] == 0);
+        m->set_animation(i_args[0], false, i_args[1] == 0);
         
         break;
         
         
     } case MOB_ACTION_SET_FAR_REACH: {
 
-        m->far_reach = vi[0];
+        m->far_reach = i_args[0];
         
         break;
         
         
     } case MOB_ACTION_SET_GRAVITY: {
 
-        m->gravity_mult = vf[0];
+        m->gravity_mult = f_args[0];
         
         break;
         
         
     } case MOB_ACTION_SET_HEALTH: {
 
-        m->set_health(false, false, vf[0]);
+        m->set_health(false, false, f_args[0]);
         
         break;
         
         
     } case MOB_ACTION_SET_HIDING: {
 
-        m->hide = vi[0];
+        m->hide = i_args[0];
         
         break;
         
@@ -1383,7 +1383,7 @@ bool mob_action::run(
     } case MOB_ACTION_SET_HOLDABLE: {
 
         if(typeid(*m) == typeid(tool)) {
-            ((tool*) m)->holdability_flags = vi[0];
+            ((tool*) m)->holdability_flags = i_args[0];
         }
         
         break;
@@ -1391,7 +1391,7 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_NEAR_REACH: {
 
-        m->near_reach = vi[0];
+        m->near_reach = i_args[0];
         
         break;
         
@@ -1400,7 +1400,7 @@ bool mob_action::run(
 
         if(!m->parent) return false;
         if(!m->parent->limb_anim.anim_db) return false;
-        size_t a = m->parent->limb_anim.anim_db->find_animation(vs[0]);
+        size_t a = m->parent->limb_anim.anim_db->find_animation(s_args[0]);
         if(a == INVALID) return false;
         m->parent->limb_anim.cur_anim =
             m->parent->limb_anim.anim_db->animations[a];
@@ -1411,49 +1411,49 @@ bool mob_action::run(
         
     } case MOB_ACTION_SET_STATE: {
 
-        m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
+        m->fsm.set_state(i_args[0], custom_data_1, custom_data_2);
         
         break;
         
         
     } case MOB_ACTION_SET_TANGIBLE: {
 
-        m->tangible = (bool) vi[0];
+        m->tangible = (bool) i_args[0];
         
         break;
         
         
     } case MOB_ACTION_SET_TEAM: {
 
-        m->team = vi[0];
+        m->team = i_args[0];
         
         break;
         
         
     } case MOB_ACTION_SET_TIMER: {
 
-        m->set_timer(vf[0]);
+        m->set_timer(f_args[0]);
         
         break;
         
         
     } case MOB_ACTION_SET_VAR: {
 
-        m->set_var(vs[0], vs[1]);
+        m->set_var(s_args[0], s_args[1]);
         
         break;
         
         
     } case MOB_ACTION_SHOW_MESSAGE_FROM_VAR: {
 
-        start_message(m->vars[vs[0]], NULL);
+        start_message(m->vars[s_args[0]], NULL);
         
         break;
         
         
     } case MOB_ACTION_SPAWN: {
 
-        return m->spawn(&m->type->spawns[vi[0]]);
+        return m->spawn(&m->type->spawns[i_args[0]]);
         
         break;
         
@@ -1464,19 +1464,19 @@ bool mob_action::run(
         float best_match_z = m->links[0]->z;
         for(size_t l = 1; l < m->links.size(); ++l) {
             if(
-                vi[0] == MOB_ACTION_STABILIZE_Z_HIGHEST &&
+                i_args[0] == MOB_ACTION_STABILIZE_Z_HIGHEST &&
                 m->links[l]->z > best_match_z
             ) {
                 best_match_z = m->links[l]->z;
             } else if(
-                vi[0] == MOB_ACTION_STABILIZE_Z_LOWEST &&
+                i_args[0] == MOB_ACTION_STABILIZE_Z_LOWEST &&
                 m->links[l]->z < best_match_z
             ) {
                 best_match_z = m->links[l]->z;
             }
         }
         
-        m->z = best_match_z + vf[0];
+        m->z = best_match_z + f_args[0];
         
         break;
         
@@ -1490,10 +1490,10 @@ bool mob_action::run(
         
     } case MOB_ACTION_START_CHOMPING: {
 
-        m->chomp_max = vi[0];
+        m->chomp_max = i_args[0];
         m->chomp_body_parts.clear();
-        for(size_t p = 1; p < vi.size(); ++p) {
-            m->chomp_body_parts.push_back(vi[p]);
+        for(size_t p = 1; p < i_args.size(); ++p) {
+            m->chomp_body_parts.push_back(i_args[p]);
         }
         
         break;
@@ -1508,19 +1508,19 @@ bool mob_action::run(
         
     } case MOB_ACTION_START_PARTICLES: {
 
-        if(vs.empty()) {
+        if(s_args.empty()) {
             m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
         } else {
             if(
-                custom_particle_generators.find(vs[0]) !=
+                custom_particle_generators.find(s_args[0]) !=
                 custom_particle_generators.end()
             ) {
-                particle_generator pg = custom_particle_generators[vs[0]];
+                particle_generator pg = custom_particle_generators[s_args[0]];
                 pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
                 pg.follow_mob = m;
                 pg.follow_angle = &m->angle;
-                pg.follow_pos_offset = point(vf[0], vf[1]);
-                pg.follow_z_offset = vf[2];
+                pg.follow_pos_offset = point(f_args[0], f_args[1]);
+                pg.follow_z_offset = f_args[2];
                 pg.reset();
                 m->particle_generators.push_back(pg);
             }
@@ -1568,7 +1568,7 @@ bool mob_action::run(
         
     } case MOB_ACTION_SWALLOW: {
 
-        m->swallow_chomped_pikmin(vi[1]);
+        m->swallow_chomped_pikmin(i_args[1]);
         
         break;
         
@@ -1583,8 +1583,8 @@ bool mob_action::run(
     } case MOB_ACTION_TELEPORT_TO_ABSOLUTE: {
 
         m->stop_chasing();
-        m->chase(point(vf[0], vf[1]), NULL, true);
-        m->z = vf[2];
+        m->chase(point(f_args[0], f_args[1]), NULL, true);
+        m->z = f_args[2];
         
         break;
         
@@ -1592,35 +1592,35 @@ bool mob_action::run(
     } case MOB_ACTION_TELEPORT_TO_RELATIVE: {
 
         m->stop_chasing();
-        point p = rotate_point(point(vf[0], vf[1]), m->angle);
+        point p = rotate_point(point(f_args[0], f_args[1]), m->angle);
         m->chase(m->pos + p, NULL, true);
-        m->z += vf[2];
+        m->z += f_args[2];
         
         break;
         
         
     } case MOB_ACTION_TURN_TO_ABSOLUTE: {
 
-        m->face(vf[0], NULL);
+        m->face(f_args[0], NULL);
         
         break;
         
         
     } case MOB_ACTION_TURN_TO_RELATIVE: {
 
-        m->face(m->angle + vf[0], NULL);
+        m->face(m->angle + f_args[0], NULL);
         
         break;
         
         
     } case MOB_ACTION_TURN_TO_TARGET: {
-        if(vi[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
+        if(i_args[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
             m->arachnorb_head_turn_logic();
-        } else if(vi[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
+        } else if(i_args[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
             m->face(0, &m->focused_mob->pos);
-        } else if(vi[0] == MOB_ACTION_TURN_HOME) {
+        } else if(i_args[0] == MOB_ACTION_TURN_HOME) {
             m->face(get_angle(m->pos, m->home), NULL);
-        } else if(vi[0] == MOB_ACTION_TURN_RANDOMLY) {
+        } else if(i_args[0] == MOB_ACTION_TURN_RANDOMLY) {
             m->face(randomf(0, TAU), NULL);
         }
         
@@ -1643,7 +1643,7 @@ bool mob_action::run(
  * actions: The vector of actions to check.
  * dn:      Data node from where these actions came.
  */
-bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn) {
+bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn) {
     int level = 0;
     for(size_t a = 0; a < actions.size(); ++a) {
         if(actions[a]->type == MOB_ACTION_IF) {
@@ -1685,10 +1685,10 @@ bool assert_if_actions(const vector<mob_action*> &actions, data_node* dn) {
  * actions: Vector of actions to be filled.
  */
 void load_init_actions(
-    mob_type* mt, data_node* node, vector<mob_action*>* actions
+    mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 ) {
     for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
-        actions->push_back(new mob_action(node->get_child(a), NULL, mt));
+        actions->push_back(new mob_action_call(node->get_child(a), NULL, mt));
     }
     assert_if_actions(*actions, node);
 }
