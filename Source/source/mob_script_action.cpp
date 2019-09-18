@@ -1635,6 +1635,28 @@ bool mob_action_call::run(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new mob action parameter struct.
+ */
+mob_action_param::mob_action_param(
+    const MOB_ACTION_PARAM_TYPE type, const string &name
+):
+    type(type),
+    name(name) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new, empty mob action.
+ */
+mob_action::mob_action() :
+    type(MOB_ACTION_UNKNOWN),
+    code(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Confirms if the "if", "else", and "end_if" actions in a given vector of
  * actions are all okay, and there are no mismatches, like for instance,
  * an "else" without an "if".

@@ -26,6 +26,7 @@
 #include "LAFI/gui.h"
 #include "LAFI/label.h"
 #include "liquid.h"
+#include "mob_script_action.h"
 #include "mobs/bridge.h"
 #include "mobs/converter.h"
 #include "mobs/decoration.h"
@@ -314,6 +315,7 @@ extern size_t max_pikmin_in_field;
 extern float message_char_interval;
 extern bool mipmaps_enabled;
 extern ALLEGRO_MIXER* mixer;
+extern vector<mob_action> mob_actions;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
 //The physical mouse's cursor, in screen coordinates.

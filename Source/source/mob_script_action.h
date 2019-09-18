@@ -25,9 +25,9 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_DELETE,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,
-    MOB_ACTION_GET_CHOMPED,
-    MOB_ACTION_FOCUS,
     MOB_ACTION_FINISH_DYING,
+    MOB_ACTION_FOCUS,
+    MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_IF,
     MOB_ACTION_MOVE_TO_ABSOLUTE,
     MOB_ACTION_MOVE_TO_RELATIVE,
@@ -73,6 +73,8 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_TURN_TO_ABSOLUTE,
     MOB_ACTION_TURN_TO_RELATIVE,
     MOB_ACTION_TURN_TO_TARGET,
+    
+    N_MOB_ACTIONS
 };
 
 //Arachnorb plan logic action sub-types.
@@ -158,6 +160,48 @@ enum MOB_ACTION_STABILIZE_Z_TYPES {
 };
 
 
+//Types of parameters that an action can receive.
+enum MOB_ACTION_PARAM_TYPE {
+    //Can be constants or variables.
+    MOB_ACTION_PARAM_FREE_INT,
+    MOB_ACTION_PARAM_FREE_FLOAT,
+    MOB_ACTION_PARAM_FREE_BOOL,
+    MOB_ACTION_PARAM_FREE_STRING,
+    //Can be constants or variables, and an array of them (minimum 0).
+    MOB_ACTION_PARAM_FREE_INT_EXTRAS,
+    MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS,
+    MOB_ACTION_PARAM_FREE_BOOL_EXTRAS,
+    MOB_ACTION_PARAM_FREE_STRING_EXTRAS,
+    //Can be constants only.
+    MOB_ACTION_PARAM_CONST_INT,
+    MOB_ACTION_PARAM_CONST_FLOAT,
+    MOB_ACTION_PARAM_CONST_BOOL,
+    MOB_ACTION_PARAM_CONST_STRING,
+    //Can be constants only, and an array of them (minimum 0).
+    MOB_ACTION_PARAM_CONST_INT_EXTRAS,
+    MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS,
+    MOB_ACTION_PARAM_CONST_BOOL_EXTRAS,
+    MOB_ACTION_PARAM_CONST_STRING_EXTRAS,
+};
+
+
+struct mob_action_param {
+    MOB_ACTION_PARAM_TYPE type;
+    string name;
+    mob_action_param(const MOB_ACTION_PARAM_TYPE type, const string &name);
+};
+
+
+struct mob_action {
+    unsigned char type;
+    string name;
+    action_code code;
+    vector<mob_action_param> parameters;
+    
+    mob_action();
+};
+
+
 struct mob_action_call {
     unsigned char type;
     custom_action_code code;
@@ -165,6 +209,7 @@ struct mob_action_call {
     vector<int> i_args;
     vector<float> f_args;
     vector<string> s_args;
+    vector<bool> arg_is_var;
     
     bool run(
         mob* m, void* custom_data_1, void* custom_data_2,

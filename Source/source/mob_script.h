@@ -26,6 +26,12 @@ class mob_state;
 class hitbox;
 
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
+typedef void (*action_code)(
+    mob* m,
+    const vector<int> &i_parms,
+    const vector<float> &f_parms,
+    const vector<string> &s_parms
+);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 

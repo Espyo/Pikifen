@@ -217,6 +217,7 @@ size_t max_pikmin_in_field = 100;
 float message_char_interval = 0.02f;
 bool mipmaps_enabled = true;
 ALLEGRO_MIXER* mixer = NULL;
+vector<mob_action> mob_actions;
 mob_category_manager mob_categories;
 vector<mob*> mobs;
 point mouse_cursor_s;
