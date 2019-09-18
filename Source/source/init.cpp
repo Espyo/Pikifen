@@ -465,6 +465,199 @@ void init_misc() {
 
 
 /* ----------------------------------------------------------------------------
+ * Initializes the list of mob actions.
+ */
+void init_mob_actions() {
+
+#define reg_param(t, n) params.push_back(mob_action_param(t, n));
+#define reg_action(t, n) \
+    a = &(mob_actions[t]); \
+    a->type = t; \
+    a->name = n; \
+    a->parameters = params; \
+    params.clear();
+
+
+    mob_actions.assign(N_MOB_ACTIONS, mob_action());
+    vector<mob_action_param> params;
+    mob_action* a;
+    
+    reg_action(MOB_ACTION_UNKNOWN, "unknown");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "amount");
+    reg_action(MOB_ACTION_ADD_HEALTH, "add_health");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "goal");
+    reg_action(MOB_ACTION_ARACHNORB_PLAN_LOGIC, "arachnorb_plan_logic");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "destination variable");
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "operand");
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "operation");
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "operand");
+    reg_action(MOB_ACTION_CALCULATE, "calculate");
+    
+    reg_action(MOB_ACTION_DELETE, "delete");
+    
+    reg_action(MOB_ACTION_ELSE, "else");
+    
+    reg_action(MOB_ACTION_END_IF, "end_if");
+    
+    reg_action(MOB_ACTION_FINISH_DYING, "finish_dying");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_action(MOB_ACTION_FINISH_DYING, "focus");
+    
+    reg_action(MOB_ACTION_GET_CHOMPED, "get_chomped");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "comparand");
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "operation");
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "value");
+    reg_action(MOB_ACTION_IF, "if");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_action(MOB_ACTION_MOVE_TO_ABSOLUTE, "move_to_absolute");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_action(MOB_ACTION_MOVE_TO_RELATIVE, "move_to_relative");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_action(MOB_ACTION_MOVE_TO_TARGET, "move_to_target");
+    
+    reg_action(MOB_ACTION_ORDER_RELEASE, "order_release");
+    
+    reg_action(MOB_ACTION_PLAY_SOUND, "play_sound");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "minimum value");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "maximum value");
+    reg_action(MOB_ACTION_RANDOMIZE_VAR, "randomize_var");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "minimum value");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "maximum value");
+    reg_action(MOB_ACTION_RANDOMIZE_VAR, "randomize_timer");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "status name");
+    reg_action(MOB_ACTION_RECEIVE_STATUS, "receive_status");
+    
+    reg_action(MOB_ACTION_RELEASE, "release");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "status name");
+    reg_action(MOB_ACTION_REMOVE_STATUS, "remove_status");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "message");
+    reg_action(MOB_ACTION_SEND_MESSAGE_TO_LINKS, "send_message_to_links");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "distance");
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "message");
+    reg_action(MOB_ACTION_SEND_MESSAGE_TO_NEARBY, "send_message_to_nearby");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
+    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "options");
+    reg_action(MOB_ACTION_SET_ANIMATION, "set_animation");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reach name");
+    reg_action(MOB_ACTION_SET_FAR_REACH, "set_far_reach");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "multiplier");
+    reg_action(MOB_ACTION_SET_GRAVITY, "set_gravity");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "amount");
+    reg_action(MOB_ACTION_SET_HEALTH, "set_health");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_BOOL, "hiding");
+    reg_action(MOB_ACTION_SET_HIDING, "set_hiding");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "options");
+    reg_action(MOB_ACTION_SET_HOLDABLE, "set_holdable");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
+    reg_action(MOB_ACTION_SET_LIMB_ANIMATION, "set_limb_animation");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reach name");
+    reg_action(MOB_ACTION_SET_NEAR_REACH, "set_near_reach");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "state name");
+    reg_action(MOB_ACTION_SET_STATE, "set_state");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_BOOL, "tangible");
+    reg_action(MOB_ACTION_SET_TANGIBLE, "set_tangible");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "team name");
+    reg_action(MOB_ACTION_SET_TEAM, "set_team");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "time");
+    reg_action(MOB_ACTION_SET_TIMER, "set_timer");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
+    reg_param(MOB_ACTION_PARAM_FREE_STRING, "value");
+    reg_action(MOB_ACTION_SET_VAR, "set_var");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
+    reg_action(MOB_ACTION_SHOW_MESSAGE_FROM_VAR, "show_message_from_var");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "spawn data");
+    reg_action(MOB_ACTION_SPAWN, "spawn");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reference");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "offset");
+    reg_action(MOB_ACTION_STABILIZE_Z, "stabilize_z");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_INT, "victim max");
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "body part");
+    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "more body parts");
+    reg_action(MOB_ACTION_START_CHOMPING, "start_chomping");
+    
+    reg_action(MOB_ACTION_START_DYING, "start_dying");
+    
+    reg_action(MOB_ACTION_START_HEIGHT_EFFECT, "start_height_effect");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "generator name");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS, "offset coordinates");
+    reg_action(MOB_ACTION_START_PARTICLES, "start_particles");
+    
+    reg_action(MOB_ACTION_STOP, "stop");
+    
+    reg_action(MOB_ACTION_STOP_CHOMPING, "stop_chomping");
+    
+    reg_action(MOB_ACTION_STOP_HEIGHT_EFFECT, "stop_height_effect");
+    
+    reg_action(MOB_ACTION_STOP_PARTICLES, "stop_particles");
+    
+    reg_action(MOB_ACTION_STOP_VERTICALLY, "stop_vertically");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_INT, "amount");
+    reg_action(MOB_ACTION_SWALLOW, "swallow");
+    
+    reg_action(MOB_ACTION_SWALLOW_ALL, "swallow_all");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "z");
+    reg_action(MOB_ACTION_TELEPORT_TO_ABSOLUTE, "teleport_to_absolute");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "z");
+    reg_action(MOB_ACTION_TELEPORT_TO_RELATIVE, "teleport_to_relative");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
+    reg_action(MOB_ACTION_TURN_TO_ABSOLUTE, "turn_to_absolute");
+    
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
+    reg_action(MOB_ACTION_TURN_TO_RELATIVE, "turn_to_relative");
+    
+    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_action(MOB_ACTION_TURN_TO_TARGET, "turn_to_target");
+    
+    
+#undef param
+#undef reg_action
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the list of mob categories.
  */
 void init_mob_categories() {

@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
     al_flip_display();
     
     //Init and load some other things.
+    init_mob_actions();
     init_mob_categories();
     init_sector_types();
     init_hud_items();
