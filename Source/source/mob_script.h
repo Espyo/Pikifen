@@ -26,12 +26,6 @@ class mob_state;
 class hitbox;
 
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
-typedef void (*action_code)(
-    mob* m,
-    const vector<int> &i_parms,
-    const vector<float> &f_parms,
-    const vector<string> &s_parms
-);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 
@@ -203,7 +197,7 @@ public:
     vector<mob_action_call*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    mob_event(data_node* d, const vector<mob_action_call*> &a);
+    mob_event(data_node* node, const vector<mob_action_call*> &actions);
     mob_event(
         const unsigned char t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()

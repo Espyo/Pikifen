@@ -143,16 +143,16 @@ void mob_fsm::run_event(
 
 /* ----------------------------------------------------------------------------
  * Creates a new event given a data node.
- * d: the data node.
- * a: its actions.
+ * node:    the data node.
+ * actions: its actions.
  */
-mob_event::mob_event(data_node* d, const vector<mob_action_call*> &a) :
-    actions(a) {
+mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
+    actions(actions) {
     
 #define r(name, number) \
     else if(n == (name)) type = (number)
     
-    string n = d->name;
+    string n = node->name;
     if(n == "on_enter") type = MOB_EVENT_ON_ENTER;
     r("on_leave",              MOB_EVENT_ON_LEAVE);
     r("on_tick",               MOB_EVENT_ON_TICK);
@@ -178,7 +178,11 @@ mob_event::mob_event(data_node* d, const vector<mob_action_call*> &a) :
     r("on_timer",              MOB_EVENT_TIMER);
     else {
         type = MOB_EVENT_UNKNOWN;
-        log_error("Unknown script event name \"" + n + "\"!", d);
+        log_error("Unknown script event name \"" + n + "\"!", node);
+    }
+    
+    for(size_t a = 0; a < this->actions.size(); ++a) {
+        this->actions[a]->parent_event = (MOB_EVENT_TYPES) type;
     }
 }
 

@@ -345,6 +345,22 @@ mob_action_call::mob_action_call(
         type = MOB_ACTION_PLAY_SOUND;
         
         
+    } else if(n == "randomize_timer") {
+    
+        type = MOB_ACTION_RANDOMIZE_TIMER;
+        
+        if(v_words.size() >= 2) {
+            f_args.push_back(s2f(v_words[0]));
+            f_args.push_back(s2f(v_words[1]));
+        } else {
+            log_error(
+                "To set a timer randomly, you need to specify the "
+                "minimum and maximum time!", dn
+            );
+            valid = false;
+        }
+        
+        
     } else if(n == "randomize_var") {
     
         type = MOB_ACTION_RANDOMIZE_VAR;
@@ -359,22 +375,6 @@ mob_action_call::mob_action_call(
             s_args.push_back(v_words[0]);
             i_args.push_back(s2i(v_words[1]));
             i_args.push_back(s2i(v_words[2]));
-        }
-        
-        
-    } else if(n == "randomize_timer") {
-    
-        type = MOB_ACTION_RANDOMIZE_TIMER;
-        
-        if(v_words.size() >= 2) {
-            f_args.push_back(s2f(v_words[0]));
-            f_args.push_back(s2f(v_words[1]));
-        } else {
-            log_error(
-                "To set a timer randomly, you need to specify the "
-                "minimum and maximum time!", dn
-            );
-            valid = false;
         }
         
         
@@ -1285,16 +1285,16 @@ bool mob_action_call::run(
         break;
         
         
-    } case MOB_ACTION_RANDOMIZE_VAR: {
+    } case MOB_ACTION_RANDOMIZE_TIMER: {
 
-        m->vars[s_args[0]] = i2s(randomi(i_args[0], i_args[1]));
+        m->set_timer(randomf(f_args[0], f_args[1]));
         
         break;
         
         
-    } case MOB_ACTION_RANDOMIZE_TIMER: {
+    } case MOB_ACTION_RANDOMIZE_VAR: {
 
-        m->set_timer(randomf(f_args[0], f_args[1]));
+        m->vars[s_args[0]] = i2s(randomi(i_args[0], i_args[1]));
         
         break;
         
@@ -1631,6 +1631,741 @@ bool mob_action_call::run(
     }
     
     return false;
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the health addition mob script action.
+ */
+void mob_action_code_runners::add_health(mob_action_run_data &data) {
+    data.m->set_health(true, false, data.f_params[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the arachnorb logic plan mob script action.
+ */
+void mob_action_code_runners::arachnorb_plan_logic(mob_action_run_data &data) {
+    data.m->arachnorb_plan_logic(data.i_params[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the calculation mob script action.
+ */
+void mob_action_code_runners::calculate(mob_action_run_data &data) {
+    float lhs, rhs, result;
+    if(data.s_params[1].empty()) {
+        lhs = data.f_params[0];
+    } else {
+        lhs = s2f(data.m->vars[data.s_params[1]]);
+    }
+    
+    if(data.s_params[2].empty()) {
+        rhs = data.f_params[1];
+    } else {
+        rhs = s2f(data.m->vars[data.s_params[2]]);
+    }
+    
+    if(data.i_params[0] == MOB_ACTION_SET_VAR_SUM) {
+        result = lhs + rhs;
+    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
+        result = lhs - rhs;
+    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
+        result = lhs * rhs;
+    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_DIVIDE) {
+        if(rhs == 0) {
+            result = 0;
+        } else {
+            result = lhs / rhs;
+        }
+    } else {
+        if(rhs == 0) {
+            result = 0;
+        } else {
+            result = fmod(lhs, rhs);
+        }
+    }
+    
+    data.m->vars[data.s_params[0]] = f2s(result);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the deletion mob script action.
+ */
+void mob_action_code_runners::delete_function(mob_action_run_data &data) {
+    data.m->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the death finish mob script action.
+ */
+void mob_action_code_runners::finish_dying(mob_action_run_data &data) {
+    data.m->finish_dying();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the focus mob script action.
+ */
+void mob_action_code_runners::focus(mob_action_run_data &data) {
+    if(data.i_params[0] == MOB_ACTION_FOCUS_PARENT && data.m->parent) {
+        data.m->focus_on_mob(data.m->parent->m);
+        
+    } else if(data.i_params[0] == MOB_ACTION_FOCUS_TRIGGER) {
+        if(
+            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
+            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT
+        ) {
+            data.m->focus_on_mob((mob*) (data.custom_data_1));
+            
+        } else if(
+            data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE
+        ) {
+            data.m->focus_on_mob((mob*) (data.custom_data_2));
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the mob script action. for getting chomped.
+ */
+void mob_action_code_runners::get_chomped(mob_action_run_data &data) {
+    if(data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_EAT) {
+        ((mob*) (data.custom_data_1))->chomp(data.m, (hitbox*) (data.custom_data_2));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the "if" mob script action.
+ */
+void mob_action_code_runners::if_function(mob_action_run_data &data) {
+    string lhs;
+    string rhs;
+    
+    if(data.i_params[1] == MOB_ACTION_IF_LHS_VAR) {
+        lhs = data.m->vars[data.s_params[0]];
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
+        lhs = i2s(data.m->chomping_mobs.size());
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
+        lhs = i2s(day_minutes);
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
+        lhs = i2s(pikmin_list.size());
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
+        if(data.call->parent_event == MOB_EVENT_FRAME_SIGNAL) {
+            lhs = i2s(*((size_t*) (data.custom_data_1)));
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_HEALTH) {
+        lhs = i2s(data.m->health);
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
+        lhs = i2s(data.m->get_latched_pikmin_amount());
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
+        lhs = i2s(data.m->get_latched_pikmin_weight());
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MESSAGE) {
+        if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+            lhs = *((string*) (data.custom_data_1));
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
+        if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+            lhs = ((mob*) (data.custom_data_2))->type->name;
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
+        if(
+            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH
+        ) {
+            lhs = ((mob*) (data.custom_data_1))->type->category->name;
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
+        if(
+            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
+            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+        ) {
+            lhs = ((mob*) (data.custom_data_1))->type->name;
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_BODY_PART) {
+        if(
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EVENT_DAMAGE
+        ) {
+            lhs =
+                (
+                    (hitbox_interaction*) (data.custom_data_1)
+                )->h1->body_part_name;
+        } else if(
+            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+        ) {
+            lhs =
+                data.m->get_closest_hitbox(
+                    ((mob*) (data.custom_data_1))->pos,
+                    INVALID, NULL
+                )->body_part_name;
+        }
+    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
+        if(
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EVENT_DAMAGE
+        ) {
+            lhs =
+                (
+                    (hitbox_interaction*) (data.custom_data_1)
+                )->h2->body_part_name;
+        } else if(
+            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+        ) {
+            lhs =
+                ((mob*) (data.custom_data_1))->get_closest_hitbox(
+                    data.m->pos, INVALID, NULL
+                )->body_part_name;
+        }
+    } else {
+        data.return_value = false;
+        return;
+    }
+    
+    if(data.i_params[2] == MOB_ACTION_IF_RHS_VAR) {
+        rhs = data.m->vars[data.s_params[1]];
+    } else {
+        rhs = data.s_params[1];
+    }
+    
+    if(data.i_params[0] == MOB_ACTION_IF_OP_EQUAL) {
+        if(is_number(lhs)) {
+            data.return_value = (s2f(lhs) == s2f(rhs));
+        } else {
+            data.return_value = (lhs == rhs);
+        }
+    } else if(data.i_params[0] == MOB_ACTION_IF_OP_NOT) {
+        if(is_number(lhs)) {
+            data.return_value = (s2f(lhs) != s2f(rhs));
+        } else {
+            data.return_value = (lhs != rhs);
+        }
+    } else if(data.i_params[0] == MOB_ACTION_IF_OP_LESS) {
+        data.return_value = (s2f(lhs) < s2f(rhs));
+    } else if(data.i_params[0] == MOB_ACTION_IF_OP_MORE) {
+        data.return_value = (s2f(lhs) > s2f(rhs));
+    } else if(data.i_params[0] == MOB_ACTION_IF_OP_LESS_E) {
+        data.return_value = (s2f(lhs) <= s2f(rhs));
+    } else if(data.i_params[0] == MOB_ACTION_IF_OP_MORE_E) {
+        data.return_value = (s2f(lhs) >= s2f(rhs));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the move to absolute coordinates mob script action.
+ */
+void mob_action_code_runners::move_to_absolute(mob_action_run_data &data) {
+    data.m->chase(point(data.f_params[0], data.f_params[1]), NULL, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the move to relative coordinates mob script action.
+ */
+void mob_action_code_runners::move_to_relative(mob_action_run_data &data) {
+    point p = rotate_point(point(data.f_params[0], data.f_params[1]), data.m->angle);
+    data.m->chase(data.m->pos + p, NULL, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the move to target mob script action.
+ */
+void mob_action_code_runners::move_to_target(mob_action_run_data &data) {
+    if(data.i_params[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
+        if(data.m->focused_mob) {
+            float a = get_angle(data.m->pos, data.m->focused_mob->pos);
+            point offset = point(2000, 0);
+            offset = rotate_point(offset, a + TAU / 2.0);
+            data.m->chase(data.m->pos + offset, NULL, false);
+        } else {
+            data.m->stop_chasing();
+        }
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
+        if(data.m->focused_mob) {
+            data.m->chase(point(), &data.m->focused_mob->pos, false);
+        } else {
+            data.m->stop_chasing();
+        }
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
+        if(data.m->focused_mob) {
+            data.m->chase(data.m->focused_mob->pos, NULL, false);
+        } else {
+            data.m->stop_chasing();
+        }
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_HOME) {
+        data.m->chase(data.m->home, NULL, false);
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC) {
+        data.m->arachnorb_foot_move_logic();
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
+        if(data.m->links.empty()) {
+            data.return_value = false;
+            return;
+        }
+        
+        point des;
+        for(size_t l = 0; l < data.m->links.size(); ++l) {
+            des += data.m->links[l]->pos;
+        }
+        des = des / data.m->links.size();
+        
+        data.m->chase(des, NULL, false);
+        
+    } else if(data.i_params[0] == MOB_ACTION_MOVE_RANDOMLY) {
+        data.m->chase(
+            point(
+                data.m->pos.x + randomf(-1000, 1000),
+                data.m->pos.y + randomf(-1000, 1000)
+            ),
+            NULL, false
+        );
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the release order mob script action.
+ */
+void mob_action_code_runners::order_release(mob_action_run_data &data) {
+    if(data.m->holder.m) {
+        data.m->holder.m->fsm.run_event(MOB_EVENT_RELEASE_ORDER, NULL, NULL);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the sound playing mob script action.
+ */
+void mob_action_code_runners::play_sound(mob_action_run_data &data) {
+
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the timer randomization mob script action.
+ */
+void mob_action_code_runners::randomize_timer(mob_action_run_data &data) {
+    data.m->set_timer(randomf(data.f_params[0], data.f_params[1]));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the var randomization mob script action.
+ */
+void mob_action_code_runners::randomize_var(mob_action_run_data &data) {
+    data.m->vars[data.s_params[0]] = i2s(randomi(data.i_params[0], data.i_params[1]));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the status reception mob script action.
+ */
+void mob_action_code_runners::receive_status(mob_action_run_data &data) {
+    data.m->apply_status_effect(&status_types[data.s_params[0]], true, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the release mob script action.
+ */
+void mob_action_code_runners::release(mob_action_run_data &data) {
+    data.m->release_chomped_pikmin();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the status removal mob script action.
+ */
+void mob_action_code_runners::remove_status(mob_action_run_data &data) {
+    for(size_t s = 0; s < data.m->statuses.size(); ++s) {
+        if(data.m->statuses[s].type->name == data.s_params[0]) {
+            data.m->statuses[s].to_delete = true;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the linked mob message sending mob script action.
+ */
+void mob_action_code_runners::send_message_to_links(mob_action_run_data &data) {
+    for(size_t l = 0; l < data.m->links.size(); ++l) {
+        if(data.m->links[l] == data.m) continue;
+        data.m->send_message(data.m->links[l], data.s_params[0]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the nearby mob message sending mob script action.
+ */
+void mob_action_code_runners::send_message_to_nearby(mob_action_run_data &data) {
+    for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
+        if(mobs[m2] == data.m) continue;
+        if(dist(data.m->pos, mobs[m2]->pos) > data.f_params[0]) continue;
+        data.m->send_message(mobs[m2], data.s_params[0]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the animation setting mob script action.
+ */
+void mob_action_code_runners::set_animation(mob_action_run_data &data) {
+    data.m->set_animation(data.i_params[0], false, data.i_params[1] == 0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the far reach setting mob script action.
+ */
+void mob_action_code_runners::set_far_reach(mob_action_run_data &data) {
+    data.m->far_reach = data.i_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the gravity setting mob script action.
+ */
+void mob_action_code_runners::set_gravity(mob_action_run_data &data) {
+    data.m->gravity_mult = data.f_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the health setting mob script action.
+ */
+void mob_action_code_runners::set_health(mob_action_run_data &data) {
+    data.m->set_health(false, false, data.f_params[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the hiding setting mob script action.
+ */
+void mob_action_code_runners::set_hiding(mob_action_run_data &data) {
+    data.m->hide = data.i_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the holdable setting mob script action.
+ */
+void mob_action_code_runners::set_holdable(mob_action_run_data &data) {
+    if(typeid(*(data.m)) == typeid(tool)) {
+        ((tool*) (data.m))->holdability_flags = data.i_params[0];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the limb animation setting mob script action.
+ */
+void mob_action_code_runners::set_limb_animation(mob_action_run_data &data) {
+    if(!data.m->parent) {
+        data.return_value = false;
+        return;
+    }
+    if(!data.m->parent->limb_anim.anim_db) {
+        data.return_value = false;
+        return;
+    }
+    
+    size_t a = data.m->parent->limb_anim.anim_db->find_animation(data.s_params[0]);
+    if(a == INVALID) {
+        data.return_value = false;
+        return;
+    }
+    
+    data.m->parent->limb_anim.cur_anim =
+        data.m->parent->limb_anim.anim_db->animations[a];
+    data.m->parent->limb_anim.start();
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the near reach setting mob script action.
+ */
+void mob_action_code_runners::set_near_reach(mob_action_run_data &data) {
+    data.m->near_reach = data.i_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the state setting mob script action.
+ */
+void mob_action_code_runners::set_state(mob_action_run_data &data) {
+    data.m->fsm.set_state(
+        data.i_params[0],
+        data.custom_data_1,
+        data.custom_data_2
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the tangible setting mob script action.
+ */
+void mob_action_code_runners::set_tangible(mob_action_run_data &data) {
+    data.m->tangible = (bool) data.i_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the team setting mob script action.
+ */
+void mob_action_code_runners::set_team(mob_action_run_data &data) {
+    data.m->team = data.i_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the timer setting mob script action.
+ */
+void mob_action_code_runners::set_timer(mob_action_run_data &data) {
+    data.m->set_timer(data.f_params[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the var setting mob script action.
+ */
+void mob_action_code_runners::set_var(mob_action_run_data &data) {
+    data.m->set_var(data.s_params[0], data.s_params[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the show message from var mob script action.
+ */
+void mob_action_code_runners::show_message_from_var(mob_action_run_data &data) {
+    start_message(data.m->vars[data.s_params[0]], NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the spawning mob script action.
+ */
+void mob_action_code_runners::spawn(mob_action_run_data &data) {
+    data.return_value = data.m->spawn(&data.m->type->spawns[data.i_params[0]]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the z stabilization mob script action.
+ */
+void mob_action_code_runners::stabilize_z(mob_action_run_data &data) {
+    if(data.m->links.empty()) {
+        data.return_value = false;
+        return;
+    }
+    
+    float best_match_z = data.m->links[0]->z;
+    for(size_t l = 1; l < data.m->links.size(); ++l) {
+        if(
+            data.i_params[0] == MOB_ACTION_STABILIZE_Z_HIGHEST &&
+            data.m->links[l]->z > best_match_z
+        ) {
+            best_match_z = data.m->links[l]->z;
+        } else if(
+            data.i_params[0] == MOB_ACTION_STABILIZE_Z_LOWEST &&
+            data.m->links[l]->z < best_match_z
+        ) {
+            best_match_z = data.m->links[l]->z;
+        }
+    }
+    
+    data.m->z = best_match_z + data.f_params[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the chomping start mob script action.
+ */
+void mob_action_code_runners::start_chomping(mob_action_run_data &data) {
+    data.m->chomp_max = data.i_params[0];
+    data.m->chomp_body_parts.clear();
+    for(size_t p = 1; p < data.i_params.size(); ++p) {
+        data.m->chomp_body_parts.push_back(data.i_params[p]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the dying start mob script action.
+ */
+void mob_action_code_runners::start_dying(mob_action_run_data &data) {
+    data.m->start_dying();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the height effect start mob script action.
+ */
+void mob_action_code_runners::start_height_effect(mob_action_run_data &data) {
+    data.m->start_height_effect();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the particle start mob script action.
+ */
+void mob_action_code_runners::start_particles(mob_action_run_data &data) {
+    if(data.s_params.empty()) {
+        data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+    } else {
+        if(
+            custom_particle_generators.find(data.s_params[0]) !=
+            custom_particle_generators.end()
+        ) {
+            particle_generator pg = custom_particle_generators[data.s_params[0]];
+            pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
+            pg.follow_mob = data.m;
+            pg.follow_angle = &data.m->angle;
+            pg.follow_pos_offset = point(data.f_params[0], data.f_params[1]);
+            pg.follow_z_offset = data.f_params[2];
+            pg.reset();
+            data.m->particle_generators.push_back(pg);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the stopping mob script action.
+ */
+void mob_action_code_runners::stop(mob_action_run_data &data) {
+    data.m->stop_chasing();
+    data.m->stop_turning();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the chomp stopping mob script action.
+ */
+void mob_action_code_runners::stop_chomping(mob_action_run_data &data) {
+    data.m->chomp_max = 0;
+    data.m->chomp_body_parts.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the height effect stopping mob script action.
+ */
+void mob_action_code_runners::stop_height_effect(mob_action_run_data &data) {
+    data.m->stop_height_effect();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the particle stopping mob script action.
+ */
+void mob_action_code_runners::stop_particles(mob_action_run_data &data) {
+    data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+}
+
+/* ----------------------------------------------------------------------------
+ * Code for the vertical stopping mob script action.
+ */
+void mob_action_code_runners::stop_vertically(mob_action_run_data &data) {
+    data.m->speed_z = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the swallow mob script action.
+ */
+void mob_action_code_runners::swallow(mob_action_run_data &data) {
+    data.m->swallow_chomped_pikmin(data.i_params[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the swallow all mob script action.
+ */
+void mob_action_code_runners::swallow_all(mob_action_run_data &data) {
+    data.m->swallow_chomped_pikmin(data.m->chomping_mobs.size());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the teleport to absolute coordinates mob script action.
+ */
+void mob_action_code_runners::teleport_to_absolute(mob_action_run_data &data) {
+    data.m->stop_chasing();
+    data.m->chase(point(data.f_params[0], data.f_params[1]), NULL, true);
+    data.m->z = data.f_params[2];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the teleport to relative coordinates mob script action.
+ */
+void mob_action_code_runners::teleport_to_relative(mob_action_run_data &data) {
+    data.m->stop_chasing();
+    point p = rotate_point(point(data.f_params[0], data.f_params[1]), data.m->angle);
+    data.m->chase(data.m->pos + p, NULL, true);
+    data.m->z += data.f_params[2];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the turn to an absolute angle mob script action.
+ */
+void mob_action_code_runners::turn_to_absolute(mob_action_run_data &data) {
+    data.m->face(data.f_params[0], NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the turn to a relative angle mob script action.
+ */
+void mob_action_code_runners::turn_to_relative(mob_action_run_data &data) {
+    data.m->face(data.m->angle + data.f_params[0], NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the turn to target mob script action.
+ */
+void mob_action_code_runners::turn_to_target(mob_action_run_data &data) {
+    if(data.i_params[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
+        data.m->arachnorb_head_turn_logic();
+    } else if(data.i_params[0] == MOB_ACTION_TURN_FOCUSED_MOB && data.m->focused_mob) {
+        data.m->face(0, &data.m->focused_mob->pos);
+    } else if(data.i_params[0] == MOB_ACTION_TURN_HOME) {
+        data.m->face(get_angle(data.m->pos, data.m->home), NULL);
+    } else if(data.i_params[0] == MOB_ACTION_TURN_RANDOMLY) {
+        data.m->face(randomf(0, TAU), NULL);
+    }
 }
 
 
