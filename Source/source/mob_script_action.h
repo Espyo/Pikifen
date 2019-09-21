@@ -138,6 +138,10 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_RANDOMLY,
 };
 
+enum MOB_ACTION_SET_ANIMATION_OPTIONS {
+    MOB_ACTION_SET_ANIMATION_NO_RESTART,
+};
+
 //Set var action sub-types.
 enum MOB_ACTION_SET_VAR_TYPES {
     MOB_ACTION_SET_VAR_SUM,
@@ -176,6 +180,9 @@ enum MOB_ACTION_PARAM_TYPE {
     MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS,
     MOB_ACTION_PARAM_CONST_BOOL_EXTRAS,
     MOB_ACTION_PARAM_CONST_STRING_EXTRAS,
+    //String in the text file, int in memory.
+    MOB_ACTION_PARAM_ENUM,
+    MOB_ACTION_PARAM_ENUM_EXTRAS,
 };
 
 
@@ -200,12 +207,14 @@ struct mob_action_run_data {
 
 
 typedef void (mob_action_code)(mob_action_run_data &data);
+typedef bool (mob_action_load_code)(mob_action_call &call);
 
 
 struct mob_action {
     unsigned char type;
     string name;
     mob_action_code* code;
+    mob_action_load_code* extra_load_logic;
     vector<mob_action_param> parameters;
     
     mob_action();
@@ -220,6 +229,9 @@ struct mob_action_call {
     vector<float> f_args;
     vector<string> s_args;
     vector<bool> arg_is_var;
+    vector<int> enum_results;
+    string custom_error;
+    mob_type* mt;
     MOB_EVENT_TYPES parent_event;
     
     bool run(
@@ -232,7 +244,7 @@ struct mob_action_call {
 };
 
 
-namespace mob_action_code_runners {
+namespace mob_action_runners {
 void add_health(mob_action_run_data &data);
 void add_health(mob_action_run_data &data);
 void arachnorb_plan_logic(mob_action_run_data &data);
@@ -287,6 +299,26 @@ void teleport_to_relative(mob_action_run_data &data);
 void turn_to_absolute(mob_action_run_data &data);
 void turn_to_relative(mob_action_run_data &data);
 void turn_to_target(mob_action_run_data &data);
+};
+
+namespace mob_action_loaders {
+bool arachnorb_plan_logic(mob_action_call &call);
+bool calculate(mob_action_call &call);
+bool focus(mob_action_call &call);
+bool if_function(mob_action_call &call);
+bool move_to_target(mob_action_call &call);
+bool receive_status(mob_action_call &call);
+bool remove_status(mob_action_call &call);
+bool set_animation(mob_action_call &call);
+bool set_far_reach(mob_action_call &call);
+bool set_holdable(mob_action_call &call);
+bool set_near_reach(mob_action_call &call);
+bool set_team(mob_action_call &call);
+bool spawn(mob_action_call &call);
+bool stabilize_z(mob_action_call &call);
+bool start_chomping(mob_action_call &call);
+bool start_particles(mob_action_call &call);
+bool turn_to_target(mob_action_call &call);
 };
 
 

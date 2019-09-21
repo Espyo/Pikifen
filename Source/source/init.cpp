@@ -470,11 +470,12 @@ void init_misc() {
 void init_mob_actions() {
 
 #define reg_param(t, n) params.push_back(mob_action_param(t, n));
-#define reg_action(t, n, c) \
+#define reg_action(t, n, rc, lc) \
     a = &(mob_actions[t]); \
     a->type = t; \
     a->name = n; \
-    a->code = c; \
+    a->code = rc; \
+    a->extra_load_logic = lc; \
     a->parameters = params; \
     params.clear();
 
@@ -486,6 +487,7 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_UNKNOWN,
         "unknown",
+        nullptr,
         nullptr
     );
     
@@ -493,70 +495,80 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_ADD_HEALTH,
         "add_health",
-        mob_action_code_runners::arachnorb_plan_logic
+        mob_action_runners::add_health,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "goal");
+    reg_param(MOB_ACTION_PARAM_ENUM, "goal");
     reg_action(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
-        mob_action_code_runners::arachnorb_plan_logic
+        mob_action_runners::arachnorb_plan_logic,
+        mob_action_loaders::arachnorb_plan_logic
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "destination variable");
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "operand");
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "operation");
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "operand");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "operand");
+    reg_param(MOB_ACTION_PARAM_ENUM, "operation");
+    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "operand");
     reg_action(
         MOB_ACTION_CALCULATE,
         "calculate",
-        mob_action_code_runners::calculate
+        mob_action_runners::calculate,
+        mob_action_loaders::calculate
     );
     
     reg_action(
         MOB_ACTION_DELETE,
         "delete",
-        mob_action_code_runners::delete_function
+        mob_action_runners::delete_function,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_ELSE,
         "else",
+        nullptr,
         nullptr
     );
     
     reg_action(
         MOB_ACTION_END_IF,
         "end_if",
+        nullptr,
         nullptr
     );
     
     reg_action(
         MOB_ACTION_FINISH_DYING,
         "finish_dying",
-        mob_action_code_runners::finish_dying
+        mob_action_runners::finish_dying,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_param(MOB_ACTION_PARAM_ENUM, "target");
     reg_action(
-        MOB_ACTION_FINISH_DYING,
+        MOB_ACTION_FOCUS,
         "focus",
-        mob_action_code_runners::focus
+        mob_action_runners::focus,
+        mob_action_loaders::focus
     );
     
     reg_action(
         MOB_ACTION_GET_CHOMPED,
         "get_chomped",
-        mob_action_code_runners::get_chomped
+        mob_action_runners::get_chomped,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_STRING, "comparand");
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "operation");
+    reg_param(MOB_ACTION_PARAM_ENUM, "operation");
     reg_param(MOB_ACTION_PARAM_FREE_STRING, "value");
     reg_action(
         MOB_ACTION_IF,
         "if",
-        mob_action_code_runners::if_function
+        mob_action_runners::if_function,
+        mob_action_loaders::if_function
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
@@ -564,7 +576,8 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
-        mob_action_code_runners::move_to_absolute
+        mob_action_runners::move_to_absolute,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
@@ -572,26 +585,30 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
-        mob_action_code_runners::move_to_relative
+        mob_action_runners::move_to_relative,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_param(MOB_ACTION_PARAM_ENUM, "target");
     reg_action(
         MOB_ACTION_MOVE_TO_TARGET,
         "move_to_target",
-        mob_action_code_runners::move_to_target
+        mob_action_runners::move_to_target,
+        mob_action_loaders::move_to_target
     );
     
     reg_action(
         MOB_ACTION_ORDER_RELEASE,
         "order_release",
-        mob_action_code_runners::order_release
+        mob_action_runners::order_release,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
-        mob_action_code_runners::play_sound
+        mob_action_runners::play_sound,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "minimum value");
@@ -599,7 +616,8 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_RANDOMIZE_VAR,
         "randomize_timer",
-        mob_action_code_runners::randomize_timer
+        mob_action_runners::randomize_timer,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
@@ -608,34 +626,39 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_RANDOMIZE_VAR,
         "randomize_var",
-        mob_action_code_runners::randomize_var
+        mob_action_runners::randomize_var,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "status name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "status name");
     reg_action(
         MOB_ACTION_RECEIVE_STATUS,
         "receive_status",
-        mob_action_code_runners::receive_status
+        mob_action_runners::receive_status,
+        mob_action_loaders::receive_status
     );
     
     reg_action(
         MOB_ACTION_RELEASE,
         "release",
-        mob_action_code_runners::release
+        mob_action_runners::release,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "status name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "status name");
     reg_action(
         MOB_ACTION_REMOVE_STATUS,
         "remove_status",
-        mob_action_code_runners::remove_status
+        mob_action_runners::remove_status,
+        mob_action_loaders::remove_status
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_STRING, "message");
     reg_action(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
-        mob_action_code_runners::send_message_to_links
+        mob_action_runners::send_message_to_links,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "distance");
@@ -643,92 +666,105 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
-        mob_action_code_runners::send_message_to_nearby
+        mob_action_runners::send_message_to_nearby,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
-    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "options");
+    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "options");
     reg_action(
         MOB_ACTION_SET_ANIMATION,
         "set_animation",
-        mob_action_code_runners::set_animation
+        mob_action_runners::set_animation,
+        mob_action_loaders::set_animation
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reach name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "reach name");
     reg_action(
         MOB_ACTION_SET_FAR_REACH,
         "set_far_reach",
-        mob_action_code_runners::set_far_reach
+        mob_action_runners::set_far_reach,
+        mob_action_loaders::set_far_reach
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "multiplier");
     reg_action(
         MOB_ACTION_SET_GRAVITY,
         "set_gravity",
-        mob_action_code_runners::set_gravity
+        mob_action_runners::set_gravity,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "amount");
     reg_action(
         MOB_ACTION_SET_HEALTH,
         "set_health",
-        mob_action_code_runners::set_health
+        mob_action_runners::set_health,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_BOOL, "hiding");
     reg_action(
         MOB_ACTION_SET_HIDING,
         "set_hiding",
-        mob_action_code_runners::set_hiding
+        mob_action_runners::set_hiding,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "options");
+    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "options");
     reg_action(
         MOB_ACTION_SET_HOLDABLE,
         "set_holdable",
-        mob_action_code_runners::set_holdable
+        mob_action_runners::set_holdable,
+        mob_action_loaders::set_holdable
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
     reg_action(
         MOB_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
-        mob_action_code_runners::set_limb_animation
+        mob_action_runners::set_limb_animation,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reach name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "reach name");
     reg_action(
         MOB_ACTION_SET_NEAR_REACH,
         "set_near_reach",
-        mob_action_code_runners::set_near_reach
+        mob_action_runners::set_near_reach,
+        mob_action_loaders::set_near_reach
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "state name");
     reg_action(
         MOB_ACTION_SET_STATE,
         "set_state",
-        mob_action_code_runners::set_state
+        mob_action_runners::set_state,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_BOOL, "tangible");
     reg_action(
         MOB_ACTION_SET_TANGIBLE,
         "set_tangible",
-        mob_action_code_runners::set_tangible
+        mob_action_runners::set_tangible,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "team name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "team name");
     reg_action(
         MOB_ACTION_SET_TEAM,
         "set_team",
-        mob_action_code_runners::set_team
+        mob_action_runners::set_team,
+        mob_action_loaders::set_team
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "time");
     reg_action(
         MOB_ACTION_SET_TIMER,
         "set_timer",
-        mob_action_code_runners::set_timer
+        mob_action_runners::set_timer,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
@@ -736,101 +772,116 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_SET_VAR,
         "set_var",
-        mob_action_code_runners::set_var
+        mob_action_runners::set_var,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
     reg_action(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        mob_action_code_runners::show_message_from_var
+        mob_action_runners::show_message_from_var,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "spawn data");
+    reg_param(MOB_ACTION_PARAM_ENUM, "spawn data");
     reg_action(
         MOB_ACTION_SPAWN,
         "spawn",
-        mob_action_code_runners::spawn
+        mob_action_runners::spawn,
+        mob_action_loaders::spawn
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "reference");
+    reg_param(MOB_ACTION_PARAM_ENUM, "reference");
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "offset");
     reg_action(
         MOB_ACTION_STABILIZE_Z,
         "stabilize_z",
-        mob_action_code_runners::stabilize_z
+        mob_action_runners::stabilize_z,
+        mob_action_loaders::stabilize_z
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_INT, "victim max");
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "body part");
-    reg_param(MOB_ACTION_PARAM_CONST_STRING_EXTRAS, "more body parts");
+    reg_param(MOB_ACTION_PARAM_ENUM, "body part");
+    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "more body parts");
     reg_action(
         MOB_ACTION_START_CHOMPING,
         "start_chomping",
-        mob_action_code_runners::start_chomping
+        mob_action_runners::start_chomping,
+        mob_action_loaders::start_chomping
     );
     
     reg_action(
         MOB_ACTION_START_DYING,
         "start_dying",
-        mob_action_code_runners::start_dying
+        mob_action_runners::start_dying,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
-        mob_action_code_runners::start_height_effect
+        mob_action_runners::start_height_effect,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "generator name");
+    reg_param(MOB_ACTION_PARAM_ENUM, "generator name");
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS, "offset coordinates");
     reg_action(
         MOB_ACTION_START_PARTICLES,
         "start_particles",
-        mob_action_code_runners::start_particles
+        mob_action_runners::start_particles,
+        mob_action_loaders::start_particles
     );
     
     reg_action(
         MOB_ACTION_STOP,
         "stop",
-        mob_action_code_runners::stop
+        mob_action_runners::stop,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_STOP_CHOMPING,
         "stop_chomping",
-        mob_action_code_runners::stop_chomping
+        mob_action_runners::stop_chomping,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
-        mob_action_code_runners::stop_height_effect
+        mob_action_runners::stop_height_effect,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_STOP_PARTICLES,
         "stop_particles",
-        mob_action_code_runners::stop_particles
+        mob_action_runners::stop_particles,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_STOP_VERTICALLY,
         "stop_vertically",
-        mob_action_code_runners::stop_vertically
+        mob_action_runners::stop_vertically,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_INT, "amount");
     reg_action(
         MOB_ACTION_SWALLOW,
         "swallow",
-        mob_action_code_runners::swallow
+        mob_action_runners::swallow,
+        nullptr
     );
     
     reg_action(
         MOB_ACTION_SWALLOW_ALL,
         "swallow_all",
-        mob_action_code_runners::swallow_all
+        mob_action_runners::swallow_all,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
@@ -839,7 +890,8 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
-        mob_action_code_runners::teleport_to_absolute
+        mob_action_runners::teleport_to_absolute,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
@@ -848,28 +900,32 @@ void init_mob_actions() {
     reg_action(
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
-        mob_action_code_runners::teleport_to_relative
+        mob_action_runners::teleport_to_relative,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
     reg_action(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
-        mob_action_code_runners::turn_to_absolute
+        mob_action_runners::turn_to_absolute,
+        nullptr
     );
     
     reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
     reg_action(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
-        mob_action_code_runners::turn_to_relative
+        mob_action_runners::turn_to_relative,
+        nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "target");
+    reg_param(MOB_ACTION_PARAM_ENUM, "target");
     reg_action(
         MOB_ACTION_TURN_TO_TARGET,
         "turn_to_target",
-        mob_action_code_runners::turn_to_target
+        mob_action_runners::turn_to_target,
+        mob_action_loaders::turn_to_target
     );
     
     
