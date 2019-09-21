@@ -37,8 +37,9 @@ script {
             set_state destroying
         }
         on_touch_object {
-            if mob_category != Pikmin
-                if mob_category != Decoration
+            get_info t mob_category
+            if var t != Pikmin
+                if var t != Decoration
                     set_state destroying
                 end_if
             end_if
@@ -48,7 +49,8 @@ script {
         }
         on_opponent_in_reach {
             if var homing = true
-                if mob_category = Leader
+                get_info t mob_category
+                if var t = Leader
                     if var has_target = false
                         focus trigger
                         move_to_target focused_mob

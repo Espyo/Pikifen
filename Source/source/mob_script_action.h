@@ -28,6 +28,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
+    MOB_ACTION_GET_INFO,
     MOB_ACTION_IF,
     MOB_ACTION_MOVE_TO_ABSOLUTE,
     MOB_ACTION_MOVE_TO_RELATIVE,
@@ -109,28 +110,21 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
     MOB_ACTION_IF_OP_MORE_E,
 };
 
-//If action LHS comparand type.
-enum MOB_ACTION_IF_LHS_TYPES {
-    MOB_ACTION_IF_LHS_VAR,
-    MOB_ACTION_IF_LHS_BODY_PART,
-    MOB_ACTION_IF_LHS_CHOMPED_PIKMIN,
-    MOB_ACTION_IF_LHS_DAY_MINUTES,
-    MOB_ACTION_IF_LHS_FIELD_PIKMIN,
-    MOB_ACTION_IF_LHS_FRAME_SIGNAL,
-    MOB_ACTION_IF_LHS_HEALTH,
-    MOB_ACTION_IF_LHS_LATCHED_PIKMIN,
-    MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT,
-    MOB_ACTION_IF_LHS_MESSAGE,
-    MOB_ACTION_IF_LHS_MESSAGE_SENDER,
-    MOB_ACTION_IF_LHS_MOB_CATEGORY,
-    MOB_ACTION_IF_LHS_MOB_TYPE,
-    MOB_ACTION_IF_LHS_OTHER_BODY_PART,
-};
-
-//If action RHS comparand types.
-enum MOB_ACTION_IF_RHS_TYPES {
-    MOB_ACTION_IF_RHS_VAR,
-    MOB_ACTION_IF_RHS_CONST,
+//Get info action info types.
+enum MOB_ACTION_GET_INFO_TYPES {
+    MOB_ACTION_GET_INFO_BODY_PART,
+    MOB_ACTION_GET_INFO_CHOMPED_PIKMIN,
+    MOB_ACTION_GET_INFO_DAY_MINUTES,
+    MOB_ACTION_GET_INFO_FIELD_PIKMIN,
+    MOB_ACTION_GET_INFO_FRAME_SIGNAL,
+    MOB_ACTION_GET_INFO_HEALTH,
+    MOB_ACTION_GET_INFO_LATCHED_PIKMIN,
+    MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT,
+    MOB_ACTION_GET_INFO_MESSAGE,
+    MOB_ACTION_GET_INFO_MESSAGE_SENDER,
+    MOB_ACTION_GET_INFO_MOB_CATEGORY,
+    MOB_ACTION_GET_INFO_MOB_TYPE,
+    MOB_ACTION_GET_INFO_OTHER_BODY_PART,
 };
 
 //Moving action sub-types.
@@ -247,6 +241,7 @@ void delete_function(mob_action_run_data &data);
 void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
+void get_info(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
 void move_to_relative(mob_action_run_data &data);

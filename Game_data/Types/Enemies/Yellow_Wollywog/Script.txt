@@ -86,7 +86,8 @@ script {
     squatting {
         on_enter {
             stop
-            if latched_pikmin_weight >= 30
+            get_info t latched_pikmin_weight
+            if var t >= 30
                 set_state struggling
             else
                 set_animation squatting

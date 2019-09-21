@@ -171,113 +171,60 @@ mob_action_call::mob_action_call(
         type = MOB_ACTION_GET_CHOMPED;
         
         
+    } else if(n == "get_info") {
+    
+        type = MOB_ACTION_GET_INFO;
+        
+        if(v_words.size() < 2) {
+            log_error(
+                "The \"get_info\" action needs to know the variable name and "
+                "what to set it to!", dn
+            );
+            valid = false;
+            return;
+        }
+        
+        s_args.push_back(v_words[0]);
+        
+        if(v_words[1] == "body_part") {
+            i_args.push_back(MOB_ACTION_GET_INFO_BODY_PART);
+        } else if(v_words[1] == "chomped_pikmin") {
+            i_args.push_back(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
+        } else if(v_words[1] == "day_minutes") {
+            i_args.push_back(MOB_ACTION_GET_INFO_DAY_MINUTES);
+        } else if(v_words[1] == "field_pikmin") {
+            i_args.push_back(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
+        } else if(v_words[1] == "frame_signal") {
+            i_args.push_back(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+        } else if(v_words[1] == "health") {
+            i_args.push_back(MOB_ACTION_GET_INFO_HEALTH);
+        } else if(v_words[1] == "latched_pikmin") {
+            i_args.push_back(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
+        } else if(v_words[1] == "latched_pikmin_weight") {
+            i_args.push_back(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+        } else if(v_words[1] == "message") {
+            i_args.push_back(MOB_ACTION_GET_INFO_MESSAGE);
+        } else if(v_words[1] == "mob_category") {
+            i_args.push_back(MOB_ACTION_GET_INFO_MOB_CATEGORY);
+        } else if(v_words[1] == "mob_type") {
+            i_args.push_back(MOB_ACTION_GET_INFO_MOB_TYPE);
+        } else if(v_words[1] == "other_body_part") {
+            i_args.push_back(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+        } else if(v_words[1] == "sender") {
+            i_args.push_back(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
+        } else {
+            log_error(
+                "Unknown info \"" + v_words[1] + "\"!",
+                dn
+            );
+            valid = false;
+            return;
+        }
+        
+        
     } else if(n == "if") {
     
-        //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
-        
-        /* i_args[0] contains the operator.
-         * i_args[1] contains the type of LHS comparand.
-         * i_args[2] contains the type of RHS comparand.
-         * s_args[0] contains the LHS comparand.
-         * s_args[1] contains the RHS comparand.
-         */
-        
-        //Find the operator first, since that's the easiest part.
-        size_t operator_pos = string::npos;
-        unsigned char operator_size = 0;
-        if((operator_pos = v.find(" = ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_EQUAL);
-            operator_size = 3;
-            
-        } else if((operator_pos = v.find(" != ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_NOT);
-            operator_size = 4;
-            
-        } else if((operator_pos = v.find(" < ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_LESS);
-            operator_size = 3;
-            
-        } else if((operator_pos = v.find(" > ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_MORE);
-            operator_size = 3;
-            
-        } else if((operator_pos = v.find(" <= ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_LESS_E);
-            operator_size = 4;
-            
-        } else if((operator_pos = v.find(" >= ")) != string::npos) {
-            i_args.push_back(MOB_ACTION_IF_OP_MORE_E);
-            operator_size = 4;
-            
-        } else {
-            log_error(
-                "This \"if\" is badly formed! Format: \"if <comparand> "
-                "<operator> <value>\".",
-                dn
-            );
-            valid = false;
-            return;
-            
-        }
-        
-        //Now, we can gather the left-hand side, and the right-hand side.
-        string lhs = v.substr(0, operator_pos);
-        string rhs = v.substr(operator_pos + operator_size, string::npos);
-        
-        lhs = trim_spaces(lhs);
-        rhs = trim_spaces(rhs);
-        
-        //Examine the left-hand side.
-        if(lhs.size() >= 4 && lhs.substr(0, 4) == "var ") {
-            i_args.push_back(MOB_ACTION_IF_LHS_VAR);
-            lhs = trim_spaces(lhs.substr(4, string::npos), true);
-        } else if(lhs == "body_part") {
-            i_args.push_back(MOB_ACTION_IF_LHS_BODY_PART);
-        } else if(lhs == "chomped_pikmin") {
-            i_args.push_back(MOB_ACTION_IF_LHS_CHOMPED_PIKMIN);
-        } else if(lhs == "day_minutes") {
-            i_args.push_back(MOB_ACTION_IF_LHS_DAY_MINUTES);
-        } else if(lhs == "field_pikmin") {
-            i_args.push_back(MOB_ACTION_IF_LHS_FIELD_PIKMIN);
-        } else if(lhs == "frame_signal") {
-            i_args.push_back(MOB_ACTION_IF_LHS_FRAME_SIGNAL);
-        } else if(lhs == "health") {
-            i_args.push_back(MOB_ACTION_IF_LHS_HEALTH);
-        } else if(lhs == "latched_pikmin") {
-            i_args.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN);
-        } else if(lhs == "latched_pikmin_weight") {
-            i_args.push_back(MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT);
-        } else if(lhs == "message") {
-            i_args.push_back(MOB_ACTION_IF_LHS_MESSAGE);
-        } else if(lhs == "mob_category") {
-            i_args.push_back(MOB_ACTION_IF_LHS_MOB_CATEGORY);
-        } else if(lhs == "mob_type") {
-            i_args.push_back(MOB_ACTION_IF_LHS_MOB_TYPE);
-        } else if(lhs == "other_body_part") {
-            i_args.push_back(MOB_ACTION_IF_LHS_OTHER_BODY_PART);
-        } else if(lhs == "sender") {
-            i_args.push_back(MOB_ACTION_IF_LHS_MESSAGE_SENDER);
-        } else {
-            log_error(
-                "Unknown comparand \"" + lhs + "\"!",
-                dn
-            );
-            valid = false;
-            return;
-        }
-        
-        //Now, examine the right-hand side.
-        if(rhs.size() >= 4 && rhs.substr(0, 4) == "var ") {
-            i_args.push_back(MOB_ACTION_IF_RHS_VAR);
-            rhs = trim_spaces(rhs.substr(4, string::npos), true);
-        } else {
-            i_args.push_back(MOB_ACTION_IF_RHS_CONST);
-        }
-        
-        //Finally, save both.
-        s_args.push_back(lhs);
-        s_args.push_back(rhs);
         
         
     } else if(n == "move_to_absolute") {
@@ -1082,104 +1029,8 @@ bool mob_action_call::run(
         
     } case MOB_ACTION_IF: {
 
-        string lhs;
-        string rhs;
-        
-        if(i_args[1] == MOB_ACTION_IF_LHS_VAR) {
-            lhs = m->vars[s_args[0]];
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
-            lhs = i2s(m->chomping_mobs.size());
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
-            lhs = i2s(day_minutes);
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
-            lhs = i2s(pikmin_list.size());
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
-            if(parent_event == MOB_EVENT_FRAME_SIGNAL) {
-                lhs = i2s(*((size_t*) custom_data_1));
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_HEALTH) {
-            lhs = i2s(m->health);
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
-            lhs = i2s(m->get_latched_pikmin_amount());
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
-            lhs = i2s(m->get_latched_pikmin_weight());
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_MESSAGE) {
-            if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-                lhs = *((string*) custom_data_1);
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
-            if(parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-                lhs = ((mob*) custom_data_2)->type->name;
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
-            if(
-                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                parent_event == MOB_EVENT_OPPONENT_IN_REACH
-            ) {
-                lhs = ((mob*) custom_data_1)->type->category->name;
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
-            if(
-                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-                parent_event == MOB_EVENT_PIKMIN_LANDED
-            ) {
-                lhs = ((mob*) custom_data_1)->type->name;
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_BODY_PART) {
-            if(
-                parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
-                parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-                parent_event == MOB_EVENT_DAMAGE
-            ) {
-                lhs =
-                    (
-                        (hitbox_interaction*) custom_data_1
-                    )->h1->body_part_name;
-            } else if(
-                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                parent_event == MOB_EVENT_PIKMIN_LANDED
-            ) {
-                lhs =
-                    m->get_closest_hitbox(
-                        ((mob*) custom_data_1)->pos,
-                        INVALID, NULL
-                    )->body_part_name;
-            }
-        } else if(i_args[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
-            if(
-                parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
-                parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-                parent_event == MOB_EVENT_DAMAGE
-            ) {
-                lhs =
-                    (
-                        (hitbox_interaction*) custom_data_1
-                    )->h2->body_part_name;
-            } else if(
-                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-                parent_event == MOB_EVENT_PIKMIN_LANDED
-            ) {
-                lhs =
-                    ((mob*) custom_data_1)->get_closest_hitbox(
-                        m->pos, INVALID, NULL
-                    )->body_part_name;
-            }
-        } else {
-            return false;
-        }
-        
-        if(i_args[2] == MOB_ACTION_IF_RHS_VAR) {
-            rhs = m->vars[s_args[1]];
-        } else {
-            rhs = s_args[1];
-        }
+        string lhs = s_args[0];
+        string rhs = s_args[1];
         
         if(i_args[0] == MOB_ACTION_IF_OP_EQUAL) {
             if(is_number(lhs)) {
@@ -1735,7 +1586,7 @@ void mob_action_code_runners::focus(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the mob script action. for getting chomped.
+ * Code for the mob script action for getting chomped.
  */
 void mob_action_code_runners::get_chomped(mob_action_run_data &data) {
     if(data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_EAT) {
@@ -1745,48 +1596,55 @@ void mob_action_code_runners::get_chomped(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the "if" mob script action.
+ * Code for the info obtaining mob script action.
  */
-void mob_action_code_runners::if_function(mob_action_run_data &data) {
-    string lhs;
-    string rhs;
+void mob_action_code_runners::get_info(mob_action_run_data &data) {
+    string* var = &(data.m->vars[data.s_params[0]]);
     
-    if(data.i_params[1] == MOB_ACTION_IF_LHS_VAR) {
-        lhs = data.m->vars[data.s_params[0]];
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_CHOMPED_PIKMIN) {
-        lhs = i2s(data.m->chomping_mobs.size());
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_DAY_MINUTES) {
-        lhs = i2s(day_minutes);
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_FIELD_PIKMIN) {
-        lhs = i2s(pikmin_list.size());
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_FRAME_SIGNAL) {
+    if(data.i_params[0] == MOB_ACTION_GET_INFO_CHOMPED_PIKMIN) {
+        *var = i2s(data.m->chomping_mobs.size());
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_DAY_MINUTES) {
+        *var = i2s(day_minutes);
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_FIELD_PIKMIN) {
+        *var = i2s(pikmin_list.size());
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_FRAME_SIGNAL) {
         if(data.call->parent_event == MOB_EVENT_FRAME_SIGNAL) {
-            lhs = i2s(*((size_t*) (data.custom_data_1)));
+            *var = i2s(*((size_t*) (data.custom_data_1)));
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_HEALTH) {
-        lhs = i2s(data.m->health);
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN) {
-        lhs = i2s(data.m->get_latched_pikmin_amount());
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_LATCHED_PIKMIN_WEIGHT) {
-        lhs = i2s(data.m->get_latched_pikmin_weight());
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MESSAGE) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_HEALTH) {
+        *var = i2s(data.m->health);
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_LATCHED_PIKMIN) {
+        *var = i2s(data.m->get_latched_pikmin_amount());
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT) {
+        *var = i2s(data.m->get_latched_pikmin_weight());
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_MESSAGE) {
         if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-            lhs = *((string*) (data.custom_data_1));
+            *var = *((string*) (data.custom_data_1));
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MESSAGE_SENDER) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_MESSAGE_SENDER) {
         if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
-            lhs = ((mob*) (data.custom_data_2))->type->name;
+            *var = ((mob*) (data.custom_data_2))->type->name;
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MOB_CATEGORY) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_MOB_CATEGORY) {
         if(
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
             data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH
         ) {
-            lhs = ((mob*) (data.custom_data_1))->type->category->name;
+            *var = ((mob*) (data.custom_data_1))->type->category->name;
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_MOB_TYPE) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_MOB_TYPE) {
         if(
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -1794,15 +1652,16 @@ void mob_action_code_runners::if_function(mob_action_run_data &data) {
             data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
             data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
         ) {
-            lhs = ((mob*) (data.custom_data_1))->type->name;
+            *var = ((mob*) (data.custom_data_1))->type->name;
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_BODY_PART) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_BODY_PART) {
         if(
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
             data.call->parent_event == MOB_EVENT_DAMAGE
         ) {
-            lhs =
+            *var =
                 (
                     (hitbox_interaction*) (data.custom_data_1)
                 )->h1->body_part_name;
@@ -1811,19 +1670,20 @@ void mob_action_code_runners::if_function(mob_action_run_data &data) {
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
         ) {
-            lhs =
+            *var =
                 data.m->get_closest_hitbox(
                     ((mob*) (data.custom_data_1))->pos,
                     INVALID, NULL
                 )->body_part_name;
         }
-    } else if(data.i_params[1] == MOB_ACTION_IF_LHS_OTHER_BODY_PART) {
+        
+    } else if(data.i_params[0] == MOB_ACTION_GET_INFO_OTHER_BODY_PART) {
         if(
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
             data.call->parent_event == MOB_EVENT_DAMAGE
         ) {
-            lhs =
+            *var =
                 (
                     (hitbox_interaction*) (data.custom_data_1)
                 )->h2->body_part_name;
@@ -1832,21 +1692,22 @@ void mob_action_code_runners::if_function(mob_action_run_data &data) {
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
         ) {
-            lhs =
+            *var =
                 ((mob*) (data.custom_data_1))->get_closest_hitbox(
                     data.m->pos, INVALID, NULL
                 )->body_part_name;
         }
-    } else {
-        data.return_value = false;
-        return;
+        
     }
-    
-    if(data.i_params[2] == MOB_ACTION_IF_RHS_VAR) {
-        rhs = data.m->vars[data.s_params[1]];
-    } else {
-        rhs = data.s_params[1];
-    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the "if" mob script action.
+ */
+void mob_action_code_runners::if_function(mob_action_run_data &data) {
+    string lhs = data.s_params[0];
+    string rhs = data.s_params[1];
     
     if(data.i_params[0] == MOB_ACTION_IF_OP_EQUAL) {
         if(is_number(lhs)) {

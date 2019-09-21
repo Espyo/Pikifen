@@ -98,7 +98,8 @@ script {
         }
         on_animation_end {
             stop_chomping
-            if chomped_pikmin > 0
+            get_info t chomped_pikmin
+            if var t > 0
                 set_state eating
             else
                 set_state sniffing

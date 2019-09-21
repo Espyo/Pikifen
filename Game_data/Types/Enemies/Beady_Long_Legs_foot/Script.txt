@@ -38,32 +38,33 @@ script {
             turn_to_target focused_mob
         }
         on_receive_message {
+            get_var t message
             if var id = fr
-                if message = move_fr
+                if var t = move_fr
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = fl
-                if message = move_fl
+                if var t = move_fl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = br
-                if message = move_br
+                if var t = move_br
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             if var id = bl
-                if message = move_bl
+                if var t = move_bl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             
-            if message = die
+            if var t = die
                 set_state dying
             end_if
         }
@@ -85,7 +86,8 @@ script {
             set_state floating
         }
         on_receive_message {
-            if message = die
+            get_info t message
+            if var t = die
                 set_state dying
             end_if
         }
@@ -104,7 +106,8 @@ script {
             set_state falling
         }
         on_receive_message {
-            if message = die
+            get_info t message
+            if var t = die
                 set_state dying
             end_if
         }
@@ -119,7 +122,8 @@ script {
             set_state landing
         }
         on_receive_message {
-            if message = die
+            get_info t message
+            if var t = die
                 set_state dying
             end_if
         }
@@ -136,7 +140,8 @@ script {
             set_state idling
         }
         on_receive_message {
-            if message = die
+            get_info t message
+            if var t = die
                 set_state dying
             end_if
         }

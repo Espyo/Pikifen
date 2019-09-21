@@ -11,10 +11,11 @@ script {
             set_animation idling_healthy
         }
         on_damage {
-            if health < 16
+            get_info t health
+            if var t < 16
                 set_state idling_very_broken
             end_if
-            if health < 32
+            if var t < 32
                 set_state idling_broken
             end_if
         }
@@ -24,7 +25,8 @@ script {
             set_animation idling_broken
         }
         on_damage {
-            if health < 16
+            get_info t health
+            if var t < 16
                 set_state idling_very_broken
             end_if
         }
