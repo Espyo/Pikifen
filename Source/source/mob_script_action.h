@@ -202,7 +202,7 @@ struct mob_action_run_data {
     void* custom_data_1;
     void* custom_data_2;
     bool return_value;
-    mob_action_run_data();
+    mob_action_run_data(mob* m, mob_action_call* call);
 };
 
 
@@ -222,24 +222,28 @@ struct mob_action {
 
 
 struct mob_action_call {
-    unsigned char type;
+    mob_action* action;
+    
     custom_action_code code;
-    bool valid;
     vector<int> i_args;
     vector<float> f_args;
     vector<string> s_args;
     vector<bool> arg_is_var;
-    vector<int> enum_results;
+    vector<size_t> enum_results;
+    
     string custom_error;
     mob_type* mt;
     MOB_EVENT_TYPES parent_event;
     
+    bool load_from_data_node(
+        data_node* dn, vector<mob_state*>* states, mob_type* mt
+    );
     bool run(
         mob* m, void* custom_data_1, void* custom_data_2,
         const size_t parent_event
     );
-    mob_action_call(data_node* dn, vector<mob_state*>* states, mob_type* mt);
-    mob_action_call(unsigned char type);
+    
+    mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
     mob_action_call(custom_action_code code);
 };
 

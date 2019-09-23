@@ -16,890 +16,218 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new mob action, given a data node.
+ * Creates a new, empty mob action call, of a certain type.
+ */
+mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
+    action(nullptr),
+    code(nullptr) {
+    
+    for(size_t a = 0; a < mob_actions.size(); ++a) {
+        if(mob_actions[a].type == type) {
+            action = &(mob_actions[a]);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new mob action call that is meant to run custom code.
+ * code: the function to run.
+ */
+mob_action_call::mob_action_call(custom_action_code code):
+    action(nullptr),
+    code(code) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads a mob action call from a data node.
  * dn:     the data node.
  * states: if this action messes with states, this points to the external
  *   vector containing the states.
  * mt:     mob type this action's fsm belongs to.
  */
-mob_action_call::mob_action_call(
+bool mob_action_call::load_from_data_node(
     data_node* dn, vector<mob_state*>* states, mob_type* mt
-) :
-    type(MOB_ACTION_UNKNOWN),
-    code(nullptr),
-    valid(true) {
-    
+) {
+
+    //First, get the name and arguments.
     vector<string> words = split(dn->name);
-    vector<string> v_words;
-    string n = words[0];
-    string v = "";
-    if(words.size() > 1) {
-        v_words = words;
-        v_words.erase(v_words.begin());
-        v = dn->name.substr(n.size(), string::npos);
-        v = trim_spaces(v);
+    
+    for(size_t w = 0; w < words.size(); ++w) {
+        words[w] = trim_spaces(words[w]);
     }
     
-    if(n == "add_health") {
+    string name = words[0];
+    if(!words.empty()) {
+        words.erase(words.begin());
+    }
     
-        type = MOB_ACTION_ADD_HEALTH;
-        
-        if(v_words.empty()) {
-            valid = false;
-            log_error("Invalid health data \"" + v + "\"!", dn);
-        } else {
-            f_args.push_back(s2f(v_words[0]));
+    //Find the corresponding action.
+    for(size_t a = 0; a < mob_actions.size(); ++a) {
+        if(mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
+        if(mob_actions[a].name == name) {
+            action = &(mob_actions[a]);
         }
-        
-        
-    } else if(n == "arachnorb_plan_logic") {
+    }
     
-        type = MOB_ACTION_ARACHNORB_PLAN_LOGIC;
-        if(v == "home") {
-            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
-        } else if(v == "forward") {
-            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
-        } else if(v == "cw_turn") {
-            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
-        } else if(v == "ccw_turn") {
-            i_args.push_back(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
-        } else {
-            valid = false;
-            log_error(
-                "The \"arachnorb_plan_logic\" action needs to know what "
-                "the mob wants to do!", dn
-            );
-        }
-        
-    } else if(n == "calculate") {
+    if(!action) {
+        log_error("Unknown script action name \"" + name + "\"!", dn);
+        return false;
+    }
     
-        type = MOB_ACTION_CALCULATE;
-        
-        if(v_words.size() < 4) {
-            log_error(
-                "The \"calculate\" action needs to know the variable name and "
-                "what to set it to!", dn
-            );
-            valid = false;
-            return;
-        }
-        
-        if(v_words[2] == "+") {
-            i_args.push_back(MOB_ACTION_SET_VAR_SUM);
-        } else if(v_words[2] == "-") {
-            i_args.push_back(MOB_ACTION_SET_VAR_SUBTRACT);
-        } else if(v_words[2] == "*") {
-            i_args.push_back(MOB_ACTION_SET_VAR_MULTIPLY);
-        } else if(v_words[2] == "/") {
-            i_args.push_back(MOB_ACTION_SET_VAR_DIVIDE);
-        } else if(v_words[2] == "%") {
-            i_args.push_back(MOB_ACTION_SET_VAR_MODULO);
-        }
-        
-        s_args.push_back(v_words[0]);
-        
-        if(is_number(v_words[1])) {
-            f_args.push_back(s2f(v_words[1]));
-            s_args.push_back("");
-        } else {
-            f_args.push_back(0);
-            s_args.push_back(v_words[1]);
-        }
-        
-        if(is_number(v_words[3])) {
-            f_args.push_back(s2f(v_words[3]));
-            s_args.push_back("");
-        } else {
-            f_args.push_back(0);
-            s_args.push_back(v_words[3]);
-        }
-        
-        
-    } else if(n == "delete") {
+    //Parse the arguments to make sure they're all good.
     
-        type = MOB_ACTION_DELETE;
-        
-    } else if(n == "else") {
+    vector<size_t> enum_arg_s_indexes;
+    vector<size_t> enum_arg_i_indexes;
+    size_t mandatory_parameters = action->parameters.size();
     
-        type = MOB_ACTION_ELSE;
-        if(!v.empty()) {
-            log_error(
-                "The \"else\" action shouldn't have anything after it!", dn
-            );
+    if(mandatory_parameters > 0) {
+        MOB_ACTION_PARAM_TYPE last_type =
+            action->parameters[mandatory_parameters - 1].type;
+        if(
+            last_type == MOB_ACTION_PARAM_FREE_INT_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_FREE_BOOL_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_FREE_STRING_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_CONST_INT_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_CONST_BOOL_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_CONST_STRING_EXTRAS ||
+            last_type == MOB_ACTION_PARAM_ENUM_EXTRAS
+        ) {
+            mandatory_parameters--;
         }
-        
-        
-    } else if(n == "end_if") {
+    }
     
-        type = MOB_ACTION_END_IF;
-        if(!v.empty()) {
-            log_error(
-                "The \"end_if\" action shouldn't have anything after it!",
-                dn
-            );
-        }
-        
-        
-    } else if(n == "finish_dying") {
-    
-        type = MOB_ACTION_FINISH_DYING;
-        
-        
-    } else if(n == "focus") {
-    
-        type = MOB_ACTION_FOCUS;
-        
-        if(v.empty()) {
-            log_error("The \"focus\" action needs to know the target!", dn);
-            valid = false;
-            
-        } else if(v == "parent") {
-            i_args.push_back(MOB_ACTION_FOCUS_PARENT);
-            
-        } else if(v == "trigger") {
-            i_args.push_back(MOB_ACTION_FOCUS_TRIGGER);
-            
-        } else {
-            log_error("Unknown focus target \"" + v + "\"!", dn);
-            valid = false;
-            
-        }
-        
-        
-    } else if(n == "get_chomped") {
-    
-        type = MOB_ACTION_GET_CHOMPED;
-        
-        
-    } else if(n == "get_info") {
-    
-        type = MOB_ACTION_GET_INFO;
-        
-        if(v_words.size() < 2) {
-            log_error(
-                "The \"get_info\" action needs to know the variable name and "
-                "what to set it to!", dn
-            );
-            valid = false;
-            return;
-        }
-        
-        s_args.push_back(v_words[0]);
-        
-        if(v_words[1] == "body_part") {
-            i_args.push_back(MOB_ACTION_GET_INFO_BODY_PART);
-        } else if(v_words[1] == "chomped_pikmin") {
-            i_args.push_back(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
-        } else if(v_words[1] == "day_minutes") {
-            i_args.push_back(MOB_ACTION_GET_INFO_DAY_MINUTES);
-        } else if(v_words[1] == "field_pikmin") {
-            i_args.push_back(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
-        } else if(v_words[1] == "frame_signal") {
-            i_args.push_back(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
-        } else if(v_words[1] == "health") {
-            i_args.push_back(MOB_ACTION_GET_INFO_HEALTH);
-        } else if(v_words[1] == "latched_pikmin") {
-            i_args.push_back(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
-        } else if(v_words[1] == "latched_pikmin_weight") {
-            i_args.push_back(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
-        } else if(v_words[1] == "message") {
-            i_args.push_back(MOB_ACTION_GET_INFO_MESSAGE);
-        } else if(v_words[1] == "mob_category") {
-            i_args.push_back(MOB_ACTION_GET_INFO_MOB_CATEGORY);
-        } else if(v_words[1] == "mob_type") {
-            i_args.push_back(MOB_ACTION_GET_INFO_MOB_TYPE);
-        } else if(v_words[1] == "other_body_part") {
-            i_args.push_back(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
-        } else if(v_words[1] == "sender") {
-            i_args.push_back(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
-        } else {
-            log_error(
-                "Unknown info \"" + v_words[1] + "\"!",
-                dn
-            );
-            valid = false;
-            return;
-        }
-        
-        
-    } else if(n == "if") {
-    
-        type = MOB_ACTION_IF;
-        
-        
-    } else if(n == "move_to_absolute") {
-    
-        type = MOB_ACTION_MOVE_TO_ABSOLUTE;
-        
-        if(v_words.size() >= 2) {
-            for(size_t c = 0; c < v_words.size(); ++c) {
-                f_args.push_back(s2f(v_words[c]));
-            }
-        } else {
-            valid = false;
-        }
-        
-        
-    } else if(n == "move_to_relative") {
-    
-        type = MOB_ACTION_MOVE_TO_RELATIVE;
-        
-        if(v_words.size() >= 2) {
-            for(size_t c = 0; c < v_words.size(); ++c) {
-                f_args.push_back(s2f(v_words[c]));
-            }
-        } else {
-            valid = false;
-        }
-        
-        
-    } else if(n == "move_to_target") {
-    
-        type = MOB_ACTION_MOVE_TO_TARGET;
-        
-        if(v.empty()) {
-            valid = false;
-            log_error("The move action has no location specified!", dn);
-        } else if(v == "arachnorb_foot_logic") {
-            i_args.push_back(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
-        } else if(v == "away_from_focused_mob") {
-            i_args.push_back(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
-        } else if(v == "focused_mob") {
-            i_args.push_back(MOB_ACTION_MOVE_FOCUSED_MOB);
-        } else if(v == "focused_mob_position") {
-            i_args.push_back(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
-        } else if(v == "home") {
-            i_args.push_back(MOB_ACTION_MOVE_HOME);
-        } else if(v == "linked_mob_average") {
-            i_args.push_back(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
-        } else if(v == "randomly") {
-            i_args.push_back(MOB_ACTION_MOVE_RANDOMLY);
-        } else {
-            valid = false;
-        }
-        if(!valid) {
-            log_error("Invalid move target \"" + v + "\"!", dn);
-        }
-        
-        
-    } else if(n == "order_release") {
-    
-        type = MOB_ACTION_ORDER_RELEASE;
-        
-        
-    } else if(n == "play_sound") {
-    
-        type = MOB_ACTION_PLAY_SOUND;
-        
-        
-    } else if(n == "randomize_timer") {
-    
-        type = MOB_ACTION_RANDOMIZE_TIMER;
-        
-        if(v_words.size() >= 2) {
-            f_args.push_back(s2f(v_words[0]));
-            f_args.push_back(s2f(v_words[1]));
-        } else {
-            log_error(
-                "To set a timer randomly, you need to specify the "
-                "minimum and maximum time!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "randomize_var") {
-    
-        type = MOB_ACTION_RANDOMIZE_VAR;
-        if(v_words.size() < 3) {
-            log_error(
-                "This \"randomize_var\" is badly formed! Format: "
-                "\"randomize_var <variable> <minimum value> <maximum value>\".",
-                dn
-            );
-            valid = false;
-        } else {
-            s_args.push_back(v_words[0]);
-            i_args.push_back(s2i(v_words[1]));
-            i_args.push_back(s2i(v_words[2]));
-        }
-        
-        
-    } else if(n == "receive_status") {
-    
-        type = MOB_ACTION_RECEIVE_STATUS;
-        if(status_types.find(v) == status_types.end()) {
-            log_error("Unknown status effect \"" + v + "\"!", dn);
-            valid = false;
-        } else {
-            s_args.push_back(v);
-        }
-        
-        
-    } else if(n == "release") {
-    
-        type = MOB_ACTION_RELEASE;
-        
-        
-    } else if(n == "remove_status") {
-    
-        type = MOB_ACTION_REMOVE_STATUS;
-        if(!v.empty()) {
-            bool exists = false;
-            for(auto s = status_types.begin(); s != status_types.end(); s++) {
-                if(s->first == v) {
-                    exists = true;
-                    break;
-                }
-            }
-            if(exists) {
-                s_args.push_back(v);
-            } else {
-                log_error("Unknown status effect \"" + v + "\"!", dn);
-                valid = false;
-            }
-        } else {
-            log_error(
-                "The \"remove_status\" action needs to know the status "
-                "effect's name!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "send_message_to_links") {
-    
-        type = MOB_ACTION_SEND_MESSAGE_TO_LINKS;
-        if(v_words.size() >= 1) {
-        
-            string msg;
-            for(size_t w = 0; w < v_words.size(); ++w) {
-                msg += v_words[w] + " ";
-            }
-            s_args.push_back(trim_spaces(msg));
-            
-        } else {
-            log_error(
-                "The message sending action needs to know the message!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "send_message_to_nearby") {
-    
-        type = MOB_ACTION_SEND_MESSAGE_TO_NEARBY;
-        if(v_words.size() >= 2) {
-        
-            f_args.push_back(s2f(v_words[0]));
-            string msg;
-            for(size_t w = 1; w < v_words.size(); ++w) {
-                msg += v_words[w] + " ";
-            }
-            s_args.push_back(trim_spaces(msg));
-            
-        } else {
-            log_error(
-                "The message sending action needs to know the distance "
-                "and the message!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "set_animation") {
-    
-        type = MOB_ACTION_SET_ANIMATION;
-        
-        if(v.empty()) {
-            log_error(
-                "The animation setting action needs to know the animation "
-                "name!", dn
-            );
-            valid = false;
-        } else {
-            size_t f_pos = mt->anims.find_animation(v_words[0]);
-            if(f_pos == INVALID) {
-                log_error("Unknown animation \"" + v_words[0] + "\"!", dn);
-                valid = false;
-            } else {
-                i_args.push_back(f_pos);
-                i_args.push_back(
-                    v_words.size() > 1 && v_words[1] == "no_restart"
-                );
-            }
-        }
-        
-        
-    } else if(n == "set_near_reach" || n == "set_far_reach") {
-    
-        if(n == "set_far_reach") {
-            type = MOB_ACTION_SET_FAR_REACH;
-        } else {
-            type = MOB_ACTION_SET_NEAR_REACH;
-        }
-        
-        if(v.empty()) {
-            i_args.push_back(INVALID);
-            return;
-        }
-        
-        for(size_t r = 0; r < mt->reaches.size(); ++r) {
-            if(mt->reaches[r].name == v) {
-                i_args.push_back(r);
-                return;
-            }
-        }
-        
+    if(words.size() < mandatory_parameters) {
         log_error(
-            "Reach-setting action refers to non-existent reach \"" +
-            v + "\"!", dn
+            "The \"" + action->name + "\" action needs " +
+            i2s(mandatory_parameters) + " arguments, but this call only "
+            "has " + i2s(words.size()) + "! You're missing the \"" +
+            action->parameters[words.size()].name + "\" parameter.",
+            dn
         );
-        valid = false;
-        
-        
-    } else if(n == "set_gravity") {
+        return false;
+    }
     
-        type = MOB_ACTION_SET_GRAVITY;
-        
-        if(v.empty()) {
-            valid = false;
+    if(mandatory_parameters != action->parameters.size()) {
+        if(words.size() > action->parameters.size()) {
             log_error(
-                "The set_gravity action needs to know the "
-                "new gravity multiplier!", dn
+                "The \"" + action->name + "\" action only needs " +
+                i2s(action->parameters.size()) + " arguments, but this call "
+                "has " + i2s(words.size()) + "!",
+                dn
             );
-        } else {
-            f_args.push_back(s2f(v));
+            return false;
         }
-        
-        
-    } else if(n == "set_health") {
+    }
     
-        type = MOB_ACTION_SET_HEALTH;
+    for(size_t w = 0; w < words.size(); ++w) {
+        size_t param_nr = w;
+        param_nr = min(param_nr, action->parameters.size() - 1);
+        MOB_ACTION_PARAM_TYPE param_type = action->parameters[param_nr].type;
+        bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
-        if(v_words.empty()) {
-            valid = false;
-            log_error("Invalid health data \"" + v + "\"!", dn);
-        } else {
-            f_args.push_back(s2f(v_words[0]));
-        }
-        
-        
-    } else if(n == "set_hiding") {
-    
-        type = MOB_ACTION_SET_HIDING;
-        
-        if(v.empty()) {
-            log_error("The hide action needs a true or false value!", dn);
-            valid = false;
-        } else {
-            i_args.push_back(s2b(v));
-        }
-        
-        
-    } else if(n == "set_holdable") {
-    
-        type = MOB_ACTION_SET_HOLDABLE;
-        
-        unsigned char final_flags = 0;
-        for(size_t word_nr = 0; word_nr < v_words.size(); ++word_nr) {
-        
-            if(v_words[word_nr] == "unholdable") {
-                final_flags = 0;
-                break;
-                
-            } else if(v_words[word_nr] == "pikmin") {
-                final_flags |= HOLDABLE_BY_PIKMIN;
-                
-            } else if(v_words[word_nr] == "enemies") {
-                final_flags |= HOLDABLE_BY_ENEMIES;
-            }
-        }
-        
-        i_args.push_back(final_flags);
-        
-        
-    } else if(n == "set_limb_animation") {
-    
-        type = MOB_ACTION_SET_LIMB_ANIMATION;
-        
-        if(v.empty()) {
-            log_error(
-                "The \"set_limb_animation\" action needs to know the "
-                "name of the animation!", dn
-            );
-            valid = false;
-        } else {
-            s_args.push_back(v);
-        }
-        
-        
-    } else if(n == "set_state" && states) {
-    
-        type = MOB_ACTION_SET_STATE;
-        
-        for(size_t s = 0; s < states->size(); ++s) {
-            if(states->at(s)->name == v) {
-                i_args.push_back(s);
-                break;
-            }
-        }
-        if(i_args.empty()) {
-            log_error("Unknown state \"" + v + "\"!", dn);
-        }
-        
-        
-    } else if(n == "set_tangible") {
-    
-        type = MOB_ACTION_SET_TANGIBLE;
-        
-        if(v.empty()) {
-            valid = false;
-            log_error(
-                "The set_tangible action needs a true or false value!", dn
-            );
-        } else {
-            i_args.push_back(s2b(v));
-        }
-        
-        
-    } else if(n == "set_team") {
-    
-        type = MOB_ACTION_SET_TEAM;
-        if(!v.empty()) {
-            size_t team_nr = string_to_team_nr(v);
-            if(team_nr != INVALID) {
-                i_args.push_back(team_nr);
-            } else {
-                log_error("Unknown team name \"" + v + "\"!", dn);
-                valid = false;
-            }
-        } else {
-            log_error(
-                "The \"set_team\" action needs to know the team name!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "set_timer") {
-    
-        type = MOB_ACTION_SET_TIMER;
-        
-        if(v_words.size() >= 1) {
-            f_args.push_back(s2f(v_words[0]));
-        } else {
-            log_error("No timer amount specified!", dn);
-            valid = false;
-        }
-        
-        
-    } else if(n == "set_var") {
-    
-        type = MOB_ACTION_SET_VAR;
-        
-        if(v_words.size() < 2) {
-            log_error(
-                "The \"set_var\" action needs to know the variable name and "
-                "what to set it to!", dn
-            );
-            valid = false;
-            return;
-        }
-        
-        s_args = v_words;
-        
-        
-    } else if(n == "show_message_from_var") {
-    
-        type = MOB_ACTION_SHOW_MESSAGE_FROM_VAR;
-        
-        if(v.empty()) {
-            log_error(
-                "\"show_message_from_var\" needs to know the "
-                "name of the variable that holds the text!", dn
-            );
-            valid = false;
-        } else {
-            s_args.push_back(v);
-        }
-        
-        
-    } else if(n == "spawn") {
-    
-        type = MOB_ACTION_SPAWN;
-        
-        for(size_t s = 0; s < mt->spawns.size(); ++s) {
-            if(mt->spawns[s].name == v) {
-                i_args.push_back(s);
-                return;
-            }
-        }
-        
-        log_error("Spawn info block \"" + v + "\" not found!", dn);
-        valid = false;
-        
-        
-    } else if(n == "stabilize_z") {
-    
-        type = MOB_ACTION_STABILIZE_Z;
-        
-        if(v_words.size() >= 2) {
-            if(v_words[0] == "highest") {
-                i_args.push_back(MOB_ACTION_STABILIZE_Z_HIGHEST);
-            } else if(v_words[0] == "lowest") {
-                i_args.push_back(MOB_ACTION_STABILIZE_Z_LOWEST);
-            } else {
-                log_error(
-                    "Unknown reference in the \"stabilize_z\" action: \"" +
-                    v_words[0] + "\"!", dn
-                );
-                valid = false;
-            }
-            
-            f_args.push_back(s2f(v_words[1]));
-        } else {
-            log_error(
-                "The \"stabilize_z\" action needs to know if the stabilization "
-                "is regarding the higest or lowest linked object, and needs "
-                "to know a Z offset!", dn
-            );
-            valid = false;
-        }
-        
-        
-    } else if(n == "start_chomping") {
-    
-        type = MOB_ACTION_START_CHOMPING;
-        
-        if(v_words.empty()) {
-            valid = false;
-        } else {
-            //The first word is the number of Pikmin it can chomp at most.
-            i_args.push_back(s2i(v_words[0]));
-            
-            for(size_t p = 1; p < v_words.size(); ++p) {
-                size_t p_nr = mt->anims.find_body_part(v_words[p]);
-                
-                if(p_nr == INVALID) {
-                    log_error("Unknown body part \"" + v_words[p] + "\"!", dn);
-                    valid = false;
-                } else {
-                    i_args.push_back(p_nr);
-                }
-            }
-            
-            if(i_args.size() == 1) {
-                valid = false;
-            }
-        }
-        
-        if(!valid) {
-            log_error(
-                "This \"start_chomping\" is badly formed! Format: "
-                "\"start_chomping <maximum victims> <body parts>\".", dn
-            );
-        }
-        
-        
-    } else if(n == "start_dying") {
-    
-        type = MOB_ACTION_START_DYING;
-        
-        
-    } else if(n == "start_height_effect") {
-    
-        type = MOB_ACTION_START_HEIGHT_EFFECT;
-        
-        
-    } else if(n == "start_particles") {
-    
-        type = MOB_ACTION_START_PARTICLES;
-        if(v_words.empty()) {
-            log_error(
-                "The \"start_particles\" action needs to know the "
-                "particle generator name!", dn
-            );
-            valid = false;
-        } else {
+        if(is_var) {
             if(
-                custom_particle_generators.find(v_words[0]) ==
-                custom_particle_generators.end()
+                param_type == MOB_ACTION_PARAM_CONST_INT ||
+                param_type == MOB_ACTION_PARAM_CONST_FLOAT ||
+                param_type == MOB_ACTION_PARAM_CONST_STRING ||
+                param_type == MOB_ACTION_PARAM_CONST_BOOL ||
+                param_type == MOB_ACTION_PARAM_CONST_INT_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_STRING_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_BOOL_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_ENUM ||
+                param_type == MOB_ACTION_PARAM_ENUM_EXTRAS
             ) {
                 log_error(
-                    "Particle generator \"" + v_words[0] + "\" not found!", dn
+                    "Argument #" + i2s(w) + " (\"" + words[w] + "\") is a "
+                    "variable, but the parameter \"" +
+                    action->parameters[param_nr].name + "\" can only be "
+                    "constant!"
                 );
-                valid = false;
-            } else {
-                s_args.push_back(v_words[0]);
-                
-                if(v_words.size() >= 2) {
-                    f_args.push_back(s2f(v_words[1]));
-                } else {
-                    f_args.push_back(0.0f);
-                }
-                if(v_words.size() >= 3) {
-                    f_args.push_back(s2f(v_words[2]));
-                } else {
-                    f_args.push_back(0.0f);
-                }
-                if(v_words.size() >= 4) {
-                    f_args.push_back(s2f(v_words[3]));
-                } else {
-                    f_args.push_back(0.0f);
-                }
+                return false;
             }
-        }
-        
-        
-    } else if(n == "stop") {
-    
-        type = MOB_ACTION_STOP;
-        
-        
-    } else if(n == "stop_chomping") {
-    
-        type = MOB_ACTION_STOP_CHOMPING;
-        
-        
-    } else if(n == "stop_height_effect") {
-    
-        type = MOB_ACTION_STOP_HEIGHT_EFFECT;
-        
-        
-    } else if(n == "stop_particles") {
-    
-        type = MOB_ACTION_STOP_PARTICLES;
-        
-        
-    } else if(n == "stop_vertically") {
-    
-        type = MOB_ACTION_STOP_VERTICALLY;
-        
-        
-    } else if(n == "swallow") {
-    
-        type = MOB_ACTION_SWALLOW;
-        
-        i_args.push_back(s2i(v));
-        
-        
-    } else if(n == "swallow_all") {
-    
-        type = MOB_ACTION_SWALLOW_ALL;
-        
-        
-    } else if(n == "teleport_to_absolute") {
-    
-        type = MOB_ACTION_TELEPORT_TO_ABSOLUTE;
-        
-        if(v_words.size() < 3) {
-            valid = false;
-            log_error(
-                "The \"teleport_to_absolute\" action needs to know "
-                "the location!", dn
-            );
+            
+            s_args.push_back(words[w]);
+            arg_is_var.push_back(true);
+            
         } else {
-            f_args.push_back(s2f(v_words[0]));
-            f_args.push_back(s2f(v_words[1]));
-            f_args.push_back(s2f(v_words[2]));
+        
+            if(
+                param_type == MOB_ACTION_PARAM_FREE_INT ||
+                param_type == MOB_ACTION_PARAM_CONST_INT ||
+                param_type == MOB_ACTION_PARAM_FREE_INT_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_INT_EXTRAS
+            ) {
+                i_args.push_back(s2i(words[w]));
+                
+            } else if(
+                param_type == MOB_ACTION_PARAM_FREE_FLOAT ||
+                param_type == MOB_ACTION_PARAM_CONST_FLOAT ||
+                param_type == MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS
+            ) {
+                f_args.push_back(s2f(words[w]));
+                
+            } else if(
+                param_type == MOB_ACTION_PARAM_FREE_BOOL ||
+                param_type == MOB_ACTION_PARAM_CONST_BOOL ||
+                param_type == MOB_ACTION_PARAM_FREE_BOOL_EXTRAS ||
+                param_type == MOB_ACTION_PARAM_CONST_BOOL_EXTRAS
+            ) {
+                f_args.push_back(s2b(words[w]));
+                
+            } else {
+            
+                if(
+                    param_type == MOB_ACTION_PARAM_ENUM ||
+                    param_type == MOB_ACTION_PARAM_ENUM_EXTRAS
+                ) {
+                    enum_arg_s_indexes.push_back(s_args.size());
+                    enum_arg_i_indexes.push_back(i_args.size());
+                    i_args.push_back(0); //Placeholder.
+                }
+                
+                s_args.push_back(words[w]);
+                
+            }
+            
+            arg_is_var.push_back(false);
+            
         }
-        
-        
-    } else if(n == "teleport_to_relative") {
-    
-        type = MOB_ACTION_TELEPORT_TO_RELATIVE;
-        
-        if(v_words.size() < 3) {
-            valid = false;
-            log_error(
-                "The \"teleport_to_relative\" action needs to know "
-                "the location!", dn
-            );
-        } else {
-            f_args.push_back(s2f(v_words[0]));
-            f_args.push_back(s2f(v_words[1]));
-            f_args.push_back(s2f(v_words[2]));
-        }
-        
-        
-    } else if(n == "turn_to_absolute") {
-    
-        type = MOB_ACTION_TURN_TO_ABSOLUTE;
-        
-        if(v_words.empty()) {
-            valid = false;
-            log_error("The \"turn_to_absolute\" action needs a direction!", dn);
-        }
-        
-        f_args.push_back(deg_to_rad(s2f(v_words[1])));
-        
-        
-    } else if(n == "turn_to_relative") {
-    
-        type = MOB_ACTION_TURN_TO_RELATIVE;
-        
-        if(v_words.empty()) {
-            valid = false;
-            log_error("The \"turn_to_relative\" action needs a direction!", dn);
-        }
-        
-        f_args.push_back(deg_to_rad(s2f(v_words[1])));
-        
-        
-    } else if(n == "turn_to_target") {
-    
-        type = MOB_ACTION_TURN_TO_TARGET;
-        
-        if(v_words.empty()) {
-            valid = false;
-            log_error("The \"turn_to_target\" action needs a direction!", dn);
-        } else if(v == "arachnorb_head_logic") {
-            i_args.push_back(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
-        } else if(v == "focused_mob") {
-            i_args.push_back(MOB_ACTION_TURN_FOCUSED_MOB);
-        } else if(v == "home") {
-            i_args.push_back(MOB_ACTION_TURN_HOME);
-        } else if(v == "randomly") {
-            i_args.push_back(MOB_ACTION_TURN_RANDOMLY);
-        } else {
-            valid = false;
-            log_error("Invalid turn target \"" + v + "\"!", dn);
-        }
-        
-        
-    } else {
-    
-        type = MOB_ACTION_UNKNOWN;
-        log_error("Unknown script action name \"" + n + "\"!", dn);
-        valid = false;
-        
-        
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty mob action.
- * type:     the action type.
- */
-mob_action_call::mob_action_call(unsigned char type) :
-    type(type),
-    code(nullptr),
-    valid(true) {
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new mob action that runs custom code.
- * code: the function to run.
- */
-mob_action_call::mob_action_call(custom_action_code code) :
-    type(MOB_ACTION_UNKNOWN),
-    code(code),
-    valid(true) {
+    if(action->extra_load_logic) {
+        bool success = action->extra_load_logic(*this);
+        
+        size_t deletions = 0;
+        for(size_t e = 0; e < enum_results.size(); ++e) {
+            size_t s_nr = enum_arg_s_indexes[e] - deletions;
+            
+            if(enum_results[e] == INVALID) {
+                log_error(
+                    "Unknown value for argument \"" +
+                    s_args[s_nr] + "\"!", dn
+                );
+                return false;
+            }
+            
+            s_args.erase(s_args.begin() + s_nr);
+            i_args[enum_arg_i_indexes[e]] = enum_results[e];
+            deletions++;
+        }
+        
+        if(!custom_error.empty()) {
+            log_error(custom_error, dn);
+        }
+        return success;
+    }
     
+    return true;
 }
 
 
@@ -915,573 +243,18 @@ bool mob_action_call::run(
     mob* m, void* custom_data_1, void* custom_data_2,
     const size_t parent_event
 ) {
-
-    if(!valid) return false;
-    
     //Custom code (i.e. instead of text-based script, use actual code).
     if(code) {
         code(m, custom_data_1, custom_data_2);
         return false;
     }
     
-    switch(type) {
-    case MOB_ACTION_ADD_HEALTH: {
-
-        m->set_health(true, false, f_args[0]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC: {
-
-        m->arachnorb_plan_logic(i_args[0]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_CALCULATE: {
-
-        float lhs, rhs, result;
-        if(s_args[1].empty()) {
-            lhs = f_args[0];
-        } else {
-            lhs = s2f(m->vars[s_args[1]]);
-        }
-        
-        if(s_args[2].empty()) {
-            rhs = f_args[1];
-        } else {
-            rhs = s2f(m->vars[s_args[2]]);
-        }
-        
-        if(i_args[0] == MOB_ACTION_SET_VAR_SUM) {
-            result = lhs + rhs;
-        } else if(i_args[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
-            result = lhs - rhs;
-        } else if(i_args[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
-            result = lhs * rhs;
-        } else if(i_args[0] == MOB_ACTION_SET_VAR_DIVIDE) {
-            if(rhs == 0) {
-                result = 0;
-            } else {
-                result = lhs / rhs;
-            }
-        } else {
-            if(rhs == 0) {
-                result = 0;
-            } else {
-                result = fmod(lhs, rhs);
-            }
-        }
-        
-        m->vars[s_args[0]] = f2s(result);
-        
-        break;
-        
-        
-    } case MOB_ACTION_DELETE: {
-
-        m->to_delete = true;
-        
-        break;
-        
-        
-    } case MOB_ACTION_FOCUS: {
-
-        if(i_args[0] == MOB_ACTION_FOCUS_PARENT && m->parent) {
-            m->focus_on_mob(m->parent->m);
-            
-        } else if(i_args[0] == MOB_ACTION_FOCUS_TRIGGER) {
-            if(
-                parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-                parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-                parent_event == MOB_EVENT_PIKMIN_LANDED ||
-                parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-                parent_event == MOB_EVENT_TOUCHED_OPPONENT
-            ) {
-                m->focus_on_mob((mob*) custom_data_1);
-                
-            } else if(
-                parent_event == MOB_EVENT_RECEIVE_MESSAGE
-            ) {
-                m->focus_on_mob((mob*) custom_data_2);
-            }
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_FINISH_DYING: {
-
-        m->finish_dying();
-        
-        break;
-        
-        
-    } case MOB_ACTION_GET_CHOMPED: {
-
-        if(parent_event == MOB_EVENT_HITBOX_TOUCH_EAT) {
-            ((mob*) custom_data_1)->chomp(m, (hitbox*) custom_data_2);
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_IF: {
-
-        string lhs = s_args[0];
-        string rhs = s_args[1];
-        
-        if(i_args[0] == MOB_ACTION_IF_OP_EQUAL) {
-            if(is_number(lhs)) {
-                return (s2f(lhs) == s2f(rhs));
-            } else {
-                return (lhs == rhs);
-            }
-        } else if(i_args[0] == MOB_ACTION_IF_OP_NOT) {
-            if(is_number(lhs)) {
-                return (s2f(lhs) != s2f(rhs));
-            } else {
-                return (lhs != rhs);
-            }
-        } else if(i_args[0] == MOB_ACTION_IF_OP_LESS) {
-            return (s2f(lhs) < s2f(rhs));
-        } else if(i_args[0] == MOB_ACTION_IF_OP_MORE) {
-            return (s2f(lhs) > s2f(rhs));
-        } else if(i_args[0] == MOB_ACTION_IF_OP_LESS_E) {
-            return (s2f(lhs) <= s2f(rhs));
-        } else if(i_args[0] == MOB_ACTION_IF_OP_MORE_E) {
-            return (s2f(lhs) >= s2f(rhs));
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_MOVE_TO_ABSOLUTE: {
-
-        m->chase(point(f_args[0], f_args[1]), NULL, false);
-        
-        break;
-        
-    } case MOB_ACTION_MOVE_TO_RELATIVE: {
-
-        point p = rotate_point(point(f_args[0], f_args[1]), m->angle);
-        m->chase(m->pos + p, NULL, false);
-        
-        break;
-        
-    } case MOB_ACTION_MOVE_TO_TARGET: {
-
-        if(i_args[0] == MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB) {
-            if(m->focused_mob) {
-                float a = get_angle(m->pos, m->focused_mob->pos);
-                point offset = point(2000, 0);
-                offset = rotate_point(offset, a + TAU / 2.0);
-                m->chase(m->pos + offset, NULL, false);
-            } else {
-                m->stop_chasing();
-            }
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_FOCUSED_MOB) {
-            if(m->focused_mob) {
-                m->chase(point(), &m->focused_mob->pos, false);
-            } else {
-                m->stop_chasing();
-            }
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_FOCUSED_MOB_POS) {
-            if(m->focused_mob) {
-                m->chase(m->focused_mob->pos, NULL, false);
-            } else {
-                m->stop_chasing();
-            }
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_HOME) {
-            m->chase(m->home, NULL, false);
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC) {
-            m->arachnorb_foot_move_logic();
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_LINKED_MOB_AVERAGE) {
-            if(m->links.empty()) return false;
-            
-            point des;
-            for(size_t l = 0; l < m->links.size(); ++l) {
-                des += m->links[l]->pos;
-            }
-            des = des / m->links.size();
-            
-            m->chase(des, NULL, false);
-            
-        } else if(i_args[0] == MOB_ACTION_MOVE_RANDOMLY) {
-            m->chase(
-                point(
-                    m->pos.x + randomf(-1000, 1000),
-                    m->pos.y + randomf(-1000, 1000)
-                ),
-                NULL, false
-            );
-            
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_ORDER_RELEASE: {
-
-        if(m->holder.m) {
-            m->holder.m->fsm.run_event(MOB_EVENT_RELEASE_ORDER, NULL, NULL);
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_RANDOMIZE_TIMER: {
-
-        m->set_timer(randomf(f_args[0], f_args[1]));
-        
-        break;
-        
-        
-    } case MOB_ACTION_RANDOMIZE_VAR: {
-
-        m->vars[s_args[0]] = i2s(randomi(i_args[0], i_args[1]));
-        
-        break;
-        
-        
-    } case MOB_ACTION_RECEIVE_STATUS: {
-
-        m->apply_status_effect(&status_types[s_args[0]], true, false);
-        
-        break;
-        
-        
-    } case MOB_ACTION_RELEASE: {
-
-        m->release_chomped_pikmin();
-        
-        break;
-        
-        
-    } case MOB_ACTION_REMOVE_STATUS: {
-
-        for(size_t s = 0; s < m->statuses.size(); ++s) {
-            if(m->statuses[s].type->name == s_args[0]) {
-                m->statuses[s].to_delete = true;
-            }
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_SEND_MESSAGE_TO_LINKS: {
-
-        for(size_t l = 0; l < m->links.size(); ++l) {
-            if(m->links[l] == m) continue;
-            m->send_message(m->links[l], s_args[0]);
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_SEND_MESSAGE_TO_NEARBY: {
-
-        for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
-            if(mobs[m2] == m) continue;
-            if(dist(m->pos, mobs[m2]->pos) > f_args[0]) continue;
-            m->send_message(mobs[m2], s_args[0]);
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_ANIMATION: {
-
-        m->set_animation(i_args[0], false, i_args[1] == 0);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_FAR_REACH: {
-
-        m->far_reach = i_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_GRAVITY: {
-
-        m->gravity_mult = f_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_HEALTH: {
-
-        m->set_health(false, false, f_args[0]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_HIDING: {
-
-        m->hide = i_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_HOLDABLE: {
-
-        if(typeid(*m) == typeid(tool)) {
-            ((tool*) m)->holdability_flags = i_args[0];
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_NEAR_REACH: {
-
-        m->near_reach = i_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_LIMB_ANIMATION: {
-
-        if(!m->parent) return false;
-        if(!m->parent->limb_anim.anim_db) return false;
-        size_t a = m->parent->limb_anim.anim_db->find_animation(s_args[0]);
-        if(a == INVALID) return false;
-        m->parent->limb_anim.cur_anim =
-            m->parent->limb_anim.anim_db->animations[a];
-        m->parent->limb_anim.start();
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_STATE: {
-
-        m->fsm.set_state(i_args[0], custom_data_1, custom_data_2);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_TANGIBLE: {
-
-        m->tangible = (bool) i_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_TEAM: {
-
-        m->team = i_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_TIMER: {
-
-        m->set_timer(f_args[0]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SET_VAR: {
-
-        m->set_var(s_args[0], s_args[1]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SHOW_MESSAGE_FROM_VAR: {
-
-        start_message(m->vars[s_args[0]], NULL);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SPAWN: {
-
-        return m->spawn(&m->type->spawns[i_args[0]]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_STABILIZE_Z: {
-
-        if(m->links.empty()) return false;
-        float best_match_z = m->links[0]->z;
-        for(size_t l = 1; l < m->links.size(); ++l) {
-            if(
-                i_args[0] == MOB_ACTION_STABILIZE_Z_HIGHEST &&
-                m->links[l]->z > best_match_z
-            ) {
-                best_match_z = m->links[l]->z;
-            } else if(
-                i_args[0] == MOB_ACTION_STABILIZE_Z_LOWEST &&
-                m->links[l]->z < best_match_z
-            ) {
-                best_match_z = m->links[l]->z;
-            }
-        }
-        
-        m->z = best_match_z + f_args[0];
-        
-        break;
-        
-        
-    } case MOB_ACTION_START_DYING: {
-
-        m->start_dying();
-        
-        break;
-        
-        
-    } case MOB_ACTION_START_CHOMPING: {
-
-        m->chomp_max = i_args[0];
-        m->chomp_body_parts.clear();
-        for(size_t p = 1; p < i_args.size(); ++p) {
-            m->chomp_body_parts.push_back(i_args[p]);
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_START_HEIGHT_EFFECT: {
-
-        m->start_height_effect();
-        
-        break;
-        
-        
-    } case MOB_ACTION_START_PARTICLES: {
-
-        if(s_args.empty()) {
-            m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
-        } else {
-            if(
-                custom_particle_generators.find(s_args[0]) !=
-                custom_particle_generators.end()
-            ) {
-                particle_generator pg = custom_particle_generators[s_args[0]];
-                pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
-                pg.follow_mob = m;
-                pg.follow_angle = &m->angle;
-                pg.follow_pos_offset = point(f_args[0], f_args[1]);
-                pg.follow_z_offset = f_args[2];
-                pg.reset();
-                m->particle_generators.push_back(pg);
-            }
-        }
-        
-        break;
-        
-        
-    } case MOB_ACTION_STOP: {
-
-        m->stop_chasing();
-        m->stop_turning();
-        
-        break;
-        
-        
-    } case MOB_ACTION_STOP_CHOMPING: {
-
-        m->chomp_max = 0;
-        m->chomp_body_parts.clear();
-        
-        break;
-        
-        
-    } case MOB_ACTION_STOP_HEIGHT_EFFECT: {
-
-        m->stop_height_effect();
-        
-        break;
-        
-        
-    } case MOB_ACTION_STOP_PARTICLES: {
-
-        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
-        
-        break;
-        
-        
-    } case MOB_ACTION_STOP_VERTICALLY: {
-
-        m->speed_z = 0;
-        
-        break;
-        
-        
-    } case MOB_ACTION_SWALLOW: {
-
-        m->swallow_chomped_pikmin(i_args[1]);
-        
-        break;
-        
-        
-    } case MOB_ACTION_SWALLOW_ALL: {
-
-        m->swallow_chomped_pikmin(m->chomping_mobs.size());
-        
-        break;
-        
-        
-    } case MOB_ACTION_TELEPORT_TO_ABSOLUTE: {
-
-        m->stop_chasing();
-        m->chase(point(f_args[0], f_args[1]), NULL, true);
-        m->z = f_args[2];
-        
-        break;
-        
-        
-    } case MOB_ACTION_TELEPORT_TO_RELATIVE: {
-
-        m->stop_chasing();
-        point p = rotate_point(point(f_args[0], f_args[1]), m->angle);
-        m->chase(m->pos + p, NULL, true);
-        m->z += f_args[2];
-        
-        break;
-        
-        
-    } case MOB_ACTION_TURN_TO_ABSOLUTE: {
-
-        m->face(f_args[0], NULL);
-        
-        break;
-        
-        
-    } case MOB_ACTION_TURN_TO_RELATIVE: {
-
-        m->face(m->angle + f_args[0], NULL);
-        
-        break;
-        
-        
-    } case MOB_ACTION_TURN_TO_TARGET: {
-        if(i_args[0] == MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC) {
-            m->arachnorb_head_turn_logic();
-        } else if(i_args[0] == MOB_ACTION_TURN_FOCUSED_MOB && m->focused_mob) {
-            m->face(0, &m->focused_mob->pos);
-        } else if(i_args[0] == MOB_ACTION_TURN_HOME) {
-            m->face(get_angle(m->pos, m->home), NULL);
-        } else if(i_args[0] == MOB_ACTION_TURN_RANDOMLY) {
-            m->face(randomf(0, TAU), NULL);
-        }
-        
-        break;
-        
-        
-    }
-    }
+    mob_action_run_data data(m, this);
+    //TODO get arguments.
+    data.custom_data_1 = custom_data_1;
+    data.custom_data_2 = custom_data_2;
     
-    return false;
+    return action->code;
 }
 
 
@@ -2562,6 +1335,22 @@ mob_action::mob_action() :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new mob action run data struct.
+ */
+mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
+    m(m),
+    call(call),
+    i_params(call->i_args),
+    f_params(call->f_args),
+    s_params(call->s_args),
+    custom_data_1(nullptr),
+    custom_data_2(nullptr),
+    return_value(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Confirms if the "if", "else", and "end_if" actions in a given vector of
  * actions are all okay, and there are no mismatches, like for instance,
  * an "else" without an "if".
@@ -2573,9 +1362,9 @@ mob_action::mob_action() :
 bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn) {
     int level = 0;
     for(size_t a = 0; a < actions.size(); ++a) {
-        if(actions[a]->type == MOB_ACTION_IF) {
+        if(actions[a]->action->type == MOB_ACTION_IF) {
             level++;
-        } else if(actions[a]->type == MOB_ACTION_ELSE) {
+        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
             if(level == 0) {
                 log_error(
                     "Found an \"else\" action without a matching "
@@ -2583,7 +1372,7 @@ bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn) {
                 );
                 return false;
             }
-        } else if(actions[a]->type == MOB_ACTION_END_IF) {
+        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
             if(level == 0) {
                 log_error(
                     "Found an \"end_if\" action without a matching "
@@ -2615,7 +1404,12 @@ void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 ) {
     for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
-        actions->push_back(new mob_action_call(node->get_child(a), NULL, mt));
+        mob_action_call* new_a = new mob_action_call();
+        if(new_a->load_from_data_node(node->get_child(a), NULL, mt)) {
+            actions->push_back(new_a);
+        } else {
+            delete new_a;
+        }
     }
     assert_if_actions(*actions, node);
 }

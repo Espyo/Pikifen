@@ -41,7 +41,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     
     for(size_t a = 0; a < actions.size(); ++a) {
     
-        if(actions[a]->type == MOB_ACTION_IF) {
+        if(actions[a]->action->type == MOB_ACTION_IF) {
             //If statement. Look out for its return value, and
             //change the flow accordingly.
             
@@ -51,11 +51,11 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                 size_t next_a = a + 1;
                 size_t depth = 0;
                 for(; next_a < actions.size(); ++next_a) {
-                    if(actions[next_a]->type == MOB_ACTION_IF) {
+                    if(actions[next_a]->action->type == MOB_ACTION_IF) {
                         depth++;
-                    } else if(actions[next_a]->type == MOB_ACTION_ELSE) {
+                    } else if(actions[next_a]->action->type == MOB_ACTION_ELSE) {
                         if(depth == 0) break;
-                    } else if(actions[next_a]->type == MOB_ACTION_END_IF) {
+                    } else if(actions[next_a]->action->type == MOB_ACTION_END_IF) {
                         if(depth == 0) break;
                         else depth--;
                     }
@@ -64,29 +64,30 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                 
             }
             
-        } else if(actions[a]->type == MOB_ACTION_ELSE) {
+        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
             //If we actually managed to read an "else", that means we were
             //running through the normal execution of a "then" section.
             //Jump to the "end if".
             size_t next_a = a + 1;
             size_t depth = 0;
             for(; next_a < actions.size(); ++next_a) {
-                if(actions[next_a]->type == MOB_ACTION_IF) {
+                if(actions[next_a]->action->type == MOB_ACTION_IF) {
                     depth++;
-                } else if(actions[next_a]->type == MOB_ACTION_END_IF) {
+                } else if(actions[next_a]->action->type == MOB_ACTION_END_IF) {
                     if(depth == 0) break;
                     else depth--;
                 }
             }
             a = next_a;
             
-        } else if(actions[a]->type == MOB_ACTION_END_IF) {
+        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
             //Nothing to do.
             
         } else {
             //Normal action.
             actions[a]->run(m, custom_data_1, custom_data_2, type);
-            if(actions[a]->type == MOB_ACTION_SET_STATE) break;
+            //If the state got changed, jump out.
+            if(actions[a]->action->type == MOB_ACTION_SET_STATE) break;
             
         }
     }
@@ -310,7 +311,7 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                 mob_action_call* action = ev->actions[a];
                 
                 if(
-                    action->type == MOB_ACTION_SET_STATE &&
+                    action->action->type == MOB_ACTION_SET_STATE &&
                     !action->s_args.empty()
                 ) {
                     string state_name = action->s_args[0];
@@ -376,7 +377,12 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             
             for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
                 data_node* action_node = event_node->get_child(a);
-                actions.push_back(new mob_action_call(action_node, states, mt));
+                mob_action_call* new_a = new mob_action_call();
+                if(new_a->load_from_data_node(action_node, states, mt)) {
+                    actions.push_back(new_a);
+                } else {
+                    delete new_a;
+                }
             }
             
             events.push_back(new mob_event(event_node, actions));
@@ -515,7 +521,7 @@ void easy_fsm_creator::new_event(const unsigned char type) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new action for the current event, one that changes
+ * Creates a new action call for the current event, one that changes
  * the mob's state to something else.
  */
 void easy_fsm_creator::change_state(const string &new_state) {
