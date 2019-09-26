@@ -310,6 +310,8 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
             for(size_t a = 0; a < ev->actions.size(); ++a) {
                 mob_action_call* action = ev->actions[a];
                 
+                //TODO
+                /*
                 if(
                     action->action->type == MOB_ACTION_SET_STATE &&
                     !action->s_args.empty()
@@ -317,14 +319,14 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                     string state_name = action->s_args[0];
                     size_t state_nr = 0;
                     bool found_state = false;
-                    
+                
                     for(; state_nr < states.size(); ++state_nr) {
                         if(states[state_nr]->name == state_name) {
                             found_state = true;
                             break;
                         }
                     }
-                    
+                
                     if(!found_state) {
                         state_nr = INVALID;
                         log_error(
@@ -334,12 +336,13 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                             nullptr
                         );
                     }
-                    
+                
                     action->s_args.clear();
                     action->i_args.clear();
                     action->i_args.push_back(state_nr);
-                    
+                
                 }
+                */
             }
         }
     }
@@ -526,7 +529,7 @@ void easy_fsm_creator::new_event(const unsigned char type) {
  */
 void easy_fsm_creator::change_state(const string &new_state) {
     cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
-    cur_event->actions.back()->s_args.push_back(new_state);
+    cur_event->actions.back()->args.push_back(mob_action_arg(new_state));
 }
 
 

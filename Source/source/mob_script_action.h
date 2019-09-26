@@ -193,12 +193,27 @@ struct mob_action_param {
 };
 
 
+struct mob_action_arg {
+    union value_union {
+        bool b;
+        int i;
+        float f;
+        string s;
+        value_union() { }
+        value_union(const value_union &u) { }
+        ~value_union() { }
+    } value;
+    explicit mob_action_arg(const bool &value);
+    explicit mob_action_arg(const int &value);
+    explicit mob_action_arg(const float &value);
+    explicit mob_action_arg(const string &value);
+};
+
+
 struct mob_action_run_data {
     mob* m;
     mob_action_call* call;
-    vector<int> &i_params;
-    vector<float> &f_params;
-    vector<string> &s_params;
+    vector<mob_action_arg> args;
     void* custom_data_1;
     void* custom_data_2;
     bool return_value;
@@ -225,11 +240,9 @@ struct mob_action_call {
     mob_action* action;
     
     custom_action_code code;
-    vector<int> i_args;
-    vector<float> f_args;
-    vector<string> s_args;
+    
+    vector<mob_action_arg> args;
     vector<bool> arg_is_var;
-    vector<size_t> enum_results;
     
     string custom_error;
     mob_type* mt;
@@ -323,6 +336,8 @@ bool stabilize_z(mob_action_call &call);
 bool start_chomping(mob_action_call &call);
 bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
+
+void report_enum_error(const string &value, mob_action_call &call);
 };
 
 
