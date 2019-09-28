@@ -562,6 +562,15 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_INFO,
+        "get_info",
+        mob_action_runners::get_info,
+        mob_action_loaders::get_info
+    );
+    
     reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
     reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
     reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
@@ -615,7 +624,7 @@ void init_mob_actions() {
     reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
-        MOB_ACTION_RANDOMIZE_VAR,
+        MOB_ACTION_RANDOMIZE_TIMER,
         "randomize_timer",
         mob_action_runners::randomize_timer,
         nullptr

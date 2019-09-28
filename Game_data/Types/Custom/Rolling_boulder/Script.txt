@@ -29,7 +29,7 @@ script {
             set_timer 10
         }
         on_tick {
-            if var has_target = false
+            if $has_target = false
                 move_to_relative 1000 0
             end_if
         }
@@ -38,8 +38,8 @@ script {
         }
         on_touch_object {
             get_info t mob_category
-            if var t != Pikmin
-                if var t != Decoration
+            if $t != Pikmin
+                if $t != Decoration
                     set_state destroying
                 end_if
             end_if
@@ -48,10 +48,10 @@ script {
             set_state destroying
         }
         on_opponent_in_reach {
-            if var homing = true
+            if $homing = true
                 get_info t mob_category
-                if var t = Leader
-                    if var has_target = false
+                if $t = Leader
+                    if $has_target = false
                         focus trigger
                         move_to_target focused_mob
                         set_var has_target true

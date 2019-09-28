@@ -61,7 +61,7 @@ script {
         on_animation_end {
             stop_chomping
             get_info t chomped_pikmin
-            if var t > 0
+            if $t > 0
                 set_state eating
             else
                 set_state exploring
@@ -98,7 +98,7 @@ script {
             set_state exploring
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if

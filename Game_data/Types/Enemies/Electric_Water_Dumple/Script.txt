@@ -15,7 +15,7 @@ script {
             set_near_reach search
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if
@@ -33,7 +33,7 @@ script {
             set_far_reach chase
         }
         on_opponent_in_reach {
-            if var next_eat = true
+            if $next_eat = true
                 set_var next_eat false
                 set_state attacking
             else
@@ -62,7 +62,7 @@ script {
         on_animation_end {
             stop_chomping
             get_info t chomped_pikmin
-            if var t > 0
+            if $t > 0
                 set_state eating
             else
                 set_state idling
@@ -118,7 +118,7 @@ script {
             set_state idling
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if

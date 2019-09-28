@@ -20,11 +20,14 @@
  */
 mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
     action(nullptr),
-    code(nullptr) {
+    code(nullptr),
+    parent_event(MOB_EVENT_UNKNOWN),
+    mt(nullptr) {
     
     for(size_t a = 0; a < mob_actions.size(); ++a) {
         if(mob_actions[a].type == type) {
             action = &(mob_actions[a]);
+            break;
         }
     }
 }
@@ -36,8 +39,16 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
  */
 mob_action_call::mob_action_call(custom_action_code code):
     action(nullptr),
-    code(code) {
+    code(code),
+    parent_event(MOB_EVENT_UNKNOWN),
+    mt(nullptr) {
     
+    for(size_t a = 0; a < mob_actions.size(); ++a) {
+        if(mob_actions[a].type == MOB_ACTION_UNKNOWN) {
+            action = &(mob_actions[a]);
+            break;
+        }
+    }
 }
 
 
@@ -52,6 +63,9 @@ bool mob_action_call::load_from_data_node(
     data_node* dn, vector<mob_state*>* states, mob_type* mt
 ) {
 
+    action = NULL;
+    this->mt = mt;
+    
     //First, get the name and arguments.
     vector<string> words = split(dn->name);
     
@@ -78,7 +92,6 @@ bool mob_action_call::load_from_data_node(
     }
     
     //Parse the arguments to make sure they're all good.
-    
     vector<size_t> enum_arg_s_indexes;
     vector<size_t> enum_arg_i_indexes;
     size_t mandatory_parameters = action->parameters.size();
@@ -100,7 +113,7 @@ bool mob_action_call::load_from_data_node(
         return false;
     }
     
-    if(mandatory_parameters != action->parameters.size()) {
+    if(mandatory_parameters == action->parameters.size()) {
         if(words.size() > action->parameters.size()) {
             log_error(
                 "The \"" + action->name + "\" action only needs " +
@@ -113,8 +126,7 @@ bool mob_action_call::load_from_data_node(
     }
     
     for(size_t w = 0; w < words.size(); ++w) {
-        size_t param_nr = w;
-        param_nr = min(param_nr, action->parameters.size() - 1);
+        size_t param_nr = min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
         if(is_var) {
@@ -123,16 +135,26 @@ bool mob_action_call::load_from_data_node(
                     "Argument #" + i2s(w) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
                     action->parameters[param_nr].name + "\" can only be "
-                    "constant!"
+                    "constant!",
+                    dn
                 );
                 return false;
             }
             
-            arg_is_var.push_back(true);
+            words[w].erase(words[w].begin()); //Remove the '$'.
             
+            if(words[w].empty()) {
+                log_error(
+                    "Argument #" + i2s(w) + " is trying to use a variable "
+                    "with no name!",
+                    dn
+                );
+                return false;
+            }
         }
         
         args.push_back(words[w]);
+        arg_is_var.push_back(is_var);
     }
     
     if(action->extra_load_logic) {
@@ -168,16 +190,16 @@ bool mob_action_call::run(
     data.args = args;
     for(size_t a = 0; a < args.size(); ++a) {
         if(arg_is_var[a]) {
-            size_t param_nr = a;
-            param_nr = min(param_nr, action->parameters.size() - 1);
+            size_t param_nr = min(a, action->parameters.size() - 1);
             MOB_ACTION_PARAM_TYPE param_type = action->parameters[param_nr].type;
-            
+            data.args[a] = m->vars[args[a]];
         }
     }
     data.custom_data_1 = custom_data_1;
     data.custom_data_2 = custom_data_2;
     
-    return action->code;
+    action->code(data);
+    return data.return_value;
 }
 
 
@@ -202,43 +224,44 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  * Code for the calculation mob script action.
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
-    //TODO
-    /*
-    float lhs, rhs, result;
-    if(data.s_params[1].empty()) {
-        lhs = data.f_params[0];
-    } else {
-        lhs = s2f(data.m->vars[data.s_params[1]]);
-    }
+    float lhs = s2f(data.args[1]);
+    size_t op = s2i(data.args[2]);
+    float rhs = s2f(data.args[3]);
+    float result = 0;
     
-    if(data.s_params[2].empty()) {
-        rhs = data.f_params[1];
-    } else {
-        rhs = s2f(data.m->vars[data.s_params[2]]);
-    }
-    
-    if(data.i_params[0] == MOB_ACTION_SET_VAR_SUM) {
+    switch(op) {
+    case MOB_ACTION_SET_VAR_SUM: {
         result = lhs + rhs;
-    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_SUBTRACT) {
+        break;
+        
+    } case MOB_ACTION_SET_VAR_SUBTRACT: {
         result = lhs - rhs;
-    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_MULTIPLY) {
+        break;
+        
+    } case MOB_ACTION_SET_VAR_MULTIPLY: {
         result = lhs * rhs;
-    } else if(data.i_params[0] == MOB_ACTION_SET_VAR_DIVIDE) {
+        break;
+        
+    } case MOB_ACTION_SET_VAR_DIVIDE: {
         if(rhs == 0) {
             result = 0;
         } else {
             result = lhs / rhs;
         }
-    } else {
+        break;
+        
+    } case MOB_ACTION_SET_VAR_MODULO: {
         if(rhs == 0) {
             result = 0;
         } else {
             result = fmod(lhs, rhs);
         }
+        break;
+        
+    }
     }
     
-    data.m->vars[data.s_params[0]] = f2s(result);
-    */
+    data.m->vars[data.args[0]] = f2s(result);
 }
 
 
@@ -546,7 +569,6 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         
     } case MOB_ACTION_MOVE_LINKED_MOB_AVERAGE: {
         if(data.m->links.empty()) {
-            data.return_value = false;
             return;
         }
         
@@ -667,11 +689,12 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
  * Code for the animation setting mob script action.
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
-    data.m->set_animation(
-        s2i(data.args[0]),
-        false,
-        s2i(data.args[1]) != MOB_ACTION_SET_ANIMATION_NO_RESTART
-    );
+    bool must_restart =
+        (
+            data.args.size() > 1 &&
+            s2i(data.args[1]) == MOB_ACTION_SET_ANIMATION_NO_RESTART
+        );
+    data.m->set_animation(s2i(data.args[0]), false, !must_restart);
 }
 
 
@@ -726,17 +749,14 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
  */
 void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
     if(!data.m->parent) {
-        data.return_value = false;
         return;
     }
     if(!data.m->parent->limb_anim.anim_db) {
-        data.return_value = false;
         return;
     }
     
     size_t a = data.m->parent->limb_anim.anim_db->find_animation(data.args[0]);
     if(a == INVALID) {
-        data.return_value = false;
         return;
     }
     
@@ -811,7 +831,7 @@ void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
  * Code for the spawning mob script action.
  */
 void mob_action_runners::spawn(mob_action_run_data &data) {
-    data.return_value = data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
+    data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
 }
 
 
@@ -820,7 +840,6 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     if(data.m->links.empty()) {
-        data.return_value = false;
         return;
     }
     
@@ -883,13 +902,19 @@ void mob_action_runners::start_height_effect(mob_action_run_data &data) {
  * Code for the particle start mob script action.
  */
 void mob_action_runners::start_particles(mob_action_run_data &data) {
-    //TODO check if the offset values exist.
+    float offset_x = 0;
+    float offset_y = 0;
+    float offset_z = 0;
+    if(data.args.size() > 1) offset_x = s2f(data.args[1]);
+    if(data.args.size() > 2) offset_y = s2f(data.args[2]);
+    if(data.args.size() > 3) offset_z = s2f(data.args[3]);
+    
     particle_generator pg = custom_particle_generators[data.args[0]];
     pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
     pg.follow_mob = data.m;
     pg.follow_angle = &data.m->angle;
-    pg.follow_pos_offset = point(s2f(data.args[1]), s2f(data.args[2]));
-    pg.follow_z_offset = s2f(data.args[3]);
+    pg.follow_pos_offset = point(offset_x, offset_y);
+    pg.follow_z_offset = offset_z;
     pg.reset();
     data.m->particle_generators.push_back(pg);
 }
@@ -1036,7 +1061,7 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
     } else if(call.args[0] == "ccw_turn") {
         call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
     } else {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
         return false;
     }
     return true;
@@ -1058,7 +1083,7 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
     } else if(call.args[2] == "%") {
         call.args[2] = i2s(MOB_ACTION_SET_VAR_MODULO);
     } else {
-        report_enum_error(call.args[2], call);
+        report_enum_error(call, 2);
         return false;
     }
     return true;
@@ -1074,7 +1099,45 @@ bool mob_action_loaders::focus(mob_action_call &call) {
     } else if(call.args[0] == "trigger") {
         call.args[0] = i2s(MOB_ACTION_FOCUS_TRIGGER);
     } else {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script action.
+ */
+bool mob_action_loaders::get_info(mob_action_call &call) {
+    if(call.args[1] == "body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
+    } else if(call.args[1] == "chomped_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
+    } else if(call.args[1] == "day_minutes") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
+    } else if(call.args[1] == "field_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
+    } else if(call.args[1] == "frame_signal") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+    } else if(call.args[1] == "health") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
+    } else if(call.args[1] == "latched_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
+    } else if(call.args[1] == "latched_pikmin_weight") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+    } else if(call.args[1] == "message") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
+    } else if(call.args[1] == "message_sender") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
+    } else if(call.args[1] == "mob_category") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
+    } else if(call.args[1] == "mob_type") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+    } else if(call.args[1] == "other_body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else {
+        report_enum_error(call, 1);
         return false;
     }
     return true;
@@ -1098,7 +1161,7 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
     } else if(call.args[1] == ">=") {
         call.args[1] = i2s(MOB_ACTION_IF_OP_MORE_E);
     } else {
-        report_enum_error(call.args[1], call);
+        report_enum_error(call, 1);
         return false;
     }
     return true;
@@ -1124,7 +1187,7 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
     } else if(call.args[0] == "randomly") {
         call.args[0] = i2s(MOB_ACTION_MOVE_RANDOMLY);
     } else {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
         return false;
     }
     return true;
@@ -1206,7 +1269,7 @@ bool mob_action_loaders::set_holdable(mob_action_call &call) {
         } else if(call.args[a] == "enemies") {
             call.args[a] = i2s(HOLDABLE_BY_ENEMIES);
         } else {
-            report_enum_error(call.args[a], call);
+            report_enum_error(call, a);
             return false;
         }
     }
@@ -1235,7 +1298,7 @@ bool mob_action_loaders::set_near_reach(mob_action_call &call) {
 bool mob_action_loaders::set_team(mob_action_call &call) {
     size_t team_nr = string_to_team_nr(call.args[0]);
     if(team_nr == INVALID) {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
         return false;
     }
     call.args[0] = i2s(team_nr);
@@ -1268,7 +1331,7 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
     } else if(call.args[0] == "highest") {
         call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_HIGHEST);
     } else {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
         return false;
     }
     return true;
@@ -1321,7 +1384,7 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
     } else if(call.args[0] == "randomly") {
         call.args[0] = i2s(MOB_ACTION_TURN_RANDOMLY);
     } else {
-        report_enum_error(call.args[0], call);
+        report_enum_error(call, 0);
         return false;
     }
     return true;
@@ -1332,9 +1395,13 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
  * Reports an error of an unknown enum value.
  */
 void mob_action_loaders::report_enum_error(
-    const string &value, mob_action_call &call
+    mob_action_call &call, const size_t arg_nr
 ) {
-    call.custom_error = "Unknown value for argument \"" + value + "\"!";
+    size_t param_nr = min(arg_nr, call.action->parameters.size() - 1);
+    call.custom_error =
+        "The parameter \"" + call.action->parameters[param_nr].name + "\" "
+        "does not know what the value \"" +
+        call.args[arg_nr] + "\" means!";
 }
 
 
@@ -1360,7 +1427,8 @@ mob_action_param::mob_action_param(
  */
 mob_action::mob_action() :
     type(MOB_ACTION_UNKNOWN),
-    code(nullptr) {
+    code(nullptr),
+    extra_load_logic(nullptr) {
     
 }
 

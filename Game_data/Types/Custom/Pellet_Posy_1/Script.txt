@@ -17,8 +17,8 @@ script {
         }
         on_timer {
             set_timer 1
-            calculate bloom_time bloom_time - 1
-            if var bloom_time <= 120
+            calculate bloom_time $bloom_time - 1
+            if $bloom_time <= 120
                 set_state sapling
             end_if
         }
@@ -31,8 +31,8 @@ script {
         }
         on_timer {
             set_timer 1
-            calculate bloom_time bloom_time - 1
-            if var bloom_time <= 0
+            calculate bloom_time $bloom_time - 1
+            if $bloom_time <= 0
                 set_state blooming
             end_if
         }
@@ -51,25 +51,25 @@ script {
         on_enter {
             set_timer 3
             
-            if var red != true
-                if var yellow != true
-                    if var blue != true
+            if $red != true
+                if $yellow != true
+                    if $blue != true
                         set_var red true
                     end_if
                 end_if
             end_if
             
-            if var cur_color = red
+            if $cur_color = red
                 set_var cur_color yellow
                 set_state idling
             end_if
             
-            if var cur_color = yellow
+            if $cur_color = yellow
                 set_var cur_color blue
                 set_state idling
             end_if
             
-            if var cur_color = blue
+            if $cur_color = blue
                 set_var cur_color red
                 set_state idling
             end_if
@@ -77,22 +77,22 @@ script {
     }
     idling {
         on_enter {
-            if var cur_color = red
-                if var red != true
+            if $cur_color = red
+                if $red != true
                     set_state picking_next_color
                 end_if
                 set_animation idling_red no_restart
             end_if
             
-            if var cur_color = yellow
-                if var yellow != true
+            if $cur_color = yellow
+                if $yellow != true
                     set_state picking_next_color
                 end_if
                 set_animation idling_yellow no_restart
             end_if
             
-            if var cur_color = blue
-                if var blue != true
+            if $cur_color = blue
+                if $blue != true
                     set_state picking_next_color
                 end_if
                 set_animation idling_blue no_restart
@@ -107,13 +107,13 @@ script {
             set_animation dying
             start_particles pellet_posy_1_petals 40 0 150
             start_dying
-            if var cur_color = red
+            if $cur_color = red
                 spawn red
             end_if
-            if var cur_color = yellow
+            if $cur_color = yellow
                 spawn yellow
             end_if
-            if var cur_color = blue
+            if $cur_color = blue
                 spawn blue
             end_if
         }

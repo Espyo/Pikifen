@@ -69,23 +69,23 @@ script {
         }
         on_animation_end {
             randomize_var decision 1 2
-            if var decision = 1
+            if $decision = 1
                 randomize_var decision 1 3
-                if var decision = 1
+                if $decision = 1
                     arachnorb_plan_logic forward
                     set_state move_fr
                 end_if
-                if var decision = 2
+                if $decision = 2
                     arachnorb_plan_logic cw_turn
                     set_state move_fr
                 end_if
-                if var decision = 3
+                if $decision = 3
                     arachnorb_plan_logic ccw_turn
                     set_state move_fr
                 end_if
                 
             else
-                if var can_rest = true
+                if $can_rest = true
                     set_state resting
                 else
                     arachnorb_plan_logic forward

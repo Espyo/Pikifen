@@ -660,7 +660,6 @@ void mob_type::add_carrying_states() {
     
     
     vector<mob_state*> new_states = efc.finish();
-    fix_states(new_states, "");
     
     states.insert(states.end(), new_states.begin(), new_states.end());
     

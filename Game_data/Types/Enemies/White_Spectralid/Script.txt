@@ -71,8 +71,8 @@ script {
             stop_vertically
             set_gravity 0
             move_to_target randomly
-            calculate flutters flutters + 1
-            if var flutters = 10
+            calculate flutters $flutters + 1
+            if $flutters = 10
                 set_state going_home
             end_if
         }

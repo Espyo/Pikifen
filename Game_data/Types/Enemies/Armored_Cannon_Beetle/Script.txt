@@ -20,10 +20,10 @@ script {
         }
         on_timer {
             randomize_var idle_action 0 1
-            if var idle_action = 0
+            if $idle_action = 0
                 set_state bored
             else
-                if var idle_action = 1
+                if $idle_action = 1
                     set_state exploring
                 end_if
             end_if
@@ -104,7 +104,7 @@ script {
         }
         on_tick {
             get_info t chomped_pikmin
-            if var t > 0
+            if $t > 0
                 set_state catching
             end_if
         }
@@ -151,9 +151,9 @@ script {
         }
         on_timer {
             move_to_target randomly
-            calculate time_open time_open + 1
+            calculate time_open $time_open + 1
             set_timer 1
-            if var time_open >= 5
+            if $time_open >= 5
                 set_state moving_cool
             end_if
         }
@@ -171,9 +171,9 @@ script {
         }
         on_timer {
             move_to_target randomly
-            calculate time_open time_open + 1
+            calculate time_open $time_open + 1
             set_timer 1
-            if var time_open >= 10
+            if $time_open >= 10
                 set_state closing
             end_if
         }
@@ -182,7 +182,7 @@ script {
     closing {
         on_enter {
             stop
-            if var hot = true
+            if $hot = true
                 set_animation closing_hot
             else
                 set_animation closing_cool
@@ -193,7 +193,7 @@ script {
         }
         on_animation_end {
             set_var open false
-            if var dead = true
+            if $dead = true
                 set_state dying
             else
                 set_state idling
@@ -203,7 +203,7 @@ script {
     
     prepare_to_die {
         on_enter {
-            if var open = false
+            if $open = false
                 set_state dying
             else
                 set_var dead true

@@ -14,7 +14,7 @@ script {
             set_near_reach search
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if
@@ -35,7 +35,7 @@ script {
             set_near_reach search
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if
@@ -111,7 +111,7 @@ script {
             set_state examining
         }
         on_opponent_in_reach {
-            if var ignoring = false
+            if $ignoring = false
                 focus trigger
                 set_state chasing
             end_if

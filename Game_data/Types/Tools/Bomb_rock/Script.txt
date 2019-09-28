@@ -62,7 +62,7 @@ script {
     
     exploding {
         on_enter {
-            if var will_be_swallowed = true
+            if $will_be_swallowed = true
                 delete
             else
                 start_particles rock_explosion 0 0 32

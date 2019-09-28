@@ -300,6 +300,7 @@ namespace mob_action_loaders {
 bool arachnorb_plan_logic(mob_action_call &call);
 bool calculate(mob_action_call &call);
 bool focus(mob_action_call &call);
+bool get_info(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);
 bool receive_status(mob_action_call &call);
@@ -315,7 +316,7 @@ bool start_chomping(mob_action_call &call);
 bool start_particles(mob_action_call &call);
 bool turn_to_target(mob_action_call &call);
 
-void report_enum_error(const string &value, mob_action_call &call);
+void report_enum_error(mob_action_call &call, const size_t arg_nr);
 };
 
 

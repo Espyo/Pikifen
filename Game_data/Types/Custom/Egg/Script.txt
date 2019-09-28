@@ -12,10 +12,10 @@ script {
         }
         on_damage {
             get_info t health
-            if var t < 16
+            if $t < 16
                 set_state idling_very_broken
             end_if
-            if var t < 32
+            if $t < 32
                 set_state idling_broken
             end_if
         }
@@ -26,7 +26,7 @@ script {
         }
         on_damage {
             get_info t health
-            if var t < 16
+            if $t < 16
                 set_state idling_very_broken
             end_if
         }
@@ -42,15 +42,15 @@ script {
             start_dying
             start_particles egg_shard_explosion
             
-            if var contents = random
+            if $contents = random
                 randomize_var c 1 100
-                if var c < 55
+                if $c < 55
                     set_var contents nectar
                 else
-                    if var c < 90
+                    if $c < 90
                         set_var contents nectar_2
                     else
-                        if var c < 95
+                        if $c < 95
                             set_var contents spicy_drop
                         else
                             set_var contents bitter_drop
@@ -59,17 +59,17 @@ script {
                 end_if
             end_if
             
-            if var contents = nectar
+            if $contents = nectar
                 spawn nectar
             end_if
-            if var contents = nectar_2
+            if $contents = nectar_2
                 spawn nectar
                 spawn nectar
             end_if
-            if var contents = spicy_drop
+            if $contents = spicy_drop
                 spawn spicy_drop
             end_if
-            if var contents = bitter_drop
+            if $contents = bitter_drop
                 spawn bitter_drop
             end_if
         }

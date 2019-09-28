@@ -38,33 +38,33 @@ script {
             turn_to_target focused_mob
         }
         on_receive_message {
-            get_var t message
-            if var id = fr
-                if var t = move_fr
+            get_info t message
+            if $id = fr
+                if $t = move_fr
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
-            if var id = fl
-                if var t = move_fl
+            if $id = fl
+                if $t = move_fl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
-            if var id = br
-                if var t = move_br
+            if $id = br
+                if $t = move_br
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
-            if var id = bl
-                if var t = move_bl
+            if $id = bl
+                if $t = move_bl
                     move_to_target arachnorb_foot_logic
                     set_state rising
                 end_if
             end_if
             
-            if var t = die
+            if $t = die
                 set_state dying
             end_if
         }
@@ -87,7 +87,7 @@ script {
         }
         on_receive_message {
             get_info t message
-            if var t = die
+            if $t = die
                 set_state dying
             end_if
         }
@@ -107,7 +107,7 @@ script {
         }
         on_receive_message {
             get_info t message
-            if var t = die
+            if $t = die
                 set_state dying
             end_if
         }
@@ -123,7 +123,7 @@ script {
         }
         on_receive_message {
             get_info t message
-            if var t = die
+            if $t = die
                 set_state dying
             end_if
         }
@@ -141,7 +141,7 @@ script {
         }
         on_receive_message {
             get_info t message
-            if var t = die
+            if $t = die
                 set_state dying
             end_if
         }

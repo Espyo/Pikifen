@@ -87,7 +87,7 @@ script {
         on_enter {
             stop
             get_info t latched_pikmin_weight
-            if var t >= 30
+            if $t >= 30
                 set_state struggling
             else
                 set_animation squatting
@@ -104,7 +104,7 @@ script {
             set_gravity -2
             set_timer 0.2
             set_animation jumping_up
-            if var has_focus = true
+            if $has_focus = true
                 move_to_target focused_mob_position
             end_if
         }
