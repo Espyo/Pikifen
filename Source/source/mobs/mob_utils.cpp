@@ -643,7 +643,7 @@ mob* create_mob(
     }
     
     for(size_t a = 0; a < type->init_actions.size(); ++a) {
-        type->init_actions[a]->run(m_ptr, NULL, NULL, MOB_EVENT_UNKNOWN);
+        type->init_actions[a]->run(m_ptr, NULL, NULL);
     }
     
     m_ptr->read_script_vars(vars);

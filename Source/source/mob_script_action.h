@@ -158,62 +158,44 @@ enum MOB_ACTION_STABILIZE_Z_TYPES {
 };
 
 
-//Types of parameters that an action can receive.
+//Types of variables that a parameter can use.
 enum MOB_ACTION_PARAM_TYPE {
-    //Can be constants or variables.
-    MOB_ACTION_PARAM_FREE_INT,
-    MOB_ACTION_PARAM_FREE_FLOAT,
-    MOB_ACTION_PARAM_FREE_BOOL,
-    MOB_ACTION_PARAM_FREE_STRING,
-    //Can be constants or variables, and an array of them (minimum 0).
-    MOB_ACTION_PARAM_FREE_INT_EXTRAS,
-    MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS,
-    MOB_ACTION_PARAM_FREE_BOOL_EXTRAS,
-    MOB_ACTION_PARAM_FREE_STRING_EXTRAS,
-    //Can be constants only.
-    MOB_ACTION_PARAM_CONST_INT,
-    MOB_ACTION_PARAM_CONST_FLOAT,
-    MOB_ACTION_PARAM_CONST_BOOL,
-    MOB_ACTION_PARAM_CONST_STRING,
-    //Can be constants only, and an array of them (minimum 0).
-    MOB_ACTION_PARAM_CONST_INT_EXTRAS,
-    MOB_ACTION_PARAM_CONST_FLOAT_EXTRAS,
-    MOB_ACTION_PARAM_CONST_BOOL_EXTRAS,
-    MOB_ACTION_PARAM_CONST_STRING_EXTRAS,
-    //String in the text file, int in memory.
+    //Signed integer.
+    MOB_ACTION_PARAM_INT,
+    //Float.
+    MOB_ACTION_PARAM_FLOAT,
+    //Boolean.
+    MOB_ACTION_PARAM_BOOL,
+    //STL string.
+    MOB_ACTION_PARAM_STRING,
+    //STL string that gets turned into an int.
     MOB_ACTION_PARAM_ENUM,
-    MOB_ACTION_PARAM_ENUM_EXTRAS,
 };
 
 
 struct mob_action_param {
-    MOB_ACTION_PARAM_TYPE type;
+    //Name of the parameter.
     string name;
-    mob_action_param(const MOB_ACTION_PARAM_TYPE type, const string &name);
-};
-
-
-struct mob_action_arg {
-    union value_union {
-        bool b;
-        int i;
-        float f;
-        string s;
-        value_union() { }
-        value_union(const value_union &u) { }
-        ~value_union() { }
-    } value;
-    explicit mob_action_arg(const bool &value);
-    explicit mob_action_arg(const int &value);
-    explicit mob_action_arg(const float &value);
-    explicit mob_action_arg(const string &value);
+    //Type of variable it's meant to hold.
+    MOB_ACTION_PARAM_TYPE type;
+    //If true, it must be a constant value. Else, it can also be a var.
+    bool force_const;
+    //If true, this is an array of them (minimum amount 0).
+    bool is_extras;
+    
+    mob_action_param(
+        const string &name,
+        const MOB_ACTION_PARAM_TYPE type,
+        const bool force_const,
+        const bool is_extras
+    );
 };
 
 
 struct mob_action_run_data {
     mob* m;
     mob_action_call* call;
-    vector<mob_action_arg> args;
+    vector<string> args;
     void* custom_data_1;
     void* custom_data_2;
     bool return_value;
@@ -238,23 +220,19 @@ struct mob_action {
 
 struct mob_action_call {
     mob_action* action;
-    
     custom_action_code code;
     
-    vector<mob_action_arg> args;
+    vector<string> args;
     vector<bool> arg_is_var;
     
     string custom_error;
-    mob_type* mt;
     MOB_EVENT_TYPES parent_event;
+    mob_type* mt;
     
     bool load_from_data_node(
         data_node* dn, vector<mob_state*>* states, mob_type* mt
     );
-    bool run(
-        mob* m, void* custom_data_1, void* custom_data_2,
-        const size_t parent_event
-    );
+    bool run(mob* m, void* custom_data_1, void* custom_data_2);
     
     mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
     mob_action_call(custom_action_code code);

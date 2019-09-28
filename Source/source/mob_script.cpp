@@ -45,7 +45,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             //If statement. Look out for its return value, and
             //change the flow accordingly.
             
-            if(!actions[a]->run(m, custom_data_1, custom_data_2, type)) {
+            if(!actions[a]->run(m, custom_data_1, custom_data_2)) {
                 //If it returned true, execution continues as normal, but
                 //if it returned false, skip to the "else" or "end if" actions.
                 size_t next_a = a + 1;
@@ -85,7 +85,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             
         } else {
             //Normal action.
-            actions[a]->run(m, custom_data_1, custom_data_2, type);
+            actions[a]->run(m, custom_data_1, custom_data_2);
             //If the state got changed, jump out.
             if(actions[a]->action->type == MOB_ACTION_SET_STATE) break;
             
@@ -529,7 +529,7 @@ void easy_fsm_creator::new_event(const unsigned char type) {
  */
 void easy_fsm_creator::change_state(const string &new_state) {
     cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
-    cur_event->actions.back()->args.push_back(mob_action_arg(new_state));
+    cur_event->actions.back()->args.push_back(new_state);
 }
 
 

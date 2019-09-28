@@ -469,7 +469,8 @@ void init_misc() {
  */
 void init_mob_actions() {
 
-#define reg_param(t, n) params.push_back(mob_action_param(t, n));
+#define reg_param(n, t, c, e) \
+    params.push_back(mob_action_param(n, t, c, e));
 #define reg_action(t, n, rc, lc) \
     a = &(mob_actions[t]); \
     a->type = t; \
@@ -491,7 +492,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "amount");
+    reg_param("amount", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_ADD_HEALTH,
         "add_health",
@@ -499,7 +500,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "goal");
+    reg_param("goal", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
@@ -507,10 +508,10 @@ void init_mob_actions() {
         mob_action_loaders::arachnorb_plan_logic
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "destination variable");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "operand");
-    reg_param(MOB_ACTION_PARAM_ENUM, "operation");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "operand");
+    reg_param("destination variable", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("operand", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_CALCULATE,
         "calculate",
@@ -546,7 +547,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "target");
+    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_FOCUS,
         "focus",
@@ -561,9 +562,9 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "comparand");
-    reg_param(MOB_ACTION_PARAM_ENUM, "operation");
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "value");
+    reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
+    reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
         MOB_ACTION_IF,
         "if",
@@ -571,8 +572,8 @@ void init_mob_actions() {
         mob_action_loaders::if_function
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
@@ -580,8 +581,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
@@ -589,7 +590,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "target");
+    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_MOVE_TO_TARGET,
         "move_to_target",
@@ -611,8 +612,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "minimum value");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "maximum value");
+    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_RANDOMIZE_VAR,
         "randomize_timer",
@@ -620,9 +621,9 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "minimum value");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "maximum value");
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_RANDOMIZE_VAR,
         "randomize_var",
@@ -630,7 +631,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "status name");
+    reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -645,7 +646,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "status name");
+    reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_REMOVE_STATUS,
         "remove_status",
@@ -653,7 +654,7 @@ void init_mob_actions() {
         mob_action_loaders::remove_status
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "message");
+    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
@@ -661,8 +662,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "distance");
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "message");
+    reg_param("distance", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
         MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
@@ -670,8 +671,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
-    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "options");
+    reg_param("animation name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("options", MOB_ACTION_PARAM_ENUM, true, true);
     reg_action(
         MOB_ACTION_SET_ANIMATION,
         "set_animation",
@@ -679,7 +680,7 @@ void init_mob_actions() {
         mob_action_loaders::set_animation
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "reach name");
+    reg_param("reach name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_SET_FAR_REACH,
         "set_far_reach",
@@ -687,7 +688,7 @@ void init_mob_actions() {
         mob_action_loaders::set_far_reach
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "multiplier");
+    reg_param("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_SET_GRAVITY,
         "set_gravity",
@@ -695,7 +696,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "amount");
+    reg_param("amount", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_SET_HEALTH,
         "set_health",
@@ -703,7 +704,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_BOOL, "hiding");
+    reg_param("hiding", MOB_ACTION_PARAM_BOOL, false, false);
     reg_action(
         MOB_ACTION_SET_HIDING,
         "set_hiding",
@@ -711,7 +712,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "options");
+    reg_param("options", MOB_ACTION_PARAM_ENUM, true, true);
     reg_action(
         MOB_ACTION_SET_HOLDABLE,
         "set_holdable",
@@ -719,7 +720,7 @@ void init_mob_actions() {
         mob_action_loaders::set_holdable
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "animation name");
+    reg_param("animation name", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
         MOB_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
@@ -727,7 +728,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "reach name");
+    reg_param("reach name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_SET_NEAR_REACH,
         "set_near_reach",
@@ -735,7 +736,7 @@ void init_mob_actions() {
         mob_action_loaders::set_near_reach
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "state name");
+    reg_param("state name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_SET_STATE,
         "set_state",
@@ -743,7 +744,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_BOOL, "tangible");
+    reg_param("tangible", MOB_ACTION_PARAM_BOOL, false, false);
     reg_action(
         MOB_ACTION_SET_TANGIBLE,
         "set_tangible",
@@ -751,7 +752,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "team name");
+    reg_param("team name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_SET_TEAM,
         "set_team",
@@ -759,7 +760,7 @@ void init_mob_actions() {
         mob_action_loaders::set_team
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "time");
+    reg_param("time", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_SET_TIMER,
         "set_timer",
@@ -767,8 +768,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
-    reg_param(MOB_ACTION_PARAM_FREE_STRING, "value");
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
         MOB_ACTION_SET_VAR,
         "set_var",
@@ -776,7 +777,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_CONST_STRING, "variable name");
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
@@ -784,7 +785,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "spawn data");
+    reg_param("spawn data", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_SPAWN,
         "spawn",
@@ -792,8 +793,8 @@ void init_mob_actions() {
         mob_action_loaders::spawn
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "reference");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "offset");
+    reg_param("reference", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("offset", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_STABILIZE_Z,
         "stabilize_z",
@@ -801,9 +802,9 @@ void init_mob_actions() {
         mob_action_loaders::stabilize_z
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_INT, "victim max");
-    reg_param(MOB_ACTION_PARAM_ENUM, "body part");
-    reg_param(MOB_ACTION_PARAM_ENUM_EXTRAS, "more body parts");
+    reg_param("victim max", MOB_ACTION_PARAM_INT, false, false);
+    reg_param("body part", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("more body parts", MOB_ACTION_PARAM_ENUM, true, true);
     reg_action(
         MOB_ACTION_START_CHOMPING,
         "start_chomping",
@@ -825,8 +826,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "generator name");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT_EXTRAS, "offset coordinates");
+    reg_param("generator name", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_param("offset coordinates", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_START_PARTICLES,
         "start_particles",
@@ -869,7 +870,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_INT, "amount");
+    reg_param("amount", MOB_ACTION_PARAM_INT, false, false);
     reg_action(
         MOB_ACTION_SWALLOW,
         "swallow",
@@ -884,9 +885,9 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "z");
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
@@ -894,9 +895,9 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "x");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "y");
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "z");
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
@@ -904,7 +905,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
+    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
@@ -912,7 +913,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_FREE_FLOAT, "angle");
+    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
@@ -920,7 +921,7 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param(MOB_ACTION_PARAM_ENUM, "target");
+    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_TURN_TO_TARGET,
         "turn_to_target",
