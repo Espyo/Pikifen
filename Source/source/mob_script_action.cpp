@@ -16,6 +16,47 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new mob action parameter struct.
+ */
+mob_action_param::mob_action_param(
+    const string &name,
+    const MOB_ACTION_PARAM_TYPE type,
+    const bool force_const,
+    const bool is_extras
+):
+    type(type),
+    name(name),
+    force_const(force_const),
+    is_extras(is_extras) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new mob action run data struct.
+ */
+mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
+    m(m),
+    call(call),
+    custom_data_1(nullptr),
+    custom_data_2(nullptr),
+    return_value(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new, empty mob action.
+ */
+mob_action::mob_action() :
+    type(MOB_ACTION_UNKNOWN),
+    code(nullptr),
+    extra_load_logic(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new, empty mob action call, of a certain type.
  */
 mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
@@ -91,7 +132,7 @@ bool mob_action_call::load_from_data_node(
         return false;
     }
     
-    //Parse the arguments to make sure they're all good.
+    //Check if there are too many or too few arguments.
     vector<size_t> enum_arg_s_indexes;
     vector<size_t> enum_arg_i_indexes;
     size_t mandatory_parameters = action->parameters.size();
@@ -125,6 +166,7 @@ bool mob_action_call::load_from_data_node(
         }
     }
     
+    //Fetch the arguments, and check if any of them are not allowed.
     for(size_t w = 0; w < words.size(); ++w) {
         size_t param_nr = min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
@@ -157,6 +199,7 @@ bool mob_action_call::load_from_data_node(
         arg_is_var.push_back(is_var);
     }
     
+    //If this action needs extra parsing, do it now.
     if(action->extra_load_logic) {
         bool success = action->extra_load_logic(*this);
         if(!custom_error.empty()) {
@@ -180,18 +223,21 @@ bool mob_action_call::load_from_data_node(
 bool mob_action_call::run(
     mob* m, void* custom_data_1, void* custom_data_2
 ) {
-    //Custom code (i.e. instead of text-based script, use actual code).
+    //Custom code (i.e. instead of text-based script, use actual C++ code).
     if(code) {
         code(m, custom_data_1, custom_data_2);
         return false;
     }
     
     mob_action_run_data data(m, this);
+    
+    //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
     for(size_t a = 0; a < args.size(); ++a) {
         if(arg_is_var[a]) {
             size_t param_nr = min(a, action->parameters.size() - 1);
-            MOB_ACTION_PARAM_TYPE param_type = action->parameters[param_nr].type;
+            MOB_ACTION_PARAM_TYPE param_type =
+                action->parameters[param_nr].type;
             data.args[a] = m->vars[args[a]];
         }
     }
@@ -581,16 +627,6 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         data.m->chase(des, NULL, false);
         break;
         
-    } case MOB_ACTION_MOVE_RANDOMLY: {
-        data.m->chase(
-            point(
-                data.m->pos.x + randomf(-1000, 1000),
-                data.m->pos.y + randomf(-1000, 1000)
-            ),
-            NULL, false
-        );
-        break;
-        
     }
     }
 }
@@ -611,14 +647,6 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
 
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code for the timer randomization mob script action.
- */
-void mob_action_runners::randomize_timer(mob_action_run_data &data) {
-    data.m->set_timer(randomf(s2f(data.args[0]), s2f(data.args[1])));
 }
 
 
@@ -1006,7 +1034,7 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
  * Code for the turn to an absolute angle mob script action.
  */
 void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
-    data.m->face(s2f(data.args[0]), NULL);
+    data.m->face(deg_to_rad(s2f(data.args[0])), NULL);
 }
 
 
@@ -1014,7 +1042,7 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
  * Code for the turn to a relative angle mob script action.
  */
 void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
-    data.m->face(data.m->angle + s2f(data.args[0]), NULL);
+    data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), NULL);
 }
 
 
@@ -1037,10 +1065,6 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
         
     } case MOB_ACTION_TURN_HOME: {
         data.m->face(get_angle(data.m->pos, data.m->home), NULL);
-        break;
-        
-    } case MOB_ACTION_TURN_RANDOMLY: {
-        data.m->face(randomf(0, TAU), NULL);
         break;
         
     }
@@ -1184,8 +1208,6 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
         call.args[0] = i2s(MOB_ACTION_MOVE_HOME);
     } else if(call.args[0] == "linked_mob_average") {
         call.args[0] = i2s(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
-    } else if(call.args[0] == "randomly") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_RANDOMLY);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -1381,8 +1403,6 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
         call.args[0] = i2s(MOB_ACTION_TURN_FOCUSED_MOB);
     } else if(call.args[0] == "home") {
         call.args[0] = i2s(MOB_ACTION_TURN_HOME);
-    } else if(call.args[0] == "randomly") {
-        call.args[0] = i2s(MOB_ACTION_TURN_RANDOMLY);
     } else {
         report_enum_error(call, 0);
         return false;
@@ -1402,47 +1422,6 @@ void mob_action_loaders::report_enum_error(
         "The parameter \"" + call.action->parameters[param_nr].name + "\" "
         "does not know what the value \"" +
         call.args[arg_nr] + "\" means!";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new mob action parameter struct.
- */
-mob_action_param::mob_action_param(
-    const string &name,
-    const MOB_ACTION_PARAM_TYPE type,
-    const bool force_const,
-    const bool is_extras
-):
-    type(type),
-    name(name),
-    force_const(force_const),
-    is_extras(is_extras) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty mob action.
- */
-mob_action::mob_action() :
-    type(MOB_ACTION_UNKNOWN),
-    code(nullptr),
-    extra_load_logic(nullptr) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new mob action run data struct.
- */
-mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
-    m(m),
-    call(call),
-    custom_data_1(nullptr),
-    custom_data_2(nullptr),
-    return_value(false) {
-    
 }
 
 

@@ -621,15 +621,6 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
-        MOB_ACTION_RANDOMIZE_TIMER,
-        "randomize_timer",
-        mob_action_runners::randomize_timer,
-        nullptr
-    );
-    
     reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);

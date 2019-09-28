@@ -60,7 +60,9 @@ script {
             set_animation flapping
             set_gravity -2
             set_timer 0.3
-            move_to_target randomly
+            randomize_var x -1000 1000
+            randomize_var y -1000 1000
+            move_to_relative $x $y
             set_var flutters 0
         }
         on_pikmin_land {
@@ -70,7 +72,9 @@ script {
             set_timer 0.3
             stop_vertically
             set_gravity 0
-            move_to_target randomly
+            randomize_var x -1000 1000
+            randomize_var y -1000 1000
+            move_to_relative $x $y
             calculate flutters $flutters + 1
             if $flutters = 10
                 set_state going_home

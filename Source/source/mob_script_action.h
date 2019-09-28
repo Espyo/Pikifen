@@ -35,7 +35,6 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_MOVE_TO_TARGET,
     MOB_ACTION_ORDER_RELEASE,
     MOB_ACTION_PLAY_SOUND,
-    MOB_ACTION_RANDOMIZE_TIMER,
     MOB_ACTION_RANDOMIZE_VAR,
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
@@ -91,7 +90,6 @@ enum MOB_ACTION_TURN_TYPES {
     MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC,
     MOB_ACTION_TURN_FOCUSED_MOB,
     MOB_ACTION_TURN_HOME,
-    MOB_ACTION_TURN_RANDOMLY,
 };
 
 //Focus action sub-types.
@@ -135,7 +133,6 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_HOME,
     MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC,
     MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
-    MOB_ACTION_MOVE_RANDOMLY,
 };
 
 enum MOB_ACTION_SET_ANIMATION_OPTIONS {
@@ -255,7 +252,6 @@ void move_to_relative(mob_action_run_data &data);
 void move_to_target(mob_action_run_data &data);
 void order_release(mob_action_run_data &data);
 void play_sound(mob_action_run_data &data);
-void randomize_timer(mob_action_run_data &data);
 void randomize_var(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);

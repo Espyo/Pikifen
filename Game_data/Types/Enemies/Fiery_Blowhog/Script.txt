@@ -9,7 +9,8 @@ script {
     examining {
         on_enter {
             set_animation idling
-            randomize_timer 5 7
+            randomize_var t 5 7
+            set_timer $t
             stop
             set_near_reach search
         }
@@ -30,8 +31,11 @@ script {
     exploring {
         on_enter {
             set_animation moving
-            randomize_timer 2.5 3.5
-            move_to_target randomly
+            randomize_var t 2.5 3.5
+            set_timer $t
+            randomize_var x -1000 1000
+            randomize_var y -1000 1000
+            move_to_relative $x $y
             set_near_reach search
         }
         on_opponent_in_reach {

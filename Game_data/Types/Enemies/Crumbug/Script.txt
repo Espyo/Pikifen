@@ -9,16 +9,22 @@ script {
     exploring {
         on_enter {
             set_animation moving
-            randomize_timer 0.8 1.2
+            randomize_var t 0.8 1.2
+            set_timer $t
             set_near_reach search
-            move_to_target randomly
+            randomize_var x -1000 1000
+            randomize_var y -1000 1000
+            move_to_relative $x $y
         }
         on_leave {
             set_timer 0
         }
         on_timer {
-            move_to_target randomly
-            randomize_timer 0.8 1.2
+            randomize_var x -1000 1000
+            randomize_var y -1000 1000
+            move_to_relative $x $y
+            randomize_var t 0.8 1.2
+            set_timer $t
         }
         on_opponent_in_reach {
             focus trigger
