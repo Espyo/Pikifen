@@ -571,6 +571,14 @@ void init_mob_actions() {
         mob_action_loaders::get_info
     );
     
+    reg_param("label name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GOTO,
+        "goto",
+        nullptr,
+        nullptr
+    );
+    
     reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
     reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
     reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
@@ -579,6 +587,14 @@ void init_mob_actions() {
         "if",
         mob_action_runners::if_function,
         mob_action_loaders::if_function
+    );
+    
+    reg_param("label name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_LABEL,
+        "label",
+        nullptr,
+        nullptr
     );
     
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);

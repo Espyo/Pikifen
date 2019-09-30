@@ -29,7 +29,9 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GOTO,
     MOB_ACTION_IF,
+    MOB_ACTION_LABEL,
     MOB_ACTION_MOVE_TO_ABSOLUTE,
     MOB_ACTION_MOVE_TO_RELATIVE,
     MOB_ACTION_MOVE_TO_TARGET,
@@ -246,6 +248,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void goto_function(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
 void move_to_relative(mob_action_run_data &data);
@@ -316,7 +319,9 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 };
 
 
-bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn);
+bool assert_branching_actions(
+    const vector<mob_action_call*> &actions, data_node* dn
+);
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );

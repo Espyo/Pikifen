@@ -80,7 +80,21 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             }
             a = next_a;
             
-        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
+        } else if(actions[a]->action->type == MOB_ACTION_GOTO) {
+            //Find the label that matches.
+            for(size_t a2 = 0; a2 < actions.size(); ++a2) {
+                if(actions[a2]->action->type == MOB_ACTION_LABEL) {
+                    if(actions[a]->args[0] == actions[a2]->args[0]) {
+                        a = a2;
+                        break;
+                    }
+                }
+            }
+            
+        } else if(
+            actions[a]->action->type == MOB_ACTION_END_IF ||
+            actions[a]->action->type == MOB_ACTION_LABEL
+        ) {
             //Nothing to do.
             
         } else {
@@ -385,7 +399,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             
             events.push_back(new mob_event(event_node, actions));
             
-            assert_if_actions(actions, event_node);
+            assert_branching_actions(actions, event_node);
             
         }
         

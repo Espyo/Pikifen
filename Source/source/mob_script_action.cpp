@@ -171,6 +171,12 @@ bool mob_action_call::load_from_data_node(
         size_t param_nr = min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
+        if(is_var && words[w].size() >= 2 && words[w][1] == '$') {
+            //Two '$' in a row means it's meant to use a literal '$'.
+            is_var = false;
+            words[w].erase(words[w].begin());
+        }
+        
         if(is_var) {
             if(action->parameters[param_nr].force_const) {
                 log_error(
@@ -1426,21 +1432,24 @@ void mob_action_loaders::report_enum_error(
 
 
 /* ----------------------------------------------------------------------------
- * Confirms if the "if", "else", and "end_if" actions in a given vector of
- * actions are all okay, and there are no mismatches, like for instance,
- * an "else" without an "if".
+ * Confirms if the "if", "else", "end_if", "goto", and "label" actions in
+ * a given vector of actions are all okay, and there are no mismatches, like
+ * for instance, an "else" without an "if".
  * If everything is okay, returns true. If not, throws errors to the
  * error log and returns false.
  * actions: The vector of actions to check.
  * dn:      Data node from where these actions came.
  */
-bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn) {
-    int level = 0;
+bool assert_branching_actions(
+    const vector<mob_action_call*> &actions, data_node* dn
+) {
+    //Check if the "if"-related actions are okay.
+    int if_level = 0;
     for(size_t a = 0; a < actions.size(); ++a) {
         if(actions[a]->action->type == MOB_ACTION_IF) {
-            level++;
+            if_level++;
         } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
-            if(level == 0) {
+            if(if_level == 0) {
                 log_error(
                     "Found an \"else\" action without a matching "
                     "\"if\" action!", dn
@@ -1448,23 +1457,54 @@ bool assert_if_actions(const vector<mob_action_call*> &actions, data_node* dn) {
                 return false;
             }
         } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
-            if(level == 0) {
+            if(if_level == 0) {
                 log_error(
                     "Found an \"end_if\" action without a matching "
                     "\"if\" action!", dn
                 );
                 return false;
             }
-            level--;
+            if_level--;
         }
     }
-    if(level > 0) {
+    if(if_level > 0) {
         log_error(
             "Some \"if\" actions don't have a matching \"end_if\" action!",
             dn
         );
         return false;
     }
+    
+    //Check if the "goto"-related actions are okay.
+    set<string> labels;
+    for(size_t a = 0; a < actions.size(); ++a) {
+        if(actions[a]->action->type == MOB_ACTION_LABEL) {
+        
+            string name = actions[a]->args[0];
+            
+            if(labels.find(name) != labels.end()) {
+                log_error(
+                    "There are multiple labels called \"" + name + "\"!", dn
+                );
+                return false;
+            }
+            
+            labels.insert(name);
+        }
+    }
+    for(size_t a = 0; a < actions.size(); ++a) {
+        if(actions[a]->action->type == MOB_ACTION_GOTO) {
+            string name = actions[a]->args[0];
+            if(labels.find(name) == labels.end()) {
+                log_error(
+                    "There is no label called \"" + name + "\", even though "
+                    "there are \"goto\" actions that need it!", dn
+                );
+                return false;
+            }
+        }
+    }
+    
     return true;
 }
 
@@ -1486,5 +1526,5 @@ void load_init_actions(
             delete new_a;
         }
     }
-    assert_if_actions(*actions, node);
+    assert_branching_actions(*actions, node);
 }
