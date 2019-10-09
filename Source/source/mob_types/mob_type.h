@@ -152,6 +152,9 @@ public:
     float weight;          //Pikmin strength needed to carry it.
     float itch_damage;
     float itch_time;
+    unsigned char target_type;
+    uint16_t huntable_targets;
+    uint16_t hurtable_targets;
     
     //Script things.
     vector<mob_action_call*> init_actions; //Actions to run on spawn.

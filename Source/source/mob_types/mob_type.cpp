@@ -53,6 +53,9 @@ mob_type::mob_type(size_t category_id) :
     weight(0),
     itch_damage(0),
     itch_time(0),
+    target_type(MOB_TARGET_TYPE_NONE),
+    huntable_targets(0),
+    hurtable_targets(0),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
     appears_in_area_editor(true),
@@ -243,6 +246,9 @@ void load_mob_type_from_file(
 ) {
 
     string spike_damage_name;
+    string target_type_string;
+    string huntable_targets_string;
+    string hurtable_targets_string;
     
     reader_setter rs(&file);
     rs.set("name",                   mt->name);
@@ -252,6 +258,11 @@ void load_mob_type_from_file(
     rs.set("max_health",             mt->max_health);
     rs.set("health_regen",           mt->health_regen);
     rs.set("itch_damage",            mt->itch_damage);
+    rs.set("itch_time",              mt->itch_time);
+    rs.set("target_type",            target_type_string);
+    rs.set("can_hunt",               huntable_targets_string);
+    rs.set("can_hurt",               hurtable_targets_string);
+    rs.set("itch_time",              mt->itch_time);
     rs.set("itch_time",              mt->itch_time);
     rs.set("move_speed",             mt->move_speed);
     rs.set("rotation_speed",         mt->rotation_speed);
@@ -424,6 +435,50 @@ void load_mob_type_from_file(
         }
         
         mt->children.push_back(new_child);
+    }
+    
+    size_t target_type_value = string_to_mob_target_type(target_type_string);
+    if(target_type_value == INVALID) {
+        log_error(
+            "Unknown target type \"" + target_type_string + "\"!",
+            file.get_child_by_name("target_type")
+        );
+    } else {
+        mt->target_type = target_type_value;
+    }
+    
+    vector<string> huntable_targets_strings =
+        semicolon_list_to_vector(huntable_targets_string);
+    if(!huntable_targets_strings.empty()) {
+        huntable_targets = 0;
+    }
+    for(size_t h = 0; h < huntable_targets_strings.size(); ++h) {
+        size_t v = string_to_mob_target_type(huntable_targets_strings[h]);
+        if(v == INVALID) {
+            log_error(
+                "Unknown target type \"" + huntable_targets_strings[h] + "\"!",
+                file.get_child_by_name("can_hunt")
+            );
+        } else {
+            mt->huntable_targets |= (uint16_t) v;
+        }
+    }
+    
+    vector<string> hurtable_targets_strings =
+        semicolon_list_to_vector(hurtable_targets_string);
+    if(!hurtable_targets_strings.empty()) {
+        hurtable_targets = 0;
+    }
+    for(size_t h = 0; h < hurtable_targets_strings.size(); ++h) {
+        size_t v = string_to_mob_target_type(hurtable_targets_strings[h]);
+        if(v == INVALID) {
+            log_error(
+                "Unknown target type \"" + hurtable_targets_strings[h] + "\"!",
+                file.get_child_by_name("can_hurt")
+            );
+        } else {
+            mt->hurtable_targets |= (uint16_t) v;
+        }
     }
     
     if(load_resources) {

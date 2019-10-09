@@ -82,6 +82,27 @@ enum MOB_TEAMS {
     MOB_TEAM_PROP,
 };
 
+enum MOB_TARGET_TYPES {
+    //Cannot be damaged or hunted down.
+    MOB_TARGET_TYPE_NONE = 0x00,
+    //Leaders and Pikmin. Can be damaged by enemies, mostly.
+    MOB_TARGET_TYPE_PLAYER = 0x01,
+    //Enemies. Can be damaged by Pikmin and leaders, mostly.
+    MOB_TARGET_TYPE_ENEMY = 0x02,
+    //Smaller objects that can be damaged by many things.
+    MOB_TARGET_TYPE_SMALL_PLAIN_OBSTACLE = 0x04,
+    //Larger objects that can be damaged by less-than-many things.
+    MOB_TARGET_TYPE_LARGE_PLAIN_OBSTACLE = 0x08,
+    //Objects that only Pikmin can damage.
+    MOB_TARGET_TYPE_PIKMIN_OBSTACLE = 0x10,
+    //Objects that can only be taken down with explosive force.
+    MOB_TARGET_TYPE_EXPLODABLE = 0x20,
+    //Objects that Pikmin and explosives can damage.
+    MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE = 0x40,
+    //Objects that can get hurt by pretty much everything.
+    MOB_TARGET_TYPE_FRAGILE = 0x80,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",

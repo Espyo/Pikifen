@@ -798,6 +798,34 @@ string get_error_message_mob_info(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Converts a string to the numeric representation of a mob target type.
+ * Returns INVALID if the string is not valid.
+ */
+size_t string_to_mob_target_type(const string &type_str) {
+    if(type_str == "none") {
+        return MOB_TARGET_TYPE_NONE;
+    } else if(type_str == "player") {
+        return MOB_TARGET_TYPE_PLAYER;
+    } else if(type_str == "enemy") {
+        return MOB_TARGET_TYPE_ENEMY;
+    } else if(type_str == "small_plain_obstacle") {
+        return MOB_TARGET_TYPE_SMALL_PLAIN_OBSTACLE;
+    } else if(type_str == "large_plain_obstacle") {
+        return MOB_TARGET_TYPE_LARGE_PLAIN_OBSTACLE;
+    } else if(type_str == "pikmin_obstacle") {
+        return MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
+    } else if(type_str == "explodable") {
+        return MOB_TARGET_TYPE_EXPLODABLE;
+    } else if(type_str == "explodable_pikmin_obstacle") {
+        return MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE;
+    } else if(type_str == "fragile") {
+        return MOB_TARGET_TYPE_FRAGILE;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts a string to the numeric representation of a team.
  * Returns INVALID if the string is not valid.
  */
