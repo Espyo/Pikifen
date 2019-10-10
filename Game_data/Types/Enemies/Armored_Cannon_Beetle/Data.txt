@@ -1,6 +1,8 @@
 name = Armored Cannon Beetle
 
 allow_ground_attacks = false
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 health_regen = 0
 height = 100
@@ -26,6 +28,7 @@ spawns {
     }
 }
 rotation_speed = 40
+target_type = enemy
 territory_radius = 300
 value = 200
 weight = 30

@@ -10,6 +10,7 @@
 
 #include "interactable_type.h"
 
+#include "../mobs/mob.h"
 #include "../utils/string_utils.h"
 
 
@@ -19,6 +20,8 @@
 interactable_type::interactable_type() :
     mob_type(MOB_CATEGORY_INTERACTABLES),
     trigger_range(64.0f) {
+    
+    target_type = MOB_TARGET_TYPE_NONE;
     
 }
 

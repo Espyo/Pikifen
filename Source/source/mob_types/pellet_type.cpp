@@ -26,6 +26,8 @@ pellet_type::pellet_type() :
     match_seeds(0),
     non_match_seeds(0),
     bmp_number(nullptr) {
+        
+    target_type = MOB_TARGET_TYPE_NONE;
     
     pellet_fsm::create_fsm(this);
 }

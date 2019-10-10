@@ -32,7 +32,16 @@ leader_type::leader_type() :
     
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
-    
+    target_type = MOB_TARGET_TYPE_PLAYER;
+    huntable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY;
+    hurtable_targets =
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_FRAGILE;
+        
     leader_fsm::create_fsm(this);
 }
 

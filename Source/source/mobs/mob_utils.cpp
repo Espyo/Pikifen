@@ -808,10 +808,10 @@ size_t string_to_mob_target_type(const string &type_str) {
         return MOB_TARGET_TYPE_PLAYER;
     } else if(type_str == "enemy") {
         return MOB_TARGET_TYPE_ENEMY;
-    } else if(type_str == "small_plain_obstacle") {
-        return MOB_TARGET_TYPE_SMALL_PLAIN_OBSTACLE;
-    } else if(type_str == "large_plain_obstacle") {
-        return MOB_TARGET_TYPE_LARGE_PLAIN_OBSTACLE;
+    } else if(type_str == "weak_plain_obstacle") {
+        return MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE;
+    } else if(type_str == "strong_plain_obstacle") {
+        return MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE;
     } else if(type_str == "pikmin_obstacle") {
         return MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     } else if(type_str == "explodable") {
@@ -830,10 +830,8 @@ size_t string_to_mob_target_type(const string &type_str) {
  * Returns INVALID if the string is not valid.
  */
 size_t string_to_team_nr(const string &team_str) {
-    if(team_str == "top") {
-        return MOB_TEAM_TOP;
-    } else if(team_str == "neutral") {
-        return MOB_TEAM_NEUTRAL;
+    if(team_str == "none") {
+        return MOB_TEAM_NONE;
     } else if(team_str == "player_1") {
         return MOB_TEAM_PLAYER_1;
     } else if(team_str == "player_2") {
@@ -848,14 +846,12 @@ size_t string_to_team_nr(const string &team_str) {
         return MOB_TEAM_ENEMY_2;
     } else if(team_str == "enemy_3") {
         return MOB_TEAM_ENEMY_3;
+    } else if(team_str == "enemy_4") {
+        return MOB_TEAM_ENEMY_4;
     } else if(team_str == "obstacle") {
         return MOB_TEAM_OBSTACLE;
-    } else if(team_str == "bottom") {
-        return MOB_TEAM_BOTTOM;
-    } else if(team_str == "tool") {
-        return MOB_TEAM_TOOL;
-    } else if(team_str == "prop") {
-        return MOB_TEAM_PROP;
+    } else if(team_str == "other") {
+        return MOB_TEAM_OTHER;
     }
     return INVALID;
 }

@@ -1,6 +1,7 @@
 name = Bomb rock
 
 can_be_hotswapped = true
+can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; explodable; explodable_pikmin_obstacle; fragile
 dropped_when_pikmin_lands = true
 dropped_when_pikmin_lands_on_opponent = true
 height = 28
@@ -12,3 +13,4 @@ pushable = true
 pushes = false
 radius = 14
 spike_damage = bomb_rock_explosion
+target_type = fragile

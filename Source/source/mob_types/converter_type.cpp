@@ -26,6 +26,8 @@ converter_type::converter_type() :
     same_type_counts_for_output(false),
     auto_conversion_timeout(5.0f) {
     
+    target_type = MOB_TARGET_TYPE_NONE;
+    
     converter_fsm::create_fsm(this);
 }
 

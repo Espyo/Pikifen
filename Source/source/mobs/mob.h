@@ -61,25 +61,22 @@ enum MOB_PARTICLE_GENERATOR_IDS {
 };
 
 enum MOB_TEAMS {
-    //Can hurt everything, cannot be hurt.
-    MOB_TEAM_TOP,
-    //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
-    MOB_TEAM_NEUTRAL,
+    //Has no friends!
+    MOB_TEAM_NONE,
+    //Players -- usually leaders and Pikmin.
     MOB_TEAM_PLAYER_1,
     MOB_TEAM_PLAYER_2,
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
+    //Enemies -- useful if you want enemy in-fighting.
     MOB_TEAM_ENEMY_1,
     MOB_TEAM_ENEMY_2,
     MOB_TEAM_ENEMY_3,
-    //Can only be hurt by Pikmin.
+    MOB_TEAM_ENEMY_4,
+    //Miscellaneous obstacles.
     MOB_TEAM_OBSTACLE,
-    //Can be hurt by anything, but nothing WANTS to hurt it.
-    MOB_TEAM_TOOL,
-    //Can only be hurt, cannot hurt.
-    MOB_TEAM_BOTTOM,
-    //Cannot be hurt or targeted by anything.
-    MOB_TEAM_PROP,
+    //Whatever else.
+    MOB_TEAM_OTHER,
 };
 
 enum MOB_TARGET_TYPES {
@@ -89,10 +86,10 @@ enum MOB_TARGET_TYPES {
     MOB_TARGET_TYPE_PLAYER = 0x01,
     //Enemies. Can be damaged by Pikmin and leaders, mostly.
     MOB_TARGET_TYPE_ENEMY = 0x02,
-    //Smaller objects that can be damaged by many things.
-    MOB_TARGET_TYPE_SMALL_PLAIN_OBSTACLE = 0x04,
-    //Larger objects that can be damaged by less-than-many things.
-    MOB_TARGET_TYPE_LARGE_PLAIN_OBSTACLE = 0x08,
+    //Weaker objects that can be damaged by many things.
+    MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE = 0x04,
+    //Stronger objects that can be damaged by less-than-many things.
+    MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE = 0x08,
     //Objects that only Pikmin can damage.
     MOB_TARGET_TYPE_PIKMIN_OBSTACLE = 0x10,
     //Objects that can only be taken down with explosive force.
@@ -319,8 +316,8 @@ public:
         const bool above_holder
     );
     void release(mob* m);
-    bool can_damage(mob* m);
-    bool wants_to_attack(mob* m);
+    bool can_hurt(mob* m);
+    bool can_hunt(mob* m);
     float get_hazard_vulnerability(hazard* h_ptr);
     bool is_resistant_to_hazards(vector<hazard*> &hazards);
     void swallow_chomped_pikmin(size_t nr);

@@ -919,7 +919,7 @@ void gameplay::process_mob_reaches(
                 )
             );
         }
-        if(opir_ev && m_ptr->wants_to_attack(m2_ptr)) {
+        if(opir_ev && m_ptr->can_hunt(m2_ptr)) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
                     d, opir_ev, m2_ptr
@@ -1121,7 +1121,7 @@ void gameplay::process_mob_touches(
             if(touch_ob_ev) {
                 touch_ob_ev->run(m_ptr, (void*) m2_ptr);
             }
-            if(touch_op_ev && m_ptr->wants_to_attack(m2_ptr)) {
+            if(touch_op_ev && m_ptr->can_hunt(m2_ptr)) {
                 touch_op_ev->run(m_ptr, (void*) m2_ptr);
             }
             if(
@@ -1267,7 +1267,7 @@ void gameplay::process_mob_touches(
                     }
                     
                     //Should this mob even attack this other mob?
-                    if(!m2_ptr->can_damage(m_ptr)) {
+                    if(!m2_ptr->can_hurt(m_ptr)) {
                         continue;
                     }
                 }

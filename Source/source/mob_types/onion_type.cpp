@@ -21,6 +21,8 @@
 onion_type::onion_type() :
     mob_type(MOB_CATEGORY_ONIONS),
     pik_type(NULL) {
+        
+    target_type = MOB_TARGET_TYPE_NONE;
     
     onion_fsm::create_fsm(this);
 }

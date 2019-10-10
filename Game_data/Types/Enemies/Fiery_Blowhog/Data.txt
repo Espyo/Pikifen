@@ -1,5 +1,7 @@
 name = Fiery Blowhog
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 height = 70
 itch_damage = 50
@@ -17,6 +19,7 @@ reaches {
     chase = 250 360
 }
 rotation_speed = 114
+target_type = enemy
 territory_radius = 300
 value = 30
 weight = 7

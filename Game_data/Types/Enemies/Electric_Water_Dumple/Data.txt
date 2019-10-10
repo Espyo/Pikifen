@@ -1,5 +1,7 @@
 name = Electric Water Dumple
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 height = 56
 itch_damage = 100
@@ -18,6 +20,7 @@ reaches {
     
 }
 rotation_speed = 120
+target_type = enemy
 territory_radius = 400
 value = 300
 weight = 7

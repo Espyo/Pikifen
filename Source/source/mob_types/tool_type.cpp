@@ -27,6 +27,15 @@ tool_type::tool_type() :
     stuck_when_pikmin_lands_on_opponent(false),
     pikmin_returns_after_using(true) {
     
+    target_type = MOB_TARGET_TYPE_FRAGILE;
+    hurtable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_EXPLODABLE |
+        MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE;
+        
 }
 
 tool_type::~tool_type() { }

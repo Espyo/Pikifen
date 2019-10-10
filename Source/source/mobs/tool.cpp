@@ -21,5 +21,5 @@ tool::tool(
     holdability_flags(0),
     reserved(nullptr) {
     
-    team = MOB_TEAM_TOOL;
+    team = MOB_TEAM_NONE;
 }

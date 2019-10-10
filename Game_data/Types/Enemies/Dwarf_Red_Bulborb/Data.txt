@@ -1,5 +1,7 @@
 name = Dwarf Red Bulborb
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 height = 32
 itch_damage = 50
@@ -18,6 +20,7 @@ reaches {
     attack = 15 30
 }
 rotation_speed = 114
+target_type = enemy
 territory_radius = 300
 value = 15
 weight = 3

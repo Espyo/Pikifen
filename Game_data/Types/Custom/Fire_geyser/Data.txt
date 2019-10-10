@@ -6,3 +6,5 @@ max_health = 150
 pushable = false
 pushes = false
 radius = 24
+target_type = strong_plain_obstacle
+can_hurt = player; fragile

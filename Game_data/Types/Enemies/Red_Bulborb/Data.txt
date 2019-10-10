@@ -1,5 +1,7 @@
 name = Red Bulborb
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 height = 128
 itch_damage = 70
@@ -19,6 +21,7 @@ reaches {
     attack = 40 30
 }
 rotation_speed = 114
+target_type = enemy
 territory_radius = 500
 value = 50
 weight = 10

@@ -78,7 +78,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
-    team(MOB_TEAM_PROP),
+    team(MOB_TEAM_NONE),
     hide(false),
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
@@ -1627,53 +1627,39 @@ void mob::set_var(const string &name, const string &value) {
 
 
 /* ----------------------------------------------------------------------------
+ * Does this mob want to attack mob v? Teams and other factors are used to
+ * decide this.
+ */
+bool mob::can_hunt(mob* v) {
+    //Teammates cannot hunt each other down.
+    if(team == v->team && team != MOB_TEAM_NONE) return false;
+    
+    //Mobs that do not participate in combat whatsoever cannot be hunted down.
+    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    
+    //Invisible mobs cannot be seen, so they can't be hunted down.
+    if(v->has_invisibility_status) return false;
+    
+    //Return whether or not this mob wants to hunt v.
+    return (type->huntable_targets & v->type->target_type);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Can this mob damage v? Teams and other factors are used to decide this.
  */
-bool mob::can_damage(mob* v) {
-    if(team == v->team && team != MOB_TEAM_NEUTRAL) {
-        //Teammates can't hurt each other.
-        return false;
-    }
-    if(v->team == MOB_TEAM_PROP) {
-        //Props aren't meant to be hurt.
-        return false;
-    }
-    if(type->is_projectile && !v->type->projectiles_can_damage) {
-        //Projectiles can't hurt those which are invulnerable to them.
-        return false;
-    }
-    if(
-        team == MOB_TEAM_OBSTACLE &&
-        (v->team < MOB_TEAM_PLAYER_1 || v->team > MOB_TEAM_PLAYER_4)
-    ) {
-        //Obstacles can only hurt Pikmin and leaders.
-        return false;
-    }
-    if(
-        v->team == MOB_TEAM_OBSTACLE &&
-        type->category->id != MOB_CATEGORY_PIKMIN &&
-        type->category->id != MOB_CATEGORY_TOOLS &&
-        !type->is_projectile
-    ) {
-        //Only Pikmin, tools, and projectiles can hurt obstacles.
-        return false;
-    }
-    if(
-        v->type->category->id == MOB_CATEGORY_PIKMIN &&
-        ((pikmin*) v)->is_seed_or_sprout
-    ) {
-        //Seed/sprout Pikmin should not be attacked or targetted.
-        return false;
-    }
-    if(v->team == MOB_TEAM_TOP) {
-        //Top of the foodchain cannot be hurt.
-        return false;
-    }
-    if(team == MOB_TEAM_BOTTOM) {
-        //Bottom of the foodchain cannot attack.
-        return false;
-    }
-    return true;
+bool mob::can_hurt(mob* v) {
+    //Teammates cannot hurt each other.
+    if(team == v->team && team != MOB_TEAM_NONE) return false;
+    
+    //Mobs that do not participate in combat whatsoever cannot be hurt.
+    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    
+    //Mobs that are invulnerable cannot be hurt.
+    if(v->invuln_period.time_left > 0) return false;
+    
+    //Return whether or not this mob can damage v.
+    return (type->hurtable_targets & v->type->target_type);
 }
 
 
@@ -2874,18 +2860,6 @@ void mob::tick_script() {
  */
 void mob::unfocus_from_mob() {
     focused_mob = nullptr;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Does this mob want to attack mob v? Teams and other factors are used to
- * decide this.
- */
-bool mob::wants_to_attack(mob* v) {
-    if(v->team == MOB_TEAM_TOOL) {
-        return false;
-    }
-    return can_damage(v);
 }
 
 

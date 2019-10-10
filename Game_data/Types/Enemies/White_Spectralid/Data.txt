@@ -1,5 +1,6 @@
 name = White Spectralid
 
+can_hunt = player; enemy
 drops_corpse = true
 height = 32
 max_carriers = 1
@@ -13,6 +14,7 @@ reaches {
     fear = 40 360
 }
 rotation_speed = 170
+target_type = enemy
 territory_radius = 600
 value = 5
 weight = 1

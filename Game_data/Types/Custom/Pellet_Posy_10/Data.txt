@@ -6,6 +6,7 @@ max_health = 300
 pushable = false
 pushes = true
 radius = 10
+target_type = weak_plain_obstacle
 
 spawns {
     red {

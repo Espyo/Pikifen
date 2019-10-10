@@ -1,5 +1,7 @@
 name = Crumbug
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 height = 24
 max_carriers = 3
@@ -15,6 +17,7 @@ reaches {
     chase = 60 360
 }
 rotation_speed = 200
+target_type = enemy
 territory_radius = 300
 value = 10
 weight = 2

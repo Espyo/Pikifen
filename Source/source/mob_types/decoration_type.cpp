@@ -24,6 +24,8 @@ decoration_type::decoration_type() :
     rotation_random_variation(0.0f),
     random_animation_delay(false) {
     
+    target_type = MOB_TARGET_TYPE_NONE;
+    
     tint_random_maximum = al_map_rgba(0, 0, 0, 0);
     decoration_fsm::create_fsm(this);
 }

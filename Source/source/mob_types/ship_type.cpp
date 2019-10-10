@@ -22,6 +22,8 @@ ship_type::ship_type() :
     mob_type(MOB_CATEGORY_SHIPS),
     can_heal(false),
     beam_radius(0.0f) {
+        
+    target_type = MOB_TARGET_TYPE_NONE;
     
     ship_fsm::create_fsm(this);
     always_active = true;

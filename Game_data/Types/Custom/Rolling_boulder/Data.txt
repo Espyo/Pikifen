@@ -13,3 +13,5 @@ reaches {
     homing = 200 360
 }
 rotation_speed = 50
+target_type = none
+can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; fragile

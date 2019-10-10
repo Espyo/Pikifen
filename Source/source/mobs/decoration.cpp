@@ -54,8 +54,6 @@ decoration::decoration(
             -dec_type->scale_random_variation,
             dec_type->scale_random_variation
         );
-        
-    team = MOB_TEAM_PROP;
 }
 
 

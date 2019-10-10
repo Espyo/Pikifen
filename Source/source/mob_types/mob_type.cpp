@@ -53,9 +53,16 @@ mob_type::mob_type(size_t category_id) :
     weight(0),
     itch_damage(0),
     itch_time(0),
-    target_type(MOB_TARGET_TYPE_NONE),
-    huntable_targets(0),
-    hurtable_targets(0),
+    target_type(MOB_TARGET_TYPE_ENEMY),
+    huntable_targets(
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY
+    ),
+    hurtable_targets(
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_FRAGILE
+    ),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
     appears_in_area_editor(true),
@@ -437,20 +444,23 @@ void load_mob_type_from_file(
         mt->children.push_back(new_child);
     }
     
-    size_t target_type_value = string_to_mob_target_type(target_type_string);
-    if(target_type_value == INVALID) {
-        log_error(
-            "Unknown target type \"" + target_type_string + "\"!",
-            file.get_child_by_name("target_type")
-        );
-    } else {
-        mt->target_type = target_type_value;
+    if(!target_type_string.empty()) {
+        size_t target_type_value =
+            string_to_mob_target_type(target_type_string);
+        if(target_type_value == INVALID) {
+            log_error(
+                "Unknown target type \"" + target_type_string + "\"!",
+                file.get_child_by_name("target_type")
+            );
+        } else {
+            mt->target_type = target_type_value;
+        }
     }
     
     vector<string> huntable_targets_strings =
         semicolon_list_to_vector(huntable_targets_string);
     if(!huntable_targets_strings.empty()) {
-        huntable_targets = 0;
+        mt->huntable_targets = 0;
     }
     for(size_t h = 0; h < huntable_targets_strings.size(); ++h) {
         size_t v = string_to_mob_target_type(huntable_targets_strings[h]);
@@ -467,7 +477,7 @@ void load_mob_type_from_file(
     vector<string> hurtable_targets_strings =
         semicolon_list_to_vector(hurtable_targets_string);
     if(!hurtable_targets_strings.empty()) {
-        hurtable_targets = 0;
+        mt->hurtable_targets = 0;
     }
     for(size_t h = 0; h < hurtable_targets_strings.size(); ++h) {
         size_t v = string_to_mob_target_type(hurtable_targets_strings[h]);

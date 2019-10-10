@@ -2,6 +2,8 @@ name = Beady Long Legs
 
 allow_ground_attacks = false
 can_free_move = true
+can_hunt = player; enemy
+can_hurt = player; enemy; weak_plain_obstacle; fragile
 health_regen = 0.4
 height = 140
 itch_damage = 50
@@ -105,5 +107,6 @@ reaches {
     ambush = 300 360
 }
 rotation_speed = 30
+target_type = enemy
 territory_radius = 300
 value = 300

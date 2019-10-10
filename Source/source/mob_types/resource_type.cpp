@@ -28,6 +28,8 @@ resource_type::resource_type() :
     damage_mob_amount(1.0f),
     spray_to_concoct(INVALID),
     point_amount(1.0f) {
+        
+    target_type = MOB_TARGET_TYPE_NONE;
     
     resource_fsm::create_fsm(this);
 }

@@ -1,5 +1,7 @@
 name = Cloaking Burrow-nit
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 drops_corpse = true
 health_regen = 1
 height = 64
@@ -19,6 +21,7 @@ reaches {
     chase = 150 360
 }
 rotation_speed = 170
+target_type = enemy
 territory_radius = 300
 value = 30
 weight = 8

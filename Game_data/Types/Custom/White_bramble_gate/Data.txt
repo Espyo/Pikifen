@@ -10,3 +10,4 @@ pushable = false
 pushes = true
 radius = 32
 rectangular_dimensions = 48 192
+target_type = strong_plain_obstacle

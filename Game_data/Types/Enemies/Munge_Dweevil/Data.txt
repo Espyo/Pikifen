@@ -1,5 +1,7 @@
 name = Munge Dweevil
 
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
 allow_ground_attacks = false
 drops_corpse = true
 height = 48
@@ -16,6 +18,7 @@ reaches {
     fear = 80 360
 }
 rotation_speed = 160
+target_type = enemy
 territory_radius = 600
 value = 2
 weight = 3

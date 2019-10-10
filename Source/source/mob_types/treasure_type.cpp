@@ -11,6 +11,7 @@
 #include "treasure_type.h"
 
 #include "../functions.h"
+#include "../mobs/mob.h"
 #include "../mobs/treasure.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_fsms/treasure_fsm.h"
@@ -22,6 +23,8 @@
 treasure_type::treasure_type() :
     mob_type(MOB_CATEGORY_TREASURES),
     value(0) {
+    
+    target_type = MOB_TARGET_TYPE_NONE;
     
     treasure_fsm::create_fsm(this);
 }

@@ -1714,7 +1714,7 @@ void pikmin_fsm::get_up(mob* m, void* info1, void* info2) {
     m->fsm.set_state(PIKMIN_STATE_IDLING);
     if(
         prev_focused_mob &&
-        m->wants_to_attack(prev_focused_mob)
+        m->can_hunt(prev_focused_mob)
     ) {
         m->fsm.run_event(
             MOB_EVENT_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
@@ -1975,7 +1975,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     mob* mob_ptr = info->mob2;
     
-    if(!m->can_damage(mob_ptr)) return;
+    if(!m->can_hurt(mob_ptr)) return;
     
     hitbox* h_ptr = info->h2;
     
@@ -2020,7 +2020,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     tool* too_ptr = (tool*) (*m->holding.begin());
     
-    if(!m->can_damage(info->mob2)) return;
+    if(!m->can_hurt(info->mob2)) return;
     
     pik_ptr->was_thrown = false;
     

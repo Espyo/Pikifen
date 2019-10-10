@@ -27,6 +27,8 @@ drop_type::drop_type() :
     status_to_give(nullptr),
     shrink_speed(40.0f) {
     
+    target_type = MOB_TARGET_TYPE_NONE;
+    
     drop_fsm::create_fsm(this);
 }
 

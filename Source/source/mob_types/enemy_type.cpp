@@ -25,6 +25,15 @@ enemy_type::enemy_type() :
     drops_corpse(true),
     allow_ground_attacks(true) {
     
+    target_type = MOB_TARGET_TYPE_ENEMY;
+    huntable_targets =
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_PLAYER;
+    hurtable_targets =
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_FRAGILE;
+        
     add_carrying_states();
 }
 

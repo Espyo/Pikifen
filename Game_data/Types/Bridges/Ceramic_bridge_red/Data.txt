@@ -4,3 +4,4 @@ main_texture = Ceramic_bridge_red.png
 rail_texture = Ceramic_bridge_rail_red.png
 max_health = 30
 radius = 32
+target_type = none

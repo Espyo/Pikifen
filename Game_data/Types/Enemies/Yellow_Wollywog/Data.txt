@@ -1,5 +1,7 @@
 name = Yellow Wollywog
 
+can_hunt = player; enemy
+can_hurt = player; enemy; weak_plain_obstacle; fragile
 allow_ground_attacks = true
 drops_corpse = true
 health_regen = 0
@@ -19,6 +21,7 @@ reaches {
     jump = 150 2
 }
 rotation_speed = 80
+target_type = enemy
 territory_radius = 500
 value = 30
 weight = 7

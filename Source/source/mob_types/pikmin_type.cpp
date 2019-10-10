@@ -58,7 +58,23 @@ pikmin_type::pikmin_type() :
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = pikmin_chase_range;
     reaches.push_back(chase_reach);
-    
+    target_type = MOB_TARGET_TYPE_PLAYER;
+    huntable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_PIKMIN_OBSTACLE |
+        MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE;
+    hurtable_targets =
+        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY |
+        MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE |
+        MOB_TARGET_TYPE_PIKMIN_OBSTACLE |
+        MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE |
+        MOB_TARGET_TYPE_FRAGILE;
+        
     pikmin_fsm::create_fsm(this);
 }
 

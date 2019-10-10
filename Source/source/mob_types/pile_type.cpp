@@ -29,6 +29,8 @@ pile_type::pile_type() :
     show_amount(true),
     hide_when_empty(true),
     delete_when_finished(true) {
+        
+    target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
     pile_fsm::create_fsm(this);
 }
