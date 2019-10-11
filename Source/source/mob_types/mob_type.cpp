@@ -67,9 +67,7 @@ mob_type::mob_type(size_t category_id) :
     death_state_nr(INVALID),
     appears_in_area_editor(true),
     is_obstacle(false),
-    is_projectile(false),
     blocks_carrier_pikmin(false),
-    projectiles_can_damage(true),
     default_vulnerability(1.0f),
     spike_damage(nullptr),
     max_span(0.0f) {
@@ -287,9 +285,7 @@ void load_mob_type_from_file(
     rs.set("casts_shadow",           mt->casts_shadow);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
     rs.set("is_obstacle",            mt->is_obstacle);
-    rs.set("is_projectile",          mt->is_projectile);
     rs.set("blocks_carrier_pikmin",  mt->blocks_carrier_pikmin);
-    rs.set("projectiles_can_damage", mt->projectiles_can_damage);
     rs.set("default_vulnerability",  mt->default_vulnerability);
     rs.set("spike_damage",           spike_damage_name);
     

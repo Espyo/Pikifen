@@ -1455,12 +1455,16 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     
     hitbox_interaction* info = (hitbox_interaction*) info1;
     
-    if(!info->mob2->attack(m, info->h2, info->h1, NULL)) return;
+    float damage = 0;
+    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
+        return;
+    }
+    m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
     
     float knockback = 0;
     float knockback_angle = 0;
-    calculate_knockback(
-        info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
+    info->mob2->calculate_knockback(
+        m, info->h2, info->h1, &knockback, &knockback_angle
     );
     m->apply_knockback(knockback, knockback_angle);
     

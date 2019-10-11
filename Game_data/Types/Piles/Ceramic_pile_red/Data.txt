@@ -13,3 +13,4 @@ radius = 80
 show_amount = true
 show_health = false
 size_animation_suffixes = _empty;_low;_mid;_high
+target_type = pikmin_obstacle

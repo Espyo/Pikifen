@@ -597,30 +597,6 @@ path_info_struct::path_info_struct(mob* m, const point &target) :
 
 
 /* ----------------------------------------------------------------------------
- * Calculates how much knockback an attack will cause.
- * attacker:   the attacking mob.
- * victim:     the mob that'll take the damage.
- * attacker_h: the hitbox of the attacker mob, if any.
- * victim_h:   the hitbox of the victim mob, if any.
- * knockback:  the variable to return the knockback amount to.
- * angle:      the variable to return the angle of the knockback to.
- */
-void calculate_knockback(
-    mob* attacker, mob* victim, hitbox* attacker_h,
-    hitbox* victim_h, float* knockback, float* angle
-) {
-    if(attacker_h) {
-        *knockback = attacker_h->knockback;
-        if(attacker_h->knockback_outward) {
-            *angle = get_angle(attacker->pos, victim->pos);
-        } else {
-            *angle = attacker->angle + attacker_h->knockback_angle;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  * Returns the new mob.
  * category:            The category the new mob belongs to.

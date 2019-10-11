@@ -1672,14 +1672,16 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
         return;
     }
     
-    if(!info->mob2->attack(p_ptr, info->h2, info->h1, NULL)) {
+    float damage = 0;
+    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
         return;
     }
+    m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
     
     float knockback = 0;
     float knockback_angle = 0;
-    calculate_knockback(
-        info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
+    info->mob2->calculate_knockback(
+        m, info->h2, info->h1, &knockback, &knockback_angle
     );
     m->apply_knockback(knockback, knockback_angle);
     
@@ -2424,6 +2426,13 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    if(m->invuln_period.time_left > 0) {
+        //Don't let the Pikmin attack while invulnerable. Otherwise, this can
+        //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
+        //emitting said hazard.
+        return;
+    }
     
     pikmin* p_ptr = (pikmin*) m;
     

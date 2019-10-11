@@ -168,9 +168,7 @@ public:
     //Misc.
     bool appears_in_area_editor;
     bool is_obstacle;
-    bool is_projectile;
     bool blocks_carrier_pikmin;
-    bool projectiles_can_damage;
     float default_vulnerability;
     map<hazard*, float> hazard_vulnerabilities;
     spike_damage_type* spike_damage;

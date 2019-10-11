@@ -74,7 +74,7 @@ enum PIKMIN_ANIMATIONS {
 };
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
-const float PIKMIN_INVULN_PERIOD = 1.0f;
+const float PIKMIN_INVULN_PERIOD = 0.7f;
 const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
 
 

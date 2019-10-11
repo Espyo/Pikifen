@@ -31,7 +31,6 @@ bridge_type::bridge_type() :
     casts_shadow = false;
     is_obstacle = true;
     blocks_carrier_pikmin = true;
-    projectiles_can_damage = false;
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
     bridge_fsm::create_fsm(this);

@@ -219,7 +219,55 @@ void mob::add_to_group(mob* new_member) {
 
 
 /* ----------------------------------------------------------------------------
- * Applies the knockback values to a mob.
+ * Applies the damage caused by an attack from another mob to this one.
+ * attacker: The mob that caused the attack.
+ * attack_h: Hitbox used for the attack.
+ * victim_h: Victim's hitbox that got hit.
+ * damage:   Total damage the attack caused.
+ */
+void mob::apply_attack_damage(
+    mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
+) {
+    if(parent && parent->relay_damage) {
+        apply_attack_damage(parent->m, attack_h, victim_h, damage);
+        if(!parent->handle_damage) {
+            return;
+        }
+    }
+    
+    //Perform the damage and script-related events.
+    set_health(true, false, -damage);
+    
+    hitbox_interaction ev_info(this, victim_h, attack_h);
+    fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
+    
+    attacker->cause_spike_damage(this, false);
+    
+    //Final setup.
+    itch_damage += damage;
+    attacker->hit_opponents.push_back(
+        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
+    );
+    
+    //Smack particle effect.
+    point smack_p_pos =
+        attacker->pos +
+        (pos - attacker->pos) *
+        (attacker->type->radius / (attacker->type->radius + type->radius));
+    sfx_attack.play(0.06, false, 0.6f);
+    particle smack_p(
+        PARTICLE_TYPE_SMACK, smack_p_pos,
+        max(z + type->height + 1, attacker->z + attacker->type->height + 1),
+        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+    );
+    smack_p.bitmap = bmp_smack;
+    smack_p.color = al_map_rgb(255, 160, 128);
+    particles.add(smack_p);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Applies the knockback values to a mob, caused by an attack.
  */
 void mob::apply_knockback(const float knockback, const float knockback_angle) {
     if(knockback != 0) {
@@ -425,137 +473,6 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
     
     vars["_destination_pos"] = p2s(destination_pos);
     vars["_destination_angle"] = f2s(destination_angle);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Makes the mob attack another mob.
- * Returns true if the attack was successful.
- * victim:   The mob to be attacked.
- * attack_h: Hitbox used for the attack.
- * victim_h: Victim's hitbox that got hit.
- * damage:   If not NULL, total damage caused is returned here.
- */
-bool mob::attack(
-    mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
-) {
-    //TODO refactor, probably when I rethink which mobs want to attack which.
-    
-    if(victim->parent && victim->parent->relay_damage) {
-        bool ret = attack(victim->parent->m, attack_h, victim_h, damage);
-        if(!victim->parent->handle_damage) {
-            return ret;
-        }
-    }
-    
-    float total_damage = 0;
-    float attacker_offense = 0;
-    float defense_multiplier = 1;
-    
-    //First, check if this mob cannot be damaged.
-    if(victim_h->type != HITBOX_TYPE_NORMAL) {
-        //This hitbox can't be damaged! Abort!
-        return false;
-    }
-    
-    if(!is_resistant_to_hazards(victim_h->hazards)) {
-        //If the hitbox says it has a fire effect, and this
-        //mob is not immune to fire, don't let it be a wise-guy;
-        //it cannot be able to attack the hitbox.
-        return false;
-    }
-    
-    for(size_t h = 0; h < hit_opponents.size(); ++h) {
-        if(hit_opponents[h].second == victim) {
-            //This opponent has already been hit by this mob recently.
-            //Don't let it attack again. This stops the same attack from
-            //hitting every single frame.
-            return false;
-        }
-    }
-    
-    //Calculate the damage.
-    if(attack_h) {
-        attacker_offense = attack_h->value;
-        
-        if(!attack_h->hazards.empty()) {
-            float max_vulnerability = 0.0f;
-            for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
-                max_vulnerability =
-                    max(
-                        victim->get_hazard_vulnerability(attack_h->hazards[h]),
-                        max_vulnerability
-                    );
-            }
-            
-            if(max_vulnerability == 0.0f) {
-                //The victim is immune to this hazard!
-                return false;
-            } else {
-                defense_multiplier = 1.0 / max_vulnerability;
-            }
-            
-        } else {
-        
-            if(victim->type->default_vulnerability == 0.0f) {
-                //The victim is invulnerable to everything about this attack!
-                return false;
-            } else {
-                defense_multiplier = 1.0 / victim->type->default_vulnerability;
-            }
-        }
-        
-    } else {
-        attacker_offense = 1;
-    }
-    
-    if(victim_h->value == 0.0f) {
-        //Hah, this hitbox is invulnerable!
-        return false;
-    }
-    
-    defense_multiplier *= victim_h->value;
-    
-    for(size_t s = 0; s < statuses.size(); ++s) {
-        attacker_offense *= statuses[s].type->attack_multiplier;
-    }
-    for(size_t s = 0; s < victim->statuses.size(); ++s) {
-        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
-    }
-    
-    total_damage = attacker_offense * (1.0 / defense_multiplier);
-    
-    //Actually perform the damage and script-related events.
-    victim->set_health(true, false, -total_damage);
-    
-    hitbox_interaction ev_info(this, victim_h, attack_h);
-    victim->fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
-    
-    victim->cause_spike_damage(victim, false);
-    
-    //Final setup.
-    victim->itch_damage += total_damage;
-    hit_opponents.push_back(
-        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, victim)
-    );
-    
-    //Smack particle effect.
-    point smack_p_pos =
-        pos +
-        (victim->pos - pos) *
-        (type->radius / (type->radius + victim->type->radius));
-    sfx_attack.play(0.06, false, 0.6f);
-    particle smack_p(
-        PARTICLE_TYPE_SMACK, smack_p_pos,
-        max(victim->z + victim->type->height + 1, z + type->height + 1),
-        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
-    );
-    smack_p.bitmap = bmp_smack;
-    smack_p.color = al_map_rgb(255, 160, 128);
-    particles.add(smack_p);
-    
-    if(damage) *damage = total_damage;
-    return true;
 }
 
 
@@ -776,6 +693,106 @@ bool mob::calculate_carrying_destination(
     *target_point = (*target_mob)->pos;
     
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates how much damage an attack will cause.
+ * Returns true if the attack will hit, false if it cannot hit.
+ * victim:   The mob that'll take the damage.
+ * attack_h: Hitbox used for the attack.
+ * victim_h: Victim's hitbox that got hit.
+ * damage:   Return the calculated damage here.
+ */
+bool mob::calculate_damage(
+    mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
+) {
+    float attacker_offense = 0;
+    float defense_multiplier = 1;
+    
+    //First, check if this hitbox cannot be damaged.
+    if(victim_h->type != HITBOX_TYPE_NORMAL) {
+        //This hitbox can't be damaged! Abort!
+        return false;
+    }
+    
+    //Calculate the damage.
+    if(attack_h) {
+        attacker_offense = attack_h->value;
+        
+        if(!attack_h->hazards.empty()) {
+            float max_vulnerability = 0.0f;
+            for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
+                max_vulnerability =
+                    max(
+                        victim->get_hazard_vulnerability(attack_h->hazards[h]),
+                        max_vulnerability
+                    );
+            }
+            
+            if(max_vulnerability == 0.0f) {
+                //The victim is immune to this hazard!
+                return false;
+            } else {
+                defense_multiplier = 1.0 / max_vulnerability;
+            }
+            
+        } else {
+        
+            if(victim->type->default_vulnerability == 0.0f) {
+                //The victim is invulnerable to everything about this attack!
+                return false;
+            } else {
+                defense_multiplier = 1.0 / victim->type->default_vulnerability;
+            }
+        }
+        
+    } else {
+        attacker_offense = 1;
+    }
+    
+    if(victim_h->value == 0.0f) {
+        //Hah, this hitbox is invulnerable!
+        return false;
+    }
+    
+    defense_multiplier *= victim_h->value;
+    
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        attacker_offense *= statuses[s].type->attack_multiplier;
+    }
+    for(size_t s = 0; s < victim->statuses.size(); ++s) {
+        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
+    }
+    
+    *damage = attacker_offense * (1.0 / defense_multiplier);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates how much knockback an attack will cause.
+ * victim:      the mob that'll take the damage.
+ * attack_h:    the hitbox of the attacker mob, if any.
+ * victim_h:    the hitbox of the victim mob, if any.
+ * kb_strength: the variable to return the knockback amount to.
+ * kb_angle:    the variable to return the angle of the knockback to.
+ */
+void mob::calculate_knockback(
+    mob* victim, hitbox* attack_h,
+    hitbox* victim_h, float* kb_strength, float* kb_angle
+) {
+    if(attack_h) {
+        *kb_strength = attack_h->knockback;
+        if(attack_h->knockback_outward) {
+            *kb_angle = get_angle(pos, victim->pos);
+        } else {
+            *kb_angle = angle + attack_h->knockback_angle;
+        }
+    } else {
+        *kb_strength = 0;
+        *kb_angle = 0;
+    }
 }
 
 
@@ -1662,6 +1679,15 @@ bool mob::can_hurt(mob* v) {
     
     //Mobs that are invulnerable cannot be hurt.
     if(v->invuln_period.time_left > 0) return false;
+    
+    //Check if this mob has already hit v recently.
+    for(size_t h = 0; h < hit_opponents.size(); ++h) {
+        if(hit_opponents[h].second == v) {
+            //v was hit by this mob recently, so don't let it attack again.
+            //This stops the same attack from hitting every single frame.
+            return false;
+        }
+    }
     
     //Return whether or not this mob can damage v.
     return (type->hurtable_targets & v->type->target_type);

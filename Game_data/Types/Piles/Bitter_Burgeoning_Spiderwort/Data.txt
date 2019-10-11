@@ -15,6 +15,7 @@ recharge_interval = 60
 show_amount = false
 show_health = false
 size_animation_suffixes = _0;_1;_2;_3;_4;_5
+target_type = explodable_pikmin_obstacle
 
 vulnerabilities {
     explosion = 400

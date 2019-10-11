@@ -295,11 +295,20 @@ public:
     void become_carriable(const size_t destination);
     void become_uncarriable();
     
-    bool attack(mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage);
+    void apply_attack_damage(
+        mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
+    );
     void add_to_group(mob* new_member);
     void apply_knockback(const float knockback, const float knockback_angle);
     bool calculate_carrying_destination(
         mob* added, mob* removed, mob** target_mob, point* target_point
+    );
+    bool calculate_damage(
+        mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
+    );
+    void calculate_knockback(
+        mob* victim, hitbox* attack_h,
+        hitbox* victim_h, float* knockback, float* angle
     );
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
