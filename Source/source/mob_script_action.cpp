@@ -765,6 +765,14 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the huntable setting mob script action.
+ */
+void mob_action_runners::set_huntable(mob_action_run_data &data) {
+    data.m->is_huntable = s2b(data.args[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the holdable setting mob script action.
  */
 void mob_action_runners::set_holdable(mob_action_run_data &data) {

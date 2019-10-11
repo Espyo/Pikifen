@@ -249,6 +249,8 @@ public:
     bool hide;
     //Is invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
+    //Can this mob be hunted down right now?
+    bool is_huntable;
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot;
     //Particle generators attached to it.

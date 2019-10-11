@@ -80,6 +80,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     invuln_period(0),
     team(MOB_TEAM_NONE),
     hide(false),
+    has_invisibility_status(false),
+    is_huntable(true),
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
     dead(false),
@@ -1639,6 +1641,9 @@ bool mob::can_hunt(mob* v) {
     
     //Invisible mobs cannot be seen, so they can't be hunted down.
     if(v->has_invisibility_status) return false;
+    
+    //Mobs that don't want to be hunted right now cannot be hunted down.
+    if(!v->is_huntable) return false;
     
     //Return whether or not this mob wants to hunt v.
     return (type->huntable_targets & v->type->target_type);

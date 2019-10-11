@@ -728,6 +728,14 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("huntable", MOB_ACTION_PARAM_BOOL, false, false);
+    reg_action(
+        MOB_ACTION_SET_HUNTABLE,
+        "set_huntable",
+        mob_action_runners::set_huntable,
+        nullptr
+    );
+    
     reg_param("options", MOB_ACTION_PARAM_ENUM, true, true);
     reg_action(
         MOB_ACTION_SET_HOLDABLE,

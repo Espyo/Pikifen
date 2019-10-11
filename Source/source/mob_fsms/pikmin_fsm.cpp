@@ -1193,6 +1193,7 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
+    m->is_huntable = false;
     ((pikmin*) m)->is_seed_or_sprout = true;
 }
 
@@ -1215,6 +1216,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     lea->add_to_group(pik);
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
+    m->is_huntable = true;
     m->unpushable = false;
     pik->is_seed_or_sprout = false;
     m->set_timer(0);

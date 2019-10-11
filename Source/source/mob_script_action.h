@@ -49,6 +49,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SET_HEALTH,
     MOB_ACTION_SET_HIDING,
     MOB_ACTION_SET_HOLDABLE,
+    MOB_ACTION_SET_HUNTABLE,
     MOB_ACTION_SET_LIMB_ANIMATION,
     MOB_ACTION_SET_NEAR_REACH,
     MOB_ACTION_SET_STATE,
@@ -267,6 +268,7 @@ void set_gravity(mob_action_run_data &data);
 void set_health(mob_action_run_data &data);
 void set_hiding(mob_action_run_data &data);
 void set_holdable(mob_action_run_data &data);
+void set_huntable(mob_action_run_data &data);
 void set_limb_animation(mob_action_run_data &data);
 void set_near_reach(mob_action_run_data &data);
 void set_state(mob_action_run_data &data);
