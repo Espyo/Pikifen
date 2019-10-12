@@ -29,6 +29,8 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_RANDOM_DECIMAL,
+    MOB_ACTION_GET_RANDOM_INT,
     MOB_ACTION_GOTO,
     MOB_ACTION_IF,
     MOB_ACTION_LABEL,
@@ -37,7 +39,6 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_MOVE_TO_TARGET,
     MOB_ACTION_ORDER_RELEASE,
     MOB_ACTION_PLAY_SOUND,
-    MOB_ACTION_RANDOMIZE_VAR,
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
     MOB_ACTION_REMOVE_STATUS,
@@ -249,6 +250,8 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void get_random_decimal(mob_action_run_data &data);
+void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
@@ -256,7 +259,6 @@ void move_to_relative(mob_action_run_data &data);
 void move_to_target(mob_action_run_data &data);
 void order_release(mob_action_run_data &data);
 void play_sound(mob_action_run_data &data);
-void randomize_var(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);

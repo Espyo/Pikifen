@@ -14,7 +14,7 @@ script {
             set_animation idling
             stop
             set_near_reach search
-            randomize_var t 2 6
+            get_random_decimal t 2 6
             set_timer $t
         }
         on_leave {

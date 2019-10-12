@@ -68,9 +68,9 @@ script {
             set_state shaking
         }
         on_animation_end {
-            randomize_var decision 1 2
+            get_random_int decision 1 2
             if $decision = 1
-                randomize_var decision 1 3
+                get_random_int decision 1 3
                 if $decision = 1
                     arachnorb_plan_logic forward
                     set_state move_fr

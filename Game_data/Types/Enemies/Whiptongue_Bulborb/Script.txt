@@ -28,11 +28,11 @@ script {
     
     exploring {
         on_enter {
-            randomize_var x -1000 1000
-            randomize_var y -1000 1000
+            get_random_decimal x -1000 1000
+            get_random_decimal y -1000 1000
             move_to_relative $x $y
             set_animation walking
-            randomize_var t 1.5 2.5
+            get_random_decimal t 1.5 2.5
             set_timer $t
         }
         on_opponent_in_reach {

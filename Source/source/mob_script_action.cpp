@@ -508,6 +508,24 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the decimal number randomization mob script action.
+ */
+void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
+    data.m->vars[data.args[0]] =
+        f2s(randomf(s2f(data.args[1]), s2f(data.args[2])));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the integer number randomization mob script action.
+ */
+void mob_action_runners::get_random_int(mob_action_run_data &data) {
+    data.m->vars[data.args[0]] =
+        i2s(randomi(s2i(data.args[1]), s2i(data.args[2])));
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the "if" mob script action.
  */
 void mob_action_runners::if_function(mob_action_run_data &data) {
@@ -653,15 +671,6 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
 
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code for the var randomization mob script action.
- */
-void mob_action_runners::randomize_var(mob_action_run_data &data) {
-    data.m->vars[data.args[0]] =
-        f2s(randomf(s2f(data.args[1]), s2f(data.args[2])));
 }
 
 

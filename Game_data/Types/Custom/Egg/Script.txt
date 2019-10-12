@@ -43,7 +43,7 @@ script {
             start_particles egg_shard_explosion
             
             if $contents = random
-                randomize_var c 1 100
+                get_random_decimal c 1 100
                 if $c < 55
                     set_var contents nectar
                 else

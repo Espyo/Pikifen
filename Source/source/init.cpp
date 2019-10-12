@@ -571,6 +571,26 @@ void init_mob_actions() {
         mob_action_loaders::get_info
     );
     
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_GET_RANDOM_DECIMAL,
+        "get_random_decimal",
+        mob_action_runners::get_random_decimal,
+        nullptr
+    );
+    
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("minimum value", MOB_ACTION_PARAM_INT, false, false);
+    reg_param("maximum value", MOB_ACTION_PARAM_INT, false, false);
+    reg_action(
+        MOB_ACTION_GET_RANDOM_INT,
+        "get_random_int",
+        mob_action_runners::get_random_int,
+        nullptr
+    );
+    
     reg_param("label name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_GOTO,
@@ -634,16 +654,6 @@ void init_mob_actions() {
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
         mob_action_runners::play_sound,
-        nullptr
-    );
-    
-    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
-        MOB_ACTION_RANDOMIZE_VAR,
-        "randomize_var",
-        mob_action_runners::randomize_var,
         nullptr
     );
     
