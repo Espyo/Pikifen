@@ -55,8 +55,24 @@ hitbox::hitbox(
 /* ----------------------------------------------------------------------------
  * Returns the coordinates of the hitbox given the mob's location and angle.
  */
+point hitbox::get_cur_pos(const point &mob_pos, const float mob_angle) {
+    float mob_angle_cos = cos(mob_angle);
+    float mob_angle_sin = sin(mob_angle);
+    return
+        point(
+            mob_pos.x + (pos.x * mob_angle_cos - pos.y * mob_angle_sin),
+            mob_pos.y + (pos.x * mob_angle_sin + pos.y * mob_angle_cos)
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the coordinates of the hitbox given the mob's location and angle.
+ * If the angle's sine and cosine are known from having been calculated
+ * previously, use this function, since it's faster.
+ */
 point hitbox::get_cur_pos(
-    const point &mob_pos, const float &mob_angle_cos, const float &mob_angle_sin
+    const point &mob_pos, const float mob_angle_cos, const float mob_angle_sin
 ) {
     return
         point(

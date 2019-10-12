@@ -656,6 +656,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+            efc.run(pikmin_fsm::check_attack);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
         }
@@ -687,6 +690,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+            efc.run(pikmin_fsm::check_attack);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -1570,6 +1576,9 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     }
     m->delete_old_status_effects();
     
+    pik->was_last_hit_dud = false;
+    pik->consecutive_dud_hits = 0;
+    
     cur_leader_ptr->add_to_group(pik);
     sfx_pikmin_called.play(0.03, false);
 }
@@ -1599,11 +1608,35 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin should check the attack it is about to unleash.
+ * If it realizes it's doing no damage, it should start considering
+ * sighing and giving up.
+ * info1: Pointer to the opponent.
+ */
+void pikmin_fsm::check_attack(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    hitbox_interaction* info = (hitbox_interaction*) info1;
+    pikmin* p_ptr = (pikmin*) m;
+    
+    float damage = 0;
+    bool attack_success =
+        p_ptr->calculate_damage(info->mob2, info->h1, info->h2, &damage);
+    if(damage == 0 || !attack_success) {
+    
+        p_ptr->was_last_hit_dud = true;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin needs to walk towards an opponent.
  * info1: Pointer to the opponent.
  */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
+    
+    pikmin* p_ptr = (pikmin*) m;
     
     mob* o_ptr = (mob*) info1;
     if(o_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
@@ -1622,6 +1655,9 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
+    
+    p_ptr->was_last_hit_dud = false;
+    p_ptr->consecutive_dud_hits = 0;
     
     m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
@@ -1642,15 +1678,32 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
  * towards it again.
  */
 void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
+
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->was_last_hit_dud) {
+        //Check if the Pikmin's last hits were duds.
+        //If so, maybe give up and sigh.
+        p_ptr->consecutive_dud_hits++;
+        if(p_ptr->consecutive_dud_hits >= 4) {
+            p_ptr->consecutive_dud_hits = 0;
+            p_ptr->fsm.set_state(PIKMIN_STATE_SIGHING);
+            return;
+        }
+    }
+    
     if(
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->pos, m->focused_mob->pos) <=
         (m->type->radius + m->focused_mob->type->radius + GROUNDED_ATTACK_DIST)
     ) {
+        //If the opponent is alive and within reach, let's stay in this state,
+        //and attack some more!
         return;
     }
     
+    //The opponent cannot be chased down. Become idle.
     m->fsm.set_state(PIKMIN_STATE_IDLING);
 }
 
@@ -1676,7 +1729,9 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
         return;
     }
+    
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
     
     float knockback = 0;
     float knockback_angle = 0;
@@ -1965,6 +2020,7 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACKING);
     p->face(0, &p->focused_mob->pos);
+    p->was_last_hit_dud = false;
 }
 
 

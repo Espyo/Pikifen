@@ -78,8 +78,11 @@ public:
         const float height = 128, const float radius = 32
     );
     point get_cur_pos(
+        const point &mob_pos, const float mob_angle
+    );
+    point get_cur_pos(
         const point &mob_pos,
-        const float &mob_angle_cos, const float &mob_angle_sin
+        const float mob_angle_cos, const float mob_angle_sin
     );
 };
 

@@ -1459,7 +1459,9 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
         return;
     }
+    
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
     
     float knockback = 0;
     float knockback_angle = 0;

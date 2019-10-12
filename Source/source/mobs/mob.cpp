@@ -236,33 +236,20 @@ void mob::apply_attack_damage(
     }
     
     //Perform the damage and script-related events.
-    set_health(true, false, -damage);
-    
-    hitbox_interaction ev_info(this, victim_h, attack_h);
-    fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
-    
-    attacker->cause_spike_damage(this, false);
+    if(damage > 0) {
+        set_health(true, false, -damage);
+        
+        hitbox_interaction ev_info(this, victim_h, attack_h);
+        fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
+        
+        attacker->cause_spike_damage(this, false);
+    }
     
     //Final setup.
     itch_damage += damage;
     attacker->hit_opponents.push_back(
         make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
     );
-    
-    //Smack particle effect.
-    point smack_p_pos =
-        attacker->pos +
-        (pos - attacker->pos) *
-        (attacker->type->radius / (attacker->type->radius + type->radius));
-    sfx_attack.play(0.06, false, 0.6f);
-    particle smack_p(
-        PARTICLE_TYPE_SMACK, smack_p_pos,
-        max(z + type->height + 1, attacker->z + attacker->type->height + 1),
-        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
-    );
-    smack_p.bitmap = bmp_smack;
-    smack_p.color = al_map_rgb(255, 160, 128);
-    particles.add(smack_p);
 }
 
 
@@ -698,7 +685,8 @@ bool mob::calculate_carrying_destination(
 
 /* ----------------------------------------------------------------------------
  * Calculates how much damage an attack will cause.
- * Returns true if the attack will hit, false if it cannot hit.
+ * Returns true if the attack will hit (even if it will end up causing zero
+ * damage), false if it cannot hit (e.g. the victim hitbox is not valid).
  * victim:   The mob that'll take the damage.
  * attack_h: Hitbox used for the attack.
  * victim_h: Victim's hitbox that got hit.
@@ -732,7 +720,8 @@ bool mob::calculate_damage(
             
             if(max_vulnerability == 0.0f) {
                 //The victim is immune to this hazard!
-                return false;
+                *damage = 0;
+                return true;
             } else {
                 defense_multiplier = 1.0 / max_vulnerability;
             }
@@ -741,7 +730,8 @@ bool mob::calculate_damage(
         
             if(victim->type->default_vulnerability == 0.0f) {
                 //The victim is invulnerable to everything about this attack!
-                return false;
+                *damage = 0;
+                return true;
             } else {
                 defense_multiplier = 1.0 / victim->type->default_vulnerability;
             }
@@ -753,7 +743,8 @@ bool mob::calculate_damage(
     
     if(victim_h->value == 0.0f) {
         //Hah, this hitbox is invulnerable!
-        return false;
+        *damage = 0;
+        return true;
     }
     
     defense_multiplier *= victim_h->value;
@@ -944,6 +935,73 @@ void mob::delete_old_status_effects() {
     for(size_t s = 0; s < statuses.size(); ++s) {
         if(statuses[s].type->turns_invisible) has_invisibility_status = true;
         break;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts the particle effect and sound for an attack, which could either be
+ * a meaty whack, or a harmless ding.
+ * attacker: Mob that caused the attack.
+ * attack_h: Hitbox that caused the attack.
+ * victim_h: Hitbox that suffered the attack.
+ * damage:   Total damage caused.
+ */
+void mob::do_attack_effects(
+    mob* attacker, hitbox* attack_h, hitbox* victim_h, const float damage
+) {
+    if(parent && parent->relay_damage) {
+        do_attack_effects(parent->m, attack_h, victim_h, damage);
+        if(!parent->handle_damage) {
+            return;
+        }
+    }
+    
+    //Calculate the particle's final position.
+    point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
+    point victim_h_pos = victim_h->get_cur_pos(pos, angle);
+    
+    float edges_d;
+    float a_to_v_angle;
+    coordinates_to_angle(
+        victim_h_pos - attack_h_pos,
+        &a_to_v_angle, &edges_d
+    );
+    
+    edges_d -= attack_h->radius;
+    edges_d -= victim_h->radius;
+    float offset = attack_h->radius + edges_d / 2.0;
+    
+    point particle_pos =
+        attack_h_pos +
+        point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
+        
+    //Create the particle.
+    if(damage > 0) {
+        particle smack_p(
+            PARTICLE_TYPE_SMACK, particle_pos,
+            max(z + type->height + 1, attacker->z + attacker->type->height + 1),
+            64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+        );
+        smack_p.bitmap = bmp_smack;
+        smack_p.color = al_map_rgb(255, 160, 128);
+        particles.add(smack_p);
+        
+    } else {
+        particle ding_p(
+            PARTICLE_TYPE_DING, particle_pos,
+            max(z + type->height + 1, attacker->z + attacker->type->height + 1),
+            24, SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
+        );
+        ding_p.bitmap = bmp_wave_ring;
+        ding_p.color = al_map_rgb(192, 208, 224);
+        particles.add(ding_p);
+        
+    }
+    
+    //Play the sound.
+    if(damage > 0) {
+        sfx_attack.play(0.06, false, 0.6f);
     }
 }
 

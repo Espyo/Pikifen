@@ -140,6 +140,18 @@ void particle::draw() {
             bitmap, pos, point(s, s),
             0, change_alpha(color, opacity)
         );
+        
+    } else if(type == PARTICLE_TYPE_DING) {
+        float r = time / duration;
+        float s = size;
+        float opacity = 255;
+        if(r >= 0.5) s *= (1 - r) * 2;
+        else opacity *= r * 2;
+        
+        draw_bitmap(
+            bitmap, pos, point(s, s),
+            0, change_alpha(color, opacity)
+        );
     }
 }
 

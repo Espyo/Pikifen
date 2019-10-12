@@ -71,9 +71,12 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     
     float damage = 0;
-    if(info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
-        m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
+    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
+        return;
     }
+    
+    m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
 }
 
 

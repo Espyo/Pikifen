@@ -108,6 +108,10 @@ public:
     bool latched;
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool is_tool_primed_for_whistle;
+    //Did the Pikmin's last attack cause zero damage?
+    bool was_last_hit_dud;
+    //How many hits in a row have done no damage.
+    unsigned char consecutive_dud_hits;
     
     void force_carry(mob* m);
     bool process_attack_miss(hitbox_interaction* info);

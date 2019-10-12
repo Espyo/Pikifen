@@ -116,7 +116,7 @@ animations{
 				duration=1.5000
 			}
 			idling{
-				duration=0.5000
+				duration=1.0000
 			}
 		}
 	}
