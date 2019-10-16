@@ -23,6 +23,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_ARACHNORB_PLAN_LOGIC,
     MOB_ACTION_CALCULATE,
     MOB_ACTION_DELETE,
+    MOB_ACTION_DRAIN_LIQUID,
     MOB_ACTION_ELSE,
     MOB_ACTION_END_IF,
     MOB_ACTION_FINISH_DYING,
@@ -246,6 +247,7 @@ void add_health(mob_action_run_data &data);
 void arachnorb_plan_logic(mob_action_run_data &data);
 void calculate(mob_action_run_data &data);
 void delete_function(mob_action_run_data &data);
+void drain_liquid(mob_action_run_data &data);
 void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);

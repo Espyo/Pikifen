@@ -30,10 +30,6 @@ enum BRIDGE_STATES {
  * into walkable wood.
  */
 class bridge : public mob {
-private:
-
-    void get_neighbor_bridge_sectors(sector* s_ptr);
-    
 public:
     bridge_type* bri_type;
     vector<sector*> secs;

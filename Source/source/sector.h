@@ -27,6 +27,7 @@
 
 using namespace std;
 
+const float LIQUID_DRAIN_DURATION = 2.0f;
 
 struct area_data;
 struct blockmap;
@@ -193,7 +194,8 @@ struct sector {
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.
     bool hazard_floor;
-    liquid* associated_liquid;
+    float liquid_drain_left;
+    bool draining_liquid;
     
     vector<size_t> edge_nrs;
     vector<edge*> edges;
@@ -206,6 +208,10 @@ struct sector {
     void clone(sector* new_sector);
     void get_texture_merge_sectors(sector** s1, sector** s2);
     void remove_edge(edge* e_ptr);
+    void get_neighbor_sectors_conditionally(
+        const std::function<bool(sector* s_ptr)> &condition,
+        vector<sector*> &sector_list
+    );
     ~sector();
 };
 

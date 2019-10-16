@@ -232,6 +232,35 @@ void gameplay::do_gameplay_logic() {
         }
         
         
+        /*******************
+        *             +--+ *
+        *   Sectors   |  | *
+        *             +--+ *
+        ********************/
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = cur_area_data.sectors[s];
+            
+            if(s_ptr->draining_liquid) {
+            
+                s_ptr->liquid_drain_left -= delta_t;
+                
+                if(s_ptr->liquid_drain_left <= 0) {
+                
+                    for(size_t h = 0; h < s_ptr->hazards.size();) {
+                        if(s_ptr->hazards[h]->associated_liquid) {
+                            s_ptr->hazards.erase(s_ptr->hazards.begin() + h);
+                        } else {
+                            ++h;
+                        }
+                    }
+                    
+                    s_ptr->liquid_drain_left = 0;
+                    s_ptr->draining_liquid = false;
+                }
+            }
+        }
+        
+        
         /********************
         *              ***  *
         *   Whistle   * O * *

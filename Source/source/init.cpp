@@ -527,6 +527,13 @@ void init_mob_actions() {
     );
     
     reg_action(
+        MOB_ACTION_DRAIN_LIQUID,
+        "drain_liquid",
+        mob_action_runners::drain_liquid,
+        nullptr
+    );
+    
+    reg_action(
         MOB_ACTION_ELSE,
         "else",
         nullptr,

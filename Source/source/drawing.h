@@ -16,6 +16,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "controls.h"
+#include "liquid.h"
 #include "misc_structs.h"
 
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
@@ -70,7 +71,7 @@ void draw_health(
     const bool just_chart = false
 );
 void draw_liquid(
-    sector* s_ptr, const point &where, const float scale
+    sector* s_ptr, liquid* l_ptr, const point &where, const float scale
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity

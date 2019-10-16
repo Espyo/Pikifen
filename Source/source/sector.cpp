@@ -1061,7 +1061,8 @@ sector::sector() :
     fade(false),
     always_cast_shadow(false),
     hazard_floor(true),
-    associated_liquid(nullptr) {
+    liquid_drain_left(0),
+    draining_liquid(false) {
     
 }
 
@@ -1099,6 +1100,43 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.tint = texture_info.tint;
     new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fills a vector with neighboring sectors, recursively, but only if they
+ * meet certain criteria.
+ * condition:       Function that accepts a sector and checks its criteria. This
+ *   function must return true if accepted, false if not.
+ * sector_list: List of sectors to be filled. Also doubles as the list of
+ *   visited sectors.
+ */
+void sector::get_neighbor_sectors_conditionally(
+    const std::function<bool(sector* s_ptr)> &condition,
+    vector<sector*> &sector_list
+) {
+
+    //If this sector is already on the list, skip.
+    for(size_t s = 0; s < sector_list.size(); ++s) {
+        if(sector_list[s] == this) return;
+    }
+    
+    //If this sector is not eligible, return.
+    if(!condition(this)) return;
+    
+    //This sector is valid!
+    sector_list.push_back(this);
+    
+    //Now check its neighbors.
+    edge* e_ptr = NULL;
+    sector* other_s = NULL;
+    for(size_t e = 0; e < edges.size(); ++e) {
+        e_ptr = edges[e];
+        other_s = e_ptr->sectors[(e_ptr->sectors[0] == this ? 1 : 0)];
+        if(!other_s) continue;
+        
+        other_s->get_neighbor_sectors_conditionally(condition, sector_list);
+    }
 }
 
 

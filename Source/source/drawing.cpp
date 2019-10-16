@@ -1400,8 +1400,16 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         
             draw_sector_texture(c_ptr->sector_ptr, point(), 1.0f, 1.0f);
             
-            if(c_ptr->sector_ptr->associated_liquid) {
-                draw_liquid(c_ptr->sector_ptr, point(), 1.0f);
+            for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); ++h) {
+                if(c_ptr->sector_ptr->hazards[h]->associated_liquid) {
+                    draw_liquid(
+                        c_ptr->sector_ptr,
+                        c_ptr->sector_ptr->hazards[h]->associated_liquid,
+                        point(),
+                        1.0f
+                    );
+                    break;
+                }
             }
             
             draw_sector_shadows(c_ptr->sector_ptr, point(), 1.0f);
@@ -1839,11 +1847,13 @@ void draw_health(
 
 /* ----------------------------------------------------------------------------
  * Draws a liquid sector.
- * where:   X and Y offset.
- * scale:   Scale the sector by this much.
+ * s_ptr: Pointer to the sector.
+ * l_ptr: Pointer to the liquid.
+ * where: X and Y offset.
+ * scale: Scale the sector by this much.
  */
 void draw_liquid(
-    sector* s_ptr, const point &where, const float scale
+    sector* s_ptr, liquid* l_ptr, const point &where, const float scale
 ) {
 
     size_t n_vertexes = s_ptr->triangles.size() * 3;
@@ -1851,6 +1861,11 @@ void draw_liquid(
     
     for(size_t v = 0; v < n_vertexes; ++v) {
         av[v].z = 0;
+    }
+    
+    float liquid_opacity_mult = 1.0f;
+    if(s_ptr->draining_liquid) {
+        liquid_opacity_mult = s_ptr->liquid_drain_left / LIQUID_DRAIN_DURATION;
     }
     
     //Layer 1 - Transparent wobbling ground texture.
@@ -1886,7 +1901,7 @@ void draw_liquid(
             av[v].color =
                 al_map_rgba(
                     s_ptr->brightness, s_ptr->brightness, s_ptr->brightness,
-                    128
+                    128 * liquid_opacity_mult
                 );
             av[v].x *= scale;
             av[v].y *= scale;
@@ -1899,7 +1914,7 @@ void draw_liquid(
     }
     
     //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color = s_ptr->associated_liquid->main_color;
+    ALLEGRO_COLOR tint_color = l_ptr->main_color;
     tint_color.r *= s_ptr->brightness / 255.0f;
     tint_color.g *= s_ptr->brightness / 255.0f;
     tint_color.b *= s_ptr->brightness / 255.0f;
@@ -1913,6 +1928,7 @@ void draw_liquid(
         av[v].x = vx - where.x;
         av[v].y = vy - where.y;
         av[v].color = tint_color;
+        av[v].color.a *= liquid_opacity_mult;
         av[v].x *= scale;
         av[v].y *= scale;
     }
@@ -1928,13 +1944,13 @@ void draw_liquid(
         sprite* anim_sprite = NULL;
         float layer_2_dy = 0;
         float layer_speed[2];
-        layer_speed[0] = s_ptr->associated_liquid->surface_speed[0];
-        layer_speed[1] = s_ptr->associated_liquid->surface_speed[1];
-        float alpha = s_ptr->associated_liquid->surface_alpha;
+        layer_speed[0] = l_ptr->surface_speed[0];
+        layer_speed[1] = l_ptr->surface_speed[1];
+        float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
         
-        if(s_ptr->associated_liquid->anim_instance.get_cur_sprite()) {
+        if(l_ptr->anim_instance.get_cur_sprite()) {
             anim_sprite =
-                s_ptr->associated_liquid->anim_instance.get_cur_sprite();
+                l_ptr->anim_instance.get_cur_sprite();
             if(anim_sprite->bitmap) {
                 layer_2_dy =
                     (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;

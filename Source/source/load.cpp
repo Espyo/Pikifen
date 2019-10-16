@@ -235,10 +235,6 @@ void load_area(
                 );
             } else {
                 new_sector->hazards.push_back(&(hazards[hazard_name]));
-                if(hazards[hazard_name].associated_liquid) {
-                    new_sector->associated_liquid =
-                        hazards[hazard_name].associated_liquid;
-                }
             }
         }
         new_sector->hazards_str = hazards_node->value;

@@ -326,6 +326,34 @@ void mob_action_runners::delete_function(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the liquid draining mob script action.
+ */
+void mob_action_runners::drain_liquid(mob_action_run_data &data) {
+    sector* s_ptr = get_sector(data.m->pos, NULL, true);
+    if(!s_ptr) return;
+    
+    vector<sector*> sectors_to_drain;
+    
+    s_ptr->get_neighbor_sectors_conditionally(
+    [] (sector * s) {
+        for(size_t h = 0; h < s->hazards.size(); ++h) {
+            if(s->hazards[h]->associated_liquid) {
+                return true;
+            }
+        }
+        return false;
+    },
+    sectors_to_drain
+    );
+    
+    for(size_t s = 0; s < sectors_to_drain.size(); ++s) {
+        sectors_to_drain[s]->draining_liquid = true;
+        sectors_to_drain[s]->liquid_drain_left = LIQUID_DRAIN_DURATION;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the death finish mob script action.
  */
 void mob_action_runners::finish_dying(mob_action_run_data &data) {

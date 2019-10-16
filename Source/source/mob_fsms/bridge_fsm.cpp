@@ -86,7 +86,6 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         
         s_ptr->is_bottomless_pit = false;
         s_ptr->hazards.clear();
-        s_ptr->associated_liquid = NULL;
         
         s_ptr->texture_info.bitmap =
             (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
