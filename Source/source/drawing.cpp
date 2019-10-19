@@ -794,7 +794,10 @@ void gameplay::draw_ingame_text() {
         if(mob_ptr->carry_info) {
             if(
                 mob_ptr->carry_info->cur_carrying_strength > 0 &&
-                mob_ptr->type->weight > 1
+                (
+                    mob_ptr->type->weight > 1 ||
+                    mob_ptr->carry_info->intended_mob
+                )
             ) {
                 ALLEGRO_COLOR color;
                 bool valid = false;

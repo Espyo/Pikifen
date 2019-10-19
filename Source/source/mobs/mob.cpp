@@ -25,7 +25,7 @@
 
 size_t next_mob_id = 0;
 
-const float MOB_PUSH_THROTTLE_TIMEOUT = 5.0f;
+const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
 
 
 /* ----------------------------------------------------------------------------

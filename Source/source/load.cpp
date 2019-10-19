@@ -218,7 +218,7 @@ void load_area(
                 get_value_or_default("255 255 255")
             );
             
-        if(!new_sector->fade) {
+        if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
                 textures.get(new_sector->texture_info.file_name, NULL);
         }

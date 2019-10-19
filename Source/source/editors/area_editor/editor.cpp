@@ -1135,6 +1135,7 @@ unsigned char area_editor::find_problems() {
     
         sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->edges.empty()) continue;
+        if(s_ptr->is_bottomless_pit) continue;
         if(
             s_ptr->texture_info.file_name.empty() &&
             !s_ptr->is_bottomless_pit && !s_ptr->fade
@@ -1152,6 +1153,7 @@ unsigned char area_editor::find_problems() {
     
         sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->edges.empty()) continue;
+        if(s_ptr->is_bottomless_pit) continue;
         
         if(s_ptr->texture_info.file_name.empty()) continue;
         
