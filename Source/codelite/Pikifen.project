@@ -47,6 +47,8 @@
     <File Name="../source/mob_fsms/treasure_fsm.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/group_task_type.cpp"/>
+    <File Name="../source/mob_types/group_task_type.h"/>
     <File Name="../source/mob_types/decoration_type.cpp"/>
     <File Name="../source/mob_types/decoration_type.h"/>
     <File Name="../source/mob_types/tool_type.cpp"/>
@@ -81,6 +83,8 @@
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/group_task_category.cpp"/>
+    <File Name="../source/mob_categories/group_task_category.h"/>
     <File Name="../source/mob_categories/decoration_category.cpp"/>
     <File Name="../source/mob_categories/decoration_category.h"/>
     <File Name="../source/mob_categories/tool_category.cpp"/>
@@ -217,6 +221,8 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/group_task.cpp"/>
+    <File Name="../source/mobs/group_task.h"/>
     <File Name="../source/mobs/decoration.cpp"/>
     <File Name="../source/mobs/decoration.h"/>
     <File Name="../source/mobs/tool.cpp"/>

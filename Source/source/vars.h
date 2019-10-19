@@ -31,6 +31,7 @@
 #include "mobs/converter.h"
 #include "mobs/decoration.h"
 #include "mobs/drop.h"
+#include "mobs/group_task.h"
 #include "mobs/interactable.h"
 #include "mobs/leader.h"
 #include "mobs/onion.h"
@@ -269,6 +270,8 @@ extern bool group_move_cursor;
 extern float group_move_task_range;
 //Joystick coordinates for the group movement.
 extern movement_struct group_movement;
+extern vector<group_task*> group_tasks;
+extern map<string, group_task_type*> group_task_types;
 extern map<string, hazard> hazards;
 extern hud_item_manager hud_items;
 extern float hud_coords[N_HUD_ITEMS][4];
