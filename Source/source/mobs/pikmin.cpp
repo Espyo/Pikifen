@@ -119,7 +119,7 @@ void pikmin::tick_class_specifics() {
     //Carrying object.
     if(carrying_mob) {
         if(!carrying_mob->carry_info) {
-            fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+            fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE);
         }
     }
     

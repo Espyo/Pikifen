@@ -16,6 +16,7 @@
 enum GROUP_TASK_PIKMIN_POSES {
     GROUP_TASK_PIKMIN_POSE_STOPPED,
     GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED,
+    GROUP_TASK_PIKMIN_POSE_PUSHING,
 };
 
 
@@ -32,6 +33,7 @@ public:
     size_t pikmin_per_row;
     float worker_pikmin_angle;
     size_t worker_pikmin_pose;
+    float speed_bonus;
     
     group_task_type();
     ~group_task_type();

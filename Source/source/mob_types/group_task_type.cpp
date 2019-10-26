@@ -25,7 +25,8 @@ group_task_type::group_task_type() :
     interval_between_rows(10.0f),
     pikmin_per_row(10),
     worker_pikmin_angle(0),
-    worker_pikmin_pose(GROUP_TASK_PIKMIN_POSE_STOPPED) {
+    worker_pikmin_pose(GROUP_TASK_PIKMIN_POSE_STOPPED),
+    speed_bonus(1.0f) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     
@@ -48,6 +49,7 @@ void group_task_type::load_parameters(data_node* file) {
     rs.set("first_row_p2", first_row_p2);
     rs.set("interval_between_rows", interval_between_rows);
     rs.set("pikmin_per_row", pikmin_per_row);
+    rs.set("speed_bonus", speed_bonus);
     rs.set("worker_pikmin_angle", worker_pikmin_angle);
     rs.set("worker_pikmin_pose", worker_pikmin_pose_str);
     
@@ -58,6 +60,8 @@ void group_task_type::load_parameters(data_node* file) {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
         } else if(worker_pikmin_pose_str == "arms_stretched") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED;
+        } else if(worker_pikmin_pose_str == "pushing") {
+            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_PUSHING;
         } else {
             log_error("Unknown pose \"" + worker_pikmin_pose_str + "\"!", file);
         }

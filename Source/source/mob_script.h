@@ -148,8 +148,8 @@ enum MOB_EVENT_TYPES {
     //When the mob was sucessfully delivered
     //to its destination after being carried.
     MOB_EVENT_CARRY_DELIVERED,
-    //When the focused mob stops being carriable.
-    MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,
+    //When the focused mob stops being able to be focused.
+    MOB_EVENT_FOCUSED_MOB_UNAVAILABLE,
     //When the mob receives an object that was carried to it.
     MOB_EVENT_RECEIVE_DELIVERY,
     //When the mob touches a drop that it can consume.

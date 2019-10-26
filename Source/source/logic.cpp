@@ -901,6 +901,7 @@ void gameplay::process_mob_misc_interactions(
         q_get_event(m_ptr, MOB_EVENT_NEAR_GROUP_TASK);
     if(
         ngto_event &&
+        m2_ptr->health > 0 &&
         d <=
         m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr) &&
         typeid(*m2_ptr) == typeid(group_task)

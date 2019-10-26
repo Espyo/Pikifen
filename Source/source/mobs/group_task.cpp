@@ -9,6 +9,7 @@
  */
 
 #include "group_task.h"
+#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a new group task mob.
@@ -18,6 +19,7 @@ group_task::group_task(
 ):
     mob(pos, type, angle),
     worker_nr(0),
+    ran_task_finished_code(false),
     tas_type(type) {
     
     //Initialize spots.
@@ -89,6 +91,18 @@ void group_task::add_worker(pikmin* who) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the task is finished.
+ */
+void group_task::finish_task() {
+    for(size_t p = 0; p < pikmin_list.size(); ++p) {
+        if(pikmin_list[p]->focused_mob && pikmin_list[p]->focused_mob == this) {
+            pikmin_list[p]->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Frees up a previously-reserved spot.
  * whose: Who had the reservation?
  */
@@ -144,6 +158,21 @@ size_t group_task::get_worker_nr() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current world coordinates of a spot, occupied by a Pikmin.
+ * Returns a (0,0) point if that Pikmin doesn't have a spot.
+ * whose: Pikmin whose spot to check.
+ */
+point group_task::get_spot_pos(pikmin* whose) {
+    for(size_t s = 0; s < spots.size(); ++s) {
+        if(spots[s].pikmin_here == whose) {
+            return pos + spots[s].pos;
+        }
+    }
+    return point();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reserves a spot for a Pikmin.
  * spot: Pointer to the spot to reserve.
  * who:  Who will be reserving this spot?
@@ -151,6 +180,33 @@ size_t group_task::get_worker_nr() {
 void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
     spot->state = 1;
     spot->pikmin_here = who;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Runs code specific to this class, once per frame.
+ */
+void group_task::tick_class_specifics() {
+    if(health <= 0 && !ran_task_finished_code) {
+        ran_task_finished_code = true;
+        finish_task();
+    }
+    
+    if(health > 0) {
+        ran_task_finished_code = false;
+    }
+    
+    if(
+        chasing &&
+        worker_nr >= tas_type->pikmin_goal &&
+        tas_type->speed_bonus != 0.0f
+    ) {
+        //Being moved and movements can go through speed bonuses?
+        //Let's update the speed.
+        chase_speed =
+            type->move_speed +
+            (worker_nr - tas_type->pikmin_goal) * tas_type->speed_bonus;
+    }
 }
 
 

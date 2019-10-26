@@ -465,7 +465,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::reach_carriable_object);
             efc.change_state("carrying");
         }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE); {
             efc.run(pikmin_fsm::forget_carriable_object);
             efc.change_state("idling");
         }
@@ -554,6 +554,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.change_state("idling");
+        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::forget_group_task);
             efc.run(pikmin_fsm::be_attacked);
@@ -622,7 +626,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
             efc.run(pikmin_fsm::finish_carrying);
         }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE); {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -659,12 +663,19 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::work_on_group_task);
         }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(pikmin_fsm::tick_group_task_work);
+        }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::forget_group_task);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
@@ -2487,6 +2498,25 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin has to teleport to its spot in a group task.
+ */
+void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    pikmin* pik_ptr = (pikmin*) m;
+    group_task* tas_ptr = (group_task*) (m->focused_mob);
+    point cur_spot_pos = tas_ptr->get_spot_pos(pik_ptr);
+    
+    pik_ptr->chase(
+        cur_spot_pos,
+        NULL,
+        true,
+        &tas_ptr->z
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin touches a "eat" hitbox.
  */
 void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
@@ -2708,4 +2738,5 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
     ) {
         pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     }
+    //TODO add the rest of the poses.
 }

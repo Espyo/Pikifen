@@ -736,7 +736,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         
         for(size_t m = 0; m < mobs.size(); ++m) {
             if(mobs[m]->focused_mob == m_ptr) {
-                mobs[m]->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+                mobs[m]->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE);
                 mobs[m]->fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
                 mobs[m]->fsm.run_event(MOB_EVENT_FOCUS_DIED);
                 mobs[m]->focused_mob = NULL;

@@ -481,7 +481,7 @@ void mob::become_uncarriable() {
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(
-                MOB_EVENT_FOCUSED_MOB_UNCARRIABLE
+                MOB_EVENT_FOCUSED_MOB_UNAVAILABLE
             );
         }
     }
@@ -2840,12 +2840,6 @@ void mob::tick_script() {
                     for_ev->run(this);
                 }
                 
-            }
-        }
-        
-        if(focused_mob) {
-            if(!focused_mob->carry_info) {
-                fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
             }
         }
         
