@@ -44,10 +44,12 @@ void finish_drinking(          mob* m, void* info1, void* info2);
 void finish_picking_up(        mob* m, void* info1, void* info2);
 void flail_to_whistle(         mob* m, void* info1, void* info2);
 void forget_carriable_object(  mob* m, void* info1, void* info2);
+void forget_group_task(        mob* m, void* info1, void* info2);
 void forget_tool(              mob* m, void* info1, void* info2);
 void get_knocked_back(         mob* m, void* info1, void* info2);
 void get_up(                   mob* m, void* info1, void* info2);
 void go_to_carriable_object(   mob* m, void* info1, void* info2);
+void go_to_group_task(         mob* m, void* info1, void* info2);
 void go_to_tool(               mob* m, void* info1, void* info2);
 void go_to_opponent(           mob* m, void* info1, void* info2);
 void going_to_dismiss_spot(    mob* m, void* info1, void* info2);
@@ -89,6 +91,7 @@ void try_held_item_hotswap(    mob* m, void* info1, void* info2);
 void try_latching(             mob* m, void* info1, void* info2);
 void unlatch(                  mob* m, void* info1, void* info2);
 void update_in_group_chasing(  mob* m, void* info1, void* info2);
+void work_on_group_task(       mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef PIKMIN_FSM_INCLUDED

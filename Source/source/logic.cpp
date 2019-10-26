@@ -895,6 +895,26 @@ void gameplay::process_mob_misc_interactions(
             );
         }
     }
+    
+    //Find a group task mob.
+    mob_event* ngto_event =
+        q_get_event(m_ptr, MOB_EVENT_NEAR_GROUP_TASK);
+    if(
+        ngto_event &&
+        d <=
+        m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr) &&
+        typeid(*m2_ptr) == typeid(group_task)
+    ) {
+        group_task* tas_ptr = (group_task*) m2_ptr;
+        group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
+        if(!free_spot) {
+            //There are no free spots here. Ignore it.
+        } else {
+            pending_intermob_events.push_back(
+                pending_intermob_event(d, ngto_event, m2_ptr)
+            );
+        }
+    }
 }
 
 

@@ -178,6 +178,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_TOOL); {
             efc.run(pikmin_fsm::go_to_tool);
         }
+        efc.new_event(MOB_EVENT_NEAR_GROUP_TASK); {
+            efc.run(pikmin_fsm::go_to_group_task);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
         }
@@ -235,6 +238,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_TOOL); {
             efc.run(pikmin_fsm::go_to_tool);
+        }
+        efc.new_event(MOB_EVENT_NEAR_GROUP_TASK); {
+            efc.run(pikmin_fsm::go_to_group_task);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -341,6 +347,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_TOOL); {
             efc.run(pikmin_fsm::go_to_tool);
         }
+        efc.new_event(MOB_EVENT_NEAR_GROUP_TASK); {
+            efc.run(pikmin_fsm::go_to_group_task);
+        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
@@ -380,6 +389,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_TOOL); {
             efc.run(pikmin_fsm::go_to_tool);
+        }
+        efc.new_event(MOB_EVENT_NEAR_GROUP_TASK); {
+            efc.run(pikmin_fsm::go_to_group_task);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -527,6 +539,44 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state(
+        "going_to_group_task", PIKMIN_STATE_GOING_TO_GROUP_TASK
+    ); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("on_group_task");
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.change_state("sighing");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::forget_group_task);
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
     efc.new_state("sighing", PIKMIN_STATE_SIGHING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::stand_still);
@@ -602,6 +652,37 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.run(pikmin_fsm::finish_picking_up);
             efc.change_state("idling_h");
+        }
+    }
+    
+    efc.new_state("on_group_task", PIKMIN_STATE_ON_GROUP_TASK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::work_on_group_task);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::forget_group_task);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+            efc.run(pikmin_fsm::check_attack);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
         }
     }
     
@@ -1838,6 +1919,41 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin needs to go towards a group task mob.
+ * info1: Pointer to the group task.
+ */
+void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    group_task* tas_ptr = (group_task*) info1;
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
+    if(!free_spot) {
+        //There are no free spots available. Forget it.
+        return;
+    }
+    
+    tas_ptr->reserve_spot(free_spot, pik_ptr);
+    
+    pik_ptr->leave_group();
+    pik_ptr->stop_chasing();
+    
+    m->focus_on_mob(tas_ptr);
+    
+    m->chase(
+        free_spot->pos, &tas_ptr->pos,
+        false, nullptr, false
+    );
+    
+    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_GROUP_TASK);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin needs to go towards a tool mob.
  * info1: Pointer to the tool.
  */
@@ -1965,6 +2081,20 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
         
     p->carrying_mob = NULL;
     p->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to forget a group task object it was going for.
+ */
+void pikmin_fsm::forget_group_task(mob* m, void* info1, void* info2) {
+    if(!m->focused_mob) return;
+    
+    group_task* tas_ptr = (group_task*) (m->focused_mob);
+    pikmin* pik_ptr = (pikmin*) m;
+    tas_ptr->free_up_spot(pik_ptr);
+    m->unfocus_from_mob();
+    m->set_timer(0);
 }
 
 
@@ -2552,4 +2682,30 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     
     m->chase(pos, NULL, false);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin should start working on a group task.
+ */
+void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    group_task* tas_ptr = (group_task*) (m->focused_mob);
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    tas_ptr->add_worker(pik_ptr);
+    
+    pik_ptr->stop_chasing();
+    pik_ptr->face(
+        tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle,
+        NULL
+    );
+    
+    if(
+        tas_ptr->tas_type->worker_pikmin_pose ==
+        GROUP_TASK_PIKMIN_POSE_STOPPED
+    ) {
+        pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+    }
 }

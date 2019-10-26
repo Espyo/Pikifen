@@ -15,16 +15,35 @@
 
 #include "../mob_types/group_task_type.h"
 #include "mob.h"
+#include "pikmin.h"
 
 
 /* ----------------------------------------------------------------------------
  * A mob that requires multiple Pikmin to work together in order to clear.
  */
 class group_task : public mob {
+private:
+    //Number of Pikmin working on it right now. Cached for performance.
+    size_t worker_nr;
+    
 public:
     group_task_type* tas_type;
     
+    struct group_task_spot {
+        point pos;
+        unsigned char state;
+        pikmin* pikmin_here;
+        group_task_spot(const point &pos);
+    };
+    
+    vector<group_task_spot> spots;
+    
     group_task(const point &pos, group_task_type* type, const float angle);
+    void add_worker(pikmin* who);
+    void free_up_spot(pikmin* whose);
+    group_task_spot* get_free_spot();
+    size_t get_worker_nr();
+    void reserve_spot(group_task_spot* spot, pikmin* who);
 };
 
 #endif //ifndef GROUP_TASK_INCLUDED

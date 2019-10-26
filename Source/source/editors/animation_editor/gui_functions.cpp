@@ -782,8 +782,7 @@ void animation_editor::pick(
             mob_categories.get_from_pname(category)->get_type(name);
             
         file_path =
-            TYPES_FOLDER_PATH + "/" +
-            loaded_mob_type->category->plural_name + "/" +
+            loaded_mob_type->category->folder + "/" +
             loaded_mob_type->folder_name + "/Animations.txt";
         load_animation_database(true);
         

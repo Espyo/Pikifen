@@ -478,8 +478,8 @@ void animation_editor::load_animation_database(const bool update_history) {
             path_parts[path_parts.size() - 1] == "Animations.txt"
         ) {
             mob_category* cat =
-                mob_categories.get_from_pname(
-                    path_parts[path_parts.size() - 3]
+                mob_categories.get_from_folder_name(
+                    TYPES_FOLDER_PATH + "/" + path_parts[path_parts.size() - 3]
                 );
             if(cat) {
                 loaded_mob_type =

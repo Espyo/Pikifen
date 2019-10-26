@@ -126,6 +126,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_NEAR_CARRIABLE_OBJECT,
     //When the Pikmin is near a tool object.
     MOB_EVENT_NEAR_TOOL,
+    //When the Pikmin is near a group task.
+    MOB_EVENT_NEAR_GROUP_TASK,
     //When it has reached its carrying spot on the carriable object.
     //TODO replace with MOB_EVENT_REACHED_DESTINATION?
     MOB_EVENT_REACHED_CARRIABLE_OBJECT,

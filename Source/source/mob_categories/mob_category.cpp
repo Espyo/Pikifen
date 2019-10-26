@@ -127,6 +127,19 @@ mob_category* mob_category_manager::get(const size_t id) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a category given its folder name.
+ * Returns NULL on error.
+ */
+mob_category* mob_category_manager::get_from_folder_name(const string &name) {
+    for(size_t n = 0; n < categories.size(); ++n) {
+        if(categories[n]->folder == name) return categories[n];
+    }
+    log_error("Mob category with the folder name \"" + name + "\" not found!");
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a category given its name.
  * Returns NULL on error.
  */
