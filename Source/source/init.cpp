@@ -41,6 +41,7 @@
 #include "mob_categories/pikmin_category.h"
 #include "mob_categories/pile_category.h"
 #include "mob_categories/resource_category.h"
+#include "mob_categories/scale_category.h"
 #include "mob_categories/ship_category.h"
 #include "mob_categories/tool_category.h"
 #include "mob_categories/treasure_category.h"
@@ -1026,6 +1027,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_GROUP_TASKS, new group_task_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_SCALES, new scale_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_DECORATIONS, new decoration_category()

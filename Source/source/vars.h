@@ -39,6 +39,7 @@
 #include "mobs/pikmin.h"
 #include "mobs/pile.h"
 #include "mobs/resource.h"
+#include "mobs/scale.h"
 #include "mobs/ship.h"
 #include "mobs/tool.h"
 #include "mobs/treasure.h"
@@ -362,6 +363,8 @@ extern bool ready_for_input;
 extern bool reset_delta_t;
 extern vector<resource*> resources;
 extern map<string, resource_type*> resource_types;
+extern map<string, scale_type*> scale_types;
+extern vector<scale*> scales;
 extern bool scr_fullscreen;
 extern int scr_h;
 extern int scr_w;

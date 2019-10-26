@@ -251,6 +251,8 @@ bool ready_for_input = false;
 bool reset_delta_t = true;
 vector<resource*> resources;
 map<string, resource_type*> resource_types;
+map<string, scale_type*> scale_types;
+vector<scale*> scales;
 bool scr_fullscreen = DEF_SCR_FULLSCREEN;
 int scr_h = DEF_SCR_H;
 int scr_w = DEF_SCR_W;
