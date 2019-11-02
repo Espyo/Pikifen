@@ -997,6 +997,7 @@ void gameplay::process_mob_touches(
         m2_ptr->type->pushes &&
         m2_ptr->tangible &&
         m_ptr->type->pushable && !m_ptr->unpushable &&
+        m_ptr->standing_on_mob != m2_ptr &&
         (
             (
                 m2_ptr->z < m_ptr->z + m_ptr->type->height &&

@@ -2166,6 +2166,7 @@ void mob::tick_physics() {
     
     point new_pos = pos;
     float new_z = z;
+    mob* new_standing_on_mob = standing_on_mob;
     sector* new_ground_sector = ground_sector;
     float pre_move_ground_z = ground_sector->z;
     
@@ -2295,7 +2296,8 @@ void mob::tick_physics() {
         
         new_pos.x = pos.x + delta_t* move_speed.x;
         new_pos.y = pos.y + delta_t* move_speed.y;
-        new_z = z;
+        new_z = z + delta_t* speed_z;
+        new_standing_on_mob = standing_on_mob;
         new_ground_sector = ground_sector;
         set<edge*> intersecting_edges;
         
@@ -2458,8 +2460,7 @@ void mob::tick_physics() {
         if(!successful_move) break;
         
         //Check also if it can walk on top of another mob.
-        standing_on_mob = NULL;
-        
+        new_standing_on_mob = NULL;
         for(size_t m = 0; m < mobs.size(); ++m) {
             mob* m_ptr = mobs[m];
             if(!m_ptr->type->walkable) {
@@ -2468,10 +2469,10 @@ void mob::tick_physics() {
             if(m_ptr == this) {
                 continue;
             }
-            if(z < m_ptr->z + m_ptr->type->height - SECTOR_STEP) {
+            if(new_z < m_ptr->z + m_ptr->type->height - SECTOR_STEP) {
                 continue;
             }
-            if(z > m_ptr->z + m_ptr->type->height) {
+            if(new_z > m_ptr->z + m_ptr->type->height) {
                 continue;
             }
             
@@ -2515,11 +2516,11 @@ void mob::tick_physics() {
                 }
             }
             
-            standing_on_mob = m_ptr;
+            new_standing_on_mob = m_ptr;
         }
         
-        if(standing_on_mob) {
-            new_z = standing_on_mob->z + standing_on_mob->type->height;
+        if(new_standing_on_mob) {
+            new_z = new_standing_on_mob->z + new_standing_on_mob->type->height;
         } else {
             if(step_sector->z > new_ground_sector->z) {
                 new_ground_sector = step_sector;
@@ -2689,6 +2690,26 @@ void mob::tick_physics() {
         fsm.run_event(MOB_EVENT_TOUCHED_WALL);
     }
     
+    if(
+        new_standing_on_mob != standing_on_mob &&
+        type->weight != 0.0f
+    ) {
+        if(standing_on_mob) {
+            standing_on_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_REMOVED,
+                (void*) this
+            );
+        }
+        if(new_standing_on_mob) {
+            new_standing_on_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_ADDED,
+                (void*) this
+            );
+        }
+    }
+    
+    standing_on_mob = new_standing_on_mob;
+    
     
     //Vertical movement.
     
@@ -2705,9 +2726,6 @@ void mob::tick_physics() {
     
     //Gravity.
     speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
-    
-    //Actual movement.
-    z += delta_t* speed_z;
     
     //Landing.
     hazard* new_on_hazard = NULL;

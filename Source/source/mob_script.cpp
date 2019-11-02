@@ -186,11 +186,13 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_receive_message",    MOB_EVENT_RECEIVE_MESSAGE);
     r("on_released",           MOB_EVENT_RELEASED);
     r("on_reach_destination",  MOB_EVENT_REACHED_DESTINATION);
+    r("on_timer",              MOB_EVENT_TIMER);
     r("on_touch_hazard",       MOB_EVENT_TOUCHED_HAZARD);
     r("on_touch_object",       MOB_EVENT_TOUCHED_OBJECT);
     r("on_touch_opponent",     MOB_EVENT_TOUCHED_OPPONENT);
     r("on_touch_wall",         MOB_EVENT_TOUCHED_WALL);
-    r("on_timer",              MOB_EVENT_TIMER);
+    r("on_weight_added",       MOB_EVENT_WEIGHT_ADDED);
+    r("on_weight_removed",     MOB_EVENT_WEIGHT_REMOVED);
     else {
         type = MOB_EVENT_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", node);

@@ -93,6 +93,10 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TIMER,
     //When it touches a wall.
     MOB_EVENT_TOUCHED_WALL,
+    //When weight has been added on top of it. Only if mob is walkable.
+    MOB_EVENT_WEIGHT_ADDED,
+    //When weight has been removed from on top of it. Only if mob is walkable.
+    MOB_EVENT_WEIGHT_REMOVED,
     
     //More internal script stuff.
     

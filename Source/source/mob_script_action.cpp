@@ -530,6 +530,13 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         }
         break;
         
+    } case MOB_ACTION_GET_INFO_WEIGHT: {
+        if(data.m->type->category->id == MOB_CATEGORY_SCALES) {
+            scale* s_ptr = (scale*) (data.m);
+            *var = i2s(s_ptr->calculate_cur_weight());
+        }
+        break;
+        
     }
     }
 }
@@ -1211,6 +1218,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
     } else if(call.args[1] == "other_body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else if(call.args[1] == "weight") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
     } else {
         report_enum_error(call, 1);
         return false;

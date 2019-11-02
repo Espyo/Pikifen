@@ -865,6 +865,25 @@ void gameplay::draw_ingame_text() {
             }
         }
         
+        for(size_t s = 0; s < scales.size(); ++s) {
+            scale* s_ptr = scales[s];
+            if(s_ptr->health <= 0) continue;
+            float w = s_ptr->calculate_cur_weight();
+            if(w > 0) {
+                draw_text_lines(
+                    font_main,
+                    carrying_color_stop,
+                    point(
+                        s_ptr->pos.x,
+                        s_ptr->pos.y - s_ptr->type->radius - font_main_h * 1.25
+                    ),
+                    ALLEGRO_ALIGN_CENTER,
+                    1,
+                    i2s(w)
+                );
+            }
+        }
+        
         if(
             mob_ptr->type->show_health &&
             !mob_ptr->hide &&
@@ -1435,11 +1454,16 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             
         } else if(c_ptr->mob_shadow_ptr) {
         
+            float delta_z = 0;
+            if(!c_ptr->mob_shadow_ptr->standing_on_mob) {
+                delta_z =
+                    c_ptr->mob_shadow_ptr->z -
+                    c_ptr->mob_shadow_ptr->ground_sector->z;
+            }
             draw_mob_shadow(
                 c_ptr->mob_shadow_ptr->pos,
                 c_ptr->mob_shadow_ptr->type->radius * 2,
-                c_ptr->mob_shadow_ptr->z -
-                c_ptr->mob_shadow_ptr->ground_sector->z,
+                delta_z,
                 mob_shadow_stretch
             );
             

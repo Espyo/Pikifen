@@ -20,6 +20,7 @@ scale_type::scale_type() :
     mob_type(MOB_CATEGORY_SCALES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
+    walkable = true;
 }
 
 

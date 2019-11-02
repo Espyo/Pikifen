@@ -24,6 +24,8 @@ public:
 
     scale_type* sca_type;
     
+    float calculate_cur_weight();
+    
     scale(const point &pos, scale_type* type, float angle);
 };
 
