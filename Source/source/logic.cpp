@@ -1000,12 +1000,12 @@ void gameplay::process_mob_touches(
         m_ptr->standing_on_mob != m2_ptr &&
         (
             (
-                m2_ptr->z < m_ptr->z + m_ptr->type->height &&
-                m2_ptr->z + m2_ptr->type->height > m_ptr->z
+                m2_ptr->z < m_ptr->z + m_ptr->height &&
+                m2_ptr->z + m2_ptr->height > m_ptr->z
             ) || (
-                m_ptr->type->height == 0
+                m_ptr->height == 0
             ) || (
-                m2_ptr->type->height == 0
+                m2_ptr->height == 0
             )
         ) && !(
             //If they are both being carried by Pikmin, one of them
@@ -1126,15 +1126,15 @@ void gameplay::process_mob_touches(
     
         bool z_touch;
         if(
-            m_ptr->type->height == 0 ||
-            m2_ptr->type->height == 0
+            m_ptr->height == 0 ||
+            m2_ptr->height == 0
         ) {
             z_touch = true;
         } else {
             z_touch =
                 !(
-                    (m2_ptr->z > m_ptr->z + m_ptr->type->height) ||
-                    (m2_ptr->z + m2_ptr->type->height < m_ptr->z)
+                    (m2_ptr->z > m_ptr->z + m_ptr->height) ||
+                    (m2_ptr->z + m2_ptr->height < m_ptr->z)
                 );
         }
         

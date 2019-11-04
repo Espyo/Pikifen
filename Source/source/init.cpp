@@ -471,14 +471,14 @@ void init_misc() {
  */
 void init_mob_actions() {
 
-#define reg_param(n, t, c, e) \
-    params.push_back(mob_action_param(n, t, c, e));
-#define reg_action(t, n, rc, lc) \
-    a = &(mob_actions[t]); \
-    a->type = t; \
-    a->name = n; \
-    a->code = rc; \
-    a->extra_load_logic = lc; \
+#define reg_param(p_name, p_type, constant, extras) \
+    params.push_back(mob_action_param(p_name, p_type, constant, extras));
+#define reg_action(a_type, a_name, run_code, load_code) \
+    a = &(mob_actions[a_type]); \
+    a->type = a_type; \
+    a->name = a_name; \
+    a->code = run_code; \
+    a->extra_load_logic = load_code; \
     a->parameters = params; \
     params.clear();
 
@@ -736,6 +736,14 @@ void init_mob_actions() {
         MOB_ACTION_SET_HEALTH,
         "set_health",
         mob_action_runners::set_health,
+        nullptr
+    );
+    
+    reg_param("height", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_SET_HEIGHT,
+        "set_height",
+        mob_action_runners::set_height,
         nullptr
     );
     

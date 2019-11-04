@@ -1333,7 +1333,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a burst of particles to symbolize the maturation.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = bmp_sparkle;
@@ -1356,7 +1356,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         //Generate a dribble of particles to symbolize the regression.
         particle pa(
-            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
+            PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = bmp_sparkle;
@@ -1600,7 +1600,7 @@ void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     particle pa(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
         4, 1, PARTICLE_PRIORITY_LOW
     );
     pa.bitmap = bmp_rock;
@@ -1734,7 +1734,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     if(o_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
         enemy* e_ptr = (enemy*) info1;
         if(!e_ptr->ene_type->allow_ground_attacks) return;
-        if(e_ptr->z > m->z + m->type->height) return;
+        if(e_ptr->z > m->z + m->height) return;
     }
     
     m->focus_on_mob((mob*) info1);
@@ -2667,7 +2667,7 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
     
     if(
         !closest_h || !closest_h->can_pikmin_latch ||
-        h_z > p_ptr->z + p_ptr->type->height ||
+        h_z > p_ptr->z + p_ptr->height ||
         h_z + closest_h->height < p_ptr->z ||
         d >= closest_h->radius + p_ptr->type->radius
     ) {

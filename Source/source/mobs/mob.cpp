@@ -48,6 +48,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     angle(angle),
     intended_turn_angle(angle),
     intended_turn_pos(nullptr),
+    height(type->height),
     z_cap(FLT_MAX),
     home(pos),
     ground_sector(nullptr),
@@ -980,7 +981,7 @@ void mob::do_attack_effects(
     if(damage > 0) {
         particle smack_p(
             PARTICLE_TYPE_SMACK, particle_pos,
-            max(z + type->height + 1, attacker->z + attacker->type->height + 1),
+            max(z + height + 1, attacker->z + attacker->height + 1),
             64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = bmp_smack;
@@ -990,7 +991,7 @@ void mob::do_attack_effects(
     } else {
         particle ding_p(
             PARTICLE_TYPE_DING, particle_pos,
-            max(z + type->height + 1, attacker->z + attacker->type->height + 1),
+            max(z + height + 1, attacker->z + attacker->height + 1),
             24, SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = bmp_wave_ring;
@@ -1838,7 +1839,7 @@ void mob::start_dying() {
     gravity_mult = 1.0;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, pos, z + type->height + 1,
+        PARTICLE_TYPE_BITMAP, pos, z + height + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
     p.bitmap = bmp_sparkle;
@@ -2469,10 +2470,10 @@ void mob::tick_physics() {
             if(m_ptr == this) {
                 continue;
             }
-            if(new_z < m_ptr->z + m_ptr->type->height - SECTOR_STEP) {
+            if(new_z < m_ptr->z + m_ptr->height - SECTOR_STEP) {
                 continue;
             }
-            if(new_z > m_ptr->z + m_ptr->type->height) {
+            if(new_z > m_ptr->z + m_ptr->height) {
                 continue;
             }
             
@@ -2520,7 +2521,7 @@ void mob::tick_physics() {
         }
         
         if(new_standing_on_mob) {
-            new_z = new_standing_on_mob->z + new_standing_on_mob->type->height;
+            new_z = new_standing_on_mob->z + new_standing_on_mob->height;
         } else {
             if(step_sector->z > new_ground_sector->z) {
                 new_ground_sector = step_sector;
@@ -2690,25 +2691,30 @@ void mob::tick_physics() {
         fsm.run_event(MOB_EVENT_TOUCHED_WALL);
     }
     
-    if(
-        new_standing_on_mob != standing_on_mob &&
-        type->weight != 0.0f
-    ) {
+    mob* weight_added_ev_mob = NULL;
+    mob* weight_removed_ev_mob = NULL;
+    
+    if(new_standing_on_mob != standing_on_mob && type->weight != 0.0f) {
         if(standing_on_mob) {
-            standing_on_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_REMOVED,
-                (void*) this
-            );
+            weight_removed_ev_mob = standing_on_mob;
         }
         if(new_standing_on_mob) {
-            new_standing_on_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_ADDED,
-                (void*) this
-            );
+            weight_added_ev_mob = new_standing_on_mob;
         }
     }
     
     standing_on_mob = new_standing_on_mob;
+    
+    if(weight_removed_ev_mob) {
+        weight_removed_ev_mob->fsm.run_event(
+            MOB_EVENT_WEIGHT_REMOVED, (void*) this
+        );
+    }
+    if(weight_added_ev_mob) {
+        weight_added_ev_mob->fsm.run_event(
+            MOB_EVENT_WEIGHT_ADDED, (void*) this
+        );
+    }
     
     
     //Vertical movement.
@@ -2731,7 +2737,7 @@ void mob::tick_physics() {
     hazard* new_on_hazard = NULL;
     if(speed_z <= 0) {
         if(standing_on_mob) {
-            z = standing_on_mob->z + standing_on_mob->type->height;
+            z = standing_on_mob->z + standing_on_mob->height;
             speed_z = 0;
             was_thrown = false;
             fsm.run_event(MOB_EVENT_LANDED);

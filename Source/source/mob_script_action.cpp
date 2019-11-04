@@ -801,6 +801,14 @@ void mob_action_runners::set_health(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the height setting mob script action.
+ */
+void mob_action_runners::set_height(mob_action_run_data &data) {
+    data.m->height = s2f(data.args[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the hiding setting mob script action.
  */
 void mob_action_runners::set_hiding(mob_action_run_data &data) {

@@ -168,6 +168,8 @@ public:
     float intended_turn_angle;
     //Variable that holds the position the mob wants to be facing.
     point* intended_turn_pos;
+    //Current height.
+    float height;
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     float z_cap;

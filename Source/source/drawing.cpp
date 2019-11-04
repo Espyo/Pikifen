@@ -1355,7 +1355,7 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             if(mob_ptr->standing_on_mob) {
                 c.z =
                     mob_ptr->standing_on_mob->z +
-                    mob_ptr->standing_on_mob->type->height;
+                    mob_ptr->standing_on_mob->height;
             } else {
                 c.z = mob_ptr->ground_sector->z;
             }
@@ -1377,17 +1377,17 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             } else if(method == LIMB_DRAW_ABOVE_PARENT) {
                 c.z =
                     mob_ptr->parent->m->z +
-                    mob_ptr->parent->m->type->height +
+                    mob_ptr->parent->m->height +
                     0.001;
             } else if(method == LIMB_DRAW_ABOVE_CHILD) {
-                c.z = mob_ptr->z + mob_ptr->type->height + 0.001;
+                c.z = mob_ptr->z + mob_ptr->height + 0.001;
             } else if(method == LIMB_DRAW_ABOVE_BOTH) {
                 c.z =
                     max(
                         mob_ptr->parent->m->z +
-                        mob_ptr->parent->m->type->height +
+                        mob_ptr->parent->m->height +
                         0.001,
-                        mob_ptr->z + mob_ptr->type->height + 0.001
+                        mob_ptr->z + mob_ptr->height + 0.001
                     );
             }
             
@@ -1398,9 +1398,9 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         world_component c;
         c.mob_ptr = mob_ptr;
         if(mob_ptr->holder.m && mob_ptr->holder.above_holder) {
-            c.z = mob_ptr->holder.m->z + mob_ptr->holder.m->type->height + 0.01;
+            c.z = mob_ptr->holder.m->z + mob_ptr->holder.m->height + 0.01;
         } else {
-            c.z = mob_ptr->z + mob_ptr->type->height;
+            c.z = mob_ptr->z + mob_ptr->height;
         }
         components.push_back(c);
         

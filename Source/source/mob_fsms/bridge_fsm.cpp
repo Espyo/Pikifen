@@ -62,7 +62,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     b_ptr->tangible = false;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->type->height + 1,
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1,
         80, 2.75, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;

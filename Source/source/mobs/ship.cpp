@@ -56,7 +56,7 @@ void ship::heal_leader(leader* l) {
     
     particle p(
         PARTICLE_TYPE_BITMAP,
-        l->pos, l->z + l->type->height, 16, 3,
+        l->pos, l->z + l->height, 16, 3,
         PARTICLE_PRIORITY_LOW
     );
     p.bitmap = bmp_sparkle;

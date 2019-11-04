@@ -49,6 +49,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SET_FAR_REACH,
     MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_SET_HEALTH,
+    MOB_ACTION_SET_HEIGHT,
     MOB_ACTION_SET_HIDING,
     MOB_ACTION_SET_HOLDABLE,
     MOB_ACTION_SET_HUNTABLE,
@@ -271,6 +272,7 @@ void set_animation(mob_action_run_data &data);
 void set_far_reach(mob_action_run_data &data);
 void set_gravity(mob_action_run_data &data);
 void set_health(mob_action_run_data &data);
+void set_height(mob_action_run_data &data);
 void set_hiding(mob_action_run_data &data);
 void set_holdable(mob_action_run_data &data);
 void set_huntable(mob_action_run_data &data);

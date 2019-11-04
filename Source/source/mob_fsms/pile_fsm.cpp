@@ -92,7 +92,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
                 angle_to_coordinates(spawn_angle, standard_pikmin_radius * 1.5);
         } else {
             spawn_pos = p_ptr->pos;
-            spawn_z = p_ptr->pil_type->height + 32.0f;
+            spawn_z = p_ptr->height + 32.0f;
             spawn_angle = randomf(0, TAU);
             spawn_h_speed = p_ptr->pil_type->radius * 3;
             spawn_v_speed = 600.0f;
