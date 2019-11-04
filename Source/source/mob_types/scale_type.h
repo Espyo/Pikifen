@@ -18,7 +18,8 @@
  */
 class scale_type : public mob_type {
 public:
-
+    size_t goal_number;
+    
     scale_type();
     ~scale_type();
     void load_parameters(data_node* file);

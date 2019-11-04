@@ -27,12 +27,23 @@ scale::scale(const point &pos, scale_type* type, float angle) :
  * Calculates the total weight currently on top of the mob.
  */
 float scale::calculate_cur_weight() {
-    float w = 0;
+
+    //Start by figuring out which mobs are applying weight.
+    set<mob*> weighing_mobs;
     
     for(size_t m = 0; m < mobs.size(); ++m) {
         if(mobs[m]->standing_on_mob == this) {
-            w += mobs[m]->type->weight;
+            weighing_mobs.insert(mobs[m]);
+            for(size_t h = 0; h < mobs[m]->holding.size(); ++h) {
+                weighing_mobs.insert(mobs[m]->holding[h]);
+            }
         }
+    }
+    
+    //Now, add up their weights.
+    float w = 0;
+    for(auto m = weighing_mobs.begin(); m != weighing_mobs.end(); ++m) {
+        w += (*m)->type->weight;
     }
     
     return w;

@@ -1457,6 +1457,13 @@ void mob::hold(
     m->holder.offset_angle = offset_angle;
     m->holder.above_holder = above_holder;
     m->fsm.run_event(MOB_EVENT_HELD, (void*) this);
+    
+    if(standing_on_mob) {
+        if(m->type->weight > 0) {
+            //Better inform the mob below that extra weight has been added.
+            standing_on_mob->fsm.run_event(MOB_EVENT_WEIGHT_ADDED, (void*) m);
+        }
+    }
 }
 
 
@@ -1569,6 +1576,13 @@ void mob::release(mob* m) {
     }
     
     m->holder.clear();
+    
+    if(standing_on_mob) {
+        if(m->type->weight > 0) {
+            //Better inform the mob below that weight has been removed.
+            standing_on_mob->fsm.run_event(MOB_EVENT_WEIGHT_REMOVED, (void*) m);
+        }
+    }
 }
 
 
@@ -2229,6 +2243,7 @@ void mob::tick_physics() {
                 center_sector = sec;
                 speed.x = speed.y = 0;
                 pos = final_target_pos;
+                new_standing_on_mob = NULL; //Pretty much always true.
                 finished_moving = true;
             }
             

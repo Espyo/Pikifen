@@ -17,7 +17,8 @@
  * Creates a type of scale.
  */
 scale_type::scale_type() :
-    mob_type(MOB_CATEGORY_SCALES) {
+    mob_type(MOB_CATEGORY_SCALES),
+    goal_number(0) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;
@@ -28,6 +29,9 @@ scale_type::scale_type() :
  * Loads parameters from a data file.
  */
 void scale_type::load_parameters(data_node* file) {
+    reader_setter rs(file);
+    
+    rs.set("goal_number", goal_number);
 }
 
 

@@ -870,17 +870,31 @@ void gameplay::draw_ingame_text() {
             if(s_ptr->health <= 0) continue;
             float w = s_ptr->calculate_cur_weight();
             if(w > 0) {
-                draw_text_lines(
-                    font_main,
-                    carrying_color_stop,
-                    point(
-                        s_ptr->pos.x,
-                        s_ptr->pos.y - s_ptr->type->radius - font_main_h * 1.25
-                    ),
-                    ALLEGRO_ALIGN_CENTER,
-                    1,
-                    i2s(w)
-                );
+                if(s_ptr->sca_type->goal_number > 0) {
+                    draw_fraction(
+                        point(
+                            s_ptr->pos.x,
+                            s_ptr->pos.y - s_ptr->type->radius -
+                            font_main_h * 1.25
+                        ),
+                        w,
+                        s_ptr->sca_type->goal_number,
+                        carrying_color_stop
+                    );
+                } else {
+                    draw_text_lines(
+                        font_main,
+                        carrying_color_stop,
+                        point(
+                            s_ptr->pos.x,
+                            s_ptr->pos.y - s_ptr->type->radius -
+                            font_main_h * 1.25
+                        ),
+                        ALLEGRO_ALIGN_CENTER,
+                        1,
+                        i2s(w)
+                    );
+                }
             }
         }
         
