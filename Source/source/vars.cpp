@@ -279,6 +279,8 @@ bmp_manager textures(TEXTURES_FOLDER_NAME);
 bool throw_can_reach_cursor = true;
 map<string, tool_type*> tool_types;
 vector<tool*> tools;
+map<string, track_type*> track_types;
+vector<track*> tracks;
 map<string, treasure_type*> treasure_types;
 vector<treasure*> treasures;
 ALLEGRO_VOICE* voice = NULL;

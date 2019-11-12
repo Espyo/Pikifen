@@ -42,6 +42,7 @@
 #include "mobs/scale.h"
 #include "mobs/ship.h"
 #include "mobs/tool.h"
+#include "mobs/track.h"
 #include "mobs/treasure.h"
 #include "particle.h"
 #include "replay.h"
@@ -392,6 +393,8 @@ extern bmp_manager textures;
 extern bool throw_can_reach_cursor;
 extern map<string, tool_type*> tool_types;
 extern vector<tool*> tools;
+extern map<string, track_type*> track_types;
+extern vector<track*> tracks;
 extern float transition_time;
 extern bool transition_fade_in;
 extern map<string, treasure_type*> treasure_types;

@@ -44,6 +44,7 @@
 #include "mob_categories/scale_category.h"
 #include "mob_categories/ship_category.h"
 #include "mob_categories/tool_category.h"
+#include "mob_categories/track_category.h"
 #include "mob_categories/treasure_category.h"
 #include "mob_script.h"
 #include "utils/string_utils.h"
@@ -1038,6 +1039,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_SCALES, new scale_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_TRACKS, new track_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_DECORATIONS, new decoration_category()
