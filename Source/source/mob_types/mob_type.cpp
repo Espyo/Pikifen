@@ -585,6 +585,14 @@ void load_mob_type_from_file(
             }
         }
     }
+    
+    if(mt->rectangular_dim.x != 0) {
+        mt->max_span =
+            max(
+                mt->max_span,
+                dist(point(0, 0), mt->rectangular_dim / 2.0).to_float()
+            );
+    }
 }
 
 

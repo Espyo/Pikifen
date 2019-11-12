@@ -720,13 +720,13 @@ void update_closest_group_member() {
             }
         }
         
+    }
+    
+    if(fabs(closest_group_member->z - cur_leader_ptr->z) > SECTOR_STEP) {
+        //If the group member is beyond a step, it's obviously above or below
+        //a wall, compared to the leader. No grabbing allowed.
+        closest_group_member_distant = true;
     } else {
-        if(fabs(closest_group_member->z - cur_leader_ptr->z) > SECTOR_STEP) {
-            //If the group member is beyond a step, it's obviously above or below
-            //a wall, compared to the leader. No grabbing allowed.
-            closest_group_member_distant = true;
-        } else {
-            closest_group_member_distant = closest_dist > pikmin_grab_range;
-        }
+        closest_group_member_distant = closest_dist > pikmin_grab_range;
     }
 }

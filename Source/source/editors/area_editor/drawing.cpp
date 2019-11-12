@@ -491,6 +491,7 @@ void area_editor::do_drawing() {
             
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 m2_ptr = m_ptr->links[l];
+                if(!m2_ptr->type) continue;
                 
                 al_draw_line(
                     m_ptr->pos.x, m_ptr->pos.y,
