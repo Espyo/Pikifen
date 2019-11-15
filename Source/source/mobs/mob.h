@@ -233,6 +233,9 @@ public:
     //If NULL, it cannot be carried.
     carry_info_struct* carry_info;
     
+    //Riding a track. If NULL, the mob is not riding on any track.
+    track_info_struct* track_info;
+    
     //If it's being held by another mob, the information is kept here.
     hold_info_struct holder;
     //List of mobs it is holding.

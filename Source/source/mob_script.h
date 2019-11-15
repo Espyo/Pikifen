@@ -158,6 +158,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_RECEIVE_DELIVERY,
     //When the mob touches a drop that it can consume.
     MOB_EVENT_TOUCHED_DROP,
+    //When the mob touches a track object.
+    MOB_EVENT_TOUCHED_TRACK,
     
     //Events that only leaders can really handle.
     

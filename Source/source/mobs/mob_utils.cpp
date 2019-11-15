@@ -597,6 +597,18 @@ path_info_struct::path_info_struct(mob* m, const point &target) :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an instance of a structure with info about the track the mob
+ * is riding.
+ */
+track_info_struct::track_info_struct(mob* m) :
+    m(m),
+    cur_cp_nr(0),
+    cur_cp_progress(0.0f) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  * Returns the new mob.
  * category:            The category the new mob belongs to.

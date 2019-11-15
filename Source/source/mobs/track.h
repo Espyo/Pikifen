@@ -17,6 +17,12 @@
 #include "mob.h"
 
 
+enum TRACK_STATES {
+    TRACK_STATE_IDLING,
+    N_TRACK_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * An object that moves others around as if on a track.
  */

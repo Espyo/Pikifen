@@ -231,6 +231,23 @@ struct path_info_struct {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Structure with information about the track mob that a mob is currently
+ * riding. Includes things like current progress.
+ */
+struct track_info_struct {
+    //Pointer to the track mob.
+    mob* m;
+    //Current checkpoint of the track. This is the last checkpoint crossed.
+    size_t cur_cp_nr;
+    //Progress within the current checkpoint. 0 means at the checkpoint.
+    //1 means it's at the next checkpoint.
+    float cur_cp_progress;
+    
+    track_info_struct(mob* m);
+};
+
+
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars,

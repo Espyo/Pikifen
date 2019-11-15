@@ -94,6 +94,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("riding_track");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -192,6 +195,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("riding_track");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -367,6 +373,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("riding_track");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -1269,6 +1278,15 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("riding_track", PIKMIN_STATE_RIDING_TRACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::start_riding_track);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(pikmin_fsm::tick_track_ride);
         }
     }
     
@@ -2310,6 +2328,20 @@ void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin starts riding on a track.
+ * info1: Points to the track mob.
+ */
+void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
+    track* tra_ptr = (track*) info1;
+    
+    m->leave_group();
+    m->stop_chasing();
+    m->focus_on_mob(tra_ptr);
+    m->track_info = new track_info_struct(tra_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin starts flailing.
  */
 void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
@@ -2513,6 +2545,64 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
         true,
         &tas_ptr->z
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin has to teleport to its spot in a track it is riding.
+ */
+void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info != NULL, m->print_state_history());
+    
+    track* tra_ptr = (track*) (m->track_info->m);
+    
+    m->track_info->cur_cp_progress +=
+        tra_ptr->tra_type->ride_speed * delta_t;
+        
+    if(m->track_info->cur_cp_progress >= 1.0f) {
+        //Next checkpoint.
+        m->track_info->cur_cp_nr++;
+        m->track_info->cur_cp_progress -= 1.0f;
+        
+        if(
+            m->track_info->cur_cp_nr ==
+            tra_ptr->type->anims.body_parts.size() - 1
+        ) {
+            //Finished!
+            m->fsm.set_state(PIKMIN_STATE_IDLING, NULL, NULL);
+            
+            delete m->track_info;
+            m->track_info = NULL;
+            return;
+        }
+    }
+    
+    //Teleport to the right spot.
+    hitbox* cur_cp =
+        tra_ptr->get_hitbox(m->track_info->cur_cp_nr);
+    hitbox* next_cp =
+        tra_ptr->get_hitbox(m->track_info->cur_cp_nr + 1);
+    point cur_cp_pos =
+        cur_cp->get_cur_pos(m->track_info->m->pos, m->track_info->m->angle);
+    point next_cp_pos =
+        next_cp->get_cur_pos(m->track_info->m->pos, m->track_info->m->angle);
+        
+    point xy(
+        interpolate_number(
+            m->track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.x, next_cp_pos.x
+        ),
+        interpolate_number(
+            m->track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.y, next_cp_pos.y
+        )
+    );
+    float z; //TODO
+    
+    float angle = get_angle(cur_cp_pos, next_cp_pos);
+    
+    m->chase(xy, NULL, true);
+    m->face(angle, NULL);
 }
 
 

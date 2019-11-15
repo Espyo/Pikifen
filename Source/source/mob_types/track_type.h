@@ -14,15 +14,38 @@
 #include "../data_file.h"
 #include "mob_type.h"
 
+enum TRACK_RIDERS {
+    TRACK_RIDER_PIKMIN,
+    TRACK_RIDER_LEADERS,
+};
+
+enum TRACK_RIDING_POSES {
+    TRACK_RIDING_POSE_STOPPED,
+    TRACK_RIDING_POSE_CLIMBING,
+    TRACK_RIDING_POSE_SLIDING,
+};
+
+enum TRACK_ANIMATIONS {
+    TRACK_ANIM_IDLING,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of track. Something that transports the mob up, down, in a loop, etc.
  */
 class track_type : public mob_type {
 public:
 
+    unsigned char riders;
+    unsigned char riding_pose;
+    float ride_speed;
+    bool cancellable_with_whistle;
+    
     track_type();
     ~track_type();
     void load_parameters(data_node* file);
+    void load_resources(data_node* file);
+    anim_conversion_vector get_anim_conversions();
 };
 
 #endif //ifndef TRACK_TYPE_INCLUDED

@@ -19,6 +19,8 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="mob_fsms">
+    <File Name="../source/mob_fsms/track_fsm.cpp"/>
+    <File Name="../source/mob_fsms/track_fsm.h"/>
     <File Name="../source/mob_fsms/decoration_fsm.cpp"/>
     <File Name="../source/mob_fsms/decoration_fsm.h"/>
     <File Name="../source/mob_fsms/bridge_fsm.cpp"/>
