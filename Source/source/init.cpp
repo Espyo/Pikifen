@@ -27,6 +27,7 @@
 #include "gameplay.h"
 #include "game_state.h"
 #include "menus.h"
+#include "mob_categories/bouncer_category.h"
 #include "mob_categories/bridge_category.h"
 #include "mob_categories/converter_category.h"
 #include "mob_categories/custom_category.h"
@@ -1042,6 +1043,9 @@ void init_mob_categories() {
     );
     mob_categories.register_category(
         MOB_CATEGORY_TRACKS, new track_category()
+    );
+    mob_categories.register_category(
+        MOB_CATEGORY_BOUNCERS, new bouncer_category()
     );
     mob_categories.register_category(
         MOB_CATEGORY_DECORATIONS, new decoration_category()

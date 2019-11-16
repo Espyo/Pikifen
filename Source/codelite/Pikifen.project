@@ -19,6 +19,8 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="mob_fsms">
+    <File Name="../source/mob_fsms/bouncer_fsm.cpp"/>
+    <File Name="../source/mob_fsms/bouncer_fsm.h"/>
     <File Name="../source/mob_fsms/track_fsm.cpp"/>
     <File Name="../source/mob_fsms/track_fsm.h"/>
     <File Name="../source/mob_fsms/decoration_fsm.cpp"/>
@@ -49,6 +51,8 @@
     <File Name="../source/mob_fsms/treasure_fsm.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_types">
+    <File Name="../source/mob_types/bouncer_type.cpp"/>
+    <File Name="../source/mob_types/bouncer_type.h"/>
     <File Name="../source/mob_types/track_type.cpp"/>
     <File Name="../source/mob_types/track_type.h"/>
     <File Name="../source/mob_types/scale_type.cpp"/>
@@ -89,6 +93,8 @@
     <File Name="../source/mob_types/bridge_type.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mob_categories">
+    <File Name="../source/mob_categories/bouncer_category.cpp"/>
+    <File Name="../source/mob_categories/bouncer_category.h"/>
     <File Name="../source/mob_categories/track_category.cpp"/>
     <File Name="../source/mob_categories/track_category.h"/>
     <File Name="../source/mob_categories/scale_category.h"/>
@@ -231,6 +237,8 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/bouncer.cpp"/>
+    <File Name="../source/mobs/bouncer.h"/>
     <File Name="../source/mobs/track.cpp"/>
     <File Name="../source/mobs/track.h"/>
     <File Name="../source/mobs/scale.cpp"/>

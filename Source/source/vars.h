@@ -27,6 +27,7 @@
 #include "LAFI/label.h"
 #include "liquid.h"
 #include "mob_script_action.h"
+#include "mobs/bouncer.h"
 #include "mobs/bridge.h"
 #include "mobs/converter.h"
 #include "mobs/decoration.h"
@@ -150,6 +151,8 @@ extern timer area_title_fade_timer;
 extern string area_to_load;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
+extern map<string, bouncer_type*> bouncer_types;
+extern vector<bouncer*> bouncers;
 extern vector<bridge*> bridges;
 extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;

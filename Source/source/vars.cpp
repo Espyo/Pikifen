@@ -77,6 +77,8 @@ float area_time_passed = 0;
 string area_to_load;
 bmp_manager bitmaps("");
 ALLEGRO_BITMAP* bmp_error = NULL;
+map<string, bouncer_type*> bouncer_types;
+vector<bouncer*> bouncers;
 vector<bridge*> bridges;
 map<string, bridge_type*> bridge_types;
 button_manager buttons;
