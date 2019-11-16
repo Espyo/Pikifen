@@ -94,9 +94,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
-        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
-            efc.change_state("riding_track");
-        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -1288,6 +1285,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run(pikmin_fsm::tick_track_ride);
         }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(pikmin_fsm::called_while_riding);
+        }
     }
     
     typ->states = efc.finish();
@@ -1714,6 +1714,24 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is called over by a leader while riding on a track.
+ */
+void pikmin_fsm::called_while_riding(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info, m->print_state_history());
+    
+    track* tra_ptr = (track*) (m->track_info->m);
+    
+    if(
+        tra_ptr->tra_type->cancellable_with_whistle &&
+        whistling
+    ) {
+        pikmin_fsm::called(m, NULL, NULL);
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+    }
 }
 
 
@@ -2337,6 +2355,15 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(tra_ptr);
+    
+    if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
+        m->set_animation(PIKMIN_ANIM_WALKING);
+    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
+        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
+    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
+        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
+    }
+    
     m->track_info = new track_info_struct(tra_ptr);
 }
 
@@ -2554,55 +2581,10 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
 void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
     
-    track* tra_ptr = (track*) (m->track_info->m);
-    
-    m->track_info->cur_cp_progress +=
-        tra_ptr->tra_type->ride_speed * delta_t;
-        
-    if(m->track_info->cur_cp_progress >= 1.0f) {
-        //Next checkpoint.
-        m->track_info->cur_cp_nr++;
-        m->track_info->cur_cp_progress -= 1.0f;
-        
-        if(
-            m->track_info->cur_cp_nr ==
-            tra_ptr->type->anims.body_parts.size() - 1
-        ) {
-            //Finished!
-            m->fsm.set_state(PIKMIN_STATE_IDLING, NULL, NULL);
-            
-            delete m->track_info;
-            m->track_info = NULL;
-            return;
-        }
+    if(m->tick_track_ride()) {
+        //Finished!
+        m->fsm.set_state(PIKMIN_STATE_IDLING, NULL, NULL);
     }
-    
-    //Teleport to the right spot.
-    hitbox* cur_cp =
-        tra_ptr->get_hitbox(m->track_info->cur_cp_nr);
-    hitbox* next_cp =
-        tra_ptr->get_hitbox(m->track_info->cur_cp_nr + 1);
-    point cur_cp_pos =
-        cur_cp->get_cur_pos(m->track_info->m->pos, m->track_info->m->angle);
-    point next_cp_pos =
-        next_cp->get_cur_pos(m->track_info->m->pos, m->track_info->m->angle);
-        
-    point xy(
-        interpolate_number(
-            m->track_info->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.x, next_cp_pos.x
-        ),
-        interpolate_number(
-            m->track_info->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.y, next_cp_pos.y
-        )
-    );
-    float z; //TODO
-    
-    float angle = get_angle(cur_cp_pos, next_cp_pos);
-    
-    m->chase(xy, NULL, true);
-    m->face(angle, NULL);
 }
 
 

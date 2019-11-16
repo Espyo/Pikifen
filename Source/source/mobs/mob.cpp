@@ -2810,6 +2810,63 @@ void mob::tick_physics() {
 
 
 /* ----------------------------------------------------------------------------
+ * Ticks one frame's worth of time while the mob is riding on a track mob.
+ * This updates the mob's position and riding progress.
+ * Returns true if the ride is over, false if not.
+ */
+bool mob::tick_track_ride() {
+    track* tra_ptr = (track*) (track_info->m);
+    
+    track_info->cur_cp_progress +=
+        tra_ptr->tra_type->ride_speed * delta_t;
+        
+    if(track_info->cur_cp_progress >= 1.0f) {
+        //Next checkpoint.
+        track_info->cur_cp_nr++;
+        track_info->cur_cp_progress -= 1.0f;
+        
+        if(
+            track_info->cur_cp_nr ==
+            tra_ptr->type->anims.body_parts.size() - 1
+        ) {
+            delete track_info;
+            track_info = NULL;
+            return true;
+        }
+    }
+    
+    //Teleport to the right spot.
+    hitbox* cur_cp =
+        tra_ptr->get_hitbox(track_info->cur_cp_nr);
+    hitbox* next_cp =
+        tra_ptr->get_hitbox(track_info->cur_cp_nr + 1);
+    point cur_cp_pos =
+        cur_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+    point next_cp_pos =
+        next_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+        
+    point xy(
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.x, next_cp_pos.x
+        ),
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.y, next_cp_pos.y
+        )
+    );
+    float z; //TODO
+    
+    float angle = get_angle(cur_cp_pos, next_cp_pos);
+    
+    chase(xy, NULL, true);
+    face(angle, NULL);
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {

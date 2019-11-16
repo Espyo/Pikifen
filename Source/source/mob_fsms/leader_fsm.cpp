@@ -133,6 +133,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("riding_track");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -393,6 +396,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("inactive_riding_track");
+        }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
         }
@@ -436,6 +442,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("inactive_riding_track");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -971,6 +980,29 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("riding_track", LEADER_STATE_RIDING_TRACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(leader_fsm::start_riding_track);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(leader_fsm::tick_track_ride);
+        }
+    }
+    
+    efc.new_state(
+        "inactive_riding_track", LEADER_STATE_INACTIVE_RIDING_TRACK
+    ); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(leader_fsm::start_riding_track);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(leader_fsm::tick_track_ride);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run(leader_fsm::called_while_riding);
+        }
+    }
+    
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idling");
     
@@ -1078,6 +1110,24 @@ void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
     m->face(cursor_angle, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader has to teleport to its spot in a track it is riding.
+ * info1: If not NULL, the leader is inactive.
+ */
+void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info != NULL, m->print_state_history());
+    
+    if(m->tick_track_ride()) {
+        //Finished!
+        if(m == cur_leader_ptr) {
+            m->fsm.set_state(LEADER_STATE_ACTIVE, NULL, NULL);
+        } else {
+            m->fsm.set_state(LEADER_STATE_IDLING, NULL, NULL);
+        }
+    }
 }
 
 
@@ -1564,11 +1614,53 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader starts riding on a track.
+ * info1: Points to the track mob.
+ */
+void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
+    track* tra_ptr = (track*) info1;
+    
+    leader_fsm::dismiss(m, NULL, NULL);
+    m->leave_group();
+    m->stop_chasing();
+    m->focus_on_mob(tra_ptr);
+    
+    if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
+        m->set_animation(LEADER_ANIM_WALKING);
+    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
+        m->set_animation(LEADER_ANIM_WALKING); //TODO
+    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
+        m->set_animation(LEADER_ANIM_WALKING); //TODO
+    }
+    
+    m->track_info = new track_info_struct(tra_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader wakes up.
  */
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_GETTING_UP);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader is called over by another leader while riding on a track.
+ */
+void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info, m->print_state_history());
+    
+    track* tra_ptr = (track*) (m->track_info->m);
+    
+    if(
+        tra_ptr->tra_type->cancellable_with_whistle &&
+        whistling
+    ) {
+        leader_fsm::join_group(m, NULL, NULL);
+        m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
+    }
 }
 
 
