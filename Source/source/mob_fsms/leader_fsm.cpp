@@ -1624,6 +1624,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(tra_ptr);
+    m->start_height_effect();
     
     if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
         m->set_animation(LEADER_ANIM_WALKING);
@@ -1658,6 +1659,7 @@ void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
         tra_ptr->tra_type->cancellable_with_whistle &&
         whistling
     ) {
+        m->stop_track_ride();
         leader_fsm::join_group(m, NULL, NULL);
         m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
     }

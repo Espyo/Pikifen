@@ -393,6 +393,7 @@ public:
     virtual void read_script_vars(const string &vars);
     virtual void start_dying_class_specific();
     bool tick_track_ride();
+    void stop_track_ride();
     
     //Drawing tools.
     point get_sprite_center(sprite* s);

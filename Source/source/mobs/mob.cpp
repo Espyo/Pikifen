@@ -1926,6 +1926,20 @@ void mob::stop_height_effect() {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes a mob stop riding on a track mob.
+ */
+void mob::stop_track_ride() {
+    if(!track_info) return;
+    
+    delete track_info;
+    track_info = NULL;
+    stop_chasing();
+    speed_z = 0;
+    stop_height_effect();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes a mob stop wanting to turn towards some direciton.
  */
 void mob::stop_turning() {
@@ -2300,7 +2314,7 @@ void mob::tick_physics() {
     //from the movement speed.
     while(!finished_moving) {
     
-        if(move_speed.x == 0 && move_speed.y == 0) break;
+        if(move_speed.x == 0 && move_speed.y == 0 && speed_z == 0) break;
         
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
@@ -2829,8 +2843,7 @@ bool mob::tick_track_ride() {
             track_info->cur_cp_nr ==
             tra_ptr->type->anims.body_parts.size() - 1
         ) {
-            delete track_info;
-            track_info = NULL;
+            stop_track_ride();
             return true;
         }
     }
@@ -2845,7 +2858,7 @@ bool mob::tick_track_ride() {
     point next_cp_pos =
         next_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
         
-    point xy(
+    point dest_xy(
         interpolate_number(
             track_info->cur_cp_progress, 0.0f, 1.0f,
             cur_cp_pos.x, next_cp_pos.x
@@ -2855,12 +2868,19 @@ bool mob::tick_track_ride() {
             cur_cp_pos.y, next_cp_pos.y
         )
     );
-    float z; //TODO
     
-    float angle = get_angle(cur_cp_pos, next_cp_pos);
+    float dest_z =
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            tra_ptr->z + cur_cp->z,
+            tra_ptr->z + next_cp->z
+        );
+        
+    float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
     
-    chase(xy, NULL, true);
-    face(angle, NULL);
+    chase(dest_xy, NULL, true);
+    z = dest_z;
+    face(dest_angle, NULL);
     
     return false;
 }
