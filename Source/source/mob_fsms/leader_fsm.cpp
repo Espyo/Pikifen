@@ -136,6 +136,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
             efc.change_state("riding_track");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -180,6 +184,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -215,6 +223,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
@@ -264,6 +276,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::release);
             efc.change_state("drinking");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::notify_pikmin_release);
+            efc.run(leader_fsm::release);
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::notify_pikmin_release);
             efc.run(leader_fsm::release);
@@ -289,6 +307,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -339,6 +361,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
         }
@@ -355,6 +381,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idling");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
@@ -398,6 +428,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
             efc.change_state("inactive_riding_track");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -936,7 +970,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(leader_fsm::land);
-            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -946,6 +979,10 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
@@ -1263,51 +1300,38 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
  * When a leader throws the grabbed mob.
  */
 void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
+    engine_assert(!m->holding.empty(), m->print_state_history());
+    
     leader* leader_ptr = (leader*) m;
     mob* holding_ptr = leader_ptr->holding[0];
     
     engine_assert(holding_ptr != NULL, m->print_state_history());
     
     holding_ptr->fsm.run_event(MOB_EVENT_THROWN);
+    holding_ptr->start_height_effect();
     
     holding_ptr->pos = leader_ptr->pos;
     holding_ptr->z = leader_ptr->z;
     
-    float angle, mag;
-    coordinates_to_angle(
-        leader_cursor_w - leader_ptr->pos,
-        &angle, &mag
+    float angle;
+    holding_ptr->calculate_throw(
+        leader_cursor_w,
+        1.0,
+        &holding_ptr->speed.x,
+        &holding_ptr->speed.y,
+        &holding_ptr->speed_z,
+        &angle
     );
-    
-    float throw_height_mult = 1.0;
-    if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-        throw_height_mult =
-            ((pikmin*) holding_ptr)->pik_type->throw_strength_mult;
-    } else if(holding_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
-        throw_height_mult =
-            ((leader*) holding_ptr)->lea_type->throw_strength_mult;
-    }
-    
-    //Regular Pikmin are thrown about 271 units high.
-    holding_ptr->speed.x =
-        cos(angle) * mag * THROW_DISTANCE_MULTIPLIER *
-        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    holding_ptr->speed.y =
-        sin(angle) * mag * THROW_DISTANCE_MULTIPLIER *
-        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    holding_ptr->speed_z = get_throw_z_speed(throw_height_mult);
     
     holding_ptr->z_cap =
         m->z + get_max_throw_height(holding_ptr->speed_z);
-    holding_ptr->start_height_effect();
-    
+        
     holding_ptr->angle = angle;
     holding_ptr->angle_cos = cos(angle);
     holding_ptr->angle_sin = sin(angle);
     holding_ptr->face(angle, NULL);
     
     holding_ptr->was_thrown = true;
-    
     holding_ptr->leave_group();
     leader_ptr->release(holding_ptr);
     
@@ -1894,6 +1918,15 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader is thrown by a bouncer mob.
+ * info1: Points to the bouncer mob.
+ */
+void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
+    //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a thrown leader lands.
  */
 void leader_fsm::land(mob* m, void* info1, void* info2) {
@@ -1901,4 +1934,10 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->speed.x = m->speed.y = 0;
     
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
+    
+    if(m == cur_leader_ptr) {
+        m->fsm.set_state(LEADER_STATE_ACTIVE);
+    } else {
+        m->fsm.set_state(LEADER_STATE_IDLING);
+    }
 }

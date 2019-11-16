@@ -38,6 +38,7 @@ public:
 
     unsigned char riders;
     unsigned char riding_pose;
+    float bounce_strength_mult;
     
     bouncer_type();
     ~bouncer_type();

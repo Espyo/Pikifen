@@ -25,6 +25,7 @@ void be_grabbed_by_enemy(      mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(     mob* m, void* info1, void* info2);
 void be_released(              mob* m, void* info1, void* info2);
 void be_thrown(                mob* m, void* info1, void* info2);
+void be_thrown_by_bouncer(     mob* m, void* info1, void* info2);
 void become_sprout(            mob* m, void* info1, void* info2);
 void become_disabled(          mob* m, void* info1, void* info2);
 void become_idle(              mob* m, void* info1, void* info2);

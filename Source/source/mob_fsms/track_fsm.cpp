@@ -67,16 +67,15 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     
         //Pikmin is about to ride it.
         ev = q_get_event(toucher, MOB_EVENT_TOUCHED_TRACK);
-    }
-    
-    //Check if a compatible mob touched it.
-    if(
+        
+    } else if(
         tra_ptr->tra_type->riders | TRACK_RIDER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
         //Leader is about to ride it.
         ev = q_get_event(toucher, MOB_EVENT_TOUCHED_TRACK);
+        
     }
     
     if(!ev) return;

@@ -160,6 +160,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TOUCHED_DROP,
     //When the mob touches a track object.
     MOB_EVENT_TOUCHED_TRACK,
+    //When the mob touches a bouncer object.
+    MOB_EVENT_TOUCHED_BOUNCER,
     
     //Events that only leaders can really handle.
     

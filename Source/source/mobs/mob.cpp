@@ -789,6 +789,40 @@ void mob::calculate_knockback(
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates the requires horizontal and vertical speed in order to
+ * throw this mob to the specified coordinates.
+ */
+void mob::calculate_throw(
+    const point &target, const float extra_height_mult,
+    float* req_speed_x, float* req_speed_y, float* req_speed_z,
+    float* final_angle
+) {
+    float throw_angle, mag;
+    coordinates_to_angle(target - pos, &throw_angle, &mag);
+    
+    float throw_height_mult = extra_height_mult;
+    if(type->category->id == MOB_CATEGORY_PIKMIN) {
+        throw_height_mult *=
+            ((pikmin*) this)->pik_type->throw_strength_mult;
+    } else if(type->category->id == MOB_CATEGORY_LEADERS) {
+        throw_height_mult *=
+            ((leader*) this)->lea_type->throw_strength_mult;
+    }
+    
+    //Regular Pikmin are thrown about 271 units high.
+    *req_speed_x =
+        cos(throw_angle) * mag * THROW_DISTANCE_MULTIPLIER *
+        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
+    *req_speed_y =
+        sin(throw_angle) * mag * THROW_DISTANCE_MULTIPLIER *
+        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
+    *req_speed_z = get_throw_z_speed(throw_height_mult);
+    
+    if(final_angle) *final_angle = throw_angle;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob cause spike damage to another mob.
  * victim:       The mob that will be damaged.
  * is_ingestion: If true, the attacker just got eaten.

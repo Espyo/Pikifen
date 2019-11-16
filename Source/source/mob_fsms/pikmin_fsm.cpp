@@ -196,6 +196,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
             efc.change_state("riding_track");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -314,6 +318,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -374,6 +382,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
             efc.change_state("riding_track");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -424,6 +436,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_DROP); {
             efc.change_state("drinking");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -1514,6 +1530,15 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     pg.follow_mob = m;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is thrown by a bouncer mob.
+ * info1: Points to the bouncer mob.
+ */
+void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
+    //TODO
 }
 
 

@@ -20,7 +20,11 @@
  * Creates a new type of track mob.
  */
 track_type::track_type() :
-    mob_type(MOB_CATEGORY_TRACKS) {
+    mob_type(MOB_CATEGORY_TRACKS),
+    riders(TRACK_RIDER_PIKMIN),
+    riding_pose(TRACK_RIDING_POSE_STOPPED),
+    ride_speed(0.5f),
+    cancellable_with_whistle(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

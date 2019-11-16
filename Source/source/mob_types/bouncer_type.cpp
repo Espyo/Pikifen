@@ -20,9 +20,13 @@
  * Creates a new type of bouncer mob.
  */
 bouncer_type::bouncer_type() :
-    mob_type(MOB_CATEGORY_BOUNCERS) {
+    mob_type(MOB_CATEGORY_BOUNCERS),
+    riders(BOUNCER_RIDER_PIKMIN),
+    riding_pose(BOUNCER_RIDING_POSE_STOPPED),
+    bounce_strength_mult(1.0f) {
     
     target_type = MOB_TARGET_TYPE_NONE;
+    walkable = true;
     
     bouncer_fsm::create_fsm(this);
 }
@@ -41,6 +45,7 @@ void bouncer_type::load_parameters(data_node* file) {
     
     rs.set("riders", riders_str);
     rs.set("riding_pose", riding_pose_str);
+    rs.set("bounce_strength_mult", bounce_strength_mult);
     
     if(!riders_str.empty()) {
         riders = 0;

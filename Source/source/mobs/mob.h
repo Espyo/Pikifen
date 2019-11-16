@@ -315,6 +315,11 @@ public:
         mob* victim, hitbox* attack_h,
         hitbox* victim_h, float* knockback, float* angle
     );
+    void calculate_throw(
+        const point &target, const float extra_height_mult,
+        float* req_speed_x, float* req_speed_y, float* req_speed_z,
+        float* final_angle
+    );
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
     void get_hitbox_hold_point(

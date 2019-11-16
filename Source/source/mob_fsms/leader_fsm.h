@@ -24,6 +24,7 @@ void be_dismissed(          mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(  mob* m, void* info1, void* info2);
 void be_released(           mob* m, void* info1, void* info2);
 void be_thrown(             mob* m, void* info1, void* info2);
+void be_thrown_by_bouncer(  mob* m, void* info1, void* info2);
 void called_while_riding(   mob* m, void* info1, void* info2);
 void chase_leader(          mob* m, void* info1, void* info2);
 void die(                   mob* m, void* info1, void* info2);
