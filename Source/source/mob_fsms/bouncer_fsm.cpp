@@ -88,11 +88,15 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     toucher->start_height_effect();
     
     float angle;
+    //The maximum height has a guaranteed minimum (useful if the destination
+    //is below the bouncer), and scales up with how much higher the thrown
+    //mob needs to go, to make for a nice smooth arc.
+    float max_h = max(128.0f, (target_mob->z - toucher->z) * 1.5f);
     toucher->calculate_throw(
         target_mob->pos,
-        bou_ptr->bou_type->bounce_strength_mult,
-        &toucher->speed.x,
-        &toucher->speed.y,
+        target_mob->z,
+        max_h,
+        &toucher->speed,
         &toucher->speed_z,
         &angle
     );

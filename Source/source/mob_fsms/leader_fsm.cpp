@@ -1314,18 +1314,42 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->z = leader_ptr->z;
     
     float angle;
+    float target_z;
+    if(leader_cursor_mob) {
+        target_z = leader_cursor_mob->z + leader_cursor_mob->height;
+    } else if(leader_cursor_sector) {
+        target_z = leader_cursor_sector->z;
+    } else {
+        target_z = m->z;
+    }
+    
+    float max_height;
+    if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+        max_height = ((pikmin*) holding_ptr)->pik_type->max_throw_height;
+    } else if(holding_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
+        max_height = ((leader*) holding_ptr)->lea_type->max_throw_height;
+    } else {
+        max_height = (target_z - leader_ptr->z) * 1.2f;
+    }
+    
+    if(max_height < target_z) {
+        //Can't reach! Just do a convincing throw that is sure to fail.
+        //Limiting the "target" Z makes it so the horizontal velocity isn't
+        //so wild.
+        target_z = max_height * 0.75;
+    }
+    
     holding_ptr->calculate_throw(
         leader_cursor_w,
-        1.0,
-        &holding_ptr->speed.x,
-        &holding_ptr->speed.y,
+        target_z,
+        max_height,
+        &holding_ptr->speed,
         &holding_ptr->speed_z,
         &angle
     );
     
-    holding_ptr->z_cap =
-        m->z + get_max_throw_height(holding_ptr->speed_z);
-        
+    holding_ptr->z_cap = m->z + max_height;
+    
     holding_ptr->angle = angle;
     holding_ptr->angle_cos = cos(angle);
     holding_ptr->angle_sin = sin(angle);

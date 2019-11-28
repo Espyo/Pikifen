@@ -123,14 +123,39 @@ void gameplay::do_aesthetic_logic() {
         cursor_save_timer.tick(delta_t);
     }
     
-    //Cursor being above or below the leader.
+    //Where the cursor is.
     //TODO check this only one out of every three frames or something.
     cursor_height_diff_light = 0;
-    sector* cursor_sector =
+    
+    leader_cursor_mob = NULL;
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* m_ptr = mobs[m];
+        if(!bbox_check(leader_cursor_w, m_ptr->pos, m_ptr->type->max_span)) {
+            //Too far away; of course the cursor isn't on it.
+            continue;
+        }
+        if(
+            leader_cursor_mob &&
+            m_ptr->z + m_ptr->height <
+            leader_cursor_mob->z + leader_cursor_mob->height
+        ) {
+            //If this mob is lower than the previous known "under cursor" mob,
+            //then forget it.
+            continue;
+        }
+        if(dist(leader_cursor_w, m_ptr->pos) > m_ptr->type->radius) {
+            //The cursor is not really on top of this mob.
+            continue;
+        }
+        leader_cursor_mob = m_ptr;
+    }
+    
+    leader_cursor_sector =
         get_sector(leader_cursor_w, NULL, true);
-    if(cursor_sector) {
+        
+    if(leader_cursor_sector) {
         cursor_height_diff_light =
-            (cursor_sector->z - cur_leader_ptr->z) * 0.0033;
+            (leader_cursor_sector->z - cur_leader_ptr->z) * 0.0033;
         cursor_height_diff_light =
             clamp(cursor_height_diff_light, -0.33f, 0.33f);
     }
@@ -140,7 +165,10 @@ void gameplay::do_aesthetic_logic() {
     if(!cur_leader_ptr->holding.empty()) {
         mob* held_mob = cur_leader_ptr->holding[0];
         
-        if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
+        if(
+            !leader_cursor_sector ||
+            leader_cursor_sector->type == SECTOR_TYPE_BLOCKING
+        ) {
             throw_can_reach_cursor = false;
             
         } else {
@@ -156,7 +184,7 @@ void gameplay::do_aesthetic_logic() {
             
             if(max_throw_z > 0) {
                 throw_can_reach_cursor =
-                    cursor_sector->z < cur_leader_ptr->z + max_throw_z;
+                    leader_cursor_sector->z < cur_leader_ptr->z + max_throw_z;
             }
         }
     }

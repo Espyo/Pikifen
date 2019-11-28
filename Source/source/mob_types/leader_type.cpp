@@ -26,7 +26,6 @@ leader_type::leader_type() :
     whistle_range(DEF_WHISTLE_RANGE),
     punch_strength(DEF_PUNCH_STRENGTH),
     pluck_delay(0.6),
-    throw_strength_mult(1.0),
     max_throw_height(0),
     bmp_icon(nullptr) {
     
@@ -60,15 +59,12 @@ void leader_type::load_parameters(data_node* file) {
         );
     punch_strength =
         s2i(file->get_child_by_name("punch_strength")->value); //TODO default.
-    throw_strength_mult =
+    max_throw_height =
         s2f(
             file->get_child_by_name(
-                "throw_strength_mult"
-            )->get_value_or_default("1")
+                "max_throw_height"
+            )->get_value_or_default("130")
         );
-        
-    max_throw_height =
-        get_max_throw_height(get_throw_z_speed(throw_strength_mult));
         
 }
 

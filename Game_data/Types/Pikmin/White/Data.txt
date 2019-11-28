@@ -12,6 +12,7 @@ height = 24
 icon = White_Pikmin_icon.png
 main_color = 240 240 240
 max_health = 100
+max_throw_height = 260
 move_speed = 125
 onion_starting_number = 0
 pushable = true

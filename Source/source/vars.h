@@ -299,8 +299,12 @@ extern float joystick_max_deadzone;
 extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
+//Mob the leader's cursor is on top of, if any.
+extern mob* leader_cursor_mob;
 //Leader's cursor, in screen coordinates.
 extern point leader_cursor_s;
+//Sector the leader's cursor is on, if any.
+extern sector* leader_cursor_sector;
 //Leader's cursor, in world coordinates.
 extern point leader_cursor_w;
 //How hard the joystick is pressed in each direction ([0, 1]);

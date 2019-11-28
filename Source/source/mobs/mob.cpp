@@ -790,35 +790,66 @@ void mob::calculate_knockback(
 
 /* ----------------------------------------------------------------------------
  * Calculates the requires horizontal and vertical speed in order to
- * throw this mob to the specified coordinates.
+ * throw this mob to the specified coordinates, such that it reaches a
+ * specific peak height.
+ * If the calculation is impossible (like if the peak height is lower than the
+ * starting height), the speed variables will all be set to 0.
+ * target_xy:     Target destination's X and Y coordinates.
+ * target_z:      Target destination's Z coordinate.
+ * max_h:         Maximum height, using the starting Z as the reference.
+ * req_speed_xy:  The required X and Y speed is returned here.
+ * req_speed_z:   The required Z speed is returned here.
+ * final_h_angle: The final horizontal angle is returned here (if not NULL).
  */
 void mob::calculate_throw(
-    const point &target, const float extra_height_mult,
-    float* req_speed_x, float* req_speed_y, float* req_speed_z,
-    float* final_angle
+    const point &target_xy, const float target_z, const float max_h,
+    point* req_speed_xy, float* req_speed_z, float* final_h_angle
 ) {
-    float throw_angle, mag;
-    coordinates_to_angle(target - pos, &throw_angle, &mag);
-    
-    float throw_height_mult = extra_height_mult;
-    if(type->category->id == MOB_CATEGORY_PIKMIN) {
-        throw_height_mult *=
-            ((pikmin*) this)->pik_type->throw_strength_mult;
-    } else if(type->category->id == MOB_CATEGORY_LEADERS) {
-        throw_height_mult *=
-            ((leader*) this)->lea_type->throw_strength_mult;
+
+    if(target_z > max_h) {
+        //If the target is above the maximum height it can be thrown...
+        //Then this is an impossible throw.
+        *req_speed_xy = point();
+        *req_speed_z = 0;
+        return;
     }
     
-    //Regular Pikmin are thrown about 271 units high.
-    *req_speed_x =
-        cos(throw_angle) * mag * THROW_DISTANCE_MULTIPLIER *
-        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    *req_speed_y =
-        sin(throw_angle) * mag * THROW_DISTANCE_MULTIPLIER *
-        (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    *req_speed_z = get_throw_z_speed(throw_height_mult);
+    //Code from https://physics.stackexchange.com/questions/515688
+    //First, we calculate stuff in 2D, with horizontal and vertical components
+    //only.
     
-    if(final_angle) *final_angle = throw_angle;
+    //We start with the vertical speed. This will be constant regardless
+    //of how far the mob is thrown. In order to reach the required max height,
+    //the vertical speed needs to be set thusly:
+    *req_speed_z = sqrt(2.0 * (-GRAVITY_ADDER) * max_h);
+    
+    //Now that we know the vertical speed, we can figure out how long it takes
+    //for the mob to land at the target vertical coordinate. The formula for
+    //this can be found on Wikipedia, for instance.
+    float height_delta = z - target_z;
+    float flight_time =
+        (
+            (*req_speed_z) +
+            sqrt(
+                (*req_speed_z) *
+                (*req_speed_z) +
+                2.0 * (-GRAVITY_ADDER) * (height_delta)
+            )
+        ) / (-GRAVITY_ADDER);
+        
+    //Once we know the total flight time, we can divide the horizontal reach
+    //by the total time to get the horizontal speed.
+    float h_angle, h_reach;
+    coordinates_to_angle(target_xy - pos, &h_angle, &h_reach);
+    
+    float h_speed = h_reach / flight_time;
+    
+    //Now that we know the vertical and horizontal speed, just split the
+    //horizontal speed into X and Y 3D world components.
+    *req_speed_xy = angle_to_coordinates(h_angle, h_speed);
+    
+    //Return the final horizontal angle, if needed.
+    if(final_h_angle) *final_h_angle = h_angle;
 }
 
 

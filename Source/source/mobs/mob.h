@@ -36,10 +36,6 @@ const float GRAVITY_ADDER = -2600.0f;
 const float MOB_KNOCKBACK_H_POWER = 64.0f;
 const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
-//When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
-const float THROW_DISTANCE_MULTIPLIER = 0.49f;
-//When a leader throws a Pikmin, multiply the strength by this.
-const float THROW_STRENGTH_MULTIPLIER = 0.457f;
 
 enum DISABLED_STATE_FLAGS {
     //The Pikmin cannot be eaten by enemies.
@@ -316,9 +312,8 @@ public:
         hitbox* victim_h, float* knockback, float* angle
     );
     void calculate_throw(
-        const point &target, const float extra_height_mult,
-        float* req_speed_x, float* req_speed_y, float* req_speed_z,
-        float* final_angle
+        const point &target_xy, const float target_z, const float max_h,
+        point* req_speed_xy, float* req_speed_z, float* final_h_angle
     );
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
