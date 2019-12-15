@@ -367,19 +367,19 @@ void mob::arachnorb_foot_move_logic() {
  * feet's positions.
  */
 void mob::arachnorb_head_turn_logic() {
-    if(links.empty()) return;
+    if(bond.empty()) return;
     
     float angle_deviation_avg = 0;
     size_t n_feet = 0;
     
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(!links[l]->parent) {
+    for(size_t l = 0; l < bond.size(); ++l) {
+        if(!bond[l]->parent) {
             continue;
         }
-        if(links[l]->parent->m != this) {
+        if(bond[l]->parent->m != this) {
             continue;
         }
-        if(links[l]->parent->limb_parent_body_part == INVALID) {
+        if(bond[l]->parent->limb_parent_body_part == INVALID) {
             continue;
         }
         
@@ -389,11 +389,11 @@ void mob::arachnorb_head_turn_logic() {
             get_angle(
                 point(),
                 get_hitbox(
-                    links[l]->parent->limb_parent_body_part
+                    bond[l]->parent->limb_parent_body_part
                 )->pos
             );
         float cur_angle =
-            get_angle(pos, links[l]->pos) - angle;
+            get_angle(pos, bond[l]->pos) - angle;
         float angle_deviation =
             get_angle_cw_dif(default_angle, cur_angle);
         if(angle_deviation > M_PI) {
@@ -1696,7 +1696,11 @@ void mob::send_message(mob* receiver, string &msg) {
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
 }
-
+void mob::send_message_bond(mob* receiver, string &msg) {
+	mob_event* ev = q_get_event(receiver, MOB_EVENT_RECEIVE_MESSAGEBOND);
+	if (!ev) return;
+	ev->run(receiver, (void*)&msg, (void*)this);
+}
 
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
@@ -1891,10 +1895,12 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     }
     
     if(info->link_object_to_spawn) {
-        links.push_back(new_mob);
+		new_mob->linkedchild = true;
+		bond.push_back(new_mob);
     }
     if(info->link_spawn_to_object) {
-        new_mob->links.push_back(this);
+		linkedparent = true;
+        new_mob->bond.push_back(this);
     }
     if(info->momentum != 0) {
         float a = randomf(0, TAU);

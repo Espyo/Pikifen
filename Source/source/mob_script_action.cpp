@@ -462,7 +462,19 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
+    } case MOB_ACTION_GET_INFO_MESSAGEBOND: {
+		if (data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGEBOND) {
+			*var = *((string*)(data.custom_data_1));
+		}
+		break;
+
+	} case MOB_ACTION_GET_INFO_MESSAGE_SENDERBOND: {
+		if (data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGEBOND) {
+			*var = ((mob*)(data.custom_data_2))->type->name;
+		}
+		break;
+
+	} case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
         if(
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
@@ -634,60 +646,76 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
  * Code for the move to target mob script action.
  */
 void mob_action_runners::move_to_target(mob_action_run_data &data) {
-    size_t t = s2i(data.args[0]);
-    
-    switch(t) {
-    case MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB: {
-        if(data.m->focused_mob) {
-            float a = get_angle(data.m->pos, data.m->focused_mob->pos);
-            point offset = point(2000, 0);
-            offset = rotate_point(offset, a + TAU / 2.0);
-            data.m->chase(data.m->pos + offset, NULL, false);
-        } else {
-            data.m->stop_chasing();
-        }
-        break;
-        
-    } case MOB_ACTION_MOVE_FOCUSED_MOB: {
-        if(data.m->focused_mob) {
-            data.m->chase(point(), &data.m->focused_mob->pos, false);
-        } else {
-            data.m->stop_chasing();
-        }
-        break;
-        
-    } case MOB_ACTION_MOVE_FOCUSED_MOB_POS: {
-        if(data.m->focused_mob) {
-            data.m->chase(data.m->focused_mob->pos, NULL, false);
-        } else {
-            data.m->stop_chasing();
-        }
-        break;
-        
-    } case MOB_ACTION_MOVE_HOME: {
-        data.m->chase(data.m->home, NULL, false);
-        break;
-        
-    } case MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC: {
-        data.m->arachnorb_foot_move_logic();
-        break;
-        
-    } case MOB_ACTION_MOVE_LINKED_MOB_AVERAGE: {
-        if(data.m->groupid= t -1) {
-            return;
-        }
-        
-        point des;
-        for(size_t l = 0; l < data.m->links.size(); ++l) {
-            if(l != data.m->lid)des += data.m->links[l]->pos;
-        }
-        des = des / data.m->links.size();
-        
-        data.m->chase(des, NULL, false);
-        break;
-        
-    }
-    }
+	size_t t = s2i(data.args[0]);
+
+	switch (t) {
+	case MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB: {
+		if (data.m->focused_mob) {
+			float a = get_angle(data.m->pos, data.m->focused_mob->pos);
+			point offset = point(2000, 0);
+			offset = rotate_point(offset, a + TAU / 2.0);
+			data.m->chase(data.m->pos + offset, NULL, false);
+		}
+		else {
+			data.m->stop_chasing();
+		}
+		break;
+
+	} case MOB_ACTION_MOVE_FOCUSED_MOB: {
+		if (data.m->focused_mob) {
+			data.m->chase(point(), &data.m->focused_mob->pos, false);
+		}
+		else {
+			data.m->stop_chasing();
+		}
+		break;
+
+	} case MOB_ACTION_MOVE_FOCUSED_MOB_POS: {
+		if (data.m->focused_mob) {
+			data.m->chase(data.m->focused_mob->pos, NULL, false);
+		}
+		else {
+			data.m->stop_chasing();
+		}
+		break;
+
+	} case MOB_ACTION_MOVE_HOME: {
+		data.m->chase(data.m->home, NULL, false);
+		break;
+
+	} case MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC: {
+		data.m->arachnorb_foot_move_logic();
+		break;
+
+	} case MOB_ACTION_MOVE_LINKED_MOB_AVERAGE: {
+		if (data.m->groupid = t - 1) {
+			return;
+		}
+
+		point des;
+		for (size_t l = 0; l < data.m->links.size(); ++l) {
+			if (data.m->links[l] != data.m)des += data.m->links[l]->pos;
+		}
+		des = des / data.m->links.size();
+
+		data.m->chase(des, NULL, false);
+		break;
+	} case MOB_ACTION_MOVE_BONDED_MOB_AVERAGE: {
+		if (data.m->bond.size() == 0) {
+			return;
+		}
+
+		point des;
+		for (size_t l = 0; l < data.m->bond.size(); ++l) {
+			des += data.m->bond[l]->pos;
+		}
+		des = des / data.m->bond.size();
+
+		data.m->chase(des, NULL, false);
+		break;
+	}
+
+	}
 }
 
 
@@ -742,12 +770,19 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
  */
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
     for(size_t l = 0; l < data.m->links.size(); ++l) {
-        if(l != data.m->lid){
+        if(data.m->links[l] != data.m){
         data.m->send_message(data.m->links[l], data.args[0]);
      }
     }
 }
 
+void mob_action_runners::send_message_to_bonds(mob_action_run_data &data) {
+	for (size_t l = 0; l < data.m->links.size(); ++l) {
+		if (data.m->bond[l] != data.m) {
+			data.m->send_message_bond(data.m->bond[l], data.args[0]);
+		}
+	}
+}
 
 /* ----------------------------------------------------------------------------
  * Code for the nearby mob message sending mob script action.
@@ -934,31 +969,28 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
  * Code for the z stabilization mob script action.
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
-    if(data.m->groupid = -1) {
-        return;
-    }
 	size_t t = 0;
-	float best_match_z = data.m->links[0]->z;
-    if (0 == data.m->lid){
-		best_match_z = data.m->links[1]->z;
-		t = s2i(data.args[0]);
+	float best_match_z;
+	if (data.m->bond[0] != data.m) {
+		best_match_z = data.m->bond[0]->z;
 	} else {
-		//best_match_z = data.m->links[0]->z;
-		t = s2i(data.args[0]);
+		best_match_z = data.m->bond[1]->z;
 	}
     
-    for(size_t l = 1; l < data.m->links.size(); ++l) {
-		if(data.m->lid != l){
+		//best_match_z = data.m->links[0]->z;
+		t = s2i(data.args[0]);
+    for(size_t l = 1; l < data.m->bond.size(); ++l) {
+		if(data.m->bond[l] != data.m){
         switch(t) {
         case MOB_ACTION_STABILIZE_Z_HIGHEST: {
-            if(data.m->links[l]->z > best_match_z) {
+            if(data.m->bond[l]->z > best_match_z) {
                 best_match_z = data.m->links[l]->z;
             }
             break;
             
         } case MOB_ACTION_STABILIZE_Z_LOWEST: {
-            if(data.m->links[l]->z < best_match_z) {
-                best_match_z = data.m->links[l]->z;
+            if(data.m->bond[l]->z < best_match_z) {
+                best_match_z = data.m->bond[l]->z;
             }
             break;
             
@@ -1227,7 +1259,12 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
     } else if(call.args[1] == "message_sender") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
-    } else if(call.args[1] == "mob_category") {
+    } else if (call.args[1] == "bond_message") {
+		call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGEBOND);
+	} else if (call.args[1] == "bond_message_sender") {
+		call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDERBOND);
+	}
+	else if(call.args[1] == "mob_category") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
     } else if(call.args[1] == "mob_type") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
@@ -1283,7 +1320,9 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
         call.args[0] = i2s(MOB_ACTION_MOVE_HOME);
     } else if(call.args[0] == "linked_mob_average") {
         call.args[0] = i2s(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
-    } else {
+    } else if (call.args[0] == "bonded_mob_average") {
+    call.args[0] = i2s(MOB_ACTION_MOVE_BONDED_MOB_AVERAGE);
+ } else {
         report_enum_error(call, 0);
         return false;
     }

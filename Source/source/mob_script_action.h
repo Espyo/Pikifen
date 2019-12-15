@@ -126,6 +126,8 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT,
     MOB_ACTION_GET_INFO_MESSAGE,
     MOB_ACTION_GET_INFO_MESSAGE_SENDER,
+	MOB_ACTION_GET_INFO_MESSAGEBOND,
+	MOB_ACTION_GET_INFO_MESSAGE_SENDERBOND,
     MOB_ACTION_GET_INFO_MOB_CATEGORY,
     MOB_ACTION_GET_INFO_MOB_TYPE,
     MOB_ACTION_GET_INFO_OTHER_BODY_PART,
@@ -140,6 +142,7 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_HOME,
     MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC,
     MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
+	MOB_ACTION_MOVE_BONDED_MOB_AVERAGE,
 };
 
 enum MOB_ACTION_SET_ANIMATION_OPTIONS {
@@ -267,6 +270,7 @@ void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
+void send_message_to_bonds(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
 void set_animation(mob_action_run_data &data);
 void set_far_reach(mob_action_run_data &data);

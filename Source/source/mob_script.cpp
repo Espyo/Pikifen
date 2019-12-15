@@ -183,7 +183,8 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_object_in_reach",    MOB_EVENT_OBJECT_IN_REACH);
     r("on_opponent_in_reach",  MOB_EVENT_OPPONENT_IN_REACH);
     r("on_pikmin_land",        MOB_EVENT_PIKMIN_LANDED);
-    r("on_receive_message",    MOB_EVENT_RECEIVE_MESSAGE);
+    r("on_receive_message",      MOB_EVENT_RECEIVE_MESSAGE);
+	r("on_receive_message_bond", MOB_EVENT_RECEIVE_MESSAGEBOND);
     r("on_released",           MOB_EVENT_RELEASED);
     r("on_reach_destination",  MOB_EVENT_REACHED_DESTINATION);
     r("on_timer",              MOB_EVENT_TIMER);

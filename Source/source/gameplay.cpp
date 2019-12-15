@@ -172,7 +172,7 @@ void gameplay::load() {
 
 	vector<mobgroup*> mobs_in_groups;
 	vector<mob*> mobs_per_gen;
-	int g=0;
+	int g = 0;
 	int lig = 0;
 	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 		mob_gen* m_ptr = cur_area_data.mob_generators[m];
@@ -183,23 +183,22 @@ void gameplay::load() {
 	}
 	vector<int> group_amounts;
 	size_t n_groups = lig;
-	for (size_t s = 0; s < n_groups + 1; ++s) {
+	for (size_t s = 0; s <= n_groups; ++s) {
 		group_amounts.push_back(0);
 	}
 	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 		mob_gen* m_ptr = cur_area_data.mob_generators[m];
 		int temp = m_ptr->lid;
-		if (group_amounts[temp + 1] != 0) {
-			group_amounts[temp + 1] += 1;
+		if (group_amounts[temp] != 0) {
+			group_amounts[temp] += 1;
 
 		}
 		else {
-			group_amounts[temp + 1] = 1;
+			group_amounts[temp] = 1;
 		}
 
 
 	}
-	vector<bool>groups;
 
 	int groupsmissing = 0;
 	for (size_t s = 0; s < group_amounts.size(); ++s) {
@@ -209,26 +208,25 @@ void gameplay::load() {
 
 			for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 				mob_gen* m_ptr = cur_area_data.mob_generators[m];
-				if (m_ptr->lid > s - groupsmissing - 1) {
+				if (m_ptr->lid > s - groupsmissing) {
 					m_ptr->lid += -1;
 
 				}
 			}
 		}
-	for (size_t t = 0; t < group_amounts.size(); ++t) {
+	for (size_t t = 0; t <= n_groups; ++t) {
 		mobgroup* mobs_per_group = new mobgroup();
+		if (t != 0) g += group_amounts[t - 1];
 		for (size_t m = 0; m < group_amounts[t]; ++m) {
 			
-			if (t == 0)g =+ 0;
-			else g += group_amounts[t - 1];
-			mob_gen* m_ptr = cur_area_data.mob_generators[m + g];
-			mob* mob_ptr = create_mob(m_ptr->category, m_ptr->pos, m_ptr->type,
-				m_ptr->angle, m_ptr->vars);
-			mob_ptr->lid = m;
-			mob_ptr->groupid = t - 1;
-			mobs_per_group->mobs.push_back(mob_ptr);
-			mobs_per_gen.push_back(mob_ptr);
-
+			 
+				mob_gen* m_ptr = cur_area_data.mob_generators[m + g];
+				mob* mob_ptr = create_mob(m_ptr->category, m_ptr->pos, m_ptr->type,
+					m_ptr->angle, m_ptr->vars);
+				mob_ptr->lid = m;
+				mob_ptr->groupid = t;
+				mobs_per_group->mobs.push_back(mob_ptr);
+				mobs_per_gen.push_back(mob_ptr);
 		}
 		int mel = mobs_per_group->mobs.size();
 		for (size_t m = 0; m < group_amounts[t]; ++m) {
@@ -237,7 +235,6 @@ void gameplay::load() {
 			for (size_t mt = 0; mt < mel ; ++mt) {
 				mob* mm = mobs_per_group->mobs[mt];
 					mobe_ptr->links.push_back(mm);
-				
 
 			}
 

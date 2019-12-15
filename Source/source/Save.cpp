@@ -13,6 +13,11 @@
 
 
 void savemobs() {
+	for (size_t m = 0; m < mobs.size(); ++m) {
+		mob* l = mobs[m];
+		if (l->linkedchild == true) delete_mob(l , true);
+	}
+
 	data_node master("masternode", "");
 	data_node* mobs_node = new data_node("mobs", "");
 	data_node* onions_node = new data_node("onions", "");
@@ -28,18 +33,18 @@ void savemobs() {
 	}
 	vector<int> group_amounts;
 	size_t n_groups = lig;
-	for (size_t s = 0; s < n_groups + 1; ++s) {
+	for (size_t s = 0; s <= n_groups; ++s) {
 		group_amounts.push_back(0);
 	}
 	for (size_t m = 0; m < mobs.size(); ++m) {
 		mob* m_ptr = mobs[m];
 		int temp = m_ptr->groupid;
-		if (group_amounts[temp+1] != 0) {
-			group_amounts[temp+1] += 1;
+		if (group_amounts[temp] != 0) {
+			group_amounts[temp] += 1;
 
 		}
 		else {
-			group_amounts[temp+1] = 1;
+			group_amounts[temp] = 1;
 		}
 
 		
@@ -53,20 +58,21 @@ void savemobs() {
 
 			for (size_t m = 0; m < mobs.size(); ++m) {
 				mob* m_ptr = mobs[m];
-				if (m_ptr->groupid > s - groupsmissing - 1) {
+				if (m_ptr->groupid > s - groupsmissing) {
 					m_ptr->groupid += -1;
 
 				}
 			}
 		}
 		else { 
-			mobs_node->add(new data_node("mobgroupV" + i2s(s - groupsmissing - 1), "")); 
+			mobs_node->add(new data_node("mobgroupV" + i2s(s - groupsmissing), "")); 
 		}
 	}
+
 	data_node* groupAmount = new data_node("ga", i2s(lig));
 	for (size_t m = 0; m < mobs.size(); ++m) {
 		mob* m_ptr = mobs[m];
-		data_node* mobsl_node = mobs_node->get_child(m_ptr->groupid +1);
+		data_node* mobsl_node = mobs_node->get_child(m_ptr->groupid);
 		data_node* mob_node =
 			new data_node(m_ptr->type->category->name, "");
 		mobsl_node->add(mob_node);

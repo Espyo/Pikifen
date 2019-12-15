@@ -150,9 +150,13 @@ public:
 	size_t near_reach;
 	//Mobs it is linked to.
 	vector<mob*> links;
+	//parent and child links
+	vector<mob*> bond;
 	//the link group the mob is in
   int groupid;
-
+  bool linkedparent;
+  bool linkedchild;
+  
 	//Movement and other physics.
 	//Coordinates.
 	point pos;
@@ -356,6 +360,7 @@ public:
 	void stop_height_effect();
 	void release_chomped_pikmin();
 	void send_message(mob* receiver, string &msg);
+	void send_message_bond(mob* receiver, string &msg);
 	mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
 	void start_dying();
 	void finish_dying();

@@ -686,7 +686,7 @@ void area_editor::mob_to_gui() {
         set_button_text(
             frm_mob, "but_type", m_ptr->type ? m_ptr->type->name : ""
         );
-		if (m_ptr->lid != -1) {
+		if (m_ptr->lid != 0) {
 			set_label_text(
 				frm_mob, "lbl_links",
 				i2s(m_ptr->lid) + " " +
@@ -700,7 +700,7 @@ void area_editor::mob_to_gui() {
 				("this mob isn't in a group")
 			);
 		}
-        if(m_ptr->lid == -1) {
+        if(m_ptr->lid == 0) {
             disable_widget(frm_mob->widgets["but_del_link"]);
         } else {
             enable_widget(frm_mob->widgets["but_del_link"]);

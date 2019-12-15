@@ -3097,18 +3097,18 @@ bool area_editor::save_area(const bool to_backup) {
 	}
 	vector<int> group_amounts;
 	size_t n_groups = lig;
-	for (size_t s = 0; s < n_groups + 1; ++s) {
+	for (size_t s = 0; s <= n_groups; ++s) {
 		group_amounts.push_back(0);
 	}
 	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 		mob_gen* m_ptr = cur_area_data.mob_generators[m];
 		int temp = m_ptr->lid;
-		if (group_amounts[temp + 1] != 0) {
-			group_amounts[temp + 1] += 1;
+		if (group_amounts[temp] != 0) {
+			group_amounts[temp] += 1;
 
 		}
 		else {
-			group_amounts[temp + 1] = 1;
+			group_amounts[temp] = 1;
 		}
 
 
@@ -3122,20 +3122,20 @@ bool area_editor::save_area(const bool to_backup) {
 
 			for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 				mob_gen* m_ptr = cur_area_data.mob_generators[m];
-				if (m_ptr->lid > s - groupsmissing - 1) {
+				if (m_ptr->lid > s - groupsmissing) {
 					m_ptr->lid += -1;
 
 				}
 			}
 		}
 		else {
-			mobs_node->add(new data_node("mobgroupV" + i2s(s - groupsmissing - 1), ""));
+			mobs_node->add(new data_node("mobgroupV" + i2s(s - groupsmissing), ""));
 		}
 	}
 	data_node* groupAmount = new data_node("ga", i2s(lig));
 	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 		mob_gen* m_ptr = cur_area_data.mob_generators[m];
-		data_node* mobsl_node = mobs_node->get_child(m_ptr->lid + 1);
+		data_node* mobsl_node = mobs_node->get_child(m_ptr->lid);
 		data_node* mob_node =
 			new data_node(m_ptr->category->name, "");
 		mobsl_node->add(mob_node);
@@ -3158,7 +3158,7 @@ bool area_editor::save_area(const bool to_backup) {
 		if (m_ptr->vars.size()) {
 			mob_node->add(new data_node("vars", m_ptr->vars));
 		}
-		if (m_ptr->lid != -1)
+		if (m_ptr->lid != 0)
 			mob_node->add(
 				new data_node("group", i2s(m_ptr->lid))
 			);

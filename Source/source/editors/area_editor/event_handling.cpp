@@ -584,7 +584,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 		for (auto m = cur_area_data.mob_generators.begin(); m != cur_area_data.mob_generators.begin(); ++m) {
 			mob_gen* m_ptr = *m;
 			if (m_ptr->lid == deletedid) {
-				m_ptr->lid = -1;
+				m_ptr->lid = 0;
 			}
 		}
 

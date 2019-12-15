@@ -252,7 +252,7 @@ void load_area(
 
 	int g = geometry_file.get_child_by_name("mobs")->get_nr_of_children();
   
-    for(size_t m = 0; m < g; ++m) {
+    for(size_t m = 0; m <= g; m++) {
 	
 		data_node* mobl_node =
 			geometry_file.get_child_by_name("mobs")->get_child_by_name("mobgroupV" + i2s(m - 1));

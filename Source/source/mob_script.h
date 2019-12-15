@@ -77,6 +77,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_REACHED_DESTINATION,
     //When it receives a message from another mob.
     MOB_EVENT_RECEIVE_MESSAGE,
+	//when it receive a message from it's bond.
+	MOB_EVENT_RECEIVE_MESSAGEBOND,
     //When it is safely released from the leader's/enemy's grasp.
     MOB_EVENT_RELEASED,
     //When it gets touched by a leader.

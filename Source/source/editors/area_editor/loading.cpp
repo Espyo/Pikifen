@@ -1478,7 +1478,7 @@ void area_editor::load() {
 
 	frm_mob->widgets["but_del_link"]->left_mouse_click_handler =
 		[this](lafi::widget*, int, int) {
-		if ((*selected_mobs.begin())->lid == -1) {
+		if ((*selected_mobs.begin())->lid == 0) {
 			emit_status_bar_message(
 				"This mob has no links to delete!", false
 			);
@@ -2687,18 +2687,18 @@ void area_editor::load() {
 		}
 		vector<int> group_amounts;
 		size_t n_groups = linkid;
-		for (size_t s = 0; s < n_groups + 1; ++s) {
+		for (size_t s = 0; s <= n_groups; ++s) {
 			group_amounts.push_back(0);
 		}
 		for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 			mob_gen* m_ptr = cur_area_data.mob_generators[m];
 			int temp = m_ptr->lid;
-			if (group_amounts[temp + 1] != 0) {
-				group_amounts[temp + 1] += 1;
+			if (group_amounts[temp] != 0) {
+				group_amounts[temp] += 1;
 
 			}
 			else {
-				group_amounts[temp + 1] = 1;
+				group_amounts[temp] = 1;
 			}
 
 
@@ -2712,7 +2712,7 @@ void area_editor::load() {
 
 				for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
 					mob_gen* m_ptr = cur_area_data.mob_generators[m];
-					if (m_ptr->lid > s - groupsmissing - 1) {
+					if (m_ptr->lid > s - groupsmissing) {
 						m_ptr->lid += -1;
 						linkid += -1;
 					}

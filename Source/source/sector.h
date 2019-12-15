@@ -270,7 +270,7 @@ struct mob_gen {
 	int lid;
 	mob_gen(
 		mob_category* category = NULL, const point &pos = point(),
-		mob_type* type = NULL, const float angle = 0, const string &vars = "", const int lid = -1
+		mob_type* type = NULL, const float angle = 0, const string &vars = "", const int lid = 0
     );
 };
 
