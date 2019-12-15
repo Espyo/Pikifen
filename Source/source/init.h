@@ -10,7 +10,7 @@
 
 #ifndef INIT_INCLUDED
 #define INIT_INCLUDED
-
+#include <csignal>
 #include "animation.h"
 #include "data_file.h"
 

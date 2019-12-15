@@ -686,13 +686,21 @@ void area_editor::mob_to_gui() {
         set_button_text(
             frm_mob, "but_type", m_ptr->type ? m_ptr->type->name : ""
         );
-        
-        set_label_text(
-            frm_mob, "lbl_links",
-            i2s(m_ptr->links.size()) + " " +
-            (m_ptr->links.size() == 1 ? "link" : "links")
-        );
-        if(m_ptr->links.empty()) {
+		if (m_ptr->lid != -1) {
+			set_label_text(
+				frm_mob, "lbl_links",
+				i2s(m_ptr->lid) + " " +
+				("group link id")
+			);
+		}
+		else {
+			set_label_text(
+				frm_mob, "lbl_links",
+				i2s(m_ptr->lid) + " " +
+				("this mob isn't in a group")
+			);
+		}
+        if(m_ptr->lid == -1) {
             disable_widget(frm_mob->widgets["but_del_link"]);
         } else {
             enable_widget(frm_mob->widgets["but_del_link"]);

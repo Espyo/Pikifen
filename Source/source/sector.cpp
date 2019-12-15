@@ -1039,13 +1039,14 @@ void edge::swap_vertexes() {
  */
 mob_gen::mob_gen(
     mob_category* category, const point &pos,
-    mob_type* type, const float angle, const string &vars
+    mob_type* type, const float angle, const string &vars, const int lid
 ) :
     category(category),
     type(type),
     pos(pos),
     angle(angle),
-    vars(vars) {
+    vars(vars), 
+    lid(lid){
     
 }
 

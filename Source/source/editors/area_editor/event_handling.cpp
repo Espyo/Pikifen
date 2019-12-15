@@ -563,89 +563,32 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
     
         //Link two mobs.
-        mob_gen* target = get_mob_under_point(mouse_cursor_w);
-        if(!target) return;
-        
-        for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
-            if(*m == target) {
-                emit_status_bar_message(
-                    "You can't link to an object to itself!", false
-                );
-                return;
-            }
-        }
-        mob_gen* m_ptr = *(selected_mobs.begin());
-        for(size_t l = 0; l < m_ptr->links.size(); ++l) {
-            if(m_ptr->links[l] == target) {
-                emit_status_bar_message(
-                    "The object already links to that object!", false
-                );
-                return;
-            }
-        }
-        
-        register_change("Object link creation");
-        
-        m_ptr->links.push_back(target);
-        m_ptr->link_nrs.push_back(cur_area_data.find_mob_gen_nr(target));
-        
-        homogenize_selected_mobs();
-        
-        sub_state = EDITOR_SUB_STATE_NONE;
-        mob_to_gui();
-        
+		if(selected_mobs.size() > 1){
+			for (auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+				mob_gen* m_ptr = *m;
+				m_ptr->lid = linkid;
+			}
+
+			linkid += 1;
+			register_change("Object link creation");
+			sub_state = EDITOR_SUB_STATE_NONE;
+			mob_to_gui();
+		}
         
     } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
-    
-        //Delete a mob link.
-        mob_gen* target = get_mob_under_point(mouse_cursor_w);
-        mob_gen* m_ptr = *(selected_mobs.begin());
-        
-        if(!target) {
-            pair<mob_gen*, mob_gen*> data1;
-            pair<mob_gen*, mob_gen*> data2;
-            if(!get_mob_link_under_point(mouse_cursor_w, &data1, &data2)) {
-                return;
-            }
-            
-            if(
-                data1.first != m_ptr &&
-                data1.second != m_ptr &&
-                data2.first != m_ptr &&
-                data2.second != m_ptr
-            ) {
-                emit_status_bar_message(
-                    "That link does not belong to the current object!", false
-                );
-                return;
-            }
-            
-            if(data1.first == m_ptr) {
-                target = data1.second;
-            } else if(data2.first == m_ptr) {
-                target = data2.second;
-            }
-        }
-        
-        size_t link_i = 0;
-        for(; link_i < m_ptr->links.size(); ++link_i) {
-            if(m_ptr->links[link_i] == target) {
-                break;
-            }
-        }
-        
-        if(link_i == m_ptr->links.size()) {
-            emit_status_bar_message(
-                "That object is not linked by the current one!", false
-            );
-            return;
-        } else {
-            register_change("Object link deletion");
-            m_ptr->links.erase(m_ptr->links.begin() + link_i);
-            m_ptr->link_nrs.erase(m_ptr->link_nrs.begin() + link_i);
-        }
-        
-        homogenize_selected_mobs();
+		mob_gen* target = get_mob_under_point(mouse_cursor_w);
+		if (!target) {
+			return;
+		}
+		int deletedid = target->lid;
+		for (auto m = cur_area_data.mob_generators.begin(); m != cur_area_data.mob_generators.begin(); ++m) {
+			mob_gen* m_ptr = *m;
+			if (m_ptr->lid == deletedid) {
+				m_ptr->lid = -1;
+			}
+		}
+
+        register_change("Object link deletion");
         
         sub_state = EDITOR_SUB_STATE_NONE;
         mob_to_gui();

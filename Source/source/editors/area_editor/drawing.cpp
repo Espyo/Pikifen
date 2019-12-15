@@ -1015,12 +1015,11 @@ void area_editor::do_drawing() {
         sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR ||
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
         sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
         point marker = mouse_cursor_w;
-        
+		
         if(sub_state != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snap_point(marker);
         }
@@ -1034,21 +1033,44 @@ void area_editor::do_drawing() {
             al_map_rgb(255, 255, 255), 1.0 / cam_zoom
         );
     }
-    
+	if (sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+		if (selecting) {
+			al_draw_rectangle(
+				selection_start.x,
+				selection_start.y,
+				selection_end.x,
+				selection_end.y,
+				al_map_rgb(
+					SELECTION_COLOR[0],
+					SELECTION_COLOR[1],
+					SELECTION_COLOR[2]
+				),
+				2.0 / cam_zoom
+
+			);
+		}
+
+	}
     //Delete thing marker.
     if(
         sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        point marker = mouse_cursor_w;
-        
-        al_draw_line(
-            marker.x - 16, marker.y - 16, marker.x + 16, marker.y + 16,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
-        );
-        al_draw_line(
-            marker.x - 16, marker.y + 16, marker.x + 16, marker.y - 16,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
-        );
+		
+		if (selecting) {
+			al_draw_rectangle(
+				selection_start.x,
+				selection_start.y,
+				selection_end.x,
+				selection_end.y,
+				al_map_rgb(
+					SELECTION_COLOR[0],
+					SELECTION_COLOR[1],
+					SELECTION_COLOR[2]
+				),
+				2.0 / cam_zoom
+
+			);
+		}
     }
     
     al_use_transform(&identity_transform);

@@ -250,70 +250,77 @@ void load_area(
     
     //Mobs.
 
-	int g = geometry_file.get_child_by_name("mobs")->get_nr_of_children();
-  
-    for(size_t m = 0; m < g; ++m) {
-	
-		data_node* mobl_node =
-			geometry_file.get_child_by_name("mobs")->get_child_by_name("mobgroupV" + i2s(m - 1));
-		for (size_t s = 0; s < mobl_node->get_nr_of_children(); ++s) {
-			mob_gen* mob_ptr = new mob_gen();
-			data_node* mob_node = mobl_node->get_child(s);
-			mob_ptr->lid = m - 1;
-			mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
-			mob_ptr->angle =
-				s2f(
-					mob_node->get_child_by_name("angle")->get_value_or_default("0")
-				);
-			mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
-			mob_ptr->category = mob_categories.get_from_name(mob_node->name);
-			if (!mob_ptr->category) continue;
+ 
 
-			string mt = mob_node->get_child_by_name("type")->value;
-			mob_ptr->type = mob_ptr->category->get_type(mt);
+	size_t n_groups = s2i(geometry_file.get_child_by_name("groupnode")->value);
+	vector<int> group_amounts;
+	for (size_t t = 0; t < n_groups + 1; ++t) {
 
-
-
-			bool problem = false;
-
-			if (!mob_ptr->type && !load_for_editor) {
-				//Error.
-				log_error(
-					"Unknown \"" + mob_ptr->category->name +
-					"\" mob type \"" +
-					mt + "\"!",
-					mob_node
-				);
-				problem = true;
-			}
-
-			if (
-				(
-					mob_ptr->category->id == MOB_CATEGORY_NONE ||
-					mob_ptr->category->id == INVALID
-					) && !load_for_editor
-				) {
-
-				log_error(
-					"Unknown mob category \"" + mob_node->name + "\"!", mob_node
-				);
-				mob_ptr->category = mob_categories.get(MOB_CATEGORY_NONE);
-				problem = true;
-
-			}
-
-			if (!problem) {
-				cur_area_data.mob_generators.push_back(mob_ptr);
-			}
-
-			else {
-				delete mob_ptr;
-
-			}
-
-		}
-
+		int g = geometry_file.get_child_by_name("mobs")->get_nr_of_children_by_name("mobgroupV" + i2s(t -1));
+		group_amounts[t] = g;
 	}
+cur_area_data.mobgroupamounts = group_amounts;
+Int mobnum = 0;
+	for(size_t; t< group_amounts.size(); ++t){
+  
+    for(size_t m = 0; m < group_amounts[t]; ++m) {
+        
+        data_node* mob_node =
+            geometry_file.get_child_by_name("mobs")->get_child(mobnum + m)->get_child(1);
+            
+        mob_gen* mob_ptr = new mob_gen();
+        
+        mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
+        mob_ptr->angle =
+            s2f(
+                mob_node->get_child_by_name("angle")->get_value_or_default("0")
+            );
+        mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
+        m_ptr->lid= t - 1;
+        mob_ptr->category = mob_categories.get_from_name(mob_node->name);
+        if(!mob_ptr->category) continue;
+        
+        string mt = mob_node->get_child_by_name("type")->value;
+        mob_ptr->type = mob_ptr->category->get_type(mt);
+        
+
+        
+        bool problem = false;
+        
+        if(!mob_ptr->type && !load_for_editor) {
+            //Error.
+            log_error(
+                "Unknown \"" + mob_ptr->category->name +
+                "\" mob type \"" +
+                mt + "\"!",
+                mob_node
+            );
+            problem = true;
+        }
+        
+        if(
+            (
+                mob_ptr->category->id == MOB_CATEGORY_NONE ||
+                mob_ptr->category->id == INVALID
+            ) && !load_for_editor
+        ) {
+        
+            log_error(
+                "Unknown mob category \"" + mob_node->name + "\"!", mob_node
+            );
+            mob_ptr->category = mob_categories.get(MOB_CATEGORY_NONE);
+            problem = true;
+            
+        }
+        
+        if(!problem) {
+            cur_area_data.mob_generators.push_back(mob_ptr);
+        } else {
+            delete mob_ptr;
+        }
+    }
+mobnum += group_amounts[t];
+}
     
 
     //Path stops.

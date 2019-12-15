@@ -24,6 +24,7 @@ using namespace std;
 void load_area(
     const string &name, const bool load_for_editor, const bool from_backup
 );
+
 void load_area_textures();
 void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(

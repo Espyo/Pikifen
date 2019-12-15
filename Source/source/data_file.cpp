@@ -10,7 +10,7 @@ using namespace std;
 //Creates a dummy node. If the programmer
 //requests an invalid node, a dummy is returned.
 data_node* data_node::create_dummy() {
-    data_node* new_dummy_child = new data_node();
+    data_node* new_dummy_child = new data_node("youdummy","");
     new_dummy_child->line_nr = line_nr;
     new_dummy_child->file_name = file_name;
     new_dummy_child->file_was_opened = file_was_opened;

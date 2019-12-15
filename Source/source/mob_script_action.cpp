@@ -8,7 +8,7 @@
  * Mob script action classes and
  * related functions.
  */
-
+#include <algorithm>
 #include "mob_script_action.h"
 
 #include "utils/string_utils.h"
@@ -673,13 +673,13 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_MOVE_LINKED_MOB_AVERAGE: {
-        if(data.m->links.empty()) {
+        if(data.m->groupid= t -1) {
             return;
         }
         
         point des;
         for(size_t l = 0; l < data.m->links.size(); ++l) {
-            des += data.m->links[l]->pos;
+            if(l != data.m->lid)des += data.m->links[l]->pos;
         }
         des = des / data.m->links.size();
         
@@ -742,8 +742,9 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
  */
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
     for(size_t l = 0; l < data.m->links.size(); ++l) {
-        if(data.m->links[l] == data.m) continue;
+        if(l != data.m->lid){
         data.m->send_message(data.m->links[l], data.args[0]);
+     }
     }
 }
 
@@ -933,15 +934,21 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
  * Code for the z stabilization mob script action.
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
-    if(data.m->links.empty()) {
+    if(data.m->groupid = -1) {
         return;
     }
-    
-    float best_match_z = data.m->links[0]->z;
-    size_t t = s2i(data.args[0]);
+	size_t t = 0;
+	float best_match_z = data.m->links[0]->z;
+    if (0 == data.m->lid){
+		best_match_z = data.m->links[1]->z;
+		t = s2i(data.args[0]);
+	} else {
+		//best_match_z = data.m->links[0]->z;
+		t = s2i(data.args[0]);
+	}
     
     for(size_t l = 1; l < data.m->links.size(); ++l) {
-    
+		if(data.m->lid != l){
         switch(t) {
         case MOB_ACTION_STABILIZE_Z_HIGHEST: {
             if(data.m->links[l]->z > best_match_z) {
@@ -957,7 +964,7 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
             
         }
         }
-        
+        }
     }
     
     data.m->z = best_match_z + s2f(data.args[1]);

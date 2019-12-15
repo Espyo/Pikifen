@@ -2493,7 +2493,14 @@ void area_editor::load_area(const bool from_backup) {
     clear_current_area();
     
     ::load_area(cur_area_name, true, from_backup);
-    
+	linkid = 0;
+	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+		mob_gen* m_ptr = cur_area_data.mob_generators[m];
+		int temp = m_ptr->lid;
+		if (linkid < temp) {
+			linkid = temp;
+		}
+	}
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
     vector<pair<string, size_t> > texture_uses_vector;
@@ -3076,49 +3083,89 @@ bool area_editor::save_area(const bool to_backup) {
     }
     
     //Mobs.
-    data_node* mobs_node = new data_node("mobs", "");
-    geometry_file.add(mobs_node);
-    
-    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_data.mob_generators[m];
-        data_node* mob_node =
-            new data_node(m_ptr->category->name, "");
-        mobs_node->add(mob_node);
-        
-        if(m_ptr->type) {
-            mob_node->add(
-                new data_node("type", m_ptr->type->name)
-            );
-        }
-        mob_node->add(
-            new data_node(
-                "p",
-                f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
-            )
-        );
-        if(m_ptr->angle != 0) {
-            mob_node->add(
-                new data_node("angle", f2s(m_ptr->angle))
-            );
-        }
-        if(m_ptr->vars.size()) {
-            mob_node->add(
-                new data_node("vars", m_ptr->vars)
-            );
-        }
-        
-        string links_str;
-        for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
-            if(l > 0) links_str += " ";
-            links_str += i2s(m_ptr->link_nrs[l]);
-        }
-        
-        if(!links_str.empty()) {
-            mob_node->add(
-                new data_node("links", links_str)
-            );
-        }
-    }
+	data_node* mobs_node = new data_node("mobs", "");
+	data_node* onions_node = new data_node("onions", "");
+	int id = 0;
+	int lig = 0;
+
+	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+		mob_gen* m_ptr = cur_area_data.mob_generators[m];
+		int temp = m_ptr->lid;
+		if (lig < temp) {
+			lig = temp;
+		}
+	}
+	vector<int> group_amounts;
+	size_t n_groups = lig;
+	for (size_t s = 0; s < n_groups + 1; ++s) {
+		group_amounts.push_back(0);
+	}
+	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+		mob_gen* m_ptr = cur_area_data.mob_generators[m];
+		int temp = m_ptr->lid;
+		if (group_amounts[temp + 1] != 0) {
+			group_amounts[temp + 1] += 1;
+
+		}
+		else {
+			group_amounts[temp + 1] = 1;
+		}
+
+
+	}
+	vector<bool>groups;
+
+	int groupsmissing = 0;
+	for (size_t s = 0; s < group_amounts.size(); ++s) {
+		if (group_amounts[s] == 0) {
+			groupsmissing += 1;
+
+			for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+				mob_gen* m_ptr = cur_area_data.mob_generators[m];
+				if (m_ptr->lid > s - groupsmissing - 1) {
+					m_ptr->lid += -1;
+
+				}
+			}
+		}
+		else {
+			mobs_node->add(new data_node("mobgroupV" + i2s(s - groupsmissing - 1), ""));
+		}
+	}
+	data_node* groupAmount = new data_node("ga", i2s(lig));
+	for (size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+		mob_gen* m_ptr = cur_area_data.mob_generators[m];
+		data_node* mobsl_node = mobs_node->get_child(m_ptr->lid + 1);
+		data_node* mob_node =
+			new data_node(m_ptr->category->name, "");
+		mobsl_node->add(mob_node);
+        if (m_ptr->type) {
+			mob_node->add(
+				new data_node("type", m_ptr->type->name)
+			);
+		}
+		mob_node->add(
+			new data_node(
+				"p",
+				f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
+			)
+		);
+		if (m_ptr->angle != 0) {
+			mob_node->add(
+				new data_node("angle", f2s(m_ptr->angle))
+			);
+		}
+		if (m_ptr->vars.size()) {
+			mob_node->add(new data_node("vars", m_ptr->vars));
+		}
+		if (m_ptr->lid != -1)
+			mob_node->add(
+				new data_node("group", i2s(m_ptr->lid))
+			);
+	}
+
+	geometry_file.add(mobs_node);
+	geometry_file.add(groupAmount);
     
     //Path stops.
     data_node* path_stops_node = new data_node("path_stops", "");

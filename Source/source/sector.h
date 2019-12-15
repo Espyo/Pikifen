@@ -266,10 +266,11 @@ struct mob_gen {
     string vars;
     vector<mob_gen*> links; //Cache for performance.
     vector<size_t> link_nrs;
-    
-    mob_gen(
-        mob_category* category = NULL, const point &pos = point(),
-        mob_type* type = NULL, const float angle = 0, const string &vars = ""
+	//the link id of the group the mob is in
+	int lid;
+	mob_gen(
+		mob_category* category = NULL, const point &pos = point(),
+		mob_type* type = NULL, const float angle = 0, const string &vars = "", const int lid = -1
     );
 };
 
@@ -301,7 +302,6 @@ struct tree_shadow {
 
 
 
-
 /* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
@@ -318,7 +318,6 @@ struct area_data {
     vector<mob_gen*> mob_generators;
     vector<path_stop*> path_stops;
     vector<tree_shadow*> tree_shadows;
-    
     ALLEGRO_BITMAP* bg_bmp;
     string bg_bmp_file_name;
     float bg_bmp_zoom;
@@ -334,7 +333,7 @@ struct area_data {
     
     weather weather_condition;
     string weather_name;
-    
+
     area_data();
     void check_stability();
     void clone(area_data &other);

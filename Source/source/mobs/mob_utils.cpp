@@ -641,6 +641,7 @@ mob* create_mob(
         get_var_vectors(vars, var_name_strings, var_value_strings);
         for(size_t v = 0; v < var_name_strings.size(); ++v) {
             m_ptr->vars[var_name_strings[v]] = var_value_strings[v];
+			m_ptr->varnames.push_back(var_name_strings[v]);
         }
     }
     
@@ -725,7 +726,7 @@ mob* create_mob(
             );
         }
     }
-    
+
     mobs.push_back(m_ptr);
     return m_ptr;
 }

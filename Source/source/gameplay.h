@@ -13,14 +13,14 @@
 #define GAMEPLAY_INCLUDED
 
 #include "game_state.h"
-
+#include "Save.h"
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay : public game_state {
 private:
 
-    static const float AREA_INTRO_HUD_MOVE_TIME;
+static const float AREA_INTRO_HUD_MOVE_TIME;
     
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
@@ -94,8 +94,13 @@ private:
         mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
     );
     void unload_game_content();
-    
+	
+
+
 public:
+struct mobgroup{
+vector<mob*> mobs;
+ };    
     gameplay();
     ~gameplay();
     

@@ -322,6 +322,7 @@ private:
     set<mob_gen*> selected_mobs;
     //Currently selected path links.
     set<pair<path_stop*, path_stop*> > selected_path_links;
+	int linkid;
     //Currently selected path stops.
     set<path_stop*> selected_path_stops;
     //Currently selected sectors.

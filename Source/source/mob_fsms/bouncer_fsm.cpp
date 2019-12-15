@@ -9,7 +9,7 @@
  */
 
 #include "bouncer_fsm.h"
-
+#include <algorithm>
 #include "../functions.h"
 #include "../mobs/bouncer.h"
 #include "../utils/string_utils.h"
