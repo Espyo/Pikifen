@@ -698,7 +698,12 @@ void init_mob_actions() {
         mob_action_runners::send_message_to_links,
         nullptr
     );
-    
+	reg_action(
+		MOB_ACTION_SEND_MESSAGE_TO_BONDS,
+		"send_message_to_bonds",
+		mob_action_runners::send_message_to_bonds,
+		nullptr
+	);
     reg_param("distance", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
     reg_action(
