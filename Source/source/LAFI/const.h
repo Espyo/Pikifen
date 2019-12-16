@@ -51,7 +51,7 @@ enum EASY_FLAGS {
     EASY_FLAG_WIDTH_PX = 1,  //Width is in pixels, not percentage.
 };
 
-const float TAU = M_PI * 2;
+const float TAU = 3.14159265358979323846 * 2;
 
 }
 

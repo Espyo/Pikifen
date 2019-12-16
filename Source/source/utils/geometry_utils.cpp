@@ -464,7 +464,7 @@ void coordinates_to_angle(
  * Converts an angle from degrees to radians.
  */
 float deg_to_rad(const float deg) {
-    return (M_PI / 180.0f) * deg;
+    return (3.14159265358979323846 / 180.0f) * deg;
 }
 
 
@@ -493,7 +493,7 @@ float get_angle_cw_dif(float a1, float a2) {
  * Returns the smallest distance between two angles.
  */
 float get_angle_smallest_dif(const float a1, const float a2) {
-    return M_PI - abs(abs(normalize_angle(a1) - normalize_angle(a2)) - M_PI);
+    return 3.14159265358979323846 - abs(abs(normalize_angle(a1) - normalize_angle(a2)) - 3.14159265358979323846);
 }
 
 
@@ -755,7 +755,7 @@ float normalize_angle(float a) {
  * Converts an angle from radians to degrees.
  */
 float rad_to_deg(const float rad) {
-    return (180.0f / M_PI) * rad;
+    return (180.0f / 3.14159265358979323846) * rad;
 }
 
 

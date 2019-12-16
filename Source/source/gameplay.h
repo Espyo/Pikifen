@@ -13,7 +13,6 @@
 #define GAMEPLAY_INCLUDED
 
 #include "game_state.h"
-#include "Save.h"
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
@@ -98,9 +97,7 @@ static const float AREA_INTRO_HUD_MOVE_TIME;
 
 
 public:
-struct mobgroup{
-vector<mob*> mobs;
- };    
+   
     gameplay();
     ~gameplay();
     

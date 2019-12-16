@@ -43,6 +43,10 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     far_reach(INVALID),
     near_reach(INVALID),
     pos(pos),
+	bond(nullptr),
+	linkedparent(false),
+	linkedchild(false),
+	groupid(0),
     z(0),
     speed_z(0),
     angle(angle),
@@ -77,6 +81,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group_spot_index(INVALID),
     carry_info(nullptr),
     id(next_mob_id),
+	lid(0),
     health(type->max_health),
     invuln_period(0),
     team(MOB_TEAM_NONE),
@@ -367,19 +372,19 @@ void mob::arachnorb_foot_move_logic() {
  * feet's positions.
  */
 void mob::arachnorb_head_turn_logic() {
-    if(bond.empty()) return;
+    if(bond->mobs.empty()) return;
     
     float angle_deviation_avg = 0;
     size_t n_feet = 0;
     
-    for(size_t l = 0; l < bond.size(); ++l) {
-        if(!bond[l]->parent) {
+    for(size_t l = 0; l < bond->mobs.size(); ++l) {
+        if(!bond->mobs[l]->parent) {
             continue;
         }
-        if(bond[l]->parent->m != this) {
+        if(bond->mobs[l]->parent->m != this) {
             continue;
         }
-        if(bond[l]->parent->limb_parent_body_part == INVALID) {
+        if(bond->mobs[l]->parent->limb_parent_body_part == INVALID) {
             continue;
         }
         
@@ -389,14 +394,14 @@ void mob::arachnorb_head_turn_logic() {
             get_angle(
                 point(),
                 get_hitbox(
-                    bond[l]->parent->limb_parent_body_part
+                    bond->mobs[l]->parent->limb_parent_body_part
                 )->pos
             );
         float cur_angle =
-            get_angle(pos, bond[l]->pos) - angle;
+            get_angle(pos, bond->mobs[l]->pos) - angle;
         float angle_deviation =
             get_angle_cw_dif(default_angle, cur_angle);
-        if(angle_deviation > M_PI) {
+        if(angle_deviation > 3.14159265358979323846) {
             angle_deviation -= TAU;
         }
         angle_deviation_avg += angle_deviation;
@@ -1895,12 +1900,14 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     }
     
     if(info->link_object_to_spawn) {
-		new_mob->linkedchild = true;
-		bond.push_back(new_mob);
+		linkedparent = true;
+		new_mob->bond->mobs.push_back(this);
     }
     if(info->link_spawn_to_object) {
-		linkedparent = true;
-        new_mob->bond.push_back(this);
+
+
+		new_mob->linkedchild = true;
+		bond->mobs.push_back(new_mob);
     }
     if(info->momentum != 0) {
         float a = randomf(0, TAU);

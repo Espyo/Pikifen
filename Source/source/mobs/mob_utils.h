@@ -122,6 +122,9 @@ struct circling_info_struct {
     circling_info_struct(mob* m);
 };
 
+struct mobgroup {
+	vector<mob*> mobs;
+};
 
 /* ----------------------------------------------------------------------------
  * Information on a mob's group.

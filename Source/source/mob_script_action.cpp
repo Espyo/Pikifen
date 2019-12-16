@@ -701,15 +701,15 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
 		data.m->chase(des, NULL, false);
 		break;
 	} case MOB_ACTION_MOVE_BONDED_MOB_AVERAGE: {
-		if (data.m->bond.size() == 0) {
+		if (data.m->bond->mobs.size() == 0) {
 			return;
 		}
 
 		point des;
-		for (size_t l = 0; l < data.m->bond.size(); ++l) {
-			des += data.m->bond[l]->pos;
+		for (size_t l = 0; l < data.m->bond->mobs.size(); ++l) {
+			des += data.m->bond->mobs[l]->pos;
 		}
-		des = des / data.m->bond.size();
+		des = des / data.m->bond->mobs.size();
 
 		data.m->chase(des, NULL, false);
 		break;
@@ -778,8 +778,8 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 
 void mob_action_runners::send_message_to_bonds(mob_action_run_data &data) {
 	for (size_t l = 0; l < data.m->links.size(); ++l) {
-		if (data.m->bond[l] != data.m) {
-			data.m->send_message_bond(data.m->bond[l], data.args[0]);
+		if (data.m->bond->mobs[l] != data.m) {
+			data.m->send_message_bond(data.m->bond->mobs[l], data.args[0]);
 		}
 	}
 }
@@ -971,26 +971,26 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
 	size_t t = 0;
 	float best_match_z;
-	if (data.m->bond[0] != data.m) {
-		best_match_z = data.m->bond[0]->z;
+	if (data.m->bond->mobs[0] != data.m) {
+		best_match_z = data.m->bond->mobs[0]->z;
 	} else {
-		best_match_z = data.m->bond[1]->z;
+		best_match_z = data.m->bond->mobs[1]->z;
 	}
     
 		//best_match_z = data.m->links[0]->z;
 		t = s2i(data.args[0]);
-    for(size_t l = 1; l < data.m->bond.size(); ++l) {
-		if(data.m->bond[l] != data.m){
+    for(size_t l = 1; l < data.m->bond->mobs.size(); ++l) {
+		if(data.m->bond->mobs[l] != data.m){
         switch(t) {
         case MOB_ACTION_STABILIZE_Z_HIGHEST: {
-            if(data.m->bond[l]->z > best_match_z) {
+            if(data.m->bond->mobs[l]->z > best_match_z) {
                 best_match_z = data.m->links[l]->z;
             }
             break;
             
         } case MOB_ACTION_STABILIZE_Z_LOWEST: {
-            if(data.m->bond[l]->z < best_match_z) {
-                best_match_z = data.m->bond[l]->z;
+            if(data.m->bond->mobs[l]->z < best_match_z) {
+                best_match_z = data.m->bond->mobs[l]->z;
             }
             break;
             

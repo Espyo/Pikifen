@@ -118,7 +118,7 @@ public:
 		const point &pos, mob_type* type, const float angle
 	);
 	virtual ~mob();
-
+	
 	//Basic information.
 	//The type of mob -- Olimar, Red Bulborb, etc.
 	mob_type* type;
@@ -151,11 +151,13 @@ public:
 	//Mobs it is linked to.
 	vector<mob*> links;
 	//parent and child links
-	vector<mob*> bond;
+	 mobgroup* bond;
 	//the link group the mob is in
-  int groupid;
-  bool linkedparent;
-  bool linkedchild;
+     int groupid;
+	 //if it's linked to a child
+     bool linkedparent;
+	 //if it is a child
+     bool linkedchild;
   
 	//Movement and other physics.
 	//Coordinates.
@@ -265,10 +267,6 @@ public:
 	//link identification
 	int lid;
 	//signalchannels
-	bool babs;
-	bool bob;
-	bool bill;
-	bool brutus;
 
 	//Particle generators attached to it.
 	vector<particle_generator> particle_generators;

@@ -625,7 +625,8 @@ mob* create_mob(
     function<void(mob*)> code_after_creation
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
-    
+	m_ptr->bond = new mobgroup();
+
     if(code_after_creation) {
         code_after_creation(m_ptr);
     }
