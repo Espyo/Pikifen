@@ -378,7 +378,7 @@ void mob_action_runners::focus(mob_action_run_data &data) {
         if(
             data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
             data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED ||
+            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT
         ) {
@@ -479,7 +479,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
             data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
         ) {
             *var = ((mob*) (data.custom_data_1))->type->name;
         }
@@ -498,7 +498,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         } else if(
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
         ) {
             *var =
                 data.m->get_closest_hitbox(
@@ -521,7 +521,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         } else if(
             data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
             data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_PIKMIN_LANDED
+            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
         ) {
             *var =
                 ((mob*) (data.custom_data_1))->get_closest_hitbox(

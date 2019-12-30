@@ -24,7 +24,7 @@ void converter_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(converter_fsm::become_idle);
         }
-        efc.new_event(MOB_EVENT_PIKMIN_LANDED); {
+        efc.new_event(MOB_EVENT_THROWN_PIKMIN_LANDED); {
             efc.run(converter_fsm::handle_pikmin);
         }
         efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {

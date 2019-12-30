@@ -24,7 +24,7 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(bouncer_fsm::spawn);
         }
-        efc.new_event(MOB_EVENT_WEIGHT_ADDED); {
+        efc.new_event(MOB_EVENT_RIDER_ADDED); {
             efc.run(bouncer_fsm::handle_mob);
         }
     }

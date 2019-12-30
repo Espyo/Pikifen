@@ -72,13 +72,17 @@ enum MOB_EVENT_TYPES {
     //When an opponent is within the "near" reach.
     MOB_EVENT_OPPONENT_IN_REACH,
     //When a Pikmin lands on it.
-    MOB_EVENT_PIKMIN_LANDED,
+    MOB_EVENT_THROWN_PIKMIN_LANDED,
     //When it reaches its destination.
     MOB_EVENT_REACHED_DESTINATION,
     //When it receives a message from another mob.
     MOB_EVENT_RECEIVE_MESSAGE,
     //When it is safely released from the leader's/enemy's grasp.
     MOB_EVENT_RELEASED,
+    //When a mob has landed on top of it. Only if this mob's walkable.
+    MOB_EVENT_RIDER_ADDED,
+    //When a mob that was on top of it has left. Only if this mob's walkable.
+    MOB_EVENT_RIDER_REMOVED,
     //When it gets touched by a leader.
     MOB_EVENT_TOUCHED_ACTIVE_LEADER,
     //When it touches a hazard (sector or hitbox).
@@ -93,9 +97,9 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TIMER,
     //When it touches a wall.
     MOB_EVENT_TOUCHED_WALL,
-    //When weight has been added on top of it. Only if mob is walkable.
+    //When weight has been added on top of it. Only if this mob's walkable.
     MOB_EVENT_WEIGHT_ADDED,
-    //When weight has been removed from on top of it. Only if mob is walkable.
+    //When weight was removed from on top of it. Only if this mob's walkable.
     MOB_EVENT_WEIGHT_REMOVED,
     
     //More internal script stuff.

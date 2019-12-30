@@ -2785,29 +2785,39 @@ void mob::tick_physics() {
         fsm.run_event(MOB_EVENT_TOUCHED_WALL);
     }
     
-    mob* weight_added_ev_mob = NULL;
-    mob* weight_removed_ev_mob = NULL;
+    mob* rider_added_ev_mob = NULL;
+    mob* rider_removed_ev_mob = NULL;
     
-    if(new_standing_on_mob != standing_on_mob && type->weight != 0.0f) {
+    if(new_standing_on_mob != standing_on_mob) {
         if(standing_on_mob) {
-            weight_removed_ev_mob = standing_on_mob;
+            rider_removed_ev_mob = standing_on_mob;
         }
         if(new_standing_on_mob) {
-            weight_added_ev_mob = new_standing_on_mob;
+            rider_added_ev_mob = new_standing_on_mob;
         }
     }
     
     standing_on_mob = new_standing_on_mob;
     
-    if(weight_removed_ev_mob) {
-        weight_removed_ev_mob->fsm.run_event(
-            MOB_EVENT_WEIGHT_REMOVED, (void*) this
+    if(rider_removed_ev_mob) {
+        rider_removed_ev_mob->fsm.run_event(
+            MOB_EVENT_RIDER_REMOVED, (void*) this
         );
+        if(type->weight != 0.0f) {
+            rider_removed_ev_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_REMOVED, (void*) this
+            );
+        }
     }
-    if(weight_added_ev_mob) {
-        weight_added_ev_mob->fsm.run_event(
-            MOB_EVENT_WEIGHT_ADDED, (void*) this
+    if(rider_added_ev_mob) {
+        rider_added_ev_mob->fsm.run_event(
+            MOB_EVENT_RIDER_ADDED, (void*) this
         );
+        if(type->weight != 0.0f) {
+            rider_added_ev_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_ADDED, (void*) this
+            );
+        }
     }
     
     

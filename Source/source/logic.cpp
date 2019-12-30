@@ -1146,7 +1146,7 @@ void gameplay::process_mob_touches(
     mob_event* touch_ob_ev =
         q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
     mob_event* pik_land_ev =
-        q_get_event(m_ptr, MOB_EVENT_PIKMIN_LANDED);
+        q_get_event(m_ptr, MOB_EVENT_THROWN_PIKMIN_LANDED);
     if(
         touch_op_ev || touch_le_ev ||
         touch_ob_ev || pik_land_ev
