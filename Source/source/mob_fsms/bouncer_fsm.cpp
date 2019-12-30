@@ -22,10 +22,22 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", BOUNCER_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(bouncer_fsm::spawn);
+            efc.run(bouncer_fsm::set_idling_animation);
         }
         efc.new_event(MOB_EVENT_RIDER_ADDED); {
             efc.run(bouncer_fsm::handle_mob);
+            efc.change_state("bouncing");
+        }
+    }
+    efc.new_state("bouncing", BOUNCER_STATE_BOUNCING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(bouncer_fsm::set_bouncing_animation);
+        }
+        efc.new_event(MOB_EVENT_RIDER_ADDED); {
+            efc.run(bouncer_fsm::handle_mob);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idling");
         }
     }
     
@@ -111,8 +123,16 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When the bouncer spawns.
+ * When it must change to the bouncing animation.
  */
-void bouncer_fsm::spawn(mob* m, void* info1, void* info2) {
+void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
+    m->set_animation(BOUNCER_ANIM_BOUNCING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When it must change to the idling animation.
+ */
+void bouncer_fsm::set_idling_animation(mob* m, void* info1, void* info2) {
     m->set_animation(BOUNCER_ANIM_IDLING);
 }
