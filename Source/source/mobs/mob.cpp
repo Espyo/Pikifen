@@ -2385,6 +2385,11 @@ void mob::tick_physics() {
         move_speed += ground_sector->scroll;
     }
     
+    //On top of a mob.
+    if(standing_on_mob) {
+        move_speed += standing_on_mob->walkable_moved;
+    }
+    
     push_amount = 0;
     bool touched_wall = false;
     
@@ -2802,6 +2807,10 @@ void mob::tick_physics() {
         fsm.run_event(MOB_EVENT_TOUCHED_WALL);
     }
     
+    if(type->walkable) {
+        walkable_moved = move_speed;
+    }
+    
     mob* rider_added_ev_mob = NULL;
     mob* rider_removed_ev_mob = NULL;
     
@@ -2862,6 +2871,8 @@ void mob::tick_physics() {
             speed_z = 0;
             was_thrown = false;
             fsm.run_event(MOB_EVENT_LANDED);
+            stop_height_effect();
+            
         } else if(z <= ground_sector->z) {
             z = ground_sector->z;
             speed_z = 0;

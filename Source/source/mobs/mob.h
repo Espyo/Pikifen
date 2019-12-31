@@ -254,6 +254,8 @@ public:
     bool is_huntable;
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot;
+    //How much the mob moved this frame, if it's walkable.
+    point walkable_moved;
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
     //Status effects currently inflicted on the mob.
