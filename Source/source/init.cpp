@@ -789,6 +789,15 @@ void init_mob_actions() {
         mob_action_loaders::set_near_reach
     );
     
+    reg_param("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_SET_SECTOR_SCROLL,
+        "set_sector_scroll",
+        mob_action_runners::set_sector_scroll,
+        nullptr
+    );
+    
     reg_param("state name", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_SET_STATE,

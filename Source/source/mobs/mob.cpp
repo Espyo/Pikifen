@@ -2047,16 +2047,22 @@ void mob::tick() {
     //check if the mob is scheduled for deletion, and bail if so.
     
     if(to_delete) return;
+    
     tick_brain();
     if(to_delete) return;
+    
     tick_physics();
     if(to_delete) return;
+    
     tick_misc_logic();
     if(to_delete) return;
+    
     tick_animation();
     if(to_delete) return;
+    
     tick_script();
     if(to_delete) return;
+    
     tick_class_specifics();
 }
 
@@ -2254,7 +2260,6 @@ void mob::tick_physics() {
         return;
     }
     
-    //Movement.
     bool finished_moving = false;
     bool doing_slide = false;
     
@@ -2304,6 +2309,7 @@ void mob::tick_physics() {
     angle_cos = cos(angle);
     angle_sin = sin(angle);
     
+    //Movement.
     if(chasing) {
         point final_target_pos = get_chase_target();
         
@@ -2369,6 +2375,14 @@ void mob::tick_physics() {
             cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
         move_speed.y +=
             sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
+    }
+    
+    //Scrolling floors.
+    if(
+        (ground_sector->scroll.x != 0 || ground_sector->scroll.y != 0) &&
+        z <= ground_sector->z
+    ) {
+        move_speed += ground_sector->scroll;
     }
     
     push_amount = 0;

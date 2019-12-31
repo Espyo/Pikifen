@@ -870,6 +870,18 @@ void mob_action_runners::set_near_reach(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the sector scroll setting mob script action.
+ */
+void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
+    sector* s_ptr = get_sector(data.m->pos, NULL, true);
+    if(!s_ptr) return;
+    
+    s_ptr->scroll.x = s2f(data.args[0]);
+    s_ptr->scroll.y = s2f(data.args[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the state setting mob script action.
  */
 void mob_action_runners::set_state(mob_action_run_data &data) {

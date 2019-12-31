@@ -286,6 +286,10 @@ void gameplay::do_gameplay_logic() {
                     s_ptr->draining_liquid = false;
                 }
             }
+            
+            if(s_ptr->scroll.x != 0 || s_ptr->scroll.y != 0) {
+                s_ptr->texture_info.translation += s_ptr->scroll * delta_t;
+            }
         }
         
         

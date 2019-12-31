@@ -196,6 +196,7 @@ struct sector {
     bool hazard_floor;
     float liquid_drain_left;
     bool draining_liquid;
+    point scroll;
     
     vector<size_t> edge_nrs;
     vector<edge*> edges;
