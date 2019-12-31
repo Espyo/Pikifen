@@ -2738,8 +2738,11 @@ void mob::tick_physics() {
         //If the mob is just slamming against the wall head-on, perpendicularly,
         //then forget any idea about sliding.
         //It'd just be awkwardly walking in place.
+        //Reset its horizontal position, but keep calculations for
+        //everything else.
         if(!successful_move && slide_angle_dif > TAU / 4 - 0.05) {
-            doing_slide = true;
+            new_pos = pos;
+            successful_move = true;
         }
         
         

@@ -166,7 +166,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     
     Under Linux, with g++ or Clang:
         Install Allegro 5.2 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
-            If you are on Ubuntu, I recommend this link https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853
+            If you are on Ubuntu, I recommend this link (but use 5.2 instead of 5.1 in the steps, of course): https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853
         On a terminal, go to the engine's root folder and write "make".
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
         If you prefer to use Clang, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.

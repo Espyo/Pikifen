@@ -128,6 +128,10 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 
             } else if(id == CREATOR_TOOL_TELEPORT) {
                 cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
+                sector* mouse_sector = get_sector(mouse_cursor_w, NULL, true);
+                if(mouse_sector) {
+                    cur_leader_ptr->z = mouse_sector->z;
+                }
                 
             }
             
