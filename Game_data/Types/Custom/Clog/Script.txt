@@ -1,0 +1,20 @@
+first_state = idling
+death_state = destroying
+
+script {
+    idling {
+        on_enter {
+            set_animation idling
+        }
+    }
+    destroying {
+        on_enter {
+            start_particles large_rock_explosion 0 0
+            set_animation destroyed
+            drain_liquid
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}

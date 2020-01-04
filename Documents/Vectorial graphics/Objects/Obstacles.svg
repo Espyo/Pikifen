@@ -15,12 +15,40 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg4288"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="0.92.4 (unknown)"
    sodipodi:docname="Obstacles.svg">
   <title
      id="title1141">Obstacle spritesheets</title>
   <defs
      id="defs4290">
+    <linearGradient
+       inkscape:collect="always"
+       id="crack">
+      <stop
+         style="stop-color:#101010;stop-opacity:1"
+         offset="0"
+         id="stop2155" />
+      <stop
+         style="stop-color:#44403c;stop-opacity:1"
+         offset="1"
+         id="stop2157" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="clog-shading">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.1882353"
+         offset="0"
+         id="stop1271" />
+      <stop
+         id="stop1279"
+         offset="0.66666669"
+         style="stop-color:#7f7f7f;stop-opacity:0" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0.1882353"
+         offset="1"
+         id="stop1273" />
+    </linearGradient>
     <linearGradient
        id="dirt"
        inkscape:collect="always">
@@ -1007,6 +1035,282 @@
        fx="124.6875"
        fy="928.14343"
        r="28.125" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter1171"
+       inkscape:label="Stone dots"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feTurbulence
+         id="feTurbulence1173"
+         baseFrequency="0.20000000000000001"
+         numOctaves="3"
+         type="fractalNoise"
+         result="result2" />
+      <feComponentTransfer
+         id="feComponentTransfer1177"
+         result="result1">
+        <feFuncR
+           id="feFuncR1179"
+           type="discrete"
+           tableValues="0 0" />
+        <feFuncG
+           id="feFuncG1181"
+           type="discrete"
+           tableValues="0 0" />
+        <feFuncB
+           id="feFuncB1183"
+           type="discrete"
+           tableValues="0 0" />
+        <feFuncA
+           id="feFuncA1185"
+           type="table"
+           tableValues="0 0 0 0 1" />
+      </feComponentTransfer>
+      <feComponentTransfer
+         id="feComponentTransfer1203"
+         in="result2"
+         result="result3">
+        <feFuncR
+           id="feFuncR1205"
+           type="table"
+           tableValues="1 1" />
+        <feFuncG
+           id="feFuncG1207"
+           type="table"
+           tableValues="1 1" />
+        <feFuncB
+           id="feFuncB1209"
+           type="table"
+           tableValues="1 1" />
+        <feFuncA
+           id="feFuncA1211"
+           type="table"
+           tableValues="1 0.01 0.01 0.01 0.01" />
+      </feComponentTransfer>
+      <feMerge
+         id="feMerge1213">
+        <feMergeNode
+           inkscape:collect="always"
+           id="feMergeNode1215"
+           in="result3" />
+        <feMergeNode
+           inkscape:collect="always"
+           id="feMergeNode1217"
+           in="result1" />
+      </feMerge>
+      <feComposite
+         in2="SourceAlpha"
+         id="feComposite1187"
+         operator="in" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2423">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1193"
+         id="use2425"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2435">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1187"
+         id="use2437"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2443">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1191"
+         id="use2445"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2451">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1185"
+         id="use2453"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2459">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1183"
+         id="use2461"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2467">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1181"
+         id="use2469"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2475">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1195"
+         id="use2477"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2483">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1189"
+         id="use2485"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2491">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1207"
+         id="use2493"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-187.5,-93.749997)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1248">
+      <path
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#504d4a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m 59.0625,621.11206 -12.1875,2.8125 -1.25061,2.49939 -2.49939,1.25061 -9.375,-0.9375 -18.75,18.75 H 7.6867676 l -1.1242676,-0.9375 -2.8125,6.5625 4.6875,22.5 H 0 l 1.875,43.125 9.039917,-0.19592 -0.245362,1.22681 -0.357055,-0.0934 -6.5625,8.4375 0.9375,4.6875 7.5,5.625 15,21.5625 H 43.125 l 23.4375,13.125 5.625,-4.6875 7.5,1.875 7.5,-2.8125 7.5,3.75 8.4375,-2.8125 v -3.75 l 2.8125,1.875 13.125,-4.6875 13.125,-13.125 13.125,-18.75 v -15 -1.875 l 4.6875,-23.4375 -5.625,-17.8125 -11.25,-14.0625 -0.9375,-7.5 -24.375,-21.5625 -8.4375,3.75 -1.875,2.8125 -7.5,-5.625 -15.9375,-0.9375 z"
+         id="path1250"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#clog-shading"
+       id="radialGradient1277"
+       cx="80"
+       cy="742.51971"
+       fx="80"
+       fy="742.51971"
+       r="80"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.87890629,4.0672512e-8,-4.0672525e-8,0.87890657,4.68753,137.25677)" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter2135"
+       inkscape:label="Stone variance">
+      <feTurbulence
+         id="feTurbulence2137"
+         type="fractalNoise"
+         baseFrequency="0.051000000000000024"
+         numOctaves="2" />
+      <feColorMatrix
+         id="feColorMatrix2149"
+         type="saturate"
+         values="0" />
+      <feComponentTransfer
+         id="feComponentTransfer2139">
+        <feFuncR
+           id="feFuncR2141"
+           type="table"
+           tableValues="0.1 0.2 1" />
+        <feFuncG
+           id="feFuncG2143"
+           type="table"
+           tableValues="0.1 0.2 0.5" />
+        <feFuncB
+           id="feFuncB2145"
+           type="table"
+           tableValues="0.1 0.2 0.1" />
+        <feFuncA
+           id="feFuncA2147"
+           type="table"
+           tableValues="0.3 0.3" />
+      </feComponentTransfer>
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#crack"
+       id="radialGradient2161"
+       cx="271.875"
+       cy="691.70044"
+       fx="271.875"
+       fy="691.70044"
+       r="75"
+       gradientTransform="matrix(0.53333334,0,0,0.56666668,145,345.5561)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#crack"
+       id="radialGradient2232"
+       cx="469.37314"
+       cy="763.50238"
+       fx="469.37314"
+       fy="763.50238"
+       r="62.5"
+       gradientTransform="matrix(0.53600002,0,0,0.57888002,223.41599,318.79605)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2281"
+       x="-0.01248"
+       width="1.02496"
+       y="-0.011555556"
+       height="1.0231111">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.65"
+         id="feGaussianBlur2283" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1015,9 +1319,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.0888458"
-     inkscape:cx="292.26667"
-     inkscape:cy="81.371085"
+     inkscape:zoom="1"
+     inkscape:cx="230.5863"
+     inkscape:cy="280.46703"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1069,7 +1373,14 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:inline">
+     style="display:none">
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect3240"
+       width="150"
+       height="150"
+       x="4.5474736e-14"
+       y="714.86218" />
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4906"
@@ -1224,12 +1535,77 @@
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <g
+       transform="matrix(0.9375,0,0,0.9375,-0.08788486,95.772659)"
+       style="display:inline;opacity:1"
+       id="g4760">
+      <ellipse
+         ry="3.5000007"
+         rx="3.203124"
+         cy="1036.3622"
+         cx="-6.7031322"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3782"
+         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+      <circle
+         r="15"
+         cy="1036.3622"
+         cx="-16"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3770"
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         r="9.5"
+         cy="1036.3622"
+         cx="-18"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         id="path3780"
+         style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
+         inkscape:connector-curvature="0"
+         id="path3824-4"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
+         style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect2238"
+       width="150"
+       height="150"
+       x="150.9375"
+       y="714.86218" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1">
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#22201e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 46.875,719.54954 -3.75,1.875 -6.5625,1.875 -20.625,15.9375 H 7.5 l 2.8125,10.3125 38.4375,14.0625 11.848755,16.58936 -7.161255,-0.65186 -24.375,25.3125 -17.8125,3.75 -0.9375,4.6875 18.75,5.625 h 6.187133 l -8.999633,22.5 0.9375,10.3125 H 43.125 l 3.75,0.9375 -4.709473,-33.75 H 46.875 l 3.75,-7.03125 v 6.09375 l 29.0625,8.4375 5.238648,-14.10644 0.386352,8.48144 19.6875,12.1875 40.3125,-26.25 v -3.75 l -28.125,-15.9375 -22.578731,2.6056 1.953731,-2.6056 2.8125,-62.8125 -1.875,2.8125 -6.5625,4.6875 -18.319702,40.1294 z"
+       id="path1207"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccc" />
     <path
        style="display:inline;opacity:1;vector-effect:none;fill:url(#radialGradient1083-0-1-8);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m 427.5,898.61221 -18.75,4.6875 -7.5,10.3125 -2.8125,18.75 4.6875,15.00001 8.4375,5.625 7.5,-10e-6 7.5,5.625 10.3125,-4.6875 12.1875,1.87501 5.625,-9.375 0.9375,-10.31251 2.8125,-11.25 -1.875,-15 -6.5625,-6.5625 -5.625,-0.9375 z"
@@ -1266,7 +1642,7 @@
        sodipodi:nodetypes="sssssss"
        clip-path="url(#clipPath3614)" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-east_asian:normal;opacity:0.478;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1222-7)"
+       style="opacity:0.478;vector-effect:none;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1222-7)"
        d="m 216.5625,915.48721 c 2.23868,-2.68241 7.42547,1.78813 9.375,4.6875 2.27353,3.38122 4.86416,11.09988 0.9375,12.1875 -3.36708,0.93263 -2.85067,-6.40295 -4.6875,-9.375 -1.64291,-2.65828 -7.62734,-5.10078 -5.625,-7.5 z"
        id="path1926"
        inkscape:connector-curvature="0"
@@ -2656,7 +3032,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-east_asian:normal;opacity:0.478;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1222)"
+       style="opacity:0.478;vector-effect:none;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1222)"
        d="m 135,910.79971 c -1.06575,-0.36567 -2.4783,0.79897 -2.8125,1.875 -0.49916,1.60713 0.55186,3.64763 1.875,4.6875 1.73736,1.36542 4.98194,-0.60673 6.5625,0.9375 1.35965,1.3284 0.96815,3.72438 0.9375,5.625 -0.0514,3.18647 -1.95081,6.18901 -1.875,9.375 0.0307,1.28811 -0.35079,3.77183 0.9375,3.75 4.47368,-0.0758 2.56335,-8.65762 2.8125,-13.125 0.17488,-3.13571 1.23585,-7.10788 -0.9375,-9.375 -1.52916,-1.59514 -4.86599,0.47837 -6.5625,-0.9375 -0.7587,-0.63319 -0.003,-2.49179 -0.9375,-2.8125 z"
        id="path1226"
        inkscape:connector-curvature="0"
@@ -2665,7 +3041,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;opacity:0.478;filter:url(#filter1222)"
+       style="opacity:0.478;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1222)"
        d="m 112.5,925.79971 c -0.61846,3.1263 0.10169,6.72705 1.875,9.375 1.88088,2.80857 5.20233,4.64548 8.4375,5.62501 2.09364,0.6339 6.05991,2.12898 6.5625,0 0.64218,-2.72031 -5.49775,-1.79975 -7.5,-3.75001 -3.80559,-3.70677 -2.19388,-13.80217 -7.5,-14.0625 -1.12538,-0.0552 -1.65634,1.70719 -1.875,2.8125 z"
        id="path1184"
        inkscape:connector-curvature="0"
@@ -2680,7 +3056,7 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssssss" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-east_asian:normal;opacity:0.478;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1222)"
+       style="opacity:0.478;vector-effect:none;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1222)"
        d="m 105,907.98721 c -0.94956,-1.02541 -2.72459,0.92544 -3.75,1.875 -1.336968,1.23807 -2.326101,2.93145 -2.8125,4.6875 -0.417084,1.5058 -1.510156,4.28646 0,4.6875 2.43505,0.64666 2.4768,-4.38842 3.75,-6.5625 0.92083,-1.57239 4.05057,-3.35053 2.8125,-4.6875 z"
        id="path1625"
        inkscape:connector-curvature="0"
@@ -2742,7 +3118,7 @@
        sodipodi:nodetypes="cscc"
        clip-path="url(#clipPath3661)" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.93749997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-east_asian:normal;opacity:0.478;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1222-7-0)"
+       style="opacity:0.478;vector-effect:none;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1222-7-0)"
        d="m 284.0625,931.42471 c -0.93096,2.65396 -1.19294,5.89054 0,8.43751 1.03524,2.21027 3.48332,5.85808 5.625,4.6875 2.21078,-1.20835 -0.66716,-4.9951 -0.9375,-7.50001 -0.37037,-3.43175 2.36803,-9.31874 -0.9375,-10.3125 -1.91625,-0.57609 -3.08766,2.79932 -3.75,4.6875 z"
        id="path2241"
        inkscape:connector-curvature="0"
@@ -2763,7 +3139,7 @@
        sodipodi:nodetypes="ssssss"
        transform="matrix(1.3402391,0,0,1,-124.26928,0)" />
     <path
-       style="fill:#6a6152;fill-rule:evenodd;stroke:none;stroke-width:0.93749997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-east_asian:normal;opacity:0.478;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter1222-7-0-8)"
+       style="opacity:0.478;vector-effect:none;fill:#6a6152;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1222-7-0-8)"
        d="m 338.4375,913.61221 c 1.2249,-0.50737 2.45859,1.53478 2.8125,2.8125 1.03181,3.72515 1.02395,11.72229 -2.8125,11.25 -4.65238,-0.57273 -4.33069,-12.26867 0,-14.0625 z"
        id="path2525"
        inkscape:connector-curvature="0"
@@ -2857,5 +3233,114 @@
        id="path1085"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccscccccccsccscccccccccsccsccsccccccccscscccccccccccccscccccscccccccccsccccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b7b4b1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 6.5625,738.29969 11.25,9.375 30.9375,7.5 16.875,28.125 -20.625,15 v 11.25 L 1.875,810.48719 0,767.36219 h 8.4375 l -4.6875,-22.5 z"
+       id="path1181"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#96918d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 15,739.23719 18.75,-18.75 9.375,0.9375 -5.625,5.625 7.5,27.1875 -25.3125,-6.5625 z"
+       id="path1183"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a9a5a1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 42.1875,727.04969 4.6875,-9.375 12.1875,-2.81248 15,5.62498 15.9375,0.9375 7.5,5.625 -14.0625,47.8125 -13.125,1.875 -21.5625,-23.4375 z"
+       id="path1185"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="cccccccccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#837e79;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 85.3125,774.86219 7.5,-23.4375 6.5625,-27.1875 8.4375,-3.75 24.375,21.5625 0.9375,7.5 11.25,14.0625 5.625,17.8125 -4.6875,23.4375 -34.6875,-12.1875 -18.75,-0.9375 z"
+       id="path1187"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#918c87;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 67.5,781.42469 14.0625,-0.9375 0.9375,11.25 -16.875,18.75 -13.125,-3.75 15,-22.5 z"
+       id="path1189"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#918c87;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 85.3125,798.29969 5.625,-6.5625 1.875,1.875 4.6875,8.4375 z"
+       id="path1191"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#89837e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 94.6875,793.61219 50.625,12.1875 v 15.9375 l -13.125,18.75 -13.125,13.125 -13.125,4.6875 -2.8125,-1.875 v 3.75 l -8.4375,2.8125 -7.5,-3.75 -7.5,2.8125 -7.5,-1.875 -5.625,4.68752 -23.4375,-13.12502 -3.75,-25.3125 v -14.0625 l 14.0625,-5.625 -1.875,7.5 13.125,2.8125 14.0625,-15 1.875,1.875 -4.6875,16.875 6.5625,-15.9375 1.875,-4.6875 12.1875,2.8125 -1.875,8.4375 8.4375,17.8125 -4.6875,-16.875 0.9375,-10.3125 z"
+       id="path1193"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#c1bebc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 38.4375,812.36219 -10.3125,3.75 -17.8125,-4.6875 -6.5625,8.4375 0.9375,4.6875 7.5,5.625 15,21.5625 z"
+       id="path1195"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient1277);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 59.0625,714.86206 -12.1875,2.8125 -1.25061,2.49939 -2.49939,1.25061 -9.375,-0.9375 -18.75,18.75 H 7.68677 l -1.12427,-0.9375 -2.8125,6.5625 4.6875,22.5 H 0 l 1.875,43.125 9.03992,-0.19592 -0.24536,1.2268 -0.35706,-0.0934 -6.5625,8.4375 0.9375,4.6875 7.5,5.625 15,21.5625 H 43.125 l 23.4375,13.125 5.625,-4.6875 7.5,1.875 7.5,-2.8125 7.5,3.75 8.4375,-2.8125 v -3.75 l 2.8125,1.875 13.125,-4.6875 13.125,-13.125 13.125,-18.75 v -15 -1.875 l 4.6875,-23.4375 -5.625,-17.8125 -11.25,-14.0625 -0.9375,-7.5 -24.375,-21.5625 -8.4375,3.75 -1.875,2.8125 -7.5,-5.625 -15.9375,-0.9375 z"
+       id="path1252"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:connector-curvature="0" />
+    <rect
+       clip-path="url(#clipPath1248)"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       y="621.11218"
+       x="1.9597172e-07"
+       height="150"
+       width="150"
+       id="rect2133"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2135);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       transform="translate(0,93.749997)" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1171);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect2413"
+       width="150"
+       height="150"
+       x="1.9597172e-07"
+       y="621.11218"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Clog.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       clip-path="url(#clipPath1248)"
+       transform="translate(0,93.749997)" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient2232);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.26666689;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2281);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 519,689.51953 -8,8 -7,16 -2,11 -3,3 -8,-3 -8,1 h -6 l -3,-3 v -3 l 2,-7 -5,7 v 3 l -17,6 -2.5,-1.5 1.5,-7.5 -8,-7 h -7 l 2,-5 -5,-5 -4,2 -3,-7 -7,-2 2,3 4,3 -1,3 4,3 4,-1 2,2 v 13 l 6,6 -8,-2 -15,3 14,-1 6,3 7,3 -1,3 5,1 2,4 -1,6 -5,7 -7,4 -7,2 -7,3 11,-1 3,7 2,8 h 6 l 2,2 -2,15 -6,12 3,-1 -5,7 -3,2 -9,-2 -6,3 -2,9 3,-8 7,-2 8,2 11,-11 1,-4 11,-9 2,6 1,-5 10,-1 3,-2 4,-2 2,-2 2,-4 7,4 2,5 6,1 v 5 l 3,4 h 5 l 9,3 4,4 7,-5 h -4 l 1,-3 -2,-4 v 4 l -5,1 -5,-5 2,-4 -4,1 -7,-2 -2,-5 -5,-2 v -4 l 8,-4 -14,2 -2.56001,-13.44 7,-6 16.56001,3.44 v 6 l -4,8 6,-8 2,-2 6,3 -2,3 9,15 10,10 -9,-13 -9,-12 3,-3 -6,-6 v -3 l 6,-4 h 6 l 2,1 7,-6 6,-2 h -7 l -4,4 h -3 l -6,-7 1,6 -6,5 h -4 l -7,-1 -9,-5 v -5 l 1,-5 1,-4 3,-6 5,1 -4,-6 2,-9 7,-19 z m -76.82617,24.69531 0.82617,3.30469 7,4 -1,4 h -3 l -6,-7 v -3 z M 469,725.51953 h 2 l 2,1 h 9 l 7.84375,0.78516 -0.84375,4.21484 -3,8 2.68164,9.83594 -2.24165,3.72406 -1.43999,-6.56 -3.56001,5.56 0.56001,-6.56 1,-5 -4,4 -1.56001,6.56 -11,1 v -6 l -2,-2 6.56001,-5.56 -8.56001,4.56 -3.43999,-6.56 2,-5 z m 21,1.80078 2,0.19922 8,4 v 4 l -5,4 5,-2 -1.73242,5.19922 -7.70703,5.33594 -2.56055,-8.53516 2,-8 z m -37.56001,23.75922 3,3 -1,6 2,4 3,1 -13.43999,10.44 h -4 l -3,-10 5,-4 v -3 z m 9,16 4,2 -5.43999,10.44 -2,9 -9,6 3,-20 3,-2 z m 14,0 4,4 2.56001,7.44 v 5 l -1,3 h -3 l -2,3 h -13 l -1,-5 3,-3 v 4 l 4,-5 1.43999,-8.44 z"
+       transform="matrix(0.9375,0,0,0.9375,-224.47499,81.037644)"
+       id="path2203"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Desktop/a.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
   </g>
 </svg>
