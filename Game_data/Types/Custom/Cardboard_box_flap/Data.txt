@@ -1,0 +1,9 @@
+name = Cardboard box flap
+
+appears_in_area_editor = false
+casts_shadow = false
+height = 1
+pushable = false
+pushes = false
+radius = 50
+target_type = none

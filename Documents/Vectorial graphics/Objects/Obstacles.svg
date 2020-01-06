@@ -23,6 +23,30 @@
      id="defs4290">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient2777">
+      <stop
+         style="stop-color:#9a8568;stop-opacity:1"
+         offset="0"
+         id="stop2773" />
+      <stop
+         style="stop-color:#b7a994;stop-opacity:0;"
+         offset="1"
+         id="stop2775" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2671">
+      <stop
+         style="stop-color:#6e5f4a;stop-opacity:1;"
+         offset="0"
+         id="stop2667" />
+      <stop
+         style="stop-color:#6e5f4a;stop-opacity:0.25098041"
+         offset="1"
+         id="stop2669" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="crack">
       <stop
          style="stop-color:#101010;stop-opacity:1"
@@ -1108,123 +1132,6 @@
     </filter>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath2423">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1193"
-         id="use2425"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2435">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1187"
-         id="use2437"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2443">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1191"
-         id="use2445"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2451">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1185"
-         id="use2453"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2459">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1183"
-         id="use2461"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2467">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1181"
-         id="use2469"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2475">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1195"
-         id="use2477"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2483">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1189"
-         id="use2485"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2491">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1207"
-         id="use2493"
-         style="stroke-width:1"
-         width="100%"
-         height="100%"
-         transform="translate(-187.5,-93.749997)" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
        id="clipPath1248">
       <path
          style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#504d4a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
@@ -1311,6 +1218,202 @@
          stdDeviation="0.65"
          id="feGaussianBlur2283" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2392"
+       x="-0.0075670529"
+       width="1.0151341"
+       y="-0.02897306"
+       height="1.0579461">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.29425764"
+         id="feGaussianBlur2394" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2436"
+       x="-0.11204131"
+       width="1.2240826"
+       y="-0.27731183"
+       height="1.5546237">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.5113258"
+         id="feGaussianBlur2438" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter2456"
+       inkscape:label="Cardboard fluff"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feTurbulence
+         id="feTurbulence2458"
+         result="result1"
+         type="turbulence"
+         baseFrequency="0.45100000000000001"
+         numOctaves="2" />
+      <feComponentTransfer
+         id="feComponentTransfer2462">
+        <feFuncR
+           id="feFuncR2464"
+           type="identity" />
+        <feFuncG
+           id="feFuncG2466"
+           type="identity" />
+        <feFuncB
+           id="feFuncB2468"
+           type="identity" />
+        <feFuncA
+           id="feFuncA2470"
+           type="table" />
+      </feComponentTransfer>
+      <feComposite
+         in2="result1"
+         id="feComposite2460"
+         operator="in" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2635"
+       x="-0.051300722"
+       width="1.1026014"
+       y="-0.018486477"
+       height="1.036973">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.44259006"
+         id="feGaussianBlur2637" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2639"
+       x="-0.035407205"
+       width="1.0708144"
+       y="-0.018274687"
+       height="1.0365494">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.44259006"
+         id="feGaussianBlur2641" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2643"
+       x="-0.0060887645"
+       width="1.0121775"
+       y="-0.18881954"
+       height="1.3776391">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.44259006"
+         id="feGaussianBlur2645" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2647"
+       x="-0.032562941"
+       width="1.0651259"
+       y="-0.033345236"
+       height="1.0666905">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.44259006"
+         id="feGaussianBlur2649" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2671"
+       id="linearGradient2765"
+       gradientUnits="userSpaceOnUse"
+       x1="352.81848"
+       y1="590.26404"
+       x2="405.08432"
+       y2="602.83093"
+       spreadMethod="reflect"
+       gradientTransform="rotate(90,424.68751,773.9247)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2671"
+       id="linearGradient2769"
+       gradientUnits="userSpaceOnUse"
+       x1="426.5625"
+       y1="591.11218"
+       x2="379.6875"
+       y2="605.17468"
+       spreadMethod="reflect"
+       gradientTransform="rotate(90,421.40626,770.64345)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2777"
+       id="linearGradient2779"
+       x1="332.8125"
+       y1="602.36218"
+       x2="332.8125"
+       y2="606.11218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(90,424.68751,773.9247)" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2817">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect2296"
+         id="use2819"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="rotate(-90,421.87502,771.11218)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2823">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect2296"
+         id="use2825"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="rotate(-90,421.87502,771.11218)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2831">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect2653"
+         id="use2833"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-5.6250013)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2838">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect2653"
+         id="use2840"
+         style="stroke-width:1"
+         width="100%"
+         height="100%"
+         transform="translate(-4.1497552e-6,-168.75)" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1319,11 +1422,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="230.5863"
-     inkscape:cy="280.46703"
+     inkscape:zoom="4"
+     inkscape:cx="565.04721"
+     inkscape:cy="294.39118"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -1339,7 +1442,11 @@
      inkscape:snap-intersection-paths="true"
      inkscape:object-nodes="true"
      inkscape:snap-smooth-nodes="true"
-     inkscape:snap-nodes="true">
+     inkscape:snap-nodes="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true">
     <inkscape:grid
        type="xygrid"
        id="grid4856" />
@@ -1373,7 +1480,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:none">
+     style="display:inline">
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect3240"
@@ -1535,6 +1642,13 @@
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect2238"
+       width="150"
+       height="150"
+       x="150.9375"
+       y="714.86218" />
     <g
        transform="matrix(0.9375,0,0,0.9375,-0.08788486,95.772659)"
        style="display:inline;opacity:1"
@@ -1585,18 +1699,56 @@
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
     </g>
     <rect
+       y="-515.625"
+       x="677.36218"
+       height="187.5"
+       width="187.5"
+       id="rect2811"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect2238"
-       width="150"
-       height="150"
-       x="150.9375"
-       y="714.86218" />
+       transform="rotate(90)" />
+    <rect
+       transform="rotate(90)"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect2846"
+       width="187.5"
+       height="98.4375"
+       x="677.36218"
+       y="-615" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1">
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#927e62;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:7.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 605.625,678.29968 c 4.6875,0 9.375,4.6875 9.375,9.375 v 166.875 c 0,4.6875 -4.6875,9.375 -9.375,9.375 h -89.0625 v -185.625 z"
+       id="rect2653"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2783"
+       transform="translate(3.8497552e-6,18.750001)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b7a994;fill-opacity:1;fill-rule:evenodd;stroke:#8b785d;stroke-width:0.9375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 615,691.42468 -98.4375,3e-5"
+       id="path2781"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="cc" />
     <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#22201e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.75;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 46.875,719.54954 -3.75,1.875 -6.5625,1.875 -20.625,15.9375 H 7.5 l 2.8125,10.3125 38.4375,14.0625 11.848755,16.58936 -7.161255,-0.65186 -24.375,25.3125 -17.8125,3.75 -0.9375,4.6875 18.75,5.625 h 6.187133 l -8.999633,22.5 0.9375,10.3125 H 43.125 l 3.75,0.9375 -4.709473,-33.75 H 46.875 l 3.75,-7.03125 v 6.09375 l 29.0625,8.4375 5.238648,-14.10644 0.386352,8.48144 19.6875,12.1875 40.3125,-26.25 v -3.75 l -28.125,-15.9375 -22.578731,2.6056 1.953731,-2.6056 2.8125,-62.8125 -1.875,2.8125 -6.5625,4.6875 -18.319702,40.1294 z"
@@ -3342,5 +3494,211 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2785"
+       transform="translate(4.1502448e-6,37.500001)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2787"
+       transform="translate(4.1502448e-6,56.249997)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2789"
+       transform="translate(4.1502448e-6,74.999997)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2791"
+       transform="translate(4.1502448e-6,93.749997)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2793"
+       transform="translate(4.1502448e-6,112.5)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2795"
+       transform="translate(4.1502448e-6,131.25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2797"
+       transform="translate(4.1502448e-6,150)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2781"
+       id="use2799"
+       transform="translate(4.1502448e-6,168.75)"
+       width="100%"
+       height="100%"
+       clip-path="url(#clipPath2838)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use2665"
+       d="m 589.6875,678.29968 v 185.625"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient2769);stroke-width:0.9375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient2779);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098039;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 596.25,678.29968 h -3.75 v 185.625 h 3.75 z"
+       id="path2771"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient2765);stroke-width:0.9375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 596.25,678.29968 v 185.625"
+       id="path2663"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#a28965;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 515.625,679.23718 c -2.76627,49.93344 -0.29536,121.29171 0,183.75 0,0.9375 -0.9375,1.875 -1.875,1.875 H 330 c -0.9375,0 -1.875,-0.9375 -1.875,-1.875 v -183.75 c 0,-0.9375 0.9375,-1.875 1.875,-1.875 h 183.75 c 0.9375,0 1.875,0.9375 1.875,1.875 z"
+       id="rect2296"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#342c2c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2643);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 337.5,852.67383 a 2.8127813,2.8127813 0 1 0 0,5.625 h 168.75 a 2.8127813,2.8127813 0 1 0 0,-5.625 z"
+       id="path2342"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#342c2c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:11.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2639);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 487.5,788.92383 c -4.21875,0 -7.78018,1.93643 -10.42188,4.57812 -2.64169,2.6417 -4.57812,6.20313 -4.57812,10.42188 v 28.125 c 0,4.21875 1.93643,7.78213 4.57812,10.42383 2.6417,2.64169 6.20313,4.57617 10.42188,4.57617 4.21875,0 7.78018,-1.93448 10.42188,-4.57617 2.64169,-2.6417 4.57812,-6.20508 4.57812,-10.42383 v -28.125 c 0,-4.21875 -1.93643,-7.78018 -4.57812,-10.42188 -2.6417,-2.64169 -6.20313,-4.57812 -10.42188,-4.57812 z m 0,11.25 c 0.46875,0 1.59482,0.40927 2.46875,1.2832 0.87393,0.87393 1.28125,1.99805 1.28125,2.4668 v 28.125 c 0,0.46875 -0.40732,1.59482 -1.28125,2.46875 -0.87393,0.87393 -2,1.28125 -2.46875,1.28125 -0.46875,0 -1.59482,-0.40732 -2.46875,-1.28125 -0.87393,-0.87393 -1.28125,-2 -1.28125,-2.46875 v -28.125 c 0,-0.46875 0.40732,-1.59287 1.28125,-2.4668 0.87393,-0.87393 2,-1.2832 2.46875,-1.2832 z"
+       id="path2344"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#342c2c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:11.25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2635);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 459.14648,789.67188 c -0.6744,0.0207 -1.16011,0.19639 -1.49804,0.29101 -1.35175,0.37849 -1.5812,0.65575 -1.97266,0.89063 -0.78291,0.46974 -1.40372,0.90121 -2.125,1.33398 -1.44256,0.86553 -3.08203,1.42383 -3.55078,1.42383 a 5.6255625,5.6255625 0 1 0 0,11.25 c 1.38968,0 2.60746,-0.23103 3.75,-0.53516 v 37.09766 a 5.6255625,5.6255625 0 1 0 11.25,0 v -45.9375 c 0,-1.23047 -1.05269,-4.12297 -3.22852,-5.17578 -1.08791,-0.52641 -1.95059,-0.65939 -2.625,-0.63867 z"
+       id="path2348"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b9ab8f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.6875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2392);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 421.875,644.54971 c 0,0 18.39628,33.62801 25.3125,36.5625 2.96181,1.25667 5.36705,3.7263 8.4375,4.6875 2.99716,0.93825 5.50018,0.93303 8.61328,1.34766 1.88422,0.25096 4.86856,1.76668 6.73828,2.10937 3.13467,0.57454 6.40252,0.72582 9.375,1.875 1.69958,0.65707 3.36874,1.55505 4.6875,2.8125 0.81545,0.77754 3.35252,2.56071 4.21875,3.28125 1.82968,1.52196 11.36719,2.8711 11.36719,2.8711 0,0 -9.81839,-4.37706 -10.3125,-5.85938 -0.19764,-0.59293 -0.36544,-1.36797 0,-1.875 0.57782,-0.80168 1.83705,-0.77921 2.8125,-0.9375 1.23386,-0.20023 2.51614,-0.20023 3.75,0 0.97545,0.15829 1.8262,0.8761 2.8125,0.9375 1.59036,0.099 3.10181,-0.78049 4.6875,-0.9375 2.17685,-0.21555 4.40325,0.3504 6.5625,0 0.97545,-0.15829 1.8637,-0.66121 2.8125,-0.9375 1.23709,-0.36024 2.95706,0.0781 3.75,-0.9375 3.26938,-4.18734 12.1875,-35.625 12.1875,-35.625 z"
+       id="path2384"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssssssscssssssssscc"
+       clip-path="url(#clipPath2817)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#897b5e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.6875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2436);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 450.9375,675.48721 c -0.64387,6.59038 13.28803,2.58882 19.57864,4.65663 4.0379,1.32731 7.04399,2.48812 11.25,1.875 1.11495,-0.16253 2.65669,0.27239 3.75,0 3.04743,-0.75923 6.23831,0.78106 9.375,0.9375 1.24845,0.0623 2.5,0 3.75,0 3.125,0 6.30639,0.59096 9.375,0 1.6525,-0.31824 3.01168,-1.72114 4.6875,-1.875 1.58677,-0.14568 3.10181,0.78049 4.6875,0.9375 1.86587,0.18476 3.43783,3.19817 4.79636,1.90587 4.53408,-4.31304 5.5611,-14.53308 0.9375,-18.75 -17.95916,-16.37952 -69.82403,-13.87912 -72.1875,10.3125 z"
+       id="path2396"
+       inkscape:connector-curvature="0"
+       clip-path="url(#clipPath2823)"
+       sodipodi:nodetypes="ssssssssssss"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <path
+       id="path2476"
+       d="m 336.81669,704.8554 c -0.34783,0.62467 -0.62468,1.56457 -0.62468,2.1568 0,0.13749 0,0.31237 0.0341,0.55495 l -4.34725,-7.47646 c -0.13915,-0.24258 -0.24279,-0.59062 -0.24279,-0.90418 0,-0.31397 0.10364,-0.69565 0.24279,-0.93865 l 2.08702,-3.6516 -2.32981,-1.32038 7.5815,-0.14035 3.68566,6.6416 -2.36387,-1.35606 z m 3.33928,-21.07317 c 0.6602,-1.14878 1.7392,-1.77471 3.05958,-1.77471 1.42683,0 2.53994,0.6616 3.33923,2.01605 l 1.18264,1.98198 -4.10452,7.09592 -6.6416,-3.86053 z m 0.48553,27.08884 c -1.98198,0 -3.61613,-1.63436 -3.61613,-3.61629 0,-0.55655 0.24419,-1.4964 0.59201,-2.08702 l 1.11166,-1.98198 h 8.2431 v 7.68534 h -6.33064 z m 6.60899,-27.29897 c -0.52109,-0.90298 -1.21675,-1.53051 -2.05156,-1.87855 h 8.55401 c 0.76523,0 1.35585,0.31397 1.70513,0.90579 l 2.12113,3.61629 2.2945,-1.35731 -3.68731,6.60874 -7.54459,-0.10629 2.32981,-1.32039 z m 13.18117,19.68341 c 1.04208,0 1.91241,-0.27825 2.64218,-0.83361 l -4.3132,7.51047 c -0.34782,0.59061 -0.9725,0.93865 -1.70248,0.93865 h -4.07045 v 2.67764 l -3.89439,-6.50245 3.89439,-6.50411 v 2.71336 h 7.44395 z m 3.33643,-6.25986 c 0.31377,0.55655 0.48838,1.14717 0.48838,1.77346 0,1.25221 -0.80074,2.57379 -1.9124,3.19852 -0.52245,0.27991 -1.25367,0.45432 -1.98198,0.45432 h -2.29715 l -4.10187,-7.09592 6.64181,-3.79075 z"
+       inkscape:connector-curvature="0"
+       style="fill:#342c2c;fill-opacity:1;stroke:none;stroke-width:0.93749988;stroke-opacity:1;filter:url(#filter2647)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,421.87501,771.1122)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect2296"
+       id="use2440"
+       style="opacity:0.5;filter:url(#filter2456)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       width="100%"
+       height="100%" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#b7a994;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter2456);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect2827"
+       width="98.4375"
+       height="187.50003"
+       x="510.9375"
+       y="677.36218"
+       clip-path="url(#clipPath2831)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cardboard_box.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(5.6250013)" />
   </g>
 </svg>

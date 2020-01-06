@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Cardboard_box.png
+		file_pos=201.0000 0.0000
+		file_size=105.0000 200.0000
+		angle=3.1416
+	}
+}
+body_parts
