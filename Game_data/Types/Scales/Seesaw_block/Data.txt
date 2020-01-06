@@ -1,0 +1,25 @@
+name = Seesaw block
+
+casts_shadow = false
+height = 20
+pushes = true
+radius = 90
+rectangular_dimensions = 220 180
+walkable = true
+
+spawns {
+    ropes {
+        object = Seesaw block ropes
+        relative = true
+        coordinates = 0 0
+        angle = 0
+    }
+}
+children {
+    ropes {
+        spawn = ropes
+        parent_holds = true
+        hold_offset_distance = 0
+        hold_offset_angle = 0
+    }
+}

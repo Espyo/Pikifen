@@ -1,0 +1,61 @@
+first_state = up
+
+init {
+    set_var pair_weight 0
+    set_var start_down false
+    set_var weight 0
+}
+
+script {
+    up {
+        on_enter {
+            if $start_down = true
+                set_var start_down false
+                set_state down
+            end_if
+            set_animation up
+            set_height 128
+        }
+        on_weight_added {
+            get_info weight weight
+            send_message_to_links $weight
+            if $weight > $pair_weight
+                set_state down
+            end_if
+        }
+        on_weight_removed {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_receive_message {
+            get_info pair_weight message
+            if $weight > $pair_weight
+                set_state down
+            end_if
+        }
+    }
+    
+    down {
+        on_enter {
+            set_animation down
+            set_height 2
+        }
+        on_weight_added {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_weight_removed {
+            get_info weight weight
+            send_message_to_links $weight
+            if $weight < $pair_weight
+                set_state up
+            end_if
+        }
+        on_receive_message {
+            get_info pair_weight message
+            if $weight < $pair_weight
+                set_state up
+            end_if
+        }
+    }
+}

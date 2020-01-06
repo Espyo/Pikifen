@@ -1,0 +1,165 @@
+animations{
+	down{
+		loop_frame=15
+		frames{
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+		}
+	}
+	up{
+		loop_frame=15
+		frames{
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+		}
+	}
+}
+sprites{
+	down{
+		file=Seesaw_block.png
+		file_pos=221.0000 0.0000
+		file_size=220.0000 180.0000
+		scale=0.9800 0.9800
+	}
+	down2{
+		file=Seesaw_block.png
+		file_pos=221.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=1.0000 0.0000
+		scale=0.9800 0.9800
+	}
+	down3{
+		file=Seesaw_block.png
+		file_pos=221.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=-1.0000 1.0000
+		scale=0.9800 0.9800
+	}
+	down4{
+		file=Seesaw_block.png
+		file_pos=221.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=-1.0000 -1.0000
+		scale=0.9800 0.9800
+	}
+	up{
+		file=Seesaw_block.png
+		file_pos=0.0000 0.0000
+		file_size=220.0000 180.0000
+		scale=1.0100 1.0100
+	}
+	up2{
+		file=Seesaw_block.png
+		file_pos=0.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=1.0000 0.0000
+		scale=1.0100 1.0100
+	}
+	up3{
+		file=Seesaw_block.png
+		file_pos=0.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=-1.0000 1.0000
+		scale=1.0100 1.0100
+	}
+	up4{
+		file=Seesaw_block.png
+		file_pos=0.0000 0.0000
+		file_size=220.0000 180.0000
+		offset=-1.0000 -1.0000
+		scale=1.0100 1.0100
+	}
+}
+body_parts
