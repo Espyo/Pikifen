@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Paper_bag.png
+		file_pos=0.0000 922.0000
+		file_size=163.0000 92.0000
+		angle=1.5708
+	}
+}
+body_parts

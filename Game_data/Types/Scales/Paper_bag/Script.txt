@@ -1,0 +1,27 @@
+first_state = up
+
+script {
+    up {
+        on_enter {
+            set_animation up
+        }
+        on_weight_added {
+            get_info t weight
+            if $t >= 20
+                set_state crushed
+            end_if
+        }
+    }
+    
+    crushed {
+        on_enter {
+            set_animation crushing
+            set_height 2
+            set_health 0
+            start_particles paper_bag_dust 0 0 200
+        }
+        on_animation_end {
+            stop_particles
+        }
+    }
+}

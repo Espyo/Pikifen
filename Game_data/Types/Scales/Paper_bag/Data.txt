@@ -1,0 +1,30 @@
+name = Paper bag
+
+goal_number = 20
+height = 128
+pushes = true
+radius = 84
+rectangular_dimensions = 169 460
+
+spawns {
+    handle {
+        object = Paper bag handle
+        relative = true
+        coordinates = 0 0
+        angle = 0
+    }
+}
+children {
+    lhandle {
+        spawn = handle
+        parent_holds = true
+        hold_offset_distance = 1.5
+        hold_offset_angle = 180
+    }
+    rhandle {
+        spawn = handle
+        parent_holds = true
+        hold_offset_distance = 1.5
+        hold_offset_angle = 0
+    }
+}

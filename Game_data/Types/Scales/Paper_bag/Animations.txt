@@ -1,0 +1,134 @@
+animations{
+	crushing{
+		loop_frame=20
+		frames{
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+			down2{
+				duration=0.0800
+			}
+			down3{
+				duration=0.0800
+			}
+			down4{
+				duration=0.0800
+			}
+			down{
+				duration=0.0800
+			}
+		}
+	}
+	up{
+		frames{
+			up{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	down{
+		file=Paper_bag.png
+		file_pos=0.0000 461.0000
+		file_size=200.0000 460.0000
+		scale=0.9800 0.9800
+	}
+	down2{
+		file=Paper_bag.png
+		file_pos=0.0000 461.0000
+		file_size=200.0000 460.0000
+		offset=1.0000 0.0000
+		scale=0.9800 0.9800
+	}
+	down3{
+		file=Paper_bag.png
+		file_pos=0.0000 461.0000
+		file_size=200.0000 460.0000
+		offset=1.0000 1.0000
+		scale=0.9800 0.9800
+	}
+	down4{
+		file=Paper_bag.png
+		file_pos=0.0000 461.0000
+		file_size=200.0000 460.0000
+		offset=-1.0000 0.0000
+		scale=0.9800 0.9800
+	}
+	up{
+		file=Paper_bag.png
+		file_pos=0.0000 0.0000
+		file_size=200.0000 460.0000
+		scale=1.0100 1.0100
+	}
+	up2{
+		file=Paper_bag.png
+		file_pos=0.0000 0.0000
+		file_size=200.0000 460.0000
+		offset=1.0000 0.0000
+		scale=1.0100 1.0100
+	}
+	up3{
+		file=Paper_bag.png
+		file_pos=0.0000 0.0000
+		file_size=200.0000 460.0000
+		offset=1.0000 1.0000
+		scale=1.0100 1.0100
+	}
+	up4{
+		file=Paper_bag.png
+		file_pos=0.0000 0.0000
+		file_size=200.0000 460.0000
+		offset=-1.0000 0.0000
+		scale=1.0100 1.0100
+	}
+}
+body_parts
