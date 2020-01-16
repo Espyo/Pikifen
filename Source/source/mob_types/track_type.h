@@ -15,8 +15,8 @@
 #include "mob_type.h"
 
 enum TRACK_RIDERS {
-    TRACK_RIDER_PIKMIN,
-    TRACK_RIDER_LEADERS,
+    TRACK_RIDER_PIKMIN = 1,
+    TRACK_RIDER_LEADERS = 2,
 };
 
 enum TRACK_RIDING_POSES {

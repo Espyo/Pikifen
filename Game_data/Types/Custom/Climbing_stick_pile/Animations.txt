@@ -1,0 +1,31 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Climbing_stick.png
+		file_pos=0.0000 0.0000
+		file_size=72.0000 64.0000
+		offset=8.0000 0.0000
+		hitboxes{
+			main{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=32.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	main
+}

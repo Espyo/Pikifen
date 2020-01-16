@@ -1,0 +1,9 @@
+first_state = idling
+
+script{
+    idling {
+        on_enter {
+            set_animation idling
+        }
+    }
+}

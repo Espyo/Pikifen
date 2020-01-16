@@ -1,0 +1,18 @@
+name = Climbing stick pile
+
+height = 64
+is_obstacle = true
+max_health = 4000
+pushable = false
+pushes = true
+radius = 20
+target_type = pikmin_obstacle
+
+spawns {
+    full_stick {
+        object = Climbing stick
+        relative = true
+        coordinates = 0 0
+        angle = 0
+    }
+}

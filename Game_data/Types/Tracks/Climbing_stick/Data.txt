@@ -1,0 +1,10 @@
+name = Climbing stick
+
+height = 250
+pushable = false
+pushes = false
+radius = 30
+riders = pikmin
+riding_pose = climbing
+ride_speed = 0.2
+cancellable_with_whistle = true

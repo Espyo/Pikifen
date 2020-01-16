@@ -411,6 +411,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_GROUP_TASK); {
             efc.run(pikmin_fsm::go_to_group_task);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_TRACK); {
+            efc.change_state("riding_track");
+        }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");

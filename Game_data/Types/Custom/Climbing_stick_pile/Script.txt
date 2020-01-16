@@ -1,0 +1,16 @@
+first_state = idling
+death_state = destroyed
+
+script{
+    idling {
+        on_enter {
+            set_animation idling
+        }
+    }
+    destroyed {
+        on_enter {
+            spawn full_stick
+            delete
+        }
+    }
+}
