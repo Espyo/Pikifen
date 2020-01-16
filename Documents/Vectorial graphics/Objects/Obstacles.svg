@@ -23,6 +23,73 @@
      id="defs4290">
     <linearGradient
        inkscape:collect="always"
+       id="bouncy-mushroom-face-shade">
+      <stop
+         id="stop2308"
+         offset="0"
+         style="stop-color:#35231d;stop-opacity:0" />
+      <stop
+         style="stop-color:#35231d;stop-opacity:0"
+         offset="0.5"
+         id="stop2316" />
+      <stop
+         id="stop2306"
+         offset="1"
+         style="stop-color:#35231d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="bouncy-mushroom-shine-inner">
+      <stop
+         id="stop2238"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         id="stop2240"
+         offset="0.94117129"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.98039234"
+         id="stop2242" />
+      <stop
+         id="stop2244"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bouncy-mushroom-texture-mask">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0"
+         id="stop2153" />
+      <stop
+         id="stop2162"
+         offset="0.5"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop2156" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bouncy-mushroom-dot">
+      <stop
+         style="stop-color:#ffdf8a;stop-opacity:1"
+         offset="0"
+         id="stop3962" />
+      <stop
+         id="stop3972"
+         offset="0.3333337"
+         style="stop-color:#ffdf8a;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffdf8a;stop-opacity:0"
+         offset="1"
+         id="stop3964" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="stick-shadow">
       <stop
          style="stop-color:#060503;stop-opacity:1;"
@@ -3235,6 +3302,229 @@
        x2="398.4375"
        y2="131.73721"
        gradientTransform="rotate(90,50.624999,275.17471)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1999"
+       x="-0.036"
+       width="1.072"
+       y="-0.036"
+       height="1.072">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.124997"
+         id="feGaussianBlur2001" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2080"
+       x="-0.048"
+       width="1.096"
+       y="-0.048"
+       height="1.096">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.199996"
+         id="feGaussianBlur2082" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2112"
+       x="-0.072"
+       width="1.144"
+       y="-0.072"
+       height="1.144">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.349994"
+         id="feGaussianBlur2114" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-texture-mask"
+       id="radialGradient2168"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="scale(1.0666667)"
+       cx="341.24997"
+       cy="336.1123"
+       fx="341.24997"
+       fy="336.1123"
+       r="44.999901" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask2164">
+      <circle
+         r="47.999893"
+         cy="358.51981"
+         cx="363.99997"
+         id="circle2166"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient2168);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    </mask>
+    <radialGradient
+       r="7.5"
+       fy="1043.6122"
+       fx="587.5"
+       cy="1043.6122"
+       cx="587.5"
+       gradientTransform="matrix(8.5333333,0,0,8.5333335,-4949.3332,-7846.9716)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3327-3"
+       xlink:href="#bouncy-mushroom-shine-outer"
+       inkscape:collect="always" />
+    <linearGradient
+       id="bouncy-mushroom-shine-outer">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop5495" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.79686671"
+         id="stop1757" />
+      <stop
+         id="stop5501"
+         offset="0.89999998"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop5497" />
+    </linearGradient>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask30961">
+      <path
+         style="opacity:1;fill:url(#linearGradient30965);fill-opacity:1;stroke:none;stroke-width:12.06795597"
+         id="path30963"
+         mask="none"
+         sodipodi:type="arc"
+         sodipodi:cx="64"
+         sodipodi:cy="1058.5197"
+         sodipodi:rx="64"
+         sodipodi:ry="64"
+         sodipodi:start="3.1415927"
+         sodipodi:end="4.712389"
+         d="M 0,1058.5197 A 64,64 0 0 1 64.000001,994.51965 L 64,1058.5197 Z" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-shine-mask"
+       id="linearGradient30965"
+       gradientUnits="userSpaceOnUse"
+       x1="64"
+       y1="1097.5197"
+       x2="103"
+       y2="1058.5197" />
+    <linearGradient
+       inkscape:collect="always"
+       id="bouncy-mushroom-shine-mask">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0"
+         id="stop1789" />
+      <stop
+         id="stop1797"
+         offset="0.40000001"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.60000002"
+         id="stop1799" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="1"
+         id="stop1791" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-shine-inner"
+       id="radialGradient2247"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.7999864,7.5717651e-5,-7.5716989e-5,6.799927,-3930.9129,-6038.0121)"
+       cx="587.5"
+       cy="1043.6122"
+       fx="587.5"
+       fy="1043.6122"
+       r="7.5" />
+    <radialGradient
+       r="7.5"
+       fy="1043.6122"
+       fx="587.5"
+       cy="1043.6122"
+       cx="587.5"
+       gradientTransform="matrix(6.799985,-1.8606435e-5,1.8606314e-5,6.7999403,-3931.0105,-6037.9704)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3327-3-6"
+       xlink:href="#bouncy-mushroom-shine-inner-2"
+       inkscape:collect="always" />
+    <linearGradient
+       id="bouncy-mushroom-shine-inner-2">
+      <stop
+         id="stop2203"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0.93167621"
+         id="stop2205" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.95098066"
+         id="stop2207" />
+      <stop
+         id="stop2209"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask30954">
+      <path
+         style="opacity:1;fill:url(#linearGradient30958);fill-opacity:1;stroke:none;stroke-width:12.06795597"
+         id="path30956"
+         mask="none"
+         sodipodi:type="arc"
+         sodipodi:cx="64"
+         sodipodi:cy="1058.5197"
+         sodipodi:rx="64"
+         sodipodi:ry="64"
+         sodipodi:start="0"
+         sodipodi:end="1.5707963"
+         d="m 128,1058.5197 a 64,64 0 0 1 -63.999998,64 l -2e-6,-64 z" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-shine-mask"
+       id="linearGradient30958"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-4.696063e-5)"
+       x1="64"
+       y1="1097.5197"
+       x2="103"
+       y2="1058.5197" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-face-shade"
+       id="radialGradient2312"
+       cx="341.24997"
+       cy="336.1123"
+       fx="341.24997"
+       fy="336.1123"
+       r="44.999901"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bouncy-mushroom-dot"
+       id="radialGradient2380"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3333329,0,0,1.3333329,-133.43732,-112.03727)"
+       cx="396.09375"
+       cy="336.11221"
+       fx="396.09375"
+       fy="336.11221"
+       r="2.812501" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3243,12 +3533,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="126.05879"
-     inkscape:cy="391.02673"
+     inkscape:zoom="1"
+     inkscape:cx="404.07718"
+     inkscape:cy="766.80829"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
      inkscape:window-x="48"
@@ -3630,6 +3920,17 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Climbing_stick.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       y="-401.25"
+       x="276.11224"
+       height="120"
+       width="120.00001"
+       id="rect5085-1"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90)" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -6356,6 +6657,392 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Climbing_stick.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#eb4d44;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.99999928;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path3797"
+       cx="341.24997"
+       cy="336.1123"
+       r="60"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       sodipodi:type="star"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ed7d55;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.00128365;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path3801"
+       sodipodi:sides="150"
+       sodipodi:cx="341.26691"
+       sodipodi:cy="336.09058"
+       sodipodi:r1="60.02298"
+       sodipodi:r2="12.004596"
+       sodipodi:arg1="0.85196633"
+       sodipodi:arg2="0.87291028"
+       inkscape:flatsided="false"
+       inkscape:rounded="0.02"
+       inkscape:randomized="0"
+       d="m 380.79232,381.26247 c -0.7228,0.63245 -31.07538,-36.59112 -31.81127,-35.97394 -0.73588,0.61717 30.63364,36.98784 29.88499,37.58947 -0.74865,0.60163 -29.51584,-37.86032 -30.27692,-37.27451 -0.76109,0.58582 29.05787,38.23821 28.28469,38.80796 -0.77319,0.56975 -27.90453,-39.06311 -28.68948,-38.50968 -0.78495,0.55343 27.43114,39.42148 26.63478,39.95836 -0.79637,0.53687 -26.24426,-40.19737 -27.05169,-39.67729 -0.80744,0.52007 25.75627,40.5356 24.93812,41.03865 -0.81815,0.50305 -24.53794,-41.2611 -25.36645,-40.77529 -0.8285,0.4858 24.03623,41.5786 23.19774,42.04695 -0.8385,0.46835 -22.78859,-42.25245 -23.63671,-41.80176 -0.84812,0.45069 22.27401,42.54867 21.41664,42.98149 -0.85738,0.43283 -20.99925,-43.16967 -21.8655,-42.7549 -0.86625,0.41478 20.47273,43.44409 19.59798,43.84063 -0.87475,0.39655 -19.17307,-44.01116 -20.05593,-43.63302 -0.88286,0.37813 18.63552,44.26328 17.74493,44.62285 -0.89059,0.35956 -17.31325,-44.77545 -18.21117,-44.43461 -0.89793,0.34083 16.76561,45.00483 15.86075,45.32679 -0.90486,0.32195 -15.42307,-45.46118 -16.33447,-45.15824 -0.91141,0.30294 14.8663,45.66743 13.94875,45.95121 -0.91755,0.28378 -13.50582,-46.06715 -14.42911,-45.80264 -0.9233,0.2645 12.94091,46.2499 12.01228,46.49501 -0.92863,0.24511 -11.56488,-46.5923 -12.49844,-46.36669 -0.93356,0.22561 10.99281,46.75124 10.05473,46.95725 -0.93808,0.20601 -9.60365,-47.03572 -10.54584,-46.8494 -0.94219,0.18632 9.02543,47.17057 8.07955,47.33711 -0.94589,0.16655 -7.62558,-47.39662 -8.57474,-47.24992 -0.94917,0.1467 7.04221,47.50714 6.09018,47.63392 -0.95202,0.12679 -5.63412,-47.67437 -6.58859,-47.56754 -0.95448,0.10682 5.04664,47.76036 4.09014,47.84717 -0.9565,0.0868 -3.63279,-47.86849 -4.5909,-47.80173 -0.95811,0.0668 3.04223,47.9298 2.08293,47.97649 -0.9593,0.0467 -1.62508,-47.97863 -2.58514,-47.95205 -0.96007,0.0266 1.03246,48.01516 0.072,48.02162 -0.96041,0.006 0.38548,-48.00458 -0.57485,-48.01823 -0.96034,-0.0136 -0.97911,48.01627 -1.93895,47.98252 -0.95984,-0.0338 2.39537,-47.94634 1.43645,-48.00019 -0.95892,-0.0538 -2.98896,47.93315 -3.94655,47.85923 -0.95758,-0.0739 4.40106,-47.80397 3.44523,-47.89793 -0.95583,-0.094 -4.99357,47.76594 -5.94722,47.65199 -0.95365,-0.11396 6.39901,-47.57775 5.44796,-47.71165 -0.95105,-0.1339 -6.98942,47.51494 -7.93746,47.36115 -0.94804,-0.15379 8.38575,-47.26805 7.44114,-47.44166 -0.94462,-0.17361 -8.97301,47.18057 -9.91378,46.98721 -0.94077,-0.19335 10.35777,-46.87542 9.42126,-47.08843 -0.93651,-0.21302 -10.94086,46.76343 -11.8727,46.53085 -0.93185,-0.23258 12.31163,-46.40057 11.38486,-46.65261 -0.92678,-0.25205 -12.88951,46.26425 -13.8108,45.99285 -0.92129,-0.27139 14.24388,-45.84431 13.32848,-46.13494 -0.91541,-0.29063 -14.81555,45.68392 -15.72467,45.37418 -0.90912,-0.30974 16.15115,-45.20762 15.24872,-45.53633 -0.90243,-0.32871 -16.71559,45.02343 -17.61094,44.67589 -0.89535,-0.34753 18.03008,-44.49163 17.1422,-44.85784 -0.88787,-0.36621 -18.58632,44.28397 -19.46633,43.89924 -0.88001,-0.38472 19.87739,-43.69758 19.00563,-44.10065 -0.87176,-0.40307 -20.42444,43.46681 -21.28757,43.04557 -0.86313,-0.42124 21.68982,-42.82688 20.8357,-43.2661 -0.85412,-0.43922 -22.22672,42.57339 -23.07146,42.11638 -0.84473,-0.45701 23.4642,-41.88103 22.62922,-42.35564 -0.83498,-0.4746 -23.99001,41.60529 -24.81487,41.11331 -0.82485,-0.49199 25.19741,-40.86172 24.38304,-41.37087 -0.81437,-0.50915 -25.71122,40.56419 -26.51475,40.0381 -0.80352,-0.5261 26.88642,-39.77072 26.09408,-40.31353 -0.79233,-0.5428 -27.38731,39.45194 -28.16811,38.89266 -0.78079,-0.55928 28.52826,-38.60994 27.75935,-39.18545 -0.76891,-0.57552 -29.01537,38.27047 -29.77206,37.67898 -0.75668,-0.59149 30.12005,-37.38144 29.37592,-37.98864 -0.74414,-0.60721 -30.59252,37.02186 -31.32378,36.39921 -0.73125,-0.62266 31.659,-36.08735 30.94095,-36.72519 -0.71806,-0.63783 -32.116,35.70831 -32.82054,35.05558 -0.70454,-0.65273 33.14241,-34.72996 32.45169,-35.3973 -0.69071,-0.66734 -33.58313,34.33211 -34.25972,33.65045 -0.67659,-0.68166 34.56768,-33.31163 33.90551,-34.00732 -0.66216,-0.69568 -34.99136,32.89568 -35.6388,32.18629 -0.64745,-0.7094 35.9323,-31.83487 35.29985,-32.55767 -0.63245,-0.7228 -36.3382,31.40153 -36.95537,30.66565 -0.61717,-0.73589 37.23389,-30.30226 36.63226,-31.05091 -0.60163,-0.74865 -37.62128,29.85231 -38.20709,29.09122 -0.58582,-0.76108 38.47015,-28.71648 37.9004,-29.48966 -0.56975,-0.77319 -38.83836,28.2507 -39.39179,27.46575 -0.55344,-0.78495 39.63893,-27.08033 39.10206,-27.87669 -0.53687,-0.79637 -39.98732,26.59954 -40.50739,25.7921 -0.52008,-0.80743 40.73817,-25.39667 40.23511,-26.21482 -0.50305,-0.81815 -41.06611,24.90172 -41.55191,24.07321 -0.48581,-0.8285 41.76593,-23.66845 41.29758,-24.50695 -0.46835,-0.8385 -42.07286,23.1602 -42.52355,22.31208 -0.45069,-0.84812 42.72043,-21.89872 42.28761,-22.75609 -0.43283,-0.85738 -43.00581,21.37805 -43.42059,20.5118 -0.41478,-0.86625 43.59998,-20.09056 43.20344,-20.96531 -0.39654,-0.87475 -43.8633,19.55841 -44.24144,18.67555 -0.37814,-0.88286 44.40304,-18.24716 44.04348,-19.13775 -0.35957,-0.89058 -44.64385,17.70445 -44.98469,16.80653 -0.34084,-0.89792 45.12821,-16.37175 44.80625,-17.27661 -0.32196,-0.90486 -45.34608,15.81943 -45.64901,14.90802 -0.30294,-0.91141 45.7742,-14.46761 45.49041,-15.38517 -0.28378,-0.91755 -45.96874,13.90666 -46.23325,12.98337 -0.2645,-0.9233 46.33989,-12.5381 46.09478,-13.46673 -0.24511,-0.92863 -46.51078,11.96948 -46.73638,11.03592 -0.22561,-0.93355 46.82428,-10.58658 46.61827,-11.52466 -0.20601,-0.93808 -46.97121,10.01131 -47.15753,9.06913 -0.18631,-0.94219 47.22653,-8.61651 47.05999,-9.56239 -0.16655,-0.94589 -47.34924,8.03558 -47.49594,7.08642 -0.1467,-0.94916 47.54592,-6.6313 47.41914,-7.58333 -0.12679,-0.95203 -47.6442,6.04575 -47.75103,5.09128 -0.10682,-0.95447 47.78191,-4.63447 47.6951,-5.59097 -0.0868,-0.95651 -47.85558,4.04532 -47.92234,3.08721 -0.0668,-0.95811 47.93407,-2.62951 47.88739,-3.58881 -0.0467,-0.9593 -47.983,2.03779 -48.00958,1.07773 -0.0266,-0.96007 48.00213,-0.61993 47.99566,-1.58035 -0.006,-0.96041 -48.02624,0.0267 -48.01259,-0.93365 0.0136,-0.96034 47.98598,1.39073 48.01974,0.43089 0.0337,-0.95984 -47.98524,-1.98447 -47.93139,-2.94339 0.0539,-0.95892 47.88566,3.39896 47.95958,2.44137 0.0739,-0.95758 -47.86004,-3.99214 -47.76609,-4.94796 0.094,-0.95583 47.70132,5.40122 47.81528,4.44757 0.11395,-0.95365 -47.65089,-5.99282 -47.51699,-6.94387 0.1339,-0.95105 47.4333,7.39401 47.58709,6.44597 0.15378,-0.94804 -47.35814,-7.98297 -47.18453,-8.92758 0.17361,-0.94462 47.08206,9.37382 47.27542,8.43305 0.19335,-0.94077 -46.98231,-9.95912 -46.76929,-10.89563 0.21301,-0.93652 46.64822,11.33719 46.8808,10.40534 0.23258,-0.93185 -46.52404,-11.9178 -46.272,-12.84457 0.25204,-0.92677 46.13256,13.28067 46.40395,12.35938 0.2714,-0.92129 -45.98417,-13.85556 -45.69354,-14.77097 0.29063,-0.9154 45.53596,15.20085 45.8457,14.29174 0.30973,-0.90912 -45.36363,-15.76904 -45.03492,-16.67147 0.32871,-0.90243 44.85947,17.09437 45.207,16.19902 0.34754,-0.89535 -44.66349,-17.65483 -44.29728,-18.5427 0.36621,-0.88788 44.10428,18.95789 44.489,18.07788 0.38473,-0.88002 -43.88501,-19.50966 -43.48194,-20.38142 0.40307,-0.87176 43.27172,20.78816 43.69296,19.92503 0.42124,-0.86313 -43.02953,-21.33026 -42.59031,-22.18438 0.43922,-0.85411 42.36324,22.58196 42.82025,21.73723 0.45702,-0.84474 -42.09857,-23.11344 -41.62397,-23.94842 0.47461,-0.83497 41.38045,24.33614 41.87244,23.51129 0.49199,-0.82486 -41.09375,-24.85607 -40.5846,-25.67044 0.50915,-0.81437 40.32506,26.04762 40.85115,25.24409 0.5261,-0.80352 -40.01684,-26.55509 -39.47403,-27.34742 0.54281,-0.79234 39.19893,27.71341 39.75821,26.93262 0.55928,-0.78079 -38.86973,-28.20753 -38.29422,-28.97644 0.57551,-0.76891 38.00402,29.33058 38.59551,28.5739 0.59149,-0.75669 -37.65442,-29.81049 -37.04722,-30.55462 0.6072,-0.74413 36.74245,30.8963 37.36511,30.16504 0.62265,-0.73125 -36.37307,-31.36113 -35.73523,-32.07919 0.63783,-0.71805 35.41642,32.40781 36.06915,31.70327 0.65273,-0.70453 -35.02789,-32.85677 -34.36055,-33.54748 0.66735,-0.69072 34.02826,33.86247 34.70992,33.18588 0.68166,-0.67659 -33.62127,-34.29477 -32.92558,-34.95693 0.69568,-0.66217 32.58039,35.25772 33.28979,34.61027 0.70939,-0.64745 -32.15566,-35.6726 -31.43286,-36.30505 0.7228,-0.63245 31.07537,36.59112 31.81126,35.97395 0.73589,-0.61718 -30.63364,-36.98785 -29.88499,-37.58948 0.74865,-0.60163 29.51584,37.86033 30.27693,37.27451 0.76108,-0.58582 -29.05788,-38.23821 -28.28469,-38.80796 0.77318,-0.56975 27.90452,39.06311 28.68947,38.50968 0.78495,-0.55343 -27.43114,-39.42148 -26.63477,-39.95835 0.79636,-0.53687 26.24425,40.19736 27.05169,39.67729 0.80743,-0.52008 -25.75628,-40.5356 -24.93813,-41.03866 0.81815,-0.50305 24.53794,41.2611 25.36645,40.7753 0.82851,-0.48581 -24.03623,-41.57861 -23.19773,-42.04696 0.8385,-0.46835 22.78858,42.25245 23.6367,41.80176 0.84813,-0.45068 -22.27401,-42.54866 -21.41663,-42.98149 0.85737,-0.43283 20.99924,43.16967 21.86549,42.7549 0.86625,-0.41478 -20.47272,-43.44409 -19.59797,-43.84063 0.87475,-0.39654 19.17306,44.01116 20.05592,43.63303 0.88287,-0.37814 -18.63551,-44.26329 -17.74493,-44.62285 0.89059,-0.35957 17.31326,44.77544 18.21118,44.4346 0.89792,-0.34083 -16.76562,-45.00483 -15.86075,-45.32678 0.90486,-0.32196 15.42306,45.46117 16.33447,45.15823 0.9114,-0.30293 -14.86631,-45.66742 -13.94876,-45.95121 0.91756,-0.28378 13.50582,46.06715 14.42912,45.80265 0.92329,-0.26451 -12.94091,-46.24991 -12.01228,-46.49502 0.92863,-0.24511 11.56488,46.5923 12.49844,46.36669 0.93356,-0.2256 -10.99282,-46.75124 -10.05474,-46.95725 0.93808,-0.20601 9.60366,47.03572 10.54584,46.8494 0.94219,-0.18631 -9.02543,-47.17056 -8.07954,-47.33711 0.94588,-0.16654 7.62557,47.39662 8.57474,47.24992 0.94916,-0.1467 -7.04222,-47.50713 -6.09019,-47.63392 0.95203,-0.12679 5.63412,47.67437 6.5886,47.56755 0.95447,-0.10683 -5.04665,-47.76037 -4.09015,-47.84718 0.95651,-0.0868 3.63279,47.86849 4.5909,47.80173 0.95811,-0.0668 -3.04222,-47.9298 -2.08292,-47.97648 0.95929,-0.0467 1.62507,47.97862 2.58514,47.95204 0.96006,-0.0266 -1.03247,-48.01515 -0.072,-48.02162 0.96041,-0.006 -0.38549,48.00459 0.57485,48.01823 0.96033,0.0136 0.9791,-48.01627 1.93894,-47.98251 0.95984,0.0338 -2.39537,47.94633 -1.43644,48.00018 0.95892,0.0539 2.98896,-47.93315 3.94654,-47.85923 0.95759,0.0739 -4.40105,47.80397 -3.44523,47.89793 0.95583,0.094 4.99358,-47.76594 5.94723,-47.65198 0.95365,0.11395 -6.39902,47.57774 -5.44797,47.71164 0.95106,0.1339 6.98943,-47.51493 7.93747,-47.36114 0.94804,0.15378 -8.38576,47.26804 -7.44114,47.44165 0.94461,0.17361 8.97301,-47.18057 9.91378,-46.98721 0.94077,0.19335 -10.35778,46.87542 -9.42127,47.08844 0.93652,0.21301 10.94086,-46.76343 11.87271,-46.53086 0.93184,0.23258 -12.31163,46.40057 -11.38486,46.65262 0.92677,0.25204 12.88951,-46.26426 13.8108,-45.99286 0.92129,0.27139 -14.24389,45.84431 -13.32848,46.13494 0.9154,0.29063 14.81554,-45.68392 15.72466,-45.37418 0.90912,0.30974 -16.15115,45.20763 -15.24872,45.53634 0.90243,0.3287 16.7156,-45.02344 17.61095,-44.6759 0.89535,0.34753 -18.03009,44.49163 -17.14221,44.85784 0.88787,0.36621 18.58632,-44.28397 19.46633,-43.89924 0.88001,0.38472 -19.87738,43.69758 -19.00562,44.10065 0.87176,0.40307 20.42443,-43.4668 21.28756,-43.04557 0.86313,0.42124 -21.68981,42.82688 -20.83569,43.2661 0.85411,0.43922 22.22672,-42.57339 23.07145,-42.11638 0.84473,0.45702 -23.46419,41.88103 -22.62922,42.35564 0.83498,0.4746 23.99002,-41.60529 24.81487,-41.1133 0.82485,0.49198 -25.1974,40.86171 -24.38304,41.37086 0.81437,0.50916 25.71122,-40.56419 26.51475,-40.0381 0.80353,0.5261 -26.88641,39.77072 -26.09408,40.31353 0.79233,0.54281 27.38732,-39.45194 28.16811,-38.89266 0.78079,0.55928 -28.52825,38.60995 -27.75935,39.18546 0.76891,0.57551 29.01537,-38.27048 29.77206,-37.67899 0.75669,0.59149 -30.12005,37.38144 -29.37591,37.98864 0.74413,0.60721 30.59252,-37.02186 31.32377,-36.3992 0.73126,0.62265 -31.659,36.08735 -30.94094,36.72518 0.71805,0.63783 32.116,-35.70831 32.82054,-35.05558 0.70453,0.65273 -33.14241,34.72996 -32.4517,35.3973 0.69071,0.66734 33.58314,-34.33211 34.25973,-33.65044 0.67658,0.68166 -34.56768,33.31163 -33.90552,34.00731 0.66216,0.69568 34.99136,-32.89568 35.63881,-32.18628 0.64745,0.70939 -35.9323,31.83486 -35.29985,32.55766 0.63245,0.7228 36.33819,-31.40153 36.95536,-30.66565 0.61718,0.73589 -37.23389,30.30226 -36.63226,31.05091 0.60163,0.74865 37.62128,-29.85231 38.2071,-29.09122 0.58581,0.76108 -38.47016,28.71648 -37.90041,29.48967 0.56975,0.77318 38.83836,-28.25071 39.3918,-27.46576 0.55343,0.78495 -39.63894,27.08033 -39.10206,27.8767 0.53687,0.79636 39.98731,-26.59955 40.50738,-25.79211 0.52008,0.80744 -40.73816,25.39667 -40.23511,26.21482 0.50305,0.81815 41.06611,-24.90172 41.55192,-24.07321 0.48581,0.82851 -41.76594,23.66845 -41.29759,24.50695 0.46835,0.8385 42.07287,-23.1602 42.52355,-22.31208 0.45069,0.84813 -42.72043,21.89872 -42.2876,22.7561 0.43283,0.85737 43.0058,-21.37806 43.42058,-20.51181 0.41478,0.86625 -43.59998,20.09056 -43.20344,20.96531 0.39655,0.87475 43.86331,-19.55841 44.24145,-18.67555 0.37813,0.88286 -44.40305,18.24716 -44.04348,19.13775 0.35956,0.89059 44.64385,-17.70445 44.98468,-16.80653 0.34084,0.89792 -45.1282,16.37175 -44.80625,17.27661 0.32196,0.90487 45.34608,-15.81942 45.64901,-14.90802 0.30294,0.91141 -45.77419,14.46762 -45.49041,15.38517 0.28378,0.91755 45.96875,-13.90666 46.23325,-12.98336 0.26451,0.92329 -46.33989,12.53809 -46.09478,13.46672 0.24511,0.92863 46.51078,-11.96948 46.73639,-11.03592 0.22561,0.93356 -46.82428,10.58659 -46.61827,11.52467 0.206,0.93808 46.9712,-10.01132 47.15752,-9.06913 0.18632,0.94218 -47.22653,8.6165 -47.05998,9.56238 0.16654,0.94589 47.34923,-8.03558 47.49593,-7.08642 0.1467,0.94917 -47.54592,6.63131 -47.41913,7.58333 0.12679,0.95203 47.6442,-6.04575 47.75102,-5.09128 0.10682,0.95448 -47.78191,4.63447 -47.6951,5.59098 0.0868,0.9565 47.85558,-4.04533 47.92234,-3.08722 0.0668,0.95811 -47.93407,2.62951 -47.88739,3.58881 0.0467,0.9593 47.983,-2.03779 48.00958,-1.07772 0.0266,0.96006 -48.00213,0.61993 -47.99566,1.58034 0.006,0.96041 48.02624,-0.0267 48.0126,0.93365 -0.0137,0.96034 -47.98599,-1.39073 -48.01974,-0.43089 -0.0338,0.95984 47.98523,1.98447 47.93138,2.94339 -0.0539,0.95892 -47.88566,-3.39896 -47.95957,-2.44137 -0.0739,0.95758 47.86004,3.99214 47.76608,4.94797 -0.094,0.95582 -47.70132,-5.40122 -47.81527,-4.44757 -0.11396,0.95365 47.65088,5.99281 47.51698,6.94386 -0.1339,0.95106 -47.4333,-7.394 -47.58708,-6.44596 -0.15379,0.94804 47.35813,7.98296 47.18452,8.92758 -0.17361,0.94461 -47.08206,-9.37383 -47.27541,-8.43306 -0.19335,0.94077 46.9823,9.95912 46.76929,10.89564 -0.21301,0.93651 -46.64823,-11.3372 -46.88081,-10.40535 -0.23258,0.93185 46.52405,11.9178 46.272,12.84457 -0.25204,0.92677 -46.13255,-13.28067 -46.40395,-12.35938 -0.2714,0.92129 45.98417,13.85557 45.69354,14.77097 -0.29063,0.91541 -45.53595,-15.20085 -45.84569,-14.29173 -0.30974,0.90911 45.36362,15.76903 45.03491,16.67146 -0.32871,0.90243 -44.85946,-17.09437 -45.207,-16.19902 -0.34754,0.89535 44.66349,17.65483 44.29728,18.54271 -0.36621,0.88787 -44.10428,-18.95789 -44.489,-18.07788 -0.38472,0.88001 43.88501,19.50965 43.48194,20.38141 -0.40307,0.87177 -43.27172,-20.78815 -43.69296,-19.92503 -0.42124,0.86313 43.02954,21.33026 42.59032,22.18438 -0.43923,0.85412 -42.36325,-22.58196 -42.82026,-21.73722 -0.45701,0.84473 42.09857,23.11343 41.62397,23.94841 -0.4746,0.83497 -41.38045,-24.33614 -41.87244,-23.51128 -0.49198,0.82485 41.09376,24.85606 40.58461,25.67043 -0.50916,0.81437 -40.32507,-26.04762 -40.85116,-25.24409 -0.5261,0.80353 40.01684,26.55509 39.47404,27.34742 -0.54281,0.79234 -39.19893,-27.71341 -39.75821,-26.93262 -0.55929,0.7808 38.86973,28.20754 38.29422,28.97644 -0.57552,0.76891 -38.00403,-29.33058 -38.59552,-28.57389 -0.59149,0.75668 37.65443,29.81048 37.04722,30.55461 -0.6072,0.74414 -36.74245,-30.89629 -37.36511,-30.16504 -0.62265,0.73125 36.37307,31.36114 35.73524,32.07919 -0.63784,0.71805 -35.41643,-32.40781 -36.06916,-31.70327 -0.65273,0.70454 35.02789,32.85677 34.36055,33.54749 -0.66734,0.69071 -34.02826,-33.86247 -34.70992,-33.18589 -0.68166,0.67659 33.62127,34.29477 32.92559,34.95694 -0.69568,0.66216 -32.5804,-35.25773 -33.28979,-34.61028 -0.7094,0.64745 32.15566,35.6726 31.43286,36.30505 z"
+       inkscape:transform-center-x="0.26714842"
+       inkscape:transform-center-y="0.35724341"
+       transform="matrix(0.99971801,0,0,0.99963982,0.0793089,0.14267206)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#radialGradient2380);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.99999928;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path3821"
+       inkscape:transform-center-x="-73.749975"
+       inkscape:transform-center-y="9.0989331e-06"
+       cy="336.11221"
+       cx="394.6875"
+       r="3.75"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-52.605312"
+       inkscape:transform-center-y="17.09251"
+       id="use3978"
+       transform="rotate(18,343.7408,339.54052)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-44.74875"
+       inkscape:transform-center-y="32.511879"
+       id="use3988"
+       transform="rotate(36,342.2239,338.02362)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-32.511869"
+       inkscape:transform-center-y="44.748759"
+       id="use3990"
+       transform="rotate(54,341.70122,337.50093)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-17.092499"
+       inkscape:transform-center-y="52.605319"
+       id="use3992"
+       transform="rotate(72,341.42642,337.22613)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="3.6101521e-06"
+       inkscape:transform-center-y="55.312504"
+       id="use3994"
+       transform="rotate(90,341.25,337.04971)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="17.092506"
+       inkscape:transform-center-y="52.605317"
+       id="use3996"
+       transform="rotate(108,341.12181,336.92152)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="32.511875"
+       inkscape:transform-center-y="44.748755"
+       id="use3998"
+       transform="rotate(126,341.02009,336.8198)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="44.748755"
+       inkscape:transform-center-y="32.511874"
+       id="use4000"
+       transform="rotate(144,340.93356,336.73326)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="52.605315"
+       inkscape:transform-center-y="17.092504"
+       id="use4002"
+       transform="rotate(162,340.85549,336.6552)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="55.3125"
+       inkscape:transform-center-y="1.3898478e-06"
+       id="use4004"
+       transform="rotate(180,340.78125,336.58096)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="52.605313"
+       inkscape:transform-center-y="-17.092501"
+       id="use4006"
+       transform="rotate(-162,340.70701,336.50671)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="44.748751"
+       inkscape:transform-center-y="-32.51187"
+       id="use4008"
+       transform="rotate(-144,340.62895,336.42865)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="32.51187"
+       inkscape:transform-center-y="-44.74875"
+       id="use4010"
+       transform="rotate(-126,340.54241,336.34212)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="17.0925"
+       inkscape:transform-center-y="-52.60531"
+       id="use4012"
+       transform="rotate(-108,340.44069,336.24039)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-2.6101521e-06"
+       inkscape:transform-center-y="-55.312495"
+       id="use4014"
+       transform="rotate(-90,340.3125,336.11221)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-17.092505"
+       inkscape:transform-center-y="-52.605308"
+       id="use4016"
+       transform="rotate(-72,340.13608,335.93578)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-32.511874"
+       inkscape:transform-center-y="-44.748746"
+       id="use4018"
+       transform="rotate(-54,339.86128,335.66098)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-44.748754"
+       inkscape:transform-center-y="-32.511865"
+       id="use4020"
+       transform="rotate(-36,339.3386,335.13829)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3821"
+       inkscape:transform-center-x="-52.605314"
+       inkscape:transform-center-y="-17.092495"
+       id="use4022"
+       transform="rotate(-18,337.8217,333.62139)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       r="47.812531"
+       cy="336.1123"
+       cx="341.24997"
+       id="circle1887"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#fc7267;fill-opacity:1;fill-rule:evenodd;stroke:#b6271f;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8f3f30;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="circle1951"
+       cx="341.24997"
+       cy="336.1123"
+       r="44.999901"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       r="37.499901"
+       cy="336.1123"
+       cx="341.24997"
+       id="circle1953"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#c25644;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;filter:url(#filter1999)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       r="29.999901"
+       cy="336.1123"
+       cx="341.24997"
+       id="circle1955"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#8f3f30;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;filter:url(#filter2080)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#c25644;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;filter:url(#filter2112)"
+       id="circle1957"
+       cx="341.24997"
+       cy="336.1123"
+       r="22.499901"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       sodipodi:type="star"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#bf654b;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path2141"
+       sodipodi:sides="100"
+       sodipodi:cx="364"
+       sodipodi:cy="358.51968"
+       sodipodi:r1="48"
+       sodipodi:r2="0.47999999"
+       sodipodi:arg1="4.0285489e-07"
+       sodipodi:arg2="0.031416329"
+       inkscape:flatsided="false"
+       inkscape:rounded="0.01"
+       inkscape:randomized="0"
+       d="m 412,358.5197 c 0,0.47521 -47.50531,-0.45991 -47.52024,0.0151 -0.0149,0.47497 47.45536,2.52462 47.42552,2.99889 -0.0298,0.47426 -47.38269,-3.44189 -47.42741,-2.96879 -0.0447,0.47309 47.20319,5.49938 47.14363,5.97084 -0.0596,0.47145 -47.07307,-6.41028 -47.14741,-5.94093 -0.0743,0.46935 46.76474,8.45245 46.67569,8.91924 -0.089,0.46678 -46.57768,-9.35338 -46.68134,-8.88962 -0.10366,0.46376 46.14173,11.37215 46.02355,11.83243 -0.11818,0.46027 -45.89847,-12.25955 -46.03105,-11.80322 -0.13258,0.45633 45.33661,14.24697 45.18977,14.69892 -0.14685,0.45194 -45.03812,-15.11735 -45.19909,-14.67024 -0.16097,0.44711 44.35258,17.06557 44.17764,17.5074 -0.17493,0.44183 -44.00001,-17.91548 -44.18874,-17.47937 -0.18872,0.43612 43.1935,19.81682 42.99117,20.2468 -0.20233,0.42997 -42.78827,-20.64292 -43.00401,-20.21951 -0.21573,0.42341 41.86396,22.48985 41.63503,22.90628 -0.22893,0.41642 -41.40766,-23.28888 -41.64955,-22.87986 -0.2419,0.40903 40.3692,25.07414 40.11457,25.47537 -0.25463,0.40122 -39.86363,-25.84294 -40.13073,-25.44991 -0.2671,0.39303 38.71512,27.55946 38.4358,27.94391 -0.27931,0.38445 -38.16227,-28.29499 -38.45353,-27.91951 -0.29125,0.37548 36.90826,29.93602 36.60535,30.30217 -0.3029,0.36615 -36.31031,-30.63539 -36.62457,-30.27894 -0.31425,0.35646 34.95573,32.19444 34.63043,32.54085 -0.3253,0.34641 -34.31505,-32.85488 -34.65107,-32.51886 -0.33602,0.33601 32.86524,34.32579 32.51884,34.65109 -0.34641,0.3253 -32.18437,-34.94471 -32.54082,-34.63045 -0.35646,0.31425 30.64506,36.32169 30.27891,36.62459 -0.36615,0.30291 -29.92666,-36.89663 -30.30214,-36.60537 -0.37549,0.29125 28.30392,38.17423 27.91948,38.45355 -0.38445,0.27932 -27.55085,-38.70293 -27.94388,-38.43583 -0.39303,0.26711 25.8511,39.87613 25.44987,40.13075 -0.40123,0.25463 -25.0663,-40.35649 -25.47533,-40.11459 -0.40903,0.2419 23.29624,41.42064 22.87982,41.64957 -0.41642,0.22893 -22.48284,-41.85078 -22.90624,-41.63504 -0.42341,0.21573 20.64944,42.80169 20.21947,43.00402 -0.42998,0.20233 -19.81064,-43.17991 -20.24676,-42.99118 -0.43612,0.18872 17.92116,44.01382 17.47933,44.18875 -0.44183,0.17494 -17.06026,-44.33862 -17.50737,-44.17765 -0.4471,0.16097 15.12215,45.05225 14.67021,45.19909 -0.45195,0.14685 -14.24255,-45.32235 -14.69888,-45.18978 -0.45634,0.13258 12.26345,45.91288 11.80318,46.03106 -0.46028,0.11818 -11.36863,-46.12722 -11.83239,-46.02356 -0.46376,0.10367 9.35636,46.59231 8.88957,46.68136 -0.46678,0.089 -8.44984,-46.75004 -8.91919,-46.67571 -0.46935,0.0743 6.41234,47.08786 5.94089,47.14742 -0.47146,0.0596 -5.49771,-47.18836 -5.97081,-47.14364 -0.47309,0.0447 3.44302,47.39758 2.96876,47.42742 -0.47427,0.0298 -2.52389,-47.44045 -2.99885,-47.42552 -0.47497,0.0149 0.4601,47.52023 -0.0151,47.52023 -0.4752,0 0.45991,-47.50531 -0.0151,-47.52023 -0.47497,-0.0149 -2.52462,47.45535 -2.99888,47.42552 -0.47427,-0.0298 3.44188,-47.3827 2.96879,-47.42742 -0.4731,-0.0447 -5.49939,47.2032 -5.97084,47.14364 -0.47146,-0.0596 6.41027,-47.07308 5.94092,-47.14742 -0.46935,-0.0743 -8.45245,46.76474 -8.91923,46.6757 -0.46679,-0.089 9.35337,-46.57768 8.88961,-46.68135 -0.46376,-0.10366 -11.37215,46.14173 -11.83242,46.02355 -0.46028,-0.11818 12.25955,-45.89847 11.80321,-46.03105 -0.45633,-0.13257 -14.24697,45.33662 -14.69891,45.18977 -0.45195,-0.14685 15.11734,-45.03811 14.67024,-45.19908 -0.44711,-0.16097 -17.06557,44.35257 -17.50741,44.17764 -0.44183,-0.17494 17.91549,-44.00002 17.47937,-44.18874 -0.43612,-0.18873 -19.81682,43.1935 -20.24679,42.99116 -0.42998,-0.20233 20.64291,-42.78827 20.2195,-43.004 -0.4234,-0.21574 -22.48985,41.86396 -22.90627,41.63503 -0.41643,-0.22894 23.28888,-41.40766 22.87985,-41.64956 -0.40903,-0.2419 -25.07414,40.3692 -25.47536,40.11457 -0.40123,-0.25462 25.84293,-39.86362 25.4499,-40.13073 -0.39303,-0.2671 -27.55946,38.71513 -27.94391,38.43581 -0.38444,-0.27932 28.295,-38.16228 27.91951,-38.45353 -0.37548,-0.29126 -29.93602,36.90825 -30.30217,36.60535 -0.36615,-0.30291 30.63539,-36.31032 30.27894,-36.62457 -0.35645,-0.31426 -32.19444,34.95572 -32.54085,34.63042 -0.3464,-0.32529 32.85489,-34.31505 32.51887,-34.65107 -0.33602,-0.33601 -34.3258,32.86525 -34.6511,32.51884 -0.3253,-0.34641 34.94471,-32.18436 34.63046,-32.54082 -0.31426,-0.35645 -36.32169,30.64506 -36.6246,30.27891 -0.3029,-0.36615 36.89663,-29.92666 36.60538,-30.30214 -0.29126,-0.37548 -38.17424,28.30393 -38.45356,27.91948 -0.27931,-0.38445 38.70293,-27.55085 38.43583,-27.94388 -0.2671,-0.39303 -39.87612,25.8511 -40.13075,25.44987 -0.25463,-0.40122 40.35649,-25.0663 40.11459,-25.47533 -0.24189,-0.40902 -41.42064,23.29625 -41.64957,22.87982 -0.22893,-0.41642 41.85078,-22.48283 41.63505,-22.90624 -0.21574,-0.42341 -42.8017,20.64945 -43.00403,20.21947 -0.20233,-0.42997 43.17991,-19.81064 42.99119,-20.24676 -0.18873,-0.43611 -44.01382,17.92117 -44.18876,17.47933 -0.17493,-0.44183 44.33863,-17.06025 44.17766,-17.50736 -0.16097,-0.44711 -45.05225,15.12215 -45.1991,14.6702 -0.14684,-0.45194 45.32236,-14.24255 45.18978,-14.69888 -0.13258,-0.45633 -45.91288,12.26345 -46.03106,11.80318 -0.11817,-0.46027 46.12722,-11.36863 46.02356,-11.83239 -0.10366,-0.46376 -46.59231,9.35636 -46.68135,8.88958 -0.089,-0.46679 46.75004,-8.44985 46.6757,-8.9192 -0.0743,-0.46935 -47.08786,6.41235 -47.14742,5.94089 -0.0596,-0.47146 47.18836,-5.49771 47.14364,-5.9708 -0.0447,-0.4731 -47.39758,3.44301 -47.42741,2.96875 -0.0298,-0.47427 47.44044,-2.52388 47.42552,-2.99885 C 363.50531,358.05979 316,358.99487 316,358.51966 c 0,-0.4752 47.50531,0.45991 47.52024,-0.015 0.0149,-0.47497 -47.45536,-2.52463 -47.42552,-2.99889 0.0298,-0.47427 47.38269,3.44189 47.42741,2.96879 0.0447,-0.47309 -47.20319,-5.49939 -47.14363,-5.97084 0.0596,-0.47146 47.07307,6.41028 47.14741,5.94093 0.0743,-0.46936 -46.76474,-8.45245 -46.67569,-8.91924 0.089,-0.46678 46.57768,9.35337 46.68134,8.88961 0.10366,-0.46375 -46.14173,-11.37215 -46.02355,-11.83242 0.11818,-0.46027 45.89847,12.25955 46.03105,11.80322 0.13258,-0.45634 -45.33661,-14.24698 -45.18977,-14.69892 0.14685,-0.45194 45.03812,15.11735 45.19909,14.67024 0.16097,-0.44711 -44.35258,-17.06557 -44.17764,-17.5074 0.17493,-0.44183 44.00001,17.91548 44.18874,17.47936 0.18872,-0.43612 -43.1935,-19.81681 -42.99117,-20.24679 0.20233,-0.42998 42.78827,20.64292 43.00401,20.21951 0.21573,-0.42341 -41.86396,-22.48986 -41.63503,-22.90628 0.22893,-0.41642 41.40766,23.28888 41.64955,22.87985 0.2419,-0.40902 -40.3692,-25.07413 -40.11457,-25.47536 0.25463,-0.40123 39.86363,25.84293 40.13073,25.4499 0.2671,-0.39303 -38.71512,-27.55946 -38.4358,-27.9439 0.27931,-0.38445 38.16227,28.29499 38.45353,27.91951 0.29125,-0.37549 -36.90826,-29.93602 -36.60535,-30.30217 0.3029,-0.36615 36.31031,30.63539 36.62457,30.27893 0.31425,-0.35645 -34.95573,-32.19443 -34.63043,-32.54084 0.3253,-0.34641 34.31505,32.85488 34.65107,32.51886 0.33602,-0.33602 -32.86524,-34.3258 -32.51884,-34.65109 0.34641,-0.3253 32.18437,34.94471 32.54082,34.63045 0.35646,-0.31426 -30.64506,-36.32169 -30.27891,-36.62459 0.36615,-0.30291 29.92666,36.89662 30.30214,36.60537 0.37549,-0.29126 -28.30392,-38.17424 -27.91948,-38.45355 0.38445,-0.27932 27.55085,38.70293 27.94388,38.43583 0.39303,-0.26711 -25.8511,-39.87613 -25.44987,-40.13076 0.40123,-0.25462 25.0663,40.3565 25.47533,40.1146 0.40903,-0.2419 -23.29624,-41.42065 -22.87982,-41.64958 0.41642,-0.22893 22.48284,41.85079 22.90624,41.63505 0.42341,-0.21574 -20.64944,-42.80169 -20.21947,-43.00402 0.42998,-0.20233 19.81064,43.17991 20.24676,42.99118 0.43612,-0.18872 -17.92116,-44.01382 -17.47933,-44.18875 0.44183,-0.17494 17.06026,44.33862 17.50737,44.17765 0.4471,-0.16097 -15.12215,-45.05225 -14.67021,-45.19909 0.45195,-0.14685 14.24255,45.32235 14.69888,45.18977 0.45634,-0.13257 -12.26345,-45.91287 -11.80318,-46.03105 0.46028,-0.11818 11.36863,46.12722 11.83239,46.02355 0.46376,-0.10366 -9.35636,-46.5923 -8.88957,-46.68135 0.46678,-0.089 8.44984,46.75004 8.91919,46.6757 0.46935,-0.0743 -6.41234,-47.08786 -5.94089,-47.14741 0.47146,-0.0596 5.49771,47.18835 5.97081,47.14363 0.47309,-0.0447 -3.44302,-47.39757 -2.96876,-47.42741 0.47427,-0.0298 2.52389,47.44045 2.99885,47.42552 0.47497,-0.0149 -0.4601,-47.52024 0.0151,-47.52024 0.4752,0 -0.45991,47.50531 0.0151,47.52024 0.47497,0.0149 2.52462,-47.45536 2.99888,-47.42552 0.47427,0.0298 -3.44188,47.38269 -2.96879,47.42741 0.4731,0.0447 5.49939,-47.20319 5.97084,-47.14363 0.47146,0.0596 -6.41027,47.07308 -5.94092,47.14741 0.46935,0.0743 8.45245,-46.76473 8.91923,-46.67569 0.46679,0.089 -9.35337,46.57768 -8.88961,46.68134 0.46376,0.10367 11.37215,-46.14172 11.83242,-46.02354 0.46028,0.11818 -12.25955,45.89847 -11.80321,46.03104 0.45633,0.13258 14.24697,-45.33661 14.69891,-45.18976 0.45195,0.14684 -15.11734,45.03811 -14.67024,45.19908 0.44711,0.16097 17.06557,-44.35257 17.50741,-44.17764 0.44183,0.17493 -17.91549,44.00002 -17.47937,44.18874 0.43612,0.18873 19.81682,-43.1935 20.24679,-42.99117 0.42998,0.20234 -20.64291,42.78827 -20.2195,43.00401 0.4234,0.21574 22.48985,-41.86396 22.90627,-41.63503 0.41643,0.22893 -23.28888,41.40766 -22.87985,41.64956 0.40903,0.2419 25.07414,-40.3692 25.47536,-40.11458 0.40123,0.25463 -25.84293,39.86363 -25.4499,40.13074 0.39303,0.2671 27.55946,-38.71513 27.94391,-38.43581 0.38444,0.27932 -28.295,38.16227 -27.91951,38.45353 0.37548,0.29125 29.93602,-36.90826 30.30217,-36.60535 0.36615,0.30291 -30.63539,36.31031 -30.27894,36.62457 0.35645,0.31426 32.19444,-34.95573 32.54085,-34.63043 0.3464,0.3253 -32.85489,34.31505 -32.51887,34.65107 0.33602,0.33602 34.3258,-32.86524 34.6511,-32.51883 0.3253,0.3464 -34.94471,32.18436 -34.63046,32.54081 0.31426,0.35646 36.32169,-30.64505 36.6246,-30.2789 0.3029,0.36615 -36.89663,29.92665 -36.60538,30.30214 0.29126,0.37548 38.17424,-28.30393 38.45356,-27.91948 0.27931,0.38444 -38.70293,27.55084 -38.43583,27.94387 0.2671,0.39303 39.87612,-25.85109 40.13075,-25.44987 0.25463,0.40123 -40.35649,25.06631 -40.11459,25.47533 0.24189,0.40903 41.42064,-23.29624 41.64957,-22.87982 0.22893,0.41643 -41.85078,22.48284 -41.63505,22.90625 0.21574,0.42341 42.8017,-20.64945 43.00403,-20.21947 0.20233,0.42997 -43.17991,19.81063 -42.99119,20.24675 0.18873,0.43612 44.01382,-17.92116 44.18876,-17.47933 0.17493,0.44184 -44.33863,17.06026 -44.17766,17.50737 0.16097,0.44711 45.05225,-15.12215 45.1991,-14.6702 0.14684,0.45194 -45.32236,14.24254 -45.18978,14.69888 0.13258,0.45633 45.91288,-12.26346 46.03106,-11.80318 0.11817,0.46027 -46.12722,11.36863 -46.02356,11.83239 0.10366,0.46375 46.59231,-9.35637 46.68135,-8.88958 0.089,0.46679 -46.75004,8.44984 -46.6757,8.9192 0.0743,0.46935 47.08786,-6.41235 47.14742,-5.94089 0.0596,0.47145 -47.18836,5.49771 -47.14364,5.9708 0.0447,0.4731 47.39758,-3.44302 47.42741,-2.96875 0.0298,0.47426 -47.44044,2.52388 -47.42552,2.99885 C 364.49469,358.97957 412,358.0445 412,358.5197 Z"
+       transform="scale(0.9375)"
+       mask="url(#mask2164)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       transform="matrix(0.9375,0,0,0.9375,281.25,-656.24997)"
+       r="64"
+       cy="1058.5197"
+       cx="64"
+       style="opacity:0.6;fill:url(#radialGradient3327-3);fill-opacity:1;stroke:none;stroke-width:12.06795597"
+       id="path4721-8-4-5"
+       mask="url(#mask30961)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       mask="url(#mask30961)"
+       id="circle2236"
+       style="opacity:0.6;fill:url(#radialGradient2247);fill-opacity:1;stroke:none;stroke-width:12.06795597"
+       cx="64"
+       cy="1058.5197"
+       r="64"
+       transform="matrix(0.9375,0,0,0.9375,281.25,-656.24997)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       transform="matrix(0.9375,0,0,0.9375,281.25,-656.24997)"
+       r="64"
+       cy="1058.5197"
+       cx="64"
+       style="opacity:0.6;fill:url(#radialGradient3327-3-6);fill-opacity:1;stroke:none;stroke-width:12.06795597"
+       id="path4721-8-4-5-0"
+       mask="url(#mask30954)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bouncy_Mushroom.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
   </g>

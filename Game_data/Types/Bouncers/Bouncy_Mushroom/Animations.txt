@@ -1,0 +1,45 @@
+animations{
+	bouncing{
+		frames{
+			bouncing1{
+				duration=0.0600
+			}
+			idling{
+				duration=0.0600
+			}
+			bouncing2{
+				duration=0.0600
+			}
+			idling{
+				duration=0.0600
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	bouncing1{
+		file=Bouncy_Mushroom.png
+		file_pos=0.0000 0.0000
+		file_size=128.0000 128.0000
+		scale=0.9500 1.0500
+	}
+	bouncing2{
+		file=Bouncy_Mushroom.png
+		file_pos=0.0000 0.0000
+		file_size=128.0000 128.0000
+		scale=1.0500 0.9500
+	}
+	idling{
+		file=Bouncy_Mushroom.png
+		file_pos=0.0000 0.0000
+		file_size=128.0000 128.0000
+	}
+}
+body_parts

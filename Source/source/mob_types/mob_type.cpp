@@ -53,7 +53,7 @@ mob_type::mob_type(size_t category_id) :
     weight(0),
     itch_damage(0),
     itch_time(0),
-    target_type(MOB_TARGET_TYPE_ENEMY),
+    target_type(MOB_TARGET_TYPE_NONE),
     huntable_targets(
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY

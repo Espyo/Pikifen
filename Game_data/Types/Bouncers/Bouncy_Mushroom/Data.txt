@@ -1,0 +1,7 @@
+name = Bouncy Mushroom
+
+height = 64
+pushable = false
+pushes = true
+riders = pikmin leaders
+radius = 64
