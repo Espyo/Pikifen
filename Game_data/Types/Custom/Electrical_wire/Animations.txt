@@ -1,0 +1,352 @@
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.0000
+			}
+		}
+	}
+	safe{
+		frames{
+			safe{
+				duration=0.0000
+			}
+		}
+	}
+	zapping{
+		frames{
+			zap1{
+				duration=0.0600
+			}
+			zap2{
+				duration=0.0600
+			}
+			zap3{
+				duration=0.0600
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=Electrical_wire.png
+		file_pos=204.0000 0.0000
+		file_size=50.0000 292.0000
+		offset=0.0000 121.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap1{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap2{
+				coords=0.0000 60.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap3{
+				coords=0.0000 121.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap4{
+				coords=0.0000 182.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap5{
+				coords=0.0000 242.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	safe{
+		file=Electrical_wire.png
+		file_pos=0.0000 0.0000
+		file_size=50.0000 292.0000
+		offset=0.0000 121.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap1{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap2{
+				coords=0.0000 60.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap3{
+				coords=0.0000 121.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap4{
+				coords=0.0000 182.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap5{
+				coords=0.0000 242.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	zap1{
+		file=Electrical_wire.png
+		file_pos=51.0000 0.0000
+		file_size=50.0000 292.0000
+		offset=0.0000 121.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap1{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap2{
+				coords=0.0000 60.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap3{
+				coords=0.0000 121.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap4{
+				coords=0.0000 182.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap5{
+				coords=0.0000 242.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+		}
+	}
+	zap2{
+		file=Electrical_wire.png
+		file_pos=102.0000 0.0000
+		file_size=50.0000 292.0000
+		offset=0.0000 121.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap1{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap2{
+				coords=0.0000 60.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap3{
+				coords=0.0000 121.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap4{
+				coords=0.0000 182.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap5{
+				coords=0.0000 242.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+		}
+	}
+	zap3{
+		file=Electrical_wire.png
+		file_pos=153.0000 0.0000
+		file_size=50.0000 292.0000
+		offset=0.0000 121.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+				knockback=1.0000
+			}
+			zap1{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap2{
+				coords=0.0000 60.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap3{
+				coords=0.0000 121.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap4{
+				coords=0.0000 182.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+			zap5{
+				coords=0.0000 242.0000 0.0000
+				height=24.0000
+				radius=32.0000
+				type=1
+				value=30.0000
+				hazards=fatal_electricity
+				knockback_outward=true
+			}
+		}
+	}
+}
+body_parts{
+	hit
+	zap1
+	zap2
+	zap3
+	zap4
+	zap5
+}

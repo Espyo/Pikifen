@@ -1,0 +1,45 @@
+first_state = safe
+death_state = destroyed
+
+init {
+    teleport_to_relative 0 -121 0
+}
+
+script {
+    safe {
+        on_enter {
+            set_timer 1.5
+            set_animation safe
+            stop_particles
+        }
+        on_timer {
+            set_state sparking
+        }
+    }
+    sparking {
+        on_enter {
+            set_timer 1.5
+            start_particles electrical_wire_sparks 0 0 32
+        }
+        on_timer {
+            set_state zapping
+        }
+    }
+    zapping {
+        on_enter {
+            set_timer 2.5
+            set_animation zapping
+        }
+        on_timer {
+            set_state safe
+        }
+    }
+    destroyed {
+        on_enter {
+            set_animation destroyed
+            stop_particles
+            send_message_to_links destroyed
+            start_dying
+        }
+    }
+}

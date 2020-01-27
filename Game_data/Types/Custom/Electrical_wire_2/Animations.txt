@@ -1,0 +1,53 @@
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling{
+		file
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hit
+}

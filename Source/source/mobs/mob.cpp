@@ -229,8 +229,14 @@ void mob::add_to_group(mob* new_member) {
 void mob::apply_attack_damage(
     mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
 ) {
+    //Register this hit, so the next frame doesn't hit it too.
+    attacker->hit_opponents.push_back(
+        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
+    );
+    
+    //Will the parent mob be handling the damage?
     if(parent && parent->relay_damage) {
-        apply_attack_damage(parent->m, attack_h, victim_h, damage);
+        parent->m->apply_attack_damage(attacker, attack_h, victim_h, damage);
         if(!parent->handle_damage) {
             return;
         }
@@ -248,9 +254,6 @@ void mob::apply_attack_damage(
     
     //Final setup.
     itch_damage += damage;
-    attacker->hit_opponents.push_back(
-        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
-    );
 }
 
 
@@ -1016,13 +1019,6 @@ void mob::delete_old_status_effects() {
 void mob::do_attack_effects(
     mob* attacker, hitbox* attack_h, hitbox* victim_h, const float damage
 ) {
-    if(parent && parent->relay_damage) {
-        do_attack_effects(parent->m, attack_h, victim_h, damage);
-        if(!parent->handle_damage) {
-            return;
-        }
-    }
-    
     //Calculate the particle's final position.
     point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
     point victim_h_pos = victim_h->get_cur_pos(pos, angle);

@@ -1,0 +1,31 @@
+name = Electrical wire
+
+height = 24
+is_obstacle = true
+max_health = 150
+pushable = false
+pushes = true
+radius = 25
+target_type = strong_plain_obstacle
+can_hurt = player; fragile
+
+spawns {
+    second {
+        object = Electrical wire 2
+        relative = true
+        coordinates = 0 121
+        angle = 0
+        link_object_to_spawn = true
+        link_spawn_to_object = true
+    }
+}
+
+children {
+    second {
+        spawn = second
+        handle_damage = false
+        relay_damage = true
+        handle_statuses = false
+        relay_statuses = true
+    }
+}
