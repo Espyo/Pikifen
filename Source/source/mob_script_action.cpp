@@ -368,7 +368,13 @@ void mob_action_runners::focus(mob_action_run_data &data) {
     size_t t = s2i(data.args[0]);
     
     switch(t) {
-    case MOB_ACTION_FOCUS_PARENT: {
+    case MOB_ACTION_FOCUS_LINK: {
+        if(!data.m->links.empty()) {
+            data.m->focus_on_mob(data.m->links[0]);
+        }
+        break;
+        
+    } case MOB_ACTION_FOCUS_PARENT: {
         if(data.m->parent) {
             data.m->focus_on_mob(data.m->parent->m);
         }
@@ -1196,7 +1202,9 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
  * Loading code for the focus mob script action.
  */
 bool mob_action_loaders::focus(mob_action_call &call) {
-    if(call.args[0] == "parent") {
+    if(call.args[0] == "link") {
+        call.args[0] = i2s(MOB_ACTION_FOCUS_LINK);
+    } else if(call.args[0] == "parent") {
         call.args[0] = i2s(MOB_ACTION_FOCUS_PARENT);
     } else if(call.args[0] == "trigger") {
         call.args[0] = i2s(MOB_ACTION_FOCUS_TRIGGER);

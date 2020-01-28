@@ -14,15 +14,16 @@ script {
     
     moving {
         on_enter {
-            move_to_relative 100 0
+            focus link
+            move_to_target focused_mob
             start_particles cardboard_box_dust -108 0 0
         }
         on_receive_message {
             set_state idling
         }
         on_reach_destination {
-            set_state done
             set_health 0
+            set_state done
         }
     }
     

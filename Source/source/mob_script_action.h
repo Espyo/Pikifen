@@ -101,8 +101,9 @@ enum MOB_ACTION_TURN_TYPES {
 
 //Focus action sub-types.
 enum MOB_ACTION_FOCUS_TYPES {
-    MOB_ACTION_FOCUS_TRIGGER,
+    MOB_ACTION_FOCUS_LINK,
     MOB_ACTION_FOCUS_PARENT,
+    MOB_ACTION_FOCUS_TRIGGER,
 };
 
 //If action operator types.
