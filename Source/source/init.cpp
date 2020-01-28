@@ -612,7 +612,7 @@ void init_mob_actions() {
     
     reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
     reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
+    reg_param("value", MOB_ACTION_PARAM_STRING, false, true);
     reg_action(
         MOB_ACTION_IF,
         "if",

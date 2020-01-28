@@ -566,7 +566,7 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
 void mob_action_runners::if_function(mob_action_run_data &data) {
     string lhs = data.args[0];
     size_t op = s2i(data.args[1]);
-    string rhs = data.args[2];
+    string rhs = vector_tail_to_string(data.args, 2);
     
     switch(op) {
     case MOB_ACTION_IF_OP_EQUAL: {

@@ -1232,6 +1232,22 @@ void update_animation_editor_history(const string &n) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns a string that's a join of the strings in the specified vector,
+ * but only past a certain position. The strings are joined with a space
+ * character.
+ * v:   The vector of strings.
+ * pos: Use the string at this position and onward.
+ */
+string vector_tail_to_string(const vector<string> &v, const size_t pos) {
+    string result = v[pos];
+    for(size_t p = pos + 1; p < v.size(); ++p) {
+        result += " " + v[p];
+    }
+    return result;
+}
+
+
 //Calls al_fwrite, but with an std::string instead of a c-string.
 void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
 

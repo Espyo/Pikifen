@@ -1,0 +1,100 @@
+animations{
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	idling_1{
+		frames{
+			idling_1{
+				duration=0.1000
+			}
+		}
+	}
+	idling_2{
+		frames{
+			idling_2{
+				duration=0.1000
+			}
+		}
+	}
+	idling_3{
+		frames{
+			idling_3{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	destroyed{
+		file=Spotcaps.png
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=25.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_1{
+		file=Spotcaps.png
+		file_pos=0.0000 309.0000
+		file_size=50.0000 50.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_2{
+		file=Spotcaps.png
+		file_pos=51.0000 309.0000
+		file_size=50.0000 50.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	idling_3{
+		file=Spotcaps.png
+		file_pos=102.0000 309.0000
+		file_size=50.0000 50.0000
+		hitboxes{
+			hit{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=25.0000
+				type=0
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hit
+}
