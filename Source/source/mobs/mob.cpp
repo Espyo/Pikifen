@@ -945,7 +945,8 @@ void mob::chomp(mob* m, hitbox* hitbox_info) {
         m, hitbox_info, &h_offset_dist, &h_offset_angle
     );
     hold(
-        m, hitbox_info->body_part_index, h_offset_dist, h_offset_angle, true
+        m, hitbox_info->body_part_index, h_offset_dist, h_offset_angle,
+        true, false
     );
     
     m->focus_on_mob(this);
@@ -1505,11 +1506,12 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
  * offset_dist:  Distance from the hitbox/body center. 1 is full radius.
  * offset_angle: Hitbox/body angle from which the mob will be held.
  * above_holder: Is the mob meant to appear above the holder?
+ * face_holder:  Should the mob rotate to always face the holder?
  */
 void mob::hold(
     mob* m, const size_t hitbox_nr,
     const float offset_dist, const float offset_angle,
-    const bool above_holder
+    const bool above_holder, const bool face_holder
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -1517,6 +1519,7 @@ void mob::hold(
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
     m->holder.above_holder = above_holder;
+    m->holder.face_holder = face_holder;
     m->fsm.run_event(MOB_EVENT_HELD, (void*) this);
     
     if(standing_on_mob) {
@@ -2297,8 +2300,10 @@ void mob::tick_physics() {
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
-        angle = get_angle(final_pos, holder.m->pos);
-        stop_turning();
+        if(holder.face_holder) {
+            angle = get_angle(final_pos, holder.m->pos);
+            stop_turning();
+        }
         chase(final_pos, NULL, true);
     }
     

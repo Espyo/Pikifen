@@ -19,6 +19,8 @@ children {
     ropes {
         spawn = ropes
         parent_holds = true
+        hold_faces_parent = false
+        hold_body_part = ropes
         hold_offset_distance = 0
         hold_offset_angle = 0
     }

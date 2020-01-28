@@ -85,6 +85,7 @@ public:
         string hold_body_part;
         float hold_offset_dist;
         float hold_offset_angle;
+        bool hold_faces_parent;
         
         bool handle_damage;
         bool relay_damage;

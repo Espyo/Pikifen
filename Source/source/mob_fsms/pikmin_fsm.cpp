@@ -2263,7 +2263,8 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
         pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
     );
     mob_ptr->hold(
-        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle, true
+        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle,
+        true, true
     );
     
     pik_ptr->was_thrown = false;
@@ -2307,7 +2308,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             );
             info->mob2->hold(
                 too_ptr, info->h2->body_part_index,
-                h_offset_dist, h_offset_angle, true
+                h_offset_dist, h_offset_angle, true, true
             );
         }
         
@@ -2443,7 +2444,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
         subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
-    m->hold(m->focused_mob, INVALID, 4, 0, true);
+    m->hold(m->focused_mob, INVALID, 4, 0, true, true);
     m->unfocus_from_mob();
 }
 

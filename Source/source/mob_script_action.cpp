@@ -811,6 +811,15 @@ void mob_action_runners::set_health(mob_action_run_data &data) {
  */
 void mob_action_runners::set_height(mob_action_run_data &data) {
     data.m->height = s2f(data.args[0]);
+    
+    if(data.m->type->walkable) {
+        //Update the Z of mobs standing on top of it.
+        for(size_t m = 0; m < mobs.size(); ++m) {
+            if(mobs[m]->standing_on_mob == data.m) {
+                mobs[m]->z = data.m->z + data.m->height;
+            }
+        }
+    }
 }
 
 

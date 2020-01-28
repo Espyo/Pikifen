@@ -408,6 +408,7 @@ void load_mob_type_from_file(
         rs.set("hold_body_part", new_child.hold_body_part);
         rs.set("hold_offset_distance", new_child.hold_offset_dist);
         rs.set("hold_offset_angle", new_child.hold_offset_angle);
+        rs.set("hold_faces_parent", new_child.hold_faces_parent);
         rs.set("handle_damage", new_child.handle_damage);
         rs.set("relay_damage", new_child.relay_damage);
         rs.set("handle_events", new_child.handle_events);

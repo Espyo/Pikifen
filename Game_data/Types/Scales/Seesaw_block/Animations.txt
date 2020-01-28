@@ -112,6 +112,17 @@ sprites{
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
 		scale=0.9800 0.9800
+		hitboxes{
+			ropes{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	down2{
 		file=Seesaw_block.png
@@ -119,6 +130,17 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=1.0000 0.0000
 		scale=0.9800 0.9800
+		hitboxes{
+			ropes{
+				coords=1.0000 0.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	down3{
 		file=Seesaw_block.png
@@ -126,6 +148,17 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=-1.0000 1.0000
 		scale=0.9800 0.9800
+		hitboxes{
+			ropes{
+				coords=-1.0000 1.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	down4{
 		file=Seesaw_block.png
@@ -133,12 +166,34 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=-1.0000 -1.0000
 		scale=0.9800 0.9800
+		hitboxes{
+			ropes{
+				coords=-1.0000 -1.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	up{
 		file=Seesaw_block.png
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
 		scale=1.0100 1.0100
+		hitboxes{
+			ropes{
+				coords=0.0000 0.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	up2{
 		file=Seesaw_block.png
@@ -146,6 +201,17 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=1.0000 0.0000
 		scale=1.0100 1.0100
+		hitboxes{
+			ropes{
+				coords=1.0000 0.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	up3{
 		file=Seesaw_block.png
@@ -153,6 +219,17 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=-1.0000 1.0000
 		scale=1.0100 1.0100
+		hitboxes{
+			ropes{
+				coords=-1.0000 1.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 	up4{
 		file=Seesaw_block.png
@@ -160,6 +237,19 @@ sprites{
 		file_size=220.0000 180.0000
 		offset=-1.0000 -1.0000
 		scale=1.0100 1.0100
+		hitboxes{
+			ropes{
+				coords=-1.0000 -1.0000 0.0000
+				height=20.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
 	}
 }
-body_parts
+body_parts{
+	ropes
+}

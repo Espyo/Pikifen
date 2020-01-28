@@ -359,7 +359,10 @@ void leader::swap_held_pikmin(mob* new_pik) {
     new_pik_ev->run(new_pik);
     
     release(holding[0]);
-    hold(new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE, false);
+    hold(
+        new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        false, true
+    );
     
     sfx_switch_pikmin.play(0, false);
 }
