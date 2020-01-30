@@ -22,7 +22,7 @@
 resource_category::resource_category() :
     mob_category(
         MOB_CATEGORY_RESOURCES, "Resource", "Resources",
-        RESOURCES_FOLDER_PATH, al_map_rgb(203, 88, 56)
+        RESOURCES_FOLDER_PATH, al_map_rgb(139, 204, 204)
     ) {
     
 }

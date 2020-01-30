@@ -22,7 +22,7 @@
 group_task_category::group_task_category() :
     mob_category(
         MOB_CATEGORY_GROUP_TASKS, "Group task", "Group tasks",
-        GROUP_TASKS_FOLDER_PATH, al_map_rgb(224, 104, 176)
+        GROUP_TASKS_FOLDER_PATH, al_map_rgb(152, 204, 139)
     ) {
     
 }

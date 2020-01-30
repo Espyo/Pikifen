@@ -21,7 +21,7 @@
 custom_category::custom_category() :
     mob_category(
         MOB_CATEGORY_CUSTOM, "Custom", "Custom",
-        CUSTOM_MOB_FOLDER_PATH, al_map_rgb(224, 128, 224)
+        CUSTOM_MOB_FOLDER_PATH, al_map_rgb(178, 73, 204)
     ) {
     
 }

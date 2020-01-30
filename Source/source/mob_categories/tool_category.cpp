@@ -22,7 +22,7 @@
 tool_category::tool_category() :
     mob_category(
         MOB_CATEGORY_TOOLS, "Tool", "Tools",
-        TOOLS_FOLDER_PATH, al_map_rgb(130, 123, 13)
+        TOOLS_FOLDER_PATH, al_map_rgb(204, 178, 139)
     ) {
     
 }

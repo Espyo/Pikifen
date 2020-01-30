@@ -57,7 +57,7 @@ const float area_editor::PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
 const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Color of a selected element, or the selection box.
-const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
+const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float area_editor::SELECTION_EFFECT_SPEED = TAU * 2;
 //Wait this long before letting a new repeat undo operation be saved.

@@ -22,7 +22,7 @@
 bridge_category::bridge_category() :
     mob_category(
         MOB_CATEGORY_BRIDGES, "Bridge", "Bridges",
-        BRIDGES_FOLDER_PATH, al_map_rgb(224, 200, 180)
+        BRIDGES_FOLDER_PATH, al_map_rgb(204, 73, 152)
     ) {
     
 }

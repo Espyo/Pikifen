@@ -539,7 +539,7 @@ void area_editor::do_drawing() {
         ALLEGRO_COLOR c =
             change_alpha(m_ptr->category->editor_color, mob_opacity * 255);
         if(m_ptr == problem_mob_ptr) {
-            c = al_map_rgb(192, 32, 32);
+            c = al_map_rgb(255, 0, 0);
         }
         
         if(m_ptr->type && m_ptr->type->rectangular_dim.x != 0) {

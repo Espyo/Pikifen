@@ -22,7 +22,7 @@
 pikmin_category::pikmin_category() :
     mob_category(
         MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin",
-        PIKMIN_FOLDER_PATH, al_map_rgb(64, 255, 64)
+        PIKMIN_FOLDER_PATH, al_map_rgb(100, 204, 73)
     ) {
     
 }

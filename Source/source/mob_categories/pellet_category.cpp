@@ -22,7 +22,7 @@
 pellet_category::pellet_category() :
     mob_category(
         MOB_CATEGORY_PELLETS, "Pellet", "Pellets",
-        PELLETS_FOLDER_PATH, al_map_rgb(224, 255, 112)
+        PELLETS_FOLDER_PATH, al_map_rgb(73, 204, 126)
     ) {
     
 }
