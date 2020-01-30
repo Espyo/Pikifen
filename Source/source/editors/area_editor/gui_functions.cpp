@@ -1294,7 +1294,6 @@ void area_editor::tools_to_gui() {
     ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->set_value(
         reference_alpha, false
     );
-    update_backup_status();
 }
 
 
@@ -1326,4 +1325,50 @@ void area_editor::update_main_frame() {
         frm_area, "lbl_n_path_stops",
         "Path stops: " + i2s(cur_area_data.path_stops.size())
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the toolbar's widgets.
+ */
+void area_editor::update_toolbar() {
+    lafi::widget* but_undo = frm_toolbar->widgets["but_undo"];
+    lafi::scrollbar* bar_reference =
+        ((lafi::scrollbar*) frm_toolbar->widgets["bar_reference"]);
+    lafi::button* but_snap = (lafi::button*) frm_toolbar->widgets["but_snap"];
+    
+    //Undo button.
+    if(undo_history.empty()) {
+        disable_widget(but_undo);
+    } else {
+        enable_widget(but_undo);
+        but_undo->description =
+            "Undo: " + undo_history[0].second + ". (Ctrl+Z)";
+        update_status_bar();
+    }
+    
+    //Reference opacity scrollbar.
+    bar_reference->set_value(255 - reference_alpha, false);
+    
+    //Snap mode button.
+    ALLEGRO_BITMAP* new_snap_icon = NULL;
+    string new_snap_name;
+    
+    if(snap_mode == SNAP_GRID) {
+        new_snap_name = "Grid";
+        new_snap_icon = editor_icons[ICON_SNAP_GRID];
+    } else if(snap_mode == SNAP_VERTEXES) {
+        new_snap_name = "Vertexes";
+        new_snap_icon = editor_icons[ICON_SNAP_VERTEXES];
+    } else if(snap_mode == SNAP_EDGES) {
+        new_snap_name = "Edges";
+        new_snap_icon = editor_icons[ICON_SNAP_EDGES];
+    } else if(snap_mode == SNAP_NOTHING) {
+        new_snap_name = "Off. Shift also disables snapping";
+        new_snap_icon = editor_icons[ICON_SNAP_NOTHING];
+    }
+    
+    but_snap->description =
+        "Current cursor snapping mode: " + new_snap_name + ". (X / Shift+X)";
+    but_snap->icon = new_snap_icon;
 }

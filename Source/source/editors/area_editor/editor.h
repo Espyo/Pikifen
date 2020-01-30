@@ -388,7 +388,6 @@ private:
     void cancel_layout_drawing();
     void cancel_layout_moving();
     void calculate_preview_path();
-    void change_snap_mode(const size_t new_mode);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -547,6 +546,7 @@ private:
     void tools_to_gui();
     void stt_to_gui();
     void update_main_frame();
+    void update_toolbar();
     
     void custom_picker_cancel_action();
     

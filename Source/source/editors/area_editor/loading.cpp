@@ -195,6 +195,7 @@ void area_editor::load() {
         
     frm_area->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        update_backup_status();
         state = EDITOR_STATE_TOOLS;
         change_to_right_frame();
     };
@@ -2273,7 +2274,12 @@ void area_editor::load() {
         "Lock width/height proportion when changing either one.";
         
     ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->change_handler =
-        lambda_gui_to_tools;
+    [this] (lafi::widget * w) {
+        ((lafi::scrollbar*) frm_toolbar->widgets["bar_reference"])->set_value(
+            (255 - ((lafi::scrollbar*) w)->low_value), false
+        );
+        gui_to_tools();
+    };
     frm_tools->widgets["bar_ref_alpha"]->description =
         "How see-through the reference is.";
         
@@ -2357,6 +2363,7 @@ void area_editor::load() {
     //Sector texture transformer -- properties.
     frm_stt->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        update_backup_status();
         state = EDITOR_STATE_TOOLS;
         change_to_right_frame();
     };
@@ -2624,6 +2631,11 @@ void area_editor::load() {
         lafi::EASY_FLAG_WIDTH_PX
     );
     frm_toolbar->easy_add(
+        "bar_reference",
+        new lafi::scrollbar(0.0f, 355.0f, 0.0f, 100.0f, true), 16, 32,
+        lafi::EASY_FLAG_WIDTH_PX
+    );
+    frm_toolbar->easy_add(
         "but_snap",
         new lafi::button(), 32, 32,
         lafi::EASY_FLAG_WIDTH_PX
@@ -2698,13 +2710,24 @@ void area_editor::load() {
     frm_toolbar->widgets["but_reference"]->description =
         "Toggle the visibility of the reference. (Ctrl+R)";
         
+    ((lafi::scrollbar*) frm_toolbar->widgets["bar_reference"])->change_handler =
+    [this] (lafi::widget * w) {
+        ((lafi::scrollbar*) frm_tools->widgets["bar_ref_alpha"])->set_value(
+            (255 - ((lafi::scrollbar*) w)->low_value), false
+        );
+        gui_to_tools();
+    };
+    frm_toolbar->widgets["bar_reference"]->description =
+        "How see-through the reference is.";
+        
     frm_toolbar->widgets["but_snap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!is_shift_pressed) {
-            change_snap_mode(sum_and_wrap(snap_mode, 1, N_SNAP_MODES));
+            snap_mode = sum_and_wrap(snap_mode, 1, N_SNAP_MODES);
         } else {
-            change_snap_mode(sum_and_wrap(snap_mode, -1, N_SNAP_MODES));
+            snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
         }
+        update_toolbar();
     };
     
     frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
@@ -2759,7 +2782,7 @@ void area_editor::load() {
     open_picker(PICKER_LOAD_AREA);
     update_status_bar();
     problem_type = EPT_NONE_YET;
-    change_snap_mode(SNAP_GRID);
+    snap_mode = SNAP_GRID;
     
     load_custom_particle_generators(false);
     load_spike_damage_types();

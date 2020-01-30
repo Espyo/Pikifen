@@ -287,37 +287,6 @@ void area_editor::cancel_layout_moving() {
 
 
 /* ----------------------------------------------------------------------------
- * Changes the current cursor snap mode and updates the button icon
- * and description.
- */
-void area_editor::change_snap_mode(const size_t new_mode) {
-    snap_mode = new_mode;
-    
-    ALLEGRO_BITMAP* new_button_icon = NULL;
-    string new_mode_name;
-    
-    if(snap_mode == SNAP_GRID) {
-        new_mode_name = "Grid";
-        new_button_icon = editor_icons[ICON_SNAP_GRID];
-    } else if(snap_mode == SNAP_VERTEXES) {
-        new_mode_name = "Vertexes";
-        new_button_icon = editor_icons[ICON_SNAP_VERTEXES];
-    } else if(snap_mode == SNAP_EDGES) {
-        new_mode_name = "Edges";
-        new_button_icon = editor_icons[ICON_SNAP_EDGES];
-    } else if(snap_mode == SNAP_NOTHING) {
-        new_mode_name = "Off. Shift also disables snapping";
-        new_button_icon = editor_icons[ICON_SNAP_NOTHING];
-    }
-    
-    lafi::button* but = (lafi::button*) frm_toolbar->widgets["but_snap"];
-    but->description =
-        "Current cursor snapping mode: " + new_mode_name + ". (X / Shift+X)";
-    but->icon = new_button_icon;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Checks if the line the user is trying to draw is okay. Sets the line's status
  * to drawing_line_error.
  */
@@ -746,6 +715,7 @@ void area_editor::create_area() {
     
     clear_undo_history();
     update_undo_history();
+    update_toolbar();
 }
 
 
@@ -2528,6 +2498,7 @@ void area_editor::load_area(const bool from_backup) {
     
     clear_undo_history();
     update_undo_history();
+    update_toolbar();
     enable_widget(frm_toolbar->widgets["but_reload"]);
     
     cam_zoom = 1.0f;
@@ -2762,6 +2733,7 @@ void area_editor::register_change(
     undo_save_lock_timer.start();
     
     update_undo_history();
+    update_toolbar();
 }
 
 
@@ -3736,6 +3708,7 @@ void area_editor::undo() {
     undo_save_lock_timer.stop();
     undo_save_lock_operation.clear();
     update_undo_history();
+    update_toolbar();
     
     clear_selection();
     clear_circle_sector();
@@ -3844,6 +3817,7 @@ void area_editor::update_reference(const string &new_file_name) {
     }
     
     tools_to_gui();
+    update_toolbar();
 }
 
 
@@ -3903,19 +3877,11 @@ void area_editor::update_texture_suggestions(const string &n) {
  * the undo history.
  */
 void area_editor::update_undo_history() {
-    lafi::widget* b = frm_toolbar->widgets["but_undo"];
-    
     while(undo_history.size() > area_editor_undo_limit) {
         undo_history.pop_back();
     };
     
-    if(undo_history.empty()) {
-        disable_widget(b);
-    } else {
-        enable_widget(b);
-        b->description = "Undo: " + undo_history[0].second + ". (Ctrl+Z)";
-        update_status_bar();
-    }
+    update_toolbar();
 }
 
 
