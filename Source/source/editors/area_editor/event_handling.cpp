@@ -121,6 +121,9 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             zoom(1.0f, false);
         }
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R) {
+        rotate_mob_gens_to_cursor();
+        
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_X) {
         frm_toolbar->widgets["but_snap"]->simulate_click();
         

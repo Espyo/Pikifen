@@ -471,6 +471,7 @@ private:
     );
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
+    void rotate_mob_gens_to_cursor();
     bool save_area(const bool to_backup);
     void save_backup();
     void save_reference();

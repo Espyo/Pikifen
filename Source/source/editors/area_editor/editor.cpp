@@ -314,7 +314,7 @@ void area_editor::change_snap_mode(const size_t new_mode) {
     
     lafi::button* but = (lafi::button*) frm_toolbar->widgets["but_snap"];
     but->description =
-        "Current cursor snapping mode: " + new_mode_name + ". (X)";
+        "Current cursor snapping mode: " + new_mode_name + ". (X / Shift+X)";
     but->icon = new_button_icon;
 }
 
@@ -2915,6 +2915,20 @@ void area_editor::resize_everything(const float mult) {
     }
     
     emit_status_bar_message("Resized successfully.", false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes all currently selected mob generators (if any) rotate to where the
+ * mouse cursor is.
+ */
+void area_editor::rotate_mob_gens_to_cursor() {
+    register_change("object rotation");
+    selection_homogenized = false;
+    for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+        (*m)->angle = get_angle((*m)->pos, mouse_cursor_w);
+    }
+    mob_to_gui();
 }
 
 

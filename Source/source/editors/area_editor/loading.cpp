@@ -2685,7 +2685,11 @@ void area_editor::load() {
         
     frm_toolbar->widgets["but_snap"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        change_snap_mode(sum_and_wrap(snap_mode, 1, N_SNAP_MODES));
+        if(!is_shift_pressed) {
+            change_snap_mode(sum_and_wrap(snap_mode, 1, N_SNAP_MODES));
+        } else {
+            change_snap_mode(sum_and_wrap(snap_mode, -1, N_SNAP_MODES));
+        }
     };
     
     frm_toolbar->widgets["but_help"]->left_mouse_click_handler =
