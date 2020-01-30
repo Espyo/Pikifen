@@ -2369,7 +2369,7 @@ void area_editor::load() {
         stt_to_gui();
     };
     frm_stt->widgets["rad_offset"]->description =
-        "Mouse drags offset the texture. (1)";
+        "Cursor drags offset the texture. (1)";
         
     frm_stt->widgets["rad_scale"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2377,7 +2377,7 @@ void area_editor::load() {
         stt_to_gui();
     };
     frm_stt->widgets["rad_scale"]->description =
-        "Mouse drags change the texture's scale. (2)";
+        "Cursor drags change the texture's scale. (2)";
         
     frm_stt->widgets["rad_angle"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2385,7 +2385,7 @@ void area_editor::load() {
         stt_to_gui();
     };
     frm_stt->widgets["rad_angle"]->description =
-        "Mouse drags rotate the texture. (3)";
+        "Cursor drags rotate the texture. (3)";
         
         
     //Options -- declarations.
@@ -2462,6 +2462,15 @@ void area_editor::load() {
     frm_options->easy_add(
         "txt_undo_limit",
         new lafi::textbox(), 20, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_snap_threshold",
+        new lafi::label("Snap threshold"), 70, 16
+    );
+    frm_options->easy_add(
+        "txt_snap_threshold",
+        new lafi::textbox(), 30, 16
     );
     frm_options->easy_row();
     frm_options->easy_add(
@@ -2557,6 +2566,12 @@ void area_editor::load() {
     frm_options->widgets["txt_undo_limit"]->description =
         "Maximum number of operations that can be undone. 0 = off.";
         
+    frm_options->widgets["txt_snap_threshold"]->lose_focus_handler =
+        lambda_gui_to_options;
+    frm_options->widgets["txt_snap_threshold"]->description =
+        "Cursor must be these many pixels close to a vertex/edge in order "
+        "to snap there.";
+        
     frm_options->widgets["chk_mmb_pan"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["chk_mmb_pan"]->description =
@@ -2566,7 +2581,7 @@ void area_editor::load() {
     frm_options->widgets["txt_drag_threshold"]->lose_focus_handler =
         lambda_gui_to_options;
     frm_options->widgets["txt_drag_threshold"]->description =
-        "Mouse must move these many pixels to be considered a drag.";
+        "Cursor must move these many pixels to be considered a drag.";
         
         
     //Toolbar -- declarations.

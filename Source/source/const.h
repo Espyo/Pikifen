@@ -55,6 +55,8 @@ const unsigned char CURSOR_SAVE_N_SPOTS = 10;
 const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 //Default area editor grid interval.
 const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
+//Default area editor snap threshold.
+const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 //Default area editor undo history size limit.
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 //Default editor mouse drag threshold range.

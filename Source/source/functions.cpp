@@ -968,6 +968,11 @@ void save_options() {
     );
     file.add(
         new data_node(
+            "area_editor_snap_threshold", i2s(area_editor_snap_threshold)
+        )
+    );
+    file.add(
+        new data_node(
             "area_editor_undo_limit", i2s(area_editor_undo_limit)
         )
     );

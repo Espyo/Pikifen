@@ -2328,7 +2328,7 @@ void animation_editor::load() {
     frm_options->widgets["txt_drag_threshold"]->lose_focus_handler =
         lambda_gui_to_options;
     frm_options->widgets["txt_drag_threshold"]->description =
-        "Mouse must move these many pixels to be considered a drag.";
+        "Cursor must move these many pixels to be considered a drag.";
         
         
     //Toolbar -- declarations.

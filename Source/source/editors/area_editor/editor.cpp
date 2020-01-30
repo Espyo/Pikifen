@@ -24,8 +24,6 @@ using namespace std;
 
 //Radius to use when drawing a cross-section point.
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
-//Minimum distance between the cursor and something snappable for it to snap.
-const float area_editor::CURSOR_SNAP_DISTANCE = 80.0f;
 //The cursor snap for heavy modes updates these many times a second.
 const float area_editor::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
@@ -3483,7 +3481,7 @@ point area_editor::snap_point(const point &p) {
         vector<pair<dist, vertex*> > v =
             get_merge_vertexes(
                 p, cur_area_data.vertexes,
-                CURSOR_SNAP_DISTANCE / cam_zoom
+                area_editor_snap_threshold / cam_zoom
             );
         if(v.empty()) {
             cursor_snap_cache = p;
@@ -3529,7 +3527,7 @@ point area_editor::snap_point(const point &p) {
             }
             
             dist d(p, edge_p);
-            if(d > CURSOR_SNAP_DISTANCE / cam_zoom) continue;
+            if(d > area_editor_snap_threshold / cam_zoom) continue;
             
             if(!got_one || d < closest_dist) {
                 got_one = true;

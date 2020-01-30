@@ -517,6 +517,8 @@ void area_editor::gui_to_options() {
         s2i(get_textbox_text(frm_options, "txt_backup"));
     area_editor_undo_limit =
         s2i(get_textbox_text(frm_options, "txt_undo_limit"));
+    area_editor_snap_threshold =
+        s2i(get_textbox_text(frm_options, "txt_snap_threshold"));
         
     editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
@@ -812,6 +814,9 @@ void area_editor::options_to_gui() {
     );
     set_textbox_text(
         frm_options, "txt_undo_limit", i2s(area_editor_undo_limit)
+    );
+    set_textbox_text(
+        frm_options, "txt_snap_threshold", i2s(area_editor_snap_threshold)
     );
     set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
     set_textbox_text(
