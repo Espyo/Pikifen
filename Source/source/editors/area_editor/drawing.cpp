@@ -592,6 +592,16 @@ void area_editor::do_drawing() {
                     selection_opacity * 255
                 )
             );
+            
+            if(
+                area_editor_show_territory &&
+                m_ptr->type->territory_radius > 0
+            ) {
+                al_draw_circle(
+                    m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->territory_radius,
+                    al_map_rgb(240, 240, 192), 1.0 / cam_zoom
+                );
+            }
         }
         
     }

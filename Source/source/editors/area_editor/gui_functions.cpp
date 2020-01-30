@@ -498,6 +498,8 @@ void area_editor::gui_to_mob() {
 void area_editor::gui_to_options() {
     area_editor_show_edge_length =
         get_checkbox_check(frm_options, "chk_edge_length");
+    area_editor_show_territory =
+        get_checkbox_check(frm_options, "chk_territory");
         
     if(get_radio_selection(frm_options, "rad_view_textures")) {
         area_editor_view_mode = VIEW_MODE_TEXTURES;
@@ -796,6 +798,9 @@ void area_editor::options_to_gui() {
     );
     set_checkbox_check(
         frm_options, "chk_edge_length", area_editor_show_edge_length
+    );
+    set_checkbox_check(
+        frm_options, "chk_territory", area_editor_show_territory
     );
     
     if(area_editor_view_mode == VIEW_MODE_TEXTURES) {

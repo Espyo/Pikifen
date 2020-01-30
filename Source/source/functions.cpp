@@ -968,6 +968,11 @@ void save_options() {
     );
     file.add(
         new data_node(
+            "area_editor_show_territory", b2s(area_editor_show_territory)
+        )
+    );
+    file.add(
+        new data_node(
             "area_editor_snap_threshold", i2s(area_editor_snap_threshold)
         )
     );

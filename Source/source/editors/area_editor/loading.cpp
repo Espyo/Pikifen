@@ -2429,6 +2429,11 @@ void area_editor::load() {
     );
     frm_options->easy_row();
     frm_options->easy_add(
+        "chk_territory",
+        new lafi::checkbox("Show territory"), 100, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
         "lbl_view_mode",
         new lafi::label("View mode:"), 100, 12
     );
@@ -2542,6 +2547,11 @@ void area_editor::load() {
         lambda_gui_to_options_click;
     frm_options->widgets["chk_edge_length"]->description =
         "Show the length of nearby edges when drawing or moving vertexes.";
+        
+    frm_options->widgets["chk_territory"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["chk_territory"]->description =
+        "Show the territory of selected objects, when applicable.";
         
     frm_options->widgets["rad_view_textures"]->left_mouse_click_handler =
         lambda_gui_to_options_click;

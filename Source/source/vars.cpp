@@ -71,6 +71,7 @@ point area_editor_quick_play_cam_pos;
 float area_editor_quick_play_cam_z = 1.0f;
 size_t area_editor_snap_threshold = DEF_AREA_EDITOR_SNAP_THRESHOLD;
 bool area_editor_show_edge_length = true;
+bool area_editor_show_territory = false;
 size_t area_editor_undo_limit = DEF_AREA_EDITOR_UNDO_LIMIT;
 unsigned char area_editor_view_mode = 0;
 timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);

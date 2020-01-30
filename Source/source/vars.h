@@ -142,6 +142,7 @@ extern string area_editor_quick_play_area;
 extern point area_editor_quick_play_cam_pos;
 extern float area_editor_quick_play_cam_z;
 extern bool area_editor_show_edge_length;
+extern bool area_editor_show_territory;
 extern size_t area_editor_snap_threshold;
 extern size_t area_editor_undo_limit;
 extern unsigned char area_editor_view_mode;
