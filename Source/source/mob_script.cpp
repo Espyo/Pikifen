@@ -178,6 +178,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_frame_signal",       MOB_EVENT_FRAME_SIGNAL);
     r("on_held",               MOB_EVENT_HELD);
     r("on_hitbox_touch_eat",   MOB_EVENT_HITBOX_TOUCH_EAT);
+    r("on_hitbox_touch_a_n",   MOB_EVENT_HITBOX_TOUCH_A_N);
     r("on_itch",               MOB_EVENT_ITCH);
     r("on_land",               MOB_EVENT_LANDED);
     r("on_object_in_reach",    MOB_EVENT_OBJECT_IN_REACH);

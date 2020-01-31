@@ -303,7 +303,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::land);
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::land_on_mob);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
@@ -705,7 +705,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::check_attack);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -773,7 +773,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::check_attack);
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -808,7 +808,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::be_attacked);
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::check_attack);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
@@ -1189,7 +1189,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(pikmin_fsm::land_while_holding);
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N); {
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::land_on_mob_while_holding);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {

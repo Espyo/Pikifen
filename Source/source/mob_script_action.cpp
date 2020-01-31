@@ -493,7 +493,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_INFO_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
             data.call->parent_event == MOB_EVENT_DAMAGE
         ) {
@@ -516,7 +516,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_INFO_OTHER_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N ||
+            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
             data.call->parent_event == MOB_EVENT_DAMAGE
         ) {

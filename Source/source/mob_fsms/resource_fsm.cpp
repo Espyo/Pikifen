@@ -135,6 +135,9 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
         r_ptr->focused_mob->set_health(
             true, false, -r_ptr->res_type->damage_mob_amount
         );
+        
+        hitbox_interaction ev_info(r_ptr, NULL, NULL);
+        r_ptr->fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
     }
 }
 

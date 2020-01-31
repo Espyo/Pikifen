@@ -140,7 +140,7 @@ enum MOB_EVENT_TYPES {
     //TODO replace with MOB_EVENT_REACHED_DESTINATION?
     MOB_EVENT_REACHED_CARRIABLE_OBJECT,
     //When one of its attack hitboxes touches another mob's normal hitbox.
-    MOB_EVENT_HITBOX_TOUCH_N,
+    MOB_EVENT_HITBOX_TOUCH_A_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.
     MOB_EVENT_HITBOX_TOUCH_N_A,
     //When a Pikmin was added to the list of Pikmin carrying this mob.
