@@ -30,6 +30,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_FOCUS_VAR,
     MOB_ACTION_GET_RANDOM_DECIMAL,
     MOB_ACTION_GET_RANDOM_INT,
     MOB_ACTION_GOTO,
@@ -43,6 +44,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
     MOB_ACTION_REMOVE_STATUS,
+    MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
     MOB_ACTION_SEND_MESSAGE_TO_LINKS,
     MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
     MOB_ACTION_SET_ANIMATION,
@@ -256,6 +258,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
@@ -268,6 +271,7 @@ void play_sound(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
+void send_message_to_focus(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
 void set_animation(mob_action_run_data &data);

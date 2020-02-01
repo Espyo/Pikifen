@@ -582,6 +582,15 @@ void init_mob_actions() {
         mob_action_loaders::get_info
     );
     
+    reg_param("this mob's var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_FOCUS_VAR,
+        "get_focus_var",
+        mob_action_runners::get_focus_var,
+        nullptr
+    );
+    
     reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -689,6 +698,14 @@ void init_mob_actions() {
         "remove_status",
         mob_action_runners::remove_status,
         mob_action_loaders::remove_status
+    );
+    
+    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
+    reg_action(
+        MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
+        "send_message_to_focus",
+        mob_action_runners::send_message_to_focus,
+        nullptr
     );
     
     reg_param("message", MOB_ACTION_PARAM_STRING, false, false);

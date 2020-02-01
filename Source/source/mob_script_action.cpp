@@ -549,6 +549,16 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the focused mob var getting script action.
+ */
+void mob_action_runners::get_focus_var(mob_action_run_data &data) {
+    if(!data.m->focused_mob) return;
+    data.m->vars[data.args[0]] =
+        data.m->focused_mob->vars[data.args[1]];
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the decimal number randomization mob script action.
  */
 void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
@@ -740,6 +750,15 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
             data.m->statuses[s].to_delete = true;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the focused mob message sending mob script action.
+ */
+void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
+    if(!data.m->focused_mob) return;
+    data.m->send_message(data.m->focused_mob, data.args[0]);
 }
 
 
