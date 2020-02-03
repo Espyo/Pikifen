@@ -568,7 +568,7 @@ void load_mob_type_from_file(
     
     if(load_resources) {
         mt->load_resources(&file);
-        mt->anims.create_conversions(mt->get_anim_conversions());
+        mt->anims.create_conversions(mt->get_anim_conversions(), &file);
     }
     
     mt->max_span = mt->radius;

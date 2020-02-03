@@ -177,7 +177,9 @@ public:
     size_t find_sprite(   const string &name);
     size_t find_body_part(const string &name);
     
-    void create_conversions(vector<pair<size_t, string> > conversions);
+    void create_conversions(
+        vector<pair<size_t, string> > conversions, data_node* file
+    );
     void fix_body_part_pointers();
     void sort_alphabetically();
     

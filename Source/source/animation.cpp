@@ -383,9 +383,11 @@ size_t animation_database::find_body_part(const string &name) {
  * conversions: A vector of size_t and strings.
  *   The size_t is the hardcoded ID (probably in some constant or enum).
  *   The string is the name of the animation in the animation file.
+ * file:        File from where these animations were loaded. Used to
+ *   report errors.
  */
 void animation_database::create_conversions(
-    vector<pair<size_t, string> > conversions
+    vector<pair<size_t, string> > conversions, data_node* file
 ) {
     pre_named_conversions.clear();
     
@@ -402,6 +404,12 @@ void animation_database::create_conversions(
     for(size_t c = 0; c < conversions.size(); ++c) {
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
+        if(a_pos == INVALID) {
+            log_error(
+                "Animation \"" + conversions[c].second + "\" is required "
+                "by the engine, but cannot be found!", file
+            );
+        }
     }
 }
 
