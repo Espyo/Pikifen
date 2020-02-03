@@ -402,7 +402,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             
             events.push_back(new mob_event(event_node, actions));
             
-            assert_branching_actions(actions, event_node);
+            assert_actions(actions, event_node);
             
         }
         

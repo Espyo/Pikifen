@@ -42,8 +42,8 @@ script {
             remove_status bomb_rock_health_drain
         }
         on_released {
-            set_state primed
             set_var will_be_swallowed false
+            set_state primed
         }
     }
     

@@ -335,7 +335,7 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 };
 
 
-bool assert_branching_actions(
+bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 );
 void load_init_actions(

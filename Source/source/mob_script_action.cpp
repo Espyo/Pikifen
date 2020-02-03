@@ -1545,12 +1545,13 @@ void mob_action_loaders::report_enum_error(
  * Confirms if the "if", "else", "end_if", "goto", and "label" actions in
  * a given vector of actions are all okay, and there are no mismatches, like
  * for instance, an "else" without an "if".
+ * Also checks if there are actions past a "set_state" action.
  * If everything is okay, returns true. If not, throws errors to the
  * error log and returns false.
  * actions: The vector of actions to check.
  * dn:      Data node from where these actions came.
  */
-bool assert_branching_actions(
+bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 ) {
     //Check if the "if"-related actions are okay.
@@ -1615,6 +1616,29 @@ bool assert_branching_actions(
         }
     }
     
+    //Check if there are actions after a "set_state" action.
+    bool passed_set_state = false;
+    for(size_t a = 0; a < actions.size(); ++a) {
+        if(actions[a]->action->type == MOB_ACTION_SET_STATE) {
+            passed_set_state = true;
+        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
+            passed_set_state = false;
+        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
+            passed_set_state = false;
+        } else if(actions[a]->action->type == MOB_ACTION_LABEL) {
+            passed_set_state = false;
+        } else {
+            if(passed_set_state) {
+                log_error(
+                    "There is an action \"" + actions[a]->action->name + "\" "
+                    "placed after a \"set_state\" action, which means it will "
+                    "never get run!", dn
+                );
+                return false;
+            }
+        }
+    }
+    
     return true;
 }
 
@@ -1636,5 +1660,5 @@ void load_init_actions(
             delete new_a;
         }
     }
-    assert_branching_actions(*actions, node);
+    assert_actions(*actions, node);
 }
