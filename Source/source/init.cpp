@@ -677,6 +677,14 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("text", MOB_ACTION_PARAM_STRING, false, true);
+    reg_action(
+        MOB_ACTION_PRINT,
+        "print",
+        mob_action_runners::print,
+        nullptr
+    );
+    
     reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_RECEIVE_STATUS,

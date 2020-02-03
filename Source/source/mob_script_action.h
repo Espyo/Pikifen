@@ -41,6 +41,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_MOVE_TO_TARGET,
     MOB_ACTION_ORDER_RELEASE,
     MOB_ACTION_PLAY_SOUND,
+    MOB_ACTION_PRINT,
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
     MOB_ACTION_REMOVE_STATUS,
@@ -268,6 +269,7 @@ void move_to_relative(mob_action_run_data &data);
 void move_to_target(mob_action_run_data &data);
 void order_release(mob_action_run_data &data);
 void play_sound(mob_action_run_data &data);
+void print(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);

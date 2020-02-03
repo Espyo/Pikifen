@@ -726,6 +726,18 @@ void mob_action_runners::play_sound(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the text printing mob script action.
+ */
+void mob_action_runners::print(mob_action_run_data &data) {
+    string text = vector_tail_to_string(data.args, 0);
+    print_info(
+        "[DEBUG PRINT] " + data.m->type->name + " says:\n" + text,
+        10.0f
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the status reception mob script action.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
