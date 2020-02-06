@@ -20,11 +20,13 @@ children {
         parent_holds = true
         hold_offset_distance = 1.5
         hold_offset_angle = 180
+        hold_faces_parent = false
     }
     rhandle {
         spawn = handle
         parent_holds = true
         hold_offset_distance = 1.5
         hold_offset_angle = 0
+        hold_faces_parent = false
     }
 }

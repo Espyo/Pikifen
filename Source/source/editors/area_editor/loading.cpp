@@ -1452,7 +1452,8 @@ void area_editor::load() {
     frm_mob->widgets["ang_angle"]->lose_focus_handler =
         lambda_gui_to_mob;
     frm_mob->widgets["ang_angle"]->description =
-        "Angle the object is facing.";
+        "Angle the object is facing. You can also use R in the canvas to "
+        "make it face the cursor.";
         
     frm_mob->widgets["txt_vars"]->lose_focus_handler =
         lambda_gui_to_mob;

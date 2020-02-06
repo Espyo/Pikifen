@@ -184,6 +184,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
     * To drop a held Pikmin without throwing it, keep holding the throw button, and press the whistle button.
     * If you're having trouble understanding why your custom mob is acting the way it is, try aiming your cursor at it
         and using the "mob info" creator tool (5 key, by default).
+    * See http://www.pikminfanon.com/Pikifen/Area_tips for tips on how to make good areas.
 
 ===============
 7) Credits
@@ -211,6 +212,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
             Codelite
             Visual Studio
             Notepad++
+            Inkscape
+            Git
         Special thanks
             Pikipedia and Pikmin Fanon users interested in the project
             The developers of all the tools I used

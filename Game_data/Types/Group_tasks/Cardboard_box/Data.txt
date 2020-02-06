@@ -24,7 +24,7 @@ spawns {
         object = Cardboard box flap
         relative = true
         coordinates = 145 0
-        angle = 90
+        angle = 0
     }
 }
 children {
@@ -33,5 +33,6 @@ children {
         parent_holds = true
         hold_offset_distance = 1.47
         hold_offset_angle = 0
+        hold_faces_parent = false
     }
 }

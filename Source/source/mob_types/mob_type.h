@@ -106,6 +106,7 @@ public:
             parent_holds(false),
             hold_offset_dist(0.0f),
             hold_offset_angle(0.0f),
+            hold_faces_parent(false),
             handle_damage(false),
             relay_damage(false),
             handle_events(false),
