@@ -722,7 +722,7 @@ mob* create_mob(
                 type->anims.find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
                 child_info->hold_offset_angle, false,
-                child_info->hold_faces_parent
+                child_info->hold_rotation_method
             );
         }
     }

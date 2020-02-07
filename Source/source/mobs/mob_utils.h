@@ -173,8 +173,8 @@ struct hold_info_struct {
     float offset_angle;
     //Is the mob drawn above the holder?
     bool above_holder;
-    //Should this mob rotate so that it always faces the holder?
-    bool face_holder;
+    //How should the held object rotate? Use HOLD_ROTATION_METHOD_*.
+    unsigned char rotation_method;
     
     hold_info_struct();
     void clear();

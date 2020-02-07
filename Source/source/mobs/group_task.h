@@ -28,11 +28,14 @@ private:
     //Has it already run the "task finished" code?
     bool ran_task_finished_code;
     
+    void update_spot_absolute_positions();
+    
 public:
     group_task_type* tas_type;
     
     struct group_task_spot {
-        point pos;
+        point relative_pos;
+        point absolute_pos;
         unsigned char state;
         pikmin* pikmin_here;
         group_task_spot(const point &pos);

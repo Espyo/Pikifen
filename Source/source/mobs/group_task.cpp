@@ -30,15 +30,12 @@ group_task::group_task(
     float space_between_neighbors =
         point_dist / (float) (tas_type->pikmin_per_row - 1);
         
-    //Rotate the anchor point, first_row_p1, based on the mob's angle.
-    point anchor = rotate_point(tas_type->first_row_p1, angle);
-    
-    //Create a transformation based on the anchor.
+    //Create a transformation based on the anchor -- p1.
     ALLEGRO_TRANSFORM trans;
     al_identity_transform(&trans);
-    al_rotate_transform(&trans, row_angle + angle);
+    al_rotate_transform(&trans, row_angle);
     al_translate_transform(
-        &trans, anchor.x, anchor.y
+        &trans, tas_type->first_row_p1.x, tas_type->first_row_p1.y
     );
     
     for(size_t r = 0; r < needed_rows; ++r) {
@@ -61,12 +58,14 @@ group_task::group_task(
             }
             x += point_dist / 2.0f;
             
-            point pos(x, r * tas_type->interval_between_rows);
-            al_transform_coordinates(&trans, &pos.x, &pos.y);
+            point s_pos(x, r * tas_type->interval_between_rows);
+            al_transform_coordinates(&trans, &s_pos.x, &s_pos.y);
             
-            spots.push_back(group_task_spot(pos));
+            spots.push_back(group_task_spot(s_pos));
         }
     }
+    
+    update_spot_absolute_positions();
 }
 
 
@@ -165,7 +164,7 @@ size_t group_task::get_worker_nr() {
 point group_task::get_spot_pos(pikmin* whose) {
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == whose) {
-            return pos + spots[s].pos;
+            return spots[s].absolute_pos;
         }
     }
     return point();
@@ -207,6 +206,26 @@ void group_task::tick_class_specifics() {
             type->move_speed +
             (worker_nr - tas_type->pikmin_goal) * tas_type->speed_bonus;
     }
+    
+    update_spot_absolute_positions();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the absolute position of all spots, based on where the group task
+ * mob currently is and where it is currently facing.
+ */
+void group_task::update_spot_absolute_positions() {
+    ALLEGRO_TRANSFORM t;
+    al_identity_transform(&t);
+    al_rotate_transform(&t, angle);
+    al_translate_transform(&t, pos.x, pos.y);
+    
+    for(size_t s = 0; s < spots.size(); ++s) {
+        point* p = &(spots[s].absolute_pos);
+        *p = spots[s].relative_pos;
+        al_transform_coordinates(&t, &(p->x), &(p->y));
+    }
 }
 
 
@@ -214,6 +233,6 @@ void group_task::tick_class_specifics() {
  * Creates a new group task spot struct.
  */
 group_task::group_task_spot::group_task_spot(const point &pos) :
-    pos(pos), state(0), pikmin_here(nullptr) {
+    relative_pos(pos), absolute_pos(pos), state(0), pikmin_here(nullptr) {
     
 }

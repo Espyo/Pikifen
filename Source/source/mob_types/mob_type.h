@@ -85,7 +85,7 @@ public:
         string hold_body_part;
         float hold_offset_dist;
         float hold_offset_angle;
-        bool hold_faces_parent;
+        unsigned char hold_rotation_method;
         
         bool handle_damage;
         bool relay_damage;
@@ -106,7 +106,7 @@ public:
             parent_holds(false),
             hold_offset_dist(0.0f),
             hold_offset_angle(0.0f),
-            hold_faces_parent(false),
+            hold_rotation_method(HOLD_ROTATION_METHOD_NEVER),
             handle_damage(false),
             relay_damage(false),
             handle_events(false),

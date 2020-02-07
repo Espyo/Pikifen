@@ -2018,7 +2018,7 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     m->focus_on_mob(tas_ptr);
     
     m->chase(
-        free_spot->pos, &tas_ptr->pos,
+        point(), &(free_spot->absolute_pos),
         false, nullptr, false
     );
     
@@ -2603,6 +2603,9 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
         true,
         &tas_ptr->z
     );
+    pik_ptr->angle = tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle;
+    pik_ptr->intended_turn_angle = pik_ptr->angle;
+    pik_ptr->stop_turning();
 }
 
 

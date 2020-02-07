@@ -16,6 +16,7 @@ first_row_p2 = -108 96
 interval_between_rows = 8
 pikmin_per_row = 20
 speed_bonus = 2
+rotation_speed = 30
 walkable = true
 worker_pikmin_pose = pushing
 
@@ -34,5 +35,6 @@ children {
         hold_offset_distance = 1.47
         hold_offset_angle = 0
         hold_faces_parent = false
+        hold_rotation_method = copy_parent
     }
 }

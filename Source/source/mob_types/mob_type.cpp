@@ -401,6 +401,7 @@ void load_mob_type_from_file(
         mob_type::child_struct new_child;
         
         string limb_draw_method;
+        string hold_rotation_method;
         
         new_child.name = child_node->name;
         rs.set("spawn", new_child.spawn_name);
@@ -408,7 +409,7 @@ void load_mob_type_from_file(
         rs.set("hold_body_part", new_child.hold_body_part);
         rs.set("hold_offset_distance", new_child.hold_offset_dist);
         rs.set("hold_offset_angle", new_child.hold_offset_angle);
-        rs.set("hold_faces_parent", new_child.hold_faces_parent);
+        rs.set("hold_rotation_method", hold_rotation_method);
         rs.set("handle_damage", new_child.handle_damage);
         rs.set("relay_damage", new_child.relay_damage);
         rs.set("handle_events", new_child.handle_events);
@@ -424,18 +425,44 @@ void load_mob_type_from_file(
         rs.set("limb_draw_method", limb_draw_method);
         
         new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
-        if(limb_draw_method == "below_both") {
-            new_child.limb_draw_method = LIMB_DRAW_BELOW_BOTH;
-        } else if(limb_draw_method == "below_child") {
-            new_child.limb_draw_method = LIMB_DRAW_BELOW_CHILD;
-        } else if(limb_draw_method == "below_parent") {
-            new_child.limb_draw_method = LIMB_DRAW_BELOW_PARENT;
-        } else if(limb_draw_method == "above_parent") {
-            new_child.limb_draw_method = LIMB_DRAW_ABOVE_PARENT;
-        } else if(limb_draw_method == "above_child") {
-            new_child.limb_draw_method = LIMB_DRAW_ABOVE_CHILD;
-        } else if(limb_draw_method == "above_both") {
-            new_child.limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+        
+        if(!limb_draw_method.empty()) {
+            if(limb_draw_method == "below_both") {
+                new_child.limb_draw_method = LIMB_DRAW_BELOW_BOTH;
+            } else if(limb_draw_method == "below_child") {
+                new_child.limb_draw_method = LIMB_DRAW_BELOW_CHILD;
+            } else if(limb_draw_method == "below_parent") {
+                new_child.limb_draw_method = LIMB_DRAW_BELOW_PARENT;
+            } else if(limb_draw_method == "above_parent") {
+                new_child.limb_draw_method = LIMB_DRAW_ABOVE_PARENT;
+            } else if(limb_draw_method == "above_child") {
+                new_child.limb_draw_method = LIMB_DRAW_ABOVE_CHILD;
+            } else if(limb_draw_method == "above_both") {
+                new_child.limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
+            } else {
+                log_error(
+                    "Unknow limb draw method \"" +
+                    limb_draw_method + "\"!", &file
+                );
+            }
+        }
+        
+        if(!hold_rotation_method.empty()) {
+            if(hold_rotation_method == "never") {
+                new_child.hold_rotation_method =
+                    HOLD_ROTATION_METHOD_NEVER;
+            } else if(hold_rotation_method == "face_parent") {
+                new_child.hold_rotation_method =
+                    HOLD_ROTATION_METHOD_FACE_HOLDER;
+            } else if(hold_rotation_method == "copy_parent") {
+                new_child.hold_rotation_method =
+                    HOLD_ROTATION_METHOD_COPY_HOLDER;
+            } else {
+                log_error(
+                    "Unknow parent holding rotation method \"" +
+                    hold_rotation_method + "\"!", &file
+                );
+            }
         }
         
         mt->children.push_back(new_child);

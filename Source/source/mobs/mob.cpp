@@ -1501,17 +1501,17 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
 
 /* ----------------------------------------------------------------------------
  * Starts holding the specified mob.
- * m:            Mob to start holding.
- * hitbox_nr:    Number of the hitbox to hold on. INVALID for mob center.
- * offset_dist:  Distance from the hitbox/body center. 1 is full radius.
- * offset_angle: Hitbox/body angle from which the mob will be held.
- * above_holder: Is the mob meant to appear above the holder?
- * face_holder:  Should the mob rotate to always face the holder?
+ * m:               Mob to start holding.
+ * hitbox_nr:       Number of the hitbox to hold on. INVALID for mob center.
+ * offset_dist:     Distance from the hitbox/body center. 1 is full radius.
+ * offset_angle:    Hitbox/body angle from which the mob will be held.
+ * above_holder:    Is the mob meant to appear above the holder?
+ * rotation_method: How should the held mob rotate? Use HOLD_ROTATION_METHOD_*.
  */
 void mob::hold(
     mob* m, const size_t hitbox_nr,
     const float offset_dist, const float offset_angle,
-    const bool above_holder, const bool face_holder
+    const bool above_holder, const unsigned char rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -1519,7 +1519,7 @@ void mob::hold(
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
     m->holder.above_holder = above_holder;
-    m->holder.face_holder = face_holder;
+    m->holder.rotation_method = rotation_method;
     m->fsm.run_event(MOB_EVENT_HELD, (void*) this);
     
     if(standing_on_mob) {
@@ -2300,8 +2300,11 @@ void mob::tick_physics() {
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
-        if(holder.face_holder) {
+        if(holder.rotation_method == HOLD_ROTATION_METHOD_FACE_HOLDER) {
             angle = get_angle(final_pos, holder.m->pos);
+            stop_turning();
+        } else if(holder.rotation_method == HOLD_ROTATION_METHOD_COPY_HOLDER) {
+            angle = holder.m->angle;
             stop_turning();
         }
         chase(final_pos, NULL, true);

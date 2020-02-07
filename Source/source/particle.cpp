@@ -422,11 +422,17 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-friction_deviation, friction_deviation);
         new_p.gravity +=
             randomf(-gravity_deviation, gravity_deviation);
+            
         new_p.pos = base_p_pos;
-        new_p.pos.x +=
-            randomf(-pos_deviation.x, pos_deviation.x);
-        new_p.pos.y +=
-            randomf(-pos_deviation.y, pos_deviation.y);
+        point pos_offset_to_use(
+            randomf(-pos_deviation.x, pos_deviation.x),
+            randomf(-pos_deviation.y, pos_deviation.y)
+        );
+        if(follow_angle) {
+            pos_offset_to_use = rotate_point(pos_offset_to_use, *follow_angle);
+        }
+        new_p.pos += pos_offset_to_use;
+        
         new_p.z = base_p_z;
         new_p.size =
             max(
