@@ -9,6 +9,8 @@
  * related functions.
  */
 
+#include <algorithm>
+
 #include "mob_script_action.h"
 
 #include "utils/string_utils.h"
@@ -24,8 +26,8 @@ mob_action_param::mob_action_param(
     const bool force_const,
     const bool is_extras
 ):
-    type(type),
     name(name),
+    type(type),
     force_const(force_const),
     is_extras(is_extras) {
     
@@ -133,8 +135,6 @@ bool mob_action_call::load_from_data_node(
     }
     
     //Check if there are too many or too few arguments.
-    vector<size_t> enum_arg_s_indexes;
-    vector<size_t> enum_arg_i_indexes;
     size_t mandatory_parameters = action->parameters.size();
     
     if(mandatory_parameters > 0) {
@@ -241,9 +241,6 @@ bool mob_action_call::run(
     data.args = args;
     for(size_t a = 0; a < args.size(); ++a) {
         if(arg_is_var[a]) {
-            size_t param_nr = min(a, action->parameters.size() - 1);
-            MOB_ACTION_PARAM_TYPE param_type =
-                action->parameters[param_nr].type;
             data.args[a] = m->vars[args[a]];
         }
     }
@@ -335,7 +332,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     vector<sector*> sectors_to_drain;
     
     s_ptr->get_neighbor_sectors_conditionally(
-    [] (sector * s) {
+    [] (sector * s) -> bool {
         for(size_t h = 0; h < s->hazards.size(); ++h) {
             if(s->hazards[h]->associated_liquid) {
                 return true;

@@ -24,7 +24,8 @@ group_task::group_task(
     
     //Initialize spots.
     float row_angle = get_angle(tas_type->first_row_p1, tas_type->first_row_p2);
-    size_t needed_rows = ceil(tas_type->max_pikmin / tas_type->pikmin_per_row);
+    size_t needed_rows =
+        ceil(tas_type->max_pikmin / (float) tas_type->pikmin_per_row);
     float point_dist =
         dist(tas_type->first_row_p1, tas_type->first_row_p2).to_float();
     float space_between_neighbors =

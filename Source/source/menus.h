@@ -33,7 +33,6 @@ private:
         bool reached_destination;
     };
         
-    size_t new_game_state;
     float time_spent;
     
     ALLEGRO_BITMAP* bmp_menu_bg;

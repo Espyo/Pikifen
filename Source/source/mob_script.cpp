@@ -51,11 +51,17 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                 size_t next_a = a + 1;
                 size_t depth = 0;
                 for(; next_a < actions.size(); ++next_a) {
-                    if(actions[next_a]->action->type == MOB_ACTION_IF) {
+                    if(
+                        actions[next_a]->action->type == MOB_ACTION_IF
+                    ) {
                         depth++;
-                    } else if(actions[next_a]->action->type == MOB_ACTION_ELSE) {
+                    } else if(
+                        actions[next_a]->action->type == MOB_ACTION_ELSE
+                    ) {
                         if(depth == 0) break;
-                    } else if(actions[next_a]->action->type == MOB_ACTION_END_IF) {
+                    } else if(
+                        actions[next_a]->action->type == MOB_ACTION_END_IF
+                    ) {
                         if(depth == 0) break;
                         else depth--;
                     }

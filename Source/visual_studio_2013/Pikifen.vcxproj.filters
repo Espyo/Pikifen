@@ -405,6 +405,51 @@
     <ClInclude Include="..\source\mobs\treasure.h">
       <Filter>Header Files\mobs</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\mob_categories\bouncer_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\group_task_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\scale_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_categories\track_category.h">
+      <Filter>Header Files\mob_categories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\bouncer_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_fsms\track_fsm.h">
+      <Filter>Header Files\mob_fsms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_script_action.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\bouncer_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\group_task_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\scale_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mob_types\track_type.h">
+      <Filter>Header Files\mob_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\bouncer.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\group_task.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\scale.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\track.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikifen.rc">
@@ -766,6 +811,51 @@
       <Filter>Source Files\mobs</Filter>
     </ClCompile>
     <ClCompile Include="..\source\mobs\treasure.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\bouncer_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\group_task_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\scale_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_categories\track_category.cpp">
+      <Filter>Source Files\mob_categories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\bouncer_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_fsms\track_fsm.cpp">
+      <Filter>Source Files\mob_fsms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_script_action.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\bouncer_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\group_task_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\scale_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mob_types\track_type.cpp">
+      <Filter>Source Files\mob_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\bouncer.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\group_task.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\scale.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\track.cpp">
       <Filter>Source Files\mobs</Filter>
     </ClCompile>
   </ItemGroup>

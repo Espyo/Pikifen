@@ -8,6 +8,8 @@
  * Bouncer finite state machine logic.
  */
 
+#include <algorithm>
+
 #include "bouncer_fsm.h"
 
 #include "../functions.h"
@@ -75,7 +77,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        bou_ptr->bou_type->riders | BOUNCER_RIDER_PIKMIN &&
+        bou_ptr->bou_type->riders & BOUNCER_RIDER_PIKMIN &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -83,7 +85,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         ev = q_get_event(toucher, MOB_EVENT_TOUCHED_BOUNCER);
         
     } else if(
-        bou_ptr->bou_type->riders | BOUNCER_RIDER_LEADERS &&
+        bou_ptr->bou_type->riders & BOUNCER_RIDER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     

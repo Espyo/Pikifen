@@ -29,7 +29,6 @@ using namespace std;
  */
 main_menu::main_menu() :
     game_state(),
-    new_game_state(0),
     time_spent(0),
     bmp_menu_bg(NULL),
     logo_pikmin_max_speed(0),
@@ -639,7 +638,7 @@ void options_menu::update() {
         i2s(intended_scr_w) + "x" +
         i2s(intended_scr_h) +
         (current_r_index == INVALID ? " (Custom)" : "");
-    
+        
     fullscreen_widget->checked = intended_scr_fullscreen;
 }
 
