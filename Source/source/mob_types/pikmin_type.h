@@ -31,6 +31,7 @@ using namespace std;
 class pikmin_type : public mob_type {
 public:
     float carry_strength;
+    float push_strength;
     float max_throw_height;
     bool has_onion;
     bool can_dig;

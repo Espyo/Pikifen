@@ -19,6 +19,7 @@ speed_bonus = 2
 rotation_speed = 30
 walkable = true
 worker_pikmin_pose = pushing
+contribution_method = push_strength
 
 spawns {
     flap {

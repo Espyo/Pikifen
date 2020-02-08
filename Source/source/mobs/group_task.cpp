@@ -18,7 +18,7 @@ group_task::group_task(
     const point &pos, group_task_type* type, const float angle
 ):
     mob(pos, type, angle),
-    worker_nr(0),
+    power(0),
     ran_task_finished_code(false),
     tas_type(type) {
     
@@ -77,12 +77,29 @@ void group_task::add_worker(pikmin* who) {
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == who) {
             spots[s].state = 2;
-            worker_nr++;
             break;
         }
     }
     
-    if(worker_nr == tas_type->pikmin_goal) {
+    bool had_goal = power >= tas_type->power_goal;
+    
+    switch(tas_type->contribution_method) {
+    case GROUP_TASK_CONTRIBUTION_NORMAL: {
+        power++;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
+        power += who->pik_type->weight;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
+        power += who->pik_type->carry_strength;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
+        power += who->pik_type->push_strength;
+        break;
+    }
+    }
+    
+    if(!had_goal && power >= tas_type->power_goal) {
         string msg = "goal_reached";
         who->send_message(this, msg);
     }
@@ -108,16 +125,31 @@ void group_task::finish_task() {
 void group_task::free_up_spot(pikmin* whose) {
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == whose) {
-            if(spots[s].state == 2) {
-                worker_nr--;
-            }
             spots[s].state = 0;
             spots[s].pikmin_here = NULL;
             break;
         }
     }
     
-    if(worker_nr == tas_type->pikmin_goal - 1) {
+    bool had_goal = power >= tas_type->power_goal;
+    
+    switch(tas_type->contribution_method) {
+    case GROUP_TASK_CONTRIBUTION_NORMAL: {
+        power--;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
+        power -= whose->pik_type->weight;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
+        power -= whose->pik_type->carry_strength;
+        break;
+    } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
+        power -= whose->pik_type->push_strength;
+        break;
+    }
+    }
+    
+    if(had_goal && power < tas_type->power_goal) {
         string msg = "goal_lost";
         whose->send_message(this, msg);
     }
@@ -149,10 +181,10 @@ group_task::group_task_spot* group_task::get_free_spot() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the current number of workers.
+ * Returns the current power put into the task.
  */
-size_t group_task::get_worker_nr() {
-    return worker_nr;
+float group_task::get_power() {
+    return power;
 }
 
 
@@ -197,14 +229,14 @@ void group_task::tick_class_specifics() {
     
     if(
         chasing &&
-        worker_nr >= tas_type->pikmin_goal &&
+        power >= tas_type->power_goal &&
         tas_type->speed_bonus != 0.0f
     ) {
         //Being moved and movements can go through speed bonuses?
         //Let's update the speed.
         chase_speed =
             type->move_speed +
-            (worker_nr - tas_type->pikmin_goal) * tas_type->speed_bonus;
+            (power - tas_type->power_goal) * tas_type->speed_bonus;
     }
     
     update_spot_absolute_positions();

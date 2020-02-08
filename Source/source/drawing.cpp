@@ -851,15 +851,15 @@ void gameplay::draw_ingame_text() {
         
         for(size_t t = 0; t < group_tasks.size(); ++t) {
             group_task* t_ptr = group_tasks[t];
-            if(t_ptr->get_worker_nr() > 0) {
+            if(t_ptr->get_power() > 0) {
                 draw_fraction(
                     point(
                         t_ptr->pos.x,
                         t_ptr->pos.y - t_ptr->type->radius -
                         font_main_h * 1.25
                     ),
-                    t_ptr->get_worker_nr(),
-                    t_ptr->tas_type->pikmin_goal,
+                    t_ptr->get_power(),
+                    t_ptr->tas_type->power_goal,
                     carrying_color_stop
                 );
             }

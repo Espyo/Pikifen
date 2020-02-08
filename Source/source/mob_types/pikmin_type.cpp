@@ -27,6 +27,7 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN),
     carry_strength(1),
+    push_strength(1),
     max_throw_height(260),
     has_onion(true),
     can_dig(false),
@@ -92,6 +93,7 @@ void pikmin_type::load_parameters(data_node* file) {
     rs.set("can_swim", can_swim);
     rs.set("carry_strength", carry_strength);
     rs.set("has_onion", has_onion);
+    rs.set("push_strength", push_strength);
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         rs.set("sprout_evolution_time_" + i2s(m + 1), sprout_evolution_time[m]);

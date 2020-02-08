@@ -23,8 +23,8 @@
  */
 class group_task : public mob {
 private:
-    //Number of Pikmin working on it right now. Cached for performance.
-    size_t worker_nr;
+    //Combined Pikmin power put into the task right now. Cached for performance.
+    float power;
     //Has it already run the "task finished" code?
     bool ran_task_finished_code;
     
@@ -48,7 +48,7 @@ public:
     void finish_task();
     void free_up_spot(pikmin* whose);
     group_task_spot* get_free_spot();
-    size_t get_worker_nr();
+    float get_power();
     point get_spot_pos(pikmin* whose);
     void reserve_spot(group_task_spot* spot, pikmin* who);
     virtual void tick_class_specifics();

@@ -17,6 +17,7 @@ move_speed = 90
 onion_starting_number = 0
 pushable = true
 pushes = false
+push_strength = 10
 radius = 5
 sprout_evolution_time_1 = 120
 sprout_evolution_time_2 = 120
