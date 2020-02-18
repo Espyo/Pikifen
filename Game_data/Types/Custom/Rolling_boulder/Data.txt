@@ -2,8 +2,6 @@ name = Rolling boulder
 
 appears_in_area_editor = false
 height = 64
-is_obstacle = false
-is_projectile = true
 max_health = 100
 move_speed = 125
 pushable = false

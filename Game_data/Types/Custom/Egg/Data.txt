@@ -1,13 +1,13 @@
 name = Egg
 
 height = 40
-is_obstacle = true
 max_health = 50
 pushable = true
 pushes = true
 radius = 15
 show_health = false
 target_type = weak_plain_obstacle
+team = obstacle
 
 spawns {
     nectar {

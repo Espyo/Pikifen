@@ -2,7 +2,6 @@ name = Spotcap
 
 blocks_carrier_pikmin = true
 height = 48
-is_obstacle = true
 max_health = 110
 pushable = false
 pushes = true
@@ -10,3 +9,4 @@ radius = 25
 rotation_speed = 3000
 show_health = false
 target_type = explodable_pikmin_obstacle
+team = obstacle

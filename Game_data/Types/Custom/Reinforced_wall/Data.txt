@@ -4,7 +4,6 @@ blocks_carrier_pikmin = true
 casts_shadow = false
 default_vulnerability = 0
 height = 0
-is_obstacle = true
 max_health = 1800
 projectiles_can_damage = false
 pushable = false
@@ -12,6 +11,7 @@ pushes = true
 radius = 32
 rectangular_dimensions = 48 192
 target_type = explodable_pikmin_obstacle
+team = obstacle
 
 vulnerabilities {
     explosion = 100

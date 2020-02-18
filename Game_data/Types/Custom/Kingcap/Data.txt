@@ -2,10 +2,10 @@ name = Kingcap
 
 blocks_carrier_pikmin = true
 height = 110
-is_obstacle = true
 max_health = 750
 pushable = false
 pushes = true
 radius = 51
 rotation_speed = 3000
 target_type = explodable_pikmin_obstacle
+team = obstacle

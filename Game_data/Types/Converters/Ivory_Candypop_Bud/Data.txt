@@ -3,7 +3,6 @@ name = Ivory Candypop Bud
 available_pikmin_types = White Pikmin
 buffer_size = 5
 height = 32
-is_obstacle = false
 pikmin_per_conversion = 1
 pushable = false
 pushes = true

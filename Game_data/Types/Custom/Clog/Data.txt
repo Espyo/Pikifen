@@ -2,10 +2,10 @@ name = Clog
 
 blocks_carrier_pikmin = true
 height = 64
-is_obstacle = true
 max_health = 2000
 pushable = false
 pushes = true
 radius = 80
 show_health = false
 target_type = pikmin_obstacle
+team = obstacle

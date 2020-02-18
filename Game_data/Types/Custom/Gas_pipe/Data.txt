@@ -1,10 +1,10 @@
 name = Gas pipe
 
 height = 23
-is_obstacle = true
 max_health = 150
 pushable = false
 pushes = true
 radius = 24
 target_type = strong_plain_obstacle
 can_hurt = player
+team = obstacle

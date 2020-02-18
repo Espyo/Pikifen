@@ -3,7 +3,6 @@ name = Queen Candypop Bud
 available_pikmin_types = Red Pikmin;Yellow Pikmin;Blue Pikmin
 buffer_size = 1
 height = 32
-is_obstacle = false
 pikmin_per_conversion = 9
 pushable = false
 pushes = true

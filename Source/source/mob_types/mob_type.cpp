@@ -62,10 +62,10 @@ mob_type::mob_type(size_t category_id) :
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_FRAGILE
     ),
+    starting_team(MOB_TEAM_NONE),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
     appears_in_area_editor(true),
-    is_obstacle(false),
     blocks_carrier_pikmin(false),
     default_vulnerability(1.0f),
     spike_damage(nullptr),
@@ -253,6 +253,7 @@ void load_mob_type_from_file(
     string target_type_string;
     string huntable_targets_string;
     string hurtable_targets_string;
+    string team_string;
     
     reader_setter rs(&file);
     rs.set("name",                   mt->name);
@@ -280,10 +281,10 @@ void load_mob_type_from_file(
     rs.set("show_health",            mt->show_health);
     rs.set("casts_shadow",           mt->casts_shadow);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
-    rs.set("is_obstacle",            mt->is_obstacle);
     rs.set("blocks_carrier_pikmin",  mt->blocks_carrier_pikmin);
     rs.set("default_vulnerability",  mt->default_vulnerability);
     rs.set("spike_damage",           spike_damage_name);
+    rs.set("team",                   team_string);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
     
@@ -311,6 +312,18 @@ void load_mob_type_from_file(
             );
         } else {
             mt->spike_damage = &(sd_it->second);
+        }
+    }
+    
+    if(!team_string.empty()) {
+        size_t t = string_to_team_nr(team_string);
+        if(t != INVALID) {
+            mt->starting_team = t;
+        } else {
+            log_error(
+                "Invalid team \"" + team_string + "\"!",
+                file.get_child_by_name("team")
+            );
         }
     }
     

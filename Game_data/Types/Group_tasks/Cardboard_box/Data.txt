@@ -1,7 +1,6 @@
 name = Cardboard box
 
 height = 64
-is_obstacle = true
 max_health = 50
 move_speed = 10
 pushable = false
@@ -20,6 +19,7 @@ rotation_speed = 30
 walkable = true
 worker_pikmin_pose = pushing
 contribution_method = push_strength
+team = obstacle
 
 spawns {
     flap {

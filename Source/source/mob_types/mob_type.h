@@ -155,6 +155,7 @@ public:
     unsigned char target_type;
     uint16_t huntable_targets;
     uint16_t hurtable_targets;
+    unsigned char starting_team;
     
     //Script things.
     vector<mob_action_call*> init_actions; //Actions to run on spawn.
@@ -167,7 +168,6 @@ public:
     
     //Misc.
     bool appears_in_area_editor;
-    bool is_obstacle;
     bool blocks_carrier_pikmin;
     float default_vulnerability;
     map<hazard*, float> hazard_vulnerabilities;

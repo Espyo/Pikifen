@@ -1,12 +1,12 @@
 name = Electrical wire
 
 height = 24
-is_obstacle = true
 max_health = 150
 pushable = false
 pushes = true
 radius = 25
 target_type = strong_plain_obstacle
+team = obstacle
 can_hurt = player; fragile
 
 spawns {

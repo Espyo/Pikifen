@@ -28,9 +28,9 @@ bridge_type::bridge_type() :
     pushable = false;
     pushes = false;
     casts_shadow = false;
-    is_obstacle = true;
     blocks_carrier_pikmin = true;
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
+    starting_team = MOB_TEAM_OBSTACLE;
     
     bridge_fsm::create_fsm(this);
 }

@@ -102,7 +102,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     ground_sector = sec;
     center_sector = sec;
     
-    if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
+    team = type->starting_team;
 }
 
 
