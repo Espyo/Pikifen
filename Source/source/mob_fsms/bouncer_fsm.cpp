@@ -108,7 +108,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     float max_h = max(128.0f, (target_mob->z - toucher->z) * 1.5f);
     toucher->calculate_throw(
         target_mob->pos,
-        target_mob->z,
+        target_mob->z + target_mob->height,
         max_h,
         &toucher->speed,
         &toucher->speed_z,

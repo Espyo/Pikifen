@@ -113,7 +113,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         Why didn't you use textures and sounds from the Pikmin games?
             1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
             2. Should something happen to the engine, I can rebrand it, and release the assets as they are, since they are my creations.
-            3. If somebody wants to add a sound effect from the series, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible (depends on the game and the sound). But if all sounds are custom-made, this isn't really a problem. This applies to textures and such as well, to a lesser degree.
+            3. If somebody wants to add a sound effect from the series, at best, it can be a bit cumbersome to obtain, and at worst, it can be downright impossible (depends on the game and the sound). But if all sounds are custom-made, this isn't really a problem. This applies to textures and such as well, to a lesser degree.
             4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
         
         Why 2D?
@@ -171,6 +171,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
         If you prefer to use Clang, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
         If you prefer to compile with Allegro 5.0.10 instead, edit the "makefile" file and add a ".0" after every "5" in the "LDFLAGS" line.
+    
+    Note that I mainly develop on Linux, so it's not unusual for the Visual Studio projects to have missing files or some compilation errors. If you get errors:
+        * Try adding any missing .h and .cpp files that are not in the project's files.
+        * Try adding #include <algorithm> to the top of any files that complain about min() or max() not existing.
+        * Try casting to float or double the parameters used in calls to min() or max(), if you get errors about unsuitable function calls.
 
 ===============
 5) Changelog
