@@ -22,5 +22,4 @@ reaches {
 rotation_speed = 120
 target_type = enemy
 territory_radius = 400
-value = 300
 weight = 7

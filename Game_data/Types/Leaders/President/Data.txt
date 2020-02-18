@@ -8,7 +8,6 @@ max_health = 2000
 max_throw_height = 130
 move_speed = 130
 name_call_sfx = President_name_call.ogg
-pluck_delay = 0.6
 pushable = true
 pushes = false
 rotation_speed = 360

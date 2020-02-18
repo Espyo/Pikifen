@@ -1,12 +1,8 @@
 name = Red Pikmin
 
 can_carry_tools = true
-can_dig = no
-can_latch = yes
-can_swim = no
 carry_speed = 4
 carry_strength = 1
-has_onion = yes
 health_regen = 10
 height = 24
 icon = Red_Pikmin_icon.png

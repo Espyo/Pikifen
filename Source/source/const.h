@@ -61,8 +61,6 @@ const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 //Default editor mouse drag threshold range.
 const size_t DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
-//Default leader punch strength.
-const float DEF_PUNCH_STRENGTH = 2.0f;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //The whistle can't go past this radius, by default.

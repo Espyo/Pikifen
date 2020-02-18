@@ -26,7 +26,6 @@ ship_type::ship_type() :
     target_type = MOB_TARGET_TYPE_NONE;
     
     ship_fsm::create_fsm(this);
-    always_active = true;
 }
 
 

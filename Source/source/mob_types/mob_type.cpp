@@ -41,7 +41,6 @@ mob_type::mob_type(size_t category_id) :
     move_speed(0),
     rotation_speed(DEF_ROTATION_SPEED),
     can_free_move(false),
-    always_active(false),
     pushes(false),
     pushable(false),
     pushes_with_hitboxes(false),
@@ -257,7 +256,6 @@ void load_mob_type_from_file(
     
     reader_setter rs(&file);
     rs.set("name",                   mt->name);
-    rs.set("always_active",          mt->always_active);
     rs.set("main_color",             mt->main_color);
     rs.set("max_carriers",           mt->max_carriers);
     rs.set("max_health",             mt->max_health);
@@ -267,8 +265,6 @@ void load_mob_type_from_file(
     rs.set("target_type",            target_type_string);
     rs.set("can_hunt",               huntable_targets_string);
     rs.set("can_hurt",               hurtable_targets_string);
-    rs.set("itch_time",              mt->itch_time);
-    rs.set("itch_time",              mt->itch_time);
     rs.set("move_speed",             mt->move_speed);
     rs.set("rotation_speed",         mt->rotation_speed);
     rs.set("can_free_move",          mt->can_free_move);

@@ -29,9 +29,6 @@
 class leader_type : public mob_type {
 public:
     float whistle_range;
-    unsigned int punch_strength;
-    //Time until the Pikmin is actually popped out of the ground.
-    float pluck_delay;
     float max_throw_height;
     
     sample_struct sfx_whistle;

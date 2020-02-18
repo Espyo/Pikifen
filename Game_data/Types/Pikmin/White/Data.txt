@@ -1,12 +1,8 @@
 name = White Pikmin
 
 can_carry_tools = true
-can_dig = yes
-can_latch = yes
-can_swim = no
 carry_speed = 1.2
 carry_strength = 1
-has_onion = no
 health_regen = 10
 height = 24
 icon = White_Pikmin_icon.png

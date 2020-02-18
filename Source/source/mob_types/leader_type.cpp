@@ -24,8 +24,6 @@
 leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(DEF_WHISTLE_RANGE),
-    punch_strength(DEF_PUNCH_STRENGTH),
-    pluck_delay(0.6),
     max_throw_height(0),
     bmp_icon(nullptr) {
     
@@ -49,16 +47,12 @@ leader_type::leader_type() :
  * Loads parameters from a data file.
  */
 void leader_type::load_parameters(data_node* file) {
-    pluck_delay =
-        s2f(file->get_child_by_name("pluck_delay")->value);
     whistle_range =
         s2f(
             file->get_child_by_name("whistle_range")->get_value_or_default(
                 f2s(DEF_WHISTLE_RANGE)
             )
         );
-    punch_strength =
-        s2i(file->get_child_by_name("punch_strength")->value); //TODO default.
     max_throw_height =
         s2f(
             file->get_child_by_name(

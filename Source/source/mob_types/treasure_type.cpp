@@ -21,20 +21,11 @@
  * Creates a type of treasure.
  */
 treasure_type::treasure_type() :
-    mob_type(MOB_CATEGORY_TREASURES),
-    value(0) {
+    mob_type(MOB_CATEGORY_TREASURES) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     
     treasure_fsm::create_fsm(this);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
- */
-void treasure_type::load_parameters(data_node* file) {
-    value = s2f(file->get_child_by_name("value")->value);
 }
 
 

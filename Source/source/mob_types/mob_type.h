@@ -135,8 +135,6 @@ public:
     float move_speed;
     float rotation_speed;
     bool can_free_move;
-    //If true, this mob is always active, even if it's off-camera.
-    bool always_active;
     bool pushes; //Blocks passage of other mobs.
     bool pushable; //Can be pushed by other mobs.
     bool pushes_with_hitboxes; //Is the push via hitbox, or mob radius?

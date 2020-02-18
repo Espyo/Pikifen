@@ -26,9 +26,6 @@ using namespace std;
 class enemy_type : public mob_type {
 public:
     size_t pikmin_seeds;
-    float value;
-    float revive_speed;
-    bool is_boss;
     bool drops_corpse;
     bool allow_ground_attacks;
     

@@ -23,7 +23,6 @@ bridge_type::bridge_type() :
     bmp_main_texture(nullptr),
     bmp_rail_texture(nullptr) {
     
-    always_active = true;
     radius = 32;
     max_health = 2000;
     pushable = false;
