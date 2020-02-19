@@ -181,7 +181,7 @@ public:
     //General functions.
     mob_type(size_t category_id);
     virtual ~mob_type();
-    virtual void load_parameters(data_node* file);
+    virtual void load_properties(data_node* file);
     virtual void load_resources(data_node* file);
     virtual anim_conversion_vector get_anim_conversions();
     virtual void unload_resources();
@@ -196,7 +196,7 @@ public:
  * dying red, etc. Because this would otherwise be a nightmare to organize,
  * this base class comes with some helpful functions and members.
  * A "group" is the "look" mentioned before, so "red", "yellow", "blue", etc.
- * The mob type should load a parameter somewhere that lists what suffixes to
+ * The mob type should load a property somewhere that lists what suffixes to
  * use for each group when loading animation names from the animation database.
  */
 class mob_type_with_anim_groups {

@@ -37,9 +37,9 @@ drop_type::~drop_type() { }
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void drop_type::load_parameters(data_node* file) {
+void drop_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     string consumer_str;

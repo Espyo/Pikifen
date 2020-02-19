@@ -26,9 +26,9 @@ scale_type::scale_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void scale_type::load_parameters(data_node* file) {
+void scale_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("goal_number", goal_number);

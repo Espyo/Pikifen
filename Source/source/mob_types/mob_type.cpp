@@ -88,9 +88,9 @@ mob_type::~mob_type() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file, if any.
+ * Loads properties from a data file, if any.
  */
-void mob_type::load_parameters(data_node* file) { }
+void mob_type::load_properties(data_node* file) { }
 
 
 /* ----------------------------------------------------------------------------
@@ -614,7 +614,7 @@ void load_mob_type_from_file(
         }
     }
     
-    mt->load_parameters(&file);
+    mt->load_properties(&file);
     
     if(load_resources) {
         mt->load_resources(&file);

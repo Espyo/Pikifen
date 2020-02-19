@@ -34,9 +34,9 @@ bouncer_type::~bouncer_type() { }
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void bouncer_type::load_parameters(data_node* file) {
+void bouncer_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     string riders_str;

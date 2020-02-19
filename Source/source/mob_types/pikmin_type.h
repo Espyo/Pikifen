@@ -44,7 +44,7 @@ public:
     
     pikmin_type();
     ~pikmin_type();
-    void load_parameters(data_node* file);
+    void load_properties(data_node* file);
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions();
     void unload_resources();

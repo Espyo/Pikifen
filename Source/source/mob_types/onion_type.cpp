@@ -29,9 +29,9 @@ onion_type::onion_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void onion_type::load_parameters(data_node* file) {
+void onion_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     string pik_type_str;

@@ -32,7 +32,7 @@ public:
     enemy_type();
     ~enemy_type();
     
-    void load_parameters(data_node* file);
+    void load_properties(data_node* file);
 };
 
 #endif //ifndef ENEMY_TYPE_INCLUDED

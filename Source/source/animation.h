@@ -32,7 +32,7 @@ class animation_database;
  *
  * A hitbox (hitbox.h) is defined by a body part,
  * a type of hitbox (can be hurt, or hurts other mobs),
- * and some other parameters, like position.
+ * and some other properties, like position.
  *
  * A frame in an animation is defined by a sprite
  * in a spritesheet, as well as its duration.

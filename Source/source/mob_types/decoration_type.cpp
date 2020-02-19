@@ -32,9 +32,9 @@ decoration_type::decoration_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void decoration_type::load_parameters(data_node* file) {
+void decoration_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("random_animation_delay", random_animation_delay);

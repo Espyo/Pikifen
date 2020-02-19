@@ -26,7 +26,7 @@ public:
     interactable_type();
     ~interactable_type();
     
-    void load_parameters(data_node* file);
+    void load_properties(data_node* file);
 };
 
 #endif //ifndef INTERACTABLE_TYPE_INCLUDED

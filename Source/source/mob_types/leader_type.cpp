@@ -44,9 +44,9 @@ leader_type::leader_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void leader_type::load_parameters(data_node* file) {
+void leader_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("max_throw_height", max_throw_height);

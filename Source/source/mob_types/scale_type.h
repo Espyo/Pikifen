@@ -22,7 +22,7 @@ public:
     
     scale_type();
     ~scale_type();
-    void load_parameters(data_node* file);
+    void load_properties(data_node* file);
 };
 
 #endif //ifndef SCALE_TYPE_INCLUDED

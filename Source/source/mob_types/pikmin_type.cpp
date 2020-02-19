@@ -75,9 +75,9 @@ pikmin_type::pikmin_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads parameters from a data file.
+ * Loads properties from a data file.
  */
-void pikmin_type::load_parameters(data_node* file) {
+void pikmin_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("can_carry_tools", can_carry_tools);

@@ -46,7 +46,7 @@ public:
     group_task_type();
     ~group_task_type();
     
-    void load_parameters(data_node* file);
+    void load_properties(data_node* file);
 };
 
 #endif //ifndef GROUP_TASK_TYPE_INCLUDED
