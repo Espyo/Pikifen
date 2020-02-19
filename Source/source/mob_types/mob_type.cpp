@@ -249,42 +249,52 @@ void load_mob_type_from_file(
     const bool load_resources, const string &folder
 ) {
 
-    string spike_damage_name;
-    string target_type_string;
-    string huntable_targets_string;
-    string hurtable_targets_string;
-    string team_string;
-    
     reader_setter rs(&file);
-    rs.set("name",                   mt->name);
-    rs.set("main_color",             mt->main_color);
-    rs.set("max_carriers",           mt->max_carriers);
-    rs.set("max_health",             mt->max_health);
-    rs.set("health_regen",           mt->health_regen);
-    rs.set("itch_damage",            mt->itch_damage);
-    rs.set("itch_time",              mt->itch_time);
-    rs.set("target_type",            target_type_string);
-    rs.set("can_hunt",               huntable_targets_string);
-    rs.set("can_hurt",               hurtable_targets_string);
-    rs.set("move_speed",             mt->move_speed);
-    rs.set("rotation_speed",         mt->rotation_speed);
-    rs.set("can_free_move",          mt->can_free_move);
-    rs.set("territory_radius",       mt->territory_radius);
-    rs.set("radius",                 mt->radius);
-    rs.set("rectangular_dimensions", mt->rectangular_dim);
-    rs.set("height",                 mt->height);
-    rs.set("weight",                 mt->weight);
-    rs.set("pushable",               mt->pushable);
-    rs.set("pushes",                 mt->pushes);
-    rs.set("pushes_with_hitboxes",   mt->pushes_with_hitboxes);
-    rs.set("walkable",               mt->walkable);
-    rs.set("show_health",            mt->show_health);
-    rs.set("casts_shadow",           mt->casts_shadow);
+    
+    string spike_damage_str;
+    string target_type_str;
+    string huntable_targets_str;
+    string hurtable_targets_str;
+    string team_str;
+    data_node* spike_damage_node;
+    data_node* target_type_node;
+    data_node* huntable_targets_node;
+    data_node* hurtable_targets_node;
+    data_node* team_node;
+    
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
-    rs.set("blocks_carrier_pikmin",  mt->blocks_carrier_pikmin);
-    rs.set("default_vulnerability",  mt->default_vulnerability);
-    rs.set("spike_damage",           spike_damage_name);
-    rs.set("team",                   team_string);
+    rs.set("blocks_carrier_pikmin", mt->blocks_carrier_pikmin);
+    rs.set("can_free_move", mt->can_free_move);
+    rs.set(
+        "can_hunt", huntable_targets_str, &huntable_targets_node
+    );
+    rs.set(
+        "can_hurt", hurtable_targets_str, &hurtable_targets_node
+    );
+    rs.set("casts_shadow", mt->casts_shadow);
+    rs.set("default_vulnerability", mt->default_vulnerability);
+    rs.set("health_regen", mt->health_regen);
+    rs.set("height", mt->height);
+    rs.set("itch_damage", mt->itch_damage);
+    rs.set("itch_time", mt->itch_time);
+    rs.set("main_color", mt->main_color);
+    rs.set("max_carriers", mt->max_carriers);
+    rs.set("max_health", mt->max_health);
+    rs.set("move_speed", mt->move_speed);
+    rs.set("name", mt->name);
+    rs.set("pushable", mt->pushable);
+    rs.set("pushes", mt->pushes);
+    rs.set("pushes_with_hitboxes", mt->pushes_with_hitboxes);
+    rs.set("radius", mt->radius);
+    rs.set("rectangular_dimensions", mt->rectangular_dim);
+    rs.set("rotation_speed", mt->rotation_speed);
+    rs.set("show_health", mt->show_health);
+    rs.set("spike_damage", spike_damage_str, &spike_damage_node);
+    rs.set("target_type", target_type_str, &target_type_node);
+    rs.set("team", team_str, &team_node);
+    rs.set("territory_radius", mt->territory_radius);
+    rs.set("walkable", mt->walkable);
+    rs.set("weight", mt->weight);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
     
@@ -303,26 +313,26 @@ void load_mob_type_from_file(
         }
     }
     
-    auto sd_it = spike_damage_types.find(spike_damage_name);
-    if(!spike_damage_name.empty()) {
+    auto sd_it = spike_damage_types.find(spike_damage_str);
+    if(spike_damage_node) {
         if(sd_it == spike_damage_types.end()) {
             log_error(
-                "Spike damage type \"" + spike_damage_name + "\" not found!",
-                file.get_child_by_name("spike_damage")
+                "Spike damage type \"" + spike_damage_str + "\" not found!",
+                spike_damage_node
             );
         } else {
             mt->spike_damage = &(sd_it->second);
         }
     }
     
-    if(!team_string.empty()) {
-        size_t t = string_to_team_nr(team_string);
+    if(team_node) {
+        size_t t = string_to_team_nr(team_str);
         if(t != INVALID) {
             mt->starting_team = t;
         } else {
             log_error(
-                "Invalid team \"" + team_string + "\"!",
-                file.get_child_by_name("team")
+                "Invalid team \"" + team_str + "\"!",
+                team_node
             );
         }
     }
@@ -411,6 +421,8 @@ void load_mob_type_from_file(
         
         string limb_draw_method;
         string hold_rotation_method;
+        data_node* limb_draw_node;
+        data_node* hold_rotation_node;
         
         new_child.name = child_node->name;
         rs.set("spawn", new_child.spawn_name);
@@ -418,7 +430,9 @@ void load_mob_type_from_file(
         rs.set("hold_body_part", new_child.hold_body_part);
         rs.set("hold_offset_distance", new_child.hold_offset_dist);
         rs.set("hold_offset_angle", new_child.hold_offset_angle);
-        rs.set("hold_rotation_method", hold_rotation_method);
+        rs.set(
+            "hold_rotation_method", hold_rotation_method, &hold_rotation_node
+        );
         rs.set("handle_damage", new_child.handle_damage);
         rs.set("relay_damage", new_child.relay_damage);
         rs.set("handle_events", new_child.handle_events);
@@ -431,11 +445,11 @@ void load_mob_type_from_file(
         rs.set("limb_parent_offset", new_child.limb_parent_offset);
         rs.set("limb_child_body_part", new_child.limb_child_body_part);
         rs.set("limb_child_offset", new_child.limb_child_offset);
-        rs.set("limb_draw_method", limb_draw_method);
+        rs.set("limb_draw_method", limb_draw_method, &limb_draw_node);
         
         new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
         
-        if(!limb_draw_method.empty()) {
+        if(limb_draw_node) {
             if(limb_draw_method == "below_both") {
                 new_child.limb_draw_method = LIMB_DRAW_BELOW_BOTH;
             } else if(limb_draw_method == "below_child") {
@@ -451,12 +465,12 @@ void load_mob_type_from_file(
             } else {
                 log_error(
                     "Unknow limb draw method \"" +
-                    limb_draw_method + "\"!", &file
+                    limb_draw_method + "\"!", limb_draw_node
                 );
             }
         }
         
-        if(!hold_rotation_method.empty()) {
+        if(hold_rotation_node) {
             if(hold_rotation_method == "never") {
                 new_child.hold_rotation_method =
                     HOLD_ROTATION_METHOD_NEVER;
@@ -469,7 +483,7 @@ void load_mob_type_from_file(
             } else {
                 log_error(
                     "Unknow parent holding rotation method \"" +
-                    hold_rotation_method + "\"!", &file
+                    hold_rotation_method + "\"!", hold_rotation_node
                 );
             }
         }
@@ -477,47 +491,47 @@ void load_mob_type_from_file(
         mt->children.push_back(new_child);
     }
     
-    if(!target_type_string.empty()) {
+    if(target_type_node) {
         size_t target_type_value =
-            string_to_mob_target_type(target_type_string);
+            string_to_mob_target_type(target_type_str);
         if(target_type_value == INVALID) {
             log_error(
-                "Unknown target type \"" + target_type_string + "\"!",
-                file.get_child_by_name("target_type")
+                "Unknown target type \"" + target_type_str + "\"!",
+                target_type_node
             );
         } else {
             mt->target_type = target_type_value;
         }
     }
     
-    vector<string> huntable_targets_strings =
-        semicolon_list_to_vector(huntable_targets_string);
-    if(!huntable_targets_strings.empty()) {
+    vector<string> huntable_targets_strs =
+        semicolon_list_to_vector(huntable_targets_str);
+    if(huntable_targets_node) {
         mt->huntable_targets = 0;
     }
-    for(size_t h = 0; h < huntable_targets_strings.size(); ++h) {
-        size_t v = string_to_mob_target_type(huntable_targets_strings[h]);
+    for(size_t h = 0; h < huntable_targets_strs.size(); ++h) {
+        size_t v = string_to_mob_target_type(huntable_targets_strs[h]);
         if(v == INVALID) {
             log_error(
-                "Unknown target type \"" + huntable_targets_strings[h] + "\"!",
-                file.get_child_by_name("can_hunt")
+                "Unknown target type \"" + huntable_targets_strs[h] + "\"!",
+                huntable_targets_node
             );
         } else {
             mt->huntable_targets |= (uint16_t) v;
         }
     }
     
-    vector<string> hurtable_targets_strings =
-        semicolon_list_to_vector(hurtable_targets_string);
-    if(!hurtable_targets_strings.empty()) {
+    vector<string> hurtable_targets_strs =
+        semicolon_list_to_vector(hurtable_targets_str);
+    if(hurtable_targets_node) {
         mt->hurtable_targets = 0;
     }
-    for(size_t h = 0; h < hurtable_targets_strings.size(); ++h) {
-        size_t v = string_to_mob_target_type(hurtable_targets_strings[h]);
+    for(size_t h = 0; h < hurtable_targets_strs.size(); ++h) {
+        size_t v = string_to_mob_target_type(hurtable_targets_strs[h]);
         if(v == INVALID) {
             log_error(
-                "Unknown target type \"" + hurtable_targets_strings[h] + "\"!",
-                file.get_child_by_name("can_hurt")
+                "Unknown target type \"" + hurtable_targets_strs[h] + "\"!",
+                hurtable_targets_node
             );
         } else {
             mt->hurtable_targets |= (uint16_t) v;

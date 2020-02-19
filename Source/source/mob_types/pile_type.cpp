@@ -29,7 +29,7 @@ pile_type::pile_type() :
     show_amount(true),
     hide_when_empty(true),
     delete_when_finished(true) {
-        
+    
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
     pile_fsm::create_fsm(this);
@@ -41,25 +41,28 @@ pile_type::pile_type() :
  */
 void pile_type::load_parameters(data_node* file) {
     reader_setter rs(file);
+    
     string contents_str;
     string size_animation_suffixes_str;
-    rs.set("contents", contents_str);
-    rs.set("recharge_interval", recharge_interval);
-    rs.set("recharge_amount", recharge_amount);
-    rs.set("max_amount", max_amount);
-    rs.set("health_per_resource", health_per_resource);
+    data_node* contents_node;
+    
     rs.set("can_drop_multiple", can_drop_multiple);
-    rs.set("size_animation_suffixes", size_animation_suffixes_str);
-    rs.set("show_amount", show_amount);
-    rs.set("hide_when_empty", hide_when_empty);
+    rs.set("contents", contents_str, &contents_node);
     rs.set("delete_when_finished", delete_when_finished);
+    rs.set("health_per_resource", health_per_resource);
+    rs.set("hide_when_empty", hide_when_empty);
+    rs.set("max_amount", max_amount);
+    rs.set("recharge_amount", recharge_amount);
+    rs.set("recharge_interval", recharge_interval);
+    rs.set("show_amount", show_amount);
+    rs.set("size_animation_suffixes", size_animation_suffixes_str);
     
     auto res_type = resource_types.find(contents_str);
     if(res_type != resource_types.end()) {
         contents = res_type->second;
     } else {
         log_error(
-            "Unknown resource type \"" + contents_str + "\"!", file
+            "Unknown resource type \"" + contents_str + "\"!", contents_node
         );
     }
     

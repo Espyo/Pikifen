@@ -43,15 +43,20 @@ void converter_type::load_parameters(data_node* file) {
     
     string pikmin_types_str;
     string type_animation_suffixes_str;
+    data_node* pikmin_types_node;
+    data_node* type_animation_suffixes_node;
     
-    rs.set("available_pikmin_types", pikmin_types_str);
-    rs.set("type_animation_suffixes", type_animation_suffixes_str);
-    rs.set("type_change_interval", type_change_interval);
-    rs.set("total_input_pikmin", total_input_pikmin);
+    rs.set("auto_conversion_timeout", auto_conversion_timeout);
+    rs.set("available_pikmin_types", pikmin_types_str, &pikmin_types_node);
+    rs.set("buffer_size", buffer_size);
     rs.set("pikmin_per_conversion", pikmin_per_conversion);
     rs.set("same_type_counts_for_output", same_type_counts_for_output);
-    rs.set("buffer_size", buffer_size);
-    rs.set("auto_conversion_timeout", auto_conversion_timeout);
+    rs.set("total_input_pikmin", total_input_pikmin);
+    rs.set(
+        "type_animation_suffixes", type_animation_suffixes_str,
+        &type_animation_suffixes_node
+    );
+    rs.set("type_change_interval", type_change_interval);
     
     mob_category* pik_cat = mob_categories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
@@ -65,7 +70,7 @@ void converter_type::load_parameters(data_node* file) {
         } else {
             log_error(
                 "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",
-                file
+                pikmin_types_node
             );
         }
     }
@@ -89,7 +94,7 @@ void converter_type::load_parameters(data_node* file) {
     if(animation_group_suffixes.size() != available_pikmin_types.size()) {
         log_error(
             "The number of animation type suffixes needs to match the "
-            "number of available Pikmin types!", file
+            "number of available Pikmin types!", type_animation_suffixes_node
         );
     }
 }

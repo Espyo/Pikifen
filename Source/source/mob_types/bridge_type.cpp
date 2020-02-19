@@ -40,15 +40,14 @@ bridge_type::bridge_type() :
  * Loads resources into memory.
  */
 void bridge_type::load_resources(data_node* file) {
-    main_texture_file_name =
-        file->get_child_by_name("main_texture")->value;
+    reader_setter rs(file);
+    
+    rs.set("main_texture", main_texture_file_name);
+    rs.set("rail_texture", rail_texture_file_name);
+    
     if(!main_texture_file_name.empty()) {
         bmp_main_texture = textures.get(main_texture_file_name);
-        
     }
-    
-    rail_texture_file_name =
-        file->get_child_by_name("rail_texture")->value;
     if(!rail_texture_file_name.empty()) {
         bmp_rail_texture = textures.get(rail_texture_file_name);
     }

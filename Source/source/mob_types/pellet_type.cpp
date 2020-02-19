@@ -26,7 +26,7 @@ pellet_type::pellet_type() :
     match_seeds(0),
     non_match_seeds(0),
     bmp_number(nullptr) {
-        
+    
     target_type = MOB_TARGET_TYPE_NONE;
     
     pellet_fsm::create_fsm(this);
@@ -37,20 +37,25 @@ pellet_type::pellet_type() :
  * Loads parameters from a data file.
  */
 void pellet_type::load_parameters(data_node* file) {
-    data_node* pik_type_node = file->get_child_by_name("pikmin_type");
-    if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
+    reader_setter rs(file);
+    
+    string pik_type_str;
+    data_node* pik_type_node;
+    
+    rs.set("match_seeds", match_seeds);
+    rs.set("non_match_seeds", non_match_seeds);
+    rs.set("number", number);
+    rs.set("pikmin_type", pik_type_str, &pik_type_node);
+    
+    if(pikmin_types.find(pik_type_str) == pikmin_types.end()) {
         log_error(
-            "Unknown Pikmin type \"" + pik_type_node->value + "\"!",
+            "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     }
+    pik_type = pikmin_types[pik_type_str];
     
-    pik_type = pikmin_types[pik_type_node->value];
-    number = s2i(file->get_child_by_name("number")->value);
     weight = number;
-    match_seeds = s2i(file->get_child_by_name("match_seeds")->value);
-    non_match_seeds = s2i(file->get_child_by_name("non_match_seeds")->value);
-    
 }
 
 
@@ -58,8 +63,14 @@ void pellet_type::load_parameters(data_node* file) {
  * Loads resources into memory.
  */
 void pellet_type::load_resources(data_node* file) {
-    bmp_number =
-        bitmaps.get(file->get_child_by_name("number_image")->value, file);
+    reader_setter rs(file);
+    
+    string number_image_str;
+    data_node* number_image_node;
+    
+    rs.set("number_image", number_image_str, &number_image_node);
+    
+    bmp_number = bitmaps.get(number_image_str, number_image_node);
 }
 
 

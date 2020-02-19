@@ -45,32 +45,19 @@ tool_type::~tool_type() { }
  * Loads parameters from a data file.
  */
 void tool_type::load_parameters(data_node* file) {
-    dropped_when_pikmin_is_whistled =
-        s2b(
-            file->get_child_by_name("dropped_when_pikmin_is_whistled")->value
-        );
-    dropped_when_pikmin_lands =
-        s2b(
-            file->get_child_by_name("dropped_when_pikmin_lands")->value
-        );
-    dropped_when_pikmin_lands_on_opponent =
-        s2b(
-            file->get_child_by_name(
-                "dropped_when_pikmin_lands_on_opponent"
-            )->value
-        );
-    stuck_when_pikmin_lands_on_opponent =
-        s2b(
-            file->get_child_by_name(
-                "stuck_when_pikmin_lands_on_opponent"
-            )->value
-        );
-    pikmin_returns_after_using =
-        s2b(
-            file->get_child_by_name(
-                "pikmin_returns_after_using"
-            )->value
-        );
+    reader_setter rs(file);
+    
+    rs.set("dropped_when_pikmin_is_whistled", dropped_when_pikmin_is_whistled);
+    rs.set("dropped_when_pikmin_lands", dropped_when_pikmin_lands);
+    rs.set(
+        "dropped_when_pikmin_lands_on_opponent",
+        dropped_when_pikmin_lands_on_opponent
+    );
+    rs.set("pikmin_returns_after_using", pikmin_returns_after_using);
+    rs.set(
+        "stuck_when_pikmin_lands_on_opponent",
+        stuck_when_pikmin_lands_on_opponent
+    );
 }
 
 
@@ -78,5 +65,12 @@ void tool_type::load_parameters(data_node* file) {
  * Loads resources into memory.
  */
 void tool_type::load_resources(data_node* file) {
-    bmp_icon = bitmaps.get(file->get_child_by_name("icon")->value, file);
+    reader_setter rs(file);
+    
+    string icon_str;
+    data_node* icon_node;
+    
+    rs.set("icon", icon_str, &icon_node);
+    
+    bmp_icon = bitmaps.get(icon_str, icon_node);
 }

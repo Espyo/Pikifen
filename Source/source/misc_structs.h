@@ -199,14 +199,30 @@ struct movement_struct {
  */
 struct reader_setter {
     data_node* node;
-    void set(const string &child, string &var);
-    void set(const string &child, size_t &var);
-    void set(const string &child, int &var);
-    void set(const string &child, unsigned char &var);
-    void set(const string &child, bool &var);
-    void set(const string &child, float &var);
-    void set(const string &child, ALLEGRO_COLOR &var);
-    void set(const string &child, point &var);
+    void set(
+        const string &child, string &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, size_t &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, int &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, unsigned char &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, bool &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, float &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, ALLEGRO_COLOR &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, point &var, data_node** child_node = NULL
+    );
     reader_setter(data_node* dn = NULL);
 };
 

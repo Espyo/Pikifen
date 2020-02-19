@@ -32,9 +32,8 @@ interactable_type::~interactable_type() { }
  * Loads parameters from a data file.
  */
 void interactable_type::load_parameters(data_node* file) {
-    prompt_text = file->get_child_by_name("prompt_text")->value;
-    trigger_range =
-        s2f(
-            file->get_child_by_name("trigger_range")->get_value_or_default("64")
-        );
+    reader_setter rs(file);
+    
+    rs.set("prompt_text", prompt_text);
+    rs.set("trigger_range", trigger_range);
 }

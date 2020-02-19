@@ -39,17 +39,11 @@ enemy_type::enemy_type() :
  * Loads parameters from a data file.
  */
 void enemy_type::load_parameters(data_node* file) {
-    drops_corpse =
-        s2b(
-            file->get_child_by_name("drops_corpse")->get_value_or_default("yes")
-        );
-    pikmin_seeds = s2i(file->get_child_by_name("pikmin_seeds")->value);
-    allow_ground_attacks =
-        s2b(
-            file->get_child_by_name("allow_ground_attacks")
-            ->get_value_or_default("true")
-        );
-        
+    reader_setter rs(file);
+    
+    rs.set("allow_ground_attacks", allow_ground_attacks);
+    rs.set("drops_corpse", drops_corpse);
+    rs.set("pikmin_seeds", pikmin_seeds);
 }
 
 

@@ -25,11 +25,11 @@ class pellet_type : public mob_type {
 public:
     pikmin_type* pik_type;
     //Number on the pellet, and hence, its weight.
-    unsigned number;
+    size_t number;
     //Number of seeds given out if the pellet's taken to a matching Onion.
-    unsigned match_seeds;
+    size_t match_seeds;
     //Number of seeds given out if the pellet's taken to a non-matching Onion.
-    unsigned non_match_seeds;
+    size_t non_match_seeds;
     ALLEGRO_BITMAP* bmp_number;
     
     pellet_type();

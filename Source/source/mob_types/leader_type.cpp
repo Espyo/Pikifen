@@ -47,19 +47,10 @@ leader_type::leader_type() :
  * Loads parameters from a data file.
  */
 void leader_type::load_parameters(data_node* file) {
-    whistle_range =
-        s2f(
-            file->get_child_by_name("whistle_range")->get_value_or_default(
-                f2s(DEF_WHISTLE_RANGE)
-            )
-        );
-    max_throw_height =
-        s2f(
-            file->get_child_by_name(
-                "max_throw_height"
-            )->get_value_or_default("130")
-        );
-        
+    reader_setter rs(file);
+    
+    rs.set("max_throw_height", max_throw_height);
+    rs.set("whistle_range", whistle_range);
 }
 
 
@@ -68,14 +59,24 @@ void leader_type::load_parameters(data_node* file) {
  */
 void leader_type::load_resources(data_node* file) {
     //TODO don't use load_sample for these.
-    sfx_dismiss =
-        load_sample(file->get_child_by_name("dismiss_sfx")->value, mixer);
-    sfx_name_call =
-        load_sample(file->get_child_by_name("name_call_sfx")->value, mixer);
-    sfx_whistle =
-        load_sample(file->get_child_by_name("whistle_sfx")->value, mixer);
-    bmp_icon =
-        bitmaps.get(file->get_child_by_name("icon")->value, file);
+    
+    reader_setter rs(file);
+    
+    string dismiss_sfx_str;
+    string icon_str;
+    string name_call_sfx_str;
+    string whistle_sfx_str;
+    data_node* icon_node;
+    
+    rs.set("dismiss_sfx", dismiss_sfx_str);
+    rs.set("icon", icon_str, &icon_node);
+    rs.set("name_call_sfx", name_call_sfx_str);
+    rs.set("whistle_sfx", whistle_sfx_str);
+    
+    bmp_icon = bitmaps.get(icon_str, icon_node);
+    sfx_dismiss = load_sample(dismiss_sfx_str, mixer);
+    sfx_name_call = load_sample(name_call_sfx_str, mixer);
+    sfx_whistle = load_sample(whistle_sfx_str, mixer);
 }
 
 

@@ -78,17 +78,15 @@ pikmin_type::pikmin_type() :
  * Loads parameters from a data file.
  */
 void pikmin_type::load_parameters(data_node* file) {
-
     reader_setter rs(file);
     
-    rs.set("max_throw_height", max_throw_height);
     rs.set("can_carry_tools", can_carry_tools);
     rs.set("carry_strength", carry_strength);
+    rs.set("max_throw_height", max_throw_height);
     rs.set("push_strength", push_strength);
-    
-    for(size_t m = 0; m < N_MATURITIES; ++m) {
-        rs.set("sprout_evolution_time_" + i2s(m + 1), sprout_evolution_time[m]);
-    }
+    rs.set("sprout_evolution_time_1", sprout_evolution_time[0]);
+    rs.set("sprout_evolution_time_2", sprout_evolution_time[1]);
+    rs.set("sprout_evolution_time_3", sprout_evolution_time[2]);
 }
 
 
@@ -96,20 +94,38 @@ void pikmin_type::load_parameters(data_node* file) {
  * Loads resources into memory.
  */
 void pikmin_type::load_resources(data_node* file) {
-    bmp_top[0] =
-        bitmaps.get(file->get_child_by_name("top_leaf")->value, file);
-    bmp_top[1] =
-        bitmaps.get(file->get_child_by_name("top_bud")->value, file);
-    bmp_top[2] =
-        bitmaps.get(file->get_child_by_name("top_flower")->value, file);
-    bmp_icon =
-        bitmaps.get(file->get_child_by_name("icon")->value, file);
-    bmp_maturity_icon[0] =
-        bitmaps.get(file->get_child_by_name("icon_leaf")->value, file);
-    bmp_maturity_icon[1] =
-        bitmaps.get(file->get_child_by_name("icon_bud")->value, file);
-    bmp_maturity_icon[2] =
-        bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
+    reader_setter rs(file);
+    
+    string top_leaf_str;
+    string top_bud_str;
+    string top_flower_str;
+    string icon_str;
+    string icon_leaf_str;
+    string icon_bud_str;
+    string icon_flower_str;
+    data_node* top_leaf_node;
+    data_node* top_bud_node;
+    data_node* top_flower_node;
+    data_node* icon_node;
+    data_node* icon_leaf_node;
+    data_node* icon_bud_node;
+    data_node* icon_flower_node;
+    
+    rs.set("icon", icon_str, &icon_node);
+    rs.set("icon_bud", icon_bud_str, &icon_bud_node);
+    rs.set("icon_flower", icon_flower_str, &icon_flower_node);
+    rs.set("icon_leaf", icon_leaf_str, &icon_leaf_node);
+    rs.set("top_bud", top_bud_str, &top_bud_node);
+    rs.set("top_flower", top_flower_str, &top_flower_node);
+    rs.set("top_leaf", top_leaf_str, &top_leaf_node);
+    
+    bmp_icon = bitmaps.get(icon_str, icon_node);
+    bmp_maturity_icon[0] = bitmaps.get(icon_leaf_str, icon_leaf_node);
+    bmp_maturity_icon[1] = bitmaps.get(icon_bud_str, icon_bud_node);
+    bmp_maturity_icon[2] = bitmaps.get(icon_flower_str, icon_flower_node);
+    bmp_top[0] = bitmaps.get(top_leaf_str, top_leaf_node);
+    bmp_top[1] = bitmaps.get(top_bud_str, top_bud_node);
+    bmp_top[2] = bitmaps.get(top_flower_str, top_flower_node);
 }
 
 
@@ -138,13 +154,13 @@ anim_conversion_vector pikmin_type::get_anim_conversions() {
  * Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
-    bitmaps.detach(bmp_top[0]);
-    bitmaps.detach(bmp_top[1]);
-    bitmaps.detach(bmp_top[2]);
     bitmaps.detach(bmp_icon);
     bitmaps.detach(bmp_maturity_icon[0]);
     bitmaps.detach(bmp_maturity_icon[1]);
     bitmaps.detach(bmp_maturity_icon[2]);
+    bitmaps.detach(bmp_top[0]);
+    bitmaps.detach(bmp_top[1]);
+    bitmaps.detach(bmp_top[2]);
 }
 
 

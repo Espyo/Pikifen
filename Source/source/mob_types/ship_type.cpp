@@ -22,7 +22,7 @@ ship_type::ship_type() :
     mob_type(MOB_CATEGORY_SHIPS),
     can_heal(false),
     beam_radius(0.0f) {
-        
+    
     target_type = MOB_TARGET_TYPE_NONE;
     
     ship_fsm::create_fsm(this);
@@ -33,10 +33,12 @@ ship_type::ship_type() :
  * Loads parameters from a data file.
  */
 void ship_type::load_parameters(data_node* file) {
-    can_heal = file->get_child_by_name("can_heal");
-    beam_offset.x = s2f(file->get_child_by_name("beam_offset_x")->value);
-    beam_offset.y = s2f(file->get_child_by_name("beam_offset_y")->value);
-    beam_radius = s2f(file->get_child_by_name("beam_radius")->value);
+    reader_setter rs(file);
+    
+    rs.set("beam_offset_x", beam_offset.x);
+    rs.set("beam_offset_y", beam_offset.y);
+    rs.set("beam_radius", beam_radius);
+    rs.set("can_heal", can_heal);
 }
 
 

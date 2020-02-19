@@ -37,10 +37,10 @@ decoration_type::decoration_type() :
 void decoration_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     
-    rs.set("tint_random_maximum", tint_random_maximum);
-    rs.set("scale_random_variation", scale_random_variation);
-    rs.set("rotation_random_variation", rotation_random_variation);
     rs.set("random_animation_delay", random_animation_delay);
+    rs.set("rotation_random_variation", rotation_random_variation);
+    rs.set("scale_random_variation", scale_random_variation);
+    rs.set("tint_random_maximum", tint_random_maximum);
     
     rotation_random_variation = deg_to_rad(rotation_random_variation);
 }

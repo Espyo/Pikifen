@@ -41,11 +41,13 @@ void bouncer_type::load_parameters(data_node* file) {
     
     string riders_str;
     string riding_pose_str;
+    data_node* riders_node;
+    data_node* riding_pose_node;
     
-    rs.set("riders", riders_str);
-    rs.set("riding_pose", riding_pose_str);
+    rs.set("riders", riders_str, &riders_node);
+    rs.set("riding_pose", riding_pose_str, &riding_pose_node);
     
-    if(!riders_str.empty()) {
+    if(riders_node) {
         riders = 0;
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); ++r) {
@@ -56,13 +58,13 @@ void bouncer_type::load_parameters(data_node* file) {
             } else {
                 log_error(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",
-                    file
+                    riders_node
                 );
             }
         }
     }
     
-    if(!riding_pose_str.empty()) {
+    if(riding_pose_node) {
         if(riding_pose_str == "stopped") {
             riding_pose = BOUNCER_RIDING_POSE_STOPPED;
         } else if(riding_pose_str == "somersault") {
@@ -70,7 +72,7 @@ void bouncer_type::load_parameters(data_node* file) {
         } else {
             log_error(
                 "Unknown type of riding pose \"" + riding_pose_str + "\"!",
-                file
+                riding_pose_node
             );
         }
     }

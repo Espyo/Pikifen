@@ -350,104 +350,168 @@ reader_setter::reader_setter(data_node* dn) :
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is an Allegro color.
+ * child:      Name of the child node.
+ * var:        The var to set. This is an Allegro color.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, ALLEGRO_COLOR &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2c(s);
+void reader_setter::set(
+    const string &child, ALLEGRO_COLOR &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2c(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is a string.
+ * child:      Name of the child node.
+ * var:        The var to set. This is a string.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, string &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s;
+void reader_setter::set(
+    const string &child, string &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = n->value;
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is an integer.
+ * child:      Name of the child node.
+ * var:        The var to set. This is an integer.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, size_t &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2i(s);
+void reader_setter::set(
+    const string &child, size_t &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2i(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is an integer.
+ * child:      Name of the child node.
+ * var:        The var to set. This is an integer.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, int &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2i(s);
+void reader_setter::set(
+    const string &child, int &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2i(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is an unsigned char.
+ * child:      Name of the child node.
+ * var:        The var to set. This is an unsigned char.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, unsigned char &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2i(s);
+void reader_setter::set(
+    const string &child, unsigned char &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2i(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is a boolean.
+ * child:      Name of the child node.
+ * var:        The var to set. This is a boolean.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, bool &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2b(s);
+void reader_setter::set(
+    const string &child, bool &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2b(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is a float.
+ * child:      Name of the child node.
+ * var:        The var to set. This is a float.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, float &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2f(s);
+void reader_setter::set(
+    const string &child, float &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2f(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child: Name of the child node.
- * var:   The var to set. This is a point.
+ * child:      Name of the child node.
+ * var:        The var to set. This is a point.
+ * child_node: If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
  */
-void reader_setter::set(const string &child, point &var) {
-    string s = node->get_child_by_name(child)->value;
-    if(s.empty()) return;
-    var = s2p(s);
+void reader_setter::set(
+    const string &child, point &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2p(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
 }
 
 

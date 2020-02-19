@@ -21,7 +21,7 @@
 onion_type::onion_type() :
     mob_type(MOB_CATEGORY_ONIONS),
     pik_type(NULL) {
-        
+    
     target_type = MOB_TARGET_TYPE_NONE;
     
     onion_fsm::create_fsm(this);
@@ -32,14 +32,20 @@ onion_type::onion_type() :
  * Loads parameters from a data file.
  */
 void onion_type::load_parameters(data_node* file) {
-    data_node* pik_type_node = file->get_child_by_name("pikmin_type");
-    if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
+    reader_setter rs(file);
+    
+    string pik_type_str;
+    data_node* pik_type_node;
+    
+    rs.set("pikmin_type", pik_type_str, &pik_type_node);
+    
+    if(pikmin_types.find(pik_type_str) == pikmin_types.end()) {
         log_error(
-            "Unknown Pikmin type \"" + pik_type_node->value + "\"!",
+            "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     }
-    pik_type = pikmin_types[pik_type_node->value];
+    pik_type = pikmin_types[pik_type_str];
 }
 
 

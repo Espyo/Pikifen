@@ -42,21 +42,28 @@ group_task_type::~group_task_type() { }
 void group_task_type::load_parameters(data_node* file) {
     reader_setter rs(file);
     
-    string worker_pikmin_pose_str;
     string contribution_method_str;
+    string worker_pikmin_pose_str;
+    data_node* contribution_method_node;
+    data_node* worker_pikmin_pose_node;
     
-    rs.set("power_goal", power_goal);
-    rs.set("max_pikmin", max_pikmin);
+    rs.set(
+        "contribution_method", contribution_method_str,
+        &contribution_method_node
+    );
     rs.set("first_row_p1", first_row_p1);
     rs.set("first_row_p2", first_row_p2);
     rs.set("interval_between_rows", interval_between_rows);
+    rs.set("max_pikmin", max_pikmin);
     rs.set("pikmin_per_row", pikmin_per_row);
-    rs.set("contribution_method", contribution_method_str);
+    rs.set("power_goal", power_goal);
     rs.set("speed_bonus", speed_bonus);
     rs.set("worker_pikmin_angle", worker_pikmin_angle);
-    rs.set("worker_pikmin_pose", worker_pikmin_pose_str);
+    rs.set(
+        "worker_pikmin_pose", worker_pikmin_pose_str, &worker_pikmin_pose_node
+    );
     
-    if(!contribution_method_str.empty()) {
+    if(contribution_method_node) {
         if(contribution_method_str == "normal") {
             contribution_method = GROUP_TASK_CONTRIBUTION_NORMAL;
         } else if(contribution_method_str == "weight") {
@@ -68,14 +75,14 @@ void group_task_type::load_parameters(data_node* file) {
         } else {
             log_error(
                 "Unknown contribution type \"" +
-                contribution_method_str + "\"!", file
+                contribution_method_str + "\"!", contribution_method_node
             );
         }
     }
     
     worker_pikmin_angle = deg_to_rad(worker_pikmin_angle);
     
-    if(!worker_pikmin_pose_str.empty()) {
+    if(worker_pikmin_pose_node) {
         if(worker_pikmin_pose_str == "stopped") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
         } else if(worker_pikmin_pose_str == "arms_stretched") {
@@ -83,7 +90,10 @@ void group_task_type::load_parameters(data_node* file) {
         } else if(worker_pikmin_pose_str == "pushing") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_PUSHING;
         } else {
-            log_error("Unknown pose \"" + worker_pikmin_pose_str + "\"!", file);
+            log_error(
+                "Unknown pose \"" + worker_pikmin_pose_str + "\"!",
+                worker_pikmin_pose_node
+            );
         }
     }
 }
