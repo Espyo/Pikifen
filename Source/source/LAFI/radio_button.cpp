@@ -2,9 +2,10 @@
 
 #include <math.h>
 
+#include "radio_button.h"
+
 #include "const.h"
 #include "label.h"
-#include "radio_button.h"
 
 namespace lafi {
 

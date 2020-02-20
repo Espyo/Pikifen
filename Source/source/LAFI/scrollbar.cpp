@@ -1,7 +1,8 @@
 #include <cfloat>
 
-#include "button.h"
 #include "scrollbar.h"
+
+#include "button.h"
 
 namespace lafi {
 

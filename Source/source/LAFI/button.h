@@ -3,9 +3,9 @@
 
 #include <string>
 
-using namespace std;
-
 #include "widget.h"
+
+using namespace std;
 
 namespace lafi {
 
@@ -23,7 +23,7 @@ private:
     static const float OFFSET_START_DELAY;
     static const float OFFSET_RESET_DELAY;
     static const float OFFSET_SPEED;
-
+    
 public:
     string text;
     ALLEGRO_BITMAP* icon;

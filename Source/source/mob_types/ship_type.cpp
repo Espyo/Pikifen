@@ -11,8 +11,8 @@
 #include "ship_type.h"
 
 #include "../functions.h"
-#include "../mobs/ship.h"
 #include "../mob_fsms/ship_fsm.h"
+#include "../mobs/ship.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

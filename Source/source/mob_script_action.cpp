@@ -13,8 +13,8 @@
 
 #include "mob_script_action.h"
 
-#include "utils/string_utils.h"
 #include "functions.h"
+#include "utils/string_utils.h"
 
 
 /* ----------------------------------------------------------------------------

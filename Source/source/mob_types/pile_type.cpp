@@ -11,8 +11,8 @@
 #include "pile_type.h"
 
 #include "../functions.h"
-#include "../mobs/pile.h"
 #include "../mob_fsms/pile_fsm.h"
+#include "../mobs/pile.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

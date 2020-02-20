@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "angle_picker.h"
+
 #include "textbox.h"
 
 namespace lafi {

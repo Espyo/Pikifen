@@ -11,8 +11,8 @@
 #include "onion_type.h"
 
 #include "../functions.h"
-#include "../mobs/onion.h"
 #include "../mob_fsms/onion_fsm.h"
+#include "../mobs/onion.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------

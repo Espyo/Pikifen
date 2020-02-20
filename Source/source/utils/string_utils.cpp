@@ -9,9 +9,8 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
-#include <assert.h>
-
 #include <algorithm>
+#include <assert.h>
 #include <iomanip>
 #include <sstream>
 

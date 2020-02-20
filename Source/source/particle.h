@@ -15,8 +15,8 @@
 
 #include <allegro5/allegro.h>
 
-#include "world_component.h"
 #include "utils/geometry_utils.h"
+#include "world_component.h"
 
 class mob;
 

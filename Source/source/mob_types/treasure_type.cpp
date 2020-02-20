@@ -11,10 +11,10 @@
 #include "treasure_type.h"
 
 #include "../functions.h"
-#include "../mobs/mob.h"
-#include "../mobs/treasure.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_fsms/treasure_fsm.h"
+#include "../mobs/mob.h"
+#include "../mobs/treasure.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------

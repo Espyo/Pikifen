@@ -12,9 +12,9 @@
 
 #include "../const.h"
 #include "../functions.h"
-#include "../mobs/leader.h"
 #include "../mob_fsms/pikmin_fsm.h"
 #include "../mob_script.h"
+#include "../mobs/leader.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 

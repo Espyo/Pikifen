@@ -11,8 +11,8 @@
 #include "resource_type.h"
 
 #include "../functions.h"
-#include "../mobs/resource.h"
 #include "../mob_fsms/resource_fsm.h"
+#include "../mobs/resource.h"
 #include "../utils/string_utils.h"
 
 /* ----------------------------------------------------------------------------
