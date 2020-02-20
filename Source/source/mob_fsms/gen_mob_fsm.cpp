@@ -20,47 +20,6 @@
 #include "../mobs/ship.h"
 #include "../spray_type.h"
 
-/* ----------------------------------------------------------------------------
- * Generic handler for a mob touching a hazard.
- */
-void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
-    hazard* h = (hazard*) info1;
-    
-    for(size_t e = 0; e < h->effects.size(); ++e) {
-        m->apply_status_effect(h->effects[e], false, false);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Generic handler for a mob touching a spray.
- */
-void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
-    spray_type* s = (spray_type*) info1;
-    
-    for(size_t e = 0; e < s->effects.size(); ++e) {
-        m->apply_status_effect(s->effects[e], false, false);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Generic handler for when a mob was delivered to an Onion/ship.
- */
-void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
-    
-    m->focused_mob->fsm.run_event(
-        MOB_EVENT_RECEIVE_DELIVERY, (void*) m
-    );
-    
-    m->to_delete = true;
-}
-
 
 /* ----------------------------------------------------------------------------
  * Event handler that makes a mob lose health by being damaged by another.
@@ -77,65 +36,6 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
     m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Event handler that makes a mob die.
- */
-void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
-    if(m->type->death_state_nr == INVALID) return;
-    m->fsm.set_state(m->type->death_state_nr, info1, info2);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Event handler that makes a mob fall into a pit and vanish.
- */
-void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
-    m->set_health(false, false, 0);
-    m->finish_dying();
-    m->to_delete = true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Event handler for a Pikmin being added as a carrier.
- */
-void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) info1;
-    
-    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
-    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_USED;
-    m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
-    m->carry_info->cur_n_carriers++;
-    
-    m->chase_speed = m->carry_info->get_speed();
-    
-    m->calculate_carrying_destination(
-        pik_ptr, NULL,
-        &m->carry_info->intended_mob, &m->carry_info->intended_point
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Event handler for a carrier Pikmin being removed.
- */
-void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) info1;
-    
-    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;
-    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_FREE;
-    m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
-    m->carry_info->cur_n_carriers--;
-    
-    m->chase_speed = m->carry_info->get_speed();
-    
-    m->calculate_carrying_destination(
-        NULL, pik_ptr,
-        &m->carry_info->intended_mob, &m->carry_info->intended_point
-    );
 }
 
 
@@ -203,6 +103,34 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a mob reaches the destination or an obstacle when carrying.
+ * info1: If not NULL, then it's impossible to progress because of an obstacle.
+ */
+void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
+    if(info1) {
+        //Stuck...
+        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+    } else {
+        //Successful delivery!
+        m->stop_following_path();
+        m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a mob is no longer stuck waiting to be carried.
+ */
+void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
+    if(m->carry_info) {
+        m->carry_info->is_stuck = false;
+        m->carry_info->obstacle_ptrs.clear();
+    }
+    m->stop_circling();
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a carried object stops moving.
  */
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
@@ -245,6 +173,79 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Event handler that makes a mob die.
+ */
+void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
+    if(m->type->death_state_nr == INVALID) return;
+    m->fsm.set_state(m->type->death_state_nr, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler that makes a mob fall into a pit and vanish.
+ */
+void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
+    m->set_health(false, false, 0);
+    m->finish_dying();
+    m->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler for a Pikmin being added as a carrier.
+ */
+void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) info1;
+    
+    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
+    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_USED;
+    m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
+    m->carry_info->cur_n_carriers++;
+    
+    m->chase_speed = m->carry_info->get_speed();
+    
+    m->calculate_carrying_destination(
+        pik_ptr, NULL,
+        &m->carry_info->intended_mob, &m->carry_info->intended_point
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler for a carrier Pikmin being removed.
+ */
+void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) info1;
+    
+    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;
+    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_FREE;
+    m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
+    m->carry_info->cur_n_carriers--;
+    
+    m->chase_speed = m->carry_info->get_speed();
+    
+    m->calculate_carrying_destination(
+        NULL, pik_ptr,
+        &m->carry_info->intended_mob, &m->carry_info->intended_point
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Generic handler for when a mob was delivered to an Onion/ship.
+ */
+void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    m->focused_mob->fsm.run_event(
+        MOB_EVENT_RECEIVE_DELIVERY, (void*) m
+    );
+    
+    m->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a mob starts the process of being delivered to an Onion/ship.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
@@ -263,28 +264,28 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a mob is no longer stuck waiting to be carried.
+ * Generic handler for a mob touching a hazard.
  */
-void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
-    if(m->carry_info) {
-        m->carry_info->is_stuck = false;
-        m->carry_info->obstacle_ptrs.clear();
+void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    hazard* h = (hazard*) info1;
+    
+    for(size_t e = 0; e < h->effects.size(); ++e) {
+        m->apply_status_effect(h->effects[e], false, false);
     }
-    m->stop_circling();
 }
 
 
 /* ----------------------------------------------------------------------------
- * When a mob reaches the destination or an obstacle when carrying.
- * info1: If not NULL, then it's impossible to progress because of an obstacle.
+ * Generic handler for a mob touching a spray.
  */
-void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
-    if(info1) {
-        //Stuck...
-        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
-    } else {
-        //Successful delivery!
-        m->stop_following_path();
-        m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
+void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    spray_type* s = (spray_type*) info1;
+    
+    for(size_t e = 0; e < s->effects.size(); ++e) {
+        m->apply_status_effect(s->effects[e], false, false);
     }
 }

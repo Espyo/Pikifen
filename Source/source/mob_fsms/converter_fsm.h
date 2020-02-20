@@ -19,6 +19,7 @@
  */
 namespace converter_fsm {
 void create_fsm(mob_type* typ);
+
 void become_idle(mob* m, void* info1, void* info2);
 void bumped(mob* m, void* info1, void* info2);
 void finish_being_bumped(mob* m, void* info1, void* info2);

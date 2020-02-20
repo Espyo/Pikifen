@@ -51,6 +51,14 @@ void decoration_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
+ * When the decoration gets bumped.
+ */
+void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
+    m->set_animation(DECORATION_ANIM_BUMPED);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When the decoration becomes idle.
  */
 void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
@@ -63,14 +71,6 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
             dec_ptr->anim.skip_ahead_randomly();
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * When the decoration gets bumped.
- */
-void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
-    m->set_animation(DECORATION_ANIM_BUMPED);
 }
 
 

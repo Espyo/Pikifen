@@ -19,8 +19,9 @@
  */
 namespace track_fsm {
 void create_fsm(mob_type* typ);
-void spawn(mob* m, void* info1, void* info2);
+
 void on_touched(mob* m, void* info1, void* info2);
+void spawn(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef TRACK_FSM_INCLUDED

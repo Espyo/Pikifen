@@ -43,14 +43,6 @@ void track_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When the track spawns.
- */
-void track_fsm::spawn(mob* m, void* info1, void* info2) {
-    m->set_animation(TRACK_ANIM_IDLING);
-}
-
-
-/* ----------------------------------------------------------------------------
  * What to do when the track is touched.
  */
 void track_fsm::on_touched(mob* m, void* info1, void* info2) {
@@ -81,4 +73,12 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     if(!ev) return;
     
     ev->run(toucher, (void*) m);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the track spawns.
+ */
+void track_fsm::spawn(mob* m, void* info1, void* info2) {
+    m->set_animation(TRACK_ANIM_IDLING);
 }
