@@ -129,7 +129,7 @@ struct circling_info_struct {
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct group_info {
+struct group_info_struct {
 
     struct group_spot {
         point pos; //Relative to the anchor.
@@ -153,7 +153,7 @@ struct group_info {
     point get_spot_offset(const size_t spot_index);
     void reassign_spots();
     bool set_next_cur_standby_type(const bool move_backwards);
-    group_info(mob* leader_ptr);
+    group_info_struct(mob* leader_ptr);
 };
 
 
@@ -185,7 +185,7 @@ struct hold_info_struct {
 /* ----------------------------------------------------------------------------
  * Structure with information about this mob's parent, if any.
  */
-struct parent_mob_info {
+struct parent_info_struct {
     mob* m;
     bool handle_damage;
     bool relay_damage;
@@ -203,7 +203,7 @@ struct parent_mob_info {
     float limb_child_offset;
     unsigned char limb_draw_method;
     
-    parent_mob_info(mob* m);
+    parent_info_struct(mob* m);
 };
 
 

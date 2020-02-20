@@ -162,7 +162,7 @@ circling_info_struct::circling_info_struct(mob* m) :
 /* ----------------------------------------------------------------------------
  * Creates a new group information struct.
  */
-group_info::group_info(mob* leader_ptr) :
+group_info_struct::group_info_struct(mob* leader_ptr) :
     radius(0),
     anchor(leader_ptr->pos),
     transform(identity_transform),
@@ -175,7 +175,7 @@ group_info::group_info(mob* leader_ptr) :
  * Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
-void group_info::change_standby_type_if_needed() {
+void group_info_struct::change_standby_type_if_needed() {
     for(size_t m = 0; m < members.size(); ++m) {
         if(members[m]->subgroup_type_ptr == cur_standby_type) {
             //Never mind, there is a member of this subgroup type.
@@ -190,7 +190,7 @@ void group_info::change_standby_type_if_needed() {
 /* ----------------------------------------------------------------------------
  * Returns the average position of the members.
  */
-point group_info::get_average_member_pos() {
+point group_info_struct::get_average_member_pos() {
     point avg;
     for(size_t m = 0; m < members.size(); ++m) {
         avg += members[m]->pos;
@@ -203,7 +203,7 @@ point group_info::get_average_member_pos() {
  * Returns a point's offset from the anchor,
  * given the current group transformation.
  */
-point group_info::get_spot_offset(const size_t spot_index) {
+point group_info_struct::get_spot_offset(const size_t spot_index) {
     point res = spots[spot_index].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
@@ -217,7 +217,7 @@ point group_info::get_spot_offset(const size_t spot_index) {
  * affected_mob_ptr: If this initialization is because a new mob entered
  *   or left the group, this should point to said mob.
  */
-void group_info::init_spots(mob* affected_mob_ptr) {
+void group_info_struct::init_spots(mob* affected_mob_ptr) {
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -367,7 +367,7 @@ void group_info::init_spots(mob* affected_mob_ptr) {
  * Assigns each mob a new spot, given how close each one of them is to
  * each spot.
  */
-void group_info::reassign_spots() {
+void group_info_struct::reassign_spots() {
     for(size_t m = 0; m < members.size(); ++m) {
         members[m]->group_spot_index = INVALID;
     }
@@ -400,7 +400,7 @@ void group_info::reassign_spots() {
  * Returns true on success, false on failure.
  * move_backwards: If true, go through the list backwards.
  */
-bool group_info::set_next_cur_standby_type(const bool move_backwards) {
+bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
 
     if(members.empty()) {
         cur_standby_type = NULL;
@@ -453,7 +453,7 @@ bool group_info::set_next_cur_standby_type(const bool move_backwards) {
  * Sorts the group with the specified type at the front, and the other types
  * (in order) behind.
  */
-void group_info::sort(subgroup_type* leading_type) {
+void group_info_struct::sort(subgroup_type* leading_type) {
 
     for(size_t m = 0; m < members.size(); ++m) {
         members[m]->group_spot_index = INVALID;
@@ -565,7 +565,7 @@ point hold_info_struct::get_final_pos(float* final_z) {
 /* ----------------------------------------------------------------------------
  * Initializes a parent mob information struct.
  */
-parent_mob_info::parent_mob_info(mob* m) :
+parent_info_struct::parent_info_struct(mob* m) :
     m(m),
     handle_damage(false),
     relay_damage(false),
@@ -673,7 +673,7 @@ mob* create_mob(
         mob* new_mob = m_ptr->spawn(spawn_info);
         if(!new_mob) continue;
         
-        parent_mob_info* p_info = new parent_mob_info(m_ptr);
+        parent_info_struct* p_info = new parent_info_struct(m_ptr);
         new_mob->parent = p_info;
         p_info->handle_damage = child_info->handle_damage;
         p_info->relay_damage = child_info->relay_damage;

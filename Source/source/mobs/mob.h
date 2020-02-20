@@ -220,7 +220,7 @@ public:
     //The current subgroup type.
     subgroup_type* subgroup_type_ptr;
     //Info on the group this mob is a leader of.
-    group_info* group;
+    group_info_struct* group;
     //Index of this mob's spot in the leader's group spots.
     size_t group_spot_index;
     
@@ -273,7 +273,7 @@ public:
     //If the mob is currently "disabled", these flags specify behavior.
     unsigned char disabled_state_flags;
     //If this mob is a sub-mob, this points to the parent mob.
-    parent_mob_info* parent;
+    parent_info_struct* parent;
     //How long it's been alive for.
     float time_alive;
     //Cached value of the angle's cosine.

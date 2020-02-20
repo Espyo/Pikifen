@@ -1718,7 +1718,7 @@ void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
  * When a leader must chase another.
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    group_info* leader_group_ptr = m->following_group->group;
+    group_info_struct* leader_group_ptr = m->following_group->group;
     engine_assert(leader_group_ptr != NULL, m->print_state_history());
     
     float distance =

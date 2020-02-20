@@ -31,7 +31,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     team = MOB_TEAM_PLAYER_1; //TODO.
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
-    group = new group_info(this);
+    group = new group_info_struct(this);
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
