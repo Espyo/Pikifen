@@ -22,7 +22,7 @@
 leader_category::leader_category() :
     mob_category(
         MOB_CATEGORY_LEADERS, "Leader", "Leaders",
-        LEADERS_FOLDER_PATH, al_map_rgb(73, 204, 204)
+        "Leaders", al_map_rgb(73, 204, 204)
     ) {
     
 }

@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string ONIONS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Onions";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the Onions.
  */

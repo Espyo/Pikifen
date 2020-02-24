@@ -17,9 +17,6 @@
 using namespace std;
 
 
-const string TRACKS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Tracks";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for anything that transports a mob from point A to point B
  * in a more-or-less linear fashion.

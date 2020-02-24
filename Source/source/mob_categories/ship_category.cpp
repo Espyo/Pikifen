@@ -22,7 +22,7 @@
 ship_category::ship_category() :
     mob_category(
         MOB_CATEGORY_SHIPS, "Ship", "Ships",
-        SHIPS_FOLDER_PATH, al_map_rgb(100, 73, 204)
+        "Ships", al_map_rgb(100, 73, 204)
     ) {
     
 }

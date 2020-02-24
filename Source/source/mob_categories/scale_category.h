@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string SCALES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Scales";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the scales.
  */

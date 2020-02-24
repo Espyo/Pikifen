@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string PILES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Piles";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the piles of resource mobs.
  */

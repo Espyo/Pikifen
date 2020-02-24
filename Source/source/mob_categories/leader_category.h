@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string LEADERS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Leaders";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the leaders.
  */

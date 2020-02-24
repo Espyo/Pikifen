@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string CUSTOM_MOB_FOLDER_PATH = TYPES_FOLDER_PATH + "/Custom";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the custom mob types.
  */

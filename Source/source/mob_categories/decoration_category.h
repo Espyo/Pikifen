@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string DECORATIONS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Decorations";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the decorations.
  */

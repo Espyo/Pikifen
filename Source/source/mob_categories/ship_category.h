@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string SHIPS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Ships";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the ships.
  */

@@ -22,7 +22,7 @@
 pile_category::pile_category() :
     mob_category(
         MOB_CATEGORY_PILES, "Pile", "Piles",
-        PILES_FOLDER_PATH, al_map_rgb(139, 204, 165)
+        "Piles", al_map_rgb(139, 204, 165)
     ) {
     
 }

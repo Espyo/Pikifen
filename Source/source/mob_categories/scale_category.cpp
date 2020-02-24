@@ -22,7 +22,7 @@
 scale_category::scale_category() :
     mob_category(
         MOB_CATEGORY_SCALES, "Scale", "Scales",
-        SCALES_FOLDER_PATH, al_map_rgb(139, 165, 204)
+        "Scales", al_map_rgb(139, 165, 204)
     ) {
     
 }

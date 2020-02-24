@@ -22,7 +22,7 @@
 onion_category::onion_category() :
     mob_category(
         MOB_CATEGORY_ONIONS, "Onion", "Onions",
-        ONIONS_FOLDER_PATH, al_map_rgb(178, 204, 73)
+        "Onions", al_map_rgb(178, 204, 73)
     ) {
     
 }

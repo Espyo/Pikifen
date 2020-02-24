@@ -29,7 +29,7 @@ mob_category::mob_category(
     name(name),
     id(id),
     plural_name(plural_name),
-    folder(folder),
+    folder(TYPES_FOLDER_PATH + "/" + folder),
     editor_color(editor_color) {
     
 }

@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string RESOURCES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Resources";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the small resource mobs.
  */

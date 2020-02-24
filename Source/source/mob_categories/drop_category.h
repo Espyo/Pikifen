@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string DROPS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Drops";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the nectar/spray/etc. drops.
  */

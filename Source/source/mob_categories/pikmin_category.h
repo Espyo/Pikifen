@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string PIKMIN_FOLDER_PATH = TYPES_FOLDER_PATH + "/Pikmin";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the Pikmin.
  */

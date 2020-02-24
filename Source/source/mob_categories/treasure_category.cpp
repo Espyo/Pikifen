@@ -22,7 +22,7 @@
 treasure_category::treasure_category() :
     mob_category(
         MOB_CATEGORY_TREASURES, "Treasure", "Treasures",
-        TREASURES_FOLDER_PATH, al_map_rgb(204, 151, 71)
+        "Treasures", al_map_rgb(204, 151, 71)
     ) {
     
 }

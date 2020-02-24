@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string TOOLS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Tools";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for tool-like carriable objects.
  */

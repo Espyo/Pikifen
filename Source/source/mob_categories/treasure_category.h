@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string TREASURES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Treasures";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the treasures.
  */

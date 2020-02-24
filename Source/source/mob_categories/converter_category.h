@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string CONVERTERS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Converters";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for mobs that can convert Pikmin from one type to another.
  */

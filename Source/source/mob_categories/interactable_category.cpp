@@ -22,7 +22,7 @@
 interactable_category::interactable_category() :
     mob_category(
         MOB_CATEGORY_INTERACTABLES, "Interactable", "Interactables",
-        INTERACTABLES_FOLDER_PATH, al_map_rgb(204, 139, 178)
+        "Interactables", al_map_rgb(204, 139, 178)
     ) {
     
 }

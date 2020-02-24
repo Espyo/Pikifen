@@ -22,7 +22,7 @@
 drop_category::drop_category() :
     mob_category(
         MOB_CATEGORY_DROPS, "Drop", "Drops",
-        DROPS_FOLDER_PATH, al_map_rgb(204, 145, 145)
+        "Drops", al_map_rgb(204, 145, 145)
     ) {
     
 }

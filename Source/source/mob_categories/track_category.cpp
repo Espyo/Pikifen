@@ -22,7 +22,7 @@
 track_category::track_category() :
     mob_category(
         MOB_CATEGORY_TRACKS, "Track", "Tracks",
-        TRACKS_FOLDER_PATH, al_map_rgb(152, 139, 204)
+        "Tracks", al_map_rgb(152, 139, 204)
     ) {
     
 }

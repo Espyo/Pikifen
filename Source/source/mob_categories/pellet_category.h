@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string PELLETS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Pellets";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the pellets.
  */

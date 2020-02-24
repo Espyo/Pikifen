@@ -22,7 +22,7 @@
 enemy_category::enemy_category() :
     mob_category(
         MOB_CATEGORY_ENEMIES, "Enemy", "Enemies",
-        ENEMIES_FOLDER_PATH, al_map_rgb(204, 71, 71)
+        "Enemies", al_map_rgb(204, 71, 71)
     ) {
     
 }

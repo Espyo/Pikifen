@@ -22,7 +22,7 @@
 bouncer_category::bouncer_category() :
     mob_category(
         MOB_CATEGORY_BOUNCERS, "Bouncer", "Bouncers",
-        BOUNCERS_FOLDER_PATH, al_map_rgb(192, 139, 204)
+        "Bouncers", al_map_rgb(192, 139, 204)
     ) {
     
 }

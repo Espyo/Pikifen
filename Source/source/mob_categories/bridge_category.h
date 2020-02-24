@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string BRIDGES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Bridges";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the bridges.
  */

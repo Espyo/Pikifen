@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string INTERACTABLES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Interactables";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the objects that can be interacted with by leaders.
  */

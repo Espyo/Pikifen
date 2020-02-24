@@ -22,7 +22,7 @@
 converter_category::converter_category() :
     mob_category(
         MOB_CATEGORY_CONVERTERS, "Converter", "Converters",
-        CONVERTERS_FOLDER_PATH, al_map_rgb(73, 126, 204)
+        "Converters", al_map_rgb(73, 126, 204)
     ) {
     
 }

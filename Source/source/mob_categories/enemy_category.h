@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string ENEMIES_FOLDER_PATH = TYPES_FOLDER_PATH + "/Enemies";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for the enemies.
  */

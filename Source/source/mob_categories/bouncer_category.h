@@ -17,9 +17,6 @@
 using namespace std;
 
 
-const string BOUNCERS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Bouncers";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for anything that grabs a mob and throws it elsewhere, at a
  * specific location.

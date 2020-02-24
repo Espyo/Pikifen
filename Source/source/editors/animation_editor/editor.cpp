@@ -505,7 +505,7 @@ void animation_editor::load_animation_database(const bool update_history) {
     ) {
         data_node data =
             load_data_file(
-                PIKMIN_FOLDER_PATH + "/" +
+                loaded_mob_type->category->folder + "/" +
                 file_path_parts[file_path_parts.size() - 2] +
                 "/Data.txt"
             );

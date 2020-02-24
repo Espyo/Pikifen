@@ -20,9 +20,6 @@
 using namespace std;
 
 
-const string GROUP_TASKS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Group_tasks";
-
-
 /* ----------------------------------------------------------------------------
  * Mob category for tasks that require multiple Pikmin to
  * work together to clear.
