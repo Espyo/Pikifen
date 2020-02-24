@@ -21,14 +21,22 @@
  */
 class decoration : public mob {
 public:
+    //What type of decoration it is.
     decoration_type* dec_type;
     
+    //This decoration's random tint, if any.
     ALLEGRO_COLOR individual_tint;
+    //This decoration's random scale, if any.
     float individual_scale;
+    //This decoration's random rotation, if any.
     float individual_rotation;
+    //Has it done its first animation yet? Used for random animation offsets.
     bool has_done_first_animation;
     
+    //Constructor.
     decoration(const point &pos, decoration_type* dec_type, const float angle);
+    
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 

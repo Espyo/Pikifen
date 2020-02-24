@@ -21,11 +21,13 @@
  */
 class scale : public mob {
 public:
-
+    //What type of scale it is.
     scale_type* sca_type;
     
+    //Return the weight currently on top of it.
     float calculate_cur_weight();
     
+    //Constructor.
     scale(const point &pos, scale_type* type, float angle);
 };
 

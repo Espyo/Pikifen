@@ -376,7 +376,7 @@ void gameplay::do_gameplay_logic() {
             for(size_t s = 0; s < ships.size(); ++s) {
                 ship* s_ptr = ships[s];
                 d = dist(cur_leader_ptr->pos, s_ptr->pos);
-                if(!s_ptr->is_leader_under_ring(cur_leader_ptr)) {
+                if(!s_ptr->is_leader_under_beam(cur_leader_ptr)) {
                     continue;
                 }
                 if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {

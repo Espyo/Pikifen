@@ -990,7 +990,7 @@ void mob::delete_old_status_effects() {
     for(size_t s = 0; s < statuses.size(); ) {
         if(statuses[s].to_delete) {
             if(statuses[s].type->causes_panic) {
-                lose_panic_from_status();
+                handle_panic_loss();
             }
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
@@ -3174,7 +3174,7 @@ bool mob::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_OTHERS;
 }
 void mob::handle_status_effect(status_type* s) {}
-void mob::lose_panic_from_status() {}
+void mob::handle_panic_loss() {}
 void mob::start_dying_class_specific() { }
 
 

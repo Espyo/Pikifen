@@ -37,13 +37,14 @@
  */
 class treasure : public mob {
 public:
-
+    //What type of treasure it is.
     treasure_type* tre_type;
-    float buried; //0: fully unburried. 1: fully buried.
     
+    //Constructor.
     treasure(const point &pos, treasure_type* type, const float angle);
-    void draw_mob(bitmap_effect_manager* effect_manager = NULL);
-    virtual void read_script_vars(const string &vars);
+    
+    //Mob drawing routine.
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef TREASURE_INCLUDED

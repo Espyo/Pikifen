@@ -105,22 +105,9 @@ enum MOB_TARGET_TYPES {
  * like leader, Pikmin, enemy, Onion, etc.
  */
 class mob {
-protected:
-    void tick_animation();
-    void tick_brain();
-    void tick_misc_logic();
-    void tick_physics();
-    void tick_script();
-    virtual void tick_class_specifics();
-    
 public:
-    mob(
-        const point &pos, mob_type* type, const float angle
-    );
-    virtual ~mob();
-    
     //Basic information.
-    //The type of mob -- Olimar, Red Bulborb, etc.
+    //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type;
     //Schedule this mob to be deleted from memory at the end of the frame.
     bool to_delete;
@@ -390,8 +377,7 @@ public:
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
     virtual void handle_status_effect(status_type* s);
-    //TODO Replace lose_panic_from_status() with handle_lose_status()?
-    virtual void lose_panic_from_status();
+    virtual void handle_panic_loss();
     virtual void read_script_vars(const string &vars);
     virtual void start_dying_class_specific();
     bool tick_track_ride();
@@ -408,6 +394,24 @@ public:
     
     string print_state_history();
     
+    //Constructor.
+    mob(const point &pos, mob_type* type, const float angle);
+    //Destructor.
+    virtual ~mob();
+    
+protected:
+    //Tick its animation logic.
+    void tick_animation();
+    //Tick the mob's "thinking" logic.
+    void tick_brain();
+    //Tick misc. things.
+    void tick_misc_logic();
+    //Tick its physics logic.
+    void tick_physics();
+    //Tick its script logic.
+    void tick_script();
+    //Tick class-specific logic.
+    virtual void tick_class_specifics();
 };
 
 

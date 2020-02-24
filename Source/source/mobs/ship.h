@@ -22,16 +22,22 @@
  */
 class ship : public mob {
 public:
-
+    //What type of ship it is.
     ship_type* shi_type;
+    
+    //The beam's absolute coordinates.
     point beam_final_pos;
     
+    //Heal up a leader.
+    void heal_leader(leader* l);
+    //Checks if a leader is under the beam.
+    bool is_leader_under_beam(leader* l);
+    
+    //Constructor.
     ship(const point &pos, ship_type* type, float angle);
     
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
-    
-    void heal_leader(leader* l);
-    bool is_leader_under_ring(leader* l);
 };
 
 #endif //ifndef SHIP_INCLUDED

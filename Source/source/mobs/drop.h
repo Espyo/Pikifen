@@ -22,15 +22,23 @@
  */
 class drop : public mob {
 public:
+    //What type of drop it is.
     drop_type* dro_type;
+    
+    //Current scale. Used for shrinking.
     float cur_scale;
+    //How many doses are left.
     size_t doses_left;
     
+    //Constructor.
     drop(const point &pos, drop_type* dro_type, const float angle);
     
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
-    virtual void tick_class_specifics();
     
+protected:
+    //Tick class-specific logic.
+    virtual void tick_class_specifics();
 };
 
 #endif //ifndef DROP_INCLUDED

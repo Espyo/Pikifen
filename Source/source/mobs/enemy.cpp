@@ -24,13 +24,7 @@
  */
 enemy::enemy(const point &pos, enemy_type* type, const float angle) :
     mob(pos, type, angle),
-    ene_type(type),
-    spawn_delay(0),
-    respawn_days_left(0),
-    respawns_after_x_days(0),
-    appears_after_day(0),
-    appears_before_day(0),
-    appears_every_x_days(0) {
+    ene_type(type) {
     
     team = MOB_TEAM_ENEMY_1; //TODO removeish.
 }
@@ -84,7 +78,6 @@ bool enemy::can_receive_status(status_type* s) {
 void enemy::read_script_vars(const string &vars) {
     mob::read_script_vars(vars);
     
-    spawn_delay = s2f(get_var_value(vars, "spawn_delay", "0"));
     vector<string> spoils_strs =
         semicolon_list_to_vector(get_var_value(vars, "spoils", ""), ",");
     vector<string> random_pellet_spoils_strs =

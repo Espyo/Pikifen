@@ -22,8 +22,10 @@
  */
 class bouncer : public mob {
 public:
+    //What type of bouncer it is.
     bouncer_type* bou_type;
     
+    //Constructor.
     bouncer(const point &pos, bouncer_type* type, const float angle);
 };
 

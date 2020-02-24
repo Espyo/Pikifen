@@ -23,13 +23,20 @@
  */
 class resource : public mob {
 public:
-
+    //What type of resource it is.
     resource_type* res_type;
+    
+    //Pile it belongs to, if any.
     pile* origin_pile;
     
-    resource(const point &pos, resource_type* type, const float angle);
-    void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    //Disappear.
     void vanish();
+    
+    //Constructor.
+    resource(const point &pos, resource_type* type, const float angle);
+    
+    //Mob drawing routine.
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef RESOURCE_INCLUDED

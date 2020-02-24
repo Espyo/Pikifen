@@ -24,15 +24,17 @@
  * An Onion is where Pikmin are stored.
  */
 class onion : public mob {
-protected:
-    virtual void tick_class_specifics();
-    
 public:
+    //What type of Onion it is.
     onion_type* oni_type;
+    
+    //Is this Onion currently activated?
     bool activated;
     //How many Pikmin are inside, per maturity.
     size_t pikmin_inside[N_MATURITIES];
-    size_t spew_queue; //TODO this needs to be a proper queue (Master Onion).
+    //How many Pikmin are queued up to be spat.
+    //TODO this needs to be a proper queue (Master Onion).
+    size_t spew_queue;
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
     //Time left until it spews the next seed in the queue.
@@ -42,13 +44,23 @@ public:
     //The Onion's alpha.
     unsigned char seethrough;
     
+    //Call a Pikmin out.
+    void call_pikmin();
+    //Spit a new seed.
+    void spew();
+    //Store a Pikmin inside.
+    void stow_pikmin();
+    
+    //Constructor.
     onion(const point &pos, onion_type* type, const float angle);
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    //Read script variables from the area data.
     virtual void read_script_vars(const string &vars);
     
-    void call_pikmin();
-    void spew();
-    void stow_pikmin();
+protected:
+    //Tick class-specific logic.
+    virtual void tick_class_specifics();
 };
 
 #endif //ifndef ONION_INCLUDED

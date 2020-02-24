@@ -72,8 +72,8 @@ void ship::heal_leader(leader* l) {
 
 /* ----------------------------------------------------------------------------
  * Checks whether the specified leader is currently under the ship's
- * ring of light or not.
+ * beam or not.
  */
-bool ship::is_leader_under_ring(leader* l) {
+bool ship::is_leader_under_beam(leader* l) {
     return dist(l->pos, beam_final_pos) <= shi_type->beam_radius;
 }

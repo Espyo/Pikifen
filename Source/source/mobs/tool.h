@@ -32,6 +32,7 @@ enum HOLDABILITY_FLAGS {
  */
 class tool : public mob {
 public:
+    //What type of tool it is.
     tool_type* too_type;
     
     //Flags indicating if and how the mob can be held by other mobs.
@@ -39,6 +40,7 @@ public:
     //If a Pikmin is already reserved to get this tool, this points to it.
     pikmin* reserved;
     
+    //Constructor.
     tool(const point &pos, tool_type* type, const float angle);
 };
 

@@ -24,9 +24,13 @@
  */
 class pellet : public mob {
 public:
+    //What type of pellet it is.
     pellet_type* pel_type;
     
+    //Constructor.
     pellet(const point &pos, pellet_type* type, const float angle);
+    
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
 };
 

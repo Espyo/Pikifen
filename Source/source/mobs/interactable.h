@@ -22,8 +22,10 @@
  */
 class interactable : public mob {
 public:
+    //What type of interactable it is.
     interactable_type* int_type;
     
+    //Constructor.
     interactable(const point &pos, interactable_type* type, const float angle);
 };
 

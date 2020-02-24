@@ -24,9 +24,7 @@ class leader;
  */
 class pikmin : public mob {
 public:
-    pikmin(const point &pos, pikmin_type* type, const float angle);
-    ~pikmin();
-    
+    //What type of Pikmin it is.
     pikmin_type* pik_type;
     
     //Mob that it is carrying.
@@ -54,16 +52,33 @@ public:
     //How many hits in a row have done no damage.
     unsigned char consecutive_dud_hits;
     
+    //Forces the Pikmin to carry a mob.
     void force_carry(mob* m);
+    //Checks and processes an attack's miss.
     bool process_attack_miss(hitbox_interaction* info);
+    //Increases the Pikmin's maturity by an amount.
     void increase_maturity(const int amount);
     
+    //Constructor.
+    pikmin(const point &pos, pikmin_type* type, const float angle);
+    //Destructor.
+    ~pikmin();
+    
+    //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s);
+    //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    //Get the base movement speed.
     virtual float get_base_speed();
-    virtual void lose_panic_from_status();
+    //Handler for when there is no longer any status effect-induced panic.
+    virtual void handle_panic_loss();
+    //Handler for a status effect.
     virtual void handle_status_effect(status_type* s);
+    //Read script variables from the area data.
     virtual void read_script_vars(const string &vars);
+    
+protected:
+    //Tick class-specific logic.
     virtual void tick_class_specifics();
 };
 

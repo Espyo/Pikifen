@@ -22,8 +22,10 @@
  */
 class track : public mob {
 public:
+    //What type of track it is.
     track_type* tra_type;
     
+    //Constructor.
     track(const point &pos, track_type* type, const float angle);
 };
 

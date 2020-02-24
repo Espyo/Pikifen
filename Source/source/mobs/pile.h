@@ -22,17 +22,29 @@
  */
 class pile : public mob, public mob_with_anim_groups {
 public:
-
+    //What type of pile it is.
     pile_type* pil_type;
+    
+    //Current amount of resources.
     size_t amount;
+    //Time left until it recharges.
     timer recharge_timer;
     
+    //Change its current amount of resources.
     void change_amount(const int change);
+    //Recharge.
     void recharge();
+    //Update one tick.
     void update();
     
+    //Constructor.
     pile(const point &pos, pile_type* type, const float angle);
+    
+    //Read script variables from the area data.
     virtual void read_script_vars(const string &vars);
+    
+protected:
+    //Tick class-specific logic.
     virtual void tick_class_specifics();
 };
 

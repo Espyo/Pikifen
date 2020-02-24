@@ -19,30 +19,25 @@
  */
 class enemy : public mob {
 public:
-    //Technical things.
+    //What type of enemy it is.
     enemy_type* ene_type;
     
-    //Spawn and respawn things.
-    //Enemy only spawns after these many seconds, a la Waterwraith.
-    float spawn_delay;
-    //Days needed until it respawns.
-    unsigned char respawn_days_left;
-    unsigned char respawns_after_x_days;
-    //This enemy only appears from this day onwards.
-    unsigned int appears_after_day;
-    unsigned int appears_before_day;
-    unsigned int appears_every_x_days;
-    
+    //Specific spoils that this enemy drops on death.
     vector<mob_type*> specific_spoils;
+    //List of pellets it drops of random types. This is a list of pellet sizes.
     vector<size_t> random_pellet_spoils;
     
+    //Constructor.
     enemy(const point &pos, enemy_type* type, const float angle);
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
-    virtual void read_script_vars(const string &vars);
-    virtual void start_dying_class_specific();
     
+    //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s);
-    
+    //Mob drawing routine.
+    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    //Read script variables from the area data.
+    virtual void read_script_vars(const string &vars);
+    //Death class-specific logic.
+    virtual void start_dying_class_specific();
 };
 
 #endif //ifndef ENEMY_INCLUDED

@@ -301,9 +301,9 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when a status effect no longer causes "panic".
+ * Handler for when there is no longer any status effect-induced panic.
  */
-void pikmin::lose_panic_from_status() {
+void pikmin::handle_panic_loss() {
     if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
         fsm.set_state(PIKMIN_STATE_IDLING);
         pikmin_fsm::stand_still(this, NULL, NULL);
