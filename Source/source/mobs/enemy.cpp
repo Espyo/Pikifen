@@ -75,32 +75,34 @@ bool enemy::can_receive_status(status_type* s) {
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
-void enemy::read_script_vars(const string &vars) {
-    mob::read_script_vars(vars);
+void enemy::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
     
-    vector<string> spoils_strs =
-        semicolon_list_to_vector(get_var_value(vars, "spoils", ""), ",");
-    vector<string> random_pellet_spoils_strs =
-        semicolon_list_to_vector(
-            get_var_value(vars, "random_pellet_spoils", ""), ","
-        );
-        
-    for(size_t s = 0; s < spoils_strs.size(); ++s) {
-        mob_type* type_ptr =
-            mob_categories.find_mob_type(spoils_strs[s]);
-        if(!type_ptr) {
-            log_error(
-                "A mob (" + get_error_message_mob_info(this) + ") is set to "
-                "have a spoil of type \"" + spoils_strs[s] + "\", but no "
-                "such mob type exists!"
-            );
-            continue;
+    string spoils_var;
+    string random_pellet_spoils_var;
+    
+    if(svr.get("spoils", spoils_var)) {
+        vector<string> spoils_strs = semicolon_list_to_vector(spoils_var, ",");
+        for(size_t s = 0; s < spoils_strs.size(); ++s) {
+            mob_type* type_ptr =
+                mob_categories.find_mob_type(spoils_strs[s]);
+            if(!type_ptr) {
+                log_error(
+                    "A mob (" + get_error_message_mob_info(this) +
+                    ") is set to have a spoil of type \"" + spoils_strs[s] +
+                    "\", but no such mob type exists!"
+                );
+                continue;
+            }
+            specific_spoils.push_back(type_ptr);
         }
-        specific_spoils.push_back(type_ptr);
     }
-    
-    for(size_t s = 0; s < random_pellet_spoils_strs.size(); ++s) {
-        random_pellet_spoils.push_back(s2i(random_pellet_spoils_strs[s]));
+    if(svr.get("random_pellet_spoils", random_pellet_spoils_var)) {
+        vector<string> random_pellet_spoils_strs =
+            semicolon_list_to_vector(random_pellet_spoils_var, ",");
+        for(size_t s = 0; s < random_pellet_spoils_strs.size(); ++s) {
+            random_pellet_spoils.push_back(s2i(random_pellet_spoils_strs[s]));
+        }
     }
 }
 

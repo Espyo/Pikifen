@@ -88,13 +88,7 @@ void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
 float get_sun_strength();
-string get_var_value(
-    const string &vars_string, const string &var, const string &def
-);
-void get_var_vectors(
-    const string &vars_string,
-    vector<string> &var_names, vector<string> &var_values
-);
+map<string, string> get_var_map(const string &vars_string);
 float get_wall_shadow_length(const float height_difference);
 vector<pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(

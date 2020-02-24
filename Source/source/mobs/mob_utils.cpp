@@ -650,13 +650,14 @@ mob* create_mob(
         type->init_actions[a]->run(m_ptr, NULL, NULL);
     }
     
-    m_ptr->read_script_vars(vars);
     if(!vars.empty()) {
-        vector<string> var_name_strings;
-        vector<string> var_value_strings;
-        get_var_vectors(vars, var_name_strings, var_value_strings);
-        for(size_t v = 0; v < var_name_strings.size(); ++v) {
-            m_ptr->vars[var_name_strings[v]] = var_value_strings[v];
+        map<string, string> vars_map = get_var_map(vars);
+        script_var_reader svr(vars_map);
+        
+        m_ptr->read_script_vars(svr);
+        
+        for(auto v = vars_map.begin(); v != vars_map.end(); ++v) {
+            m_ptr->vars[v->first] = v->second;
         }
     }
     

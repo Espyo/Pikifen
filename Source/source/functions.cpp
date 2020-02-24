@@ -474,55 +474,22 @@ float get_sun_strength() {
 }
 
 /* ----------------------------------------------------------------------------
- * Returns the value of a var on the vars listing of a mob's spawn.
- */
-string get_var_value(
-    const string &vars_string, const string &var, const string &def
-) {
-    vector<string> vars = semicolon_list_to_vector(vars_string);
-    
-    for(size_t v = 0; v < vars.size(); ++v) {
-        size_t equals_pos = vars[v].find("=");
-        string var_name = trim_spaces(vars[v].substr(0, equals_pos));
-        
-        if(var_name != var) continue;
-        
-        return
-            trim_spaces(
-                vars[v].substr(
-                    equals_pos + 1, vars[v].size() - (equals_pos + 1)
-                ),
-                true
-            );
-    }
-    
-    return def;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Given a string representation of mob script variables,
- * returns two vectors: one for the variable names, and one for their values.
+ * returns a map, where every key is a variable, and every value is the
+ * variable's value.
  */
-void get_var_vectors(
-    const string &vars_string,
-    vector<string> &var_names, vector<string> &var_values
-) {
+map<string, string> get_var_map(const string &vars_string) {
+    map<string, string> final_map;
     vector<string> raw_vars = semicolon_list_to_vector(vars_string);
     
     for(size_t v = 0; v < raw_vars.size(); ++v) {
         vector<string> raw_parts = split(raw_vars[v], "=");
-        if(raw_parts.size() == 0) {
-            var_names.push_back("");
-        } else {
-            var_names.push_back(trim_spaces(raw_parts[0]));
+        if(raw_parts.size() < 2) {
+            continue;
         }
-        if(raw_parts.size() == 1) {
-            var_values.push_back("");
-        } else {
-            var_values.push_back(trim_spaces(raw_parts[1]));
-        }
+        final_map[trim_spaces(raw_parts[0])] = trim_spaces(raw_parts[1]);
     }
+    return final_map;
 }
 
 

@@ -245,30 +245,25 @@ void gameplay::load() {
     day_minutes = day_minutes_start;
     area_time_passed = 0;
     
-    vector<string> spray_amount_name_strs;
-    vector<string> spray_amount_value_strs;
-    get_var_vectors(
-        cur_area_data.spray_amounts,
-        spray_amount_name_strs, spray_amount_value_strs
-    );
+    map<string, string> spray_strs = get_var_map(cur_area_data.spray_amounts);
     
-    for(size_t s = 0; s < spray_amount_name_strs.size(); ++s) {
+    for(auto s = spray_strs.begin(); s != spray_strs.end(); s++) {
         size_t spray_id = 0;
         for(; spray_id < spray_types.size(); ++spray_id) {
-            if(spray_types[spray_id].name == spray_amount_name_strs[s]) {
+            if(spray_types[spray_id].name == s->first) {
                 break;
             }
         }
         if(spray_id == spray_types.size()) {
             log_error(
-                "Unknown spray type \"" + spray_amount_name_strs[s] + "\", "
+                "Unknown spray type \"" + s->first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + cur_area_data.name + "\"!", NULL
             );
             continue;
         }
         
-        spray_stats[spray_id].nr_sprays = s2i(spray_amount_value_strs[s]);
+        spray_stats[spray_id].nr_sprays = s2i(s->second);
     }
     
     for(size_t c = 0; c < controls[0].size(); ++c) {

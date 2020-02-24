@@ -258,12 +258,20 @@ void pikmin::increase_maturity(const int amount) {
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
-void pikmin::read_script_vars(const string &vars) {
-    mob::read_script_vars(vars);
-    maturity = 0;
-    increase_maturity(s2i(get_var_value(vars, "maturity", "2")));
-    if(s2b(get_var_value(vars, "sprout", "0"))) {
-        fsm.first_state_override = PIKMIN_STATE_SPROUT;
+void pikmin::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    size_t maturity_var;
+    bool sprout_var;
+    
+    if(svr.get("maturity", maturity_var)) {
+        maturity = 0;
+        increase_maturity(maturity_var);
+    }
+    if(svr.get("sprout", sprout_var)) {
+        if(sprout_var) {
+            fsm.first_state_override = PIKMIN_STATE_SPROUT;
+        }
     }
 }
 

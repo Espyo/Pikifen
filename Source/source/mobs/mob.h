@@ -360,7 +360,7 @@ public:
     virtual bool can_receive_status(status_type* s);
     virtual void handle_status_effect(status_type* s);
     virtual void handle_panic_loss();
-    virtual void read_script_vars(const string &vars);
+    virtual void read_script_vars(const script_var_reader &svr);
     virtual void start_dying_class_specific();
     bool tick_track_ride();
     void stop_track_ride();

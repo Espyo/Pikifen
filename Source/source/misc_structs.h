@@ -270,6 +270,25 @@ public:
 
 
 /* ----------------------------------------------------------------------------
+ * Makes it easy to read script variables, and make changes based on which
+ * ones exist, and what values they have.
+ */
+struct script_var_reader {
+    map<string, string> &vars;
+    bool get(const string &name, string &dest) const;
+    bool get(const string &name, size_t &dest) const;
+    bool get(const string &name, int &dest) const;
+    bool get(const string &name, unsigned char &dest) const;
+    bool get(const string &name, bool &dest) const;
+    bool get(const string &name, float &dest) const;
+    bool get(const string &name, ALLEGRO_COLOR &dest) const;
+    bool get(const string &name, point &dest) const;
+    script_var_reader(map<string, string> &vars);
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * Manages fade ins/outs for transitions.
  */
 struct fade_manager {

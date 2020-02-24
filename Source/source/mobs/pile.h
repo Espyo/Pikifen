@@ -41,7 +41,7 @@ public:
     pile(const point &pos, pile_type* type, const float angle);
     
     //Read script variables from the area data.
-    virtual void read_script_vars(const string &vars);
+    virtual void read_script_vars(const script_var_reader &svr);
     
 protected:
     //Tick class-specific logic.

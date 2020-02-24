@@ -47,13 +47,17 @@ void pile::change_amount(const int change) {
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
-void pile::read_script_vars(const string &vars) {
-    mob::read_script_vars(vars);
-    amount = s2i(get_var_value(vars, "amount", i2s(pil_type->max_amount)));
-    amount = clamp(amount, 0, pil_type->max_amount);
+void pile::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    size_t amount_var;
+    
+    if(svr.get("amount", amount_var)) {
+        amount = amount_var;
+        amount = clamp(amount, 0, pil_type->max_amount);
+    }
     
     health = pil_type->health_per_resource * amount;
-    
     update();
 }
 

@@ -698,6 +698,146 @@ float timer::get_ratio_left() {
 }
 
 
+
+/* ----------------------------------------------------------------------------
+ * Creates a "script var reader".
+ * vars: Map of variables to read from.
+ */
+script_var_reader::script_var_reader(map<string, string> &vars) :
+    vars(vars) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns an Allegro color to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2c(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns a string to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, string &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = v->second;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns a size_t to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, size_t &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2i(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns an int to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, int &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2i(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns an unsigned char to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, unsigned char &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2i(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns a bool to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, bool &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2b(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns a float to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, float &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2f(v->second);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns a point to the value of a given variable, if it exists.
+ * Returns true if it exists, false if not.
+ * name:      Name of the variable to read.
+ * dest:      Destination for the value.
+ */
+bool script_var_reader::get(const string &name, point &dest) const {
+    auto v = vars.find(name);
+    if(v == vars.end()) {
+        return false;
+    }
+    dest = s2p(v->second);
+    return true;
+}
+
+
+
 const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------

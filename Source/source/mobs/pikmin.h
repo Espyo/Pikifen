@@ -75,7 +75,7 @@ public:
     //Handler for a status effect.
     virtual void handle_status_effect(status_type* s);
     //Read script variables from the area data.
-    virtual void read_script_vars(const string &vars);
+    virtual void read_script_vars(const script_var_reader &svr);
     
 protected:
     //Tick class-specific logic.

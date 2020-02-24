@@ -56,7 +56,7 @@ public:
     //Mob drawing routine.
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
     //Read script variables from the area data.
-    virtual void read_script_vars(const string &vars);
+    virtual void read_script_vars(const script_var_reader &svr);
     
 protected:
     //Tick class-specific logic.

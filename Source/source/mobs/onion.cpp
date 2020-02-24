@@ -83,13 +83,20 @@ void onion::call_pikmin() {
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
-void onion::read_script_vars(const string &vars) {
-    mob::read_script_vars(vars);
-    vector<string> pikmin_inside_vars =
-        split(get_var_value(vars, "pikmin_inside", ""));
+void onion::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    string pikmin_inside_var;
+    
+    if(svr.get("pikmin_inside", pikmin_inside_var)) {
+        vector<string> pikmin_inside_vars = split(pikmin_inside_var);
         
-    for(size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES; ++m) {
-        pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
+        for(
+            size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES;
+            ++m
+        ) {
+            pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
+        }
     }
 }
 

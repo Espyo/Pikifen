@@ -1599,13 +1599,14 @@ string mob::print_state_history() {
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
-void mob::read_script_vars(const string &vars) {
-    string team_str = get_var_value(vars, "team", "");
-    if(!team_str.empty()) {
-        size_t team_nr = string_to_team_nr(team_str);
+void mob::read_script_vars(const script_var_reader &svr) {
+    string team_var;
+    
+    if(svr.get("team", team_var)) {
+        size_t team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
             log_error(
-                "Unknown team name \"" + team_str + "\", when trying to "
+                "Unknown team name \"" + team_var + "\", when trying to "
                 "create a mob of type " + type->name + ", at coordinates " +
                 p2s(pos) + "!", NULL
             );
