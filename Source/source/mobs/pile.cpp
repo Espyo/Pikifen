@@ -70,7 +70,7 @@ void pile::recharge() {
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to piles.
  */
-void pile::tick_class_specifics() {
+void pile::tick_class_specifics(const float delta_t) {
     recharge_timer.tick(delta_t);
     
     if(amount == 0 && pil_type->delete_when_finished) {

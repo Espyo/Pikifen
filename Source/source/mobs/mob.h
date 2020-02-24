@@ -249,8 +249,6 @@ public:
     vector<status> statuses;
     //Hazard of the sector the mob is currently on.
     hazard* on_hazard;
-    //Is it completely dead? Health = 0 isn't necessarily dead; could be dying.
-    bool dead;
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
     //List of mobs currently in its mouth, i.e., chomped.
@@ -269,7 +267,7 @@ public:
     float angle_sin;
     
     
-    void tick();
+    void tick(const float delta_t);
     void draw(bitmap_effect_manager* effect_manager = NULL);
     void draw_limb(bitmap_effect_manager* effect_manager = NULL);
     virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
@@ -401,17 +399,17 @@ public:
     
 protected:
     //Tick its animation logic.
-    void tick_animation();
+    void tick_animation(const float delta_t);
     //Tick the mob's "thinking" logic.
-    void tick_brain();
+    void tick_brain(const float delta_t);
     //Tick misc. things.
-    void tick_misc_logic();
+    void tick_misc_logic(const float delta_t);
     //Tick its physics logic.
-    void tick_physics();
+    void tick_physics(const float delta_t);
     //Tick its script logic.
-    void tick_script();
+    void tick_script(const float delta_t);
     //Tick class-specific logic.
-    virtual void tick_class_specifics();
+    virtual void tick_class_specifics(const float delta_t);
 };
 
 

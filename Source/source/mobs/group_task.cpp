@@ -218,7 +218,7 @@ void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
 /* ----------------------------------------------------------------------------
  * Runs code specific to this class, once per frame.
  */
-void group_task::tick_class_specifics() {
+void group_task::tick_class_specifics(const float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {
         ran_task_finished_code = true;
         finish_task();

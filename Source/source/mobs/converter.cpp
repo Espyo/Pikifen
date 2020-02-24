@@ -119,7 +119,7 @@ void converter::spew() {
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to converters.
  */
-void converter::tick_class_specifics() {
+void converter::tick_class_specifics(const float delta_t) {
     type_change_timer.tick(delta_t);
     auto_conversion_timer.tick(delta_t);
 }

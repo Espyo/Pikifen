@@ -320,7 +320,7 @@ void gameplay::do_gameplay_logic() {
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs[m];
-            m_ptr->tick();
+            m_ptr->tick(delta_t);
             
             if(m_ptr->fsm.cur_state) {
                 process_mob_interactions(m_ptr, m);

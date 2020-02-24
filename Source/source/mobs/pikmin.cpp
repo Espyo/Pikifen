@@ -115,7 +115,7 @@ pikmin* get_closest_sprout(
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to Pikmin.
  */
-void pikmin::tick_class_specifics() {
+void pikmin::tick_class_specifics(const float delta_t) {
     //Carrying object.
     if(carrying_mob) {
         if(!carrying_mob->carry_info) {
@@ -125,9 +125,6 @@ void pikmin::tick_class_specifics() {
     
     //Is it dead?
     if(health <= 0) {
-        dead = true;
-    }
-    if(dead) {
         to_delete = true;
         
         pikmin_fsm::notify_leader_release(this, NULL, NULL);

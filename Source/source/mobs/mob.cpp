@@ -85,7 +85,6 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     is_huntable(true),
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
-    dead(false),
     chomp_max(0),
     disabled_state_flags(0),
     parent(nullptr),
@@ -1199,9 +1198,6 @@ const float ENEMY_SPIRIT_MIN_SIZE = 16;
  * Sets up stuff for the end of the mob's dying process.
  */
 void mob::finish_dying() {
-    if(dead) return;
-    dead = true;
-    
     if(type->category->id == MOB_CATEGORY_ENEMIES) {
         //TODO move this to the enemy class.
         enemy* e_ptr = (enemy*) this;
@@ -2023,7 +2019,6 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
     
     for(size_t p = 0; p < total; ++p) {
         chomping_mobs[p]->set_health(false, false, 0.0f);
-        chomping_mobs[p]->dead = true;
         chomping_mobs[p]->cause_spike_damage(this, true);
     }
     chomping_mobs.clear();
@@ -2039,8 +2034,9 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
  * Then, the actual physics go into place, your nerves
  * send signals to the muscles, and gravity, intertia, etc.
  * take over the rest, to make you move.
+ * How many seconds to tick by.
  */
-void mob::tick() {
+void mob::tick(const float delta_t) {
     //Since the mob could be marked for deletion after any little
     //interaction with the world, and since doing logic on a mob that already
     //forgot some things due to deletion is dangerous... Let's constantly
@@ -2048,29 +2044,29 @@ void mob::tick() {
     
     if(to_delete) return;
     
-    tick_brain();
+    tick_brain(delta_t);
     if(to_delete) return;
     
-    tick_physics();
+    tick_physics(delta_t);
     if(to_delete) return;
     
-    tick_misc_logic();
+    tick_misc_logic(delta_t);
     if(to_delete) return;
     
-    tick_animation();
+    tick_animation(delta_t);
     if(to_delete) return;
     
-    tick_script();
+    tick_script(delta_t);
     if(to_delete) return;
     
-    tick_class_specifics();
+    tick_class_specifics(delta_t);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Ticks one game frame into the mob's animations.
  */
-void mob::tick_animation() {
+void mob::tick_animation(const float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         mult *= this->statuses[s].type->anim_speed_multiplier;
@@ -2107,7 +2103,7 @@ void mob::tick_animation() {
  * This is related to mob-global things, like
  * thinking about where to move next and such.
  */
-void mob::tick_brain() {
+void mob::tick_brain(const float delta_t) {
     //Circling around something.
     if(circling_info) {
         point center =
@@ -2212,14 +2208,14 @@ void mob::tick_brain() {
 /* ----------------------------------------------------------------------------
  * Code specific for each class. Meant to be overwritten by the child classes.
  */
-void mob::tick_class_specifics() {
+void mob::tick_class_specifics(const float delta_t) {
 }
 
 
 /* ----------------------------------------------------------------------------
  * Performs some logic code for this game frame.
  */
-void mob::tick_misc_logic() {
+void mob::tick_misc_logic(const float delta_t) {
     time_alive += delta_t;
     
     invuln_period.tick(delta_t);
@@ -2254,7 +2250,7 @@ void mob::tick_misc_logic() {
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
  */
-void mob::tick_physics() {
+void mob::tick_physics(const float delta_t) {
     if(!ground_sector) {
         //Object is placed out of bounds.
         return;
@@ -2997,7 +2993,7 @@ bool mob::tick_track_ride() {
 /* ----------------------------------------------------------------------------
  * Checks general events in the mob's script for this frame.
  */
-void mob::tick_script() {
+void mob::tick_script(const float delta_t) {
     if(!fsm.cur_state) return;
     
     //Timer events.

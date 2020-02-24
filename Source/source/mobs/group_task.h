@@ -63,7 +63,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    virtual void tick_class_specifics();
+    virtual void tick_class_specifics(const float delta_t);
     
 private:
     //Combined Pikmin power put into the task right now. Cached for performance.

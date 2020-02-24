@@ -529,7 +529,7 @@ bool leader::can_receive_status(status_type* s) {
 /* ----------------------------------------------------------------------------
  * Ticks leader-related logic for this frame.
  */
-void leader::tick_class_specifics() {
+void leader::tick_class_specifics(const float delta_t) {
     if(group && group->members.size()) {
     
         bool must_reassign_spots = false;

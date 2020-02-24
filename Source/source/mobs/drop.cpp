@@ -53,7 +53,7 @@ void drop::draw_mob(bitmap_effect_manager* effect_manager) {
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to drops.
  */
-void drop::tick_class_specifics() {
+void drop::tick_class_specifics(const float delta_t) {
     float intended_scale;
     
     if(doses_left == dro_type->total_doses) {

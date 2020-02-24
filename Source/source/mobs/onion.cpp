@@ -171,7 +171,7 @@ void onion::stow_pikmin() {
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to Onions.
  */
-void onion::tick_class_specifics() {
+void onion::tick_class_specifics(const float delta_t) {
     for(size_t o = 0; o < onions.size(); ++o) {
         onion* o_ptr = onions[o];
         
@@ -207,13 +207,13 @@ void onion::tick_class_specifics() {
                 o_ptr->seethrough =
                     max(
                         (double) final_alpha,
-                        o_ptr->seethrough - ONION_FADE_SPEED * delta_t
+                        (double) o_ptr->seethrough - ONION_FADE_SPEED * delta_t
                     );
             } else {
                 o_ptr->seethrough =
                     min(
                         (double) final_alpha,
-                        o_ptr->seethrough + ONION_FADE_SPEED * delta_t
+                        (double) o_ptr->seethrough + ONION_FADE_SPEED * delta_t
                     );
             }
         }
