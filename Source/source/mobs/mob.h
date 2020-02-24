@@ -178,24 +178,8 @@ public:
     bool was_thrown;
     
     //Target things.
-    //If true, the mob is trying to go to a certain spot.
-    bool chasing;
-    //Chase after these coordinates, relative to the "origin" coordinates.
-    point chase_offset;
-    //Pointer to the origin of the coordinates, or NULL for the world origin.
-    point* chase_orig_coords;
-    //When chasing something in teleport mode, also change the z accordingly.
-    float* chase_teleport_z;
-    //If true, teleport instantly.
-    bool chase_teleport;
-    //If true, the mob can move in a direction it's not facing.
-    bool chase_free_move;
-    //Distance from the target in which the mob is considered as being there.
-    float chase_target_dist;
-    //Speed to move towards the target at.
-    float chase_speed;
-    //If true, the mob successfully reached its intended destination.
-    bool reached_destination;
+    //Information about what point it is chasing after.
+    chase_info_struct chase_info;
     //Information about the path it is following, if any.
     path_info_struct* path_info;
     //Information about the mob/point it's circling, if any.

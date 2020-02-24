@@ -98,6 +98,33 @@ struct carry_info_struct {
 
 
 /* ----------------------------------------------------------------------------
+ * Structure with information on what point the mob is chasing after.
+ */
+struct chase_info_struct {
+    //If true, the mob is trying to go to a certain spot.
+    bool is_chasing;
+    //Chase after these coordinates, relative to the "origin" coordinates.
+    point offset;
+    //Pointer to the origin of the coordinates, or NULL for the world origin.
+    point* orig_coords;
+    //When chasing something in teleport mode, also change the z accordingly.
+    float* teleport_z;
+    //If true, teleport instantly.
+    bool teleport;
+    //If true, the mob can move in a direction it's not facing.
+    bool free_move;
+    //Distance from the target in which the mob is considered as being there.
+    float target_dist;
+    //Speed to move towards the target at.
+    float speed;
+    //If true, the mob successfully reached its intended destination.
+    bool reached_destination;
+    
+    chase_info_struct();
+};
+
+
+/* ----------------------------------------------------------------------------
  * Structure with information about what mob or point that this
  * mob is circling around, if any.
  */

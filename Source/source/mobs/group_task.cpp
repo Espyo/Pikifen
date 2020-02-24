@@ -229,13 +229,13 @@ void group_task::tick_class_specifics(const float delta_t) {
     }
     
     if(
-        chasing &&
+        chase_info.is_chasing &&
         power >= tas_type->power_goal &&
         tas_type->speed_bonus != 0.0f
     ) {
         //Being moved and movements can go through speed bonuses?
         //Let's update the speed.
-        chase_speed =
+        chase_info.speed =
             type->move_speed +
             (power - tas_type->power_goal) * tas_type->speed_bonus;
     }

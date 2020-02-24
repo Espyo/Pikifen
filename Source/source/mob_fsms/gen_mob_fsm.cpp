@@ -202,7 +202,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
-    m->chase_speed = m->carry_info->get_speed();
+    m->chase_info.speed = m->carry_info->get_speed();
     
     m->calculate_carrying_destination(
         pik_ptr, NULL,
@@ -222,7 +222,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
     
-    m->chase_speed = m->carry_info->get_speed();
+    m->chase_info.speed = m->carry_info->get_speed();
     
     m->calculate_carrying_destination(
         NULL, pik_ptr,

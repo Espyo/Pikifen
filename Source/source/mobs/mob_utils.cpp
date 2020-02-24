@@ -145,6 +145,22 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an instance of a structure with info about what the mob's chasing.
+ */
+chase_info_struct::chase_info_struct() :
+    is_chasing(false),
+    orig_coords(nullptr),
+    teleport_z(nullptr),
+    teleport(false),
+    free_move(false),
+    target_dist(0),
+    speed(-1),
+    reached_destination(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an instance of a structure with info about the mob's circling.
  */
 circling_info_struct::circling_info_struct(mob* m) :

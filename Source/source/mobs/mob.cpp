@@ -60,15 +60,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     unpushable(false),
     tangible(true),
     was_thrown(false),
-    chasing(false),
-    chase_offset(pos),
-    chase_orig_coords(nullptr),
-    chase_teleport_z(nullptr),
-    chase_teleport(false),
-    chase_free_move(false),
-    chase_target_dist(0),
-    chase_speed(-1),
-    reached_destination(false),
+    chase_info(),
     path_info(nullptr),
     circling_info(nullptr),
     following_group(nullptr),
@@ -914,16 +906,16 @@ void mob::chase(
     const bool free_move, const float target_distance, const float speed
 ) {
 
-    this->chase_offset = offset;
-    this->chase_orig_coords = orig_coords;
-    this->chase_teleport = teleport;
-    this->chase_teleport_z = teleport_z;
-    this->chase_free_move = free_move || type->can_free_move;
-    this->chase_target_dist = target_distance;
-    this->chase_speed = (speed == -1 ? get_base_speed() : speed);
+    this->chase_info.offset = offset;
+    this->chase_info.orig_coords = orig_coords;
+    this->chase_info.teleport = teleport;
+    this->chase_info.teleport_z = teleport_z;
+    this->chase_info.free_move = free_move || type->can_free_move;
+    this->chase_info.target_dist = target_distance;
+    this->chase_info.speed = (speed == -1 ? get_base_speed() : speed);
     
-    chasing = true;
-    reached_destination = false;
+    chase_info.is_chasing = true;
+    chase_info.reached_destination = false;
 }
 
 
@@ -1307,8 +1299,8 @@ float mob::get_base_speed() {
  * Returns the actual location of the movement target.
  */
 point mob::get_chase_target() {
-    point p = chase_offset;
-    if(chase_orig_coords) p += (*chase_orig_coords);
+    point p = chase_info.offset;
+    if(chase_info.orig_coords) p += (*chase_info.orig_coords);
     return p;
 }
 
@@ -1945,9 +1937,9 @@ void mob::start_height_effect() {
  * Makes a mob not follow any target any more.
  */
 void mob::stop_chasing() {
-    chasing = false;
-    reached_destination = false;
-    chase_teleport_z = NULL;
+    chase_info.is_chasing = false;
+    chase_info.reached_destination = false;
+    chase_info.teleport_z = NULL;
     
     speed.x = speed.y = 0;
 }
@@ -2129,13 +2121,13 @@ void mob::tick_brain(const float delta_t) {
     }
     
     //Chasing a target.
-    if(chasing && !chase_teleport && speed_z == 0) {
+    if(chase_info.is_chasing && !chase_info.teleport && speed_z == 0) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
         
         if(
-            dist(pos, final_target_pos) > chase_target_dist
+            dist(pos, final_target_pos) > chase_info.target_dist
         ) {
             //If it still hasn't reached its target
             //(or close enough to the target),
@@ -2161,14 +2153,14 @@ void mob::tick_brain(const float delta_t) {
                         //stop before the obstacle. Meaning the object
                         //is now facing an obstacle.
                         stuck_at_obstacle = true;
-                        reached_destination = true;
+                        chase_info.reached_destination = true;
                         
                     } else {
                         //Time to head towards the actual goal.
                         chase(
                             path_info->target_point,
                             NULL, false, NULL, true,
-                            path_info->final_target_distance, chase_speed
+                            path_info->final_target_distance, chase_info.speed
                         );
                     }
                     
@@ -2176,24 +2168,24 @@ void mob::tick_brain(const float delta_t) {
                     path_info->cur_path_stop_nr == path_info->path.size() + 1
                 ) {
                     //Reached the final destination.
-                    reached_destination = true;
+                    chase_info.reached_destination = true;
                     
                 } else {
                     //Reached a stop while traversing the path.
                     //Think about going to the next.
                     chase(
                         path_info->path[path_info->cur_path_stop_nr]->pos,
-                        NULL, false, NULL, true, 3.0f, chase_speed
+                        NULL, false, NULL, true, 3.0f, chase_info.speed
                     );
                 }
                 
             } else {
-                reached_destination = true;
+                chase_info.reached_destination = true;
             }
             
-            if(reached_destination) {
+            if(chase_info.reached_destination) {
                 //Reached the final destination. Think about stopping.
-                chase_speed = 0;
+                chase_info.speed = 0;
                 fsm.run_event(
                     MOB_EVENT_REACHED_DESTINATION,
                     (stuck_at_obstacle ? (void*) stuck_at_obstacle : NULL)
@@ -2311,10 +2303,10 @@ void mob::tick_physics(const float delta_t) {
     angle_sin = sin(angle);
     
     //Movement.
-    if(chasing) {
+    if(chase_info.is_chasing) {
         point final_target_pos = get_chase_target();
         
-        if(chase_teleport) {
+        if(chase_info.teleport) {
             sector* sec =
                 get_sector(final_target_pos, NULL, true);
             if(!sec) {
@@ -2322,8 +2314,8 @@ void mob::tick_physics(const float delta_t) {
                 return;
                 
             } else {
-                if(chase_teleport_z) {
-                    z = *chase_teleport_z;
+                if(chase_info.teleport_z) {
+                    z = *chase_info.teleport_z;
                 }
                 ground_sector = sec;
                 center_sector = sec;
@@ -2341,10 +2333,10 @@ void mob::tick_physics(const float delta_t) {
             float move_amount =
                 min(
                     (double) (d / delta_t),
-                    (double) chase_speed * movement_speed_mult
+                    (double) chase_info.speed * movement_speed_mult
                 );
                 
-            bool can_free_move = chase_free_move || d <= 10.0;
+            bool can_free_move = chase_info.free_move || d <= 10.0;
             
             float movement_angle =
                 can_free_move ?
@@ -3009,7 +3001,7 @@ void mob::tick_script(const float delta_t) {
     
     //Has it reached its home?
     mob_event* reach_dest_ev = q_get_event(this, MOB_EVENT_REACHED_DESTINATION);
-    if(reach_dest_ev && reached_destination) {
+    if(reach_dest_ev && chase_info.reached_destination) {
         reach_dest_ev->run(this);
     }
     
@@ -3131,7 +3123,7 @@ void mob::tick_script(const float delta_t) {
             if((*o)->health == 0) {
                 follow_path(
                     path_info->target_point,
-                    true, chase_speed,
+                    true, chase_info.speed,
                     path_info->final_target_distance
                 );
                 break;

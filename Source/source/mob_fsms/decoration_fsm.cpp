@@ -80,7 +80,10 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void decoration_fsm::check_bump(mob* m, void* info1, void* info2) {
     mob* toucher = (mob*) info1;
-    if(toucher->speed.x == 0 && toucher->speed.y == 0 && !toucher->chasing) {
+    if(
+        toucher->speed.x == 0 && toucher->speed.y == 0 &&
+        !toucher->chase_info.is_chasing
+    ) {
         //Is the other object not currently moving? Let's not get bumped.
         return;
     }
