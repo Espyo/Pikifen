@@ -14,13 +14,6 @@
 #include "../mob_types/decoration_type.h"
 #include "mob.h"
 
-enum DECORATION_STATES {
-    DECORATION_STATE_IDLING,
-    DECORATION_STATE_BUMPED,
-    
-    N_DECORATION_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A decoration mob, like a plant. They don't do much other than be pretty

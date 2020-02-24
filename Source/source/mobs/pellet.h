@@ -15,15 +15,6 @@
 #include "../mob_types/pikmin_type.h"
 #include "mob.h"
 
-enum PELLET_STATES {
-    PELLET_STATE_IDLE_WAITING,
-    PELLET_STATE_IDLE_MOVING,
-    PELLET_STATE_IDLE_STUCK,
-    PELLET_STATE_BEING_DELIVERED,
-    
-    N_PELLET_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A pellet can be delivered to an Onion in

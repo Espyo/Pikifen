@@ -21,6 +21,13 @@ enum SHIP_ANIMATIONS {
     SHIP_ANIM_IDLING,
 };
 
+enum SHIP_STATES {
+    SHIP_STATE_IDLING,
+    
+    N_SHIP_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of ship (Hocotate ship, research pod, golden HS, S.S. Drake, etc.).
  */

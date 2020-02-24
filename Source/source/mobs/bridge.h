@@ -14,13 +14,6 @@
 #include "../mob_types/bridge_type.h"
 #include "mob.h"
 
-enum BRIDGE_STATES {
-    BRIDGE_STATE_IDLING,
-    BRIDGE_STATE_DESTROYED,
-    
-    N_BRIDGE_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A bridge mob. Bridges on the engine are made up of two parts:

@@ -29,6 +29,11 @@ enum TRACK_ANIMATIONS {
     TRACK_ANIM_IDLING,
 };
 
+enum TRACK_STATES {
+    TRACK_STATE_IDLING,
+    N_TRACK_STATES,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A type of track. Something that transports the mob up, down, in a loop, etc.

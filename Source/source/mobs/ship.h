@@ -16,12 +16,6 @@
 #include "../mob_types/ship_type.h"
 #include "leader.h"
 
-enum SHIP_STATES {
-    SHIP_STATE_IDLING,
-    
-    N_SHIP_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A ship is where "treasure" is delivered to.

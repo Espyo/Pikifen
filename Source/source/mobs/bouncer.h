@@ -17,13 +17,6 @@
 #include "mob.h"
 
 
-enum BOUNCER_STATES {
-    BOUNCER_STATE_IDLING,
-    BOUNCER_STATE_BOUNCING,
-    N_BOUNCER_STATES,
-};
-
-
 /* ----------------------------------------------------------------------------
  * An object that throws another mob, bouncing it away.
  */

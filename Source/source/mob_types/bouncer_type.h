@@ -29,6 +29,12 @@ enum BOUNCER_ANIMATIONS {
     BOUNCER_ANIM_BOUNCING,
 };
 
+enum BOUNCER_STATES {
+    BOUNCER_STATE_IDLING,
+    BOUNCER_STATE_BOUNCING,
+    N_BOUNCER_STATES,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A type of bouncer. Something that grabs another mob and bounces it away

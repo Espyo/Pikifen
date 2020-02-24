@@ -15,15 +15,6 @@
 #include "mob.h"
 #include "pile.h"
 
-enum RESOURCE_STATES {
-    RESOURCE_STATE_IDLE_WAITING,
-    RESOURCE_STATE_IDLE_MOVING,
-    RESOURCE_STATE_IDLE_STUCK,
-    RESOURCE_STATE_BEING_DELIVERED,
-    
-    N_RESOURCE_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A resource is any object that a single Pikmin can pick up, and deliver

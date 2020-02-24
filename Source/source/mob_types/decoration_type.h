@@ -21,6 +21,13 @@ enum DECORATION_ANIMATIONS {
     DECORATION_ANIM_BUMPED,
 };
 
+enum DECORATION_STATES {
+    DECORATION_STATE_IDLING,
+    DECORATION_STATE_BUMPED,
+    
+    N_DECORATION_STATES,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A type of decoration.

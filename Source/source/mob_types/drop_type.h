@@ -36,6 +36,15 @@ enum DROP_EFFECT {
     DROP_EFFECT_GIVE_STATUS,
 };
 
+enum DROP_STATES {
+    DROP_STATE_IDLING,
+    DROP_STATE_FALLING,
+    DROP_STATE_LANDING,
+    DROP_STATE_BUMPED,
+    
+    N_DROP_STATES,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A type of drop, like a nectar drop, spray drop, etc.

@@ -15,18 +15,6 @@
 #include "mob.h"
 
 
-enum CONVERTER_STATES {
-    CONVERTER_STATE_IDLING,
-    CONVERTER_STATE_BUMPING,
-    CONVERTER_STATE_CLOSING,
-    CONVERTER_STATE_SPITTING,
-    CONVERTER_STATE_OPENING,
-    CONVERTER_STATE_DYING,
-    
-    N_CONVERTER_STATES,
-};
-
-
 /* ----------------------------------------------------------------------------
  * A converter mob. This is like the Candypop Buds in the canon games, in the
  * sense that it converts a thrown Pikmin from one type into a Pikmin

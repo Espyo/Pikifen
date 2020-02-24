@@ -15,16 +15,6 @@
 #include "mob.h"
 
 
-enum DROP_STATES {
-    DROP_STATE_IDLING,
-    DROP_STATE_FALLING,
-    DROP_STATE_LANDING,
-    DROP_STATE_BUMPED,
-    
-    N_DROP_STATES,
-};
-
-
 /* ----------------------------------------------------------------------------
  * A drop mob. This is a droplet that sits on the ground and can be consumed
  * by certain mobs. When that happens, some effect is triggered, depending

@@ -33,6 +33,17 @@ enum CONVERTER_ANIMATIONS {
     N_CONVERTER_ANIMS,
 };
 
+enum CONVERTER_STATES {
+    CONVERTER_STATE_IDLING,
+    CONVERTER_STATE_BUMPING,
+    CONVERTER_STATE_CLOSING,
+    CONVERTER_STATE_SPITTING,
+    CONVERTER_STATE_OPENING,
+    CONVERTER_STATE_DYING,
+    
+    N_CONVERTER_STATES,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A type of converter, which is a mob that can convert Pikmin from one type

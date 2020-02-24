@@ -15,6 +15,18 @@
 #include "mob_type.h"
 #include "pikmin_type.h"
 
+enum ONION_STATES {
+    ONION_STATE_IDLING,
+    
+    N_ONION_STATES,
+};
+
+const float ONION_FULL_SPEW_DELAY          = 2.5f;
+const float ONION_NEXT_SPEW_DELAY          = 0.10f;
+const unsigned char ONION_SEETHROUGH_ALPHA = 64;
+const float ONION_FADE_SPEED               = 255; //Values per second.
+
+
 /* ----------------------------------------------------------------------------
  * An Onion type.
  * It's basically associated with a Pikmin type.

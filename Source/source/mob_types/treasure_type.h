@@ -14,6 +14,16 @@
 #include "../data_file.h"
 #include "mob_type.h"
 
+enum TREASURE_STATES {
+    TREASURE_STATE_IDLE_WAITING,
+    TREASURE_STATE_IDLE_MOVING,
+    TREASURE_STATE_IDLE_STUCK,
+    TREASURE_STATE_BEING_DELIVERED,
+    
+    N_TREASURE_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of treasure.
  * Although uncommon, there can be several

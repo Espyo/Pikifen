@@ -14,12 +14,6 @@
 #include "../mob_types/pile_type.h"
 #include "mob.h"
 
-enum PILE_STATES {
-    PILE_STATE_IDLING,
-    
-    N_PILE_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A pile is an object that represents a collection of resource-type mobs.

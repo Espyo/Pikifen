@@ -19,17 +19,6 @@
 #include "../mob_types/pikmin_type.h"
 #include "mob.h"
 
-enum ONION_STATES {
-    ONION_STATE_IDLING,
-    
-    N_ONION_STATES,
-};
-
-const float ONION_FULL_SPEW_DELAY          = 2.5f;
-const float ONION_NEXT_SPEW_DELAY          = 0.10f;
-const unsigned char ONION_SEETHROUGH_ALPHA = 64;
-const float ONION_FADE_SPEED               = 255; //Values per second.
-
 
 /* ----------------------------------------------------------------------------
  * An Onion is where Pikmin are stored.

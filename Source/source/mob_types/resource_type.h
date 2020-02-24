@@ -28,6 +28,16 @@ enum RESOURCE_DELIVERY_RESULTS {
     RESOURCE_DELIVERY_RESULT_ADD_POINTS,
 };
 
+enum RESOURCE_STATES {
+    RESOURCE_STATE_IDLE_WAITING,
+    RESOURCE_STATE_IDLE_MOVING,
+    RESOURCE_STATE_IDLE_STUCK,
+    RESOURCE_STATE_BEING_DELIVERED,
+    
+    N_RESOURCE_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of resource (gold nugget, bridge fragment, spray ingredient, etc.).
  */

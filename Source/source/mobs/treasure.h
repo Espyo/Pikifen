@@ -15,15 +15,6 @@
 #include "mob.h"
 #include "pikmin.h"
 
-enum TREASURE_STATES {
-    TREASURE_STATE_IDLE_WAITING,
-    TREASURE_STATE_IDLE_MOVING,
-    TREASURE_STATE_IDLE_STUCK,
-    TREASURE_STATE_BEING_DELIVERED,
-    
-    N_TREASURE_STATES,
-};
-
 
 /* ----------------------------------------------------------------------------
  * "Treasure" is the catch-all term for the

@@ -15,6 +15,16 @@
 #include "mob_type.h"
 #include "pikmin_type.h"
 
+enum PELLET_STATES {
+    PELLET_STATE_IDLE_WAITING,
+    PELLET_STATE_IDLE_MOVING,
+    PELLET_STATE_IDLE_STUCK,
+    PELLET_STATE_BEING_DELIVERED,
+    
+    N_PELLET_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A pellet type. Contains info on
  * how many seeds the Onion should receive,

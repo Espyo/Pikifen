@@ -24,6 +24,13 @@ enum PILE_ANIMATIONS {
     N_PILE_ANIMS,
 };
 
+enum PILE_STATES {
+    PILE_STATE_IDLING,
+    
+    N_PILE_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of resource pile (gold nugget pile, Burgeoning Spiderwort, etc.).
  */
