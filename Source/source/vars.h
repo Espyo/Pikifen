@@ -60,7 +60,6 @@ extern ALLEGRO_BITMAP* bmp_checkbox_check;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_cursor_invalid;
 extern ALLEGRO_BITMAP* bmp_enemy_spirit;
-extern ALLEGRO_BITMAP* bmp_group_move_arrow;
 extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
 extern ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
@@ -76,6 +75,7 @@ extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
 extern ALLEGRO_BITMAP* bmp_spotlight;
+extern ALLEGRO_BITMAP* bmp_swarm_arrow;
 extern ALLEGRO_BITMAP* bmp_wave_ring;
 
 //Sound effects.
@@ -110,7 +110,7 @@ struct asset_file_names_struct {
     string counter_font;
     string editor_icons;
     string enemy_spirit;
-    string group_move_arrow;
+    string swarm_arrow;
     string icon;
     string idle_glow;
     string main_font;
@@ -263,20 +263,6 @@ extern int game_fps;
 extern string game_name;
 extern map<size_t, game_state*> game_states;
 extern string game_version;
-extern subgroup_type_manager subgroup_types;
-extern float group_move_angle;
-//Distance of the arrows that appear
-//when the "move group to cursor" button is held.
-extern vector<float> group_move_arrows;
-//General intensity of the group move in the specified angle.
-extern float group_move_magnitude;
-//Time remaining until the next arrow on the "move group arrows" appears.
-extern timer group_move_next_arrow_timer;
-//Is the "move group to cursor" button being pressed?
-extern bool group_move_cursor;
-extern float group_move_task_range;
-//Joystick coordinates for the group movement.
-extern movement_struct group_movement;
 extern vector<group_task*> group_tasks;
 extern map<string, group_task_type*> group_task_types;
 extern map<string, hazard> hazards;
@@ -398,6 +384,20 @@ extern vector<spray_type> spray_types;
 extern float standard_pikmin_height;
 extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
+extern subgroup_type_manager subgroup_types;
+extern float swarm_angle;
+//Distance of the arrows that appear
+//when the "swarm to cursor" button is held.
+extern vector<float> swarm_arrows;
+//General intensity of the swarm in the specified angle.
+extern float swarm_magnitude;
+//Time remaining until the next arrow on the list of swarm arrows appears.
+extern timer swarm_next_arrow_timer;
+//Is the "swarm to cursor" button being pressed?
+extern bool swarm_cursor;
+extern float swarm_task_range;
+//Joystick coordinates for swarming.
+extern movement_struct swarm_movement;
 extern bmp_manager textures;
 extern bool throw_can_reach_cursor;
 extern map<string, tool_type*> tool_types;

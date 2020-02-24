@@ -165,7 +165,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
  * pos:    The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
  *   For controls with more sensitivity, values between 0 and 1 are important.
- *   Like a 0.5 for the group movement makes it move at half distance.
+ *   Like a 0.5 for swarming makes the group swarm at half distance.
  * player: Number of the player that pressed.
  */
 void gameplay::handle_button(
@@ -236,18 +236,18 @@ void gameplay::handle_button(
             ******************/
             
             if(button == BUTTON_GROUP_RIGHT) {
-                group_movement.right = pos;
+                swarm_movement.right = pos;
             } else if(button == BUTTON_GROUP_LEFT) {
-                group_movement.left = pos;
+                swarm_movement.left = pos;
             } else if(button == BUTTON_GROUP_UP) {
-                group_movement.up = pos;
+                swarm_movement.up = pos;
             } else if(button == BUTTON_GROUP_DOWN) {
-                group_movement.down = pos;
+                swarm_movement.down = pos;
             }
             
         } else if(button == BUTTON_GROUP_CURSOR) {
         
-            group_move_cursor = is_down;
+            swarm_cursor = is_down;
             
         } else if(button == BUTTON_THROW) {
         

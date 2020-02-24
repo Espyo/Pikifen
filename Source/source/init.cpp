@@ -96,7 +96,6 @@ void init_asset_file_names() {
     asset_file_names.counter_font =      "Counter_font.png";
     asset_file_names.editor_icons =      "Editor_icons.png";
     asset_file_names.enemy_spirit =      "Enemy_spirit.png";
-    asset_file_names.group_move_arrow =  "Group_move_arrow.png";
     asset_file_names.icon =              "Icon.png";
     asset_file_names.idle_glow =         "Idle_glow.png";
     asset_file_names.main_font =         "Font.png";
@@ -113,6 +112,7 @@ void init_asset_file_names() {
     asset_file_names.smoke =             "Smoke.png";
     asset_file_names.sparkle =           "Sparkle.png";
     asset_file_names.spotlight =         "Spotlight.png";
+    asset_file_names.swarm_arrow =       "Swarm_arrow.png";
     asset_file_names.value_font =        "Value_font.png";
     asset_file_names.wave_ring =         "Wave_ring.png";
     
@@ -162,19 +162,19 @@ void init_controls() {
         BUTTON_CURSOR_DOWN, "Cursor down", "cursor_down", ""
     );
     buttons.add(
-        BUTTON_GROUP_RIGHT, "Group right", "group_right", ""
+        BUTTON_GROUP_RIGHT, "Swarm right", "swarm_right", ""
     );
     buttons.add(
-        BUTTON_GROUP_UP, "Group up", "group_up", ""
+        BUTTON_GROUP_UP, "Swarm up", "swarm_up", ""
     );
     buttons.add(
-        BUTTON_GROUP_LEFT, "Group left", "group_left", ""
+        BUTTON_GROUP_LEFT, "Swarm left", "swarm_left", ""
     );
     buttons.add(
-        BUTTON_GROUP_DOWN, "Group down", "group_down", ""
+        BUTTON_GROUP_DOWN, "Swarm down", "swarm_down", ""
     );
     buttons.add(
-        BUTTON_GROUP_CURSOR, "Group to cursor", "group_cursor", "k_75"
+        BUTTON_GROUP_CURSOR, "Swarm to cursor", "swarm_cursor", "k_75"
     );
     buttons.add(
         BUTTON_NEXT_LEADER, "Next leader", "next_leader", "k_64"
@@ -426,11 +426,11 @@ void init_misc() {
     };
     cursor_save_timer.start();
     
-    group_move_next_arrow_timer.on_end = [] () {
-        group_move_next_arrow_timer.start();
-        group_move_arrows.push_back(0);
+    swarm_next_arrow_timer.on_end = [] () {
+        swarm_next_arrow_timer.start();
+        swarm_arrows.push_back(0);
     };
-    group_move_next_arrow_timer.start();
+    swarm_next_arrow_timer.start();
     
     whistle_next_dot_timer.on_end = [] () {
         whistle_next_dot_timer.start();

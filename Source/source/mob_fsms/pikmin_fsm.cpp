@@ -69,8 +69,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
-            efc.change_state("group_move_chasing");
+        efc.new_event(MOB_EVENT_SWARM_STARTED); {
+            efc.change_state("swarm_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
@@ -110,8 +110,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
-            efc.change_state("group_move_chasing");
+        efc.new_event(MOB_EVENT_SWARM_STARTED); {
+            efc.change_state("swarm_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
@@ -137,9 +137,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("group_move_chasing", PIKMIN_STATE_GROUP_MOVE_CHASING); {
+    efc.new_state("swarm_chasing", PIKMIN_STATE_SWARM_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::set_swarm_reach);
             efc.run(pikmin_fsm::start_chasing_leader);
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
@@ -153,9 +153,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("grabbed_by_leader");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.change_state("group_move_stopped");
+            efc.change_state("swarm_stopped");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+        efc.new_event(MOB_EVENT_SWARM_ENDED); {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
@@ -205,9 +205,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("group_move_stopped", PIKMIN_STATE_GROUP_MOVE_STOPPED); {
+    efc.new_state("swarm_stopped", PIKMIN_STATE_SWARM_STOPPED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::set_swarm_reach);
             efc.run(pikmin_fsm::stop_in_group);
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
@@ -218,12 +218,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("grabbed_by_leader");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.change_state("group_move_stopped");
+            efc.change_state("swarm_stopped");
         }
         efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
-            efc.change_state("group_move_chasing");
+            efc.change_state("swarm_chasing");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+        efc.new_event(MOB_EVENT_SWARM_ENDED); {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
@@ -970,8 +970,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped_h");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
-            efc.change_state("group_move_chasing_h");
+        efc.new_event(MOB_EVENT_SWARM_STARTED); {
+            efc.change_state("swarm_chasing_h");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
@@ -1013,8 +1013,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
             efc.change_state("in_group_chasing_h");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
-            efc.change_state("group_move_chasing_h");
+        efc.new_event(MOB_EVENT_SWARM_STARTED); {
+            efc.change_state("swarm_chasing_h");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run(pikmin_fsm::be_dismissed);
@@ -1041,14 +1041,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("group_move_chasing_h", PIKMIN_STATE_GROUP_MOVE_CHASING_H); {
+    efc.new_state("swarm_chasing_h", PIKMIN_STATE_SWARM_CHASING_H); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::set_swarm_reach);
             efc.run(pikmin_fsm::start_chasing_leader);
         }
         efc.new_event(MOB_EVENT_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
-            efc.change_state("group_move_chasing");
+            efc.change_state("swarm_chasing");
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
@@ -1061,9 +1061,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("grabbed_by_leader_h");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.change_state("group_move_stopped_h");
+            efc.change_state("swarm_stopped_h");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+        efc.new_event(MOB_EVENT_SWARM_ENDED); {
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
@@ -1091,14 +1091,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("group_move_stopped_h", PIKMIN_STATE_GROUP_MOVE_STOPPED_H); {
+    efc.new_state("swarm_stopped_h", PIKMIN_STATE_SWARM_STOPPED_H); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::set_group_move_reach);
+            efc.run(pikmin_fsm::set_swarm_reach);
             efc.run(pikmin_fsm::stop_in_group);
         }
         efc.new_event(MOB_EVENT_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
-            efc.change_state("group_move_stopped");
+            efc.change_state("swarm_stopped");
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
@@ -1108,12 +1108,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("grabbed_by_leader_h");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.change_state("group_move_stopped_h");
+            efc.change_state("swarm_stopped_h");
         }
         efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
-            efc.change_state("group_move_chasing_h");
+            efc.change_state("swarm_chasing_h");
         }
-        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+        efc.new_event(MOB_EVENT_SWARM_ENDED); {
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
@@ -2320,18 +2320,18 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is meant to to change "reach" to the group move reach.
- */
-void pikmin_fsm::set_group_move_reach(mob* m, void* info1, void* info2) {
-    m->near_reach = 1;
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin is meant to to change "reach" to the idle task reach.
  */
 void pikmin_fsm::set_idle_task_reach(mob* m, void* info1, void* info2) {
     m->near_reach = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to to change "reach" to the swarm reach.
+ */
+void pikmin_fsm::set_swarm_reach(mob* m, void* info1, void* info2) {
+    m->near_reach = 1;
 }
 
 

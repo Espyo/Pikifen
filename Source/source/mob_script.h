@@ -124,10 +124,10 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_SPOT_IS_NEAR,
     //When its spot on the group is now far, and the mob is in the group.
     MOB_EVENT_SPOT_IS_FAR,
-    //When the group the mob is on started to move (C stick).
-    MOB_EVENT_GROUP_MOVE_STARTED,
-    //When the group the mob is on stopped moving (C stick).
-    MOB_EVENT_GROUP_MOVE_ENDED,
+    //When the group the mob is on started swarming..
+    MOB_EVENT_SWARM_STARTED,
+    //When the group the mob is on stopped swarming.
+    MOB_EVENT_SWARM_ENDED,
     //When the object the Pikmin was carrying gets delivered.
     MOB_EVENT_FINISHED_CARRYING,
     //When the Pikmin is near an object that can be carried.

@@ -173,24 +173,24 @@ void gameplay::draw_cursor(
 
     al_use_transform(&world_to_screen_drawing_transform);
     
-    size_t n_arrows = group_move_arrows.size();
+    size_t n_arrows = swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
-            cos(group_move_angle) * group_move_arrows[a],
-            sin(group_move_angle) * group_move_arrows[a]
+            cos(swarm_angle) * swarm_arrows[a],
+            sin(swarm_angle) * swarm_arrows[a]
         );
         float alpha =
             64 + min(
                 191,
                 (int) (
-                    191 * (group_move_arrows[a] / (cursor_max_dist * 0.4))
+                    191 * (swarm_arrows[a] / (cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
-            bmp_group_move_arrow,
+            bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
-            point(16 * (1 + group_move_arrows[a] / cursor_max_dist), -1),
-            group_move_angle,
+            point(16 * (1 + swarm_arrows[a] / cursor_max_dist), -1),
+            swarm_angle,
             map_alpha(alpha)
         );
     }

@@ -41,10 +41,10 @@ public:
     
     //Dismiss current group.
     void dismiss();
-    //Signal to every group member that a group-move started.
-    void signal_group_move_start();
-    //Signal to every group member that a group-move ended.
-    void signal_group_move_end();
+    //Signal to every group member that swarm mode started.
+    void signal_swarm_start();
+    //Signal to every group member that swarm mode ended.
+    void signal_swarm_end();
     //Start whistling.
     void start_whistling();
     //Stop whistling.

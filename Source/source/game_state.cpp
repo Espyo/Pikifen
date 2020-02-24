@@ -85,7 +85,7 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
  * pos:    The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
  *   For controls with more sensitivity, values between 0 and 1 are important.
- *   Like a 0.5 for the group movement makes it move at half distance.
+ *   Like a 0.5 for swarming makes the group swarm at half distance.
  * player: Number of the player that pressed.
  */
 void game_state::handle_menu_button(

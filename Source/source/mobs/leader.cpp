@@ -57,10 +57,10 @@ void leader::dismiss() {
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(group_move_magnitude > 0) {
-        //If the leader's moving the group,
+    if(swarm_magnitude > 0) {
+        //If the leader's swarming,
         //they should be dismissed in that direction.
-        base_angle = group_move_angle;
+        base_angle = swarm_angle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         point min_coords, max_coords;
@@ -409,21 +409,21 @@ size_t leader::get_dismiss_rows(const size_t n_members) {
 
 
 /* ----------------------------------------------------------------------------
- * Signals the group members that the group move mode stopped.
+ * Signals the group members that the swarm mode stopped.
  */
-void leader::signal_group_move_end() {
+void leader::signal_swarm_end() {
     for(size_t m = 0; m < group->members.size(); ++m) {
-        group->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_ENDED);
+        group->members[m]->fsm.run_event(MOB_EVENT_SWARM_ENDED);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Signals the group members that the group move mode started.
+ * Signals the group members that the swarm mode started.
  */
-void leader::signal_group_move_start() {
+void leader::signal_swarm_start() {
     for(size_t m = 0; m < group->members.size(); ++m) {
-        group->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_STARTED);
+        group->members[m]->fsm.run_event(MOB_EVENT_SWARM_STARTED);
     }
 }
 
@@ -534,8 +534,8 @@ void leader::tick_class_specifics() {
     
         bool must_reassign_spots = false;
         
-        bool is_moving_group =
-            (group_move_magnitude && cur_leader_ptr == this);
+        bool is_swarming =
+            (swarm_magnitude && cur_leader_ptr == this);
             
         if(
             dist(group->get_average_member_pos(), pos) >
@@ -546,7 +546,7 @@ void leader::tick_class_specifics() {
             }
             group->follow_mode = true;
             
-        } else if(is_moving_group || !holding.empty()) {
+        } else if(is_swarming || !holding.empty()) {
             group->follow_mode = true;
             
         } else {
@@ -559,29 +559,29 @@ void leader::tick_class_specifics() {
         if(group->follow_mode) {
             //Follow mode. Try to stay on the leader's back.
             
-            if(is_moving_group) {
+            if(is_swarming) {
             
                 point move_anchor_offset =
                     rotate_point(
                         point(
                             -(type->radius + GROUP_SPOT_INTERVAL * 2),
                             0
-                        ), group_move_angle + TAU / 2
+                        ), swarm_angle + TAU / 2
                     );
                 group->anchor = pos + move_anchor_offset;
                 
-                float intensity_dist = cursor_max_dist * group_move_magnitude;
+                float intensity_dist = cursor_max_dist * swarm_magnitude;
                 al_translate_transform(
-                    &group->transform, -GROUP_MOVE_MARGIN, 0
+                    &group->transform, -SWARM_MARGIN, 0
                 );
                 al_scale_transform(
                     &group->transform,
                     intensity_dist / (group->radius * 2),
-                    1 - (GROUP_MOVE_VERTICAL_SCALE * group_move_magnitude)
+                    1 - (SWARM_VERTICAL_SCALE * swarm_magnitude)
                 );
                 al_rotate_transform(
                     &group->transform,
-                    group_move_angle + TAU / 2
+                    swarm_angle + TAU / 2
                 );
                 
             } else {

@@ -18,7 +18,7 @@ standard_pikmin_radius = 5
 leader_order = Olimar;Louie;President
 
 idle_task_range = 50
-group_move_task_range = 0
+swarm_task_range = 0
 pikmin_chase_range = 200
 max_pikmin_in_field = 100
 maturity_power_mult = 0.1

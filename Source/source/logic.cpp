@@ -33,22 +33,22 @@ void gameplay::do_aesthetic_logic() {
     *                               `-´  *
     **************************************/
     
-    //"Move group" arrows.
-    if(group_move_magnitude) {
-        group_move_next_arrow_timer.tick(delta_t);
+    //Swarming arrows.
+    if(swarm_magnitude) {
+        swarm_next_arrow_timer.tick(delta_t);
     }
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-    for(size_t a = 0; a < group_move_arrows.size(); ) {
-        group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
+    for(size_t a = 0; a < swarm_arrows.size(); ) {
+        swarm_arrows[a] += SWARM_ARROW_SPEED * delta_t;
         
         dist max_dist =
-            (group_move_magnitude > 0) ?
-            cursor_max_dist * group_move_magnitude :
+            (swarm_magnitude > 0) ?
+            cursor_max_dist * swarm_magnitude :
             leader_to_cursor_dist;
             
-        if(max_dist < group_move_arrows[a]) {
-            group_move_arrows.erase(group_move_arrows.begin() + a);
+        if(max_dist < swarm_arrows[a]) {
+            swarm_arrows.erase(swarm_arrows.begin() + a);
         } else {
             a++;
         }
@@ -452,31 +452,31 @@ void gameplay::do_gameplay_logic() {
             update_closest_group_member();
         }
         
-        float old_group_move_magnitude = group_move_magnitude;
-        point group_move_coords;
-        float new_group_move_angle;
-        group_movement.get_clean_info(
-            &group_move_coords, &new_group_move_angle, &group_move_magnitude
+        float old_swarm_magnitude = swarm_magnitude;
+        point swarm_coords;
+        float new_swarm_angle;
+        swarm_movement.get_clean_info(
+            &swarm_coords, &new_swarm_angle, &swarm_magnitude
         );
-        if(group_move_magnitude > 0) {
+        if(swarm_magnitude > 0) {
             //This stops arrows that were fading away to the left from
             //turning to angle 0 because the magnitude reached 0.
-            group_move_angle = new_group_move_angle;
+            swarm_angle = new_swarm_angle;
         }
         
-        if(group_move_cursor) {
-            group_move_angle = cursor_angle;
+        if(swarm_cursor) {
+            swarm_angle = cursor_angle;
             float leader_to_cursor_dist =
                 dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
-            group_move_magnitude =
+            swarm_magnitude =
                 leader_to_cursor_dist / cursor_max_dist;
         }
         
-        if(old_group_move_magnitude != group_move_magnitude) {
-            if(group_move_magnitude != 0) {
-                cur_leader_ptr->signal_group_move_start();
+        if(old_swarm_magnitude != swarm_magnitude) {
+            if(swarm_magnitude != 0) {
+                cur_leader_ptr->signal_swarm_start();
             } else {
-                cur_leader_ptr->signal_group_move_end();
+                cur_leader_ptr->signal_swarm_end();
             }
         }
         

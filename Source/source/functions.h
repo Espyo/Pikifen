@@ -65,8 +65,8 @@
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range(p) \
-    (((p)->following_group == cur_leader_ptr && group_move_magnitude) ? \
-     group_move_task_range : idle_task_range)
+    (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
+     swarm_task_range : idle_task_range)
 
 
 

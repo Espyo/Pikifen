@@ -45,10 +45,10 @@ pikmin_type::pikmin_type() :
     idle_attack_reach.angle_1 = TAU;
     idle_attack_reach.radius_1 = idle_task_range;
     reaches.push_back(idle_attack_reach);
-    mob_type::reach_struct group_move_attack_reach;
-    group_move_attack_reach.angle_1 = TAU;
-    group_move_attack_reach.radius_1 = group_move_task_range;
-    reaches.push_back(group_move_attack_reach);
+    mob_type::reach_struct swarm_attack_reach;
+    swarm_attack_reach.angle_1 = TAU;
+    swarm_attack_reach.radius_1 = swarm_task_range;
+    reaches.push_back(swarm_attack_reach);
     mob_type::reach_struct chase_reach;
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = pikmin_chase_range;

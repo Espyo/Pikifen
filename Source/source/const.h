@@ -73,16 +73,6 @@ const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 const size_t FRAMERATE_HISTORY_SIZE = 300;
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
-//"Move group" arrows move these many units per second.
-const float GROUP_MOVE_ARROW_SPEED = 400.0f;
-//Seconds that need to pass before another "move group" arrow appears.
-const float GROUP_MOVE_ARROWS_INTERVAL = 0.1f;
-//Put this space between the leader and the "main" member of the group,
-//when using group moving.
-const float GROUP_MOVE_MARGIN = 8.0f;
-//When group moving, the group can scale this much vertically.
-//Basically, the tube shape's girth can reach this scale.
-const float GROUP_MOVE_VERTICAL_SCALE = 0.5f;
 //If there's less than this much gap between the leader and group,
 //then the group's Pikmin should shuffle a bit to keep up with the leader.
 const float GROUP_SHUFFLE_DIST = 40.0f;
@@ -116,6 +106,16 @@ const unsigned int SHIP_BEAM_RING_COLOR_SPEED = 255;
 const float SMACK_PARTICLE_DUR = 0.1f;
 //The Sun Meter's sun spins these many radians per second.
 const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
+//Swarming arrows move these many units per second.
+const float SWARM_ARROW_SPEED = 400.0f;
+//Seconds that need to pass before another swarm arrow appears.
+const float SWARM_ARROWS_INTERVAL = 0.1f;
+//Put this space between the leader and the "main" member of the group,
+//when using swarming.
+const float SWARM_MARGIN = 8.0f;
+//When swarming, the group can scale this much vertically.
+//Basically, the tube shape's girth can reach this scale.
+const float SWARM_VERTICAL_SCALE = 0.5f;
 //Tree shadows sway this much away from their neutral position.
 const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
 //Tree shadows sway this much per second (TAU = full back-and-forth cycle).

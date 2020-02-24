@@ -486,7 +486,6 @@ void load_asset_file_names() {
     rs.set("counter_font", asset_file_names.counter_font);
     rs.set("editor_icons", asset_file_names.editor_icons);
     rs.set("enemy_spirit", asset_file_names.enemy_spirit);
-    rs.set("group_move_arrow", asset_file_names.group_move_arrow);
     rs.set("icon", asset_file_names.icon);
     rs.set("idle_glow", asset_file_names.idle_glow);
     rs.set("main_font", asset_file_names.main_font);
@@ -502,6 +501,7 @@ void load_asset_file_names() {
     rs.set("smoke", asset_file_names.smoke);
     rs.set("sparkle", asset_file_names.sparkle);
     rs.set("spotlight", asset_file_names.spotlight);
+    rs.set("swarm_arrow", asset_file_names.swarm_arrow);
     rs.set("value_font", asset_file_names.value_font);
     rs.set("wave_ring", asset_file_names.wave_ring);
     
@@ -830,7 +830,7 @@ void load_game_config() {
     rs.set("leader_order", leader_order_string);
     
     rs.set("idle_task_range", idle_task_range);
-    rs.set("group_move_task_range", group_move_task_range);
+    rs.set("swarm_task_range", swarm_task_range);
     rs.set("pikmin_chase_range", pikmin_chase_range);
     rs.set("max_pikmin_in_field", max_pikmin_in_field);
     rs.set("maturity_power_mult", maturity_power_mult);
@@ -968,7 +968,6 @@ void load_misc_graphics() {
     bmp_mouse_wd_icon = load_bmp(    asset_file_names.mouse_wd_icon);
     bmp_mouse_wu_icon = load_bmp(    asset_file_names.mouse_wu_icon);
     bmp_notification = load_bmp(     asset_file_names.notification);
-    bmp_group_move_arrow = load_bmp( asset_file_names.group_move_arrow);
     bmp_pikmin_silhouette = load_bmp(asset_file_names.pikmin_silhouette);
     bmp_pikmin_spirit = load_bmp(    asset_file_names.pikmin_spirit);
     bmp_rock = load_bmp(             asset_file_names.rock);
@@ -977,6 +976,7 @@ void load_misc_graphics() {
     bmp_smoke = load_bmp(            asset_file_names.smoke);
     bmp_sparkle = load_bmp(          asset_file_names.sparkle);
     bmp_spotlight = load_bmp(        asset_file_names.spotlight);
+    bmp_swarm_arrow = load_bmp(      asset_file_names.swarm_arrow);
     bmp_wave_ring = load_bmp(        asset_file_names.wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] =
@@ -1542,17 +1542,20 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_enemy_spirit);
     al_destroy_bitmap(bmp_icon);
     al_destroy_bitmap(bmp_idle_glow);
+    al_destroy_bitmap(bmp_mouse_cursor);
     al_destroy_bitmap(bmp_mouse_wd_icon);
     al_destroy_bitmap(bmp_mouse_wu_icon);
-    al_destroy_bitmap(bmp_mouse_cursor);
     al_destroy_bitmap(bmp_notification);
-    al_destroy_bitmap(bmp_group_move_arrow);
+    al_destroy_bitmap(bmp_pikmin_silhouette);
     al_destroy_bitmap(bmp_pikmin_spirit);
     al_destroy_bitmap(bmp_rock);
     al_destroy_bitmap(bmp_shadow);
     al_destroy_bitmap(bmp_smack);
     al_destroy_bitmap(bmp_smoke);
     al_destroy_bitmap(bmp_sparkle);
+    al_destroy_bitmap(bmp_spotlight);
+    al_destroy_bitmap(bmp_swarm_arrow);
+    al_destroy_bitmap(bmp_wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
         bitmaps.detach(bmp_mouse_button_icon[i]);
     }
