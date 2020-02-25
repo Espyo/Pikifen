@@ -50,21 +50,24 @@ void load_area(
             AREAS_FOLDER_PATH + "/" + name + "/Data.txt";
     }
     
-    data_node data_file = load_data_file(data_file_name);
+    //First, load the area's configuration data.
+    data_node data_file(data_file_name);
+    reader_setter rs(&data_file);
     
-    cur_area_data.name =
-        data_file.get_child_by_name("name")->get_value_or_default(name);
-    cur_area_data.subtitle =
-        data_file.get_child_by_name("subtitle")->value;
-    cur_area_data.creator =
-        data_file.get_child_by_name("creator")->value;
-    cur_area_data.version =
-        data_file.get_child_by_name("version")->value;
-    cur_area_data.notes =
-        data_file.get_child_by_name("notes")->value;
-    cur_area_data.spray_amounts =
-        data_file.get_child_by_name("spray_amounts")->value;
-        
+    data_node* weather_node;
+    
+    rs.set("name", cur_area_data.name);
+    rs.set("subtitle", cur_area_data.subtitle);
+    rs.set("creator", cur_area_data.creator);
+    rs.set("version", cur_area_data.version);
+    rs.set("notes", cur_area_data.notes);
+    rs.set("spray_amounts", cur_area_data.spray_amounts);
+    rs.set("weather", cur_area_data.weather_name, &weather_node);
+    rs.set("bg_bmp", cur_area_data.bg_bmp_file_name);
+    rs.set("bg_color", cur_area_data.bg_color);
+    rs.set("bg_dist", cur_area_data.bg_dist);
+    rs.set("bg_zoom", cur_area_data.bg_bmp_zoom);
+    
     if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
     if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
     loading_text_bmp = NULL;
@@ -73,7 +76,6 @@ void load_area(
     draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
     al_flip_display();
     
-    cur_area_data.weather_name = data_file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
     
         if(cur_area_data.weather_name.empty()) {
@@ -87,7 +89,7 @@ void load_area(
                 "Area " + name +
                 " refers to a non-existing weather condition, \"" +
                 cur_area_data.weather_name + "\"!",
-                &data_file
+                weather_node
             );
             cur_area_data.weather_condition = weather();
             
@@ -98,20 +100,13 @@ void load_area(
         }
     }
     
-    cur_area_data.bg_bmp_file_name =
-        data_file.get_child_by_name("bg_bmp")->value;
     if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
         cur_area_data.bg_bmp =
             textures.get(cur_area_data.bg_bmp_file_name, &data_file);
     }
-    cur_area_data.bg_color =
-        s2c(data_file.get_child_by_name("bg_color")->value);
-    cur_area_data.bg_dist =
-        s2f(data_file.get_child_by_name("bg_dist")->get_value_or_default("2"));
-    cur_area_data.bg_bmp_zoom =
-        s2f(data_file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
-        
-        
+    
+    
+    //Time to load the geometry.
     data_node geometry_file = load_data_file(geometry_file_name);
     
     //Vertexes.
@@ -618,22 +613,24 @@ void load_creator_tools() {
         }
     }
     
-    creator_tool_area_image_mobs =
-        s2b(file.get_child_by_name("area_image_mobs")->value);
-    creator_tool_area_image_shadows =
-        s2b(file.get_child_by_name("area_image_shadows")->value);
-    creator_tool_area_image_size =
-        s2i(file.get_child_by_name("area_image_size")->value);
-    creator_tool_change_speed_mult =
-        s2f(file.get_child_by_name("change_speed_multiplier")->value);
-    creator_tool_mob_hurting_ratio =
-        s2f(file.get_child_by_name("mob_hurting_percentage")->value) / 100;
-        
-    creator_tool_auto_start_option =
-        file.get_child_by_name("auto_start_option")->value;
-    creator_tool_auto_start_mode =
-        file.get_child_by_name("auto_start_mode")->value;
-        
+    reader_setter rs(&file);
+    
+    data_node* mob_hurting_percentage_node;
+    
+    rs.set("area_image_mobs", creator_tool_area_image_mobs);
+    rs.set("area_image_shadows", creator_tool_area_image_shadows);
+    rs.set("area_image_size", creator_tool_area_image_size);
+    rs.set("change_speed_multiplier", creator_tool_change_speed_mult);
+    rs.set(
+        "mob_hurting_percentage", creator_tool_mob_hurting_ratio,
+        &mob_hurting_percentage_node
+    );
+    rs.set("auto_start_option", creator_tool_auto_start_option);
+    rs.set("auto_start_mode", creator_tool_auto_start_mode);
+    
+    if(mob_hurting_percentage_node) {
+        creator_tool_mob_hurting_ratio /= 100.0;
+    }
 }
 
 
@@ -1164,28 +1161,34 @@ void load_spike_damage_types() {
     for(size_t t = 0; t < n_types; ++t) {
         data_node* type_node = types_file.get_child(t);
         spike_damage_type s_type;
-        
         s_type.name = type_node->name;
-        s_type.damage =
-            s2f(type_node->get_child_by_name("damage")->value);
-        s_type.ingestion_only =
-            s2b(type_node->get_child_by_name("ingestion_only")->value);
-        s_type.is_damage_ratio =
-            s2b(type_node->get_child_by_name("is_damage_ratio")->value);
-            
-        data_node* pg_node = type_node->get_child_by_name("particle_generator");
-        string pg_name = pg_node->value;
-        if(!pg_name.empty()) {
+        
+        reader_setter rs(type_node);
+        
+        string particle_generator_name;
+        data_node* damage_node;
+        data_node* particle_generator_node;
+        
+        rs.set("damage", s_type.damage, &damage_node);
+        rs.set("ingestion_only", s_type.ingestion_only);
+        rs.set("is_damage_ratio", s_type.is_damage_ratio);
+        rs.set(
+            "particle_generator", particle_generator_name,
+            &particle_generator_node
+        );
+        
+        if(particle_generator_node) {
             if(
-                custom_particle_generators.find(pg_name) ==
+                custom_particle_generators.find(particle_generator_name) ==
                 custom_particle_generators.end()
             ) {
                 log_error(
                     "Unknown particle generator \"" +
-                    pg_name + "\"!", pg_node
+                    particle_generator_name + "\"!", particle_generator_node
                 );
             } else {
-                s_type.particle_gen = &custom_particle_generators[pg_name];
+                s_type.particle_gen =
+                    &custom_particle_generators[particle_generator_name];
                 s_type.particle_offset_pos =
                     s2p(
                         type_node->get_child_by_name("particle_offset")->value,
@@ -1198,7 +1201,7 @@ void load_spike_damage_types() {
             log_error(
                 "Spike damage type \"" + s_type.name +
                 "\" needs a damage number!",
-                type_node
+                (damage_node ? damage_node : type_node)
             );
         }
         
