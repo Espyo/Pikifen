@@ -36,7 +36,7 @@ public:
     resource(const point &pos, resource_type* type, const float angle);
     
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
 };
 
 #endif //ifndef RESOURCE_INCLUDED

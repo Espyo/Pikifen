@@ -67,7 +67,7 @@ public:
     //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s);
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
     //Get the base movement speed.
     virtual float get_base_speed();
     //Handler for when there is no longer any status effect-induced panic.

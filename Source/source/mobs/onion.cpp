@@ -231,26 +231,15 @@ void onion::tick_class_specifics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Draws an Onion.
  */
-void onion::draw_mob(bitmap_effect_manager* effect_manager) {
+void onion::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
     
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
-    bitmap_effect_manager effects;
-    add_sector_brightness_bitmap_effect(&effects);
+    eff.tint_color.a *= (seethrough / 255.0f);
     
-    bitmap_effect seethrough_effect;
-    bitmap_effect_props seethrough_effect_props;
-    seethrough_effect_props.tint_color = al_map_rgba(255, 255, 255, seethrough);
-    seethrough_effect.add_keyframe(0, seethrough_effect_props);
-    effects.add_effect(seethrough_effect);
-    
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, &effects
-    );
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }

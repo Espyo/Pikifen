@@ -371,24 +371,31 @@ void leader::swap_held_pikmin(mob* new_pik) {
 /* ----------------------------------------------------------------------------
  * Draw a leader mob.
  */
-void leader::draw_mob(bitmap_effect_manager* effect_manager) {
+void leader::draw_mob() {
     mob::draw_mob();
     
     sprite* s_ptr = anim.get_cur_sprite();
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
+    if(!s_ptr) return;
+    
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s = spark_animation.instance.get_cur_sprite();
+        
         if(spark_s && spark_s->bitmap) {
-            draw_bitmap(
-                spark_s->bitmap, draw_pos,
-                draw_size
+            bitmap_effect_info spark_eff = eff;
+            point size(
+                al_get_bitmap_width(s_ptr->bitmap) * eff.scale.x,
+                al_get_bitmap_height(s_ptr->bitmap) * eff.scale.y
             );
+            spark_eff.scale.x = size.x / al_get_bitmap_width(spark_s->bitmap);
+            spark_eff.scale.y = size.y / al_get_bitmap_height(spark_s->bitmap);
+            draw_bitmap_with_effects(spark_s->bitmap, spark_eff);
         }
     }
     
-    draw_status_effect_bmp(this, NULL);
+    draw_status_effect_bmp(this, eff);
 }
 
 

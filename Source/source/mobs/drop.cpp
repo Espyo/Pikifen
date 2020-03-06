@@ -12,6 +12,7 @@
 
 #include "drop.h"
 
+#include "../drawing.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -31,22 +32,16 @@ drop::drop(const point &pos, drop_type* dro_type, const float angle) :
  * Draws a drop, but with its size reflecting the doses left or
  * the process of vanishing.
  */
-void drop::draw_mob(bitmap_effect_manager* effect_manager) {
-    bitmap_effect_manager internal_manager;
-    if(!effect_manager) {
-        effect_manager = &internal_manager;
-    }
+void drop::draw_mob() {
+    sprite* s_ptr = anim.get_cur_sprite();
+    if(!s_ptr) return;
     
-    bitmap_effect_props shrink_effect_props;
-    shrink_effect_props.scale.x = cur_scale;
-    shrink_effect_props.scale.y = cur_scale;
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
-    bitmap_effect shrink_effect;
-    shrink_effect.add_keyframe(0, shrink_effect_props);
+    eff.scale *= cur_scale;
     
-    effect_manager->add_effect(shrink_effect);
-    
-    mob::draw_mob(effect_manager);
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
 
 

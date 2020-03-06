@@ -11,6 +11,7 @@
 #include "resource.h"
 
 #include "../drawing.h"
+#include "../functions.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -27,26 +28,23 @@ resource::resource(const point &pos, resource_type* type, const float angle) :
 /* ----------------------------------------------------------------------------
  * Draws a resource.
  */
-void resource::draw_mob(bitmap_effect_manager* effect_manager) {
+void resource::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
+    bitmap_effect_info eff;
+    ALLEGRO_COLOR delivery_color = map_gray(0);
+    float delivery_time_ratio_left = LARGE_FLOAT;
     
-    bitmap_effect_manager effects;
-    add_sector_brightness_bitmap_effect(&effects);
-    
-    if(fsm.cur_state->id == RESOURCE_STATE_BEING_DELIVERED) {
-        add_delivery_bitmap_effect(
-            &effects, script_timer.get_ratio_left(),
-            carrying_color_move
-        );
+    if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
+        delivery_color = carrying_color_move;
+        delivery_time_ratio_left = script_timer.get_ratio_left();
     }
     
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, &effects
+    get_sprite_bitmap_effects(
+        s_ptr, &eff, true, true,
+        delivery_time_ratio_left, delivery_color
     );
+    
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }

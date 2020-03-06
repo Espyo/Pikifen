@@ -33,7 +33,7 @@ public:
     //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s);
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
     //Death class-specific logic.

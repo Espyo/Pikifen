@@ -252,9 +252,9 @@ public:
     
     
     void tick(const float delta_t);
-    void draw(bitmap_effect_manager* effect_manager = NULL);
-    void draw_limb(bitmap_effect_manager* effect_manager = NULL);
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    void draw();
+    void draw_limb();
+    virtual void draw_mob();
     
     void set_animation(
         const size_t nr,
@@ -355,7 +355,6 @@ public:
     );
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
-    void add_status_bitmap_effects(bitmap_effect_manager* manager);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
     virtual void handle_status_effect(status_type* s);
@@ -366,13 +365,14 @@ public:
     void stop_track_ride();
     
     //Drawing tools.
-    point get_sprite_center(sprite* s);
-    point get_sprite_dimensions(sprite* s, float* scale = NULL);
-    void add_sector_brightness_bitmap_effect(bitmap_effect_manager* manager);
-    void add_delivery_bitmap_effect(
-        bitmap_effect_manager* manager, const float delivery_time_ratio_left,
-        const ALLEGRO_COLOR &onion_color
+    void get_sprite_bitmap_effects(
+        sprite* s_ptr, bitmap_effect_info* info,
+        const bool add_status, const bool add_sector_brightness,
+        const float delivery_time_ratio_left = LARGE_FLOAT,
+        const ALLEGRO_COLOR &delivery_color = al_map_rgb(0, 0, 0)
     );
+    point get_sprite_center(sprite* s);
+    point get_sprite_dimensions(sprite* s, point* scale = NULL);
     
     string print_state_history();
     

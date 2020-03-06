@@ -34,7 +34,7 @@ public:
     drop(const point &pos, drop_type* dro_type, const float angle);
     
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
     
 protected:
     //Tick class-specific logic.

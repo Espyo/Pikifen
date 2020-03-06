@@ -33,34 +33,27 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
 /* ----------------------------------------------------------------------------
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
-void enemy::draw_mob(bitmap_effect_manager* effect_manager) {
+void enemy::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
-    
-    bitmap_effect_manager effects;
+    bitmap_effect_info eff;
+    ALLEGRO_COLOR delivery_color = map_gray(0);
+    float delivery_time_ratio_left = LARGE_FLOAT;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        onion* o_ptr = ((onion*) focused_mob);
-        add_delivery_bitmap_effect(
-            &effects, script_timer.get_ratio_left(),
-            o_ptr->oni_type->pik_type->main_color
-        );
+        delivery_color = ((onion*) focused_mob)->oni_type->pik_type->main_color;
+        delivery_time_ratio_left = script_timer.get_ratio_left();
     }
     
-    add_status_bitmap_effects(&effects);
-    add_sector_brightness_bitmap_effect(&effects);
-    
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, &effects
+    get_sprite_bitmap_effects(
+        s_ptr, &eff, true, true,
+        delivery_time_ratio_left, delivery_color
     );
     
-    draw_status_effect_bmp(this, &effects);
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
     
+    draw_status_effect_bmp(this, eff);
 }
 
 

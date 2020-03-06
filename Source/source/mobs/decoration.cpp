@@ -61,29 +61,20 @@ decoration::decoration(
  * Draws a decorative object. This is responsible for randomly tinting it,
  * rotating it, etc.
  */
-void decoration::draw_mob(bitmap_effect_manager* effect_manager) {
-
+void decoration::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
-    bitmap_effect_manager effects;
-    add_sector_brightness_bitmap_effect(&effects);
+    eff.tint_color.r *= individual_tint.r;
+    eff.tint_color.g *= individual_tint.g;
+    eff.tint_color.b *= individual_tint.b;
+    eff.tint_color.a *= individual_tint.a;
     
-    bitmap_effect individual_randomness_effect;
-    bitmap_effect_props props;
-    props.tint_color = individual_tint;
-    props.scale = point(individual_scale, individual_scale);
-    props.rotation = individual_rotation;
-    individual_randomness_effect.add_keyframe(0, props);
-    effects.add_effect(individual_randomness_effect);
+    eff.scale *= individual_scale;
+    eff.rotation += individual_rotation;
     
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, &effects
-    );
-    
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }

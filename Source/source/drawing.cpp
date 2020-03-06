@@ -1483,11 +1483,15 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             
         } else if(c_ptr->mob_limb_ptr) {
         
-            c_ptr->mob_limb_ptr->draw_limb();
+            if(!c_ptr->mob_limb_ptr->hide) {
+                c_ptr->mob_limb_ptr->draw_limb();
+            }
             
         } else if(c_ptr->mob_ptr) {
         
-            c_ptr->mob_ptr->draw();
+            if(!c_ptr->mob_ptr->hide) {
+                c_ptr->mob_ptr->draw_mob();
+            }
             
         } else if(c_ptr->particle_ptr) {
         
@@ -1709,48 +1713,30 @@ void draw_bitmap_in_box(
 
 /* ----------------------------------------------------------------------------
  * Draws a bitmap, applying bitmap effects.
- * bmp:      The bitmap.
- * center:   Center coordinates.
- * size:     Final width and height.
- *   Make this -1 on one of them to keep the aspect ratio from the other.
- * angle:    Angle to rotate the bitmap by.
- * effects:  Bitmap effect manager with the effects.
- *   If NULL, no effects are used.
+ * bmp:     The bitmap.
+ * effects: Effects to use.
  */
 void draw_bitmap_with_effects(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, const float angle,
-    bitmap_effect_manager* effects
+    ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
 ) {
 
     if(!bmp) {
         bmp = bmp_error;
     }
     
-    bitmap_effect_props final_props;
-    if(effects) {
-        final_props = effects->get_final_properties();
-    }
-    
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
-    point scale(
-        (size.x / bmp_size.x) * final_props.scale.x,
-        (size.y / bmp_size.y) * final_props.scale.y
-    );
-    point final_pos = center + final_props.translation;
-    float final_angle = angle + final_props.rotation;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
-        final_props.tint_color,
+        effects.tint_color,
         bmp_size.x / 2, bmp_size.y / 2,
-        final_pos.x, final_pos.y,
-        (size.x == -1) ? scale.y : scale.x,
-        (size.y == -1) ? scale.x : scale.y,
-        final_angle,
+        effects.translation.x, effects.translation.y,
+        (effects.scale.x == -1) ? effects.scale.y : effects.scale.x,
+        (effects.scale.y == -1) ? effects.scale.x : effects.scale.y,
+        effects.rotation,
         0
     );
     
-    if(final_props.glow_color.a > 0) {
+    if(effects.glow_color.a > 0) {
         int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
         al_get_separate_blender(
             &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
@@ -1758,12 +1744,12 @@ void draw_bitmap_with_effects(
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
         al_draw_tinted_scaled_rotated_bitmap(
             bmp,
-            final_props.glow_color,
+            effects.glow_color,
             bmp_size.x / 2, bmp_size.y / 2,
-            final_pos.x, final_pos.y,
-            (size.x == -1) ? scale.y : scale.x,
-            (size.y == -1) ? scale.x : scale.y,
-            final_angle,
+            effects.translation.x, effects.translation.y,
+            (effects.scale.x == -1) ? effects.scale.y : effects.scale.x,
+            (effects.scale.y == -1) ? effects.scale.x : effects.scale.y,
+            effects.rotation,
             0
         );
         al_set_separate_blender(
@@ -2925,17 +2911,20 @@ void draw_sector_texture(
 /* ----------------------------------------------------------------------------
  * Draws a status effect's bitmap.
  */
-void draw_status_effect_bmp(mob* m, bitmap_effect_manager* effects) {
+void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
-    if(status_bmp) {
-        draw_bitmap_with_effects(
-            status_bmp,
-            m->pos,
-            point(m->type->radius * 2 * status_bmp_scale, -1),
-            0, effects
-        );
-    }
+    
+    if(!status_bmp) return;
+    bitmap_effect_info status_eff = effects;
+    status_eff.translation = m->pos;
+    status_eff.scale.x =
+        (m->type->radius * 2 * status_bmp_scale) /
+        al_get_bitmap_width(status_bmp);
+    status_eff.scale.y = -1;
+    status_eff.rotation = 0;
+    
+    draw_bitmap_with_effects(status_bmp, status_eff);
 }
 
 

@@ -153,69 +153,54 @@ void pikmin::tick_class_specifics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
-void pikmin::draw_mob(bitmap_effect_manager* effect_manager) {
-
+void pikmin::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
-    
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
+    //The Pikmin itself.
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
         fsm.cur_state->id == PIKMIN_STATE_IDLING_H ||
         fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
-    bitmap_effect_manager effects;
-    add_sector_brightness_bitmap_effect(&effects);
-    add_status_bitmap_effects(&effects);
-    
     if(is_idle) {
-        bitmap_effect idle_effect;
-        bitmap_effect_props idle_effect_props;
-        idle_effect_props.glow_color = al_map_rgb(255, 255, 255);
-        idle_effect.add_keyframe(0, idle_effect_props);
-        effects.add_effect(idle_effect);
+        eff.glow_color = al_map_rgb(255, 255, 255);
     }
     
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, &effects
-    );
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
     
+    //Top.
     if(s_ptr->top_visible) {
-        point top_pos;
-        top_pos = rotate_point(s_ptr->top_pos, angle);
-        draw_bitmap_with_effects(
-            pik_type->bmp_top[maturity],
-            pos + top_pos,
-            s_ptr->top_size,
-            angle + s_ptr->top_angle,
-            &effects
-        );
+        bitmap_effect_info top_eff = eff;
+        ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
+        top_eff.translation = pos + rotate_point(s_ptr->top_pos, angle);
+        top_eff.scale.x = s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
+        top_eff.scale.y = s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
+        top_eff.rotation += s_ptr->top_angle;
+        top_eff.glow_color = map_gray(0);
+        
+        draw_bitmap_with_effects(top_bmp, top_eff);
     }
     
+    //Idle glow.
     if(is_idle) {
-        draw_bitmap(
-            bmp_idle_glow,
-            pos,
-            point(standard_pikmin_radius * 8, standard_pikmin_radius * 8),
-            area_time_passed * IDLE_GLOW_SPIN_SPEED,
-            type->main_color
-        );
+        bitmap_effect_info idle_eff = eff;
+        idle_eff.translation = pos;
+        idle_eff.scale.x =
+            (standard_pikmin_radius * 8) / al_get_bitmap_width(bmp_idle_glow);
+        idle_eff.scale.y =
+            (standard_pikmin_radius * 8) / al_get_bitmap_height(bmp_idle_glow);
+        idle_eff.rotation = area_time_passed * IDLE_GLOW_SPIN_SPEED;
+        idle_eff.tint_color = type->main_color;
+        idle_eff.glow_color = map_gray(0);
+        
+        draw_bitmap_with_effects(bmp_idle_glow, idle_eff);
     }
     
-    float status_bmp_scale;
-    ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
-    if(status_bmp) {
-        draw_bitmap(
-            status_bmp, pos,
-            point(type->radius * 2 * status_bmp_scale, -1)
-        );
-    }
-    
+    draw_status_effect_bmp(this, eff);
 }
 
 

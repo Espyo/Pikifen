@@ -37,7 +37,7 @@ public:
     decoration(const point &pos, decoration_type* dec_type, const float angle);
     
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
 };
 
 #endif //ifndef DECORATION_INCLUDED

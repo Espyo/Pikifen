@@ -344,51 +344,16 @@ struct spike_damage_type {
 
 
 /* ----------------------------------------------------------------------------
- * Holds information about how a sprite should be resized, colored, etc.,
- * over time, right before it is drawn to the screen.
+ * Contains information on how a bitmap should be drawn, in regards to
+ * translation, rotation, coloring, etc.
  */
-struct bitmap_effect_props {
+struct bitmap_effect_info {
     point translation;
     float rotation;
     point scale;
     ALLEGRO_COLOR tint_color;
     ALLEGRO_COLOR glow_color;
-    
-    bitmap_effect_props();
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * A full bitmap effect. It is made of several properties, and has the
- * information necessary to interpolate the properties' values over time.
- * If an effect only has one keyframe, no interpolations are made.
- */
-struct bitmap_effect {
-private:
-    map<float, bitmap_effect_props> keyframes;
-    float cur_time;
-    
-public:
-    void add_keyframe(const float time, const bitmap_effect_props &props);
-    void set_cur_time(const float cur_time);
-    bitmap_effect_props get_final_properties();
-    
-    bitmap_effect();
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * Holds several bitmap effect structs.
- */
-struct bitmap_effect_manager {
-private:
-    vector<bitmap_effect> effects;
-    
-public:
-    void add_effect(bitmap_effect e);
-    bitmap_effect_props get_final_properties();
+    bitmap_effect_info();
 };
 
 

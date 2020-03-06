@@ -37,7 +37,7 @@ public:
     ship(const point &pos, ship_type* type, float angle);
     
     //Mob drawing routine.
-    virtual void draw_mob(bitmap_effect_manager* effect_manager = NULL);
+    virtual void draw_mob();
 };
 
 #endif //ifndef SHIP_INCLUDED

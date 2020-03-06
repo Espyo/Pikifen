@@ -109,77 +109,6 @@ mob::~mob() {
 
 
 /* ----------------------------------------------------------------------------
- * Adds a bitmap effect to the manager, responsible for color
- * and scaling the mob when it is being delivered to an Onion.
- */
-void mob::add_delivery_bitmap_effect(
-    bitmap_effect_manager* manager, const float delivery_time_ratio_left,
-    const ALLEGRO_COLOR &onion_color
-) {
-
-    bitmap_effect se;
-    bitmap_effect_props props_half;
-    bitmap_effect_props props_end;
-    
-    se.add_keyframe(0, bitmap_effect_props());
-    
-    props_half.glow_color = onion_color;
-    se.add_keyframe(0.5, props_half);
-    
-    props_end.glow_color = onion_color;
-    props_end.scale = point(0, 0);
-    se.add_keyframe(1.0, props_end);
-    
-    se.set_cur_time(1.0f - delivery_time_ratio_left);
-    manager->add_effect(se);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a bitmap effect to the manager, responsible for shading the
- * mob when it is in a shaded sector.
- */
-void mob::add_sector_brightness_bitmap_effect(bitmap_effect_manager* manager) {
-    if(center_sector->brightness == 255) return;
-    
-    bitmap_effect se;
-    bitmap_effect_props props;
-    
-    props.tint_color = map_gray(center_sector->brightness);
-    
-    se.add_keyframe(0, props);
-    manager->add_effect(se);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds the bitmap effects caused by the status effects to the manager.
- */
-void mob::add_status_bitmap_effects(bitmap_effect_manager* manager) {
-    for(size_t s = 0; s < statuses.size(); ++s) {
-        status_type* t = this->statuses[s].type;
-        if(
-            t->tint.r == 1.0f &&
-            t->tint.g == 1.0f &&
-            t->tint.b == 1.0f &&
-            t->tint.a == 1.0f &&
-            t->glow.a == 0.0f
-        ) {
-            continue;
-        }
-        
-        bitmap_effect se;
-        bitmap_effect_props props;
-        props.tint_color = t->tint;
-        props.glow_color = t->glow;
-        
-        se.add_keyframe(0, props);
-        manager->add_effect(se);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Adds a mob to this mob's group.
  */
 void mob::add_to_group(mob* new_member) {
@@ -1062,33 +991,16 @@ void mob::do_attack_effects(
 
 
 /* ----------------------------------------------------------------------------
- * Draws the entirety of the mob.
- * effect_manager: Effect manager to use, if any.
- */
-void mob::draw(bitmap_effect_manager* effect_manager) {
-
-    if(hide) return;
-    
-    draw_mob(effect_manager);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the limb that connects this mob to its parent.
  */
-void mob::draw_limb(bitmap_effect_manager* effect_manager) {
-    if(hide) return;
+void mob::draw_limb() {
     if(!parent) return;
     if(!parent->limb_anim.anim_db) return;
     sprite* sprite_to_use = parent->limb_anim.get_cur_sprite();
     if(!sprite_to_use) return;
     
-    bitmap_effect_manager internal_manager;
-    if(!effect_manager) {
-        effect_manager = &internal_manager;
-    }
-    add_status_bitmap_effects(effect_manager);
-    add_sector_brightness_bitmap_effect(effect_manager);
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true);
     
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
@@ -1129,41 +1041,30 @@ void mob::draw_limb(bitmap_effect_manager* effect_manager) {
     
     float length = dist(parent_end, child_end).to_float();
     
-    draw_bitmap_with_effects(
-        sprite_to_use->bitmap,
-        (parent_end + child_end) / 2,
-        point(length, parent->limb_thickness),
-        p2c_angle,
-        effect_manager
-    );
+    eff.translation = (parent_end + child_end) / 2.0;
+    eff.scale.x =
+        length / al_get_bitmap_width(sprite_to_use->bitmap);
+    eff.scale.y =
+        parent->limb_thickness / al_get_bitmap_height(sprite_to_use->bitmap);
+    eff.rotation = p2c_angle;
+    
+    draw_bitmap_with_effects(sprite_to_use->bitmap, eff);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Draws just the mob. This is a generic function, and can be overwritten
  * by child classes.
- * effect_manager: Effect manager to base on.
  */
-void mob::draw_mob(bitmap_effect_manager* effect_manager) {
+void mob::draw_mob() {
     sprite* s_ptr = anim.get_cur_sprite();
     
     if(!s_ptr) return;
     
-    bitmap_effect_manager internal_manager;
-    if(!effect_manager) {
-        effect_manager = &internal_manager;
-    }
-    add_status_bitmap_effects(effect_manager);
-    add_sector_brightness_bitmap_effect(effect_manager);
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
-    point draw_pos = get_sprite_center(s_ptr);
-    point draw_size = get_sprite_dimensions(s_ptr);
-    
-    draw_bitmap_with_effects(
-        s_ptr->bitmap,
-        draw_pos, draw_size,
-        angle + s_ptr->angle, effect_manager
-    );
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
 
 
@@ -1424,6 +1325,112 @@ float mob::get_latched_pikmin_weight() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns what the given sprite's center, rotation, tint, etc. should be
+ * at the present moment, for normal mob drawing routines.
+ * s_ptr:                    Sprite to get info about.
+ * info:                     Struct to fill the info with.
+ * add_status:               If true, add status effect coloring to the result.
+ * add_sector_brightness:    If true, add sector brightness coloring to the
+ *   result.
+ * delivery_time_ratio_left: If not LARGE_FLOAT, this indicates how much time
+ *   is left in the delivery, as a ratio, and the delivery's shrinking
+ *   and glowing effects will be added to the result.
+ * delivery_color:           If applying a delivery effect, this is the color
+ *   to make it glow in.
+ */
+void mob::get_sprite_bitmap_effects(
+    sprite* s_ptr, bitmap_effect_info* info,
+    const bool add_status, const bool add_sector_brightness,
+    const float delivery_time_ratio_left, const ALLEGRO_COLOR &delivery_color
+) {
+    info->translation =
+        point(
+            pos.x + angle_cos * s_ptr->offset.x - angle_sin * s_ptr->offset.y,
+            pos.y + angle_sin * s_ptr->offset.x + angle_cos * s_ptr->offset.y
+        );
+    info->rotation = angle + s_ptr->angle;
+    get_sprite_dimensions(s_ptr, &(info->scale));
+    
+    if(add_status) {
+        size_t n_glow_colors = 0;
+        ALLEGRO_COLOR glow_color_sum = al_map_rgba(0, 0, 0, 0);
+        
+        float total_tint_r = 0;
+        float total_tint_g = 0;
+        float total_tint_b = 0;
+        float total_tint_a = 0;
+        
+        for(size_t s = 0; s < statuses.size(); ++s) {
+            status_type* t = this->statuses[s].type;
+            if(
+                t->tint.r == 1.0f &&
+                t->tint.g == 1.0f &&
+                t->tint.b == 1.0f &&
+                t->tint.a == 1.0f &&
+                t->glow.a == 0.0f
+            ) {
+                continue;
+            }
+            
+            info->tint_color.r *= t->tint.r;
+            info->tint_color.g *= t->tint.g;
+            info->tint_color.b *= t->tint.b;
+            info->tint_color.a *= t->tint.a;
+            
+            if(t->glow.a > 0) {
+                glow_color_sum.r += t->glow.r;
+                glow_color_sum.g += t->glow.g;
+                glow_color_sum.b += t->glow.b;
+                glow_color_sum.a += t->glow.a;
+                n_glow_colors++;
+            }
+            
+            if(n_glow_colors > 0) {
+                t->glow.r = glow_color_sum.r / n_glow_colors;
+                t->glow.g = glow_color_sum.g / n_glow_colors;
+                t->glow.b = glow_color_sum.b / n_glow_colors;
+                t->glow.a = glow_color_sum.a / n_glow_colors;
+            }
+        }
+    }
+    
+    if(add_sector_brightness) {
+        info->tint_color.r *= (center_sector->brightness / 255.0);
+        info->tint_color.g *= (center_sector->brightness / 255.0);
+        info->tint_color.b *= (center_sector->brightness / 255.0);
+    }
+    
+    if(delivery_time_ratio_left != LARGE_FLOAT) {
+        ALLEGRO_COLOR new_glow;
+        float new_scale;
+        
+        if(delivery_time_ratio_left > 0.5) {
+            new_glow =
+                interpolate_color(
+                    delivery_time_ratio_left, 0.5, 1.0,
+                    delivery_color, map_gray(0)
+                );
+            new_scale = 1.0f;
+        } else {
+            new_glow = delivery_color;
+            new_scale =
+                interpolate_number(
+                    delivery_time_ratio_left, 0.0, 0.5,
+                    0.0f, 1.0f
+                );
+        }
+        
+        info->glow_color.r = clamp(info->glow_color.r + new_glow.r, 0.0f, 1.0f);
+        info->glow_color.g = clamp(info->glow_color.g + new_glow.g, 0.0f, 1.0f);
+        info->glow_color.b = clamp(info->glow_color.b + new_glow.b, 0.0f, 1.0f);
+        info->glow_color.a = clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
+        
+        info->scale *= new_scale;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns where a sprite's center should be, for normal mob drawing routines.
  */
 point mob::get_sprite_center(sprite* s) {
@@ -1440,12 +1447,10 @@ point mob::get_sprite_center(sprite* s) {
  * s:     the sprite.
  * scale: variable to return the scale used to. Optional.
  */
-point mob::get_sprite_dimensions(sprite* s, float* scale) {
+point mob::get_sprite_dimensions(sprite* s, point* scale) {
     point dim;
     dim.x = s->file_size.x;
     dim.y = s->file_size.y;
-    dim.x *= s->scale.x;
-    dim.y *= s->scale.y;
     
     float sucking_mult = 1.0;
     float height_mult = 1.0;
@@ -1461,10 +1466,11 @@ point mob::get_sprite_dimensions(sprite* s, float* scale) {
             (height_effect_pivot - ground_sector->z);
     }
     
-    float final_scale = sucking_mult * height_mult;
+    point final_scale = s->scale * sucking_mult * height_mult;
     if(scale) *scale = final_scale;
     
-    dim *= final_scale;
+    dim.x *= final_scale.x;
+    dim.y *= final_scale.y;
     return dim;
 }
 
