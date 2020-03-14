@@ -382,16 +382,42 @@ public:
     virtual ~mob();
     
 protected:
+    //Returns edge intersections at a certain spot.
+    unsigned char get_movement_edge_intersections(
+        const point &new_pos, set<edge*>* intersecting_edges
+    );
+    //Returns how the mob should move horizontally this frame.
+    unsigned char get_physics_horizontal_movement(
+        const float delta_t, const float move_speed_mult, point* move_speed
+    );
+    //Returns the angle at which the mob should slide against a wall.
+    unsigned char get_wall_slide_angle(
+        edge* e_ptr, unsigned char wall_sector, const float move_angle,
+        float* slide_angle
+    );
     //Tick its animation logic.
     void tick_animation(const float delta_t);
     //Tick the mob's "thinking" logic.
     void tick_brain(const float delta_t);
+    //Tick its horizontal movement physics logic.
+    void tick_horizontal_movement_physics(
+        const float delta_t, const point &attempted_move_speed,
+        mob** new_standing_on_mob, bool* touched_wall
+    );
     //Tick misc. things.
     void tick_misc_logic(const float delta_t);
     //Tick its physics logic.
     void tick_physics(const float delta_t);
+    //Tick its rotation physics logic.
+    void tick_rotation_physics(
+        const float delta_t, const float move_speed_mult
+    );
     //Tick its script logic.
     void tick_script(const float delta_t);
+    //Tick its vertical movement physics logic.
+    void tick_vertical_movement_physics(
+        const float delta_t, const float pre_move_ground_z
+    );
     //Tick class-specific logic.
     virtual void tick_class_specifics(const float delta_t);
 };

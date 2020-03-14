@@ -147,6 +147,7 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="source">
+    <File Name="../source/mob_physics.cpp"/>
     <File Name="../source/mob_script_action.cpp"/>
     <File Name="../source/mob_script_action.h"/>
     <File Name="../source/world_component.cpp"/>
