@@ -162,6 +162,40 @@ vertexes{
 	v=-320.0000 352.0000
 	v=-192.0000 704.0000
 	v=-192.0000 352.0000
+	v=768.0000 576.0000
+	v=832.0000 448.0000
+	v=832.0000 576.0000
+	v=896.0000 576.0000
+	v=576.0000 768.0000
+	v=704.0000 768.0000
+	v=704.0000 832.0000
+	v=576.0000 832.0000
+	v=832.0000 768.0000
+	v=832.0000 832.0000
+	v=960.0000 768.0000
+	v=960.0000 832.0000
+	v=448.0000 768.0000
+	v=448.0000 832.0000
+	v=512.0000 768.0000
+	v=512.0000 832.0000
+	v=640.0000 768.0000
+	v=640.0000 832.0000
+	v=768.0000 768.0000
+	v=768.0000 832.0000
+	v=896.0000 768.0000
+	v=896.0000 832.0000
+	v=448.0000 -448.0000
+	v=506.7098 -448.3919
+	v=506.7098 -416.3919
+	v=448.0000 -416.0000
+	v=384.0000 -448.0000
+	v=384.0000 -416.0000
+	v=832.0000 -96.0000
+	v=832.0000 -64.0000
+	v=960.0000 -32.0000
+	v=832.0000 -32.0000
+	v=832.0000 -0.0000
+	v=832.0000 32.0000
 }
 edges{
 	e{
@@ -920,6 +954,190 @@ edges{
 		s=48 49
 		v=159 160
 	}
+	e{
+		s=0 50
+		v=165 163
+	}
+	e{
+		s=0 50
+		v=163 164
+	}
+	e{
+		s=50 51
+		v=165 164
+	}
+	e{
+		s=0 51
+		v=166 165
+	}
+	e{
+		s=0 51
+		v=164 166
+	}
+	e{
+		s=55 57
+		v=170 167
+	}
+	e{
+		s=0 57
+		v=167 179
+	}
+	e{
+		s=52 58
+		v=169 168
+	}
+	e{
+		s=0 52
+		v=169 180
+	}
+	e{
+		s=0 58
+		v=168 181
+	}
+	e{
+		s=53 59
+		v=172 171
+	}
+	e{
+		s=0 53
+		v=172 182
+	}
+	e{
+		s=0 59
+		v=171 183
+	}
+	e{
+		s=0 54
+		v=173 174
+	}
+	e{
+		s=0 54
+		v=174 184
+	}
+	e{
+		s=55 0
+		v=167 177
+	}
+	e{
+		s=0 56
+		v=176 175
+	}
+	e{
+		s=0 56
+		v=178 176
+	}
+	e{
+		s=0 56
+		v=175 177
+	}
+	e{
+		s=55 0
+		v=178 170
+	}
+	e{
+		s=55 56
+		v=177 178
+	}
+	e{
+		s=0 52
+		v=179 168
+	}
+	e{
+		s=0 57
+		v=180 170
+	}
+	e{
+		s=52 57
+		v=179 180
+	}
+	e{
+		s=0 53
+		v=181 171
+	}
+	e{
+		s=0 58
+		v=182 169
+	}
+	e{
+		s=53 58
+		v=181 182
+	}
+	e{
+		s=0 54
+		v=183 173
+	}
+	e{
+		s=0 59
+		v=184 172
+	}
+	e{
+		s=54 59
+		v=183 184
+	}
+	e{
+		s=61 60
+		v=188 185
+	}
+	e{
+		s=0 60
+		v=185 186
+	}
+	e{
+		s=0 60
+		v=186 187
+	}
+	e{
+		s=0 60
+		v=187 188
+	}
+	e{
+		s=61 0
+		v=185 189
+	}
+	e{
+		s=61 0
+		v=189 190
+	}
+	e{
+		s=61 0
+		v=190 188
+	}
+	e{
+		s=62 0
+		v=193 191
+	}
+	e{
+		s=62 0
+		v=191 192
+	}
+	e{
+		s=63 62
+		v=193 192
+	}
+	e{
+		s=63 0
+		v=192 194
+	}
+	e{
+		s=64 63
+		v=193 194
+	}
+	e{
+		s=64 0
+		v=194 195
+	}
+	e{
+		s=65 64
+		v=193 195
+	}
+	e{
+		s=65 0
+		v=195 196
+	}
+	e{
+		s=65 0
+		v=196 193
+	}
 }
 sectors{
 	s{
@@ -931,19 +1149,19 @@ sectors{
 		texture=Metal.png
 	}
 	s{
-		z=0.0000
+		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
-		z=0.0000
+		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
-		z=0.0000
+		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
-		z=0.0000
+		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
@@ -1184,6 +1402,89 @@ sectors{
 		texture=Stone.jpg
 		texture_tint=255 64 255
 	}
+	s{
+		type=Blocking
+		z=-100.0000
+		texture=Dirt.jpg
+	}
+	s{
+		type=Blocking
+		z=100.0000
+		texture=Dirt.jpg
+	}
+	s{
+		z=211.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=255 128 255
+	}
+	s{
+		z=261.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=255 128 128
+	}
+	s{
+		z=331.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=225 225 128
+	}
+	s{
+		z=131.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=128 255 255
+	}
+	s{
+		z=130.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=96 224 224
+	}
+	s{
+		z=210.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=224 96 224
+	}
+	s{
+		z=260.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=224 96 96
+	}
+	s{
+		z=330.0000
+		always_cast_shadow=true
+		texture=Test.png
+		texture_tint=224 224 96
+	}
+	s{
+		z=55.0000
+		texture=Grass_light.jpg
+	}
+	s{
+		z=25.0000
+		texture=Grass_light.jpg
+	}
+	s{
+		z=80.0000
+		texture=Stone.jpg
+	}
+	s{
+		z=60.0000
+		texture=Stone.jpg
+	}
+	s{
+		z=70.0000
+		texture=Stone.jpg
+	}
+	s{
+		type=Blocking
+		z=70.0000
+		texture=Stone.jpg
+	}
 }
 mobs{
 	Interactable{
@@ -1200,15 +1501,15 @@ mobs{
 	}
 	Onion{
 		type=Red Onion
-		p=896.0000 448.0000
+		p=256.0000 864.0000
 	}
 	Onion{
 		type=Yellow Onion
-		p=400.0000 200.0000
+		p=416.0000 224.0000
 	}
 	Onion{
 		type=Blue Onion
-		p=400.0000 300.0000
+		p=416.0000 864.0000
 	}
 	Treasure{
 		type=Billiards Ball
@@ -1275,7 +1576,7 @@ mobs{
 	}
 	Pellet{
 		type=Red 5 pellet
-		p=896.0000 224.0000
+		p=864.0000 224.0000
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -1444,6 +1745,47 @@ mobs{
 	Tool{
 		type=Bomb rock
 		p=-64.0000 576.0000
+	}
+	Group task{
+		type=Cardboard box
+		p=608.5426 -506.3826
+		links=58
+	}
+	Bouncer{
+		type=Bouncy Mushroom
+		p=736.9291 -288.9290
+		links=19
+	}
+	Custom{
+		type=Dummy
+		p=896.0000 -505.8334
+	}
+	Scale{
+		type=Seesaw block
+		p=461.6956 -832.0000
+		vars=start_down=true
+		links=60
+	}
+	Scale{
+		type=Seesaw block
+		p=224.0000 -896.0000
+		links=59
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=736.0000 -800.0000
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=768.0000 -800.0000
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=768.0000 -768.0000
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=736.0000 -768.0000
 	}
 }
 path_stops{
