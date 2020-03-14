@@ -382,9 +382,11 @@ public:
     virtual ~mob();
     
 protected:
+    //Returns a walkable mob to stand on.
+    mob* get_mob_to_walk_on();
     //Returns edge intersections at a certain spot.
     unsigned char get_movement_edge_intersections(
-        const point &new_pos, set<edge*>* intersecting_edges
+        const point &new_pos, vector<edge*>* intersecting_edges
     );
     //Returns how the mob should move horizontally this frame.
     unsigned char get_physics_horizontal_movement(
@@ -402,7 +404,7 @@ protected:
     //Tick its horizontal movement physics logic.
     void tick_horizontal_movement_physics(
         const float delta_t, const point &attempted_move_speed,
-        mob** new_standing_on_mob, bool* touched_wall
+        bool* touched_wall
     );
     //Tick misc. things.
     void tick_misc_logic(const float delta_t);
@@ -418,6 +420,8 @@ protected:
     void tick_vertical_movement_physics(
         const float delta_t, const float pre_move_ground_z
     );
+    //Tick physics logic for riding atop a walkable mob.
+    void tick_walkable_riding_physics(const float delta_t);
     //Tick class-specific logic.
     virtual void tick_class_specifics(const float delta_t);
 };

@@ -36,8 +36,8 @@ void mob::tick_physics(const float delta_t) {
         move_speed_mult *= this->statuses[s].type->speed_multiplier;
     }
     
+    point pre_move_pos = pos;
     point move_speed = speed;
-    mob* new_standing_on_mob = standing_on_mob;
     bool touched_wall = false;
     float pre_move_ground_z = ground_sector->z;
     
@@ -50,81 +50,110 @@ void mob::tick_physics(const float delta_t) {
         
     if(h_mov_type == H_MOVE_FAIL) {
         return;
-    } else if (h_mov_type == H_MOVE_TELEPORTED) {
-        new_standing_on_mob = NULL; //Pretty much always true.
-    } else {
+    } else if (h_mov_type == H_MOVE_OK) {
         //Horizontal movement time!
         tick_horizontal_movement_physics(
-            delta_t, move_speed, &new_standing_on_mob, &touched_wall
+            delta_t, move_speed, &touched_wall
         );
-    }
-    
-    //Finish horizontal logic.
-    if(touched_wall) {
-        fsm.run_event(MOB_EVENT_TOUCHED_WALL);
-    }
-    
-    if(type->walkable) {
-        walkable_moved = move_speed;
-    }
-    
-    mob* rider_added_ev_mob = NULL;
-    mob* rider_removed_ev_mob = NULL;
-    
-    if(new_standing_on_mob != standing_on_mob) {
-        if(standing_on_mob) {
-            rider_removed_ev_mob = standing_on_mob;
-        }
-        if(new_standing_on_mob) {
-            rider_added_ev_mob = new_standing_on_mob;
-        }
-    }
-    
-    standing_on_mob = new_standing_on_mob;
-    
-    if(rider_removed_ev_mob) {
-        rider_removed_ev_mob->fsm.run_event(
-            MOB_EVENT_RIDER_REMOVED, (void*) this
-        );
-        if(type->weight != 0.0f) {
-            rider_removed_ev_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_REMOVED, (void*) this
-            );
-        }
-    }
-    if(rider_added_ev_mob) {
-        rider_added_ev_mob->fsm.run_event(
-            MOB_EVENT_RIDER_ADDED, (void*) this
-        );
-        if(type->weight != 0.0f) {
-            rider_added_ev_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_ADDED, (void*) this
-            );
-        }
     }
     
     //Vertical movement.
     tick_vertical_movement_physics(delta_t, pre_move_ground_z);
     
+    //Walk on top of another mob, if possible.
+    tick_walkable_riding_physics(delta_t);
+    
     //Final setup.
     push_amount = 0;
+    
+    if(touched_wall) {
+        fsm.run_event(MOB_EVENT_TOUCHED_WALL);
+    }
+    
+    if(type->walkable) {
+        walkable_moved = (pos - pre_move_pos) / delta_t;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which walkable mob this mob should be considered to be on top of.
+ * Returns NULL if none is found.
+ */
+mob* mob::get_mob_to_walk_on() {
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* m_ptr = mobs[m];
+        if(!m_ptr->type->walkable) {
+            continue;
+        }
+        if(m_ptr == this) {
+            continue;
+        }
+        if(z < m_ptr->z + m_ptr->height - SECTOR_STEP) {
+            continue;
+        }
+        if(z > m_ptr->z + m_ptr->height) {
+            continue;
+        }
+        
+        //Check if they collide on X+Y.
+        if(
+            type->rectangular_dim.x != 0 &&
+            m_ptr->type->rectangular_dim.x != 0
+        ) {
+            //Rectangle vs rectangle.
+            //Not supported.
+            continue;
+        } else if(type->rectangular_dim.x != 0) {
+            //Rectangle vs circle.
+            if(
+                !circle_intersects_rectangle(
+                    m_ptr->pos, m_ptr->type->radius,
+                    pos, type->rectangular_dim,
+                    angle
+                )
+            ) {
+                continue;
+            }
+        } else if(m_ptr->type->rectangular_dim.x != 0) {
+            //Circle vs rectangle.
+            if(
+                !circle_intersects_rectangle(
+                    pos, type->radius,
+                    m_ptr->pos, m_ptr->type->rectangular_dim,
+                    m_ptr->angle
+                )
+            ) {
+                continue;
+            }
+        } else {
+            //Circle vs circle.
+            if(
+                dist(pos, m_ptr->pos) >
+                (type->radius + m_ptr->type->radius)
+            ) {
+                continue;
+            }
+        }
+        return m_ptr;
+    }
+    return NULL;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Calculates which edges the mob is intersecting with for horizontal movement
  * physics logic.
- * Only edges that have "walls" count.
  * Returns H_MOVE_OK if everything is okay, H_MOVE_FAIL if movement is
  * impossible.
  * new_pos:            Position to check.
  * intersecting_edges: List of edges it is intersecting with.
  */
 unsigned char mob::get_movement_edge_intersections(
-    const point &new_pos, set<edge*>* intersecting_edges
+    const point &new_pos, vector<edge*>* intersecting_edges
 ) {
     //Before checking the edges, let's consult the blockmap and look at
-    //the edges in the same block the mob is on.
+    //the edges in the same blocks the mob is on.
     //This way, we won't check for edges that are really far away.
     //Use the bounding box to know which blockmap blocks the mob will be on.
     size_t bx1 = cur_area_data.bmap.get_col(new_pos.x - type->radius);
@@ -140,75 +169,99 @@ unsigned char mob::get_movement_edge_intersections(
         return H_MOVE_FAIL;
     }
     
-    edge* e_ptr = NULL;
+    set<edge*> candidate_edges;
     
-    //Go through the blocks, to find intersections, and set up some things.
+    //Go through the blocks, and get a list of all edges to check against.
     for(size_t bx = bx1; bx <= bx2; ++bx) {
         for(size_t by = by1; by <= by2; ++by) {
         
             vector<edge*>* edges = &cur_area_data.bmap.edges[bx][by];
             
             for(size_t e = 0; e < edges->size(); ++e) {
-            
-                e_ptr = (*edges)[e];
-                bool is_edge_blocking = false;
-                
-                if(
-                    !circle_intersects_line(
-                        new_pos, type->radius,
-                        point(
-                            e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
-                        ),
-                        point(
-                            e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
-                        ),
-                        NULL, NULL
-                    )
-                ) {
-                    continue;
-                }
-                
-                if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
-                
-                    if(
-                        e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
-                        e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
-                    ) {
-                        is_edge_blocking = true;
-                    }
-                    
-                    if(!is_edge_blocking) {
-                        if(
-                            e_ptr->sectors[0]->z < z &&
-                            e_ptr->sectors[1]->z < z
-                        ) {
-                            //An edge whose sectors are below the mob?
-                            //No collision here.
-                            continue;
-                        }
-                        if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
-                            //No difference in floor height = no wall.
-                            //Ignore this.
-                            continue;
-                        }
-                    }
-                    
-                    //Add this edge to the list of intersections, then.
-                    intersecting_edges->insert(e_ptr);
-                    
-                } else {
-                
-                    //If we're on the edge of out-of-bounds geometry,
-                    //block entirely.
-                    return H_MOVE_FAIL;
-                    
-                }
+                candidate_edges.insert(edges->operator[](e));
             }
         }
     }
+    
+    edge* e_ptr = NULL;
+    
+    //Go through each edge, and figure out if it is a valid wall for our mob.
+    for(auto e = candidate_edges.begin(); e != candidate_edges.end(); e++) {
+    
+        e_ptr = *e;
+        bool is_edge_blocking = false;
+        
+        if(
+            !circle_intersects_line(
+                new_pos, type->radius,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                NULL, NULL
+            )
+        ) {
+            //No intersection? Well, obviously this one doesn't count.
+            continue;
+        }
+        
+        if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
+            //If we're on the edge of out-of-bounds geometry,
+            //block entirely.
+            return H_MOVE_FAIL;
+        }
+        
+        for(unsigned char s = 0; s < 2; ++s) {
+            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+                is_edge_blocking = true;
+                break;
+            }
+        }
+        
+        if(!is_edge_blocking) {
+            if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
+                //No difference in floor height = no wall.
+                //Ignore this.
+                continue;
+            }
+            if(
+                e_ptr->sectors[0]->z < z &&
+                e_ptr->sectors[1]->z < z
+            ) {
+                //An edge whose sectors are below the mob?
+                //No collision here.
+                continue;
+            }
+        }
+        
+        if(
+            e_ptr->sectors[0]->z > z &&
+            e_ptr->sectors[1]->z > z
+        ) {
+            //If both floors of this edge are above the mob...
+            //then what does that mean? That the mob is under the ground?
+            //Nonsense! Throw this edge away!
+            //It's a false positive, and it's likely behind a more logical
+            //edge that we actually did collide against.
+            continue;
+        }
+        
+        if(
+            e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING &&
+            e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
+        ) {
+            //Same logic as the previous check.
+            continue;
+        }
+        
+        //Add this edge to the list of intersections, then.
+        intersecting_edges->push_back(e_ptr);
+    }
+    
     return H_MOVE_OK;
 }
 
+
+//If a mob is this close to the destination, it can move without tank controls.
+const float FREE_MOVE_THRESHOLD = 10.0f;
 
 /* ----------------------------------------------------------------------------
  * Calculates how much the mob is going to move horizontally, for the purposes
@@ -238,20 +291,20 @@ unsigned char mob::get_physics_horizontal_movement(
         if(chase_info.teleport) {
             sector* sec =
                 get_sector(final_target_pos, NULL, true);
+                
             if(!sec) {
                 //No sector, invalid teleport. No move.
                 return H_MOVE_FAIL;
-                
-            } else {
-                if(chase_info.teleport_z) {
-                    z = *chase_info.teleport_z;
-                }
-                ground_sector = sec;
-                center_sector = sec;
-                speed.x = speed.y = 0;
-                pos = final_target_pos;
-                return H_MOVE_TELEPORTED;
             }
+            
+            if(chase_info.teleport_z) {
+                z = *chase_info.teleport_z;
+            }
+            ground_sector = sec;
+            center_sector = sec;
+            speed.x = speed.y = 0;
+            pos = final_target_pos;
+            return H_MOVE_TELEPORTED;
             
         } else {
         
@@ -264,8 +317,9 @@ unsigned char mob::get_physics_horizontal_movement(
                     (double) chase_info.speed * move_speed_mult
                 );
                 
-            bool can_free_move = chase_info.free_move || d <= 10.0;
-            
+            bool can_free_move =
+                chase_info.free_move || d <= FREE_MOVE_THRESHOLD;
+                
             float movement_angle =
                 can_free_move ?
                 get_angle(pos, final_target_pos) :
@@ -378,15 +432,18 @@ unsigned char mob::get_wall_slide_angle(
  * Ticks physics logic regarding the mob's horizontal movement.
  * delta_t:              How many seconds to tick the logic by.
  * attempted_move_speed: Movement speed to calculate with.
- * new_standing_on_mob:  Holds what mob this mob will be standing on, after
- *   the move.
  * touched_wall:         Holds whether or not the mob touched a wall in this
  *   move.
  */
 void mob::tick_horizontal_movement_physics(
     const float delta_t, const point &attempted_move_speed,
-    mob** new_standing_on_mob, bool* touched_wall
+    bool* touched_wall
 ) {
+    if(attempted_move_speed.x == 0 && attempted_move_speed.y == 0) {
+        //No movement. Nothing to do here.
+        return;
+    }
+    
     //Setup.
     bool finished_moving = false;
     bool doing_slide = false;
@@ -401,8 +458,6 @@ void mob::tick_horizontal_movement_physics(
     //from the movement speed.
     while(!finished_moving) {
     
-        if(move_speed.x == 0 && move_speed.y == 0 && speed_z == 0) break;
-        
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
         //with any edge. With this, we trust that mobs can't go so fast
@@ -413,8 +468,7 @@ void mob::tick_horizontal_movement_physics(
         
         new_pos.x = pos.x + delta_t* move_speed.x;
         new_pos.y = pos.y + delta_t* move_speed.y;
-        new_z = z + delta_t* speed_z;
-        (*new_standing_on_mob) = standing_on_mob;
+        new_z = z;
         new_ground_sector = ground_sector;
         
         //Get the sector the mob will be on.
@@ -433,18 +487,8 @@ void mob::tick_horizontal_movement_physics(
             return;
         }
         
-        float move_angle;
-        float total_move_speed;
-        coordinates_to_angle(
-            move_speed, &move_angle, &total_move_speed
-        );
-        
-        //Angle to slide towards.
-        float slide_angle = move_angle;
-        //Difference between the movement angle and the slide.
-        float slide_angle_dif = 0;
-        
-        set<edge*> intersecting_edges;
+        //Get all edges it collides against in this new position.
+        vector<edge*> intersecting_edges;
         if(
             get_movement_edge_intersections(new_pos, &intersecting_edges) ==
             H_MOVE_FAIL
@@ -452,23 +496,15 @@ void mob::tick_horizontal_movement_physics(
             return;
         }
         
-        for(
-            auto e = intersecting_edges.begin();
-            e != intersecting_edges.end(); ++e
-        ) {
-            edge* e_ptr = *e;
-            sector* tallest_sector; //Tallest of the two.
+        //For every sector in the new position, let's figure out
+        //the ground sector, and also a stepping sector, if possible.
+        for(size_t e = 0; e < intersecting_edges.size(); ++e) {
+            edge* e_ptr = intersecting_edges[e];
+            sector* tallest_sector = ground_sector; //Tallest of the two.
             if(
-                e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
+                e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
+                e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
             ) {
-                tallest_sector = e_ptr->sectors[1];
-                
-            } else if(
-                e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
-            ) {
-                tallest_sector = e_ptr->sectors[0];
-                
-            } else {
                 if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
                     tallest_sector = e_ptr->sectors[0];
                 } else {
@@ -497,85 +533,28 @@ void mob::tick_horizontal_movement_physics(
             }
         }
         
-        
-        //Check also if it can walk on top of another mob.
-        (*new_standing_on_mob) = NULL;
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            mob* m_ptr = mobs[m];
-            if(!m_ptr->type->walkable) {
-                continue;
-            }
-            if(m_ptr == this) {
-                continue;
-            }
-            if(new_z < m_ptr->z + m_ptr->height - SECTOR_STEP) {
-                continue;
-            }
-            if(new_z > m_ptr->z + m_ptr->height) {
-                continue;
-            }
-            
-            //Check if they collide on X+Y.
-            if(
-                type->rectangular_dim.x != 0 &&
-                m_ptr->type->rectangular_dim.x != 0
-            ) {
-                //Rectangle vs rectangle.
-                //Not supported.
-                continue;
-            } else if(type->rectangular_dim.x != 0) {
-                //Rectangle vs circle.
-                if(
-                    !circle_intersects_rectangle(
-                        m_ptr->pos, m_ptr->type->radius,
-                        new_pos, type->rectangular_dim,
-                        angle
-                    )
-                ) {
-                    continue;
-                }
-            } else if(m_ptr->type->rectangular_dim.x != 0) {
-                //Circle vs rectangle.
-                if(
-                    !circle_intersects_rectangle(
-                        new_pos, type->radius,
-                        m_ptr->pos, m_ptr->type->rectangular_dim,
-                        m_ptr->angle
-                    )
-                ) {
-                    continue;
-                }
-            } else {
-                //Circle vs circle.
-                if(
-                    dist(new_pos, m_ptr->pos) >
-                    (type->radius + m_ptr->type->radius)
-                ) {
-                    continue;
-                }
-            }
-            
-            (*new_standing_on_mob) = m_ptr;
+        //Mosey on up to the step sector, if any.
+        if(step_sector->z > new_ground_sector->z) {
+            new_ground_sector = step_sector;
         }
+        if(z < step_sector->z) new_z = step_sector->z;
         
-        if(*new_standing_on_mob) {
-            new_z = (*new_standing_on_mob)->z + (*new_standing_on_mob)->height;
-        } else {
-            if(step_sector->z > new_ground_sector->z) {
-                new_ground_sector = step_sector;
-            }
-            
-            if(z < step_sector->z) new_z = step_sector->z;
-        }
+        //Figure out sliding logic now, if needed.
+        float move_angle;
+        float total_move_speed;
+        coordinates_to_angle(
+            move_speed, &move_angle, &total_move_speed
+        );
         
+        //Angle to slide towards.
+        float slide_angle = move_angle;
+        //Difference between the movement angle and the slide.
+        float slide_angle_dif = 0;
         
-        //Check wall angles and heights to check which of these edges
-        //really are wall collisions.
-        for(
-            auto e = intersecting_edges.begin();
-            e != intersecting_edges.end(); e++
-        ) {
-            edge* e_ptr = *e;
+        //Check the sector heights of the intersecting edges to figure out
+        //which are really walls, and how to slide against them.
+        for(size_t e = 0; e < intersecting_edges.size(); ++e) {
+            edge* e_ptr = intersecting_edges[e];
             bool is_edge_wall = false;
             unsigned char wall_sector = 0;
             
@@ -597,27 +576,6 @@ void mob::tick_horizontal_movement_physics(
             
             //This isn't a wall... Get out of here, faker.
             if(!is_edge_wall) continue;
-            
-            //If both floors of this edge are above the mob...
-            //then what does that mean? That the mob is under the ground?
-            //Nonsense! Throw this edge away!
-            //It's a false positive, and the only
-            //way for it to get caught is if it's behind a more logical
-            //edge that we actually did collide against.
-            if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
-                if(
-                    (
-                        e_ptr->sectors[0]->z > new_z ||
-                        e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
-                    ) &&
-                    (
-                        e_ptr->sectors[1]->z > new_z ||
-                        e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
-                    )
-                ) {
-                    continue;
-                }
-            }
             
             //Ok, there's obviously been a collision, so let's work out what
             //wall the mob will slide on.
@@ -657,12 +615,12 @@ void mob::tick_horizontal_movement_physics(
         }
         
         
-        //We're done here. If the move was unobstructed, good, go there.
+        //We're done checking. If the move was unobstructed, good, go there.
         //If not, we'll use the info we gathered before to calculate sliding,
         //and try again.
         
         if(successful_move) {
-            //Good news, the mob can move to this new spot freely.
+            //Good news, the mob can be placed in this new spot freely.
             pos = new_pos;
             z = new_z;
             ground_sector = new_ground_sector;
@@ -678,21 +636,16 @@ void mob::tick_horizontal_movement_physics(
                 finished_moving = true;
                 
             } else {
-            
                 doing_slide = true;
                 //To limit the speed, we should use a cross-product of the
                 //movement and slide vectors.
                 //But nuts to that, this is just as nice, and a lot simpler!
                 total_move_speed *= 1 - (slide_angle_dif / TAU / 2);
                 move_speed =
-                    angle_to_coordinates(
-                        slide_angle, total_move_speed
-                    );
+                    angle_to_coordinates(slide_angle, total_move_speed);
                     
             }
-            
         }
-        
     }
 }
 
@@ -749,6 +702,8 @@ void mob::tick_rotation_physics(
 void mob::tick_vertical_movement_physics(
     const float delta_t, const float pre_move_ground_z
 ) {
+    z += delta_t* speed_z;
+    
     if(!standing_on_mob) {
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
@@ -823,4 +778,54 @@ void mob::tick_vertical_movement_physics(
     
     //Quick panic check: if it's somehow inside the ground, pop it out.
     z = max(z, ground_sector->z);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks physics logic regarding landing on top of a walkable mob.
+ * delta_t: How many seconds to tick the logic by.
+ */
+void mob::tick_walkable_riding_physics(const float delta_t) {
+    mob* rider_added_ev_mob = NULL;
+    mob* rider_removed_ev_mob = NULL;
+    mob* new_standing_on_mob = NULL;
+    
+    //Check which mob it is on top of, if any.
+    new_standing_on_mob = get_mob_to_walk_on();
+    
+    if(new_standing_on_mob) {
+        z = new_standing_on_mob->z + new_standing_on_mob->height;
+    }
+    
+    if(new_standing_on_mob != standing_on_mob) {
+        if(standing_on_mob) {
+            rider_removed_ev_mob = standing_on_mob;
+        }
+        if(new_standing_on_mob) {
+            rider_added_ev_mob = new_standing_on_mob;
+        }
+    }
+    
+    standing_on_mob = new_standing_on_mob;
+    
+    if(rider_removed_ev_mob) {
+        rider_removed_ev_mob->fsm.run_event(
+            MOB_EVENT_RIDER_REMOVED, (void*) this
+        );
+        if(type->weight != 0.0f) {
+            rider_removed_ev_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_REMOVED, (void*) this
+            );
+        }
+    }
+    if(rider_added_ev_mob) {
+        rider_added_ev_mob->fsm.run_event(
+            MOB_EVENT_RIDER_ADDED, (void*) this
+        );
+        if(type->weight != 0.0f) {
+            rider_added_ev_mob->fsm.run_event(
+                MOB_EVENT_WEIGHT_ADDED, (void*) this
+            );
+        }
+    }
 }
