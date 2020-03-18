@@ -32,7 +32,8 @@ using namespace std;
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float clamp(const float number, const float minimum, const float maximum);
-float deterministic_random(const unsigned int seed);
+uint32_t hash_nr(const unsigned int input);
+uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
 float interpolate_number(
     const float p, const float p1, const float p2,
     const float v1, const float v2

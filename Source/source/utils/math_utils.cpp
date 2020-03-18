@@ -22,18 +22,41 @@ float clamp(const float number, const float minimum, const float maximum) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a random number, between 0 and 1, but it's deterministic
- * if you use the same seed. i.e., if you feed it X, it
- * will always return Y. Because of its simplicity and predictability,
- * it should only be used for tiny details with unimportant randomness.
- * seed: The seed number.
+ * Given an input, it returns a 32-bit unsigned integer hash of that input.
+ * input: The input number.
  */
-float deterministic_random(const unsigned int seed) {
-    //This was built pretty much ad-hoc.
-    return
-        (
-            ((seed * 1234567890L + (seed << 4)) % (seed ^ 981524)) % 65536
-        ) / 65535.0f;
+uint32_t hash_nr(const unsigned int input) {
+    //Robert Jenkins' 32 bit integer hash function.
+    //From https://gist.github.com/badboy/6267743
+    //This algorithm is the simplest, lightest, fairest one I could find.
+    uint32_t n = (input + 0x7ED55D16) + (input << 12);
+    n = (n ^ 0xC761C23C) ^ (n >> 19);
+    n = (n + 0x165667B1) + (n << 5);
+    n = (n + 0xD3A2646C) ^ (n << 9);
+    n = (n + 0xFD7046C5) + (n << 3);
+    n = (n ^ 0xB55A4F09) ^ (n >> 16);
+    return n;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Given two inputs, it returns a 32-bit unsigned integer hash of those inputs.
+ * input1: First input number.
+ * input2: Second input number.
+ */
+uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
+    uint32_t n1 = hash_nr(input1);
+    
+    //Same algorithm has in hash_nr() with one argument,
+    //but I changed the magic numbers to other random stuff.
+    uint32_t n2 = (input2 + 0x5D795E0E) + (input2 << 12);
+    n2 = (n2 ^ 0xC07C34BD) ^ (n2 >> 19);
+    n2 = (n2 + 0x4969B10A) + (n2 << 5);
+    n2 = (n2 + 0x583EB559) ^ (n2 << 9);
+    n2 = (n2 + 0x72F56900) + (n2 << 3);
+    n2 = (n2 ^ 0x8B121972) ^ (n2 >> 16);
+    
+    return n1 * n2;
 }
 
 
