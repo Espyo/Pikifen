@@ -326,7 +326,7 @@ void leader::dismiss() {
             
             subgroups_info[s].members[m]->leave_group();
             subgroups_info[s].members[m]->fsm.run_event(
-                MOB_EVENT_DISMISSED, (void*) &destination
+                MOB_EV_DISMISSED, (void*) &destination
             );
             
         }
@@ -334,7 +334,7 @@ void leader::dismiss() {
     
     //Dismiss leaders now.
     while(!group->members.empty()) {
-        group->members[0]->fsm.run_event(MOB_EVENT_DISMISSED, NULL);
+        group->members[0]->fsm.run_event(MOB_EV_DISMISSED, NULL);
         group->members[0]->leave_group();
     }
     
@@ -350,8 +350,8 @@ void leader::dismiss() {
 void leader::swap_held_pikmin(mob* new_pik) {
     if(holding.empty()) return;
     
-    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EVENT_RELEASED);
-    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
+    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EV_RELEASED);
+    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(new_pik->subgroup_type_ptr);
     
@@ -421,7 +421,7 @@ size_t leader::get_dismiss_rows(const size_t n_members) {
  */
 void leader::signal_swarm_end() {
     for(size_t m = 0; m < group->members.size(); ++m) {
-        group->members[m]->fsm.run_event(MOB_EVENT_SWARM_ENDED);
+        group->members[m]->fsm.run_event(MOB_EV_SWARM_ENDED);
     }
 }
 
@@ -431,7 +431,7 @@ void leader::signal_swarm_end() {
  */
 void leader::signal_swarm_start() {
     for(size_t m = 0; m < group->members.size(); ++m) {
-        group->members[m]->fsm.run_event(MOB_EVENT_SWARM_STARTED);
+        group->members[m]->fsm.run_event(MOB_EV_SWARM_STARTED);
     }
 }
 
@@ -475,7 +475,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     if(leaders.size() == 1) return;
     
     if(
-        !cur_leader_ptr->fsm.get_event(LEADER_EVENT_INACTIVATED) &&
+        !cur_leader_ptr->fsm.get_event(LEADER_EV_INACTIVATED) &&
         !force_success
     ) {
         //This leader isn't ready to be switched out of. Forget it.
@@ -505,7 +505,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
             searching = false;
         }
         
-        new_leader_ptr->fsm.run_event(LEADER_EVENT_ACTIVATED);
+        new_leader_ptr->fsm.run_event(LEADER_EV_ACTIVATED);
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
@@ -627,7 +627,7 @@ void leader::tick_class_specifics(const float delta_t) {
     if(health <= 0 && group) {
         while(!group->members.empty()) {
             group->members[0]->fsm.run_event(
-                MOB_EVENT_DISMISSED,
+                MOB_EV_DISMISSED,
                 (void*) & (group->members[0]->pos)
             );
             group->members[0]->leave_group();
@@ -644,15 +644,15 @@ bool grab_closest_group_member() {
     if(closest_group_member) {
         mob_event* grabbed_ev =
             closest_group_member->fsm.get_event(
-                MOB_EVENT_GRABBED_BY_FRIEND
+                MOB_EV_GRABBED_BY_FRIEND
             );
         mob_event* grabber_ev =
             cur_leader_ptr->fsm.get_event(
-                LEADER_EVENT_HOLDING
+                LEADER_EV_HOLDING
             );
         if(grabber_ev && grabbed_ev) {
             cur_leader_ptr->fsm.run_event(
-                LEADER_EVENT_HOLDING,
+                LEADER_EV_HOLDING,
                 (void*) closest_group_member
             );
             grabbed_ev->run(

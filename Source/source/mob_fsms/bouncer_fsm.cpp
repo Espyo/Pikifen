@@ -23,22 +23,22 @@
 void bouncer_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", BOUNCER_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(bouncer_fsm::set_idling_animation);
         }
-        efc.new_event(MOB_EVENT_RIDER_ADDED); {
+        efc.new_event(MOB_EV_RIDER_ADDED); {
             efc.run(bouncer_fsm::handle_mob);
             efc.change_state("bouncing");
         }
     }
     efc.new_state("bouncing", BOUNCER_STATE_BOUNCING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(bouncer_fsm::set_bouncing_animation);
         }
-        efc.new_event(MOB_EVENT_RIDER_ADDED); {
+        efc.new_event(MOB_EV_RIDER_ADDED); {
             efc.run(bouncer_fsm::handle_mob);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
         }
     }
@@ -82,7 +82,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to be bounced.
-        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_BOUNCER);
+        ev = q_get_event(toucher, MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
         bou_ptr->bou_type->riders & BOUNCER_RIDER_LEADERS &&
@@ -90,7 +90,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to be bounced.
-        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_BOUNCER);
+        ev = q_get_event(toucher, MOB_EV_TOUCHED_BOUNCER);
         
     }
     

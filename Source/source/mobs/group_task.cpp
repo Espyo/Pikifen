@@ -113,7 +113,7 @@ void group_task::add_worker(pikmin* who) {
 void group_task::finish_task() {
     for(size_t p = 0; p < pikmin_list.size(); ++p) {
         if(pikmin_list[p]->focused_mob && pikmin_list[p]->focused_mob == this) {
-            pikmin_list[p]->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNAVAILABLE);
+            pikmin_list[p]->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
 }

@@ -21,37 +21,37 @@
 void drop_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("falling", DROP_STATE_FALLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::set_falling_anim);
         }
-        efc.new_event(MOB_EVENT_LANDED); {
+        efc.new_event(MOB_EV_LANDED); {
             efc.change_state("landing");
         }
     }
     efc.new_state("landing", DROP_STATE_LANDING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::land);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
         }
     }
     efc.new_state("idling", DROP_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::set_idling_anim);
         }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
             efc.run(drop_fsm::on_touched);
         }
     }
     efc.new_state("bumped", DROP_STATE_BUMPED); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::set_bumped_anim);
         }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
             efc.run(drop_fsm::on_touched);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
         }
     }
@@ -124,7 +124,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     mob_event* ev = NULL;
     
     if(will_drink) {
-        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_DROP);
+        ev = q_get_event(toucher, MOB_EV_TOUCHED_DROP);
     }
     
     if(!ev) {

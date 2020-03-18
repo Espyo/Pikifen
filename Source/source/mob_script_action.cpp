@@ -64,7 +64,7 @@ mob_action::mob_action() :
 mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
     action(nullptr),
     code(nullptr),
-    parent_event(MOB_EVENT_UNKNOWN),
+    parent_event(MOB_EV_UNKNOWN),
     mt(nullptr) {
     
     for(size_t a = 0; a < mob_actions.size(); ++a) {
@@ -83,7 +83,7 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
 mob_action_call::mob_action_call(custom_action_code code):
     action(nullptr),
     code(code),
-    parent_event(MOB_EVENT_UNKNOWN),
+    parent_event(MOB_EV_UNKNOWN),
     mt(nullptr) {
     
     for(size_t a = 0; a < mob_actions.size(); ++a) {
@@ -379,17 +379,17 @@ void mob_action_runners::focus(mob_action_run_data &data) {
         
     } case MOB_ACTION_FOCUS_TRIGGER: {
         if(
-            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT
+            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT
         ) {
         
             data.m->focus_on_mob((mob*) (data.custom_data_1));
             
         } else if(
-            data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE
+            data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
         ) {
         
             data.m->focus_on_mob((mob*) (data.custom_data_2));
@@ -406,7 +406,7 @@ void mob_action_runners::focus(mob_action_run_data &data) {
  * Code for the mob script action for getting chomped.
  */
 void mob_action_runners::get_chomped(mob_action_run_data &data) {
-    if(data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_EAT) {
+    if(data.call->parent_event == MOB_EV_HITBOX_TOUCH_EAT) {
         ((mob*) (data.custom_data_1))->chomp(
             data.m,
             (hitbox*) (data.custom_data_2)
@@ -436,7 +436,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
-        if(data.call->parent_event == MOB_EVENT_FRAME_SIGNAL) {
+        if(data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*) (data.custom_data_1)));
         }
         break;
@@ -454,23 +454,23 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_MESSAGE: {
-        if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = *((string*) (data.custom_data_1));
         }
         break;
         
     } case MOB_ACTION_GET_INFO_MESSAGE_SENDER: {
-        if(data.call->parent_event == MOB_EVENT_RECEIVE_MESSAGE) {
+        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = ((mob*) (data.custom_data_2))->type->name;
         }
         break;
         
     } case MOB_ACTION_GET_INFO_MOB_CATEGORY: {
         if(
-            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH
         ) {
             *var = ((mob*) (data.custom_data_1))->type->category->name;
         }
@@ -478,11 +478,11 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_INFO_MOB_TYPE: {
         if(
-            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_OBJECT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
+            data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var = ((mob*) (data.custom_data_1))->type->name;
         }
@@ -490,18 +490,18 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_INFO_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EVENT_DAMAGE
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_DAMAGE
         ) {
             *var =
                 (
                     (hitbox_interaction*) (data.custom_data_1)
                 )->h1->body_part_name;
         } else if(
-            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var =
                 data.m->get_closest_hitbox(
@@ -513,18 +513,18 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_INFO_OTHER_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EVENT_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EVENT_DAMAGE
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_DAMAGE
         ) {
             *var =
                 (
                     (hitbox_interaction*) (data.custom_data_1)
                 )->h2->body_part_name;
         } else if(
-            data.call->parent_event == MOB_EVENT_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EVENT_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EVENT_THROWN_PIKMIN_LANDED
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var =
                 ((mob*) (data.custom_data_1))->get_closest_hitbox(
@@ -709,7 +709,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
  */
 void mob_action_runners::order_release(mob_action_run_data &data) {
     if(data.m->holder.m) {
-        data.m->holder.m->fsm.run_event(MOB_EVENT_RELEASE_ORDER, NULL, NULL);
+        data.m->holder.m->fsm.run_event(MOB_EV_RELEASE_ORDER, NULL, NULL);
     }
 }
 

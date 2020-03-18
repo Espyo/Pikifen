@@ -23,81 +23,81 @@ void pellet_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idle_waiting", PELLET_STATE_IDLE_WAITING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_stop_move);
         }
-        efc.new_event(MOB_EVENT_LANDED); {
+        efc.new_event(MOB_EV_LANDED); {
             efc.run(pellet_fsm::stand_still);
         }
-        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
             efc.run(gen_mob_fsm::check_carry_begin);
         }
-        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
         }
-        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
             efc.change_state("idle_moving");
         }
     }
     
     efc.new_state("idle_moving", PELLET_STATE_IDLE_MOVING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_begin_move);
         }
-        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
             efc.run(gen_mob_fsm::check_carry_begin);
         }
-        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
             efc.run(gen_mob_fsm::check_carry_begin);
             efc.run(gen_mob_fsm::check_carry_stop);
         }
-        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.change_state("idle_waiting");
         }
-        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
             efc.run(gen_mob_fsm::carry_begin_move);
         }
-        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+        efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(gen_mob_fsm::carry_reach_destination);
         }
-        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+        efc.new_event(MOB_EV_CARRY_STUCK); {
             efc.change_state("idle_stuck");
         }
-        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+        efc.new_event(MOB_EV_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
         }
     }
     
     efc.new_state("idle_stuck", PELLET_STATE_IDLE_STUCK); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_become_stuck);
         }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
+        efc.new_event(MOB_EV_ON_LEAVE); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
         }
-        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
         }
-        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
             efc.run(gen_mob_fsm::check_carry_stop);
         }
-        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.change_state("idle_waiting");
         }
-        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
             efc.change_state("idle_moving");
         }
     }
     
     efc.new_state("being_delivered", PELLET_STATE_BEING_DELIVERED); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::start_being_delivered);
         }
-        efc.new_event(MOB_EVENT_TIMER); {
+        efc.new_event(MOB_EV_TIMER); {
             efc.run(gen_mob_fsm::handle_delivery);
         }
     }

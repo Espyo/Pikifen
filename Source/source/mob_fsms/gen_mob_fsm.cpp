@@ -69,7 +69,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
     if(m->carry_info->intended_mob == NULL) {
-        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+        m->fsm.run_event(MOB_EV_CARRY_STUCK);
         return;
     }
     
@@ -97,7 +97,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->path_info->target_point = m->carry_info->intended_point;
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
-        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+        m->fsm.run_event(MOB_EV_CARRY_STUCK);
     }
 }
 
@@ -109,11 +109,11 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
     if(info1) {
         //Stuck...
-        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+        m->fsm.run_event(MOB_EV_CARRY_STUCK);
     } else {
         //Successful delivery!
         m->stop_following_path();
-        m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
+        m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
     }
 }
 
@@ -147,7 +147,7 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
     if(m->carry_info->cur_carrying_strength >= m->type->weight) {
-        m->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -167,7 +167,7 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
     }
     
     if(m->carry_info->cur_carrying_strength < m->type->weight || run_event) {
-        m->fsm.run_event(MOB_EVENT_CARRY_STOP_MOVE);
+        m->fsm.run_event(MOB_EV_CARRY_STOP_MOVE);
     }
 }
 
@@ -238,7 +238,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     m->focused_mob->fsm.run_event(
-        MOB_EVENT_RECEIVE_DELIVERY, (void*) m
+        MOB_EV_RECEIVE_DELIVERY, (void*) m
     );
     
     m->to_delete = true;
@@ -252,7 +252,7 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carry_info->spot_info.size(); ++p) {
         mob* p_ptr = m->carry_info->spot_info[p].pik_ptr;
         if(p_ptr) {
-            p_ptr->fsm.run_event(MOB_EVENT_FINISHED_CARRYING);
+            p_ptr->fsm.run_event(MOB_EV_FINISHED_CARRYING);
         }
     }
     

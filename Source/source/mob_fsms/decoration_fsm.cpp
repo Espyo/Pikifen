@@ -21,18 +21,18 @@
 void decoration_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", DECORATION_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(decoration_fsm::become_idle);
         }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
             efc.run(decoration_fsm::check_bump);
         }
     }
     efc.new_state("bumped", DECORATION_STATE_BUMPED); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(decoration_fsm::be_bumped);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
         }
     }

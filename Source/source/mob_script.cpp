@@ -174,39 +174,39 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     else if(n == (name)) type = (number)
     
     string n = node->name;
-    if(n == "on_enter") type = MOB_EVENT_ON_ENTER;
-    r("on_leave",              MOB_EVENT_ON_LEAVE);
-    r("on_tick",               MOB_EVENT_ON_TICK);
-    r("on_animation_end",      MOB_EVENT_ANIMATION_END);
-    r("on_damage",             MOB_EVENT_DAMAGE);
-    r("on_far_from_home",      MOB_EVENT_FAR_FROM_HOME);
-    r("on_focus_off_reach",    MOB_EVENT_FOCUS_OFF_REACH);
-    r("on_frame_signal",       MOB_EVENT_FRAME_SIGNAL);
-    r("on_held",               MOB_EVENT_HELD);
-    r("on_hitbox_touch_eat",   MOB_EVENT_HITBOX_TOUCH_EAT);
-    r("on_hitbox_touch_a_n",   MOB_EVENT_HITBOX_TOUCH_A_N);
-    r("on_itch",               MOB_EVENT_ITCH);
-    r("on_land",               MOB_EVENT_LANDED);
-    r("on_object_in_reach",    MOB_EVENT_OBJECT_IN_REACH);
-    r("on_opponent_in_reach",  MOB_EVENT_OPPONENT_IN_REACH);
-    r("on_pikmin_land",        MOB_EVENT_THROWN_PIKMIN_LANDED);
-    r("on_receive_message",    MOB_EVENT_RECEIVE_MESSAGE);
-    r("on_released",           MOB_EVENT_RELEASED);
-    r("on_reach_destination",  MOB_EVENT_REACHED_DESTINATION);
-    r("on_timer",              MOB_EVENT_TIMER);
-    r("on_touch_hazard",       MOB_EVENT_TOUCHED_HAZARD);
-    r("on_touch_object",       MOB_EVENT_TOUCHED_OBJECT);
-    r("on_touch_opponent",     MOB_EVENT_TOUCHED_OPPONENT);
-    r("on_touch_wall",         MOB_EVENT_TOUCHED_WALL);
-    r("on_weight_added",       MOB_EVENT_WEIGHT_ADDED);
-    r("on_weight_removed",     MOB_EVENT_WEIGHT_REMOVED);
+    if(n == "on_enter") type = MOB_EV_ON_ENTER;
+    r("on_leave",              MOB_EV_ON_LEAVE);
+    r("on_tick",               MOB_EV_ON_TICK);
+    r("on_animation_end",      MOB_EV_ANIMATION_END);
+    r("on_damage",             MOB_EV_DAMAGE);
+    r("on_far_from_home",      MOB_EV_FAR_FROM_HOME);
+    r("on_focus_off_reach",    MOB_EV_FOCUS_OFF_REACH);
+    r("on_frame_signal",       MOB_EV_FRAME_SIGNAL);
+    r("on_held",               MOB_EV_HELD);
+    r("on_hitbox_touch_eat",   MOB_EV_HITBOX_TOUCH_EAT);
+    r("on_hitbox_touch_a_n",   MOB_EV_HITBOX_TOUCH_A_N);
+    r("on_itch",               MOB_EV_ITCH);
+    r("on_land",               MOB_EV_LANDED);
+    r("on_object_in_reach",    MOB_EV_OBJECT_IN_REACH);
+    r("on_opponent_in_reach",  MOB_EV_OPPONENT_IN_REACH);
+    r("on_pikmin_land",        MOB_EV_THROWN_PIKMIN_LANDED);
+    r("on_receive_message",    MOB_EV_RECEIVE_MESSAGE);
+    r("on_released",           MOB_EV_RELEASED);
+    r("on_reach_destination",  MOB_EV_REACHED_DESTINATION);
+    r("on_timer",              MOB_EV_TIMER);
+    r("on_touch_hazard",       MOB_EV_TOUCHED_HAZARD);
+    r("on_touch_object",       MOB_EV_TOUCHED_OBJECT);
+    r("on_touch_opponent",     MOB_EV_TOUCHED_OPPONENT);
+    r("on_touch_wall",         MOB_EV_TOUCHED_WALL);
+    r("on_weight_added",       MOB_EV_WEIGHT_ADDED);
+    r("on_weight_removed",     MOB_EV_WEIGHT_REMOVED);
     else {
-        type = MOB_EVENT_UNKNOWN;
+        type = MOB_EV_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", node);
     }
     
     for(size_t a = 0; a < this->actions.size(); ++a) {
-        this->actions[a]->parent_event = (MOB_EVENT_TYPES) type;
+        this->actions[a]->parent_event = (MOB_EV_TYPES) type;
     }
 }
 
@@ -279,7 +279,7 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
             prev_state_names[p] = prev_state_names[p - 1];
         }
         prev_state_names[0] = cur_state->name;
-        run_event(MOB_EVENT_ON_LEAVE, info1, info2);
+        run_event(MOB_EV_ON_LEAVE, info1, info2);
     }
     
     //Uncomment this to be notified about state changes on stdout.
@@ -293,7 +293,7 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
         cur_state = m->type->states[new_state];
         
         //Run the code to enter the new state.
-        run_event(MOB_EVENT_ON_ENTER, info1, info2);
+        run_event(MOB_EV_ON_ENTER, info1, info2);
     }
     
 }
@@ -415,7 +415,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         //Inject a damage event.
         vector<mob_action_call*> da_actions;
         da_actions.push_back(new mob_action_call(gen_mob_fsm::be_attacked));
-        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, da_actions));
+        events.push_back(new mob_event(MOB_EV_HITBOX_TOUCH_N_A, da_actions));
         
         //Inject a death event.
         if(
@@ -429,13 +429,13 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         ) {
             vector<mob_action_call*> de_actions;
             de_actions.push_back(new mob_action_call(gen_mob_fsm::die));
-            events.push_back(new mob_event(MOB_EVENT_DEATH, de_actions));
+            events.push_back(new mob_event(MOB_EV_DEATH, de_actions));
         }
         
         //Inject a bottomless pit event.
         vector<mob_action_call*> bp_actions;
         bp_actions.push_back(new mob_action_call(gen_mob_fsm::fall_down_pit));
-        events.push_back(new mob_event(MOB_EVENT_BOTTOMLESS_PIT, bp_actions));
+        events.push_back(new mob_event(MOB_EV_BOTTOMLESS_PIT, bp_actions));
         
         //Inject a spray event.
         if(
@@ -447,7 +447,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         ) {
             vector<mob_action_call*> s_actions;
             s_actions.push_back(new mob_action_call(gen_mob_fsm::touch_spray));
-            events.push_back(new mob_event(MOB_EVENT_TOUCHED_SPRAY, s_actions));
+            events.push_back(new mob_event(MOB_EV_TOUCHED_SPRAY, s_actions));
         }
         
         //Connect the events to the state.

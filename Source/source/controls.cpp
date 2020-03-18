@@ -271,7 +271,7 @@ void gameplay::handle_button(
                 if(!done) {
                     if(close_to_pikmin_to_pluck) {
                         cur_leader_ptr->fsm.run_event(
-                            LEADER_EVENT_GO_PLUCK,
+                            LEADER_EV_GO_PLUCK,
                             (void*) close_to_pikmin_to_pluck
                         );
                         done = true;
@@ -311,13 +311,13 @@ void gameplay::handle_button(
                 
                 //Now check if the leader should punch.
                 if(!done) {
-                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_PUNCH);
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_PUNCH);
                     done = true;
                 }
                 
             } else { //Button release.
                 if(!cur_leader_ptr->holding.empty()) {
-                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_THROW);
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_THROW);
                 }
             }
             
@@ -332,19 +332,19 @@ void gameplay::handle_button(
             if(is_down) {
                 //Button pressed.
                 //Cancel auto-pluck, lying down, etc.
-                cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
+                cur_leader_ptr->fsm.run_event(LEADER_EV_CANCEL);
                 
                 if(close_to_onion_to_open) {
                     close_to_onion_to_open->stow_pikmin();
                     
                 } else {
-                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
                     
                 }
                 
             } else {
                 //Button released.
-                cur_leader_ptr->fsm.run_event(LEADER_EVENT_STOP_WHISTLE);
+                cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
                 
             }
             
@@ -373,7 +373,7 @@ void gameplay::handle_button(
             
             if(!is_down) return;
             
-            cur_leader_ptr->fsm.run_event(LEADER_EVENT_DISMISS);
+            cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
             
         } else if(button == BUTTON_PAUSE) {
         
@@ -408,7 +408,7 @@ void gameplay::handle_button(
             if(spray_types.size() == 1 || spray_types.size() == 2) {
                 size_t spray_nr = 0;
                 cur_leader_ptr->fsm.run_event(
-                    LEADER_EVENT_SPRAY, (void*) &spray_nr
+                    LEADER_EV_SPRAY, (void*) &spray_nr
                 );
             }
             
@@ -419,7 +419,7 @@ void gameplay::handle_button(
             if(spray_types.size() == 2) {
                 size_t spray_nr = 1;
                 cur_leader_ptr->fsm.run_event(
-                    LEADER_EVENT_SPRAY, (void*) &spray_nr
+                    LEADER_EV_SPRAY, (void*) &spray_nr
                 );
             }
             
@@ -448,7 +448,7 @@ void gameplay::handle_button(
             
             if(spray_types.size() > 2) {
                 cur_leader_ptr->fsm.run_event(
-                    LEADER_EVENT_SPRAY,
+                    LEADER_EV_SPRAY,
                     (void*) &selected_spray
                 );
             }
@@ -510,7 +510,7 @@ void gameplay::handle_button(
             
             if(!is_down) return;
             
-            cur_leader_ptr->fsm.run_event(LEADER_EVENT_LIE_DOWN);
+            cur_leader_ptr->fsm.run_event(LEADER_EV_LIE_DOWN);
             
             
         } else if(

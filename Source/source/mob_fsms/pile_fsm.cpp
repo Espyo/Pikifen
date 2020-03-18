@@ -27,10 +27,10 @@ void pile_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idling", PILE_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pile_fsm::become_idle);
         }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(pile_fsm::be_attacked);
         }
     }

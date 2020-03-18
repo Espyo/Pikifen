@@ -67,7 +67,7 @@ void mob::tick_physics(const float delta_t) {
     push_amount = 0;
     
     if(touched_wall) {
-        fsm.run_event(MOB_EVENT_TOUCHED_WALL);
+        fsm.run_event(MOB_EV_TOUCHED_WALL);
     }
     
     if(type->walkable) {
@@ -725,23 +725,23 @@ void mob::tick_vertical_movement_physics(
             z = standing_on_mob->z + standing_on_mob->height;
             speed_z = 0;
             was_thrown = false;
-            fsm.run_event(MOB_EVENT_LANDED);
+            fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
             
         } else if(z <= ground_sector->z) {
             z = ground_sector->z;
             speed_z = 0;
             was_thrown = false;
-            fsm.run_event(MOB_EVENT_LANDED);
+            fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
             
             if(ground_sector->is_bottomless_pit) {
-                fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
+                fsm.run_event(MOB_EV_BOTTOMLESS_PIT);
             }
             
             for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
                 fsm.run_event(
-                    MOB_EVENT_TOUCHED_HAZARD,
+                    MOB_EV_TOUCHED_HAZARD,
                     (void*) ground_sector->hazards[h]
                 );
                 new_on_hazard = ground_sector->hazards[h];
@@ -761,7 +761,7 @@ void mob::tick_vertical_movement_physics(
     if(z > ground_sector->z && !ground_sector->hazard_floor) {
         for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
             fsm.run_event(
-                MOB_EVENT_TOUCHED_HAZARD,
+                MOB_EV_TOUCHED_HAZARD,
                 (void*) ground_sector->hazards[h]
             );
             new_on_hazard = ground_sector->hazards[h];
@@ -770,7 +770,7 @@ void mob::tick_vertical_movement_physics(
     
     if(new_on_hazard != on_hazard && on_hazard != NULL) {
         fsm.run_event(
-            MOB_EVENT_LEFT_HAZARD,
+            MOB_EV_LEFT_HAZARD,
             (void*) on_hazard
         );
     }
@@ -810,21 +810,21 @@ void mob::tick_walkable_riding_physics(const float delta_t) {
     
     if(rider_removed_ev_mob) {
         rider_removed_ev_mob->fsm.run_event(
-            MOB_EVENT_RIDER_REMOVED, (void*) this
+            MOB_EV_RIDER_REMOVED, (void*) this
         );
         if(type->weight != 0.0f) {
             rider_removed_ev_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_REMOVED, (void*) this
+                MOB_EV_WEIGHT_REMOVED, (void*) this
             );
         }
     }
     if(rider_added_ev_mob) {
         rider_added_ev_mob->fsm.run_event(
-            MOB_EVENT_RIDER_ADDED, (void*) this
+            MOB_EV_RIDER_ADDED, (void*) this
         );
         if(type->weight != 0.0f) {
             rider_added_ev_mob->fsm.run_event(
-                MOB_EVENT_WEIGHT_ADDED, (void*) this
+                MOB_EV_WEIGHT_ADDED, (void*) this
             );
         }
     }

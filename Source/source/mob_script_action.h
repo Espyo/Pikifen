@@ -235,7 +235,7 @@ struct mob_action_call {
     vector<bool> arg_is_var;
     
     string custom_error;
-    MOB_EVENT_TYPES parent_event;
+    MOB_EV_TYPES parent_event;
     mob_type* mt;
     
     bool load_from_data_node(

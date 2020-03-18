@@ -23,10 +23,10 @@ void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idling", SHIP_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(ship_fsm::set_anim);
         }
-        efc.new_event(MOB_EVENT_RECEIVE_DELIVERY); {
+        efc.new_event(MOB_EV_RECEIVE_DELIVERY); {
             efc.run(ship_fsm::receive_mob);
         }
     }

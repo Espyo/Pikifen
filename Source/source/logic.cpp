@@ -356,11 +356,11 @@ void gameplay::do_gameplay_logic() {
         );
         if(leader_move_magnitude < 0.75) {
             cur_leader_ptr->fsm.run_event(
-                LEADER_EVENT_MOVE_END, (void*) &leader_movement
+                LEADER_EV_MOVE_END, (void*) &leader_movement
             );
         } else {
             cur_leader_ptr->fsm.run_event(
-                LEADER_EVENT_MOVE_START, (void*) &leader_movement
+                LEADER_EV_MOVE_START, (void*) &leader_movement
             );
         }
         
@@ -892,7 +892,7 @@ void gameplay::process_mob_misc_interactions(
 ) {
     //Find a carriable mob to grab.
     mob_event* nco_event =
-        q_get_event(m_ptr, MOB_EVENT_NEAR_CARRIABLE_OBJECT);
+        q_get_event(m_ptr, MOB_EV_NEAR_CARRIABLE_OBJECT);
     if(
         nco_event &&
         m2_ptr->carry_info &&
@@ -911,7 +911,7 @@ void gameplay::process_mob_misc_interactions(
     
     //Find a tool mob.
     mob_event* nto_event =
-        q_get_event(m_ptr, MOB_EVENT_NEAR_TOOL);
+        q_get_event(m_ptr, MOB_EV_NEAR_TOOL);
     if(
         nto_event &&
         d <=
@@ -930,7 +930,7 @@ void gameplay::process_mob_misc_interactions(
     
     //Find a group task mob.
     mob_event* ngto_event =
-        q_get_event(m_ptr, MOB_EVENT_NEAR_GROUP_TASK);
+        q_get_event(m_ptr, MOB_EV_NEAR_GROUP_TASK);
     if(
         ngto_event &&
         m2_ptr->health > 0 &&
@@ -967,9 +967,9 @@ void gameplay::process_mob_reaches(
 ) {
     //Check reaches.
     mob_event* obir_ev =
-        q_get_event(m_ptr, MOB_EVENT_OBJECT_IN_REACH);
+        q_get_event(m_ptr, MOB_EV_OBJECT_IN_REACH);
     mob_event* opir_ev =
-        q_get_event(m_ptr, MOB_EVENT_OPPONENT_IN_REACH);
+        q_get_event(m_ptr, MOB_EV_OPPONENT_IN_REACH);
         
     mob_type::reach_struct* r_ptr =
         &m_ptr->type->reaches[m_ptr->near_reach];
@@ -1144,13 +1144,13 @@ void gameplay::process_mob_touches(
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
     mob_event* touch_op_ev =
-        q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
+        q_get_event(m_ptr, MOB_EV_TOUCHED_OPPONENT);
     mob_event* touch_le_ev =
-        q_get_event(m_ptr, MOB_EVENT_TOUCHED_ACTIVE_LEADER);
+        q_get_event(m_ptr, MOB_EV_TOUCHED_ACTIVE_LEADER);
     mob_event* touch_ob_ev =
-        q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
+        q_get_event(m_ptr, MOB_EV_TOUCHED_OBJECT);
     mob_event* pik_land_ev =
-        q_get_event(m_ptr, MOB_EVENT_THROWN_PIKMIN_LANDED);
+        q_get_event(m_ptr, MOB_EV_THROWN_PIKMIN_LANDED);
     if(
         touch_op_ev || touch_le_ev ||
         touch_ob_ev || pik_land_ev
@@ -1229,13 +1229,13 @@ void gameplay::process_mob_touches(
     
     //Check hitbox touches.
     mob_event* hitbox_touch_an_ev =
-        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
+        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_A_N);
     mob_event* hitbox_touch_na_ev =
-        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
     mob_event* hitbox_touch_eat_ev =
-        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
+        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_EAT);
     mob_event* hitbox_touch_haz_ev =
-        q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
+        q_get_event(m_ptr, MOB_EV_TOUCHED_HAZARD);
         
     sprite* s1_ptr = m_ptr->anim.get_cur_sprite();
     sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
@@ -1328,11 +1328,11 @@ void gameplay::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_eat_ev =
-                        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_EAT);
                     hitbox_touch_haz_ev =
-                        q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
+                        q_get_event(m_ptr, MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
-                        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 if(
@@ -1390,9 +1390,9 @@ void gameplay::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_haz_ev =
-                        q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
+                        q_get_event(m_ptr, MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
-                        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Touched hazard" event.
@@ -1422,7 +1422,7 @@ void gameplay::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_na_ev =
-                        q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Normal hitbox touched attack hitbox" event.

@@ -21,10 +21,10 @@
 void track_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", TRACK_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(track_fsm::spawn);
         }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
             efc.run(track_fsm::on_touched);
         }
     }
@@ -58,7 +58,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to ride it.
-        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_TRACK);
+        ev = q_get_event(toucher, MOB_EV_TOUCHED_TRACK);
         
     } else if(
         tra_ptr->tra_type->riders & TRACK_RIDER_LEADERS &&
@@ -66,7 +66,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to ride it.
-        ev = q_get_event(toucher, MOB_EVENT_TOUCHED_TRACK);
+        ev = q_get_event(toucher, MOB_EV_TOUCHED_TRACK);
         
     }
     

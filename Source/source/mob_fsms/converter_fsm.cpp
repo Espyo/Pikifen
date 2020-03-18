@@ -21,56 +21,56 @@
 void converter_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", CONVERTER_STATE_IDLING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::become_idle);
         }
-        efc.new_event(MOB_EVENT_THROWN_PIKMIN_LANDED); {
+        efc.new_event(MOB_EV_THROWN_PIKMIN_LANDED); {
             efc.run(converter_fsm::handle_pikmin);
         }
-        efc.new_event(MOB_EVENT_TOUCHED_OBJECT); {
+        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
             efc.run(converter_fsm::handle_object_touch);
         }
     }
     
     efc.new_state("bumping", CONVERTER_STATE_BUMPING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::bumped);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(converter_fsm::finish_being_bumped);
             efc.change_state("closing");
         }
     }
     
     efc.new_state("closing", CONVERTER_STATE_CLOSING); {
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(converter_fsm::open_or_spit);
         }
     }
     
     efc.new_state("spitting", CONVERTER_STATE_SPITTING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::spew);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(converter_fsm::open_or_die);
         }
     }
     
     efc.new_state("opening", CONVERTER_STATE_OPENING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::open);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
         }
     }
     
     efc.new_state("dying", CONVERTER_STATE_DYING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::start_dying);
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(converter_fsm::finish_dying);
         }
     }

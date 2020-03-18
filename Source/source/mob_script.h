@@ -10,8 +10,8 @@
  */
 
 
-#ifndef MOB_EVENT_INCLUDED
-#define MOB_EVENT_INCLUDED
+#ifndef MOB_EV_INCLUDED
+#define MOB_EV_INCLUDED
 
 #include <vector>
 
@@ -30,177 +30,177 @@ typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 const unsigned char STATE_HISTORY_SIZE = 3;
 
 //Types of script events.
-enum MOB_EVENT_TYPES {
+enum MOB_EV_TYPES {
     //"Special" events.
     
-    MOB_EVENT_UNKNOWN,
+    MOB_EV_UNKNOWN,
     //When the state is entered.
-    MOB_EVENT_ON_ENTER,
+    MOB_EV_ON_ENTER,
     //When the state is left.
-    MOB_EVENT_ON_LEAVE,
+    MOB_EV_ON_LEAVE,
     //When the game ticks a frame.
-    MOB_EVENT_ON_TICK,
+    MOB_EV_ON_TICK,
     
     //Script file stuff.
     
     //When the current animation ends.
-    MOB_EVENT_ANIMATION_END,
+    MOB_EV_ANIMATION_END,
     //When it lands on a bottomless pit.
-    MOB_EVENT_BOTTOMLESS_PIT,
+    MOB_EV_BOTTOMLESS_PIT,
     //When it is damaged.
-    MOB_EVENT_DAMAGE,
+    MOB_EV_DAMAGE,
     //When it dies.
-    MOB_EVENT_DEATH,
+    MOB_EV_DEATH,
     //When the mob is far away from its home.
-    MOB_EVENT_FAR_FROM_HOME,
+    MOB_EV_FAR_FROM_HOME,
     //When the mob it was focused on died.
-    MOB_EVENT_FOCUS_DIED,
+    MOB_EV_FOCUS_DIED,
     //When the mob it was focused on went past the "far" reach.
-    MOB_EVENT_FOCUS_OFF_REACH,
+    MOB_EV_FOCUS_OFF_REACH,
     //When a frame of animation sends a signal.
-    MOB_EVENT_FRAME_SIGNAL,
+    MOB_EV_FRAME_SIGNAL,
     //When it just got held by another mob.
-    MOB_EVENT_HELD,
+    MOB_EV_HELD,
     //When one of its normal hitboxes touches another mob's eating hitbox.
-    MOB_EVENT_HITBOX_TOUCH_EAT,
+    MOB_EV_HITBOX_TOUCH_EAT,
     //When it has been damaged enough to want to shake.
-    MOB_EVENT_ITCH,
+    MOB_EV_ITCH,
     //When it leaves a hazard in a sector.
-    MOB_EVENT_LEFT_HAZARD,
+    MOB_EV_LEFT_HAZARD,
     //When an object is within the "near" reach.
-    MOB_EVENT_OBJECT_IN_REACH,
+    MOB_EV_OBJECT_IN_REACH,
     //When an opponent is within the "near" reach.
-    MOB_EVENT_OPPONENT_IN_REACH,
+    MOB_EV_OPPONENT_IN_REACH,
     //When a Pikmin lands on it.
-    MOB_EVENT_THROWN_PIKMIN_LANDED,
+    MOB_EV_THROWN_PIKMIN_LANDED,
     //When it reaches its destination.
-    MOB_EVENT_REACHED_DESTINATION,
+    MOB_EV_REACHED_DESTINATION,
     //When it receives a message from another mob.
-    MOB_EVENT_RECEIVE_MESSAGE,
+    MOB_EV_RECEIVE_MESSAGE,
     //When it is safely released from the leader's/enemy's grasp.
-    MOB_EVENT_RELEASED,
+    MOB_EV_RELEASED,
     //When a mob has landed on top of it. Only if this mob's walkable.
-    MOB_EVENT_RIDER_ADDED,
+    MOB_EV_RIDER_ADDED,
     //When a mob that was on top of it has left. Only if this mob's walkable.
-    MOB_EVENT_RIDER_REMOVED,
+    MOB_EV_RIDER_REMOVED,
     //When it gets touched by a leader.
-    MOB_EVENT_TOUCHED_ACTIVE_LEADER,
+    MOB_EV_TOUCHED_ACTIVE_LEADER,
     //When it touches a hazard (sector or hitbox).
-    MOB_EVENT_TOUCHED_HAZARD,
+    MOB_EV_TOUCHED_HAZARD,
     //When it touches a sprayed spray.
-    MOB_EVENT_TOUCHED_SPRAY,
+    MOB_EV_TOUCHED_SPRAY,
     //When it gets touched by an object.
-    MOB_EVENT_TOUCHED_OBJECT,
+    MOB_EV_TOUCHED_OBJECT,
     //When it gets touched by an opponent.
-    MOB_EVENT_TOUCHED_OPPONENT,
+    MOB_EV_TOUCHED_OPPONENT,
     //When its timer ticks.
-    MOB_EVENT_TIMER,
+    MOB_EV_TIMER,
     //When it touches a wall.
-    MOB_EVENT_TOUCHED_WALL,
+    MOB_EV_TOUCHED_WALL,
     //When weight has been added on top of it. Only if this mob's walkable.
-    MOB_EVENT_WEIGHT_ADDED,
+    MOB_EV_WEIGHT_ADDED,
     //When weight was removed from on top of it. Only if this mob's walkable.
-    MOB_EVENT_WEIGHT_REMOVED,
+    MOB_EV_WEIGHT_REMOVED,
     
     //More internal script stuff.
     
     //When it is plucked off the ground (Pikmin only).
-    MOB_EVENT_PLUCKED,
+    MOB_EV_PLUCKED,
     //When it is grabbed by a friend.
-    MOB_EVENT_GRABBED_BY_FRIEND,
+    MOB_EV_GRABBED_BY_FRIEND,
     //When it is dismissed by its leader.
-    MOB_EVENT_DISMISSED,
+    MOB_EV_DISMISSED,
     //When it is thrown.
-    MOB_EVENT_THROWN,
+    MOB_EV_THROWN,
     //When it lands on the ground.
-    MOB_EVENT_LANDED,
+    MOB_EV_LANDED,
     //When it is ordered to release whatever it is holding.
-    MOB_EVENT_RELEASE_ORDER,
+    MOB_EV_RELEASE_ORDER,
     //When it is near a task (Pikmin only).
-    MOB_EVENT_NEAR_TASK,
+    MOB_EV_NEAR_TASK,
     //When it is whistled by a leader.
-    MOB_EVENT_WHISTLED,
+    MOB_EV_WHISTLED,
     //When its spot on the group is now near, and the mob is in the group.
-    MOB_EVENT_SPOT_IS_NEAR,
+    MOB_EV_SPOT_IS_NEAR,
     //When its spot on the group is now far, and the mob is in the group.
-    MOB_EVENT_SPOT_IS_FAR,
+    MOB_EV_SPOT_IS_FAR,
     //When the group the mob is on started swarming..
-    MOB_EVENT_SWARM_STARTED,
+    MOB_EV_SWARM_STARTED,
     //When the group the mob is on stopped swarming.
-    MOB_EVENT_SWARM_ENDED,
+    MOB_EV_SWARM_ENDED,
     //When the object the Pikmin was carrying gets delivered.
-    MOB_EVENT_FINISHED_CARRYING,
+    MOB_EV_FINISHED_CARRYING,
     //When the Pikmin is near an object that can be carried.
-    MOB_EVENT_NEAR_CARRIABLE_OBJECT,
+    MOB_EV_NEAR_CARRIABLE_OBJECT,
     //When the Pikmin is near a tool object.
-    MOB_EVENT_NEAR_TOOL,
+    MOB_EV_NEAR_TOOL,
     //When the Pikmin is near a group task.
-    MOB_EVENT_NEAR_GROUP_TASK,
+    MOB_EV_NEAR_GROUP_TASK,
     //When it has reached its carrying spot on the carriable object.
-    //TODO replace with MOB_EVENT_REACHED_DESTINATION?
-    MOB_EVENT_REACHED_CARRIABLE_OBJECT,
+    //TODO replace with MOB_EV_REACHED_DESTINATION?
+    MOB_EV_REACHED_CARRIABLE_OBJECT,
     //When one of its attack hitboxes touches another mob's normal hitbox.
-    MOB_EVENT_HITBOX_TOUCH_A_N,
+    MOB_EV_HITBOX_TOUCH_A_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.
-    MOB_EVENT_HITBOX_TOUCH_N_A,
+    MOB_EV_HITBOX_TOUCH_N_A,
     //When a Pikmin was added to the list of Pikmin carrying this mob.
-    MOB_EVENT_CARRIER_ADDED,
+    MOB_EV_CARRIER_ADDED,
     //When a Pikmin was removed from the list of Pikmin carrying this mob.
-    MOB_EVENT_CARRIER_REMOVED,
+    MOB_EV_CARRIER_REMOVED,
     //When the mob needs to begin moving, as it's being carried.
-    MOB_EVENT_CARRY_BEGIN_MOVE,
+    MOB_EV_CARRY_BEGIN_MOVE,
     //When the mob needs to stop moving, as it's no longer being carried.
-    MOB_EVENT_CARRY_STOP_MOVE,
+    MOB_EV_CARRY_STOP_MOVE,
     //When the mob being carried becomes stuck.
-    MOB_EVENT_CARRY_STUCK,
+    MOB_EV_CARRY_STUCK,
     //When the mob was sucessfully delivered
     //to its destination after being carried.
-    MOB_EVENT_CARRY_DELIVERED,
+    MOB_EV_CARRY_DELIVERED,
     //When the focused mob stops being able to be focused.
-    MOB_EVENT_FOCUSED_MOB_UNAVAILABLE,
+    MOB_EV_FOCUSED_MOB_UNAVAILABLE,
     //When the mob receives an object that was carried to it.
-    MOB_EVENT_RECEIVE_DELIVERY,
+    MOB_EV_RECEIVE_DELIVERY,
     //When the mob touches a drop that it can consume.
-    MOB_EVENT_TOUCHED_DROP,
+    MOB_EV_TOUCHED_DROP,
     //When the mob touches a track object.
-    MOB_EVENT_TOUCHED_TRACK,
+    MOB_EV_TOUCHED_TRACK,
     //When the mob touches a bouncer object.
-    MOB_EVENT_TOUCHED_BOUNCER,
+    MOB_EV_TOUCHED_BOUNCER,
     
     //Events that only leaders can really handle.
     
     //When the leader becomes the one controlled by the player.
-    LEADER_EVENT_ACTIVATED,
+    LEADER_EV_ACTIVATED,
     //When the leader stops being the one controlled by the player.
-    LEADER_EVENT_INACTIVATED,
+    LEADER_EV_INACTIVATED,
     //When the leader begins moving.
-    LEADER_EVENT_MOVE_START,
+    LEADER_EV_MOVE_START,
     //When the leader stops moving.
-    LEADER_EVENT_MOVE_END,
+    LEADER_EV_MOVE_END,
     //When the leader is holding a Pikmin on their hand.
-    LEADER_EVENT_HOLDING,
+    LEADER_EV_HOLDING,
     //When the leader throws the Pikmin on their hand.
-    LEADER_EVENT_THROW,
+    LEADER_EV_THROW,
     //When the leader begins whistling.
-    LEADER_EVENT_START_WHISTLE,
+    LEADER_EV_START_WHISTLE,
     //When the leader stops whistling.
-    LEADER_EVENT_STOP_WHISTLE,
+    LEADER_EV_STOP_WHISTLE,
     //When the leader throws a punch.
-    LEADER_EVENT_PUNCH,
+    LEADER_EV_PUNCH,
     //When the leader dismisses their group.
-    LEADER_EVENT_DISMISS,
+    LEADER_EV_DISMISS,
     //When the leader uses a spray.
-    LEADER_EVENT_SPRAY,
+    LEADER_EV_SPRAY,
     //When the leader lies down.
-    LEADER_EVENT_LIE_DOWN,
+    LEADER_EV_LIE_DOWN,
     //When the leader has to go towards the Pikmin it intends to pluck.
-    LEADER_EVENT_GO_PLUCK,
+    LEADER_EV_GO_PLUCK,
     //When the leader has to go help pluck Pikmin, as an inactive leader.
-    LEADER_EVENT_MUST_SEARCH_SEED,
+    LEADER_EV_MUST_SEARCH_SEED,
     //When the leader reaches the seed they're meant to pluck.
-    LEADER_EVENT_REACHED_SEED,
+    LEADER_EV_REACHED_SEED,
     //When the leader's pluck is canceled.
-    LEADER_EVENT_CANCEL,
+    LEADER_EV_CANCEL,
     
     N_MOB_EVENTS,
 };
@@ -300,4 +300,4 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 void unload_script(mob_type* mt);
 
 
-#endif //ifndef MOB_EVENT_INCLUDED
+#endif //ifndef MOB_EV_INCLUDED

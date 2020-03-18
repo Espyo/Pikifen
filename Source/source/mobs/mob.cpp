@@ -164,7 +164,7 @@ void mob::apply_attack_damage(
         set_health(true, false, -damage);
         
         hitbox_interaction ev_info(this, victim_h, attack_h);
-        fsm.run_event(MOB_EVENT_DAMAGE, (void*) &ev_info);
+        fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info);
         
         attacker->cause_spike_damage(this, false);
     }
@@ -403,7 +403,7 @@ void mob::become_uncarriable() {
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(
-                MOB_EVENT_FOCUSED_MOB_UNAVAILABLE
+                MOB_EV_FOCUSED_MOB_UNAVAILABLE
             );
         }
     }
@@ -1512,12 +1512,12 @@ void mob::hold(
     m->holder.offset_angle = offset_angle;
     m->holder.above_holder = above_holder;
     m->holder.rotation_method = rotation_method;
-    m->fsm.run_event(MOB_EVENT_HELD, (void*) this);
+    m->fsm.run_event(MOB_EV_HELD, (void*) this);
     
     if(standing_on_mob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that extra weight has been added.
-            standing_on_mob->fsm.run_event(MOB_EVENT_WEIGHT_ADDED, (void*) m);
+            standing_on_mob->fsm.run_event(MOB_EV_WEIGHT_ADDED, (void*) m);
         }
     }
 }
@@ -1626,7 +1626,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
 void mob::release(mob* m) {
     for(size_t h = 0; h < holding.size(); ++h) {
         if(holding[h] == m) {
-            m->fsm.run_event(MOB_EVENT_RELEASED, (void*) this);
+            m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
             holding.erase(holding.begin() + h);
             break;
         }
@@ -1637,7 +1637,7 @@ void mob::release(mob* m) {
     if(standing_on_mob) {
         if(m->type->weight > 0) {
             //Better inform the mob below that weight has been removed.
-            standing_on_mob->fsm.run_event(MOB_EVENT_WEIGHT_REMOVED, (void*) m);
+            standing_on_mob->fsm.run_event(MOB_EV_WEIGHT_REMOVED, (void*) m);
         }
     }
 }
@@ -1684,7 +1684,7 @@ void mob::respawn() {
  * event, with the message as data.
  */
 void mob::send_message(mob* receiver, string &msg) {
-    mob_event* ev = q_get_event(receiver, MOB_EVENT_RECEIVE_MESSAGE);
+    mob_event* ev = q_get_event(receiver, MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
 }
@@ -2072,10 +2072,10 @@ void mob::tick_animation(const float delta_t) {
     bool finished_anim = anim.tick(delta_t* mult, &frame_signals);
     
     if(finished_anim) {
-        fsm.run_event(MOB_EVENT_ANIMATION_END);
+        fsm.run_event(MOB_EV_ANIMATION_END);
     }
     for(size_t s = 0; s < frame_signals.size(); ++s) {
-        fsm.run_event(MOB_EVENT_FRAME_SIGNAL, &frame_signals[s]);
+        fsm.run_event(MOB_EV_FRAME_SIGNAL, &frame_signals[s]);
     }
     
     for(size_t h = 0; h < hit_opponents.size();) {
@@ -2191,7 +2191,7 @@ void mob::tick_brain(const float delta_t) {
                 //Reached the final destination. Think about stopping.
                 chase_info.speed = 0;
                 fsm.run_event(
-                    MOB_EVENT_REACHED_DESTINATION,
+                    MOB_EV_REACHED_DESTINATION,
                     (stuck_at_obstacle ? (void*) stuck_at_obstacle : NULL)
                 );
             }
@@ -2312,7 +2312,7 @@ void mob::tick_script(const float delta_t) {
     if(!fsm.cur_state) return;
     
     //Timer events.
-    mob_event* timer_ev = q_get_event(this, MOB_EVENT_TIMER);
+    mob_event* timer_ev = q_get_event(this, MOB_EV_TIMER);
     if(script_timer.duration > 0) {
         if(script_timer.time_left > 0) {
             script_timer.tick(delta_t);
@@ -2323,32 +2323,32 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Has it reached its home?
-    mob_event* reach_dest_ev = q_get_event(this, MOB_EVENT_REACHED_DESTINATION);
+    mob_event* reach_dest_ev = q_get_event(this, MOB_EV_REACHED_DESTINATION);
     if(reach_dest_ev && chase_info.reached_destination) {
         reach_dest_ev->run(this);
     }
     
     //Is it dead?
     if(health <= 0 && type->max_health != 0) {
-        fsm.run_event(MOB_EVENT_DEATH, this);
+        fsm.run_event(MOB_EV_DEATH, this);
     }
     
     //Check the focused mob.
     if(focused_mob) {
     
         if(focused_mob->health <= 0) {
-            fsm.run_event(MOB_EVENT_FOCUS_DIED);
-            fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
+            fsm.run_event(MOB_EV_FOCUS_DIED);
+            fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
         }
         
         //We have to recheck if the focused mob is not NULL, because
-        //sending MOB_EVENT_FOCUS_DIED could've set this to NULL.
+        //sending MOB_EV_FOCUS_DIED could've set this to NULL.
         if(focused_mob) {
         
             mob* focus = focused_mob;
             
             mob_event* for_ev =
-                q_get_event(this, MOB_EVENT_FOCUS_OFF_REACH);
+                q_get_event(this, MOB_EV_FOCUS_OFF_REACH);
                 
             if(far_reach != INVALID && for_ev) {
                 dist d(pos, focus->pos);
@@ -2383,7 +2383,7 @@ void mob::tick_script(const float delta_t) {
     //Itch event.
     if(type->itch_damage > 0 || type->itch_time > 0) {
         itch_time += delta_t;
-        mob_event* itch_ev = q_get_event(this, MOB_EVENT_ITCH);
+        mob_event* itch_ev = q_get_event(this, MOB_EV_ITCH);
         if(
             itch_ev &&
             itch_damage > type->itch_damage && itch_time > type->itch_time
@@ -2400,7 +2400,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Check if it got whistled.
-    mob_event* whistled_ev = q_get_event(this, MOB_EVENT_WHISTLED);
+    mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
     if(whistling && whistled_ev) {
         if(dist(pos, leader_cursor_w) <= whistle_radius) {
             whistled_ev->run(this);
@@ -2409,8 +2409,8 @@ void mob::tick_script(const float delta_t) {
     
     //Following a leader.
     if(following_group) {
-        mob_event* spot_near_ev = q_get_event(this, MOB_EVENT_SPOT_IS_NEAR);
-        mob_event* spot_far_ev =  q_get_event(this, MOB_EVENT_SPOT_IS_FAR);
+        mob_event* spot_near_ev = q_get_event(this, MOB_EV_SPOT_IS_NEAR);
+        mob_event* spot_far_ev =  q_get_event(this, MOB_EV_SPOT_IS_FAR);
         
         if(spot_near_ev || spot_far_ev) {
             point final_pos =
@@ -2428,7 +2428,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Far away from home.
-    mob_event* far_from_home_ev = q_get_event(this, MOB_EVENT_FAR_FROM_HOME);
+    mob_event* far_from_home_ev = q_get_event(this, MOB_EV_FAR_FROM_HOME);
     if(far_from_home_ev) {
         dist d(pos, home);
         if(d >= type->territory_radius) {
@@ -2462,14 +2462,14 @@ void mob::tick_script(const float delta_t) {
             ++o
         ) {
             if((*o)->health == 0) {
-                fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+                fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
                 break;
             }
         }
     }
     
     //Tick event.
-    fsm.run_event(MOB_EVENT_ON_TICK);
+    fsm.run_event(MOB_EV_ON_TICK);
 }
 
 
