@@ -31,27 +31,27 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::enter_idle);
         }
         efc.new_event(MOB_EVENT_ON_TICK); {
-            efc.run(leader_fsm::inactive_search_seed);
+            efc.run(leader_fsm::search_seed);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(leader_fsm::join_group);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(leader_fsm::stop);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_be_attacked);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
         }
-        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
-            efc.run(leader_fsm::inactive_search_seed);
+        efc.new_event(LEADER_EVENT_MUST_SEARCH_SEED); {
+            efc.run(leader_fsm::search_seed);
         }
         efc.new_event(LEADER_EVENT_GO_PLUCK); {
             efc.run(leader_fsm::go_pluck);
@@ -78,9 +78,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run(leader_fsm::tick_active_state);
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
             efc.run(leader_fsm::stop);
-            efc.run(leader_fsm::unfocus);
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("idling");
         }
         efc.new_event(LEADER_EVENT_MOVE_START); {
@@ -333,8 +333,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("pain", LEADER_STATE_PAIN); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(leader_fsm::suffer_pain);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
+            efc.change_state("inactive_pain");
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
@@ -342,8 +343,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(leader_fsm::suffer_pain);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
+            efc.change_state("pain");
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.run(leader_fsm::be_dismissed);
@@ -352,8 +354,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("knocked_back", LEADER_STATE_KNOCKED_BACK); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(leader_fsm::get_knocked_back);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
+            efc.change_state("inactive_knocked_back");
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(leader_fsm::lose_momentum);
@@ -373,8 +376,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     efc.new_state(
         "inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK
     ); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(leader_fsm::get_knocked_back);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(leader_fsm::lose_momentum);
@@ -413,15 +417,15 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_grabbed_by_friend);
             efc.change_state("held_by_leader");
         }
-        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
-            efc.run(leader_fsm::inactive_search_seed);
+        efc.new_event(LEADER_EVENT_MUST_SEARCH_SEED); {
+            efc.run(leader_fsm::search_seed);
         }
         efc.new_event(LEADER_EVENT_GO_PLUCK); {
             efc.run(leader_fsm::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_be_attacked);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -464,15 +468,15 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_grabbed_by_friend);
             efc.change_state("held_by_leader");
         }
-        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
-            efc.run(leader_fsm::inactive_search_seed);
+        efc.new_event(LEADER_EVENT_MUST_SEARCH_SEED); {
+            efc.run(leader_fsm::search_seed);
         }
         efc.new_event(LEADER_EVENT_GO_PLUCK); {
             efc.run(leader_fsm::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_be_attacked);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -515,8 +519,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("dying");
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run(leader_fsm::unfocus);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_going_to_pluck");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -542,8 +546,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::queue_stop_auto_pluck);
             efc.run(leader_fsm::signal_stop_auto_pluck);
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run(leader_fsm::unfocus);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_plucking");
         }
     }
@@ -572,8 +576,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("dying");
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("going_to_pluck");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
@@ -594,7 +598,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.run(leader_fsm::finish_current_pluck);
-            efc.run(leader_fsm::inactive_search_seed);
+            efc.run(leader_fsm::search_seed);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(leader_fsm::join_group);
@@ -603,8 +607,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run(leader_fsm::queue_stop_auto_pluck);
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("plucking");
         }
     }
@@ -627,8 +631,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("waking_up");
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run(leader_fsm::unfocus);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -683,8 +687,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("waking_up");
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run(leader_fsm::unfocus);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -733,8 +737,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("waking_up");
         }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run(leader_fsm::unfocus);
+        efc.new_event(LEADER_EVENT_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -779,8 +783,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("inactive_waking_up");
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -838,8 +842,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("inactive_waking_up");
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -892,8 +896,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("inactive_waking_up");
         }
-        efc.new_event(LEADER_EVENT_FOCUSED); {
-            efc.run(leader_fsm::focus);
+        efc.new_event(LEADER_EVENT_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
             efc.change_state("sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -944,7 +948,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::inactive_be_attacked);
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -1055,10 +1059,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
 /* ----------------------------------------------------------------------------
  * When a leader loses health.
  * info1: Pointer to the hitbox touch information structure.
- * info2: If not NULL, that means this leader is inactive.
  */
 void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
+    
+    leader* l_ptr = (leader*) m;
     
     if(m->invuln_period.time_left > 0.0f) return;
     m->invuln_period.start();
@@ -1073,6 +1078,8 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
     m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
     
+    m->stop_chasing();
+    
     float knockback = 0;
     float knockback_angle = 0;
     info->mob2->calculate_knockback(
@@ -1080,17 +1087,20 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     );
     m->apply_knockback(knockback, knockback_angle);
     
-    //If info2 has a value, then this leader is inactive.
+    m->leave_group();
+    
     if(knockback > 0) {
-        if(info2)
-            m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
-        else
-            m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
+        m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
+        
+        if(l_ptr->active) m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
+        else m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+        
     } else {
-        if(info2)
-            m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
-        else
-            m->fsm.set_state(LEADER_STATE_PAIN);
+        m->set_animation(LEADER_ANIM_PAIN);
+        
+        if(l_ptr->active) m->fsm.set_state(LEADER_STATE_PAIN);
+        else m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
+        
     }
 }
 
@@ -1145,6 +1155,37 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
     //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader is meant to become the active one.
+ */
+void leader_fsm::become_active(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_INACTIVATED);
+    
+    size_t new_leader_nr = cur_leader_nr;
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l] == l_ptr) {
+            new_leader_nr = l;
+            break;
+        }
+    }
+    
+    cur_leader_ptr = l_ptr;
+    cur_leader_nr = new_leader_nr;
+    l_ptr->active = true;
+    
+    l_ptr->lea_type->sfx_name_call.play(0, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader stops being the active one.
+ */
+void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
+    ((leader*) m)->active = false;
 }
 
 
@@ -1378,37 +1419,6 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader is meant to become the active one.
- */
-void leader_fsm::focus(mob* m, void* info1, void* info2) {
-    leader* l_ptr = (leader*) m;
-    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
-    
-    size_t new_leader_nr = cur_leader_nr;
-    for(size_t l = 0; l < leaders.size(); ++l) {
-        if(leaders[l] == l_ptr) {
-            new_leader_nr = l;
-            break;
-        }
-    }
-    
-    cur_leader_ptr = l_ptr;
-    cur_leader_nr = new_leader_nr;
-    
-    l_ptr->lea_type->sfx_name_call.play(0, false);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a leader lies down from being knocked back.
- */
-void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
-    m->leave_group();
-    m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a leader heads towards a Pikmin with the intent to pluck it.
  * Also signals other leaders in the group to search for other seeds.
  * info1: Pointer to the Pikmin to be plucked.
@@ -1434,7 +1444,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     for(size_t l = 0; l < leaders.size(); ++l) {
         if(leaders[l]->following_group == lea_ptr) {
             leaders[l]->auto_plucking = true;
-            leaders[l]->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
+            leaders[l]->fsm.run_event(LEADER_EVENT_MUST_SEARCH_SEED);
         }
     }
     
@@ -1456,28 +1466,6 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
         false, true
     );
     l_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When an inactive leader loses health.
- * info1: Pointer to the hitbox touch information structure.
- */
-void leader_fsm::inactive_be_attacked(mob* m, void* info1, void* info2) {
-    int a = 0;
-    leader_fsm::be_attacked(m, info1, &a);
-    //We need to send the function a value so it knows
-    //it's an inactive leader.
-}
-
-
-/* ----------------------------------------------------------------------------
- * When an inactive leader searches for a seed next to them.
- * This just calls search_seed().
- */
-void leader_fsm::inactive_search_seed(mob* m, void* info1, void* info2) {
-    int a = 0; //Dummy value.
-    leader_fsm::search_seed(m, &a, NULL);
 }
 
 
@@ -1598,7 +1586,6 @@ void leader_fsm::release(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a leader searches for a seed next to them.
  * If found, issues events to go towards the seed.
- * info1: If not NULL, this leader is inactive.
  */
 void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1612,15 +1599,14 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
         leader_fsm::stop_auto_pluck(m, NULL, NULL);
     }
     
-    if(!info1) {
-        //Active leader.
+    if(l_ptr->active) {
         l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     } else {
-        //Inactive leader.
-        if(l_ptr->following_group)
+        if(l_ptr->following_group) {
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
-        else
+        } else {
             l_ptr->fsm.set_state(LEADER_STATE_IDLING);
+        }
     }
     
     if(new_pikmin && d <= next_pluck_range) {
@@ -1859,15 +1845,6 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader reels back in pain from being hurt.
- */
-void leader_fsm::suffer_pain(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_PAIN);
-    m->stop_chasing();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Every tick in the active state.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
@@ -1877,14 +1854,13 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader has to teleport to its spot in a track it is riding.
- * info1: If not NULL, the leader is inactive.
  */
 void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
     
     if(m->tick_track_ride()) {
         //Finished!
-        if(m == cur_leader_ptr) {
+        if(((leader*) m)->active) {
             m->fsm.set_state(LEADER_STATE_ACTIVE, NULL, NULL);
         } else {
             m->fsm.set_state(LEADER_STATE_IDLING, NULL, NULL);
@@ -1948,14 +1924,6 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     for(size_t e = 0; e < s->effects.size(); ++e) {
         l->apply_status_effect(s->effects[e], false, false);
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a leader stops being the active one.
- */
-void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
-
 }
 
 

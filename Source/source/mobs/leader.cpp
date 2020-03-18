@@ -23,6 +23,7 @@
 leader::leader(const point &pos, leader_type* type, const float angle) :
     mob(pos, type, angle),
     lea_type(type),
+    active(false),
     auto_plucking(false),
     pluck_target(nullptr),
     queued_pluck_cancel(false),
@@ -474,7 +475,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     if(leaders.size() == 1) return;
     
     if(
-        !cur_leader_ptr->fsm.get_event(LEADER_EVENT_UNFOCUSED) &&
+        !cur_leader_ptr->fsm.get_event(LEADER_EVENT_INACTIVATED) &&
         !force_success
     ) {
         //This leader isn't ready to be switched out of. Forget it.
@@ -504,7 +505,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
             searching = false;
         }
         
-        new_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
+        new_leader_ptr->fsm.run_event(LEADER_EVENT_ACTIVATED);
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.

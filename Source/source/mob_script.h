@@ -170,9 +170,9 @@ enum MOB_EVENT_TYPES {
     //Events that only leaders can really handle.
     
     //When the leader becomes the one controlled by the player.
-    LEADER_EVENT_FOCUSED,
+    LEADER_EVENT_ACTIVATED,
     //When the leader stops being the one controlled by the player.
-    LEADER_EVENT_UNFOCUSED,
+    LEADER_EVENT_INACTIVATED,
     //When the leader begins moving.
     LEADER_EVENT_MOVE_START,
     //When the leader stops moving.
@@ -196,7 +196,7 @@ enum MOB_EVENT_TYPES {
     //When the leader has to go towards the Pikmin it intends to pluck.
     LEADER_EVENT_GO_PLUCK,
     //When the leader has to go help pluck Pikmin, as an inactive leader.
-    LEADER_EVENT_INACTIVE_SEARCH_SEED,
+    LEADER_EVENT_MUST_SEARCH_SEED,
     //When the leader reaches the seed they're meant to pluck.
     LEADER_EVENT_REACHED_SEED,
     //When the leader's pluck is canceled.

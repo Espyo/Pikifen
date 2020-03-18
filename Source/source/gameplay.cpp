@@ -223,6 +223,7 @@ void gameplay::load() {
     cur_leader_nr = 0;
     cur_leader_ptr = leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+    cur_leader_ptr->active = true;
     
     cam_pos = cam_final_pos = cur_leader_ptr->pos;
     cam_zoom = cam_final_zoom = zoom_mid_level;

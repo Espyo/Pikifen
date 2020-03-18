@@ -30,6 +30,8 @@ public:
     //What type of leader it is.
     leader_type* lea_type;
     
+    //Is it active? i.e. being controlled by a player.
+    bool active;
     //Is it currently auto-plucking?
     bool auto_plucking;
     //Pikmin it wants to pluck.
