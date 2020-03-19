@@ -24,6 +24,12 @@
 #include "sector.h"
 #include "vars.h"
 
+enum FILE_DIALOG_RESULTS {
+    FILE_DIALOG_RES_SUCCESS,
+    FILE_DIALOG_RES_WRONG_FOLDER,
+    FILE_DIALOG_RES_CANCELED,
+};
+
 //Disables an enabled widget.
 #define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
 
@@ -107,7 +113,7 @@ vector<string> prompt_file_dialog(
 );
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
-    const string &patterns, const int mode, unsigned char* result
+    const string &patterns, const int mode, FILE_DIALOG_RESULTS* result
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 void report_fatal_error(const string &s, data_node* dn = NULL);

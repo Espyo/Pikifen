@@ -12,13 +12,7 @@
 
 #include "vars.h"
 
-enum H_MOVE_RESULTS {
-    H_MOVE_OK,
-    H_MOVE_TELEPORTED,
-    H_MOVE_FAIL,
-};
 const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
-
 
 /* ----------------------------------------------------------------------------
  * Ticks the mob's actual physics procedures:
@@ -45,7 +39,7 @@ void mob::tick_physics(const float delta_t) {
     tick_rotation_physics(delta_t, move_speed_mult);
     
     //What type of horizontal movement is this?
-    unsigned char h_mov_type =
+    H_MOVE_RESULTS h_mov_type =
         get_physics_horizontal_movement(delta_t, move_speed_mult, &move_speed);
         
     if(h_mov_type == H_MOVE_FAIL) {
@@ -149,7 +143,7 @@ mob* mob::get_mob_to_walk_on() {
  * new_pos:            Position to check.
  * intersecting_edges: List of edges it is intersecting with.
  */
-unsigned char mob::get_movement_edge_intersections(
+H_MOVE_RESULTS mob::get_movement_edge_intersections(
     const point &new_pos, vector<edge*>* intersecting_edges
 ) {
     //Before checking the edges, let's consult the blockmap and look at
@@ -273,7 +267,7 @@ const float FREE_MOVE_THRESHOLD = 10.0f;
  * move_speed_mult: Movement speed is multiplied by this.
  * move_speed:      The calculated move speed is placed in this struct.
  */
-unsigned char mob::get_physics_horizontal_movement(
+H_MOVE_RESULTS mob::get_physics_horizontal_movement(
     const float delta_t, const float move_speed_mult, point* move_speed
 ) {
     //Held by another mob.
@@ -380,7 +374,7 @@ unsigned char mob::get_physics_horizontal_movement(
  * move_angle:  Angle at which the mob is going to move.
  * slide_angle: Holds the calculated slide angle.
  */
-unsigned char mob::get_wall_slide_angle(
+H_MOVE_RESULTS mob::get_wall_slide_angle(
     edge* e_ptr, unsigned char wall_sector, const float move_angle,
     float* slide_angle
 ) {

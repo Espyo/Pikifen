@@ -439,7 +439,7 @@ void area_editor::load() {
         
     frm_info->widgets["but_bg_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        unsigned char result = 0;
+        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
                 TEXTURES_FOLDER_PATH,
@@ -450,14 +450,14 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == 1) {
+        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == 2) {
+        } else if(result == FILE_DIALOG_RES_CANCELED) {
             //User canceled.
             return;
         }
@@ -1039,7 +1039,7 @@ void area_editor::load() {
         
     frm_texture->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        unsigned char result = 0;
+        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
                 TEXTURES_FOLDER_PATH,
@@ -1050,14 +1050,14 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == 1) {
+        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == 2) {
+        } else if(result == FILE_DIALOG_RES_CANCELED) {
             //User canceled.
             return;
         }
@@ -1840,7 +1840,7 @@ void area_editor::load() {
         
     frm_shadow->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        unsigned char result = 0;
+        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
         vector<string> f =
             prompt_file_dialog_locked_to_folder(
                 TEXTURES_FOLDER_PATH,
@@ -1851,14 +1851,14 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == 1) {
+        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == 2) {
+        } else if(result == FILE_DIALOG_RES_CANCELED) {
             //User canceled.
             return;
         }

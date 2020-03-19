@@ -806,7 +806,10 @@ void animation_editor::save_animation_database() {
                         new data_node("hazards", h_ptr->hazards_str)
                     );
                 }
-                if(h_ptr->knockback_outward) {
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback_outward
+                ) {
                     hitbox_node->add(
                         new data_node(
                             "knockback_outward",
@@ -814,19 +817,28 @@ void animation_editor::save_animation_database() {
                         )
                     );
                 }
-                if(h_ptr->knockback_angle != 0) {
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback_angle != 0
+                ) {
                     hitbox_node->add(
                         new data_node(
                             "knockback_angle", f2s(h_ptr->knockback_angle)
                         )
                     );
                 }
-                if(h_ptr->knockback != 0) {
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->knockback != 0
+                ) {
                     hitbox_node->add(
                         new data_node("knockback", f2s(h_ptr->knockback))
                     );
                 }
-                if(h_ptr->wither_chance > 0) {
+                if(
+                    h_ptr->type == HITBOX_TYPE_ATTACK &&
+                    h_ptr->wither_chance > 0
+                ) {
                     hitbox_node->add(
                         new data_node(
                             "wither_chance", i2s(h_ptr->wither_chance)

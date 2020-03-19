@@ -97,6 +97,13 @@ enum MOB_TARGET_TYPES {
 };
 
 
+enum H_MOVE_RESULTS {
+    H_MOVE_OK,
+    H_MOVE_TELEPORTED,
+    H_MOVE_FAIL,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
@@ -385,15 +392,15 @@ protected:
     //Returns a walkable mob to stand on.
     mob* get_mob_to_walk_on();
     //Returns edge intersections at a certain spot.
-    unsigned char get_movement_edge_intersections(
+    H_MOVE_RESULTS get_movement_edge_intersections(
         const point &new_pos, vector<edge*>* intersecting_edges
     );
     //Returns how the mob should move horizontally this frame.
-    unsigned char get_physics_horizontal_movement(
+    H_MOVE_RESULTS get_physics_horizontal_movement(
         const float delta_t, const float move_speed_mult, point* move_speed
     );
     //Returns the angle at which the mob should slide against a wall.
-    unsigned char get_wall_slide_angle(
+    H_MOVE_RESULTS get_wall_slide_angle(
         edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
     );
