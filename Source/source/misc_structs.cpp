@@ -96,9 +96,9 @@ void bmp_manager::detach(const string &name) {
  * Deletes all bitmaps loaded and clears the list.
  */
 void bmp_manager::clear() {
-    for(auto b = list.begin(); b != list.end(); ++b) {
-        if(b->second.b != bmp_error) {
-            al_destroy_bitmap(b->second.b);
+    for(auto &b : list) {
+        if(b.second.b != bmp_error) {
+            al_destroy_bitmap(b.second.b);
         }
     }
     list.clear();

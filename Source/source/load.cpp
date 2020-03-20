@@ -927,20 +927,20 @@ void load_liquids(const bool load_resources) {
     }
     
     if(load_resources) {
-        for(auto l = liquids.begin(); l != liquids.end(); ++l) {
+        for(auto &l : liquids) {
             data_node anim_file =
                 load_data_file(
                     ANIMATIONS_FOLDER_PATH + "/" +
-                    nodes[l->first]->get_child_by_name("animation")->value
+                    nodes[l.first]->get_child_by_name("animation")->value
                 );
-            l->second.anim_db =
+            l.second.anim_db =
                 load_animation_database_from_file(&anim_file);
-            if(!l->second.anim_db.animations.empty()) {
-                l->second.anim_instance =
-                    animation_instance(&l->second.anim_db);
-                l->second.anim_instance.cur_anim =
-                    l->second.anim_db.animations[0];
-                l->second.anim_instance.start();
+            if(!l.second.anim_db.animations.empty()) {
+                l.second.anim_instance =
+                    animation_instance(&l.second.anim_db);
+                l.second.anim_instance.cur_anim =
+                    l.second.anim_db.animations[0];
+                l.second.anim_instance.start();
             }
         }
     }
@@ -1336,19 +1336,19 @@ void load_status_types(const bool load_resources) {
     }
     
     if(load_resources) {
-        for(auto s = status_types.begin(); s != status_types.end(); ++s) {
-            if(s->second.animation_name.empty()) continue;
+        for(auto &s : status_types) {
+            if(s.second.animation_name.empty()) continue;
             data_node anim_file =
                 load_data_file(
-                    ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name
+                    ANIMATIONS_FOLDER_PATH + "/" + s.second.animation_name
                 );
-            s->second.anim_db = load_animation_database_from_file(&anim_file);
-            if(!s->second.anim_db.animations.empty()) {
-                s->second.anim_instance =
-                    animation_instance(&s->second.anim_db);
-                s->second.anim_instance.cur_anim =
-                    s->second.anim_db.animations[0];
-                s->second.anim_instance.start();
+            s.second.anim_db = load_animation_database_from_file(&anim_file);
+            if(!s.second.anim_db.animations.empty()) {
+                s.second.anim_instance =
+                    animation_instance(&s.second.anim_db);
+                s.second.anim_instance.cur_anim =
+                    s.second.anim_db.animations[0];
+                s.second.anim_instance.start();
             }
         }
     }
@@ -1528,8 +1528,8 @@ void unload_hazards() {
  * Unloads loaded liquids from memory.
  */
 void unload_liquids() {
-    for(auto l = liquids.begin(); l != liquids.end(); ++l) {
-        l->second.anim_db.destroy();
+    for(auto &l : liquids) {
+        l.second.anim_db.destroy();
     }
     liquids.clear();
 }
@@ -1611,8 +1611,8 @@ void unload_spray_types() {
 void unload_status_types(const bool unload_resources) {
 
     if(unload_resources) {
-        for(auto s = status_types.begin(); s != status_types.end(); ++s) {
-            s->second.anim_db.destroy();
+        for(auto &s : status_types) {
+            s.second.anim_db.destroy();
         }
     }
     status_types.clear();

@@ -32,8 +32,8 @@ tool_category::tool_category() :
  * Returns all types of tool by name.
  */
 void tool_category::get_type_names(vector<string> &list) {
-    for(auto t = tool_types.begin(); t != tool_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : tool_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void tool_category::erase_mob(mob* m) {
  * Clears the list of registered types of tools.
  */
 void tool_category::clear_types() {
-    for(auto t = tool_types.begin(); t != tool_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : tool_types) {
+        delete t.second;
     }
     tool_types.clear();
 }

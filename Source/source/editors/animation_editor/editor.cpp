@@ -455,8 +455,8 @@ void animation_editor::load_animation_database(const bool update_history) {
         for(size_t f = 0; f < anims.sprites.size(); ++f) {
             file_uses_map[anims.sprites[f]->file]++;
         }
-        for(auto u = file_uses_map.begin(); u != file_uses_map.end(); ++u) {
-            file_uses_vector.push_back(make_pair(u->second, u->first));
+        for(auto &u : file_uses_map) {
+            file_uses_vector.push_back(make_pair(u.second, u.first));
         }
         sort(
             file_uses_vector.begin(),

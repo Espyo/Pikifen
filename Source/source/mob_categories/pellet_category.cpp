@@ -32,8 +32,8 @@ pellet_category::pellet_category() :
  * Returns all types of pellet by name.
  */
 void pellet_category::get_type_names(vector<string> &list) {
-    for(auto t = pellet_types.begin(); t != pellet_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : pellet_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void pellet_category::erase_mob(mob* m) {
  * Clears the list of registered types of pellet.
  */
 void pellet_category::clear_types() {
-    for(auto t = pellet_types.begin(); t != pellet_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : pellet_types) {
+        delete t.second;
     }
     pellet_types.clear();
 }

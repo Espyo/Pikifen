@@ -743,8 +743,8 @@ void area_editor::open_picker(const unsigned char id) {
         id == PICKER_ADD_SECTOR_HAZARD
     ) {
     
-        for(auto h = hazards.begin(); h != hazards.end(); ++h) {
-            elements.push_back(make_pair("", h->first));
+        for(auto &h : hazards) {
+            elements.push_back(make_pair("", h.first));
         }
         title = "Choose a hazard.";
         

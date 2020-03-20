@@ -32,8 +32,8 @@ decoration_category::decoration_category() :
  * Returns all types of decoration by name.
  */
 void decoration_category::get_type_names(vector<string> &list) {
-    for(auto t = decoration_types.begin(); t != decoration_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : decoration_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void decoration_category::erase_mob(mob* m) {
  * Clears the list of registered types of decorations.
  */
 void decoration_category::clear_types() {
-    for(auto t = decoration_types.begin(); t != decoration_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : decoration_types) {
+        delete t.second;
     }
     decoration_types.clear();
 }

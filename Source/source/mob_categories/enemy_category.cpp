@@ -32,8 +32,8 @@ enemy_category::enemy_category() :
  * Returns all types of enemy by name.
  */
 void enemy_category::get_type_names(vector<string> &list) {
-    for(auto t = enemy_types.begin(); t != enemy_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : enemy_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void enemy_category::erase_mob(mob* m) {
  * Clears the list of registered types of enemy.
  */
 void enemy_category::clear_types() {
-    for(auto t = enemy_types.begin(); t != enemy_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : enemy_types) {
+        delete t.second;
     }
     enemy_types.clear();
 }

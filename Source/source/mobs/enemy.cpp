@@ -129,10 +129,10 @@ void enemy::start_dying_class_specific() {
             
             //Check the pellet types that match that number and
             //also match the available Pikmin types.
-            for(auto p = pellet_types.begin(); p != pellet_types.end(); ++p) {
+            for(auto &p : pellet_types) {
                 bool pik_type_ok = false;
                 for(size_t pt = 0; pt < available_pik_types.size(); ++pt) {
-                    if(p->second->pik_type == available_pik_types[pt]) {
+                    if(p.second->pik_type == available_pik_types[pt]) {
                         pik_type_ok = true;
                         break;
                     }
@@ -143,8 +143,8 @@ void enemy::start_dying_class_specific() {
                     continue;
                 }
                 
-                if(p->second->number == random_pellet_spoils[s]) {
-                    possible_pellets.push_back(p->second);
+                if(p.second->number == random_pellet_spoils[s]) {
+                    possible_pellets.push_back(p.second);
                 }
             }
             

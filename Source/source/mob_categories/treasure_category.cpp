@@ -32,8 +32,8 @@ treasure_category::treasure_category() :
  * Returns all types of treasure by name.
  */
 void treasure_category::get_type_names(vector<string> &list) {
-    for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : treasure_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void treasure_category::erase_mob(mob* m) {
  * Clears the list of registered types of treasure.
  */
 void treasure_category::clear_types() {
-    for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : treasure_types) {
+        delete t.second;
     }
     treasure_types.clear();
 }

@@ -177,12 +177,9 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         }
     }
     
-    edge* e_ptr = NULL;
-    
     //Go through each edge, and figure out if it is a valid wall for our mob.
-    for(auto e = candidate_edges.begin(); e != candidate_edges.end(); e++) {
+    for(auto e_ptr : candidate_edges) {
     
-        e_ptr = *e;
         bool is_edge_blocking = false;
         
         if(

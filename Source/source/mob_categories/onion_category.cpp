@@ -32,8 +32,8 @@ onion_category::onion_category() :
  * Returns all types of Onion by name.
  */
 void onion_category::get_type_names(vector<string> &list) {
-    for(auto t = onion_types.begin(); t != onion_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : onion_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void onion_category::erase_mob(mob* m) {
  * Clears the list of registered types of Onion.
  */
 void onion_category::clear_types() {
-    for(auto t = onion_types.begin(); t != onion_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : onion_types) {
+        delete t.second;
     }
     onion_types.clear();
 }

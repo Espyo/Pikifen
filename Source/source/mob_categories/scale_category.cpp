@@ -32,8 +32,8 @@ scale_category::scale_category() :
  * Returns all types of scale by name.
  */
 void scale_category::get_type_names(vector<string> &list) {
-    for(auto t = scale_types.begin(); t != scale_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : scale_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void scale_category::erase_mob(mob* m) {
  * Clears the list of registered types of scale.
  */
 void scale_category::clear_types() {
-    for(auto t = scale_types.begin(); t != scale_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : scale_types) {
+        delete t.second;
     }
     scale_types.clear();
 }

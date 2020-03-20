@@ -1268,29 +1268,29 @@ void editor::gui_to_var_helper::register_point(
  * Returns true if all registered variables equal the given GUI values.
  */
 bool editor::gui_to_var_helper::all_equal() {
-    for(auto b = bools.begin(); b != bools.end(); ++b) {
-        if(*(b->first) != b->second) return false;
+    for(auto &b : bools) {
+        if(*(b.first) != b.second) return false;
     }
-    for(auto i = ints.begin(); i != ints.end(); ++i) {
-        if(*(i->first) != i->second) return false;
+    for(auto &i : ints) {
+        if(*(i.first) != i.second) return false;
     }
-    for(auto f = floats.begin(); f != floats.end(); ++f) {
-        if(*(f->first) != f->second) return false;
+    for(auto &f : floats) {
+        if(*(f.first) != f.second) return false;
     }
-    for(auto c = uchars.begin(); c != uchars.end(); ++c) {
-        if(*(c->first) != c->second) return false;
+    for(auto &c : uchars) {
+        if(*(c.first) != c.second) return false;
     }
-    for(auto s = strings.begin(); s != strings.end(); ++s) {
-        if(*(s->first) != s->second) return false;
+    for(auto &s : strings) {
+        if(*(s.first) != s.second) return false;
     }
-    for(auto c = colors.begin(); c != colors.end(); ++c) {
-        if((c->first)->r != c->second.r) return false;
-        if((c->first)->g != c->second.g) return false;
-        if((c->first)->b != c->second.b) return false;
-        if((c->first)->a != c->second.a) return false;
+    for(auto &c : colors) {
+        if((c.first)->r != c.second.r) return false;
+        if((c.first)->g != c.second.g) return false;
+        if((c.first)->b != c.second.b) return false;
+        if((c.first)->a != c.second.a) return false;
     }
-    for(auto p = points.begin(); p != points.end(); ++p) {
-        if(*(p->first) != p->second) return false;
+    for(auto &p : points) {
+        if(*(p.first) != p.second) return false;
     }
     return true;
 }
@@ -1300,26 +1300,26 @@ bool editor::gui_to_var_helper::all_equal() {
  * Sets all variables to the given GUI values.
  */
 void editor::gui_to_var_helper::set_all() {
-    for(auto b = bools.begin(); b != bools.end(); ++b) {
-        *(b->first) = b->second;
+    for(auto &b : bools) {
+        *(b.first) = b.second;
     }
-    for(auto i = ints.begin(); i != ints.end(); ++i) {
-        *(i->first) = i->second;
+    for(auto &i : ints) {
+        *(i.first) = i.second;
     }
-    for(auto f = floats.begin(); f != floats.end(); ++f) {
-        *(f->first) = f->second;
+    for(auto &f : floats) {
+        *(f.first) = f.second;
     }
-    for(auto c = uchars.begin(); c != uchars.end(); ++c) {
-        *(c->first) = c->second;
+    for(auto &c : uchars) {
+        *(c.first) = c.second;
     }
-    for(auto s = strings.begin(); s != strings.end(); ++s) {
-        *(s->first) = s->second;
+    for(auto &s : strings) {
+        *(s.first) = s.second;
     }
-    for(auto c = colors.begin(); c != colors.end(); ++c) {
-        *(c->first) = c->second;
+    for(auto &c : colors) {
+        *(c.first) = c.second;
     }
-    for(auto p = points.begin(); p != points.end(); ++p) {
-        *(p->first) = p->second;
+    for(auto &p : points) {
+        *(p.first) = p.second;
     }
 }
 

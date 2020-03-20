@@ -174,8 +174,8 @@ ALLEGRO_COLOR widget::get_alt_color() {
 widget* widget::get_widget_under_mouse(const int mx, const int my) {
     if(!(flags & FLAG_DISABLED)) {
         if(!(flags & FLAG_WUM_NO_CHILDREN)) {
-            for(auto c = widgets.begin(); c != widgets.end(); ++c) {
-                widget* w = c->second->get_widget_under_mouse(mx, my);
+            for(auto &c : widgets) {
+                widget* w = c.second->get_widget_under_mouse(mx, my);
                 if(w) return w;
             }
         }
@@ -307,8 +307,8 @@ void widget::draw() {
         
         al_use_transform(&t); {
         
-            for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-                if(w->second) w->second->draw();
+            for(auto &w : widgets) {
+                if(w.second) w.second->draw();
             }
             
         } al_use_transform(&old);
@@ -338,8 +338,8 @@ void widget::simulate_click() {
 void widget::tick(const float time) {
     widget_on_tick(time);
     
-    for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-        if(w->second) w->second->tick(time);
+    for(auto &w : widgets) {
+        if(w.second) w.second->tick(time);
     }
 }
 
@@ -359,40 +359,40 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
+        for(auto &w : widgets) {
         
-            if(!w->second) continue;
+            if(!w.second) continue;
             
-            if(w->second->flags & FLAG_DISABLED) continue;
+            if(w.second->flags & FLAG_DISABLED) continue;
             
-            if(w->second->mouse_in) {
-                if(!w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
+            if(w.second->mouse_in) {
+                if(!w.second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
                 
                     //Mouse was in but left.
-                    w->second->widget_on_mouse_leave();
-                    w->second->mouse_in = false;
-                    w->second->call_mouse_leave_handler();
+                    w.second->widget_on_mouse_leave();
+                    w.second->mouse_in = false;
+                    w.second->call_mouse_leave_handler();
                 }
                 
                 if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
-                    w->second->widget_on_mouse_move(ev.mouse.x, ev.mouse.y);
-                    w->second->call_mouse_move_handler(ev.mouse.x, ev.mouse.y);
+                    w.second->widget_on_mouse_move(ev.mouse.x, ev.mouse.y);
+                    w.second->call_mouse_move_handler(ev.mouse.x, ev.mouse.y);
                 }
                 if(ev.mouse.dz != 0 || ev.mouse.dw != 0) {
-                    w->second->widget_on_mouse_wheel(ev.mouse.dz, ev.mouse.dw);
-                    w->second->call_mouse_wheel_handler(
+                    w.second->widget_on_mouse_wheel(ev.mouse.dz, ev.mouse.dw);
+                    w.second->call_mouse_wheel_handler(
                         ev.mouse.dz, ev.mouse.dw
                     );
                 }
                 
             } else {
             
-                if(w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
+                if(w.second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
                 
                     //Mouse was out but is now in.
-                    w->second->widget_on_mouse_enter();
-                    w->second->mouse_in = true;
-                    w->second->call_mouse_enter_handler();
+                    w.second->widget_on_mouse_enter();
+                    w.second->mouse_in = true;
+                    w.second->call_mouse_enter_handler();
                 }
             }
         }
@@ -401,62 +401,62 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
+        for(auto &w : widgets) {
         
-            if(!w->second) continue;
+            if(!w.second) continue;
             
-            if(w->second->flags & FLAG_DISABLED) continue;
+            if(w.second->flags & FLAG_DISABLED) continue;
             
-            if(w->second->mouse_in) {
+            if(w.second->mouse_in) {
             
-                w->second->widget_on_mouse_down(
+                w.second->widget_on_mouse_down(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
-                if(ev.mouse.button == 1) w->second->mouse_clicking = true;
+                if(ev.mouse.button == 1) w.second->mouse_clicking = true;
                 
-                give_focus(w->second);
+                give_focus(w.second);
                 
-                w->second->call_mouse_down_handler(
+                w.second->call_mouse_down_handler(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
                 
             } else {
-                if(ev.mouse.button == 1) w->second->mouse_clicking = false;
+                if(ev.mouse.button == 1) w.second->mouse_clicking = false;
             }
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
+        for(auto &w : widgets) {
         
-            if(!w->second) continue;
+            if(!w.second) continue;
             
-            if(w->second->flags & FLAG_DISABLED) continue;
+            if(w.second->flags & FLAG_DISABLED) continue;
             
-            if(w->second->mouse_in) {
+            if(w.second->mouse_in) {
             
-                w->second->widget_on_mouse_up(
+                w.second->widget_on_mouse_up(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
-                w->second->call_mouse_up_handler(
+                w.second->call_mouse_up_handler(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
                 
                 if(ev.mouse.button == 1) {
-                    if(w->second->mouse_clicking) {
+                    if(w.second->mouse_clicking) {
                     
                         //Mouse was clicking, and a button up just happened.
                         //So a full click just happened.
-                        w->second->widget_on_left_mouse_click(
+                        w.second->widget_on_left_mouse_click(
                             ev.mouse.x, ev.mouse.y
                         );
-                        w->second->call_left_mouse_click_handler(
+                        w.second->call_left_mouse_click_handler(
                             ev.mouse.x, ev.mouse.y
                         );
                     }
                 }
             }
-            if(ev.mouse.button == 1) w->second->mouse_clicking = false;
+            if(ev.mouse.button == 1) w.second->mouse_clicking = false;
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
@@ -481,8 +481,8 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     }
     
     //Now let children widgets handle events.
-    for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-        if(w->second) w->second->handle_event(ev);
+    for(auto &w : widgets) {
+        if(w.second) w.second->handle_event(ev);
     }
 }
 
@@ -540,8 +540,8 @@ void widget::lose_focus() {
         focused_widget = NULL;
     }
     
-    for(auto cw = widgets.begin(); cw != widgets.end(); ++cw) {
-        if(cw->second) cw->second->lose_focus();
+    for(auto &cw : widgets) {
+        if(cw.second) cw.second->lose_focus();
     }
 }
 

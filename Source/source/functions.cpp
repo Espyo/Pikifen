@@ -902,11 +902,11 @@ void save_options() {
     }
     
     //Save controls.
-    for(auto c = grouped_controls.begin(); c != grouped_controls.end(); ++c) {
+    for(auto &c : grouped_controls) {
         //Remove the final character, which is always an extra semicolon.
-        if(c->second.size()) c->second.erase(c->second.size() - 1);
+        if(c.second.size()) c.second.erase(c.second.size() - 1);
         
-        file.add(new data_node(c->first, c->second));
+        file.add(new data_node(c.first, c.second));
     }
     
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {

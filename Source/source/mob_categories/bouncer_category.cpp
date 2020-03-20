@@ -32,8 +32,8 @@ bouncer_category::bouncer_category() :
  * Returns all types of bouncer by name.
  */
 void bouncer_category::get_type_names(vector<string> &list) {
-    for(auto t = bouncer_types.begin(); t != bouncer_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : bouncer_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void bouncer_category::erase_mob(mob* m) {
  * Clears the list of registered types of bouncers.
  */
 void bouncer_category::clear_types() {
-    for(auto t = bouncer_types.begin(); t != bouncer_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : bouncer_types) {
+        delete t.second;
     }
     bouncer_types.clear();
 }

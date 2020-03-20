@@ -150,18 +150,18 @@ void load_mob_types(bool load_resources) {
     }
     
     //Pikmin type order.
-    for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
+    for(auto &p : pikmin_types) {
         if(
             find(
                 pikmin_order_strings.begin(), pikmin_order_strings.end(),
-                p->first
+                p.first
             ) == pikmin_order_strings.end()
         ) {
             log_error(
-                "Pikmin type \"" + p->first + "\" was not found "
+                "Pikmin type \"" + p.first + "\" was not found "
                 "in the Pikmin order list in the config file!"
             );
-            pikmin_order_strings.push_back(p->first);
+            pikmin_order_strings.push_back(p.first);
         }
     }
     for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
@@ -177,18 +177,18 @@ void load_mob_types(bool load_resources) {
     }
     
     //Leader type order.
-    for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
+    for(auto &l : leader_types) {
         if(
             find(
                 leader_order_strings.begin(), leader_order_strings.end(),
-                l->first
+                l.first
             ) == leader_order_strings.end()
         ) {
             log_error(
-                "Leader type \"" + l->first + "\" was not found "
+                "Leader type \"" + l.first + "\" was not found "
                 "in the leader order list in the config file!"
             );
-            leader_order_strings.push_back(l->first);
+            leader_order_strings.push_back(l.first);
         }
     }
     for(size_t o = 0; o < leader_order_strings.size(); ++o) {

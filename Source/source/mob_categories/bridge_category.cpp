@@ -32,8 +32,8 @@ bridge_category::bridge_category() :
  * Returns all types of bridge by name.
  */
 void bridge_category::get_type_names(vector<string> &list) {
-    for(auto t = bridge_types.begin(); t != bridge_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : bridge_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void bridge_category::erase_mob(mob* m) {
  * Clears the list of registered types of bridges.
  */
 void bridge_category::clear_types() {
-    for(auto t = bridge_types.begin(); t != bridge_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : bridge_types) {
+        delete t.second;
     }
     bridge_types.clear();
 }

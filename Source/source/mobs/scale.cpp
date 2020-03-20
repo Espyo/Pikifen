@@ -42,8 +42,8 @@ float scale::calculate_cur_weight() {
     
     //Now, add up their weights.
     float w = 0;
-    for(auto m = weighing_mobs.begin(); m != weighing_mobs.end(); ++m) {
-        w += (*m)->type->weight;
+    for(auto m : weighing_mobs) {
+        w += m->type->weight;
     }
     
     return w;

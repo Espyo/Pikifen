@@ -32,8 +32,8 @@ leader_category::leader_category() :
  * Returns all types of leader by name.
  */
 void leader_category::get_type_names(vector<string> &list) {
-    for(auto t = leader_types.begin(); t != leader_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : leader_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void leader_category::erase_mob(mob* m) {
  * Clears the list of registered types of leader.
  */
 void leader_category::clear_types() {
-    for(auto t = leader_types.begin(); t != leader_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : leader_types) {
+        delete t.second;
     }
     leader_types.clear();
 }

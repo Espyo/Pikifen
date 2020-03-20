@@ -107,10 +107,10 @@ void radio_button::select() {
     ((radio_button_button*) widgets["rbb_circle"])->selected = true;
     
     if(!parent) return;
-    for(auto b = parent->widgets.begin(); b != parent->widgets.end(); ++b) {
-        widget* b_ptr = b->second;
+    for(auto &b : parent->widgets) {
+        widget* b_ptr = b.second;
         if(typeid(*b_ptr) == typeid(radio_button)) {
-            radio_button* rb_ptr = (radio_button*) b->second;
+            radio_button* rb_ptr = (radio_button*) b.second;
             if(rb_ptr->group == group && rb_ptr != this) rb_ptr->unselect();
         }
     }

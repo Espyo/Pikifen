@@ -32,8 +32,8 @@ pile_category::pile_category() :
  * Returns all types of pile by name.
  */
 void pile_category::get_type_names(vector<string> &list) {
-    for(auto t = pile_types.begin(); t != pile_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : pile_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void pile_category::erase_mob(mob* m) {
  * Clears the list of registered types of pile.
  */
 void pile_category::clear_types() {
-    for(auto t = pile_types.begin(); t != pile_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : pile_types) {
+        delete t.second;
     }
     pile_types.clear();
 }

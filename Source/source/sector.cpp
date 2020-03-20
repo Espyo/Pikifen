@@ -1178,11 +1178,11 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     
     //Find the two lengthiest ones.
     vector<pair<dist, sector*> > neighbors_vec;
-    for(auto n = neighbors.begin(); n != neighbors.end(); ++n) {
+    for(auto &n : neighbors) {
         neighbors_vec.push_back(
             make_pair(
                 //Yes, we do need these casts, for g++.
-                (dist) (n->second), (sector*) (n->first)
+                (dist) (n.second), (sector*) (n.first)
             )
         );
     }
@@ -1814,8 +1814,8 @@ TRIANGULATION_ERRORS get_polys(
             vertex_count[e_ptr->vertexes[1]]++;
         }
         
-        for(auto v = vertex_count.begin(); v != vertex_count.end(); v++) {
-            if(v->second > 2) {
+        for(auto &v : vertex_count) {
+            if(v.second > 2) {
                 //Unfortunately, it does...
                 //That means it's a non-simple sector.
                 //This likely caused an incorrect triangulation,
@@ -1889,13 +1889,13 @@ sector* get_sector(
         
         if(sectors->size() == 1) return *sectors->begin();
         
-        for(auto s = sectors->begin(); s != sectors->end(); ++s) {
+        for(auto s : (*sectors)) {
         
-            if(!(*s)) {
+            if(!s) {
                 continue;
             }
-            if(is_point_in_sector(p, *s)) {
-                return *s;
+            if(is_point_in_sector(p, s)) {
+                return s;
             }
         }
         
@@ -2049,11 +2049,11 @@ bool is_vertex_ear(
 vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
     
-    for(auto l = edges.begin(); l != edges.end(); ++l) {
-        if(!rightmost) rightmost = l->first->vertexes[0];
+    for(auto &e : edges) {
+        if(!rightmost) rightmost = e.first->vertexes[0];
         
         for(unsigned char v = 0; v < 2; ++v) {
-            rightmost = get_rightmost_vertex(l->first->vertexes[v], rightmost);
+            rightmost = get_rightmost_vertex(e.first->vertexes[v], rightmost);
         }
     }
     
@@ -2413,9 +2413,9 @@ void depth_first_search(
         }
     }
     
-    for(auto l = links.begin(); l != links.end(); ++l) {
-        if(visited.find(*l) != visited.end()) continue;
-        depth_first_search(nodes, visited, *l);
+    for(auto l : links) {
+        if(visited.find(l) != visited.end()) continue;
+        depth_first_search(nodes, visited, l);
     }
 }
 
@@ -2460,10 +2460,10 @@ vector<path_stop*> dijkstra(
         float shortest_node_dist = 0;
         pair<float, path_stop*> shortest_node_data;
         
-        for(auto u = unvisited.begin(); u != unvisited.end(); ++u) {
-            pair<float, path_stop*> d = data[*u];
+        for(auto u : unvisited) {
+            pair<float, path_stop*> d = data[u];
             if(!shortest_node || d.first < shortest_node_dist) {
-                shortest_node = *u;
+                shortest_node = u;
                 shortest_node_dist = d.first;
                 shortest_node_data = d;
             }

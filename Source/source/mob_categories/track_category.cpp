@@ -32,8 +32,8 @@ track_category::track_category() :
  * Returns all types of track by name.
  */
 void track_category::get_type_names(vector<string> &list) {
-    for(auto t = track_types.begin(); t != track_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : track_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void track_category::erase_mob(mob* m) {
  * Clears the list of registered types of tracks.
  */
 void track_category::clear_types() {
-    for(auto t = track_types.begin(); t != track_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : track_types) {
+        delete t.second;
     }
     track_types.clear();
 }

@@ -32,8 +32,8 @@ drop_category::drop_category() :
  * Returns all types of drop by name.
  */
 void drop_category::get_type_names(vector<string> &list) {
-    for(auto t = drop_types.begin(); t != drop_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : drop_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void drop_category::erase_mob(mob* m) {
  * Clears the list of registered types of drops.
  */
 void drop_category::clear_types() {
-    for(auto t = drop_types.begin(); t != drop_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : drop_types) {
+        delete t.second;
     }
     drop_types.clear();
 }

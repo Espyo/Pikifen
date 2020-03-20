@@ -32,8 +32,8 @@ group_task_category::group_task_category() :
  * Returns all types of group tasks by name.
  */
 void group_task_category::get_type_names(vector<string> &list) {
-    for(auto t = group_task_types.begin(); t != group_task_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : group_task_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void group_task_category::erase_mob(mob* m) {
  * Clears the list of registered types of group tasks.
  */
 void group_task_category::clear_types() {
-    for(auto t = group_task_types.begin(); t != group_task_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : group_task_types) {
+        delete t.second;
     }
     group_task_types.clear();
 }

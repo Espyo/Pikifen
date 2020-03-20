@@ -656,8 +656,8 @@ mob* create_mob(
         
         m_ptr->read_script_vars(svr);
         
-        for(auto v = vars_map.begin(); v != vars_map.end(); ++v) {
-            m_ptr->vars[v->first] = v->second;
+        for(auto &v : vars_map) {
+            m_ptr->vars[v.first] = v.second;
         }
     }
     

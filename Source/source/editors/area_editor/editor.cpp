@@ -278,9 +278,9 @@ void area_editor::cancel_layout_drawing() {
  * Cancels the vertex moving operation.
  */
 void area_editor::cancel_layout_moving() {
-    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
-        (*v)->x = pre_move_vertex_coords[*v].x;
-        (*v)->y = pre_move_vertex_coords[*v].y;
+    for(auto v : selected_vertexes) {
+        v->x = pre_move_vertex_coords[v].x;
+        v->y = pre_move_vertex_coords[v].y;
     }
     clear_layout_moving();
 }
@@ -773,11 +773,11 @@ void area_editor::delete_selected_mobs() {
     }
     
     register_change("object deletion");
-    for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
+    for(auto sm : selected_mobs) {
     
         size_t m_i = 0;
         for(; m_i < cur_area_data.mob_generators.size(); ++m_i) {
-            if(cur_area_data.mob_generators[m_i] == *sm) break;
+            if(cur_area_data.mob_generators[m_i] == sm) break;
         }
         
         //Check all links to this mob.
@@ -789,7 +789,7 @@ void area_editor::delete_selected_mobs() {
                     m2_ptr->link_nrs[l]--;
                 }
                 
-                if(m2_ptr->links[l] == *sm) {
+                if(m2_ptr->links[l] == sm) {
                     m2_ptr->links.erase(m2_ptr->links.begin() + l);
                     m2_ptr->link_nrs.erase(m2_ptr->link_nrs.begin() + l);
                 }
@@ -799,7 +799,7 @@ void area_editor::delete_selected_mobs() {
         cur_area_data.mob_generators.erase(
             cur_area_data.mob_generators.begin() + m_i
         );
-        delete *sm;
+        delete sm;
     }
     
     clear_selection();
@@ -1394,8 +1394,8 @@ void area_editor::finish_layout_drawing() {
         }
     }
     
-    for(auto i = inner_edges.begin(); i != inner_edges.end(); ++i) {
-        auto de_it = find(drawing_edges.begin(), drawing_edges.end(), *i);
+    for(auto i : inner_edges) {
+        auto de_it = find(drawing_edges.begin(), drawing_edges.end(), i);
         
         if(de_it != drawing_edges.end()) {
             //If this edge is a part of the drawing, then we know
@@ -1406,21 +1406,21 @@ void area_editor::finish_layout_drawing() {
             //the new sector, letting it keep its old data.
             //The new sector will still be closed using other edges; that's
             //guaranteed.
-            if((*i)->sectors[outer_sector_side] == new_sector) {
-                new_sector->remove_edge(*i);
+            if(i->sectors[outer_sector_side] == new_sector) {
+                new_sector->remove_edge(i);
                 cur_area_data.connect_edge_to_sector(
-                    *i, edge_sector_backups[*i].first, 0
+                    i, edge_sector_backups[i].first, 0
                 );
                 cur_area_data.connect_edge_to_sector(
-                    *i, edge_sector_backups[*i].second, 1
+                    i, edge_sector_backups[i].second, 1
                 );
                 drawing_edges.erase(de_it);
             }
             
         } else {
             for(size_t s = 0; s < 2; ++s) {
-                if((*i)->sectors[s] == outer_sector) {
-                    cur_area_data.connect_edge_to_sector(*i, new_sector, s);
+                if(i->sectors[s] == outer_sector) {
+                    cur_area_data.connect_edge_to_sector(i, new_sector, s);
                 }
             }
             
@@ -1497,8 +1497,8 @@ void area_editor::finish_layout_moving() {
     unordered_set<sector*> merge_affected_sectors;
     
     //Find merge vertexes and edges to split, if any.
-    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
-        point p((*v)->x, (*v)->y);
+    for(auto v : selected_vertexes) {
+        point p(v->x, v->y);
         
         vector<pair<dist, vertex*> > merge_vertexes =
             get_merge_vertexes(
@@ -1509,7 +1509,7 @@ void area_editor::finish_layout_moving() {
         for(size_t mv = 0; mv < merge_vertexes.size(); ) {
             vertex* mv_ptr = merge_vertexes[mv].second;
             if(
-                mv_ptr == *v ||
+                mv_ptr == v ||
                 selected_vertexes.find(mv_ptr) != selected_vertexes.end()
             ) {
                 merge_vertexes.erase(merge_vertexes.begin() + mv);
@@ -1531,7 +1531,7 @@ void area_editor::finish_layout_moving() {
         }
         
         if(merge_v) {
-            merges[*v] = merge_v;
+            merges[v] = merge_v;
             
         } else {
             edge* e_ptr = NULL;
@@ -1551,13 +1551,13 @@ void area_editor::finish_layout_moving() {
             } while(
                 e_ptr != NULL &&
                 (
-                    (*v)->has_edge(e_ptr) ||
+                    v->has_edge(e_ptr) ||
                     e_ptr_v1_selected || e_ptr_v2_selected
                 )
             );
             
             if(e_ptr) {
-                edges_to_split[*v] = e_ptr;
+                edges_to_split[v] = e_ptr;
             }
         }
     }
@@ -1590,8 +1590,8 @@ void area_editor::finish_layout_moving() {
             continue;
         }
         bool is_merge_target = false;
-        for(auto m = merges.begin(); m != merges.end(); ++m) {
-            if(m->second == v_ptr) {
+        for(auto &m : merges) {
+            if(m.second == v_ptr) {
                 //This vertex will have some other vertex merge into it; skip.
                 is_merge_target = true;
                 break;
@@ -1621,13 +1621,13 @@ void area_editor::finish_layout_moving() {
     //but removing all of the ones that come from edge splits or vertex merges.
     vector<edge_intersection> intersections =
         get_intersecting_edges();
-    for(auto m = merges.begin(); m != merges.end(); ++m) {
-        for(size_t e1 = 0; e1 < m->first->edges.size(); ++e1) {
-            for(size_t e2 = 0; e2 < m->second->edges.size(); ++e2) {
+    for(auto &m : merges) {
+        for(size_t e1 = 0; e1 < m.first->edges.size(); ++e1) {
+            for(size_t e2 = 0; e2 < m.second->edges.size(); ++e2) {
                 for(size_t i = 0; i < intersections.size();) {
                     if(
-                        intersections[i].contains(m->first->edges[e1]) &&
-                        intersections[i].contains(m->second->edges[e2])
+                        intersections[i].contains(m.first->edges[e1]) &&
+                        intersections[i].contains(m.second->edges[e2])
                     ) {
                         intersections.erase(intersections.begin() + i);
                     } else {
@@ -1637,12 +1637,12 @@ void area_editor::finish_layout_moving() {
             }
         }
     }
-    for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
-        for(size_t e = 0; e < v->first->edges.size(); ++e) {
+    for(auto &v : edges_to_split) {
+        for(size_t e = 0; e < v.first->edges.size(); ++e) {
             for(size_t i = 0; i < intersections.size();) {
                 if(
-                    intersections[i].contains(v->first->edges[e]) &&
-                    intersections[i].contains(v->second)
+                    intersections[i].contains(v.first->edges[e]) &&
+                    intersections[i].contains(v.second)
                 ) {
                     intersections.erase(intersections.begin() + i);
                 } else {
@@ -1668,12 +1668,12 @@ void area_editor::finish_layout_moving() {
     //When the first merge happens, this vertex will be gone, and we'll be
     //unable to use it for the second merge. There are no plans to support
     //this complex corner case, so abort!
-    for(auto m = merges.begin(); m != merges.end(); ++m) {
+    for(auto &m : merges) {
         vertex* crushed_vertex = NULL;
-        if(m->first->is_2nd_degree_neighbor(m->second, &crushed_vertex)) {
+        if(m.first->is_2nd_degree_neighbor(m.second, &crushed_vertex)) {
         
-            for(auto m2 = merges.begin(); m2 != merges.end(); ++m2) {
-                if(m2->second == crushed_vertex) {
+            for(auto &m2 : merges) {
+                if(m2.second == crushed_vertex) {
                     emit_status_bar_message(
                         "That move would crush an edge that's in the middle!",
                         true
@@ -1690,7 +1690,7 @@ void area_editor::finish_layout_moving() {
     //Merge vertexes and split edges now.
     for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
         merges[v->first] =
-            split_edge(v->second, point((v->first)->x, v->first->y));
+            split_edge(v->second, point(v->first->x, v->first->y));
         //This split could've thrown off the edge pointer of a different
         //vertex to merge. Let's re-calculate.
         edge* new_edge = cur_area_data.edges.back();
@@ -1702,8 +1702,8 @@ void area_editor::finish_layout_moving() {
                 get_correct_post_split_edge(v2->first, v2->second, new_edge);
         }
     }
-    for(auto m = merges.begin(); m != merges.end(); ++m) {
-        merge_vertex(m->first, m->second, &merge_affected_sectors);
+    for(auto &m : merges) {
+        merge_vertex(m.first, m.second, &merge_affected_sectors);
     }
     
     affected_sectors.insert(
@@ -1711,24 +1711,24 @@ void area_editor::finish_layout_moving() {
     );
     
     //Triangulate all affected sectors.
-    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
-        if(!(*s)) continue;
+    for(auto s : affected_sectors) {
+        if(!s) continue;
         
         set<edge*> triangulation_lone_edges;
         TRIANGULATION_ERRORS triangulation_error =
-            triangulate(*s, &triangulation_lone_edges, true, true);
+            triangulate(s, &triangulation_lone_edges, true, true);
         if(triangulation_error == TRIANGULATION_NO_ERROR) {
-            auto it = non_simples.find(*s);
+            auto it = non_simples.find(s);
             if(it != non_simples.end()) {
                 non_simples.erase(it);
             }
         } else {
-            non_simples[*s] = triangulation_error;
+            non_simples[s] = triangulation_error;
             last_triangulation_error = triangulation_error;
         }
         
         get_sector_bounding_box(
-            *s, &((*s)->bbox[0]), &((*s)->bbox[1])
+            s, &(s->bbox[0]), &(s->bbox[1])
         );
     }
     
@@ -1834,11 +1834,11 @@ bool area_editor::get_common_sector(
     //and we can easily find out which is the inner one with this method.
     float best_rightmost_x = 0;
     sector* best_rightmost_sector = NULL;
-    for(auto s = sectors.begin(); s != sectors.end(); ++s) {
-        if(*s == NULL) continue;
-        vertex* v_ptr = get_rightmost_vertex(*s);
+    for(auto s : sectors) {
+        if(s == NULL) continue;
+        vertex* v_ptr = get_rightmost_vertex(s);
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
-            best_rightmost_sector = *s;
+            best_rightmost_sector = s;
             best_rightmost_x = v_ptr->x;
         }
     }
@@ -2026,10 +2026,10 @@ unordered_set<sector*> area_editor::get_affected_sectors(
     set<vertex*> &vertexes
 ) {
     unordered_set<sector*> affected_sectors;
-    for(auto v = vertexes.begin(); v != vertexes.end(); ++v) {
-        for(size_t e = 0; e < (*v)->edges.size(); ++e) {
-            affected_sectors.insert((*v)->edges[e]->sectors[0]);
-            affected_sectors.insert((*v)->edges[e]->sectors[1]);
+    for(auto v : vertexes) {
+        for(size_t e = 0; e < v->edges.size(); ++e) {
+            affected_sectors.insert(v->edges[e]->sectors[0]);
+            affected_sectors.insert(v->edges[e]->sectors[1]);
         }
     }
     return affected_sectors;
@@ -2471,8 +2471,8 @@ void area_editor::load_area(const bool from_backup) {
         if(n.empty()) continue;
         texture_uses_map[n]++;
     }
-    for(auto u = texture_uses_map.begin(); u != texture_uses_map.end(); ++u) {
-        texture_uses_vector.push_back(make_pair(u->first, u->second));
+    for(auto &u : texture_uses_map) {
+        texture_uses_vector.push_back(make_pair(u.first, u.second));
     }
     sort(
         texture_uses_vector.begin(), texture_uses_vector.end(),
@@ -2744,9 +2744,8 @@ void area_editor::register_change(
 bool area_editor::remove_isolated_sectors() {
     map<sector*, sector*> alt_sectors;
     
-    for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
-        sector* s_ptr = *s;
-        
+    for(auto s_ptr : selected_sectors) {
+    
         //If around the sector there are two different sectors, then
         //it's definitely connected.
         sector* alt_sector = NULL;
@@ -2788,9 +2787,8 @@ bool area_editor::remove_isolated_sectors() {
     TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
     
     //Remove the sectors now.
-    for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
-        sector* s_ptr = *s;
-        
+    for(auto s_ptr : selected_sectors) {
+    
         vector<edge*> main_sector_edges = s_ptr->edges;
         unordered_set<vertex*> main_vertexes;
         for(size_t e = 0; e < main_sector_edges.size(); ++e) {
@@ -2802,8 +2800,8 @@ bool area_editor::remove_isolated_sectors() {
             cur_area_data.remove_edge(e_ptr);
         }
         
-        for(auto v = main_vertexes.begin(); v != main_vertexes.end(); ++v) {
-            cur_area_data.remove_vertex(*v);
+        for(auto v : main_vertexes) {
+            cur_area_data.remove_vertex(v);
         }
         
         cur_area_data.remove_sector(s_ptr);
@@ -2895,8 +2893,8 @@ void area_editor::resize_everything(const float mult) {
 void area_editor::rotate_mob_gens_to_cursor() {
     register_change("object rotation");
     selection_homogenized = false;
-    for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
-        (*m)->angle = get_angle((*m)->pos, mouse_cursor_w);
+    for(auto m : selected_mobs) {
+        m->angle = get_angle(m->pos, mouse_cursor_w);
     }
     mob_to_gui();
 }
@@ -3602,14 +3600,14 @@ void area_editor::start_mob_move() {
     
     move_closest_mob = NULL;
     dist move_closest_mob_dist;
-    for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
-        pre_move_mob_coords[*m] = (*m)->pos;
+    for(auto m : selected_mobs) {
+        pre_move_mob_coords[m] = m->pos;
         
-        dist d(mouse_cursor_w, (*m)->pos);
+        dist d(mouse_cursor_w, m->pos);
         if(!move_closest_mob || d < move_closest_mob_dist) {
-            move_closest_mob = *m;
+            move_closest_mob = m;
             move_closest_mob_dist = d;
-            move_closest_mob_start_pos = (*m)->pos;
+            move_closest_mob_start_pos = m->pos;
         }
     }
     
@@ -3664,13 +3662,13 @@ void area_editor::start_vertex_move() {
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
-    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
-        point p((*v)->x, (*v)->y);
-        pre_move_vertex_coords[*v] = p;
+    for(auto v : selected_vertexes) {
+        point p(v->x, v->y);
+        pre_move_vertex_coords[v] = p;
         
         dist d(mouse_cursor_w, p);
         if(!move_closest_vertex || d < move_closest_vertex_dist) {
-            move_closest_vertex = *v;
+            move_closest_vertex = v;
             move_closest_vertex_dist = d;
             move_closest_vertex_start_pos = p;
         }

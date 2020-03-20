@@ -32,8 +32,8 @@ ship_category::ship_category() :
  * Returns all types of ship by name.
  */
 void ship_category::get_type_names(vector<string> &list) {
-    for(auto t = ship_types.begin(); t != ship_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : ship_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void ship_category::erase_mob(mob* m) {
  * Clears the list of registered types of ship.
  */
 void ship_category::clear_types() {
-    for(auto t = ship_types.begin(); t != ship_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : ship_types) {
+        delete t.second;
     }
     ship_types.clear();
 }

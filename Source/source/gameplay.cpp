@@ -248,23 +248,23 @@ void gameplay::load() {
     
     map<string, string> spray_strs = get_var_map(cur_area_data.spray_amounts);
     
-    for(auto s = spray_strs.begin(); s != spray_strs.end(); s++) {
+    for(auto &s : spray_strs) {
         size_t spray_id = 0;
         for(; spray_id < spray_types.size(); ++spray_id) {
-            if(spray_types[spray_id].name == s->first) {
+            if(spray_types[spray_id].name == s.first) {
                 break;
             }
         }
         if(spray_id == spray_types.size()) {
             log_error(
-                "Unknown spray type \"" + s->first + "\", "
+                "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + cur_area_data.name + "\"!", NULL
             );
             continue;
         }
         
-        spray_stats[spray_id].nr_sprays = s2i(s->second);
+        spray_stats[spray_id].nr_sprays = s2i(s.second);
     }
     
     for(size_t c = 0; c < controls[0].size(); ++c) {
@@ -350,8 +350,8 @@ void gameplay::load_game_content() {
     }
     
     vector<string> tool_types_vector;
-    for(auto t = tool_types.begin(); t != tool_types.end(); ++t) {
-        tool_types_vector.push_back(t->first);
+    for(auto &t : tool_types) {
+        tool_types_vector.push_back(t.first);
     }
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); ++t) {

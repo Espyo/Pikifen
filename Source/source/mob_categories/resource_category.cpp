@@ -32,8 +32,8 @@ resource_category::resource_category() :
  * Returns all types of resource by name.
  */
 void resource_category::get_type_names(vector<string> &list) {
-    for(auto t = resource_types.begin(); t != resource_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : resource_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void resource_category::erase_mob(mob* m) {
  * Clears the list of registered types of resource.
  */
 void resource_category::clear_types() {
-    for(auto t = resource_types.begin(); t != resource_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : resource_types) {
+        delete t.second;
     }
     resource_types.clear();
 }

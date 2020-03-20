@@ -513,12 +513,12 @@ bool mob::calculate_carrying_destination(
     
     //Then figure out what are the majority types.
     unsigned most = 0;
-    for(auto t = type_quantity.begin(); t != type_quantity.end(); ++t) {
-        if(t->second > most) {
-            most = t->second;
+    for(auto &t : type_quantity) {
+        if(t.second > most) {
+            most = t.second;
             majority_types.clear();
         }
-        if(t->second == most) majority_types.push_back(t->first);
+        if(t.second == most) majority_types.push_back(t.first);
     }
     
     //If we ended up with no candidates, pick a type at random,

@@ -32,8 +32,8 @@ pikmin_category::pikmin_category() :
  * Returns all types of Pikmin by name.
  */
 void pikmin_category::get_type_names(vector<string> &list) {
-    for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
-        list.push_back(t->first);
+    for(auto &t : pikmin_types) {
+        list.push_back(t.first);
     }
 }
 
@@ -90,8 +90,8 @@ void pikmin_category::erase_mob(mob* m) {
  * Clears the list of registered types of Pikmin.
  */
 void pikmin_category::clear_types() {
-    for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
-        delete t->second;
+    for(auto &t : pikmin_types) {
+        delete t.second;
     }
     pikmin_types.clear();
 }
