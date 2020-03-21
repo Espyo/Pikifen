@@ -3740,7 +3740,6 @@ void area_editor::undo_layout_drawing_node() {
 void area_editor::unload() {
     editor::unload();
     
-    //TODO
     clear_current_area();
     cur_area_name.clear();
     
@@ -3748,10 +3747,14 @@ void area_editor::unload() {
     delete(faded_style);
     delete(gui);
     
-    unload_hazards();
+    unload_weather();
     unload_mob_types(false);
+    unload_hazards();
     unload_spray_types();
     unload_status_types(false);
+    unload_liquids();
+    unload_spike_damage_types();
+    unload_custom_particle_generators();
 }
 
 

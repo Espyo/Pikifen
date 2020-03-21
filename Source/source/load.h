@@ -24,7 +24,6 @@ using namespace std;
 void load_area(
     const string &name, const bool load_for_editor, const bool from_backup
 );
-void load_area_textures();
 void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL,
@@ -53,7 +52,6 @@ void load_system_animations();
 void load_weather();
 
 void unload_area();
-void unload_area_textures();
 void unload_custom_particle_generators();
 void unload_hazards();
 void unload_liquids();
@@ -61,6 +59,7 @@ void unload_misc_resources();
 void unload_spike_damage_types();
 void unload_spray_types();
 void unload_status_types(const bool unload_resources);
+void unload_weather();
 
 
 #endif //ifndef LOAD_INCLUDED

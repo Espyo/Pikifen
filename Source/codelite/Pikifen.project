@@ -168,8 +168,6 @@
     <File Name="../source/functions.cpp"/>
     <File Name="../source/data_file.cpp"/>
     <File Name="../source/hitbox.cpp"/>
-    <File Name="../source/interval.h"/>
-    <File Name="../source/interval.cpp"/>
     <File Name="../source/drawing.cpp"/>
     <File Name="../source/hazard.h"/>
     <File Name="../source/weather.h"/>

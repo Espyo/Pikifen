@@ -124,7 +124,6 @@ void gameplay::do_aesthetic_logic() {
     }
     
     //Where the cursor is.
-    //TODO check this only one out of every three frames or something.
     cursor_height_diff_light = 0;
     
     leader_cursor_mob = NULL;
@@ -344,9 +343,6 @@ void gameplay::do_gameplay_logic() {
         *   Leader   (*:O) *
         *             `-´  *
         *******************/
-        //TODO move this logic to the leader class once
-        //multiplayer logic is implemented.
-        
         //Current leader movement.
         point dummy_coords;
         float dummy_angle;
@@ -509,9 +505,6 @@ void gameplay::do_gameplay_logic() {
             
         dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
         if(leader_to_cursor_dist > cursor_max_dist) {
-            //TODO with an analog stick, if the cursor is being moved,
-            //it's considered off-limit a lot more than it should.
-            
             //Cursor goes beyond the range limit.
             leader_cursor_w.x =
                 cur_leader_ptr->pos.x + (cos(cursor_angle) * cursor_max_dist);

@@ -31,6 +31,8 @@ enemy_type::enemy_type() :
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_FRAGILE;
         
+    starting_team = MOB_TEAM_ENEMY_1;
+        
     add_carrying_states();
 }
 

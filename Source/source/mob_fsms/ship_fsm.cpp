@@ -54,14 +54,14 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     ship* s_ptr = (ship*) m;
     
     if(delivery->type->category->id == MOB_CATEGORY_TREASURES) {
-        //TODO
+        
     } else if(delivery->type->category->id == MOB_CATEGORY_RESOURCES) {
         resource* r_ptr = (resource*) delivery;
         if(
             r_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_ADD_POINTS
         ) {
-            //TODO
+            
         } else if(
             r_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS

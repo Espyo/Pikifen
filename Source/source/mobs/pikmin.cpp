@@ -39,7 +39,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     consecutive_dud_hits(0) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
-    team = MOB_TEAM_PLAYER_1; // TODO
+    team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
     near_reach = 0;
@@ -213,6 +213,17 @@ bool pikmin::can_receive_status(status_type* s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handler for when there is no longer any status effect-induced panic.
+ */
+void pikmin::handle_panic_loss() {
+    if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
+        pikmin_fsm::stand_still(this, NULL, NULL);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
  */
 void pikmin::handle_status_effect(status_type* s) {
@@ -291,11 +302,17 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced panic.
+ * Starts the particle generator that leaves a trail behind a thrown Pikmin.
  */
-void pikmin::handle_panic_loss() {
-    if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
-        fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
-    }
+void pikmin::start_throw_trail() {
+    particle throw_p(
+        PARTICLE_TYPE_CIRCLE, pos, z,
+        type->radius, 0.6, PARTICLE_PRIORITY_LOW
+    );
+    throw_p.size_grow_speed = -5;
+    throw_p.color = change_alpha(type->main_color, 128);
+    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
+    pg.follow_mob = this;
+    pg.id = MOB_PARTICLE_GENERATOR_THROW;
+    particle_generators.push_back(pg);
 }

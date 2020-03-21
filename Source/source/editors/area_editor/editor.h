@@ -236,8 +236,6 @@ private:
     mob_category* last_mob_category;
     //Mob type of the last mob placed.
     mob_type* last_mob_type;
-    //List of lone edges found.
-    unordered_set<edge*> lone_edges;
     //Closest mob to the mouse when moving.
     mob_gen* move_closest_mob;
     //Closest mob was here when the move started (world coords).
@@ -270,8 +268,6 @@ private:
     vector<bool> new_circle_sector_valid_edges;
     //Time left to keep the error-redness of the new sector's line(s) for.
     timer new_sector_error_tint_timer;
-    //Non-simple sectors found, and their reason for being broken.
-    map<sector*, TRIANGULATION_ERRORS> non_simples;
     //When drawing a path, create normal links. False for one-way links.
     bool path_drawing_normals;
     //First stop of the next link when drawing a path.
@@ -556,7 +552,12 @@ public:
     void load();
     void unload();
     
+    //Load this area when the area editor loads.
     string auto_load_area;
+    //Non-simple sectors found, and their reason for being broken.
+    map<sector*, TRIANGULATION_ERRORS> non_simples;
+    //List of lone edges found.
+    unordered_set<edge*> lone_edges;
     
     area_editor();
     ~area_editor();

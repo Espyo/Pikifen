@@ -986,7 +986,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
-            efc.change_state("thrown");
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
@@ -1134,18 +1133,7 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
  * When a leader grabbed by another is thrown.
  */
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    m->stop_chasing();
-    
-    particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->pos, m->z,
-        m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
-    );
-    throw_p.size_grow_speed = -5;
-    throw_p.color = change_alpha(m->type->main_color, 128);
-    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_mob = m;
-    pg.id = MOB_PARTICLE_GENERATOR_THROW;
-    m->particle_generators.push_back(pg);
+    ((leader*) m)->start_throw_trail();
 }
 
 
@@ -1154,7 +1142,7 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * info1: Points to the bouncer mob.
  */
 void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
-    //TODO
+    ((leader*) m)->start_throw_trail();
 }
 
 
@@ -1244,7 +1232,6 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
  * When a leader dies.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
-    //TODO TEMP.
     size_t living_leaders = 0;
     for(size_t l = 0; l < leaders.size(); ++l) {
         if(leaders[l]->health > 0) living_leaders++;
@@ -1288,6 +1275,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->fsm.run_event(MOB_EV_THROWN);
     holding_ptr->start_height_effect();
     
+    holding_ptr->stop_chasing();
     holding_ptr->pos = leader_ptr->pos;
     holding_ptr->z = leader_ptr->z;
     
@@ -1776,9 +1764,9 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
         m->set_animation(LEADER_ANIM_WALKING);
     } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
-        m->set_animation(LEADER_ANIM_WALKING); //TODO
+        m->set_animation(LEADER_ANIM_WALKING);
     } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
-        m->set_animation(LEADER_ANIM_WALKING); //TODO
+        m->set_animation(LEADER_ANIM_WALKING);
     }
     
     m->track_info = new track_info_struct(tra_ptr);

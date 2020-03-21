@@ -136,9 +136,6 @@ enum MOB_EV_TYPES {
     MOB_EV_NEAR_TOOL,
     //When the Pikmin is near a group task.
     MOB_EV_NEAR_GROUP_TASK,
-    //When it has reached its carrying spot on the carriable object.
-    //TODO replace with MOB_EV_REACHED_DESTINATION?
-    MOB_EV_REACHED_CARRIABLE_OBJECT,
     //When one of its attack hitboxes touches another mob's normal hitbox.
     MOB_EV_HITBOX_TOUCH_A_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.

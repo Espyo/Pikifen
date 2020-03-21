@@ -58,6 +58,8 @@ public:
     bool process_attack_miss(hitbox_interaction* info);
     //Increases the Pikmin's maturity by an amount.
     void increase_maturity(const int amount);
+    //Starts the trail behind a thrown Pikmin.
+    void start_throw_trail();
     
     //Constructor.
     pikmin(const point &pos, pikmin_type* type, const float angle);

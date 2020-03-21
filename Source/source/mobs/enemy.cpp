@@ -26,7 +26,14 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
     mob(pos, type, angle),
     ene_type(type) {
     
-    team = MOB_TEAM_ENEMY_1; //TODO removeish.
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not an enemy can receive a given status effect.
+ */
+bool enemy::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_ENEMIES;
 }
 
 
@@ -57,11 +64,36 @@ void enemy::draw_mob() {
 }
 
 
+//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
+const float ENEMY_SPIRIT_SIZE_MULT = 0.7;
+//Maximum diameter an enemy's spirit can be.
+const float ENEMY_SPIRIT_MAX_SIZE = 128;
+//Minimum diameter an enemy's spirit can be.
+const float ENEMY_SPIRIT_MIN_SIZE = 16;
+
 /* ----------------------------------------------------------------------------
- * Returns whether or not an enemy can receive a given status effect.
+ * Logic specific to enemies for when they finish dying.
  */
-bool enemy::can_receive_status(status_type* s) {
-    return s->affects & STATUS_AFFECTS_ENEMIES;
+void enemy::finish_dying_class_specifics() {
+    if(ene_type->drops_corpse) {
+        become_carriable(CARRY_DESTINATION_ONION);
+        fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+    }
+    particle par(
+        PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
+        clamp(
+            type->radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
+            ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
+        ),
+        2, PARTICLE_PRIORITY_MEDIUM
+    );
+    par.bitmap = bmp_enemy_spirit;
+    par.speed.x = 0;
+    par.speed.y = -50;
+    par.friction = 0.5;
+    par.gravity = 0;
+    par.color = al_map_rgb(255, 192, 255);
+    particles.add(par);
 }
 
 
@@ -103,7 +135,7 @@ void enemy::read_script_vars(const script_var_reader &svr) {
 /* ----------------------------------------------------------------------------
  * Sets up stuff for the beginning of the enemy's death process.
  */
-void enemy::start_dying_class_specific() {
+void enemy::start_dying_class_specifics() {
     vector<mob_type*> spoils_to_spawn = specific_spoils;
     
     //If there are random pellets to spawn, then prepare some data.

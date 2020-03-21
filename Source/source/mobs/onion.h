@@ -33,7 +33,6 @@ public:
     //How many Pikmin are inside, per maturity.
     size_t pikmin_inside[N_MATURITIES];
     //How many Pikmin are queued up to be spat.
-    //TODO this needs to be a proper queue (Master Onion).
     size_t spew_queue;
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;

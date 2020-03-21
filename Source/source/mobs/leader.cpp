@@ -29,12 +29,20 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     queued_pluck_cancel(false),
     is_in_walking_anim(false) {
     
-    team = MOB_TEAM_PLAYER_1; //TODO.
+    team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
     group = new group_info_struct(this);
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a leader can receive a given status effect.
+ */
+bool leader::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_LEADERS;
 }
 
 
@@ -44,6 +52,7 @@ const float DISMISS_ANGLE_RANGE = TAU / 2;
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
 //Dismissed groups must have this much distance between them/the leader.
 const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
+
 /* ----------------------------------------------------------------------------
  * Makes a leader dismiss their group.
  * The group is then organized in groups, by type,
@@ -437,6 +446,23 @@ void leader::signal_swarm_start() {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts the particle generator that leaves a trail behind a thrown Pikmin.
+ */
+void leader::start_throw_trail() {
+    particle throw_p(
+        PARTICLE_TYPE_CIRCLE, pos, z,
+        type->radius, 0.6, PARTICLE_PRIORITY_LOW
+    );
+    throw_p.size_grow_speed = -5;
+    throw_p.color = change_alpha(type->main_color, 128);
+    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
+    pg.follow_mob = this;
+    pg.id = MOB_PARTICLE_GENERATOR_THROW;
+    particle_generators.push_back(pg);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the leader start whistling.
  */
 void leader::start_whistling() {
@@ -465,72 +491,6 @@ void leader::stop_whistling() {
     
     whistling = false;
     whistle_radius = 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Switch active leader.
- */
-void change_to_next_leader(const bool forward, const bool force_success) {
-    if(leaders.size() == 1) return;
-    
-    if(
-        !cur_leader_ptr->fsm.get_event(LEADER_EV_INACTIVATED) &&
-        !force_success
-    ) {
-        //This leader isn't ready to be switched out of. Forget it.
-        return;
-    }
-    
-    //We'll send the switch event to the next leader on the list.
-    //If they accept, they run a function to change leaders.
-    //If not, we try the next leader.
-    //If we return to the current leader without anything being
-    //changed, then stop trying; no leader can be switched to.
-    
-    size_t new_leader_nr = cur_leader_nr;
-    leader* new_leader_ptr = NULL;
-    bool searching = true;
-    size_t original_leader_nr = cur_leader_nr;
-    bool cant_find_new_leader = false;
-    
-    while(searching) {
-        new_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
-        new_leader_ptr = leaders[new_leader_nr];
-        
-        if(new_leader_nr == original_leader_nr) {
-            //Back to the original; stop trying.
-            cant_find_new_leader = true;
-            searching = false;
-        }
-        
-        new_leader_ptr->fsm.run_event(LEADER_EV_ACTIVATED);
-        
-        //If after we called the event, the leader is the same,
-        //then that means the leader can't be switched to.
-        //Try a new one.
-        if(cur_leader_nr != original_leader_nr) {
-            searching = false;
-        }
-    }
-    
-    if(cant_find_new_leader && force_success) {
-        //Ok, we need to force a leader to accept the focus. Let's do so.
-        cur_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
-        cur_leader_ptr = leaders[cur_leader_nr];
-        
-        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether or not a leader can receive a given status effect.
- */
-bool leader::can_receive_status(status_type* s) {
-    return s->affects & STATUS_AFFECTS_LEADERS;
 }
 
 
@@ -632,6 +592,64 @@ void leader::tick_class_specifics(const float delta_t) {
             );
             group->members[0]->leave_group();
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Switch active leader.
+ */
+void change_to_next_leader(const bool forward, const bool force_success) {
+    if(leaders.size() == 1) return;
+    
+    if(
+        !cur_leader_ptr->fsm.get_event(LEADER_EV_INACTIVATED) &&
+        !force_success
+    ) {
+        //This leader isn't ready to be switched out of. Forget it.
+        return;
+    }
+    
+    //We'll send the switch event to the next leader on the list.
+    //If they accept, they run a function to change leaders.
+    //If not, we try the next leader.
+    //If we return to the current leader without anything being
+    //changed, then stop trying; no leader can be switched to.
+    
+    size_t new_leader_nr = cur_leader_nr;
+    leader* new_leader_ptr = NULL;
+    bool searching = true;
+    size_t original_leader_nr = cur_leader_nr;
+    bool cant_find_new_leader = false;
+    
+    while(searching) {
+        new_leader_nr =
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
+        new_leader_ptr = leaders[new_leader_nr];
+        
+        if(new_leader_nr == original_leader_nr) {
+            //Back to the original; stop trying.
+            cant_find_new_leader = true;
+            searching = false;
+        }
+        
+        new_leader_ptr->fsm.run_event(LEADER_EV_ACTIVATED);
+        
+        //If after we called the event, the leader is the same,
+        //then that means the leader can't be switched to.
+        //Try a new one.
+        if(cur_leader_nr != original_leader_nr) {
+            searching = false;
+        }
+    }
+    
+    if(cant_find_new_leader && force_success) {
+        //Ok, we need to force a leader to accept the focus. Let's do so.
+        cur_leader_nr =
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
+        cur_leader_ptr = leaders[cur_leader_nr];
+        
+        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
 }
 

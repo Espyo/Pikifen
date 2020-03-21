@@ -71,26 +71,6 @@ void radio_button::init() {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a radio button.
- */
-radio_button::~radio_button() {
-    /*
-    //TODO
-    vector<widget*>* radio_button_group =
-        &((lafi::container*) parent)->groups[group];
-    
-    size_t n_radio_buttons = radio_button_group->size();
-    for(size_t r=0; r<n_radio_buttons; ++r){
-        if(radio_button_group->operator[](r) == this){
-            radio_button_group->erase(radio_button_group->begin() + r);
-            return;
-        }
-    }
-    */
-}
-
-
-/* ----------------------------------------------------------------------------
  * When the user clicks, this radio button is selected.
  */
 void radio_button::widget_on_left_mouse_click(const int, const int) {
@@ -181,5 +161,13 @@ void radio_button_button::draw_self() {
         al_draw_filled_circle(x1 + w / 2, y1 + h / 2, w * 0.25, get_fg_color());
     }
 }
+
+/* ----------------------------------------------------------------------------
+ * Destroys a radio button.
+ */
+radio_button::~radio_button() {
+
+}
+
 
 }

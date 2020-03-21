@@ -320,7 +320,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(pikmin_fsm::be_thrown_by_bouncer);
-            efc.change_state("thrown");
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -1431,22 +1430,13 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
  * When a Pikmin is thrown by a leader.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    m->stop_chasing();
     sfx_pikmin_held.stop();
     sfx_pikmin_thrown.stop();
     sfx_pikmin_thrown.play(0, false);
+    
     m->set_animation(PIKMIN_ANIM_THROWN);
     
-    particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->pos, m->z,
-        m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
-    );
-    throw_p.size_grow_speed = -5;
-    throw_p.color = change_alpha(m->type->main_color, 128);
-    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_mob = m;
-    pg.id = MOB_PARTICLE_GENERATOR_THROW;
-    m->particle_generators.push_back(pg);
+    ((pikmin*) m)->start_throw_trail();
 }
 
 
@@ -1455,7 +1445,9 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * info1: Points to the bouncer mob.
  */
 void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
-    //TODO
+    m->set_animation(PIKMIN_ANIM_THROWN);
+    
+    ((pikmin*) m)->start_throw_trail();
 }
 
 
@@ -2315,7 +2307,6 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.25;
     pg.emit(particles);
-    //TODO play a sound.
 }
 
 
@@ -2369,7 +2360,6 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
         pg.emit(particles);
-        //TODO play a sound.
         
     } else {
         //Flower to leaf.
@@ -2393,7 +2383,6 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
         pg.emit(particles);
-        //TODO play a sound.
     }
 }
 
@@ -2526,9 +2515,9 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
         m->set_animation(PIKMIN_ANIM_WALKING);
     } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
-        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
+        m->set_animation(PIKMIN_ANIM_WALKING);
     } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
-        m->set_animation(PIKMIN_ANIM_WALKING); //TODO
+        m->set_animation(PIKMIN_ANIM_WALKING);
     }
     
     m->track_info = new track_info_struct(tra_ptr);
@@ -2704,7 +2693,6 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     }
     
     if(s->buries_pikmin) {
-        //TODO make sure this only buries opposing Pikmin.
         m->fsm.set_state(PIKMIN_STATE_SPROUT, NULL, NULL);
     }
 }
@@ -2844,5 +2832,4 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
     ) {
         pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     }
-    //TODO add the rest of the poses.
 }

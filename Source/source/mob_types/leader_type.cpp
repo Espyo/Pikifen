@@ -58,8 +58,6 @@ void leader_type::load_properties(data_node* file) {
  * Loads resources into memory.
  */
 void leader_type::load_resources(data_node* file) {
-    //TODO don't use load_sample for these.
-    
     reader_setter rs(file);
     
     string dismiss_sfx_str;
@@ -73,6 +71,7 @@ void leader_type::load_resources(data_node* file) {
     rs.set("name_call_sfx", name_call_sfx_str);
     rs.set("whistle_sfx", whistle_sfx_str);
     
+    //TODO Replace load_sample with something better when it exists.
     bmp_icon = bitmaps.get(icon_str, icon_node);
     sfx_dismiss = load_sample(dismiss_sfx_str, mixer);
     sfx_name_call = load_sample(name_call_sfx_str, mixer);

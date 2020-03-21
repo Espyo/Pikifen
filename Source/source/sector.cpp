@@ -709,8 +709,10 @@ void area_data::clear() {
 void area_data::clone(area_data &other) {
     other.clear();
     
+    if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
+        bitmaps.detach(other.bg_bmp_file_name);
+    }
     other.bg_bmp_file_name = bg_bmp_file_name;
-    //TODO free the old background bitmap.
     if(other.bg_bmp_file_name.empty()) {
         other.bg_bmp = NULL;
     } else {
@@ -1692,6 +1694,7 @@ TRIANGULATION_ERRORS get_polys(
         vertex* cur_vertex = get_rightmost_vertex(edges_done);
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
+        edge* prev_edge = NULL;
         
         //At the start, assume the angle is left.
         float prev_angle = TAU / 2;
@@ -1766,6 +1769,9 @@ TRIANGULATION_ERRORS get_polys(
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
+                    if(prev_edge) {
+                        lone_edges->insert(prev_edge);
+                    }
                     result = TRIANGULATION_ERROR_LONE_EDGES;
                 }
                 
@@ -1785,6 +1791,7 @@ TRIANGULATION_ERRORS get_polys(
                 //Continue onto the next edge.
                 prev_vertex = cur_vertex;
                 cur_vertex = next_vertex;
+                prev_edge = best_edge;
                 edges_done[best_edge] = true;
                 
             }

@@ -1,5 +1,3 @@
-//TODO automated guis
-
 #ifndef LAFI_GUI_INCLUDED
 #define LAFI_GUI_INCLUDED
 

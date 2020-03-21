@@ -93,7 +93,6 @@ struct carry_info_struct {
     bool is_full();
     float get_speed();
     void rotate_points(const float angle);
-    ~carry_info_struct();
 };
 
 

@@ -49,14 +49,6 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
 
 
 /* ----------------------------------------------------------------------------
- * Deletes a carrier info structure.
- */
-carry_info_struct::~carry_info_struct() {
-    //TODO
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the speed at which the object should move, given the carrier Pikmin.
  */
 float carry_info_struct::get_speed() {

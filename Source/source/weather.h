@@ -13,10 +13,9 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include <allegro5/allegro.h>
-
-#include "interval.h"
 
 using namespace std;
 
@@ -49,17 +48,13 @@ public:
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<pair<size_t, ALLEGRO_COLOR> > fog_color;
     unsigned char precipitation_type;
-    interval precipitation_frequency;
-    interval precipitation_speed;
-    interval precipitation_angle;
     
     weather();
     weather(
         const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl,
         const vector<pair<size_t, unsigned char> > &ss,
         const vector<pair<size_t, unsigned char> > &bs,
-        const unsigned char pt, const interval &pf,
-        const interval &ps, const interval &pa
+        const unsigned char pt
     );
 };
 

@@ -154,7 +154,6 @@ void gameplay::load() {
     }
     
     load_area(area_to_load, false, false);
-    load_area_textures();
     
     if(!cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(scr_w, scr_h);
@@ -471,7 +470,6 @@ void gameplay::unload() {
         lightmap_bmp = NULL;
     }
     
-    unload_area_textures();
     unload_area();
     
     spray_stats.clear();

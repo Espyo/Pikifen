@@ -365,8 +365,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
 
 
 /* ----------------------------------------------------------------------------
- * //TODO describe this. This is the problem of late documentation --
- * you document after you forget what stuff does.
+ * Callback for when a scrollbar is meant to scroll the contents of a widget.
  */
 void scrollbar::widget_scroller(widget* w) {
     scrollbar* scrollbar_ptr = (scrollbar*) w;

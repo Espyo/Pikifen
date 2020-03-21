@@ -47,6 +47,8 @@ public:
     void signal_swarm_start();
     //Signal to every group member that swarm mode ended.
     void signal_swarm_end();
+    //Starts the trail behind a thrown leader.
+    void start_throw_trail();
     //Start whistling.
     void start_whistling();
     //Stop whistling.

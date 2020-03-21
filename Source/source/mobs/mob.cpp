@@ -1077,42 +1077,13 @@ void mob::face(const float new_angle, point* new_pos) {
 }
 
 
-//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
-const float ENEMY_SPIRIT_SIZE_MULT = 0.7;
-//Maximum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MAX_SIZE = 128;
-//Minimum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MIN_SIZE = 16;
-
 /* ----------------------------------------------------------------------------
  * Sets up stuff for the end of the mob's dying process.
  */
 void mob::finish_dying() {
-    if(type->category->id == MOB_CATEGORY_ENEMIES) {
-        //TODO move this to the enemy class.
-        enemy* e_ptr = (enemy*) this;
-        if(e_ptr->ene_type->drops_corpse) {
-            become_carriable(CARRY_DESTINATION_ONION);
-            e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
-        }
-        particle par(
-            PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
-            clamp(
-                type->radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
-                ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
-            ),
-            2, PARTICLE_PRIORITY_MEDIUM
-        );
-        par.bitmap = bmp_enemy_spirit;
-        par.speed.x = 0;
-        par.speed.y = -50;
-        par.friction = 0.5;
-        par.gravity = 0;
-        par.color = al_map_rgb(255, 192, 255);
-        particles.add(par);
-    }
-    
     release_chomped_pikmin();
+    
+    finish_dying_class_specifics();
 }
 
 
@@ -1924,7 +1895,7 @@ void mob::start_dying() {
     pg.duration_deviation = 0.5;
     pg.emit(particles);
     
-    start_dying_class_specific();
+    start_dying_class_specifics();
 }
 
 
@@ -2486,7 +2457,8 @@ bool mob::can_receive_status(status_type* s) {
 }
 void mob::handle_status_effect(status_type* s) {}
 void mob::handle_panic_loss() {}
-void mob::start_dying_class_specific() { }
+void mob::start_dying_class_specifics() { }
+void mob::finish_dying_class_specifics() { }
 
 
 /* ----------------------------------------------------------------------------

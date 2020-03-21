@@ -435,34 +435,24 @@ void load_area(
     
     
     //Triangulate everything and save bounding boxes.
+    set<edge*> lone_edges;
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->triangles.clear();
-        //TODO report lone edges and such to the editor.
-        triangulate(s_ptr, NULL, false, false);
+        TRIANGULATION_ERRORS res =
+            triangulate(s_ptr, &lone_edges, false, false);
+            
+        if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
+            area_editor* ae =
+                ((area_editor*) game_states[GAME_STATE_AREA_EDITOR]);
+            ae->non_simples[s_ptr] = res;
+            ae->lone_edges.insert(lone_edges.begin(), lone_edges.end());
+        }
         
         get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
     }
     
     if(!load_for_editor) cur_area_data.generate_blockmap();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the area's sector textures.
- */
-void load_area_textures() {
-    //TODO will this still be needed after area editor v2?
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
-        
-        if(s_ptr->texture_info.file_name.empty()) {
-            s_ptr->texture_info.bitmap = NULL;
-        } else {
-            s_ptr->texture_info.bitmap =
-                textures.get(s_ptr->texture_info.file_name, NULL);
-        }
-    }
 }
 
 
@@ -1452,24 +1442,6 @@ void load_weather() {
                     "precipitation_type"
                 )->get_value_or_default(i2s(PRECIPITATION_TYPE_NONE))
             );
-        weather_struct.precipitation_frequency =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_frequency"
-                )->value
-            );
-        weather_struct.precipitation_speed =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_speed"
-                )->value
-            );
-        weather_struct.precipitation_angle =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_angle"
-                )->get_value_or_default(f2s((TAU * 0.75)))
-            );
             
         //Save it in the map.
         weather_conditions[weather_struct.name] = weather_struct;
@@ -1482,22 +1454,6 @@ void load_weather() {
  */
 void unload_area() {
     cur_area_data.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Unloads the loaded area's sector textures from memory.
- */
-void unload_area_textures() {
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
-        
-        if(s_ptr->texture_info.file_name.empty()) continue;
-        
-        textures.detach(s_ptr->texture_info.file_name);
-        s_ptr->texture_info.file_name.clear();
-        s_ptr->texture_info.bitmap = NULL;
-    }
 }
 
 
@@ -1616,4 +1572,12 @@ void unload_status_types(const bool unload_resources) {
         }
     }
     status_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded weather conditions.
+ */
+void unload_weather() {
+    weather_conditions.clear();
 }

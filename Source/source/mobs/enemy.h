@@ -34,10 +34,12 @@ public:
     virtual bool can_receive_status(status_type* s);
     //Mob drawing routine.
     virtual void draw_mob();
+    //Death finish class-specific logic.
+    virtual void finish_dying_class_specifics();
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
-    //Death class-specific logic.
-    virtual void start_dying_class_specific();
+    //Death start class-specific logic.
+    virtual void start_dying_class_specifics();
 };
 
 #endif //ifndef ENEMY_INCLUDED

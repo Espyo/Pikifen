@@ -33,7 +33,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
         
             //Debug testing.
-            //TODO remove.
+            //TODO remove any debug code that is in here before releasing.
             
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
