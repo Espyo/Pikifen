@@ -28,39 +28,17 @@ scale_category::scale_category() :
 }
 
 
+scale_category::~scale_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of scale by name.
+ * Clears the list of registered types of scale.
  */
-void scale_category::get_type_names(vector<string> &list) {
+void scale_category::clear_types() {
     for(auto &t : scale_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of scale given its name, or NULL on error.
- */
-mob_type* scale_category::get_type(const string &name) {
-    auto it = scale_types.find(name);
-    if(it == scale_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of scale.
- */
-mob_type* scale_category::create_type() {
-    return new scale_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of scale.
- */
-void scale_category::register_type(mob_type* type) {
-    scale_types[type->name] = (scale_type*) type;
+    scale_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* scale_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of scale.
+ */
+mob_type* scale_category::create_type() {
+    return new scale_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a scale from the list of scales.
  */
 void scale_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void scale_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of scale.
+ * Returns a type of scale given its name, or NULL on error.
  */
-void scale_category::clear_types() {
-    for(auto &t : scale_types) {
-        delete t.second;
-    }
-    scale_types.clear();
+mob_type* scale_category::get_type(const string &name) {
+    auto it = scale_types.find(name);
+    if(it == scale_types.end()) return NULL;
+    return it->second;
 }
 
 
-scale_category::~scale_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of scale by name.
+ */
+void scale_category::get_type_names(vector<string> &list) {
+    for(auto &t : scale_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of scale.
+ */
+void scale_category::register_type(mob_type* type) {
+    scale_types[type->name] = (scale_type*) type;
+}

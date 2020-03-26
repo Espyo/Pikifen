@@ -33,6 +33,7 @@ group_task_type::group_task_type() :
     
 }
 
+
 group_task_type::~group_task_type() { }
 
 

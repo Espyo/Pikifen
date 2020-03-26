@@ -81,6 +81,23 @@ void onion::call_pikmin() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws an Onion.
+ */
+void onion::draw_mob() {
+    sprite* s_ptr = anim.get_cur_sprite();
+    
+    if(!s_ptr) return;
+    
+    bitmap_effect_info eff;
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
+    
+    eff.tint_color.a *= (seethrough / 255.0f);
+    
+    draw_bitmap_with_effects(s_ptr->bitmap, eff);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  */
 void onion::read_script_vars(const script_var_reader &svr) {
@@ -225,21 +242,4 @@ void onion::tick_class_specifics(const float delta_t) {
             }
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws an Onion.
- */
-void onion::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
-    
-    if(!s_ptr) return;
-    
-    bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
-    
-    eff.tint_color.a *= (seethrough / 255.0f);
-    
-    draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }

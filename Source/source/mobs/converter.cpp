@@ -86,7 +86,6 @@ const float CONVERTER_SPEW_H_SPEED_DEVIATION = 10.0f;
 //A converter-spat seed is this quick, vertically.
 const float CONVERTER_SPEW_V_SPEED = 1200.0f;
 
-
 /* ----------------------------------------------------------------------------
  * Spews out the converted seeds.
  */

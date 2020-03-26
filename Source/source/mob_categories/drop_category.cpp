@@ -28,39 +28,17 @@ drop_category::drop_category() :
 }
 
 
+drop_category::~drop_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of drop by name.
+ * Clears the list of registered types of drops.
  */
-void drop_category::get_type_names(vector<string> &list) {
+void drop_category::clear_types() {
     for(auto &t : drop_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of drop given its name, or NULL on error.
- */
-mob_type* drop_category::get_type(const string &name) {
-    auto it = drop_types.find(name);
-    if(it == drop_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of drop.
- */
-mob_type* drop_category::create_type() {
-    return new drop_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of drop.
- */
-void drop_category::register_type(mob_type* type) {
-    drop_types[type->name] = (drop_type*) type;
+    drop_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* drop_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of drop.
+ */
+mob_type* drop_category::create_type() {
+    return new drop_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a drop from the list of drops.
  */
 void drop_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void drop_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of drops.
+ * Returns a type of drop given its name, or NULL on error.
  */
-void drop_category::clear_types() {
-    for(auto &t : drop_types) {
-        delete t.second;
-    }
-    drop_types.clear();
+mob_type* drop_category::get_type(const string &name) {
+    auto it = drop_types.find(name);
+    if(it == drop_types.end()) return NULL;
+    return it->second;
 }
 
 
-drop_category::~drop_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of drop by name.
+ */
+void drop_category::get_type_names(vector<string> &list) {
+    for(auto &t : drop_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of drop.
+ */
+void drop_category::register_type(mob_type* type) {
+    drop_types[type->name] = (drop_type*) type;
+}

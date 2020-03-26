@@ -35,6 +35,18 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
+
+//Calls al_fwrite, but with an std::string instead of a c-string.
+void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
+
+
+//Converts a color to its string representation.
+string c2s(const ALLEGRO_COLOR &c) {
+    return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
+           (c.a == 1 ? "" : " " + i2s(c.a * 255));
+}
+
+
 /* ----------------------------------------------------------------------------
  * Does sector s1 cast a shadow onto sector s2?
  */
@@ -762,6 +774,43 @@ void report_fatal_error(const string &s, data_node* dn) {
 }
 
 
+//Converts a string to an Allegro color.
+//Components are separated by spaces, and the final one (alpha) is optional.
+ALLEGRO_COLOR s2c(const string &s) {
+    string s2 = s;
+    s2 = trim_spaces(s2);
+    
+    unsigned char alpha = 255;
+    vector<string> components = split(s2);
+    if(components.size() >= 2) alpha = s2i(components[1]);
+    
+    if(s2 == "nothing") return al_map_rgba(0,   0,   0,   0);
+    if(s2 == "none")    return al_map_rgba(0,   0,   0,   0);
+    if(s2 == "black")   return al_map_rgba(0,   0,   0,   alpha);
+    if(s2 == "gray")    return al_map_rgba(128, 128, 128, alpha);
+    if(s2 == "grey")    return al_map_rgba(128, 128, 128, alpha);
+    if(s2 == "white")   return map_alpha(alpha);
+    if(s2 == "yellow")  return al_map_rgba(255, 255, 0,   alpha);
+    if(s2 == "orange")  return al_map_rgba(255, 128, 0,   alpha);
+    if(s2 == "brown")   return al_map_rgba(128, 64,  0,   alpha);
+    if(s2 == "red")     return al_map_rgba(255, 0,   0,   alpha);
+    if(s2 == "violet")  return al_map_rgba(255, 0,   255, alpha);
+    if(s2 == "purple")  return al_map_rgba(128, 0,   255, alpha);
+    if(s2 == "blue")    return al_map_rgba(0,   0,   255, alpha);
+    if(s2 == "cyan")    return al_map_rgba(0,   255, 255, alpha);
+    if(s2 == "green")   return al_map_rgba(0,   255, 0,   alpha);
+    
+    ALLEGRO_COLOR c =
+        al_map_rgba(
+            ((components.size() > 0) ? s2i(components[0]) : 0),
+            ((components.size() > 1) ? s2i(components[1]) : 0),
+            ((components.size() > 2) ? s2i(components[2]) : 0),
+            ((components.size() > 3) ? s2i(components[3]) : 255)
+        );
+    return c;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Converts a string to a point.
  * If z is present, the third word is placed there.
@@ -1174,6 +1223,33 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
 }
 
 
+#if defined(_WIN32)
+
+string strsignal(const int signum) {
+    if(signum == SIGINT) {
+        return "SIGINT";
+    } else if(signum == SIGILL) {
+        return "SIGILL";
+    } else if(signum == SIGFPE) {
+        return "SIGFPE";
+    } else if(signum == SIGSEGV) {
+        return "SIGSEGV";
+    } else if(signum == SIGTERM) {
+        return "SIGTERM";
+    } else if(signum == SIGBREAK) {
+        return "SIGBREAK";
+    } else if(signum == SIGABRT) {
+        return "SIGABRT";
+    } else if(signum == SIGABRT_COMPAT) {
+        return "SIGABRT_COMPAT";
+    } else {
+        return "Unknown";
+    }
+}
+
+#endif //if defined(_WIN32)
+
+
 /* ----------------------------------------------------------------------------
  * Updates the history list for the animation editor,
  * adding a new entry or bumping it up.
@@ -1224,78 +1300,3 @@ string vector_tail_to_string(const vector<string> &v, const size_t pos) {
     }
     return result;
 }
-
-
-//Calls al_fwrite, but with an std::string instead of a c-string.
-void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
-
-
-//Converts a color to its string representation.
-string c2s(const ALLEGRO_COLOR &c) {
-    return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
-           (c.a == 1 ? "" : " " + i2s(c.a * 255));
-}
-
-
-//Converts a string to an Allegro color.
-//Components are separated by spaces, and the final one (alpha) is optional.
-ALLEGRO_COLOR s2c(const string &s) {
-    string s2 = s;
-    s2 = trim_spaces(s2);
-    
-    unsigned char alpha = 255;
-    vector<string> components = split(s2);
-    if(components.size() >= 2) alpha = s2i(components[1]);
-    
-    if(s2 == "nothing") return al_map_rgba(0,   0,   0,   0);
-    if(s2 == "none")    return al_map_rgba(0,   0,   0,   0);
-    if(s2 == "black")   return al_map_rgba(0,   0,   0,   alpha);
-    if(s2 == "gray")    return al_map_rgba(128, 128, 128, alpha);
-    if(s2 == "grey")    return al_map_rgba(128, 128, 128, alpha);
-    if(s2 == "white")   return map_alpha(alpha);
-    if(s2 == "yellow")  return al_map_rgba(255, 255, 0,   alpha);
-    if(s2 == "orange")  return al_map_rgba(255, 128, 0,   alpha);
-    if(s2 == "brown")   return al_map_rgba(128, 64,  0,   alpha);
-    if(s2 == "red")     return al_map_rgba(255, 0,   0,   alpha);
-    if(s2 == "violet")  return al_map_rgba(255, 0,   255, alpha);
-    if(s2 == "purple")  return al_map_rgba(128, 0,   255, alpha);
-    if(s2 == "blue")    return al_map_rgba(0,   0,   255, alpha);
-    if(s2 == "cyan")    return al_map_rgba(0,   255, 255, alpha);
-    if(s2 == "green")   return al_map_rgba(0,   255, 0,   alpha);
-    
-    ALLEGRO_COLOR c =
-        al_map_rgba(
-            ((components.size() > 0) ? s2i(components[0]) : 0),
-            ((components.size() > 1) ? s2i(components[1]) : 0),
-            ((components.size() > 2) ? s2i(components[2]) : 0),
-            ((components.size() > 3) ? s2i(components[3]) : 255)
-        );
-    return c;
-}
-
-
-#if defined(_WIN32)
-
-string strsignal(const int signum) {
-    if(signum == SIGINT) {
-        return "SIGINT";
-    } else if(signum == SIGILL) {
-        return "SIGILL";
-    } else if(signum == SIGFPE) {
-        return "SIGFPE";
-    } else if(signum == SIGSEGV) {
-        return "SIGSEGV";
-    } else if(signum == SIGTERM) {
-        return "SIGTERM";
-    } else if(signum == SIGBREAK) {
-        return "SIGBREAK";
-    } else if(signum == SIGABRT) {
-        return "SIGABRT";
-    } else if(signum == SIGABRT_COMPAT) {
-        return "SIGABRT_COMPAT";
-    } else {
-        return "Unknown";
-    }
-}
-
-#endif //if defined(_WIN32)

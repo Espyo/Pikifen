@@ -18,36 +18,6 @@
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new mob action parameter struct.
- */
-mob_action_param::mob_action_param(
-    const string &name,
-    const MOB_ACTION_PARAM_TYPE type,
-    const bool force_const,
-    const bool is_extras
-):
-    name(name),
-    type(type),
-    force_const(force_const),
-    is_extras(is_extras) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new mob action run data struct.
- */
-mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
-    m(m),
-    call(call),
-    custom_data_1(nullptr),
-    custom_data_2(nullptr),
-    return_value(false) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a new, empty mob action.
  */
 mob_action::mob_action() :
@@ -254,6 +224,393 @@ bool mob_action_call::run(
 
 
 /* ----------------------------------------------------------------------------
+ * Loading code for the arachnorb logic plan mob script action.
+ */
+bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
+    if(call.args[0] == "home") {
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
+    } else if(call.args[0] == "forward") {
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
+    } else if(call.args[0] == "cw_turn") {
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
+    } else if(call.args[0] == "ccw_turn") {
+        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
+    } else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the calculation mob script action.
+ */
+bool mob_action_loaders::calculate(mob_action_call &call) {
+    if(call.args[2] == "+") {
+        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUM);
+    } else if(call.args[2] == "-") {
+        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUBTRACT);
+    } else if(call.args[2] == "*") {
+        call.args[2] = i2s(MOB_ACTION_SET_VAR_MULTIPLY);
+    } else if(call.args[2] == "/") {
+        call.args[2] = i2s(MOB_ACTION_SET_VAR_DIVIDE);
+    } else if(call.args[2] == "%") {
+        call.args[2] = i2s(MOB_ACTION_SET_VAR_MODULO);
+    } else {
+        report_enum_error(call, 2);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the focus mob script action.
+ */
+bool mob_action_loaders::focus(mob_action_call &call) {
+    if(call.args[0] == "link") {
+        call.args[0] = i2s(MOB_ACTION_FOCUS_LINK);
+    } else if(call.args[0] == "parent") {
+        call.args[0] = i2s(MOB_ACTION_FOCUS_PARENT);
+    } else if(call.args[0] == "trigger") {
+        call.args[0] = i2s(MOB_ACTION_FOCUS_TRIGGER);
+    } else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the info getting script action.
+ */
+bool mob_action_loaders::get_info(mob_action_call &call) {
+    if(call.args[1] == "body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
+    } else if(call.args[1] == "chomped_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
+    } else if(call.args[1] == "day_minutes") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
+    } else if(call.args[1] == "field_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
+    } else if(call.args[1] == "frame_signal") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+    } else if(call.args[1] == "health") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
+    } else if(call.args[1] == "latched_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
+    } else if(call.args[1] == "latched_pikmin_weight") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+    } else if(call.args[1] == "message") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
+    } else if(call.args[1] == "message_sender") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
+    } else if(call.args[1] == "mob_category") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
+    } else if(call.args[1] == "mob_type") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
+    } else if(call.args[1] == "other_body_part") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else if(call.args[1] == "weight") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
+    } else {
+        report_enum_error(call, 1);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the "if" mob script action.
+ */
+bool mob_action_loaders::if_function(mob_action_call &call) {
+    if(call.args[1] == "=") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_EQUAL);
+    } else if(call.args[1] == "!=") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_NOT);
+    } else if(call.args[1] == "<") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS);
+    } else if(call.args[1] == ">") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE);
+    } else if(call.args[1] == "<=") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS_E);
+    } else if(call.args[1] == ">=") {
+        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE_E);
+    } else {
+        report_enum_error(call, 1);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the move to target mob script action.
+ */
+bool mob_action_loaders::move_to_target(mob_action_call &call) {
+    if(call.args[0] == "arachnorb_foot_logic") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
+    } else if(call.args[0] == "away_from_focused_mob") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
+    } else if(call.args[0] == "focused_mob") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB);
+    } else if(call.args[0] == "focused_mob_position") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
+    } else if(call.args[0] == "home") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_HOME);
+    } else if(call.args[0] == "linked_mob_average") {
+        call.args[0] = i2s(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
+    } else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the status reception mob script action.
+ */
+bool mob_action_loaders::receive_status(mob_action_call &call) {
+    if(status_types.find(call.args[0]) == status_types.end()) {
+        call.custom_error =
+            "Unknown status effect \"" + call.args[0] + "\"!";
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the status removal mob script action.
+ */
+bool mob_action_loaders::remove_status(mob_action_call &call) {
+    if(status_types.find(call.args[0]) == status_types.end()) {
+        call.custom_error =
+            "Unknown status effect \"" + call.args[0] + "\"!";
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reports an error of an unknown enum value.
+ */
+void mob_action_loaders::report_enum_error(
+    mob_action_call &call, const size_t arg_nr
+) {
+    size_t param_nr = min(arg_nr, call.action->parameters.size() - 1);
+    call.custom_error =
+        "The parameter \"" + call.action->parameters[param_nr].name + "\" "
+        "does not know what the value \"" +
+        call.args[arg_nr] + "\" means!";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the animation setting mob script action.
+ */
+bool mob_action_loaders::set_animation(mob_action_call &call) {
+    size_t a_pos = call.mt->anims.find_animation(call.args[0]);
+    if(a_pos == INVALID) {
+        call.custom_error =
+            "Unknown animation \"" + call.args[0] + "\"!";
+        return false;
+    }
+    call.args[0] = i2s(a_pos);
+    
+    for(size_t a = 1; a < call.args.size(); ++a) {
+        if(call.args[a] == "no_restart") {
+            call.args[a] = i2s(MOB_ACTION_SET_ANIMATION_NO_RESTART);
+        } else {
+            call.args[a] = "0";
+        }
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the far reach setting mob script action.
+ */
+bool mob_action_loaders::set_far_reach(mob_action_call &call) {
+    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
+        if(call.mt->reaches[r].name == call.args[0]) {
+            call.args[0] = i2s(r);
+            return true;
+        }
+    }
+    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the holdable setting mob script action.
+ */
+bool mob_action_loaders::set_holdable(mob_action_call &call) {
+    for(size_t a = 0; a < call.args.size(); ++a) {
+        if(call.args[a] == "pikmin") {
+            call.args[a] = i2s(HOLDABLE_BY_PIKMIN);
+        } else if(call.args[a] == "enemies") {
+            call.args[a] = i2s(HOLDABLE_BY_ENEMIES);
+        } else {
+            report_enum_error(call, a);
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the near reach setting mob script action.
+ */
+bool mob_action_loaders::set_near_reach(mob_action_call &call) {
+    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
+        if(call.mt->reaches[r].name == call.args[0]) {
+            call.args[0] = i2s(r);
+            return true;
+        }
+    }
+    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the team setting mob script action.
+ */
+bool mob_action_loaders::set_team(mob_action_call &call) {
+    size_t team_nr = string_to_team_nr(call.args[0]);
+    if(team_nr == INVALID) {
+        report_enum_error(call, 0);
+        return false;
+    }
+    call.args[0] = i2s(team_nr);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the spawning mob script action.
+ */
+bool mob_action_loaders::spawn(mob_action_call &call) {
+    for(size_t s = 0; s < call.mt->spawns.size(); ++s) {
+        if(call.mt->spawns[s].name == call.args[0]) {
+            call.args[0] = i2s(s);
+            return true;
+        }
+    }
+    call.custom_error =
+        "Unknown spawn info block \"" + call.args[0] + "\"!";
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the z stabilization mob script action.
+ */
+bool mob_action_loaders::stabilize_z(mob_action_call &call) {
+    if(call.args[0] == "lowest") {
+        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_LOWEST);
+    } else if(call.args[0] == "highest") {
+        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_HIGHEST);
+    } else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the chomping start mob script action.
+ */
+bool mob_action_loaders::start_chomping(mob_action_call &call) {
+    for(size_t s = 1; s < call.args.size(); ++s) {
+        size_t p_nr = call.mt->anims.find_body_part(call.args[s]);
+        if(p_nr == INVALID) {
+            call.custom_error =
+                "Unknown body part \"" + call.args[s] + "\"!";
+            return false;
+        }
+        call.args[s] = i2s(p_nr);
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the particle start mob script action.
+ */
+bool mob_action_loaders::start_particles(mob_action_call &call) {
+    if(
+        custom_particle_generators.find(call.args[0]) ==
+        custom_particle_generators.end()
+    ) {
+        call.custom_error =
+            "Particle generator \"" + call.args[0] + "\" not found!";
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the turn to target mob script action.
+ */
+bool mob_action_loaders::turn_to_target(mob_action_call &call) {
+    if(call.args[0] == "arachnorb_head_logic") {
+        call.args[0] = i2s(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
+    } else if(call.args[0] == "focused_mob") {
+        call.args[0] = i2s(MOB_ACTION_TURN_FOCUSED_MOB);
+    } else if(call.args[0] == "home") {
+        call.args[0] = i2s(MOB_ACTION_TURN_HOME);
+    } else {
+        report_enum_error(call, 0);
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new mob action parameter struct.
+ */
+mob_action_param::mob_action_param(
+    const string &name,
+    const MOB_ACTION_PARAM_TYPE type,
+    const bool force_const,
+    const bool is_extras
+):
+    name(name),
+    type(type),
+    force_const(force_const),
+    is_extras(is_extras) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new mob action run data struct.
+ */
+mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
+    m(m),
+    call(call),
+    custom_data_1(nullptr),
+    custom_data_2(nullptr),
+    return_value(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the health addition mob script action.
  */
 void mob_action_runners::add_health(mob_action_run_data &data) {
@@ -416,6 +773,16 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the focused mob var getting script action.
+ */
+void mob_action_runners::get_focus_var(mob_action_run_data &data) {
+    if(!data.m->focused_mob) return;
+    data.m->vars[data.args[0]] =
+        data.m->focused_mob->vars[data.args[1]];
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the info obtaining mob script action.
  */
 void mob_action_runners::get_info(mob_action_run_data &data) {
@@ -542,16 +909,6 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         
     }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code for the focused mob var getting script action.
- */
-void mob_action_runners::get_focus_var(mob_action_run_data &data) {
-    if(!data.m->focused_mob) return;
-    data.m->vars[data.args[0]] =
-        data.m->focused_mob->vars[data.args[1]];
 }
 
 
@@ -860,14 +1217,6 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the huntable setting mob script action.
- */
-void mob_action_runners::set_huntable(mob_action_run_data &data) {
-    data.m->is_huntable = s2b(data.args[0]);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code for the holdable setting mob script action.
  */
 void mob_action_runners::set_holdable(mob_action_run_data &data) {
@@ -878,6 +1227,14 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
         }
         ((tool*) (data.m))->holdability_flags = flags;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the huntable setting mob script action.
+ */
+void mob_action_runners::set_huntable(mob_action_run_data &data) {
+    data.m->is_huntable = s2b(data.args[0]);
 }
 
 
@@ -1190,363 +1547,6 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
         
     }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the arachnorb logic plan mob script action.
- */
-bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
-    if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME);
-    } else if(call.args[0] == "forward") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD);
-    } else if(call.args[0] == "cw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN);
-    } else if(call.args[0] == "ccw_turn") {
-        call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the calculation mob script action.
- */
-bool mob_action_loaders::calculate(mob_action_call &call) {
-    if(call.args[2] == "+") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUM);
-    } else if(call.args[2] == "-") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUBTRACT);
-    } else if(call.args[2] == "*") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_MULTIPLY);
-    } else if(call.args[2] == "/") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_DIVIDE);
-    } else if(call.args[2] == "%") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_MODULO);
-    } else {
-        report_enum_error(call, 2);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the focus mob script action.
- */
-bool mob_action_loaders::focus(mob_action_call &call) {
-    if(call.args[0] == "link") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_LINK);
-    } else if(call.args[0] == "parent") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_PARENT);
-    } else if(call.args[0] == "trigger") {
-        call.args[0] = i2s(MOB_ACTION_FOCUS_TRIGGER);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the info getting script action.
- */
-bool mob_action_loaders::get_info(mob_action_call &call) {
-    if(call.args[1] == "body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
-    } else if(call.args[1] == "chomped_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
-    } else if(call.args[1] == "day_minutes") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
-    } else if(call.args[1] == "field_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
-    } else if(call.args[1] == "frame_signal") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
-    } else if(call.args[1] == "health") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
-    } else if(call.args[1] == "latched_pikmin") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
-    } else if(call.args[1] == "latched_pikmin_weight") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
-    } else if(call.args[1] == "message") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
-    } else if(call.args[1] == "message_sender") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
-    } else if(call.args[1] == "mob_category") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
-    } else if(call.args[1] == "mob_type") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
-    } else if(call.args[1] == "other_body_part") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
-    } else if(call.args[1] == "weight") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
-    } else {
-        report_enum_error(call, 1);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the "if" mob script action.
- */
-bool mob_action_loaders::if_function(mob_action_call &call) {
-    if(call.args[1] == "=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_EQUAL);
-    } else if(call.args[1] == "!=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_NOT);
-    } else if(call.args[1] == "<") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS);
-    } else if(call.args[1] == ">") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE);
-    } else if(call.args[1] == "<=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_LESS_E);
-    } else if(call.args[1] == ">=") {
-        call.args[1] = i2s(MOB_ACTION_IF_OP_MORE_E);
-    } else {
-        report_enum_error(call, 1);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the move to target mob script action.
- */
-bool mob_action_loaders::move_to_target(mob_action_call &call) {
-    if(call.args[0] == "arachnorb_foot_logic") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC);
-    } else if(call.args[0] == "away_from_focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB);
-    } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB);
-    } else if(call.args[0] == "focused_mob_position") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_FOCUSED_MOB_POS);
-    } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_HOME);
-    } else if(call.args[0] == "linked_mob_average") {
-        call.args[0] = i2s(MOB_ACTION_MOVE_LINKED_MOB_AVERAGE);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the status reception mob script action.
- */
-bool mob_action_loaders::receive_status(mob_action_call &call) {
-    if(status_types.find(call.args[0]) == status_types.end()) {
-        call.custom_error =
-            "Unknown status effect \"" + call.args[0] + "\"!";
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the status removal mob script action.
- */
-bool mob_action_loaders::remove_status(mob_action_call &call) {
-    if(status_types.find(call.args[0]) == status_types.end()) {
-        call.custom_error =
-            "Unknown status effect \"" + call.args[0] + "\"!";
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the animation setting mob script action.
- */
-bool mob_action_loaders::set_animation(mob_action_call &call) {
-    size_t a_pos = call.mt->anims.find_animation(call.args[0]);
-    if(a_pos == INVALID) {
-        call.custom_error =
-            "Unknown animation \"" + call.args[0] + "\"!";
-        return false;
-    }
-    call.args[0] = i2s(a_pos);
-    
-    for(size_t a = 1; a < call.args.size(); ++a) {
-        if(call.args[a] == "no_restart") {
-            call.args[a] = i2s(MOB_ACTION_SET_ANIMATION_NO_RESTART);
-        } else {
-            call.args[a] = "0";
-        }
-    }
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the far reach setting mob script action.
- */
-bool mob_action_loaders::set_far_reach(mob_action_call &call) {
-    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
-        if(call.mt->reaches[r].name == call.args[0]) {
-            call.args[0] = i2s(r);
-            return true;
-        }
-    }
-    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the holdable setting mob script action.
- */
-bool mob_action_loaders::set_holdable(mob_action_call &call) {
-    for(size_t a = 0; a < call.args.size(); ++a) {
-        if(call.args[a] == "pikmin") {
-            call.args[a] = i2s(HOLDABLE_BY_PIKMIN);
-        } else if(call.args[a] == "enemies") {
-            call.args[a] = i2s(HOLDABLE_BY_ENEMIES);
-        } else {
-            report_enum_error(call, a);
-            return false;
-        }
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the near reach setting mob script action.
- */
-bool mob_action_loaders::set_near_reach(mob_action_call &call) {
-    for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
-        if(call.mt->reaches[r].name == call.args[0]) {
-            call.args[0] = i2s(r);
-            return true;
-        }
-    }
-    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the team setting mob script action.
- */
-bool mob_action_loaders::set_team(mob_action_call &call) {
-    size_t team_nr = string_to_team_nr(call.args[0]);
-    if(team_nr == INVALID) {
-        report_enum_error(call, 0);
-        return false;
-    }
-    call.args[0] = i2s(team_nr);
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the spawning mob script action.
- */
-bool mob_action_loaders::spawn(mob_action_call &call) {
-    for(size_t s = 0; s < call.mt->spawns.size(); ++s) {
-        if(call.mt->spawns[s].name == call.args[0]) {
-            call.args[0] = i2s(s);
-            return true;
-        }
-    }
-    call.custom_error =
-        "Unknown spawn info block \"" + call.args[0] + "\"!";
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the z stabilization mob script action.
- */
-bool mob_action_loaders::stabilize_z(mob_action_call &call) {
-    if(call.args[0] == "lowest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_LOWEST);
-    } else if(call.args[0] == "highest") {
-        call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_HIGHEST);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the chomping start mob script action.
- */
-bool mob_action_loaders::start_chomping(mob_action_call &call) {
-    for(size_t s = 1; s < call.args.size(); ++s) {
-        size_t p_nr = call.mt->anims.find_body_part(call.args[s]);
-        if(p_nr == INVALID) {
-            call.custom_error =
-                "Unknown body part \"" + call.args[s] + "\"!";
-            return false;
-        }
-        call.args[s] = i2s(p_nr);
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the particle start mob script action.
- */
-bool mob_action_loaders::start_particles(mob_action_call &call) {
-    if(
-        custom_particle_generators.find(call.args[0]) ==
-        custom_particle_generators.end()
-    ) {
-        call.custom_error =
-            "Particle generator \"" + call.args[0] + "\" not found!";
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loading code for the turn to target mob script action.
- */
-bool mob_action_loaders::turn_to_target(mob_action_call &call) {
-    if(call.args[0] == "arachnorb_head_logic") {
-        call.args[0] = i2s(MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC);
-    } else if(call.args[0] == "focused_mob") {
-        call.args[0] = i2s(MOB_ACTION_TURN_FOCUSED_MOB);
-    } else if(call.args[0] == "home") {
-        call.args[0] = i2s(MOB_ACTION_TURN_HOME);
-    } else {
-        report_enum_error(call, 0);
-        return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Reports an error of an unknown enum value.
- */
-void mob_action_loaders::report_enum_error(
-    mob_action_call &call, const size_t arg_nr
-) {
-    size_t param_nr = min(arg_nr, call.action->parameters.size() - 1);
-    call.custom_error =
-        "The parameter \"" + call.action->parameters[param_nr].name + "\" "
-        "does not know what the value \"" +
-        call.args[arg_nr] + "\" means!";
 }
 
 

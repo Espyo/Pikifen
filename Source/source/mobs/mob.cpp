@@ -775,6 +775,63 @@ void mob::calculate_throw(
 
 
 /* ----------------------------------------------------------------------------
+ * Does this mob want to attack mob v? Teams and other factors are used to
+ * decide this.
+ */
+bool mob::can_hunt(mob* v) {
+    //Teammates cannot hunt each other down.
+    if(team == v->team && team != MOB_TEAM_NONE) return false;
+    
+    //Mobs that do not participate in combat whatsoever cannot be hunted down.
+    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    
+    //Invisible mobs cannot be seen, so they can't be hunted down.
+    if(v->has_invisibility_status) return false;
+    
+    //Mobs that don't want to be hunted right now cannot be hunted down.
+    if(!v->is_huntable) return false;
+    
+    //Return whether or not this mob wants to hunt v.
+    return (type->huntable_targets & v->type->target_type);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Can this mob damage v? Teams and other factors are used to decide this.
+ */
+bool mob::can_hurt(mob* v) {
+    //Teammates cannot hurt each other.
+    if(team == v->team && team != MOB_TEAM_NONE) return false;
+    
+    //Mobs that do not participate in combat whatsoever cannot be hurt.
+    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
+    
+    //Mobs that are invulnerable cannot be hurt.
+    if(v->invuln_period.time_left > 0) return false;
+    
+    //Check if this mob has already hit v recently.
+    for(size_t h = 0; h < hit_opponents.size(); ++h) {
+        if(hit_opponents[h].second == v) {
+            //v was hit by this mob recently, so don't let it attack again.
+            //This stops the same attack from hitting every single frame.
+            return false;
+        }
+    }
+    
+    //Return whether or not this mob can damage v.
+    return (type->hurtable_targets & v->type->target_type);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a mob can receive a given status effect.
+ */
+bool mob::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_OTHERS;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob cause spike damage to another mob.
  * victim:       The mob that will be damaged.
  * is_ingestion: If true, the attacker just got eaten.
@@ -1084,6 +1141,14 @@ void mob::finish_dying() {
     release_chomped_pikmin();
     
     finish_dying_class_specifics();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up stuff for the end of the mob's dying process.
+ * This function is meant to be overridden by child classes.
+ */
+void mob::finish_dying_class_specifics() {
 }
 
 
@@ -1463,6 +1528,20 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handler for when there is no longer any status effect-induced panic.
+ */
+void mob::handle_panic_loss() {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a status effect being applied.
+ */
+void mob::handle_status_effect(status_type* s) {
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts holding the specified mob.
  * m:               Mob to start holding.
  * hitbox_nr:       Number of the hitbox to hold on. INVALID for mob center.
@@ -1747,55 +1826,6 @@ void mob::set_var(const string &name, const string &value) {
 
 
 /* ----------------------------------------------------------------------------
- * Does this mob want to attack mob v? Teams and other factors are used to
- * decide this.
- */
-bool mob::can_hunt(mob* v) {
-    //Teammates cannot hunt each other down.
-    if(team == v->team && team != MOB_TEAM_NONE) return false;
-    
-    //Mobs that do not participate in combat whatsoever cannot be hunted down.
-    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
-    
-    //Invisible mobs cannot be seen, so they can't be hunted down.
-    if(v->has_invisibility_status) return false;
-    
-    //Mobs that don't want to be hunted right now cannot be hunted down.
-    if(!v->is_huntable) return false;
-    
-    //Return whether or not this mob wants to hunt v.
-    return (type->huntable_targets & v->type->target_type);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Can this mob damage v? Teams and other factors are used to decide this.
- */
-bool mob::can_hurt(mob* v) {
-    //Teammates cannot hurt each other.
-    if(team == v->team && team != MOB_TEAM_NONE) return false;
-    
-    //Mobs that do not participate in combat whatsoever cannot be hurt.
-    if(v->type->target_type == MOB_TARGET_TYPE_NONE) return false;
-    
-    //Mobs that are invulnerable cannot be hurt.
-    if(v->invuln_period.time_left > 0) return false;
-    
-    //Check if this mob has already hit v recently.
-    for(size_t h = 0; h < hit_opponents.size(); ++h) {
-        if(hit_opponents[h].second == v) {
-            //v was hit by this mob recently, so don't let it attack again.
-            //This stops the same attack from hitting every single frame.
-            return false;
-        }
-    }
-    
-    //Return whether or not this mob can damage v.
-    return (type->hurtable_targets & v->type->target_type);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Makes the current mob spawn a new mob, given some spawn information.
  * info:     Structure with information about how to spawn it.
  * type_ptr: If NULL, the pointer to the mob type is obtained given its
@@ -1896,6 +1926,14 @@ void mob::start_dying() {
     pg.emit(particles);
     
     start_dying_class_specifics();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up stuff for the beginning of the mob's death process.
+ * This function is meant to be overridden by child classes.
+ */
+void mob::start_dying_class_specifics() {
 }
 
 
@@ -2214,69 +2252,6 @@ void mob::tick_misc_logic(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame's worth of time while the mob is riding on a track mob.
- * This updates the mob's position and riding progress.
- * Returns true if the ride is over, false if not.
- */
-bool mob::tick_track_ride() {
-    track* tra_ptr = (track*) (track_info->m);
-    
-    track_info->cur_cp_progress +=
-        tra_ptr->tra_type->ride_speed * delta_t;
-        
-    if(track_info->cur_cp_progress >= 1.0f) {
-        //Next checkpoint.
-        track_info->cur_cp_nr++;
-        track_info->cur_cp_progress -= 1.0f;
-        
-        if(
-            track_info->cur_cp_nr ==
-            tra_ptr->type->anims.body_parts.size() - 1
-        ) {
-            stop_track_ride();
-            return true;
-        }
-    }
-    
-    //Teleport to the right spot.
-    hitbox* cur_cp =
-        tra_ptr->get_hitbox(track_info->cur_cp_nr);
-    hitbox* next_cp =
-        tra_ptr->get_hitbox(track_info->cur_cp_nr + 1);
-    point cur_cp_pos =
-        cur_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
-    point next_cp_pos =
-        next_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
-        
-    point dest_xy(
-        interpolate_number(
-            track_info->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.x, next_cp_pos.x
-        ),
-        interpolate_number(
-            track_info->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.y, next_cp_pos.y
-        )
-    );
-    
-    float dest_z =
-        interpolate_number(
-            track_info->cur_cp_progress, 0.0f, 1.0f,
-            tra_ptr->z + cur_cp->z,
-            tra_ptr->z + next_cp->z
-        );
-        
-    float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
-    
-    chase(dest_xy, NULL, true);
-    z = dest_z;
-    face(dest_angle, NULL);
-    
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script(const float delta_t) {
@@ -2445,20 +2420,74 @@ void mob::tick_script(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
+ * Ticks one frame's worth of time while the mob is riding on a track mob.
+ * This updates the mob's position and riding progress.
+ * Returns true if the ride is over, false if not.
+ */
+bool mob::tick_track_ride() {
+    track* tra_ptr = (track*) (track_info->m);
+    
+    track_info->cur_cp_progress +=
+        tra_ptr->tra_type->ride_speed * delta_t;
+        
+    if(track_info->cur_cp_progress >= 1.0f) {
+        //Next checkpoint.
+        track_info->cur_cp_nr++;
+        track_info->cur_cp_progress -= 1.0f;
+        
+        if(
+            track_info->cur_cp_nr ==
+            tra_ptr->type->anims.body_parts.size() - 1
+        ) {
+            stop_track_ride();
+            return true;
+        }
+    }
+    
+    //Teleport to the right spot.
+    hitbox* cur_cp =
+        tra_ptr->get_hitbox(track_info->cur_cp_nr);
+    hitbox* next_cp =
+        tra_ptr->get_hitbox(track_info->cur_cp_nr + 1);
+    point cur_cp_pos =
+        cur_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+    point next_cp_pos =
+        next_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+        
+    point dest_xy(
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.x, next_cp_pos.x
+        ),
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            cur_cp_pos.y, next_cp_pos.y
+        )
+    );
+    
+    float dest_z =
+        interpolate_number(
+            track_info->cur_cp_progress, 0.0f, 1.0f,
+            tra_ptr->z + cur_cp->z,
+            tra_ptr->z + next_cp->z
+        );
+        
+    float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
+    
+    chase(dest_xy, NULL, true);
+    z = dest_z;
+    face(dest_angle, NULL);
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes the mob lose focus on its currently focused mob.
  */
 void mob::unfocus_from_mob() {
     focused_mob = nullptr;
 }
-
-
-bool mob::can_receive_status(status_type* s) {
-    return s->affects & STATUS_AFFECTS_OTHERS;
-}
-void mob::handle_status_effect(status_type* s) {}
-void mob::handle_panic_loss() {}
-void mob::start_dying_class_specifics() { }
-void mob::finish_dying_class_specifics() { }
 
 
 /* ----------------------------------------------------------------------------

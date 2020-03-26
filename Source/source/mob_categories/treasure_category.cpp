@@ -28,39 +28,17 @@ treasure_category::treasure_category() :
 }
 
 
+treasure_category::~treasure_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of treasure by name.
+ * Clears the list of registered types of treasure.
  */
-void treasure_category::get_type_names(vector<string> &list) {
+void treasure_category::clear_types() {
     for(auto &t : treasure_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of treasure given its name, or NULL on error.
- */
-mob_type* treasure_category::get_type(const string &name) {
-    auto it = treasure_types.find(name);
-    if(it == treasure_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of treasure.
- */
-mob_type* treasure_category::create_type() {
-    return new treasure_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of treasure.
- */
-void treasure_category::register_type(mob_type* type) {
-    treasure_types[type->name] = (treasure_type*) type;
+    treasure_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* treasure_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of treasure.
+ */
+mob_type* treasure_category::create_type() {
+    return new treasure_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a treasure from the list of treasures.
  */
 void treasure_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void treasure_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of treasure.
+ * Returns a type of treasure given its name, or NULL on error.
  */
-void treasure_category::clear_types() {
-    for(auto &t : treasure_types) {
-        delete t.second;
-    }
-    treasure_types.clear();
+mob_type* treasure_category::get_type(const string &name) {
+    auto it = treasure_types.find(name);
+    if(it == treasure_types.end()) return NULL;
+    return it->second;
 }
 
 
-treasure_category::~treasure_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of treasure by name.
+ */
+void treasure_category::get_type_names(vector<string> &list) {
+    for(auto &t : treasure_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of treasure.
+ */
+void treasure_category::register_type(mob_type* type) {
+    treasure_types[type->name] = (treasure_type*) type;
+}

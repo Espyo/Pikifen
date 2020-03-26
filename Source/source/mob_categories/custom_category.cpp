@@ -27,39 +27,17 @@ custom_category::custom_category() :
 }
 
 
+custom_category::~custom_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all custom types by name.
+ * Clears the list of registered types of custom mob.
  */
-void custom_category::get_type_names(vector<string> &list) {
+void custom_category::clear_types() {
     for(auto &t : custom_mob_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a custom type given its name, or NULL on error.
- */
-mob_type* custom_category::get_type(const string &name) {
-    auto it = custom_mob_types.find(name);
-    if(it == custom_mob_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty custom type.
- */
-mob_type* custom_category::create_type() {
-    return new mob_type(MOB_CATEGORY_CUSTOM);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created custom type.
- */
-void custom_category::register_type(mob_type* type) {
-    custom_mob_types[type->name] = type;
+    custom_mob_types.clear();
 }
 
 
@@ -75,20 +53,42 @@ mob* custom_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty custom type.
+ */
+mob_type* custom_category::create_type() {
+    return new mob_type(MOB_CATEGORY_CUSTOM);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a custom mob from the list of custom mobs.
  */
 void custom_category::erase_mob(mob* m) { }
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of custom mob.
+ * Returns a custom type given its name, or NULL on error.
  */
-void custom_category::clear_types() {
-    for(auto &t : custom_mob_types) {
-        delete t.second;
-    }
-    custom_mob_types.clear();
+mob_type* custom_category::get_type(const string &name) {
+    auto it = custom_mob_types.find(name);
+    if(it == custom_mob_types.end()) return NULL;
+    return it->second;
 }
 
 
-custom_category::~custom_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all custom types by name.
+ */
+void custom_category::get_type_names(vector<string> &list) {
+    for(auto &t : custom_mob_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created custom type.
+ */
+void custom_category::register_type(mob_type* type) {
+    custom_mob_types[type->name] = type;
+}

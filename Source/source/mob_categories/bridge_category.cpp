@@ -28,39 +28,17 @@ bridge_category::bridge_category() :
 }
 
 
+bridge_category::~bridge_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of bridge by name.
+ * Clears the list of registered types of bridges.
  */
-void bridge_category::get_type_names(vector<string> &list) {
+void bridge_category::clear_types() {
     for(auto &t : bridge_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of bridge given its name, or NULL on error.
- */
-mob_type* bridge_category::get_type(const string &name) {
-    auto it = bridge_types.find(name);
-    if(it == bridge_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of bridge.
- */
-mob_type* bridge_category::create_type() {
-    return new bridge_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of bridge.
- */
-void bridge_category::register_type(mob_type* type) {
-    bridge_types[type->name] = (bridge_type*) type;
+    bridge_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* bridge_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of bridge.
+ */
+mob_type* bridge_category::create_type() {
+    return new bridge_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a bridge from the list of bridges.
  */
 void bridge_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void bridge_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of bridges.
+ * Returns a type of bridge given its name, or NULL on error.
  */
-void bridge_category::clear_types() {
-    for(auto &t : bridge_types) {
-        delete t.second;
-    }
-    bridge_types.clear();
+mob_type* bridge_category::get_type(const string &name) {
+    auto it = bridge_types.find(name);
+    if(it == bridge_types.end()) return NULL;
+    return it->second;
 }
 
 
-bridge_category::~bridge_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of bridge by name.
+ */
+void bridge_category::get_type_names(vector<string> &list) {
+    for(auto &t : bridge_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of bridge.
+ */
+void bridge_category::register_type(mob_type* type) {
+    bridge_types[type->name] = (bridge_type*) type;
+}

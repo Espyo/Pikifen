@@ -21,6 +21,17 @@ using namespace std;
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a structure with info about a carrying spot.
+ */
+carrier_spot_struct::carrier_spot_struct(const point &pos) :
+    state(CARRY_SPOT_FREE),
+    pos(pos),
+    pik_ptr(NULL) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a structure with info about carrying.
  * m:                 The mob this info belongs to.
  * max_carriers:      The maximum number of carrier Pikmin.
@@ -122,17 +133,6 @@ void carry_info_struct::rotate_points(const float angle) {
         );
         spot_info[s].pos = p;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about a carrying spot.
- */
-carrier_spot_struct::carrier_spot_struct(const point &pos) :
-    state(CARRY_SPOT_FREE),
-    pos(pos),
-    pik_ptr(NULL) {
-    
 }
 
 

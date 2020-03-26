@@ -46,6 +46,31 @@ gameplay::gameplay() :
     
 }
 
+
+gameplay::~gameplay() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Draw the gameplay.
+ */
+void gameplay::do_drawing() {
+    do_game_drawing();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Tick the gameplay logic by one frame.
+ */
+void gameplay::do_logic() {
+    if(creator_tool_change_speed) {
+        delta_t *= creator_tool_change_speed_mult;
+    }
+    
+    do_gameplay_logic();
+    do_aesthetic_logic();
+}
+
+
 const int FOG_BITMAP_SIZE = 128;
 
 /* ----------------------------------------------------------------------------
@@ -366,6 +391,19 @@ void gameplay::load_game_content() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads HUD coordinates of a specific HUD item.
+ */
+void gameplay::load_hud_coordinates(const int item, string data) {
+    vector<string> words = split(data);
+    if(data.size() < 4) return;
+    
+    hud_items.set_item(
+        item, s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads all gameplay HUD info.
  */
 void gameplay::load_hud_info() {
@@ -434,19 +472,6 @@ void gameplay::load_hud_info() {
     
 #undef loader
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads HUD coordinates of a specific HUD item.
- */
-void gameplay::load_hud_coordinates(const int item, string data) {
-    vector<string> words = split(data);
-    if(data.size() < 4) return;
-    
-    hud_items.set_item(
-        item, s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
-    );
 }
 
 
@@ -534,27 +559,3 @@ void gameplay::update_transformations() {
     screen_to_world_transform = world_to_screen_transform;
     al_invert_transform(&screen_to_world_transform);
 }
-
-
-/* ----------------------------------------------------------------------------
- * Tick the gameplay logic by one frame.
- */
-void gameplay::do_logic() {
-    if(creator_tool_change_speed) {
-        delta_t *= creator_tool_change_speed_mult;
-    }
-    
-    do_gameplay_logic();
-    do_aesthetic_logic();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draw the gameplay.
- */
-void gameplay::do_drawing() {
-    do_game_drawing();
-}
-
-
-gameplay::~gameplay() { }

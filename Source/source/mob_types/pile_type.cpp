@@ -36,6 +36,21 @@ pile_type::pile_type() :
 }
 
 
+pile_type::~pile_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector pile_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    
+    v.push_back(make_pair(PILE_ANIM_IDLING, "idling"));
+    
+    return get_anim_conversions_with_groups(v, N_PILE_ANIMS);
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -77,18 +92,3 @@ void pile_type::load_properties(data_node* file) {
     
     max_health = health_per_resource * max_amount;
 }
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector pile_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    
-    v.push_back(make_pair(PILE_ANIM_IDLING, "idling"));
-    
-    return get_anim_conversions_with_groups(v, N_PILE_ANIMS);
-}
-
-
-pile_type::~pile_type() { }

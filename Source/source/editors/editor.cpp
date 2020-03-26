@@ -252,6 +252,10 @@ void editor::create_toolbar_frame() {
 }
 
 
+//Runs custom code when the user presses the "cancel" button on a picker.
+void editor::custom_picker_cancel_action() { }
+
+
 /* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the area editor. This is meant to
  * be run after the editor's own logic code.
@@ -423,6 +427,45 @@ void editor::generate_and_open_picker(
     
     picker_elements = elements;
     populate_picker("");
+}
+
+
+//LAFI helper functions.
+float editor::get_angle_picker_angle(
+    lafi::widget* parent, const string &picker_name
+) {
+    return
+        ((lafi::angle_picker*) parent->widgets[picker_name])->get_angle_rads();
+}
+string editor::get_button_text(
+    lafi::widget* parent, const string &button_name
+) {
+    return
+        ((lafi::button*) parent->widgets[button_name])->text;
+}
+bool editor::get_checkbox_check(
+    lafi::widget* parent, const string &checkbox_name
+) {
+    return
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->checked;
+}
+string editor::get_label_text(
+    lafi::widget* parent, const string &label_name
+) {
+    return
+        ((lafi::label*) parent->widgets[label_name])->text;
+}
+bool editor::get_radio_selection(
+    lafi::widget* parent, const string &radio_name
+) {
+    return
+        ((lafi::radio_button*) parent->widgets[radio_name])->selected;
+}
+string editor::get_textbox_text(
+    lafi::widget* parent, const string &textbox_name
+) {
+    return
+        ((lafi::textbox*) parent->widgets[textbox_name])->text;
 }
 
 
@@ -619,82 +662,6 @@ void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
-//LAFI helper functions.
-float editor::get_angle_picker_angle(
-    lafi::widget* parent, const string &picker_name
-) {
-    return
-        ((lafi::angle_picker*) parent->widgets[picker_name])->get_angle_rads();
-}
-string editor::get_button_text(
-    lafi::widget* parent, const string &button_name
-) {
-    return
-        ((lafi::button*) parent->widgets[button_name])->text;
-}
-bool editor::get_checkbox_check(
-    lafi::widget* parent, const string &checkbox_name
-) {
-    return
-        ((lafi::checkbox*) parent->widgets[checkbox_name])->checked;
-}
-string editor::get_label_text(
-    lafi::widget* parent, const string &label_name
-) {
-    return
-        ((lafi::label*) parent->widgets[label_name])->text;
-}
-string editor::get_textbox_text(
-    lafi::widget* parent, const string &textbox_name
-) {
-    return
-        ((lafi::textbox*) parent->widgets[textbox_name])->text;
-}
-bool editor::get_radio_selection(
-    lafi::widget* parent, const string &radio_name
-) {
-    return
-        ((lafi::radio_button*) parent->widgets[radio_name])->selected;
-}
-void editor::set_angle_picker_angle(
-    lafi::widget* parent, const string &picker_name, const float angle
-) {
-    ((lafi::angle_picker*) parent->widgets[picker_name])->set_angle_rads(angle);
-}
-void editor::set_button_text(
-    lafi::widget* parent, const string &button_name, const string &text
-) {
-    ((lafi::button*) parent->widgets[button_name])->text = text;
-}
-void editor::set_checkbox_check(
-    lafi::widget* parent, const string &checkbox_name, const bool check
-) {
-    if(check) {
-        ((lafi::checkbox*) parent->widgets[checkbox_name])->check();
-    } else {
-        ((lafi::checkbox*) parent->widgets[checkbox_name])->uncheck();
-    }
-}
-void editor::set_label_text(
-    lafi::widget* parent, const string &label_name, const string &text
-) {
-    ((lafi::label*) parent->widgets[label_name])->text = text;
-}
-void editor::set_textbox_text(
-    lafi::widget* parent, const string &textbox_name, const string &text
-) {
-    ((lafi::textbox*) parent->widgets[textbox_name])->text = text;
-}
-void editor::set_radio_selection(
-    lafi::widget* parent, const string &radio_name, const bool selection
-) {
-    if(selection) {
-        ((lafi::radio_button*) parent->widgets[radio_name])->select();
-    } else {
-        ((lafi::radio_button*) parent->widgets[radio_name])->unselect();
-    }
-}
-
 
 /* ----------------------------------------------------------------------------
  * Returns whether the mouse cursor is inside the gui or not.
@@ -795,6 +762,46 @@ void editor::populate_picker(const string &filter) {
     (
         (lafi::scrollbar*) frm_picker->widgets["bar_scroll"]
     )->make_widget_scroll(f);
+}
+
+
+void editor::set_angle_picker_angle(
+    lafi::widget* parent, const string &picker_name, const float angle
+) {
+    ((lafi::angle_picker*) parent->widgets[picker_name])->set_angle_rads(angle);
+}
+void editor::set_button_text(
+    lafi::widget* parent, const string &button_name, const string &text
+) {
+    ((lafi::button*) parent->widgets[button_name])->text = text;
+}
+void editor::set_checkbox_check(
+    lafi::widget* parent, const string &checkbox_name, const bool check
+) {
+    if(check) {
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->check();
+    } else {
+        ((lafi::checkbox*) parent->widgets[checkbox_name])->uncheck();
+    }
+}
+void editor::set_label_text(
+    lafi::widget* parent, const string &label_name, const string &text
+) {
+    ((lafi::label*) parent->widgets[label_name])->text = text;
+}
+void editor::set_radio_selection(
+    lafi::widget* parent, const string &radio_name, const bool selection
+) {
+    if(selection) {
+        ((lafi::radio_button*) parent->widgets[radio_name])->select();
+    } else {
+        ((lafi::radio_button*) parent->widgets[radio_name])->unselect();
+    }
+}
+void editor::set_textbox_text(
+    lafi::widget* parent, const string &textbox_name, const string &text
+) {
+    ((lafi::textbox*) parent->widgets[textbox_name])->text = text;
 }
 
 
@@ -910,6 +917,136 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns true if all registered variables equal the given GUI values.
+ */
+bool editor::gui_to_var_helper::all_equal() {
+    for(auto &b : bools) {
+        if(*(b.first) != b.second) return false;
+    }
+    for(auto &i : ints) {
+        if(*(i.first) != i.second) return false;
+    }
+    for(auto &f : floats) {
+        if(*(f.first) != f.second) return false;
+    }
+    for(auto &c : uchars) {
+        if(*(c.first) != c.second) return false;
+    }
+    for(auto &s : strings) {
+        if(*(s.first) != s.second) return false;
+    }
+    for(auto &c : colors) {
+        if((c.first)->r != c.second.r) return false;
+        if((c.first)->g != c.second.g) return false;
+        if((c.first)->b != c.second.b) return false;
+        if((c.first)->a != c.second.a) return false;
+    }
+    for(auto &p : points) {
+        if(*(p.first) != p.second) return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new boolean to the list.
+ */
+void editor::gui_to_var_helper::register_bool(
+    bool* var, const bool gui_value
+) {
+    bools[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new color to the list.
+ */
+void editor::gui_to_var_helper::register_color(
+    ALLEGRO_COLOR* var, const ALLEGRO_COLOR &gui_value
+) {
+    colors[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new float to the list.
+ */
+void editor::gui_to_var_helper::register_float(
+    float* var, const float gui_value
+) {
+    floats[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new int to the list.
+ */
+void editor::gui_to_var_helper::register_int(
+    int* var, const int gui_value
+) {
+    ints[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new point to the list.
+ */
+void editor::gui_to_var_helper::register_point(
+    point* var, const point &gui_value
+) {
+    points[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new string to the list.
+ */
+void editor::gui_to_var_helper::register_string(
+    string* var, const string &gui_value
+) {
+    strings[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new unsigned char to the list.
+ */
+void editor::gui_to_var_helper::register_uchar(
+    unsigned char* var, const unsigned char gui_value
+) {
+    uchars[var] = gui_value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets all variables to the given GUI values.
+ */
+void editor::gui_to_var_helper::set_all() {
+    for(auto &b : bools) {
+        *(b.first) = b.second;
+    }
+    for(auto &i : ints) {
+        *(i.first) = i.second;
+    }
+    for(auto &f : floats) {
+        *(f.first) = f.second;
+    }
+    for(auto &c : uchars) {
+        *(c.first) = c.second;
+    }
+    for(auto &s : strings) {
+        *(s.first) = s.second;
+    }
+    for(auto &c : colors) {
+        *(c.first) = c.second;
+    }
+    for(auto &p : points) {
+        *(p.first) = p.second;
+    }
+}
+
+
 const float editor::transformation_controller::HANDLE_RADIUS = 6.0;
 const float editor::transformation_controller::ROTATION_HANDLE_THICKNESS = 8.0;
 
@@ -973,6 +1110,52 @@ void editor::transformation_controller::draw_handles() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the angle.
+ */
+float editor::transformation_controller::get_angle() {
+    return angle;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the center.
+ */
+point editor::transformation_controller::get_center() {
+    return center;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the position at which a handle is.
+ */
+point editor::transformation_controller::get_handle_pos(
+    const unsigned char handle
+) {
+    point result;
+    if(handle == 0 || handle == 3 || handle == 6) {
+        result.x = -size.x / 2.0;
+    } else if(handle == 2 || handle == 5 || handle == 8) {
+        result.x = size.x / 2.0;
+    }
+    if(handle == 0 || handle == 1 || handle == 2) {
+        result.y = -size.y / 2.0;
+    } else if(handle == 6 || handle == 7 || handle == 8) {
+        result.y = size.y / 2.0;
+    }
+    al_transform_coordinates(&disalign_transform, &result.x, &result.y);
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the size.
+ */
+point editor::transformation_controller::get_size() {
+    return size;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles a mouse press, allowing a handle to be grabbed.
  * Returns true if handled, false if nothing was done.
  */
@@ -1002,14 +1185,6 @@ bool editor::transformation_controller::handle_mouse_down(const point pos) {
     }
     
     return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles a mouse release, allowing a handle to be released.
- */
-void editor::transformation_controller::handle_mouse_up() {
-    moving_handle = -1;
 }
 
 
@@ -1106,26 +1281,19 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the center.
+ * Handles a mouse release, allowing a handle to be released.
  */
-point editor::transformation_controller::get_center() {
-    return center;
+void editor::transformation_controller::handle_mouse_up() {
+    moving_handle = -1;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the size.
+ * Sets the angle.
  */
-point editor::transformation_controller::get_size() {
-    return size;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the angle.
- */
-float editor::transformation_controller::get_angle() {
-    return angle;
+void editor::transformation_controller::set_angle(const float angle) {
+    this->angle = angle;
+    update();
 }
 
 
@@ -1148,37 +1316,6 @@ void editor::transformation_controller::set_size(const point &size) {
 
 
 /* ----------------------------------------------------------------------------
- * Sets the angle.
- */
-void editor::transformation_controller::set_angle(const float angle) {
-    this->angle = angle;
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the position at which a handle is.
- */
-point editor::transformation_controller::get_handle_pos(
-    const unsigned char handle
-) {
-    point result;
-    if(handle == 0 || handle == 3 || handle == 6) {
-        result.x = -size.x / 2.0;
-    } else if(handle == 2 || handle == 5 || handle == 8) {
-        result.x = size.x / 2.0;
-    }
-    if(handle == 0 || handle == 1 || handle == 2) {
-        result.y = -size.y / 2.0;
-    } else if(handle == 6 || handle == 7 || handle == 8) {
-        result.y = size.y / 2.0;
-    }
-    al_transform_coordinates(&disalign_transform, &result.x, &result.y);
-    return result;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Updates the transformations to match the new data, as well as
  * some caches.
  */
@@ -1192,137 +1329,3 @@ void editor::transformation_controller::update() {
     
     radius = dist(center, center + (size / 2)).to_float();
 }
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new boolean to the list.
- */
-void editor::gui_to_var_helper::register_bool(
-    bool* var, const bool gui_value
-) {
-    bools[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new int to the list.
- */
-void editor::gui_to_var_helper::register_int(
-    int* var, const int gui_value
-) {
-    ints[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new float to the list.
- */
-void editor::gui_to_var_helper::register_float(
-    float* var, const float gui_value
-) {
-    floats[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new unsigned char to the list.
- */
-void editor::gui_to_var_helper::register_uchar(
-    unsigned char* var, const unsigned char gui_value
-) {
-    uchars[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new string to the list.
- */
-void editor::gui_to_var_helper::register_string(
-    string* var, const string &gui_value
-) {
-    strings[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new color to the list.
- */
-void editor::gui_to_var_helper::register_color(
-    ALLEGRO_COLOR* var, const ALLEGRO_COLOR &gui_value
-) {
-    colors[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new point to the list.
- */
-void editor::gui_to_var_helper::register_point(
-    point* var, const point &gui_value
-) {
-    points[var] = gui_value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns true if all registered variables equal the given GUI values.
- */
-bool editor::gui_to_var_helper::all_equal() {
-    for(auto &b : bools) {
-        if(*(b.first) != b.second) return false;
-    }
-    for(auto &i : ints) {
-        if(*(i.first) != i.second) return false;
-    }
-    for(auto &f : floats) {
-        if(*(f.first) != f.second) return false;
-    }
-    for(auto &c : uchars) {
-        if(*(c.first) != c.second) return false;
-    }
-    for(auto &s : strings) {
-        if(*(s.first) != s.second) return false;
-    }
-    for(auto &c : colors) {
-        if((c.first)->r != c.second.r) return false;
-        if((c.first)->g != c.second.g) return false;
-        if((c.first)->b != c.second.b) return false;
-        if((c.first)->a != c.second.a) return false;
-    }
-    for(auto &p : points) {
-        if(*(p.first) != p.second) return false;
-    }
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets all variables to the given GUI values.
- */
-void editor::gui_to_var_helper::set_all() {
-    for(auto &b : bools) {
-        *(b.first) = b.second;
-    }
-    for(auto &i : ints) {
-        *(i.first) = i.second;
-    }
-    for(auto &f : floats) {
-        *(f.first) = f.second;
-    }
-    for(auto &c : uchars) {
-        *(c.first) = c.second;
-    }
-    for(auto &s : strings) {
-        *(s.first) = s.second;
-    }
-    for(auto &c : colors) {
-        *(c.first) = c.second;
-    }
-    for(auto &p : points) {
-        *(p.first) = p.second;
-    }
-}
-
-
-//Runs custom code when the user presses the "cancel" button on a picker.
-void editor::custom_picker_cancel_action() { }

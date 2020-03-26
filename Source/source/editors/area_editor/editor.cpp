@@ -69,77 +69,6 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 
 /* ----------------------------------------------------------------------------
- * Creates a layout drawing node based on the mouse's click position.
- */
-area_editor::layout_drawing_node::layout_drawing_node(
-    area_editor* ae_ptr, const point &mouse_click
-) :
-    raw_spot(mouse_click),
-    snapped_spot(mouse_click),
-    on_vertex(nullptr),
-    on_vertex_nr(INVALID),
-    on_edge(nullptr),
-    on_edge_nr(INVALID),
-    on_sector(nullptr),
-    on_sector_nr(INVALID),
-    is_new_vertex(false) {
-    
-    vector<pair<dist, vertex*> > merge_vertexes =
-        get_merge_vertexes(
-            mouse_click, cur_area_data.vertexes,
-            VERTEX_MERGE_RADIUS / cam_zoom
-        );
-    if(!merge_vertexes.empty()) {
-        sort(
-            merge_vertexes.begin(), merge_vertexes.end(),
-        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
-            return v1.first < v2.first;
-        }
-        );
-        on_vertex = merge_vertexes[0].second;
-        on_vertex_nr = cur_area_data.find_vertex_nr(on_vertex);
-    }
-    
-    if(on_vertex) {
-        snapped_spot.x = on_vertex->x;
-        snapped_spot.y = on_vertex->y;
-        
-    } else {
-        on_edge = ae_ptr->get_edge_under_point(mouse_click);
-        
-        if(on_edge) {
-            on_edge_nr = cur_area_data.find_edge_nr(on_edge);
-            snapped_spot =
-                get_closest_point_in_line(
-                    point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),
-                    point(on_edge->vertexes[1]->x, on_edge->vertexes[1]->y),
-                    mouse_click
-                );
-                
-        } else {
-            on_sector = get_sector(mouse_click, &on_sector_nr, false);
-            
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a layout drawing node with no info.
- */
-area_editor::layout_drawing_node::layout_drawing_node() :
-    on_vertex(nullptr),
-    on_vertex_nr(INVALID),
-    on_edge(nullptr),
-    on_edge_nr(INVALID),
-    on_sector(nullptr),
-    on_sector_nr(INVALID),
-    is_new_vertex(false) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
@@ -190,6 +119,9 @@ area_editor::area_editor() :
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
 }
+
+
+area_editor::~area_editor() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -1752,6 +1684,94 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns all sectors affected by the specified vertexes.
+ * This includes the NULL sector.
+ */
+unordered_set<sector*> area_editor::get_affected_sectors(
+    set<vertex*> &vertexes
+) {
+    unordered_set<sector*> affected_sectors;
+    for(auto v : vertexes) {
+        for(size_t e = 0; e < v->edges.size(); ++e) {
+            affected_sectors.insert(v->edges[e]->sectors[0]);
+            affected_sectors.insert(v->edges[e]->sectors[1]);
+        }
+    }
+    return affected_sectors;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which layout element got clicked, if any.
+ */
+void area_editor::get_clicked_layout_element(
+    vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
+) {
+    *clicked_vertex = get_vertex_under_point(mouse_cursor_w);
+    *clicked_edge = NULL;
+    *clicked_sector = NULL;
+    
+    if(*clicked_vertex) return;
+    
+    if(selection_filter != SELECTION_FILTER_VERTEXES) {
+        *clicked_edge = get_edge_under_point(mouse_cursor_w);
+    }
+    
+    if(*clicked_edge) return;
+    
+    if(selection_filter == SELECTION_FILTER_SECTORS) {
+        *clicked_sector = get_sector_under_point(mouse_cursor_w);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * For a given vertex, returns the edge closest to the given angle, in the
+ * given direction.
+ * v_ptr:           Pointer to the vertex.
+ * angle:           Angle coming into the vertex.
+ * clockwise:       Return the closest edge clockwise?
+ * closest_edge_angle: If not NULL, the angle the edge makes into its
+ *   other vertex is returned here.
+ */
+edge* area_editor::get_closest_edge_to_angle(
+    vertex* v_ptr, const float angle, const bool clockwise,
+    float* closest_edge_angle
+) {
+    edge* best_edge = NULL;
+    float best_angle_diff = 0;
+    float best_edge_angle = 0;
+    
+    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        edge* e_ptr = v_ptr->edges[e];
+        vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
+        
+        float a =
+            get_angle(
+                point(v_ptr->x, v_ptr->y),
+                point(other_v_ptr->x, other_v_ptr->y)
+            );
+        float diff = get_angle_cw_dif(angle, a);
+        
+        if(
+            !best_edge ||
+            (clockwise && diff < best_angle_diff) ||
+            (!clockwise && diff > best_angle_diff)
+        ) {
+            best_edge = e_ptr;
+            best_angle_diff = diff;
+            best_edge_angle = a;
+        }
+    }
+    
+    if(closest_edge_angle) {
+        *closest_edge_angle = best_edge_angle;
+    }
+    return best_edge;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a sector common to all vertexes and edges.
  * A sector is considered this if a vertex has it as a sector of
  * a neighboring edge, or if a vertex is inside it.
@@ -2001,112 +2021,6 @@ float area_editor::get_mob_gen_radius(mob_gen* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the mob currently under the specified point, or NULL if none.
- */
-mob_gen* area_editor::get_mob_under_point(const point &p) {
-    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_data.mob_generators[m];
-        
-        if(
-            dist(m_ptr->pos, p) <= get_mob_gen_radius(m_ptr)
-        ) {
-            return m_ptr;
-        }
-    }
-    
-    return NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns all sectors affected by the specified vertexes.
- * This includes the NULL sector.
- */
-unordered_set<sector*> area_editor::get_affected_sectors(
-    set<vertex*> &vertexes
-) {
-    unordered_set<sector*> affected_sectors;
-    for(auto v : vertexes) {
-        for(size_t e = 0; e < v->edges.size(); ++e) {
-            affected_sectors.insert(v->edges[e]->sectors[0]);
-            affected_sectors.insert(v->edges[e]->sectors[1]);
-        }
-    }
-    return affected_sectors;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns which layout element got clicked, if any.
- */
-void area_editor::get_clicked_layout_element(
-    vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
-) {
-    *clicked_vertex = get_vertex_under_point(mouse_cursor_w);
-    *clicked_edge = NULL;
-    *clicked_sector = NULL;
-    
-    if(*clicked_vertex) return;
-    
-    if(selection_filter != SELECTION_FILTER_VERTEXES) {
-        *clicked_edge = get_edge_under_point(mouse_cursor_w);
-    }
-    
-    if(*clicked_edge) return;
-    
-    if(selection_filter == SELECTION_FILTER_SECTORS) {
-        *clicked_sector = get_sector_under_point(mouse_cursor_w);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * For a given vertex, returns the edge closest to the given angle, in the
- * given direction.
- * v_ptr:           Pointer to the vertex.
- * angle:           Angle coming into the vertex.
- * clockwise:       Return the closest edge clockwise?
- * closest_edge_angle: If not NULL, the angle the edge makes into its
- *   other vertex is returned here.
- */
-edge* area_editor::get_closest_edge_to_angle(
-    vertex* v_ptr, const float angle, const bool clockwise,
-    float* closest_edge_angle
-) {
-    edge* best_edge = NULL;
-    float best_angle_diff = 0;
-    float best_edge_angle = 0;
-    
-    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-        edge* e_ptr = v_ptr->edges[e];
-        vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
-        
-        float a =
-            get_angle(
-                point(v_ptr->x, v_ptr->y),
-                point(other_v_ptr->x, other_v_ptr->y)
-            );
-        float diff = get_angle_cw_dif(angle, a);
-        
-        if(
-            !best_edge ||
-            (clockwise && diff < best_angle_diff) ||
-            (!clockwise && diff > best_angle_diff)
-        ) {
-            best_edge = e_ptr;
-            best_angle_diff = diff;
-            best_edge_angle = a;
-        }
-    }
-    
-    if(closest_edge_angle) {
-        *closest_edge_angle = best_edge_angle;
-    }
-    return best_edge;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns true if there are path links currently under the specified point.
  * data1 takes the info of the found link. If there's also a link in
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
@@ -2138,6 +2052,24 @@ bool area_editor::get_mob_link_under_point(
     }
     
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mob currently under the specified point, or NULL if none.
+ */
+mob_gen* area_editor::get_mob_under_point(const point &p) {
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        
+        if(
+            dist(m_ptr->pos, p) <= get_mob_gen_radius(m_ptr)
+        ) {
+            return m_ptr;
+        }
+    }
+    
+    return NULL;
 }
 
 
@@ -3887,6 +3819,77 @@ void area_editor::update_undo_history() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a layout drawing node based on the mouse's click position.
+ */
+area_editor::layout_drawing_node::layout_drawing_node(
+    area_editor* ae_ptr, const point &mouse_click
+) :
+    raw_spot(mouse_click),
+    snapped_spot(mouse_click),
+    on_vertex(nullptr),
+    on_vertex_nr(INVALID),
+    on_edge(nullptr),
+    on_edge_nr(INVALID),
+    on_sector(nullptr),
+    on_sector_nr(INVALID),
+    is_new_vertex(false) {
+    
+    vector<pair<dist, vertex*> > merge_vertexes =
+        get_merge_vertexes(
+            mouse_click, cur_area_data.vertexes,
+            VERTEX_MERGE_RADIUS / cam_zoom
+        );
+    if(!merge_vertexes.empty()) {
+        sort(
+            merge_vertexes.begin(), merge_vertexes.end(),
+        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+            return v1.first < v2.first;
+        }
+        );
+        on_vertex = merge_vertexes[0].second;
+        on_vertex_nr = cur_area_data.find_vertex_nr(on_vertex);
+    }
+    
+    if(on_vertex) {
+        snapped_spot.x = on_vertex->x;
+        snapped_spot.y = on_vertex->y;
+        
+    } else {
+        on_edge = ae_ptr->get_edge_under_point(mouse_click);
+        
+        if(on_edge) {
+            on_edge_nr = cur_area_data.find_edge_nr(on_edge);
+            snapped_spot =
+                get_closest_point_in_line(
+                    point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),
+                    point(on_edge->vertexes[1]->x, on_edge->vertexes[1]->y),
+                    mouse_click
+                );
+                
+        } else {
+            on_sector = get_sector(mouse_click, &on_sector_nr, false);
+            
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a layout drawing node with no info.
+ */
+area_editor::layout_drawing_node::layout_drawing_node() :
+    on_vertex(nullptr),
+    on_vertex_nr(INVALID),
+    on_edge(nullptr),
+    on_edge_nr(INVALID),
+    on_sector(nullptr),
+    on_sector_nr(INVALID),
+    is_new_vertex(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a texture suggestion.
  */
 area_editor::texture_suggestion::texture_suggestion(
@@ -3905,6 +3908,3 @@ area_editor::texture_suggestion::texture_suggestion(
 void area_editor::texture_suggestion::destroy() {
     textures.detach(name);
 }
-
-
-area_editor::~area_editor() { }

@@ -35,6 +35,19 @@ resource_type::resource_type() :
 }
 
 
+resource_type::~resource_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector resource_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(RESOURCE_ANIM_IDLING, "idling"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -99,16 +112,3 @@ void resource_type::load_properties(data_node* file) {
         }
     }
 }
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector resource_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(RESOURCE_ANIM_IDLING, "idling"));
-    return v;
-}
-
-
-resource_type::~resource_type() { }

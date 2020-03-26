@@ -6,6 +6,34 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
+ * Creates an accelerator.
+ */
+accelerator::accelerator(
+    const int key, const unsigned int modifiers, lafi::widget* w
+) {
+    this->key = key;
+    this->modifiers = modifiers;
+    this->w = w;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an "easy add" widget info structure.
+ */
+easy_widget_info::easy_widget_info(
+    const string &name, lafi::widget* w, const float width, const float height,
+    const unsigned char flags
+) :
+    name(name),
+    w(w),
+    width(width),
+    height(height),
+    flags(flags) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a widget given some parameters.
  */
 widget::widget(
@@ -79,155 +107,6 @@ widget::~widget() {
 }
 
 
-//Calls the function that handles a mouse move.
-void widget::call_mouse_move_handler(const int x, const int y) {
-    if(mouse_move_handler) mouse_move_handler(this, x, y);
-}
-
-//Calls the function that handles a left mouse click.
-void widget::call_left_mouse_click_handler(const int x, const int y) {
-    if(left_mouse_click_handler) left_mouse_click_handler(this, x, y);
-}
-
-//Calls the function that handles a mouse button down.
-void widget::call_mouse_down_handler(
-    const int button, const int x, const int y
-) {
-    if(mouse_down_handler) mouse_down_handler(this, button, x, y);
-}
-
-//Calls the function that handles a mouse button up.
-void widget::call_mouse_up_handler(const int button, const int x, const int y) {
-    if(mouse_up_handler) mouse_up_handler(this, button, x, y);
-}
-
-//Calls the function that handles a mouse wheel move.
-void widget::call_mouse_wheel_handler(const int dy, const int dx) {
-    if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx);
-}
-
-//Calls the function that handles the mouse entering.
-void widget::call_mouse_enter_handler() {
-    if(mouse_enter_handler) mouse_enter_handler(this);
-}
-
-//Calls the function that handles the mouse leaving.
-void widget::call_mouse_leave_handler() {
-    if(mouse_leave_handler) mouse_leave_handler(this);
-}
-
-//Calls the function that handles the focus being obtained.
-void widget::call_get_focus_handler() {
-    if(get_focus_handler) get_focus_handler(this);
-}
-
-//Calls the function that handles the focus being lost.
-void widget::call_lose_focus_handler() {
-    if(lose_focus_handler) lose_focus_handler(this);
-}
-
-
-//Returns the appropriate background color,
-//taking into account whether the widget is enabled or not.
-ALLEGRO_COLOR widget::get_bg_color() {
-    if(is_disabled()) return style->disabled_bg_color;
-    return style->bg_color;
-}
-
-
-//Returns the appropriate lighter background color,
-//taking into account whether the widget is enabled or not.
-ALLEGRO_COLOR widget::get_lighter_bg_color() {
-    if(is_disabled()) return style->lighter_disabled_bg_color;
-    return style->lighter_bg_color;
-}
-
-
-//Returns the appropriate darker background color,
-//taking into account whether the widget is enabled or not.
-ALLEGRO_COLOR widget::get_darker_bg_color() {
-    if(is_disabled()) return style->darker_disabled_bg_color;
-    return style->darker_bg_color;
-}
-
-
-//Returns the appropriate foreground color,
-//taking into account whether the widget is enabled or not.
-ALLEGRO_COLOR widget::get_fg_color() {
-    if(is_disabled()) return style->disabled_fg_color;
-    return style->fg_color;
-}
-
-
-//Returns the appropriate alternate color,
-//taking into account whether the widget is enabled or not.
-ALLEGRO_COLOR widget::get_alt_color() {
-    if(is_disabled()) return style->disabled_alt_color;
-    return style->alt_color;
-}
-
-
-//Returns which widget the mouse is under.
-//It searches for the deepmost child widget, and if none has it,
-//it returns either itself, or none.
-//Disabled widgets are ignored.
-widget* widget::get_widget_under_mouse(const int mx, const int my) {
-    if(!(flags & FLAG_DISABLED)) {
-        if(!(flags & FLAG_WUM_NO_CHILDREN)) {
-            for(auto &c : widgets) {
-                widget* w = c.second->get_widget_under_mouse(mx, my);
-                if(w) return w;
-            }
-        }
-        if(is_mouse_in(mx, my)) return this;
-    }
-    return NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if the widget is disabled, either because of its flags,
- * or because of one of its parents' flags.
- */
-bool widget::is_disabled() {
-    widget* p = this;
-    while(p->parent) {
-        if((p->flags & FLAG_DISABLED) != 0) return true;
-        p = p->parent;
-    }
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if the mouse cursor is inside the widget, given its coordinates.
- */
-bool widget::is_mouse_in(const int mx, const int my) {
-    int ox, oy;
-    get_offset(&ox, &oy);
-    bool in_current_widget =
-        mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
-    bool in_parent_widget = true;
-    if(parent) in_parent_widget = parent->is_mouse_in(mx, my);
-    
-    return(in_current_widget && in_parent_widget);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the total offset in pixels.
- * Takes into account all parent's offsets.
- */
-void widget::get_offset(int* ox, int* oy) {
-    if(!parent) { *ox = 0; *oy = 0; return; }
-    
-    int parent_parent_offset_x, parent_parent_offset_y;
-    parent->get_offset(&parent_parent_offset_x, &parent_parent_offset_y);
-    *ox = parent->children_offset_x + parent_parent_offset_x;
-    *oy = parent->children_offset_y + parent_parent_offset_y;
-}
-
-
 /* ----------------------------------------------------------------------------
  * Adds a widget as a child to the current one.
  */
@@ -242,14 +121,51 @@ void widget::add(const string &name, widget* w) {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Registers a key accelerator.
- */
-void widget::register_accelerator(
-    const int key, const unsigned int modifiers, widget* w
+//Calls the function that handles the focus being obtained.
+void widget::call_get_focus_handler() {
+    if(get_focus_handler) get_focus_handler(this);
+}
+
+//Calls the function that handles a left mouse click.
+void widget::call_left_mouse_click_handler(const int x, const int y) {
+    if(left_mouse_click_handler) left_mouse_click_handler(this, x, y);
+}
+
+//Calls the function that handles the focus being lost.
+void widget::call_lose_focus_handler() {
+    if(lose_focus_handler) lose_focus_handler(this);
+}
+
+//Calls the function that handles a mouse button down.
+void widget::call_mouse_down_handler(
+    const int button, const int x, const int y
 ) {
-    assert(w != NULL);
-    accelerators.push_back(accelerator(key, modifiers, w));
+    if(mouse_down_handler) mouse_down_handler(this, button, x, y);
+}
+
+//Calls the function that handles the mouse entering.
+void widget::call_mouse_enter_handler() {
+    if(mouse_enter_handler) mouse_enter_handler(this);
+}
+
+//Calls the function that handles the mouse leaving.
+void widget::call_mouse_leave_handler() {
+    if(mouse_leave_handler) mouse_leave_handler(this);
+}
+
+//Calls the function that handles a mouse move.
+void widget::call_mouse_move_handler(const int x, const int y) {
+    if(mouse_move_handler) mouse_move_handler(this, x, y);
+}
+
+//Calls the function that handles a mouse button up.
+void widget::call_mouse_up_handler(const int button, const int x, const int y) {
+    if(mouse_up_handler) mouse_up_handler(this, button, x, y);
+}
+
+//Calls the function that handles a mouse wheel move.
+void widget::call_mouse_wheel_handler(const int dy, const int dx) {
+    if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx);
 }
 
 
@@ -322,25 +238,183 @@ void widget::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Simulates a left mouse-button click, if the widget is enabled.
+ * "Easy add"s a widget to the current row.
+ * name:   Name.
+ * widget: The widget.
+ * width:  Width it takes up on the row, in percentage.
+ * height: Height of the widget, in pixels.
+ * flags:  Use EASY_FLAG_*.
  */
-void widget::simulate_click() {
-    if(is_disabled()) return;
-    parent->give_focus(this);
-    call_left_mouse_click_handler(0, 0);
+void widget::easy_add(
+    const string &name, widget* w, const float width, const float height,
+    const unsigned char flags
+) {
+    assert(w != NULL);
+    assert(!name.empty());
+    easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame worth of time. This updates all child widgets, so don't
- * call the child tick() functions too.
+ * Resets the "easy add" rows.
  */
-void widget::tick(const float time) {
-    widget_on_tick(time);
-    
-    for(auto &w : widgets) {
-        if(w.second) w.second->tick(time);
+void widget::easy_reset() {
+    easy_row_vertical_padding = 0;
+    easy_row_horizontal_padding = 0;
+    easy_row_widget_padding = 0;
+    easy_row_y1 = 0;
+    easy_row_y2 = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an "easy add" row and commits the previous one.
+ * vertical_padding:   Padding between this new row and the previous one,
+ *   in pixels.
+ * horizontal_padding: Padding between the left and right sides, in pixels.
+ * widget_padding:     Padding between added widgets, in pixels.
+ * Returns the y of the next row.
+ */
+int widget::easy_row(
+    const float vertical_padding, const float horizontal_padding,
+    const float widget_padding
+) {
+    if(easy_row_widgets.size()) {
+        //Find the tallest widget.
+        float tallest_height = easy_row_widgets[0].height;
+        float available_width =
+            (x2 - x1) - (
+                (
+                    easy_row_widgets.size() - 1) *
+                easy_row_widget_padding
+            ) - (easy_row_horizontal_padding * 2);
+        float prev_x = x1 + easy_row_horizontal_padding;
+        
+        for(size_t w = 1; w < easy_row_widgets.size(); ++w) {
+            if(easy_row_widgets[w].height > tallest_height) {
+                tallest_height = easy_row_widgets[w].height;
+            }
+        }
+        
+        easy_row_y2 = easy_row_y1 + tallest_height;
+        float y_center = (easy_row_y2 + easy_row_y1) / 2 + y1;
+        
+        for(size_t w = 0; w < easy_row_widgets.size(); ++w) {
+            easy_widget_info* i_ptr = &easy_row_widgets[w];
+            
+            float width =
+                (
+                    (i_ptr->flags & EASY_FLAG_WIDTH_PX) != 0 ?
+                    i_ptr->width :
+                    available_width * (i_ptr->width / 100)
+                );
+            i_ptr->w->x1 = prev_x;
+            i_ptr->w->x2 = prev_x + width;
+            prev_x = i_ptr->w->x2 + easy_row_widget_padding;
+            
+            i_ptr->w->y1 = y_center - i_ptr->height / 2;
+            i_ptr->w->y2 = y_center + i_ptr->height / 2;
+            
+            add(i_ptr->name, i_ptr->w);
+        }
     }
+    easy_row_widgets.clear();
+    easy_row_y1 = easy_row_y2 + vertical_padding;
+    easy_row_y2 = easy_row_y1;
+    easy_row_vertical_padding = vertical_padding;
+    easy_row_horizontal_padding = horizontal_padding;
+    easy_row_widget_padding = widget_padding;
+    
+    return easy_row_y1;
+}
+
+
+//Returns the appropriate alternate color,
+//taking into account whether the widget is enabled or not.
+ALLEGRO_COLOR widget::get_alt_color() {
+    if(is_disabled()) return style->disabled_alt_color;
+    return style->alt_color;
+}
+
+
+//Returns the appropriate background color,
+//taking into account whether the widget is enabled or not.
+ALLEGRO_COLOR widget::get_bg_color() {
+    if(is_disabled()) return style->disabled_bg_color;
+    return style->bg_color;
+}
+
+
+//Returns the appropriate darker background color,
+//taking into account whether the widget is enabled or not.
+ALLEGRO_COLOR widget::get_darker_bg_color() {
+    if(is_disabled()) return style->darker_disabled_bg_color;
+    return style->darker_bg_color;
+}
+
+
+//Returns the appropriate foreground color,
+//taking into account whether the widget is enabled or not.
+ALLEGRO_COLOR widget::get_fg_color() {
+    if(is_disabled()) return style->disabled_fg_color;
+    return style->fg_color;
+}
+
+
+//Returns the appropriate lighter background color,
+//taking into account whether the widget is enabled or not.
+ALLEGRO_COLOR widget::get_lighter_bg_color() {
+    if(is_disabled()) return style->lighter_disabled_bg_color;
+    return style->lighter_bg_color;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total offset in pixels.
+ * Takes into account all parent's offsets.
+ */
+void widget::get_offset(int* ox, int* oy) {
+    if(!parent) { *ox = 0; *oy = 0; return; }
+    
+    int parent_parent_offset_x, parent_parent_offset_y;
+    parent->get_offset(&parent_parent_offset_x, &parent_parent_offset_y);
+    *ox = parent->children_offset_x + parent_parent_offset_x;
+    *oy = parent->children_offset_y + parent_parent_offset_y;
+}
+
+
+//Returns which widget the mouse is under.
+//It searches for the deepmost child widget, and if none has it,
+//it returns either itself, or none.
+//Disabled widgets are ignored.
+widget* widget::get_widget_under_mouse(const int mx, const int my) {
+    if(!(flags & FLAG_DISABLED)) {
+        if(!(flags & FLAG_WUM_NO_CHILDREN)) {
+            for(auto &c : widgets) {
+                widget* w = c.second->get_widget_under_mouse(mx, my);
+                if(w) return w;
+            }
+        }
+        if(is_mouse_in(mx, my)) return this;
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Gives focus to this widget, making all other widgets
+ * lose focus in the process.
+ */
+void widget::give_focus(widget* w) {
+    assert(w != NULL);
+    //Mark focus lost. First go up to the topmost parent,
+    //and let it tell everybody to lose their focuses.
+    widget* p = this;
+    while(p->parent) p = p->parent;
+    p->lose_focus();
+    
+    focused_widget = w;
+    w->call_get_focus_handler();
 }
 
 
@@ -495,6 +569,64 @@ void widget::hide() {
 }
 
 
+void widget::init() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the widget is disabled, either because of its flags,
+ * or because of one of its parents' flags.
+ */
+bool widget::is_disabled() {
+    widget* p = this;
+    while(p->parent) {
+        if((p->flags & FLAG_DISABLED) != 0) return true;
+        p = p->parent;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the mouse cursor is inside the widget, given its coordinates.
+ */
+bool widget::is_mouse_in(const int mx, const int my) {
+    int ox, oy;
+    get_offset(&ox, &oy);
+    bool in_current_widget =
+        mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
+    bool in_parent_widget = true;
+    if(parent) in_parent_widget = parent->is_mouse_in(mx, my);
+    
+    return(in_current_widget && in_parent_widget);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes this widget and all of its children lose focus.
+ */
+void widget::lose_focus() {
+    if(focused_widget) {
+        focused_widget->call_lose_focus_handler();
+        focused_widget = NULL;
+    }
+    
+    for(auto &cw : widgets) {
+        if(cw.second) cw.second->lose_focus();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a key accelerator.
+ */
+void widget::register_accelerator(
+    const int key, const unsigned int modifiers, widget* w
+) {
+    assert(w != NULL);
+    accelerators.push_back(accelerator(key, modifiers, w));
+}
+
+
 /* ----------------------------------------------------------------------------
  * Removes a child widget from the list.
  */
@@ -516,175 +648,38 @@ void widget::show() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Simulates a left mouse-button click, if the widget is enabled.
+ */
+void widget::simulate_click() {
+    if(is_disabled()) return;
+    parent->give_focus(this);
+    call_left_mouse_click_handler(0, 0);
+}
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks one frame worth of time. This updates all child widgets, so don't
+ * call the child tick() functions too.
+ */
+void widget::tick(const float time) {
+    widget_on_tick(time);
+    
+    for(auto &w : widgets) {
+        if(w.second) w.second->tick(time);
+    }
+}
 
-void widget::widget_on_mouse_move(const int, const int) { }
+
+void widget::widget_on_key_char(const int, const int, const unsigned int) { }
 void widget::widget_on_left_mouse_click(const int, const int) { }
 void widget::widget_on_mouse_down(const int, const int, const int) { }
-void widget::widget_on_mouse_up(const int, const int, const int) { }
-void widget::widget_on_mouse_wheel(const int, const int) { }
 void widget::widget_on_mouse_enter() { }
 void widget::widget_on_mouse_leave() { }
-void widget::widget_on_key_char(const int, const int, const unsigned int) { }
+void widget::widget_on_mouse_move(const int, const int) { }
+void widget::widget_on_mouse_up(const int, const int, const int) { }
+void widget::widget_on_mouse_wheel(const int, const int) { }
 void widget::widget_on_tick(const float) { }
-void widget::init() { }
-
-
-/* ----------------------------------------------------------------------------
- * Makes this widget and all of its children lose focus.
- */
-void widget::lose_focus() {
-    if(focused_widget) {
-        focused_widget->call_lose_focus_handler();
-        focused_widget = NULL;
-    }
-    
-    for(auto &cw : widgets) {
-        if(cw.second) cw.second->lose_focus();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Gives focus to this widget, making all other widgets
- * lose focus in the process.
- */
-void widget::give_focus(widget* w) {
-    assert(w != NULL);
-    //Mark focus lost. First go up to the topmost parent,
-    //and let it tell everybody to lose their focuses.
-    widget* p = this;
-    while(p->parent) p = p->parent;
-    p->lose_focus();
-    
-    focused_widget = w;
-    w->call_get_focus_handler();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an "easy add" row and commits the previous one.
- * vertical_padding:   Padding between this new row and the previous one,
- *   in pixels.
- * horizontal_padding: Padding between the left and right sides, in pixels.
- * widget_padding:     Padding between added widgets, in pixels.
- * Returns the y of the next row.
- */
-int widget::easy_row(
-    const float vertical_padding, const float horizontal_padding,
-    const float widget_padding
-) {
-    if(easy_row_widgets.size()) {
-        //Find the tallest widget.
-        float tallest_height = easy_row_widgets[0].height;
-        float available_width =
-            (x2 - x1) - (
-                (
-                    easy_row_widgets.size() - 1) *
-                easy_row_widget_padding
-            ) - (easy_row_horizontal_padding * 2);
-        float prev_x = x1 + easy_row_horizontal_padding;
-        
-        for(size_t w = 1; w < easy_row_widgets.size(); ++w) {
-            if(easy_row_widgets[w].height > tallest_height) {
-                tallest_height = easy_row_widgets[w].height;
-            }
-        }
-        
-        easy_row_y2 = easy_row_y1 + tallest_height;
-        float y_center = (easy_row_y2 + easy_row_y1) / 2 + y1;
-        
-        for(size_t w = 0; w < easy_row_widgets.size(); ++w) {
-            easy_widget_info* i_ptr = &easy_row_widgets[w];
-            
-            float width =
-                (
-                    (i_ptr->flags & EASY_FLAG_WIDTH_PX) != 0 ?
-                    i_ptr->width :
-                    available_width * (i_ptr->width / 100)
-                );
-            i_ptr->w->x1 = prev_x;
-            i_ptr->w->x2 = prev_x + width;
-            prev_x = i_ptr->w->x2 + easy_row_widget_padding;
-            
-            i_ptr->w->y1 = y_center - i_ptr->height / 2;
-            i_ptr->w->y2 = y_center + i_ptr->height / 2;
-            
-            add(i_ptr->name, i_ptr->w);
-        }
-    }
-    easy_row_widgets.clear();
-    easy_row_y1 = easy_row_y2 + vertical_padding;
-    easy_row_y2 = easy_row_y1;
-    easy_row_vertical_padding = vertical_padding;
-    easy_row_horizontal_padding = horizontal_padding;
-    easy_row_widget_padding = widget_padding;
-    
-    return easy_row_y1;
-}
-
-
-/* ----------------------------------------------------------------------------
- * "Easy add"s a widget to the current row.
- * name:   Name.
- * widget: The widget.
- * width:  Width it takes up on the row, in percentage.
- * height: Height of the widget, in pixels.
- * flags:  Use EASY_FLAG_*.
- */
-void widget::easy_add(
-    const string &name, widget* w, const float width, const float height,
-    const unsigned char flags
-) {
-    assert(w != NULL);
-    assert(!name.empty());
-    easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the "easy add" rows.
- */
-void widget::easy_reset() {
-    easy_row_vertical_padding = 0;
-    easy_row_horizontal_padding = 0;
-    easy_row_widget_padding = 0;
-    easy_row_y1 = 0;
-    easy_row_y2 = 0;
-}
-
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates an "easy add" widget info structure.
- */
-easy_widget_info::easy_widget_info(
-    const string &name, lafi::widget* w, const float width, const float height,
-    const unsigned char flags
-) :
-    name(name),
-    w(w),
-    width(width),
-    height(height),
-    flags(flags) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an accelerator.
- */
-accelerator::accelerator(
-    const int key, const unsigned int modifiers, lafi::widget* w
-) {
-    this->key = key;
-    this->modifiers = modifiers;
-    this->w = w;
-}
-
-
 
 
 /* ----------------------------------------------------------------------------

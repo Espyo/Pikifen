@@ -28,39 +28,17 @@ onion_category::onion_category() :
 }
 
 
+onion_category::~onion_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of Onion by name.
+ * Clears the list of registered types of Onion.
  */
-void onion_category::get_type_names(vector<string> &list) {
+void onion_category::clear_types() {
     for(auto &t : onion_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of Onion given its name, or NULL on error.
- */
-mob_type* onion_category::get_type(const string &name) {
-    auto it = onion_types.find(name);
-    if(it == onion_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of Onion.
- */
-mob_type* onion_category::create_type() {
-    return new onion_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of Onion.
- */
-void onion_category::register_type(mob_type* type) {
-    onion_types[type->name] = (onion_type*) type;
+    onion_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* onion_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of Onion.
+ */
+mob_type* onion_category::create_type() {
+    return new onion_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears an Onion from the list of Onions.
  */
 void onion_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void onion_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of Onion.
+ * Returns a type of Onion given its name, or NULL on error.
  */
-void onion_category::clear_types() {
-    for(auto &t : onion_types) {
-        delete t.second;
-    }
-    onion_types.clear();
+mob_type* onion_category::get_type(const string &name) {
+    auto it = onion_types.find(name);
+    if(it == onion_types.end()) return NULL;
+    return it->second;
 }
 
 
-onion_category::~onion_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of Onion by name.
+ */
+void onion_category::get_type_names(vector<string> &list) {
+    for(auto &t : onion_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of Onion.
+ */
+void onion_category::register_type(mob_type* type) {
+    onion_types[type->name] = (onion_type*) type;
+}

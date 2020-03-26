@@ -89,6 +89,9 @@ animation_editor::animation_editor() :
 }
 
 
+animation_editor::~animation_editor() { }
+
+
 /* ----------------------------------------------------------------------------
  * Centers the camera on the sprite's parent bitmap, so the user can choose
  * what part of the bitmap they want to use for the sprite.
@@ -278,124 +281,6 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     
     gui_to_sprite_transform();
     emit_status_bar_message("Data imported.", false);
-}
-
-
-static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
-/* ----------------------------------------------------------------------------
- * Performs a flood fill on the bitmap sprite, to see what parts
- * contain non-alpha pixels, based on a starting position.
- * bmp:              Locked bitmap to check.
- * selection_pixels: Array that controls which pixels are selected or not.
- * x, y:             Image coordinates to start on.
- */
-void animation_editor::sprite_bmp_flood_fill(
-    ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
-) {
-    //https://en.wikipedia.org/wiki/Flood_fill#The_algorithm
-    int bmp_w = al_get_bitmap_width(bmp);
-    int bmp_h = al_get_bitmap_height(bmp);
-    
-    if(x < 0 || x > bmp_w) return;
-    if(y < 0 || y > bmp_h) return;
-    if(selection_pixels[y * bmp_w + x]) return;
-    if(al_get_pixel(bmp, x, y).a < FLOOD_FILL_ALPHA_THRESHOLD) {
-        return;
-    }
-    
-    struct int_point {
-        int x;
-        int y;
-        int_point(point p) :
-            x(p.x),
-            y(p.y) { }
-        int_point(int x, int y) :
-            x(x),
-            y(y) { }
-    };
-    
-    queue<int_point> pixels_left;
-    pixels_left.push(int_point(x, y));
-    
-    while(!pixels_left.empty()) {
-        int_point p = pixels_left.front();
-        pixels_left.pop();
-        
-        if(
-            selection_pixels[(p.y) * bmp_w + p.x] ||
-            al_get_pixel(bmp, p.x, p.y).a < FLOOD_FILL_ALPHA_THRESHOLD
-        ) {
-            continue;
-        }
-        
-        int_point offset = p;
-        vector<int_point> columns;
-        columns.push_back(p);
-        
-        bool add = true;
-        //Keep going left and adding columns to check.
-        while(add) {
-            if(offset.x  == 0) {
-                add = false;
-            } else {
-                offset.x--;
-                if(selection_pixels[offset.y * bmp_w + offset.x]) {
-                    add = false;
-                } else if(
-                    al_get_pixel(bmp, offset.x, offset.y).a <
-                    FLOOD_FILL_ALPHA_THRESHOLD
-                ) {
-                    add = false;
-                } else {
-                    columns.push_back(offset);
-                }
-            }
-        }
-        offset = p;
-        add = true;
-        //Keep going right and adding columns to check.
-        while(add) {
-            if(offset.x == bmp_w - 1) {
-                add = false;
-            } else {
-                offset.x++;
-                if(selection_pixels[offset.y * bmp_w + offset.x]) {
-                    add = false;
-                } else if(
-                    al_get_pixel(bmp, offset.x, offset.y).a <
-                    FLOOD_FILL_ALPHA_THRESHOLD
-                ) {
-                    add = false;
-                } else {
-                    columns.push_back(offset);
-                }
-            }
-        }
-        
-        for(size_t c = 0; c < columns.size(); ++c) {
-            //For each column obtained, mark the pixel there,
-            //and check the pixels above and below, to see if they should be
-            //processed next.
-            int_point col = columns[c];
-            selection_pixels[col.y * bmp_w + col.x] = true;
-            if(
-                col.y > 0 &&
-                !selection_pixels[(col.y - 1) * bmp_w + col.x] &&
-                al_get_pixel(bmp, col.x, col.y - 1).a >=
-                FLOOD_FILL_ALPHA_THRESHOLD
-            ) {
-                pixels_left.push(int_point(col.x, col.y - 1));
-            }
-            if(
-                col.y < bmp_h - 1 &&
-                !selection_pixels[(col.y + 1) * bmp_w + col.x] &&
-                al_get_pixel(bmp, col.x, col.y + 1).a >=
-                FLOOD_FILL_ALPHA_THRESHOLD
-            ) {
-                pixels_left.push(int_point(col.x, col.y + 1));
-            }
-        }
-    }
 }
 
 
@@ -902,6 +787,125 @@ void animation_editor::set_all_sprite_scales() {
 }
 
 
+static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
+
+/* ----------------------------------------------------------------------------
+ * Performs a flood fill on the bitmap sprite, to see what parts
+ * contain non-alpha pixels, based on a starting position.
+ * bmp:              Locked bitmap to check.
+ * selection_pixels: Array that controls which pixels are selected or not.
+ * x, y:             Image coordinates to start on.
+ */
+void animation_editor::sprite_bmp_flood_fill(
+    ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
+) {
+    //https://en.wikipedia.org/wiki/Flood_fill#The_algorithm
+    int bmp_w = al_get_bitmap_width(bmp);
+    int bmp_h = al_get_bitmap_height(bmp);
+    
+    if(x < 0 || x > bmp_w) return;
+    if(y < 0 || y > bmp_h) return;
+    if(selection_pixels[y * bmp_w + x]) return;
+    if(al_get_pixel(bmp, x, y).a < FLOOD_FILL_ALPHA_THRESHOLD) {
+        return;
+    }
+    
+    struct int_point {
+        int x;
+        int y;
+        int_point(point p) :
+            x(p.x),
+            y(p.y) { }
+        int_point(int x, int y) :
+            x(x),
+            y(y) { }
+    };
+    
+    queue<int_point> pixels_left;
+    pixels_left.push(int_point(x, y));
+    
+    while(!pixels_left.empty()) {
+        int_point p = pixels_left.front();
+        pixels_left.pop();
+        
+        if(
+            selection_pixels[(p.y) * bmp_w + p.x] ||
+            al_get_pixel(bmp, p.x, p.y).a < FLOOD_FILL_ALPHA_THRESHOLD
+        ) {
+            continue;
+        }
+        
+        int_point offset = p;
+        vector<int_point> columns;
+        columns.push_back(p);
+        
+        bool add = true;
+        //Keep going left and adding columns to check.
+        while(add) {
+            if(offset.x  == 0) {
+                add = false;
+            } else {
+                offset.x--;
+                if(selection_pixels[offset.y * bmp_w + offset.x]) {
+                    add = false;
+                } else if(
+                    al_get_pixel(bmp, offset.x, offset.y).a <
+                    FLOOD_FILL_ALPHA_THRESHOLD
+                ) {
+                    add = false;
+                } else {
+                    columns.push_back(offset);
+                }
+            }
+        }
+        offset = p;
+        add = true;
+        //Keep going right and adding columns to check.
+        while(add) {
+            if(offset.x == bmp_w - 1) {
+                add = false;
+            } else {
+                offset.x++;
+                if(selection_pixels[offset.y * bmp_w + offset.x]) {
+                    add = false;
+                } else if(
+                    al_get_pixel(bmp, offset.x, offset.y).a <
+                    FLOOD_FILL_ALPHA_THRESHOLD
+                ) {
+                    add = false;
+                } else {
+                    columns.push_back(offset);
+                }
+            }
+        }
+        
+        for(size_t c = 0; c < columns.size(); ++c) {
+            //For each column obtained, mark the pixel there,
+            //and check the pixels above and below, to see if they should be
+            //processed next.
+            int_point col = columns[c];
+            selection_pixels[col.y * bmp_w + col.x] = true;
+            if(
+                col.y > 0 &&
+                !selection_pixels[(col.y - 1) * bmp_w + col.x] &&
+                al_get_pixel(bmp, col.x, col.y - 1).a >=
+                FLOOD_FILL_ALPHA_THRESHOLD
+            ) {
+                pixels_left.push(int_point(col.x, col.y - 1));
+            }
+            if(
+                col.y < bmp_h - 1 &&
+                !selection_pixels[(col.y + 1) * bmp_w + col.x] &&
+                al_get_pixel(bmp, col.x, col.y + 1).a >=
+                FLOOD_FILL_ALPHA_THRESHOLD
+            ) {
+                pixels_left.push(int_point(col.x, col.y + 1));
+            }
+        }
+    }
+}
+
+
 /* ----------------------------------------------------------------------------
  * Unloads the editor from memory.
  */
@@ -989,6 +993,3 @@ void animation_editor::update_hitboxes() {
         );
     }
 }
-
-
-animation_editor::~animation_editor() { }

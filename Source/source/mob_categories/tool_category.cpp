@@ -28,39 +28,17 @@ tool_category::tool_category() :
 }
 
 
+tool_category::~tool_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of tool by name.
+ * Clears the list of registered types of tools.
  */
-void tool_category::get_type_names(vector<string> &list) {
+void tool_category::clear_types() {
     for(auto &t : tool_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of tool given its name, or NULL on error.
- */
-mob_type* tool_category::get_type(const string &name) {
-    auto it = tool_types.find(name);
-    if(it == tool_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of tool.
- */
-mob_type* tool_category::create_type() {
-    return new tool_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of tool.
- */
-void tool_category::register_type(mob_type* type) {
-    tool_types[type->name] = (tool_type*) type;
+    tool_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* tool_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of tool.
+ */
+mob_type* tool_category::create_type() {
+    return new tool_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a tool from the list of tools.
  */
 void tool_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void tool_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of tools.
+ * Returns a type of tool given its name, or NULL on error.
  */
-void tool_category::clear_types() {
-    for(auto &t : tool_types) {
-        delete t.second;
-    }
-    tool_types.clear();
+mob_type* tool_category::get_type(const string &name) {
+    auto it = tool_types.find(name);
+    if(it == tool_types.end()) return NULL;
+    return it->second;
 }
 
 
-tool_category::~tool_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of tool by name.
+ */
+void tool_category::get_type_names(vector<string> &list) {
+    for(auto &t : tool_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of tool.
+ */
+void tool_category::register_type(mob_type* type) {
+    tool_types[type->name] = (tool_type*) type;
+}

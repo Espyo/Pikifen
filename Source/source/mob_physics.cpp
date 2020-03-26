@@ -12,64 +12,6 @@
 
 #include "vars.h"
 
-const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
-
-/* ----------------------------------------------------------------------------
- * Ticks the mob's actual physics procedures:
- * falling because of gravity, moving forward, etc.
- */
-void mob::tick_physics(const float delta_t) {
-    if(!ground_sector) {
-        //Object is placed out of bounds.
-        return;
-    }
-    
-    //Initial setup.
-    float move_speed_mult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
-        move_speed_mult *= this->statuses[s].type->speed_multiplier;
-    }
-    
-    point pre_move_pos = pos;
-    point move_speed = speed;
-    bool touched_wall = false;
-    float pre_move_ground_z = ground_sector->z;
-    
-    //Rotation logic.
-    tick_rotation_physics(delta_t, move_speed_mult);
-    
-    //What type of horizontal movement is this?
-    H_MOVE_RESULTS h_mov_type =
-        get_physics_horizontal_movement(delta_t, move_speed_mult, &move_speed);
-        
-    if(h_mov_type == H_MOVE_FAIL) {
-        return;
-    } else if (h_mov_type == H_MOVE_OK) {
-        //Horizontal movement time!
-        tick_horizontal_movement_physics(
-            delta_t, move_speed, &touched_wall
-        );
-    }
-    
-    //Vertical movement.
-    tick_vertical_movement_physics(delta_t, pre_move_ground_z);
-    
-    //Walk on top of another mob, if possible.
-    tick_walkable_riding_physics(delta_t);
-    
-    //Final setup.
-    push_amount = 0;
-    
-    if(touched_wall) {
-        fsm.run_event(MOB_EV_TOUCHED_WALL);
-    }
-    
-    if(type->walkable) {
-        walkable_moved = (pos - pre_move_pos) / delta_t;
-    }
-}
-
-
 /* ----------------------------------------------------------------------------
  * Returns which walkable mob this mob should be considered to be on top of.
  * Returns NULL if none is found.
@@ -251,6 +193,8 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
 }
 
 
+//Before this much time, a mob can't push others as effectively.
+const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
 //If a mob is this close to the destination, it can move without tank controls.
 const float FREE_MOVE_THRESHOLD = 10.0f;
 
@@ -637,6 +581,62 @@ void mob::tick_horizontal_movement_physics(
                     
             }
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the mob's actual physics procedures:
+ * falling because of gravity, moving forward, etc.
+ */
+void mob::tick_physics(const float delta_t) {
+    if(!ground_sector) {
+        //Object is placed out of bounds.
+        return;
+    }
+    
+    //Initial setup.
+    float move_speed_mult = 1.0f;
+    for(size_t s = 0; s < this->statuses.size(); ++s) {
+        move_speed_mult *= this->statuses[s].type->speed_multiplier;
+    }
+    
+    point pre_move_pos = pos;
+    point move_speed = speed;
+    bool touched_wall = false;
+    float pre_move_ground_z = ground_sector->z;
+    
+    //Rotation logic.
+    tick_rotation_physics(delta_t, move_speed_mult);
+    
+    //What type of horizontal movement is this?
+    H_MOVE_RESULTS h_mov_type =
+        get_physics_horizontal_movement(delta_t, move_speed_mult, &move_speed);
+        
+    if(h_mov_type == H_MOVE_FAIL) {
+        return;
+    } else if (h_mov_type == H_MOVE_OK) {
+        //Horizontal movement time!
+        tick_horizontal_movement_physics(
+            delta_t, move_speed, &touched_wall
+        );
+    }
+    
+    //Vertical movement.
+    tick_vertical_movement_physics(delta_t, pre_move_ground_z);
+    
+    //Walk on top of another mob, if possible.
+    tick_walkable_riding_physics(delta_t);
+    
+    //Final setup.
+    push_amount = 0;
+    
+    if(touched_wall) {
+        fsm.run_event(MOB_EV_TOUCHED_WALL);
+    }
+    
+    if(type->walkable) {
+        walkable_moved = (pos - pre_move_pos) / delta_t;
     }
 }
 

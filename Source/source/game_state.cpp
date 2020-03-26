@@ -30,52 +30,7 @@ game_state::game_state() :
 }
 
 
-/* ----------------------------------------------------------------------------
- * Sets the currently selected widget.
- */
-void game_state::set_selected_widget(menu_widget* widget) {
-    if(selected_widget) selected_widget->selected = false;
-    selected_widget = widget;
-    if(selected_widget) selected_widget->selected = true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Pass an Allegro event to this so the state's widgets can
- * handle it if necessary.
- */
-void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
-
-    //Mousing over a widget and clicking.
-    if(
-        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
-    ) {
-        set_selected_widget(NULL);
-        for(size_t w = 0; w < menu_widgets.size(); w++) {
-            menu_widget* w_ptr = menu_widgets[w];
-            if(
-                w_ptr->mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
-                w_ptr->is_clickable()
-            ) {
-                set_selected_widget(w_ptr);
-                break;
-            }
-        }
-    }
-    
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(selected_widget) selected_widget->click();
-    }
-    
-    vector<action_from_event> actions = get_actions_from_event(ev);
-    for(size_t a = 0; a < actions.size(); ++a) {
-        handle_menu_button(
-            actions[a].button, actions[a].pos, actions[a].player
-        );
-    }
-    
-}
+game_state::~game_state() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -216,5 +171,52 @@ void game_state::handle_menu_button(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Pass an Allegro event to this so the state's widgets can
+ * handle it if necessary.
+ */
+void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
+
+    //Mousing over a widget and clicking.
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
+    ) {
+        set_selected_widget(NULL);
+        for(size_t w = 0; w < menu_widgets.size(); w++) {
+            menu_widget* w_ptr = menu_widgets[w];
+            if(
+                w_ptr->mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
+                w_ptr->is_clickable()
+            ) {
+                set_selected_widget(w_ptr);
+                break;
+            }
+        }
+    }
+    
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
+        if(selected_widget) selected_widget->click();
+    }
+    
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_menu_button(
+            actions[a].button, actions[a].pos, actions[a].player
+        );
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the currently selected widget.
+ */
+void game_state::set_selected_widget(menu_widget* widget) {
+    if(selected_widget) selected_widget->selected = false;
+    selected_widget = widget;
+    if(selected_widget) selected_widget->selected = true;
+}
+
+
 void game_state::update_transformations() { }
-game_state::~game_state() { }

@@ -31,7 +31,18 @@ track_type::track_type() :
     track_fsm::create_fsm(this);
 }
 
+
 track_type::~track_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector track_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(DROP_ANIM_IDLING, "idling"));
+    return v;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -99,14 +110,4 @@ void track_type::load_resources(data_node* file) {
             i2s(anims.body_parts.size()) + "!"
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector track_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(DROP_ANIM_IDLING, "idling"));
-    return v;
 }

@@ -28,6 +28,19 @@ onion_type::onion_type() :
 }
 
 
+onion_type::~onion_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector onion_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(ANIM_IDLING, "idling"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -47,16 +60,3 @@ void onion_type::load_properties(data_node* file) {
     }
     pik_type = pikmin_types[pik_type_str];
 }
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector onion_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(ANIM_IDLING, "idling"));
-    return v;
-}
-
-
-onion_type::~onion_type() { }

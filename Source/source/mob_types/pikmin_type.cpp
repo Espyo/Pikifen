@@ -74,6 +74,30 @@ pikmin_type::pikmin_type() :
 }
 
 
+pikmin_type::~pikmin_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector pikmin_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(PIKMIN_ANIM_IDLING,     "idling"));
+    v.push_back(make_pair(PIKMIN_ANIM_WALKING,    "walking"));
+    v.push_back(make_pair(PIKMIN_ANIM_THROWN,     "thrown"));
+    v.push_back(make_pair(PIKMIN_ANIM_ATTACKING,  "attacking"));
+    v.push_back(make_pair(PIKMIN_ANIM_GRABBING,   "grabbing"));
+    v.push_back(make_pair(PIKMIN_ANIM_SIGHING,    "sighing"));
+    v.push_back(make_pair(PIKMIN_ANIM_CARRYING,   "carrying"));
+    v.push_back(make_pair(PIKMIN_ANIM_SPROUT,     "sprout"));
+    v.push_back(make_pair(PIKMIN_ANIM_PLUCKING,   "plucking"));
+    v.push_back(make_pair(PIKMIN_ANIM_LYING,      "lying"));
+    v.push_back(make_pair(PIKMIN_ANIM_DRINKING,   "drinking"));
+    v.push_back(make_pair(PIKMIN_ANIM_PICKING_UP, "picking_up"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -130,27 +154,6 @@ void pikmin_type::load_resources(data_node* file) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector pikmin_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(PIKMIN_ANIM_IDLING,     "idling"));
-    v.push_back(make_pair(PIKMIN_ANIM_WALKING,    "walking"));
-    v.push_back(make_pair(PIKMIN_ANIM_THROWN,     "thrown"));
-    v.push_back(make_pair(PIKMIN_ANIM_ATTACKING,  "attacking"));
-    v.push_back(make_pair(PIKMIN_ANIM_GRABBING,   "grabbing"));
-    v.push_back(make_pair(PIKMIN_ANIM_SIGHING,    "sighing"));
-    v.push_back(make_pair(PIKMIN_ANIM_CARRYING,   "carrying"));
-    v.push_back(make_pair(PIKMIN_ANIM_SPROUT,     "sprout"));
-    v.push_back(make_pair(PIKMIN_ANIM_PLUCKING,   "plucking"));
-    v.push_back(make_pair(PIKMIN_ANIM_LYING,      "lying"));
-    v.push_back(make_pair(PIKMIN_ANIM_DRINKING,   "drinking"));
-    v.push_back(make_pair(PIKMIN_ANIM_PICKING_UP, "picking_up"));
-    return v;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
@@ -162,6 +165,3 @@ void pikmin_type::unload_resources() {
     bitmaps.detach(bmp_top[1]);
     bitmaps.detach(bmp_top[2]);
 }
-
-
-pikmin_type::~pikmin_type() { }

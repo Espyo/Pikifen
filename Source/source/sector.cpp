@@ -37,6 +37,272 @@ area_data::area_data() :
 
 
 /* ----------------------------------------------------------------------------
+ * A debugging tool. This checks to see if all numbers match their pointers,
+ * for the various edges, vertexes, etc. Aborts execution if any doesn't.
+ */
+void area_data::check_stability() {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        engine_assert(
+            v_ptr->edges.size() == v_ptr->edge_nrs.size(),
+            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_nrs.size())
+        );
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]], "");
+        }
+    }
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        for(size_t v = 0; v < 2; ++v) {
+            engine_assert(
+                e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]], ""
+            );
+        }
+        
+        for(size_t s = 0; s < 2; ++s) {
+            sector* s_ptr = e_ptr->sectors[s];
+            if(
+                s_ptr == NULL &&
+                e_ptr->sector_nrs[s] == INVALID
+            ) {
+                continue;
+            }
+            engine_assert(s_ptr == sectors[e_ptr->sector_nrs[s]], "");
+        }
+    }
+    
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        engine_assert(
+            s_ptr->edges.size() == s_ptr->edge_nrs.size(),
+            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_nrs.size())
+        );
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]], "");
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the info of an area map.
+ */
+void area_data::clear() {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        delete vertexes[v];
+    }
+    for(size_t e = 0; e < edges.size(); ++e) {
+        delete edges[e];
+    }
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        delete sectors[s];
+    }
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        delete mob_generators[m];
+    }
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        delete path_stops[s];
+    }
+    for(size_t s = 0; s < tree_shadows.size(); ++s) {
+        delete tree_shadows[s];
+    }
+    
+    vertexes.clear();
+    edges.clear();
+    sectors.clear();
+    mob_generators.clear();
+    path_stops.clear();
+    tree_shadows.clear();
+    bmap.clear();
+    
+    if(bg_bmp) {
+        bitmaps.detach(bg_bmp);
+        bg_bmp = NULL;
+    }
+    
+    name.clear();
+    subtitle.clear();
+    creator.clear();
+    version.clear();
+    notes.clear();
+    spray_amounts.clear();
+    weather_name.clear();
+    bg_bmp_file_name.clear();
+    bg_color = al_map_rgb(0, 0, 0);
+    bg_dist = 2.0f;
+    bg_bmp_zoom = 1.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clones this area data into another area_data object.
+ */
+void area_data::clone(area_data &other) {
+    other.clear();
+    
+    if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
+        bitmaps.detach(other.bg_bmp_file_name);
+    }
+    other.bg_bmp_file_name = bg_bmp_file_name;
+    if(other.bg_bmp_file_name.empty()) {
+        other.bg_bmp = NULL;
+    } else {
+        other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
+    }
+    other.bg_bmp_zoom = bg_bmp_zoom;
+    other.bg_color = bg_color;
+    other.bg_dist = bg_dist;
+    other.bmap = bmap;
+    
+    other.vertexes.reserve(vertexes.size());
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        other.vertexes.push_back(new vertex());
+    }
+    other.edges.reserve(edges.size());
+    for(size_t e = 0; e < edges.size(); ++e) {
+        other.edges.push_back(new edge());
+    }
+    other.sectors.reserve(sectors.size());
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        other.sectors.push_back(new sector());
+    }
+    other.mob_generators.reserve(mob_generators.size());
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        other.mob_generators.push_back(new mob_gen());
+    }
+    other.path_stops.reserve(path_stops.size());
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        other.path_stops.push_back(new path_stop());
+    }
+    other.tree_shadows.reserve(tree_shadows.size());
+    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+        other.tree_shadows.push_back(new tree_shadow());
+    }
+    
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        vertex* ov_ptr = other.vertexes[v];
+        ov_ptr->x = v_ptr->x;
+        ov_ptr->y = v_ptr->y;
+        ov_ptr->edges.reserve(v_ptr->edges.size());
+        ov_ptr->edge_nrs.reserve(v_ptr->edge_nrs.size());
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            size_t nr = v_ptr->edge_nrs[e];
+            ov_ptr->edges.push_back(other.edges[nr]);
+            ov_ptr->edge_nrs.push_back(nr);
+        }
+    }
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        edge* oe_ptr = other.edges[e];
+        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_nrs[0]];
+        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_nrs[1]];
+        oe_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[0];
+        oe_ptr->vertex_nrs[1] = e_ptr->vertex_nrs[1];
+        if(e_ptr->sector_nrs[0] == INVALID) {
+            oe_ptr->sectors[0] = NULL;
+        } else {
+            oe_ptr->sectors[0] = other.sectors[e_ptr->sector_nrs[0]];
+        }
+        if(e_ptr->sector_nrs[1] == INVALID) {
+            oe_ptr->sectors[1] = NULL;
+        } else {
+            oe_ptr->sectors[1] = other.sectors[e_ptr->sector_nrs[1]];
+        }
+        oe_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
+        oe_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
+    }
+    
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        sector* os_ptr = other.sectors[s];
+        s_ptr->clone(os_ptr);
+        os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
+        os_ptr->texture_info.bitmap =
+            textures.get(s_ptr->texture_info.file_name, NULL, false);
+        os_ptr->edges.reserve(s_ptr->edges.size());
+        os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            size_t nr = s_ptr->edge_nrs[e];
+            os_ptr->edges.push_back(other.edges[nr]);
+            os_ptr->edge_nrs.push_back(nr);
+        }
+        os_ptr->triangles.reserve(s_ptr->triangles.size());
+        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+            triangle* t_ptr = &s_ptr->triangles[t];
+            os_ptr->triangles.push_back(
+                triangle(
+                    other.vertexes[find_vertex_nr(t_ptr->points[0])],
+                    other.vertexes[find_vertex_nr(t_ptr->points[1])],
+                    other.vertexes[find_vertex_nr(t_ptr->points[2])]
+                )
+            );
+        }
+        os_ptr->bbox[0] = s_ptr->bbox[0];
+        os_ptr->bbox[1] = s_ptr->bbox[1];
+    }
+    
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        mob_gen* m_ptr = mob_generators[m];
+        mob_gen* om_ptr = other.mob_generators[m];
+        om_ptr->angle = m_ptr->angle;
+        om_ptr->category = m_ptr->category;
+        om_ptr->pos = m_ptr->pos;
+        om_ptr->type = m_ptr->type;
+        om_ptr->vars = m_ptr->vars;
+        om_ptr->link_nrs = m_ptr->link_nrs;
+    }
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        mob_gen* om_ptr = other.mob_generators[m];
+        for(size_t l = 0; l < om_ptr->link_nrs.size(); ++l) {
+            om_ptr->links.push_back(
+                other.mob_generators[om_ptr->link_nrs[l]]
+            );
+        }
+    }
+    
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        path_stop* s_ptr = path_stops[s];
+        path_stop* os_ptr = other.path_stops[s];
+        os_ptr->pos = s_ptr->pos;
+        os_ptr->links.reserve(s_ptr->links.size());
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            os_ptr->links.push_back(
+                path_link(
+                    other.path_stops[s_ptr->links[l].end_nr],
+                    s_ptr->links[l].end_nr
+                )
+            );
+            os_ptr->links.back().distance = s_ptr->links[l].distance;
+        }
+    }
+    
+    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+        tree_shadow* t_ptr = tree_shadows[t];
+        tree_shadow* ot_ptr = other.tree_shadows[t];
+        ot_ptr->alpha = t_ptr->alpha;
+        ot_ptr->angle = t_ptr->angle;
+        ot_ptr->center = t_ptr->center;
+        ot_ptr->file_name = t_ptr->file_name;
+        ot_ptr->size = t_ptr->size;
+        ot_ptr->sway = t_ptr->sway;
+        ot_ptr->bitmap = textures.get(t_ptr->file_name, NULL, false);
+    }
+    
+    other.name = name;
+    other.subtitle = subtitle;
+    other.creator = creator;
+    other.version = version;
+    other.notes = notes;
+    other.spray_amounts = spray_amounts;
+    other.weather_name = weather_name;
+    other.weather_condition = weather_condition;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Connects an edge to a sector, adding the sector and its number to the edge's
  * lists, and adding the edge and its number to the sector's.
  */
@@ -474,44 +740,6 @@ vertex* area_data::new_vertex() {
 
 
 /* ----------------------------------------------------------------------------
- * Removes a vertex from the list, and updates all IDs referencing it.
- */
-void area_data::remove_vertex(const size_t v_nr) {
-    vertexes.erase(vertexes.begin() + v_nr);
-    for(size_t e = 0; e < edges.size(); ++e) {
-        edge* e_ptr = edges[e];
-        for(size_t v = 0; v < 2; ++v) {
-            if(
-                e_ptr->vertex_nrs[v] != INVALID &&
-                e_ptr->vertex_nrs[v] > v_nr
-            ) {
-                e_ptr->vertex_nrs[v]--;
-            } else {
-                //This should never happen.
-                engine_assert(
-                    e_ptr->vertex_nrs[v] != v_nr,
-                    i2s(e_ptr->vertex_nrs[v]) + " " + i2s(v_nr)
-                );
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Removes a vertex from the list, and updates all IDs referencing it.
- */
-void area_data::remove_vertex(const vertex* v_ptr) {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        if(vertexes[v] == v_ptr) {
-            remove_vertex(v);
-            return;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Removes an edge from the list, and updates all IDs referencing it.
  */
 void area_data::remove_edge(const size_t e_nr) {
@@ -605,268 +833,40 @@ void area_data::remove_sector(const sector* s_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * A debugging tool. This checks to see if all numbers match their pointers,
- * for the various edges, vertexes, etc. Aborts execution if any doesn't.
+ * Removes a vertex from the list, and updates all IDs referencing it.
  */
-void area_data::check_stability() {
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        vertex* v_ptr = vertexes[v];
-        engine_assert(
-            v_ptr->edges.size() == v_ptr->edge_nrs.size(),
-            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_nrs.size())
-        );
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]], "");
-        }
-    }
-    
+void area_data::remove_vertex(const size_t v_nr) {
+    vertexes.erase(vertexes.begin() + v_nr);
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; ++v) {
-            engine_assert(
-                e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]], ""
-            );
-        }
-        
-        for(size_t s = 0; s < 2; ++s) {
-            sector* s_ptr = e_ptr->sectors[s];
             if(
-                s_ptr == NULL &&
-                e_ptr->sector_nrs[s] == INVALID
+                e_ptr->vertex_nrs[v] != INVALID &&
+                e_ptr->vertex_nrs[v] > v_nr
             ) {
-                continue;
+                e_ptr->vertex_nrs[v]--;
+            } else {
+                //This should never happen.
+                engine_assert(
+                    e_ptr->vertex_nrs[v] != v_nr,
+                    i2s(e_ptr->vertex_nrs[v]) + " " + i2s(v_nr)
+                );
             }
-            engine_assert(s_ptr == sectors[e_ptr->sector_nrs[s]], "");
-        }
-    }
-    
-    for(size_t s = 0; s < sectors.size(); ++s) {
-        sector* s_ptr = sectors[s];
-        engine_assert(
-            s_ptr->edges.size() == s_ptr->edge_nrs.size(),
-            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_nrs.size())
-        );
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]], "");
         }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Clears the info of an area map.
+ * Removes a vertex from the list, and updates all IDs referencing it.
  */
-void area_data::clear() {
+void area_data::remove_vertex(const vertex* v_ptr) {
     for(size_t v = 0; v < vertexes.size(); ++v) {
-        delete vertexes[v];
-    }
-    for(size_t e = 0; e < edges.size(); ++e) {
-        delete edges[e];
-    }
-    for(size_t s = 0; s < sectors.size(); ++s) {
-        delete sectors[s];
-    }
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
-        delete mob_generators[m];
-    }
-    for(size_t s = 0; s < path_stops.size(); ++s) {
-        delete path_stops[s];
-    }
-    for(size_t s = 0; s < tree_shadows.size(); ++s) {
-        delete tree_shadows[s];
-    }
-    
-    vertexes.clear();
-    edges.clear();
-    sectors.clear();
-    mob_generators.clear();
-    path_stops.clear();
-    tree_shadows.clear();
-    bmap.clear();
-    
-    if(bg_bmp) {
-        bitmaps.detach(bg_bmp);
-        bg_bmp = NULL;
-    }
-    
-    name.clear();
-    subtitle.clear();
-    creator.clear();
-    version.clear();
-    notes.clear();
-    spray_amounts.clear();
-    weather_name.clear();
-    bg_bmp_file_name.clear();
-    bg_color = al_map_rgb(0, 0, 0);
-    bg_dist = 2.0f;
-    bg_bmp_zoom = 1.0f;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Clones this area data into another area_data object.
- */
-void area_data::clone(area_data &other) {
-    other.clear();
-    
-    if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        bitmaps.detach(other.bg_bmp_file_name);
-    }
-    other.bg_bmp_file_name = bg_bmp_file_name;
-    if(other.bg_bmp_file_name.empty()) {
-        other.bg_bmp = NULL;
-    } else {
-        other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
-    }
-    other.bg_bmp_zoom = bg_bmp_zoom;
-    other.bg_color = bg_color;
-    other.bg_dist = bg_dist;
-    other.bmap = bmap;
-    
-    other.vertexes.reserve(vertexes.size());
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        other.vertexes.push_back(new vertex());
-    }
-    other.edges.reserve(edges.size());
-    for(size_t e = 0; e < edges.size(); ++e) {
-        other.edges.push_back(new edge());
-    }
-    other.sectors.reserve(sectors.size());
-    for(size_t s = 0; s < sectors.size(); ++s) {
-        other.sectors.push_back(new sector());
-    }
-    other.mob_generators.reserve(mob_generators.size());
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
-        other.mob_generators.push_back(new mob_gen());
-    }
-    other.path_stops.reserve(path_stops.size());
-    for(size_t s = 0; s < path_stops.size(); ++s) {
-        other.path_stops.push_back(new path_stop());
-    }
-    other.tree_shadows.reserve(tree_shadows.size());
-    for(size_t t = 0; t < tree_shadows.size(); ++t) {
-        other.tree_shadows.push_back(new tree_shadow());
-    }
-    
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        vertex* v_ptr = vertexes[v];
-        vertex* ov_ptr = other.vertexes[v];
-        ov_ptr->x = v_ptr->x;
-        ov_ptr->y = v_ptr->y;
-        ov_ptr->edges.reserve(v_ptr->edges.size());
-        ov_ptr->edge_nrs.reserve(v_ptr->edge_nrs.size());
-        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-            size_t nr = v_ptr->edge_nrs[e];
-            ov_ptr->edges.push_back(other.edges[nr]);
-            ov_ptr->edge_nrs.push_back(nr);
+        if(vertexes[v] == v_ptr) {
+            remove_vertex(v);
+            return;
         }
     }
-    
-    for(size_t e = 0; e < edges.size(); ++e) {
-        edge* e_ptr = edges[e];
-        edge* oe_ptr = other.edges[e];
-        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_nrs[0]];
-        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_nrs[1]];
-        oe_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[0];
-        oe_ptr->vertex_nrs[1] = e_ptr->vertex_nrs[1];
-        if(e_ptr->sector_nrs[0] == INVALID) {
-            oe_ptr->sectors[0] = NULL;
-        } else {
-            oe_ptr->sectors[0] = other.sectors[e_ptr->sector_nrs[0]];
-        }
-        if(e_ptr->sector_nrs[1] == INVALID) {
-            oe_ptr->sectors[1] = NULL;
-        } else {
-            oe_ptr->sectors[1] = other.sectors[e_ptr->sector_nrs[1]];
-        }
-        oe_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
-        oe_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
-    }
-    
-    for(size_t s = 0; s < sectors.size(); ++s) {
-        sector* s_ptr = sectors[s];
-        sector* os_ptr = other.sectors[s];
-        s_ptr->clone(os_ptr);
-        os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
-        os_ptr->texture_info.bitmap =
-            textures.get(s_ptr->texture_info.file_name, NULL, false);
-        os_ptr->edges.reserve(s_ptr->edges.size());
-        os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            size_t nr = s_ptr->edge_nrs[e];
-            os_ptr->edges.push_back(other.edges[nr]);
-            os_ptr->edge_nrs.push_back(nr);
-        }
-        os_ptr->triangles.reserve(s_ptr->triangles.size());
-        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
-            triangle* t_ptr = &s_ptr->triangles[t];
-            os_ptr->triangles.push_back(
-                triangle(
-                    other.vertexes[find_vertex_nr(t_ptr->points[0])],
-                    other.vertexes[find_vertex_nr(t_ptr->points[1])],
-                    other.vertexes[find_vertex_nr(t_ptr->points[2])]
-                )
-            );
-        }
-        os_ptr->bbox[0] = s_ptr->bbox[0];
-        os_ptr->bbox[1] = s_ptr->bbox[1];
-    }
-    
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
-        mob_gen* m_ptr = mob_generators[m];
-        mob_gen* om_ptr = other.mob_generators[m];
-        om_ptr->angle = m_ptr->angle;
-        om_ptr->category = m_ptr->category;
-        om_ptr->pos = m_ptr->pos;
-        om_ptr->type = m_ptr->type;
-        om_ptr->vars = m_ptr->vars;
-        om_ptr->link_nrs = m_ptr->link_nrs;
-    }
-    for(size_t m = 0; m < mob_generators.size(); ++m) {
-        mob_gen* om_ptr = other.mob_generators[m];
-        for(size_t l = 0; l < om_ptr->link_nrs.size(); ++l) {
-            om_ptr->links.push_back(
-                other.mob_generators[om_ptr->link_nrs[l]]
-            );
-        }
-    }
-    
-    for(size_t s = 0; s < path_stops.size(); ++s) {
-        path_stop* s_ptr = path_stops[s];
-        path_stop* os_ptr = other.path_stops[s];
-        os_ptr->pos = s_ptr->pos;
-        os_ptr->links.reserve(s_ptr->links.size());
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            os_ptr->links.push_back(
-                path_link(
-                    other.path_stops[s_ptr->links[l].end_nr],
-                    s_ptr->links[l].end_nr
-                )
-            );
-            os_ptr->links.back().distance = s_ptr->links[l].distance;
-        }
-    }
-    
-    for(size_t t = 0; t < tree_shadows.size(); ++t) {
-        tree_shadow* t_ptr = tree_shadows[t];
-        tree_shadow* ot_ptr = other.tree_shadows[t];
-        ot_ptr->alpha = t_ptr->alpha;
-        ot_ptr->angle = t_ptr->angle;
-        ot_ptr->center = t_ptr->center;
-        ot_ptr->file_name = t_ptr->file_name;
-        ot_ptr->size = t_ptr->size;
-        ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = textures.get(t_ptr->file_name, NULL, false);
-    }
-    
-    other.name = name;
-    other.subtitle = subtitle;
-    other.creator = creator;
-    other.version = version;
-    other.notes = notes;
-    other.spray_amounts = spray_amounts;
-    other.weather_name = weather_name;
-    other.weather_condition = weather_condition;
 }
 
 
@@ -1037,6 +1037,24 @@ void edge::swap_vertexes() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an edge intersection info structure.
+ */
+edge_intersection::edge_intersection(edge* e1, edge* e2) :
+    e1(e1),
+    e2(e2) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks whether the edge intersection contains the specified edge.
+ */
+bool edge_intersection::contains(edge* e) {
+    return e1 == e || e2 == e;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
  */
 mob_gen::mob_gen(
@@ -1049,6 +1067,115 @@ mob_gen::mob_gen(
     angle(angle),
     vars(vars) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new stop link.
+ */
+path_link::path_link(path_stop* end_ptr, size_t end_nr) :
+    end_ptr(end_ptr),
+    end_nr(end_nr),
+    distance(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates and stores the distance between the two stops.
+ * Because the link doesn't know about the starting stop,
+ * you need to provide it as a parameter when calling the function.
+ */
+void path_link::calculate_dist(path_stop* start_ptr) {
+    distance = dist(start_ptr->pos, end_ptr->pos).to_float();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new path stop.
+ */
+path_stop::path_stop(const point &pos, const vector<path_link> &links) :
+    pos(pos),
+    links(links) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a link between this stop and another, whether it's one-way or not.
+ * Also adds the link to the other stop, if applicable.
+ * If these two stops already had some link, it gets removed.
+ * other_stop: Pointer to the other stop.
+ * normal:     Normal link? False means one-way link.
+ */
+void path_stop::add_link(path_stop* other_stop, const bool normal) {
+    remove_link(other_stop);
+    if(other_stop->get_link(this) != INVALID) {
+        other_stop->remove_link(this);
+    }
+    
+    links.push_back(path_link(other_stop, INVALID));
+    if(normal) {
+        other_stop->links.push_back(path_link(this, INVALID));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors.
+ */
+void path_stop::calculate_dists() {
+    for(size_t l = 0; l < links.size(); ++l) {
+        links[l].calculate_dist(this);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors, and then goes through
+ * the neighbors and updates their distance back to this stop, if that
+ * neighbor links back.
+ */
+void path_stop::calculate_dists_plus_neighbors() {
+    for(size_t l = 0; l < links.size(); ++l) {
+        path_link* l_ptr = &links[l];
+        l_ptr->calculate_dist(this);
+    }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        size_t l_nr = s_ptr->get_link(this);
+        if(l_nr != INVALID) {
+            s_ptr->links[l_nr].calculate_dist(s_ptr);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the index of the link between this stop and another.
+ * The links in memory are one-way, meaning that if the only link
+ * is from the other stop to this one, it will not count.
+ * Returns INVALID if it does not link to that stop.
+ */
+size_t path_stop::get_link(path_stop* other_stop) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l].end_ptr == other_stop) return l;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes the link between this stop and the specified one.
+ */
+void path_stop::remove_link(path_stop* other_stop) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l].end_ptr == other_stop) {
+            links.erase(links.begin() + l);
+            return;
+        }
+    }
 }
 
 
@@ -1066,6 +1193,18 @@ sector::sector() :
     liquid_drain_left(0),
     draining_liquid(false) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a sector.
+ */
+sector::~sector() {
+    for(size_t t = 0; t < 2; ++t) {
+        if(texture_info.bitmap && texture_info.bitmap != bmp_error) {
+            bitmaps.detach(texture_info.file_name);
+        }
+    }
 }
 
 
@@ -1233,18 +1372,6 @@ void sector::remove_edge(edge* e_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a sector.
- */
-sector::~sector() {
-    for(size_t t = 0; t < 2; ++t) {
-        if(texture_info.bitmap && texture_info.bitmap != bmp_error) {
-            bitmaps.detach(texture_info.file_name);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a sector texture's info struct.
  */
 sector_texture_info::sector_texture_info() :
@@ -1252,133 +1379,6 @@ sector_texture_info::sector_texture_info() :
     rot(0),
     bitmap(nullptr),
     tint(al_map_rgb(255, 255, 255)) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an edge intersection info structure.
- */
-edge_intersection::edge_intersection(edge* e1, edge* e2) :
-    e1(e1),
-    e2(e2) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks whether the edge intersection contains the specified edge.
- */
-bool edge_intersection::contains(edge* e) {
-    return e1 == e || e2 == e;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new path stop.
- */
-path_stop::path_stop(const point &pos, const vector<path_link> &links) :
-    pos(pos),
-    links(links) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a link between this stop and another, whether it's one-way or not.
- * Also adds the link to the other stop, if applicable.
- * If these two stops already had some link, it gets removed.
- * other_stop: Pointer to the other stop.
- * normal:     Normal link? False means one-way link.
- */
-void path_stop::add_link(path_stop* other_stop, const bool normal) {
-    remove_link(other_stop);
-    if(other_stop->get_link(this) != INVALID) {
-        other_stop->remove_link(this);
-    }
-    
-    links.push_back(path_link(other_stop, INVALID));
-    if(normal) {
-        other_stop->links.push_back(path_link(this, INVALID));
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the index of the link between this stop and another.
- * The links in memory are one-way, meaning that if the only link
- * is from the other stop to this one, it will not count.
- * Returns INVALID if it does not link to that stop.
- */
-size_t path_stop::get_link(path_stop* other_stop) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l].end_ptr == other_stop) return l;
-    }
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Removes the link between this stop and the specified one.
- */
-void path_stop::remove_link(path_stop* other_stop) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l].end_ptr == other_stop) {
-            links.erase(links.begin() + l);
-            return;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors.
- */
-void path_stop::calculate_dists() {
-    for(size_t l = 0; l < links.size(); ++l) {
-        links[l].calculate_dist(this);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors, and then goes through
- * the neighbors and updates their distance back to this stop, if that
- * neighbor links back.
- */
-void path_stop::calculate_dists_plus_neighbors() {
-    for(size_t l = 0; l < links.size(); ++l) {
-        path_link* l_ptr = &links[l];
-        l_ptr->calculate_dist(this);
-    }
-    
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
-        size_t l_nr = s_ptr->get_link(this);
-        if(l_nr != INVALID) {
-            s_ptr->links[l_nr].calculate_dist(s_ptr);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new stop link.
- */
-path_link::path_link(path_stop* end_ptr, size_t end_nr) :
-    end_ptr(end_ptr),
-    end_nr(end_nr),
-    distance(0) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates and stores the distance between the two stops.
- * Because the link doesn't know about the starting stop,
- * you need to provide it as a parameter when calling the function.
- */
-void path_link::calculate_dist(path_stop* start_ptr) {
-    distance = dist(start_ptr->pos, end_ptr->pos).to_float();
 }
 
 
@@ -1505,616 +1505,6 @@ void vertex::remove_edge(edge* e_ptr) {
             return;
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns all vertexes that are close enough to be merged with
- * the specified point, as well as their distances to said point.
- * point:        Coordinates of the point.
- * all_vertexes: Vector with all of the vertexes in the area.
- * merge_radius: Minimum radius to merge. This does not take the camera zoom
- *   level into account.
- */
-vector<pair<dist, vertex*> > get_merge_vertexes(
-    const point &pos, vector<vertex*> &all_vertexes, const float merge_radius
-) {
-
-    vector<pair<dist, vertex*> > result;
-    for(size_t v = 0; v < all_vertexes.size(); ++v) {
-        vertex* v_ptr = all_vertexes[v];
-        
-        dist d(pos, point(v_ptr->x, v_ptr->y));
-        if(d <= merge_radius) {
-        
-            result.push_back(make_pair(d, v_ptr));
-        }
-    }
-    
-    return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the shortest available path between two points, following
- * the area's path graph.
- * start:           Start coordinates.
- * end:             End coordinates.
- * obstacles_found: If there is no clear path, this points to all obstacles
- *   found, so the mob can keep an eye for when they're open and try again.
- * go_straight:     This is set according to whether it's better
- *   to go straight to the end point.
- * total_dist:      If not NULL, place the total path distance here.
- */
-vector<path_stop*> get_path(
-    const point &start, const point &end,
-    unordered_set<mob*>* obstacles_found, bool* go_straight,
-    float* total_dist
-) {
-
-    vector<path_stop*> full_path;
-    
-    if(cur_area_data.path_stops.empty()) {
-        if(go_straight) *go_straight = true;
-        return full_path;
-    } else {
-        if(go_straight) *go_straight = false;
-    }
-    
-    //Start by finding the closest stops to the start and finish.
-    path_stop* closest_to_start = NULL;
-    path_stop* closest_to_end = NULL;
-    dist closest_to_start_dist;
-    dist closest_to_end_dist;
-    
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
-        
-        dist dist_to_start(start, s_ptr->pos);
-        dist dist_to_end(end, s_ptr->pos);
-        
-        if(!closest_to_start || dist_to_start < closest_to_start_dist) {
-            closest_to_start_dist = dist_to_start;
-            closest_to_start = s_ptr;
-        }
-        if(!closest_to_end || dist_to_end < closest_to_end_dist) {
-            closest_to_end_dist = dist_to_end;
-            closest_to_end = s_ptr;
-        }
-    }
-    
-    //Let's just check something real quick:
-    //if the destination is closer than any stop,
-    //just go there right away!
-    dist start_to_end_dist = dist(start, end);
-    if(start_to_end_dist <= closest_to_start_dist) {
-        if(go_straight) *go_straight = true;
-        if(total_dist) {
-            *total_dist = start_to_end_dist.to_float();
-        }
-        return full_path;
-    }
-    
-    //If the start and destination share the same closest spot,
-    //that means this is the only stop in the path.
-    if(closest_to_start == closest_to_end) {
-        full_path.push_back(closest_to_start);
-        if(total_dist) {
-            *total_dist = closest_to_start_dist.to_float();
-            *total_dist += closest_to_end_dist.to_float();
-        }
-        return full_path;
-    }
-    
-    
-    //Calculate the path.
-    full_path =
-        dijkstra(
-            closest_to_start, closest_to_end, false, obstacles_found, total_dist
-        );
-        
-    if(total_dist && !full_path.empty()) {
-        *total_dist +=
-            dist(start, full_path[0]->pos).to_float();
-        *total_dist +=
-            dist(full_path[full_path.size() - 1]->pos, end).to_float();
-    }
-    
-    return full_path;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns what active obstacle stands in the way of these two stops, if any.
- * If multiple ones do, it returns the closest.
- */
-mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
-    mob* closest_obs = NULL;
-    dist closest_obs_dist;
-    
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* m_ptr = mobs[m];
-        if(!m_ptr->type->blocks_carrier_pikmin) continue;
-        
-        if(
-            m_ptr->health != 0 &&
-            circle_intersects_line(
-                m_ptr->pos,
-                m_ptr->type->radius,
-                s1->pos, s2->pos
-            )
-        ) {
-            dist d(s1->pos, m_ptr->pos);
-            if(!closest_obs || d < closest_obs_dist) {
-                closest_obs = m_ptr;
-                closest_obs_dist = d;
-            }
-        }
-    }
-    
-    return closest_obs;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the outer polygon and inner polygons of a sector,
- * with the vertexes ordered counter-clockwise for the outer,
- * and clockwise for the inner.
- * s_ptr:              Pointer to the sector.
- * outer:              Return the outer polygon here.
- * inners:             Return the inner polygons here.
- * lone_edges:         Return any lone edges found here.
- * check_vertex_reuse: True if the algorithm is meant to check for vertexes
- *   that get reused.
- * Returns a number based on what happened. See TRIANGULATION_ERRORS.
- */
-TRIANGULATION_ERRORS get_polys(
-    sector* s_ptr, polygon* outer, vector<polygon>* inners,
-    set<edge*>* lone_edges, const bool check_vertex_reuse
-) {
-    if(!s_ptr || !outer || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
-    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
-    
-    bool doing_outer = true;
-    
-    //First, compile a list of all edges related to this sector.
-    map<edge*, bool> edges_done;
-    
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        edges_done[s_ptr->edges[e]] = false;
-    }
-    
-    //Now travel along the edges, vertex by vertex, until we have no more left.
-    while(!edges_done.empty()) {
-        bool poly_done = false;
-        
-        //Start with the rightmost vertex.
-        //If we still haven't closed the outer polygon, then this vertex
-        //mandatorily belongs to it. Otherwise, it belongs to an inner.
-        vertex* cur_vertex = get_rightmost_vertex(edges_done);
-        vertex* next_vertex = NULL;
-        vertex* prev_vertex = NULL;
-        edge* prev_edge = NULL;
-        
-        //At the start, assume the angle is left.
-        float prev_angle = TAU / 2;
-        
-        if(!doing_outer) {
-            inners->push_back(polygon());
-        }
-        
-        while(!poly_done) {
-        
-            float base_angle = prev_angle - TAU / 2; //The angle we came from.
-            
-            //For every edge attached to this vertex, find the closest one
-            //that hasn't been done, in the direction of travel.
-            
-            float best_angle_dif = 0;
-            edge* best_edge = NULL;
-            
-            for(size_t e = 0; e < cur_vertex->edges.size(); ++e) {
-                edge* e_ptr = cur_vertex->edges[e];
-                auto it = edges_done.find(e_ptr);
-                if(it == edges_done.end()) {
-                    //We're not meant to check this edge.
-                    continue;
-                }
-                
-                vertex* other_vertex =
-                    e_ptr->vertexes[0] == cur_vertex ?
-                    e_ptr->vertexes[1] :
-                    e_ptr->vertexes[0];
-                    
-                if(other_vertex == prev_vertex) {
-                    //This is where we came from.
-                    continue;
-                }
-                
-                //Find the angle between our vertex and this vertex.
-                float angle =
-                    get_angle(
-                        point(cur_vertex->x, cur_vertex->y),
-                        point(other_vertex->x, other_vertex->y)
-                    );
-                float angle_dif = get_angle_cw_dif(angle, base_angle);
-                
-                //For the outer poly, we're going counter-clockwise.
-                //So the lowest angle difference is best.
-                //For the inner ones, it's clockwise, so the highest.
-                if(
-                    !best_edge ||
-                    (doing_outer  && angle_dif < best_angle_dif) ||
-                    (!doing_outer && angle_dif > best_angle_dif)
-                ) {
-                    best_edge = e_ptr;
-                    best_angle_dif = angle_dif;
-                    prev_angle = angle;
-                    next_vertex = other_vertex;
-                }
-            }
-            
-            if(!best_edge) {
-            
-                //If there is no edge to go to next, something went wrong.
-                
-                //If this polygon is only one vertex, though, then
-                //that means it was a stray edge. Remove it.
-                //Otherwise, something just went wrong, and this is
-                //a non-simple sector.
-                poly_done = true;
-                if(!doing_outer && inners->back().size() == 1) {
-                    if(lone_edges) {
-                        lone_edges->insert(inners->back()[0]->edges[0]);
-                    }
-                    inners->erase(inners->begin() + inners->size() - 1);
-                } else {
-                    if(prev_edge) {
-                        lone_edges->insert(prev_edge);
-                    }
-                    result = TRIANGULATION_ERROR_LONE_EDGES;
-                }
-                
-            } else if(edges_done[best_edge]) {
-            
-                //If we already did this edge, that's it, polygon closed.
-                poly_done = true;
-                
-            } else {
-            
-                if(doing_outer) {
-                    outer->push_back(cur_vertex);
-                } else {
-                    inners->back().push_back(cur_vertex);
-                }
-                
-                //Continue onto the next edge.
-                prev_vertex = cur_vertex;
-                cur_vertex = next_vertex;
-                prev_edge = best_edge;
-                edges_done[best_edge] = true;
-                
-            }
-        }
-        
-        doing_outer = false;
-        
-        //Remove all edges that were done from the list.
-        auto it = edges_done.begin();
-        while(it != edges_done.end()) {
-            if(it->second) {
-                edges_done.erase(it++);
-            } else {
-                ++it;
-            }
-        }
-    }
-    
-    //Before we quit, let's just check if the sector
-    //uses a vertex more than twice.
-    if(check_vertex_reuse) {
-        map<vertex*, size_t> vertex_count;
-        edge* e_ptr = NULL;
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            e_ptr = s_ptr->edges[e];
-            vertex_count[e_ptr->vertexes[0]]++;
-            vertex_count[e_ptr->vertexes[1]]++;
-        }
-        
-        for(auto &v : vertex_count) {
-            if(v.second > 2) {
-                //Unfortunately, it does...
-                //That means it's a non-simple sector.
-                //This likely caused an incorrect triangulation,
-                //so let's report it.
-                result = TRIANGULATION_ERROR_VERTEXES_REUSED;
-                break;
-            }
-        }
-    }
-    
-    return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Places the bounding box coordinates of a sector on the specified floats.
- */
-void get_sector_bounding_box(
-    sector* s_ptr, point* min_coords, point* max_coords
-) {
-    if(!min_coords || !max_coords) return;
-    
-    if(s_ptr->edges.empty()) {
-        //Unused sector... This shouldn't exist.
-        *min_coords = point();
-        *max_coords = point();
-        return;
-    }
-    
-    min_coords->x = s_ptr->edges[0]->vertexes[0]->x;
-    max_coords->x = min_coords->x;
-    min_coords->y = s_ptr->edges[0]->vertexes[0]->y;
-    max_coords->y = min_coords->y;
-    
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        for(unsigned char v = 0; v < 2; ++v) {
-            point coords(
-                s_ptr->edges[e]->vertexes[v]->x,
-                s_ptr->edges[e]->vertexes[v]->y
-            );
-            
-            min_coords->x = min(min_coords->x, coords.x);
-            max_coords->x = max(max_coords->x, coords.x);
-            min_coords->y = min(min_coords->y, coords.y);
-            max_coords->y = max(max_coords->y, coords.y);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns which sector the specified point belongs to.
- * p:            Coordinates of the point.
- * sector_nr:    If not NULL, the number of the sector
- *   on the area map is placed here.
- *   The number will not be set if the search is using the blockmap.
- * use_blockmap: If true, use the blockmap to search.
- *   This provides faster results, but the blockmap must be built.
- */
-sector* get_sector(
-    const point &p, size_t* sector_nr, const bool use_blockmap
-) {
-
-    if(use_blockmap) {
-    
-        size_t col = cur_area_data.bmap.get_col(p.x);
-        size_t row = cur_area_data.bmap.get_row(p.y);
-        if(col == INVALID || row == INVALID) return NULL;
-        
-        unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
-        
-        if(sectors->size() == 1) return *sectors->begin();
-        
-        for(auto s : (*sectors)) {
-        
-            if(!s) {
-                continue;
-            }
-            if(is_point_in_sector(p, s)) {
-                return s;
-            }
-        }
-        
-        return NULL;
-        
-    } else {
-    
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
-            
-            if(
-                p.x < s_ptr->bbox[0].x ||
-                p.x > s_ptr->bbox[1].x ||
-                p.y < s_ptr->bbox[0].y ||
-                p.y > s_ptr->bbox[1].y
-            ) {
-                continue;
-            }
-            if(is_point_in_sector(p, s_ptr)) {
-                if(sector_nr) *sector_nr = s;
-                return s_ptr;
-            }
-            
-        }
-        
-        if(sector_nr) *sector_nr = INVALID;
-        return NULL;
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether or not an edge is valid.
- * An edge is valid if it has non-NULL vertexes.
- */
-bool is_edge_valid(edge* l) {
-    if(!l->vertexes[0]) return false;
-    if(!l->vertexes[1]) return false;
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a sector by checking its triangles.
- */
-bool is_point_in_sector(const point &p, sector* s_ptr) {
-    for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
-        triangle* t_ptr = &s_ptr->triangles[t];
-        if(
-            is_point_in_triangle(
-                p,
-                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
-                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
-                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
-                false
-            )
-        ) {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a polygon was created clockwise or anti-clockwise,
- * given the order of its vertexes.
- */
-bool is_polygon_clockwise(vector<vertex*> &vertexes) {
-    //Solution by http://stackoverflow.com/a/1165943
-    float sum = 0;
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        vertex* v_ptr = vertexes[v];
-        vertex* v2_ptr = get_next_in_vector(vertexes, v);
-        sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
-    }
-    return sum < 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a sector's vertexes are ordered clockwise or not.
- */
-bool is_sector_clockwise(sector* s_ptr) {
-    vector<vertex*> vertexes;
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        vertexes.push_back(s_ptr->edges[e]->vertexes[0]);
-    }
-    return is_polygon_clockwise(vertexes);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether this vertex is convex or not.
- */
-bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
-    const vertex* cur_v = vec[nr];
-    const vertex* prev_v = get_prev_in_vector(vec, nr);
-    const vertex* next_v = get_next_in_vector(vec, nr);
-    float angle_prev =
-        get_angle(
-            point(cur_v->x, cur_v->y),
-            point(prev_v->x, prev_v->y)
-        );
-    float angle_next =
-        get_angle(
-            point(cur_v->x, cur_v->y),
-            point(next_v->x, next_v->y)
-        );
-        
-    return get_angle_cw_dif(angle_prev, angle_next) < TAU / 2;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether this vertex is an ear or not.
- */
-bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
-) {
-    //A vertex is an ear if the triangle of it, the previous, and next vertexes
-    //does not contain any other vertex inside. Also, if it has vertexes inside,
-    //they mandatorily are concave, so only check those.
-    const vertex* v = vec[nr];
-    const vertex* pv = get_prev_in_vector(vec, nr);
-    const vertex* nv = get_next_in_vector(vec, nr);
-    
-    for(size_t c = 0; c < concaves.size(); ++c) {
-        const vertex* v_to_check = vec[concaves[c]];
-        if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
-        if(
-            is_point_in_triangle(
-                point(v_to_check->x, v_to_check->y),
-                point(pv->x, pv->y),
-                point(v->x, v->y),
-                point(nv->x, nv->y),
-                true
-            )
-        ) return false;
-    }
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a list of edges.
- */
-vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
-    vertex* rightmost = NULL;
-    
-    for(auto &e : edges) {
-        if(!rightmost) rightmost = e.first->vertexes[0];
-        
-        for(unsigned char v = 0; v < 2; ++v) {
-            rightmost = get_rightmost_vertex(e.first->vertexes[v], rightmost);
-        }
-    }
-    
-    return rightmost;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a polygon.
- */
-vertex* get_rightmost_vertex(polygon* p) {
-    vertex* rightmost = NULL;
-    
-    for(size_t v = 0; v < p->size(); ++v) {
-        vertex* v_ptr = p->at(v);
-        if(!rightmost) rightmost = v_ptr;
-        else {
-            rightmost = get_rightmost_vertex(v_ptr, rightmost);
-        }
-    }
-    
-    return rightmost;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a sector.
- */
-vertex* get_rightmost_vertex(sector* s) {
-    vertex* rightmost = NULL;
-    
-    for(size_t e = 0; e < s->edges.size(); ++e) {
-        edge* e_ptr = s->edges[e];
-        if(!rightmost) rightmost = e_ptr->vertexes[0];
-        else {
-            rightmost = get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
-            rightmost = get_rightmost_vertex(e_ptr->vertexes[1], rightmost);
-        }
-    }
-    
-    return rightmost;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right between the two.
- * In the case of a tie, the highest one is returned.
- * This is necessary because at one point, the rightmost
- * vertex was being decided kinda randomly.
- */
-vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
-    if(v1->x > v2->x) return v1;
-    if(v1->x == v2->x && v1->y < v2->y) return v1;
-    return v2;
 }
 
 
@@ -2595,6 +1985,616 @@ void get_cce(
             ears.push_back(convex_vertexes[c]);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns all vertexes that are close enough to be merged with
+ * the specified point, as well as their distances to said point.
+ * point:        Coordinates of the point.
+ * all_vertexes: Vector with all of the vertexes in the area.
+ * merge_radius: Minimum radius to merge. This does not take the camera zoom
+ *   level into account.
+ */
+vector<pair<dist, vertex*> > get_merge_vertexes(
+    const point &pos, vector<vertex*> &all_vertexes, const float merge_radius
+) {
+
+    vector<pair<dist, vertex*> > result;
+    for(size_t v = 0; v < all_vertexes.size(); ++v) {
+        vertex* v_ptr = all_vertexes[v];
+        
+        dist d(pos, point(v_ptr->x, v_ptr->y));
+        if(d <= merge_radius) {
+        
+            result.push_back(make_pair(d, v_ptr));
+        }
+    }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the shortest available path between two points, following
+ * the area's path graph.
+ * start:           Start coordinates.
+ * end:             End coordinates.
+ * obstacles_found: If there is no clear path, this points to all obstacles
+ *   found, so the mob can keep an eye for when they're open and try again.
+ * go_straight:     This is set according to whether it's better
+ *   to go straight to the end point.
+ * total_dist:      If not NULL, place the total path distance here.
+ */
+vector<path_stop*> get_path(
+    const point &start, const point &end,
+    unordered_set<mob*>* obstacles_found, bool* go_straight,
+    float* total_dist
+) {
+
+    vector<path_stop*> full_path;
+    
+    if(cur_area_data.path_stops.empty()) {
+        if(go_straight) *go_straight = true;
+        return full_path;
+    } else {
+        if(go_straight) *go_straight = false;
+    }
+    
+    //Start by finding the closest stops to the start and finish.
+    path_stop* closest_to_start = NULL;
+    path_stop* closest_to_end = NULL;
+    dist closest_to_start_dist;
+    dist closest_to_end_dist;
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        
+        dist dist_to_start(start, s_ptr->pos);
+        dist dist_to_end(end, s_ptr->pos);
+        
+        if(!closest_to_start || dist_to_start < closest_to_start_dist) {
+            closest_to_start_dist = dist_to_start;
+            closest_to_start = s_ptr;
+        }
+        if(!closest_to_end || dist_to_end < closest_to_end_dist) {
+            closest_to_end_dist = dist_to_end;
+            closest_to_end = s_ptr;
+        }
+    }
+    
+    //Let's just check something real quick:
+    //if the destination is closer than any stop,
+    //just go there right away!
+    dist start_to_end_dist = dist(start, end);
+    if(start_to_end_dist <= closest_to_start_dist) {
+        if(go_straight) *go_straight = true;
+        if(total_dist) {
+            *total_dist = start_to_end_dist.to_float();
+        }
+        return full_path;
+    }
+    
+    //If the start and destination share the same closest spot,
+    //that means this is the only stop in the path.
+    if(closest_to_start == closest_to_end) {
+        full_path.push_back(closest_to_start);
+        if(total_dist) {
+            *total_dist = closest_to_start_dist.to_float();
+            *total_dist += closest_to_end_dist.to_float();
+        }
+        return full_path;
+    }
+    
+    
+    //Calculate the path.
+    full_path =
+        dijkstra(
+            closest_to_start, closest_to_end, false, obstacles_found, total_dist
+        );
+        
+    if(total_dist && !full_path.empty()) {
+        *total_dist +=
+            dist(start, full_path[0]->pos).to_float();
+        *total_dist +=
+            dist(full_path[full_path.size() - 1]->pos, end).to_float();
+    }
+    
+    return full_path;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns what active obstacle stands in the way of these two stops, if any.
+ * If multiple ones do, it returns the closest.
+ */
+mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
+    mob* closest_obs = NULL;
+    dist closest_obs_dist;
+    
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* m_ptr = mobs[m];
+        if(!m_ptr->type->blocks_carrier_pikmin) continue;
+        
+        if(
+            m_ptr->health != 0 &&
+            circle_intersects_line(
+                m_ptr->pos,
+                m_ptr->type->radius,
+                s1->pos, s2->pos
+            )
+        ) {
+            dist d(s1->pos, m_ptr->pos);
+            if(!closest_obs || d < closest_obs_dist) {
+                closest_obs = m_ptr;
+                closest_obs_dist = d;
+            }
+        }
+    }
+    
+    return closest_obs;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the outer polygon and inner polygons of a sector,
+ * with the vertexes ordered counter-clockwise for the outer,
+ * and clockwise for the inner.
+ * s_ptr:              Pointer to the sector.
+ * outer:              Return the outer polygon here.
+ * inners:             Return the inner polygons here.
+ * lone_edges:         Return any lone edges found here.
+ * check_vertex_reuse: True if the algorithm is meant to check for vertexes
+ *   that get reused.
+ * Returns a number based on what happened. See TRIANGULATION_ERRORS.
+ */
+TRIANGULATION_ERRORS get_polys(
+    sector* s_ptr, polygon* outer, vector<polygon>* inners,
+    set<edge*>* lone_edges, const bool check_vertex_reuse
+) {
+    if(!s_ptr || !outer || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
+    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    
+    bool doing_outer = true;
+    
+    //First, compile a list of all edges related to this sector.
+    map<edge*, bool> edges_done;
+    
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edges_done[s_ptr->edges[e]] = false;
+    }
+    
+    //Now travel along the edges, vertex by vertex, until we have no more left.
+    while(!edges_done.empty()) {
+        bool poly_done = false;
+        
+        //Start with the rightmost vertex.
+        //If we still haven't closed the outer polygon, then this vertex
+        //mandatorily belongs to it. Otherwise, it belongs to an inner.
+        vertex* cur_vertex = get_rightmost_vertex(edges_done);
+        vertex* next_vertex = NULL;
+        vertex* prev_vertex = NULL;
+        edge* prev_edge = NULL;
+        
+        //At the start, assume the angle is left.
+        float prev_angle = TAU / 2;
+        
+        if(!doing_outer) {
+            inners->push_back(polygon());
+        }
+        
+        while(!poly_done) {
+        
+            float base_angle = prev_angle - TAU / 2; //The angle we came from.
+            
+            //For every edge attached to this vertex, find the closest one
+            //that hasn't been done, in the direction of travel.
+            
+            float best_angle_dif = 0;
+            edge* best_edge = NULL;
+            
+            for(size_t e = 0; e < cur_vertex->edges.size(); ++e) {
+                edge* e_ptr = cur_vertex->edges[e];
+                auto it = edges_done.find(e_ptr);
+                if(it == edges_done.end()) {
+                    //We're not meant to check this edge.
+                    continue;
+                }
+                
+                vertex* other_vertex =
+                    e_ptr->vertexes[0] == cur_vertex ?
+                    e_ptr->vertexes[1] :
+                    e_ptr->vertexes[0];
+                    
+                if(other_vertex == prev_vertex) {
+                    //This is where we came from.
+                    continue;
+                }
+                
+                //Find the angle between our vertex and this vertex.
+                float angle =
+                    get_angle(
+                        point(cur_vertex->x, cur_vertex->y),
+                        point(other_vertex->x, other_vertex->y)
+                    );
+                float angle_dif = get_angle_cw_dif(angle, base_angle);
+                
+                //For the outer poly, we're going counter-clockwise.
+                //So the lowest angle difference is best.
+                //For the inner ones, it's clockwise, so the highest.
+                if(
+                    !best_edge ||
+                    (doing_outer  && angle_dif < best_angle_dif) ||
+                    (!doing_outer && angle_dif > best_angle_dif)
+                ) {
+                    best_edge = e_ptr;
+                    best_angle_dif = angle_dif;
+                    prev_angle = angle;
+                    next_vertex = other_vertex;
+                }
+            }
+            
+            if(!best_edge) {
+            
+                //If there is no edge to go to next, something went wrong.
+                
+                //If this polygon is only one vertex, though, then
+                //that means it was a stray edge. Remove it.
+                //Otherwise, something just went wrong, and this is
+                //a non-simple sector.
+                poly_done = true;
+                if(!doing_outer && inners->back().size() == 1) {
+                    if(lone_edges) {
+                        lone_edges->insert(inners->back()[0]->edges[0]);
+                    }
+                    inners->erase(inners->begin() + inners->size() - 1);
+                } else {
+                    if(prev_edge) {
+                        lone_edges->insert(prev_edge);
+                    }
+                    result = TRIANGULATION_ERROR_LONE_EDGES;
+                }
+                
+            } else if(edges_done[best_edge]) {
+            
+                //If we already did this edge, that's it, polygon closed.
+                poly_done = true;
+                
+            } else {
+            
+                if(doing_outer) {
+                    outer->push_back(cur_vertex);
+                } else {
+                    inners->back().push_back(cur_vertex);
+                }
+                
+                //Continue onto the next edge.
+                prev_vertex = cur_vertex;
+                cur_vertex = next_vertex;
+                prev_edge = best_edge;
+                edges_done[best_edge] = true;
+                
+            }
+        }
+        
+        doing_outer = false;
+        
+        //Remove all edges that were done from the list.
+        auto it = edges_done.begin();
+        while(it != edges_done.end()) {
+            if(it->second) {
+                edges_done.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+    }
+    
+    //Before we quit, let's just check if the sector
+    //uses a vertex more than twice.
+    if(check_vertex_reuse) {
+        map<vertex*, size_t> vertex_count;
+        edge* e_ptr = NULL;
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
+            e_ptr = s_ptr->edges[e];
+            vertex_count[e_ptr->vertexes[0]]++;
+            vertex_count[e_ptr->vertexes[1]]++;
+        }
+        
+        for(auto &v : vertex_count) {
+            if(v.second > 2) {
+                //Unfortunately, it does...
+                //That means it's a non-simple sector.
+                //This likely caused an incorrect triangulation,
+                //so let's report it.
+                result = TRIANGULATION_ERROR_VERTEXES_REUSED;
+                break;
+            }
+        }
+    }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a list of edges.
+ */
+vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
+    vertex* rightmost = NULL;
+    
+    for(auto &e : edges) {
+        if(!rightmost) rightmost = e.first->vertexes[0];
+        
+        for(unsigned char v = 0; v < 2; ++v) {
+            rightmost = get_rightmost_vertex(e.first->vertexes[v], rightmost);
+        }
+    }
+    
+    return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a polygon.
+ */
+vertex* get_rightmost_vertex(polygon* p) {
+    vertex* rightmost = NULL;
+    
+    for(size_t v = 0; v < p->size(); ++v) {
+        vertex* v_ptr = p->at(v);
+        if(!rightmost) rightmost = v_ptr;
+        else {
+            rightmost = get_rightmost_vertex(v_ptr, rightmost);
+        }
+    }
+    
+    return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a sector.
+ */
+vertex* get_rightmost_vertex(sector* s) {
+    vertex* rightmost = NULL;
+    
+    for(size_t e = 0; e < s->edges.size(); ++e) {
+        edge* e_ptr = s->edges[e];
+        if(!rightmost) rightmost = e_ptr->vertexes[0];
+        else {
+            rightmost = get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
+            rightmost = get_rightmost_vertex(e_ptr->vertexes[1], rightmost);
+        }
+    }
+    
+    return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right between the two.
+ * In the case of a tie, the highest one is returned.
+ * This is necessary because at one point, the rightmost
+ * vertex was being decided kinda randomly.
+ */
+vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
+    if(v1->x > v2->x) return v1;
+    if(v1->x == v2->x && v1->y < v2->y) return v1;
+    return v2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which sector the specified point belongs to.
+ * p:            Coordinates of the point.
+ * sector_nr:    If not NULL, the number of the sector
+ *   on the area map is placed here.
+ *   The number will not be set if the search is using the blockmap.
+ * use_blockmap: If true, use the blockmap to search.
+ *   This provides faster results, but the blockmap must be built.
+ */
+sector* get_sector(
+    const point &p, size_t* sector_nr, const bool use_blockmap
+) {
+
+    if(use_blockmap) {
+    
+        size_t col = cur_area_data.bmap.get_col(p.x);
+        size_t row = cur_area_data.bmap.get_row(p.y);
+        if(col == INVALID || row == INVALID) return NULL;
+        
+        unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
+        
+        if(sectors->size() == 1) return *sectors->begin();
+        
+        for(auto s : (*sectors)) {
+        
+            if(!s) {
+                continue;
+            }
+            if(is_point_in_sector(p, s)) {
+                return s;
+            }
+        }
+        
+        return NULL;
+        
+    } else {
+    
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = cur_area_data.sectors[s];
+            
+            if(
+                p.x < s_ptr->bbox[0].x ||
+                p.x > s_ptr->bbox[1].x ||
+                p.y < s_ptr->bbox[0].y ||
+                p.y > s_ptr->bbox[1].y
+            ) {
+                continue;
+            }
+            if(is_point_in_sector(p, s_ptr)) {
+                if(sector_nr) *sector_nr = s;
+                return s_ptr;
+            }
+            
+        }
+        
+        if(sector_nr) *sector_nr = INVALID;
+        return NULL;
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Places the bounding box coordinates of a sector on the specified floats.
+ */
+void get_sector_bounding_box(
+    sector* s_ptr, point* min_coords, point* max_coords
+) {
+    if(!min_coords || !max_coords) return;
+    
+    if(s_ptr->edges.empty()) {
+        //Unused sector... This shouldn't exist.
+        *min_coords = point();
+        *max_coords = point();
+        return;
+    }
+    
+    min_coords->x = s_ptr->edges[0]->vertexes[0]->x;
+    max_coords->x = min_coords->x;
+    min_coords->y = s_ptr->edges[0]->vertexes[0]->y;
+    max_coords->y = min_coords->y;
+    
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        for(unsigned char v = 0; v < 2; ++v) {
+            point coords(
+                s_ptr->edges[e]->vertexes[v]->x,
+                s_ptr->edges[e]->vertexes[v]->y
+            );
+            
+            min_coords->x = min(min_coords->x, coords.x);
+            max_coords->x = max(max_coords->x, coords.x);
+            min_coords->y = min(min_coords->y, coords.y);
+            max_coords->y = max(max_coords->y, coords.y);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not an edge is valid.
+ * An edge is valid if it has non-NULL vertexes.
+ */
+bool is_edge_valid(edge* l) {
+    if(!l->vertexes[0]) return false;
+    if(!l->vertexes[1]) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a point is inside a sector by checking its triangles.
+ */
+bool is_point_in_sector(const point &p, sector* s_ptr) {
+    for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+        triangle* t_ptr = &s_ptr->triangles[t];
+        if(
+            is_point_in_triangle(
+                p,
+                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
+                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
+                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
+                false
+            )
+        ) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a polygon was created clockwise or anti-clockwise,
+ * given the order of its vertexes.
+ */
+bool is_polygon_clockwise(vector<vertex*> &vertexes) {
+    //Solution by http://stackoverflow.com/a/1165943
+    float sum = 0;
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        vertex* v2_ptr = get_next_in_vector(vertexes, v);
+        sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
+    }
+    return sum < 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a sector's vertexes are ordered clockwise or not.
+ */
+bool is_sector_clockwise(sector* s_ptr) {
+    vector<vertex*> vertexes;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        vertexes.push_back(s_ptr->edges[e]->vertexes[0]);
+    }
+    return is_polygon_clockwise(vertexes);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether this vertex is convex or not.
+ */
+bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
+    const vertex* cur_v = vec[nr];
+    const vertex* prev_v = get_prev_in_vector(vec, nr);
+    const vertex* next_v = get_next_in_vector(vec, nr);
+    float angle_prev =
+        get_angle(
+            point(cur_v->x, cur_v->y),
+            point(prev_v->x, prev_v->y)
+        );
+    float angle_next =
+        get_angle(
+            point(cur_v->x, cur_v->y),
+            point(next_v->x, next_v->y)
+        );
+        
+    return get_angle_cw_dif(angle_prev, angle_next) < TAU / 2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether this vertex is an ear or not.
+ */
+bool is_vertex_ear(
+    const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
+) {
+    //A vertex is an ear if the triangle of it, the previous, and next vertexes
+    //does not contain any other vertex inside. Also, if it has vertexes inside,
+    //they mandatorily are concave, so only check those.
+    const vertex* v = vec[nr];
+    const vertex* pv = get_prev_in_vector(vec, nr);
+    const vertex* nv = get_next_in_vector(vec, nr);
+    
+    for(size_t c = 0; c < concaves.size(); ++c) {
+        const vertex* v_to_check = vec[concaves[c]];
+        if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
+        if(
+            is_point_in_triangle(
+                point(v_to_check->x, v_to_check->y),
+                point(pv->x, pv->y),
+                point(v->x, v->y),
+                point(nv->x, nv->y),
+                true
+            )
+        ) return false;
+    }
+    
+    return true;
 }
 
 

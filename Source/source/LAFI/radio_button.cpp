@@ -42,6 +42,22 @@ radio_button::radio_button(
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys a radio button.
+ */
+radio_button::~radio_button() {
+
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the radio button. Because the radio button is
+ * consisted of a radio button button and a label, nothing
+ * is really drawn for the actual "radio button" widget.
+ */
+void radio_button::draw_self() { }
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the radio button. Creates a radio button button
  * and a label.
  */
@@ -67,14 +83,6 @@ void radio_button::init() {
             flags
         ));
     flags |= FLAG_WUM_NO_CHILDREN;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When the user clicks, this radio button is selected.
- */
-void radio_button::widget_on_left_mouse_click(const int, const int) {
-    select();
 }
 
 
@@ -107,11 +115,12 @@ void radio_button::unselect() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the radio button. Because the radio button is
- * consisted of a radio button button and a label, nothing
- * is really drawn for the actual "radio button" widget.
+ * When the user clicks, this radio button is selected.
  */
-void radio_button::draw_self() { }
+void radio_button::widget_on_left_mouse_click(const int, const int) {
+    select();
+}
+
 
 
 
@@ -161,13 +170,5 @@ void radio_button_button::draw_self() {
         al_draw_filled_circle(x1 + w / 2, y1 + h / 2, w * 0.25, get_fg_color());
     }
 }
-
-/* ----------------------------------------------------------------------------
- * Destroys a radio button.
- */
-radio_button::~radio_button() {
-
-}
-
 
 }

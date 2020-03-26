@@ -28,39 +28,17 @@ enemy_category::enemy_category() :
 }
 
 
+enemy_category::~enemy_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of enemy by name.
+ * Clears the list of registered types of enemy.
  */
-void enemy_category::get_type_names(vector<string> &list) {
+void enemy_category::clear_types() {
     for(auto &t : enemy_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of enemy given its name, or NULL on error.
- */
-mob_type* enemy_category::get_type(const string &name) {
-    auto it = enemy_types.find(name);
-    if(it == enemy_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of enemy.
- */
-mob_type* enemy_category::create_type() {
-    return new enemy_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of enemy.
- */
-void enemy_category::register_type(mob_type* type) {
-    enemy_types[type->name] = (enemy_type*) type;
+    enemy_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* enemy_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of enemy.
+ */
+mob_type* enemy_category::create_type() {
+    return new enemy_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears an enemy from the list of enemies.
  */
 void enemy_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void enemy_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of enemy.
+ * Returns a type of enemy given its name, or NULL on error.
  */
-void enemy_category::clear_types() {
-    for(auto &t : enemy_types) {
-        delete t.second;
-    }
-    enemy_types.clear();
+mob_type* enemy_category::get_type(const string &name) {
+    auto it = enemy_types.find(name);
+    if(it == enemy_types.end()) return NULL;
+    return it->second;
 }
 
 
-enemy_category::~enemy_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of enemy by name.
+ */
+void enemy_category::get_type_names(vector<string> &list) {
+    for(auto &t : enemy_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of enemy.
+ */
+void enemy_category::register_type(mob_type* type) {
+    enemy_types[type->name] = (enemy_type*) type;
+}

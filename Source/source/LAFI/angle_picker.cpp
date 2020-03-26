@@ -48,58 +48,35 @@ string angle_picker::angle_to_str(const float angle) {
 
 
 /* ----------------------------------------------------------------------------
- * Converts a string representation of an angle in degrees
- * to an angle in radians.
+ * Draws the circle and the pointer.
  */
-float angle_picker::str_to_angle(const string &s) {
-    return atof(s.c_str()) * M_PI / 180;
-}
-
-
-/* ----------------------------------------------------------------------------
- * On mouse down, check the angle to set it to, judging from the
- * position of the click in comparison to the center of
- * the circle.
- */
-void angle_picker::widget_on_mouse_down(
-    const int button, const int x, const int y
-) {
-    if(button != 1) return;
-    
+void angle_picker::draw_self() {
     float circle_r = (y2 - y1) / 2;
     float circle_cx = x1 + circle_r;
     float circle_cy = y1 + circle_r;
-    
-    if(x > x1 + circle_r * 2) return;
-    
-    set_angle_rads(atan2(y - circle_cy, x - circle_cx));
-    dragging_pointer = true;
+    al_draw_filled_circle(circle_cx, circle_cy, circle_r, get_bg_color());
+    al_draw_arc(
+        circle_cx, circle_cy, circle_r,
+        TAU / 4 + TAU / 8, TAU / 2, get_darker_bg_color(), 1
+    );
+    al_draw_arc(
+        circle_cx, circle_cy, circle_r,
+        TAU / 4 + TAU / 8 + TAU / 2, TAU / 2, get_lighter_bg_color(), 1
+    );
+    al_draw_line(
+        circle_cx, circle_cy,
+        circle_cx + cos(angle) * circle_r,
+        circle_cy + sin(angle) * circle_r,
+        get_fg_color(), 2
+    );
 }
 
 
 /* ----------------------------------------------------------------------------
- * On mouse up, just mark the fact that the user is not
- * dragging the pointer around.
+ * Returns the current angle, in radians.
  */
-void angle_picker::widget_on_mouse_up(const int, const int, const int) {
-    dragging_pointer = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * If the mouse moves while the button is held on it,
- * move the pointer about.
- */
-void angle_picker::widget_on_mouse_move(const int x, const int y) {
-    if(!dragging_pointer) return;
-    
-    float circle_r = (y2 - y1) / 2;
-    float circle_cx = x1 + circle_r;
-    float circle_cy = y1 + circle_r;
-    
-    if(x > x1 + circle_r * 2) return;
-    
-    set_angle_rads(atan2(y - circle_cy, x - circle_cx));
+float angle_picker::get_angle_rads() {
+    return angle;
 }
 
 
@@ -127,31 +104,6 @@ void angle_picker::init() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the circle and the pointer.
- */
-void angle_picker::draw_self() {
-    float circle_r = (y2 - y1) / 2;
-    float circle_cx = x1 + circle_r;
-    float circle_cy = y1 + circle_r;
-    al_draw_filled_circle(circle_cx, circle_cy, circle_r, get_bg_color());
-    al_draw_arc(
-        circle_cx, circle_cy, circle_r,
-        TAU / 4 + TAU / 8, TAU / 2, get_darker_bg_color(), 1
-    );
-    al_draw_arc(
-        circle_cx, circle_cy, circle_r,
-        TAU / 4 + TAU / 8 + TAU / 2, TAU / 2, get_lighter_bg_color(), 1
-    );
-    al_draw_line(
-        circle_cx, circle_cy,
-        circle_cx + cos(angle) * circle_r,
-        circle_cy + sin(angle) * circle_r,
-        get_fg_color(), 2
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Sets the widget's angle to a value (in radians), updating both
  * the textbox and the circle's pointer.
  */
@@ -162,10 +114,11 @@ void angle_picker::set_angle_rads(const float a) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the current angle, in radians.
+ * Converts a string representation of an angle in degrees
+ * to an angle in radians.
  */
-float angle_picker::get_angle_rads() {
-    return angle;
+float angle_picker::str_to_angle(const string &s) {
+    return atof(s.c_str()) * M_PI / 180;
 }
 
 
@@ -178,6 +131,53 @@ void angle_picker::textbox_lose_focus_handler(widget* w) {
         str_to_angle(((textbox*) w)->text)
     );
     w->parent->call_lose_focus_handler();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * On mouse down, check the angle to set it to, judging from the
+ * position of the click in comparison to the center of
+ * the circle.
+ */
+void angle_picker::widget_on_mouse_down(
+    const int button, const int x, const int y
+) {
+    if(button != 1) return;
+    
+    float circle_r = (y2 - y1) / 2;
+    float circle_cx = x1 + circle_r;
+    float circle_cy = y1 + circle_r;
+    
+    if(x > x1 + circle_r * 2) return;
+    
+    set_angle_rads(atan2(y - circle_cy, x - circle_cx));
+    dragging_pointer = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * If the mouse moves while the button is held on it,
+ * move the pointer about.
+ */
+void angle_picker::widget_on_mouse_move(const int x, const int y) {
+    if(!dragging_pointer) return;
+    
+    float circle_r = (y2 - y1) / 2;
+    float circle_cx = x1 + circle_r;
+    float circle_cy = y1 + circle_r;
+    
+    if(x > x1 + circle_r * 2) return;
+    
+    set_angle_rads(atan2(y - circle_cy, x - circle_cx));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * On mouse up, just mark the fact that the user is not
+ * dragging the pointer around.
+ */
+void angle_picker::widget_on_mouse_up(const int, const int, const int) {
+    dragging_pointer = false;
 }
 
 

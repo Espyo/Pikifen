@@ -28,39 +28,17 @@ pile_category::pile_category() :
 }
 
 
+pile_category::~pile_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of pile by name.
+ * Clears the list of registered types of pile.
  */
-void pile_category::get_type_names(vector<string> &list) {
+void pile_category::clear_types() {
     for(auto &t : pile_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of pile given its name, or NULL on error.
- */
-mob_type* pile_category::get_type(const string &name) {
-    auto it = pile_types.find(name);
-    if(it == pile_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of pile.
- */
-mob_type* pile_category::create_type() {
-    return new pile_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of pile.
- */
-void pile_category::register_type(mob_type* type) {
-    pile_types[type->name] = (pile_type*) type;
+    pile_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* pile_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of pile.
+ */
+mob_type* pile_category::create_type() {
+    return new pile_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a pile from the list of piles.
  */
 void pile_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void pile_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of pile.
+ * Returns a type of pile given its name, or NULL on error.
  */
-void pile_category::clear_types() {
-    for(auto &t : pile_types) {
-        delete t.second;
-    }
-    pile_types.clear();
+mob_type* pile_category::get_type(const string &name) {
+    auto it = pile_types.find(name);
+    if(it == pile_types.end()) return NULL;
+    return it->second;
 }
 
 
-pile_category::~pile_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of pile by name.
+ */
+void pile_category::get_type_names(vector<string> &list) {
+    for(auto &t : pile_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of pile.
+ */
+void pile_category::register_type(mob_type* type) {
+    pile_types[type->name] = (pile_type*) type;
+}

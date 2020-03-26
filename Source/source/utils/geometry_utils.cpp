@@ -16,6 +16,98 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new distance number, given two points.
+ */
+dist::dist(const point &p1, const point &p2) :
+    distance_squared(
+        (p2.x - p1.x) * (p2.x - p1.x) +
+        (p2.y - p1.y) * (p2.y - p1.y)
+    ),
+    normal_distance(0),
+    has_normal_distance(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new distance number, given a non-squared distance.
+ */
+dist::dist(const float d) :
+    distance_squared(d * d),
+    normal_distance(d),
+    has_normal_distance(true) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Distance comparisons and plain operations.
+ */
+dist &dist::operator =(const float d) {
+    distance_squared = d * d;
+    normal_distance = d;
+    has_normal_distance = true;
+    return *this;
+}
+bool dist::operator<(const float d2) {
+    return distance_squared < (d2 * d2);
+}
+bool dist::operator>(const float d2) {
+    return distance_squared > (d2 * d2);
+}
+bool dist::operator==(const float d2) {
+    return distance_squared == (d2 * d2);
+}
+bool dist::operator<=(const float d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const float d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const float d2) {
+    return !operator==(d2);
+}
+bool dist::operator<(const dist &d2) {
+    return distance_squared < d2.distance_squared;
+}
+bool dist::operator>(const dist &d2) {
+    return distance_squared > d2.distance_squared;
+}
+bool dist::operator==(const dist &d2) {
+    return distance_squared == d2.distance_squared;
+}
+bool dist::operator<=(const dist &d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const dist &d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const dist &d2) {
+    return !operator==(d2);
+}
+void dist::operator+=(const dist &d2) {
+    distance_squared += d2.distance_squared;
+    if(has_normal_distance && d2.has_normal_distance) {
+        normal_distance += d2.normal_distance;
+    } else {
+        has_normal_distance = false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the regular distance as a number.
+ */
+float dist::to_float() {
+    if(!has_normal_distance) {
+        normal_distance = sqrt(distance_squared);
+        has_normal_distance = true;
+    }
+    return normal_distance;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Constructs a point, given its coordinates.
  */
 point::point(const float x, const float y) :
@@ -152,99 +244,6 @@ const bool point::operator !=(const point &p) const {
  */
 const point point::operator *(const float m) const {
     return point(x * m, y * m);
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new distance number, given two points.
- */
-dist::dist(const point &p1, const point &p2) :
-    distance_squared(
-        (p2.x - p1.x) * (p2.x - p1.x) +
-        (p2.y - p1.y) * (p2.y - p1.y)
-    ),
-    normal_distance(0),
-    has_normal_distance(false) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new distance number, given a non-squared distance.
- */
-dist::dist(const float d) :
-    distance_squared(d * d),
-    normal_distance(d),
-    has_normal_distance(true) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the regular distance as a number.
- */
-float dist::to_float() {
-    if(!has_normal_distance) {
-        normal_distance = sqrt(distance_squared);
-        has_normal_distance = true;
-    }
-    return normal_distance;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Distance comparisons and plain operations.
- */
-dist &dist::operator =(const float d) {
-    distance_squared = d * d;
-    normal_distance = d;
-    has_normal_distance = true;
-    return *this;
-}
-bool dist::operator<(const float d2) {
-    return distance_squared < (d2 * d2);
-}
-bool dist::operator>(const float d2) {
-    return distance_squared > (d2 * d2);
-}
-bool dist::operator==(const float d2) {
-    return distance_squared == (d2 * d2);
-}
-bool dist::operator<=(const float d2) {
-    return !operator>(d2);
-}
-bool dist::operator>=(const float d2) {
-    return !operator<(d2);
-}
-bool dist::operator!=(const float d2) {
-    return !operator==(d2);
-}
-bool dist::operator<(const dist &d2) {
-    return distance_squared < d2.distance_squared;
-}
-bool dist::operator>(const dist &d2) {
-    return distance_squared > d2.distance_squared;
-}
-bool dist::operator==(const dist &d2) {
-    return distance_squared == d2.distance_squared;
-}
-bool dist::operator<=(const dist &d2) {
-    return !operator>(d2);
-}
-bool dist::operator>=(const dist &d2) {
-    return !operator<(d2);
-}
-bool dist::operator!=(const dist &d2) {
-    return !operator==(d2);
-}
-void dist::operator+=(const dist &d2) {
-    distance_squared += d2.distance_squared;
-    if(has_normal_distance && d2.has_normal_distance) {
-        normal_distance += d2.normal_distance;
-    } else {
-        has_normal_distance = false;
-    }
 }
 
 

@@ -16,6 +16,11 @@
 
 #include "string_utils.h"
 
+
+//Converts a boolean to a string, returning either "true" or "false".
+string b2s(const bool b) { return b ? "true" : "false"; }
+
+
 /* ----------------------------------------------------------------------------
  * Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
@@ -32,10 +37,6 @@ string box_string(const string &s, const size_t size, const string &finisher) {
         finisher +
         string(size - core_size - finisher.size(), ' ');
 }
-
-
-//Converts a boolean to a string, returning either "true" or "false".
-string b2s(const bool b) { return b ? "true" : "false"; }
 
 
 //Converts a float to a string, with 4 decimal places.

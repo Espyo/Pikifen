@@ -43,6 +43,31 @@ leader_type::leader_type() :
 }
 
 
+leader_type::~leader_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector leader_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(LEADER_ANIM_IDLING,       "idling"));
+    v.push_back(make_pair(LEADER_ANIM_WALKING,      "walking"));
+    v.push_back(make_pair(LEADER_ANIM_PLUCKING,     "plucking"));
+    v.push_back(make_pair(LEADER_ANIM_GETTING_UP,   "getting_up"));
+    v.push_back(make_pair(LEADER_ANIM_DISMISSING,   "dismissing"));
+    v.push_back(make_pair(LEADER_ANIM_THROWING,     "throwing"));
+    v.push_back(make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
+    v.push_back(make_pair(LEADER_ANIM_PUNCHING,     "punching"));
+    v.push_back(make_pair(LEADER_ANIM_LYING,        "lying"));
+    v.push_back(make_pair(LEADER_ANIM_PAIN,         "pain"));
+    v.push_back(make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
+    v.push_back(make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
+    v.push_back(make_pair(LEADER_ANIM_DRINKING,     "drinking"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -80,28 +105,6 @@ void leader_type::load_resources(data_node* file) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector leader_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(LEADER_ANIM_IDLING,       "idling"));
-    v.push_back(make_pair(LEADER_ANIM_WALKING,      "walking"));
-    v.push_back(make_pair(LEADER_ANIM_PLUCKING,     "plucking"));
-    v.push_back(make_pair(LEADER_ANIM_GETTING_UP,   "getting_up"));
-    v.push_back(make_pair(LEADER_ANIM_DISMISSING,   "dismissing"));
-    v.push_back(make_pair(LEADER_ANIM_THROWING,     "throwing"));
-    v.push_back(make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
-    v.push_back(make_pair(LEADER_ANIM_PUNCHING,     "punching"));
-    v.push_back(make_pair(LEADER_ANIM_LYING,        "lying"));
-    v.push_back(make_pair(LEADER_ANIM_PAIN,         "pain"));
-    v.push_back(make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
-    v.push_back(make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
-    v.push_back(make_pair(LEADER_ANIM_DRINKING,     "drinking"));
-    return v;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads resources from memory.
  */
 void leader_type::unload_resources() {
@@ -113,6 +116,3 @@ void leader_type::unload_resources() {
     sfx_name_call.destroy();
     sfx_whistle.destroy();
 }
-
-
-leader_type::~leader_type() { }

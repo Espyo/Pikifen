@@ -82,6 +82,12 @@ textbox::~textbox() {}
 
 
 /* ----------------------------------------------------------------------------
+ * Calls the function that handles a change of the text.
+ */
+void textbox::call_change_handler() { if(change_handler) change_handler(this); }
+
+
+/* ----------------------------------------------------------------------------
  * Draws the textbox. It's basically a rectangle with a border.
  * The border is drawn line by line. Finally, it draws the
  * text within.
@@ -148,9 +154,22 @@ void textbox::draw_self() {
 
 
 /* ----------------------------------------------------------------------------
- * Calls the function that handles a change of the text.
+ * Returns the number of the position the caret should go at,
+ * when the mouse is clicked on the given X coordinate.
+ * Takes into account text scroll, widget position, etc.
  */
-void textbox::call_change_handler() { if(change_handler) change_handler(this); }
+unsigned int textbox::mouse_to_char(const int mouse_x) {
+    //Get the relative X, from the start of the text.
+    int rel_x = mouse_x - x1 + scroll_x;
+    for(size_t c = 0; c < text.size(); ++c) {
+        int width =
+            al_get_text_width(style->text_font, text.substr(0, c + 1).c_str());
+        if(rel_x < width) {
+            return c;
+        }
+    }
+    return text.size();
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -393,25 +412,6 @@ void textbox::widget_on_tick(const float time) {
         cursor_change_time_left = CURSOR_CHANGE_INTERVAL;
         cursor_visible = !cursor_visible;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the number of the position the caret should go at,
- * when the mouse is clicked on the given X coordinate.
- * Takes into account text scroll, widget position, etc.
- */
-unsigned int textbox::mouse_to_char(const int mouse_x) {
-    //Get the relative X, from the start of the text.
-    int rel_x = mouse_x - x1 + scroll_x;
-    for(size_t c = 0; c < text.size(); ++c) {
-        int width =
-            al_get_text_width(style->text_font, text.substr(0, c + 1).c_str());
-        if(rel_x < width) {
-            return c;
-        }
-    }
-    return text.size();
 }
 
 }

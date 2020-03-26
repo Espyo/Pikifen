@@ -413,9 +413,9 @@ bool is_edge_valid(edge* l);
 bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
 bool is_sector_clockwise(sector* s_ptr);
-bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
+bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr);
 bool is_vertex_ear(
-    const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr
+    const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
 );
 bool is_point_in_sector(const point &p, sector* s_ptr);
 TRIANGULATION_ERRORS triangulate(

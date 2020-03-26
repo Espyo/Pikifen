@@ -28,39 +28,17 @@ group_task_category::group_task_category() :
 }
 
 
+group_task_category::~group_task_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of group tasks by name.
+ * Clears the list of registered types of group tasks.
  */
-void group_task_category::get_type_names(vector<string> &list) {
+void group_task_category::clear_types() {
     for(auto &t : group_task_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of group task given its name, or NULL on error.
- */
-mob_type* group_task_category::get_type(const string &name) {
-    auto it = group_task_types.find(name);
-    if(it == group_task_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of group task.
- */
-mob_type* group_task_category::create_type() {
-    return new group_task_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of group task.
- */
-void group_task_category::register_type(mob_type* type) {
-    group_task_types[type->name] = (group_task_type*) type;
+    group_task_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* group_task_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of group task.
+ */
+mob_type* group_task_category::create_type() {
+    return new group_task_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a group task from the list of group task.
  */
 void group_task_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void group_task_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of group tasks.
+ * Returns a type of group task given its name, or NULL on error.
  */
-void group_task_category::clear_types() {
-    for(auto &t : group_task_types) {
-        delete t.second;
-    }
-    group_task_types.clear();
+mob_type* group_task_category::get_type(const string &name) {
+    auto it = group_task_types.find(name);
+    if(it == group_task_types.end()) return NULL;
+    return it->second;
 }
 
 
-group_task_category::~group_task_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of group tasks by name.
+ */
+void group_task_category::get_type_names(vector<string> &list) {
+    for(auto &t : group_task_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of group task.
+ */
+void group_task_category::register_type(mob_type* type) {
+    group_task_types[type->name] = (group_task_type*) type;
+}

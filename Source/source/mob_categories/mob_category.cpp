@@ -39,48 +39,13 @@ mob_category::~mob_category() { }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a "none" category.
+ * Clears the list of registered categories, freeing memory.
  */
-none_category::none_category() :
-    mob_category(
-        MOB_CATEGORY_NONE, "None", "None",
-        "", al_map_rgb(255, 0, 0)
-    ) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Dummies.
- */
-void none_category::get_type_names(vector<string> &list) { }
-mob_type* none_category::get_type(const string &name) { return NULL; }
-mob_type* none_category::create_type() { return NULL; }
-void none_category::register_type(mob_type* type) { }
-mob* none_category::create_mob(
-    const point &pos, mob_type* type, const float angle
-) { return NULL; }
-void none_category::erase_mob(mob* m) { }
-void none_category::clear_types() { }
-none_category::~none_category() { }
-
-
-
-/* ----------------------------------------------------------------------------
- * Registers a new mob category.
- */
-void mob_category_manager::register_category(
-    size_t nr,
-    mob_category* category
-) {
-    if(nr >= categories.size()) {
-        categories.insert(
-            categories.end(),
-            (nr + 1) - categories.size(),
-            NULL
-        );
+void mob_category_manager::clear() {
+    for(size_t c = 0; c < categories.size(); ++c) {
+        delete categories[c];
     }
-    categories[nr] = category;
+    categories.clear();
 }
 
 
@@ -165,11 +130,45 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered categories, freeing memory.
+ * Registers a new mob category.
  */
-void mob_category_manager::clear() {
-    for(size_t c = 0; c < categories.size(); ++c) {
-        delete categories[c];
+void mob_category_manager::register_category(
+    size_t nr,
+    mob_category* category
+) {
+    if(nr >= categories.size()) {
+        categories.insert(
+            categories.end(),
+            (nr + 1) - categories.size(),
+            NULL
+        );
     }
-    categories.clear();
+    categories[nr] = category;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a "none" category.
+ */
+none_category::none_category() :
+    mob_category(
+        MOB_CATEGORY_NONE, "None", "None",
+        "", al_map_rgb(255, 0, 0)
+    ) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Dummies.
+ */
+none_category::~none_category() { }
+void none_category::clear_types() { }
+mob* none_category::create_mob(
+    const point &pos, mob_type* type, const float angle
+) { return NULL; }
+mob_type* none_category::create_type() { return NULL; }
+void none_category::erase_mob(mob* m) { }
+mob_type* none_category::get_type(const string &name) { return NULL; }
+void none_category::get_type_names(vector<string> &list) { }
+void none_category::register_type(mob_type* type) { }

@@ -28,39 +28,17 @@ leader_category::leader_category() :
 }
 
 
+leader_category::~leader_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of leader by name.
+ * Clears the list of registered types of leader.
  */
-void leader_category::get_type_names(vector<string> &list) {
+void leader_category::clear_types() {
     for(auto &t : leader_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of leader given its name, or NULL on error.
- */
-mob_type* leader_category::get_type(const string &name) {
-    auto it = leader_types.find(name);
-    if(it == leader_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of leader.
- */
-mob_type* leader_category::create_type() {
-    return new leader_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of leader.
- */
-void leader_category::register_type(mob_type* type) {
-    leader_types[type->name] = (leader_type*) type;
+    leader_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* leader_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of leader.
+ */
+mob_type* leader_category::create_type() {
+    return new leader_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a leader from the list of leaders.
  */
 void leader_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void leader_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of leader.
+ * Returns a type of leader given its name, or NULL on error.
  */
-void leader_category::clear_types() {
-    for(auto &t : leader_types) {
-        delete t.second;
-    }
-    leader_types.clear();
+mob_type* leader_category::get_type(const string &name) {
+    auto it = leader_types.find(name);
+    if(it == leader_types.end()) return NULL;
+    return it->second;
 }
 
 
-leader_category::~leader_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of leader by name.
+ */
+void leader_category::get_type_names(vector<string> &list) {
+    for(auto &t : leader_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of leader.
+ */
+void leader_category::register_type(mob_type* type) {
+    leader_types[type->name] = (leader_type*) type;
+}

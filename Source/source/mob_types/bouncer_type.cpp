@@ -30,7 +30,19 @@ bouncer_type::bouncer_type() :
     bouncer_fsm::create_fsm(this);
 }
 
+
 bouncer_type::~bouncer_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector bouncer_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(BOUNCER_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(BOUNCER_ANIM_BOUNCING, "bouncing"));
+    return v;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -77,15 +89,4 @@ void bouncer_type::load_properties(data_node* file) {
         }
     }
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector bouncer_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(BOUNCER_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(BOUNCER_ANIM_BOUNCING, "bouncing"));
-    return v;
 }

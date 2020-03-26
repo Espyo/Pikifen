@@ -29,6 +29,9 @@ treasure_type::treasure_type() :
 }
 
 
+treasure_type::~treasure_type() { }
+
+
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */
@@ -37,6 +40,3 @@ anim_conversion_vector treasure_type::get_anim_conversions() {
     v.push_back(make_pair(ANIM_IDLING, "idling"));
     return v;
 }
-
-
-treasure_type::~treasure_type() { }

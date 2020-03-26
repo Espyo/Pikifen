@@ -19,7 +19,7 @@ style::style(
     darker_disabled_bg_color(darken_color(disabled_bg_color)),
     disabled_fg_color(lighten_color(fg_color)),
     disabled_alt_color(darken_color(alt_color)),
-    text_font(text_font){
+    text_font(text_font) {
     
 }
 
@@ -50,6 +50,23 @@ style::~style() { }
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a color that's darker than the given color.
+ */
+ALLEGRO_COLOR style::darken_color(const ALLEGRO_COLOR color) {
+    float indexes[4] = {
+        static_cast<float>(color.r - COLOR_SHIFT_DELTA),
+        static_cast<float>(color.g - COLOR_SHIFT_DELTA),
+        static_cast<float>(color.b - COLOR_SHIFT_DELTA),
+        color.a
+    };
+    
+    for(unsigned char i = 0; i < 3; ++i) if(indexes[i] < 0) indexes[i] = 0;
+    
+    return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a color that's ligther than the given color.
  */
 ALLEGRO_COLOR style::lighten_color(const ALLEGRO_COLOR color) {
@@ -65,21 +82,5 @@ ALLEGRO_COLOR style::lighten_color(const ALLEGRO_COLOR color) {
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }
 
-
-/* ----------------------------------------------------------------------------
- * Returns a color that's darker than the given color.
- */
-ALLEGRO_COLOR style::darken_color(const ALLEGRO_COLOR color) {
-    float indexes[4] = {
-        static_cast<float>(color.r - COLOR_SHIFT_DELTA),
-        static_cast<float>(color.g - COLOR_SHIFT_DELTA),
-        static_cast<float>(color.b - COLOR_SHIFT_DELTA),
-        color.a
-    };
-    
-    for(unsigned char i = 0; i < 3; ++i) if(indexes[i] < 0) indexes[i] = 0;
-    
-    return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
-}
 
 }

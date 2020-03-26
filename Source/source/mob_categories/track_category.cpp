@@ -28,39 +28,17 @@ track_category::track_category() :
 }
 
 
+track_category::~track_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of track by name.
+ * Clears the list of registered types of tracks.
  */
-void track_category::get_type_names(vector<string> &list) {
+void track_category::clear_types() {
     for(auto &t : track_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of track given its name, or NULL on error.
- */
-mob_type* track_category::get_type(const string &name) {
-    auto it = track_types.find(name);
-    if(it == track_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of track.
- */
-mob_type* track_category::create_type() {
-    return new track_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of track.
- */
-void track_category::register_type(mob_type* type) {
-    track_types[type->name] = (track_type*) type;
+    track_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* track_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of track.
+ */
+mob_type* track_category::create_type() {
+    return new track_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a track from the list of tracks.
  */
 void track_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void track_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of tracks.
+ * Returns a type of track given its name, or NULL on error.
  */
-void track_category::clear_types() {
-    for(auto &t : track_types) {
-        delete t.second;
-    }
-    track_types.clear();
+mob_type* track_category::get_type(const string &name) {
+    auto it = track_types.find(name);
+    if(it == track_types.end()) return NULL;
+    return it->second;
 }
 
 
-track_category::~track_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of track by name.
+ */
+void track_category::get_type_names(vector<string> &list) {
+    for(auto &t : track_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of track.
+ */
+void track_category::register_type(mob_type* type) {
+    track_types[type->name] = (track_type*) type;
+}

@@ -28,39 +28,17 @@ bouncer_category::bouncer_category() :
 }
 
 
+bouncer_category::~bouncer_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of bouncer by name.
+ * Clears the list of registered types of bouncers.
  */
-void bouncer_category::get_type_names(vector<string> &list) {
+void bouncer_category::clear_types() {
     for(auto &t : bouncer_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of bouncer given its name, or NULL on error.
- */
-mob_type* bouncer_category::get_type(const string &name) {
-    auto it = bouncer_types.find(name);
-    if(it == bouncer_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of bouncer.
- */
-mob_type* bouncer_category::create_type() {
-    return new bouncer_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of bouncer.
- */
-void bouncer_category::register_type(mob_type* type) {
-    bouncer_types[type->name] = (bouncer_type*) type;
+    bouncer_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* bouncer_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of bouncer.
+ */
+mob_type* bouncer_category::create_type() {
+    return new bouncer_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a bouncer from the list of bouncers.
  */
 void bouncer_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void bouncer_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of bouncers.
+ * Returns a type of bouncer given its name, or NULL on error.
  */
-void bouncer_category::clear_types() {
-    for(auto &t : bouncer_types) {
-        delete t.second;
-    }
-    bouncer_types.clear();
+mob_type* bouncer_category::get_type(const string &name) {
+    auto it = bouncer_types.find(name);
+    if(it == bouncer_types.end()) return NULL;
+    return it->second;
 }
 
 
-bouncer_category::~bouncer_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of bouncer by name.
+ */
+void bouncer_category::get_type_names(vector<string> &list) {
+    for(auto &t : bouncer_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of bouncer.
+ */
+void bouncer_category::register_type(mob_type* type) {
+    bouncer_types[type->name] = (bouncer_type*) type;
+}

@@ -24,70 +24,6 @@ const float menu_widget::JUICY_GROW_DELTA = 0.05f;
 const float menu_widget::JUICY_GROW_DURATION = 0.3f;
 
 /* ----------------------------------------------------------------------------
- * Creates a menu widget.
- */
-menu_widget::menu_widget(
-    const point &center, const point &size,
-    const function<void()> &click_handler
-) :
-    juicy_grow_time_left(0),
-    center(center),
-    size(size),
-    click_handler(click_handler),
-    selected(false),
-    enabled(true) {
-    
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether or not the mouse cursor is on top of this widget.
- */
-bool menu_widget::mouse_on(const point &mc) {
-    return
-        (
-            mc.x >= center.x - size.x * 0.5 &&
-            mc.x <= center.x + size.x * 0.5 &&
-            mc.y >= center.y - size.y * 0.5 &&
-            mc.y <= center.y + size.y * 0.5
-        );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Runs the widget's "click" code, used when the player clicks on the widget,
- * if possible.
- */
-void menu_widget::click() {
-    if(!enabled) return;
-    on_click();
-    if(click_handler) click_handler();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks an in-game frame worth of logic.
- */
-void menu_widget::tick(const float time) {
-    if(juicy_grow_time_left > 0) {
-        juicy_grow_time_left = max(0.0f, juicy_grow_time_left - time);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Begins the growth animation process.
- */
-void menu_widget::start_juicy_grow() {
-    juicy_grow_time_left = JUICY_GROW_DURATION;
-}
-
-
-menu_widget::~menu_widget() { }
-
-
-/* ----------------------------------------------------------------------------
  * Creates a clickable button widget.
  */
 menu_button::menu_button(
@@ -103,6 +39,10 @@ menu_button::menu_button(
     
     
 }
+
+
+menu_button::~menu_button() { }
+
 
 /* ----------------------------------------------------------------------------
  * Draws a button widget.
@@ -144,9 +84,8 @@ void menu_button::draw(const float time_spent) {
 }
 
 
-void menu_button::on_click() { }
 bool menu_button::is_clickable() { return enabled; }
-menu_button::~menu_button() { }
+void menu_button::on_click() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -166,6 +105,9 @@ menu_checkbox::menu_checkbox(
     
     
 }
+
+
+menu_checkbox::~menu_checkbox() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -215,9 +157,8 @@ void menu_checkbox::draw(const float time_spent) {
 }
 
 
-void menu_checkbox::on_click() { checked = !checked; }
 bool menu_checkbox::is_clickable() { return enabled; }
-menu_checkbox::~menu_checkbox() { }
+void menu_checkbox::on_click() { checked = !checked; }
 
 
 /* ----------------------------------------------------------------------------
@@ -235,6 +176,9 @@ menu_text::menu_text(
     
     
 }
+
+
+menu_text::~menu_text() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -265,6 +209,69 @@ void menu_text::draw(const float time_spent) {
 }
 
 
-void menu_text::on_click() { }
 bool menu_text::is_clickable() { return false; }
-menu_text::~menu_text() { }
+void menu_text::on_click() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a menu widget.
+ */
+menu_widget::menu_widget(
+    const point &center, const point &size,
+    const function<void()> &click_handler
+) :
+    juicy_grow_time_left(0),
+    center(center),
+    size(size),
+    click_handler(click_handler),
+    selected(false),
+    enabled(true) {
+    
+    
+}
+
+
+menu_widget::~menu_widget() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Runs the widget's "click" code, used when the player clicks on the widget,
+ * if possible.
+ */
+void menu_widget::click() {
+    if(!enabled) return;
+    on_click();
+    if(click_handler) click_handler();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not the mouse cursor is on top of this widget.
+ */
+bool menu_widget::mouse_on(const point &mc) {
+    return
+        (
+            mc.x >= center.x - size.x * 0.5 &&
+            mc.x <= center.x + size.x * 0.5 &&
+            mc.y >= center.y - size.y * 0.5 &&
+            mc.y <= center.y + size.y * 0.5
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Begins the growth animation process.
+ */
+void menu_widget::start_juicy_grow() {
+    juicy_grow_time_left = JUICY_GROW_DURATION;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks an in-game frame worth of logic.
+ */
+void menu_widget::tick(const float time) {
+    if(juicy_grow_time_left > 0) {
+        juicy_grow_time_left = max(0.0f, juicy_grow_time_left - time);
+    }
+}

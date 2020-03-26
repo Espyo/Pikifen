@@ -22,6 +22,323 @@
 using namespace std;
 
 /* ----------------------------------------------------------------------------
+ * Creates an animation.
+ * name:       Name, should be unique.
+ * frames:     List of frame instances.
+ * loop_frame: Loop frame number.
+ */
+animation::animation(
+    const string &name, const vector<frame> &frames,
+    const size_t loop_frame, const unsigned char hit_rate
+) :
+    name(name),
+    frames(frames),
+    loop_frame(loop_frame),
+    hit_rate(hit_rate) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an animation by copying info from another animation.
+ */
+animation::animation(const animation &a2) :
+    name(a2.name),
+    frames(a2.frames),
+    loop_frame(a2.loop_frame),
+    hit_rate(a2.hit_rate) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an animation database.
+ */
+animation_database::animation_database(
+    const vector<animation*> &a, const vector<sprite*> &s,
+    const vector<body_part*> &b
+) :
+    animations(a),
+    sprites(s),
+    body_parts(b) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Enemies and such have a regular list of animations.
+ * The only way to change these animations is through the script.
+ * So animation control is done entirely through game data.
+ * However, the animations for Pikmin, leaders, etc. are pre-named.
+ * e.g.: The game wants there to be an "idle" animation,
+ * a "walk" animation, etc.
+ * Because we are NOT looking up with strings, if we want more than 20FPS,
+ * we need a way to convert from a numeric ID
+ * (one that stands for walking, one for idling, etc.)
+ * into the corresponding number on the animation file.
+ * This is where this comes in.
+ *
+ * conversions: A vector of size_t and strings.
+ *   The size_t is the hardcoded ID (probably in some constant or enum).
+ *   The string is the name of the animation in the animation file.
+ * file:        File from where these animations were loaded. Used to
+ *   report errors.
+ */
+void animation_database::create_conversions(
+    vector<pair<size_t, string> > conversions, data_node* file
+) {
+    pre_named_conversions.clear();
+    
+    if(conversions.empty()) return;
+    
+    //First, find the highest number.
+    size_t highest = conversions[0].first;
+    for(size_t c = 1; c < conversions.size(); ++c) {
+        highest = max(highest, conversions[c].first);
+    }
+    
+    pre_named_conversions.assign(highest + 1, INVALID);
+    
+    for(size_t c = 0; c < conversions.size(); ++c) {
+        size_t a_pos = find_animation(conversions[c].second);
+        pre_named_conversions[conversions[c].first] = a_pos;
+        if(a_pos == INVALID) {
+            log_error(
+                "Animation \"" + conversions[c].second + "\" is required "
+                "by the engine, but cannot be found!", file
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys an animation database and all of its content.
+ */
+void animation_database::destroy() {
+    for(size_t a = 0; a < animations.size(); ++a) {
+        delete animations[a];
+    }
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        delete sprites[s];
+    }
+    for(size_t b = 0; b < body_parts.size(); ++b) {
+        delete body_parts[b];
+    }
+    animations.clear();
+    sprites.clear();
+    body_parts.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the index of the specified animation.
+ * Returns INVALID if not found.
+ */
+size_t animation_database::find_animation(const string &name) {
+    for(size_t a = 0; a < animations.size(); ++a) {
+        if(animations[a]->name == name) return a;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the index of the specified body part.
+ * Returns INVALID if not found.
+ */
+size_t animation_database::find_body_part(const string &name) {
+    for(size_t b = 0; b < body_parts.size(); ++b) {
+        if(body_parts[b]->name == name) return b;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the index of the specified sprite.
+ * Returns INVALID if not found.
+ */
+size_t animation_database::find_sprite(const string &name) {
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        if(sprites[s]->name == name) return s;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the pointers for body parts.
+ */
+void animation_database::fix_body_part_pointers() {
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        sprite* s_ptr = sprites[s];
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            hitbox* h_ptr = &s_ptr->hitboxes[h];
+            
+            for(size_t b = 0; b < body_parts.size(); ++b) {
+                body_part* b_ptr = body_parts[b];
+                if(b_ptr->name == h_ptr->body_part_name) {
+                    h_ptr->body_part_index = b;
+                    h_ptr->body_part_ptr = b_ptr;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sorts all animations and sprites alphabetically, making them more organized.
+ */
+void animation_database::sort_alphabetically() {
+    sort(
+        animations.begin(), animations.end(),
+    [] (animation * a1, animation * a2) {
+        return a1->name < a2->name;
+    }
+    );
+    sort(
+        sprites.begin(), sprites.end(),
+    [] (sprite * s1, sprite * s2) {
+        return s1->name < s2->name;
+    }
+    );
+    
+    for(size_t a = 0; a < animations.size(); ++a) {
+        animation* a_ptr = animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            frame* f_ptr = &(a_ptr->frames[f]);
+            
+            f_ptr->sprite_index = find_sprite(f_ptr->sprite_name);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an animation instance.
+ * anim_db: The animation database. Used when changing animations.
+ */
+animation_instance::animation_instance(animation_database* anim_db) :
+    cur_anim(nullptr),
+    anim_db(anim_db),
+    cur_frame_time(0),
+    cur_frame_index(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an animation instance by copying info from another.
+ */
+animation_instance::animation_instance(const animation_instance &ai2) :
+    cur_anim(ai2.cur_anim),
+    anim_db(ai2.anim_db) {
+    
+    start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the sprite of the current frame of animation.
+ */
+sprite* animation_instance::get_cur_sprite() {
+    if(!cur_anim) return NULL;
+    if(cur_frame_index == INVALID) return NULL;
+    return cur_anim->frames[cur_frame_index].sprite_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Skips the current animation instance ahead in time for a random amount of
+ * time. The time is anywhere between 0 and the total duration of the
+ * animation. Frame signals will be ignored.
+ */
+void animation_instance::skip_ahead_randomly() {
+    if(!cur_anim) return;
+    //First, find how long the animation lasts for.
+    
+    float total_duration = 0;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        total_duration += cur_anim->frames[f].duration;
+    }
+    
+    tick(randomf(0, total_duration));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts or restarts the animation.
+ * It's called automatically when the animation is set.
+ */
+void animation_instance::start() {
+    cur_frame_time = 0;
+    cur_frame_index = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the animation with the given amount of time.
+ * time:    How many seconds to tick.
+ * signals: Any frame that sends a signal adds it here.
+ * Returns whether or not the animation ended its final frame.
+ */
+bool animation_instance::tick(const float time, vector<size_t>* signals) {
+    if(!cur_anim) return false;
+    size_t n_frames = cur_anim->frames.size();
+    if(n_frames == 0) return false;
+    frame* cur_frame = &cur_anim->frames[cur_frame_index];
+    if(cur_frame->duration == 0) {
+        return true;
+    }
+    
+    cur_frame_time += time;
+    
+    bool reached_end = false;
+    
+    //This is a while instead of an if because if the framerate is too low
+    //and the next frame's duration is too short, it could be that a tick
+    //goes over an entire frame, and lands 2 or more frames ahead.
+    while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
+        cur_frame_time = cur_frame_time - cur_frame->duration;
+        cur_frame_index++;
+        if(cur_frame_index >= n_frames) {
+            reached_end = true;
+            cur_frame_index =
+                (cur_anim->loop_frame >= n_frames) ? 0 : cur_anim->loop_frame;
+        }
+        cur_frame = &cur_anim->frames[cur_frame_index];
+        if(cur_frame->signal != INVALID && signals) {
+            signals->push_back(cur_frame->signal);
+        }
+    }
+    
+    return reached_end;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a frame of animation.
+ * sn: Name of the sprite.
+ * si: Index of the sprite in the animation database.
+ * sp: Pointer to the sprite.
+ * d:  Duration.
+ * s:  Signal.
+ */
+frame::frame(
+    const string &sn, const size_t si, sprite* sp, const float d, const size_t s
+) :
+    sprite_name(sn),
+    sprite_index(si),
+    sprite_ptr(sp),
+    duration(d),
+    signal(s) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a sprite, with a pre-existing bitmap.
  * name:  Internal name; should be unique.
  * b:     Bitmap.
@@ -165,322 +482,6 @@ void sprite::set_bitmap(
     this->file_size = file_size;
 }
 
-
-/* ----------------------------------------------------------------------------
- * Creates a frame of animation.
- * sn: Name of the sprite.
- * si: Index of the sprite in the animation database.
- * sp: Pointer to the sprite.
- * d:  Duration.
- * s:  Signal.
- */
-frame::frame(
-    const string &sn, const size_t si, sprite* sp, const float d, const size_t s
-) :
-    sprite_name(sn),
-    sprite_index(si),
-    sprite_ptr(sp),
-    duration(d),
-    signal(s) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an animation.
- * name:       Name, should be unique.
- * frames:     List of frame instances.
- * loop_frame: Loop frame number.
- */
-animation::animation(
-    const string &name, const vector<frame> &frames,
-    const size_t loop_frame, const unsigned char hit_rate
-) :
-    name(name),
-    frames(frames),
-    loop_frame(loop_frame),
-    hit_rate(hit_rate) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an animation by copying info from another animation.
- */
-animation::animation(const animation &a2) :
-    name(a2.name),
-    frames(a2.frames),
-    loop_frame(a2.loop_frame),
-    hit_rate(a2.hit_rate) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an animation instance.
- * anim_db: The animation database. Used when changing animations.
- */
-animation_instance::animation_instance(animation_database* anim_db) :
-    cur_anim(nullptr),
-    anim_db(anim_db),
-    cur_frame_time(0),
-    cur_frame_index(0) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an animation instance by copying info from another.
- */
-animation_instance::animation_instance(const animation_instance &ai2) :
-    cur_anim(ai2.cur_anim),
-    anim_db(ai2.anim_db) {
-    
-    start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts or restarts the animation.
- * It's called automatically when the animation is set.
- */
-void animation_instance::start() {
-    cur_frame_time = 0;
-    cur_frame_index = 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Skips the current animation instance ahead in time for a random amount of
- * time. The time is anywhere between 0 and the total duration of the
- * animation. Frame signals will be ignored.
- */
-void animation_instance::skip_ahead_randomly() {
-    if(!cur_anim) return;
-    //First, find how long the animation lasts for.
-    
-    float total_duration = 0;
-    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
-        total_duration += cur_anim->frames[f].duration;
-    }
-    
-    tick(randomf(0, total_duration));
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks the animation with the given amount of time.
- * time:    How many seconds to tick.
- * signals: Any frame that sends a signal adds it here.
- * Returns whether or not the animation ended its final frame.
- */
-bool animation_instance::tick(const float time, vector<size_t>* signals) {
-    if(!cur_anim) return false;
-    size_t n_frames = cur_anim->frames.size();
-    if(n_frames == 0) return false;
-    frame* cur_frame = &cur_anim->frames[cur_frame_index];
-    if(cur_frame->duration == 0) {
-        return true;
-    }
-    
-    cur_frame_time += time;
-    
-    bool reached_end = false;
-    
-    //This is a while instead of an if because if the framerate is too low
-    //and the next frame's duration is too short, it could be that a tick
-    //goes over an entire frame, and lands 2 or more frames ahead.
-    while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
-        cur_frame_time = cur_frame_time - cur_frame->duration;
-        cur_frame_index++;
-        if(cur_frame_index >= n_frames) {
-            reached_end = true;
-            cur_frame_index =
-                (cur_anim->loop_frame >= n_frames) ? 0 : cur_anim->loop_frame;
-        }
-        cur_frame = &cur_anim->frames[cur_frame_index];
-        if(cur_frame->signal != INVALID && signals) {
-            signals->push_back(cur_frame->signal);
-        }
-    }
-    
-    return reached_end;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the sprite of the current frame of animation.
- */
-sprite* animation_instance::get_cur_sprite() {
-    if(!cur_anim) return NULL;
-    if(cur_frame_index == INVALID) return NULL;
-    return cur_anim->frames[cur_frame_index].sprite_ptr;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an animation database.
- */
-animation_database::animation_database(
-    const vector<animation*> &a, const vector<sprite*> &s,
-    const vector<body_part*> &b
-) :
-    animations(a),
-    sprites(s),
-    body_parts(b) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified animation.
- * Returns INVALID if not found.
- */
-size_t animation_database::find_animation(const string &name) {
-    for(size_t a = 0; a < animations.size(); ++a) {
-        if(animations[a]->name == name) return a;
-    }
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified sprite.
- * Returns INVALID if not found.
- */
-size_t animation_database::find_sprite(const string &name) {
-    for(size_t s = 0; s < sprites.size(); ++s) {
-        if(sprites[s]->name == name) return s;
-    }
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the index of the specified body part.
- * Returns INVALID if not found.
- */
-size_t animation_database::find_body_part(const string &name) {
-    for(size_t b = 0; b < body_parts.size(); ++b) {
-        if(body_parts[b]->name == name) return b;
-    }
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Enemies and such have a regular list of animations.
- * The only way to change these animations is through the script.
- * So animation control is done entirely through game data.
- * However, the animations for Pikmin, leaders, etc. are pre-named.
- * e.g.: The game wants there to be an "idle" animation,
- * a "walk" animation, etc.
- * Because we are NOT looking up with strings, if we want more than 20FPS,
- * we need a way to convert from a numeric ID
- * (one that stands for walking, one for idling, etc.)
- * into the corresponding number on the animation file.
- * This is where this comes in.
- *
- * conversions: A vector of size_t and strings.
- *   The size_t is the hardcoded ID (probably in some constant or enum).
- *   The string is the name of the animation in the animation file.
- * file:        File from where these animations were loaded. Used to
- *   report errors.
- */
-void animation_database::create_conversions(
-    vector<pair<size_t, string> > conversions, data_node* file
-) {
-    pre_named_conversions.clear();
-    
-    if(conversions.empty()) return;
-    
-    //First, find the highest number.
-    size_t highest = conversions[0].first;
-    for(size_t c = 1; c < conversions.size(); ++c) {
-        highest = max(highest, conversions[c].first);
-    }
-    
-    pre_named_conversions.assign(highest + 1, INVALID);
-    
-    for(size_t c = 0; c < conversions.size(); ++c) {
-        size_t a_pos = find_animation(conversions[c].second);
-        pre_named_conversions[conversions[c].first] = a_pos;
-        if(a_pos == INVALID) {
-            log_error(
-                "Animation \"" + conversions[c].second + "\" is required "
-                "by the engine, but cannot be found!", file
-            );
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fixes the pointers for body parts.
- */
-void animation_database::fix_body_part_pointers() {
-    for(size_t s = 0; s < sprites.size(); ++s) {
-        sprite* s_ptr = sprites[s];
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
-            
-            for(size_t b = 0; b < body_parts.size(); ++b) {
-                body_part* b_ptr = body_parts[b];
-                if(b_ptr->name == h_ptr->body_part_name) {
-                    h_ptr->body_part_index = b;
-                    h_ptr->body_part_ptr = b_ptr;
-                    break;
-                }
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sorts all animations and sprites alphabetically, making them more organized.
- */
-void animation_database::sort_alphabetically() {
-    sort(
-        animations.begin(), animations.end(),
-    [] (animation * a1, animation * a2) {
-        return a1->name < a2->name;
-    }
-    );
-    sort(
-        sprites.begin(), sprites.end(),
-    [] (sprite * s1, sprite * s2) {
-        return s1->name < s2->name;
-    }
-    );
-    
-    for(size_t a = 0; a < animations.size(); ++a) {
-        animation* a_ptr = animations[a];
-        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
-            frame* f_ptr = &(a_ptr->frames[f]);
-            
-            f_ptr->sprite_index = find_sprite(f_ptr->sprite_name);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys an animation database and all of its content.
- */
-void animation_database::destroy() {
-    for(size_t a = 0; a < animations.size(); ++a) {
-        delete animations[a];
-    }
-    for(size_t s = 0; s < sprites.size(); ++s) {
-        delete sprites[s];
-    }
-    for(size_t b = 0; b < body_parts.size(); ++b) {
-        delete body_parts[b];
-    }
-    animations.clear();
-    sprites.clear();
-    body_parts.clear();
-}
 
 
 /* ----------------------------------------------------------------------------

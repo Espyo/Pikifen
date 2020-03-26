@@ -28,39 +28,17 @@ decoration_category::decoration_category() :
 }
 
 
+decoration_category::~decoration_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of decoration by name.
+ * Clears the list of registered types of decorations.
  */
-void decoration_category::get_type_names(vector<string> &list) {
+void decoration_category::clear_types() {
     for(auto &t : decoration_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of decoration given its name, or NULL on error.
- */
-mob_type* decoration_category::get_type(const string &name) {
-    auto it = decoration_types.find(name);
-    if(it == decoration_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of decoration.
- */
-mob_type* decoration_category::create_type() {
-    return new decoration_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of decoration.
- */
-void decoration_category::register_type(mob_type* type) {
-    decoration_types[type->name] = (decoration_type*) type;
+    decoration_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* decoration_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of decoration.
+ */
+mob_type* decoration_category::create_type() {
+    return new decoration_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a decoration from the list of decorations.
  */
 void decoration_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void decoration_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of decorations.
+ * Returns a type of decoration given its name, or NULL on error.
  */
-void decoration_category::clear_types() {
-    for(auto &t : decoration_types) {
-        delete t.second;
-    }
-    decoration_types.clear();
+mob_type* decoration_category::get_type(const string &name) {
+    auto it = decoration_types.find(name);
+    if(it == decoration_types.end()) return NULL;
+    return it->second;
 }
 
 
-decoration_category::~decoration_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of decoration by name.
+ */
+void decoration_category::get_type_names(vector<string> &list) {
+    for(auto &t : decoration_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of decoration.
+ */
+void decoration_category::register_type(mob_type* type) {
+    decoration_types[type->name] = (decoration_type*) type;
+}

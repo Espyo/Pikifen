@@ -15,28 +15,6 @@
 using namespace std;
 
 
-/* ----------------------------------------------------------------------------
- * Creates a new replay element.
- */
-replay_element::replay_element(const unsigned char type, const point &pos) :
-    type(type),
-    pos(pos) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new replay event.
- */
-replay_event::replay_event(
-    const unsigned char type, const size_t data
-) :
-    type(type),
-    data(data) {
-    
-}
-
-
 replay::replay() :
     prev_leader_nr(INVALID) {
     
@@ -242,4 +220,26 @@ void replay::save_to_file(const string &file_name) {
     }
     
     al_fclose(file);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new replay element.
+ */
+replay_element::replay_element(const unsigned char type, const point &pos) :
+    type(type),
+    pos(pos) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new replay event.
+ */
+replay_event::replay_event(
+    const unsigned char type, const size_t data
+) :
+    type(type),
+    data(data) {
+    
 }

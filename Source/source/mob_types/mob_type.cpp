@@ -88,6 +88,106 @@ mob_type::~mob_type() {
 
 
 /* ----------------------------------------------------------------------------
+ * Adds carrying-related states to the FSM.
+ */
+void mob_type::add_carrying_states() {
+
+    easy_fsm_creator efc;
+    
+    efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_stop_move);
+        }
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.change_state("carriable_moving");
+        }
+    }
+    
+    efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_begin_move);
+        }
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_begin);
+            efc.run(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
+            efc.change_state("carriable_waiting");
+        }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_begin_move);
+        }
+        efc.new_event(MOB_EV_REACHED_DESTINATION); {
+            efc.run(gen_mob_fsm::carry_reach_destination);
+        }
+        efc.new_event(MOB_EV_CARRY_STUCK); {
+            efc.change_state("carriable_stuck");
+        }
+        efc.new_event(MOB_EV_CARRY_DELIVERED); {
+            efc.change_state("being_delivered");
+        }
+    }
+    
+    efc.new_state("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carry_become_stuck);
+        }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+        }
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
+            efc.change_state("carriable_waiting");
+        }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.change_state("carriable_moving");
+        }
+    }
+    
+    efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::start_being_delivered);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(gen_mob_fsm::handle_delivery);
+        }
+    }
+    
+    
+    vector<mob_state*> new_states = efc.finish();
+    
+    states.insert(states.end(), new_states.begin(), new_states.end());
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Specifies what animation conversions there are, if any.
+ */
+anim_conversion_vector mob_type::get_anim_conversions() {
+    return anim_conversion_vector();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads properties from a data file, if any.
  */
 void mob_type::load_properties(data_node* file) { }
@@ -100,17 +200,12 @@ void mob_type::load_resources(data_node* file) { }
 
 
 /* ----------------------------------------------------------------------------
- * Specifies what animation conversions there are, if any.
- */
-anim_conversion_vector mob_type::get_anim_conversions() {
-    return anim_conversion_vector();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads loaded resources from memory.
  */
 void mob_type::unload_resources() { }
+
+
+mob_type_with_anim_groups::~mob_type_with_anim_groups() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -137,108 +232,6 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
     return new_v;
 }
 
-
-
-/* ----------------------------------------------------------------------------
- * Loads all mob types.
- */
-void load_mob_types(bool load_resources) {
-    //Load the categorized mob types.
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = mob_categories.get(c);
-        load_mob_types(category, load_resources);
-    }
-    
-    //Pikmin type order.
-    for(auto &p : pikmin_types) {
-        if(
-            find(
-                pikmin_order_strings.begin(), pikmin_order_strings.end(),
-                p.first
-            ) == pikmin_order_strings.end()
-        ) {
-            log_error(
-                "Pikmin type \"" + p.first + "\" was not found "
-                "in the Pikmin order list in the config file!"
-            );
-            pikmin_order_strings.push_back(p.first);
-        }
-    }
-    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
-        string s = pikmin_order_strings[o];
-        if(pikmin_types.find(s) != pikmin_types.end()) {
-            pikmin_order.push_back(pikmin_types[s]);
-        } else {
-            log_error(
-                "Unknown Pikmin type \"" + s + "\" found "
-                "in the Pikmin order list in the config file!"
-            );
-        }
-    }
-    
-    //Leader type order.
-    for(auto &l : leader_types) {
-        if(
-            find(
-                leader_order_strings.begin(), leader_order_strings.end(),
-                l.first
-            ) == leader_order_strings.end()
-        ) {
-            log_error(
-                "Leader type \"" + l.first + "\" was not found "
-                "in the leader order list in the config file!"
-            );
-            leader_order_strings.push_back(l.first);
-        }
-    }
-    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
-        string s = leader_order_strings[o];
-        if(leader_types.find(s) != leader_types.end()) {
-            leader_order.push_back(leader_types[s]);
-        } else {
-            log_error(
-                "Unknown leader type \"" + s + "\" found "
-                "in the leader order list in the config file!"
-            );
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the mob types from a category's folder.
- * category:       Pointer to the mob category.
- * load_resources: False if you don't need the images and sounds,
- *   so it loads faster.
- */
-void load_mob_types(mob_category* category, bool load_resources) {
-    if(category->folder.empty()) return;
-    bool folder_found;
-    vector<string> types =
-        folder_to_vector(category->folder, true, &folder_found);
-    if(!folder_found) {
-        log_error("Folder \"" + category->folder + "\" not found!");
-    }
-    
-    for(size_t t = 0; t < types.size(); ++t) {
-    
-        data_node file(category->folder + "/" + types[t] + "/Data.txt");
-        if(!file.file_was_opened) continue;
-        
-        mob_type* mt;
-        mt = category->create_type();
-        
-        load_mob_type_from_file(
-            mt, file, load_resources, category->folder + "/" + types[t]
-        );
-        
-        category->register_type(mt);
-        
-        mt->folder_name = types[t];
-        
-    }
-    
-}
 
 
 /* ----------------------------------------------------------------------------
@@ -648,6 +641,108 @@ void load_mob_type_from_file(
 
 
 /* ----------------------------------------------------------------------------
+ * Loads all mob types.
+ */
+void load_mob_types(bool load_resources) {
+    //Load the categorized mob types.
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        mob_category* category = mob_categories.get(c);
+        load_mob_types(category, load_resources);
+    }
+    
+    //Pikmin type order.
+    for(auto &p : pikmin_types) {
+        if(
+            find(
+                pikmin_order_strings.begin(), pikmin_order_strings.end(),
+                p.first
+            ) == pikmin_order_strings.end()
+        ) {
+            log_error(
+                "Pikmin type \"" + p.first + "\" was not found "
+                "in the Pikmin order list in the config file!"
+            );
+            pikmin_order_strings.push_back(p.first);
+        }
+    }
+    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
+        string s = pikmin_order_strings[o];
+        if(pikmin_types.find(s) != pikmin_types.end()) {
+            pikmin_order.push_back(pikmin_types[s]);
+        } else {
+            log_error(
+                "Unknown Pikmin type \"" + s + "\" found "
+                "in the Pikmin order list in the config file!"
+            );
+        }
+    }
+    
+    //Leader type order.
+    for(auto &l : leader_types) {
+        if(
+            find(
+                leader_order_strings.begin(), leader_order_strings.end(),
+                l.first
+            ) == leader_order_strings.end()
+        ) {
+            log_error(
+                "Leader type \"" + l.first + "\" was not found "
+                "in the leader order list in the config file!"
+            );
+            leader_order_strings.push_back(l.first);
+        }
+    }
+    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
+        string s = leader_order_strings[o];
+        if(leader_types.find(s) != leader_types.end()) {
+            leader_order.push_back(leader_types[s]);
+        } else {
+            log_error(
+                "Unknown leader type \"" + s + "\" found "
+                "in the leader order list in the config file!"
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the mob types from a category's folder.
+ * category:       Pointer to the mob category.
+ * load_resources: False if you don't need the images and sounds,
+ *   so it loads faster.
+ */
+void load_mob_types(mob_category* category, bool load_resources) {
+    if(category->folder.empty()) return;
+    bool folder_found;
+    vector<string> types =
+        folder_to_vector(category->folder, true, &folder_found);
+    if(!folder_found) {
+        log_error("Folder \"" + category->folder + "\" not found!");
+    }
+    
+    for(size_t t = 0; t < types.size(); ++t) {
+    
+        data_node file(category->folder + "/" + types[t] + "/Data.txt");
+        if(!file.file_was_opened) continue;
+        
+        mob_type* mt;
+        mt = category->create_type();
+        
+        load_mob_type_from_file(
+            mt, file, load_resources, category->folder + "/" + types[t]
+        );
+        
+        category->register_type(mt);
+        
+        mt->folder_name = types[t];
+        
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads a type of mob.
  */
 void unload_mob_type(mob_type* mt, const bool unload_resources) {
@@ -692,98 +787,3 @@ void unload_mob_types(mob_category* category, bool unload_resources) {
     
     category->clear_types();
 }
-
-
-/* ----------------------------------------------------------------------------
- * Adds carrying-related states to the FSM.
- */
-void mob_type::add_carrying_states() {
-
-    easy_fsm_creator efc;
-    
-    efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_stop_move);
-        }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
-        }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
-        }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.change_state("carriable_moving");
-        }
-    }
-    
-    efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_begin_move);
-        }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
-        }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_begin);
-            efc.run(gen_mob_fsm::check_carry_stop);
-        }
-        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
-            efc.change_state("carriable_waiting");
-        }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carry_begin_move);
-        }
-        efc.new_event(MOB_EV_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::carry_reach_destination);
-        }
-        efc.new_event(MOB_EV_CARRY_STUCK); {
-            efc.change_state("carriable_stuck");
-        }
-        efc.new_event(MOB_EV_CARRY_DELIVERED); {
-            efc.change_state("being_delivered");
-        }
-    }
-    
-    efc.new_state("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_become_stuck);
-        }
-        efc.new_event(MOB_EV_ON_LEAVE); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-        }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
-        }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_stop);
-        }
-        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
-            efc.change_state("carriable_waiting");
-        }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.change_state("carriable_moving");
-        }
-    }
-    
-    efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::start_being_delivered);
-        }
-        efc.new_event(MOB_EV_TIMER); {
-            efc.run(gen_mob_fsm::handle_delivery);
-        }
-    }
-    
-    
-    vector<mob_state*> new_states = efc.finish();
-    
-    states.insert(states.end(), new_states.begin(), new_states.end());
-    
-}
-
-
-mob_type_with_anim_groups::~mob_type_with_anim_groups() { }

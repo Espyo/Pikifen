@@ -28,39 +28,17 @@ resource_category::resource_category() :
 }
 
 
+resource_category::~resource_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of resource by name.
+ * Clears the list of registered types of resource.
  */
-void resource_category::get_type_names(vector<string> &list) {
+void resource_category::clear_types() {
     for(auto &t : resource_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of resource given its name, or NULL on error.
- */
-mob_type* resource_category::get_type(const string &name) {
-    auto it = resource_types.find(name);
-    if(it == resource_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of resource.
- */
-mob_type* resource_category::create_type() {
-    return new resource_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of resource.
- */
-void resource_category::register_type(mob_type* type) {
-    resource_types[type->name] = (resource_type*) type;
+    resource_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* resource_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of resource.
+ */
+mob_type* resource_category::create_type() {
+    return new resource_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a resource from the list of resources.
  */
 void resource_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void resource_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of resource.
+ * Returns a type of resource given its name, or NULL on error.
  */
-void resource_category::clear_types() {
-    for(auto &t : resource_types) {
-        delete t.second;
-    }
-    resource_types.clear();
+mob_type* resource_category::get_type(const string &name) {
+    auto it = resource_types.find(name);
+    if(it == resource_types.end()) return NULL;
+    return it->second;
 }
 
 
-resource_category::~resource_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of resource by name.
+ */
+void resource_category::get_type_names(vector<string> &list) {
+    for(auto &t : resource_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of resource.
+ */
+void resource_category::register_type(mob_type* type) {
+    resource_types[type->name] = (resource_type*) type;
+}

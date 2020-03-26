@@ -50,36 +50,9 @@ scrollbar::scrollbar(
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the scrollbar.
+ * Destroys a scrollbar.
  */
-void scrollbar::init() {
-    create_button();
-    flags |= FLAG_WUM_NO_CHILDREN;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When the mouse is held down, the scrollbar button
- * is moved to that location.
- */
-void scrollbar::widget_on_mouse_down(
-    const int button, const int x, const int y
-) {
-    if(button != 1) return;
-    
-    move_button(x, y);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When the mouse is moved, if the mouse button is held
- * down, the scrollbar button is moved with the mouse.
- */
-void scrollbar::widget_on_mouse_move(const int x, const int y) {
-    if(!mouse_clicking) return;
-    
-    move_button(x, y);
-}
+scrollbar::~scrollbar() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -124,83 +97,6 @@ void scrollbar::create_button() {
                 style
             ));
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Moves the scrollbar's button to the desired coordinates.
- * The coordinates specify the center.
- */
-void scrollbar::move_button(const int x, const int y) {
-    if(low_value == high_value) return;
-    
-    button* but = (button*) widgets["but_bar"];
-    
-    if(vertical) {
-        int bh = but->y2 - but->y1;
-        int h = y2 - y1;
-        
-        but->y1 = y - (but->y2 - but->y1) / 2;
-        if(but->y1 < y1) but->y1 = y1;
-        if(but->y1 + bh > y2) but->y1 = y2 - bh;
-        
-        but->y2 = but->y1 + bh;
-        
-        low_value =
-            min_value + ((but->y1 - y1) / (float) h) *
-            (max_value - min_value);
-        high_value =
-            min_value + ((but->y2 - y1) / (float) h) *
-            (max_value - min_value);
-            
-    } else {
-        int bw = but->x2 - but->x1;
-        int w = x2 - x1;
-        
-        but->x1 = x - (but->x2 - but->x1) / 2;
-        if(but->x1 < x1) but->x1 = x1;
-        if(but->x1 + bw > x2) but->x1 = x2 - bw;
-        
-        but->x2 = but->x1 + bw;
-        
-        low_value =
-            min_value + ((but->x1 - x1) / (float) w) *
-            (max_value - min_value);
-        high_value =
-            min_value + ((but->x2 - x1) / (float) w) *
-            (max_value - min_value);
-    }
-    
-    if(change_handler) change_handler(this);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the scrollbar's current value.
- */
-void scrollbar::set_value(const float new_low, const bool call_handler) {
-    float dif = high_value - low_value;
-    if(new_low < min_value || new_low + dif > max_value) return;
-    
-    button* but = (button*) widgets["but_bar"];
-    if(!but) return;
-    
-    low_value = new_low;
-    high_value = new_low + dif;
-    
-    float ratio = (low_value - min_value) / (max_value - min_value - dif);
-    
-    if(vertical) {
-        int but_h = but->y2 - but->y1;
-        but->y1 = y1 + ratio * ((y2 - y1) - but_h);
-        but->y2 = but->y1 + but_h;
-    } else {
-        int but_w = but->x2 - but->x1;
-        but->x1 = x1 + ratio * ((x2 - x1) - but_w);
-        but->x2 = but->x1 + but_w;
-    }
-    
-    if(change_handler && call_handler) change_handler(this);
 }
 
 
@@ -300,11 +196,11 @@ void scrollbar::draw_self() {
 
 
 /* ----------------------------------------------------------------------------
- * Registers an external handler for when the scrollbar's
- * value is changed.
+ * Initializes the scrollbar.
  */
-void scrollbar::register_change_handler(void(*handler)(widget* w)) {
-    change_handler = handler;
+void scrollbar::init() {
+    create_button();
+    flags |= FLAG_WUM_NO_CHILDREN;
 }
 
 
@@ -365,6 +261,116 @@ void scrollbar::make_widget_scroll(widget* widget) {
 
 
 /* ----------------------------------------------------------------------------
+ * Moves the scrollbar's button to the desired coordinates.
+ * The coordinates specify the center.
+ */
+void scrollbar::move_button(const int x, const int y) {
+    if(low_value == high_value) return;
+    
+    button* but = (button*) widgets["but_bar"];
+    
+    if(vertical) {
+        int bh = but->y2 - but->y1;
+        int h = y2 - y1;
+        
+        but->y1 = y - (but->y2 - but->y1) / 2;
+        if(but->y1 < y1) but->y1 = y1;
+        if(but->y1 + bh > y2) but->y1 = y2 - bh;
+        
+        but->y2 = but->y1 + bh;
+        
+        low_value =
+            min_value + ((but->y1 - y1) / (float) h) *
+            (max_value - min_value);
+        high_value =
+            min_value + ((but->y2 - y1) / (float) h) *
+            (max_value - min_value);
+            
+    } else {
+        int bw = but->x2 - but->x1;
+        int w = x2 - x1;
+        
+        but->x1 = x - (but->x2 - but->x1) / 2;
+        if(but->x1 < x1) but->x1 = x1;
+        if(but->x1 + bw > x2) but->x1 = x2 - bw;
+        
+        but->x2 = but->x1 + bw;
+        
+        low_value =
+            min_value + ((but->x1 - x1) / (float) w) *
+            (max_value - min_value);
+        high_value =
+            min_value + ((but->x2 - x1) / (float) w) *
+            (max_value - min_value);
+    }
+    
+    if(change_handler) change_handler(this);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers an external handler for when the scrollbar's
+ * value is changed.
+ */
+void scrollbar::register_change_handler(void(*handler)(widget* w)) {
+    change_handler = handler;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the scrollbar's current value.
+ */
+void scrollbar::set_value(const float new_low, const bool call_handler) {
+    float dif = high_value - low_value;
+    if(new_low < min_value || new_low + dif > max_value) return;
+    
+    button* but = (button*) widgets["but_bar"];
+    if(!but) return;
+    
+    low_value = new_low;
+    high_value = new_low + dif;
+    
+    float ratio = (low_value - min_value) / (max_value - min_value - dif);
+    
+    if(vertical) {
+        int but_h = but->y2 - but->y1;
+        but->y1 = y1 + ratio * ((y2 - y1) - but_h);
+        but->y2 = but->y1 + but_h;
+    } else {
+        int but_w = but->x2 - but->x1;
+        but->x1 = x1 + ratio * ((x2 - x1) - but_w);
+        but->x2 = but->x1 + but_w;
+    }
+    
+    if(change_handler && call_handler) change_handler(this);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the mouse is held down, the scrollbar button
+ * is moved to that location.
+ */
+void scrollbar::widget_on_mouse_down(
+    const int button, const int x, const int y
+) {
+    if(button != 1) return;
+    
+    move_button(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the mouse is moved, if the mouse button is held
+ * down, the scrollbar button is moved with the mouse.
+ */
+void scrollbar::widget_on_mouse_move(const int x, const int y) {
+    if(!mouse_clicking) return;
+    
+    move_button(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Callback for when a scrollbar is meant to scroll the contents of a widget.
  */
 void scrollbar::widget_scroller(widget* w) {
@@ -378,11 +384,5 @@ void scrollbar::widget_scroller(widget* w) {
             -scrollbar_ptr->low_value;
     }
 }
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a scrollbar.
- */
-scrollbar::~scrollbar() { }
 
 }

@@ -28,39 +28,17 @@ ship_category::ship_category() :
 }
 
 
+ship_category::~ship_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of ship by name.
+ * Clears the list of registered types of ship.
  */
-void ship_category::get_type_names(vector<string> &list) {
+void ship_category::clear_types() {
     for(auto &t : ship_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of ship given its name, or NULL on error.
- */
-mob_type* ship_category::get_type(const string &name) {
-    auto it = ship_types.find(name);
-    if(it == ship_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of ship.
- */
-mob_type* ship_category::create_type() {
-    return new ship_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of ship.
- */
-void ship_category::register_type(mob_type* type) {
-    ship_types[type->name] = (ship_type*) type;
+    ship_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* ship_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of ship.
+ */
+mob_type* ship_category::create_type() {
+    return new ship_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a ship from the list of ships.
  */
 void ship_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void ship_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of ship.
+ * Returns a type of ship given its name, or NULL on error.
  */
-void ship_category::clear_types() {
-    for(auto &t : ship_types) {
-        delete t.second;
-    }
-    ship_types.clear();
+mob_type* ship_category::get_type(const string &name) {
+    auto it = ship_types.find(name);
+    if(it == ship_types.end()) return NULL;
+    return it->second;
 }
 
 
-ship_category::~ship_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of ship by name.
+ */
+void ship_category::get_type_names(vector<string> &list) {
+    for(auto &t : ship_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of ship.
+ */
+void ship_category::register_type(mob_type* type) {
+    ship_types[type->name] = (ship_type*) type;
+}

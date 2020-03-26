@@ -32,9 +32,12 @@ enemy_type::enemy_type() :
         MOB_TARGET_TYPE_FRAGILE;
         
     starting_team = MOB_TEAM_ENEMY_1;
-        
+    
     add_carrying_states();
 }
+
+
+enemy_type::~enemy_type() { }
 
 
 /* ----------------------------------------------------------------------------
@@ -47,6 +50,3 @@ void enemy_type::load_properties(data_node* file) {
     rs.set("drops_corpse", drops_corpse);
     rs.set("pikmin_seeds", pikmin_seeds);
 }
-
-
-enemy_type::~enemy_type() { }

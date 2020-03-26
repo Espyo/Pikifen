@@ -28,39 +28,17 @@ pikmin_category::pikmin_category() :
 }
 
 
+pikmin_category::~pikmin_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of Pikmin by name.
+ * Clears the list of registered types of Pikmin.
  */
-void pikmin_category::get_type_names(vector<string> &list) {
+void pikmin_category::clear_types() {
     for(auto &t : pikmin_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of Pikmin given its name, or NULL on error.
- */
-mob_type* pikmin_category::get_type(const string &name) {
-    auto it = pikmin_types.find(name);
-    if(it == pikmin_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of Pikmin.
- */
-mob_type* pikmin_category::create_type() {
-    return new pikmin_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of Pikmin.
- */
-void pikmin_category::register_type(mob_type* type) {
-    pikmin_types[type->name] = (pikmin_type*) type;
+    pikmin_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* pikmin_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of Pikmin.
+ */
+mob_type* pikmin_category::create_type() {
+    return new pikmin_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a Pikmin from the list of Pikmin.
  */
 void pikmin_category::erase_mob(mob* m) {
@@ -87,13 +73,28 @@ void pikmin_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of Pikmin.
+ * Returns a type of Pikmin given its name, or NULL on error.
  */
-void pikmin_category::clear_types() {
-    for(auto &t : pikmin_types) {
-        delete t.second;
-    }
-    pikmin_types.clear();
+mob_type* pikmin_category::get_type(const string &name) {
+    auto it = pikmin_types.find(name);
+    if(it == pikmin_types.end()) return NULL;
+    return it->second;
 }
 
-pikmin_category::~pikmin_category() { }
+
+/* ----------------------------------------------------------------------------
+ * Returns all types of Pikmin by name.
+ */
+void pikmin_category::get_type_names(vector<string> &list) {
+    for(auto &t : pikmin_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of Pikmin.
+ */
+void pikmin_category::register_type(mob_type* type) {
+    pikmin_types[type->name] = (pikmin_type*) type;
+}

@@ -28,39 +28,17 @@ pellet_category::pellet_category() :
 }
 
 
+pellet_category::~pellet_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of pellet by name.
+ * Clears the list of registered types of pellet.
  */
-void pellet_category::get_type_names(vector<string> &list) {
+void pellet_category::clear_types() {
     for(auto &t : pellet_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of pellet given its name, or NULL on error.
- */
-mob_type* pellet_category::get_type(const string &name) {
-    auto it = pellet_types.find(name);
-    if(it == pellet_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of pellet.
- */
-mob_type* pellet_category::create_type() {
-    return new pellet_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of pellet.
- */
-void pellet_category::register_type(mob_type* type) {
-    pellet_types[type->name] = (pellet_type*) type;
+    pellet_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* pellet_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of pellet.
+ */
+mob_type* pellet_category::create_type() {
+    return new pellet_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a pellet from the list of pellets.
  */
 void pellet_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void pellet_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of pellet.
+ * Returns a type of pellet given its name, or NULL on error.
  */
-void pellet_category::clear_types() {
-    for(auto &t : pellet_types) {
-        delete t.second;
-    }
-    pellet_types.clear();
+mob_type* pellet_category::get_type(const string &name) {
+    auto it = pellet_types.find(name);
+    if(it == pellet_types.end()) return NULL;
+    return it->second;
 }
 
 
-pellet_category::~pellet_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of pellet by name.
+ */
+void pellet_category::get_type_names(vector<string> &list) {
+    for(auto &t : pellet_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of pellet.
+ */
+void pellet_category::register_type(mob_type* type) {
+    pellet_types[type->name] = (pellet_type*) type;
+}

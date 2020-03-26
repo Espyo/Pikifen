@@ -23,6 +23,70 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the animation's data onto the gui.
+ */
+void animation_editor::animation_to_gui() {
+    set_button_text(frm_anims, "but_anim", cur_anim ? cur_anim->name : "");
+    
+    if(!cur_anim) {
+        frm_anim->hide();
+    } else {
+        frm_anim->show();
+        
+        set_button_text(frm_anims, "but_anim", cur_anim->name);
+        set_textbox_text(frm_anim, "txt_loop", i2s(cur_anim->loop_frame + 1));
+        
+        if(cur_anim->hit_rate == 100) {
+            set_checkbox_check(frm_anim, "chk_missable", false);
+            frm_anim->widgets["lbl_hit_rate"]->hide();
+            frm_anim->widgets["txt_hit_rate"]->hide();
+            frm_anim->widgets["lbl_hit_rate_p"]->hide();
+            set_textbox_text(frm_anim, "txt_hit_rate", "100");
+            
+        } else {
+            set_checkbox_check(frm_anim, "chk_missable", true);
+            frm_anim->widgets["lbl_hit_rate"]->show();
+            frm_anim->widgets["txt_hit_rate"]->show();
+            frm_anim->widgets["lbl_hit_rate_p"]->show();
+            set_textbox_text(frm_anim, "txt_hit_rate", i2s(cur_anim->hit_rate));
+            
+        }
+        
+        frame_to_gui();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the body part's data onto the gui.
+ */
+void animation_editor::body_part_to_gui() {
+    set_label_text(
+        frm_body_parts, "lbl_nr",
+        (
+            anims.body_parts.empty() ?
+            "--/0" :
+            (string) (
+                i2s(cur_body_part_nr + 1) + "/" +
+                i2s(anims.body_parts.size())
+            )
+        )
+    );
+    
+    if(anims.body_parts.empty()) {
+        frm_body_part->hide();
+        return;
+    }
+    
+    frm_body_part->show();
+    
+    set_textbox_text(
+        frm_body_part, "txt_name", anims.body_parts[cur_body_part_nr]->name
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Switches to the correct frame, depending on the current editor state.
  */
 void animation_editor::change_to_right_frame() {
@@ -156,70 +220,6 @@ void animation_editor::cur_sprite_tc_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the animation's data onto the gui.
- */
-void animation_editor::animation_to_gui() {
-    set_button_text(frm_anims, "but_anim", cur_anim ? cur_anim->name : "");
-    
-    if(!cur_anim) {
-        frm_anim->hide();
-    } else {
-        frm_anim->show();
-        
-        set_button_text(frm_anims, "but_anim", cur_anim->name);
-        set_textbox_text(frm_anim, "txt_loop", i2s(cur_anim->loop_frame + 1));
-        
-        if(cur_anim->hit_rate == 100) {
-            set_checkbox_check(frm_anim, "chk_missable", false);
-            frm_anim->widgets["lbl_hit_rate"]->hide();
-            frm_anim->widgets["txt_hit_rate"]->hide();
-            frm_anim->widgets["lbl_hit_rate_p"]->hide();
-            set_textbox_text(frm_anim, "txt_hit_rate", "100");
-            
-        } else {
-            set_checkbox_check(frm_anim, "chk_missable", true);
-            frm_anim->widgets["lbl_hit_rate"]->show();
-            frm_anim->widgets["txt_hit_rate"]->show();
-            frm_anim->widgets["lbl_hit_rate_p"]->show();
-            set_textbox_text(frm_anim, "txt_hit_rate", i2s(cur_anim->hit_rate));
-            
-        }
-        
-        frame_to_gui();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the body part's data onto the gui.
- */
-void animation_editor::body_part_to_gui() {
-    set_label_text(
-        frm_body_parts, "lbl_nr",
-        (
-            anims.body_parts.empty() ?
-            "--/0" :
-            (string) (
-                i2s(cur_body_part_nr + 1) + "/" +
-                i2s(anims.body_parts.size())
-            )
-        )
-    );
-    
-    if(anims.body_parts.empty()) {
-        frm_body_part->hide();
-        return;
-    }
-    
-    frm_body_part->show();
-    
-    set_textbox_text(
-        frm_body_part, "txt_name", anims.body_parts[cur_body_part_nr]->name
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Loads the frame's data from memory to the gui.
  */
 void animation_editor::frame_to_gui() {
@@ -258,168 +258,6 @@ void animation_editor::frame_to_gui() {
         }
         
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the hitbox's data from memory to the gui.
- */
-void animation_editor::hitbox_to_gui() {
-    if(cur_hitbox) {
-        set_label_text(frm_hitboxes, "lbl_name", cur_hitbox->body_part_name);
-        set_textbox_text(frm_hitbox, "txt_x", f2s(cur_hitbox->pos.x));
-        set_textbox_text(frm_hitbox, "txt_y", f2s(cur_hitbox->pos.y));
-        set_textbox_text(frm_hitbox, "txt_z", f2s(cur_hitbox->z));
-        set_textbox_text(frm_hitbox, "txt_h", f2s(cur_hitbox->height));
-        set_textbox_text(frm_hitbox, "txt_r", f2s(cur_hitbox->radius));
-    } else {
-        set_label_text(frm_hitboxes, "lbl_name", "");
-    }
-    
-    open_hitbox_type(cur_hitbox ? cur_hitbox->type : 255);
-    
-    if(cur_hitbox) {
-        frm_hitbox->show();
-        if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
-            set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_hitbox->value));
-            set_checkbox_check(
-                frm_normal_h, "chk_latch", cur_hitbox->can_pikmin_latch
-            );
-            set_textbox_text(
-                frm_normal_h, "txt_hazards", cur_hitbox->hazards_str
-            );
-            
-        } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
-            set_textbox_text(
-                frm_attack_h, "txt_value", f2s(cur_hitbox->value)
-            );
-            set_textbox_text(
-                frm_attack_h, "txt_hazards", cur_hitbox->hazards_str
-            );
-            set_checkbox_check(
-                frm_attack_h, "chk_outward", cur_hitbox->knockback_outward
-            );
-            set_angle_picker_angle(
-                frm_attack_h, "ang_angle", cur_hitbox->knockback_angle
-            );
-            set_textbox_text(
-                frm_attack_h, "txt_knockback", f2s(cur_hitbox->knockback)
-            );
-            set_textbox_text(
-                frm_attack_h, "txt_wither", i2s(cur_hitbox->wither_chance)
-            );
-            
-            if(cur_hitbox->knockback_outward) {
-                disable_widget(frm_attack_h->widgets["ang_angle"]);
-            } else {
-                enable_widget(frm_attack_h->widgets["ang_angle"]);
-            }
-            
-        }
-    } else {
-        frm_hitbox->hide();
-    }
-    
-    if(cur_hitbox) {
-        update_cur_hitbox_tc();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the options data onto the GUI.
- */
-void animation_editor::options_to_gui() {
-    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
-    set_textbox_text(
-        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the sprite's data from memory to the gui.
- */
-void animation_editor::sprite_to_gui() {
-    set_button_text(
-        frm_sprites, "but_sprite", cur_sprite ? cur_sprite->name : ""
-    );
-    
-    if(!cur_sprite) {
-        frm_sprite->hide();
-    } else {
-        frm_sprite->show();
-        
-        if(anims.body_parts.empty()) {
-            disable_widget(frm_sprite->widgets["but_hitboxes"]);
-        } else {
-            enable_widget(frm_sprite->widgets["but_hitboxes"]);
-        }
-        
-        if(
-            loaded_mob_type &&
-            loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
-        ) {
-            enable_widget(frm_sprite->widgets["but_top"]);
-        } else {
-            disable_widget(frm_sprite->widgets["but_top"]);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the sprite's bitmap data from memory to the gui.
- */
-void animation_editor::sprite_bmp_to_gui() {
-    set_textbox_text(frm_sprite_bmp, "txt_file", cur_sprite->file);
-    set_textbox_text(frm_sprite_bmp, "txt_x", i2s(cur_sprite->file_pos.x));
-    set_textbox_text(frm_sprite_bmp, "txt_y", i2s(cur_sprite->file_pos.y));
-    set_textbox_text(frm_sprite_bmp, "txt_w", i2s(cur_sprite->file_size.x));
-    set_textbox_text(frm_sprite_bmp, "txt_h", i2s(cur_sprite->file_size.y));
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the sprite transformation's data from memory to the gui.
- */
-void animation_editor::sprite_transform_to_gui() {
-    set_textbox_text(frm_sprite_tra, "txt_x", f2s(cur_sprite->offset.x));
-    set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
-    set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
-    set_textbox_text(frm_sprite_tra, "txt_sy", f2s(cur_sprite->scale.y));
-    set_angle_picker_angle(frm_sprite_tra, "ang_a", cur_sprite->angle);
-    set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
-    
-    if(comparison) {
-        frm_sprite_comp->show();
-    } else {
-        frm_sprite_comp->hide();
-    }
-    
-    set_checkbox_check(frm_sprite_comp, "chk_compare_blink", comparison_blink);
-    set_checkbox_check(frm_sprite_comp, "chk_compare_above", comparison_above);
-    set_checkbox_check(frm_sprite_comp, "chk_tint", comparison_tint);
-    set_button_text(
-        frm_sprite_comp, "but_compare",
-        comparison_sprite ? comparison_sprite->name : ""
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the Pikmin top's data onto the gui.
- */
-void animation_editor::top_to_gui() {
-    lafi::checkbox* c = (lafi::checkbox*) frm_top->widgets["chk_visible"];
-    if(cur_sprite->top_visible) c->check();
-    else c->uncheck();
-    
-    set_textbox_text(frm_top, "txt_x", f2s(cur_sprite->top_pos.x));
-    set_textbox_text(frm_top, "txt_y", f2s(cur_sprite->top_pos.y));
-    set_textbox_text(frm_top, "txt_w", f2s(cur_sprite->top_size.x));
-    set_textbox_text(frm_top, "txt_h", f2s(cur_sprite->top_size.y));
-    set_angle_picker_angle(frm_top, "ang_angle", cur_sprite->top_angle);
 }
 
 
@@ -683,6 +521,71 @@ void animation_editor::hide_all_frames() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the hitbox's data from memory to the gui.
+ */
+void animation_editor::hitbox_to_gui() {
+    if(cur_hitbox) {
+        set_label_text(frm_hitboxes, "lbl_name", cur_hitbox->body_part_name);
+        set_textbox_text(frm_hitbox, "txt_x", f2s(cur_hitbox->pos.x));
+        set_textbox_text(frm_hitbox, "txt_y", f2s(cur_hitbox->pos.y));
+        set_textbox_text(frm_hitbox, "txt_z", f2s(cur_hitbox->z));
+        set_textbox_text(frm_hitbox, "txt_h", f2s(cur_hitbox->height));
+        set_textbox_text(frm_hitbox, "txt_r", f2s(cur_hitbox->radius));
+    } else {
+        set_label_text(frm_hitboxes, "lbl_name", "");
+    }
+    
+    open_hitbox_type(cur_hitbox ? cur_hitbox->type : 255);
+    
+    if(cur_hitbox) {
+        frm_hitbox->show();
+        if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
+            set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_hitbox->value));
+            set_checkbox_check(
+                frm_normal_h, "chk_latch", cur_hitbox->can_pikmin_latch
+            );
+            set_textbox_text(
+                frm_normal_h, "txt_hazards", cur_hitbox->hazards_str
+            );
+            
+        } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
+            set_textbox_text(
+                frm_attack_h, "txt_value", f2s(cur_hitbox->value)
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_hazards", cur_hitbox->hazards_str
+            );
+            set_checkbox_check(
+                frm_attack_h, "chk_outward", cur_hitbox->knockback_outward
+            );
+            set_angle_picker_angle(
+                frm_attack_h, "ang_angle", cur_hitbox->knockback_angle
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_knockback", f2s(cur_hitbox->knockback)
+            );
+            set_textbox_text(
+                frm_attack_h, "txt_wither", i2s(cur_hitbox->wither_chance)
+            );
+            
+            if(cur_hitbox->knockback_outward) {
+                disable_widget(frm_attack_h->widgets["ang_angle"]);
+            } else {
+                enable_widget(frm_attack_h->widgets["ang_angle"]);
+            }
+            
+        }
+    } else {
+        frm_hitbox->hide();
+    }
+    
+    if(cur_hitbox) {
+        update_cur_hitbox_tc();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
  * For the ID of the picker, use animation_editor::PICKER_*.
  * The content to use is decided from that.
@@ -765,6 +668,17 @@ void animation_editor::open_picker(
     }
     
     generate_and_open_picker(id, elements, title, can_make_new);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the options data onto the GUI.
+ */
+void animation_editor::options_to_gui() {
+    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
+    set_textbox_text(
+        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
+    );
 }
 
 
@@ -958,6 +872,76 @@ void animation_editor::populate_history() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the sprite's bitmap data from memory to the gui.
+ */
+void animation_editor::sprite_bmp_to_gui() {
+    set_textbox_text(frm_sprite_bmp, "txt_file", cur_sprite->file);
+    set_textbox_text(frm_sprite_bmp, "txt_x", i2s(cur_sprite->file_pos.x));
+    set_textbox_text(frm_sprite_bmp, "txt_y", i2s(cur_sprite->file_pos.y));
+    set_textbox_text(frm_sprite_bmp, "txt_w", i2s(cur_sprite->file_size.x));
+    set_textbox_text(frm_sprite_bmp, "txt_h", i2s(cur_sprite->file_size.y));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the sprite's data from memory to the gui.
+ */
+void animation_editor::sprite_to_gui() {
+    set_button_text(
+        frm_sprites, "but_sprite", cur_sprite ? cur_sprite->name : ""
+    );
+    
+    if(!cur_sprite) {
+        frm_sprite->hide();
+    } else {
+        frm_sprite->show();
+        
+        if(anims.body_parts.empty()) {
+            disable_widget(frm_sprite->widgets["but_hitboxes"]);
+        } else {
+            enable_widget(frm_sprite->widgets["but_hitboxes"]);
+        }
+        
+        if(
+            loaded_mob_type &&
+            loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
+            enable_widget(frm_sprite->widgets["but_top"]);
+        } else {
+            disable_widget(frm_sprite->widgets["but_top"]);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the sprite transformation's data from memory to the gui.
+ */
+void animation_editor::sprite_transform_to_gui() {
+    set_textbox_text(frm_sprite_tra, "txt_x", f2s(cur_sprite->offset.x));
+    set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
+    set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
+    set_textbox_text(frm_sprite_tra, "txt_sy", f2s(cur_sprite->scale.y));
+    set_angle_picker_angle(frm_sprite_tra, "ang_a", cur_sprite->angle);
+    set_checkbox_check(frm_sprite_tra, "chk_compare", comparison);
+    
+    if(comparison) {
+        frm_sprite_comp->show();
+    } else {
+        frm_sprite_comp->hide();
+    }
+    
+    set_checkbox_check(frm_sprite_comp, "chk_compare_blink", comparison_blink);
+    set_checkbox_check(frm_sprite_comp, "chk_compare_above", comparison_above);
+    set_checkbox_check(frm_sprite_comp, "chk_tint", comparison_tint);
+    set_button_text(
+        frm_sprite_comp, "but_compare",
+        comparison_sprite ? comparison_sprite->name : ""
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds the current sprite Pikmin top's transformation controller data
  * to the GUI.
  */
@@ -978,6 +962,22 @@ void animation_editor::top_tc_to_gui() {
         frm_top, "ang_angle", top_tc.get_angle()
     );
     gui_to_top();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the Pikmin top's data onto the gui.
+ */
+void animation_editor::top_to_gui() {
+    lafi::checkbox* c = (lafi::checkbox*) frm_top->widgets["chk_visible"];
+    if(cur_sprite->top_visible) c->check();
+    else c->uncheck();
+    
+    set_textbox_text(frm_top, "txt_x", f2s(cur_sprite->top_pos.x));
+    set_textbox_text(frm_top, "txt_y", f2s(cur_sprite->top_pos.y));
+    set_textbox_text(frm_top, "txt_w", f2s(cur_sprite->top_size.x));
+    set_textbox_text(frm_top, "txt_h", f2s(cur_sprite->top_size.y));
+    set_angle_picker_angle(frm_top, "ang_angle", cur_sprite->top_angle);
 }
 
 

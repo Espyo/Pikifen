@@ -354,31 +354,6 @@ void leader::dismiss() {
 
 
 /* ----------------------------------------------------------------------------
- * Swaps out the currently held Pikmin for a different one.
- */
-void leader::swap_held_pikmin(mob* new_pik) {
-    if(holding.empty()) return;
-    
-    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EV_RELEASED);
-    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
-    
-    group->sort(new_pik->subgroup_type_ptr);
-    
-    if(!old_pik_ev || !new_pik_ev) return;
-    
-    new_pik_ev->run(new_pik);
-    
-    release(holding[0]);
-    hold(
-        new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
-        false, true
-    );
-    
-    sfx_switch_pikmin.play(0, false);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draw a leader mob.
  */
 void leader::draw_mob() {
@@ -491,6 +466,31 @@ void leader::stop_whistling() {
     
     whistling = false;
     whistle_radius = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Swaps out the currently held Pikmin for a different one.
+ */
+void leader::swap_held_pikmin(mob* new_pik) {
+    if(holding.empty()) return;
+    
+    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EV_RELEASED);
+    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
+    
+    group->sort(new_pik->subgroup_type_ptr);
+    
+    if(!old_pik_ev || !new_pik_ev) return;
+    
+    new_pik_ev->run(new_pik);
+    
+    release(holding[0]);
+    hold(
+        new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        false, true
+    );
+    
+    sfx_switch_pikmin.play(0, false);
 }
 
 

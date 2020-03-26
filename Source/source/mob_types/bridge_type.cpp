@@ -36,6 +36,20 @@ bridge_type::bridge_type() :
 }
 
 
+bridge_type::~bridge_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector bridge_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads resources into memory.
  */
@@ -55,23 +69,9 @@ void bridge_type::load_resources(data_node* file) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector bridge_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
-    return v;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
     textures.detach(main_texture_file_name);
     textures.detach(rail_texture_file_name);
 }
-
-
-bridge_type::~bridge_type() { }

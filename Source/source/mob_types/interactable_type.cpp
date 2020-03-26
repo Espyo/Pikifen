@@ -25,6 +25,7 @@ interactable_type::interactable_type() :
     
 }
 
+
 interactable_type::~interactable_type() { }
 
 

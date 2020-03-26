@@ -25,137 +25,101 @@
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------
- * Handles an Allegro event related to hardware input,
- * and triggers the corresponding controls, if any.
+ * Creates information about a control.
+ * action: The action this control does in-game. Use BUTTON_*.
+ * player: Player number.
+ * s:      The textual code that represents the hardware inputs.
  */
-void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
-    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
-        
-            //Debug testing.
-            //TODO remove any debug code that is in here before releasing.
-            
-            
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
-        
-            show_system_info = !show_system_info;
-            
-        } else if(
-            creator_tools_enabled &&
-            (
-                (
-                    ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-                    ev.keyboard.keycode <= ALLEGRO_KEY_F11
-                ) || (
-                    ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
-                    ev.keyboard.keycode <= ALLEGRO_KEY_9
-                )
-            )
-        ) {
-        
-            unsigned char id;
-            if(
-                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-                ev.keyboard.keycode <= ALLEGRO_KEY_F11
-            ) {
-                //The first ten indexes are the F2 - F11 keys.
-                id =
-                    creator_tool_keys[
-                        ev.keyboard.keycode - ALLEGRO_KEY_F2
-                ];
-            } else {
-                //The second ten indexes are the 0 - 9 keys.
-                id =
-                    creator_tool_keys[
-                        10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
-                ];
-            }
-            
-            if(id == CREATOR_TOOL_AREA_IMAGE) {
-                ALLEGRO_BITMAP* bmp = draw_to_bitmap();
-                string file_name =
-                    USER_DATA_FOLDER_PATH + "/Area_" + cur_area_data.name +
-                    "_" + get_current_time(true) + ".png";
-                    
-                if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                    log_error(
-                        "Could not save the area onto an image,"
-                        " with the name \"" + file_name + "\"!"
-                    );
-                }
-                
-            } else if(id == CREATOR_TOOL_CHANGE_SPEED) {
-                creator_tool_change_speed = !creator_tool_change_speed;
-                
-            } else if(id == CREATOR_TOOL_GEOMETRY_INFO) {
-                creator_tool_geometry_info = !creator_tool_geometry_info;
-                
-            } else if(id == CREATOR_TOOL_HITBOXES) {
-                creator_tool_hitboxes = !creator_tool_hitboxes;
-                
-            } else if(id == CREATOR_TOOL_HURT_MOB) {
-                mob* m = get_closest_mob_to_cursor();
-                if(m) {
-                    m->set_health(true, true, -creator_tool_mob_hurting_ratio);
-                }
-                
-            } else if(id == CREATOR_TOOL_MOB_INFO) {
-                mob* m = get_closest_mob_to_cursor();
-                creator_tool_info_lock =
-                    (creator_tool_info_lock == m ? NULL : m);
-                    
-            } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
-                if(pikmin_list.size() < max_pikmin_in_field) {
-                    pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
-                    
-                    auto p = pikmin_types.begin();
-                    for(; p != pikmin_types.end(); ++p) {
-                        if(p->second == creator_tool_last_pikmin_type) {
-                            ++p;
-                            if(p != pikmin_types.end()) {
-                                new_pikmin_type = p->second;
-                            }
-                            break;
-                        }
-                    }
-                    creator_tool_last_pikmin_type = new_pikmin_type;
-                    
-                    create_mob(
-                        mob_categories.get(MOB_CATEGORY_PIKMIN),
-                        mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
-                    );
-                }
-                
-            } else if(id == CREATOR_TOOL_TELEPORT) {
-                cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
-                sector* mouse_sector = get_sector(mouse_cursor_w, NULL, true);
-                if(mouse_sector) {
-                    cur_leader_ptr->z = mouse_sector->z;
-                }
-                
-            }
-            
+control_info::control_info(unsigned char action, const string &s) :
+    action(action),
+    type(CONTROL_TYPE_NONE),
+    device_nr(0),
+    button(0),
+    stick(0),
+    axis(0) {
+    vector<string> parts = split(s, "_");
+    size_t n_parts = parts.size();
+    
+    if(n_parts == 0) return;
+    if(parts[0] == "k") {   //Keyboard.
+        if(n_parts > 1) {
+            type = CONTROL_TYPE_KEYBOARD_KEY;
+            button = s2i(parts[1]);
         }
-    }
-    
-    vector<action_from_event> actions = get_actions_from_event(ev);
-    for(size_t a = 0; a < actions.size(); ++a) {
-        handle_button(actions[a].button, actions[a].pos, actions[a].player);
-    }
-    
-    for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
-            mouse_cursor_s.x = ev.mouse.x;
-            mouse_cursor_s.y = ev.mouse.y;
-            mouse_cursor_w = mouse_cursor_s;
-            
-            al_transform_coordinates(
-                &screen_to_world_transform,
-                &mouse_cursor_w.x, &mouse_cursor_w.y
-            );
+        
+    } else if(parts[0] == "mb") { //Mouse button.
+        if(n_parts > 1) {
+            type = CONTROL_TYPE_MOUSE_BUTTON;
+            button = s2i(parts[1]);
         }
+        
+    } else if(parts[0] == "mwu") { //Mouse wheel up.
+        type = CONTROL_TYPE_MOUSE_WHEEL_UP;
+        
+    } else if(parts[0] == "mwd") { //Mouse wheel down.
+        type = CONTROL_TYPE_MOUSE_WHEEL_DOWN;
+        
+    } else if(parts[0] == "mwl") { //Mouse wheel left.
+        type = CONTROL_TYPE_MOUSE_WHEEL_LEFT;
+        
+    } else if(parts[0] == "mwr") { //Mouse wheel right.
+        type = CONTROL_TYPE_MOUSE_WHEEL_RIGHT;
+        
+    } else if(parts[0] == "jb") { //Joystick button.
+        if(n_parts > 2) {
+            type = CONTROL_TYPE_JOYSTICK_BUTTON;
+            device_nr = s2i(parts[1]);
+            button = s2i(parts[2]);
+        }
+        
+    } else if(parts[0] == "jap") { //Joystick axis, positive.
+        if(n_parts > 3) {
+            type = CONTROL_TYPE_JOYSTICK_AXIS_POS;
+            device_nr = s2i(parts[1]);
+            stick = s2i(parts[2]);
+            axis = s2i(parts[3]);
+        }
+    } else if(parts[0] == "jan") { //Joystick axis, negative.
+        if(n_parts > 3) {
+            type = CONTROL_TYPE_JOYSTICK_AXIS_NEG;
+            device_nr = s2i(parts[1]);
+            stick = s2i(parts[2]);
+            axis = s2i(parts[3]);
+        }
+    } else {
+        log_error(
+            "Unrecognized control type \"" + parts[0] + "\""
+            " (value=\"" + s + "\")!");
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts a control info's hardware input data into a string,
+ * used in the options file.
+ */
+string control_info::stringify() {
+    if(type == CONTROL_TYPE_KEYBOARD_KEY) {
+        return "k_" + i2s(button);
+    } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {
+        return "mb_" + i2s(button);
+    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
+        return "mwu";
+    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+        return "mwd";
+    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
+        return "mwl";
+    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
+        return "mwr";
+    } else if(type == CONTROL_TYPE_JOYSTICK_BUTTON) {
+        return "jb_" + i2s(device_nr) + "_" + i2s(button);
+    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
+        return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
+    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
+        return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
     }
     
+    return "";
 }
 
 
@@ -678,6 +642,141 @@ void gameplay::handle_button(
 
 
 /* ----------------------------------------------------------------------------
+ * Handles an Allegro event related to hardware input,
+ * and triggers the corresponding controls, if any.
+ */
+void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
+        
+            //Debug testing.
+            //TODO remove any debug code that is in here before releasing.
+            
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+        
+            show_system_info = !show_system_info;
+            
+        } else if(
+            creator_tools_enabled &&
+            (
+                (
+                    ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
+                    ev.keyboard.keycode <= ALLEGRO_KEY_F11
+                ) || (
+                    ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
+                    ev.keyboard.keycode <= ALLEGRO_KEY_9
+                )
+            )
+        ) {
+        
+            unsigned char id;
+            if(
+                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
+                ev.keyboard.keycode <= ALLEGRO_KEY_F11
+            ) {
+                //The first ten indexes are the F2 - F11 keys.
+                id =
+                    creator_tool_keys[
+                        ev.keyboard.keycode - ALLEGRO_KEY_F2
+                ];
+            } else {
+                //The second ten indexes are the 0 - 9 keys.
+                id =
+                    creator_tool_keys[
+                        10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
+                ];
+            }
+            
+            if(id == CREATOR_TOOL_AREA_IMAGE) {
+                ALLEGRO_BITMAP* bmp = draw_to_bitmap();
+                string file_name =
+                    USER_DATA_FOLDER_PATH + "/Area_" + cur_area_data.name +
+                    "_" + get_current_time(true) + ".png";
+                    
+                if(!al_save_bitmap(file_name.c_str(), bmp)) {
+                    log_error(
+                        "Could not save the area onto an image,"
+                        " with the name \"" + file_name + "\"!"
+                    );
+                }
+                
+            } else if(id == CREATOR_TOOL_CHANGE_SPEED) {
+                creator_tool_change_speed = !creator_tool_change_speed;
+                
+            } else if(id == CREATOR_TOOL_GEOMETRY_INFO) {
+                creator_tool_geometry_info = !creator_tool_geometry_info;
+                
+            } else if(id == CREATOR_TOOL_HITBOXES) {
+                creator_tool_hitboxes = !creator_tool_hitboxes;
+                
+            } else if(id == CREATOR_TOOL_HURT_MOB) {
+                mob* m = get_closest_mob_to_cursor();
+                if(m) {
+                    m->set_health(true, true, -creator_tool_mob_hurting_ratio);
+                }
+                
+            } else if(id == CREATOR_TOOL_MOB_INFO) {
+                mob* m = get_closest_mob_to_cursor();
+                creator_tool_info_lock =
+                    (creator_tool_info_lock == m ? NULL : m);
+                    
+            } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
+                if(pikmin_list.size() < max_pikmin_in_field) {
+                    pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
+                    
+                    auto p = pikmin_types.begin();
+                    for(; p != pikmin_types.end(); ++p) {
+                        if(p->second == creator_tool_last_pikmin_type) {
+                            ++p;
+                            if(p != pikmin_types.end()) {
+                                new_pikmin_type = p->second;
+                            }
+                            break;
+                        }
+                    }
+                    creator_tool_last_pikmin_type = new_pikmin_type;
+                    
+                    create_mob(
+                        mob_categories.get(MOB_CATEGORY_PIKMIN),
+                        mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
+                    );
+                }
+                
+            } else if(id == CREATOR_TOOL_TELEPORT) {
+                cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
+                sector* mouse_sector = get_sector(mouse_cursor_w, NULL, true);
+                if(mouse_sector) {
+                    cur_leader_ptr->z = mouse_sector->z;
+                }
+                
+            }
+            
+        }
+    }
+    
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_button(actions[a].button, actions[a].pos, actions[a].player);
+    }
+    
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
+        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
+            mouse_cursor_s.x = ev.mouse.x;
+            mouse_cursor_s.y = ev.mouse.y;
+            mouse_cursor_w = mouse_cursor_s;
+            
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &mouse_cursor_w.x, &mouse_cursor_w.y
+            );
+        }
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Grabs an ALLEGRO_EVENT and checks all available controls.
  * For every control that matches, it adds its input information to a vector,
  * which it then returns.
@@ -840,103 +939,4 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
     
     return actions;
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates information about a control.
- * action: The action this control does in-game. Use BUTTON_*.
- * player: Player number.
- * s:      The textual code that represents the hardware inputs.
- */
-control_info::control_info(unsigned char action, const string &s) :
-    action(action),
-    type(CONTROL_TYPE_NONE),
-    device_nr(0),
-    button(0),
-    stick(0),
-    axis(0) {
-    vector<string> parts = split(s, "_");
-    size_t n_parts = parts.size();
-    
-    if(n_parts == 0) return;
-    if(parts[0] == "k") {   //Keyboard.
-        if(n_parts > 1) {
-            type = CONTROL_TYPE_KEYBOARD_KEY;
-            button = s2i(parts[1]);
-        }
-        
-    } else if(parts[0] == "mb") { //Mouse button.
-        if(n_parts > 1) {
-            type = CONTROL_TYPE_MOUSE_BUTTON;
-            button = s2i(parts[1]);
-        }
-        
-    } else if(parts[0] == "mwu") { //Mouse wheel up.
-        type = CONTROL_TYPE_MOUSE_WHEEL_UP;
-        
-    } else if(parts[0] == "mwd") { //Mouse wheel down.
-        type = CONTROL_TYPE_MOUSE_WHEEL_DOWN;
-        
-    } else if(parts[0] == "mwl") { //Mouse wheel left.
-        type = CONTROL_TYPE_MOUSE_WHEEL_LEFT;
-        
-    } else if(parts[0] == "mwr") { //Mouse wheel right.
-        type = CONTROL_TYPE_MOUSE_WHEEL_RIGHT;
-        
-    } else if(parts[0] == "jb") { //Joystick button.
-        if(n_parts > 2) {
-            type = CONTROL_TYPE_JOYSTICK_BUTTON;
-            device_nr = s2i(parts[1]);
-            button = s2i(parts[2]);
-        }
-        
-    } else if(parts[0] == "jap") { //Joystick axis, positive.
-        if(n_parts > 3) {
-            type = CONTROL_TYPE_JOYSTICK_AXIS_POS;
-            device_nr = s2i(parts[1]);
-            stick = s2i(parts[2]);
-            axis = s2i(parts[3]);
-        }
-    } else if(parts[0] == "jan") { //Joystick axis, negative.
-        if(n_parts > 3) {
-            type = CONTROL_TYPE_JOYSTICK_AXIS_NEG;
-            device_nr = s2i(parts[1]);
-            stick = s2i(parts[2]);
-            axis = s2i(parts[3]);
-        }
-    } else {
-        log_error(
-            "Unrecognized control type \"" + parts[0] + "\""
-            " (value=\"" + s + "\")!");
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Converts a control info's hardware input data into a string,
- * used in the options file.
- */
-string control_info::stringify() {
-    if(type == CONTROL_TYPE_KEYBOARD_KEY) {
-        return "k_" + i2s(button);
-    } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {
-        return "mb_" + i2s(button);
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
-        return "mwu";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
-        return "mwd";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
-        return "mwl";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
-        return "mwr";
-    } else if(type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        return "jb_" + i2s(device_nr) + "_" + i2s(button);
-    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
-        return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
-    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
-        return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
-    }
-    
-    return "";
 }

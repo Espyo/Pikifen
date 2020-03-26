@@ -1287,6 +1287,51 @@ void gameplay::draw_system_stuff() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws the current area and mobs to a bitmap and returns it.
+ */
+ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
+    //First, get the full dimensions of the map.
+    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        min_x = min(v_ptr->x, min_x);
+        min_y = min(v_ptr->y, min_y);
+        max_x = max(v_ptr->x, max_x);
+        max_y = max(v_ptr->y, max_y);
+    }
+    
+    //Figure out the scale that will fit on the image.
+    float area_w = max_x - min_x;
+    float area_h = max_y - min_y;
+    float scale = 1.0f;
+    float final_bmp_w = creator_tool_area_image_size;
+    float final_bmp_h = creator_tool_area_image_size;
+    
+    if(area_w > area_h) {
+        scale = creator_tool_area_image_size / area_w;
+        final_bmp_h *= area_h / area_w;
+    } else {
+        scale = creator_tool_area_image_size / area_h;
+        final_bmp_w *= area_w / area_h;
+    }
+    
+    //Create the bitmap.
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
+    
+    ALLEGRO_TRANSFORM t;
+    al_identity_transform(&t);
+    al_translate_transform(&t, -min_x, -min_y);
+    al_scale_transform(&t, scale, scale);
+    
+    //Begin drawing!
+    do_game_drawing(bmp, &t);
+    
+    return bmp;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws tree shadows.
  */
 void gameplay::draw_tree_shadows() {
@@ -1503,154 +1548,6 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the current area and mobs to a bitmap and returns it.
- */
-ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
-    //First, get the full dimensions of the map.
-    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
-    
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = cur_area_data.vertexes[v];
-        min_x = min(v_ptr->x, min_x);
-        min_y = min(v_ptr->y, min_y);
-        max_x = max(v_ptr->x, max_x);
-        max_y = max(v_ptr->y, max_y);
-    }
-    
-    //Figure out the scale that will fit on the image.
-    float area_w = max_x - min_x;
-    float area_h = max_y - min_y;
-    float scale = 1.0f;
-    float final_bmp_w = creator_tool_area_image_size;
-    float final_bmp_h = creator_tool_area_image_size;
-    
-    if(area_w > area_h) {
-        scale = creator_tool_area_image_size / area_w;
-        final_bmp_h *= area_h / area_w;
-    } else {
-        scale = creator_tool_area_image_size / area_h;
-        final_bmp_w *= area_w / area_h;
-    }
-    
-    //Create the bitmap.
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
-    
-    ALLEGRO_TRANSFORM t;
-    al_identity_transform(&t);
-    al_translate_transform(&t, -min_x, -min_y);
-    al_scale_transform(&t, scale, scale);
-    
-    //Begin drawing!
-    do_game_drawing(bmp, &t);
-    
-    return bmp;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a key or button on the screen.
- * font:     Font to use for the name.
- * c:        Info on the control.
- * where:    Center of the place to draw at.
- * max_size: Max width or height. Used to compress it if needed.
- *   0 = unlimited.
- */
-void draw_control(
-    const ALLEGRO_FONT* const font, const control_info &c,
-    const point &where, const point &max_size
-) {
-
-    if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
-        //If it's a mouse click, just draw the icon and be done with it.
-        if(c.button >= 1 && c.button <= 3) {
-        
-            draw_bitmap_in_box(
-                bmp_mouse_button_icon[c.button - 1], where, max_size
-            );
-            return;
-            
-        }
-    }
-    
-    if(
-        c.type == CONTROL_TYPE_MOUSE_WHEEL_UP ||
-        c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
-    ) {
-        //Likewise, if it's a mouse wheel move, just draw the icon and leave.
-        ALLEGRO_BITMAP* b = bmp_mouse_wu_icon;
-        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
-            b = bmp_mouse_wd_icon;
-        }
-        
-        draw_bitmap_in_box(b, where, max_size);
-        return;
-    }
-    
-    string name;
-    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
-        name = str_to_upper(al_keycode_to_name(c.button));
-    } else if(
-        c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ||
-        c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS
-    ) {
-        name = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
-        name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
-    } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        name = i2s(c.button + 1);
-    } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
-        name = "M" + i2s(c.button);
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
-        name = "MWL";
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
-        name = "MWR";
-    }
-    
-    int x1, y1, x2, y2;
-    al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
-    float total_width =
-        min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
-    float total_height =
-        min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
-    total_width = max(total_width, total_height);
-    
-    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
-        al_draw_filled_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            map_alpha(192)
-        );
-        al_draw_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            al_map_rgba(160, 160, 160, 192), 2
-        );
-    } else {
-        al_draw_filled_rounded_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            min(16.0, total_width * 0.5),
-            min(16.0, total_height * 0.5),
-            map_alpha(192)
-        );
-        al_draw_rounded_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            min(16.0, total_width * 0.5),
-            min(16.0, total_height * 0.5),
-            al_map_rgba(160, 160, 160, 192), 2
-        );
-    }
-    draw_compressed_text(
-        font, map_alpha(192), where, ALLEGRO_ALIGN_CENTER, 1,
-        point(
-            (max_size.x == 0 ? 0 : max_size.x - 2),
-            (max_size.y == 0 ? 0 : max_size.y - 2)
-        ), name
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a bitmap.
  * bmp:    The bitmap.
  * center: Center coordinates.
@@ -1805,6 +1702,109 @@ void draw_compressed_text(
     al_use_transform(&scale_transform); {
         al_draw_text(font, color, 0, 0, flags, text.c_str());
     }; al_use_transform(&old_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a key or button on the screen.
+ * font:     Font to use for the name.
+ * c:        Info on the control.
+ * where:    Center of the place to draw at.
+ * max_size: Max width or height. Used to compress it if needed.
+ *   0 = unlimited.
+ */
+void draw_control(
+    const ALLEGRO_FONT* const font, const control_info &c,
+    const point &where, const point &max_size
+) {
+
+    if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
+        //If it's a mouse click, just draw the icon and be done with it.
+        if(c.button >= 1 && c.button <= 3) {
+        
+            draw_bitmap_in_box(
+                bmp_mouse_button_icon[c.button - 1], where, max_size
+            );
+            return;
+            
+        }
+    }
+    
+    if(
+        c.type == CONTROL_TYPE_MOUSE_WHEEL_UP ||
+        c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
+    ) {
+        //Likewise, if it's a mouse wheel move, just draw the icon and leave.
+        ALLEGRO_BITMAP* b = bmp_mouse_wu_icon;
+        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+            b = bmp_mouse_wd_icon;
+        }
+        
+        draw_bitmap_in_box(b, where, max_size);
+        return;
+    }
+    
+    string name;
+    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
+        name = str_to_upper(al_keycode_to_name(c.button));
+    } else if(
+        c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ||
+        c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS
+    ) {
+        name = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
+        name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
+    } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
+        name = i2s(c.button + 1);
+    } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
+        name = "M" + i2s(c.button);
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
+        name = "MWL";
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
+        name = "MWR";
+    }
+    
+    int x1, y1, x2, y2;
+    al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
+    float total_width =
+        min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
+    float total_height =
+        min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
+    total_width = max(total_width, total_height);
+    
+    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
+        al_draw_filled_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            map_alpha(192)
+        );
+        al_draw_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            al_map_rgba(160, 160, 160, 192), 2
+        );
+    } else {
+        al_draw_filled_rounded_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            min(16.0, total_width * 0.5),
+            min(16.0, total_height * 0.5),
+            map_alpha(192)
+        );
+        al_draw_rounded_rectangle(
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
+            min(16.0, total_width * 0.5),
+            min(16.0, total_height * 0.5),
+            al_map_rgba(160, 160, 160, 192), 2
+        );
+    }
+    draw_compressed_text(
+        font, map_alpha(192), where, ALLEGRO_ALIGN_CENTER, 1,
+        point(
+            (max_size.x == 0 ? 0 : max_size.x - 2),
+            (max_size.y == 0 ? 0 : max_size.y - 2)
+        ), name
+    );
 }
 
 
@@ -2282,6 +2282,47 @@ void draw_loading_screen(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a mob's shadow.
+ * center:         Center of the mob.
+ * diameter:       Diameter of the mob.
+ * delta_z:        The mob is these many units above the floor
+ *   directly below it.
+ * shadow_stretch: How much to stretch the shadow by
+ *   (used to simulate sun shadow direction casting).
+ */
+void draw_mob_shadow(
+    const point &center, const float diameter,
+    const float delta_z, const float shadow_stretch
+) {
+
+    if(shadow_stretch <= 0) return;
+    
+    float shadow_x = 0;
+    float shadow_w =
+        diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
+        
+    if(day_minutes < 60 * 12) {
+        //Shadows point to the West.
+        shadow_x = -shadow_w + diameter * 0.5;
+        shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
+    } else {
+        //Shadows point to the East.
+        shadow_x = -(diameter * 0.5);
+        shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
+    }
+    
+    
+    draw_bitmap(
+        bmp_shadow,
+        point(center.x + shadow_x + shadow_w / 2, center.y),
+        point(shadow_w, diameter),
+        0,
+        map_alpha(255 * (1 - shadow_stretch))
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a notification, like a note saying that the player can press
  * a certain button to pluck.
  * target:  Spot that the notification is pointing at.
@@ -2377,47 +2418,6 @@ void draw_rotated_rectangle(
             color, thickness
         );
     }; al_use_transform(&old_transform);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a mob's shadow.
- * center:         Center of the mob.
- * diameter:       Diameter of the mob.
- * delta_z:        The mob is these many units above the floor
- *   directly below it.
- * shadow_stretch: How much to stretch the shadow by
- *   (used to simulate sun shadow direction casting).
- */
-void draw_mob_shadow(
-    const point &center, const float diameter,
-    const float delta_z, const float shadow_stretch
-) {
-
-    if(shadow_stretch <= 0) return;
-    
-    float shadow_x = 0;
-    float shadow_w =
-        diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
-        
-    if(day_minutes < 60 * 12) {
-        //Shadows point to the West.
-        shadow_x = -shadow_w + diameter * 0.5;
-        shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
-    } else {
-        //Shadows point to the East.
-        shadow_x = -(diameter * 0.5);
-        shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
-    }
-    
-    
-    draw_bitmap(
-        bmp_shadow,
-        point(center.x + shadow_x + shadow_w / 2, center.y),
-        point(shadow_w, diameter),
-        0,
-        map_alpha(255 * (1 - shadow_stretch))
-    );
 }
 
 

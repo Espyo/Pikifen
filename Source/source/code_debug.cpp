@@ -15,24 +15,6 @@
 map<void*, string> code_debug_new_allocs;
 bool code_debug_new_recording;
 
-void* operator new(size_t size, char* file, int line) {
-    void* ptr = malloc(size);
-    if(code_debug_new_recording) {
-        code_debug_new_allocs[ptr] =
-            string(file) + ":" + to_string((long long) line);
-    }
-    return ptr;
-}
-
-void* operator new[](size_t size, char* file, int line) {
-    void* ptr = malloc(size);
-    if(code_debug_new_recording) {
-        code_debug_new_allocs[ptr] =
-            string(file) + ":" + to_string((long long) line);
-    }
-    return ptr;
-}
-
 void operator delete(void* ptr) noexcept {
     if(code_debug_new_recording) {
         map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
@@ -51,6 +33,24 @@ void operator delete[](void* ptr) noexcept {
         }
     }
     return free(ptr);
+}
+
+void* operator new(size_t size, char* file, int line) {
+    void* ptr = malloc(size);
+    if(code_debug_new_recording) {
+        code_debug_new_allocs[ptr] =
+            string(file) + ":" + to_string((long long) line);
+    }
+    return ptr;
+}
+
+void* operator new[](size_t size, char* file, int line) {
+    void* ptr = malloc(size);
+    if(code_debug_new_recording) {
+        code_debug_new_allocs[ptr] =
+            string(file) + ":" + to_string((long long) line);
+    }
+    return ptr;
 }
 
 #endif //ifndef CODE_DEBUG_NEW

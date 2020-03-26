@@ -7,6 +7,71 @@
 
 using namespace std;
 
+//Creates an empty data node.
+data_node::data_node() :
+    file_was_opened(false),
+    line_nr(0) {
+    
+}
+
+
+//Creates a data node, using the data and creating a copy
+//of the children from another node.
+data_node::data_node(const data_node &dn2) :
+    name(dn2.name),
+    value(dn2.value),
+    file_was_opened(dn2.file_was_opened),
+    file_name(dn2.file_name),
+    line_nr(dn2.line_nr) {
+    
+    for(size_t c = 0; c < dn2.children.size(); ++c) {
+        children.push_back(new data_node(*(dn2.children[c])));
+    }
+    for(size_t dc = 0; dc < dn2.dummy_children.size(); ++dc) {
+        dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
+    }
+}
+
+
+//Creates a data node from a file, given the file name.
+data_node::data_node(const string &file_name) :
+    file_was_opened(false),
+    file_name(file_name),
+    line_nr(0) {
+    
+    load_file(file_name);
+}
+
+
+//Creates a data node by filling its name and value.
+data_node::data_node(const string &name, const string &value) :
+    name(name),
+    value(value),
+    file_was_opened(false),
+    line_nr(0) {
+    
+}
+
+
+//Destroys a data node and all the children within.
+data_node::~data_node() {
+    for(size_t c = 0; c < children.size(); ++c) {
+        delete children[c];
+    }
+    
+    for(size_t dc = 0; dc < dummy_children.size(); ++dc) {
+        delete dummy_children[dc];
+    }
+}
+
+
+//Adds a new child to the list.
+size_t data_node::add(data_node* new_node) {
+    children.push_back(new_node);
+    return children.size() - 1;
+}
+
+
 //Creates a dummy node. If the programmer
 //requests an invalid node, a dummy is returned.
 data_node* data_node::create_dummy() {
@@ -19,28 +84,10 @@ data_node* data_node::create_dummy() {
 }
 
 
-//Returns the number of children nodes (direct children only).
-size_t data_node::get_nr_of_children() {
-    return children.size();
-}
-
-
 //Returns a child node given its number on the list (direct children only).
 data_node* data_node::get_child(const size_t number) {
     if(number >= children.size()) return create_dummy();
     return children[number];
-}
-
-
-//Returns the number of occurences of a child name (direct children only).
-size_t data_node::get_nr_of_children_by_name(const string &name) {
-    size_t number = 0;
-    
-    for(size_t c = 0; c < children.size(); ++c) {
-        if(name == children[c]->name) ++number;
-    }
-    
-    return number;
 }
 
 
@@ -65,29 +112,27 @@ data_node* data_node::get_child_by_name(
 }
 
 
+//Returns the number of children nodes (direct children only).
+size_t data_node::get_nr_of_children() {
+    return children.size();
+}
+
+
+//Returns the number of occurences of a child name (direct children only).
+size_t data_node::get_nr_of_children_by_name(const string &name) {
+    size_t number = 0;
+    
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(name == children[c]->name) ++number;
+    }
+    
+    return number;
+}
+
+
 //Returns the value of a node, or def if it has no value.
 string data_node::get_value_or_default(const string &def) {
     return (value.empty() ? def : value);
-}
-
-
-//Adds a new child to the list.
-size_t data_node::add(data_node* new_node) {
-    children.push_back(new_node);
-    return children.size() - 1;
-}
-
-
-//Removes and destroys a child from the list.
-bool data_node::remove(data_node* node_to_remove) {
-    for(size_t c = 0; c < children.size(); ++c) {
-        if(children[c] == node_to_remove) {
-            delete node_to_remove;
-            children.erase(children.begin() + c);
-            return true;
-        }
-    }
-    return false;
 }
 
 
@@ -221,6 +266,19 @@ size_t data_node::load_node(
 }
 
 
+//Removes and destroys a child from the list.
+bool data_node::remove(data_node* node_to_remove) {
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(children[c] == node_to_remove) {
+            delete node_to_remove;
+            children.erase(children.begin() + c);
+            return true;
+        }
+    }
+    return false;
+}
+
+
 //Saves a node into a new text file. Line numbers are ignored.
 //If you don't provide a file name, it'll use the node's file name.
 //Returns true on success.
@@ -285,94 +343,6 @@ void data_node::save_node(
 }
 
 
-//Creates an empty data node.
-data_node::data_node() :
-    file_was_opened(false),
-    line_nr(0) {
-    
-}
-
-
-//Creates a data node, using the data and creating a copy
-//of the children from another node.
-data_node::data_node(const data_node &dn2) :
-    name(dn2.name),
-    value(dn2.value),
-    file_was_opened(dn2.file_was_opened),
-    file_name(dn2.file_name),
-    line_nr(dn2.line_nr) {
-    
-    for(size_t c = 0; c < dn2.children.size(); ++c) {
-        children.push_back(new data_node(*(dn2.children[c])));
-    }
-    for(size_t dc = 0; dc < dn2.dummy_children.size(); ++dc) {
-        dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
-    }
-}
-
-
-//Creates a data node from a file, given the file name.
-data_node::data_node(const string &file_name) :
-    file_was_opened(false),
-    file_name(file_name),
-    line_nr(0) {
-    
-    load_file(file_name);
-}
-
-
-//Creates a data node by filling its name and value.
-data_node::data_node(const string &name, const string &value) :
-    name(name),
-    value(value),
-    file_was_opened(false),
-    line_nr(0) {
-    
-}
-
-
-//Destroys a data node and all the children within.
-data_node::~data_node() {
-    for(size_t c = 0; c < children.size(); ++c) {
-        delete children[c];
-    }
-    
-    for(size_t dc = 0; dc < dummy_children.size(); ++dc) {
-        delete dummy_children[dc];
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Like an std::getline(), but for ALLEGRO_FILE*.
- */
-void getline(ALLEGRO_FILE* file, string &line) {
-    line.clear();
-    if(!file) {
-        return;
-    }
-    
-    size_t bytes_read;
-    char* c_ptr = new char;
-    char c;
-    
-    bytes_read = al_fread(file, c_ptr, 1);
-    while(bytes_read > 0) {
-        c = *((char*) c_ptr);
-        
-        if(c == '\r' || c == '\n') {
-            break;
-        } else {
-            line.push_back(c);
-        }
-        
-        bytes_read = al_fread(file, c_ptr, 1);
-    }
-    
-    delete c_ptr;
-}
-
-
 /* ----------------------------------------------------------------------------
  * Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
@@ -403,4 +373,34 @@ string data_node::trim_spaces(const string &s, const bool left_only) {
     }
     
     return orig;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Like an std::getline(), but for ALLEGRO_FILE*.
+ */
+void getline(ALLEGRO_FILE* file, string &line) {
+    line.clear();
+    if(!file) {
+        return;
+    }
+    
+    size_t bytes_read;
+    char* c_ptr = new char;
+    char c;
+    
+    bytes_read = al_fread(file, c_ptr, 1);
+    while(bytes_read > 0) {
+        c = *((char*) c_ptr);
+        
+        if(c == '\r' || c == '\n') {
+            break;
+        } else {
+            line.push_back(c);
+        }
+        
+        bytes_read = al_fread(file, c_ptr, 1);
+    }
+    
+    delete c_ptr;
 }

@@ -25,6 +25,172 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
+
+
+/* ----------------------------------------------------------------------------
+ * Creates the easy fsm creator.
+ */
+easy_fsm_creator::easy_fsm_creator() :
+    cur_state(nullptr),
+    cur_event(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new action call for the current event, one that changes
+ * the mob's state to something else.
+ */
+void easy_fsm_creator::change_state(const string &new_state) {
+    cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
+    cur_event->actions.back()->args.push_back(new_state);
+    cur_event->actions.back()->arg_is_var.push_back(false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes the event that is currently under construction, if any.
+ */
+void easy_fsm_creator::commit_event() {
+    if(!cur_event) return;
+    cur_event = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes the state that is currently under construction, if any.
+ */
+void easy_fsm_creator::commit_state() {
+    if(!cur_state) return;
+    commit_event();
+    cur_state = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes any event or state under construction and returns the
+ * final vector of states.
+ */
+vector<mob_state*> easy_fsm_creator::finish() {
+    commit_event();
+    commit_state();
+    sort(
+        states.begin(), states.end(),
+    [] (mob_state * ms1, mob_state * ms2) -> bool {
+        return ms1->id < ms2->id;
+    }
+    );
+    return states;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes the previous event, if any, creates a new event for the
+ * current state, and starts tracking for the creation of its actions.
+ */
+void easy_fsm_creator::new_event(const unsigned char type) {
+    commit_event();
+    cur_event = new mob_event(type);
+    cur_state->events[type] = cur_event;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes the previous state, if any, creates a new state,
+ * and starts tracking for the creation of its events.
+ */
+void easy_fsm_creator::new_state(const string &name, const size_t id) {
+    commit_state();
+    cur_state = new mob_state(name, id);
+    states.push_back(cur_state);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new action for the current event, one that
+ * runs some custom code.
+ */
+void easy_fsm_creator::run(custom_action_code code) {
+    cur_event->actions.push_back(new mob_action_call(code));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a structure with info about an event where two hitboxes touch.
+ * mob2: the other mob.
+ * h1:   the current mob's hitbox.
+ * h2:   the other mob's hitbox.
+ */
+hitbox_interaction::hitbox_interaction(
+    mob* mob2, hitbox* h1, hitbox* h2
+) {
+    this->mob2 = mob2;
+    this->h1   = h1;
+    this->h2   = h2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new event given a data node.
+ * node:    the data node.
+ * actions: its actions.
+ */
+mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
+    actions(actions) {
+    
+#define r(name, number) \
+    else if(n == (name)) type = (number)
+    
+    string n = node->name;
+    if(n == "on_enter") type = MOB_EV_ON_ENTER;
+    r("on_leave",              MOB_EV_ON_LEAVE);
+    r("on_tick",               MOB_EV_ON_TICK);
+    r("on_animation_end",      MOB_EV_ANIMATION_END);
+    r("on_damage",             MOB_EV_DAMAGE);
+    r("on_far_from_home",      MOB_EV_FAR_FROM_HOME);
+    r("on_focus_off_reach",    MOB_EV_FOCUS_OFF_REACH);
+    r("on_frame_signal",       MOB_EV_FRAME_SIGNAL);
+    r("on_held",               MOB_EV_HELD);
+    r("on_hitbox_touch_eat",   MOB_EV_HITBOX_TOUCH_EAT);
+    r("on_hitbox_touch_a_n",   MOB_EV_HITBOX_TOUCH_A_N);
+    r("on_itch",               MOB_EV_ITCH);
+    r("on_land",               MOB_EV_LANDED);
+    r("on_object_in_reach",    MOB_EV_OBJECT_IN_REACH);
+    r("on_opponent_in_reach",  MOB_EV_OPPONENT_IN_REACH);
+    r("on_pikmin_land",        MOB_EV_THROWN_PIKMIN_LANDED);
+    r("on_receive_message",    MOB_EV_RECEIVE_MESSAGE);
+    r("on_released",           MOB_EV_RELEASED);
+    r("on_reach_destination",  MOB_EV_REACHED_DESTINATION);
+    r("on_timer",              MOB_EV_TIMER);
+    r("on_touch_hazard",       MOB_EV_TOUCHED_HAZARD);
+    r("on_touch_object",       MOB_EV_TOUCHED_OBJECT);
+    r("on_touch_opponent",     MOB_EV_TOUCHED_OPPONENT);
+    r("on_touch_wall",         MOB_EV_TOUCHED_WALL);
+    r("on_weight_added",       MOB_EV_WEIGHT_ADDED);
+    r("on_weight_removed",     MOB_EV_WEIGHT_REMOVED);
+    else {
+        type = MOB_EV_UNKNOWN;
+        log_error("Unknown script event name \"" + n + "\"!", node);
+    }
+    
+    for(size_t a = 0; a < this->actions.size(); ++a) {
+        this->actions[a]->parent_event = (MOB_EV_TYPES) type;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new event.
+ * t: the event type.
+ * a: its actions.
+ */
+mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
+    type(t),
+    actions(a) {
+    
+}
+
+
 /* ----------------------------------------------------------------------------
  * Runs a mob event. Basically runs all actions within.
  * m:             the mob.
@@ -115,12 +281,14 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a pointer to an event of the given type in the state,
- * if it exists.
- * type: the event's type.
+ * Creates a new mob FSM.
  */
-mob_event* mob_state::get_event(const size_t type) {
-    return events[type];
+mob_fsm::mob_fsm(mob* m) :
+    cur_state(nullptr),
+    first_state_override(INVALID) {
+    
+    if(!m) return;
+    this->m = m;
 }
 
 
@@ -163,110 +331,6 @@ void mob_fsm::run_event(
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new event given a data node.
- * node:    the data node.
- * actions: its actions.
- */
-mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
-    actions(actions) {
-    
-#define r(name, number) \
-    else if(n == (name)) type = (number)
-    
-    string n = node->name;
-    if(n == "on_enter") type = MOB_EV_ON_ENTER;
-    r("on_leave",              MOB_EV_ON_LEAVE);
-    r("on_tick",               MOB_EV_ON_TICK);
-    r("on_animation_end",      MOB_EV_ANIMATION_END);
-    r("on_damage",             MOB_EV_DAMAGE);
-    r("on_far_from_home",      MOB_EV_FAR_FROM_HOME);
-    r("on_focus_off_reach",    MOB_EV_FOCUS_OFF_REACH);
-    r("on_frame_signal",       MOB_EV_FRAME_SIGNAL);
-    r("on_held",               MOB_EV_HELD);
-    r("on_hitbox_touch_eat",   MOB_EV_HITBOX_TOUCH_EAT);
-    r("on_hitbox_touch_a_n",   MOB_EV_HITBOX_TOUCH_A_N);
-    r("on_itch",               MOB_EV_ITCH);
-    r("on_land",               MOB_EV_LANDED);
-    r("on_object_in_reach",    MOB_EV_OBJECT_IN_REACH);
-    r("on_opponent_in_reach",  MOB_EV_OPPONENT_IN_REACH);
-    r("on_pikmin_land",        MOB_EV_THROWN_PIKMIN_LANDED);
-    r("on_receive_message",    MOB_EV_RECEIVE_MESSAGE);
-    r("on_released",           MOB_EV_RELEASED);
-    r("on_reach_destination",  MOB_EV_REACHED_DESTINATION);
-    r("on_timer",              MOB_EV_TIMER);
-    r("on_touch_hazard",       MOB_EV_TOUCHED_HAZARD);
-    r("on_touch_object",       MOB_EV_TOUCHED_OBJECT);
-    r("on_touch_opponent",     MOB_EV_TOUCHED_OPPONENT);
-    r("on_touch_wall",         MOB_EV_TOUCHED_WALL);
-    r("on_weight_added",       MOB_EV_WEIGHT_ADDED);
-    r("on_weight_removed",     MOB_EV_WEIGHT_REMOVED);
-    else {
-        type = MOB_EV_UNKNOWN;
-        log_error("Unknown script event name \"" + n + "\"!", node);
-    }
-    
-    for(size_t a = 0; a < this->actions.size(); ++a) {
-        this->actions[a]->parent_event = (MOB_EV_TYPES) type;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new event.
- * t: the event type.
- * a: its actions.
- */
-mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
-    type(t),
-    actions(a) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new state.
- * name: the state's name.
- */
-mob_state::mob_state(const string &name) :
-    name(name),
-    id(INVALID) {
-    
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
-        events[e] = nullptr;
-    }
-}
-
-/* ----------------------------------------------------------------------------
- * Creates a new state.
- * name: the state's name.
- * e:    its events.
- */
-mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
-    name(name),
-    id(INVALID) {
-    
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
-        events[e] = evs[e];
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty state.
- * name: the state's name.
- * id:   its ID, for sorting on the vector of states.
- */
-mob_state::mob_state(const string &name, const size_t id) :
-    name(name),
-    id(id) {
-    
-    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
-        events[e] = nullptr;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Changes the fsm to use a different state.
  * info*: data to pass on to the code after the state change.
  *   This data comes from the event that started all of this.
@@ -300,14 +364,56 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new mob FSM.
+ * Creates a new state.
+ * name: the state's name.
  */
-mob_fsm::mob_fsm(mob* m) :
-    cur_state(nullptr),
-    first_state_override(INVALID) {
+mob_state::mob_state(const string &name) :
+    name(name),
+    id(INVALID) {
     
-    if(!m) return;
-    this->m = m;
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        events[e] = nullptr;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new state.
+ * name: the state's name.
+ * e:    its events.
+ */
+mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
+    name(name),
+    id(INVALID) {
+    
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        events[e] = evs[e];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new, empty state.
+ * name: the state's name.
+ * id:   its ID, for sorting on the vector of states.
+ */
+mob_state::mob_state(const string &name, const size_t id) :
+    name(name),
+    id(id) {
+    
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+        events[e] = nullptr;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a pointer to an event of the given type in the state,
+ * if it exists.
+ * type: the event's type.
+ */
+mob_event* mob_state::get_event(const size_t type) {
+    return events[type];
 }
 
 
@@ -489,107 +595,4 @@ void unload_script(mob_type* mt) {
         
     }
     mt->states.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates the easy fsm creator.
- */
-easy_fsm_creator::easy_fsm_creator() :
-    cur_state(nullptr),
-    cur_event(nullptr) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes the state that is currently under construction, if any.
- */
-void easy_fsm_creator::commit_state() {
-    if(!cur_state) return;
-    commit_event();
-    cur_state = NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes the event that is currently under construction, if any.
- */
-void easy_fsm_creator::commit_event() {
-    if(!cur_event) return;
-    cur_event = NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes the previous state, if any, creates a new state,
- * and starts tracking for the creation of its events.
- */
-void easy_fsm_creator::new_state(const string &name, const size_t id) {
-    commit_state();
-    cur_state = new mob_state(name, id);
-    states.push_back(cur_state);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes the previous event, if any, creates a new event for the
- * current state, and starts tracking for the creation of its actions.
- */
-void easy_fsm_creator::new_event(const unsigned char type) {
-    commit_event();
-    cur_event = new mob_event(type);
-    cur_state->events[type] = cur_event;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new action call for the current event, one that changes
- * the mob's state to something else.
- */
-void easy_fsm_creator::change_state(const string &new_state) {
-    cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
-    cur_event->actions.back()->args.push_back(new_state);
-    cur_event->actions.back()->arg_is_var.push_back(false);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new action for the current event, one that
- * runs some custom code.
- */
-void easy_fsm_creator::run(custom_action_code code) {
-    cur_event->actions.push_back(new mob_action_call(code));
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes any event or state under construction and returns the
- * final vector of states.
- */
-vector<mob_state*> easy_fsm_creator::finish() {
-    commit_event();
-    commit_state();
-    sort(
-        states.begin(), states.end(),
-    [] (mob_state * ms1, mob_state * ms2) -> bool {
-        return ms1->id < ms2->id;
-    }
-    );
-    return states;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a structure with info about an event where two hitboxes touch.
- * mob2: the other mob.
- * h1:   the current mob's hitbox.
- * h2:   the other mob's hitbox.
- */
-hitbox_interaction::hitbox_interaction(
-    mob* mob2, hitbox* h1, hitbox* h2
-) {
-    this->mob2 = mob2;
-    this->h1   = h1;
-    this->h2   = h2;
 }

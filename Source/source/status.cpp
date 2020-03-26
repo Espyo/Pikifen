@@ -15,6 +15,30 @@
 using namespace std;
 
 /* ----------------------------------------------------------------------------
+ * Creates a status effect instance.
+ */
+status::status(status_type* type) :
+    type(type),
+    to_delete(false) {
+    
+    time_left = type->auto_remove_time;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks a status effect instance's logic, but not its effects.
+ */
+void status::tick(const float delta_t) {
+    if(type->auto_remove_time > 0.0f) {
+        time_left -= delta_t;
+        if(time_left <= 0.0f) {
+            to_delete = true;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a status effect type.
  */
 status_type::status_type() :
@@ -41,29 +65,4 @@ status_type::status_type() :
     particle_offset_z(0.0f),
     animation_mob_scale(1.0f) {
     
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a status effect instance.
- */
-status::status(status_type* type) :
-    type(type),
-    to_delete(false) {
-    
-    time_left = type->auto_remove_time;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks a status effect instance's logic, but not its effects.
- */
-void status::tick(const float delta_t) {
-    if(type->auto_remove_time > 0.0f) {
-        time_left -= delta_t;
-        if(time_left <= 0.0f) {
-            to_delete = true;
-        }
-    }
 }

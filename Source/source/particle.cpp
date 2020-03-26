@@ -47,29 +47,6 @@ particle::particle(
 
 
 /* ----------------------------------------------------------------------------
- * Makes a particle follow a game tick.
- * Returns false if its lifespan is over and it should be deleted.
- */
-void particle::tick(const float delta_t) {
-    time -= delta_t;
-    
-    if(time <= 0.0f) {
-        time = 0.0f;
-        return;
-    }
-    
-    pos += speed * delta_t;
-    
-    speed.x *= 1 - (delta_t* friction);
-    speed.y *= 1 - (delta_t* friction);
-    speed.y += delta_t* gravity;
-    
-    size += delta_t* size_grow_speed;
-    size = max(0.0f, size);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws this particle onto the world.
  */
 void particle::draw() {
@@ -157,171 +134,25 @@ void particle::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a particle manager.
+ * Makes a particle follow a game tick.
+ * Returns false if its lifespan is over and it should be deleted.
  */
-particle_manager::particle_manager(const size_t &max_nr) :
-    particles(nullptr),
-    max_nr(max_nr) {
+void particle::tick(const float delta_t) {
+    time -= delta_t;
     
-    if(max_nr == 0) return;
-    particles = new particle[max_nr];
-    clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Copies a particle manager from another one.
- */
-particle_manager &particle_manager::operator =(const particle_manager &pg) {
-
-    if(this != &pg) {
-        this->particles = NULL;
-        max_nr = pg.max_nr;
-        if(max_nr == 0) return *this;
-        count = pg.count;
-        this->particles = new particle[max_nr];
-        for(size_t p = 0; p < count; ++p) {
-            this->particles[p] = pg.particles[p];
-        }
-    }
-    
-    return *this;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a particle manager.
- */
-particle_manager::~particle_manager() {
-    if(particles) delete[] particles;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Removes a particle from the list.
- */
-void particle_manager::remove(const size_t pos) {
-    if(pos > count) return;
-    
-    //To remove a particle, let's simply move its data to the start of
-    //the "dead" particles. A particle is considered dead if its time is 0.
-    particles[pos].time = 0.0f;
-    
-    //Because the first "count" members are alive, we'll swap this dead
-    //particle with the last living one. This means this particle
-    //will represent the new start of the dead ones.
-    
-    //But hey, if we only had one particle, we can just skip this!
-    if(count == 1) {
-        count = 0;
+    if(time <= 0.0f) {
+        time = 0.0f;
         return;
     }
     
-    //Place the last live particle on this now-unused position.
-    particles[pos] = particles[count - 1];
-    //And this new "dead" particle should be marked as such.
-    particles[count - 1].time = 0.0f;
+    pos += speed * delta_t;
     
-    count--;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new particle to the list. It will fail if there is no slot
- * where it can be added to.
- */
-void particle_manager::add(particle p) {
-    if(max_nr == 0) return;
+    speed.x *= 1 - (delta_t* friction);
+    speed.y *= 1 - (delta_t* friction);
+    speed.y += delta_t* gravity;
     
-    //The first "count" particles are alive. Add the new one after.
-    //...Unless count already equals the max. That means the list is full.
-    //Let's try to dump a particle with lower priority.
-    //Starting from 0 will (hopefully) give us the oldest one first.
-    bool success = true;
-    if(count == max_nr) {
-        success = false;
-        for(size_t i = 0; i < max_nr; ++i) {
-            if(particles[i].priority < p.priority) {
-                remove(i);
-                success = true;
-                break;
-            }
-        }
-    }
-    
-    //No room for this particle.
-    if(!success)
-        return;
-        
-    particles[count] = p;
-    count++;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns how many are in the list.
- */
-size_t particle_manager::get_count() {
-    return count;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks all particles in the list.
- */
-void particle_manager::tick_all(const float delta_t) {
-    for(size_t c = 0; c < count;) {
-        particles[c].tick(delta_t);
-        if(particles[c].time == 0.0f) {
-            remove(c);
-        } else {
-            ++c;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds the particle pointers to the provided list of world component,
- * so that the particles can be drawn, after being Z-sorted.
- * list:           The list to populate.
- * cam_tl, cam_br: Only draw particles inside this frame.
- */
-void particle_manager::fill_component_list(
-    vector<world_component> &list,
-    const point &cam_tl, const point &cam_br
-) {
-    for(size_t c = 0; c < count; ++c) {
-    
-        particle* p_ptr = &particles[c];
-        
-        if(
-            cam_tl != cam_br &&
-            !rectangles_intersect(
-                p_ptr->pos - p_ptr->size, p_ptr->pos + p_ptr->size,
-                cam_tl, cam_br
-            )
-        ) {
-            //Off-camera.
-            continue;
-        }
-        
-        world_component wc;
-        wc.particle_ptr = p_ptr;
-        wc.z = p_ptr->z;
-        list.push_back(wc);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Clears the list.
- */
-void particle_manager::clear() {
-    for(size_t p = 0; p < max_nr; ++p) {
-        particles[p].time = 0.0f;
-    }
-    count = 0;
+    size += delta_t* size_grow_speed;
+    size = max(0.0f, size);
 }
 
 
@@ -358,22 +189,6 @@ particle_generator::particle_generator(
     total_speed(0),
     total_speed_deviation(0) {
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks one game frame of logic.
- */
-void particle_generator::tick(const float delta_t, particle_manager &manager) {
-    if(follow_mob) {
-        base_particle.pos = follow_mob->pos;
-        base_particle.z = follow_mob->z;
-    }
-    emission_timer -= delta_t;
-    if(emission_timer <= 0.0f) {
-        emit(manager);
-        emission_timer = emission_interval;
-    }
 }
 
 
@@ -471,4 +286,189 @@ void particle_generator::emit(particle_manager &manager) {
  */
 void particle_generator::reset() {
     emission_timer = emission_interval;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one game frame of logic.
+ */
+void particle_generator::tick(const float delta_t, particle_manager &manager) {
+    if(follow_mob) {
+        base_particle.pos = follow_mob->pos;
+        base_particle.z = follow_mob->z;
+    }
+    emission_timer -= delta_t;
+    if(emission_timer <= 0.0f) {
+        emit(manager);
+        emission_timer = emission_interval;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a particle manager.
+ */
+particle_manager::particle_manager(const size_t &max_nr) :
+    particles(nullptr),
+    max_nr(max_nr) {
+    
+    if(max_nr == 0) return;
+    particles = new particle[max_nr];
+    clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies a particle manager from another one.
+ */
+particle_manager &particle_manager::operator =(const particle_manager &pg) {
+
+    if(this != &pg) {
+        this->particles = NULL;
+        max_nr = pg.max_nr;
+        if(max_nr == 0) return *this;
+        count = pg.count;
+        this->particles = new particle[max_nr];
+        for(size_t p = 0; p < count; ++p) {
+            this->particles[p] = pg.particles[p];
+        }
+    }
+    
+    return *this;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a particle manager.
+ */
+particle_manager::~particle_manager() {
+    if(particles) delete[] particles;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new particle to the list. It will fail if there is no slot
+ * where it can be added to.
+ */
+void particle_manager::add(particle p) {
+    if(max_nr == 0) return;
+    
+    //The first "count" particles are alive. Add the new one after.
+    //...Unless count already equals the max. That means the list is full.
+    //Let's try to dump a particle with lower priority.
+    //Starting from 0 will (hopefully) give us the oldest one first.
+    bool success = true;
+    if(count == max_nr) {
+        success = false;
+        for(size_t i = 0; i < max_nr; ++i) {
+            if(particles[i].priority < p.priority) {
+                remove(i);
+                success = true;
+                break;
+            }
+        }
+    }
+    
+    //No room for this particle.
+    if(!success)
+        return;
+        
+    particles[count] = p;
+    count++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list.
+ */
+void particle_manager::clear() {
+    for(size_t p = 0; p < max_nr; ++p) {
+        particles[p].time = 0.0f;
+    }
+    count = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds the particle pointers to the provided list of world component,
+ * so that the particles can be drawn, after being Z-sorted.
+ * list:           The list to populate.
+ * cam_tl, cam_br: Only draw particles inside this frame.
+ */
+void particle_manager::fill_component_list(
+    vector<world_component> &list,
+    const point &cam_tl, const point &cam_br
+) {
+    for(size_t c = 0; c < count; ++c) {
+    
+        particle* p_ptr = &particles[c];
+        
+        if(
+            cam_tl != cam_br &&
+            !rectangles_intersect(
+                p_ptr->pos - p_ptr->size, p_ptr->pos + p_ptr->size,
+                cam_tl, cam_br
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
+        world_component wc;
+        wc.particle_ptr = p_ptr;
+        wc.z = p_ptr->z;
+        list.push_back(wc);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many are in the list.
+ */
+size_t particle_manager::get_count() {
+    return count;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes a particle from the list.
+ */
+void particle_manager::remove(const size_t pos) {
+    if(pos > count) return;
+    
+    //To remove a particle, let's simply move its data to the start of
+    //the "dead" particles. A particle is considered dead if its time is 0.
+    particles[pos].time = 0.0f;
+    
+    //Because the first "count" members are alive, we'll swap this dead
+    //particle with the last living one. This means this particle
+    //will represent the new start of the dead ones.
+    
+    //But hey, if we only had one particle, we can just skip this!
+    if(count == 1) {
+        count = 0;
+        return;
+    }
+    
+    //Place the last live particle on this now-unused position.
+    particles[pos] = particles[count - 1];
+    //And this new "dead" particle should be marked as such.
+    particles[count - 1].time = 0.0f;
+    
+    count--;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks all particles in the list.
+ */
+void particle_manager::tick_all(const float delta_t) {
+    for(size_t c = 0; c < count;) {
+        particles[c].tick(delta_t);
+        if(particles[c].time == 0.0f) {
+            remove(c);
+        } else {
+            ++c;
+        }
+    }
 }

@@ -53,6 +53,64 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys Allegro and modules.
+ */
+void destroy_allegro() {
+    al_uninstall_joystick();
+    al_uninstall_audio();
+    al_uninstall_keyboard();
+    al_uninstall_mouse();
+    al_uninstall_system();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys Allegro's event-related things.
+ */
+void destroy_event_things(
+    ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
+) {
+    al_destroy_event_queue(logic_queue);
+    al_destroy_timer(logic_timer);
+    al_destroy_display(display);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys the list of game states.
+ */
+void destroy_game_states() {
+    for(size_t s = 0; s < N_GAME_STATES; s++) {
+        delete game_states[s];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys miscellaneous things.
+ */
+void destroy_misc() {
+    al_destroy_bitmap(bmp_error);
+    al_destroy_font(font_area_name);
+    al_destroy_font(font_counter);
+    al_destroy_font(font_main);
+    al_destroy_font(font_value);
+    
+    al_detach_voice(voice);
+    al_destroy_mixer(mixer);
+    al_destroy_voice(voice);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys registered mob categories.
+ */
+void destroy_mob_categories() {
+    mob_categories.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes Allegro and its modules.
  */
 void init_allegro() {
@@ -1121,62 +1179,4 @@ void init_single_animation(
     anim.database = load_animation_database_from_file(&file);
     anim.instance.cur_anim = anim.database.animations[0];
     anim.instance.start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys Allegro and modules.
- */
-void destroy_allegro() {
-    al_uninstall_joystick();
-    al_uninstall_audio();
-    al_uninstall_keyboard();
-    al_uninstall_mouse();
-    al_uninstall_system();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys Allegro's event-related things.
- */
-void destroy_event_things(
-    ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
-) {
-    al_destroy_event_queue(logic_queue);
-    al_destroy_timer(logic_timer);
-    al_destroy_display(display);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys the list of game states.
- */
-void destroy_game_states() {
-    for(size_t s = 0; s < N_GAME_STATES; s++) {
-        delete game_states[s];
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys miscellaneous things.
- */
-void destroy_misc() {
-    al_destroy_bitmap(bmp_error);
-    al_destroy_font(font_area_name);
-    al_destroy_font(font_counter);
-    al_destroy_font(font_main);
-    al_destroy_font(font_value);
-    
-    al_detach_voice(voice);
-    al_destroy_mixer(mixer);
-    al_destroy_voice(voice);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys registered mob categories.
- */
-void destroy_mob_categories() {
-    mob_categories.clear();
 }

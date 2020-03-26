@@ -25,6 +25,9 @@ scale_type::scale_type() :
 }
 
 
+scale_type::~scale_type() { }
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -33,6 +36,3 @@ void scale_type::load_properties(data_node* file) {
     
     rs.set("goal_number", goal_number);
 }
-
-
-scale_type::~scale_type() { }

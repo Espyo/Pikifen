@@ -3,6 +3,37 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
+ * Creates a dummy widget.
+ */
+dummy::dummy(
+    const int x1, const int y1, const int x2, const int y2,
+    lafi::style* style, const unsigned char flags
+) :
+    widget(x1, y1, x2, y2, style, flags) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a dummy widget.
+ */
+dummy::dummy() : widget() {
+
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a dummy widget.
+ */
+dummy::~dummy() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a dummy widget.
+ */
+void dummy::draw_self() { }
+
+
+/* ----------------------------------------------------------------------------
  * Creates a line.
  */
 line::line(
@@ -46,39 +77,5 @@ void line::draw_self() {
         al_draw_line(x, y1, x, y2, get_fg_color(), thickness);
     }
 }
-
-
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a dummy widget.
- */
-dummy::dummy(
-    const int x1, const int y1, const int x2, const int y2,
-    lafi::style* style, const unsigned char flags
-) :
-    widget(x1, y1, x2, y2, style, flags) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a dummy widget.
- */
-dummy::dummy() : widget() {
-
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a dummy widget.
- */
-void dummy::draw_self() { }
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a dummy widget.
- */
-dummy::~dummy() { }
 
 }

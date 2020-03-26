@@ -57,96 +57,10 @@ pikmin::~pikmin() { }
 
 
 /* ----------------------------------------------------------------------------
- * Forces the Pikmin to start carrying the given mob.
- * This quickly runs over several steps in the usual FSM logic, just to
- * instantly get to the end result.
- * As such, be careful when using it.
+ * Returns whether or not a Pikmin can receive a given status effect.
  */
-void pikmin::force_carry(mob* m) {
-    pikmin_fsm::go_to_carriable_object(this, (void*) m, NULL);
-    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT);
-    pikmin_fsm::reach_carriable_object(this, NULL, NULL);
-    fsm.set_state(PIKMIN_STATE_CARRYING);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a Pikmin's base speed, without status effects and the like.
- * This depends on the maturity.
- */
-float pikmin::get_base_speed() {
-    float base = mob::get_base_speed();
-    return base + (base * this->maturity * maturity_speed_mult);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the sprout closest to a leader. Used when auto-plucking.
- * pos:             Coordinates of the leader.
- * d:               Variable to return the distance to. NULL for none.
- * ignore_reserved: If true, ignore any sprouts that are "reserved"
- *   (i.e. already chosen to be plucked by another leader).
- */
-pikmin* get_closest_sprout(
-    const point &pos, dist* d, const bool ignore_reserved
-) {
-    dist closest_distance = 0;
-    pikmin* closest_pikmin = NULL;
-    
-    size_t n_pikmin = pikmin_list.size();
-    for(size_t p = 0; p < n_pikmin; ++p) {
-        if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
-        
-        dist dis(pos, pikmin_list[p]->pos);
-        if(closest_pikmin == NULL || dis < closest_distance) {
-        
-            if(!(ignore_reserved || pikmin_list[p]->pluck_reserved)) {
-                closest_distance = dis;
-                closest_pikmin = pikmin_list[p];
-            }
-        }
-    }
-    
-    if(d) *d = closest_distance;
-    return closest_pikmin;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks some logic specific to Pikmin.
- */
-void pikmin::tick_class_specifics(const float delta_t) {
-    //Carrying object.
-    if(carrying_mob) {
-        if(!carrying_mob->carry_info) {
-            fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-        }
-    }
-    
-    //Is it dead?
-    if(health <= 0) {
-        to_delete = true;
-        
-        pikmin_fsm::notify_leader_release(this, NULL, NULL);
-        
-        particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
-            pik_type->radius * 2, 2.0f
-        );
-        par.bitmap = bmp_pikmin_spirit;
-        par.speed.x = randomf(-20, 20);
-        par.speed.y = randomf(-70, -30);
-        par.friction = 0.8;
-        par.gravity = -0.2;
-        par.color = pik_type->main_color;
-        particles.add(par);
-        
-        sfx_pikmin_dying.play(0.03, false);
-    }
-    
-    //Tick the timer for the "missed" attack animation.
-    missed_attack_timer.tick(delta_t);
-    
+bool pikmin::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_PIKMIN;
 }
 
 
@@ -205,10 +119,26 @@ void pikmin::draw_mob() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether or not a Pikmin can receive a given status effect.
+ * Forces the Pikmin to start carrying the given mob.
+ * This quickly runs over several steps in the usual FSM logic, just to
+ * instantly get to the end result.
+ * As such, be careful when using it.
  */
-bool pikmin::can_receive_status(status_type* s) {
-    return s->affects & STATUS_AFFECTS_PIKMIN;
+void pikmin::force_carry(mob* m) {
+    pikmin_fsm::go_to_carriable_object(this, (void*) m, NULL);
+    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT);
+    pikmin_fsm::reach_carriable_object(this, NULL, NULL);
+    fsm.set_state(PIKMIN_STATE_CARRYING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a Pikmin's base speed, without status effects and the like.
+ * This depends on the maturity.
+ */
+float pikmin::get_base_speed() {
+    float base = mob::get_base_speed();
+    return base + (base * this->maturity * maturity_speed_mult);
 }
 
 
@@ -252,27 +182,6 @@ void pikmin::increase_maturity(const int amount) {
 
 
 /* ----------------------------------------------------------------------------
- * Reads the provided script variables, if any, and does stuff with them.
- */
-void pikmin::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
-    
-    size_t maturity_var;
-    bool sprout_var;
-    
-    if(svr.get("maturity", maturity_var)) {
-        maturity = 0;
-        increase_maturity(maturity_var);
-    }
-    if(svr.get("sprout", sprout_var)) {
-        if(sprout_var) {
-            fsm.first_state_override = PIKMIN_STATE_SPROUT;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Checks if the attack should miss, and returns the result.
  * If it was already decided that it missed in a previous frame, that's a
  * straight no. If not, it will roll with the hit rate to check.
@@ -302,6 +211,27 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 
 
 /* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ */
+void pikmin::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    size_t maturity_var;
+    bool sprout_var;
+    
+    if(svr.get("maturity", maturity_var)) {
+        maturity = 0;
+        increase_maturity(maturity_var);
+    }
+    if(svr.get("sprout", sprout_var)) {
+        if(sprout_var) {
+            fsm.first_state_override = PIKMIN_STATE_SPROUT;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts the particle generator that leaves a trail behind a thrown Pikmin.
  */
 void pikmin::start_throw_trail() {
@@ -315,4 +245,74 @@ void pikmin::start_throw_trail() {
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     particle_generators.push_back(pg);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks some logic specific to Pikmin.
+ */
+void pikmin::tick_class_specifics(const float delta_t) {
+    //Carrying object.
+    if(carrying_mob) {
+        if(!carrying_mob->carry_info) {
+            fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+        }
+    }
+    
+    //Is it dead?
+    if(health <= 0) {
+        to_delete = true;
+        
+        pikmin_fsm::notify_leader_release(this, NULL, NULL);
+        
+        particle par(
+            PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
+            pik_type->radius * 2, 2.0f
+        );
+        par.bitmap = bmp_pikmin_spirit;
+        par.speed.x = randomf(-20, 20);
+        par.speed.y = randomf(-70, -30);
+        par.friction = 0.8;
+        par.gravity = -0.2;
+        par.color = pik_type->main_color;
+        particles.add(par);
+        
+        sfx_pikmin_dying.play(0.03, false);
+    }
+    
+    //Tick the timer for the "missed" attack animation.
+    missed_attack_timer.tick(delta_t);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the sprout closest to a leader. Used when auto-plucking.
+ * pos:             Coordinates of the leader.
+ * d:               Variable to return the distance to. NULL for none.
+ * ignore_reserved: If true, ignore any sprouts that are "reserved"
+ *   (i.e. already chosen to be plucked by another leader).
+ */
+pikmin* get_closest_sprout(
+    const point &pos, dist* d, const bool ignore_reserved
+) {
+    dist closest_distance = 0;
+    pikmin* closest_pikmin = NULL;
+    
+    size_t n_pikmin = pikmin_list.size();
+    for(size_t p = 0; p < n_pikmin; ++p) {
+        if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
+        
+        dist dis(pos, pikmin_list[p]->pos);
+        if(closest_pikmin == NULL || dis < closest_distance) {
+        
+            if(!(ignore_reserved || pikmin_list[p]->pluck_reserved)) {
+                closest_distance = dis;
+                closest_pikmin = pikmin_list[p];
+            }
+        }
+    }
+    
+    if(d) *d = closest_distance;
+    return closest_pikmin;
 }

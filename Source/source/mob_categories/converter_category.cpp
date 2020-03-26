@@ -28,39 +28,17 @@ converter_category::converter_category() :
 }
 
 
+converter_category::~converter_category() { }
+
+
 /* ----------------------------------------------------------------------------
- * Returns all types of converter by name.
+ * Clears the list of registered types of converters.
  */
-void converter_category::get_type_names(vector<string> &list) {
+void converter_category::clear_types() {
     for(auto &t : converter_types) {
-        list.push_back(t.first);
+        delete t.second;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns a type of converter given its name, or NULL on error.
- */
-mob_type* converter_category::get_type(const string &name) {
-    auto it = converter_types.find(name);
-    if(it == converter_types.end()) return NULL;
-    return it->second;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new, empty type of converter.
- */
-mob_type* converter_category::create_type() {
-    return new converter_type();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a created type of converter.
- */
-void converter_category::register_type(mob_type* type) {
-    converter_types[type->name] = (converter_type*) type;
+    converter_types.clear();
 }
 
 
@@ -77,6 +55,14 @@ mob* converter_category::create_mob(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new, empty type of converter.
+ */
+mob_type* converter_category::create_type() {
+    return new converter_type();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears a converter from the list of converters.
  */
 void converter_category::erase_mob(mob* m) {
@@ -87,14 +73,28 @@ void converter_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Clears the list of registered types of converters.
+ * Returns a type of converter given its name, or NULL on error.
  */
-void converter_category::clear_types() {
-    for(auto &t : converter_types) {
-        delete t.second;
-    }
-    converter_types.clear();
+mob_type* converter_category::get_type(const string &name) {
+    auto it = converter_types.find(name);
+    if(it == converter_types.end()) return NULL;
+    return it->second;
 }
 
 
-converter_category::~converter_category() { }
+/* ----------------------------------------------------------------------------
+ * Returns all types of converter by name.
+ */
+void converter_category::get_type_names(vector<string> &list) {
+    for(auto &t : converter_types) {
+        list.push_back(t.first);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of converter.
+ */
+void converter_category::register_type(mob_type* type) {
+    converter_types[type->name] = (converter_type*) type;
+}

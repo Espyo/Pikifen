@@ -32,6 +32,30 @@ checkbox::checkbox(const string &text, const bool checked) :
     needs_init = true;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Destroys a checkbox.
+ */
+checkbox::~checkbox() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the state to "checked".
+ */
+void checkbox::check() {
+    checked = true;
+    ((checkbox_box*) widgets["box_square"])->checked = checked;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the widget. Because the widget is entirely consisted
+ * of the checkbox box and a label, two independent widgets,
+ * the "checkbox" widget itself draws nothing.
+ */
+void checkbox::draw_self() { }
+
+
 /* ----------------------------------------------------------------------------
  * Initializes the checkbox. Creates a checkbox box
  * and a label.
@@ -62,25 +86,11 @@ void checkbox::init() {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a checkbox.
+ * Sets the state to the specified value.
+ * (true = checked, false = unchecked.)
  */
-checkbox::~checkbox() { }
-
-
-/* ----------------------------------------------------------------------------
- * When the mouse is clicked, toggle the state.
- */
-void checkbox::widget_on_left_mouse_click(const int, const int) {
-    if(checked) uncheck(); else check();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the state to "checked".
- */
-void checkbox::check() {
-    checked = true;
-    ((checkbox_box*) widgets["box_square"])->checked = checked;
+void checkbox::set(bool value) {
+    if(value) check(); else uncheck();
 }
 
 
@@ -94,20 +104,11 @@ void checkbox::uncheck() {
 
 
 /* ----------------------------------------------------------------------------
- * Sets the state to the specified value.
- * (true = checked, false = unchecked.)
+ * When the mouse is clicked, toggle the state.
  */
-void checkbox::set(bool value) {
-    if(value) check(); else uncheck();
+void checkbox::widget_on_left_mouse_click(const int, const int) {
+    if(checked) uncheck(); else check();
 }
-
-
-/* ----------------------------------------------------------------------------
- * Draws the widget. Because the widget is entirely consisted
- * of the checkbox box and a label, two independent widgets,
- * the "checkbox" widget itself draws nothing.
- */
-void checkbox::draw_self() { }
 
 
 

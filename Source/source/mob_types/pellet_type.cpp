@@ -33,6 +33,19 @@ pellet_type::pellet_type() :
 }
 
 
+pellet_type::~pellet_type() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector pellet_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(ANIM_IDLING, "idling"));
+    return v;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
@@ -75,21 +88,8 @@ void pellet_type::load_resources(data_node* file) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vector of animation conversions.
- */
-anim_conversion_vector pellet_type::get_anim_conversions() {
-    anim_conversion_vector v;
-    v.push_back(make_pair(ANIM_IDLING, "idling"));
-    return v;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads resources from memory.
  */
 void pellet_type::unload_resources() {
     bitmaps.detach(bmp_number);
 }
-
-
-pellet_type::~pellet_type() { }
