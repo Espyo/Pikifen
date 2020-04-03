@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     treasure_category();
-    ~treasure_category();
 };
 
 #endif //ifndef TREASURE_CATEGORY_INCLUDED

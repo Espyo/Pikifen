@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     enemy_category();
-    ~enemy_category();
 };
 
 #endif //ifndef ENEMY_CATEGORY_INCLUDED

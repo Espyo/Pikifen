@@ -187,7 +187,7 @@ public:
         lafi::style* style = NULL, const unsigned char flags = 0
     );
     widget(widget &w2);
-    virtual ~widget();
+    virtual ~widget() = default;
     
 };
 

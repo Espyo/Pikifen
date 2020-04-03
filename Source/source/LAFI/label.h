@@ -38,7 +38,6 @@ public:
         const string &text = "", const int text_flags = 0,
         const bool autoscroll = false
     );
-    ~label();
     
     void widget_on_tick(const float time);
     void draw_self();

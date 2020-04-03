@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     onion_category();
-    ~onion_category();
 };
 
 #endif //ifndef ONION_CATEGORY_INCLUDED

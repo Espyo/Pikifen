@@ -50,12 +50,6 @@ scrollbar::scrollbar(
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a scrollbar.
- */
-scrollbar::~scrollbar() { }
-
-
-/* ----------------------------------------------------------------------------
  * (Re)creates the button used on the scrollbar.
  * If the values do not allow for there to be
  * a button, it is not created (or deleted, if

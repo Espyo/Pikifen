@@ -101,13 +101,6 @@ widget::widget(widget &w2) :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a widget.
- */
-widget::~widget() {
-}
-
-
-/* ----------------------------------------------------------------------------
  * Adds a widget as a child to the current one.
  */
 void widget::add(const string &name, widget* w) {
@@ -121,49 +114,75 @@ void widget::add(const string &name, widget* w) {
 }
 
 
-//Calls the function that handles the focus being obtained.
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles the focus being obtained.
+ */
 void widget::call_get_focus_handler() {
     if(get_focus_handler) get_focus_handler(this);
 }
 
-//Calls the function that handles a left mouse click.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a left mouse click.
+ */
 void widget::call_left_mouse_click_handler(const int x, const int y) {
     if(left_mouse_click_handler) left_mouse_click_handler(this, x, y);
 }
 
-//Calls the function that handles the focus being lost.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles the focus being lost.
+ */
 void widget::call_lose_focus_handler() {
     if(lose_focus_handler) lose_focus_handler(this);
 }
 
-//Calls the function that handles a mouse button down.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a mouse button down.
+ */
 void widget::call_mouse_down_handler(
     const int button, const int x, const int y
 ) {
     if(mouse_down_handler) mouse_down_handler(this, button, x, y);
 }
 
-//Calls the function that handles the mouse entering.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles the mouse entering.
+ */
 void widget::call_mouse_enter_handler() {
     if(mouse_enter_handler) mouse_enter_handler(this);
 }
 
-//Calls the function that handles the mouse leaving.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles the mouse leaving.
+ */
 void widget::call_mouse_leave_handler() {
     if(mouse_leave_handler) mouse_leave_handler(this);
 }
 
-//Calls the function that handles a mouse move.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a mouse move.
+ */
 void widget::call_mouse_move_handler(const int x, const int y) {
     if(mouse_move_handler) mouse_move_handler(this, x, y);
 }
 
-//Calls the function that handles a mouse button up.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a mouse button up.
+ */
 void widget::call_mouse_up_handler(const int button, const int x, const int y) {
     if(mouse_up_handler) mouse_up_handler(this, button, x, y);
 }
 
-//Calls the function that handles a mouse wheel move.
+
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a mouse wheel move.
+ */
 void widget::call_mouse_wheel_handler(const int dy, const int dx) {
     if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx);
 }
@@ -329,40 +348,50 @@ int widget::easy_row(
 }
 
 
-//Returns the appropriate alternate color,
-//taking into account whether the widget is enabled or not.
+/* ----------------------------------------------------------------------------
+ * Returns the appropriate alternate color,
+ * taking into account whether the widget is enabled or not.
+ */
 ALLEGRO_COLOR widget::get_alt_color() {
     if(is_disabled()) return style->disabled_alt_color;
     return style->alt_color;
 }
 
 
-//Returns the appropriate background color,
-//taking into account whether the widget is enabled or not.
+/* ----------------------------------------------------------------------------
+ * Returns the appropriate background color,
+ * taking into account whether the widget is enabled or not.
+ */
 ALLEGRO_COLOR widget::get_bg_color() {
     if(is_disabled()) return style->disabled_bg_color;
     return style->bg_color;
 }
 
 
-//Returns the appropriate darker background color,
-//taking into account whether the widget is enabled or not.
+/* ----------------------------------------------------------------------------
+ * Returns the appropriate darker background color,
+ * taking into account whether the widget is enabled or not.
+ */
 ALLEGRO_COLOR widget::get_darker_bg_color() {
     if(is_disabled()) return style->darker_disabled_bg_color;
     return style->darker_bg_color;
 }
 
 
-//Returns the appropriate foreground color,
-//taking into account whether the widget is enabled or not.
+/* ----------------------------------------------------------------------------
+ * Returns the appropriate foreground color,
+ * taking into account whether the widget is enabled or not.
+ */
 ALLEGRO_COLOR widget::get_fg_color() {
     if(is_disabled()) return style->disabled_fg_color;
     return style->fg_color;
 }
 
 
-//Returns the appropriate lighter background color,
-//taking into account whether the widget is enabled or not.
+/* ----------------------------------------------------------------------------
+ * Returns the appropriate lighter background color,
+ * taking into account whether the widget is enabled or not.
+ */
 ALLEGRO_COLOR widget::get_lighter_bg_color() {
     if(is_disabled()) return style->lighter_disabled_bg_color;
     return style->lighter_bg_color;
@@ -383,10 +412,12 @@ void widget::get_offset(int* ox, int* oy) {
 }
 
 
-//Returns which widget the mouse is under.
-//It searches for the deepmost child widget, and if none has it,
-//it returns either itself, or none.
-//Disabled widgets are ignored.
+/* ----------------------------------------------------------------------------
+ * Returns which widget the mouse is under.
+ * It searches for the deepmost child widget, and if none has it,
+ * it returns either itself, or none.
+ * Disabled widgets are ignored.
+ */
 widget* widget::get_widget_under_mouse(const int mx, const int my) {
     if(!(flags & FLAG_DISABLED)) {
         if(!(flags & FLAG_WUM_NO_CHILDREN)) {

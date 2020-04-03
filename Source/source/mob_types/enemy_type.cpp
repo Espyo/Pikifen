@@ -37,9 +37,6 @@ enemy_type::enemy_type() :
 }
 
 
-enemy_type::~enemy_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */

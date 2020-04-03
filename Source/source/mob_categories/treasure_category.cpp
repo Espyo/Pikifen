@@ -28,9 +28,6 @@ treasure_category::treasure_category() :
 }
 
 
-treasure_category::~treasure_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of treasure.
  */

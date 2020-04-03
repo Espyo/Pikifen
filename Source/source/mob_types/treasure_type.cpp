@@ -29,9 +29,6 @@ treasure_type::treasure_type() :
 }
 
 
-treasure_type::~treasure_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

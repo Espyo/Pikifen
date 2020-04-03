@@ -31,9 +31,6 @@ bouncer_type::bouncer_type() :
 }
 
 
-bouncer_type::~bouncer_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

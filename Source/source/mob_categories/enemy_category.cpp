@@ -28,9 +28,6 @@ enemy_category::enemy_category() :
 }
 
 
-enemy_category::~enemy_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of enemy.
  */

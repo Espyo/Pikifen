@@ -53,9 +53,6 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
 }
 
 
-pikmin::~pikmin() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns whether or not a Pikmin can receive a given status effect.
  */

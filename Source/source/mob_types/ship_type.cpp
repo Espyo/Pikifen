@@ -29,9 +29,6 @@ ship_type::ship_type() :
 }
 
 
-ship_type::~ship_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

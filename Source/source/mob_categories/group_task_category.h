@@ -37,7 +37,6 @@ public:
     virtual void clear_types();
     
     group_task_category();
-    ~group_task_category();
 };
 
 #endif //ifndef GROUP_TASK_CATEGORY_INCLUDED

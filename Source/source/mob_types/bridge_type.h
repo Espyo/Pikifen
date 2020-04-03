@@ -40,7 +40,6 @@ public:
     string rail_texture_file_name;
     
     bridge_type();
-    ~bridge_type();
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions();
     void unload_resources();

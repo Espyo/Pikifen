@@ -33,7 +33,6 @@ public:
         bool close_button_quits = true, lafi::style* style = new style(),
         unsigned char flags = 0
     );*/
-    ~gui();
     
     void stop();
     void wait();

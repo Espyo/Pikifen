@@ -28,7 +28,6 @@ public:
         const float low_value = 0, const float high_value = 1,
         const bool vertical = true
     );
-    ~scrollbar();
     
     void init();
     void draw_self();

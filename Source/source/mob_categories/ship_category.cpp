@@ -28,9 +28,6 @@ ship_category::ship_category() :
 }
 
 
-ship_category::~ship_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of ship.
  */

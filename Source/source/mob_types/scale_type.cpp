@@ -25,9 +25,6 @@ scale_type::scale_type() :
 }
 
 
-scale_type::~scale_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */

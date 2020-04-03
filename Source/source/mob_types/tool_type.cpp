@@ -39,9 +39,6 @@ tool_type::tool_type() :
 }
 
 
-tool_type::~tool_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */

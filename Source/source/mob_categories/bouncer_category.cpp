@@ -28,9 +28,6 @@ bouncer_category::bouncer_category() :
 }
 
 
-bouncer_category::~bouncer_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of bouncers.
  */

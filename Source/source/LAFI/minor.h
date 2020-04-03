@@ -19,7 +19,6 @@ public:
         lafi::style* style = NULL, const unsigned char flags = 0
     );
     line(const bool horizontal = true, const int thickness = 1);
-    ~line();
     
     void draw_self();
 };
@@ -36,7 +35,6 @@ public:
         lafi::style* style = NULL, const unsigned char flags = 0
     );
     dummy();
-    ~dummy();
     
     void draw_self();
 };

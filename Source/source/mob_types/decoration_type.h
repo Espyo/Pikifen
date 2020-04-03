@@ -40,7 +40,6 @@ public:
     bool random_animation_delay;
     
     decoration_type();
-    ~decoration_type();
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions();
 };

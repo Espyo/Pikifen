@@ -26,9 +26,6 @@ interactable_type::interactable_type() :
 }
 
 
-interactable_type::~interactable_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */

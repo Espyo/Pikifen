@@ -28,9 +28,6 @@ tool_category::tool_category() :
 }
 
 
-tool_category::~tool_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of tools.
  */

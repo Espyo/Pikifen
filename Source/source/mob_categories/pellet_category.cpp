@@ -28,9 +28,6 @@ pellet_category::pellet_category() :
 }
 
 
-pellet_category::~pellet_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of pellet.
  */

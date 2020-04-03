@@ -32,9 +32,6 @@ converter_type::converter_type() :
 }
 
 
-converter_type::~converter_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

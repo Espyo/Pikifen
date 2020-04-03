@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     pellet_category();
-    ~pellet_category();
 };
 
 #endif //ifndef PELLET_CATEGORY_INCLUDED

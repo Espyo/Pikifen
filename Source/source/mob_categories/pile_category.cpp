@@ -28,9 +28,6 @@ pile_category::pile_category() :
 }
 
 
-pile_category::~pile_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of pile.
  */

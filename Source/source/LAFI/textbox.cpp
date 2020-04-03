@@ -76,12 +76,6 @@ textbox::textbox(textbox &t2) :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a textbox.
- */
-textbox::~textbox() {}
-
-
-/* ----------------------------------------------------------------------------
  * Calls the function that handles a change of the text.
  */
 void textbox::call_change_handler() { if(change_handler) change_handler(this); }

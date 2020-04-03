@@ -63,8 +63,6 @@ public:
     
     //Constructor.
     pikmin(const point &pos, pikmin_type* type, const float angle);
-    //Destructor.
-    ~pikmin();
     
     //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s);

@@ -300,7 +300,7 @@ protected:
 public:
 
     editor();
-    virtual ~editor();
+    virtual ~editor() = default;
     
     virtual void do_drawing() = 0;
     virtual void do_logic() = 0;

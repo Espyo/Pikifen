@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     decoration_category();
-    ~decoration_category();
 };
 
 #endif //ifndef DECORATION_CATEGORY_INCLUDED

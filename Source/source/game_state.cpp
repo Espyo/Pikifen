@@ -30,9 +30,6 @@ game_state::game_state() :
 }
 
 
-game_state::~game_state() { }
-
-
 /* ----------------------------------------------------------------------------
  * Handles a button "press" in a menu. Technically, it could also be
  * a button release.

@@ -39,7 +39,6 @@ public:
         const string &text = "", const string &description = "",
         ALLEGRO_BITMAP* icon = NULL
     );
-    ~button();
     
     void widget_on_tick(const float time);
     void draw_self();

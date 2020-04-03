@@ -44,7 +44,6 @@ public:
     float speed_bonus;
     
     group_task_type();
-    ~group_task_type();
     
     void load_properties(data_node* file);
 };

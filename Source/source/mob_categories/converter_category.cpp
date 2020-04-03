@@ -28,9 +28,6 @@ converter_category::converter_category() :
 }
 
 
-converter_category::~converter_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of converters.
  */

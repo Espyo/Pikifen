@@ -29,7 +29,6 @@ public:
     bool pikmin_returns_after_using;
     
     tool_type();
-    ~tool_type();
     void load_properties(data_node* file);
     void load_resources(data_node* file);
 };

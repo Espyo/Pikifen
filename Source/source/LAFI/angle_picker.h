@@ -26,7 +26,6 @@ public:
         const unsigned char flags = 0
     );
     angle_picker(const float angle = 0);
-    ~angle_picker();
     
     void widget_on_mouse_down(const int button, const int x, const int y);
     void widget_on_mouse_up(const int button, const int x, const int y);

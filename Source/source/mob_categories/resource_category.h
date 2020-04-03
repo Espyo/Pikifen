@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     resource_category();
-    ~resource_category();
 };
 
 #endif //ifndef RESOURCE_CATEGORY_INCLUDED

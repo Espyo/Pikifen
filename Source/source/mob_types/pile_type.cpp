@@ -36,9 +36,6 @@ pile_type::pile_type() :
 }
 
 
-pile_type::~pile_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

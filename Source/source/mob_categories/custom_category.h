@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     custom_category();
-    ~custom_category();
 };
 
 #endif //ifndef CUSTOM_CATEGORY_INCLUDED

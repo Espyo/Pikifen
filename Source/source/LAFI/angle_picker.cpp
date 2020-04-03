@@ -35,10 +35,6 @@ angle_picker::angle_picker(const float angle) :
 }
 
 
-//Destroys an angle picker.
-angle_picker::~angle_picker() {}
-
-
 /* ----------------------------------------------------------------------------
  * Converts an angle in radians to a string representation, in degrees.
  */

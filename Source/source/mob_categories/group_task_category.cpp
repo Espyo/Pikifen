@@ -28,9 +28,6 @@ group_task_category::group_task_category() :
 }
 
 
-group_task_category::~group_task_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of group tasks.
  */

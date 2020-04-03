@@ -206,7 +206,7 @@ public:
         const anim_conversion_vector &v, const size_t base_anim_total
     );
     
-    virtual ~mob_type_with_anim_groups();
+    virtual ~mob_type_with_anim_groups() = default;
 };
 
 

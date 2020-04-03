@@ -61,7 +61,6 @@ public:
     size_t max_pikmin_spawn_requirement;
     
     converter_type();
-    ~converter_type();
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions();
 };

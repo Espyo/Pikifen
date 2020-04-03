@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     bridge_category();
-    ~bridge_category();
 };
 
 #endif //ifndef BRIDGE_CATEGORY_INCLUDED

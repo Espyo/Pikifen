@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     pile_category();
-    ~pile_category();
 };
 
 #endif //ifndef PILE_CATEGORY_INCLUDED

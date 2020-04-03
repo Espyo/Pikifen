@@ -28,9 +28,6 @@ track_category::track_category() :
 }
 
 
-track_category::~track_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of tracks.
  */

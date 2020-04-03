@@ -33,9 +33,6 @@ drop_type::drop_type() :
 }
 
 
-drop_type::~drop_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

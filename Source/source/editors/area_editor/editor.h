@@ -560,7 +560,6 @@ public:
     unordered_set<edge*> lone_edges;
     
     area_editor();
-    ~area_editor();
 };
 
 

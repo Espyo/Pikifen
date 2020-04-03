@@ -34,7 +34,6 @@ public:
     virtual void clear_types();
     
     bouncer_category();
-    ~bouncer_category();
 };
 
 #endif //ifndef BOUNCER_CATEGORY_INCLUDED

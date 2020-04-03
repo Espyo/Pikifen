@@ -36,9 +36,6 @@ bridge_type::bridge_type() :
 }
 
 
-bridge_type::~bridge_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     scale_category();
-    ~scale_category();
 };
 
 #endif //ifndef SCALE_CATEGORY_INCLUDED

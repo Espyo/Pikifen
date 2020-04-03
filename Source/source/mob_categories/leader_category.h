@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     leader_category();
-    ~leader_category();
 };
 
 #endif //ifndef LEADER_CATEGORY_INCLUDED

@@ -35,9 +35,6 @@ resource_type::resource_type() :
 }
 
 
-resource_type::~resource_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

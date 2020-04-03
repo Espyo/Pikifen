@@ -28,9 +28,6 @@ bridge_category::bridge_category() :
 }
 
 
-bridge_category::~bridge_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of bridges.
  */

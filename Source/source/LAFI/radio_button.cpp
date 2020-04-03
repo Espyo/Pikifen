@@ -42,14 +42,6 @@ radio_button::radio_button(
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a radio button.
- */
-radio_button::~radio_button() {
-
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the radio button. Because the radio button is
  * consisted of a radio button button and a label, nothing
  * is really drawn for the actual "radio button" widget.
@@ -140,12 +132,6 @@ radio_button_button::radio_button_button(
     selected(selected) {
     
 }
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a radio button button.
- */
-radio_button_button::~radio_button_button() {}
 
 
 /* ----------------------------------------------------------------------------

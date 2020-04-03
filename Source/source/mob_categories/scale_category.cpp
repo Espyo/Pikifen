@@ -28,9 +28,6 @@ scale_category::scale_category() :
 }
 
 
-scale_category::~scale_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of scale.
  */

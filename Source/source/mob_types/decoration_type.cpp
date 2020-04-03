@@ -31,9 +31,6 @@ decoration_type::decoration_type() :
 }
 
 
-decoration_type::~decoration_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

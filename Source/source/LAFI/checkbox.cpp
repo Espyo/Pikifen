@@ -34,12 +34,6 @@ checkbox::checkbox(const string &text, const bool checked) :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a checkbox.
- */
-checkbox::~checkbox() { }
-
-
-/* ----------------------------------------------------------------------------
  * Sets the state to "checked".
  */
 void checkbox::check() {
@@ -128,12 +122,6 @@ checkbox_box::checkbox_box(
     checked(checked) {
     
 }
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a checkbox box.
- */
-checkbox_box::~checkbox_box() { }
 
 
 /* ----------------------------------------------------------------------------

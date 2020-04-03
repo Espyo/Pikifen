@@ -41,12 +41,6 @@ label::label(const string &text, const int text_flags, const bool autoscroll) :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a label.
- */
-label::~label() {}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a label. It draws a solid rectangle at the back, and then
  * draws the label's text.
  */
@@ -69,6 +63,7 @@ void label::draw_self() {
         );
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Ticks one frame worth of time. This is used for the auto-scrolling.

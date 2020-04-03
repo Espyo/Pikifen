@@ -121,9 +121,6 @@ area_editor::area_editor() :
 }
 
 
-area_editor::~area_editor() { }
-
-
 /* ----------------------------------------------------------------------------
  * Checks whether it's possible to traverse from drawing node n1 to n2
  * with the existing edges and vertexes. In other words, if you draw a line

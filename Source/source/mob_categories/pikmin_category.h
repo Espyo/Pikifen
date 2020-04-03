@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     pikmin_category();
-    ~pikmin_category();
 };
 
 #endif //ifndef PIKMIN_CATEGORY_INCLUDED

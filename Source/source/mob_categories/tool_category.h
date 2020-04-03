@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     tool_category();
-    ~tool_category();
 };
 
 #endif //ifndef TOOL_CATEGORY_INCLUDED

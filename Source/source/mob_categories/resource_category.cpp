@@ -28,9 +28,6 @@ resource_category::resource_category() :
 }
 
 
-resource_category::~resource_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of resource.
  */

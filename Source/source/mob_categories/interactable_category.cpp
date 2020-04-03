@@ -28,9 +28,6 @@ interactable_category::interactable_category() :
 }
 
 
-interactable_category::~interactable_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of interactables.
  */

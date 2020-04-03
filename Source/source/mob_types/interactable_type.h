@@ -24,7 +24,6 @@ public:
     float trigger_range;
     
     interactable_type();
-    ~interactable_type();
     
     void load_properties(data_node* file);
 };

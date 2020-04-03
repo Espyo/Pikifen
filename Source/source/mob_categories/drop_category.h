@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     drop_category();
-    ~drop_category();
 };
 
 #endif //ifndef DROP_CATEGORY_INCLUDED

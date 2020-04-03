@@ -28,9 +28,6 @@ decoration_category::decoration_category() :
 }
 
 
-decoration_category::~decoration_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of decorations.
  */

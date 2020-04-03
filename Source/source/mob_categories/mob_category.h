@@ -77,7 +77,7 @@ public:
         const size_t id, const string &name, const string &plural_name,
         const string &folder, const ALLEGRO_COLOR editor_color
     );
-    virtual ~mob_category();
+    virtual ~mob_category() = default;
     
 };
 
@@ -123,7 +123,6 @@ public:
     virtual void clear_types();
     
     none_category();
-    ~none_category();
 };
 
 

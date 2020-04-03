@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     converter_category();
-    ~converter_category();
 };
 
 #endif //ifndef CONVERTER_CATEGORY_INCLUDED

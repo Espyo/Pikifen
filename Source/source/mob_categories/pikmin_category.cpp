@@ -28,9 +28,6 @@ pikmin_category::pikmin_category() :
 }
 
 
-pikmin_category::~pikmin_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of Pikmin.
  */

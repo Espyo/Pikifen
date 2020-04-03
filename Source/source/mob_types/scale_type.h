@@ -21,7 +21,6 @@ public:
     size_t goal_number;
     
     scale_type();
-    ~scale_type();
     void load_properties(data_node* file);
 };
 

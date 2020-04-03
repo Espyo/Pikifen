@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     ship_category();
-    ~ship_category();
 };
 
 #endif //ifndef SHIP_CATEGORY_INCLUDED

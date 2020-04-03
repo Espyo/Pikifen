@@ -57,7 +57,6 @@ public:
     );
     textbox(const string &text = "");
     textbox(textbox &b2);
-    ~textbox();
     
     void draw_self();
     

@@ -743,12 +743,15 @@ main_menu::main_menu() :
     game_state(),
     time_spent(0),
     bmp_menu_bg(NULL),
-    logo_pikmin_max_speed(0),
-    logo_pikmin_min_speed(0),
-    logo_pikmin_speed_smoothness(0),
-    logo_pikmin_sway_amount(0),
-    logo_pikmin_sway_max_speed(0),
-    logo_pikmin_sway_min_speed(0) {
+    logo_min_screen_limit(10.0f, 10.0f),
+    logo_max_screen_limit(90.0f, 50.0f),
+    logo_pikmin_max_speed(800.0f),
+    logo_pikmin_min_speed(600.0f),
+    logo_pikmin_speed_smoothness(0.08f),
+    logo_pikmin_sway_amount(3.0f),
+    logo_pikmin_sway_max_speed(5.5f),
+    logo_pikmin_sway_min_speed(2.5f),
+    logo_pikmin_size(3.5f, 3.5f) {
     
 }
 
@@ -764,10 +767,14 @@ void main_menu::do_drawing() {
     );
     
     //Draw the logo Pikmin.
+    point pik_size = logo_pikmin_size;
+    pik_size.x *= scr_w / 100.0f;
+    pik_size.y *= scr_h / 100.0f;
+    
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
         
-        draw_bitmap_in_box(pik->top, pik->pos, logo_pikmin_size, pik->angle);
+        draw_bitmap_in_box(pik->top, pik->pos, pik_size, pik->angle);
     }
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -861,10 +868,6 @@ void main_menu::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    //Resources.
-    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
-    data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
-    
     //Menu widgets.
     menu_widgets.push_back(
         new menu_button(
@@ -915,10 +918,14 @@ void main_menu::load() {
     );
     menu_widgets.push_back(back_widget);
     
+    //Resources.
+    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
+    data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
+    
     //Logo pikmin.
-    data_node* logo_node =
-        title_screen_file.get_child_by_name("logo");
-        
+    data_node* logo_node = title_screen_file.get_child_by_name("logo");
+    reader_setter logo_rs(logo_node);
+    
     data_node* pik_types_node =
         logo_node->get_child_by_name("pikmin_types");
     for(size_t t = 0; t < pik_types_node->get_nr_of_children(); ++t) {
@@ -937,66 +944,15 @@ void main_menu::load() {
             max(map_total_cols, map_node->get_child(r)->name.size());
     }
     
-    logo_min_screen_limit =
-        s2p(
-            logo_node->get_child_by_name(
-                "min_screen_limit"
-            )->get_value_or_default("10 10")
-        );
-    logo_min_screen_limit.x *= scr_w / 100.0f;
-    logo_min_screen_limit.y *= scr_h / 100.0f;
-    logo_max_screen_limit =
-        s2p(
-            logo_node->get_child_by_name(
-                "max_screen_limit"
-            )->get_value_or_default("90 50")
-        );
-    logo_max_screen_limit.x *= scr_w / 100.0f;
-    logo_max_screen_limit.y *= scr_h / 100.0f;
-    logo_pikmin_max_speed =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_max_speed"
-            )->get_value_or_default("800")
-        );
-    logo_pikmin_min_speed =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_min_speed"
-            )->get_value_or_default("600")
-        );
-    logo_pikmin_speed_smoothness =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_speed_smoothness"
-            )->get_value_or_default("0.08")
-        );
-    logo_pikmin_sway_amount =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_sway_amount"
-            )->get_value_or_default("3")
-        );
-    logo_pikmin_sway_max_speed =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_sway_max_speed"
-            )->get_value_or_default("5.5")
-        );
-    logo_pikmin_sway_min_speed =
-        s2f(
-            logo_node->get_child_by_name(
-                "pikmin_sway_min_speed"
-            )->get_value_or_default("2.5")
-        );
-    logo_pikmin_size =
-        s2p(
-            logo_node->get_child_by_name(
-                "pikmin_size"
-            )->get_value_or_default("3.5 3.5")
-        );
-    logo_pikmin_size.x *= scr_w / 100.0f;
-    logo_pikmin_size.y *= scr_h / 100.0f;
+    logo_rs.set("min_screen_limit", logo_min_screen_limit);
+    logo_rs.set("max_screen_limit", logo_max_screen_limit);
+    logo_rs.set("pikmin_max_speed", logo_pikmin_max_speed);
+    logo_rs.set("pikmin_min_speed", logo_pikmin_min_speed);
+    logo_rs.set("pikmin_speed_smoothness", logo_pikmin_speed_smoothness);
+    logo_rs.set("pikmin_sway_amount", logo_pikmin_sway_amount);
+    logo_rs.set("pikmin_sway_max_speed", logo_pikmin_sway_max_speed);
+    logo_rs.set("pikmin_sway_min_speed", logo_pikmin_sway_min_speed);
+    logo_rs.set("pikmin_size", logo_pikmin_size);
     
     bool map_ok = true;
     
@@ -1017,14 +973,21 @@ void main_menu::load() {
             
             logo_pik pik;
             
+            point min_pos = logo_min_screen_limit;
+            min_pos.x *= scr_w / 100.0f;
+            min_pos.y *= scr_h / 100.0f;
+            point max_pos = logo_max_screen_limit;
+            max_pos.x *= scr_w / 100.0f;
+            max_pos.y *= scr_h / 100.0f;
+            
             pik.top = logo_type_bitmaps[row[c]];
             pik.destination =
                 point(
-                    logo_min_screen_limit.x +
-                    (logo_max_screen_limit.x - logo_min_screen_limit.x) *
+                    min_pos.x +
+                    (max_pos.x - min_pos.x) *
                     (c / (float) map_total_cols),
-                    logo_min_screen_limit.y +
-                    (logo_max_screen_limit.y - logo_min_screen_limit.y) *
+                    min_pos.y +
+                    (max_pos.y - min_pos.y) *
                     (r / (float) map_total_rows)
                 );
                 

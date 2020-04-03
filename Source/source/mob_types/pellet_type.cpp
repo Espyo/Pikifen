@@ -33,9 +33,6 @@ pellet_type::pellet_type() :
 }
 
 
-pellet_type::~pellet_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

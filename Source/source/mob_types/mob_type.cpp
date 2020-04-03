@@ -205,9 +205,6 @@ void mob_type::load_resources(data_node* file) { }
 void mob_type::unload_resources() { }
 
 
-mob_type_with_anim_groups::~mob_type_with_anim_groups() { }
-
-
 /* ----------------------------------------------------------------------------
  * Grabs an animation conversion vector, filled with base animations,
  * and outputs one that combines all base animations with their groups.

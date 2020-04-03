@@ -43,9 +43,6 @@ leader_type::leader_type() :
 }
 
 
-leader_type::~leader_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

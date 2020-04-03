@@ -28,9 +28,6 @@ leader_category::leader_category() :
 }
 
 
-leader_category::~leader_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of leader.
  */

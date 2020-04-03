@@ -43,7 +43,6 @@ public:
     ALLEGRO_BITMAP* bmp_number;
     
     pellet_type();
-    ~pellet_type();
     void load_properties(data_node* file);
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions();

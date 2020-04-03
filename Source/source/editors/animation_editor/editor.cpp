@@ -89,9 +89,6 @@ animation_editor::animation_editor() :
 }
 
 
-animation_editor::~animation_editor() { }
-
-
 /* ----------------------------------------------------------------------------
  * Centers the camera on the sprite's parent bitmap, so the user can choose
  * what part of the bitmap they want to use for the sprite.

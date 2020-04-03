@@ -26,7 +26,6 @@ public:
         lafi::style* style = NULL, const unsigned char flags = 0
     );
     checkbox(const string &text = "", const bool checked = false);
-    ~checkbox();
     void widget_on_left_mouse_click(const int x, const int y);
     
     void draw_self();
@@ -48,7 +47,6 @@ public:
         const int x1 = 0, const int y1 = 0, const bool checked = false,
         lafi::style* style = NULL, const unsigned char flags = 0
     );
-    ~checkbox_box();
     
     void draw_self();
 };

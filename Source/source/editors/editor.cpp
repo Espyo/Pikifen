@@ -82,13 +82,6 @@ editor::editor() :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys an instance of the editor class.
- */
-editor::~editor() {
-}
-
-
-/* ----------------------------------------------------------------------------
  * Centers the camera so that these four points are in view.
  * A bit of padding is added, so that, for instance, the top-left
  * point isn't exactly on the top-left of the screen,

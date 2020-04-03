@@ -74,9 +74,6 @@ pikmin_type::pikmin_type() :
 }
 
 
-pikmin_type::~pikmin_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

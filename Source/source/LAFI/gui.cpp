@@ -66,10 +66,6 @@ gui::gui(
 }*/
 
 
-//Destroys a gui.
-gui::~gui() { }
-
-
 /* ----------------------------------------------------------------------------
  * Draws the gui. Because the gui is pretty much defined
  * by its widgets, there's nothing to draw except a

@@ -28,9 +28,6 @@ onion_category::onion_category() :
 }
 
 
-onion_category::~onion_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of Onion.
  */

@@ -34,7 +34,6 @@ public:
     virtual void clear_types();
     
     track_category();
-    ~track_category();
 };
 
 #endif //ifndef TRACK_CATEGORY_INCLUDED

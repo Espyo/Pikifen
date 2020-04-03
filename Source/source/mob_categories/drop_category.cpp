@@ -28,9 +28,6 @@ drop_category::drop_category() :
 }
 
 
-drop_category::~drop_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of drops.
  */

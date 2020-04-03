@@ -24,12 +24,6 @@ frame::frame() : widget() {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a frame.
- */
-frame::~frame() {}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the actual frame. Like the frame of a painting, this
  * is basically a rectangle and a border.
  */

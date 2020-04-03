@@ -27,9 +27,6 @@ custom_category::custom_category() :
 }
 
 
-custom_category::~custom_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered types of custom mob.
  */

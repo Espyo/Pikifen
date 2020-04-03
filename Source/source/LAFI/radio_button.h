@@ -28,7 +28,6 @@ public:
         const string &text = "", const int group = 0,
         const bool selected = false
     );
-    ~radio_button();
     void widget_on_left_mouse_click(const int x, const int y);
     
     void select();
@@ -51,7 +50,6 @@ public:
         const int x1 = 0, const int y1 = 0, const bool selected = false,
         lafi::style* style = NULL, const unsigned char flags = 0
     );
-    ~radio_button_button();
     
     void draw_self();
 };

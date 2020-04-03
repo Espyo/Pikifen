@@ -32,9 +32,6 @@ track_type::track_type() :
 }
 
 
-track_type::~track_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

@@ -36,7 +36,6 @@ public:
     virtual void clear_types();
     
     interactable_category();
-    ~interactable_category();
 };
 
 #endif //ifndef INTERACTABLE_CATEGORY_INCLUDED

@@ -47,7 +47,6 @@ public:
     unsigned char riding_pose;
     
     bouncer_type();
-    ~bouncer_type();
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions();
 };

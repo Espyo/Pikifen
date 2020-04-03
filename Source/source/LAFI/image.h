@@ -25,7 +25,6 @@ public:
     );
     image(ALLEGRO_BITMAP* bmp = NULL);
     image(image &i2);
-    ~image();
     
     void draw_self();
 };

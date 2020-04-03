@@ -28,9 +28,6 @@ onion_type::onion_type() :
 }
 
 
-onion_type::~onion_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */

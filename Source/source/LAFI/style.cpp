@@ -44,12 +44,6 @@ style::style(const style &s2) :
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a style.
- */
-style::~style() { }
-
-
-/* ----------------------------------------------------------------------------
  * Returns a color that's darker than the given color.
  */
 ALLEGRO_COLOR style::darken_color(const ALLEGRO_COLOR color) {

@@ -45,12 +45,6 @@ button::button(
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a button.
- */
-button::~button() { }
-
-
-/* ----------------------------------------------------------------------------
  * Draws the button. It' just a rectangle with a fancy border;
  * the latter is drawn one line at a time.
  */
@@ -142,6 +136,7 @@ void button::draw_self() {
         );
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Ticks one frame worth of time. This is used for the auto-scrolling.

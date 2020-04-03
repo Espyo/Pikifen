@@ -35,9 +35,6 @@ mob_category::mob_category(
 }
 
 
-mob_category::~mob_category() { }
-
-
 /* ----------------------------------------------------------------------------
  * Clears the list of registered categories, freeing memory.
  */
@@ -162,7 +159,6 @@ none_category::none_category() :
 /* ----------------------------------------------------------------------------
  * Dummies.
  */
-none_category::~none_category() { }
 void none_category::clear_types() { }
 mob* none_category::create_mob(
     const point &pos, mob_type* type, const float angle

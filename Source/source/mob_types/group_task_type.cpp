@@ -34,9 +34,6 @@ group_task_type::group_task_type() :
 }
 
 
-group_task_type::~group_task_type() { }
-
-
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
  */
