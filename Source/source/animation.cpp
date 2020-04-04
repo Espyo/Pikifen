@@ -624,8 +624,8 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             cur_hitbox.hazards_str = hazards_node->value;
             vector<string> hazards_strs =
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
-            for(size_t h = 0; h < hazards_strs.size(); ++h) {
-                string hazard_name = hazards_strs[h];
+            for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
+                string hazard_name = hazards_strs[hs];
                 if(hazards.find(hazard_name) == hazards.end()) {
                     log_error(
                         "Unknown hazard \"" + hazard_name + "\"!",

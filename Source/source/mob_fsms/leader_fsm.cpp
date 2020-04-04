@@ -1464,8 +1464,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     
     cur_leader_ptr->add_to_group(l_ptr);
-    size_t n_group_members = l_ptr->group->members.size();
-    for(size_t m = 0; m < n_group_members; ++m) {
+    while(!l_ptr->group->members.empty()) {
         mob* member = l_ptr->group->members[0];
         member->leave_group();
         cur_leader_ptr->add_to_group(member);

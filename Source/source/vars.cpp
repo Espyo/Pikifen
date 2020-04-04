@@ -257,7 +257,7 @@ int scr_h = DEF_SCR_H;
 int scr_w = DEF_SCR_W;
 ALLEGRO_TRANSFORM screen_to_world_transform;
 sector_types_manager sector_types;
-unsigned int selected_spray = 0;
+size_t selected_spray = 0;
 replay session_replay;
 unsigned char ship_beam_ring_color[3] = {0, 0, 0};
 bool ship_beam_ring_color_up[3] = {true, true, true};

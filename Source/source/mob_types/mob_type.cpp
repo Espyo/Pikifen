@@ -379,19 +379,19 @@ void load_mob_type_from_file(
     for(size_t s = 0; s < n_spawns; ++s) {
     
         data_node* spawn_node = spawns_node->get_child(s);
-        reader_setter rs(spawn_node);
+        reader_setter spawn_rs(spawn_node);
         mob_type::spawn_struct new_spawn;
         string coords_str;
         
         new_spawn.name = spawn_node->name;
-        rs.set("object", new_spawn.mob_type_name);
-        rs.set("relative", new_spawn.relative);
-        rs.set("coordinates", coords_str);
-        rs.set("angle", new_spawn.angle);
-        rs.set("vars", new_spawn.vars);
-        rs.set("link_object_to_spawn", new_spawn.link_object_to_spawn);
-        rs.set("link_spawn_to_object", new_spawn.link_spawn_to_object);
-        rs.set("momentum", new_spawn.momentum);
+        spawn_rs.set("object", new_spawn.mob_type_name);
+        spawn_rs.set("relative", new_spawn.relative);
+        spawn_rs.set("coordinates", coords_str);
+        spawn_rs.set("angle", new_spawn.angle);
+        spawn_rs.set("vars", new_spawn.vars);
+        spawn_rs.set("link_object_to_spawn", new_spawn.link_object_to_spawn);
+        spawn_rs.set("link_spawn_to_object", new_spawn.link_spawn_to_object);
+        spawn_rs.set("momentum", new_spawn.momentum);
         
         if(!coords_str.empty()) {
             new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
@@ -406,7 +406,7 @@ void load_mob_type_from_file(
     for(size_t c = 0; c < n_children; ++c) {
     
         data_node* child_node = children_node->get_child(c);
-        reader_setter rs(child_node);
+        reader_setter child_rs(child_node);
         mob_type::child_struct new_child;
         
         string limb_draw_method;
@@ -415,27 +415,27 @@ void load_mob_type_from_file(
         data_node* hold_rotation_node;
         
         new_child.name = child_node->name;
-        rs.set("spawn", new_child.spawn_name);
-        rs.set("parent_holds", new_child.parent_holds);
-        rs.set("hold_body_part", new_child.hold_body_part);
-        rs.set("hold_offset_distance", new_child.hold_offset_dist);
-        rs.set("hold_offset_angle", new_child.hold_offset_angle);
-        rs.set(
+        child_rs.set("spawn", new_child.spawn_name);
+        child_rs.set("parent_holds", new_child.parent_holds);
+        child_rs.set("hold_body_part", new_child.hold_body_part);
+        child_rs.set("hold_offset_distance", new_child.hold_offset_dist);
+        child_rs.set("hold_offset_angle", new_child.hold_offset_angle);
+        child_rs.set(
             "hold_rotation_method", hold_rotation_method, &hold_rotation_node
         );
-        rs.set("handle_damage", new_child.handle_damage);
-        rs.set("relay_damage", new_child.relay_damage);
-        rs.set("handle_events", new_child.handle_events);
-        rs.set("relay_events", new_child.relay_events);
-        rs.set("handle_statuses", new_child.handle_statuses);
-        rs.set("relay_statuses", new_child.relay_statuses);
-        rs.set("limb_animation", new_child.limb_anim_name);
-        rs.set("limb_thickness", new_child.limb_thickness);
-        rs.set("limb_parent_body_part", new_child.limb_parent_body_part);
-        rs.set("limb_parent_offset", new_child.limb_parent_offset);
-        rs.set("limb_child_body_part", new_child.limb_child_body_part);
-        rs.set("limb_child_offset", new_child.limb_child_offset);
-        rs.set("limb_draw_method", limb_draw_method, &limb_draw_node);
+        child_rs.set("handle_damage", new_child.handle_damage);
+        child_rs.set("relay_damage", new_child.relay_damage);
+        child_rs.set("handle_events", new_child.handle_events);
+        child_rs.set("relay_events", new_child.relay_events);
+        child_rs.set("handle_statuses", new_child.handle_statuses);
+        child_rs.set("relay_statuses", new_child.relay_statuses);
+        child_rs.set("limb_animation", new_child.limb_anim_name);
+        child_rs.set("limb_thickness", new_child.limb_thickness);
+        child_rs.set("limb_parent_body_part", new_child.limb_parent_body_part);
+        child_rs.set("limb_parent_offset", new_child.limb_parent_offset);
+        child_rs.set("limb_child_body_part", new_child.limb_child_body_part);
+        child_rs.set("limb_child_offset", new_child.limb_child_offset);
+        child_rs.set("limb_draw_method", limb_draw_method, &limb_draw_node);
         
         new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
         

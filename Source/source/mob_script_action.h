@@ -238,9 +238,7 @@ struct mob_action_call {
     MOB_EV_TYPES parent_event;
     mob_type* mt;
     
-    bool load_from_data_node(
-        data_node* dn, vector<mob_state*>* states, mob_type* mt
-    );
+    bool load_from_data_node(data_node* dn, mob_type* mt);
     bool run(mob* m, void* custom_data_1, void* custom_data_2);
     
     mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);

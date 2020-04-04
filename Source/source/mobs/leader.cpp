@@ -292,7 +292,7 @@ void leader::dismiss() {
     
     //Now, dismiss!
     for(size_t s = 0; s < subgroups_info.size(); ++s) {
-        size_t cur_row_nr = 0;
+        cur_row_nr = 0;
         size_t cur_row_spot_nr = 0;
         size_t cur_row_spots = 1;
         

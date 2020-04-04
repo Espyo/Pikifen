@@ -978,8 +978,10 @@ void mob::delete_old_status_effects() {
     //Update some flags.
     has_invisibility_status = false;
     for(size_t s = 0; s < statuses.size(); ++s) {
-        if(statuses[s].type->turns_invisible) has_invisibility_status = true;
-        break;
+        if(statuses[s].type->turns_invisible) {
+            has_invisibility_status = true;
+            break;
+        }
     }
 }
 

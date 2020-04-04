@@ -14,7 +14,7 @@
 
 #define _USE_MATH_DEFINES
 
-const float TAU = M_PI * 2;
+const float TAU = (float) M_PI * 2.0f;
 
 #include <cstddef>
 #include <math.h>

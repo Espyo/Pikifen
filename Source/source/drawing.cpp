@@ -358,7 +358,7 @@ void gameplay::draw_hud() {
     for(size_t l = 0; l < 3; ++l) {
         if(leaders.size() < l + 1) continue;
         
-        size_t l_nr = sum_and_wrap(cur_leader_nr, l, leaders.size());
+        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, leaders.size());
         size_t icon_id = HUD_ITEM_LEADER_1_ICON + l;
         size_t health_id = HUD_ITEM_LEADER_1_HEALTH + l;
         
@@ -728,7 +728,9 @@ void gameplay::draw_hud() {
             ) {
                 draw_bitmap_in_box(
                     spray_types[
-                        sum_and_wrap(selected_spray, -1, spray_types.size())
+                        (size_t) sum_and_wrap(
+                            selected_spray, -1, spray_types.size()
+                        )
                     ].bmp_spray,
                     i_center, i_size
                 );
@@ -757,7 +759,9 @@ void gameplay::draw_hud() {
             ) {
                 draw_bitmap_in_box(
                     spray_types[
-                        sum_and_wrap(selected_spray, 1, spray_types.size())
+                        (size_t) sum_and_wrap(
+                            selected_spray, 1, spray_types.size()
+                        )
                     ].bmp_spray,
                     i_center, i_size
                 );
@@ -1817,8 +1821,8 @@ void draw_control(
  * color:   Color of the fraction's text.
  */
 void draw_fraction(
-    const point &center, const unsigned int current,
-    const unsigned int needed, const ALLEGRO_COLOR &color
+    const point &center, const size_t current,
+    const size_t needed, const ALLEGRO_COLOR &color
 ) {
     float first_y = center.y - (font_main_h * 3) / 2;
     float font_h = al_get_font_line_height(font_value);
@@ -2564,17 +2568,17 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                     neighbor_angle_difs[v] = d;
                     got_first[v] = true;
                     
-                    sector* other_sector =
+                    sector* edge_other_sec =
                         ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
                     neighbor_shadow[v] =
-                        casts_shadow(other_sector, s_ptr);
+                        casts_shadow(edge_other_sec, s_ptr);
                         
                     //Get the shadow length.
                     //Defaulting to the current sector's length
                     //makes it easier to calculate things later on.
                     neighbor_shadow_length[v] =
                         neighbor_shadow[v] ?
-                        get_wall_shadow_length(other_sector->z - s_ptr->z) :
+                        get_wall_shadow_length(edge_other_sec->z - s_ptr->z) :
                         shadow_length;
                 }
             }
@@ -2590,7 +2594,9 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         
         point shadow_point[2];
         ALLEGRO_VERTEX extra_av[8];
-        for(unsigned char e = 0; e < 8; ++e) { extra_av[e].z = 0;}
+        for(unsigned char eav = 0; eav < 8; ++eav) {
+            extra_av[eav].z = 0;
+        }
         //How many vertexes of the extra polygon to draw.
         unsigned char draw_extra[2] = {0, 0};
         

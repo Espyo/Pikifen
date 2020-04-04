@@ -598,7 +598,7 @@ void gameplay::handle_button(
             bool finished = false;
             do {
                 next_maturity =
-                    sum_and_wrap(
+                    (size_t) sum_and_wrap(
                         next_maturity,
                         (button == BUTTON_NEXT_MATURITY ? 1 : -1),
                         N_MATURITIES

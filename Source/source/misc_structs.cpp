@@ -228,10 +228,10 @@ bool fade_manager::is_fading() {
  * Sets up the start of a fade.
  */
 void fade_manager::start_fade(
-    const bool fade_in, const function<void()> &on_end
+    const bool is_fade_in, const function<void()> &on_end
 ) {
     time_left = FADE_DURATION;
-    this->fade_in = fade_in;
+    fade_in = is_fade_in;
     this->on_end = on_end;
 }
 

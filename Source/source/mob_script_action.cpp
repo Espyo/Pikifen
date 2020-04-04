@@ -68,13 +68,9 @@ mob_action_call::mob_action_call(custom_action_code code):
 /* ----------------------------------------------------------------------------
  * Loads a mob action call from a data node.
  * dn:     the data node.
- * states: if this action messes with states, this points to the external
- *   vector containing the states.
  * mt:     mob type this action's fsm belongs to.
  */
-bool mob_action_call::load_from_data_node(
-    data_node* dn, vector<mob_state*>* states, mob_type* mt
-) {
+bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 
     action = NULL;
     this->mt = mt;
@@ -1663,7 +1659,7 @@ void load_init_actions(
 ) {
     for(size_t a = 0; a < node->get_nr_of_children(); ++a) {
         mob_action_call* new_a = new mob_action_call();
-        if(new_a->load_from_data_node(node->get_child(a), NULL, mt)) {
+        if(new_a->load_from_data_node(node->get_child(a), mt)) {
             actions->push_back(new_a);
         } else {
             delete new_a;

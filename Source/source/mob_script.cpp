@@ -505,7 +505,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
                 data_node* action_node = event_node->get_child(a);
                 mob_action_call* new_a = new mob_action_call();
-                if(new_a->load_from_data_node(action_node, states, mt)) {
+                if(new_a->load_from_data_node(action_node, mt)) {
                     actions.push_back(new_a);
                 } else {
                     delete new_a;

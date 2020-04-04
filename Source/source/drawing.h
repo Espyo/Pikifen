@@ -60,8 +60,8 @@ void draw_compressed_text(
     const point &max_size, const string &text
 );
 void draw_fraction(
-    const point &center, const unsigned int current,
-    const unsigned int needed, const ALLEGRO_COLOR &color
+    const point &center, const size_t current,
+    const size_t needed, const ALLEGRO_COLOR &color
 );
 void draw_health(
     const point &center, const float health,
