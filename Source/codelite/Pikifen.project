@@ -137,6 +137,11 @@
     <File Name="../source/mob_categories/mob_category.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="utils">
+    <File Name="../source/utils/code_debug.h"/>
+    <File Name="../source/utils/code_debug.cpp"/>
+    <File Name="../source/utils/backtrace.h"/>
+    <File Name="../source/utils/data_file.cpp"/>
+    <File Name="../source/utils/data_file.h"/>
     <File Name="../source/utils/string_utils.cpp"/>
     <File Name="../source/utils/string_utils.h"/>
     <File Name="../source/utils/math_utils.h"/>
@@ -164,9 +169,7 @@
     <File Name="../source/particle.cpp"/>
     <File Name="../source/mob_script.h"/>
     <File Name="../source/hitbox.h"/>
-    <File Name="../source/data_file.h"/>
     <File Name="../source/functions.cpp"/>
-    <File Name="../source/data_file.cpp"/>
     <File Name="../source/hitbox.cpp"/>
     <File Name="../source/drawing.cpp"/>
     <File Name="../source/hazard.h"/>
@@ -200,9 +203,6 @@
     <File Name="../source/load.cpp"/>
     <File Name="../source/gameplay.h"/>
     <File Name="../source/gameplay.cpp"/>
-    <File Name="../source/code_debug.h"/>
-    <File Name="../source/code_debug.cpp"/>
-    <File Name="../source/backtrace.h"/>
     <File Name="../source/replay.h"/>
     <File Name="../source/replay.cpp"/>
   </VirtualDirectory>

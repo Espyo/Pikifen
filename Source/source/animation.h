@@ -18,8 +18,8 @@
 #include <allegro5/allegro_image.h>
 
 #include "const.h"
-#include "data_file.h"
 #include "hitbox.h"
+#include "utils/data_file.h"
 
 using namespace std;
 

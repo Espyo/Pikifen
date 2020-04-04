@@ -11,7 +11,7 @@
 #ifndef TOOL_TYPE_INCLUDED
 #define TOOL_TYPE_INCLUDED
 
-#include "../data_file.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 
 /* ----------------------------------------------------------------------------

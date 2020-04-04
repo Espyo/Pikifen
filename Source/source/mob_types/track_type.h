@@ -11,7 +11,7 @@
 #ifndef TRACK_TYPE_INCLUDED
 #define TRACK_TYPE_INCLUDED
 
-#include "../data_file.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 
 enum TRACK_RIDERS {

@@ -13,8 +13,8 @@
 
 #include <allegro5/allegro.h>
 
-#include "../data_file.h"
 #include "../misc_structs.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 
 enum SHIP_ANIMATIONS {

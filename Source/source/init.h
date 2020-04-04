@@ -12,7 +12,7 @@
 #define INIT_INCLUDED
 
 #include "animation.h"
-#include "data_file.h"
+#include "utils/data_file.h"
 
 void init_allegro();
 void init_asset_file_names();

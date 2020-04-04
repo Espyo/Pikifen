@@ -19,9 +19,9 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "data_file.h"
 #include "mob_categories/mob_category.h"
 #include "particle.h"
+#include "utils/data_file.h"
 #include "utils/geometry_utils.h"
 
 class pikmin_type;

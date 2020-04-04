@@ -11,7 +11,7 @@
 #ifndef BOUNCER_TYPE_INCLUDED
 #define BOUNCER_TYPE_INCLUDED
 
-#include "../data_file.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 
 enum BOUNCER_RIDERS {

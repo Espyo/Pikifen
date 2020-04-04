@@ -11,7 +11,7 @@
 #ifndef TREASURE_TYPE_INCLUDED
 #define TREASURE_TYPE_INCLUDED
 
-#include "../data_file.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 
 enum TREASURE_STATES {

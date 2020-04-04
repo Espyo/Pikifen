@@ -11,7 +11,7 @@
 #ifndef ONION_TYPE_INCLUDED
 #define ONION_TYPE_INCLUDED
 
-#include "../data_file.h"
+#include "../utils/data_file.h"
 #include "mob_type.h"
 #include "pikmin_type.h"
 

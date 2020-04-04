@@ -16,12 +16,12 @@
 #include <allegro5/allegro_image.h>
 
 #include "controls.h"
-#include "data_file.h"
 #include "mob_script.h"
 #include "mobs/leader.h"
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "sector.h"
+#include "utils/data_file.h"
 #include "vars.h"
 
 enum FILE_DIALOG_RESULTS {

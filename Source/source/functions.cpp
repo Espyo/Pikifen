@@ -26,12 +26,12 @@
 
 #include "functions.h"
 
-#include "backtrace.h"
 #include "const.h"
 #include "drawing.h"
 #include "editors/animation_editor/editor.h"
 #include "init.h"
 #include "menus.h"
+#include "utils/backtrace.h"
 #include "utils/string_utils.h"
 #include "vars.h"
 
