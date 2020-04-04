@@ -30,8 +30,6 @@ using namespace std;
  * and grayer).
  */
 class weather {
-private:
-    vector<pair<size_t, string> > get_table();
 public:
     string name;
     //Vector with the lighting colors for specific times of day, in minutes.

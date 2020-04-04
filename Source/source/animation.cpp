@@ -51,6 +51,21 @@ animation::animation(const animation &a2) :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an animation by copying info from another animation.
+ */
+const animation &animation::operator=(const animation &a2) {
+    if(this != &a2) {
+        name = a2.name;
+        frames = a2.frames;
+        loop_frame = a2.loop_frame;
+        hit_rate = a2.hit_rate;
+    }
+    
+    return *this;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an animation database.
  */
 animation_database::animation_database(
@@ -237,6 +252,23 @@ animation_instance::animation_instance(const animation_instance &ai2) :
     anim_db(ai2.anim_db) {
     
     start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies data from another animation instance.
+ */
+const animation_instance &animation_instance::operator=(
+    const animation_instance &ai2
+) {
+    if(this != &ai2) {
+        cur_anim = ai2.cur_anim;
+        anim_db = ai2.anim_db;
+    }
+    
+    start();
+    
+    return *this;
 }
 
 
@@ -440,6 +472,32 @@ void sprite::create_hitboxes(
             )
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies data from another sprite.
+ */
+const sprite &sprite::operator=(const sprite &s2) {
+    if(this != &s2) {
+        name = s2.name;
+        parent_bmp = NULL;
+        file = s2.file;
+        file_pos = s2.file_pos;
+        file_size = s2.file_size;
+        offset = s2.offset;
+        scale = s2.scale;
+        angle = s2.angle;
+        top_pos = s2.top_pos;
+        top_size = s2.top_size;
+        top_angle = s2.top_angle;
+        top_visible = s2.top_visible;
+        bitmap = NULL;
+        hitboxes = s2.hitboxes;
+        set_bitmap(file, file_pos, file_size);
+    }
+    
+    return *this;
 }
 
 

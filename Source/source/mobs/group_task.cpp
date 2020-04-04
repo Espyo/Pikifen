@@ -18,9 +18,9 @@ group_task::group_task(
     const point &pos, group_task_type* type, const float angle
 ):
     mob(pos, type, angle),
+    tas_type(type),
     power(0),
-    ran_task_finished_code(false),
-    tas_type(type) {
+    ran_task_finished_code(false) {
     
     //Initialize spots.
     float row_angle = get_angle(tas_type->first_row_p1, tas_type->first_row_p2);

@@ -1388,11 +1388,6 @@ void mob::get_sprite_bitmap_effects(
         size_t n_glow_colors = 0;
         ALLEGRO_COLOR glow_color_sum = al_map_rgba(0, 0, 0, 0);
         
-        float total_tint_r = 0;
-        float total_tint_g = 0;
-        float total_tint_b = 0;
-        float total_tint_a = 0;
-        
         for(size_t s = 0; s < statuses.size(); ++s) {
             status_type* t = this->statuses[s].type;
             if(

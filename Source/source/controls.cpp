@@ -781,7 +781,6 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
  * For every control that matches, it adds its input information to a vector,
  * which it then returns.
  * ev:   Pointer to the event.
- * func: Pointer to the function to run.
  */
 vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
 

@@ -8,6 +8,8 @@
  * Logic about mob movement, gravity, wall collision, etc.
  */
 
+#include <algorithm>
+
 #include "mobs/mob.h"
 
 #include "vars.h"
@@ -350,7 +352,6 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
     
     //If we were to slide on this edge, this would be
     //the slide angle.
-    float tentative_slide_angle;
     if(nd < TAU / 2) {
         //Coming in from the "left" of the normal. Slide right.
         *slide_angle = wall_normal + TAU / 4;
@@ -779,11 +780,9 @@ void mob::tick_vertical_movement_physics(
 void mob::tick_walkable_riding_physics(const float delta_t) {
     mob* rider_added_ev_mob = NULL;
     mob* rider_removed_ev_mob = NULL;
-    mob* new_standing_on_mob = NULL;
+    mob* new_standing_on_mob = get_mob_to_walk_on();
     
     //Check which mob it is on top of, if any.
-    new_standing_on_mob = get_mob_to_walk_on();
-    
     if(new_standing_on_mob) {
         z = new_standing_on_mob->z + new_standing_on_mob->height;
     }

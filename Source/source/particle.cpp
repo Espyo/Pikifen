@@ -319,18 +319,38 @@ particle_manager::particle_manager(const size_t &max_nr) :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a particle manager by copying data from another.
+ */
+particle_manager::particle_manager(const particle_manager &pm2) :
+    particles(NULL),
+    count(pm2.count),
+    max_nr(pm2.max_nr) {
+    
+    particles = new particle[max_nr];
+    for(size_t p = 0; p < count; ++p) {
+        this->particles[p] = pm2.particles[p];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Copies a particle manager from another one.
  */
-particle_manager &particle_manager::operator =(const particle_manager &pg) {
+const particle_manager &particle_manager::operator =(
+    const particle_manager &pm2
+) {
 
-    if(this != &pg) {
+    if(this != &pm2) {
+        if(this->particles) {
+            delete[] this->particles;
+        }
         this->particles = NULL;
-        max_nr = pg.max_nr;
+        max_nr = pm2.max_nr;
+        count = pm2.count;
         if(max_nr == 0) return *this;
-        count = pg.count;
         this->particles = new particle[max_nr];
         for(size_t p = 0; p < count; ++p) {
-            this->particles[p] = pg.particles[p];
+            this->particles[p] = pm2.particles[p];
         }
     }
     

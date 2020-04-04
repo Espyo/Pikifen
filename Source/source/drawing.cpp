@@ -591,7 +591,7 @@ void gameplay::draw_hud() {
     if(
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_TOTAL_NR, &i_center, &i_size)
     ) {
-        unsigned long total_pikmin = pikmin_list.size();
+        size_t total_pikmin = pikmin_list.size();
         for(size_t o = 0; o < onions.size(); ++o) {
             for(size_t m = 0; m < N_MATURITIES; ++m) {
                 total_pikmin += onions[o]->pikmin_inside[m];

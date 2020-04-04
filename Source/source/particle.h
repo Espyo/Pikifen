@@ -116,7 +116,8 @@ public:
     void tick_all(const float delta_t);
     
     particle_manager(const size_t &max_nr = 0);
-    particle_manager &operator=(const particle_manager &pg);
+    particle_manager(const particle_manager &pm2);
+    const particle_manager &operator=(const particle_manager &pm2);
     ~particle_manager();
     
 };

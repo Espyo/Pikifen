@@ -44,7 +44,6 @@ public:
         ALLEGRO_FONT* text_font =
             al_create_builtin_font()
     );
-    style(const style &s2);
     
     static ALLEGRO_COLOR lighten_color(ALLEGRO_COLOR color);
     static ALLEGRO_COLOR darken_color(ALLEGRO_COLOR color);

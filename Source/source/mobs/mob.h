@@ -260,7 +260,6 @@ public:
     
     
     void tick(const float delta_t);
-    void draw();
     void draw_limb();
     virtual void draw_mob();
     
