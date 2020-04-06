@@ -593,7 +593,7 @@ void animation_editor::hitbox_to_gui() {
 void animation_editor::open_picker(
     const unsigned char id, const bool can_make_new
 ) {
-    vector<pair<string, string> > elements;
+    vector<std::pair<string, string> > elements;
     string title;
     
     if(

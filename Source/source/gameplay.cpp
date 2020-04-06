@@ -117,7 +117,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
                     point(x, y),
                     point(FOG_BITMAP_SIZE / 2.0, FOG_BITMAP_SIZE / 2.0)
                 ).to_float() / (FOG_BITMAP_SIZE / 2.0);
-            cur_ratio = min(cur_ratio, 1.0f);
+            cur_ratio = std::min(cur_ratio, 1.0f);
             //Then, map that ratio to a different ratio that considers
             //the start of the "near" section as 0.
             cur_ratio =

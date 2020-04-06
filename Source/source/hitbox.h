@@ -16,6 +16,9 @@
 #include "const.h"
 #include "utils/geometry_utils.h"
 
+using std::string;
+using std::vector;
+
 /*
  * You can read more about hitboxes
  * on animation.h.

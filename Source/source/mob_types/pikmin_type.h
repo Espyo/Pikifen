@@ -20,7 +20,6 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
-using namespace std;
 
 enum PIKMIN_STATES {
     PIKMIN_STATE_IN_GROUP_CHASING,

@@ -18,7 +18,8 @@
 #include "../utils/string_utils.h"
 #include "../vars.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
 
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.
@@ -229,13 +230,13 @@ void onion::tick_class_specifics(const float delta_t) {
         if(o_ptr->seethrough != final_alpha) {
             if(final_alpha < o_ptr->seethrough) {
                 o_ptr->seethrough =
-                    max(
+                    std::max(
                         (double) final_alpha,
                         (double) o_ptr->seethrough - ONION_FADE_SPEED * delta_t
                     );
             } else {
                 o_ptr->seethrough =
-                    min(
+                    std::min(
                         (double) final_alpha,
                         (double) o_ptr->seethrough + ONION_FADE_SPEED * delta_t
                     );

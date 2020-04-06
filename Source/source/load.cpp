@@ -20,6 +20,8 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
+using std::set;
+
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
@@ -244,7 +246,7 @@ void load_area(
     }
     
     //Mobs.
-    vector<pair<size_t, size_t> > mob_links_buffer;
+    vector<std::pair<size_t, size_t> > mob_links_buffer;
     size_t n_mobs =
         geometry_file.get_child_by_name("mobs")->get_nr_of_children();
         
@@ -271,7 +273,7 @@ void load_area(
         vector<string> link_strs =
             split(mob_node->get_child_by_name("links")->value);
         for(size_t l = 0; l < link_strs.size(); ++l) {
-            mob_links_buffer.push_back(make_pair(m, s2i(link_strs[l])));
+            mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
         bool problem = false;
@@ -1097,17 +1099,17 @@ void load_options() {
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("window_position_hack", window_position_hack);
     
-    game_fps = max(1, game_fps);
+    game_fps = std::max(1, game_fps);
     joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
     joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
     if(joystick_min_deadzone > joystick_max_deadzone) {
-        swap(joystick_min_deadzone, joystick_max_deadzone);
+        std::swap(joystick_min_deadzone, joystick_max_deadzone);
     }
     
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {
-        scr_w = max(1, s2i(resolution_parts[0]));
-        scr_h = max(1, s2i(resolution_parts[1]));
+        scr_w = std::max(1, s2i(resolution_parts[0]));
+        scr_h = std::max(1, s2i(resolution_parts[1]));
     }
     
     for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
@@ -1373,12 +1375,12 @@ void load_weather() {
         weather_struct.name = weather_node->name;
         
         //Lighting.
-        vector<pair<size_t, string> > lighting_table =
+        vector<std::pair<size_t, string> > lighting_table =
             get_weather_table(weather_node->get_child_by_name("lighting"));
             
         for(size_t p = 0; p < lighting_table.size(); ++p) {
             weather_struct.daylight.push_back(
-                make_pair(
+                std::make_pair(
                     lighting_table[p].first,
                     s2c(lighting_table[p].second)
                 )
@@ -1386,12 +1388,12 @@ void load_weather() {
         }
         
         //Sun's strength.
-        vector<pair<size_t, string> > sun_strength_table =
+        vector<std::pair<size_t, string> > sun_strength_table =
             get_weather_table(weather_node->get_child_by_name("sun_strength"));
             
         for(size_t p = 0; p < sun_strength_table.size(); ++p) {
             weather_struct.sun_strength.push_back(
-                make_pair(
+                std::make_pair(
                     sun_strength_table[p].first,
                     s2i(sun_strength_table[p].second)
                 )
@@ -1399,14 +1401,14 @@ void load_weather() {
         }
         
         //Blackout effect's strength.
-        vector<pair<size_t, string> > blackout_strength_table =
+        vector<std::pair<size_t, string> > blackout_strength_table =
             get_weather_table(
                 weather_node->get_child_by_name("blackout_strength")
             );
             
         for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
             weather_struct.blackout_strength.push_back(
-                make_pair(
+                std::make_pair(
                     blackout_strength_table[p].first,
                     s2i(blackout_strength_table[p].second)
                 )
@@ -1418,17 +1420,17 @@ void load_weather() {
             s2f(weather_node->get_child_by_name("fog_near")->value);
         weather_struct.fog_far =
             s2f(weather_node->get_child_by_name("fog_far")->value);
-        weather_struct.fog_near = max(weather_struct.fog_near, 0.0f);
+        weather_struct.fog_near = std::max(weather_struct.fog_near, 0.0f);
         weather_struct.fog_far =
-            max(weather_struct.fog_far, weather_struct.fog_near);
+            std::max(weather_struct.fog_far, weather_struct.fog_near);
             
-        vector<pair<size_t, string> > fog_color_table =
+        vector<std::pair<size_t, string> > fog_color_table =
             get_weather_table(
                 weather_node->get_child_by_name("fog_color")
             );
         for(size_t p = 0; p < fog_color_table.size(); ++p) {
             weather_struct.fog_color.push_back(
-                make_pair(
+                std::make_pair(
                     fog_color_table[p].first,
                     s2c(fog_color_table[p].second)
                 )

@@ -19,7 +19,8 @@
 #include "animation.h"
 #include "particle.h"
 
-using namespace std;
+using std::string;
+
 
 /* ----------------------------------------------------------------------------
  * A status effect type, like "burning", "spicy", "petrified", etc.

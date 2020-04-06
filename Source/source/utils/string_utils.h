@@ -15,10 +15,12 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 //Converts an integer (or long) to a string.
-#define i2s(n) to_string((long long) (n))
+#define i2s(n) std::to_string((long long) (n))
 
 string box_string(
     const string &s, const size_t size, const string &finisher = ""

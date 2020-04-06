@@ -18,7 +18,9 @@
 
 #include "../utils/geometry_utils.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 enum MOB_CATEGORIES {
     //Sorted by what types of mobs to load first.

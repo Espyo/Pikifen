@@ -36,8 +36,8 @@ decoration_type::decoration_type() :
  */
 anim_conversion_vector decoration_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(DECORATION_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(DECORATION_ANIM_BUMPED, "bumped"));
+    v.push_back(std::make_pair(DECORATION_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(DECORATION_ANIM_BUMPED, "bumped"));
     return v;
 }
 

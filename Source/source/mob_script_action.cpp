@@ -16,6 +16,8 @@
 #include "functions.h"
 #include "utils/string_utils.h"
 
+using std::set;
+
 
 /* ----------------------------------------------------------------------------
  * Creates a new, empty mob action.
@@ -134,7 +136,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     
     //Fetch the arguments, and check if any of them are not allowed.
     for(size_t w = 0; w < words.size(); ++w) {
-        size_t param_nr = min(w, action->parameters.size() - 1);
+        size_t param_nr = std::min(w, action->parameters.size() - 1);
         bool is_var = (words[w][0] == '$' && words[w].size() > 1);
         
         if(is_var && words[w].size() >= 2 && words[w][1] == '$') {
@@ -399,7 +401,7 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
 void mob_action_loaders::report_enum_error(
     mob_action_call &call, const size_t arg_nr
 ) {
-    size_t param_nr = min(arg_nr, call.action->parameters.size() - 1);
+    size_t param_nr = std::min(arg_nr, call.action->parameters.size() - 1);
     call.custom_error =
         "The parameter \"" + call.action->parameters[param_nr].name + "\" "
         "does not know what the value \"" +

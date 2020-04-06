@@ -20,7 +20,11 @@
 #include "../../utils/string_utils.h"
 #include "../../vars.h"
 
-using namespace std;
+using std::set;
+using std::size_t;
+using std::string;
+using std::unordered_set;
+using std::vector;
 
 //Radius to use when drawing a cross-section point.
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
@@ -1250,7 +1254,7 @@ void area_editor::finish_layout_drawing() {
     unsigned char inner_sector_side = (is_clockwise ? 1 : 0);
     unsigned char outer_sector_side = (is_clockwise ? 0 : 1);
     
-    map<edge*, pair<sector*, sector*> > edge_sector_backups;
+    map<edge*, std::pair<sector*, sector*> > edge_sector_backups;
     
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
         edge* e_ptr = drawing_edges[e];
@@ -1429,7 +1433,7 @@ void area_editor::finish_layout_moving() {
     for(auto v : selected_vertexes) {
         point p(v->x, v->y);
         
-        vector<pair<dist, vertex*> > merge_vertexes =
+        vector<std::pair<dist, vertex*> > merge_vertexes =
             get_merge_vertexes(
                 p, cur_area_data.vertexes,
                 VERTEX_MERGE_RADIUS / cam_zoom
@@ -1449,7 +1453,7 @@ void area_editor::finish_layout_moving() {
         
         sort(
             merge_vertexes.begin(), merge_vertexes.end(),
-        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+        [] (std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2) -> bool {
             return v1.first < v2.first;
         }
         );
@@ -2025,7 +2029,7 @@ float area_editor::get_mob_gen_radius(mob_gen* m) {
  */
 bool area_editor::get_mob_link_under_point(
     const point &p,
-    pair<mob_gen*, mob_gen*>* data1, pair<mob_gen*, mob_gen*>* data2
+    std::pair<mob_gen*, mob_gen*>* data1, std::pair<mob_gen*, mob_gen*>* data2
 ) {
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
@@ -2034,12 +2038,12 @@ bool area_editor::get_mob_link_under_point(
             if(
                 circle_intersects_line(p, 8 / cam_zoom, m_ptr->pos, m2_ptr->pos)
             ) {
-                *data1 = make_pair(m_ptr, m2_ptr);
-                *data2 = make_pair((mob_gen*) NULL, (mob_gen*) NULL);
+                *data1 = std::make_pair(m_ptr, m2_ptr);
+                *data2 = std::make_pair((mob_gen*) NULL, (mob_gen*) NULL);
                 
                 for(size_t l2 = 0; l2 < m2_ptr->links.size(); ++l2) {
                     if(m2_ptr->links[l2] == m_ptr) {
-                        *data2 = make_pair(m2_ptr, m_ptr);
+                        *data2 = std::make_pair(m2_ptr, m_ptr);
                         break;
                     }
                 }
@@ -2078,7 +2082,8 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
  */
 bool area_editor::get_path_link_under_point(
     const point &p,
-    pair<path_stop*, path_stop*>* data1, pair<path_stop*, path_stop*>* data2
+    std::pair<path_stop*, path_stop*>* data1,
+    std::pair<path_stop*, path_stop*>* data2
 ) {
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
@@ -2087,11 +2092,12 @@ bool area_editor::get_path_link_under_point(
             if(
                 circle_intersects_line(p, 8 / cam_zoom, s_ptr->pos, s2_ptr->pos)
             ) {
-                *data1 = make_pair(s_ptr, s2_ptr);
+                *data1 = std::make_pair(s_ptr, s2_ptr);
                 if(s2_ptr->get_link(s_ptr) != INVALID) {
-                    *data2 = make_pair(s2_ptr, s_ptr);
+                    *data2 = std::make_pair(s2_ptr, s_ptr);
                 } else {
-                    *data2 = make_pair((path_stop*) NULL, (path_stop*) NULL);
+                    *data2 =
+                        std::make_pair((path_stop*) NULL, (path_stop*) NULL);
                 }
                 return true;
             }
@@ -2178,37 +2184,69 @@ void area_editor::goto_problem() {
         max_coords.y = min_coords.y;
         
         min_coords.x =
-            min(min_coords.x, problem_edge_intersection.e1->vertexes[0]->x);
+            std::min(
+                min_coords.x, problem_edge_intersection.e1->vertexes[0]->x
+            );
         min_coords.x =
-            min(min_coords.x, problem_edge_intersection.e1->vertexes[1]->x);
+            std::min(
+                min_coords.x, problem_edge_intersection.e1->vertexes[1]->x
+            );
         min_coords.x =
-            min(min_coords.x, problem_edge_intersection.e2->vertexes[0]->x);
+            std::min(
+                min_coords.x, problem_edge_intersection.e2->vertexes[0]->x
+            );
         min_coords.x =
-            min(min_coords.x, problem_edge_intersection.e2->vertexes[1]->x);
+            std::min(
+                min_coords.x, problem_edge_intersection.e2->vertexes[1]->x
+            );
         max_coords.x =
-            max(max_coords.x, problem_edge_intersection.e1->vertexes[0]->x);
+            std::max(
+                max_coords.x, problem_edge_intersection.e1->vertexes[0]->x
+            );
         max_coords.x =
-            max(max_coords.x, problem_edge_intersection.e1->vertexes[1]->x);
+            std::max(
+                max_coords.x, problem_edge_intersection.e1->vertexes[1]->x
+            );
         max_coords.x =
-            max(max_coords.x, problem_edge_intersection.e2->vertexes[0]->x);
+            std::max(
+                max_coords.x, problem_edge_intersection.e2->vertexes[0]->x
+            );
         max_coords.x =
-            max(max_coords.x, problem_edge_intersection.e2->vertexes[1]->x);
+            std::max(
+                max_coords.x, problem_edge_intersection.e2->vertexes[1]->x
+            );
         min_coords.y =
-            min(min_coords.y, problem_edge_intersection.e1->vertexes[0]->y);
+            std::min(
+                min_coords.y, problem_edge_intersection.e1->vertexes[0]->y
+            );
         min_coords.y =
-            min(min_coords.y, problem_edge_intersection.e1->vertexes[1]->y);
+            std::min(
+                min_coords.y, problem_edge_intersection.e1->vertexes[1]->y
+            );
         min_coords.y =
-            min(min_coords.y, problem_edge_intersection.e2->vertexes[0]->y);
+            std::min(
+                min_coords.y, problem_edge_intersection.e2->vertexes[0]->y
+            );
         min_coords.y =
-            min(min_coords.y, problem_edge_intersection.e2->vertexes[1]->y);
+            std::min(
+                min_coords.y, problem_edge_intersection.e2->vertexes[1]->y
+            );
         max_coords.y =
-            max(max_coords.y, problem_edge_intersection.e1->vertexes[0]->y);
+            std::max(
+                max_coords.y, problem_edge_intersection.e1->vertexes[0]->y
+            );
         max_coords.y =
-            max(max_coords.y, problem_edge_intersection.e1->vertexes[1]->y);
+            std::max(
+                max_coords.y, problem_edge_intersection.e1->vertexes[1]->y
+            );
         max_coords.y =
-            max(max_coords.y, problem_edge_intersection.e2->vertexes[0]->y);
+            std::max(
+                max_coords.y, problem_edge_intersection.e2->vertexes[0]->y
+            );
         max_coords.y =
-            max(max_coords.y, problem_edge_intersection.e2->vertexes[1]->y);
+            std::max(
+                max_coords.y, problem_edge_intersection.e2->vertexes[1]->y
+            );
             
         center_camera(min_coords, max_coords);
         
@@ -2241,14 +2279,14 @@ void area_editor::goto_problem() {
         min_coords.y = e_ptr->vertexes[0]->y;
         max_coords.y = min_coords.y;
         
-        min_coords.x = min(min_coords.x, e_ptr->vertexes[0]->x);
-        min_coords.x = min(min_coords.x, e_ptr->vertexes[1]->x);
-        max_coords.x = max(max_coords.x, e_ptr->vertexes[0]->x);
-        max_coords.x = max(max_coords.x, e_ptr->vertexes[1]->x);
-        min_coords.y = min(min_coords.y, e_ptr->vertexes[0]->y);
-        min_coords.y = min(min_coords.y, e_ptr->vertexes[1]->y);
-        max_coords.y = max(max_coords.y, e_ptr->vertexes[0]->y);
-        max_coords.y = max(max_coords.y, e_ptr->vertexes[1]->y);
+        min_coords.x = std::min(min_coords.x, e_ptr->vertexes[0]->x);
+        min_coords.x = std::min(min_coords.x, e_ptr->vertexes[1]->x);
+        max_coords.x = std::max(max_coords.x, e_ptr->vertexes[0]->x);
+        max_coords.x = std::max(max_coords.x, e_ptr->vertexes[1]->x);
+        min_coords.y = std::min(min_coords.y, e_ptr->vertexes[0]->y);
+        min_coords.y = std::min(min_coords.y, e_ptr->vertexes[1]->y);
+        max_coords.y = std::max(max_coords.y, e_ptr->vertexes[0]->y);
+        max_coords.y = std::max(max_coords.y, e_ptr->vertexes[1]->y);
         
         center_camera(min_coords, max_coords);
         
@@ -2393,7 +2431,7 @@ void area_editor::load_area(const bool from_backup) {
     
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
-    vector<pair<string, size_t> > texture_uses_vector;
+    vector<std::pair<string, size_t> > texture_uses_vector;
     
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         string n = cur_area_data.sectors[s]->texture_info.file_name;
@@ -2405,7 +2443,7 @@ void area_editor::load_area(const bool from_backup) {
     }
     sort(
         texture_uses_vector.begin(), texture_uses_vector.end(),
-    [] (pair<string, size_t> u1, pair<string, size_t> u2) -> bool {
+    [] (std::pair<string, size_t> u1, std::pair<string, size_t> u2) -> bool {
         return u1.second > u2.second;
     }
     );
@@ -3377,7 +3415,7 @@ point area_editor::snap_point(const point &p) {
         }
         cursor_snap_timer.start();
         
-        vector<pair<dist, vertex*> > v =
+        vector<std::pair<dist, vertex*> > v =
             get_merge_vertexes(
                 p, cur_area_data.vertexes,
                 area_editor_snap_threshold / cam_zoom
@@ -3388,7 +3426,9 @@ point area_editor::snap_point(const point &p) {
         } else {
             sort(
                 v.begin(), v.end(),
-            [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+                [] (
+                    std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2
+            ) -> bool {
                 return v1.first < v2.first;
             }
             );
@@ -3484,8 +3524,8 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  * newly-created path stop. The new stop gets added to the current area.
  */
 path_stop* area_editor::split_path_link(
-    const pair<path_stop*, path_stop*> &l1,
-    const pair<path_stop*, path_stop*> &l2,
+    const std::pair<path_stop*, path_stop*> &l1,
+    const std::pair<path_stop*, path_stop*> &l2,
     const point &where
 ) {
     bool normal_link = (l2.first != NULL);
@@ -3831,7 +3871,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     on_sector_nr(INVALID),
     is_new_vertex(false) {
     
-    vector<pair<dist, vertex*> > merge_vertexes =
+    vector<std::pair<dist, vertex*> > merge_vertexes =
         get_merge_vertexes(
             mouse_click, cur_area_data.vertexes,
             VERTEX_MERGE_RADIUS / cam_zoom
@@ -3839,7 +3879,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     if(!merge_vertexes.empty()) {
         sort(
             merge_vertexes.begin(), merge_vertexes.end(),
-        [] (pair<dist, vertex*> v1, pair<dist, vertex*> v2) -> bool {
+        [] (std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2) -> bool {
             return v1.first < v2.first;
         }
         );

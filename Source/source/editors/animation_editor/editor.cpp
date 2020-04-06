@@ -30,6 +30,8 @@
 #include "../../utils/string_utils.h"
 #include "../../vars.h"
 
+using std::queue;
+
 
 //Maximum zoom level possible in the editor.
 const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
@@ -333,7 +335,7 @@ void animation_editor::load_animation_database(const bool update_history) {
     
     if(!anims.sprites.empty()) {
         map<string, size_t> file_uses_map;
-        vector<pair<size_t, string> > file_uses_vector;
+        vector<std::pair<size_t, string> > file_uses_vector;
         for(size_t f = 0; f < anims.sprites.size(); ++f) {
             file_uses_map[anims.sprites[f]->file]++;
         }
@@ -343,7 +345,9 @@ void animation_editor::load_animation_database(const bool update_history) {
         sort(
             file_uses_vector.begin(),
             file_uses_vector.end(),
-        [] (pair<size_t, string> u1, pair<size_t, string> u2) -> bool {
+            [] (
+                std::pair<size_t, string> u1, std::pair<size_t, string> u2
+        ) -> bool {
             return u1.first > u2.first;
         }
         );

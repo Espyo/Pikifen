@@ -18,7 +18,8 @@
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 
-using namespace std;
+using std::size_t;
+
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the pile's logic.
@@ -61,7 +62,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     int intended_amount =
         ceil(p_ptr->health / p_ptr->pil_type->health_per_resource);
     int amount_to_spawn = p_ptr->amount - intended_amount;
-    amount_to_spawn = max((int) 0, amount_to_spawn);
+    amount_to_spawn = std::max((int) 0, amount_to_spawn);
     
     if(amount_to_spawn == 0) return;
     

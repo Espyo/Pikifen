@@ -18,7 +18,7 @@
 
 #include "animation.h"
 
-using namespace std;
+using std::string;
 
 /* ----------------------------------------------------------------------------
  * A liquid type defines how a sector should look to make it look like water.

@@ -19,7 +19,8 @@
 #include "menu_widgets.h"
 #include "mobs/mob.h"
 
-using namespace std;
+using std::size_t;
+using std::vector;
 
 enum GAME_STATES {
     GAME_STATE_MAIN_MENU,

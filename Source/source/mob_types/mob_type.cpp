@@ -26,7 +26,7 @@
 #include "pikmin_type.h"
 #include "treasure_type.h"
 
-using namespace std;
+using std::string;
 
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
@@ -622,14 +622,14 @@ void load_mob_type_from_file(
                 
                 float d = dist(point(0, 0), h_ptr->pos).to_float();
                 d += h_ptr->radius;
-                mt->max_span = max(mt->max_span, d);
+                mt->max_span = std::max(mt->max_span, d);
             }
         }
     }
     
     if(mt->rectangular_dim.x != 0) {
         mt->max_span =
-            max(
+            std::max(
                 mt->max_span,
                 dist(point(0, 0), mt->rectangular_dim / 2.0).to_float()
             );

@@ -25,7 +25,10 @@
 #include "mob_types/mob_type.h"
 #include "weather.h"
 
-using namespace std;
+using std::set;
+using std::size_t;
+using std::unordered_set;
+using std::vector;
 
 const float LIQUID_DRAIN_DURATION = 2.0f;
 
@@ -387,7 +390,7 @@ void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
-vector<pair<dist, vertex*> > get_merge_vertexes(
+vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &p, vector<vertex*> &all_vertexes, const float merge_radius
 );
 vector<path_stop*> get_path(

@@ -62,7 +62,7 @@ void drop::tick_class_specifics(const float delta_t) {
     
     if(cur_scale > intended_scale) {
         cur_scale -= dro_type->shrink_speed * delta_t;
-        cur_scale = max(intended_scale, cur_scale);
+        cur_scale = std::max(intended_scale, cur_scale);
     }
     
     if(cur_scale == 0) {

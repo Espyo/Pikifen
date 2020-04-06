@@ -5,7 +5,6 @@
 
 #include "widget.h"
 
-using namespace std;
 
 namespace lafi {
 

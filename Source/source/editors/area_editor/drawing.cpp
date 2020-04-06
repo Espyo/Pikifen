@@ -42,9 +42,9 @@ void area_editor::do_drawing() {
         
         for(size_t s = 1; s < cur_area_data.sectors.size(); ++s) {
             lowest_sector_z =
-                min(lowest_sector_z, cur_area_data.sectors[s]->z);
+                std::min(lowest_sector_z, cur_area_data.sectors[s]->z);
             highest_sector_z =
-                max(highest_sector_z, cur_area_data.sectors[s]->z);
+                std::max(highest_sector_z, cur_area_data.sectors[s]->z);
         }
     }
     
@@ -615,7 +615,7 @@ void area_editor::do_drawing() {
                 bool one_way =
                     s_ptr->links[l].end_ptr->get_link(s_ptr) == INVALID;
                 bool selected =
-                    selected_path_links.find(make_pair(s_ptr, s2_ptr)) !=
+                    selected_path_links.find(std::make_pair(s_ptr, s2_ptr)) !=
                     selected_path_links.end();
                     
                 al_draw_line(
@@ -1153,7 +1153,9 @@ void area_editor::do_drawing() {
             
             for(size_t s = 1; s < splits.size(); ++s) {
                 if(splits[s].sector_ptrs[0] != splits[s - 1].sector_ptrs[1]) {
-                    swap(splits[s].sector_ptrs[0], splits[s].sector_ptrs[1]);
+                    std::swap(
+                        splits[s].sector_ptrs[0], splits[s].sector_ptrs[1]
+                    );
                 }
             }
             

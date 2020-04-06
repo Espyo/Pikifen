@@ -18,7 +18,7 @@
 #include "misc_structs.h"
 #include "utils/data_file.h"
 
-using namespace std;
+using std::string;
 
 
 void load_area(

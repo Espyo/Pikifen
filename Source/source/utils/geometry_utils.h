@@ -17,7 +17,6 @@
 #include <math.h>
 #include <string>
 
-using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Simple 2D point.

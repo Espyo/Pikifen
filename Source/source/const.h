@@ -21,7 +21,8 @@
 
 #include "utils/math_utils.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
 
 /*
  * Version stuff.
@@ -33,8 +34,8 @@ const unsigned char VERSION_MINOR = 18;
 const unsigned char VERSION_REV   = 0;
 
 
-const size_t INVALID = UINT32_MAX;
-const float LARGE_FLOAT = 999999.0f;
+constexpr size_t INVALID = UINT32_MAX;
+constexpr float LARGE_FLOAT = 999999.0f;
 
 const string ANIMATION_EDITOR_TUTORIAL_URL =
     "http://www.pikminfanon.com/Pikifen/Creating_animations";

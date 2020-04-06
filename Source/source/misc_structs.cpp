@@ -228,7 +228,7 @@ bool fade_manager::is_fading() {
  * Sets up the start of a fade.
  */
 void fade_manager::start_fade(
-    const bool is_fade_in, const function<void()> &on_end
+    const bool is_fade_in, const std::function<void()> &on_end
 ) {
     time_left = FADE_DURATION;
     fade_in = is_fade_in;
@@ -962,7 +962,7 @@ void subgroup_type_manager::register_type(
 /* ----------------------------------------------------------------------------
  * Creates a timer.
  */
-timer::timer(float duration, const function<void()> &on_end) :
+timer::timer(float duration, const std::function<void()> &on_end) :
     time_left(0),
     duration(duration),
     on_end(on_end) {
@@ -1022,7 +1022,7 @@ void timer::stop() {
  */
 void timer::tick(const float amount) {
     if(time_left == 0.0f) return;
-    time_left = max(time_left - amount, 0.0f);
+    time_left = std::max(time_left - amount, 0.0f);
     if(time_left == 0.0f && on_end) {
         on_end();
     }

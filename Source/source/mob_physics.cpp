@@ -14,6 +14,8 @@
 
 #include "vars.h"
 
+using std::set;
+
 /* ----------------------------------------------------------------------------
  * Returns which walkable mob this mob should be considered to be on top of.
  * Returns NULL if none is found.
@@ -249,7 +251,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             float d = dist(pos, final_target_pos).to_float();
             
             float move_amount =
-                min(
+                std::min(
                     (double) (d / delta_t),
                     (double) chase_info.speed * move_speed_mult
                 );
@@ -273,7 +275,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
-            min(push_amount, (float) (type->radius / delta_t) * 4);
+            std::min(push_amount, (float) (type->radius / delta_t) * 4);
             
         //If the mob spawned recently, throttle its push. This avoids a bundle
         //of recently-spawned objects from pushing each other with insane force.
@@ -664,7 +666,7 @@ void mob::tick_rotation_physics(
     if(angle_dif < -TAU / 2) angle_dif += TAU;
     
     angle +=
-        sign(angle_dif) * min(
+        sign(angle_dif) * std::min(
             (double) (type->rotation_speed * move_speed_mult * delta_t),
             (double) fabs(angle_dif)
         );
@@ -746,7 +748,7 @@ void mob::tick_vertical_movement_physics(
     if(speed_z <= 0) {
         z_cap = FLT_MAX;
     } else if(z_cap < FLT_MAX) {
-        z = min(z, z_cap);
+        z = std::min(z, z_cap);
     }
     
     //On a sector that has a hazard that is not on the floor.
@@ -769,7 +771,7 @@ void mob::tick_vertical_movement_physics(
     on_hazard = new_on_hazard;
     
     //Quick panic check: if it's somehow inside the ground, pop it out.
-    z = max(z, ground_sector->z);
+    z = std::max(z, ground_sector->z);
 }
 
 

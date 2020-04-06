@@ -17,7 +17,7 @@
 #include "../vars.h"
 #include "mob.h"
 
-using namespace std;
+using std::size_t;
 
 
 /* ----------------------------------------------------------------------------
@@ -630,7 +630,7 @@ track_info_struct::track_info_struct(mob* m) :
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars,
-    function<void(mob*)> code_after_creation
+    std::function<void(mob*)> code_after_creation
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
     

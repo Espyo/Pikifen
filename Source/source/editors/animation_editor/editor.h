@@ -23,7 +23,7 @@
 #include "../../misc_structs.h"
 #include "../editor.h"
 
-using namespace std;
+using std::size_t;
 
 class animation_editor : public editor {
 private:

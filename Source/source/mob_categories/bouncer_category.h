@@ -14,7 +14,8 @@
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 
 /* ----------------------------------------------------------------------------

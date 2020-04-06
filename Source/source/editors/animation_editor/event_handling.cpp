@@ -120,18 +120,18 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                 cur_sprite->top_angle,
                 &top_min, &top_max
             );
-            cmin.x = min(cmin.x, top_min.x);
-            cmin.y = min(cmin.y, top_min.y);
-            cmax.x = max(cmax.x, top_max.x);
-            cmax.y = max(cmax.y, top_max.y);
+            cmin.x = std::min(cmin.x, top_min.x);
+            cmin.y = std::min(cmin.y, top_min.y);
+            cmax.x = std::max(cmax.x, top_max.x);
+            cmax.y = std::max(cmax.y, top_max.y);
         }
         
         for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
             hitbox* h_ptr = &cur_sprite->hitboxes[h];
-            cmin.x = min(cmin.x, h_ptr->pos.x - h_ptr->radius);
-            cmin.y = min(cmin.y, h_ptr->pos.y - h_ptr->radius);
-            cmax.x = max(cmax.x, h_ptr->pos.x + h_ptr->radius);
-            cmax.y = max(cmax.y, h_ptr->pos.y + h_ptr->radius);
+            cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
+            cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
+            cmax.x = std::max(cmax.x, h_ptr->pos.x + h_ptr->radius);
+            cmax.y = std::max(cmax.y, h_ptr->pos.y + h_ptr->radius);
         }
         
         center_camera(cmin, cmax);
@@ -291,10 +291,10 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             for(size_t x = 0; x < (size_t) bmp_w; ++x) {
                 p = y * bmp_w + x;
                 if(!selection_pixels[p]) continue;
-                selection_tl.x = min(selection_tl.x, (float) x);
-                selection_tl.y = min(selection_tl.y, (float) y);
-                selection_br.x = max(selection_br.x, (float) x);
-                selection_br.y = max(selection_br.y, (float) y);
+                selection_tl.x = std::min(selection_tl.x, (float) x);
+                selection_tl.y = std::min(selection_tl.y, (float) y);
+                selection_br.x = std::max(selection_br.x, (float) x);
+                selection_br.y = std::max(selection_br.y, (float) y);
             }
         }
         

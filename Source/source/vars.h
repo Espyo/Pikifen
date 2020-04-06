@@ -53,7 +53,9 @@
 #include "utils/geometry_utils.h"
 #include "weather.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 //Bitmaps.
 extern ALLEGRO_BITMAP* bmp_checkbox_check;

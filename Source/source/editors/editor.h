@@ -20,7 +20,9 @@
 #include "../LAFI/label.h"
 #include "../misc_structs.h"
 
-using namespace std;
+using std::map;
+using std::string;
+using std::vector;
 
 /*
  * A generic class for an editor.
@@ -29,7 +31,7 @@ using namespace std;
  */
 class editor : public game_state {
 private:
-    vector<pair<string, string> > picker_elements;
+    vector<std::pair<string, string> > picker_elements;
     size_t cur_picker_id;
     
 protected:
@@ -214,7 +216,7 @@ protected:
     void draw_unsaved_changes_warning();
     void emit_status_bar_message(const string &text, const bool important);
     void generate_and_open_picker(
-        const size_t id, const vector<pair<string, string> > &elements,
+        const size_t id, const vector<std::pair<string, string> > &elements,
         const string &title, const bool can_make_new
     );
     bool is_mouse_in_gui(const point &mouse_coords);

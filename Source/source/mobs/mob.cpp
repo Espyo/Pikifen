@@ -148,7 +148,7 @@ void mob::apply_attack_damage(
 ) {
     //Register this hit, so the next frame doesn't hit it too.
     attacker->hit_opponents.push_back(
-        make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
+        std::make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
     );
     
     //Will the parent mob be handling the damage?
@@ -366,10 +366,10 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
         
     }
     
-    amount_to_move = min(amount_to_move, max_step_distance);
+    amount_to_move = std::min(amount_to_move, max_step_distance);
     amount_to_turn =
         sign(amount_to_turn) *
-        min((double) fabs(amount_to_turn), (double) max_turn_angle);
+        std::min((double) fabs(amount_to_turn), (double) max_turn_angle);
         
     point destination_pos = pos;
     float destination_angle = angle + amount_to_turn;
@@ -634,7 +634,7 @@ bool mob::calculate_damage(
             float max_vulnerability = 0.0f;
             for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
                 max_vulnerability =
-                    max(
+                    std::max(
                         victim->get_hazard_vulnerability(attack_h->hazards[h]),
                         max_vulnerability
                     );
@@ -1020,7 +1020,7 @@ void mob::do_attack_effects(
     if(damage > 0) {
         particle smack_p(
             PARTICLE_TYPE_SMACK, particle_pos,
-            max(z + height + 1, attacker->z + attacker->height + 1),
+            std::max(z + height + 1, attacker->z + attacker->height + 1),
             64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = bmp_smack;
@@ -1030,7 +1030,7 @@ void mob::do_attack_effects(
     } else {
         particle ding_p(
             PARTICLE_TYPE_DING, particle_pos,
-            max(z + height + 1, attacker->z + attacker->height + 1),
+            std::max(z + height + 1, attacker->z + attacker->height + 1),
             24, SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = bmp_wave_ring;
@@ -1489,7 +1489,7 @@ point mob::get_sprite_dimensions(sprite* s, point* scale) {
         height_mult +=
             (z - height_effect_pivot) * MOB_HEIGHT_EFFECT_FACTOR;
     }
-    height_mult = max(height_mult, 1.0f);
+    height_mult = std::max(height_mult, 1.0f);
     if(ground_sector->is_bottomless_pit && height_mult == 1.0f) {
         height_mult =
             (z - ground_sector->z) /
@@ -1581,7 +1581,7 @@ bool mob::is_off_camera() {
         m_radius = type->radius;
     } else {
         m_radius =
-            max(type->rectangular_dim.x / 2.0, type->rectangular_dim.y / 2.0);
+            std::max(type->rectangular_dim.x / 2.0, type->rectangular_dim.y / 2.0);
     }
     
     return !bbox_check(cam_box[0], cam_box[1], pos, m_radius);
@@ -2017,7 +2017,7 @@ void mob::stop_turning() {
  */
 void mob::swallow_chomped_pikmin(const size_t nr) {
 
-    size_t total = min(nr, chomping_mobs.size());
+    size_t total = std::min(nr, chomping_mobs.size());
     
     for(size_t p = 0; p < total; ++p) {
         chomping_mobs[p]->set_health(false, false, 0.0f);

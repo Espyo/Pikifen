@@ -187,7 +187,8 @@ void crash(const string &reason, const string &info, const int exit_status) {
         }
         );
         
-        for(size_t p = 0; p < min(closest_pikmin.size(), (size_t) 10); ++p) {
+        size_t closest_p_amount = std::min(closest_pikmin.size(), (size_t) 10);
+        for(size_t p = 0; p < closest_p_amount; ++p) {
             error_str +=
                 "    " + closest_pikmin[p]->type->name + ", at " +
                 p2s(closest_pikmin[p]->pos) + ", history: " +
@@ -438,13 +439,13 @@ void get_multiline_text_dimensions(
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     
-    if(ret_h) *ret_h = max(0, (int) ((fh + 1) * n_lines) - 1);
+    if(ret_h) *ret_h = std::max(0, (int) ((fh + 1) * n_lines) - 1);
     
     if(ret_w) {
         int largest_w = 0;
         for(size_t l = 0; l < lines.size(); ++l) {
             largest_w =
-                max(
+                std::max(
                     largest_w, al_get_text_width(font, lines[l].c_str())
                 );
         }
@@ -530,8 +531,8 @@ float get_wall_shadow_length(const float height_difference) {
 /* ----------------------------------------------------------------------------
  * Auxiliary function that returns a table used in the weather configs.
  */
-vector<pair<size_t, string> > get_weather_table(data_node* node) {
-    vector<pair<size_t, string> > table;
+vector<std::pair<size_t, string> > get_weather_table(data_node* node) {
+    vector<std::pair<size_t, string> > table;
     size_t n_points = node->get_nr_of_children();
     
     bool have_midnight = false;
@@ -550,8 +551,8 @@ vector<pair<size_t, string> > get_weather_table(data_node* node) {
     sort(
         table.begin(), table.end(),
         [] (
-            pair<size_t, string> p1,
-            pair<size_t, string> p2
+            std::pair<size_t, string> p1,
+            std::pair<size_t, string> p2
     ) -> bool {
         return p1.first < p2.first;
     }
@@ -609,7 +610,7 @@ void log_error(string s, data_node* d) {
     }
     s += "\n";
     
-    cout << s;
+    std::cout << s;
     
     if(errors_reported_today == 0) {
         s =

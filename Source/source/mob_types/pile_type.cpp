@@ -42,7 +42,7 @@ pile_type::pile_type() :
 anim_conversion_vector pile_type::get_anim_conversions() {
     anim_conversion_vector v;
     
-    v.push_back(make_pair(PILE_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(PILE_ANIM_IDLING, "idling"));
     
     return get_anim_conversions_with_groups(v, N_PILE_ANIMS);
 }

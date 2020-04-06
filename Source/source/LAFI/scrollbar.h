@@ -32,7 +32,7 @@ public:
     void init();
     void draw_self();
     
-    function<void(widget* w)> change_handler;
+    std::function<void(widget* w)> change_handler;
     
     void widget_on_mouse_down(const int button, const int x, const int y);
     void widget_on_mouse_move(const int x, const int y);

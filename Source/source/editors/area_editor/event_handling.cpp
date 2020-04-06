@@ -16,6 +16,8 @@
 #include "../../functions.h"
 #include "../../vars.h"
 
+using std::set;
+
 /* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed anywhere.
  */
@@ -386,8 +388,8 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
         bool clicked_stop =
             get_path_stop_under_point(mouse_cursor_w);
         if(!clicked_stop) {
-            pair<path_stop*, path_stop*> clicked_link_data_1;
-            pair<path_stop*, path_stop*> clicked_link_data_2;
+            std::pair<path_stop*, path_stop*> clicked_link_data_1;
+            std::pair<path_stop*, path_stop*> clicked_link_data_2;
             bool clicked_link =
                 get_path_link_under_point(
                     mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
@@ -605,8 +607,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         mob_gen* m_ptr = *(selected_mobs.begin());
         
         if(!target) {
-            pair<mob_gen*, mob_gen*> data1;
-            pair<mob_gen*, mob_gen*> data2;
+            std::pair<mob_gen*, mob_gen*> data1;
+            std::pair<mob_gen*, mob_gen*> data2;
             if(!get_mob_link_under_point(mouse_cursor_w, &data1, &data2)) {
                 return;
             }
@@ -843,8 +845,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         path_stop* clicked_stop =
             get_path_stop_under_point(mouse_cursor_w);
-        pair<path_stop*, path_stop*> clicked_link_data_1;
-        pair<path_stop*, path_stop*> clicked_link_data_2;
+        std::pair<path_stop*, path_stop*> clicked_link_data_1;
+        std::pair<path_stop*, path_stop*> clicked_link_data_2;
         bool clicked_link =
             get_path_link_under_point(
                 mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
@@ -987,10 +989,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     
     if(selecting) {
     
-        float selection_x1 = min(selection_start.x, selection_end.x);
-        float selection_x2 = max(selection_start.x, selection_end.x);
-        float selection_y1 = min(selection_start.y, selection_end.y);
-        float selection_y2 = max(selection_start.y, selection_end.y);
+        float selection_x1 = std::min(selection_start.x, selection_end.x);
+        float selection_x2 = std::max(selection_start.x, selection_end.x);
+        float selection_y1 = std::min(selection_start.y, selection_end.y);
+        float selection_y2 = std::max(selection_start.y, selection_end.y);
         selection_end = mouse_cursor_w;
         
         if(state == EDITOR_STATE_LAYOUT) {
@@ -1119,7 +1121,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         s2_ptr->pos.y >= selection_y1 &&
                         s2_ptr->pos.y <= selection_y2
                     ) {
-                        selected_path_links.insert(make_pair(s_ptr, s2_ptr));
+                        selected_path_links.insert(
+                            std::make_pair(s_ptr, s2_ptr)
+                        );
                     }
                 }
             }

@@ -38,12 +38,12 @@ converter_type::converter_type() :
 anim_conversion_vector converter_type::get_anim_conversions() {
     anim_conversion_vector v;
     
-    v.push_back(make_pair(CONVERTER_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(CONVERTER_ANIM_BUMPING, "bumping"));
-    v.push_back(make_pair(CONVERTER_ANIM_CLOSING, "closing"));
-    v.push_back(make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
-    v.push_back(make_pair(CONVERTER_ANIM_OPENING, "opening"));
-    v.push_back(make_pair(CONVERTER_ANIM_DYING, "dying"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_BUMPING, "bumping"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_CLOSING, "closing"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_OPENING, "opening"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_DYING, "dying"));
     
     return get_anim_conversions_with_groups(v, N_CONVERTER_ANIMS);
 }

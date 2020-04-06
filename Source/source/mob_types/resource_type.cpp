@@ -40,7 +40,7 @@ resource_type::resource_type() :
  */
 anim_conversion_vector resource_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(RESOURCE_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(RESOURCE_ANIM_IDLING, "idling"));
     return v;
 }
 

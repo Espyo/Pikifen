@@ -5,7 +5,10 @@
 
 #include "data_file.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
+
 
 /* ----------------------------------------------------------------------------
  * Creates an empty data node.

@@ -20,6 +20,8 @@
 #include "../vars.h"
 #include "gen_mob_fsm.h"
 
+using std::unordered_set;
+
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the leader's logic.
@@ -1390,7 +1392,7 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     
     if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
         spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays =
-            max(
+            std::max(
                 (long long)
                 spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays +
                 d_ptr->dro_type->increase_amount,

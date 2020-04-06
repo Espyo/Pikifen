@@ -621,7 +621,7 @@ void gameplay::do_gameplay_logic() {
             float sample_avg_sum = 0;
             size_t sample_avg_point_count = 0;
             size_t sample_size =
-                min(
+                std::min(
                     (size_t) FRAMERATE_AVG_SAMPLE_SIZE,
                     framerate_history.size()
                 );

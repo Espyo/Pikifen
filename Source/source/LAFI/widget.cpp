@@ -223,10 +223,10 @@ void widget::draw() {
         int ocr_x2 = ocr_x + ocr_w;
         int ocr_y2 = ocr_y + ocr_h;
         al_set_clipping_rectangle(
-            max(rx1, ocr_x),
-            max(ry1, ocr_y),
-            min(ocr_x2, rx2) - rx1,
-            min(ocr_y2, ry2) - ry1
+            std::max(rx1, ocr_x),
+            std::max(ry1, ocr_y),
+            std::min(ocr_x2, rx2) - rx1,
+            std::min(ocr_y2, ry2) - ry1
         );
     }
     {
@@ -813,7 +813,7 @@ int get_text_width(const ALLEGRO_FONT* const f, const string &text) {
     vector<string> lines = split(text, "\n", true);
     int longest_w = 0;
     for(size_t l = 0; l < lines.size(); ++l) {
-        longest_w = max(longest_w, al_get_text_width(f, lines[l].c_str()));
+        longest_w = std::max(longest_w, al_get_text_width(f, lines[l].c_str()));
     }
     return longest_w;
 }

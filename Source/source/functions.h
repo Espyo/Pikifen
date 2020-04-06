@@ -44,7 +44,7 @@ enum FILE_DIALOG_RESULTS {
         info += " ("; \
         info += __FILE__; \
         info += ":"; \
-        info += to_string((long long) (__LINE__)); \
+        info += std::to_string((long long) (__LINE__)); \
         info += "). Extra info: "; \
         info += message; \
         crash("Assert", info, 1); \
@@ -96,7 +96,7 @@ void get_multiline_text_dimensions(
 float get_sun_strength();
 map<string, string> get_var_map(const string &vars_string);
 float get_wall_shadow_length(const float height_difference);
-vector<pair<size_t, string> > get_weather_table(data_node* node);
+vector<std::pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2

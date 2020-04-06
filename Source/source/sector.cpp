@@ -24,6 +24,10 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
+using std::unordered_set;
+using std::set;
+
+
 /* ----------------------------------------------------------------------------
  * Creates info on an area.
  */
@@ -566,10 +570,10 @@ void area_data::generate_blockmap() {
     
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
-        min_coords.x = min(v_ptr->x, min_coords.x);
-        max_coords.x = max(v_ptr->x, max_coords.x);
-        min_coords.y = min(v_ptr->y, min_coords.y);
-        max_coords.y = max(v_ptr->y, max_coords.y);
+        min_coords.x = std::min(v_ptr->x, min_coords.x);
+        max_coords.x = std::max(v_ptr->x, max_coords.x);
+        min_coords.y = std::min(v_ptr->y, min_coords.y);
+        max_coords.y = std::max(v_ptr->y, max_coords.y);
     }
     
     bmap.top_left_corner = min_coords;
@@ -659,13 +663,21 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
         edge* e_ptr = edges[e];
         
         b_min_x =
-            bmap.get_col(min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x));
+            bmap.get_col(
+                std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
+            );
         b_max_x =
-            bmap.get_col(max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x));
+            bmap.get_col(
+                std::max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
+            );
         b_min_y =
-            bmap.get_row(min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
+            bmap.get_row(
+                std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
+            );
         b_max_y =
-            bmap.get_row(max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
+            bmap.get_row(
+                std::max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
+            );
             
         for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
             for(size_t by = b_min_y; by <= b_max_y; ++by) {
@@ -1029,10 +1041,10 @@ size_t edge::remove_from_vertexes() {
  * so that they still point in the right direction.
  */
 void edge::swap_vertexes() {
-    swap(vertexes[0], vertexes[1]);
-    swap(vertex_nrs[0], vertex_nrs[1]);
-    swap(sectors[0], sectors[1]);
-    swap(sector_nrs[0], sector_nrs[1]);
+    std::swap(vertexes[0], vertexes[1]);
+    std::swap(vertex_nrs[0], vertex_nrs[1]);
+    std::swap(sectors[0], sectors[1]);
+    std::swap(sector_nrs[0], sector_nrs[1]);
 }
 
 
@@ -1318,10 +1330,10 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     }
     
     //Find the two lengthiest ones.
-    vector<pair<dist, sector*> > neighbors_vec;
+    vector<std::pair<dist, sector*> > neighbors_vec;
     for(auto &n : neighbors) {
         neighbors_vec.push_back(
-            make_pair(
+            std::make_pair(
                 //Yes, we do need these casts, for g++.
                 (dist) (n.second), (sector*) (n.first)
             )
@@ -1329,7 +1341,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     }
     sort(
         neighbors_vec.begin(), neighbors_vec.end(),
-    [this] (pair<dist, sector*> p1, pair<dist, sector*> p2) -> bool {
+    [this] (std::pair<dist, sector*> p1, std::pair<dist, sector*> p2) -> bool {
         return p1.first < p2.first;
     }
     );
@@ -1343,12 +1355,12 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     if(!texture_sector[1] && texture_sector[0]) {
         //0 is always the bottom one. If we're fading into nothingness,
         //we should swap first.
-        swap(texture_sector[0], texture_sector[1]);
+        std::swap(texture_sector[0], texture_sector[1]);
     } else if(!texture_sector[1]) {
         //Nothing to draw.
         return;
     } else if(texture_sector[1]->is_bottomless_pit) {
-        swap(texture_sector[0], texture_sector[1]);
+        std::swap(texture_sector[0], texture_sector[1]);
     }
     
     *s1 = texture_sector[0];
@@ -1832,7 +1844,7 @@ vector<path_stop*> dijkstra(
 
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
-    map<path_stop*, pair<float, path_stop*> > data;
+    map<path_stop*, std::pair<float, path_stop*> > data;
     //If we found an error, set this to true.
     bool got_error = false;
     //Total obstacles found.
@@ -1843,7 +1855,7 @@ vector<path_stop*> dijkstra(
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);
-        data[s_ptr] = make_pair(FLT_MAX, (path_stop*) NULL);
+        data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
     }
     if(obstacles_found) obstacles_found->clear();
     
@@ -1855,10 +1867,10 @@ vector<path_stop*> dijkstra(
         //Figure out what node to work on.
         path_stop* shortest_node = NULL;
         float shortest_node_dist = 0;
-        pair<float, path_stop*> shortest_node_data;
+        std::pair<float, path_stop*> shortest_node_data;
         
         for(auto u : unvisited) {
-            pair<float, path_stop*> d = data[u];
+            std::pair<float, path_stop*> d = data[u];
             if(!shortest_node || d.first < shortest_node_dist) {
                 shortest_node = u;
                 shortest_node_dist = d.first;
@@ -1996,18 +2008,18 @@ void get_cce(
  * merge_radius: Minimum radius to merge. This does not take the camera zoom
  *   level into account.
  */
-vector<pair<dist, vertex*> > get_merge_vertexes(
+vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &pos, vector<vertex*> &all_vertexes, const float merge_radius
 ) {
 
-    vector<pair<dist, vertex*> > result;
+    vector<std::pair<dist, vertex*> > result;
     for(size_t v = 0; v < all_vertexes.size(); ++v) {
         vertex* v_ptr = all_vertexes[v];
         
         dist d(pos, point(v_ptr->x, v_ptr->y));
         if(d <= merge_radius) {
         
-            result.push_back(make_pair(d, v_ptr));
+            result.push_back(std::make_pair(d, v_ptr));
         }
     }
     
@@ -2474,10 +2486,10 @@ void get_sector_bounding_box(
                 s_ptr->edges[e]->vertexes[v]->y
             );
             
-            min_coords->x = min(min_coords->x, coords.x);
-            max_coords->x = max(max_coords->x, coords.x);
-            min_coords->y = min(min_coords->y, coords.y);
-            max_coords->y = max(max_coords->y, coords.y);
+            min_coords->x = std::min(min_coords->x, coords.x);
+            max_coords->x = std::max(max_coords->x, coords.x);
+            min_coords->y = std::min(min_coords->y, coords.y);
+            max_coords->y = std::max(max_coords->y, coords.y);
         }
     }
 }

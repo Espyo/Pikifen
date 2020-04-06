@@ -14,7 +14,9 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 const size_t BACKTRACE_MAX_FRAMES = 30;
 const size_t BACKTRACE_MAX_SYMBOL_LENGTH = 512;

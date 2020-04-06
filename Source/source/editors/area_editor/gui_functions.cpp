@@ -197,7 +197,7 @@ void area_editor::delete_current_hazard() {
     if(!s_ptr->hazards_str.empty()) {
         s_ptr->hazards_str.pop_back(); //Remove the trailing semicolon.
     }
-    cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
+    cur_hazard_nr = std::min(cur_hazard_nr, list.size() - 1);
     
     homogenize_selected_sectors();
     asb_to_gui();
@@ -716,7 +716,7 @@ void area_editor::mob_to_gui() {
  * The content to use is decided from that.
  */
 void area_editor::open_picker(const unsigned char id) {
-    vector<pair<string, string> > elements;
+    vector<std::pair<string, string> > elements;
     bool can_create_new = false;
     string title;
     
@@ -1254,7 +1254,7 @@ void area_editor::sector_to_gui() {
 void area_editor::select_different_hazard(const bool next) {
     sector* s_ptr = *selected_sectors.begin();
     vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
-    cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
+    cur_hazard_nr = std::min(cur_hazard_nr, list.size() - 1);
     cur_hazard_nr = sum_and_wrap(cur_hazard_nr, next ? 1 : -1, list.size());
     asb_to_gui();
 }

@@ -18,7 +18,9 @@
 #include "game_state.h"
 #include "menu_widgets.h"
 
-using namespace std;
+using std::map;
+using std::size_t;
+using std::vector;
 
 class main_menu : public game_state {
 private:
@@ -32,7 +34,7 @@ private:
         ALLEGRO_BITMAP* top;
         bool reached_destination;
     };
-        
+    
     float time_spent;
     
     ALLEGRO_BITMAP* bmp_menu_bg;
@@ -61,7 +63,7 @@ public:
 
 class options_menu : public game_state {
 private:
-    vector<pair<int, int> > resolution_presets;
+    vector<std::pair<int, int> > resolution_presets;
     
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
@@ -122,7 +124,7 @@ private:
     float time_spent;
     size_t cur_page_nr;
     vector<string> areas_to_pick;
-	vector<string> area_names;
+    vector<string> area_names;
     
     vector<menu_widget*> area_buttons;
     menu_text* cur_page_nr_widget;

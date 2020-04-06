@@ -21,7 +21,7 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
-using namespace std;
+using std::size_t;
 
 
 /* ----------------------------------------------------------------------------
@@ -239,7 +239,7 @@ void area_menu::unload() {
  */
 void area_menu::update() {
     cur_page_nr =
-        min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
+        std::min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
     
     for(size_t aw = 0; aw < area_buttons.size(); ++aw) {
@@ -653,7 +653,7 @@ void controls_menu::unload() {
  */
 void controls_menu::update() {
     cur_page_nr =
-        min(
+        std::min(
             cur_page_nr,
             (size_t) (ceil(controls[cur_player_nr].size() / 8.0) - 1)
         );
@@ -817,7 +817,7 @@ void main_menu::do_logic() {
         if(!pik->reached_destination) {
             float a = get_angle(pik->pos, pik->destination);
             float speed =
-                min(
+                std::min(
                     (float) (pik->speed * delta_t),
                     dist(pik->pos, pik->destination).to_float() *
                     logo_pikmin_speed_smoothness
@@ -941,7 +941,7 @@ void main_menu::load() {
     size_t map_total_cols = 0;
     for(size_t r = 0; r < map_total_rows; ++r) {
         map_total_cols =
-            max(map_total_cols, map_node->get_child(r)->name.size());
+            std::max(map_total_cols, map_node->get_child(r)->name.size());
     }
     
     logo_rs.set("min_screen_limit", logo_min_screen_limit);
@@ -1066,17 +1066,23 @@ options_menu::options_menu() :
         if(!al_get_display_mode(d, &d_info)) continue;
         if(d_info.width < SMALLEST_SCR_W) continue;
         if(d_info.height < SMALLEST_SCR_H) continue;
-        resolution_presets.push_back(make_pair(d_info.width, d_info.height));
+        resolution_presets.push_back(
+            std::make_pair(d_info.width, d_info.height)
+        );
     }
     
     //In case things go wrong, at least add these presets.
-    resolution_presets.push_back(make_pair(DEF_SCR_W, DEF_SCR_H));
-    resolution_presets.push_back(make_pair(SMALLEST_SCR_W, SMALLEST_SCR_H));
+    resolution_presets.push_back(
+        std::make_pair(DEF_SCR_W, DEF_SCR_H)
+    );
+    resolution_presets.push_back(
+        std::make_pair(SMALLEST_SCR_W, SMALLEST_SCR_H)
+    );
     
     //Sort the list.
     sort(
         resolution_presets.begin(), resolution_presets.end(),
-    [] (pair<int, int> p1, pair<int, int> p2) -> bool {
+    [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
         if(p1.first == p2.first) {
             return p1.second < p2.second;
         }

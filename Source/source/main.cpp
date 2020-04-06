@@ -34,7 +34,6 @@
 #include "sector.h"
 #include "vars.h"
 
-using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Main function.
@@ -158,7 +157,7 @@ int main(int argc, char** argv) {
             }
             
             //Anti speed-burst cap.
-            delta_t = min(cur_time - prev_frame_time, 0.2);
+            delta_t = std::min(cur_time - prev_frame_time, 0.2);
             
             size_t prev_game_state_nr = cur_game_state_nr;
             

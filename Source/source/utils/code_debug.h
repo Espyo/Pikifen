@@ -48,7 +48,9 @@
 #include <new>
 #include <string>
 
-using namespace std;
+using std::map;
+using std::size_t;
+using std::string;
 
 extern map<void*, string> code_debug_new_allocs;
 extern bool code_debug_new_recording;

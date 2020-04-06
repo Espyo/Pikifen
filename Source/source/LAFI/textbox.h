@@ -5,7 +5,8 @@
 
 #include "widget.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
 
 namespace lafi {
 
@@ -40,7 +41,7 @@ public:
     //When there's no text, write this.
     string placeholder;
     
-    function<void(widget* w)> change_handler;
+    std::function<void(widget* w)> change_handler;
     
     void widget_on_key_char(
         const int keycode, const int unichar, const unsigned int modifiers

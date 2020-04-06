@@ -2526,7 +2526,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         area_editor_grid_interval *= 2;
         area_editor_grid_interval =
-            min(area_editor_grid_interval, MAX_GRID_INTERVAL);
+            std::min(area_editor_grid_interval, MAX_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };
@@ -2537,7 +2537,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         area_editor_grid_interval *= 0.5;
         area_editor_grid_interval =
-            max(area_editor_grid_interval, MIN_GRID_INTERVAL);
+            std::max(area_editor_grid_interval, MIN_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };

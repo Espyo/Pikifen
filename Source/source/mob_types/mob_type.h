@@ -22,7 +22,9 @@
 #include "../mob_script.h"
 #include "../utils/data_file.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_CARRIABLE_WAITING,
@@ -31,7 +33,7 @@ enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
 };
 
-typedef vector<pair<size_t, string> > anim_conversion_vector;
+typedef vector<std::pair<size_t, string> > anim_conversion_vector;
 
 const size_t ANIM_IDLING = 0;
 

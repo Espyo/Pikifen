@@ -187,7 +187,9 @@ void leader::dismiss() {
     
     while(!done && !subgroups_info.empty()) {
         float new_thickness =
-            max(cur_row.thickness, subgroups_info[cur_subgroup_nr].radius * 2);
+            std::max(
+                cur_row.thickness, subgroups_info[cur_subgroup_nr].radius * 2
+            );
             
         float new_angle_occupation = 0;
         for(size_t s = 0; s < cur_row.subgroups.size(); ++s) {

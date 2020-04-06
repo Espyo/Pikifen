@@ -39,7 +39,7 @@ angle_picker::angle_picker(const float angle) :
  * Converts an angle in radians to a string representation, in degrees.
  */
 string angle_picker::angle_to_str(const float angle) {
-    return to_string((long double) (angle * 180 / M_PI));
+    return std::to_string((long double) (angle * 180 / M_PI));
 }
 
 

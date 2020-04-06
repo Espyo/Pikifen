@@ -28,7 +28,7 @@ const float menu_widget::JUICY_GROW_DURATION = 0.3f;
  */
 menu_button::menu_button(
     const point &center, const point &size,
-    const function<void()> &click_handler, const string &text,
+    const std::function<void()> &click_handler, const string &text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(center, size, click_handler),
@@ -90,7 +90,7 @@ void menu_button::on_click() { }
  */
 menu_checkbox::menu_checkbox(
     const point &center, const point &size,
-    const function<void()> &click_handler, const string &text,
+    const std::function<void()> &click_handler, const string &text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(center, size, click_handler),
@@ -209,7 +209,7 @@ void menu_text::on_click() { }
  */
 menu_widget::menu_widget(
     const point &center, const point &size,
-    const function<void()> &click_handler
+    const std::function<void()> &click_handler
 ) :
     juicy_grow_time_left(0),
     center(center),
@@ -260,6 +260,6 @@ void menu_widget::start_juicy_grow() {
  */
 void menu_widget::tick(const float time) {
     if(juicy_grow_time_left > 0) {
-        juicy_grow_time_left = max(0.0f, juicy_grow_time_left - time);
+        juicy_grow_time_left = std::max(0.0f, juicy_grow_time_left - time);
     }
 }

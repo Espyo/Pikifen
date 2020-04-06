@@ -23,7 +23,9 @@
 #include "mobs/treasure.h"
 #include "utils/geometry_utils.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 
 enum REPLAY_ELEMENT_TYPES {

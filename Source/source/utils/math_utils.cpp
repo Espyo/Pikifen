@@ -11,13 +11,11 @@
 
 #include <algorithm>
 
-using namespace std;
-
 /* ----------------------------------------------------------------------------
  * Limits the given number to the given range, inclusive.
  */
 float clamp(const float number, const float minimum, const float maximum) {
-    return min(maximum, max(minimum, number));
+    return std::min(maximum, std::max(minimum, number));
 }
 
 
@@ -74,20 +72,20 @@ float interpolate_number(
 /* ----------------------------------------------------------------------------
  * Returns a random float between the provided range, inclusive.
  */
-float randomf(float min, float max) {
-    if(min == max) return min;
-    if(min > max) swap(min, max);
-    return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
+float randomf(float minimum, float maximum) {
+    if(minimum == maximum) return minimum;
+    if(minimum > maximum) std::swap(minimum, maximum);
+    return (float) rand() / ((float) RAND_MAX / (maximum - minimum)) + minimum;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns a random integer between the provided range, inclusive.
  */
-int randomi(int min, int max) {
-    if(min == max) return min;
-    if(min > max) swap(min, max);
-    return ((rand()) % (max - min + 1)) + min;
+int randomi(int minimum, int maximum) {
+    if(minimum == maximum) return minimum;
+    if(minimum > maximum) std::swap(minimum, maximum);
+    return ((rand()) % (maximum - minimum + 1)) + minimum;
 }
 
 

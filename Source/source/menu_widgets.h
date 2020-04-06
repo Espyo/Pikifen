@@ -20,7 +20,7 @@
 
 #include "utils/geometry_utils.h"
 
-using namespace std;
+using std::string;
 
 class menu_widget {
 protected:
@@ -37,13 +37,13 @@ protected:
 public:
     point center;
     point size;
-    function<void()> click_handler;
+    std::function<void()> click_handler;
     bool selected;
     bool enabled;
     
     menu_widget(
         const point &center = point(), const point &size = point(),
-        const function<void()> &click_handler = nullptr
+        const std::function<void()> &click_handler = nullptr
     );
     virtual ~menu_widget() = default;
     virtual void tick(const float time);
@@ -68,7 +68,7 @@ public:
     
     menu_button(
         const point &center = point(), const point &size = point(),
-        const function<void()> &click_handler = nullptr,
+        const std::function<void()> &click_handler = nullptr,
         const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
@@ -90,7 +90,7 @@ public:
     
     menu_checkbox(
         const point &center = point(), const point &size = point(),
-        const function<void()> &click_handler = nullptr,
+        const std::function<void()> &click_handler = nullptr,
         const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_LEFT

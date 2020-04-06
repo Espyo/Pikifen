@@ -38,10 +38,10 @@ drop_type::drop_type() :
  */
 anim_conversion_vector drop_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(DROP_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(DROP_ANIM_FALLING, "falling"));
-    v.push_back(make_pair(DROP_ANIM_LANDING, "landing"));
-    v.push_back(make_pair(DROP_ANIM_BUMPED, "bumped"));
+    v.push_back(std::make_pair(DROP_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(DROP_ANIM_FALLING, "falling"));
+    v.push_back(std::make_pair(DROP_ANIM_LANDING, "landing"));
+    v.push_back(std::make_pair(DROP_ANIM_BUMPED, "bumped"));
     return v;
 }
 

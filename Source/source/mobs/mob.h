@@ -26,7 +26,10 @@
 #include "../status.h"
 #include "mob_utils.h"
 
-using namespace std;
+using std::map;
+using std::size_t;
+using std::string;
+using std::vector;
 
 class mob_type;
 
@@ -132,7 +135,7 @@ public:
     //The mob it has focus on.
     mob* focused_mob;
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
-    vector<pair<float, mob*> > hit_opponents;
+    vector<std::pair<float, mob*> > hit_opponents;
     //How much damage did it take since the last time the itch event triggered?
     float itch_damage;
     //How much time has passed the last time the itch event triggered?

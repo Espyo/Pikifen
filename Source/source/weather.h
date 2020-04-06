@@ -17,7 +17,9 @@
 
 #include <allegro5/allegro.h>
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 
 /* ----------------------------------------------------------------------------
@@ -33,25 +35,25 @@ class weather {
 public:
     string name;
     //Vector with the lighting colors for specific times of day, in minutes.
-    vector<pair<size_t, ALLEGRO_COLOR> > daylight;
+    vector<std::pair<size_t, ALLEGRO_COLOR> > daylight;
     //Vector with the sun strength for specific times of day, in minutes.
-    vector<pair<size_t, unsigned char> > sun_strength;
+    vector<std::pair<size_t, unsigned char> > sun_strength;
     //Vector with the blackout effect's strength
     //for specific times of day, in minutes.
-    vector<pair<size_t, unsigned char> > blackout_strength;
+    vector<std::pair<size_t, unsigned char> > blackout_strength;
     //Fog -- distance at which everything is still fully visible.
     float fog_near;
     //Fog -- distance at which everything is 100% foggy.
     float fog_far;
     //Fog -- color and density at 100% fogginess. Values throughout the day.
-    vector<pair<size_t, ALLEGRO_COLOR> > fog_color;
+    vector<std::pair<size_t, ALLEGRO_COLOR> > fog_color;
     unsigned char precipitation_type;
     
     weather();
     weather(
-        const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl,
-        const vector<pair<size_t, unsigned char> > &ss,
-        const vector<pair<size_t, unsigned char> > &bs,
+        const string &n, const vector<std::pair<size_t, ALLEGRO_COLOR> > &dl,
+        const vector<std::pair<size_t, unsigned char> > &ss,
+        const vector<std::pair<size_t, unsigned char> > &bs,
         const unsigned char pt
     );
 };

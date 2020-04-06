@@ -26,7 +26,10 @@
 
 class pikmin_type;
 
-using namespace std;
+using std::map;
+using std::size_t;
+using std::string;
+using std::vector;
 
 /* ----------------------------------------------------------------------------
  * A timer. You can set it to start at a pre-determined time, to tick, etc.
@@ -34,9 +37,12 @@ using namespace std;
 struct timer {
     float time_left; //How much time is left until 0.
     float duration;  //When the timer starts, its time is set to this.
-    function<void()> on_end;
+    std::function<void()> on_end;
     
-    timer(const float duration = 0, const function<void()> &on_end = nullptr);
+    timer(
+        const float duration = 0,
+        const std::function<void()> &on_end = nullptr
+    );
     ~timer();
     void start(const bool can_restart = true);
     void start(const float new_duration);
@@ -295,13 +301,13 @@ struct fade_manager {
 private:
     float time_left;
     bool fade_in;
-    function<void()> on_end;
+    std::function<void()> on_end;
     
 public:
     static const float FADE_DURATION;
     
     fade_manager();
-    void start_fade(const bool fade_in, const function<void()> &on_end);
+    void start_fade(const bool fade_in, const std::function<void()> &on_end);
     bool is_fade_in();
     bool is_fading();
     float get_perc_left();

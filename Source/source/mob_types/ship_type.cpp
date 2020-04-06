@@ -34,7 +34,7 @@ ship_type::ship_type() :
  */
 anim_conversion_vector ship_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(SHIP_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(SHIP_ANIM_IDLING, "idling"));
     return v;
 }
 

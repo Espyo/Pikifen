@@ -17,7 +17,8 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
-using namespace std;
+using std::size_t;
+
 
 /* ----------------------------------------------------------------------------
  * A type of enemy. A species, if you will.

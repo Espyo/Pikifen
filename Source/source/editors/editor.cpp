@@ -395,7 +395,7 @@ void editor::emit_status_bar_message(
  *   name on the textbox, and pressing the "+" button.
  */
 void editor::generate_and_open_picker(
-    const size_t picker_id, const vector<pair<string, string> > &elements,
+    const size_t picker_id, const vector<std::pair<string, string> > &elements,
     const string &title, const bool can_make_new
 ) {
 

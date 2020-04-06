@@ -19,7 +19,9 @@
 #include "utils/string_utils.h"
 #include "vars.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 /* ----------------------------------------------------------------------------
  * Creates an animation.
@@ -99,7 +101,7 @@ animation_database::animation_database(
  *   report errors.
  */
 void animation_database::create_conversions(
-    vector<pair<size_t, string> > conversions, data_node* file
+    vector<std::pair<size_t, string> > conversions, data_node* file
 ) {
     pre_named_conversions.clear();
     
@@ -108,7 +110,7 @@ void animation_database::create_conversions(
     //First, find the highest number.
     size_t highest = conversions[0].first;
     for(size_t c = 1; c < conversions.size(); ++c) {
-        highest = max(highest, conversions[c].first);
+        highest = std::max(highest, conversions[c].first);
     }
     
     pre_named_conversions.assign(highest + 1, INVALID);

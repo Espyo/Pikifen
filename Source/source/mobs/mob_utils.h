@@ -21,7 +21,8 @@
 #include "../sector.h"
 #include "../utils/geometry_utils.h"
 
-using namespace std;
+using std::size_t;
+using std::vector;
 
 class mob;
 
@@ -279,7 +280,7 @@ struct track_info_struct {
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars,
-    function<void(mob*)> code_after_creation = nullptr
+    std::function<void(mob*)> code_after_creation = nullptr
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);

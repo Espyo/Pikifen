@@ -12,7 +12,6 @@
 
 #include "status.h"
 
-using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Creates a status effect instance.

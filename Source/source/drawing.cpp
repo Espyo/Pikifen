@@ -180,7 +180,7 @@ void gameplay::draw_cursor(
             sin(swarm_angle) * swarm_arrows[a]
         );
         float alpha =
-            64 + min(
+            64 + std::min(
                 191,
                 (int) (
                     191 * (swarm_arrows[a] / (cursor_max_dist * 0.4))
@@ -366,7 +366,7 @@ void gameplay::draw_hud() {
         if(hud_items.get_draw_data(icon_id, &i_center, &i_size)) {
             al_draw_filled_circle(
                 i_center.x, i_center.y,
-                min(i_size.x, i_size.y) / 2.0f,
+                std::min(i_size.x, i_size.y) / 2.0f,
                 change_alpha(leaders[l_nr]->type->main_color, 128)
             );
             draw_bitmap_in_box(
@@ -382,7 +382,7 @@ void gameplay::draw_hud() {
             draw_health(
                 i_center,
                 leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                min(i_size.x, i_size.y) * 0.4f,
+                std::min(i_size.x, i_size.y) * 0.4f,
                 true
             );
             draw_bitmap_in_box(bmp_hard_bubble, i_center, i_size);
@@ -1299,10 +1299,10 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     
     for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
         vertex* v_ptr = cur_area_data.vertexes[v];
-        min_x = min(v_ptr->x, min_x);
-        min_y = min(v_ptr->y, min_y);
-        max_x = max(v_ptr->x, max_x);
-        max_y = max(v_ptr->y, max_y);
+        min_x = std::min(v_ptr->x, min_x);
+        min_y = std::min(v_ptr->y, min_y);
+        max_x = std::max(v_ptr->x, max_x);
+        max_y = std::max(v_ptr->y, max_y);
     }
     
     //Figure out the scale that will fit on the image.
@@ -1432,7 +1432,7 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             c.mob_limb_ptr = mob_ptr;
             
             if(method == LIMB_DRAW_BELOW_BOTH) {
-                c.z = min(mob_ptr->z, mob_ptr->parent->m->z);
+                c.z = std::min(mob_ptr->z, mob_ptr->parent->m->z);
             } else if(method == LIMB_DRAW_BELOW_CHILD) {
                 c.z = mob_ptr->z;
             } else if(method == LIMB_DRAW_BELOW_PARENT) {
@@ -1446,7 +1446,7 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                 c.z = mob_ptr->z + mob_ptr->height + 0.001;
             } else if(method == LIMB_DRAW_ABOVE_BOTH) {
                 c.z =
-                    max(
+                    std::max(
                         mob_ptr->parent->m->z +
                         mob_ptr->parent->m->height +
                         0.001,
@@ -1770,10 +1770,10 @@ void draw_control(
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
     float total_width =
-        min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
+        std::min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
     float total_height =
-        min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
-    total_width = max(total_width, total_height);
+        std::min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
+    total_width = std::max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         al_draw_filled_rectangle(
@@ -1790,15 +1790,15 @@ void draw_control(
         al_draw_filled_rounded_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            min(16.0, total_width * 0.5),
-            min(16.0, total_height * 0.5),
+            std::min(16.0, total_width * 0.5),
+            std::min(16.0, total_height * 0.5),
             map_alpha(192)
         );
         al_draw_rounded_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            min(16.0, total_width * 0.5),
-            min(16.0, total_height * 0.5),
+            std::min(16.0, total_width * 0.5),
+            std::min(16.0, total_height * 0.5),
             al_map_rgba(160, 160, 160, 192), 2
         );
     }
@@ -2052,7 +2052,7 @@ void draw_loading_screen(
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
     const int LOADING_SCREEN_PADDING = 64;
     
-    unsigned char blackness_alpha = 255.0f * max(0.0f, opacity * 4 - 3);
+    unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
         0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha)
     );
@@ -2164,7 +2164,7 @@ void draw_loading_screen(
     
         ALLEGRO_VERTEX text_vertexes[4];
         float text_reflection_h =
-            min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
+            std::min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
         //Top-left vertex.
         text_vertexes[0].x = scr_w * 0.5 - text_w * 0.5;
         text_vertexes[0].y = text_y + text_h;
@@ -2206,7 +2206,7 @@ void draw_loading_screen(
     
         ALLEGRO_VERTEX subtext_vertexes[4];
         float subtext_reflection_h =
-            min(
+            std::min(
                 (int) (LOADING_SCREEN_PADDING * 0.5),
                 (int) (text_h * LOADING_SCREEN_SUBTITLE_SCALE)
             );

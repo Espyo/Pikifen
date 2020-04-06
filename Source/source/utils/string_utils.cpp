@@ -31,7 +31,7 @@ string b2s(const bool b) { return b ? "true" : "false"; }
  */
 string box_string(const string &s, const size_t size, const string &finisher) {
     assert(size > finisher.size());
-    size_t core_size = min(s.size(), size - finisher.size());
+    size_t core_size = std::min(s.size(), size - finisher.size());
     return
         s.substr(0, core_size) +
         finisher +
@@ -42,7 +42,7 @@ string box_string(const string &s, const size_t size, const string &finisher) {
 //Converts a float to a string, with 4 decimal places.
 string f2s(const float f) {
     std::stringstream s;
-    s << std::fixed << ::setprecision(4) << f;
+    s << std::fixed << std::setprecision(4) << f;
     return s.str();
 }
 

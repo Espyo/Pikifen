@@ -152,7 +152,7 @@ void particle::tick(const float delta_t) {
     speed.y += delta_t* gravity;
     
     size += delta_t* size_grow_speed;
-    size = max(0.0f, size);
+    size = std::max(0.0f, size);
 }
 
 
@@ -217,7 +217,7 @@ void particle_generator::emit(particle_manager &manager) {
     }
     
     size_t final_nr =
-        max(
+        std::max(
             0,
             (int) number +
             randomi((int) (0 - number_deviation), (int) number_deviation)
@@ -227,7 +227,7 @@ void particle_generator::emit(particle_manager &manager) {
         particle new_p = base_particle;
         
         new_p.duration =
-            max(
+            std::max(
                 0.0f,
                 new_p.duration +
                 randomf(-duration_deviation, duration_deviation)
@@ -250,7 +250,7 @@ void particle_generator::emit(particle_manager &manager) {
         
         new_p.z = base_p_z;
         new_p.size =
-            max(
+            std::max(
                 0.0f,
                 new_p.size +
                 randomf(-size_deviation, size_deviation)

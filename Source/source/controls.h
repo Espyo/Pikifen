@@ -17,7 +17,10 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
+
 
 /* ----------------------------------------------------------------------------
  * This holds information over a user-specified

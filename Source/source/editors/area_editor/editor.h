@@ -18,7 +18,9 @@
 #include "../../LAFI/frame.h"
 #include "../../LAFI/label.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+
 
 class area_editor : public editor {
 private:
@@ -317,7 +319,7 @@ private:
     //Currently selected mobs.
     set<mob_gen*> selected_mobs;
     //Currently selected path links.
-    set<pair<path_stop*, path_stop*> > selected_path_links;
+    set<std::pair<path_stop*, path_stop*> > selected_path_links;
     //Currently selected path stops.
     set<path_stop*> selected_path_stops;
     //Currently selected sectors.
@@ -369,7 +371,7 @@ private:
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     //Undo history, with the state of the area at each point.
-    deque<pair<area_data*, string> > undo_history;
+    std::deque<std::pair<area_data*, string> > undo_history;
     //Name of the undo operation responsible for the lock.
     string undo_save_lock_operation;
     //During this timer, don't save state for operations matching the last one.
@@ -415,7 +417,9 @@ private:
     void finish_layout_drawing();
     void finish_layout_moving();
     void forget_prepared_state(area_data* prepared_change);
-    unordered_set<sector*> get_affected_sectors(set<vertex*> &vertexes);
+    unordered_set<sector*> get_affected_sectors(
+        set<vertex*> &vertexes
+    );
     void get_clicked_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
     );
@@ -435,12 +439,14 @@ private:
     float get_mob_gen_radius(mob_gen* m);
     bool get_mob_link_under_point(
         const point &p,
-        pair<mob_gen*, mob_gen*>* data1, pair<mob_gen*, mob_gen*>* data2
+        std::pair<mob_gen*, mob_gen*>* data1,
+        std::pair<mob_gen*, mob_gen*>* data2
     );
     mob_gen* get_mob_under_point(const point &p);
     bool get_path_link_under_point(
         const point &p,
-        pair<path_stop*, path_stop*>* data1, pair<path_stop*, path_stop*>* data2
+        std::pair<path_stop*, path_stop*>* data1,
+        std::pair<path_stop*, path_stop*>* data2
     );
     path_stop* get_path_stop_under_point(const point &p);
     sector* get_sector_under_point(const point &p);
@@ -479,8 +485,8 @@ private:
     point snap_point(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
-        const pair<path_stop*, path_stop*> &l1,
-        const pair<path_stop*, path_stop*> &l2,
+        const std::pair<path_stop*, path_stop*> &l1,
+        const std::pair<path_stop*, path_stop*> &l2,
         const point &where
     );
     void start_mob_move();

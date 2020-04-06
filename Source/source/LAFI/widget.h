@@ -10,7 +10,9 @@
 
 #include "style.h"
 
-using namespace std;
+using std::map;
+using std::string;
+using std::vector;
 
 namespace lafi {
 class widget;
@@ -116,23 +118,23 @@ public:
     bool is_mouse_in(const int mx, const int my);
     void get_offset(int* ox, int* oy);
     
-    function<void(widget* w, const int x, const int y)>
+    std::function<void(widget* w, const int x, const int y)>
     mouse_move_handler;
-    function<void(widget* w, const int x, const int y)>
+    std::function<void(widget* w, const int x, const int y)>
     left_mouse_click_handler;
-    function<void(widget* w, const int button, const int x, const int y)>
+    std::function<void(widget* w, const int button, const int x, const int y)>
     mouse_down_handler;
-    function<void(widget* w, const int button, const int x, const int y)>
+    std::function<void(widget* w, const int button, const int x, const int y)>
     mouse_up_handler;
-    function<void(widget* w, const int dy, const int dx)>
+    std::function<void(widget* w, const int dy, const int dx)>
     mouse_wheel_handler;
-    function<void(widget* w)>
+    std::function<void(widget* w)>
     mouse_enter_handler;
-    function<void(widget* w)>
+    std::function<void(widget* w)>
     mouse_leave_handler;
-    function<void(widget* w)>
+    std::function<void(widget* w)>
     get_focus_handler;
-    function<void(widget* w)>
+    std::function<void(widget* w)>
     lose_focus_handler;
     
     //Functions for the widget classes to handle, if they want to.

@@ -14,7 +14,10 @@
 
 #include "const.h"
 
-using namespace std;
+using std::map;
+using std::size_t;
+using std::string;
+using std::vector;
 
 ALLEGRO_BITMAP* bmp_checkbox_check = NULL;
 ALLEGRO_BITMAP* bmp_cursor = NULL;

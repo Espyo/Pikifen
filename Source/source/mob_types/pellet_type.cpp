@@ -38,7 +38,7 @@ pellet_type::pellet_type() :
  */
 anim_conversion_vector pellet_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(ANIM_IDLING, "idling"));
     return v;
 }
 

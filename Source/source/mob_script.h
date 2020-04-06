@@ -17,7 +17,9 @@
 
 #include "utils/data_file.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 class mob;
 struct mob_action_call;

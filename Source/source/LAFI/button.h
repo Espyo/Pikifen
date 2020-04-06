@@ -5,7 +5,8 @@
 
 #include "widget.h"
 
-using namespace std;
+using std::string;
+
 
 namespace lafi {
 

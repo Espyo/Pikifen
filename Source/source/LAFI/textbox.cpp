@@ -111,12 +111,12 @@ void textbox::draw_self() {
             al_draw_filled_rectangle(
                 text_start + al_get_text_width(
                     style->text_font,
-                    text_to_use.substr(0, min(sel_start, sel_end)).c_str()
+                    text_to_use.substr(0, std::min(sel_start, sel_end)).c_str()
                 ),
                 y1 + 2,
                 text_start + al_get_text_width(
                     style->text_font,
-                    text_to_use.substr(0, max(sel_start, sel_end)).c_str()
+                    text_to_use.substr(0, std::max(sel_start, sel_end)).c_str()
                 ),
                 y2 - 2,
                 get_alt_color()
@@ -180,7 +180,8 @@ void textbox::widget_on_key_char(
     
     if(cursor > text.size()) cursor = 0; //If the text is somehow changed.
     
-    int sel1 = min(sel_start, sel_end), sel2 = max(sel_start, sel_end);
+    int sel1 = std::min(sel_start, sel_end);
+    int sel2 = std::max(sel_start, sel_end);
     int sel_size = sel2 - sel1;
     
     if(keycode == ALLEGRO_KEY_LEFT && !ctrl && !shift) {
@@ -368,7 +369,7 @@ void textbox::widget_on_key_char(
     if(text_width > box_width) {
         if(box_width / 2 < cursor_x) scroll_x = cursor_x - box_width / 2;
         else scroll_x = 0;
-        scroll_x = min(scroll_x, (int) (text_width - box_width));
+        scroll_x = std::min(scroll_x, (int) (text_width - box_width));
     } else scroll_x = 0;
 }
 

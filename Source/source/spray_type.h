@@ -17,7 +17,8 @@
 
 #include "status.h"
 
-using namespace std;
+using std::string;
+using std::vector;
 
 /* ----------------------------------------------------------------------------
  * A spray type. It decides how the spray behaves,

@@ -82,7 +82,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
         //is on the same coordinates as the beam.
         ship* s_ptr = (ship*) m->carry_info->intended_mob;
         target_distance =
-            max(
+            std::max(
                 m->type->radius -
                 s_ptr->shi_type->beam_radius,
                 3.0f

@@ -337,10 +337,10 @@ bool circle_intersects_line(
             float y = line_p1.y + (i * vy * t);
             //If one of them is in the boundaries of the segment, it collides
             if (
-                x >= min(line_p1.x, line_p2.x) &&
-                x <= max(line_p1.x, line_p2.x) &&
-                y >= min(line_p1.y, line_p2.y) &&
-                y <= max(line_p1.y, line_p2.y)
+                x >= std::min(line_p1.x, line_p2.x) &&
+                x <= std::max(line_p1.x, line_p2.x) &&
+                y >= std::min(line_p1.y, line_p2.y) &&
+                y <= std::max(line_p1.y, line_p2.y)
             ) {
                 if(lix) *lix = x;
                 if(liy) *liy = y;
@@ -391,9 +391,9 @@ bool circle_intersects_rectangle(
             -(-rect_dim.x / 2.0 - circle_rel_pos.x),
             -(-rect_dim.y / 2.0 - circle_rel_pos.y)
         );
-        float smallest_x = min(dist_to_neg.x, dist_to_pos.x);
-        float smallest_y = min(dist_to_neg.y, dist_to_pos.y);
-        float smallest = min(smallest_x, smallest_y);
+        float smallest_x = std::min(dist_to_neg.x, dist_to_pos.x);
+        float smallest_y = std::min(dist_to_neg.y, dist_to_pos.y);
+        float smallest = std::min(smallest_x, smallest_y);
         
         if(smallest == dist_to_pos.x) {
             nearest = point(rect_dim.x / 2, circle_rel_pos.y);
@@ -492,7 +492,10 @@ float get_angle_cw_dif(float a1, float a2) {
  * Returns the smallest distance between two angles.
  */
 float get_angle_smallest_dif(const float a1, const float a2) {
-    return M_PI - abs(abs(normalize_angle(a1) - normalize_angle(a2)) - M_PI);
+    return
+        M_PI - std::abs(
+            std::abs(normalize_angle(a1) - normalize_angle(a2)) - M_PI
+        );
 }
 
 
@@ -724,7 +727,7 @@ void move_point(
     
     if(dis > reach_radius) {
         float move_amount =
-            min((double) (dis / delta_t / 2.0f), (double) speed);
+            std::min((double) (dis / delta_t / 2.0f), (double) speed);
             
         dif *= (move_amount / dis);
         

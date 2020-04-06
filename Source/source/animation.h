@@ -21,7 +21,9 @@
 #include "hitbox.h"
 #include "utils/data_file.h"
 
-using namespace std;
+using std::size_t;
+using std::string;
+using std::vector;
 
 class animation_database;
 
@@ -180,7 +182,7 @@ public:
     size_t find_body_part(const string &name);
     
     void create_conversions(
-        vector<pair<size_t, string> > conversions, data_node* file
+        vector<std::pair<size_t, string> > conversions, data_node* file
     );
     void fix_body_part_pointers();
     void sort_alphabetically();

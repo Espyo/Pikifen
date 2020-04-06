@@ -41,8 +41,8 @@ bridge_type::bridge_type() :
  */
 anim_conversion_vector bridge_type::get_anim_conversions() {
     anim_conversion_vector v;
-    v.push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));
-    v.push_back(make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
+    v.push_back(std::make_pair(BRIDGE_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
     return v;
 }
 
