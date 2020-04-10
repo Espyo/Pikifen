@@ -93,8 +93,8 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
  * Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
         if(
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != bmp_error
@@ -263,18 +263,20 @@ vector<string> folder_to_vector(
  * for the current time and weather.
  */
 unsigned char get_blackout_strength() {
-    size_t n_points = cur_area_data.weather_condition.blackout_strength.size();
-    
+    size_t n_points =
+        game.cur_area_data.weather_condition.blackout_strength.size();
+        
     if(n_points == 0) {
         return 0;
     } else if(n_points == 1) {
-        return cur_area_data.weather_condition.blackout_strength[0].second;
+        return game.cur_area_data.weather_condition.blackout_strength[0].second;
     }
     
     for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &cur_area_data.weather_condition.blackout_strength[p];
+        auto cur_ptr =
+            &game.cur_area_data.weather_condition.blackout_strength[p];
         auto next_ptr =
-            &cur_area_data.weather_condition.blackout_strength[p + 1];
+            &game.cur_area_data.weather_condition.blackout_strength[p + 1];
             
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
@@ -343,17 +345,17 @@ string get_current_time(const bool filename_friendly) {
  * Returns the daylight effect color for the current time and weather.
  */
 ALLEGRO_COLOR get_daylight_color() {
-    size_t n_points = cur_area_data.weather_condition.daylight.size();
+    size_t n_points = game.cur_area_data.weather_condition.daylight.size();
     
     if(n_points == 0) {
         return al_map_rgba(255, 255, 255, 0);
     } else if(n_points == 1) {
-        return cur_area_data.weather_condition.daylight[0].second;
+        return game.cur_area_data.weather_condition.daylight[0].second;
     }
     
     for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &cur_area_data.weather_condition.daylight[p];
-        auto next_ptr = &cur_area_data.weather_condition.daylight[p + 1];
+        auto cur_ptr = &game.cur_area_data.weather_condition.daylight[p];
+        auto next_ptr = &game.cur_area_data.weather_condition.daylight[p + 1];
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
@@ -375,17 +377,17 @@ ALLEGRO_COLOR get_daylight_color() {
  * Returns the fog color for the current time and weather.
  */
 ALLEGRO_COLOR get_fog_color() {
-    size_t n_points = cur_area_data.weather_condition.fog_color.size();
+    size_t n_points = game.cur_area_data.weather_condition.fog_color.size();
     
     if(n_points == 0) {
         return al_map_rgba(255, 255, 255, 0);
     } else if(n_points == 1) {
-        return cur_area_data.weather_condition.fog_color[0].second;
+        return game.cur_area_data.weather_condition.fog_color[0].second;
     }
     
     for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &cur_area_data.weather_condition.fog_color[p];
-        auto next_ptr = &cur_area_data.weather_condition.fog_color[p + 1];
+        auto cur_ptr = &game.cur_area_data.weather_condition.fog_color[p];
+        auto next_ptr = &game.cur_area_data.weather_condition.fog_color[p + 1];
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
@@ -440,18 +442,20 @@ void get_multiline_text_dimensions(
  * Returns the sun strength for the current time and weather.
  */
 float get_sun_strength() {
-    size_t n_points = cur_area_data.weather_condition.sun_strength.size();
+    size_t n_points = game.cur_area_data.weather_condition.sun_strength.size();
     
     if(n_points == 0) {
         return 1.0f;
     } else if(n_points == 1) {
-        return cur_area_data.weather_condition.sun_strength[0].second;
+        return game.cur_area_data.weather_condition.sun_strength[0].second;
     }
     
     for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &cur_area_data.weather_condition.sun_strength[p];
-        auto next_ptr = &cur_area_data.weather_condition.sun_strength[p + 1];
-        
+        auto cur_ptr =
+            &game.cur_area_data.weather_condition.sun_strength[p];
+        auto next_ptr =
+            &game.cur_area_data.weather_condition.sun_strength[p + 1];
+            
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
             return

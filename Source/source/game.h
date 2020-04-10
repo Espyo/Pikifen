@@ -35,6 +35,8 @@ public:
     area_menu* area_menu_state;
     //Controls menu game state.
     controls_menu* controls_menu_state;
+    //Data about the area that's currently being used.
+    area_data cur_area_data;
     //Time between the previous frame and the current.
     double delta_t;
     //Gameplay game state.

@@ -15,6 +15,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -417,7 +418,7 @@ void area_editor::load() {
     frm_info->widgets["but_no_weather"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         register_change("weather removal");
-        cur_area_data.weather_name.clear();
+        game.cur_area_data.weather_name.clear();
         info_to_gui();
     };
     frm_info->widgets["but_no_weather"]->description =
@@ -1810,10 +1811,10 @@ void area_editor::load() {
             return;
         }
         register_change("tree shadow deletion");
-        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-            if(cur_area_data.tree_shadows[s] == selected_shadow) {
-                cur_area_data.tree_shadows.erase(
-                    cur_area_data.tree_shadows.begin() + s
+        for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+            if(game.cur_area_data.tree_shadows[s] == selected_shadow) {
+                game.cur_area_data.tree_shadows.erase(
+                    game.cur_area_data.tree_shadows.begin() + s
                 );
                 delete selected_shadow;
                 selected_shadow = NULL;

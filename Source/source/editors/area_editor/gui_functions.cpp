@@ -13,6 +13,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -412,47 +413,47 @@ void area_editor::gui_to_info() {
     gui_to_var_helper h;
     
     h.register_string(
-        &cur_area_data.name,
+        &game.cur_area_data.name,
         get_textbox_text(frm_info, "txt_name")
     );
     h.register_string(
-        &cur_area_data.subtitle,
+        &game.cur_area_data.subtitle,
         get_textbox_text(frm_info, "txt_subtitle")
     );
     h.register_string(
-        &cur_area_data.weather_name,
+        &game.cur_area_data.weather_name,
         get_button_text(frm_info, "but_weather")
     );
     h.register_string(
-        &cur_area_data.bg_bmp_file_name,
+        &game.cur_area_data.bg_bmp_file_name,
         get_textbox_text(frm_info, "txt_bg_bitmap")
     );
     h.register_color(
-        &cur_area_data.bg_color,
+        &game.cur_area_data.bg_color,
         s2c(get_textbox_text(frm_info, "txt_bg_color"))
     );
     h.register_float(
-        &cur_area_data.bg_dist,
+        &game.cur_area_data.bg_dist,
         s2f(get_textbox_text(frm_info, "txt_bg_dist"))
     );
     h.register_float(
-        &cur_area_data.bg_bmp_zoom,
+        &game.cur_area_data.bg_bmp_zoom,
         s2f(get_textbox_text(frm_info, "txt_bg_zoom"))
     );
     h.register_string(
-        &cur_area_data.creator,
+        &game.cur_area_data.creator,
         get_textbox_text(frm_info, "txt_creator")
     );
     h.register_string(
-        &cur_area_data.version,
+        &game.cur_area_data.version,
         get_textbox_text(frm_info, "txt_version")
     );
     h.register_string(
-        &cur_area_data.notes,
+        &game.cur_area_data.notes,
         get_textbox_text(frm_info, "txt_notes")
     );
     h.register_string(
-        &cur_area_data.spray_amounts,
+        &game.cur_area_data.spray_amounts,
         get_textbox_text(frm_info, "txt_sprays")
     );
     
@@ -652,17 +653,39 @@ void area_editor::hide_all_frames() {
  * Loads the current area metadata onto the GUI.
  */
 void area_editor::info_to_gui() {
-    set_textbox_text(frm_info, "txt_name", cur_area_data.name);
-    set_textbox_text(frm_info, "txt_subtitle", cur_area_data.subtitle);
-    set_button_text(frm_info, "but_weather", cur_area_data.weather_name);
-    set_textbox_text(frm_info, "txt_bg_bitmap", cur_area_data.bg_bmp_file_name);
-    set_textbox_text(frm_info, "txt_bg_color", c2s(cur_area_data.bg_color));
-    set_textbox_text(frm_info, "txt_bg_dist", f2s(cur_area_data.bg_dist));
-    set_textbox_text(frm_info, "txt_bg_zoom", f2s(cur_area_data.bg_bmp_zoom));
-    set_textbox_text(frm_info, "txt_creator", cur_area_data.creator);
-    set_textbox_text(frm_info, "txt_version", cur_area_data.version);
-    set_textbox_text(frm_info, "txt_notes", cur_area_data.notes);
-    set_textbox_text(frm_info, "txt_sprays", cur_area_data.spray_amounts);
+    set_textbox_text(
+        frm_info, "txt_name", game.cur_area_data.name
+    );
+    set_textbox_text(
+        frm_info, "txt_subtitle", game.cur_area_data.subtitle
+    );
+    set_button_text(
+        frm_info, "but_weather", game.cur_area_data.weather_name
+    );
+    set_textbox_text(
+        frm_info, "txt_bg_bitmap", game.cur_area_data.bg_bmp_file_name
+    );
+    set_textbox_text(
+        frm_info, "txt_bg_color", c2s(game.cur_area_data.bg_color)
+    );
+    set_textbox_text(
+        frm_info, "txt_bg_dist", f2s(game.cur_area_data.bg_dist)
+    );
+    set_textbox_text(
+        frm_info, "txt_bg_zoom", f2s(game.cur_area_data.bg_bmp_zoom)
+    );
+    set_textbox_text(
+        frm_info, "txt_creator", game.cur_area_data.creator
+    );
+    set_textbox_text(
+        frm_info, "txt_version", game.cur_area_data.version
+    );
+    set_textbox_text(
+        frm_info, "txt_notes", game.cur_area_data.notes
+    );
+    set_textbox_text(
+        frm_info, "txt_sprays", game.cur_area_data.spray_amounts
+    );
     
 }
 
@@ -884,7 +907,7 @@ void area_editor::pick(
         
     } else if(picker_id == PICKER_SET_WEATHER) {
         register_change("weather change");
-        cur_area_data.weather_name = name;
+        game.cur_area_data.weather_name = name;
         info_to_gui();
         
     }
@@ -1316,19 +1339,19 @@ void area_editor::update_main_frame() {
     
     set_label_text(
         frm_area, "lbl_n_sectors",
-        "Sectors: " + i2s(cur_area_data.sectors.size())
+        "Sectors: " + i2s(game.cur_area_data.sectors.size())
     );
     set_label_text(
         frm_area, "lbl_n_vertexes",
-        "Vertexes: " + i2s(cur_area_data.vertexes.size())
+        "Vertexes: " + i2s(game.cur_area_data.vertexes.size())
     );
     set_label_text(
         frm_area, "lbl_n_mobs",
-        "Objects: " + i2s(cur_area_data.mob_generators.size())
+        "Objects: " + i2s(game.cur_area_data.mob_generators.size())
     );
     set_label_text(
         frm_area, "lbl_n_path_stops",
-        "Path stops: " + i2s(cur_area_data.path_stops.size())
+        "Path stops: " + i2s(game.cur_area_data.path_stops.size())
     );
 }
 

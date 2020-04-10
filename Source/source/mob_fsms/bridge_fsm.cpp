@@ -11,6 +11,7 @@
 #include "bridge_fsm.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mobs/bridge.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
@@ -99,7 +100,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         s_ptr->texture_info.scale = point(1.0, 1.0);
         s_ptr->texture_info.tint = al_map_rgb(255, 255, 255);
         
-        cur_area_data.generate_edges_blockmap(s_ptr->edges);
+        game.cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
     }
 }

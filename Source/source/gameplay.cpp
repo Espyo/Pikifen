@@ -195,22 +195,22 @@ void gameplay::load() {
     
     load_area(area_to_load, false, false);
     
-    if(!cur_area_data.weather_condition.blackout_strength.empty()) {
+    if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(scr_w, scr_h);
     }
-    if(!cur_area_data.weather_condition.fog_color.empty()) {
+    if(!game.cur_area_data.weather_condition.fog_color.empty()) {
         bmp_fog =
             generate_fog_bitmap(
-                cur_area_data.weather_condition.fog_near,
-                cur_area_data.weather_condition.fog_far
+                game.cur_area_data.weather_condition.fog_near,
+                game.cur_area_data.weather_condition.fog_far
             );
     }
     
     //Generate mobs.
     vector<mob*> mobs_per_gen;
     
-    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         mobs_per_gen.push_back(
             create_mob(
@@ -237,8 +237,8 @@ void gameplay::load() {
     //does not necessarily correspond to mob number X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) number.
-    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
             mobs_per_gen[m]->links.push_back(mobs_per_gen[m_ptr->link_nrs[l]]);
@@ -299,7 +299,7 @@ void gameplay::load() {
             log_error(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
-                "area \"" + cur_area_data.name + "\"!", NULL
+                "area \"" + game.cur_area_data.name + "\"!", NULL
             );
             continue;
         }

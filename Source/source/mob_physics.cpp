@@ -12,6 +12,7 @@
 
 #include "mobs/mob.h"
 
+#include "game.h"
 #include "vars.h"
 
 using std::set;
@@ -96,10 +97,10 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     //the edges in the same blocks the mob is on.
     //This way, we won't check for edges that are really far away.
     //Use the bounding box to know which blockmap blocks the mob will be on.
-    size_t bx1 = cur_area_data.bmap.get_col(new_pos.x - type->radius);
-    size_t bx2 = cur_area_data.bmap.get_col(new_pos.x + type->radius);
-    size_t by1 = cur_area_data.bmap.get_row(new_pos.y - type->radius);
-    size_t by2 = cur_area_data.bmap.get_row(new_pos.y + type->radius);
+    size_t bx1 = game.cur_area_data.bmap.get_col(new_pos.x - type->radius);
+    size_t bx2 = game.cur_area_data.bmap.get_col(new_pos.x + type->radius);
+    size_t by1 = game.cur_area_data.bmap.get_row(new_pos.y - type->radius);
+    size_t by2 = game.cur_area_data.bmap.get_row(new_pos.y + type->radius);
     
     if(
         bx1 == INVALID || bx2 == INVALID ||
@@ -115,7 +116,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     for(size_t bx = bx1; bx <= bx2; ++bx) {
         for(size_t by = by1; by <= by2; ++by) {
         
-            vector<edge*>* edges = &cur_area_data.bmap.edges[bx][by];
+            vector<edge*>* edges = &game.cur_area_data.bmap.edges[bx][by];
             
             for(size_t e = 0; e < edges->size(); ++e) {
                 candidate_edges.insert(edges->operator[](e));

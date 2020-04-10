@@ -35,7 +35,7 @@ void load_area(
     const string &name, const bool load_for_editor, const bool from_backup
 ) {
 
-    cur_area_data.clear();
+    game.cur_area_data.clear();
     
     string geometry_file_name;
     string data_file_name;
@@ -59,53 +59,55 @@ void load_area(
     
     data_node* weather_node;
     
-    rs.set("name", cur_area_data.name);
-    rs.set("subtitle", cur_area_data.subtitle);
-    rs.set("creator", cur_area_data.creator);
-    rs.set("version", cur_area_data.version);
-    rs.set("notes", cur_area_data.notes);
-    rs.set("spray_amounts", cur_area_data.spray_amounts);
-    rs.set("weather", cur_area_data.weather_name, &weather_node);
-    rs.set("bg_bmp", cur_area_data.bg_bmp_file_name);
-    rs.set("bg_color", cur_area_data.bg_color);
-    rs.set("bg_dist", cur_area_data.bg_dist);
-    rs.set("bg_zoom", cur_area_data.bg_bmp_zoom);
+    rs.set("name", game.cur_area_data.name);
+    rs.set("subtitle", game.cur_area_data.subtitle);
+    rs.set("creator", game.cur_area_data.creator);
+    rs.set("version", game.cur_area_data.version);
+    rs.set("notes", game.cur_area_data.notes);
+    rs.set("spray_amounts", game.cur_area_data.spray_amounts);
+    rs.set("weather", game.cur_area_data.weather_name, &weather_node);
+    rs.set("bg_bmp", game.cur_area_data.bg_bmp_file_name);
+    rs.set("bg_color", game.cur_area_data.bg_color);
+    rs.set("bg_dist", game.cur_area_data.bg_dist);
+    rs.set("bg_zoom", game.cur_area_data.bg_bmp_zoom);
     
     if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
     if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
     loading_text_bmp = NULL;
     loading_subtext_bmp = NULL;
     
-    draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
+    draw_loading_screen(
+        game.cur_area_data.name, game.cur_area_data.subtitle, 1.0
+    );
     al_flip_display();
     
     if(!load_for_editor) {
     
-        if(cur_area_data.weather_name.empty()) {
-            cur_area_data.weather_condition = weather();
+        if(game.cur_area_data.weather_name.empty()) {
+            game.cur_area_data.weather_condition = weather();
             
         } else if(
-            weather_conditions.find(cur_area_data.weather_name) ==
+            weather_conditions.find(game.cur_area_data.weather_name) ==
             weather_conditions.end()
         ) {
             log_error(
                 "Area " + name +
                 " refers to a non-existing weather condition, \"" +
-                cur_area_data.weather_name + "\"!",
+                game.cur_area_data.weather_name + "\"!",
                 weather_node
             );
-            cur_area_data.weather_condition = weather();
+            game.cur_area_data.weather_condition = weather();
             
         } else {
-            cur_area_data.weather_condition =
-                weather_conditions[cur_area_data.weather_name];
+            game.cur_area_data.weather_condition =
+                weather_conditions[game.cur_area_data.weather_name];
                 
         }
     }
     
-    if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
-        cur_area_data.bg_bmp =
-            textures.get(cur_area_data.bg_bmp_file_name, &data_file);
+    if(!load_for_editor && !game.cur_area_data.bg_bmp_file_name.empty()) {
+        game.cur_area_data.bg_bmp =
+            textures.get(game.cur_area_data.bg_bmp_file_name, &data_file);
     }
     
     
@@ -124,7 +126,7 @@ void load_area(
             )->get_child_by_name("v", v);
         vector<string> words = split(vertex_data->value);
         if(words.size() == 2) {
-            cur_area_data.vertexes.push_back(
+            game.cur_area_data.vertexes.push_back(
                 new vertex(s2f(words[0]), s2f(words[1]))
             );
         }
@@ -155,7 +157,7 @@ void load_area(
         new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
         new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
         
-        cur_area_data.edges.push_back(new_edge);
+        game.cur_area_data.edges.push_back(new_edge);
     }
     
     //Sectors.
@@ -243,7 +245,7 @@ void load_area(
                 )->get_value_or_default("true")
             );
             
-        cur_area_data.sectors.push_back(new_sector);
+        game.cur_area_data.sectors.push_back(new_sector);
     }
     
     //Mobs.
@@ -306,7 +308,7 @@ void load_area(
         }
         
         if(!problem) {
-            cur_area_data.mob_generators.push_back(mob_ptr);
+            game.cur_area_data.mob_generators.push_back(mob_ptr);
         } else {
             delete mob_ptr;
         }
@@ -315,10 +317,10 @@ void load_area(
     for(size_t l = 0; l < mob_links_buffer.size(); ++l) {
         size_t f = mob_links_buffer[l].first;
         size_t s = mob_links_buffer[l].second;
-        cur_area_data.mob_generators[f]->links.push_back(
-            cur_area_data.mob_generators[s]
+        game.cur_area_data.mob_generators[f]->links.push_back(
+            game.cur_area_data.mob_generators[s]
         );
-        cur_area_data.mob_generators[f]->link_nrs.push_back(s);
+        game.cur_area_data.mob_generators[f]->link_nrs.push_back(s);
     }
     
     //Path stops.
@@ -350,7 +352,7 @@ void load_area(
             
         }
         
-        cur_area_data.path_stops.push_back(s_ptr);
+        game.cur_area_data.path_stops.push_back(s_ptr);
     }
     
     
@@ -399,32 +401,40 @@ void load_area(
             );
         }
         
-        cur_area_data.tree_shadows.push_back(s_ptr);
+        game.cur_area_data.tree_shadows.push_back(s_ptr);
         
     }
     
     
     //Set up stuff.
-    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-        cur_area_data.fix_edge_pointers(cur_area_data.edges[e]);
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        game.cur_area_data.fix_edge_pointers(
+            game.cur_area_data.edges[e]
+        );
     }
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        cur_area_data.connect_sector_edges(cur_area_data.sectors[s]);
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        game.cur_area_data.connect_sector_edges(
+            game.cur_area_data.sectors[s]
+        );
     }
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-        cur_area_data.connect_vertex_edges(cur_area_data.vertexes[v]);
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+        game.cur_area_data.connect_vertex_edges(
+            game.cur_area_data.vertexes[v]
+        );
     }
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        cur_area_data.fix_path_stop_pointers(cur_area_data.path_stops[s]);
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        game.cur_area_data.fix_path_stop_pointers(
+            game.cur_area_data.path_stops[s]
+        );
     }
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        cur_area_data.path_stops[s]->calculate_dists();
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        game.cur_area_data.path_stops[s]->calculate_dists();
     }
     if(!load_for_editor) {
         //Fade sectors that also fade brightness should be
         //at midway between the two neighbors.
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = game.cur_area_data.sectors[s];
             if(s_ptr->fade) {
                 sector* n1 = NULL;
                 sector* n2 = NULL;
@@ -439,8 +449,8 @@ void load_area(
     
     //Triangulate everything and save bounding boxes.
     set<edge*> lone_edges;
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         TRIANGULATION_ERRORS res =
             triangulate(s_ptr, &lone_edges, false, false);
@@ -455,7 +465,7 @@ void load_area(
         get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
     }
     
-    if(!load_for_editor) cur_area_data.generate_blockmap();
+    if(!load_for_editor) game.cur_area_data.generate_blockmap();
 }
 
 
@@ -1450,7 +1460,7 @@ void load_weather() {
  * Unloads the loaded area from memory.
  */
 void unload_area() {
-    cur_area_data.clear();
+    game.cur_area_data.clear();
 }
 
 

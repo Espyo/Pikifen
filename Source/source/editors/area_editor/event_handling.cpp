@@ -14,6 +14,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../vars.h"
 
 using std::set;
@@ -191,27 +192,30 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
             if(state == EDITOR_STATE_LAYOUT) {
                 selected_edges.insert(
-                    cur_area_data.edges.begin(), cur_area_data.edges.end()
+                    game.cur_area_data.edges.begin(),
+                    game.cur_area_data.edges.end()
                 );
                 selected_sectors.insert(
-                    cur_area_data.sectors.begin(), cur_area_data.sectors.end()
+                    game.cur_area_data.sectors.begin(),
+                    game.cur_area_data.sectors.end()
                 );
                 selected_vertexes.insert(
-                    cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
+                    game.cur_area_data.vertexes.begin(),
+                    game.cur_area_data.vertexes.end()
                 );
                 sector_to_gui();
                 
             } else if(state == EDITOR_STATE_MOBS) {
                 selected_mobs.insert(
-                    cur_area_data.mob_generators.begin(),
-                    cur_area_data.mob_generators.end()
+                    game.cur_area_data.mob_generators.begin(),
+                    game.cur_area_data.mob_generators.end()
                 );
                 mob_to_gui();
                 
             } else if(state == EDITOR_STATE_PATHS) {
                 selected_path_stops.insert(
-                    cur_area_data.path_stops.begin(),
-                    cur_area_data.path_stops.end()
+                    game.cur_area_data.path_stops.begin(),
+                    game.cur_area_data.path_stops.end()
                 );
                 path_to_gui();
             }
@@ -250,8 +254,8 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         bool got_something = false;
         point min_coords, max_coords;
         
-        for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-            vertex* v_ptr = cur_area_data.vertexes[v];
+        for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+            vertex* v_ptr = game.cur_area_data.vertexes[v];
             if(v_ptr->x < min_coords.x || !got_something) {
                 min_coords.x = v_ptr->x;
             }
@@ -267,8 +271,8 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             got_something = true;
         }
         
-        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             if(m_ptr->pos.x < min_coords.x || !got_something) {
                 min_coords.x = m_ptr->pos.x;
             }
@@ -284,8 +288,8 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             got_something = true;
         }
         
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = game.cur_area_data.path_stops[s];
             if(s_ptr->pos.x < min_coords.x || !got_something) {
                 min_coords.x = s_ptr->pos.x;
             }
@@ -517,14 +521,14 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             type_to_use = pikmin_order[0];
         }
         
-        cur_area_data.mob_generators.push_back(
+        game.cur_area_data.mob_generators.push_back(
             new mob_gen(category_to_use, hotspot, type_to_use)
         );
         
         last_mob_category = category_to_use;
         last_mob_type = type_to_use;
         
-        selected_mobs.insert(cur_area_data.mob_generators.back());
+        selected_mobs.insert(game.cur_area_data.mob_generators.back());
         mob_to_gui();
         
     } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
@@ -557,7 +561,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         for(auto m : selected_mobs) {
             mob_gen* new_mg = new mob_gen(*m);
             new_mg->pos = point(hotspot + (m->pos) - selection_center);
-            cur_area_data.mob_generators.push_back(new_mg);
+            game.cur_area_data.mob_generators.push_back(new_mg);
             mobs_to_select.insert(new_mg);
         }
         
@@ -592,7 +596,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         register_change("Object link creation");
         
         m_ptr->links.push_back(target);
-        m_ptr->link_nrs.push_back(cur_area_data.find_mob_gen_nr(target));
+        m_ptr->link_nrs.push_back(game.cur_area_data.find_mob_gen_nr(target));
         
         homogenize_selected_mobs();
         
@@ -672,7 +676,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             } else {
                 register_change("path stop creation");
                 next_stop = new path_stop(hotspot);
-                cur_area_data.path_stops.push_back(next_stop);
+                game.cur_area_data.path_stops.push_back(next_stop);
             }
             
             if(next_stop) {
@@ -680,8 +684,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 path_drawing_stop_1->add_link(
                     next_stop, path_drawing_normals
                 );
-                cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
-                cur_area_data.fix_path_stop_nrs(next_stop);
+                game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
+                game.cur_area_data.fix_path_stop_nrs(next_stop);
                 path_drawing_stop_1 = next_stop;
                 next_stop->calculate_dists_plus_neighbors();
             }
@@ -692,7 +696,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             } else {
                 register_change("path stop creation");
                 path_drawing_stop_1 = new path_stop(hotspot);
-                cur_area_data.path_stops.push_back(path_drawing_stop_1);
+                game.cur_area_data.path_stops.push_back(path_drawing_stop_1);
             }
             
         }
@@ -710,7 +714,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         tree_shadow* new_shadow = new tree_shadow(hotspot);
         new_shadow->bitmap = bmp_error;
         
-        cur_area_data.tree_shadows.push_back(new_shadow);
+        game.cur_area_data.tree_shadows.push_back(new_shadow);
         
         select_tree_shadow(new_shadow);
         details_to_gui();
@@ -921,9 +925,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         if(!transformation_handled) {
             //Select a tree shadow.
             selected_shadow = NULL;
-            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
             
-                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+                tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
                 point min_coords, max_coords;
                 get_transformed_rectangle_bounding_box(
                     s_ptr->center, s_ptr->size, s_ptr->angle,
@@ -1000,8 +1004,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around the layout.
             clear_selection();
             
-            for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-                vertex* v_ptr = cur_area_data.vertexes[v];
+            for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+                vertex* v_ptr = game.cur_area_data.vertexes[v];
                 
                 if(
                     v_ptr->x >= selection_x1 &&
@@ -1014,8 +1018,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             if(selection_filter != SELECTION_FILTER_VERTEXES) {
-                for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-                    edge* e_ptr = cur_area_data.edges[e];
+                for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+                    edge* e_ptr = game.cur_area_data.edges[e];
                     
                     if(
                         e_ptr->vertexes[0]->x >= selection_x1 &&
@@ -1033,8 +1037,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             if(selection_filter == SELECTION_FILTER_SECTORS) {
-                for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                    sector* s_ptr = cur_area_data.sectors[s];
+                for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+                    sector* s_ptr = game.cur_area_data.sectors[s];
                     bool valid_sector = true;
                     
                     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -1071,8 +1075,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around mobs.
             clear_selection();
             
-            for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-                mob_gen* m_ptr = cur_area_data.mob_generators[m];
+            for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+                mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
                 float radius = get_mob_gen_radius(m_ptr);
                 
                 if(
@@ -1093,8 +1097,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around path stops.
             clear_selection();
             
-            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-                path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 
                 if(
                     s_ptr->pos.x - PATH_STOP_RADIUS >= selection_x1 &&
@@ -1106,8 +1110,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-                path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); ++l) {
                     path_stop* s2_ptr = s_ptr->links[l].end_ptr;
                     

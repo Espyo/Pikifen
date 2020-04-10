@@ -54,7 +54,7 @@ void gameplay::do_game_drawing(
             world_to_screen_drawing_transform = world_to_screen_transform;
         }
         
-        al_clear_to_color(cur_area_data.bg_color);
+        al_clear_to_color(game.cur_area_data.bg_color);
         
         //Layer 1 -- Background.
         draw_background(bmp_output);
@@ -106,8 +106,8 @@ void gameplay::do_game_drawing(
     
     if(area_title_fade_timer.time_left > 0) {
         draw_loading_screen(
-            cur_area_data.name,
-            cur_area_data.subtitle,
+            game.cur_area_data.name,
+            game.cur_area_data.subtitle,
             area_title_fade_timer.get_ratio_left()
         );
     }
@@ -122,7 +122,7 @@ void gameplay::do_game_drawing(
  * Draws the area background.
  */
 void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
-    if(!cur_area_data.bg_bmp) return;
+    if(!game.cur_area_data.bg_bmp) return;
     
     ALLEGRO_VERTEX bg_v[4];
     for(unsigned char v = 0; v < 4; ++v) {
@@ -137,29 +137,29 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
     int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
     float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
     point final_zoom(
-        bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use,
-        bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use
+        bmp_w * 0.5 * game.cur_area_data.bg_dist / zoom_to_use,
+        bmp_h * 0.5 * game.cur_area_data.bg_dist / zoom_to_use
     );
     
     bg_v[0].x = 0;
     bg_v[0].y = 0;
-    bg_v[0].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
-    bg_v[0].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[0].u = (cam_pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[0].v = (cam_pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[1].x = bmp_w;
     bg_v[1].y = 0;
-    bg_v[1].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
-    bg_v[1].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[1].u = (cam_pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[1].v = (cam_pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[2].x = bmp_w;
     bg_v[2].y = bmp_h;
-    bg_v[2].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
-    bg_v[2].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[2].u = (cam_pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[2].v = (cam_pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[3].x = 0;
     bg_v[3].y = bmp_h;
-    bg_v[3].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
-    bg_v[3].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[3].u = (cam_pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[3].v = (cam_pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     
     al_draw_prim(
-        bg_v, NULL, cur_area_data.bg_bmp,
+        bg_v, NULL, game.cur_area_data.bg_bmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
 }
@@ -1060,14 +1060,14 @@ void gameplay::draw_lighting_filter() {
         point fog_top_left =
             cam_pos -
             point(
-                cur_area_data.weather_condition.fog_far,
-                cur_area_data.weather_condition.fog_far
+                game.cur_area_data.weather_condition.fog_far,
+                game.cur_area_data.weather_condition.fog_far
             );
         point fog_bottom_right =
             cam_pos +
             point(
-                cur_area_data.weather_condition.fog_far,
-                cur_area_data.weather_condition.fog_far
+                game.cur_area_data.weather_condition.fog_far,
+                game.cur_area_data.weather_condition.fog_far
             );
         al_transform_coordinates(
             &world_to_screen_transform,
@@ -1228,7 +1228,7 @@ void gameplay::draw_message_box() {
  */
 void gameplay::draw_precipitation() {
     if(
-        cur_area_data.weather_condition.precipitation_type !=
+        game.cur_area_data.weather_condition.precipitation_type !=
         PRECIPITATION_TYPE_NONE
     ) {
         size_t n_precipitation_particles = precipitation.size();
@@ -1298,8 +1298,8 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     //First, get the full dimensions of the map.
     float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
     
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = cur_area_data.vertexes[v];
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data.vertexes[v];
         min_x = std::min(v_ptr->x, min_x);
         min_y = std::min(v_ptr->y, min_y);
         max_x = std::max(v_ptr->x, max_x);
@@ -1340,8 +1340,8 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
  * Draws tree shadows.
  */
 void gameplay::draw_tree_shadows() {
-    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+    for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         
         unsigned char alpha =
             ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
@@ -1371,15 +1371,15 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
     components.reserve(
-        cur_area_data.sectors.size() + //Sectors
+        game.cur_area_data.sectors.size() + //Sectors
         mobs.size() + //Mob shadows
         mobs.size() + //Mobs
         particles.get_count() //Particles
     );
     
     //Sectors.
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = game.cur_area_data.sectors[s];
         
         if(
             !bmp_output &&

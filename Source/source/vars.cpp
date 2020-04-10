@@ -105,7 +105,6 @@ float creator_tool_mob_hurting_ratio = 0.5;
 pikmin_type* creator_tool_last_pikmin_type = NULL;
 unsigned char creator_tool_keys[20];
 bool creator_tools_enabled = true;
-area_data cur_area_data;
 size_t cur_leader_nr = 0;
 leader* cur_leader_ptr = nullptr;
 string cur_message;

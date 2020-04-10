@@ -13,6 +13,7 @@
 #include "mob_utils.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_script_action.h"
 #include "../vars.h"
 #include "mob.h"
@@ -791,7 +792,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
 string get_error_message_mob_info(mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
-        p2s(m->pos) + ", area \"" + cur_area_data.name + "\"";
+        p2s(m->pos) + ", area \"" + game.cur_area_data.name + "\"";
 }
 
 

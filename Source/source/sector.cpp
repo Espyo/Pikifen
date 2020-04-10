@@ -20,6 +20,7 @@
 
 #include "editors/area_editor/editor.h"
 #include "functions.h"
+#include "game.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -811,8 +812,8 @@ void area_data::remove_edge(const edge* e_ptr) {
  */
 void area_data::remove_sector(const size_t s_nr) {
     sectors.erase(sectors.begin() + s_nr);
-    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-        edge* e_ptr = cur_area_data.edges[e];
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = game.cur_area_data.edges[e];
         for(size_t s = 0; s < 2; ++s) {
             if(
                 e_ptr->sector_nrs[s] != INVALID &&
@@ -1154,8 +1155,8 @@ void path_stop::calculate_dists_plus_neighbors() {
         l_ptr->calculate_dist(this);
     }
     
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
         size_t l_nr = s_ptr->get_link(this);
         if(l_nr != INVALID) {
             s_ptr->links[l_nr].calculate_dist(s_ptr);
@@ -1852,8 +1853,8 @@ vector<path_stop*> dijkstra(
     
     
     //Initialize the algorithm.
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);
         data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
     }
@@ -2046,7 +2047,7 @@ vector<path_stop*> get_path(
 
     vector<path_stop*> full_path;
     
-    if(cur_area_data.path_stops.empty()) {
+    if(game.cur_area_data.path_stops.empty()) {
         if(go_straight) *go_straight = true;
         return full_path;
     } else {
@@ -2059,8 +2060,8 @@ vector<path_stop*> get_path(
     dist closest_to_start_dist;
     dist closest_to_end_dist;
     
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = cur_area_data.path_stops[s];
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
         dist dist_to_start(start, s_ptr->pos);
         dist dist_to_end(end, s_ptr->pos);
@@ -2412,12 +2413,13 @@ sector* get_sector(
 
     if(use_blockmap) {
     
-        size_t col = cur_area_data.bmap.get_col(p.x);
-        size_t row = cur_area_data.bmap.get_row(p.y);
+        size_t col = game.cur_area_data.bmap.get_col(p.x);
+        size_t row = game.cur_area_data.bmap.get_row(p.y);
         if(col == INVALID || row == INVALID) return NULL;
         
-        unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
-        
+        unordered_set<sector*>* sectors =
+            &game.cur_area_data.bmap.sectors[col][row];
+            
         if(sectors->size() == 1) return *sectors->begin();
         
         for(auto s : (*sectors)) {
@@ -2434,8 +2436,8 @@ sector* get_sector(
         
     } else {
     
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = game.cur_area_data.sectors[s];
             
             if(
                 p.x < s_ptr->bbox[0].x ||

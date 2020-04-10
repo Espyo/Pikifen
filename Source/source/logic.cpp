@@ -265,8 +265,8 @@ void gameplay::do_gameplay_logic() {
         *   Sectors   |  | *
         *             +--+ *
         ********************/
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
+        for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = game.cur_area_data.sectors[s];
             
             if(s_ptr->draining_liquid) {
             
@@ -657,9 +657,9 @@ void gameplay::do_gameplay_logic() {
         string resolution_str =
             i2s(scr_w) + "x" + i2s(scr_h);
         string area_v_str =
-            cur_area_data.version;
+            game.cur_area_data.version;
         string area_creator_str =
-            cur_area_data.creator;
+            game.cur_area_data.creator;
         string engine_v_str =
             i2s(VERSION_MAJOR) + "." +
             i2s(VERSION_MINOR) + "." +
@@ -760,9 +760,9 @@ void gameplay::do_gameplay_logic() {
             box_string(f2s(mouse_cursor_w.y), 6);
         string blockmap_str =
             box_string(
-                i2s(cur_area_data.bmap.get_col(mouse_cursor_w.x)), 5, " "
+                i2s(game.cur_area_data.bmap.get_col(mouse_cursor_w.x)), 5, " "
             ) +
-            i2s(cur_area_data.bmap.get_row(mouse_cursor_w.y));
+            i2s(game.cur_area_data.bmap.get_row(mouse_cursor_w.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =

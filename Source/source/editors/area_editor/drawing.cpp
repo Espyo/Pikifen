@@ -14,6 +14,7 @@
 
 #include "../../drawing.h"
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../utils/string_utils.h"
 #include "../../vars.h"
 
@@ -35,16 +36,16 @@ void area_editor::do_drawing() {
     float highest_sector_z = 0.0f;
     if(
         area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
-        !cur_area_data.sectors.empty()
+        !game.cur_area_data.sectors.empty()
     ) {
-        lowest_sector_z = cur_area_data.sectors[0]->z;
+        lowest_sector_z = game.cur_area_data.sectors[0]->z;
         highest_sector_z = lowest_sector_z;
         
-        for(size_t s = 1; s < cur_area_data.sectors.size(); ++s) {
+        for(size_t s = 1; s < game.cur_area_data.sectors.size(); ++s) {
             lowest_sector_z =
-                std::min(lowest_sector_z, cur_area_data.sectors[s]->z);
+                std::min(lowest_sector_z, game.cur_area_data.sectors[s]->z);
             highest_sector_z =
-                std::max(highest_sector_z, cur_area_data.sectors[s]->z);
+                std::max(highest_sector_z, game.cur_area_data.sectors[s]->z);
         }
     }
     
@@ -95,7 +96,7 @@ void area_editor::do_drawing() {
         (selection_max_opacity - selection_min_opacity) / 2.0;
         
     //Sectors.
-    size_t n_sectors = cur_area_data.sectors.size();
+    size_t n_sectors = game.cur_area_data.sectors.size();
     for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr;
         if(
@@ -109,7 +110,7 @@ void area_editor::do_drawing() {
         ) {
             s_ptr = pre_move_area_data->sectors[s];
         } else {
-            s_ptr = cur_area_data.sectors[s];
+            s_ptr = game.cur_area_data.sectors[s];
         }
         
         bool view_heightmap = false;
@@ -275,9 +276,9 @@ void area_editor::do_drawing() {
     );
     
     //Edges.
-    size_t n_edges = cur_area_data.edges.size();
+    size_t n_edges = game.cur_area_data.edges.size();
     for(size_t e = 0; e < n_edges; ++e) {
-        edge* e_ptr = cur_area_data.edges[e];
+        edge* e_ptr = game.cur_area_data.edges[e];
         
         if(!is_edge_valid(e_ptr)) continue;
         
@@ -451,9 +452,9 @@ void area_editor::do_drawing() {
     
     //Vertexes.
     if(state == EDITOR_STATE_LAYOUT || state == EDITOR_STATE_ASB) {
-        size_t n_vertexes = cur_area_data.vertexes.size();
+        size_t n_vertexes = game.cur_area_data.vertexes.size();
         for(size_t v = 0; v < n_vertexes; ++v) {
-            vertex* v_ptr = cur_area_data.vertexes[v];
+            vertex* v_ptr = game.cur_area_data.vertexes[v];
             bool selected =
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
@@ -485,8 +486,8 @@ void area_editor::do_drawing() {
     
     //Mobs.
     if(state == EDITOR_STATE_MOBS) {
-        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             mob_gen* m2_ptr = NULL;
             
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
@@ -532,8 +533,8 @@ void area_editor::do_drawing() {
         }
     }
     
-    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         float radius = get_mob_gen_radius(m_ptr);
         ALLEGRO_COLOR c =
@@ -608,8 +609,8 @@ void area_editor::do_drawing() {
     
     //Paths.
     if(state == EDITOR_STATE_PATHS) {
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = game.cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
                 path_stop* s2_ptr = s_ptr->links[l].end_ptr;
                 bool one_way =
@@ -672,8 +673,8 @@ void area_editor::do_drawing() {
             }
         }
         
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = game.cur_area_data.path_stops[s];
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
                 PATH_STOP_RADIUS,
@@ -705,8 +706,8 @@ void area_editor::do_drawing() {
         if(show_closest_stop) {
             path_stop* closest = NULL;
             dist closest_dist;
-            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-                path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 dist d(mouse_cursor_w, s_ptr->pos);
                 
                 if(!closest || d < closest_dist) {
@@ -795,9 +796,9 @@ void area_editor::do_drawing() {
         state == EDITOR_STATE_DETAILS ||
         (sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW && show_shadows)
     ) {
-        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         
-            tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+            tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
             if(
                 sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW &&
                 s_ptr == selected_shadow
@@ -1106,8 +1107,8 @@ void area_editor::do_drawing() {
             }
         };
         vector<split_info> splits;
-        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-            edge* e_ptr = cur_area_data.edges[e];
+        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = game.cur_area_data.edges[e];
             float ur = 0;
             float ul = 0;
             if(
