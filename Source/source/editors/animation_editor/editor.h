@@ -152,7 +152,7 @@ private:
     void import_sprite_hitbox_data(const string &name);
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
-    void load_animation_database(const bool update_history);
+    void load_animation_database(const bool should_update_history);
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
@@ -222,15 +222,22 @@ private:
     
 public:
 
+    //How many entries of the history to store, at most.
+    static const size_t HISTORY_SIZE = 6;
+    
     animation_editor();
     
+    //Automatically load this animation file upon boot-up of the editor, if any.
     string auto_load_anim;
+    //History for the last files that were opened.
+    vector<string> history;
+    
+    void update_history(const string &n);
     
     void do_logic();
     void do_drawing();
     void load();
     void unload();
-    
     virtual string get_name();
     
 };

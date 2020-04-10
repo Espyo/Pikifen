@@ -43,7 +43,16 @@ gameplay::gameplay() :
     bmp_hard_bubble(nullptr),
     bmp_message_box(nullptr),
     bmp_no_pikmin_bubble(nullptr),
-    bmp_sun(nullptr) {
+    bmp_sun(nullptr),
+    area_time_passed(0.0f),
+    cancel_control_id(INVALID),
+    close_to_interactable_to_use(nullptr),
+    close_to_onion_to_open(nullptr),
+    close_to_pikmin_to_pluck(nullptr),
+    close_to_ship_to_heal(nullptr),
+    main_control_id(INVALID),
+    closest_group_member(nullptr),
+    closest_group_member_distant(false) {
     
 }
 
@@ -156,7 +165,7 @@ string gameplay::get_name() {
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay::leave() {
-    if(area_editor_quick_play_area.empty()) {
+    if(game.area_editor_state->quick_play_area.empty()) {
         game.change_state(game.main_menu_state);
     } else {
         game.change_state(game.area_editor_state);
@@ -274,10 +283,11 @@ void gameplay::load() {
     cur_leader_ptr->stop_whistling();
     
     day_minutes = day_minutes_start;
-    area_time_passed = 0;
+    area_time_passed = 0.0f;
     
-    map<string, string> spray_strs = get_var_map(cur_area_data.spray_amounts);
-    
+    map<string, string> spray_strs =
+        get_var_map(game.cur_area_data.spray_amounts);
+        
     for(auto &s : spray_strs) {
         size_t spray_id = 0;
         for(; spray_id < spray_types.size(); ++spray_id) {
@@ -299,13 +309,13 @@ void gameplay::load() {
     
     for(size_t c = 0; c < controls[0].size(); ++c) {
         if(controls[0][c].action == BUTTON_THROW) {
-            click_control_id = c;
+            main_control_id = c;
             break;
         }
     }
     for(size_t c = 0; c < controls[0].size(); ++c) {
         if(controls[0][c].action == BUTTON_WHISTLE) {
-            whistle_control_id = c;
+            cancel_control_id = c;
             break;
         }
     }
@@ -545,6 +555,90 @@ void gameplay::unload_game_content() {
     unload_status_types(true);
     unload_liquids();
     unload_custom_particle_generators();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the variable that indicates what the closest
+ * group member of the standby subgroup is.
+ * In the case all candidate members are out of reach,
+ * this gets set to the closest. Otherwise, it gets set to the closest
+ * and more mature one.
+ * NULL if there is no member of that subgroup available.
+ */
+void gameplay::update_closest_group_member() {
+    //Closest members so far for each maturity.
+    dist closest_dists[N_MATURITIES];
+    mob* closest_ptrs[N_MATURITIES];
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+        closest_ptrs[m] = NULL;
+    }
+    
+    game.gameplay_state->closest_group_member = NULL;
+    
+    //Fetch the closest, for each maturity.
+    size_t n_members = cur_leader_ptr->group->members.size();
+    for(size_t m = 0; m < n_members; ++m) {
+    
+        mob* member_ptr = cur_leader_ptr->group->members[m];
+        if(
+            member_ptr->subgroup_type_ptr !=
+            cur_leader_ptr->group->cur_standby_type
+        ) {
+            continue;
+        }
+        
+        unsigned char maturity = 0;
+        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            maturity = ((pikmin*) member_ptr)->maturity;
+        }
+        
+        dist d(cur_leader_ptr->pos, member_ptr->pos);
+        
+        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
+            closest_dists[maturity] = d;
+            closest_ptrs[maturity] = member_ptr;
+        }
+    }
+    
+    //Now, try to get the one with the highest maturity within reach.
+    dist closest_dist;
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+        if(!closest_ptrs[2 - m]) continue;
+        if(closest_dists[2 - m] > pikmin_grab_range) continue;
+        game.gameplay_state->closest_group_member = closest_ptrs[2 - m];
+        closest_dist = closest_dists[2 - m];
+        break;
+    }
+    
+    if(!game.gameplay_state->closest_group_member) {
+        //Couldn't find any within reach? Then just set it to the closest one.
+        //Maturity is irrelevant for this case.
+        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+            if(!closest_ptrs[m]) continue;
+            
+            if(
+                !game.gameplay_state->closest_group_member ||
+                closest_dists[m] < closest_dist
+            ) {
+                game.gameplay_state->closest_group_member = closest_ptrs[m];
+                closest_dist = closest_dists[m];
+            }
+        }
+        
+    }
+    
+    if(
+        fabs(game.gameplay_state->closest_group_member->z - cur_leader_ptr->z) >
+        SECTOR_STEP
+    ) {
+        //If the group member is beyond a step, it's obviously above or below
+        //a wall, compared to the leader. No grabbing allowed.
+        game.gameplay_state->closest_group_member_distant = true;
+    } else {
+        game.gameplay_state->closest_group_member_distant =
+            closest_dist > pikmin_grab_range;
+    }
 }
 
 

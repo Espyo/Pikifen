@@ -946,7 +946,7 @@ void gameplay::draw_ingame_text() {
     //Lying down stop notification.
     if(
         cur_leader_ptr->carry_info &&
-        whistle_control_id != INVALID
+        cancel_control_id != INVALID
     ) {
         draw_notification(
             point(
@@ -954,7 +954,7 @@ void gameplay::draw_ingame_text() {
                 cur_leader_ptr->pos.y -
                 cur_leader_ptr->type->radius
             ),
-            "Get up", &controls[0][whistle_control_id]
+            "Get up", &controls[0][cancel_control_id]
         );
         done = true;
     }
@@ -963,7 +963,7 @@ void gameplay::draw_ingame_text() {
     if(
         !done &&
         cur_leader_ptr->auto_plucking &&
-        whistle_control_id != INVALID
+        cancel_control_id != INVALID
     ) {
         draw_notification(
             point(
@@ -971,7 +971,7 @@ void gameplay::draw_ingame_text() {
                 cur_leader_ptr->pos.y -
                 cur_leader_ptr->type->radius
             ),
-            "Stop", &controls[0][whistle_control_id]
+            "Stop", &controls[0][cancel_control_id]
         );
         done = true;
     }
@@ -980,7 +980,7 @@ void gameplay::draw_ingame_text() {
     if(
         !done &&
         close_to_ship_to_heal &&
-        click_control_id != INVALID
+        main_control_id != INVALID
     ) {
         draw_notification(
             point(
@@ -988,7 +988,7 @@ void gameplay::draw_ingame_text() {
                 close_to_ship_to_heal->beam_final_pos.y -
                 close_to_ship_to_heal->shi_type->beam_radius
             ),
-            "Repair suit", &controls[0][click_control_id]
+            "Repair suit", &controls[0][main_control_id]
         );
         done = true;
     }
@@ -997,7 +997,7 @@ void gameplay::draw_ingame_text() {
     if(
         !done &&
         close_to_interactable_to_use &&
-        click_control_id != INVALID
+        main_control_id != INVALID
     ) {
         float pivot_y =
             close_to_interactable_to_use->pos.y -
@@ -1005,7 +1005,7 @@ void gameplay::draw_ingame_text() {
         draw_notification(
             point(close_to_interactable_to_use->pos.x, pivot_y),
             close_to_interactable_to_use->int_type->prompt_text,
-            &controls[0][click_control_id]
+            &controls[0][main_control_id]
         );
         done = true;
     }
@@ -1014,7 +1014,7 @@ void gameplay::draw_ingame_text() {
     if(
         !done &&
         close_to_pikmin_to_pluck &&
-        click_control_id != INVALID
+        main_control_id != INVALID
     ) {
         draw_notification(
             point(
@@ -1022,7 +1022,7 @@ void gameplay::draw_ingame_text() {
                 close_to_pikmin_to_pluck->pos.y -
                 close_to_pikmin_to_pluck->type->radius
             ),
-            "Pluck", &controls[0][click_control_id]
+            "Pluck", &controls[0][main_control_id]
         );
         done = true;
     }
@@ -1031,7 +1031,7 @@ void gameplay::draw_ingame_text() {
     if(
         !done &&
         close_to_onion_to_open &&
-        click_control_id != INVALID
+        main_control_id != INVALID
     ) {
         draw_notification(
             point(
@@ -1039,7 +1039,7 @@ void gameplay::draw_ingame_text() {
                 close_to_onion_to_open->pos.y -
                 close_to_onion_to_open->type->radius
             ),
-            "Call a Pikmin", &controls[0][click_control_id]
+            "Call a Pikmin", &controls[0][main_control_id]
         );
         done = true;
     }
@@ -1929,8 +1929,10 @@ void draw_liquid(
         );
         
         float ground_wobble =
-            -sin(area_time_passed * LIQUID_WOBBLE_TIME_SCALE) *
-            LIQUID_WOBBLE_DELTA_X;
+            -sin(
+                game.gameplay_state->area_time_passed *
+                LIQUID_WOBBLE_TIME_SCALE
+            ) * LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
             al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.5;
             
@@ -2014,7 +2016,9 @@ void draw_liquid(
             
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
-            av[v].u = vx + (area_time_passed * layer_speed[l]);
+            av[v].u =
+                vx +
+                (game.gameplay_state->area_time_passed * layer_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
                 al_map_rgba(

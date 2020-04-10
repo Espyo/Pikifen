@@ -825,14 +825,14 @@ void animation_editor::populate_history() {
         f->remove(f->widgets.begin()->first);
     }
     
-    if(animation_editor_history.empty()) return;
+    if(history.empty()) return;
     
     f->easy_reset();
     f->easy_row();
     
-    for(size_t h = 0; h < animation_editor_history.size(); ++h) {
+    for(size_t h = 0; h < history.size(); ++h) {
     
-        string name = animation_editor_history[h];
+        string name = history[h];
         if(name.empty()) continue;
         
         string button_text;

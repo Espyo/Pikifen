@@ -103,7 +103,8 @@ area_editor::area_editor() :
     show_path_preview(false),
     show_reference(true),
     stt_mode(0),
-    stt_sector(nullptr) {
+    stt_sector(nullptr),
+    quick_play_cam_z(1.0f) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});

@@ -130,22 +130,14 @@ extern asset_file_names_struct asset_file_names;
 
 //General globals.
 
-extern vector<string> animation_editor_history;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
-extern string area_editor_quick_play_area;
-extern point area_editor_quick_play_cam_pos;
-extern float area_editor_quick_play_cam_z;
 extern bool area_editor_show_edge_length;
 extern bool area_editor_show_territory;
 extern size_t area_editor_snap_threshold;
 extern size_t area_editor_undo_limit;
 extern unsigned char area_editor_view_mode;
-//How much real time has passed since the area was loaded.
-extern float area_time_passed;
 extern timer area_title_fade_timer;
-//Name of the area to load, from the area select.
-extern string area_to_load;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern map<string, bouncer_type*> bouncer_types;
@@ -165,13 +157,6 @@ extern ALLEGRO_COLOR carrying_color_stop;
 extern float carrying_speed_base_mult;
 extern float carrying_speed_max_mult;
 extern float carrying_speed_weight_mult;
-extern size_t click_control_id;
-extern onion* close_to_onion_to_open;
-extern pikmin* close_to_pikmin_to_pluck;
-extern ship* close_to_ship_to_heal;
-extern interactable* close_to_interactable_to_use;
-extern mob* closest_group_member;
-extern bool closest_group_member_distant;
 extern vector<vector<control_info> > controls;
 extern vector<converter*> converters;
 extern map<string, converter_type*> converter_types;
@@ -396,7 +381,6 @@ extern vector<treasure*> treasures;
 //Voice from which the sound effects play.
 extern ALLEGRO_VOICE* voice;
 extern map<string, weather> weather_conditions;
-extern size_t whistle_control_id;
 //Radius of every 6th dot.
 extern float whistle_dot_radius[6];
 //Radius the whistle was at pre-fade.

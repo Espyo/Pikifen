@@ -13,6 +13,10 @@
 #define GAMEPLAY_INCLUDED
 
 #include "game_state.h"
+#include "mobs/interactable.h"
+#include "mobs/onion.h"
+#include "mobs/pikmin.h"
+#include "mobs/ship.h"
 
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
@@ -53,6 +57,19 @@ private:
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     ALLEGRO_BITMAP* bmp_sun;
     
+    //Control ID for player 1's cancel button. Cached for convenience.
+    size_t cancel_control_id;
+    //Points to an interactable close enough for player 1 to use, if any.
+    interactable* close_to_interactable_to_use;
+    //Points to an Onion close enough for player 1 to open, if any.
+    onion* close_to_onion_to_open;
+    //Points to a Pikmin close enough for player 1 to pluck, if any.
+    pikmin* close_to_pikmin_to_pluck;
+    //Points to a ship close enough for player 1 to heal in, if any.
+    ship* close_to_ship_to_heal;
+    //Control ID for player 1's main button. Cached for convenience.
+    size_t main_control_id;
+    //Timer for the next replay state save.
     timer replay_timer;
     
     void do_aesthetic_logic();
@@ -98,7 +115,17 @@ private:
 public:
     gameplay();
     
+    //How much real time has passed since the area was loaded.
+    float area_time_passed;
+    //Name of the area to be loaded.
+    string area_to_load;
+    //Group member closest to player 1's leader.
+    mob* closest_group_member;
+    //Is the group member closest to player 1's leader distant?
+    bool closest_group_member_distant;
+    
     void leave();
+    void update_closest_group_member();
     
     virtual void load();
     virtual void unload();

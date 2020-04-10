@@ -20,6 +20,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "game.h"
 #include "gameplay.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -691,7 +692,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             if(id == CREATOR_TOOL_AREA_IMAGE) {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
                 string file_name =
-                    USER_DATA_FOLDER_PATH + "/Area_" + cur_area_data.name +
+                    USER_DATA_FOLDER_PATH + "/Area_" + game.cur_area_data.name +
                     "_" + get_current_time(true) + ".png";
                     
                 if(!al_save_bitmap(file_name.c_str(), bmp)) {

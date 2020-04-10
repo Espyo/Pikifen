@@ -274,8 +274,8 @@ void animation_editor::load() {
     frm_load->widgets["but_browse"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string last_file_opened;
-        if(animation_editor_history.size()) {
-            last_file_opened = animation_editor_history[0];
+        if(history.size()) {
+            last_file_opened = history[0];
         }
         
         vector<string> f =

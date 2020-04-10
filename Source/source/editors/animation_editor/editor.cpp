@@ -295,7 +295,9 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Loads the animation database for the current object.
  */
-void animation_editor::load_animation_database(const bool update_history) {
+void animation_editor::load_animation_database(
+    const bool should_update_history
+) {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
@@ -412,8 +414,8 @@ void animation_editor::load_animation_database(const bool update_history) {
             load_bmp(data.get_child_by_name("top_flower")->value, &data);
     }
     
-    if(update_history) {
-        update_animation_editor_history(file_path);
+    if(should_update_history) {
+        update_history(file_path);
         save_options(); //Save the history on the options.
     }
     
@@ -935,6 +937,39 @@ void animation_editor::unload() {
     unload_status_types(false);
     unload_custom_particle_generators();
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the history list, by adding a new entry or bumping it up.
+ */
+void animation_editor::update_history(const string &n) {
+    //First, check if it exists.
+    size_t pos = INVALID;
+    
+    for(size_t h = 0; h < history.size(); ++h) {
+        if(history[h] == n) {
+            pos = h;
+            break;
+        }
+    }
+    
+    if(pos == 0) {
+        //Already #1? Never mind.
+        return;
+    } else if(pos == INVALID) {
+        //If it doesn't exist, create it and add it to the top.
+        history.insert(history.begin(), n);
+    } else {
+        //Otherwise, remove it from its spot and bump it to the top.
+        history.erase(history.begin() + pos);
+        history.insert(history.begin(), n);
+    }
+    
+    if(history.size() > HISTORY_SIZE) {
+        history.erase(history.begin() + history.size() - 1);
+    }
+}
+
 
 /* ----------------------------------------------------------------------------
  * Update every frame's hitbox instances in light of new hitbox info.

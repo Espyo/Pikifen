@@ -1011,8 +1011,8 @@ void load_misc_sounds() {
  * Loads the player's options.
  */
 void load_options() {
-    for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
-        animation_editor_history.push_back("");
+    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
+        game.animation_editor_state->history.push_back("");
     }
     
     data_node file = data_node(OPTIONS_FILE_PATH);
@@ -1107,10 +1107,10 @@ void load_options() {
         scr_h = std::max(1, s2i(resolution_parts[1]));
     }
     
-    for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
+    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
-            animation_editor_history[h]
+            game.animation_editor_state->history[h]
         );
     }
     

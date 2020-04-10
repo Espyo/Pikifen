@@ -113,7 +113,8 @@ void area_menu::load() {
     
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {
-        area_to_load = areas_to_pick[0];
+        game.gameplay_state->area_to_load =
+            areas_to_pick[0];
         game.change_state(game.gameplay_state);
         return;
     }
@@ -263,7 +264,7 @@ void area_menu::update() {
         
         ((menu_button*) area_buttons[list_nr])->click_handler =
         [area_name, area_folder] () {
-            area_to_load = area_folder;
+            game.gameplay_state->area_to_load = area_folder;
             fade_mgr.start_fade(false, [] () {
                 game.change_state(game.gameplay_state);
             });

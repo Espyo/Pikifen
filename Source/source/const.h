@@ -42,8 +42,6 @@ const string ANIMATION_EDITOR_TUTORIAL_URL =
 const string AREA_EDITOR_TUTORIAL_URL =
     "http://www.pikminfanon.com/Pikifen/Creating_areas";
 
-//How many entries of the animation editor history to store, at max.
-const size_t ANIMATION_EDITOR_HISTORY_SIZE = 6;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
 //How fast the "invalid cursor" effect goes, per second.

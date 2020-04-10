@@ -14,6 +14,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/pikmin_fsm.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
@@ -104,7 +105,8 @@ void pikmin::draw_mob() {
             (standard_pikmin_radius * 8) / al_get_bitmap_width(bmp_idle_glow);
         idle_eff.scale.y =
             (standard_pikmin_radius * 8) / al_get_bitmap_height(bmp_idle_glow);
-        idle_eff.rotation = area_time_passed * IDLE_GLOW_SPIN_SPEED;
+        idle_eff.rotation =
+            game.gameplay_state->area_time_passed * IDLE_GLOW_SPIN_SPEED;
         idle_eff.tint_color = type->main_color;
         idle_eff.glow_color = map_gray(0);
         

@@ -134,7 +134,6 @@ void spew_pikmin_seed(
 );
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
-void update_animation_editor_history(const string &n = "");
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
 
 

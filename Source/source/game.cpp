@@ -22,8 +22,15 @@
  * Constructor for the game class.
  */
 game_class::game_class() :
+    animation_editor_state(nullptr),
+    area_editor_state(nullptr),
+    area_menu_state(nullptr),
+    controls_menu_state(nullptr),
     delta_t(0.0),
+    gameplay_state(nullptr),
     is_game_running(true),
+    main_menu_state(nullptr),
+    options_menu_state(nullptr),
     target_fps(DEF_TARGET_FPS),
     cur_state(nullptr),
     reset_delta_t(true) {
@@ -191,6 +198,7 @@ int game_class::start() {
     
     //Essentials.
     init_essentials();
+    init_game_states();
     
     //Controls and options.
     init_controls();
@@ -203,7 +211,6 @@ int game_class::start() {
     //Other fundamental initializations and loadings.
     init_asset_file_names();
     init_misc();
-    init_game_states();
     init_error_bitmap();
     load_asset_file_names();
     load_fonts();
@@ -229,7 +236,8 @@ int game_class::start() {
         creator_tool_auto_start_mode == "play" &&
         !creator_tool_auto_start_option.empty()
     ) {
-        area_to_load = creator_tool_auto_start_option;
+        game.gameplay_state->area_to_load =
+            creator_tool_auto_start_option;
         game.change_state(game.gameplay_state);
     } else if(
         creator_tools_enabled &&

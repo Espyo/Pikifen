@@ -1020,11 +1020,11 @@ void save_options() {
     file.add(new data_node("smooth_scaling", b2s(smooth_scaling)));
     file.add(new data_node("window_position_hack", b2s(window_position_hack)));
     
-    for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
+    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
         file.add(
             new data_node(
                 "animation_editor_history_" + i2s(h + 1),
-                animation_editor_history[h]
+                game.animation_editor_state->history[h]
             )
         );
     }
@@ -1230,42 +1230,6 @@ string strsignal(const int signum) {
 }
 
 #endif //if defined(_WIN32)
-
-
-/* ----------------------------------------------------------------------------
- * Updates the history list for the animation editor,
- * adding a new entry or bumping it up.
- */
-void update_animation_editor_history(const string &n) {
-    //First, check if it exists.
-    size_t pos = INVALID;
-    
-    for(size_t h = 0; h < animation_editor_history.size(); ++h) {
-        if(animation_editor_history[h] == n) {
-            pos = h;
-            break;
-        }
-    }
-    
-    if(pos == 0) {
-        //Already #1? Never mind.
-        return;
-    } else if(pos == INVALID) {
-        //If it doesn't exist, create it and add it to the top.
-        animation_editor_history.insert(animation_editor_history.begin(), n);
-    } else {
-        //Otherwise, remove it from its spot and bump it to the top.
-        animation_editor_history.erase(animation_editor_history.begin() + pos);
-        animation_editor_history.insert(animation_editor_history.begin(), n);
-    }
-    
-    if(animation_editor_history.size() > ANIMATION_EDITOR_HISTORY_SIZE) {
-        animation_editor_history.erase(
-            animation_editor_history.begin() +
-            animation_editor_history.size() - 1
-        );
-    }
-}
 
 
 /* ----------------------------------------------------------------------------

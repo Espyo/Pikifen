@@ -15,6 +15,7 @@
 #include "../const.h"
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -661,9 +662,9 @@ void change_to_next_leader(const bool forward, const bool force_success) {
  * Returns true on success, false on failure.
  */
 bool grab_closest_group_member() {
-    if(closest_group_member) {
+    if(game.gameplay_state->closest_group_member) {
         mob_event* grabbed_ev =
-            closest_group_member->fsm.get_event(
+            game.gameplay_state->closest_group_member->fsm.get_event(
                 MOB_EV_GRABBED_BY_FRIEND
             );
         mob_event* grabber_ev =
@@ -673,91 +674,14 @@ bool grab_closest_group_member() {
         if(grabber_ev && grabbed_ev) {
             cur_leader_ptr->fsm.run_event(
                 LEADER_EV_HOLDING,
-                (void*) closest_group_member
+                (void*) game.gameplay_state->closest_group_member
             );
             grabbed_ev->run(
-                closest_group_member,
-                (void*) closest_group_member
+                game.gameplay_state->closest_group_member,
+                (void*) game.gameplay_state->closest_group_member
             );
             return true;
         }
     }
     return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the variable that indicates what the closest
- * group member of the standby subgroup is.
- * In the case all candidate members are out of reach,
- * this gets set to the closest. Otherwise, it gets set to the closest
- * and more mature one.
- * NULL if there is no member of that subgroup available.
- */
-void update_closest_group_member() {
-    //Closest members so far for each maturity.
-    dist closest_dists[N_MATURITIES];
-    mob* closest_ptrs[N_MATURITIES];
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-        closest_ptrs[m] = NULL;
-    }
-    
-    closest_group_member = NULL;
-    
-    //Fetch the closest, for each maturity.
-    size_t n_members = cur_leader_ptr->group->members.size();
-    for(size_t m = 0; m < n_members; ++m) {
-    
-        mob* member_ptr = cur_leader_ptr->group->members[m];
-        if(
-            member_ptr->subgroup_type_ptr !=
-            cur_leader_ptr->group->cur_standby_type
-        ) {
-            continue;
-        }
-        
-        unsigned char maturity = 0;
-        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-            maturity = ((pikmin*) member_ptr)->maturity;
-        }
-        
-        dist d(cur_leader_ptr->pos, member_ptr->pos);
-        
-        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
-            closest_dists[maturity] = d;
-            closest_ptrs[maturity] = member_ptr;
-        }
-    }
-    
-    //Now, try to get the one with the highest maturity within reach.
-    dist closest_dist;
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-        if(!closest_ptrs[2 - m]) continue;
-        if(closest_dists[2 - m] > pikmin_grab_range) continue;
-        closest_group_member = closest_ptrs[2 - m];
-        closest_dist = closest_dists[2 - m];
-        break;
-    }
-    
-    if(!closest_group_member) {
-        //Couldn't find any within reach? Then just set it to the closest one.
-        //Maturity is irrelevant for this case.
-        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-            if(!closest_ptrs[m]) continue;
-            
-            if(!closest_group_member || closest_dists[m] < closest_dist) {
-                closest_group_member = closest_ptrs[m];
-                closest_dist = closest_dists[m];
-            }
-        }
-        
-    }
-    
-    if(fabs(closest_group_member->z - cur_leader_ptr->z) > SECTOR_STEP) {
-        //If the group member is beyond a step, it's obviously above or below
-        //a wall, compared to the leader. No grabbing allowed.
-        closest_group_member_distant = true;
-    } else {
-        closest_group_member_distant = closest_dist > pikmin_grab_range;
-    }
 }
