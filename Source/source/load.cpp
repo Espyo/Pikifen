@@ -16,6 +16,7 @@
 #include "drawing.h"
 #include "editors/area_editor/editor.h"
 #include "functions.h"
+#include "game.h"
 #include "init.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -445,10 +446,10 @@ void load_area(
             triangulate(s_ptr, &lone_edges, false, false);
             
         if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
-            area_editor* ae =
-                ((area_editor*) game_states[GAME_STATE_AREA_EDITOR]);
-            ae->non_simples[s_ptr] = res;
-            ae->lone_edges.insert(lone_edges.begin(), lone_edges.end());
+            game.area_editor_state->non_simples[s_ptr] = res;
+            game.area_editor_state->lone_edges.insert(
+                lone_edges.begin(), lone_edges.end()
+            );
         }
         
         get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
@@ -999,12 +1000,6 @@ void load_misc_sounds() {
     sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
     sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
     sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
-    sfx_olimar_whistle = load_sample(      "Olimar_whistle.ogg",       mixer);
-    sfx_louie_whistle = load_sample(       "Louie_whistle.ogg",        mixer);
-    sfx_president_whistle = load_sample(   "President_whistle.ogg",    mixer);
-    sfx_olimar_name_call = load_sample(    "Olimar_name_call.ogg",     mixer);
-    sfx_louie_name_call = load_sample(     "Louie_name_call.ogg",      mixer);
-    sfx_president_name_call = load_sample( "President_name_call.ogg",  mixer);
     sfx_pluck = load_sample(               "Pluck.ogg",                mixer);
     sfx_throw = load_sample(               "Throw.ogg",                mixer);
     sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
@@ -1087,7 +1082,7 @@ void load_options() {
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
-    rs.set("fps", game_fps);
+    rs.set("fps", game.target_fps);
     rs.set("fullscreen", scr_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
@@ -1099,7 +1094,7 @@ void load_options() {
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("window_position_hack", window_position_hack);
     
-    game_fps = std::max(1, game_fps);
+    game.target_fps = std::max(1, game.target_fps);
     joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
     joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
     if(joystick_min_deadzone > joystick_max_deadzone) {
@@ -1532,12 +1527,6 @@ void unload_misc_resources() {
     sfx_pikmin_thrown.destroy();
     sfx_pikmin_plucked.destroy();
     sfx_pikmin_called.destroy();
-    sfx_olimar_whistle.destroy();
-    sfx_louie_whistle.destroy();
-    sfx_president_whistle.destroy();
-    sfx_olimar_name_call.destroy();
-    sfx_louie_name_call.destroy();
-    sfx_president_name_call.destroy();
     sfx_throw.destroy();
     sfx_switch_pikmin.destroy();
     sfx_camera.destroy();

@@ -83,13 +83,6 @@ extern ALLEGRO_BITMAP* bmp_wave_ring;
 //Sound effects.
 extern sample_struct sfx_attack;
 extern sample_struct sfx_camera;
-extern sample_struct sfx_louie_whistle;
-extern sample_struct sfx_louie_name_call;
-extern sample_struct sfx_president_name_call;
-extern sample_struct sfx_olimar_whistle;
-extern sample_struct sfx_olimar_name_call;
-extern sample_struct sfx_president_whistle;
-extern sample_struct sfx_president_name_call;
 extern sample_struct sfx_pikmin_attack;
 extern sample_struct sfx_pikmin_called;
 extern sample_struct sfx_pikmin_carrying;
@@ -207,7 +200,6 @@ extern size_t cur_message_section;
 extern ALLEGRO_BITMAP* cur_message_speaker;
 //The message stops scrolling when it reaches one of these characters.
 extern vector<size_t> cur_message_stopping_chars;
-extern size_t cur_game_state_nr;
 extern float cur_sun_strength;
 extern float cursor_angle;
 extern float cursor_height_diff_light;
@@ -238,8 +230,6 @@ extern float day_minutes_per_irl_sec;
 extern float day_minutes_start;
 extern map<string, decoration_type*> decoration_types;
 extern vector<decoration*> decorations;
-//Time between the previous frame and the current.
-extern double delta_t;
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
 extern vector<drop*> drops;
@@ -261,9 +251,7 @@ extern unsigned int font_main_h;
 extern ALLEGRO_FONT* font_value;
 extern vector<float> framerate_history;
 extern size_t framerate_last_avg_point;
-extern int game_fps;
 extern string game_name;
-extern map<size_t, game_state*> game_states;
 extern string game_version;
 extern vector<group_task*> group_tasks;
 extern map<string, group_task_type*> group_task_types;
@@ -281,7 +269,6 @@ extern int intended_scr_h;
 extern int intended_scr_w;
 extern vector<interactable*> interactables;
 extern map<string, interactable_type*> interactable_types;
-extern bool is_game_running;
 //Is input enabled in general, for reasons outside the ready_for_input variable?
 extern bool is_input_allowed;
 extern float joystick_min_deadzone;
@@ -351,14 +338,10 @@ extern float pluck_range;
 //Used to improve performance.
 extern bool pretty_whistle;
 //Time since start, on the previous frame.
-//Used to calculate the time difference between the current and last frames.
-extern double prev_frame_time;
 //The first frame shouldn't allow for input just yet, because
 //some things are still being set up within the first logic loop.
 //So forbid input until the second frame.
 extern bool ready_for_input;
-//Is delta_t meant to be reset for the next frame?
-extern bool reset_delta_t;
 extern vector<resource*> resources;
 extern map<string, resource_type*> resource_types;
 extern map<string, scale_type*> scale_types;

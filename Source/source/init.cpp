@@ -24,6 +24,7 @@
 #include "editors/animation_editor/editor.h"
 #include "editors/area_editor/editor.h"
 #include "functions.h"
+#include "game.h"
 #include "game_state.h"
 #include "gameplay.h"
 #include "menus.h"
@@ -80,9 +81,13 @@ void destroy_event_things(
  * Destroys the list of game states.
  */
 void destroy_game_states() {
-    for(size_t s = 0; s < N_GAME_STATES; s++) {
-        delete game_states[s];
-    }
+    delete game.animation_editor_state;
+    delete game.area_editor_state;
+    delete game.area_menu_state;
+    delete game.controls_menu_state;
+    delete game.gameplay_state;
+    delete game.main_menu_state;
+    delete game.options_menu_state;
 }
 
 
@@ -386,7 +391,7 @@ void init_event_things(
         report_fatal_error("Could not create a display!");
     }
     
-    logic_timer = al_create_timer(1.0 / game_fps);
+    logic_timer = al_create_timer(1.0 / game.target_fps);
     if(!logic_timer) {
         report_fatal_error("Could not create the main logic timer!");
     }
@@ -409,13 +414,13 @@ void init_event_things(
  * Initializes the game states.
  */
 void init_game_states() {
-    game_states[GAME_STATE_MAIN_MENU] = new main_menu();
-    game_states[GAME_STATE_AREA_MENU] = new area_menu();
-    game_states[GAME_STATE_GAME] = new gameplay();
-    game_states[GAME_STATE_OPTIONS_MENU] = new options_menu();
-    game_states[GAME_STATE_CONTROLS_MENU] = new controls_menu();
-    game_states[GAME_STATE_AREA_EDITOR] = new area_editor();
-    game_states[GAME_STATE_ANIMATION_EDITOR] = new animation_editor();
+    game.animation_editor_state = new animation_editor();
+    game.area_editor_state = new area_editor();
+    game.area_menu_state = new area_menu();
+    game.controls_menu_state = new controls_menu();
+    game.gameplay_state = new gameplay();
+    game.main_menu_state = new main_menu();
+    game.options_menu_state = new options_menu();
 }
 
 

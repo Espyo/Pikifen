@@ -29,6 +29,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "editors/animation_editor/editor.h"
+#include "game.h"
 #include "init.h"
 #include "menus.h"
 #include "utils/backtrace.h"
@@ -89,25 +90,6 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
 
 
 /* ----------------------------------------------------------------------------
- * Changes the game's state.
- */
-void change_game_state(unsigned int new_state) {
-    if(cur_game_state_nr != INVALID) {
-        game_states[cur_game_state_nr]->unload();
-    }
-    cur_game_state_nr = new_state;
-    game_states[cur_game_state_nr]->load();
-    
-    //Because during the loading screens, there is no activity, on the
-    //next frame, the game will assume the time between that and the last
-    //non-loading frame is normal. This could be something like 2 seconds.
-    //Let's reset the delta_t, then.
-    reset_delta_t = true;
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
@@ -155,11 +137,10 @@ void crash(const string &reason, const string &info, const int exit_status) {
         error_str += "  Error log has messages!\n";
     }
     error_str +=
-        "  Game state: " + (
-            cur_game_state_nr == INVALID ? "None" : i2s(cur_game_state_nr)
-        ) + ". delta_t: " + (
-            delta_t == 0.0f ? "0" :
-            f2s(delta_t) + " (" + f2s(1 / delta_t) + " FPS)"
+        "  Game state: " + game.get_cur_state_name() + ". delta_t: " +
+        (
+            game.delta_t == 0.0f ? "0" :
+            f2s(game.delta_t) + " (" + f2s(1 / game.delta_t) + " FPS)"
         ) + ".\n"
         "  Mob count: " + i2s(mobs.size()) + ". Particle count: " +
         i2s(particles.get_count()) + ".\n" +
@@ -1019,7 +1000,7 @@ void save_options() {
             "editor_mouse_drag_threshold", i2s(editor_mouse_drag_threshold)
         )
     );
-    file.add(new data_node("fps", i2s(game_fps)));
+    file.add(new data_node("fps", i2s(game.target_fps)));
     file.add(new data_node("fullscreen", b2s(intended_scr_fullscreen)));
     file.add(
         new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))

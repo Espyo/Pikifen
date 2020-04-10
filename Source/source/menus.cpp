@@ -17,6 +17,7 @@
 
 #include "drawing.h"
 #include "functions.h"
+#include "game.h"
 #include "load.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -60,12 +61,20 @@ void area_menu::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void area_menu::do_logic() {
-    fade_mgr.tick(delta_t);
-    time_spent += delta_t;
+    fade_mgr.tick(game.delta_t);
+    time_spent += game.delta_t;
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(delta_t);
+        menu_widgets[w]->tick(game.delta_t);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string area_menu::get_name() {
+    return "area menu";
 }
 
 
@@ -85,7 +94,7 @@ void area_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void area_menu::leave() {
     fade_mgr.start_fade(false, [] () {
-        change_game_state(GAME_STATE_MAIN_MENU);
+        game.change_state(game.main_menu_state);
     });
 }
 
@@ -105,7 +114,7 @@ void area_menu::load() {
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {
         area_to_load = areas_to_pick[0];
-        change_game_state(GAME_STATE_GAME);
+        game.change_state(game.gameplay_state);
         return;
     }
     
@@ -256,7 +265,7 @@ void area_menu::update() {
         [area_name, area_folder] () {
             area_to_load = area_folder;
             fade_mgr.start_fade(false, [] () {
-                change_game_state(GAME_STATE_GAME);
+                game.change_state(game.gameplay_state);
             });
         };
         ((menu_button*) area_buttons[list_nr])->text = area_name;
@@ -324,12 +333,20 @@ void controls_menu::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void controls_menu::do_logic() {
-    fade_mgr.tick(delta_t);
-    time_spent += delta_t;
+    fade_mgr.tick(game.delta_t);
+    time_spent += game.delta_t;
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(delta_t);
+        menu_widgets[w]->tick(game.delta_t);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string controls_menu::get_name() {
+    return "controls menu";
 }
 
 
@@ -406,7 +423,7 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void controls_menu::leave() {
     fade_mgr.start_fade(false, [] () {
-        change_game_state(GAME_STATE_OPTIONS_MENU);
+        game.change_state(game.options_menu_state);
     });
     save_options();
 }
@@ -808,7 +825,7 @@ void main_menu::do_drawing() {
  * Ticks a frame's worth of logic.
  */
 void main_menu::do_logic() {
-    time_spent += delta_t;
+    time_spent += game.delta_t;
     
     //Animate the logo Pikmin.
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
@@ -818,7 +835,7 @@ void main_menu::do_logic() {
             float a = get_angle(pik->pos, pik->destination);
             float speed =
                 std::min(
-                    (float) (pik->speed * delta_t),
+                    (float) (pik->speed * game.delta_t),
                     dist(pik->pos, pik->destination).to_float() *
                     logo_pikmin_speed_smoothness
                 );
@@ -833,7 +850,7 @@ void main_menu::do_logic() {
             }
             
         } else {
-            pik->sway_var += pik->sway_speed * delta_t;
+            pik->sway_var += pik->sway_speed * game.delta_t;
             pik->pos.x =
                 pik->destination.x +
                 sin(pik->sway_var) * logo_pikmin_sway_amount;
@@ -844,8 +861,16 @@ void main_menu::do_logic() {
     //the fade finishes and the state changes, and
     //after that we still attempt to do stuff in
     //this function, we're going to have a bad time.
-    fade_mgr.tick(delta_t);
+    fade_mgr.tick(game.delta_t);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string main_menu::get_name() {
+    return "main menu";
 }
 
 
@@ -874,7 +899,7 @@ void main_menu::load() {
             point(scr_w * 0.5, scr_h * 0.55), point(scr_w * 0.8, scr_h * 0.06),
     [this] () {
         fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_AREA_MENU);
+            game.change_state(game.area_menu_state);
         });
     }, "Play", font_area_name
         )
@@ -884,7 +909,7 @@ void main_menu::load() {
             point(scr_w * 0.5, scr_h * 0.63), point(scr_w * 0.8, scr_h * 0.06),
     [this] () {
         fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_OPTIONS_MENU);
+            game.change_state(game.options_menu_state);
         });
     }, "Options", font_area_name
         )
@@ -894,7 +919,7 @@ void main_menu::load() {
             point(scr_w * 0.5, scr_h * 0.71), point(scr_w * 0.8, scr_h * 0.06),
     [this] () {
         fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_ANIMATION_EDITOR);
+            game.change_state(game.animation_editor_state);
         });
     }, "Animation editor", font_area_name
         )
@@ -904,7 +929,7 @@ void main_menu::load() {
             point(scr_w * 0.5, scr_h * 0.79), point(scr_w * 0.8, scr_h * 0.06),
     [this] () {
         fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_AREA_EDITOR);
+            game.change_state(game.area_editor_state);
         });
     }, "Area editor", font_area_name
         )
@@ -913,7 +938,7 @@ void main_menu::load() {
         new menu_button(
         point(scr_w * 0.5, scr_h * 0.87), point(scr_w * 0.8, scr_h * 0.06),
     [] () {
-        is_game_running = false;
+        game.is_game_running = false;
     }, "Exit", font_area_name
     );
     menu_widgets.push_back(back_widget);
@@ -1160,11 +1185,11 @@ void options_menu::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void options_menu::do_logic() {
-    time_spent += delta_t;
+    time_spent += game.delta_t;
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(delta_t);
+        menu_widgets[w]->tick(game.delta_t);
     }
-    fade_mgr.tick(delta_t);
+    fade_mgr.tick(game.delta_t);
 }
 
 
@@ -1173,8 +1198,16 @@ void options_menu::do_logic() {
  */
 void options_menu::go_to_controls() {
     fade_mgr.start_fade(false, [] () {
-        change_game_state(GAME_STATE_CONTROLS_MENU);
+        game.change_state(game.controls_menu_state);
     });
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string options_menu::get_name() {
+    return "options menu";
 }
 
 
@@ -1193,7 +1226,7 @@ void options_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void options_menu::leave() {
     fade_mgr.start_fade(false, [] () {
-        change_game_state(GAME_STATE_MAIN_MENU);
+        game.change_state(game.main_menu_state);
     });
     save_options();
 }

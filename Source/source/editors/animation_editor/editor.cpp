@@ -16,6 +16,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -122,7 +123,7 @@ void animation_editor::do_logic() {
     ) {
         frame* f = &cur_anim->frames[cur_frame_nr];
         if(f->duration != 0) {
-            cur_frame_time += delta_t;
+            cur_frame_time += game.delta_t;
             
             while(cur_frame_time > f->duration) {
                 cur_frame_time = cur_frame_time - f->duration;
@@ -142,10 +143,10 @@ void animation_editor::do_logic() {
         animation_to_gui();
     }
     
-    cur_hitbox_alpha += TAU * 1.5 * delta_t;
+    cur_hitbox_alpha += TAU * 1.5 * game.delta_t;
     
     if(comparison_blink) {
-        comparison_blink_timer.tick(delta_t);
+        comparison_blink_timer.tick(game.delta_t);
     } else {
         comparison_blink_show = true;
     }
@@ -196,6 +197,14 @@ string animation_editor::get_cut_path(const string &p) {
     }
     
     return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string animation_editor::get_name() {
+    return "animation editor";
 }
 
 

@@ -15,6 +15,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/button.h"
 #include "../../load.h"
 #include "../../utils/string_utils.h"
@@ -804,16 +805,16 @@ void area_editor::delete_selected_path_elements() {
 void area_editor::do_logic() {
     editor::do_logic_pre();
     
-    cursor_snap_timer.tick(delta_t);
-    path_preview_timer.tick(delta_t);
-    new_sector_error_tint_timer.tick(delta_t);
-    undo_save_lock_timer.tick(delta_t);
+    cursor_snap_timer.tick(game.delta_t);
+    path_preview_timer.tick(game.delta_t);
+    new_sector_error_tint_timer.tick(game.delta_t);
+    undo_save_lock_timer.tick(game.delta_t);
     
     if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
-        backup_timer.tick(delta_t);
+        backup_timer.tick(game.delta_t);
     }
     
-    selection_effect += SELECTION_EFFECT_SPEED * delta_t;
+    selection_effect += SELECTION_EFFECT_SPEED * game.delta_t;
     
     editor::do_logic_post();
 }
@@ -2071,6 +2072,14 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
     }
     
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string area_editor::get_name() {
+    return "area editor";
 }
 
 

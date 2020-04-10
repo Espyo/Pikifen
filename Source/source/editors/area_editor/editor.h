@@ -558,6 +558,8 @@ public:
     void load();
     void unload();
     
+    virtual string get_name();
+    
     //Load this area when the area editor loads.
     string auto_load_area;
     //Non-simple sectors found, and their reason for being broken.

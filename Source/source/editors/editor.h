@@ -310,6 +310,7 @@ public:
     virtual void load();
     virtual void unload();
     virtual void update_transformations();
+    virtual string get_name() = 0;
 };
 
 #endif //ifndef EDITOR_INCLUDED

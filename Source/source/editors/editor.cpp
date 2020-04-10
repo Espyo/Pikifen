@@ -12,6 +12,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
 #include "../LAFI/checkbox.h"
@@ -254,7 +255,7 @@ void editor::custom_picker_cancel_action() { }
  * be run after the editor's own logic code.
  */
 void editor::do_logic_post() {
-    fade_mgr.tick(delta_t);
+    fade_mgr.tick(game.delta_t);
 }
 
 
@@ -263,17 +264,17 @@ void editor::do_logic_post() {
  * be run before the editor's own logic code.
  */
 void editor::do_logic_pre() {
-    gui->tick(delta_t);
+    gui->tick(game.delta_t);
     
     update_transformations();
     
     if(double_click_time > 0) {
-        double_click_time -= delta_t;
+        double_click_time -= game.delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
     
-    unsaved_changes_warning_timer.tick(delta_t);
-    status_override_timer.tick(delta_t);
+    unsaved_changes_warning_timer.tick(game.delta_t);
+    status_override_timer.tick(game.delta_t);
 }
 
 
@@ -673,10 +674,10 @@ bool editor::is_mouse_in_gui(const point &mouse_coords) {
 void editor::leave() {
     fade_mgr.start_fade(false, [] () {
         if(area_editor_quick_play_area.empty()) {
-            change_game_state(GAME_STATE_MAIN_MENU);
+            game.change_state(game.main_menu_state);
         } else {
             area_to_load = area_editor_quick_play_area;
-            change_game_state(GAME_STATE_GAME);
+            game.change_state(game.gameplay_state);
         }
     });
 }

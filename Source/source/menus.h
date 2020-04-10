@@ -58,6 +58,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
+    virtual string get_name();
 };
 
 
@@ -84,6 +85,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
+    virtual string get_name();
 };
 
 
@@ -115,6 +117,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
+    virtual string get_name();
 };
 
 
@@ -139,6 +142,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
+    virtual string get_name();
 };
 
 

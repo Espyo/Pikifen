@@ -17,6 +17,7 @@
 
 #include "drawing.h"
 #include "functions.h"
+#include "game.h"
 #include "load.h"
 #include "misc_structs.h"
 #include "utils/string_utils.h"
@@ -60,7 +61,7 @@ void gameplay::do_drawing() {
  */
 void gameplay::do_logic() {
     if(creator_tool_change_speed) {
-        delta_t *= creator_tool_change_speed_mult;
+        game.delta_t *= creator_tool_change_speed_mult;
     }
     
     do_gameplay_logic();
@@ -144,13 +145,21 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string gameplay::get_name() {
+    return "gameplay";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay::leave() {
     if(area_editor_quick_play_area.empty()) {
-        change_game_state(GAME_STATE_MAIN_MENU);
+        game.change_state(game.main_menu_state);
     } else {
-        change_game_state(GAME_STATE_AREA_EDITOR);
+        game.change_state(game.area_editor_state);
     }
 }
 

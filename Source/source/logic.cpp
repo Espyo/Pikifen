@@ -15,6 +15,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "game.h"
 #include "mobs/pikmin.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -35,12 +36,12 @@ void gameplay::do_aesthetic_logic() {
     
     //Swarming arrows.
     if(swarm_magnitude) {
-        swarm_next_arrow_timer.tick(delta_t);
+        swarm_next_arrow_timer.tick(game.delta_t);
     }
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t a = 0; a < swarm_arrows.size(); ) {
-        swarm_arrows[a] += SWARM_ARROW_SPEED * delta_t;
+        swarm_arrows[a] += SWARM_ARROW_SPEED * game.delta_t;
         
         dist max_dist =
             (swarm_magnitude > 0) ?
@@ -54,20 +55,20 @@ void gameplay::do_aesthetic_logic() {
         }
     }
     
-    whistle_fade_timer.tick(delta_t);
+    whistle_fade_timer.tick(game.delta_t);
     
     if(whistling) {
         //Create rings.
-        whistle_next_ring_timer.tick(delta_t);
+        whistle_next_ring_timer.tick(game.delta_t);
         
         if(pretty_whistle) {
-            whistle_next_dot_timer.tick(delta_t);
+            whistle_next_dot_timer.tick(game.delta_t);
         }
         
         for(unsigned char d = 0; d < 6; ++d) {
             if(whistle_dot_radius[d] == -1) continue;
             
-            whistle_dot_radius[d] += whistle_growth_speed * delta_t;
+            whistle_dot_radius[d] += whistle_growth_speed * game.delta_t;
             if(
                 whistle_radius > 0 &&
                 whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range
@@ -85,7 +86,7 @@ void gameplay::do_aesthetic_logic() {
     
     for(size_t r = 0; r < whistle_rings.size(); ) {
         //Erase rings that go beyond the cursor.
-        whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
+        whistle_rings[r] += WHISTLE_RING_SPEED * game.delta_t;
         if(leader_to_cursor_dist < whistle_rings[r]) {
             whistle_rings.erase(whistle_rings.begin() + r);
             whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
@@ -103,7 +104,7 @@ void gameplay::do_aesthetic_logic() {
     for(unsigned char i = 0; i < 3; ++i) {
         float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
         signed char addition =
-            dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
+            dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * game.delta_t;
         if(ship_beam_ring_color[i] + addition >= 255) {
             ship_beam_ring_color[i] = 255;
             ship_beam_ring_color_up[i] = false;
@@ -116,11 +117,11 @@ void gameplay::do_aesthetic_logic() {
     }
     
     //Cursor spin angle and invalidness effect.
-    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
+    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * game.delta_t;
     
     //Cursor trail.
     if(draw_cursor_trail) {
-        cursor_save_timer.tick(delta_t);
+        cursor_save_timer.tick(game.delta_t);
     }
     
     //Where the cursor is.
@@ -190,13 +191,13 @@ void gameplay::do_aesthetic_logic() {
     
     
     //Specific animations.
-    spark_animation.instance.tick(delta_t);
+    spark_animation.instance.tick(game.delta_t);
     
     //Area title fade.
-    area_title_fade_timer.tick(delta_t);
+    area_title_fade_timer.tick(game.delta_t);
     
     //Fade.
-    fade_mgr.tick(delta_t);
+    fade_mgr.tick(game.delta_t);
     
     
 }
@@ -211,13 +212,13 @@ void gameplay::do_gameplay_logic() {
 
     //Camera movement.
     cam_pos.x +=
-        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
     cam_pos.y +=
-        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
     cam_zoom +=
-        (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+        (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
         
-    game_states[cur_game_state_nr]->update_transformations();
+    update_transformations();
     
     //Set the camera bounding box.
     cam_box[0] = point(0, 0);
@@ -245,17 +246,17 @@ void gameplay::do_gameplay_logic() {
         *                              `-´  *
         *************************************/
         
-        day_minutes += (day_minutes_per_irl_sec * delta_t);
+        day_minutes += (day_minutes_per_irl_sec * game.delta_t);
         if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
         
-        area_time_passed += delta_t;
+        area_time_passed += game.delta_t;
         
         //Tick all particles.
-        particles.tick_all(delta_t);
+        particles.tick_all(game.delta_t);
         
         //Ticks all status effect animations.
         for(auto &s : status_types) {
-            s.second.anim_instance.tick(delta_t);
+            s.second.anim_instance.tick(game.delta_t);
         }
         
         
@@ -269,7 +270,7 @@ void gameplay::do_gameplay_logic() {
             
             if(s_ptr->draining_liquid) {
             
-                s_ptr->liquid_drain_left -= delta_t;
+                s_ptr->liquid_drain_left -= game.delta_t;
                 
                 if(s_ptr->liquid_drain_left <= 0) {
                 
@@ -287,7 +288,7 @@ void gameplay::do_gameplay_logic() {
             }
             
             if(s_ptr->scroll.x != 0 || s_ptr->scroll.y != 0) {
-                s_ptr->texture_info.translation += s_ptr->scroll * delta_t;
+                s_ptr->texture_info.translation += s_ptr->scroll * game.delta_t;
             }
         }
         
@@ -302,7 +303,7 @@ void gameplay::do_gameplay_logic() {
             whistling &&
             whistle_radius < cur_leader_ptr->lea_type->whistle_range
         ) {
-            whistle_radius += whistle_growth_speed * delta_t;
+            whistle_radius += whistle_growth_speed * game.delta_t;
             if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_radius = cur_leader_ptr->lea_type->whistle_range;
             }
@@ -319,7 +320,7 @@ void gameplay::do_gameplay_logic() {
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs[m];
-            m_ptr->tick(delta_t);
+            m_ptr->tick(game.delta_t);
             
             if(m_ptr->fsm.cur_state) {
                 process_mob_interactions(m_ptr, m);
@@ -489,7 +490,7 @@ void gameplay::do_gameplay_logic() {
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
-            mouse_cursor_speed * delta_t* MOUSE_CURSOR_MOVE_SPEED;
+            mouse_cursor_speed * game.delta_t* MOUSE_CURSOR_MOVE_SPEED;
             
         mouse_cursor_s += mouse_cursor_speed;
         
@@ -572,7 +573,7 @@ void gameplay::do_gameplay_logic() {
         *             ~ ~ ~ *
         ********************/
         for(auto &l : liquids) {
-            l.second.anim_instance.tick(delta_t);
+            l.second.anim_instance.tick(game.delta_t);
         }
         
     } else { //Displaying a message.
@@ -587,19 +588,19 @@ void gameplay::do_gameplay_logic() {
                 //Display everything right away.
                 cur_message_char = stopping_char;
             } else {
-                cur_message_char_timer.tick(delta_t);
+                cur_message_char_timer.tick(game.delta_t);
             }
         }
         
     }
     
-    hud_items.tick(delta_t);
-    replay_timer.tick(delta_t);
+    hud_items.tick(game.delta_t);
+    replay_timer.tick(game.delta_t);
     
     //Process and print framerate and system info.
     if(show_system_info) {
     
-        framerate_history.push_back(1.0 / delta_t);
+        framerate_history.push_back(1.0 / game.delta_t);
         if(framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
             framerate_history.erase(framerate_history.begin());
         }
@@ -647,8 +648,8 @@ void gameplay::do_gameplay_logic() {
         
         string fps_str =
             box_string(f2s(sample_avg), 12, " avg, ") +
-            box_string(f2s(1.0 / delta_t), 12, " now, ") +
-            i2s(game_fps) + " intended";
+            box_string(f2s(1.0 / game.delta_t), 12, " now, ") +
+            i2s(game.target_fps) + " intended";
         string n_mobs_str =
             box_string(i2s(mobs.size()), 7);
         string n_particles_str =
@@ -792,7 +793,7 @@ void gameplay::do_gameplay_logic() {
         print_info(str, 1.0f, 1.0f);
     }
     
-    info_print_timer.tick(delta_t);
+    info_print_timer.tick(game.delta_t);
     
     if(!ready_for_input) {
         ready_for_input = true;
@@ -1128,7 +1129,7 @@ void gameplay::process_mob_touches(
         //If the mob is inside the other,
         //it needs to be pushed out.
         if(push_amount > m_ptr->push_amount) {
-            m_ptr->push_amount = push_amount / delta_t;
+            m_ptr->push_amount = push_amount / game.delta_t;
             m_ptr->push_angle = push_angle;
         }
     }

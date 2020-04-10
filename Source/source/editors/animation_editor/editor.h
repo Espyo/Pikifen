@@ -231,6 +231,8 @@ public:
     void load();
     void unload();
     
+    virtual string get_name();
+    
 };
 
 #endif //ifndef ANIMATION_EDITOR_INCLUDED

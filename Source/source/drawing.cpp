@@ -16,6 +16,7 @@
 #include "animation.h"
 #include "const.h"
 #include "functions.h"
+#include "game.h"
 #include "gameplay.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
@@ -1282,8 +1283,8 @@ void gameplay::draw_system_stuff() {
             );
         }
         al_draw_line(
-            scr_w - FRAMERATE_HISTORY_SIZE, game_fps,
-            scr_w, game_fps,
+            scr_w - FRAMERATE_HISTORY_SIZE, game.target_fps,
+            scr_w, game.target_fps,
             al_map_rgba(128, 224, 128, 48), 1
         );
     }

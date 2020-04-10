@@ -134,7 +134,6 @@ const float WHISTLE_RING_SPEED = 600.0f;
 //Seconds that need to pass before another whistle ring appears.
 const float WHISTLE_RINGS_INTERVAL = 0.1f;
 
-const unsigned int DEF_FPS   = 60;
 const bool DEF_SCR_FULLSCREEN = false;
 const unsigned int DEF_SCR_W = 1024;
 const unsigned int DEF_SCR_H = 768;

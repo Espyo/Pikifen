@@ -15,6 +15,7 @@
 #include "../const.h"
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_script_action.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
@@ -2425,7 +2426,7 @@ bool mob::tick_track_ride() {
     track* tra_ptr = (track*) (track_info->m);
     
     track_info->cur_cp_progress +=
-        tra_ptr->tra_type->ride_speed * delta_t;
+        tra_ptr->tra_type->ride_speed * game.delta_t;
         
     if(track_info->cur_cp_progress >= 1.0f) {
         //Next checkpoint.

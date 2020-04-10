@@ -22,17 +22,6 @@
 using std::size_t;
 using std::vector;
 
-enum GAME_STATES {
-    GAME_STATE_MAIN_MENU,
-    GAME_STATE_AREA_MENU,
-    GAME_STATE_OPTIONS_MENU,
-    GAME_STATE_CONTROLS_MENU,
-    GAME_STATE_GAME,
-    GAME_STATE_AREA_EDITOR,
-    GAME_STATE_ANIMATION_EDITOR,
-    
-    N_GAME_STATES,
-};
 
 /* ----------------------------------------------------------------------------
  * A game macro-state. It might be easier to think of this as a "screen".
@@ -67,6 +56,7 @@ public:
     virtual void do_logic() = 0;
     virtual void do_drawing() = 0;
     virtual void update_transformations();
+    virtual string get_name() = 0;
 };
 
 #endif //ifndef GAME_STATE_INCLUDED
