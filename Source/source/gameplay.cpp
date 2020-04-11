@@ -29,12 +29,27 @@ const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 const float gameplay::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float gameplay::CURSOR_SAVE_INTERVAL = 0.03f;
+//Swarming arrows move these many units per second.
+const float gameplay::SWARM_ARROW_SPEED = 400.0f;
+//Seconds that need to pass before another swarm arrow appears.
+const float gameplay::SWARM_ARROWS_INTERVAL = 0.1f;
 
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
  */
 gameplay::gameplay() :
     game_state(),
+    area_time_passed(0.0f),
+    closest_group_member(nullptr),
+    closest_group_member_distant(false),
+    cur_leader_nr(0),
+    cur_leader_ptr(nullptr),
+    day_minutes(0.0f),
+    leader_cursor_mob(nullptr),
+    leader_cursor_sector(nullptr),
+    swarm_angle(0),
+    swarm_magnitude(0.0f),
+    whistling(false),
     bmp_bubble(nullptr),
     bmp_counter_bubble_group(nullptr),
     bmp_counter_bubble_field(nullptr),
@@ -47,7 +62,6 @@ gameplay::gameplay() :
     bmp_message_box(nullptr),
     bmp_no_pikmin_bubble(nullptr),
     bmp_sun(nullptr),
-    area_time_passed(0.0f),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_onion_to_open(nullptr),
@@ -56,13 +70,21 @@ gameplay::gameplay() :
     cursor_height_diff_light(0.0f),
     cursor_save_timer(CURSOR_SAVE_INTERVAL),
     day(1),
+    is_input_allowed(false),
+    lightmap_bmp(nullptr),
     main_control_id(INVALID),
-    closest_group_member(nullptr),
-    closest_group_member_distant(false),
-    cur_leader_nr(0),
-    cur_leader_ptr(nullptr),
-    day_minutes(0.0f) {
+    paused(false),
+    ready_for_input(false),
+    selected_spray(0),
+    swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
+    swarm_cursor(false),
+    throw_can_reach_cursor(true) {
     
+    swarm_next_arrow_timer.on_end = [this] () {
+        swarm_next_arrow_timer.start();
+        swarm_arrows.push_back(0);
+    };
+    swarm_next_arrow_timer.start();
 }
 
 
@@ -259,11 +281,11 @@ void gameplay::load() {
         leaders.begin(), leaders.end(),
     [] (leader * l1, leader * l2) -> bool {
         size_t priority_l1 =
-        find(leader_order.begin(), leader_order.end(), l1->lea_type) -
-        leader_order.begin();
+        find(game.leader_order.begin(), game.leader_order.end(), l1->lea_type) -
+        game.leader_order.begin();
         size_t priority_l2 =
-        find(leader_order.begin(), leader_order.end(), l2->lea_type) -
-        leader_order.begin();
+        find(game.leader_order.begin(), game.leader_order.end(), l2->lea_type) -
+        game.leader_order.begin();
         return priority_l1 < priority_l2;
     }
     );
@@ -279,19 +301,19 @@ void gameplay::load() {
     
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
-    mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
-    mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
-    mouse_cursor_w = mouse_cursor_s;
+    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouse_cursor_w = game.mouse_cursor_s;
     al_transform_coordinates(
-        &screen_to_world_transform,
-        &mouse_cursor_w.x, &mouse_cursor_w.y
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-    leader_cursor_w = mouse_cursor_w;
-    leader_cursor_s = mouse_cursor_s;
+    leader_cursor_w = game.mouse_cursor_w;
+    leader_cursor_s = game.mouse_cursor_s;
     
     cursor_save_timer.on_end = [this] () {
         cursor_save_timer.start();
-        cursor_spots.push_back(mouse_cursor_s);
+        cursor_spots.push_back(game.mouse_cursor_s);
         if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
             cursor_spots.erase(cursor_spots.begin());
         }
@@ -400,10 +422,10 @@ void gameplay::load_game_content() {
     load_mob_types(true);
     
     //Register leader sub-group types.
-    for(size_t p = 0; p < pikmin_order.size(); ++p) {
+    for(size_t p = 0; p < game.pikmin_order.size(); ++p) {
         subgroup_types.register_type(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p],
-            pikmin_order[p]->bmp_icon
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, game.pikmin_order[p],
+            game.pikmin_order[p]->bmp_icon
         );
     }
     
@@ -665,15 +687,15 @@ void gameplay::update_closest_group_member() {
  */
 void gameplay::update_transformations() {
     //World coordinates to screen coordinates.
-    world_to_screen_transform = game.identity_transform;
+    game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
-        &world_to_screen_transform,
+        &game.world_to_screen_transform,
         -cam_pos.x + game.win_w / 2.0 / cam_zoom,
         -cam_pos.y + game.win_h / 2.0 / cam_zoom
     );
-    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    al_scale_transform(&game.world_to_screen_transform, cam_zoom, cam_zoom);
     
     //Screen coordinates to world coordinates.
-    screen_to_world_transform = world_to_screen_transform;
-    al_invert_transform(&screen_to_world_transform);
+    game.screen_to_world_transform = game.world_to_screen_transform;
+    al_invert_transform(&game.screen_to_world_transform);
 }

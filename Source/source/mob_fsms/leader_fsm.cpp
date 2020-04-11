@@ -1190,7 +1190,7 @@ void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
     
     if(
         tra_ptr->tra_type->cancellable_with_whistle &&
-        whistling
+        game.gameplay_state->whistling
     ) {
         m->stop_track_ride();
         leader_fsm::join_group(m, NULL, NULL);
@@ -1284,10 +1284,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     float angle;
     float target_z;
-    if(leader_cursor_mob) {
-        target_z = leader_cursor_mob->z + leader_cursor_mob->height;
-    } else if(leader_cursor_sector) {
-        target_z = leader_cursor_sector->z;
+    if(game.gameplay_state->leader_cursor_mob) {
+        target_z =
+            game.gameplay_state->leader_cursor_mob->z +
+            game.gameplay_state->leader_cursor_mob->height;
+    } else if(game.gameplay_state->leader_cursor_sector) {
+        target_z = game.gameplay_state->leader_cursor_sector->z;
     } else {
         target_z = m->z;
     }
@@ -1309,7 +1311,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     }
     
     holding_ptr->calculate_throw(
-        leader_cursor_w,
+        game.gameplay_state->leader_cursor_w,
         target_z,
         max_height,
         &holding_ptr->speed,
@@ -1392,11 +1394,13 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     drop* d_ptr = (drop*) m->focused_mob;
     
     if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays =
+        spray_stats_struct* stats =
+            &game.gameplay_state->spray_stats[
+         d_ptr->dro_type->spray_type_to_increase
+        ];
+        stats->nr_sprays =
             std::max(
-                (long long)
-                spray_stats[d_ptr->dro_type->spray_type_to_increase].nr_sprays +
-                d_ptr->dro_type->increase_amount,
+                (long long) stats->nr_sprays + d_ptr->dro_type->increase_amount,
                 (long long) 0
             );
     } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
@@ -1653,9 +1657,10 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
     
-    if(spray_stats[spray_nr].nr_sprays == 0) return;
+    if(game.gameplay_state->spray_stats[spray_nr].nr_sprays == 0) return;
     
-    float cursor_angle = get_angle(m->pos, leader_cursor_w);
+    float cursor_angle =
+        get_angle(m->pos, game.gameplay_state->leader_cursor_w);
     float shoot_angle =
         cursor_angle + ((spray_types[spray_nr].angle) ? TAU / 2 : 0);
         
@@ -1717,7 +1722,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.size_deviation = 0.5;
     pg.emit(particles);
     
-    spray_stats[spray_nr].nr_sprays--;
+    game.gameplay_state->spray_stats[spray_nr].nr_sprays--;
     
     m->set_animation(LEADER_ANIM_SPRAYING);
 }
@@ -1839,7 +1844,7 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  * Every tick in the active state.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
-    m->face(get_angle(m->pos, leader_cursor_w), NULL);
+    m->face(get_angle(m->pos, game.gameplay_state->leader_cursor_w), NULL);
 }
 
 

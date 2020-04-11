@@ -44,7 +44,7 @@ void load_liquids(const bool load_resources);
 void load_misc_graphics();
 void load_misc_sounds();
 void load_options();
-sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
+sample_struct load_sample(const string &file_name);
 void load_spike_damage_types();
 void load_spray_types(const bool load_resources);
 void load_status_types(const bool load_resources);

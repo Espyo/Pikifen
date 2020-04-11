@@ -49,7 +49,7 @@ void gameplay::do_game_drawing(
                 ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
             );
         } else {
-            world_to_screen_drawing_transform = world_to_screen_transform;
+            world_to_screen_drawing_transform = game.world_to_screen_transform;
         }
         
         al_clear_to_color(game.cur_area_data.bg_color);
@@ -301,7 +301,7 @@ void gameplay::draw_cursor(
     //Mouse cursor.
     draw_bitmap(
         bmp_mouse_cursor,
-        mouse_cursor_s,
+        game.mouse_cursor_s,
         point(
             cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
             cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
@@ -1070,11 +1070,11 @@ void gameplay::draw_lighting_filter() {
                 game.cur_area_data.weather_condition.fog_far
             );
         al_transform_coordinates(
-            &world_to_screen_transform,
+            &game.world_to_screen_transform,
             &fog_top_left.x, &fog_top_left.y
         );
         al_transform_coordinates(
-            &world_to_screen_transform,
+            &game.world_to_screen_transform,
             &fog_bottom_right.x, &fog_bottom_right.y
         );
         
@@ -1149,7 +1149,7 @@ void gameplay::draw_lighting_filter() {
             
             point pos = mobs[m]->pos;
             al_transform_coordinates(
-                &world_to_screen_transform,
+                &game.world_to_screen_transform,
                 &pos.x, &pos.y
             );
             float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
@@ -1267,7 +1267,7 @@ void gameplay::draw_system_stuff() {
         );
     }
     
-    if(show_system_info) {
+    if(game.show_system_info) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
             game.win_w - FRAMERATE_HISTORY_SIZE, 0,
@@ -2071,16 +2071,17 @@ void draw_loading_screen(
     //Set up the bitmap that will hold the text.
     int text_w = 0, text_h = 0;
     if(!text.empty()) {
-        if(!loading_text_bmp) {
+        if(!game.loading_text_bmp) {
             //No main text buffer? Create it!
             
             get_multiline_text_dimensions(
                 font_area_name, text, &text_w, &text_h
             );
-            loading_text_bmp = al_create_bitmap(text_w, text_h);
-            
+            game.loading_text_bmp =
+                al_create_bitmap(text_w, text_h);
+                
             //Draw the main text on its bitmap.
-            al_set_target_bitmap(loading_text_bmp); {
+            al_set_target_bitmap(game.loading_text_bmp); {
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
                     font_area_name, al_map_rgb(255, 215, 0),
@@ -2090,8 +2091,10 @@ void draw_loading_screen(
             } al_set_target_backbuffer(game.display);
             
         } else {
-            text_w = al_get_bitmap_width(loading_text_bmp);
-            text_h = al_get_bitmap_height(loading_text_bmp);
+            text_w =
+                al_get_bitmap_width(game.loading_text_bmp);
+            text_h =
+                al_get_bitmap_height(game.loading_text_bmp);
         }
         
     }
@@ -2099,14 +2102,15 @@ void draw_loading_screen(
     int subtext_w = 0, subtext_h = 0;
     if(!subtext.empty()) {
     
-        if(!loading_subtext_bmp) {
+        if(!game.loading_subtext_bmp) {
             //No subtext buffer? Create it!
             get_multiline_text_dimensions(
                 font_area_name, subtext, &subtext_w, &subtext_h
             );
-            loading_subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
-            
-            al_set_target_bitmap(loading_subtext_bmp); {
+            game.loading_subtext_bmp =
+                al_create_bitmap(subtext_w, subtext_h);
+                
+            al_set_target_bitmap(game.loading_subtext_bmp); {
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
                     font_area_name, al_map_rgb(224, 224, 224),
@@ -2118,11 +2122,12 @@ void draw_loading_screen(
             } al_set_target_backbuffer(game.display);
             
             //We'll be scaling this, so let's update the mipmap.
-            loading_subtext_bmp = recreate_bitmap(loading_subtext_bmp);
-            
+            game.loading_subtext_bmp =
+                recreate_bitmap(game.loading_subtext_bmp);
+                
         } else {
-            subtext_w = al_get_bitmap_width(loading_subtext_bmp);
-            subtext_h = al_get_bitmap_height(loading_subtext_bmp);
+            subtext_w = al_get_bitmap_width(game.loading_subtext_bmp);
+            subtext_h = al_get_bitmap_height(game.loading_subtext_bmp);
         }
         
     }
@@ -2140,7 +2145,7 @@ void draw_loading_screen(
             (game.win_h * 0.5 - text_h * 0.5) :
             (game.win_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h);
         al_draw_tinted_bitmap(
-            loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
+            game.loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
             game.win_w * 0.5 - text_w * 0.5, text_y, 0
         );
         
@@ -2151,7 +2156,8 @@ void draw_loading_screen(
     if(!subtext.empty()) {
     
         al_draw_tinted_scaled_bitmap(
-            loading_subtext_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
+            game.loading_subtext_bmp,
+            al_map_rgba(255, 255, 255, 255.0 * opacity),
             0, 0, subtext_w, subtext_h,
             game.win_w * 0.5 -
             (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
@@ -2201,7 +2207,7 @@ void draw_loading_screen(
         text_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            text_vertexes, NULL, loading_text_bmp,
+            text_vertexes, NULL, game.loading_text_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -2258,7 +2264,7 @@ void draw_loading_screen(
         subtext_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            subtext_vertexes, NULL, loading_subtext_bmp,
+            subtext_vertexes, NULL, game.loading_subtext_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         

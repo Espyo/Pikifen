@@ -71,12 +71,32 @@ public:
     int intended_win_w;
     //Set to false to stop program execution next frame.
     bool is_game_running;
+    //What Allegro joystick maps to what number.
+    map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
+    //Standard leader order.
+    vector<leader_type*> leader_order;
+    //Loading screen subtext buffer.
+    ALLEGRO_BITMAP* loading_subtext_bmp;
+    //Loading screen main text buffer.
+    ALLEGRO_BITMAP* loading_text_bmp;
     //Main menu game state.
     main_menu* main_menu_state;
+    //OS mouse cursor position, in screen coordinates.
+    point mouse_cursor_s;
+    //OS mouse cursor position, in world coordinates.
+    point mouse_cursor_w;
+    //Global audio mixer.
+    ALLEGRO_MIXER* mixer;
     //Name of the fan-game.
     string name;
     //Options game state.
     options_menu* options_menu_state;
+    //Standard Pikmin order.
+    vector<pikmin_type*> pikmin_order;
+    //Screen to world coordinate matrix. Cache for convenience.
+    ALLEGRO_TRANSFORM screen_to_world_transform;
+    //Should we be showing system info? (Framerate, version, etc.)
+    bool show_system_info;
     //Target framerate.
     int target_fps;
     //Version of the fan-game.
@@ -87,6 +107,10 @@ public:
     unsigned int win_h;
     //Current window width.
     unsigned int win_w;
+    //World to screen coordinate matrix. Cache for convenience.
+    ALLEGRO_TRANSFORM world_to_screen_transform;
+    //Allegro voice from which the sound effects play.
+    ALLEGRO_VOICE* voice;
     
     //Change to a different state.
     void change_state(game_state* new_state);

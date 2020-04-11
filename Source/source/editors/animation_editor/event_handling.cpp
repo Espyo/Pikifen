@@ -13,6 +13,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/textbox.h"
 #include "../../utils/string_utils.h"
 #include "../../vars.h"
@@ -166,7 +167,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     }
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-        if(cur_sprite_tc.handle_mouse_down(mouse_cursor_w)) {
+        if(cur_sprite_tc.handle_mouse_down(game.mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
         }
         
@@ -174,7 +175,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         if(cur_sprite) {
             bool tc_handled = false;
             if(cur_hitbox) {
-                tc_handled = cur_hitbox_tc.handle_mouse_down(mouse_cursor_w);
+                tc_handled =
+                    cur_hitbox_tc.handle_mouse_down(game.mouse_cursor_w);
             }
             
             if(tc_handled) {
@@ -195,13 +197,16 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                                     h_ptr->pos.x + h_ptr->radius,
                                     -h_ptr->z
                                 ),
-                                mouse_cursor_w, 1 / cam_zoom
+                                game.mouse_cursor_w, 1 / cam_zoom
                             )
                         ) {
                             clicked_hitboxes.push_back(h);
                         }
                     } else {
-                        if(dist(mouse_cursor_w, h_ptr->pos) <= h_ptr->radius) {
+                        if(
+                            dist(game.mouse_cursor_w, h_ptr->pos) <=
+                            h_ptr->radius
+                        ) {
                             clicked_hitboxes.push_back(h);
                         }
                     }
@@ -246,7 +251,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
         int bmp_x = -bmp_w / 2.0;
         int bmp_y = -bmp_h / 2.0;
-        point bmp_click_pos = mouse_cursor_w;
+        point bmp_click_pos = game.mouse_cursor_w;
         bmp_click_pos.x = floor(bmp_click_pos.x - bmp_x);
         bmp_click_pos.y = floor(bmp_click_pos.y - bmp_y);
         
@@ -317,7 +322,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(
         state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
-        if(top_tc.handle_mouse_down(mouse_cursor_w)) {
+        if(top_tc.handle_mouse_down(game.mouse_cursor_w)) {
             top_tc_to_gui();
         }
     }
@@ -329,14 +334,14 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-        if(cur_sprite_tc.handle_mouse_move(mouse_cursor_w)) {
+        if(cur_sprite_tc.handle_mouse_move(game.mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
             made_new_changes = true;
         }
         
     } else if(state == EDITOR_STATE_HITBOXES) {
         if(cur_sprite && cur_hitbox) {
-            if(cur_hitbox_tc.handle_mouse_move(mouse_cursor_w)) {
+            if(cur_hitbox_tc.handle_mouse_move(game.mouse_cursor_w)) {
                 cur_hitbox_tc_to_gui();
                 made_new_changes = true;
             }
@@ -344,7 +349,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     } else if(
         state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
     ) {
-        if(top_tc.handle_mouse_move(mouse_cursor_w)) {
+        if(top_tc.handle_mouse_move(game.mouse_cursor_w)) {
             top_tc_to_gui();
         }
     }
@@ -403,12 +408,12 @@ void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the mouse coordinates being updated.
  */
 void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
-    mouse_cursor_s.x = ev.mouse.x;
-    mouse_cursor_s.y = ev.mouse.y;
-    mouse_cursor_w = mouse_cursor_s;
+    game.mouse_cursor_s.x = ev.mouse.x;
+    game.mouse_cursor_s.y = ev.mouse.y;
+    game.mouse_cursor_w = game.mouse_cursor_s;
     al_transform_coordinates(
-        &screen_to_world_transform,
-        &mouse_cursor_w.x, &mouse_cursor_w.y
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
     
     update_status_bar(

@@ -391,7 +391,7 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
             
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
             c_ptr->type = CONTROL_TYPE_JOYSTICK_BUTTON;
-            c_ptr->device_nr = joystick_numbers[ev.joystick.id];
+            c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
             c_ptr->button = ev.joystick.button;
             
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
@@ -401,7 +401,7 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
                     CONTROL_TYPE_JOYSTICK_AXIS_POS :
                     CONTROL_TYPE_JOYSTICK_AXIS_NEG
                 );
-            c_ptr->device_nr = joystick_numbers[ev.joystick.id];
+            c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
             c_ptr->stick = ev.joystick.stick;
             c_ptr->axis = ev.joystick.axis;
             

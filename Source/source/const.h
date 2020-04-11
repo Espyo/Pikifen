@@ -90,17 +90,10 @@ const size_t N_MATURITIES = 3;
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 //How frequently should a replay state be saved.
 const float REPLAY_SAVE_FREQUENCY = 1.0f;
-//Red color's index moves these many units per second.
-//(Green is fast and blue is faster still).
-const unsigned int SHIP_BEAM_RING_COLOR_SPEED = 255;
 //Duration of the "smack" particle.
 const float SMACK_PARTICLE_DUR = 0.1f;
 //The Sun Meter's sun spins these many radians per second.
 const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
-//Swarming arrows move these many units per second.
-const float SWARM_ARROW_SPEED = 400.0f;
-//Seconds that need to pass before another swarm arrow appears.
-const float SWARM_ARROWS_INTERVAL = 0.1f;
 //Put this space between the leader and the "main" member of the group,
 //when using swarming.
 const float SWARM_MARGIN = 8.0f;

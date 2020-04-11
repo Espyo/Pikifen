@@ -644,7 +644,7 @@ void area_editor::create_area() {
     game.cur_area_data.mob_generators.push_back(
         new mob_gen(
             mob_categories.get(MOB_CATEGORY_LEADERS), point(),
-            leader_order[0], 0, ""
+            game.leader_order[0], 0, ""
         )
     );
     
@@ -1712,20 +1712,20 @@ unordered_set<sector*> area_editor::get_affected_sectors(
 void area_editor::get_clicked_layout_element(
     vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
 ) {
-    *clicked_vertex = get_vertex_under_point(mouse_cursor_w);
+    *clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
     *clicked_edge = NULL;
     *clicked_sector = NULL;
     
     if(*clicked_vertex) return;
     
     if(selection_filter != SELECTION_FILTER_VERTEXES) {
-        *clicked_edge = get_edge_under_point(mouse_cursor_w);
+        *clicked_edge = get_edge_under_point(game.mouse_cursor_w);
     }
     
     if(*clicked_edge) return;
     
     if(selection_filter == SELECTION_FILTER_SECTORS) {
-        *clicked_sector = get_sector_under_point(mouse_cursor_w);
+        *clicked_sector = get_sector_under_point(game.mouse_cursor_w);
     }
 }
 
@@ -2873,7 +2873,7 @@ void area_editor::rotate_mob_gens_to_cursor() {
     register_change("object rotation");
     selection_homogenized = false;
     for(auto m : selected_mobs) {
-        m->angle = get_angle(m->pos, mouse_cursor_w);
+        m->angle = get_angle(m->pos, game.mouse_cursor_w);
     }
     mob_to_gui();
 }
@@ -3347,7 +3347,7 @@ void area_editor::set_new_circle_sector_points() {
     float anchor_angle =
         get_angle(new_circle_sector_center, new_circle_sector_anchor);
     float cursor_angle =
-        get_angle(new_circle_sector_center, mouse_cursor_w);
+        get_angle(new_circle_sector_center, game.mouse_cursor_w);
     float radius =
         dist(
             new_circle_sector_center, new_circle_sector_anchor
@@ -3588,7 +3588,7 @@ void area_editor::start_mob_move() {
     for(auto m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
         
-        dist d(mouse_cursor_w, m->pos);
+        dist d(game.mouse_cursor_w, m->pos);
         if(!move_closest_mob || d < move_closest_mob_dist) {
             move_closest_mob = m;
             move_closest_mob_dist = d;
@@ -3596,7 +3596,7 @@ void area_editor::start_mob_move() {
         }
     }
     
-    move_mouse_start_pos = mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
 }
 
@@ -3615,7 +3615,7 @@ void area_editor::start_path_stop_move() {
     ) {
         pre_move_stop_coords[*s] = (*s)->pos;
         
-        dist d(mouse_cursor_w, (*s)->pos);
+        dist d(game.mouse_cursor_w, (*s)->pos);
         if(!move_closest_stop || d < move_closest_stop_dist) {
             move_closest_stop = *s;
             move_closest_stop_dist = d;
@@ -3623,7 +3623,7 @@ void area_editor::start_path_stop_move() {
         }
     }
     
-    move_mouse_start_pos = mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
 }
 
@@ -3634,7 +3634,7 @@ void area_editor::start_path_stop_move() {
 void area_editor::start_shadow_move() {
     pre_move_shadow_coords = selected_shadow->center;
     
-    move_mouse_start_pos = mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
 }
 
@@ -3651,7 +3651,7 @@ void area_editor::start_vertex_move() {
         point p(v->x, v->y);
         pre_move_vertex_coords[v] = p;
         
-        dist d(mouse_cursor_w, p);
+        dist d(game.mouse_cursor_w, p);
         if(!move_closest_vertex || d < move_closest_vertex_dist) {
             move_closest_vertex = v;
             move_closest_vertex_dist = d;
@@ -3662,7 +3662,7 @@ void area_editor::start_vertex_move() {
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
         
-    move_mouse_start_pos = mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
 }
 

@@ -2345,8 +2345,8 @@ void mob::tick_script(const float delta_t) {
     
     //Check if it got whistled.
     mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
-    if(whistling && whistled_ev) {
-        if(dist(pos, leader_cursor_w) <= whistle_radius) {
+    if(game.gameplay_state->whistling && whistled_ev) {
+        if(dist(pos, game.gameplay_state->leader_cursor_w) <= whistle_radius) {
             whistled_ev->run(this);
         }
     }

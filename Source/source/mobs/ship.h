@@ -22,11 +22,19 @@
  */
 class ship : public mob {
 public:
+    //Red color's index moves these many units per second.
+    //(Green is faster and blue is faster still).
+    static const unsigned int SHIP_BEAM_RING_COLOR_SPEED;
+    
     //What type of ship it is.
     ship_type* shi_type;
     
     //The beam's absolute coordinates.
     point beam_final_pos;
+    //Current color of the beam ring.
+    unsigned char beam_ring_color[3];
+    //Is the beam ring's color component going up or down?
+    bool beam_ring_color_up[3];
     
     //Heal up a leader.
     void heal_leader(leader* l);
@@ -38,6 +46,8 @@ public:
     
     //Mob drawing routine.
     virtual void draw_mob();
+    //Tick class-specific logic.
+    virtual void tick_class_specifics(const float delta_t);
 };
 
 #endif //ifndef SHIP_INCLUDED

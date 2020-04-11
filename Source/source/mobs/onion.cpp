@@ -227,7 +227,7 @@ void onion::tick_class_specifics(const float delta_t) {
         
         if(
             bbox_check(
-                leader_cursor_w, o_ptr->pos,
+                game.gameplay_state->leader_cursor_w, o_ptr->pos,
                 game.gameplay_state->cur_leader_ptr->type->radius +
                 o_ptr->type->radius * 3
             )

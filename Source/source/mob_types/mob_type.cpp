@@ -14,6 +14,7 @@
 
 #include "../const.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../load.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_script_action.h"
@@ -665,7 +666,7 @@ void load_mob_types(bool load_resources) {
     for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
         string s = pikmin_order_strings[o];
         if(pikmin_types.find(s) != pikmin_types.end()) {
-            pikmin_order.push_back(pikmin_types[s]);
+            game.pikmin_order.push_back(pikmin_types[s]);
         } else {
             log_error(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -692,7 +693,7 @@ void load_mob_types(bool load_resources) {
     for(size_t o = 0; o < leader_order_strings.size(); ++o) {
         string s = leader_order_strings[o];
         if(leader_types.find(s) != leader_types.end()) {
-            leader_order.push_back(leader_types[s]);
+            game.leader_order.push_back(leader_types[s]);
         } else {
             log_error(
                 "Unknown leader type \"" + s + "\" found "
@@ -756,8 +757,8 @@ void unload_mob_type(mob_type* mt, const bool unload_resources) {
  * Unloads all loaded types of mob from memory.
  */
 void unload_mob_types(const bool unload_resources) {
-    leader_order.clear();
-    pikmin_order.clear();
+    game.leader_order.clear();
+    game.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* category = mob_categories.get(c);

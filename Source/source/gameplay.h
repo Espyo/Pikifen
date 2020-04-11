@@ -40,6 +40,22 @@ public:
     leader* cur_leader_ptr;
     //What time of the day is it in-game? In minutes.
     float day_minutes;
+    //Mob that player 1's leader cursor is on top of, if any.
+    mob* leader_cursor_mob;
+    //Player 1's leader cursor, in screen coordinates.
+    point leader_cursor_s;
+    //Sector that player 1's leader cursor is on, if any.
+    sector* leader_cursor_sector;
+    //Player 1's leader cursor, in world coordinates.
+    point leader_cursor_w;
+    //How many of each spray/ingredients player 1 has.
+    vector<spray_stats_struct> spray_stats;
+    //Angle at which player 1 is swarming.
+    float swarm_angle;
+    //General intensity of player 1's swarm in the specified angle.
+    float swarm_magnitude;
+    //Is player 1 currently holding the whistle button?
+    bool whistling;
     
     void leave();
     void update_closest_group_member();
@@ -57,6 +73,9 @@ private:
     static const float AREA_INTRO_HUD_MOVE_TIME;
     static const float CURSOR_INVALID_EFFECT_SPEED;
     static const float CURSOR_SAVE_INTERVAL;
+    static const float SWARM_ARROW_SPEED;
+    static const float SWARM_ARROWS_INTERVAL;
+    
     
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
@@ -109,10 +128,34 @@ private:
     ship* close_to_ship_to_heal;
     //What day it is, in-game.
     size_t day;
+    //Is input enabled, for reasons outside the ready_for_input variable?
+    bool is_input_allowed;
+    //Bitmap that lights up the area when in blackout mode.
+    ALLEGRO_BITMAP* lightmap_bmp;
     //Control ID for player 1's main button. Cache for convenience.
     size_t main_control_id;
+    //Movement of player 1's leader.
+    movement_struct leader_movement;
+    //Is the gameplay paused?
+    bool paused;
+    //The first frame shouldn't allow for input just yet, because
+    //some things are still being set up within the first logic loop.
+    //So forbid input until the second frame.
+    bool ready_for_input;
     //Timer for the next replay state save.
     timer replay_timer;
+    //Spray that player 1 has currently selected.
+    size_t selected_spray;
+    //Player 1's swarm mode arrows.
+    vector<float> swarm_arrows;
+    //Time until the next arrow in player 1's list of swarm arrows appears.
+    timer swarm_next_arrow_timer;
+    //Is player 1 holding the "swarm to cursor" button?
+    bool swarm_cursor;
+    //Reach of player 1's swarm.
+    movement_struct swarm_movement;
+    //Is it possible for the currently held Pikmin to reach the cursor?
+    bool throw_can_reach_cursor;
     
     void do_aesthetic_logic();
     void do_game_drawing(

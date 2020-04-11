@@ -68,10 +68,10 @@ void leader::dismiss() {
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(swarm_magnitude > 0) {
+    if(game.gameplay_state->swarm_magnitude > 0) {
         //If the leader's swarming,
         //they should be dismissed in that direction.
-        base_angle = swarm_angle;
+        base_angle = game.gameplay_state->swarm_angle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         point min_coords, max_coords;
@@ -449,7 +449,7 @@ void leader::start_whistling() {
     for(unsigned char d = 0; d < 6; ++d) whistle_dot_radius[d] = -1;
     whistle_fade_timer.start();
     whistle_fade_radius = 0;
-    whistling = true;
+    game.gameplay_state->whistling = true;
     lea_type->sfx_whistle.play(0, false);
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
@@ -460,14 +460,14 @@ void leader::start_whistling() {
  * Makes the leader stop whistling.
  */
 void leader::stop_whistling() {
-    if(!whistling) return;
+    if(!game.gameplay_state->whistling) return;
     
     lea_type->sfx_whistle.stop();
     
     whistle_fade_timer.start();
     whistle_fade_radius = whistle_radius;
     
-    whistling = false;
+    game.gameplay_state->whistling = false;
     whistle_radius = 0;
 }
 
@@ -506,7 +506,10 @@ void leader::tick_class_specifics(const float delta_t) {
         bool must_reassign_spots = false;
         
         bool is_swarming =
-            (swarm_magnitude && game.gameplay_state->cur_leader_ptr == this);
+            (
+                game.gameplay_state->swarm_magnitude &&
+                game.gameplay_state->cur_leader_ptr == this
+            );
             
         if(
             dist(group->get_average_member_pos(), pos) >
@@ -537,22 +540,27 @@ void leader::tick_class_specifics(const float delta_t) {
                         point(
                             -(type->radius + GROUP_SPOT_INTERVAL * 2),
                             0
-                        ), swarm_angle + TAU / 2
+                        ), game.gameplay_state->swarm_angle + TAU / 2
                     );
                 group->anchor = pos + move_anchor_offset;
                 
-                float intensity_dist = cursor_max_dist * swarm_magnitude;
+                float intensity_dist =
+                    cursor_max_dist * game.gameplay_state->swarm_magnitude;
                 al_translate_transform(
                     &group->transform, -SWARM_MARGIN, 0
                 );
                 al_scale_transform(
                     &group->transform,
                     intensity_dist / (group->radius * 2),
-                    1 - (SWARM_VERTICAL_SCALE * swarm_magnitude)
+                    1 -
+                    (
+                        SWARM_VERTICAL_SCALE *
+                        game.gameplay_state->swarm_magnitude
+                    )
                 );
                 al_rotate_transform(
                     &group->transform,
-                    swarm_angle + TAU / 2
+                    game.gameplay_state->swarm_angle + TAU / 2
                 );
                 
             } else {

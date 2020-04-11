@@ -223,31 +223,12 @@ extern string info_print_text;
 extern timer info_print_timer;
 extern vector<interactable*> interactables;
 extern map<string, interactable_type*> interactable_types;
-//Is input enabled in general, for reasons outside the ready_for_input variable?
-extern bool is_input_allowed;
 extern float joystick_min_deadzone;
 extern float joystick_max_deadzone;
-extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
-//Mob the leader's cursor is on top of, if any.
-extern mob* leader_cursor_mob;
-//Leader's cursor, in screen coordinates.
-extern point leader_cursor_s;
-//Sector the leader's cursor is on, if any.
-extern sector* leader_cursor_sector;
-//Leader's cursor, in world coordinates.
-extern point leader_cursor_w;
-//How hard the joystick is pressed in each direction ([0, 1]);
-extern movement_struct leader_movement;
-extern vector<leader_type*> leader_order;
 extern vector<string> leader_order_strings;
 extern map<string, leader_type*> leader_types;
-extern ALLEGRO_BITMAP* lightmap_bmp;
-//Loading screen main text buffer.
-extern ALLEGRO_BITMAP* loading_text_bmp;
-//Loading screen subtext buffer.
-extern ALLEGRO_BITMAP* loading_subtext_bmp;
 //Every level of maturity, multiply the power by 1 + this much.
 extern float maturity_power_mult;
 //Every level of maturity, multiply the attack by 1 + this much.
@@ -257,24 +238,16 @@ extern size_t max_pikmin_in_field;
 //These many seconds until a new character of the message is drawn.
 extern float message_char_interval;
 extern bool mipmaps_enabled;
-extern ALLEGRO_MIXER* mixer;
 extern vector<mob_action> mob_actions;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
-//The physical mouse's cursor, in screen coordinates.
-extern point mouse_cursor_s;
-//The physical mouse's cursor, in world coordinates.
-extern point mouse_cursor_w;
-extern bool mouse_cursor_valid;
 extern bool mouse_moves_cursor[MAX_PLAYERS];
 //How far a leader can go to auto-pluck the next Pikmin.
 extern float next_pluck_range;
 extern float onion_open_range;
 extern map<string, onion_type*> onion_types;
 extern vector<onion*> onions;
-extern unsigned char particle_quality;
 extern particle_manager particles;
-extern bool paused;
 extern map<string, pellet_type*> pellet_types;
 extern vector<pellet*> pellets;
 extern vector<point> precipitation;
@@ -282,7 +255,6 @@ extern timer precipitation_timer;
 extern float pikmin_chase_range;
 extern float pikmin_grab_range;
 extern vector<pikmin*> pikmin_list;
-extern vector<pikmin_type*> pikmin_order;
 extern vector<string> pikmin_order_strings;
 extern map<string, pikmin_type*> pikmin_types;
 extern vector<pile*> piles;
@@ -291,61 +263,35 @@ extern float pluck_range;
 //If true, the whistle radius is merely drawn as a circle.
 //Used to improve performance.
 extern bool pretty_whistle;
-//Time since start, on the previous frame.
-//The first frame shouldn't allow for input just yet, because
-//some things are still being set up within the first logic loop.
-//So forbid input until the second frame.
-extern bool ready_for_input;
 extern vector<resource*> resources;
 extern map<string, resource_type*> resource_types;
 extern map<string, scale_type*> scale_types;
 extern vector<scale*> scales;
-extern ALLEGRO_TRANSFORM screen_to_world_transform;
 extern sector_types_manager sector_types;
-extern size_t selected_spray;
 extern replay session_replay;
-extern unsigned char ship_beam_ring_color[3];
-extern bool ship_beam_ring_color_up[3];
 extern map<string, ship_type*> ship_types;
 extern vector<ship*> ships;
-extern bool show_system_info;
 //If false, images that are scaled up and down will look pixelated.
 extern bool smooth_scaling;
 extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
 extern map<string, spike_damage_type> spike_damage_types;
-//How many of each spray/ingredients the player has.
-extern vector<spray_stats_struct> spray_stats;
 extern vector<spray_type> spray_types;
 extern float standard_pikmin_height;
 extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
 extern subgroup_type_manager subgroup_types;
-extern float swarm_angle;
 //Distance of the arrows that appear
 //when the "swarm to cursor" button is held.
 extern vector<float> swarm_arrows;
-//General intensity of the swarm in the specified angle.
-extern float swarm_magnitude;
-//Time remaining until the next arrow on the list of swarm arrows appears.
-extern timer swarm_next_arrow_timer;
-//Is the "swarm to cursor" button being pressed?
-extern bool swarm_cursor;
 extern float swarm_task_range;
-//Joystick coordinates for swarming.
-extern movement_struct swarm_movement;
 extern bmp_manager textures;
-extern bool throw_can_reach_cursor;
 extern map<string, tool_type*> tool_types;
 extern vector<tool*> tools;
 extern map<string, track_type*> track_types;
 extern vector<track*> tracks;
-extern float transition_time;
-extern bool transition_fade_in;
 extern map<string, treasure_type*> treasure_types;
 extern vector<treasure*> treasures;
-//Voice from which the sound effects play.
-extern ALLEGRO_VOICE* voice;
 extern map<string, weather> weather_conditions;
 //Radius of every 6th dot.
 extern float whistle_dot_radius[6];
@@ -360,12 +306,9 @@ extern float whistle_radius;
 extern vector<unsigned char> whistle_ring_colors;
 extern unsigned char whistle_ring_prev_color;
 extern vector<float> whistle_rings;
-//Is the whistle currently being blown?
-extern bool whistling;
 //Should we force the window's positioning
 //(on some systems it appears out-of-bounds by default)
 extern bool window_position_hack;
-extern ALLEGRO_TRANSFORM world_to_screen_transform;
 extern float zoom_max_level;
 extern float zoom_mid_level;
 extern float zoom_min_level;

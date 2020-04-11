@@ -95,27 +95,6 @@ void gameplay::do_aesthetic_logic() {
         }
     }
     
-    //Ship beam ring.
-    //The way this works is that the three color components are saved.
-    //Each frame, we increase them or decrease them
-    //(if it reaches 255, set it to decrease, if 0, set it to increase).
-    //Each index increases/decreases at a different speed,
-    //with red being the slowest and blue the fastest.
-    for(unsigned char i = 0; i < 3; ++i) {
-        float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
-        signed char addition =
-            dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * game.delta_t;
-        if(ship_beam_ring_color[i] + addition >= 255) {
-            ship_beam_ring_color[i] = 255;
-            ship_beam_ring_color_up[i] = false;
-        } else if(ship_beam_ring_color[i] + addition <= 0) {
-            ship_beam_ring_color[i] = 0;
-            ship_beam_ring_color_up[i] = true;
-        } else {
-            ship_beam_ring_color[i] += addition;
-        }
-    }
-    
     //Cursor trail.
     if(draw_cursor_trail) {
         cursor_save_timer.tick(game.delta_t);
@@ -221,12 +200,12 @@ void gameplay::do_gameplay_logic() {
     cam_box[0] = point(0, 0);
     cam_box[1] = point(game.win_w, game.win_h);
     al_transform_coordinates(
-        &screen_to_world_transform,
+        &game.screen_to_world_transform,
         &cam_box[0].x,
         &cam_box[0].y
     );
     al_transform_coordinates(
-        &screen_to_world_transform,
+        &game.screen_to_world_transform,
         &cam_box[1].x,
         &cam_box[1].y
     );
@@ -443,14 +422,14 @@ void gameplay::do_gameplay_logic() {
         mouse_cursor_speed =
             mouse_cursor_speed * game.delta_t* MOUSE_CURSOR_MOVE_SPEED;
             
-        mouse_cursor_s += mouse_cursor_speed;
+        game.mouse_cursor_s += mouse_cursor_speed;
         
-        mouse_cursor_w = mouse_cursor_s;
+        game.mouse_cursor_w = game.mouse_cursor_s;
         al_transform_coordinates(
-            &screen_to_world_transform,
-            &mouse_cursor_w.x, &mouse_cursor_w.y
+            &game.screen_to_world_transform,
+            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
         );
-        leader_cursor_w = mouse_cursor_w;
+        leader_cursor_w = game.mouse_cursor_w;
         
         float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
         
@@ -465,18 +444,18 @@ void gameplay::do_gameplay_logic() {
             if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
                 //If we're speeding the mouse cursor (via analog stick),
                 //don't let it go beyond the edges.
-                mouse_cursor_w = leader_cursor_w;
-                mouse_cursor_s = mouse_cursor_w;
+                game.mouse_cursor_w = leader_cursor_w;
+                game.mouse_cursor_s = game.mouse_cursor_w;
                 al_transform_coordinates(
-                    &world_to_screen_transform,
-                    &mouse_cursor_s.x, &mouse_cursor_s.y
+                    &game.world_to_screen_transform,
+                    &game.mouse_cursor_s.x, &game.mouse_cursor_s.y
                 );
             }
         }
         
         leader_cursor_s = leader_cursor_w;
         al_transform_coordinates(
-            &world_to_screen_transform,
+            &game.world_to_screen_transform,
             &leader_cursor_s.x, &leader_cursor_s.y
         );
         
@@ -594,7 +573,7 @@ void gameplay::do_gameplay_logic() {
     replay_timer.tick(game.delta_t);
     
     //Process and print framerate and system info.
-    if(show_system_info) {
+    if(game.show_system_info) {
     
         game.framerate_history.push_back(1.0 / game.delta_t);
         if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
@@ -750,16 +729,17 @@ void gameplay::do_gameplay_logic() {
     //Print mouse coordinates.
     if(creator_tool_geometry_info) {
         sector* mouse_sector =
-            get_sector(mouse_cursor_w, NULL, true);
+            get_sector(game.mouse_cursor_w, NULL, true);
             
         string coords_str =
-            box_string(f2s(mouse_cursor_w.x), 6) + " " +
-            box_string(f2s(mouse_cursor_w.y), 6);
+            box_string(f2s(game.mouse_cursor_w.x), 6) + " " +
+            box_string(f2s(game.mouse_cursor_w.y), 6);
         string blockmap_str =
             box_string(
-                i2s(game.cur_area_data.bmap.get_col(mouse_cursor_w.x)), 5, " "
+                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor_w.x)),
+                5, " "
             ) +
-            i2s(game.cur_area_data.bmap.get_row(mouse_cursor_w.y));
+            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor_w.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =

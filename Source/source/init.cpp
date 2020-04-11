@@ -101,9 +101,9 @@ void destroy_misc() {
     al_destroy_font(font_main);
     al_destroy_font(font_value);
     
-    al_detach_voice(voice);
-    al_destroy_mixer(mixer);
-    al_destroy_voice(voice);
+    al_detach_voice(game.voice);
+    al_destroy_mixer(game.mixer);
+    al_destroy_voice(game.voice);
 }
 
 
@@ -482,12 +482,6 @@ void init_misc() {
     al_identity_transform(&game.identity_transform);
     
     srand(time(NULL));
-    
-    swarm_next_arrow_timer.on_end = [] () {
-        swarm_next_arrow_timer.start();
-        swarm_arrows.push_back(0);
-    };
-    swarm_next_arrow_timer.start();
     
     whistle_next_dot_timer.on_end = [] () {
         whistle_next_dot_timer.start();

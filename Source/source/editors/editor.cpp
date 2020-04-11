@@ -482,7 +482,7 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui(mouse_cursor_s)
+        !is_mouse_in_gui(game.mouse_cursor_s)
     ) {
     
         if(ev.mouse.button == 1) {
@@ -526,7 +526,7 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        is_mouse_in_gui(mouse_cursor_s)
+        is_mouse_in_gui(game.mouse_cursor_s)
     ) {
         is_gui_focused = true;
         
@@ -570,7 +570,7 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         }
         if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
-            !is_mouse_in_gui(mouse_cursor_s)
+            !is_mouse_in_gui(game.mouse_cursor_s)
         ) {
             handle_mouse_wheel(ev);
         }
@@ -837,9 +837,11 @@ void editor::update_status_bar(
         new_text = status_override_text;
         
     } else {
-        if(is_mouse_in_gui(mouse_cursor_s)) {
+        if(is_mouse_in_gui(game.mouse_cursor_s)) {
             lafi::widget* wum =
-                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+                gui->get_widget_under_mouse(
+                    game.mouse_cursor_s.x, game.mouse_cursor_s.y
+                );
             if(wum) {
                 new_text = wum->description;
             }
@@ -849,9 +851,11 @@ void editor::update_status_bar(
                 "to show information about it here!)";
         } else if(!omit_coordinates) {
             new_text =
-                "(" + i2s(mouse_cursor_w.x) + "," +
+                "(" + i2s(game.mouse_cursor_w.x) + "," +
                 i2s(
-                    reverse_y_coordinate ? -mouse_cursor_w.y : mouse_cursor_w.y
+                    reverse_y_coordinate ?
+                    -game.mouse_cursor_w.y :
+                    game.mouse_cursor_w.y
                 ) + ")";
         }
     }
@@ -869,17 +873,17 @@ void editor::update_transformations() {
         (canvas_tl.x + canvas_br.x) / 2.0,
         (canvas_tl.y + canvas_br.y) / 2.0
     );
-    world_to_screen_transform = game.identity_transform;
+    game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
-        &world_to_screen_transform,
+        &game.world_to_screen_transform,
         -cam_pos.x + canvas_center.x / cam_zoom,
         -cam_pos.y + canvas_center.y / cam_zoom
     );
-    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    al_scale_transform(&game.world_to_screen_transform, cam_zoom, cam_zoom);
     
     //Screen coordinates to world coordinates.
-    screen_to_world_transform = world_to_screen_transform;
-    al_invert_transform(&screen_to_world_transform);
+    game.screen_to_world_transform = game.world_to_screen_transform;
+    al_invert_transform(&game.screen_to_world_transform);
 }
 
 
@@ -892,20 +896,20 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
     
     if(anchor_cursor) {
         //Keep a backup of the old mouse coordinates.
-        point old_mouse_pos = mouse_cursor_w;
+        point old_mouse_pos = game.mouse_cursor_w;
         
         //Figure out where the mouse will be after the zoom.
         update_transformations();
-        mouse_cursor_w = mouse_cursor_s;
+        game.mouse_cursor_w = game.mouse_cursor_s;
         al_transform_coordinates(
-            &screen_to_world_transform,
-            &mouse_cursor_w.x, &mouse_cursor_w.y
+            &game.screen_to_world_transform,
+            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
         );
         
         //Readjust the transformation by shifting the camera
         //so that the cursor ends up where it was before.
-        cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
-        cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
+        cam_pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x);
+        cam_pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y);
     }
     
     update_transformations();

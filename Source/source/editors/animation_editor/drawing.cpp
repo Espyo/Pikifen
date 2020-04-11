@@ -24,7 +24,7 @@ void animation_editor::do_drawing() {
 
     gui->draw();
     
-    al_use_transform(&world_to_screen_transform);
+    al_use_transform(&game.world_to_screen_transform);
     
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
@@ -82,10 +82,10 @@ void animation_editor::do_drawing() {
             point scene_tl = point(-1, -1);
             point scene_br = point(canvas_br.x + 1, canvas_br.y + 1);
             al_transform_coordinates(
-                &screen_to_world_transform, &scene_tl.x, &scene_tl.y
+                &game.screen_to_world_transform, &scene_tl.x, &scene_tl.y
             );
             al_transform_coordinates(
-                &screen_to_world_transform, &scene_br.x, &scene_br.y
+                &game.screen_to_world_transform, &scene_br.x, &scene_br.y
             );
             
             for(unsigned char x = 0; x < 3; ++x) {
@@ -197,11 +197,11 @@ void animation_editor::do_drawing() {
         point cam_top_left_corner(0, 0);
         point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
         al_transform_coordinates(
-            &screen_to_world_transform,
+            &game.screen_to_world_transform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &screen_to_world_transform,
+            &game.screen_to_world_transform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         
@@ -290,8 +290,12 @@ void animation_editor::draw_side_view_hitbox(
         //padding just to make sure.
         z_to_use = game.win_h + 1;
         h_to_use = 0 - 1;
-        al_transform_coordinates(&screen_to_world_transform, &dummy, &z_to_use);
-        al_transform_coordinates(&screen_to_world_transform, &dummy, &h_to_use);
+        al_transform_coordinates(
+            &game.screen_to_world_transform, &dummy, &z_to_use
+        );
+        al_transform_coordinates(
+            &game.screen_to_world_transform, &dummy, &h_to_use
+        );
         //The height is the height from the top of the screen to the bottom.
         h_to_use = z_to_use - h_to_use;
         //Z needs to be flipped.

@@ -656,7 +656,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         
-            show_system_info = !show_system_info;
+            game.show_system_info = !game.show_system_info;
             
         } else if(
             creator_tools_enabled &&
@@ -740,13 +740,14 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     
                     create_mob(
                         mob_categories.get(MOB_CATEGORY_PIKMIN),
-                        mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
+                        game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
                     );
                 }
                 
             } else if(id == CREATOR_TOOL_TELEPORT) {
-                cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
-                sector* mouse_sector = get_sector(mouse_cursor_w, NULL, true);
+                cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
+                sector* mouse_sector =
+                    get_sector(game.mouse_cursor_w, NULL, true);
                 if(mouse_sector) {
                     cur_leader_ptr->z = mouse_sector->z;
                 }
@@ -763,13 +764,13 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
-            mouse_cursor_s.x = ev.mouse.x;
-            mouse_cursor_s.y = ev.mouse.y;
-            mouse_cursor_w = mouse_cursor_s;
+            game.mouse_cursor_s.x = ev.mouse.x;
+            game.mouse_cursor_s.y = ev.mouse.y;
+            game.mouse_cursor_w = game.mouse_cursor_s;
             
             al_transform_coordinates(
-                &screen_to_world_transform,
-                &mouse_cursor_w.x, &mouse_cursor_w.y
+                &game.screen_to_world_transform,
+                &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
             );
         }
     }
@@ -876,7 +877,7 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
                 )
             ) {
                 if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    con->device_nr == game.joystick_numbers[ev.joystick.id] &&
                     (signed) con->button == ev.joystick.button
                 ) {
                     actions.push_back(
@@ -894,7 +895,7 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
                 ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
             ) {
                 if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    con->device_nr == game.joystick_numbers[ev.joystick.id] &&
                     con->stick == ev.joystick.stick &&
                     con->axis == ev.joystick.axis
                 ) {
@@ -916,7 +917,7 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
                 ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
             ) {
                 if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    con->device_nr == game.joystick_numbers[ev.joystick.id] &&
                     con->stick == ev.joystick.stick &&
                     con->axis == ev.joystick.axis
                 ) {

@@ -35,14 +35,19 @@ game_class::game_class() :
     intended_win_fullscreen(DEF_WIN_FULLSCREEN),
     intended_win_h(DEF_WIN_H),
     intended_win_w(DEF_WIN_W),
+    loading_subtext_bmp(nullptr),
+    loading_text_bmp(nullptr),
     main_menu_state(nullptr),
+    mixer(nullptr),
     options_menu_state(nullptr),
+    show_system_info(false),
     target_fps(DEF_TARGET_FPS),
     win_fullscreen(DEF_WIN_FULLSCREEN),
     win_h(DEF_WIN_H),
     win_w(DEF_WIN_W),
     cur_state(nullptr),
-    reset_delta_t(true) {
+    reset_delta_t(true),
+    voice(nullptr) {
     
 }
 

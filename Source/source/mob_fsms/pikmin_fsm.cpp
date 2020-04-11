@@ -1544,7 +1544,7 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
     if(
         too_ptr->too_type->dropped_when_pikmin_is_whistled &&
         pik_ptr->is_tool_primed_for_whistle &&
-        whistling
+        game.gameplay_state->whistling
     ) {
         //Since this event can be called when the Pikmin is bumped, we must add
         //a check to only release the tool if it's a real whistle. Checking
@@ -1566,7 +1566,7 @@ void pikmin_fsm::called_while_riding(mob* m, void* info1, void* info2) {
     
     if(
         tra_ptr->tra_type->cancellable_with_whistle &&
-        whistling
+        game.gameplay_state->whistling
     ) {
         m->stop_track_ride();
         pikmin_fsm::called(m, NULL, NULL);

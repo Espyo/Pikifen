@@ -71,10 +71,10 @@ void load_area(
     rs.set("bg_dist", game.cur_area_data.bg_dist);
     rs.set("bg_zoom", game.cur_area_data.bg_bmp_zoom);
     
-    if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
-    if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
-    loading_text_bmp = NULL;
-    loading_subtext_bmp = NULL;
+    if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
+    if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
+    game.loading_text_bmp = NULL;
+    game.loading_subtext_bmp = NULL;
     
     draw_loading_screen(
         game.cur_area_data.name, game.cur_area_data.subtitle, 1.0
@@ -990,30 +990,31 @@ void load_misc_graphics() {
  */
 void load_misc_sounds() {
     //Sound effects.
-    voice =
+    game.voice =
         al_create_voice(
             44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
         );
-    mixer =
+    game.mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(mixer, voice);
-    sfx_attack = load_sample(              "Attack.ogg",               mixer);
-    sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg",        mixer);
-    sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg",      mixer);
-    sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg", mixer);
-    sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg",        mixer);
-    sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg",         mixer);
-    sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
-    sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
-    sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
-    sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
-    sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
-    sfx_pluck = load_sample(               "Pluck.ogg",                mixer);
-    sfx_throw = load_sample(               "Throw.ogg",                mixer);
-    sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
-    sfx_camera = load_sample(              "Camera.ogg",               mixer);
+    al_attach_mixer_to_voice(game.mixer, game.voice);
+    
+    sfx_attack = load_sample(              "Attack.ogg");
+    sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg");
+    sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg");
+    sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg");
+    sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg");
+    sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg");
+    sfx_pikmin_held = load_sample(         "Pikmin_held.ogg");
+    sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg");
+    sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg");
+    sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg");
+    sfx_pikmin_called = load_sample(       "Pikmin_called.ogg");
+    sfx_pluck = load_sample(               "Pluck.ogg");
+    sfx_throw = load_sample(               "Throw.ogg");
+    sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg");
+    sfx_camera = load_sample(              "Camera.ogg");
 }
 
 
@@ -1029,10 +1030,10 @@ void load_options() {
     if(!file.file_was_opened) return;
     
     //Init joysticks.
-    joystick_numbers.clear();
+    game.joystick_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
     for(int j = 0; j < n_joysticks; ++j) {
-        joystick_numbers[al_get_joystick(j)] = j;
+        game.joystick_numbers[al_get_joystick(j)] = j;
     }
     
     /* Load controls.
@@ -1134,16 +1135,14 @@ void load_options() {
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
-sample_struct load_sample(
-    const string &file_name, ALLEGRO_MIXER* const mixer
-) {
+sample_struct load_sample(const string &file_name) {
     ALLEGRO_SAMPLE* sample =
         al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
     if(!sample) {
         log_error("Could not open audio sample " + file_name + "!");
     }
     
-    return sample_struct(sample, mixer);
+    return sample_struct(sample, game.mixer);
 }
 
 
