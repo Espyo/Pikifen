@@ -131,8 +131,8 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
     //Not gonna lie, this uses some fancy-shmancy numbers.
     //I mostly got here via trial and error.
     //I apologize if you're trying to understand what it means.
-    int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : scr_w;
-    int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
+    int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : game.win_w;
+    int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : game.win_h;
     float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
     point final_zoom(
         bmp_w * 0.5 * game.cur_area_data.bg_dist / zoom_to_use,
@@ -1097,19 +1097,19 @@ void gameplay::draw_lighting_filter() {
         //Top-right and center-right.
         al_draw_filled_rectangle(
             fog_bottom_right.x, 0,
-            scr_w, fog_bottom_right.y,
+            game.win_w, fog_bottom_right.y,
             fog_c
         );
         //Bottom-right and bottom-center.
         al_draw_filled_rectangle(
             fog_top_left.x, fog_bottom_right.y,
-            scr_w, scr_h,
+            game.win_w, game.win_h,
             fog_c
         );
         //Bottom-left and center-left.
         al_draw_filled_rectangle(
             0, fog_top_left.y,
-            fog_top_left.x, scr_h,
+            fog_top_left.x, game.win_h,
             fog_c
         );
         
@@ -1118,7 +1118,7 @@ void gameplay::draw_lighting_filter() {
     //Draw the daylight.
     ALLEGRO_COLOR daylight_c = get_daylight_color();
     if(daylight_c.a > 0) {
-        al_draw_filled_rectangle(0, 0, scr_w, scr_h, daylight_c);
+        al_draw_filled_rectangle(0, 0, game.win_w, game.win_h, daylight_c);
     }
     
     //Draw the blackout effect.
@@ -1185,19 +1185,19 @@ void gameplay::draw_message_box() {
     
     draw_bitmap(
         bmp_message_box,
-        point(scr_w / 2, scr_h - font_main_h * 2 - 4),
-        point(scr_w - 16, font_main_h * 4)
+        point(game.win_w / 2, game.win_h - font_main_h * 2 - 4),
+        point(game.win_w - 16, font_main_h * 4)
     );
     
     if(cur_message_speaker) {
         draw_bitmap(
             cur_message_speaker,
-            point(40, scr_h - font_main_h * 4 - 16),
+            point(40, game.win_h - font_main_h * 4 - 16),
             point(48, 48)
         );
         draw_bitmap(
             bmp_bubble,
-            point(40, scr_h - font_main_h * 4 - 16),
+            point(40, game.win_h - font_main_h * 4 - 16),
             point(64, 64)
         );
     }
@@ -1214,8 +1214,8 @@ void gameplay::draw_message_box() {
     
         draw_compressed_text(
             font_main, al_map_rgb(255, 255, 255),
-            point(24, scr_h - font_main_h * (4 - l) + 8),
-            ALLEGRO_ALIGN_LEFT, 0, point(scr_w - 64, 0),
+            point(24, game.win_h - font_main_h * (4 - l) + 8),
+            ALLEGRO_ALIGN_LEFT, 0, point(game.win_w - 64, 0),
             lines[l]
         );
         
@@ -1258,7 +1258,7 @@ void gameplay::draw_system_stuff() {
         int total_height = n_lines * fh + (n_lines - 1);
         
         al_draw_filled_rectangle(
-            0, 0, scr_w, total_height + 16,
+            0, 0, game.win_w, total_height + 16,
             al_map_rgba(0, 0, 0, 96 * alpha_mult)
         );
         draw_text_lines(
@@ -1270,8 +1270,8 @@ void gameplay::draw_system_stuff() {
     if(show_system_info) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
-            scr_w - FRAMERATE_HISTORY_SIZE, 0,
-            scr_w, 100,
+            game.win_w - FRAMERATE_HISTORY_SIZE, 0,
+            game.win_w, 100,
             al_map_rgba(0, 0, 0, 192)
         );
         for(size_t f = 0; f < game.framerate_history.size(); ++f) {
@@ -1283,8 +1283,8 @@ void gameplay::draw_system_stuff() {
             );
         }
         al_draw_line(
-            scr_w - FRAMERATE_HISTORY_SIZE, game.target_fps,
-            scr_w, game.target_fps,
+            game.win_w - FRAMERATE_HISTORY_SIZE, game.target_fps,
+            game.win_w, game.target_fps,
             al_map_rgba(128, 224, 128, 48), 1
         );
     }
@@ -2059,7 +2059,7 @@ void draw_loading_screen(
     
     unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
-        0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha)
+        0, 0, game.win_w, game.win_h, al_map_rgba(0, 0, 0, blackness_alpha)
     );
     
     int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
@@ -2137,23 +2137,24 @@ void draw_loading_screen(
     
         text_y =
             subtext.empty() ?
-            (scr_h * 0.5 - text_h * 0.5) :
-            (scr_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h);
+            (game.win_h * 0.5 - text_h * 0.5) :
+            (game.win_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h);
         al_draw_tinted_bitmap(
             loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
-            scr_w * 0.5 - text_w * 0.5, text_y, 0
+            game.win_w * 0.5 - text_w * 0.5, text_y, 0
         );
         
     }
     
     //Draw the subtext bitmap in its place.
-    float subtext_y = scr_h * 0.5 + LOADING_SCREEN_PADDING * 0.5;
+    float subtext_y = game.win_h * 0.5 + LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
     
         al_draw_tinted_scaled_bitmap(
             loading_subtext_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
             0, 0, subtext_w, subtext_h,
-            scr_w * 0.5 - (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
+            game.win_w * 0.5 -
+            (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
             subtext_y,
             subtext_w * LOADING_SCREEN_SUBTITLE_SCALE,
             subtext_h * LOADING_SCREEN_SUBTITLE_SCALE,
@@ -2171,28 +2172,28 @@ void draw_loading_screen(
         float text_reflection_h =
             std::min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
         //Top-left vertex.
-        text_vertexes[0].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertexes[0].x = game.win_w * 0.5 - text_w * 0.5;
         text_vertexes[0].y = text_y + text_h;
         text_vertexes[0].z = 0;
         text_vertexes[0].u = 0;
         text_vertexes[0].v = text_h;
         text_vertexes[0].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
-        text_vertexes[1].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertexes[1].x = game.win_w * 0.5 + text_w * 0.5;
         text_vertexes[1].y = text_y + text_h;
         text_vertexes[1].z = 0;
         text_vertexes[1].u = text_w;
         text_vertexes[1].v = text_h;
         text_vertexes[1].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
-        text_vertexes[2].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertexes[2].x = game.win_w * 0.5 + text_w * 0.5;
         text_vertexes[2].y = text_y + text_h + text_reflection_h;
         text_vertexes[2].z = 0;
         text_vertexes[2].u = text_w;
         text_vertexes[2].v = text_h - text_reflection_h;
         text_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        text_vertexes[3].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertexes[3].x = game.win_w * 0.5 - text_w * 0.5;
         text_vertexes[3].y = text_y + text_h + text_reflection_h;
         text_vertexes[3].z = 0;
         text_vertexes[3].u = 0;
@@ -2217,7 +2218,7 @@ void draw_loading_screen(
             );
         //Top-left vertex.
         subtext_vertexes[0].x =
-            scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[0].y =
             subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[0].z = 0;
@@ -2227,7 +2228,7 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
         subtext_vertexes[1].x =
-            scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[1].y =
             subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[1].z = 0;
@@ -2237,7 +2238,7 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
         subtext_vertexes[2].x =
-            scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[2].y =
             subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
@@ -2247,7 +2248,7 @@ void draw_loading_screen(
         subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
         subtext_vertexes[3].x =
-            scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[3].y =
             subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
@@ -2266,9 +2267,9 @@ void draw_loading_screen(
     //Draw the game's logo to the left of the "Loading..." text.
     if(opacity == 1.0f) {
         point icon_pos(
-            scr_w - 8 - al_get_text_width(font_main, "Loading...") -
+            game.win_w - 8 - al_get_text_width(font_main, "Loading...") -
             8 - font_main_h * 0.5,
-            scr_h - 8 - font_main_h * 0.5
+            game.win_h - 8 - font_main_h * 0.5
         );
         
         if(bmp_icon && bmp_icon != bmp_error) {
@@ -2281,8 +2282,8 @@ void draw_loading_screen(
         //Draw the "Loading..." text, if we're not fading.
         al_draw_text(
             font_main, al_map_rgb(192, 192, 192),
-            scr_w - 8,
-            scr_h - 8 - font_main_h,
+            game.win_w - 8,
+            game.win_h - 8 - font_main_h,
             ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }

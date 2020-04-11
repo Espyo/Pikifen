@@ -32,9 +32,15 @@ game_class::game_class() :
     framerate_last_avg_point(0),
     gameplay_state(nullptr),
     is_game_running(true),
+    intended_win_fullscreen(DEF_WIN_FULLSCREEN),
+    intended_win_h(DEF_WIN_H),
+    intended_win_w(DEF_WIN_W),
     main_menu_state(nullptr),
     options_menu_state(nullptr),
     target_fps(DEF_TARGET_FPS),
+    win_fullscreen(DEF_WIN_FULLSCREEN),
+    win_h(DEF_WIN_H),
+    win_w(DEF_WIN_W),
     cur_state(nullptr),
     reset_delta_t(true) {
     

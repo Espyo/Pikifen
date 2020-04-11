@@ -362,24 +362,25 @@ void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
     if(window_position_hack) al_set_new_window_position(64, 64);
-    if(scr_fullscreen) {
+    if(game.win_fullscreen) {
         al_set_new_display_flags(
             al_get_new_display_flags() | ALLEGRO_FULLSCREEN
         );
     }
-    display = al_create_display(scr_w, scr_h);
+    game.display = al_create_display(game.win_w, game.win_h);
     
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
-    if(!display && scr_fullscreen) {
+    if(!game.display && game.win_fullscreen) {
         log_error(
             "Could not create a fullscreen window with the resolution " +
-            i2s(scr_w) + "x" + i2s(scr_h) + ". Setting the fullscreen "
-            "option back to false. You can try a different resolution, "
+            i2s(game.win_w) + "x" + i2s(game.win_h) + ". "
+            "Setting the fullscreen option back to false. "
+            "You can try a different resolution, "
             "preferably one from the options menu."
         );
-        scr_fullscreen = false;
-        intended_scr_fullscreen = false;
+        game.win_fullscreen = false;
+        game.intended_win_fullscreen = false;
         save_options();
         al_set_new_display_flags(
             al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN

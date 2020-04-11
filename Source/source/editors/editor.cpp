@@ -143,7 +143,7 @@ bool editor::check_new_unsaved_changes(lafi::widget* caller_widget) {
 void editor::create_picker_frame() {
 
     frm_picker =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     frm_picker->hide();
     gui->add("frm_picker", frm_picker);
     
@@ -153,24 +153,24 @@ void editor::create_picker_frame() {
     );
     frm_picker->add(
         "lbl_title",
-        new lafi::label(canvas_br.x + 8, 32, scr_w - 8, 44)
+        new lafi::label(canvas_br.x + 8, 32, game.win_w - 8, 44)
     );
     frm_picker->add(
         "txt_text",
-        new lafi::textbox(canvas_br.x + 8, 52, scr_w - 48, 68)
+        new lafi::textbox(canvas_br.x + 8, 52, game.win_w - 48, 68)
     );
     frm_picker->add(
         "but_new",
-        new lafi::button(scr_w - 40, 44, scr_w - 8, 76, "+")
+        new lafi::button(game.win_w - 40, 44, game.win_w - 8, 76, "+")
     );
     
     frm_picker->add(
         "frm_list",
-        new lafi::frame(canvas_br.x + 8, 84, scr_w - 32, scr_h - 8)
+        new lafi::frame(canvas_br.x + 8, 84, game.win_w - 32, game.win_h - 8)
     );
     frm_picker->add(
         "bar_scroll",
-        new lafi::scrollbar(scr_w - 24, 84, scr_w - 8, scr_h - 8)
+        new lafi::scrollbar(game.win_w - 24, 84, game.win_w - 8, game.win_h - 8)
     );
     
     
@@ -230,7 +230,7 @@ void editor::create_picker_frame() {
  */
 void editor::create_status_bar() {
     lbl_status_bar =
-        new lafi::label(0, canvas_br.y, canvas_br.x, scr_h, "", 0, true);
+        new lafi::label(0, canvas_br.y, canvas_br.x, game.win_h, "", 0, true);
     gui->add("lbl_status_bar", lbl_status_bar);
 }
 
@@ -288,7 +288,7 @@ void editor::draw_unsaved_changes_warning() {
     ALLEGRO_COLOR back_color = al_map_rgba(192, 192, 64, r * 255);
     ALLEGRO_COLOR outline_color = al_map_rgba(80, 80, 16, r * 255);
     ALLEGRO_COLOR text_color = al_map_rgba(0, 0, 0, r * 255);
-    bool spike_up = unsaved_changes_warning_pos.y < scr_h / 2.0;
+    bool spike_up = unsaved_changes_warning_pos.y < game.win_h / 2.0;
     
     point box_center = unsaved_changes_warning_pos;
     if(unsaved_changes_warning_pos.x < UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
@@ -296,11 +296,11 @@ void editor::draw_unsaved_changes_warning() {
             UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
     } else if(
         unsaved_changes_warning_pos.x >
-        scr_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0
+        game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0
     ) {
         box_center.x -=
             unsaved_changes_warning_pos.x -
-            (scr_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
+            (game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
     }
     if(spike_up) {
         box_center.y += UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
@@ -821,8 +821,8 @@ void editor::unload() {
 void editor::update_canvas_coordinates() {
     canvas_tl.x = 0;
     canvas_tl.y = 40;
-    canvas_br.x = scr_w * 0.675;
-    canvas_br.y = scr_h - 16;
+    canvas_br.x = game.win_w * 0.675;
+    canvas_br.y = game.win_h - 16;
 }
 
 

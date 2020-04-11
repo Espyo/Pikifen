@@ -192,9 +192,9 @@ void fade_manager::draw() {
     if(is_fading()) {
         unsigned char alpha = (game.fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
-            0, 0, scr_w, scr_h,
+            0, 0, game.win_w, game.win_h,
             al_map_rgba(
-                0, 0, 0, (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
+                0, 0, 0, (game.fade_mgr.is_fade_in() ? alpha : 255 - alpha)
             )
         );
     }
@@ -294,8 +294,8 @@ bool hud_item_manager::get_draw_data(
     if(h->center.y - h->size.y / 2.0f > 1.0f) return false;
     
     point normal_coords, final_coords;
-    normal_coords.x = h->center.x * scr_w;
-    normal_coords.y = h->center.y * scr_h;
+    normal_coords.x = h->center.x * game.win_w;
+    normal_coords.y = h->center.y * game.win_h;
     
     if(move_timer.time_left == 0.0f) {
         final_coords = normal_coords;
@@ -308,8 +308,8 @@ bool hud_item_manager::get_draw_data(
         float angle = get_angle(point(0.5, 0.5), h->center);
         offscreen_coords.x = h->center.x + cos(angle);
         offscreen_coords.y = h->center.y + sin(angle);
-        offscreen_coords.x *= scr_w;
-        offscreen_coords.y *= scr_h;
+        offscreen_coords.x *= game.win_w;
+        offscreen_coords.y *= game.win_h;
         
         if(move_in) {
             start_coords = offscreen_coords;
@@ -337,8 +337,8 @@ bool hud_item_manager::get_draw_data(
         *center = final_coords;
     }
     if(size) {
-        size->x = h->size.x * scr_w;
-        size->y = h->size.y * scr_h;
+        size->x = h->size.x * game.win_w;
+        size->y = h->size.y * game.win_h;
     }
     
     return true;

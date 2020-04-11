@@ -1020,7 +1020,7 @@ void save_options() {
         )
     );
     file.add(new data_node("fps", i2s(game.target_fps)));
-    file.add(new data_node("fullscreen", b2s(intended_scr_fullscreen)));
+    file.add(new data_node("fullscreen", b2s(game.intended_win_fullscreen)));
     file.add(
         new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))
     );
@@ -1033,7 +1033,8 @@ void save_options() {
     file.add(new data_node("pretty_whistle", b2s(pretty_whistle)));
     file.add(
         new data_node(
-            "resolution", i2s(intended_scr_w) + " " + i2s(intended_scr_h)
+            "resolution",
+            i2s(game.intended_win_w) + " " + i2s(game.intended_win_h)
         )
     );
     file.add(new data_node("smooth_scaling", b2s(smooth_scaling)));

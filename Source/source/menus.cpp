@@ -44,8 +44,8 @@ area_menu::area_menu() :
 void area_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_bitmap(
-        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(64)
+        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
+        point(game.win_w, game.win_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -138,8 +138,8 @@ void area_menu::load() {
     //Menu widgets.
     back_widget =
         new menu_button(
-        point(scr_w * 0.15, scr_h * 0.10),
-        point(scr_w * 0.20, scr_h * 0.06),
+        point(game.win_w * 0.15, game.win_h * 0.10),
+        point(game.win_w * 0.20, game.win_h * 0.06),
     [this] () {
         leave();
     },
@@ -149,7 +149,8 @@ void area_menu::load() {
     
     menu_widgets.push_back(
         new menu_text(
-            point(scr_w * 0.5, scr_h * 0.1), point(scr_w * 0.3, scr_h * 0.1),
+            point(game.win_w * 0.5, game.win_h * 0.1),
+            point(game.win_w * 0.3, game.win_h * 0.1),
             "Pick an area:",
             font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_CENTER
         )
@@ -158,8 +159,8 @@ void area_menu::load() {
     for(size_t a = 0; a < 8; ++a) {
         menu_widgets.push_back(
             new menu_button(
-                point(scr_w * 0.5, scr_h * (0.2 + 0.08 * a)),
-                point(scr_w * 0.8, scr_h * 0.06),
+                point(game.win_w * 0.5, game.win_h * (0.2 + 0.08 * a)),
+                point(game.win_w * 0.8, game.win_h * 0.06),
         [] () {
         
         },
@@ -171,13 +172,15 @@ void area_menu::load() {
     
     menu_widgets.push_back(
         new menu_text(
-            point(scr_w * 0.15, scr_h * 0.9), point(scr_w * 0.2, scr_h * 0.1),
+            point(game.win_w * 0.15, game.win_h * 0.9),
+            point(game.win_w * 0.2, game.win_h * 0.1),
             "Page:", font_main
         )
     );
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.3, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
+            point(game.win_w * 0.3, game.win_h * 0.9),
+            point(game.win_w * 0.15, game.win_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -191,13 +194,15 @@ void area_menu::load() {
     );
     cur_page_nr_widget =
         new menu_text(
-        point(scr_w * 0.4, scr_h * 0.9), point(scr_w * 0.1, scr_h * 0.1),
+        point(game.win_w * 0.4, game.win_h * 0.9),
+        point(game.win_w * 0.1, game.win_h * 0.1),
         "", font_main
     );
     menu_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
+            point(game.win_w * 0.5, game.win_h * 0.9),
+            point(game.win_w * 0.15, game.win_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -301,8 +306,8 @@ void controls_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     draw_bitmap(
-        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(64)
+        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
+        point(game.win_w, game.win_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -319,8 +324,8 @@ void controls_menu::do_drawing() {
         
         draw_control(
             font_main, *c_ptr,
-            point(scr_w * 0.83, scr_h * (0.2 + 0.08 * list_nr)),
-            point(scr_w * 0.23, scr_h * 0.07)
+            point(game.win_w * 0.83, game.win_h * (0.2 + 0.08 * list_nr)),
+            point(game.win_w * 0.23, game.win_h * 0.07)
         );
     }
     
@@ -446,16 +451,16 @@ void controls_menu::load() {
     //Menu widgets.
     menu_widgets.push_back(
         new menu_text(
-            point(scr_w * 0.45, scr_h * 0.10),
-            point(scr_w * 0.20, scr_h * 0.08),
+            point(game.win_w * 0.45, game.win_h * 0.10),
+            point(game.win_w * 0.20, game.win_h * 0.08),
             "Player:", font_main
         )
     );
     
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.60, scr_h * 0.10),
-            point(scr_w * 0.15, scr_h * 0.08),
+            point(game.win_w * 0.60, game.win_h * 0.10),
+            point(game.win_w * 0.15, game.win_h * 0.08),
     [this] () {
         cur_page_nr = 0;
         cur_player_nr = sum_and_wrap(cur_player_nr, -1, MAX_PLAYERS);
@@ -468,16 +473,16 @@ void controls_menu::load() {
     
     cur_player_nr_widget =
         new menu_text(
-        point(scr_w * 0.70, scr_h * 0.10),
-        point(scr_w * 0.10, scr_h * 0.08),
+        point(game.win_w * 0.70, game.win_h * 0.10),
+        point(game.win_w * 0.10, game.win_h * 0.08),
         "", font_main
     );
     menu_widgets.push_back(cur_player_nr_widget);
     
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.80, scr_h * 0.10),
-            point(scr_w * 0.15, scr_h * 0.08),
+            point(game.win_w * 0.80, game.win_h * 0.10),
+            point(game.win_w * 0.15, game.win_h * 0.08),
     [this] () {
         cur_page_nr = 0;
         cur_player_nr = sum_and_wrap(cur_player_nr, 1, MAX_PLAYERS);
@@ -490,8 +495,8 @@ void controls_menu::load() {
     
     back_widget =
         new menu_button(
-        point(scr_w * 0.15, scr_h * 0.10),
-        point(scr_w * 0.20, scr_h * 0.08),
+        point(game.win_w * 0.15, game.win_h * 0.10),
+        point(game.win_w * 0.20, game.win_h * 0.08),
     [this] () {
         leave();
     },
@@ -502,24 +507,24 @@ void controls_menu::load() {
     for(size_t c = 0; c < 8; c++) {
         control_widgets.push_back(
             new menu_button(
-                point(scr_w * 0.07, scr_h * (0.20 + 0.08 * c)),
-                point(scr_w * 0.08, scr_h * 0.07),
+                point(game.win_w * 0.07, game.win_h * (0.20 + 0.08 * c)),
+                point(game.win_w * 0.08, game.win_h * 0.07),
         [] () { }, "-", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                point(scr_w * 0.16, scr_h * (0.20 + 0.08 * c)),
-                point(scr_w * 0.08, scr_h * 0.07),
+                point(game.win_w * 0.16, game.win_h * (0.20 + 0.08 * c)),
+                point(game.win_w * 0.08, game.win_h * 0.07),
         [] () { }, "<", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_text(
-                point(scr_w * 0.40, scr_h * (0.20 + 0.08 * c)),
-                point(scr_w * 0.39, scr_h * 0.07),
+                point(game.win_w * 0.40, game.win_h * (0.20 + 0.08 * c)),
+                point(game.win_w * 0.39, game.win_h * 0.07),
                 "", font_main, al_map_rgb(255, 255, 255),
                 ALLEGRO_ALIGN_LEFT
             )
@@ -527,16 +532,16 @@ void controls_menu::load() {
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                point(scr_w * 0.65, scr_h * (0.20 + 0.08 * c)),
-                point(scr_w * 0.08, scr_h * 0.07),
+                point(game.win_w * 0.65, game.win_h * (0.20 + 0.08 * c)),
+                point(game.win_w * 0.08, game.win_h * 0.07),
         [] () { }, ">", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                point(scr_w * 0.83, scr_h * (0.20 + 0.08 * c)),
-                point(scr_w * 0.26, scr_h * 0.07),
+                point(game.win_w * 0.83, game.win_h * (0.20 + 0.08 * c)),
+                point(game.win_w * 0.26, game.win_h * 0.07),
         [] () { }, "", font_main
             )
         );
@@ -546,8 +551,8 @@ void controls_menu::load() {
     
     bottom_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.85, scr_h * 0.90),
-            point(scr_w * 0.20, scr_h * 0.07),
+            point(game.win_w * 0.85, game.win_h * 0.90),
+            point(game.win_w * 0.20, game.win_h * 0.07),
     [this] () {
         if(controls[cur_player_nr].size()) {
             size_t last_action =
@@ -578,16 +583,16 @@ void controls_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_text(
-            point(scr_w * 0.15, scr_h * 0.90),
-            point(scr_w * 0.20, scr_h * 0.08),
+            point(game.win_w * 0.15, game.win_h * 0.90),
+            point(game.win_w * 0.20, game.win_h * 0.08),
             "Page:", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.30, scr_h * 0.90),
-            point(scr_w * 0.15, scr_h * 0.08),
+            point(game.win_w * 0.30, game.win_h * 0.90),
+            point(game.win_w * 0.15, game.win_h * 0.08),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -602,16 +607,16 @@ void controls_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     cur_page_nr_widget =
         new menu_text(
-        point(scr_w * 0.40, scr_h * 0.90),
-        point(scr_w * 0.10, scr_h * 0.08),
+        point(game.win_w * 0.40, game.win_h * 0.90),
+        point(game.win_w * 0.10, game.win_h * 0.08),
         "", font_main
     );
     bottom_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.50, scr_h * 0.90),
-            point(scr_w * 0.15, scr_h * 0.08),
+            point(game.win_w * 0.50, game.win_h * 0.90),
+            point(game.win_w * 0.15, game.win_h * 0.08),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -627,8 +632,8 @@ void controls_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     input_capture_msg_widget =
         new menu_text(
-        point(scr_w * 0.50, scr_h * 0.90),
-        point(scr_w * 1.00, scr_h * 0.08),
+        point(game.win_w * 0.50, game.win_h * 0.90),
+        point(game.win_w * 1.00, game.win_h * 0.08),
         "Waiting for any input...", font_main
     );
     menu_widgets.push_back(input_capture_msg_widget);
@@ -780,14 +785,14 @@ main_menu::main_menu() :
 void main_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_bitmap(
-        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h)
+        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
+        point(game.win_w, game.win_h)
     );
     
     //Draw the logo Pikmin.
     point pik_size = logo_pikmin_size;
-    pik_size.x *= scr_w / 100.0f;
-    pik_size.y *= scr_h / 100.0f;
+    pik_size.x *= game.win_w / 100.0f;
+    pik_size.y *= game.win_h / 100.0f;
     
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
@@ -801,14 +806,14 @@ void main_menu::do_drawing() {
     
     draw_scaled_text(
         font_main, al_map_rgb(255, 255, 255),
-        point(8, scr_h  - 8),
+        point(8, game.win_h  - 8),
         point(0.4, 0.4),
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
     draw_scaled_text(
         font_main, al_map_rgb(255, 255, 255),
-        point(scr_w - 8, scr_h  - 8),
+        point(game.win_w - 8, game.win_h  - 8),
         point(0.4, 0.4),
         ALLEGRO_ALIGN_RIGHT, 2,
         game.name + " " + game.version +
@@ -897,7 +902,8 @@ void main_menu::load() {
     //Menu widgets.
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.55), point(scr_w * 0.8, scr_h * 0.06),
+            point(game.win_w * 0.5, game.win_h * 0.55),
+            point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.area_menu_state);
@@ -907,7 +913,8 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.63), point(scr_w * 0.8, scr_h * 0.06),
+            point(game.win_w * 0.5, game.win_h * 0.63),
+            point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.options_menu_state);
@@ -917,7 +924,8 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.71), point(scr_w * 0.8, scr_h * 0.06),
+            point(game.win_w * 0.5, game.win_h * 0.71),
+            point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.animation_editor_state);
@@ -927,7 +935,8 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.79), point(scr_w * 0.8, scr_h * 0.06),
+            point(game.win_w * 0.5, game.win_h * 0.79),
+            point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.area_editor_state);
@@ -937,7 +946,8 @@ void main_menu::load() {
     );
     back_widget =
         new menu_button(
-        point(scr_w * 0.5, scr_h * 0.87), point(scr_w * 0.8, scr_h * 0.06),
+        point(game.win_w * 0.5, game.win_h * 0.87),
+        point(game.win_w * 0.8, game.win_h * 0.06),
     [] () {
         game.is_game_running = false;
     }, "Exit", font_area_name
@@ -1000,11 +1010,11 @@ void main_menu::load() {
             logo_pik pik;
             
             point min_pos = logo_min_screen_limit;
-            min_pos.x *= scr_w / 100.0f;
-            min_pos.y *= scr_h / 100.0f;
+            min_pos.x *= game.win_w / 100.0f;
+            min_pos.y *= game.win_h / 100.0f;
             point max_pos = logo_max_screen_limit;
-            max_pos.x *= scr_w / 100.0f;
-            max_pos.y *= scr_h / 100.0f;
+            max_pos.x *= game.win_w / 100.0f;
+            max_pos.y *= game.win_h / 100.0f;
             
             pik.top = logo_type_bitmaps[row[c]];
             pik.destination =
@@ -1022,19 +1032,19 @@ void main_menu::load() {
             
             pik.pos =
                 point(
-                    randomf(0, scr_w * 0.5),
-                    randomf(0, scr_h * 0.5)
+                    randomf(0, game.win_w * 0.5),
+                    randomf(0, game.win_h * 0.5)
                 );
                 
             if(h_side == 0) {
-                pik.pos.x -= scr_w * 1.2;
+                pik.pos.x -= game.win_w * 1.2;
             } else {
-                pik.pos.x += scr_w * 1.2;
+                pik.pos.x += game.win_w * 1.2;
             }
             if(v_side == 0) {
-                pik.pos.y -= scr_h * 1.2;
+                pik.pos.y -= game.win_h * 1.2;
             } else {
-                pik.pos.y += scr_h * 1.2;
+                pik.pos.y += game.win_h * 1.2;
             }
             
             pik.angle = randomf(0, TAU);
@@ -1090,8 +1100,8 @@ options_menu::options_menu() :
     for(int d = 0; d < n_modes; ++d) {
         ALLEGRO_DISPLAY_MODE d_info;
         if(!al_get_display_mode(d, &d_info)) continue;
-        if(d_info.width < SMALLEST_SCR_W) continue;
-        if(d_info.height < SMALLEST_SCR_H) continue;
+        if(d_info.width < SMALLEST_WIN_W) continue;
+        if(d_info.height < SMALLEST_WIN_H) continue;
         resolution_presets.push_back(
             std::make_pair(d_info.width, d_info.height)
         );
@@ -1099,10 +1109,10 @@ options_menu::options_menu() :
     
     //In case things go wrong, at least add these presets.
     resolution_presets.push_back(
-        std::make_pair(DEF_SCR_W, DEF_SCR_H)
+        std::make_pair(DEF_WIN_W, DEF_WIN_H)
     );
     resolution_presets.push_back(
-        std::make_pair(SMALLEST_SCR_W, SMALLEST_SCR_H)
+        std::make_pair(SMALLEST_WIN_W, SMALLEST_WIN_H)
     );
     
     //Sort the list.
@@ -1135,8 +1145,8 @@ void options_menu::change_resolution(const signed int step) {
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
-            intended_scr_w == resolution_presets[r].first &&
-            intended_scr_h == resolution_presets[r].second
+            game.intended_win_w == resolution_presets[r].first &&
+            game.intended_win_h == resolution_presets[r].second
         ) {
             current_r_index = r;
             break;
@@ -1150,8 +1160,8 @@ void options_menu::change_resolution(const signed int step) {
             sum_and_wrap(current_r_index, step, resolution_presets.size());
     }
     
-    intended_scr_w = resolution_presets[current_r_index].first;
-    intended_scr_h = resolution_presets[current_r_index].second;
+    game.intended_win_w = resolution_presets[current_r_index].first;
+    game.intended_win_h = resolution_presets[current_r_index].second;
     
     if(!warning_widget->enabled) {
         warning_widget->enabled = true;
@@ -1169,8 +1179,8 @@ void options_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     draw_bitmap(
-        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
-        point(scr_w, scr_h), 0, map_gray(64)
+        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
+        point(game.win_w, game.win_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -1243,8 +1253,8 @@ void options_menu::load() {
     //Menu widgets.
     back_widget =
         new menu_button(
-        point(scr_w * 0.15, scr_h * 0.10),
-        point(scr_w * 0.20, scr_h * 0.06),
+        point(game.win_w * 0.15, game.win_h * 0.10),
+        point(game.win_w * 0.20, game.win_h * 0.06),
     [this] () {
         leave();
     },
@@ -1254,10 +1264,10 @@ void options_menu::load() {
     
     fullscreen_widget =
         new menu_checkbox(
-        point(scr_w * 0.25, scr_h * 0.20),
-        point(scr_w * 0.45, scr_h * 0.08),
+        point(game.win_w * 0.25, game.win_h * 0.20),
+        point(game.win_w * 0.45, game.win_h * 0.08),
     [this] () {
-        intended_scr_fullscreen = this->fullscreen_widget->checked;
+        game.intended_win_fullscreen = this->fullscreen_widget->checked;
         warning_widget->enabled = true;
         update();
     },
@@ -1267,8 +1277,8 @@ void options_menu::load() {
     
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.05, scr_h * 0.30),
-            point(scr_w * 0.05, scr_h * 0.08),
+            point(game.win_w * 0.05, game.win_h * 0.30),
+            point(game.win_w * 0.05, game.win_h * 0.08),
     [this] () {
         change_resolution(-1);
     },
@@ -1278,8 +1288,8 @@ void options_menu::load() {
     
     resolution_widget =
         new menu_text(
-        point(scr_w * 0.26, scr_h * 0.30),
-        point(scr_w * 0.35, scr_h * 0.08),
+        point(game.win_w * 0.26, game.win_h * 0.30),
+        point(game.win_w * 0.35, game.win_h * 0.08),
         "Resolution: ", font_main,
         al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
     );
@@ -1287,8 +1297,8 @@ void options_menu::load() {
     
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.45, scr_h * 0.30),
-            point(scr_w * 0.05, scr_h * 0.08),
+            point(game.win_w * 0.45, game.win_h * 0.30),
+            point(game.win_w * 0.05, game.win_h * 0.08),
     [this] () {
         change_resolution(1);
     },
@@ -1298,8 +1308,8 @@ void options_menu::load() {
     
     menu_widgets.push_back(
         new menu_button(
-            point(scr_w * 0.25, scr_h * 0.40),
-            point(scr_w * 0.45, scr_h * 0.08),
+            point(game.win_w * 0.25, game.win_h * 0.40),
+            point(game.win_w * 0.45, game.win_h * 0.08),
     [this] () {
         go_to_controls();
     },
@@ -1310,8 +1320,8 @@ void options_menu::load() {
     
     warning_widget =
         new menu_text(
-        point(scr_w * 0.50, scr_h * 0.95),
-        point(scr_w * 0.95, scr_h * 0.10),
+        point(game.win_w * 0.50, game.win_h * 0.95),
+        point(game.win_w * 0.95, game.win_h * 0.10),
         "Please restart for the changes to take effect.", font_main
     );
     warning_widget->enabled = false;
@@ -1351,8 +1361,8 @@ void options_menu::update() {
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
-            intended_scr_w == resolution_presets[r].first &&
-            intended_scr_h == resolution_presets[r].second
+            game.intended_win_w == resolution_presets[r].first &&
+            game.intended_win_h == resolution_presets[r].second
         ) {
             current_r_index = r;
             break;
@@ -1361,9 +1371,9 @@ void options_menu::update() {
     
     resolution_widget->text =
         "Resolution: " +
-        i2s(intended_scr_w) + "x" +
-        i2s(intended_scr_h) +
+        i2s(game.intended_win_w) + "x" +
+        i2s(game.intended_win_h) +
         (current_r_index == INVALID ? " (Custom)" : "");
         
-    fullscreen_widget->checked = intended_scr_fullscreen;
+    fullscreen_widget->checked = game.intended_win_fullscreen;
 }

@@ -219,7 +219,7 @@ void gameplay::do_gameplay_logic() {
     
     //Set the camera bounding box.
     cam_box[0] = point(0, 0);
-    cam_box[1] = point(scr_w, scr_h);
+    cam_box[1] = point(game.win_w, game.win_h);
     al_transform_coordinates(
         &screen_to_world_transform,
         &cam_box[0].x,
@@ -652,7 +652,7 @@ void gameplay::do_gameplay_logic() {
         string n_particles_str =
             box_string(i2s(particles.get_count()), 7);
         string resolution_str =
-            i2s(scr_w) + "x" + i2s(scr_h);
+            i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =
             game.cur_area_data.version;
         string area_creator_str =

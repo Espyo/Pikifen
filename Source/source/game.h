@@ -23,6 +23,12 @@
 
 //Default target FPS.
 const unsigned int DEF_TARGET_FPS = 60;
+//Default fullscreen state.
+const bool DEF_WIN_FULLSCREEN = false;
+//Default window height.
+const unsigned int DEF_WIN_H = 768;
+//Default window width.
+const unsigned int DEF_WIN_W = 1024;
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 //Only save the latest N FPS samples.
@@ -57,6 +63,12 @@ public:
     gameplay* gameplay_state;
     //Identity matrix transformation. Cache for convenience.
     ALLEGRO_TRANSFORM identity_transform;
+    //Does the player intend to use fullscreen?
+    bool intended_win_fullscreen;
+    //Player's intended window height.
+    int intended_win_h;
+    //Player's intended window width.
+    int intended_win_w;
     //Set to false to stop program execution next frame.
     bool is_game_running;
     //Main menu game state.
@@ -69,6 +81,12 @@ public:
     int target_fps;
     //Version of the fan-game.
     string version;
+    //Current fullscreen state.
+    bool win_fullscreen;
+    //Current window height.
+    unsigned int win_h;
+    //Current window width.
+    unsigned int win_w;
     
     //Change to a different state.
     void change_state(game_state* new_state);

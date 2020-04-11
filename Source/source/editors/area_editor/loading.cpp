@@ -53,12 +53,12 @@ void area_editor::load() {
         al_map_rgb(96, 128, 160),
         font_builtin
     );
-    gui = new lafi::gui(scr_w, scr_h, gui_style);
+    gui = new lafi::gui(game.win_w, game.win_h, gui_style);
     
     
     //Main -- declarations.
     frm_main =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
@@ -74,7 +74,7 @@ void area_editor::load() {
     int y = frm_main->easy_row();
     
     frm_area =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_main->add("frm_area", frm_area);
     
     frm_area->easy_row();
@@ -214,7 +214,7 @@ void area_editor::load() {
         
     //Info -- declarations.
     frm_info =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_info", frm_info);
     
     frm_info->easy_row();
@@ -501,7 +501,7 @@ void area_editor::load() {
         
     //Layout -- declarations.
     frm_layout =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_layout", frm_layout);
     
     frm_layout->easy_row();
@@ -537,7 +537,7 @@ void area_editor::load() {
     y = frm_layout->easy_row();
     
     frm_sector =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_layout->add("frm_sector", frm_sector);
     
     frm_sector->easy_row();
@@ -639,7 +639,7 @@ void area_editor::load() {
     frm_sector->easy_row();
     
     frm_sector_multi =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_layout->add("frm_sector_multi", frm_sector_multi);
     
     frm_sector_multi->easy_row();
@@ -854,7 +854,7 @@ void area_editor::load() {
     
     //Advanced sector behavior -- declarations.
     frm_asb =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_asb", frm_asb);
     
     frm_asb->easy_row();
@@ -996,7 +996,7 @@ void area_editor::load() {
     
     //Texture picker -- declarations.
     frm_texture =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_texture", frm_texture);
     
     frm_texture->add(
@@ -1005,27 +1005,29 @@ void area_editor::load() {
     );
     frm_texture->add(
         "txt_name",
-        new lafi::textbox(canvas_br.x + 8, 40, scr_w - 88, 56)
+        new lafi::textbox(canvas_br.x + 8, 40, game.win_w - 88, 56)
     );
     frm_texture->add(
         "but_browse",
-        new lafi::button(scr_w - 80, 32, scr_w - 48, 64, "...")
+        new lafi::button(game.win_w - 80, 32, game.win_w - 48, 64, "...")
     );
     frm_texture->add(
         "but_ok",
-        new lafi::button(scr_w - 40, 32, scr_w - 8, 64, "Ok")
+        new lafi::button(game.win_w - 40, 32, game.win_w - 8, 64, "Ok")
     );
     frm_texture->add(
         "lbl_suggestions",
-        new lafi::label(canvas_br.x + 8, 72, scr_w - 8, 88, "Suggestions:")
+        new lafi::label(canvas_br.x + 8, 72, game.win_w - 8, 88, "Suggestions:")
     );
     frm_texture->add(
         "frm_list",
-        new lafi::frame(canvas_br.x + 8, 96, scr_w - 32, scr_h - 56)
+        new lafi::frame(canvas_br.x + 8, 96, game.win_w - 32, game.win_h - 56)
     );
     frm_texture->add(
         "bar_scroll",
-        new lafi::scrollbar(scr_w - 24, 96, scr_w - 8, scr_h - 56)
+        new lafi::scrollbar(
+            game.win_w - 24, 96, game.win_w - 8, game.win_h - 56
+        )
     );
     
     
@@ -1101,7 +1103,7 @@ void area_editor::load() {
     
     //Advanced sector appearance -- declarations.
     frm_asa =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_asa", frm_asa);
     
     frm_asa->easy_row();
@@ -1270,7 +1272,7 @@ void area_editor::load() {
         
     //Mobs -- declarations.
     frm_mobs =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_mobs", frm_mobs);
     
     frm_mobs->easy_row();
@@ -1298,7 +1300,7 @@ void area_editor::load() {
     y = frm_mobs->easy_row();
     
     frm_mob =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_mobs->add("frm_mob", frm_mob);
     
     frm_mob->easy_row();
@@ -1351,7 +1353,7 @@ void area_editor::load() {
     frm_mob->easy_row();
     
     frm_mob_multi =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_mobs->add("frm_mob_multi", frm_mob_multi);
     
     frm_mob_multi->easy_row();
@@ -1502,7 +1504,7 @@ void area_editor::load() {
     
     //Paths -- declarations.
     frm_paths =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_paths", frm_paths);
     
     frm_paths->easy_row();
@@ -1661,7 +1663,7 @@ void area_editor::load() {
         
     //Details -- declarations.
     frm_details =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_details", frm_details);
     
     frm_details->easy_row();
@@ -1698,7 +1700,7 @@ void area_editor::load() {
     y = frm_details->easy_row();
     
     frm_shadow =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_details->add("frm_shadow", frm_shadow);
     
     frm_shadow->easy_row();
@@ -1918,7 +1920,7 @@ void area_editor::load() {
         
     //Review -- declarations.
     frm_review =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_review", frm_review);
     
     frm_review->easy_row();
@@ -2085,7 +2087,7 @@ void area_editor::load() {
         
     //Tools -- declarations.
     frm_tools =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_tools", frm_tools);
     
     frm_tools->easy_row();
@@ -2321,7 +2323,7 @@ void area_editor::load() {
         
     //Sector texture transformer -- declarations.
     frm_stt =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_stt", frm_stt);
     
     frm_stt->easy_row();
@@ -2399,7 +2401,7 @@ void area_editor::load() {
         
     //Options -- declarations.
     frm_options =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_options", frm_options);
     
     frm_options->easy_row();

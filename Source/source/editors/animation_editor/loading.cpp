@@ -58,12 +58,12 @@ void animation_editor::load() {
         al_map_rgb(96, 128, 160),
         font_builtin
     );
-    gui = new lafi::gui(scr_w, scr_h, gui_style);
+    gui = new lafi::gui(game.win_w, game.win_h, gui_style);
     
     
     //Main -- declarations.
     frm_main =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
@@ -79,7 +79,7 @@ void animation_editor::load() {
     int y = frm_main->easy_row();
     
     frm_object =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_main->add("frm_object", frm_object);
     frm_object->easy_row();
     frm_object->easy_add(
@@ -197,7 +197,7 @@ void animation_editor::load() {
         
     //Load -- declarations.
     frm_load =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_load", frm_load);
     
     frm_load->easy_row();
@@ -238,7 +238,7 @@ void animation_editor::load() {
     y = frm_load->easy_row();
     frm_load->add(
         "frm_list",
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h)
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h)
     );
     
     
@@ -301,7 +301,7 @@ void animation_editor::load() {
         
     //Animations -- declarations.
     frm_anims =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_anims", frm_anims);
     
     frm_anims->easy_row();
@@ -326,7 +326,7 @@ void animation_editor::load() {
     y = frm_anims->easy_row();
     
     frm_anim =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_anims->add("frm_anim", frm_anim);
     frm_anim->easy_row();
     frm_anim->easy_add(
@@ -433,7 +433,7 @@ void animation_editor::load() {
     y += frm_anim->easy_row();
     
     frm_frame =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_anim->add("frm_frame", frm_frame);
     
     frm_frame->easy_row();
@@ -740,7 +740,7 @@ void animation_editor::load() {
     
     //Sprites -- declarations.
     frm_sprites =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_sprites", frm_sprites);
     
     frm_sprites->easy_row();
@@ -765,7 +765,7 @@ void animation_editor::load() {
     y = frm_sprites->easy_row();
     
     frm_sprite =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_sprites->add("frm_sprite", frm_sprite);
     
     frm_sprite->easy_row();
@@ -956,7 +956,7 @@ void animation_editor::load() {
         
     //Sprite bitmap -- declarations.
     frm_sprite_bmp =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_sprite_bmp", frm_sprite_bmp);
     
     frm_sprite_bmp->easy_row();
@@ -1139,7 +1139,7 @@ void animation_editor::load() {
         
     //Sprite transform -- declarations.
     frm_sprite_tra =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_sprite_tra", frm_sprite_tra);
     
     frm_sprite_tra->easy_row();
@@ -1222,7 +1222,7 @@ void animation_editor::load() {
     y = frm_sprite_tra->easy_row();
     
     frm_sprite_comp =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_sprite_tra->add("frm_sprite_comp", frm_sprite_comp);
     
     frm_sprite_comp->easy_row();
@@ -1351,7 +1351,7 @@ void animation_editor::load() {
         
     //Hitboxes -- declarations.
     frm_hitboxes =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_hitboxes", frm_hitboxes);
     
     frm_hitboxes->easy_row();
@@ -1393,7 +1393,7 @@ void animation_editor::load() {
     y = frm_hitboxes->easy_row();
     
     frm_hitbox =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_hitboxes->add("frm_hitbox", frm_hitbox);
     
     frm_hitbox->easy_row();
@@ -1454,7 +1454,7 @@ void animation_editor::load() {
     y += frm_hitbox->easy_row();
     
     frm_normal_h =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_hitbox->add("frm_normal_h", frm_normal_h);
     
     frm_normal_h->easy_row();
@@ -1484,7 +1484,7 @@ void animation_editor::load() {
     frm_normal_h->easy_row();
     
     frm_attack_h =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_hitbox->add("frm_attack_h", frm_attack_h);
     
     frm_attack_h->easy_row();
@@ -1717,7 +1717,7 @@ void animation_editor::load() {
         
     //Pikmin top -- declarations.
     frm_top =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_top", frm_top);
     
     frm_top->easy_row();
@@ -1855,7 +1855,7 @@ void animation_editor::load() {
         
     //Body parts -- declarations.
     frm_body_parts =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_body_parts", frm_body_parts);
     
     frm_body_parts->easy_row();
@@ -1926,7 +1926,7 @@ void animation_editor::load() {
     y = frm_body_parts->easy_row();
     
     frm_body_part =
-        new lafi::frame(canvas_br.x, y, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, y, game.win_w, game.win_h);
     frm_body_parts->add("frm_body_part", frm_body_part);
     
     frm_body_part->easy_row();
@@ -2104,7 +2104,7 @@ void animation_editor::load() {
         
     //Tools -- declarations.
     frm_tools =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_tools", frm_tools);
     
     frm_tools->easy_row();
@@ -2271,7 +2271,7 @@ void animation_editor::load() {
         
     //Options -- declarations.
     frm_options =
-        new lafi::frame(canvas_br.x, 0, scr_w, scr_h);
+        new lafi::frame(canvas_br.x, 0, game.win_w, game.win_h);
     gui->add("frm_options", frm_options);
     
     frm_options->easy_row();

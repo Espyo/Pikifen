@@ -288,7 +288,7 @@ void animation_editor::draw_side_view_hitbox(
     if(h_ptr->height == 0) {
         //Set the coordinates to the screen top and screen bottom. Add some
         //padding just to make sure.
-        z_to_use = scr_h + 1;
+        z_to_use = game.win_h + 1;
         h_to_use = 0 - 1;
         al_transform_coordinates(&screen_to_world_transform, &dummy, &z_to_use);
         al_transform_coordinates(&screen_to_world_transform, &dummy, &h_to_use);

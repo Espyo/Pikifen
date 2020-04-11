@@ -205,7 +205,7 @@ void gameplay::load() {
     load_area(area_to_load, false, false);
     
     if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
-        lightmap_bmp = al_create_bitmap(scr_w, scr_h);
+        lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);
     }
     if(!game.cur_area_data.weather_condition.fog_color.empty()) {
         bmp_fog =
@@ -668,8 +668,8 @@ void gameplay::update_transformations() {
     world_to_screen_transform = game.identity_transform;
     al_translate_transform(
         &world_to_screen_transform,
-        -cam_pos.x + scr_w / 2.0 / cam_zoom,
-        -cam_pos.y + scr_h / 2.0 / cam_zoom
+        -cam_pos.x + game.win_w / 2.0 / cam_zoom,
+        -cam_pos.y + game.win_h / 2.0 / cam_zoom
     );
     al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
     

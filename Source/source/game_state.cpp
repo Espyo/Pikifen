@@ -109,7 +109,7 @@ void game_state::handle_menu_button(
                 w2_pivot.y = w_ptr->center.y;
                 
                 if(selected_widget->center.x == w_ptr->center.x) continue;
-                if(cur_pivot.x > w2_pivot.x) w2_pivot.x += scr_w;
+                if(cur_pivot.x > w2_pivot.x) w2_pivot.x += game.win_w;
                 
             } else if(pressed == BUTTON_MENU_UP) {
                 cur_pivot.x =
@@ -120,7 +120,7 @@ void game_state::handle_menu_button(
                 w2_pivot.y = w_ptr->center.y + w_ptr->size.y * 0.25;
                 
                 if(selected_widget->center.y == w_ptr->center.y) continue;
-                if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= scr_h;
+                if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= game.win_h;
                 
             } else if(pressed == BUTTON_MENU_LEFT) {
                 cur_pivot.x =
@@ -131,7 +131,7 @@ void game_state::handle_menu_button(
                 w2_pivot.y = w_ptr->center.y;
                 
                 if(selected_widget->center.x == w_ptr->center.x) continue;
-                if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= scr_w;
+                if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= game.win_w;
                 
             } else {
                 cur_pivot.x =
@@ -142,7 +142,7 @@ void game_state::handle_menu_button(
                 w2_pivot.y = w_ptr->center.y - w_ptr->size.y * 0.25;
                 
                 if(selected_widget->center.y == w_ptr->center.y) continue;
-                if(cur_pivot.y > w2_pivot.y) w2_pivot.y += scr_h;
+                if(cur_pivot.y > w2_pivot.y) w2_pivot.y += game.win_h;
             }
             
             dist d(cur_pivot, w2_pivot);

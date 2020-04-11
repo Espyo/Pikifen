@@ -1093,7 +1093,7 @@ void load_options() {
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
     rs.set("fps", game.target_fps);
-    rs.set("fullscreen", scr_fullscreen);
+    rs.set("fullscreen", game.win_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
     rs.set("max_particles", max_particles);
@@ -1113,8 +1113,8 @@ void load_options() {
     
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {
-        scr_w = std::max(1, s2i(resolution_parts[0]));
-        scr_h = std::max(1, s2i(resolution_parts[1]));
+        game.win_w = std::max(1, s2i(resolution_parts[0]));
+        game.win_h = std::max(1, s2i(resolution_parts[1]));
     }
     
     for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
@@ -1124,9 +1124,9 @@ void load_options() {
         );
     }
     
-    intended_scr_fullscreen = scr_fullscreen;
-    intended_scr_w = scr_w;
-    intended_scr_h = scr_h;
+    game.intended_win_fullscreen = game.win_fullscreen;
+    game.intended_win_w = game.win_w;
+    game.intended_win_h = game.win_h;
     
 }
 
