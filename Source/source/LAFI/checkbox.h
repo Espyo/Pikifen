@@ -38,8 +38,6 @@ public:
  * is this plus a label.
  */
 class checkbox_box : public widget {
-private:
-
 public:
     bool checked;
     

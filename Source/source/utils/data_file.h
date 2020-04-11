@@ -56,13 +56,6 @@ const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
  * A node of data. Nodes may contain a value, and/or a list of children nodes.
  */
 class data_node {
-private:
-    vector<data_node*> children;
-    vector<data_node*> dummy_children;
-    data_node* create_dummy();
-    
-    string trim_spaces(const string &s, const bool left_only = false);
-    
 public:
     string name;    //The node's name.
     string value;   //And its value.
@@ -112,6 +105,14 @@ public:
     data_node(const data_node &dn2);
     const data_node &operator=(const data_node &dn2);
     ~data_node();
+
+private:
+    vector<data_node*> children;
+    vector<data_node*> dummy_children;
+    data_node* create_dummy();
+    
+    string trim_spaces(const string &s, const bool left_only = false);
+    
 };
 
 

@@ -15,16 +15,6 @@ namespace lafi {
  * and mouse button up), it'll run some code.
  */
 class button : public widget {
-private:
-    string prev_text;
-    float offset;
-    float offset_start_time_left;
-    float offset_reset_time_left;
-    
-    static const float OFFSET_START_DELAY;
-    static const float OFFSET_RESET_DELAY;
-    static const float OFFSET_SPEED;
-    
 public:
     string text;
     ALLEGRO_BITMAP* icon;
@@ -43,6 +33,17 @@ public:
     
     void widget_on_tick(const float time);
     void draw_self();
+
+private:
+    string prev_text;
+    float offset;
+    float offset_start_time_left;
+    float offset_reset_time_left;
+    
+    static const float OFFSET_START_DELAY;
+    static const float OFFSET_RESET_DELAY;
+    static const float OFFSET_SPEED;
+    
 };
 
 }

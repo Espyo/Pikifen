@@ -100,10 +100,6 @@ struct replay_state {
  * relevant data of every moment.
  */
 class replay {
-private:
-    vector<mob*> prev_state_mobs;
-    size_t prev_leader_nr;
-    
 public:
     vector<replay_state> states;
     
@@ -122,6 +118,11 @@ public:
     void finish_recording();
     void load_from_file(const string &file_name);
     void save_to_file(const string &file_name);
+    
+private:
+    vector<mob*> prev_state_mobs;
+    size_t prev_leader_nr;
+    
 };
 
 #endif //ifndef REPLAY_H

@@ -15,16 +15,6 @@ namespace lafi {
  * on the box, and then type.
  */
 class textbox : public widget {
-private:
-    //Scroll the text by this much. Used to keep track of the cursor.
-    int scroll_x;
-    //Is the cursor currently visible?
-    bool cursor_visible;
-    //Time left until the cursor swaps states.
-    float cursor_change_time_left;
-    
-    static const float CURSOR_CHANGE_INTERVAL;
-    
 public:
 
     static size_t cur_tab_index;
@@ -62,6 +52,17 @@ public:
     void draw_self();
     
     unsigned int mouse_to_char(const int mouse_x);
+
+private:
+    //Scroll the text by this much. Used to keep track of the cursor.
+    int scroll_x;
+    //Is the cursor currently visible?
+    bool cursor_visible;
+    //Time left until the cursor swaps states.
+    float cursor_change_time_left;
+    
+    static const float CURSOR_CHANGE_INTERVAL;
+    
 };
 
 }

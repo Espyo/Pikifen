@@ -91,9 +91,6 @@ public:
  * Read the sector type manager's comments for more info.
  */
 struct mob_category_manager {
-private:
-    vector<mob_category*> categories;
-    
 public:
     void register_category(size_t nr, mob_category* category);
     mob_type* find_mob_type(const string &name);
@@ -105,6 +102,10 @@ public:
     mob_category* get_from_name(const string &name);
     mob_category* get_from_pname(const string &pname);
     void clear();
+
+private:
+    vector<mob_category*> categories;
+    
 };
 
 

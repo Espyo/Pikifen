@@ -94,19 +94,6 @@ struct particle {
  * Manages a list of particles, allows the addition of new ones, etc.
  */
 struct particle_manager {
-private:
-    //This list works as follows:
-    //The first "count" particles are alive.
-    //The next particle is the beginning of the dead ones.
-    //When a particle is deleted, swap places between it and the first
-    //"dead" particle, to preserve the list's logic.
-    //When a particle is added, if the entire list is filled with live ones,
-    //delete the one on position 0 (presumably the oldest).
-    particle* particles;
-    size_t count;
-    size_t max_nr;
-    void remove(const size_t pos);
-    
 public:
     void add(particle p);
     void clear();
@@ -122,6 +109,19 @@ public:
     const particle_manager &operator=(const particle_manager &pm2);
     ~particle_manager();
     
+private:
+    //This list works as follows:
+    //The first "count" particles are alive.
+    //The next particle is the beginning of the dead ones.
+    //When a particle is deleted, swap places between it and the first
+    //"dead" particle, to preserve the list's logic.
+    //When a particle is added, if the entire list is filled with live ones,
+    //delete the one on position 0 (presumably the oldest).
+    particle* particles;
+    size_t count;
+    size_t max_nr;
+    void remove(const size_t pos);
+    
 };
 
 
@@ -130,9 +130,6 @@ public:
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
 struct particle_generator {
-private:
-    float emission_timer;
-    
 public:
     //Optional ID, if you need to identify it later on.
     size_t id;
@@ -171,6 +168,9 @@ public:
     void tick(const float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
     void reset();
+    
+private:
+    float emission_timer;
     
 };
 

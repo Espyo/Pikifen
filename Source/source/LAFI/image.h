@@ -13,9 +13,6 @@ namespace lafi {
  * The bitmap is NOT managed by the widget, so make sure it is not NULL.
  */
 class image : public widget {
-private:
-    ALLEGRO_BITMAP* bmp;
-    
 public:
     image(
         const int x1, const int y1, const int x2, const int y2,
@@ -26,6 +23,10 @@ public:
     image(image &i2);
     
     void draw_self();
+
+private:
+    ALLEGRO_BITMAP* bmp;
+    
 };
 
 }

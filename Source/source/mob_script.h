@@ -268,13 +268,6 @@ public:
  * they would be in a plain text file!
  */
 class easy_fsm_creator {
-private:
-    vector<mob_state*> states;
-    mob_state* cur_state;
-    mob_event* cur_event;
-    void commit_state();
-    void commit_event();
-    
 public:
     void new_state(const string &name, const size_t id);
     void new_event(const unsigned char type);
@@ -282,6 +275,14 @@ public:
     void run(custom_action_code code);
     vector<mob_state*> finish();
     easy_fsm_creator();
+
+private:
+    vector<mob_state*> states;
+    mob_state* cur_state;
+    mob_event* cur_event;
+    void commit_state();
+    void commit_event();
+    
 };
 
 struct hitbox_interaction {

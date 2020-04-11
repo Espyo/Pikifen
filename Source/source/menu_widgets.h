@@ -57,9 +57,6 @@ public:
 };
 
 class menu_button : public menu_widget {
-private:
-    virtual void on_click();
-    
 public:
     string text;
     ALLEGRO_FONT* font;
@@ -75,12 +72,13 @@ public:
     );
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
-};
 
-class menu_checkbox : public menu_widget {
 private:
     virtual void on_click();
     
+};
+
+class menu_checkbox : public menu_widget {
 public:
     string text;
     ALLEGRO_FONT* font;
@@ -97,12 +95,13 @@ public:
     );
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
-};
 
-class menu_text : public menu_widget {
 private:
     virtual void on_click();
     
+};
+
+class menu_text : public menu_widget {
 public:
     string text;
     ALLEGRO_FONT* font;
@@ -117,6 +116,10 @@ public:
     );
     virtual void draw(const float time_spent);
     virtual bool is_clickable();
+
+private:
+    virtual void on_click();
+    
 };
 
 #endif //ifndef MENU_WIDGETS_INCLUDED

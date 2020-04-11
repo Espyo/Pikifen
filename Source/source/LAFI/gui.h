@@ -13,12 +13,6 @@ namespace lafi {
  * all widgets for a screen.
  */
 class gui : public widget {
-private:
-    ALLEGRO_TIMER* loop_timer;
-    ALLEGRO_EVENT_QUEUE* ev_queue;
-    ALLEGRO_THREAD* thread;
-    
-    static void* thread_code(ALLEGRO_THREAD* thread, void* gui);
 public:
     bool autonomous;
     bool close_button_quits;
@@ -37,6 +31,14 @@ public:
     void wait();
     
     void draw_self();
+
+private:
+    ALLEGRO_TIMER* loop_timer;
+    ALLEGRO_EVENT_QUEUE* ev_queue;
+    ALLEGRO_THREAD* thread;
+    
+    static void* thread_code(ALLEGRO_THREAD* thread, void* gui);
+    
 };
 
 }

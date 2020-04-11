@@ -13,10 +13,6 @@ namespace lafi {
  * by rotating a dial.
  */
 class angle_picker : public widget {
-private:
-    float angle; //In radians.
-    bool dragging_pointer;
-    
 public:
 
     angle_picker(
@@ -40,6 +36,10 @@ public:
     
     void init();
     void draw_self();
+    
+private:
+    float angle; //In radians.
+    bool dragging_pointer;
     
 };
 

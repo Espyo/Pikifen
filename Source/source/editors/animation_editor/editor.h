@@ -26,6 +26,26 @@
 using std::size_t;
 
 class animation_editor : public editor {
+public:
+
+    //How many entries of the history to store, at most.
+    static const size_t HISTORY_SIZE = 6;
+    
+    animation_editor();
+    
+    //Automatically load this animation file upon boot-up of the editor, if any.
+    string auto_load_anim;
+    //History for the last files that were opened.
+    vector<string> history;
+    
+    void update_history(const string &n);
+    
+    void do_logic();
+    void do_drawing();
+    void load();
+    void unload();
+    virtual string get_name();
+    
 private:
 
     enum EDITOR_STATES {
@@ -219,26 +239,6 @@ private:
     void pick(
         const size_t picker_id, const string &name, const string &category
     );
-    
-public:
-
-    //How many entries of the history to store, at most.
-    static const size_t HISTORY_SIZE = 6;
-    
-    animation_editor();
-    
-    //Automatically load this animation file upon boot-up of the editor, if any.
-    string auto_load_anim;
-    //History for the last files that were opened.
-    vector<string> history;
-    
-    void update_history(const string &n);
-    
-    void do_logic();
-    void do_drawing();
-    void load();
-    void unload();
-    virtual string get_name();
     
 };
 

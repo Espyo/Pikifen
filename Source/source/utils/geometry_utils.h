@@ -56,11 +56,6 @@ struct point {
  * to LARGE_FLOAT if it is uncached.
  */
 struct dist {
-private:
-    float distance_squared;
-    float normal_distance;
-    bool has_normal_distance;
-    
 public:
     dist(const point &p1, const point &p2);
     dist(const float d = 0.0f);
@@ -79,6 +74,12 @@ public:
     bool operator !=(const dist &d2);
     void operator +=(const dist &d2);
     float to_float();
+
+private:
+    float distance_squared;
+    float normal_distance;
+    bool has_normal_distance;
+    
 };
 
 

@@ -30,10 +30,19 @@ using std::vector;
  * warning manager, information for the gui, etc.
  */
 class editor : public game_state {
-private:
-    vector<std::pair<string, string> > picker_elements;
-    size_t cur_picker_id;
+public:
+
+    editor();
+    virtual ~editor() = default;
     
+    virtual void do_drawing() = 0;
+    virtual void do_logic() = 0;
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
+    virtual void load();
+    virtual void unload();
+    virtual void update_transformations();
+    virtual string get_name() = 0;
+
 protected:
 
     static const int   EDITOR_ICON_BMP_PADDING;
@@ -96,6 +105,22 @@ protected:
     };
     
     struct transformation_controller {
+    public:
+        bool keep_aspect_ratio;
+        bool allow_rotation;
+        
+        void draw_handles();
+        bool handle_mouse_down(const point pos);
+        void handle_mouse_up();
+        bool handle_mouse_move(const point pos);
+        point get_center();
+        point get_size();
+        float get_angle();
+        void set_center(const point &center);
+        void set_size(const point &size);
+        void set_angle(const float angle);
+        transformation_controller();
+    
     private:
         static const float HANDLE_RADIUS;
         static const float ROTATION_HANDLE_THICKNESS;
@@ -112,35 +137,12 @@ protected:
         point get_handle_pos(const unsigned char handle);
         void update();
         
-    public:
-        bool keep_aspect_ratio;
-        bool allow_rotation;
-        
-        void draw_handles();
-        bool handle_mouse_down(const point pos);
-        void handle_mouse_up();
-        bool handle_mouse_move(const point pos);
-        point get_center();
-        point get_size();
-        float get_angle();
-        void set_center(const point &center);
-        void set_size(const point &size);
-        void set_angle(const float angle);
-        transformation_controller();
     };
     
     /*
      * Makes setting variables from LAFI widgets easier.
      */
     struct gui_to_var_helper {
-    private:
-        map<bool*, bool> bools;
-        map<int*, int> ints;
-        map<float*, float> floats;
-        map<unsigned char*, unsigned char> uchars;
-        map<string*, string> strings;
-        map<ALLEGRO_COLOR*, ALLEGRO_COLOR> colors;
-        map<point*, point> points;
     public:
         void register_bool(bool* var, const bool gui_value);
         void register_int(int* var, const int gui_value);
@@ -159,6 +161,15 @@ protected:
         );
         bool all_equal();
         void set_all();
+    
+    private:
+        map<bool*, bool> bools;
+        map<int*, int> ints;
+        map<float*, float> floats;
+        map<unsigned char*, unsigned char> uchars;
+        map<string*, string> strings;
+        map<ALLEGRO_COLOR*, ALLEGRO_COLOR> colors;
+        map<point*, point> points;
     };
     
     ALLEGRO_BITMAP*         bmp_editor_icons;
@@ -299,18 +310,10 @@ protected:
         lafi::widget* parent, const string &radio_name, const bool selection
     );
     
-public:
-
-    editor();
-    virtual ~editor() = default;
+private:
+    vector<std::pair<string, string> > picker_elements;
+    size_t cur_picker_id;
     
-    virtual void do_drawing() = 0;
-    virtual void do_logic() = 0;
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
-    virtual void load();
-    virtual void unload();
-    virtual void update_transformations();
-    virtual string get_name() = 0;
 };
 
 #endif //ifndef EDITOR_INCLUDED

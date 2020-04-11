@@ -22,12 +22,42 @@
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay : public game_state {
+public:
+
+    gameplay();
+    
+    //How much real time has passed since the area was loaded.
+    float area_time_passed;
+    //Name of the area to be loaded.
+    string area_to_load;
+    //Group member closest to player 1's leader.
+    mob* closest_group_member;
+    //Is the group member closest to player 1's leader distant?
+    bool closest_group_member_distant;
+    //Index of player 1's current leader, in the array of leaders.
+    size_t cur_leader_nr;
+    //Pointer to player 1's leader. Cache for convenience.
+    leader* cur_leader_ptr;
+    //What time of the day is it in-game? In minutes.
+    float day_minutes;
+    
+    void leave();
+    void update_closest_group_member();
+    
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+    virtual void update_transformations();
+    virtual string get_name();
+    
 private:
 
     static const float AREA_INTRO_HUD_MOVE_TIME;
     static const float CURSOR_INVALID_EFFECT_SPEED;
     static const float CURSOR_SAVE_INTERVAL;
-
+    
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
     //a viable mob, its distance, and the corresponding event.
@@ -124,34 +154,6 @@ private:
     );
     void unload_game_content();
     
-public:
-    gameplay();
-    
-    //How much real time has passed since the area was loaded.
-    float area_time_passed;
-    //Name of the area to be loaded.
-    string area_to_load;
-    //Group member closest to player 1's leader.
-    mob* closest_group_member;
-    //Is the group member closest to player 1's leader distant?
-    bool closest_group_member_distant;
-    //Index of player 1's current leader, in the array of leaders.
-    size_t cur_leader_nr;
-    //Pointer to player 1's leader. Cache for convenience.
-    leader* cur_leader_ptr;
-    //What time of the day is it in-game? In minutes.
-    float day_minutes;
-    
-    void leave();
-    void update_closest_group_member();
-    
-    virtual void load();
-    virtual void unload();
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual void update_transformations();
-    virtual string get_name();
 };
 
 #endif //ifndef GAMEPLAY_INCLUDED

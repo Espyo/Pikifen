@@ -59,8 +59,6 @@ struct accelerator {
  * of calculating coordinates and such.
  */
 class widget {
-private:
-
 public:
     widget* parent;
     bool mouse_in;

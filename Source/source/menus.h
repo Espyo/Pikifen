@@ -23,6 +23,15 @@ using std::size_t;
 using std::vector;
 
 class main_menu : public game_state {
+public:
+    main_menu();
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+    virtual string get_name();
+
 private:
     struct logo_pik {
         point pos;
@@ -51,18 +60,19 @@ private:
     point logo_pikmin_size;
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
+};
+
+
+class options_menu : public game_state {
 public:
-    main_menu();
+    options_menu();
     virtual void load();
     virtual void unload();
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
     virtual string get_name();
-};
 
-
-class options_menu : public game_state {
 private:
     vector<std::pair<int, int> > resolution_presets;
     
@@ -78,18 +88,19 @@ private:
     void update();
     void leave();
     
+};
+
+
+class controls_menu : public game_state {
 public:
-    options_menu();
+    controls_menu();
     virtual void load();
     virtual void unload();
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
     virtual string get_name();
-};
 
-
-class controls_menu : public game_state {
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
@@ -110,18 +121,19 @@ private:
     void update();
     void leave();
     
+};
+
+
+class area_menu : public game_state {
 public:
-    controls_menu();
+    area_menu();
     virtual void load();
     virtual void unload();
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
     virtual string get_name();
-};
 
-
-class area_menu : public game_state {
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
@@ -135,14 +147,6 @@ private:
     void leave();
     void update();
     
-public:
-    area_menu();
-    virtual void load();
-    virtual void unload();
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual string get_name();
 };
 
 

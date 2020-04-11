@@ -85,17 +85,6 @@ struct timer {
  * are not the only thing using the bitmap manager.
  */
 struct bmp_manager {
-private:
-    struct bmp_info {
-        ALLEGRO_BITMAP* b;
-        size_t calls;
-        bmp_info(ALLEGRO_BITMAP* b = NULL);
-    };
-    string base_dir;
-    map<string, bmp_info> list;
-    long total_calls; //Useful for debugging.
-    void detach(map<string, bmp_info>::iterator it);
-    
 public:
     bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
@@ -108,6 +97,18 @@ public:
     
     long get_total_calls();
     size_t get_list_size();
+
+private:
+    struct bmp_info {
+        ALLEGRO_BITMAP* b;
+        size_t calls;
+        bmp_info(ALLEGRO_BITMAP* b = NULL);
+    };
+    string base_dir;
+    map<string, bmp_info> list;
+    long total_calls; //Useful for debugging.
+    void detach(map<string, bmp_info>::iterator it);
+    
 };
 
 
@@ -148,13 +149,6 @@ struct hud_item {
  * Manages the HUD items.
  */
 struct hud_item_manager {
-private:
-    vector<hud_item> items;
-    bool move_in;
-    timer move_timer;
-    bool offscreen;
-    void update_offscreen();
-    
 public:
     void set_item(
         const size_t id,
@@ -164,6 +158,14 @@ public:
     void start_move(const bool in, const float duration);
     void tick(const float time);
     hud_item_manager(const size_t item_total);
+
+private:
+    vector<hud_item> items;
+    bool move_in;
+    timer move_timer;
+    bool offscreen;
+    void update_offscreen();
+    
 };
 
 
@@ -262,14 +264,14 @@ struct sample_struct {
  * an enum, hence, there are no gaps.
  */
 struct sector_types_manager {
-private:
-    vector<string> names;
-    
 public:
     void register_type(const unsigned char nr, const string &name);
     unsigned char get_nr(const string &name);
     string get_name(const unsigned char nr);
     unsigned char get_nr_of_types();
+    
+private:
+    vector<string> names;
     
 };
 
@@ -298,11 +300,6 @@ struct script_var_reader {
  * Manages fade ins/outs for transitions.
  */
 struct fade_manager {
-private:
-    float time_left;
-    bool fade_in;
-    std::function<void()> on_end;
-    
 public:
     static const float FADE_DURATION;
     
@@ -313,6 +310,12 @@ public:
     float get_perc_left();
     void tick(const float time);
     void draw();
+
+private:
+    float time_left;
+    bool fade_in;
+    std::function<void()> on_end;
+    
 };
 
 
@@ -376,15 +379,16 @@ struct subgroup_type_manager;
  * a Red Pikmin, a Yellow Pikmin, a leader, etc.
  */
 struct subgroup_type {
+public:
+    SUBGROUP_TYPE_CATEGORIES get_category() { return category; }
+    ALLEGRO_BITMAP* get_icon() { return icon; }
+
 private:
     friend subgroup_type_manager;
     SUBGROUP_TYPE_CATEGORIES category;
     mob_type* specific_type;
     ALLEGRO_BITMAP* icon;
     subgroup_type() : specific_type(nullptr), icon(nullptr) { }
-public:
-    SUBGROUP_TYPE_CATEGORIES get_category() { return category; }
-    ALLEGRO_BITMAP* get_icon() { return icon; }
 };
 
 
@@ -392,8 +396,6 @@ public:
  * Manages what types of subgroups exist.
  */
 struct subgroup_type_manager {
-private:
-    vector<subgroup_type*> types;
 public:
     void register_type(
         const SUBGROUP_TYPE_CATEGORIES category,
@@ -408,6 +410,9 @@ public:
     subgroup_type* get_prev_type(subgroup_type* sgt);
     subgroup_type* get_next_type(subgroup_type* sgt);
     void clear();
+
+private:
+    vector<subgroup_type*> types;
 };
 
 
