@@ -174,7 +174,7 @@ circling_info_struct::circling_info_struct(mob* m) :
 group_info_struct::group_info_struct(mob* leader_ptr) :
     radius(0),
     anchor(leader_ptr->pos),
-    transform(identity_transform),
+    transform(game.identity_transform),
     cur_standby_type(nullptr),
     follow_mode(false) {
 }

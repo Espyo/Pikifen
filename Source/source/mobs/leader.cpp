@@ -506,7 +506,7 @@ void leader::tick_class_specifics(const float delta_t) {
         bool must_reassign_spots = false;
         
         bool is_swarming =
-            (swarm_magnitude && cur_leader_ptr == this);
+            (swarm_magnitude && game.gameplay_state->cur_leader_ptr == this);
             
         if(
             dist(group->get_average_member_pos(), pos) >
@@ -525,7 +525,7 @@ void leader::tick_class_specifics(const float delta_t) {
             
         }
         
-        group->transform = identity_transform;
+        group->transform = game.identity_transform;
         
         if(group->follow_mode) {
             //Follow mode. Try to stay on the leader's back.
@@ -606,8 +606,9 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     if(leaders.size() == 1) return;
     
     if(
-        !cur_leader_ptr->fsm.get_event(LEADER_EV_INACTIVATED) &&
-        !force_success
+        !game.gameplay_state->cur_leader_ptr->fsm.get_event(
+            LEADER_EV_INACTIVATED
+        ) && !force_success
     ) {
         //This leader isn't ready to be switched out of. Forget it.
         return;
@@ -619,10 +620,10 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    size_t new_leader_nr = cur_leader_nr;
+    size_t new_leader_nr = game.gameplay_state->cur_leader_nr;
     leader* new_leader_ptr = NULL;
     bool searching = true;
-    size_t original_leader_nr = cur_leader_nr;
+    size_t original_leader_nr = game.gameplay_state->cur_leader_nr;
     bool cant_find_new_leader = false;
     
     while(searching) {
@@ -641,18 +642,19 @@ void change_to_next_leader(const bool forward, const bool force_success) {
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(cur_leader_nr != original_leader_nr) {
+        if(game.gameplay_state->cur_leader_nr != original_leader_nr) {
             searching = false;
         }
     }
     
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
-        cur_leader_nr =
+        game.gameplay_state->cur_leader_nr =
             sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
-        cur_leader_ptr = leaders[cur_leader_nr];
-        
-        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+        game.gameplay_state->cur_leader_ptr =
+            leaders[game.gameplay_state->cur_leader_nr];
+            
+        game.gameplay_state->cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
 }
 
@@ -668,11 +670,11 @@ bool grab_closest_group_member() {
                 MOB_EV_GRABBED_BY_FRIEND
             );
         mob_event* grabber_ev =
-            cur_leader_ptr->fsm.get_event(
+            game.gameplay_state->cur_leader_ptr->fsm.get_event(
                 LEADER_EV_HOLDING
             );
         if(grabber_ev && grabbed_ev) {
-            cur_leader_ptr->fsm.run_event(
+            game.gameplay_state->cur_leader_ptr->fsm.run_event(
                 LEADER_EV_HOLDING,
                 (void*) game.gameplay_state->closest_group_member
             );

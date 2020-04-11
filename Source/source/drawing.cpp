@@ -38,8 +38,6 @@ void gameplay::do_game_drawing(
     
     if(!paused) {
     
-        cur_sun_strength = get_sun_strength();
-        
         ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
         
         if(bmp_output) {
@@ -80,7 +78,7 @@ void gameplay::do_game_drawing(
         
         //Finish dumping to a bitmap image here.
         if(bmp_output) {
-            al_set_target_backbuffer(display);
+            al_set_target_backbuffer(game.display);
             return;
         }
         
@@ -112,7 +110,7 @@ void gameplay::do_game_drawing(
         );
     }
     
-    fade_mgr.draw();
+    game.fade_mgr.draw();
     
     al_flip_display();
 }
@@ -197,6 +195,7 @@ void gameplay::draw_cursor(
     }
     
     size_t n_rings = whistle_rings.size();
+    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t r = 0; r < n_rings; ++r) {
         point pos(
             cur_leader_ptr->pos.x + cos(cursor_angle) * whistle_rings[r],
@@ -277,7 +276,7 @@ void gameplay::draw_cursor(
     }
     
     //Cursor trail
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     if(draw_cursor_trail) {
         for(size_t p = 1; p < cursor_spots.size(); ++p) {
             point* p_ptr = &cursor_spots[p];
@@ -332,7 +331,8 @@ void gameplay::draw_cursor(
     
     if(!throw_can_reach_cursor) {
         unsigned char alpha =
-            0 + (sin(cursor_invalid_effect) + 1) * 127.0;
+            0 +
+            (sin(area_time_passed * CURSOR_INVALID_EFFECT_SPEED) + 1) * 127.0;
             
         draw_bitmap(
             bmp_cursor_invalid,
@@ -352,7 +352,7 @@ void gameplay::draw_cursor(
  * Draws the HUD.
  */
 void gameplay::draw_hud() {
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     point i_center, i_size;
     
     //Leader health.
@@ -1050,7 +1050,7 @@ void gameplay::draw_ingame_text() {
  * Draws the full-screen effects that will represent lighting.
  */
 void gameplay::draw_lighting_filter() {
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     
     //Draw the fog effect.
     ALLEGRO_COLOR fog_c = get_fog_color();
@@ -1164,7 +1164,7 @@ void gameplay::draw_lighting_filter() {
         al_hold_bitmap_drawing(false);
         
         //Now, simply darken the screen using the map.
-        al_set_target_backbuffer(display);
+        al_set_target_backbuffer(game.display);
         
         al_draw_bitmap(lightmap_bmp, 0, 0, 0);
         
@@ -1181,7 +1181,7 @@ void gameplay::draw_lighting_filter() {
  * Draws a message box.
  */
 void gameplay::draw_message_box() {
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     
     draw_bitmap(
         bmp_message_box,
@@ -1274,11 +1274,11 @@ void gameplay::draw_system_stuff() {
             scr_w, 100,
             al_map_rgba(0, 0, 0, 192)
         );
-        for(size_t f = 0; f < framerate_history.size(); ++f) {
+        for(size_t f = 0; f < game.framerate_history.size(); ++f) {
             al_draw_line(
-                scr_w - FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                scr_w - FRAMERATE_HISTORY_SIZE + f + 0.5,
-                round(framerate_history[f]),
+                game.win_w - FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
+                game.win_w - FRAMERATE_HISTORY_SIZE + f + 0.5,
+                round(game.framerate_history[f]),
                 al_map_rgba(24, 96, 192, 192), 1
             );
         }
@@ -1344,7 +1344,7 @@ void gameplay::draw_tree_shadows() {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         
         unsigned char alpha =
-            ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
+            ((s_ptr->alpha / 255.0) * get_sun_strength()) * 255;
             
         draw_bitmap(
             s_ptr->bitmap,
@@ -2087,7 +2087,7 @@ void draw_loading_screen(
                     point(), ALLEGRO_ALIGN_LEFT, 0,
                     text
                 );
-            } al_set_target_backbuffer(display);
+            } al_set_target_backbuffer(game.display);
             
         } else {
             text_w = al_get_bitmap_width(loading_text_bmp);
@@ -2115,7 +2115,7 @@ void draw_loading_screen(
                     subtext
                 );
                 
-            } al_set_target_backbuffer(display);
+            } al_set_target_backbuffer(game.display);
             
             //We'll be scaling this, so let's update the mipmap.
             loading_subtext_bmp = recreate_bitmap(loading_subtext_bmp);
@@ -2310,7 +2310,7 @@ void draw_mob_shadow(
     float shadow_w =
         diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
         
-    if(day_minutes < 60 * 12) {
+    if(game.gameplay_state->day_minutes < 60 * 12) {
         //Shadows point to the West.
         shadow_x = -shadow_w + diameter * 0.5;
         shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;

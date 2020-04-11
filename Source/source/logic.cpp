@@ -116,9 +116,6 @@ void gameplay::do_aesthetic_logic() {
         }
     }
     
-    //Cursor spin angle and invalidness effect.
-    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * game.delta_t;
-    
     //Cursor trail.
     if(draw_cursor_trail) {
         cursor_save_timer.tick(game.delta_t);
@@ -197,7 +194,7 @@ void gameplay::do_aesthetic_logic() {
     area_title_fade_timer.tick(game.delta_t);
     
     //Fade.
-    fade_mgr.tick(game.delta_t);
+    game.fade_mgr.tick(game.delta_t);
     
     
 }
@@ -431,6 +428,59 @@ void gameplay::do_gameplay_logic() {
             }
         }
         
+        
+        /********************
+        *             .-.   *
+        *   Cursor   ( = )> *
+        *             `-´   *
+        ********************/
+        
+        point mouse_cursor_speed;
+        float dummy_magnitude;
+        cursor_movement.get_clean_info(
+            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+        );
+        mouse_cursor_speed =
+            mouse_cursor_speed * game.delta_t* MOUSE_CURSOR_MOVE_SPEED;
+            
+        mouse_cursor_s += mouse_cursor_speed;
+        
+        mouse_cursor_w = mouse_cursor_s;
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &mouse_cursor_w.x, &mouse_cursor_w.y
+        );
+        leader_cursor_w = mouse_cursor_w;
+        
+        float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
+        
+        dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
+        if(leader_to_cursor_dist > cursor_max_dist) {
+            //Cursor goes beyond the range limit.
+            leader_cursor_w.x =
+                cur_leader_ptr->pos.x + (cos(cursor_angle) * cursor_max_dist);
+            leader_cursor_w.y =
+                cur_leader_ptr->pos.y + (sin(cursor_angle) * cursor_max_dist);
+                
+            if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
+                //If we're speeding the mouse cursor (via analog stick),
+                //don't let it go beyond the edges.
+                mouse_cursor_w = leader_cursor_w;
+                mouse_cursor_s = mouse_cursor_w;
+                al_transform_coordinates(
+                    &world_to_screen_transform,
+                    &mouse_cursor_s.x, &mouse_cursor_s.y
+                );
+            }
+        }
+        
+        leader_cursor_s = leader_cursor_w;
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &leader_cursor_s.x, &leader_cursor_s.y
+        );
+        
+        
         /***********************************
         *                             ***  *
         *   Current leader's group   ****O *
@@ -476,60 +526,6 @@ void gameplay::do_gameplay_logic() {
                 cur_leader_ptr->signal_swarm_end();
             }
         }
-        
-        
-        /********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             `-´   *
-        ********************/
-        
-        point mouse_cursor_speed;
-        float dummy_magnitude;
-        cursor_movement.get_clean_info(
-            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
-        );
-        mouse_cursor_speed =
-            mouse_cursor_speed * game.delta_t* MOUSE_CURSOR_MOVE_SPEED;
-            
-        mouse_cursor_s += mouse_cursor_speed;
-        
-        mouse_cursor_w = mouse_cursor_s;
-        al_transform_coordinates(
-            &screen_to_world_transform,
-            &mouse_cursor_w.x, &mouse_cursor_w.y
-        );
-        leader_cursor_w = mouse_cursor_w;
-        
-        cursor_angle =
-            get_angle(cur_leader_ptr->pos, leader_cursor_w);
-            
-        dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-        if(leader_to_cursor_dist > cursor_max_dist) {
-            //Cursor goes beyond the range limit.
-            leader_cursor_w.x =
-                cur_leader_ptr->pos.x + (cos(cursor_angle) * cursor_max_dist);
-            leader_cursor_w.y =
-                cur_leader_ptr->pos.y + (sin(cursor_angle) * cursor_max_dist);
-                
-            if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
-                //If we're speeding the mouse cursor (via analog stick),
-                //don't let it go beyond the edges.
-                mouse_cursor_w = leader_cursor_w;
-                mouse_cursor_s = mouse_cursor_w;
-                al_transform_coordinates(
-                    &world_to_screen_transform,
-                    &mouse_cursor_s.x, &mouse_cursor_s.y
-                );
-            }
-        }
-        
-        leader_cursor_s = leader_cursor_w;
-        al_transform_coordinates(
-            &world_to_screen_transform,
-            &leader_cursor_s.x, &leader_cursor_s.y
-        );
-        
         
         
         /**************************
@@ -600,37 +596,38 @@ void gameplay::do_gameplay_logic() {
     //Process and print framerate and system info.
     if(show_system_info) {
     
-        framerate_history.push_back(1.0 / game.delta_t);
-        if(framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
-            framerate_history.erase(framerate_history.begin());
+        game.framerate_history.push_back(1.0 / game.delta_t);
+        if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
+            game.framerate_history.erase(game.framerate_history.begin());
         }
         
-        framerate_last_avg_point++;
+        game.framerate_last_avg_point++;
         
         float sample_avg;
         
-        if(framerate_last_avg_point >= FRAMERATE_AVG_SAMPLE_SIZE) {
+        if(game.framerate_last_avg_point >= FRAMERATE_AVG_SAMPLE_SIZE) {
             //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
             //If we can fit a sample of this size using the most recent
             //unsampled frames, then use those. Otherwise, keep using the last
             //block, which starts at framerate_last_avg_point.
             //This makes it so the average stays the same for a bit of time,
             //so the player can actually read it.
-            if(framerate_last_avg_point > FRAMERATE_AVG_SAMPLE_SIZE * 2) {
-                framerate_last_avg_point = FRAMERATE_AVG_SAMPLE_SIZE;
+            if(game.framerate_last_avg_point > FRAMERATE_AVG_SAMPLE_SIZE * 2) {
+                game.framerate_last_avg_point = FRAMERATE_AVG_SAMPLE_SIZE;
             }
             float sample_avg_sum = 0;
             size_t sample_avg_point_count = 0;
             size_t sample_size =
                 std::min(
                     (size_t) FRAMERATE_AVG_SAMPLE_SIZE,
-                    framerate_history.size()
+                    game.framerate_history.size()
                 );
                 
             for(size_t f = 0; f < sample_size; ++f) {
                 size_t idx =
-                    framerate_history.size() - framerate_last_avg_point + f;
-                sample_avg_sum += framerate_history[idx];
+                    game.framerate_history.size() -
+                    game.framerate_last_avg_point + f;
+                sample_avg_sum += game.framerate_history[idx];
                 sample_avg_point_count++;
             }
             
@@ -642,7 +639,7 @@ void gameplay::do_gameplay_logic() {
             //that. This defeats the purpose of a smoothly-updating number,
             //so until that requirement is filled, let's stick to the oldest
             //record.
-            sample_avg = framerate_history[0];
+            sample_avg = game.framerate_history[0];
             
         }
         
@@ -665,7 +662,7 @@ void gameplay::do_gameplay_logic() {
             i2s(VERSION_MINOR) + "." +
             i2s(VERSION_REV);
         string game_v_str =
-            game_version;
+            game.version;
             
         print_info(
             "FPS: " + fps_str +
@@ -682,8 +679,8 @@ void gameplay::do_gameplay_logic() {
         );
         
     } else {
-        framerate_last_avg_point = 0;
-        framerate_history.clear();
+        game.framerate_last_avg_point = 0;
+        game.framerate_history.clear();
     }
     
     //Print info on a mob.

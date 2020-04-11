@@ -25,7 +25,10 @@
 
 //How long the HUD moves for when the area is entered.
 const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
-
+//How fast the "invalid cursor" effect goes, per second.
+const float gameplay::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
+//Every X seconds, the cursor's position is saved, to create the trail effect.
+const float gameplay::CURSOR_SAVE_INTERVAL = 0.03f;
 
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
@@ -50,9 +53,15 @@ gameplay::gameplay() :
     close_to_onion_to_open(nullptr),
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
+    cursor_height_diff_light(0.0f),
+    cursor_save_timer(CURSOR_SAVE_INTERVAL),
+    day(1),
     main_control_id(INVALID),
     closest_group_member(nullptr),
-    closest_group_member_distant(false) {
+    closest_group_member_distant(false),
+    cur_leader_nr(0),
+    cur_leader_ptr(nullptr),
+    day_minutes(0.0f) {
     
 }
 
@@ -177,7 +186,7 @@ void gameplay::leave() {
  * Loads the "gameplay" state into memory.
  */
 void gameplay::load() {
-    size_t errors_reported_at_start = errors_reported_today;
+    size_t errors_reported_at_start = game.errors_reported_so_far;
     
     ready_for_input = false;
     
@@ -223,7 +232,7 @@ void gameplay::load() {
     //Panic check -- If there are no leaders, abort.
     if(leaders.empty()) {
         show_message_box(
-            display, "No leaders!", "No leaders!",
+            game.display, "No leaders!", "No leaders!",
             "This area has no leaders! You need at least one "
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
@@ -279,6 +288,15 @@ void gameplay::load() {
     );
     leader_cursor_w = mouse_cursor_w;
     leader_cursor_s = mouse_cursor_s;
+    
+    cursor_save_timer.on_end = [this] () {
+        cursor_save_timer.start();
+        cursor_spots.push_back(mouse_cursor_s);
+        if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+            cursor_spots.erase(cursor_spots.begin());
+        }
+    };
+    cursor_save_timer.start();
     
     cur_leader_ptr->stop_whistling();
     
@@ -336,7 +354,7 @@ void gameplay::load() {
     replay_timer.start();
     session_replay.clear();*/
     
-    al_hide_mouse_cursor(display);
+    al_hide_mouse_cursor(game.display);
     
     area_title_fade_timer.start();
     hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
@@ -351,7 +369,7 @@ void gameplay::load() {
     }
         );
         
-    if(errors_reported_today > errors_reported_at_start) {
+    if(game.errors_reported_so_far > errors_reported_at_start) {
         print_info(
             "\n\n\nERRORS FOUND!\n"
             "See \"" + ERROR_LOG_FILE_PATH + "\".\n\n\n",
@@ -359,8 +377,8 @@ void gameplay::load() {
         );
     }
     
-    framerate_last_avg_point = 0;
-    framerate_history.clear();
+    game.framerate_last_avg_point = 0;
+    game.framerate_history.clear();
     
 }
 
@@ -495,7 +513,7 @@ void gameplay::load_hud_info() {
  * Unloads the "gameplay" state from memory.
  */
 void gameplay::unload() {
-    al_show_mouse_cursor(display);
+    al_show_mouse_cursor(game.display);
     
     cur_leader_ptr = NULL;
     
@@ -647,7 +665,7 @@ void gameplay::update_closest_group_member() {
  */
 void gameplay::update_transformations() {
     //World coordinates to screen coordinates.
-    world_to_screen_transform = identity_transform;
+    world_to_screen_transform = game.identity_transform;
     al_translate_transform(
         &world_to_screen_transform,
         -cam_pos.x + scr_w / 2.0 / cam_zoom,

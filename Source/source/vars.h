@@ -175,8 +175,6 @@ extern float creator_tool_mob_hurting_ratio;
 //For each key (F2 - F11, 0 - 9), what tool is bound to it?
 extern unsigned char creator_tool_keys[20];
 extern bool creator_tools_enabled;
-extern size_t cur_leader_nr;
-extern leader* cur_leader_ptr;
 extern string cur_message;
 extern size_t cur_message_char;
 extern timer cur_message_char_timer;
@@ -184,28 +182,12 @@ extern size_t cur_message_section;
 extern ALLEGRO_BITMAP* cur_message_speaker;
 //The message stops scrolling when it reaches one of these characters.
 extern vector<size_t> cur_message_stopping_chars;
-extern float cur_sun_strength;
-extern float cursor_angle;
-extern float cursor_height_diff_light;
-//Effect for the invalid cursor fading in or out.
-//The opacity is calculated using this number's sign.
-extern float cursor_invalid_effect;
 //Maximum distance away from the leader the cursor can go.
 extern float cursor_max_dist;
-//Movement of the cursor via non-mouse.
-extern movement_struct cursor_movement;
-//Is the cursor in the window, and is the window active?
-extern bool cursor_ready;
-//Time left until the position of the cursor is saved on the vector.
-extern timer cursor_save_timer;
 //How much the cursor spins per second.
 extern float cursor_spin_speed;
-//Spots the cursor has been through. Used for the faint trail left behind it.
-extern vector<point> cursor_spots;
 extern map<string, mob_type*> custom_mob_types;
 extern map<string, particle_generator> custom_particle_generators;
-extern unsigned int day;
-extern float day_minutes;
 //The day ends when the in-game minutes reach this value.
 extern float day_minutes_end;
 //Every real-life second, these many in-game minutes pass.
@@ -214,17 +196,13 @@ extern float day_minutes_per_irl_sec;
 extern float day_minutes_start;
 extern map<string, decoration_type*> decoration_types;
 extern vector<decoration*> decorations;
-extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
 extern vector<drop*> drops;
 extern map<string, drop_type*> drop_types;
 extern bool editor_mmb_pan;
 extern float editor_mouse_drag_threshold;
-//How many errors have been reported this application session.
-extern size_t errors_reported_today;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
-extern fade_manager fade_mgr;
 extern ALLEGRO_FONT* font_area_name;
 extern ALLEGRO_FONT* font_builtin;
 extern ALLEGRO_FONT* font_counter;
@@ -233,16 +211,11 @@ extern unsigned int font_counter_h;
 extern unsigned int font_main_h;
 //Font for the carrying / money values.
 extern ALLEGRO_FONT* font_value;
-extern vector<float> framerate_history;
-extern size_t framerate_last_avg_point;
-extern string game_name;
-extern string game_version;
 extern vector<group_task*> group_tasks;
 extern map<string, group_task_type*> group_task_types;
 extern map<string, hazard> hazards;
 extern hud_item_manager hud_items;
 extern float hud_coords[N_HUD_ITEMS][4];
-extern ALLEGRO_TRANSFORM identity_transform;
 extern float idle_task_range;
 extern float info_print_duration;
 extern float info_print_fade_duration;

@@ -44,10 +44,6 @@ const string AREA_EDITOR_TUTORIAL_URL =
 
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
-//How fast the "invalid cursor" effect goes, per second.
-const float CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
-//Every X seconds, the cursor's position is saved, to create the trail effect.
-const float CURSOR_SAVE_INTERVAL = 0.03f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_SAVE_N_SPOTS = 10;
 //Default area editor auto-backup interval, in seconds.
@@ -66,10 +62,6 @@ const float DEF_ROTATION_SPEED = 630.0f;
 const float DEF_WHISTLE_RANGE = 80.0f;
 //How long to suck a mob in for, when being delivered to an Onion/ship.
 const float DELIVERY_SUCK_TIME = 1.5f;
-//When getting a framerate average, use a sample of this size.
-const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
-//Only save the latest N FPS samples.
-const size_t FRAMERATE_HISTORY_SIZE = 300;
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
 //If there's less than this much gap between the leader and group,

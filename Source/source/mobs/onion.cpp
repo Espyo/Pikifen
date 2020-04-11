@@ -14,6 +14,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
@@ -168,8 +169,13 @@ void onion::stow_pikmin() {
     pikmin* pik_to_stow = NULL;
     size_t maturity = 0;
     for(; maturity < N_MATURITIES; ++maturity) {
-        for(size_t p = 0; p < cur_leader_ptr->group->members.size(); ++p) {
-            mob* mob_ptr = cur_leader_ptr->group->members[p];
+        for(
+            size_t p = 0;
+            p < game.gameplay_state->cur_leader_ptr->group->members.size();
+            ++p
+        ) {
+            mob* mob_ptr =
+                game.gameplay_state->cur_leader_ptr->group->members[p];
             if(mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN) {
                 continue;
             }
@@ -211,8 +217,9 @@ void onion::tick_class_specifics(const float delta_t) {
         
         if(
             bbox_check(
-                cur_leader_ptr->pos, o_ptr->pos,
-                cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+                game.gameplay_state->cur_leader_ptr->pos, o_ptr->pos,
+                game.gameplay_state->cur_leader_ptr->type->radius +
+                o_ptr->type->radius * 3
             )
         ) {
             final_alpha = ONION_SEETHROUGH_ALPHA;
@@ -221,7 +228,8 @@ void onion::tick_class_specifics(const float delta_t) {
         if(
             bbox_check(
                 leader_cursor_w, o_ptr->pos,
-                cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+                game.gameplay_state->cur_leader_ptr->type->radius +
+                o_ptr->type->radius * 3
             )
         ) {
             final_alpha = ONION_SEETHROUGH_ALPHA;

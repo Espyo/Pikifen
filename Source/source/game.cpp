@@ -27,6 +27,9 @@ game_class::game_class() :
     area_menu_state(nullptr),
     controls_menu_state(nullptr),
     delta_t(0.0),
+    display(nullptr),
+    errors_reported_so_far(0),
+    framerate_last_avg_point(0),
     gameplay_state(nullptr),
     is_game_running(true),
     main_menu_state(nullptr),
@@ -150,10 +153,7 @@ void game_class::main_loop() {
             cursor_in_window = true;
             
         }
-        
-        cursor_ready = (window_found && window_focused && cursor_in_window);
     }
-    
 }
 
 

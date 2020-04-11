@@ -255,7 +255,7 @@ void editor::custom_picker_cancel_action() { }
  * be run after the editor's own logic code.
  */
 void editor::do_logic_post() {
-    fade_mgr.tick(game.delta_t);
+    game.fade_mgr.tick(game.delta_t);
 }
 
 
@@ -467,7 +467,7 @@ string editor::get_textbox_text(
  * Handles an Allegro event for control-related things.
  */
 void editor::handle_controls(const ALLEGRO_EVENT &ev) {
-    if(fade_mgr.is_fading()) return;
+    if(game.fade_mgr.is_fading()) return;
     
     gui->handle_event(ev);
     
@@ -672,7 +672,7 @@ bool editor::is_mouse_in_gui(const point &mouse_coords) {
  * Exits out of the editor, with a fade.
  */
 void editor::leave() {
-    fade_mgr.start_fade(false, [] () {
+    game.fade_mgr.start_fade(false, [] () {
         if(game.area_editor_state->quick_play_area.empty()) {
             game.change_state(game.main_menu_state);
         } else {
@@ -869,7 +869,7 @@ void editor::update_transformations() {
         (canvas_tl.x + canvas_br.x) / 2.0,
         (canvas_tl.y + canvas_br.y) / 2.0
     );
-    world_to_screen_transform = identity_transform;
+    world_to_screen_transform = game.identity_transform;
     al_translate_transform(
         &world_to_screen_transform,
         -cam_pos.x + canvas_center.x / cam_zoom,

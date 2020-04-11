@@ -73,7 +73,7 @@ void destroy_event_things(
 ) {
     al_destroy_event_queue(logic_queue);
     al_destroy_timer(logic_timer);
-    al_destroy_display(display);
+    al_destroy_display(game.display);
 }
 
 
@@ -338,7 +338,7 @@ void init_error_bitmap() {
             16.0, 16.0, 32.0, 32.0,
             al_map_rgba(255, 0, 255, 192)
         );
-    } al_set_target_backbuffer(display);
+    } al_set_target_backbuffer(game.display);
     bmp_error = recreate_bitmap(bmp_error);
 }
 
@@ -384,10 +384,10 @@ void init_event_things(
         al_set_new_display_flags(
             al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN
         );
-        display = al_create_display(scr_w, scr_h);
+        game.display = al_create_display(game.win_w, game.win_h);
     }
     
-    if(!display) {
+    if(!game.display) {
         report_fatal_error("Could not create a display!");
     }
     
@@ -403,7 +403,9 @@ void init_event_things(
     al_register_event_source(logic_queue, al_get_mouse_event_source());
     al_register_event_source(logic_queue, al_get_keyboard_event_source());
     al_register_event_source(logic_queue, al_get_joystick_event_source());
-    al_register_event_source(logic_queue, al_get_display_event_source(display));
+    al_register_event_source(
+        logic_queue, al_get_display_event_source(game.display)
+    );
     al_register_event_source(
         logic_queue, al_get_timer_event_source(logic_timer)
     );
@@ -465,7 +467,7 @@ void init_hud_items() {
  */
 void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    al_set_window_title(display, "Pikifen");
+    al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(smooth_scaling) {
         new_bitmap_flags |= ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR;
@@ -476,18 +478,9 @@ void init_misc() {
     al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);
     
-    al_identity_transform(&identity_transform);
+    al_identity_transform(&game.identity_transform);
     
     srand(time(NULL));
-    
-    cursor_save_timer.on_end = [] () {
-        cursor_save_timer.start();
-        cursor_spots.push_back(mouse_cursor_s);
-        if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
-            cursor_spots.erase(cursor_spots.begin());
-        }
-    };
-    cursor_save_timer.start();
     
     swarm_next_arrow_timer.on_end = [] () {
         swarm_next_arrow_timer.start();

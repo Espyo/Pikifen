@@ -351,7 +351,7 @@ void gameplay::handle_button(
             if(!is_down) return;
             
             is_input_allowed = false;
-            fade_mgr.start_fade(
+            game.fade_mgr.start_fade(
                 false,
             [this] () {
                 this->leave();

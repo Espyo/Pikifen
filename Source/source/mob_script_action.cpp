@@ -14,6 +14,7 @@
 #include "mob_script_action.h"
 
 #include "functions.h"
+#include "game.h"
 #include "utils/string_utils.h"
 
 using std::set;
@@ -793,7 +794,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_DAY_MINUTES: {
-        *var = i2s(day_minutes);
+        *var = i2s(game.gameplay_state->day_minutes);
         break;
         
     } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {

@@ -11,6 +11,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -30,7 +31,7 @@
 void animation_editor::load() {
     editor::load();
     
-    fade_mgr.start_fade(true, nullptr);
+    game.fade_mgr.start_fade(true, nullptr);
     
     update_canvas_coordinates();
     file_path.clear();
@@ -2454,7 +2455,7 @@ void animation_editor::load() {
             "If you need more help on how to use the animation editor, "
             "check out the tutorial on\n" + ANIMATION_EDITOR_TUTORIAL_URL;
         show_message_box(
-            display, "Help", "Animation editor help",
+            game.display, "Help", "Animation editor help",
             help_str.c_str(), NULL, 0
         );
     };

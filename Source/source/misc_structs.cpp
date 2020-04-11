@@ -17,6 +17,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "game.h"
 #include "load.h"
 #include "utils/string_utils.h"
 #include "vars.h"
@@ -189,7 +190,7 @@ fade_manager::fade_manager() :
  */
 void fade_manager::draw() {
     if(is_fading()) {
-        unsigned char alpha = (fade_mgr.get_perc_left()) * 255;
+        unsigned char alpha = (game.fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
             0, 0, scr_w, scr_h,
             al_map_rgba(

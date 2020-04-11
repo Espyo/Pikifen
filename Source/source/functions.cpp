@@ -115,8 +115,8 @@ void clear_area_textures() {
  */
 void crash(const string &reason, const string &info, const int exit_status) {
 
-    if(display) {
-        ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(display);
+    if(game.display) {
+        ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
         if(backbuffer) {
             al_save_bitmap(
                 (
@@ -133,7 +133,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
         "  Time: " + get_current_time(false) + ".\n";
-    if(errors_reported_today > 0) {
+    if(game.errors_reported_so_far > 0) {
         error_str += "  Error log has messages!\n";
     }
     error_str +=
@@ -148,13 +148,16 @@ void crash(const string &reason, const string &info, const int exit_status) {
         i2s(bitmaps.get_total_calls()) + " total calls).\n" +
         "  Current leader: " ;
         
-    if(cur_leader_ptr) {
+    if(game.gameplay_state->cur_leader_ptr) {
         error_str +=
-            cur_leader_ptr->type->name + ", at " +
-            p2s(cur_leader_ptr->pos) + ", state history: " +
-            cur_leader_ptr->fsm.cur_state->name;
+            game.gameplay_state->cur_leader_ptr->type->name + ", at " +
+            p2s(game.gameplay_state->cur_leader_ptr->pos) +
+            ", state history: " +
+            game.gameplay_state->cur_leader_ptr->fsm.cur_state->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
-            error_str += " " + cur_leader_ptr->fsm.prev_state_names[h];
+            error_str +=
+                " " +
+                game.gameplay_state->cur_leader_ptr->fsm.prev_state_names[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
@@ -163,8 +166,8 @@ void crash(const string &reason, const string &info, const int exit_status) {
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (pikmin * p1, pikmin * p2) -> bool {
             return
-            dist(cur_leader_ptr->pos, p1->pos).to_float() <
-            dist(cur_leader_ptr->pos, p2->pos).to_float();
+            dist(game.gameplay_state->cur_leader_ptr->pos, p1->pos).to_float() <
+            dist(game.gameplay_state->cur_leader_ptr->pos, p2->pos).to_float();
         }
         );
         
@@ -278,11 +281,14 @@ unsigned char get_blackout_strength() {
         auto next_ptr =
             &game.cur_area_data.weather_condition.blackout_strength[p + 1];
             
-        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        if(
+            game.gameplay_state->day_minutes >= cur_ptr->first &&
+            game.gameplay_state->day_minutes < next_ptr->first
+        ) {
         
             return
                 interpolate_number(
-                    day_minutes,
+                    game.gameplay_state->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -357,11 +363,14 @@ ALLEGRO_COLOR get_daylight_color() {
         auto cur_ptr = &game.cur_area_data.weather_condition.daylight[p];
         auto next_ptr = &game.cur_area_data.weather_condition.daylight[p + 1];
         
-        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        if(
+            game.gameplay_state->day_minutes >= cur_ptr->first &&
+            game.gameplay_state->day_minutes < next_ptr->first
+        ) {
         
             return
                 interpolate_color(
-                    day_minutes,
+                    game.gameplay_state->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -389,11 +398,14 @@ ALLEGRO_COLOR get_fog_color() {
         auto cur_ptr = &game.cur_area_data.weather_condition.fog_color[p];
         auto next_ptr = &game.cur_area_data.weather_condition.fog_color[p + 1];
         
-        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        if(
+            game.gameplay_state->day_minutes >= cur_ptr->first &&
+            game.gameplay_state->day_minutes < next_ptr->first
+        ) {
         
             return
                 interpolate_color(
-                    day_minutes,
+                    game.gameplay_state->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -456,11 +468,14 @@ float get_sun_strength() {
         auto next_ptr =
             &game.cur_area_data.weather_condition.sun_strength[p + 1];
             
-        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        if(
+            game.gameplay_state->day_minutes >= cur_ptr->first &&
+            game.gameplay_state->day_minutes < next_ptr->first
+        ) {
         
             return
                 interpolate_number(
-                    day_minutes,
+                    game.gameplay_state->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 ) / 255.0f;
@@ -597,7 +612,7 @@ void log_error(string s, data_node* d) {
     
     std::cout << s;
     
-    if(errors_reported_today == 0) {
+    if(game.errors_reported_so_far == 0) {
         s =
             "\n" +
             get_current_time(false) +
@@ -624,7 +639,7 @@ void log_error(string s, data_node* d) {
         al_fclose(file_o);
     }
     
-    errors_reported_today++;
+    game.errors_reported_so_far++;
 }
 
 
@@ -667,7 +682,7 @@ vector<string> prompt_file_dialog(
             initial_path.c_str(), title.c_str(),
             patterns.c_str(), mode
         );
-    al_show_native_file_dialog(display, dialog);
+    al_show_native_file_dialog(game.display, dialog);
     
     //Reset the locale, which gets set by Allegro's native dialogs...
     //and breaks s2f().
@@ -1068,7 +1083,7 @@ void save_screenshot() {
     
     al_save_bitmap(
         (USER_DATA_FOLDER_PATH + "/" + final_file_name + ".png").c_str(),
-        al_get_backbuffer(display)
+        al_get_backbuffer(game.display)
     );
 }
 

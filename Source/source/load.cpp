@@ -810,8 +810,8 @@ void load_game_config() {
     string pikmin_order_string;
     string leader_order_string;
     
-    rs.set("game_name", game_name);
-    rs.set("game_version", game_version);
+    rs.set("game_name", game.name);
+    rs.set("game_version", game.version);
     
     rs.set("carrying_color_move", carrying_color_move);
     rs.set("carrying_color_stop", carrying_color_stop);
@@ -849,7 +849,7 @@ void load_game_config() {
     rs.set("zoom_max_level", zoom_max_level);
     rs.set("zoom_min_level", zoom_min_level);
     
-    al_set_window_title(display, game_name.c_str());
+    al_set_window_title(game.display, game.name.c_str());
     
     pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
     leader_order_strings = semicolon_list_to_vector(leader_order_string);
@@ -956,7 +956,7 @@ void load_liquids(const bool load_resources) {
 void load_misc_graphics() {
     //Icon.
     bmp_icon = load_bmp(asset_file_names.icon);
-    al_set_display_icon(display, bmp_icon);
+    al_set_display_icon(game.display, bmp_icon);
     
     //Graphics.
     bmp_checkbox_check = load_bmp(   asset_file_names.checkbox_check);

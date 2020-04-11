@@ -25,7 +25,9 @@ class gameplay : public game_state {
 private:
 
     static const float AREA_INTRO_HUD_MOVE_TIME;
-    
+    static const float CURSOR_INVALID_EFFECT_SPEED;
+    static const float CURSOR_SAVE_INTERVAL;
+
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
     //a viable mob, its distance, and the corresponding event.
@@ -57,8 +59,16 @@ private:
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     ALLEGRO_BITMAP* bmp_sun;
     
-    //Control ID for player 1's cancel button. Cached for convenience.
+    //Control ID for player 1's cancel button. Cache for convenience.
     size_t cancel_control_id;
+    //Ligthten player 1's cursor by this due to leader/cursor height difference.
+    float cursor_height_diff_light;
+    //Movement of player 1's cursor via non-mouse means.
+    movement_struct cursor_movement;
+    //Spots the cursor has been through. Used for the faint trail left behind.
+    vector<point> cursor_spots;
+    //Time left until the position of the cursor is saved on the vector.
+    timer cursor_save_timer;
     //Points to an interactable close enough for player 1 to use, if any.
     interactable* close_to_interactable_to_use;
     //Points to an Onion close enough for player 1 to open, if any.
@@ -67,7 +77,9 @@ private:
     pikmin* close_to_pikmin_to_pluck;
     //Points to a ship close enough for player 1 to heal in, if any.
     ship* close_to_ship_to_heal;
-    //Control ID for player 1's main button. Cached for convenience.
+    //What day it is, in-game.
+    size_t day;
+    //Control ID for player 1's main button. Cache for convenience.
     size_t main_control_id;
     //Timer for the next replay state save.
     timer replay_timer;
@@ -123,6 +135,12 @@ public:
     mob* closest_group_member;
     //Is the group member closest to player 1's leader distant?
     bool closest_group_member_distant;
+    //Index of player 1's current leader, in the array of leaders.
+    size_t cur_leader_nr;
+    //Pointer to player 1's leader. Cache for convenience.
+    leader* cur_leader_ptr;
+    //What time of the day is it in-game? In minutes.
+    float day_minutes;
     
     void leave();
     void update_closest_group_member();

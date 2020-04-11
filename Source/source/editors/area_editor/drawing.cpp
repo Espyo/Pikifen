@@ -1063,7 +1063,7 @@ void area_editor::do_drawing() {
         );
     }
     
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     
     //Cross-section graph.
     if(state == EDITOR_STATE_REVIEW && show_cross_section) {
@@ -1311,11 +1311,11 @@ void area_editor::do_drawing() {
     }
     
     al_reset_clipping_rectangle();
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     
     draw_unsaved_changes_warning();
     
-    fade_mgr.draw();
+    game.fade_mgr.draw();
     
     al_flip_display();
 }

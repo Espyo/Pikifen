@@ -1528,7 +1528,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
     
-    cur_leader_ptr->add_to_group(pik);
+    game.gameplay_state->cur_leader_ptr->add_to_group(pik);
     sfx_pikmin_called.play(0.03, false);
 }
 
@@ -1733,7 +1733,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
  * When the Pikmin must move towards the whistle.
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
-    m->chase(cur_leader_ptr->pos, NULL, false, NULL, true);
+    m->chase(game.gameplay_state->cur_leader_ptr->pos, NULL, false, NULL, true);
 }
 
 

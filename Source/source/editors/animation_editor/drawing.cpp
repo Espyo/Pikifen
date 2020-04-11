@@ -14,6 +14,7 @@
 
 #include "../../drawing.h"
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -236,11 +237,11 @@ void animation_editor::do_drawing() {
     }
     
     al_reset_clipping_rectangle();
-    al_use_transform(&identity_transform);
+    al_use_transform(&game.identity_transform);
     
     draw_unsaved_changes_warning();
     
-    fade_mgr.draw();
+    game.fade_mgr.draw();
     
     al_flip_display();
 }

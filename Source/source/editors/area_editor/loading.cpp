@@ -2754,7 +2754,7 @@ void area_editor::load() {
             "If you need more help on how to use the area editor, "
             "check out the tutorial on\n" + AREA_EDITOR_TUTORIAL_URL;
         show_message_box(
-            display, "Help", "Area editor help",
+            game.display, "Help", "Area editor help",
             help_str.c_str(), NULL, 0
         );
     };
@@ -2765,7 +2765,7 @@ void area_editor::load() {
     create_picker_frame();
     create_status_bar();
     
-    fade_mgr.start_fade(true, nullptr);
+    game.fade_mgr.start_fade(true, nullptr);
     
     last_mob_category = NULL;
     last_mob_type = NULL;

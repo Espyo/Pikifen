@@ -11,6 +11,7 @@
 
 #include "game_state.h"
 
+#include "game.h"
 #include "vars.h"
 
 
