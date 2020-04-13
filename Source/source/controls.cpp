@@ -428,15 +428,15 @@ void gameplay::handle_button(
             
             if(!is_down) return;
             
-            if(cam_final_zoom < game.options.zoom_mid_level) {
-                cam_final_zoom = zoom_max_level;
-            } else if(cam_final_zoom > game.options.zoom_mid_level) {
-                cam_final_zoom = game.options.zoom_mid_level;
+            if(game.cam.target_zoom < game.options.zoom_mid_level) {
+                game.cam.target_zoom = zoom_max_level;
+            } else if(game.cam.target_zoom > game.options.zoom_mid_level) {
+                game.cam.target_zoom = game.options.zoom_mid_level;
             } else {
                 if(game.options.zoom_mid_level == zoom_min_level) {
-                    cam_final_zoom = zoom_max_level;
+                    game.cam.target_zoom = zoom_max_level;
                 } else {
-                    cam_final_zoom = zoom_min_level;
+                    game.cam.target_zoom = zoom_min_level;
                 }
             }
             
@@ -444,24 +444,24 @@ void gameplay::handle_button(
             
         } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
         
-            if(cam_final_zoom >= zoom_max_level && button == BUTTON_ZOOM_IN) {
+            if(game.cam.target_zoom >= zoom_max_level && button == BUTTON_ZOOM_IN) {
                 return;
             }
             
-            if(cam_final_zoom <= zoom_min_level && button == BUTTON_ZOOM_OUT) {
+            if(game.cam.target_zoom <= zoom_min_level && button == BUTTON_ZOOM_OUT) {
                 return;
             }
             
             float floored_pos = floor(pos);
             
             if(button == BUTTON_ZOOM_IN) {
-                cam_final_zoom = cam_final_zoom + 0.1 * floored_pos;
+                game.cam.target_zoom = game.cam.target_zoom + 0.1 * floored_pos;
             } else {
-                cam_final_zoom = cam_final_zoom - 0.1 * floored_pos;
+                game.cam.target_zoom = game.cam.target_zoom - 0.1 * floored_pos;
             }
             
-            if(cam_final_zoom > zoom_max_level) cam_final_zoom = zoom_max_level;
-            if(cam_final_zoom < zoom_min_level) cam_final_zoom = zoom_min_level;
+            if(game.cam.target_zoom > zoom_max_level) game.cam.target_zoom = zoom_max_level;
+            if(game.cam.target_zoom < zoom_min_level) game.cam.target_zoom = zoom_min_level;
             
             sfx_camera.play(-1, false);
             

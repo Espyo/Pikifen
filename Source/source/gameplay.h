@@ -28,6 +28,8 @@ public:
     
     //How much real time has passed since the area was loaded.
     float area_time_passed;
+    //Timer used to fade out the area's title when the area is entered.
+    timer area_title_fade_timer;
     //Name of the area to be loaded.
     string area_to_load;
     //Group member closest to player 1's leader.
@@ -71,6 +73,7 @@ public:
 private:
 
     static const float AREA_INTRO_HUD_MOVE_TIME;
+    static const float AREA_TITLE_FADE_DURATION;
     static const float CURSOR_INVALID_EFFECT_SPEED;
     static const float CURSOR_SAVE_INTERVAL;
     static const float SWARM_ARROW_SPEED;

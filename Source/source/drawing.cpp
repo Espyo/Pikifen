@@ -133,7 +133,7 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
     //I apologize if you're trying to understand what it means.
     int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : game.win_w;
     int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : game.win_h;
-    float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
+    float zoom_to_use = bmp_output ? 0.5 : game.cam.zoom;
     point final_zoom(
         bmp_w * 0.5 * game.cur_area_data.bg_dist / zoom_to_use,
         bmp_h * 0.5 * game.cur_area_data.bg_dist / zoom_to_use
@@ -141,20 +141,20 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
     
     bg_v[0].x = 0;
     bg_v[0].y = 0;
-    bg_v[0].u = (cam_pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[0].v = (cam_pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[0].u = (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[0].v = (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[1].x = bmp_w;
     bg_v[1].y = 0;
-    bg_v[1].u = (cam_pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[1].v = (cam_pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[1].u = (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[1].v = (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[2].x = bmp_w;
     bg_v[2].y = bmp_h;
-    bg_v[2].u = (cam_pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[2].v = (cam_pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[2].u = (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[2].v = (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     bg_v[3].x = 0;
     bg_v[3].y = bmp_h;
-    bg_v[3].u = (cam_pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[3].v = (cam_pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[3].u = (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[3].v = (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
     
     al_draw_prim(
         bg_v, NULL, game.cur_area_data.bg_bmp,
@@ -303,8 +303,8 @@ void gameplay::draw_cursor(
         bmp_mouse_cursor,
         game.mouse_cursor_s,
         point(
-            cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
-            cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
+            game.cam.zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
+            game.cam.zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
         ),
         -(area_time_passed * cursor_spin_speed),
         change_color_lighting(
@@ -1058,13 +1058,13 @@ void gameplay::draw_lighting_filter() {
         //Start by drawing the central fog fade out effect.
         
         point fog_top_left =
-            cam_pos -
+            game.cam.pos -
             point(
                 game.cur_area_data.weather_condition.fog_far,
                 game.cur_area_data.weather_condition.fog_far
             );
         point fog_bottom_right =
-            cam_pos +
+            game.cam.pos +
             point(
                 game.cur_area_data.weather_condition.fog_far,
                 game.cur_area_data.weather_condition.fog_far
@@ -1152,7 +1152,7 @@ void gameplay::draw_lighting_filter() {
                 &game.world_to_screen_transform,
                 &pos.x, &pos.y
             );
-            float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
+            float radius = mobs[m]->type->radius * 4.0 * game.cam.zoom;
             al_draw_scaled_bitmap(
                 bmp_spotlight,
                 0, 0, 64, 64,
@@ -1385,7 +1385,7 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             !bmp_output &&
             !rectangles_intersect(
                 s_ptr->bbox[0], s_ptr->bbox[1],
-                cam_box[0], cam_box[1]
+                game.cam.box[0], game.cam.box[1]
             )
         ) {
             //Off-camera.
@@ -1399,7 +1399,7 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     }
     
     //Particles.
-    particles.fill_component_list(components, cam_box[0], cam_box[1]);
+    particles.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
     
     //Mobs.
     for(size_t m = 0; m < mobs.size(); ++m) {
@@ -2351,8 +2351,8 @@ void draw_notification(
 
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
-    al_translate_transform(&tra, target.x * cam_zoom, target.y * cam_zoom);
-    al_scale_transform(&tra, 1.0 / cam_zoom, 1.0 / cam_zoom);
+    al_translate_transform(&tra, target.x * game.cam.zoom, target.y * game.cam.zoom);
+    al_scale_transform(&tra, 1.0 / game.cam.zoom, 1.0 / game.cam.zoom);
     al_copy_transform(&old, al_get_current_transform());
     al_compose_transform(&tra, &old);
     al_use_transform(&tra);

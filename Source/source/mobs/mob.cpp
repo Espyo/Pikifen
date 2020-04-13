@@ -1585,7 +1585,7 @@ bool mob::is_off_camera() {
             std::max(type->rectangular_dim.x / 2.0, type->rectangular_dim.y / 2.0);
     }
     
-    return !bbox_check(cam_box[0], cam_box[1], pos, m_radius);
+    return !bbox_check(game.cam.box[0], game.cam.box[1], pos, m_radius);
 }
 
 

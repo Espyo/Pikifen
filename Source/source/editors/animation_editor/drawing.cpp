@@ -152,7 +152,7 @@ void animation_editor::do_drawing() {
                 hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
                 float hitbox_outline_thickness =
-                    (cur_hitbox_nr == h ? 3 / cam_zoom : 2 / cam_zoom);
+                    (cur_hitbox_nr == h ? 3 / game.cam.zoom : 2 / game.cam.zoom);
                     
                 if(h_ptr->type == HITBOX_TYPE_NORMAL) {
                     hitbox_color = al_map_rgba(0, 128, 0, 128);
@@ -207,11 +207,11 @@ void animation_editor::do_drawing() {
         
         al_draw_line(
             0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-            al_map_rgb(240, 240, 240), 1 / cam_zoom
+            al_map_rgb(240, 240, 240), 1 / game.cam.zoom
         );
         al_draw_line(
             cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-            al_map_rgb(240, 240, 240), 1 / cam_zoom
+            al_map_rgb(240, 240, 240), 1 / game.cam.zoom
         );
     }
     
@@ -384,13 +384,13 @@ void animation_editor::draw_top_down_view_hitbox(
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
         0, 0, mt->radius,
-        al_map_rgb(240, 240, 240), 1.0 / cam_zoom
+        al_map_rgb(240, 240, 240), 1.0 / game.cam.zoom
     );
     if(mt->rectangular_dim.x != 0) {
         al_draw_rectangle(
             -mt->rectangular_dim.x / 2.0, -mt->rectangular_dim.y / 2.0,
             mt->rectangular_dim.x / 2.0, mt->rectangular_dim.y / 2.0,
-            al_map_rgb(240, 240, 240), 1.0 / cam_zoom
+            al_map_rgb(240, 240, 240), 1.0 / game.cam.zoom
         );
     }
 }

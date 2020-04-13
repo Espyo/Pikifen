@@ -172,6 +172,16 @@ void button_manager::add(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a camera info struct.
+ */
+camera_info::camera_info() :
+    target_zoom(1.0f),
+    zoom(1.0f) {
+    
+}
+
+
 const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------

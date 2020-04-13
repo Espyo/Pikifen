@@ -216,11 +216,11 @@ void area_editor::do_drawing() {
         
         if(fmod(x, game.options.area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((game.options.area_editor_grid_interval * 2) * cam_zoom <= 6) {
+            if((game.options.area_editor_grid_interval * 2) * game.cam.zoom <= 6) {
                 draw_line = false;
             }
         } else {
-            if(game.options.area_editor_grid_interval * cam_zoom <= 6) {
+            if(game.options.area_editor_grid_interval * game.cam.zoom <= 6) {
                 draw_line = false;
             }
         }
@@ -229,7 +229,7 @@ void area_editor::do_drawing() {
             al_draw_line(
                 x, cam_top_left_corner.y,
                 x, cam_bottom_right_corner.y + game.options.area_editor_grid_interval,
-                c, 1.0 / cam_zoom
+                c, 1.0 / game.cam.zoom
             );
         }
         x += game.options.area_editor_grid_interval;
@@ -244,11 +244,11 @@ void area_editor::do_drawing() {
         
         if(fmod(y, game.options.area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((game.options.area_editor_grid_interval * 2) * cam_zoom <= 6) {
+            if((game.options.area_editor_grid_interval * 2) * game.cam.zoom <= 6) {
                 draw_line = false;
             }
         } else {
-            if(game.options.area_editor_grid_interval * cam_zoom <= 6) {
+            if(game.options.area_editor_grid_interval * game.cam.zoom <= 6) {
                 draw_line = false;
             }
         }
@@ -257,7 +257,7 @@ void area_editor::do_drawing() {
             al_draw_line(
                 cam_top_left_corner.x, y,
                 cam_bottom_right_corner.x + game.options.area_editor_grid_interval, y,
-                c, 1.0 / cam_zoom
+                c, 1.0 / game.cam.zoom
             );
         }
         y += game.options.area_editor_grid_interval;
@@ -268,13 +268,13 @@ void area_editor::do_drawing() {
         -(COMFY_DIST * 2), 0,
         COMFY_DIST * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
-        1.0 / cam_zoom
+        1.0 / game.cam.zoom
     );
     al_draw_line(
         0, -(COMFY_DIST * 2), 0,
         COMFY_DIST * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
-        1.0 / cam_zoom
+        1.0 / game.cam.zoom
     );
     
     //Edges.
@@ -351,7 +351,7 @@ void area_editor::do_drawing() {
                 al_map_rgba(128, 128, 128, edges_opacity * 255) :
                 al_map_rgba(192, 192, 192, edges_opacity * 255)
             ),
-            (selected ? 3.0 : 2.0) / cam_zoom
+            (selected ? 3.0 : 2.0) / game.cam.zoom
         );
         
         if(
@@ -399,7 +399,7 @@ void area_editor::do_drawing() {
                     t_ptr->points[2]->x,
                     t_ptr->points[2]->y,
                     al_map_rgb(192, 0, 160),
-                    1.0 / cam_zoom
+                    1.0 / game.cam.zoom
                 );
             }
         }
@@ -464,7 +464,7 @@ void area_editor::do_drawing() {
             al_draw_filled_circle(
                 v_ptr->x,
                 v_ptr->y,
-                3.0 / cam_zoom,
+                3.0 / game.cam.zoom,
                 selected ?
                 al_map_rgba(
                     SELECTION_COLOR[0],
@@ -501,10 +501,10 @@ void area_editor::do_drawing() {
                     m_ptr->pos.x, m_ptr->pos.y,
                     m2_ptr->pos.x, m2_ptr->pos.y,
                     al_map_rgb(160, 224, 64),
-                    MOB_LINK_THICKNESS / cam_zoom
+                    MOB_LINK_THICKNESS / game.cam.zoom
                 );
                 
-                if(cam_zoom >= 0.25) {
+                if(game.cam.zoom >= 0.25) {
                     float angle =
                         get_angle(m_ptr->pos, m2_ptr->pos);
                     point start = point(m_ptr->type->radius, 0);
@@ -519,7 +519,7 @@ void area_editor::do_drawing() {
                         start.y + (end.y - start.y) * 0.55
                     );
                     const float delta =
-                        (MOB_LINK_THICKNESS * 4) / cam_zoom;
+                        (MOB_LINK_THICKNESS * 4) / game.cam.zoom;
                         
                     al_draw_filled_triangle(
                         pivot.x + cos(angle) * delta,
@@ -548,7 +548,7 @@ void area_editor::do_drawing() {
         if(m_ptr->type && m_ptr->type->rectangular_dim.x != 0) {
             draw_rotated_rectangle(
                 m_ptr->pos, m_ptr->type->rectangular_dim,
-                m_ptr->angle, c, 1.0 / cam_zoom
+                m_ptr->angle, c, 1.0 / game.cam.zoom
             );
         }
         
@@ -602,7 +602,7 @@ void area_editor::do_drawing() {
             ) {
                 al_draw_circle(
                     m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->territory_radius,
-                    al_map_rgb(240, 240, 192), 1.0 / cam_zoom
+                    al_map_rgb(240, 240, 192), 1.0 / game.cam.zoom
                 );
             }
         }
@@ -635,7 +635,7 @@ void area_editor::do_drawing() {
                         one_way ? al_map_rgb(192, 128, 224) :
                         al_map_rgb(0, 80, 224)
                     ),
-                    PATH_LINK_THICKNESS / cam_zoom
+                    PATH_LINK_THICKNESS / game.cam.zoom
                 );
                 
                 if(debug_path_nrs && (one_way || s < s_ptr->links[l].end_nr)) {
@@ -660,7 +660,7 @@ void area_editor::do_drawing() {
                     float angle =
                         get_angle(s_ptr->pos, s2_ptr->pos);
                     const float delta =
-                        (PATH_LINK_THICKNESS * 4) / cam_zoom;
+                        (PATH_LINK_THICKNESS * 4) / game.cam.zoom;
                         
                     al_draw_filled_triangle(
                         mid_x + cos(angle) * delta,
@@ -722,7 +722,7 @@ void area_editor::do_drawing() {
                 al_draw_line(
                     game.mouse_cursor_w.x, game.mouse_cursor_w.y,
                     closest->pos.x, closest->pos.y,
-                    al_map_rgb(192, 128, 32), 2.0 / cam_zoom
+                    al_map_rgb(192, 128, 32), 2.0 / game.cam.zoom
                 );
             }
         }
@@ -735,7 +735,7 @@ void area_editor::do_drawing() {
                     path_preview_checkpoints[0].y,
                     path_preview_checkpoints[1].x,
                     path_preview_checkpoints[1].y,
-                    al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
                 );
             } else {
                 al_draw_line(
@@ -743,7 +743,7 @@ void area_editor::do_drawing() {
                     path_preview_checkpoints[0].y,
                     path_preview[0]->pos.x,
                     path_preview[0]->pos.y,
-                    al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
                 );
                 for(size_t s = 0; s < path_preview.size() - 1; ++s) {
                     al_draw_line(
@@ -751,7 +751,7 @@ void area_editor::do_drawing() {
                         path_preview[s]->pos.y,
                         path_preview[s + 1]->pos.x,
                         path_preview[s + 1]->pos.y,
-                        al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                        al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
                     );
                 }
                 
@@ -760,7 +760,7 @@ void area_editor::do_drawing() {
                     path_preview.back()->pos.y,
                     path_preview_checkpoints[1].x,
                     path_preview_checkpoints[1].y,
-                    al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
                 );
             }
             
@@ -770,21 +770,21 @@ void area_editor::do_drawing() {
                 
                 al_draw_filled_rectangle(
                     path_preview_checkpoints[c].x -
-                    (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].y -
-                    (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].x +
-                    (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].y +
-                    (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     al_map_rgb(240, 224, 160)
                 );
                 draw_scaled_text(
                     font_builtin, al_map_rgb(0, 64, 64),
                     path_preview_checkpoints[c],
                     point(
-                        POINT_LETTER_TEXT_SCALE / cam_zoom,
-                        POINT_LETTER_TEXT_SCALE / cam_zoom
+                        POINT_LETTER_TEXT_SCALE / game.cam.zoom,
+                        POINT_LETTER_TEXT_SCALE / game.cam.zoom
                     ),
                     ALLEGRO_ALIGN_CENTER, 1,
                     letter
@@ -847,7 +847,7 @@ void area_editor::do_drawing() {
                             al_map_rgb(224, 224, 64) :
                             al_map_rgb(128, 128, 64)
                         ),
-                        2.0 / cam_zoom
+                        2.0 / game.cam.zoom
                     );
                 }
             }
@@ -864,21 +864,21 @@ void area_editor::do_drawing() {
             
             al_draw_filled_rectangle(
                 cross_section_checkpoints[p].x -
-                (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].y -
-                (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].x +
-                (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].y +
-                (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 al_map_rgb(255, 255, 32)
             );
             draw_scaled_text(
                 font_builtin, al_map_rgb(0, 64, 64),
                 cross_section_checkpoints[p],
                 point(
-                    POINT_LETTER_TEXT_SCALE / cam_zoom,
-                    POINT_LETTER_TEXT_SCALE / cam_zoom
+                    POINT_LETTER_TEXT_SCALE / game.cam.zoom,
+                    POINT_LETTER_TEXT_SCALE / game.cam.zoom
                 ),
                 ALLEGRO_ALIGN_CENTER, 1,
                 letter
@@ -889,7 +889,7 @@ void area_editor::do_drawing() {
             cross_section_checkpoints[0].y,
             cross_section_checkpoints[1].x,
             cross_section_checkpoints[1].y,
-            al_map_rgb(255, 0, 0), 3.0 / cam_zoom
+            al_map_rgb(255, 0, 0), 3.0 / game.cam.zoom
         );
     }
     
@@ -920,7 +920,7 @@ void area_editor::do_drawing() {
                 drawing_nodes[n].snapped_spot.x,
                 drawing_nodes[n].snapped_spot.y,
                 al_map_rgb(128, 255, 128),
-                3.0 / cam_zoom
+                3.0 / game.cam.zoom
             );
         }
         if(!drawing_nodes.empty()) {
@@ -939,7 +939,7 @@ void area_editor::do_drawing() {
                 hotspot.x,
                 hotspot.y,
                 new_line_color,
-                3.0 / cam_zoom
+                3.0 / game.cam.zoom
             );
             
             if(game.options.area_editor_show_edge_length) {
@@ -960,7 +960,7 @@ void area_editor::do_drawing() {
                 new_circle_sector_center.y,
                 circle_radius,
                 al_map_rgb(64, 255, 64),
-                3.0 / cam_zoom
+                3.0 / game.cam.zoom
             );
             
         } else if(new_circle_sector_step == 2) {
@@ -976,7 +976,7 @@ void area_editor::do_drawing() {
                 al_draw_line(
                     cur_point.x, cur_point.y,
                     next_point.x, next_point.y,
-                    color, 3.0 / cam_zoom
+                    color, 3.0 / game.cam.zoom
                 );
             }
             
@@ -984,7 +984,7 @@ void area_editor::do_drawing() {
                 al_draw_filled_circle(
                     new_circle_sector_points[p].x,
                     new_circle_sector_points[p].y,
-                    3.0 / cam_zoom, al_map_rgb(192, 255, 192)
+                    3.0 / game.cam.zoom, al_map_rgb(192, 255, 192)
                 );
             }
             
@@ -1001,7 +1001,7 @@ void area_editor::do_drawing() {
                 hotspot.x,
                 hotspot.y,
                 al_map_rgb(64, 255, 64),
-                3.0 / cam_zoom
+                3.0 / game.cam.zoom
             );
         }
     }
@@ -1018,7 +1018,7 @@ void area_editor::do_drawing() {
                 SELECTION_COLOR[1],
                 SELECTION_COLOR[2]
             ),
-            2.0 / cam_zoom
+            2.0 / game.cam.zoom
             
         );
     }
@@ -1041,11 +1041,11 @@ void area_editor::do_drawing() {
         
         al_draw_line(
             marker.x - 16, marker.y, marker.x + 16, marker.y,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
         );
         al_draw_line(
             marker.x, marker.y - 16, marker.x, marker.y + 16,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
         );
     }
     
@@ -1057,11 +1057,11 @@ void area_editor::do_drawing() {
         
         al_draw_line(
             marker.x - 16, marker.y - 16, marker.x + 16, marker.y + 16,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
         );
         al_draw_line(
             marker.x - 16, marker.y + 16, marker.x + 16, marker.y - 16,
-            al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
         );
     }
     
@@ -1388,8 +1388,8 @@ void area_editor::draw_debug_text(
         NULL, NULL, &dw, &dh
     );
     
-    float bbox_w = (dw * DEBUG_TEXT_SCALE) / cam_zoom;
-    float bbox_h = (dh * DEBUG_TEXT_SCALE) / cam_zoom;
+    float bbox_w = (dw * DEBUG_TEXT_SCALE) / game.cam.zoom;
+    float bbox_h = (dh * DEBUG_TEXT_SCALE) / game.cam.zoom;
     
     al_draw_filled_rectangle(
         where.x - bbox_w * 0.5, where.y - bbox_h * 0.5,
@@ -1401,8 +1401,8 @@ void area_editor::draw_debug_text(
         font_builtin, color,
         where,
         point(
-            DEBUG_TEXT_SCALE / cam_zoom,
-            DEBUG_TEXT_SCALE / cam_zoom
+            DEBUG_TEXT_SCALE / game.cam.zoom,
+            DEBUG_TEXT_SCALE / game.cam.zoom
         ),
         ALLEGRO_ALIGN_CENTER, 1,
         text
@@ -1410,34 +1410,34 @@ void area_editor::draw_debug_text(
     
     if(dots > 0) {
         al_draw_filled_rectangle(
-            where.x - 3.0 / cam_zoom,
+            where.x - 3.0 / game.cam.zoom,
             where.y + bbox_h * 0.5,
-            where.x + 3.0 / cam_zoom,
-            where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+            where.x + 3.0 / game.cam.zoom,
+            where.y + bbox_h * 0.5 + 3.0 / game.cam.zoom,
             al_map_rgba(0, 0, 0, 128)
         );
         
         if(dots == 1) {
             al_draw_filled_rectangle(
-                where.x - 1.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
-                where.x + 1.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                where.x - 1.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 1.0 / game.cam.zoom,
+                where.x + 1.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 3.0 / game.cam.zoom,
                 color
             );
         } else {
             al_draw_filled_rectangle(
-                where.x - 3.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
-                where.x - 1.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                where.x - 3.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 1.0 / game.cam.zoom,
+                where.x - 1.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 3.0 / game.cam.zoom,
                 color
             );
             al_draw_filled_rectangle(
-                where.x + 1.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
-                where.x + 3.0 / cam_zoom,
-                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                where.x + 1.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 1.0 / game.cam.zoom,
+                where.x + 3.0 / game.cam.zoom,
+                where.y + bbox_h * 0.5 + 3.0 / game.cam.zoom,
                 color
             );
         }

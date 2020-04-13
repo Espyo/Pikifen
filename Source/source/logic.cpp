@@ -187,32 +187,32 @@ const float CAMERA_BOX_MARGIN = 128.0f;
 void gameplay::do_gameplay_logic() {
 
     //Camera movement.
-    cam_pos.x +=
-        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
-    cam_pos.y +=
-        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
-    cam_zoom +=
-        (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
+    game.cam.pos.x +=
+        (game.cam.target_pos.x - game.cam.pos.x) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
+    game.cam.pos.y +=
+        (game.cam.target_pos.y - game.cam.pos.y) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
+    game.cam.zoom +=
+        (game.cam.target_zoom - game.cam.zoom) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
         
     update_transformations();
     
     //Set the camera bounding box.
-    cam_box[0] = point(0, 0);
-    cam_box[1] = point(game.win_w, game.win_h);
+    game.cam.box[0] = point(0, 0);
+    game.cam.box[1] = point(game.win_w, game.win_h);
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &cam_box[0].x,
-        &cam_box[0].y
+        &game.cam.box[0].x,
+        &game.cam.box[0].y
     );
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &cam_box[1].x,
-        &cam_box[1].y
+        &game.cam.box[1].x,
+        &game.cam.box[1].y
     );
-    cam_box[0].x -= CAMERA_BOX_MARGIN;
-    cam_box[0].y -= CAMERA_BOX_MARGIN;
-    cam_box[1].x += CAMERA_BOX_MARGIN;
-    cam_box[1].y += CAMERA_BOX_MARGIN;
+    game.cam.box[0].x -= CAMERA_BOX_MARGIN;
+    game.cam.box[0].y -= CAMERA_BOX_MARGIN;
+    game.cam.box[1].x += CAMERA_BOX_MARGIN;
+    game.cam.box[1].y += CAMERA_BOX_MARGIN;
     
     if(cur_message.empty()) {
     
@@ -337,7 +337,7 @@ void gameplay::do_gameplay_logic() {
             );
         }
         
-        cam_final_pos = cur_leader_ptr->pos;
+        game.cam.target_pos = cur_leader_ptr->pos;
         
         //Check proximity with certain key things.
         if(!cur_leader_ptr->auto_plucking) {

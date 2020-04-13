@@ -1640,13 +1640,13 @@ void area_editor::load() {
             if(path_preview_checkpoints[0].x == LARGE_FLOAT) {
                 //No previous location. Place them on-camera.
                 path_preview_checkpoints[0].x =
-                    cam_pos.x - COMFY_DIST;
+                    game.cam.pos.x - COMFY_DIST;
                 path_preview_checkpoints[0].y =
-                    cam_pos.y;
+                    game.cam.pos.y;
                 path_preview_checkpoints[1].x =
-                    cam_pos.x + COMFY_DIST;
+                    game.cam.pos.x + COMFY_DIST;
                 path_preview_checkpoints[1].y =
-                    cam_pos.y;
+                    game.cam.pos.y;
             }
             calculate_preview_path();
             this->frm_paths->widgets["lbl_path_dist"]->show();
@@ -2063,13 +2063,13 @@ void area_editor::load() {
         ) {
             //No previous location. Place them on-camera.
             cross_section_checkpoints[0].x =
-                cam_pos.x - COMFY_DIST;
+                game.cam.pos.x - COMFY_DIST;
             cross_section_checkpoints[0].y =
-                cam_pos.y;
+                game.cam.pos.y;
             cross_section_checkpoints[1].x =
-                cam_pos.x + COMFY_DIST;
+                game.cam.pos.x + COMFY_DIST;
             cross_section_checkpoints[1].y =
-                cam_pos.y;
+                game.cam.pos.y;
         }
         review_to_gui();
     };
@@ -2702,8 +2702,8 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         if(!save_area(false)) return;
         quick_play_area = cur_area_name;
-        quick_play_cam_pos = cam_pos;
-        quick_play_cam_z = cam_zoom;
+        quick_play_cam_pos = game.cam.pos;
+        quick_play_cam_z = game.cam.zoom;
         leave();
     };
     frm_toolbar->widgets["but_play"]->description =
@@ -2776,8 +2776,8 @@ void area_editor::load() {
     clear_selection();
     selected_shadow = NULL;
     selection_homogenized = false;
-    cam_zoom = 1.0;
-    cam_pos.x = cam_pos.y = 0.0;
+    game.cam.zoom = 1.0;
+    game.cam.pos.x = game.cam.pos.y = 0.0;
     selection_effect = 0.0;
     is_ctrl_pressed = false;
     is_shift_pressed = false;
@@ -2811,8 +2811,8 @@ void area_editor::load() {
         cur_area_name = quick_play_area;
         quick_play_area.clear();
         load_area(false);
-        cam_pos = quick_play_cam_pos;
-        cam_zoom = quick_play_cam_z;
+        game.cam.pos = quick_play_cam_pos;
+        game.cam.zoom = quick_play_cam_z;
         
     } else if(!auto_load_area.empty()) {
         cur_area_name = auto_load_area;

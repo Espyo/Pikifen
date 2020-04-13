@@ -60,7 +60,6 @@ sample_struct sfx_throw;
 
 asset_file_names_struct asset_file_names;
 
-timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);
 bmp_manager bitmaps("");
 ALLEGRO_BITMAP* bmp_error = NULL;
 map<string, bouncer_type*> bouncer_types;
@@ -68,11 +67,6 @@ vector<bouncer*> bouncers;
 vector<bridge*> bridges;
 map<string, bridge_type*> bridge_types;
 button_manager buttons;
-point cam_box[2];
-point cam_final_pos;
-float cam_final_zoom = 1.0;
-point cam_pos;
-float cam_zoom = 1.0;
 bool can_throw_leaders = true;
 ALLEGRO_COLOR carrying_color_move = al_map_rgb(255, 255, 255);
 ALLEGRO_COLOR carrying_color_stop = al_map_rgb(96, 192, 192);

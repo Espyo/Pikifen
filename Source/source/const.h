@@ -42,8 +42,6 @@ const string ANIMATION_EDITOR_TUTORIAL_URL =
 const string AREA_EDITOR_TUTORIAL_URL =
     "http://www.pikminfanon.com/Pikifen/Creating_areas";
 
-//How long it takes for the area name to fade away, in-game.
-const float AREA_TITLE_FADE_DURATION = 3.0f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_SAVE_N_SPOTS = 10;
 //The default rotation speed of a mob type.

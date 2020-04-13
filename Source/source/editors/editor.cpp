@@ -101,8 +101,8 @@ void editor::center_camera(
     float width = max_c.x - min_c.x;
     float height = max_c.y - min_c.y;
     
-    cam_pos.x = floor(min_c.x + width  / 2);
-    cam_pos.y = floor(min_c.y + height / 2);
+    game.cam.pos.x = floor(min_c.x + width  / 2);
+    game.cam.pos.y = floor(min_c.y + height / 2);
     
     float z;
     if(width > height) z = (canvas_br.x - canvas_tl.x) / width;
@@ -876,10 +876,10 @@ void editor::update_transformations() {
     game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
         &game.world_to_screen_transform,
-        -cam_pos.x + canvas_center.x / cam_zoom,
-        -cam_pos.y + canvas_center.y / cam_zoom
+        -game.cam.pos.x + canvas_center.x / game.cam.zoom,
+        -game.cam.pos.y + canvas_center.y / game.cam.zoom
     );
-    al_scale_transform(&game.world_to_screen_transform, cam_zoom, cam_zoom);
+    al_scale_transform(&game.world_to_screen_transform, game.cam.zoom, game.cam.zoom);
     
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;
@@ -892,7 +892,7 @@ void editor::update_transformations() {
  * in the same spot.
  */
 void editor::zoom(const float new_zoom, const bool anchor_cursor) {
-    cam_zoom = clamp(new_zoom, zoom_min_level, zoom_max_level);
+    game.cam.zoom = clamp(new_zoom, zoom_min_level, zoom_max_level);
     
     if(anchor_cursor) {
         //Keep a backup of the old mouse coordinates.
@@ -908,8 +908,8 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
         
         //Readjust the transformation by shifting the camera
         //so that the cursor ends up where it was before.
-        cam_pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x);
-        cam_pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y);
+        game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x);
+        game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y);
     }
     
     update_transformations();
@@ -1073,7 +1073,7 @@ void editor::transformation_controller::draw_handles() {
     if(allow_rotation) {
         al_draw_circle(
             center.x, center.y, radius,
-            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS / cam_zoom
+            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS / game.cam.zoom
         );
     }
     
@@ -1093,7 +1093,7 @@ void editor::transformation_controller::draw_handles() {
         al_draw_line(
             corners[c].x, corners[c].y,
             corners[c2].x, corners[c2].y,
-            al_map_rgb(32, 32, 160), 2.0 / cam_zoom
+            al_map_rgb(32, 32, 160), 2.0 / game.cam.zoom
         );
     }
     
@@ -1102,7 +1102,7 @@ void editor::transformation_controller::draw_handles() {
         point handle_pos = get_handle_pos(h);
         al_draw_filled_circle(
             handle_pos.x, handle_pos.y,
-            HANDLE_RADIUS / cam_zoom, al_map_rgb(96, 96, 224)
+            HANDLE_RADIUS / game.cam.zoom, al_map_rgb(96, 96, 224)
         );
     }
 }
@@ -1163,7 +1163,7 @@ bool editor::transformation_controller::handle_mouse_down(const point pos) {
     
     for(unsigned char h = 0; h < 9; ++h) {
         point handle_pos = get_handle_pos(h);
-        if(dist(handle_pos, pos) <= HANDLE_RADIUS / cam_zoom) {
+        if(dist(handle_pos, pos) <= HANDLE_RADIUS / game.cam.zoom) {
             moving_handle = h;
             pre_move_size = size;
             return true;
@@ -1173,8 +1173,8 @@ bool editor::transformation_controller::handle_mouse_down(const point pos) {
     if(allow_rotation) {
         dist d(center, pos);
         if(
-            d >= radius - ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0 &&
-            d <= radius + ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0
+            d >= radius - ROTATION_HANDLE_THICKNESS / game.cam.zoom / 2.0 &&
+            d <= radius + ROTATION_HANDLE_THICKNESS / game.cam.zoom / 2.0
         ) {
             moving_handle = 9;
             pre_rotation_angle = angle;

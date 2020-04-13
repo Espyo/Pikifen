@@ -25,6 +25,8 @@
 
 //How long the HUD moves for when the area is entered.
 const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
+//How long it takes for the area name to fade away, in-game.
+const float gameplay::AREA_TITLE_FADE_DURATION = 3.0f;
 //How fast the "invalid cursor" effect goes, per second.
 const float gameplay::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
@@ -40,6 +42,7 @@ const float gameplay::SWARM_ARROWS_INTERVAL = 0.1f;
 gameplay::gameplay() :
     game_state(),
     area_time_passed(0.0f),
+    area_title_fade_timer(AREA_TITLE_FADE_DURATION),
     closest_group_member(nullptr),
     closest_group_member_distant(false),
     cur_leader_nr(0),
@@ -295,8 +298,8 @@ void gameplay::load() {
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->active = true;
     
-    cam_pos = cam_final_pos = cur_leader_ptr->pos;
-    cam_zoom = cam_final_zoom = game.options.zoom_mid_level;
+    game.cam.pos = game.cam.target_pos = cur_leader_ptr->pos;
+    game.cam.zoom = game.cam.target_zoom = game.options.zoom_mid_level;
     update_transformations();
     
     ALLEGRO_MOUSE_STATE mouse_state;
@@ -539,8 +542,8 @@ void gameplay::unload() {
     
     cur_leader_ptr = NULL;
     
-    cam_pos = cam_final_pos = point();
-    cam_zoom = cam_final_zoom = 1.0f;
+    game.cam.pos = game.cam.target_pos = point();
+    game.cam.zoom = game.cam.target_zoom = 1.0f;
     
     while(!mobs.empty()) {
         delete_mob(*mobs.begin(), true);
@@ -690,10 +693,10 @@ void gameplay::update_transformations() {
     game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
         &game.world_to_screen_transform,
-        -cam_pos.x + game.win_w / 2.0 / cam_zoom,
-        -cam_pos.y + game.win_h / 2.0 / cam_zoom
+        -game.cam.pos.x + game.win_w / 2.0 / game.cam.zoom,
+        -game.cam.pos.y + game.win_h / 2.0 / game.cam.zoom
     );
-    al_scale_transform(&game.world_to_screen_transform, cam_zoom, cam_zoom);
+    al_scale_transform(&game.world_to_screen_transform, game.cam.zoom, game.cam.zoom);
     
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;

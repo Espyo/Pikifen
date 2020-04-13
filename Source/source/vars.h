@@ -130,7 +130,6 @@ extern asset_file_names_struct asset_file_names;
 
 //General globals.
 
-extern timer area_title_fade_timer;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern map<string, bouncer_type*> bouncer_types;
@@ -138,12 +137,6 @@ extern vector<bouncer*> bouncers;
 extern vector<bridge*> bridges;
 extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;
-//Minimum and maximum coordinates that are on-camera.
-extern point cam_box[2];
-extern point cam_final_pos;
-extern float cam_final_zoom;
-extern point cam_pos;
-extern float cam_zoom;
 extern bool can_throw_leaders;
 extern ALLEGRO_COLOR carrying_color_move;
 extern ALLEGRO_COLOR carrying_color_stop;

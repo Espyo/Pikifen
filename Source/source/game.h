@@ -36,6 +36,8 @@ public:
     area_editor* area_editor_state;
     //Area menu game state.
     area_menu* area_menu_state;
+    //Player 1's camera.
+    camera_info cam;
     //Controls menu game state.
     controls_menu* controls_menu_state;
     //Data about the area that's currently being used.

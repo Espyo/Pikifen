@@ -99,27 +99,27 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     }
     
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        cam_pos.x -= KEYBOARD_PAN_AMOUNT / cam_zoom;
+        game.cam.pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        cam_pos.x += KEYBOARD_PAN_AMOUNT / cam_zoom;
+        game.cam.pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-        cam_pos.y -= KEYBOARD_PAN_AMOUNT / cam_zoom;
+        game.cam.pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        cam_pos.y += KEYBOARD_PAN_AMOUNT / cam_zoom;
+        game.cam.pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
-        zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        zoom(game.cam.zoom - (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
-        zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        zoom(game.cam.zoom + (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
-        if(cam_zoom == 1.0f) {
-            cam_pos.x = 0.0f;
-            cam_pos.y = 0.0f;
+        if(game.cam.zoom == 1.0f) {
+            game.cam.pos.x = 0.0f;
+            game.cam.pos.y = 0.0f;
         } else {
             zoom(1.0f, false);
         }
@@ -440,7 +440,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     drawing_nodes.back().snapped_spot.x,
                     drawing_nodes.back().snapped_spot.y
                 )
-            ) <= VERTEX_MERGE_RADIUS / cam_zoom
+            ) <= VERTEX_MERGE_RADIUS / game.cam.zoom
         ) {
             undo_layout_drawing_node();
             return;
@@ -459,7 +459,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             } else if(
                 dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
-                VERTEX_MERGE_RADIUS / cam_zoom
+                VERTEX_MERGE_RADIUS / game.cam.zoom
             ) {
                 //Back to the first vertex. Finish the drawing.
                 finish_layout_drawing();
@@ -836,7 +836,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     bbox_check(
                         path_preview_checkpoints[c],
                         game.mouse_cursor_w,
-                        PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
+                        PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom
                     )
                 ) {
                     clear_selection();
@@ -973,7 +973,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             if(
                 bbox_check(
                     cross_section_checkpoints[p], game.mouse_cursor_w,
-                    CROSS_SECTION_POINT_RADIUS / cam_zoom
+                    CROSS_SECTION_POINT_RADIUS / game.cam.zoom
                 )
             ) {
                 moving_cross_section_point = p;
@@ -1391,7 +1391,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  * Handles the mouse wheel being moved.
  */
 void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    zoom(cam_zoom + (cam_zoom * ev.mouse.dz * 0.1));
+    zoom(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
@@ -1429,8 +1429,8 @@ void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
  * Pans the camera around.
  */
 void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
-    cam_pos.x -= ev.mouse.dx / cam_zoom;
-    cam_pos.y -= ev.mouse.dy / cam_zoom;
+    game.cam.pos.x -= ev.mouse.dx / game.cam.zoom;
+    game.cam.pos.y -= ev.mouse.dy / game.cam.zoom;
 }
 
 
@@ -1438,8 +1438,8 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * Resets the camera's X and Y coordinates.
  */
 void area_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
-    cam_pos.x = 0;
-    cam_pos.y = 0;
+    game.cam.pos.x = 0;
+    game.cam.pos.y = 0;
 }
 
 

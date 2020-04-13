@@ -31,6 +31,26 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+
+/* ----------------------------------------------------------------------------
+ * Information about the game camera. Where it is, where it wants to go, etc.
+ */
+struct camera_info {
+    //Top-left and bottom-right world coordinates that this camera can see.
+    point box[2];
+    //Current position.
+    point pos;
+    //Position it wants to be at.
+    point target_pos;
+    //Zoom it wants to be at.
+    float target_zoom;
+    //Current zoom.
+    float zoom;
+    
+    camera_info();
+};
+
+
 /* ----------------------------------------------------------------------------
  * A timer. You can set it to start at a pre-determined time, to tick, etc.
  */
@@ -97,7 +117,7 @@ public:
     
     long get_total_calls();
     size_t get_list_size();
-
+    
 private:
     struct bmp_info {
         ALLEGRO_BITMAP* b;
@@ -158,7 +178,7 @@ public:
     void start_move(const bool in, const float duration);
     void tick(const float time);
     hud_item_manager(const size_t item_total);
-
+    
 private:
     vector<hud_item> items;
     bool move_in;
@@ -310,7 +330,7 @@ public:
     float get_perc_left();
     void tick(const float time);
     void draw();
-
+    
 private:
     float time_left;
     bool fade_in;
@@ -382,7 +402,7 @@ struct subgroup_type {
 public:
     SUBGROUP_TYPE_CATEGORIES get_category() { return category; }
     ALLEGRO_BITMAP* get_icon() { return icon; }
-
+    
 private:
     friend subgroup_type_manager;
     SUBGROUP_TYPE_CATEGORIES category;
@@ -410,7 +430,7 @@ public:
     subgroup_type* get_prev_type(subgroup_type* sgt);
     subgroup_type* get_next_type(subgroup_type* sgt);
     void clear();
-
+    
 private:
     vector<subgroup_type*> types;
 };

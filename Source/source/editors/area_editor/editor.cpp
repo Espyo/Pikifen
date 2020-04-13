@@ -292,7 +292,7 @@ void area_editor::check_drawing_line(const point &pos) {
             ) {
                 if(
                     dist(intersection, drawing_nodes.begin()->snapped_spot) >
-                    VERTEX_MERGE_RADIUS / cam_zoom
+                    VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Only a problem if this isn't the user's drawing finish.
                     drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
@@ -303,7 +303,7 @@ void area_editor::check_drawing_line(const point &pos) {
         
         if(
             circle_intersects_line(
-                pos, 8.0 / cam_zoom,
+                pos, 8.0 / game.cam.zoom,
                 prev_node->snapped_spot,
                 drawing_nodes[drawing_nodes.size() - 2].snapped_spot
             )
@@ -476,8 +476,8 @@ void area_editor::clear_current_area() {
     mob_to_gui();
     tools_to_gui();
     
-    cam_pos = point();
-    cam_zoom = 1.0f;
+    game.cam.pos = point();
+    game.cam.zoom = 1.0f;
     show_cross_section = false;
     show_cross_section_grid = false;
     show_path_preview = false;
@@ -1447,7 +1447,7 @@ void area_editor::finish_layout_moving() {
         vector<std::pair<dist, vertex*> > merge_vertexes =
             get_merge_vertexes(
                 p, game.cur_area_data.vertexes,
-                VERTEX_MERGE_RADIUS / cam_zoom
+                VERTEX_MERGE_RADIUS / game.cam.zoom
             );
             
         for(size_t mv = 0; mv < merge_vertexes.size(); ) {
@@ -1978,7 +1978,7 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) {
         
         if(
             circle_intersects_line(
-                p, 8 / cam_zoom,
+                p, 8 / game.cam.zoom,
                 point(
                     e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                 ),
@@ -2047,7 +2047,7 @@ bool area_editor::get_mob_link_under_point(
         for(size_t l = 0; l < m_ptr->links.size(); ++l) {
             mob_gen* m2_ptr = m_ptr->links[l];
             if(
-                circle_intersects_line(p, 8 / cam_zoom, m_ptr->pos, m2_ptr->pos)
+                circle_intersects_line(p, 8 / game.cam.zoom, m_ptr->pos, m2_ptr->pos)
             ) {
                 *data1 = std::make_pair(m_ptr, m2_ptr);
                 *data2 = std::make_pair((mob_gen*) NULL, (mob_gen*) NULL);
@@ -2109,7 +2109,7 @@ bool area_editor::get_path_link_under_point(
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_stop* s2_ptr = s_ptr->links[l].end_ptr;
             if(
-                circle_intersects_line(p, 8 / cam_zoom, s_ptr->pos, s2_ptr->pos)
+                circle_intersects_line(p, 8 / game.cam.zoom, s_ptr->pos, s2_ptr->pos)
             ) {
                 *data1 = std::make_pair(s_ptr, s2_ptr);
                 if(s2_ptr->get_link(s_ptr) != INVALID) {
@@ -2160,15 +2160,15 @@ vertex* area_editor::get_vertex_under_point(const point &p) {
         
         if(
             rectangles_intersect(
-                p - (4 / cam_zoom),
-                p + (4 / cam_zoom),
+                p - (4 / game.cam.zoom),
+                p + (4 / game.cam.zoom),
                 point(
-                    v_ptr->x - (4 / cam_zoom),
-                    v_ptr->y - (4 / cam_zoom)
+                    v_ptr->x - (4 / game.cam.zoom),
+                    v_ptr->y - (4 / game.cam.zoom)
                 ),
                 point(
-                    v_ptr->x + (4 / cam_zoom),
-                    v_ptr->y + (4 / cam_zoom)
+                    v_ptr->x + (4 / game.cam.zoom),
+                    v_ptr->y + (4 / game.cam.zoom)
                 )
             )
         ) {
@@ -2487,8 +2487,8 @@ void area_editor::load_area(const bool from_backup) {
     update_toolbar();
     enable_widget(frm_toolbar->widgets["but_reload"]);
     
-    cam_zoom = 1.0f;
-    cam_pos = point();
+    game.cam.zoom = 1.0f;
+    game.cam.pos = point();
     
     emit_status_bar_message("Loaded successfully.", false);
 }
@@ -3437,7 +3437,7 @@ point area_editor::snap_point(const point &p) {
         vector<std::pair<dist, vertex*> > v =
             get_merge_vertexes(
                 p, game.cur_area_data.vertexes,
-                game.options.area_editor_snap_threshold / cam_zoom
+                game.options.area_editor_snap_threshold / game.cam.zoom
             );
         if(v.empty()) {
             cursor_snap_cache = p;
@@ -3485,7 +3485,7 @@ point area_editor::snap_point(const point &p) {
             }
             
             dist d(p, edge_p);
-            if(d > game.options.area_editor_snap_threshold / cam_zoom) continue;
+            if(d > game.options.area_editor_snap_threshold / game.cam.zoom) continue;
             
             if(!got_one || d < closest_dist) {
                 got_one = true;
@@ -3897,7 +3897,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     vector<std::pair<dist, vertex*> > merge_vertexes =
         get_merge_vertexes(
             mouse_click, game.cur_area_data.vertexes,
-            VERTEX_MERGE_RADIUS / cam_zoom
+            VERTEX_MERGE_RADIUS / game.cam.zoom
         );
     if(!merge_vertexes.empty()) {
         sort(
