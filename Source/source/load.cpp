@@ -813,47 +813,47 @@ void load_game_config() {
     rs.set("game_name", game.name);
     rs.set("game_version", game.version);
     
-    rs.set("carrying_color_move", carrying_color_move);
-    rs.set("carrying_color_stop", carrying_color_stop);
-    rs.set("carrying_speed_base_mult", carrying_speed_base_mult);
-    rs.set("carrying_speed_max_mult", carrying_speed_max_mult);
-    rs.set("carrying_speed_weight_mult", carrying_speed_weight_mult);
+    rs.set("carrying_color_move", game.config.carrying_color_move);
+    rs.set("carrying_color_stop", game.config.carrying_color_stop);
+    rs.set("carrying_speed_base_mult", game.config.carrying_speed_base_mult);
+    rs.set("carrying_speed_max_mult", game.config.carrying_speed_max_mult);
+    rs.set("carrying_speed_weight_mult", game.config.carrying_speed_weight_mult);
     
-    rs.set("day_minutes_start", day_minutes_start);
-    rs.set("day_minutes_end", day_minutes_end);
-    rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
+    rs.set("day_minutes_start", game.config.day_minutes_start);
+    rs.set("day_minutes_end", game.config.day_minutes_end);
+    rs.set("day_minutes_per_irl_sec", game.config.day_minutes_per_irl_sec);
     
     rs.set("pikmin_order", pikmin_order_string);
-    rs.set("standard_pikmin_height", standard_pikmin_height);
-    rs.set("standard_pikmin_radius", standard_pikmin_radius);
+    rs.set("standard_pikmin_height", game.config.standard_pikmin_height);
+    rs.set("standard_pikmin_radius", game.config.standard_pikmin_radius);
     
     rs.set("leader_order", leader_order_string);
     
-    rs.set("idle_task_range", idle_task_range);
-    rs.set("swarm_task_range", swarm_task_range);
-    rs.set("pikmin_chase_range", pikmin_chase_range);
-    rs.set("max_pikmin_in_field", max_pikmin_in_field);
-    rs.set("maturity_power_mult", maturity_power_mult);
-    rs.set("maturity_speed_mult", maturity_speed_mult);
+    rs.set("idle_task_range", game.config.idle_task_range);
+    rs.set("swarm_task_range", game.config.swarm_task_range);
+    rs.set("pikmin_chase_range", game.config.pikmin_chase_range);
+    rs.set("max_pikmin_in_field", game.config.max_pikmin_in_field);
+    rs.set("maturity_power_mult", game.config.maturity_power_mult);
+    rs.set("maturity_speed_mult", game.config.maturity_speed_mult);
     
-    rs.set("can_throw_leaders", can_throw_leaders);
-    rs.set("cursor_max_dist", cursor_max_dist);
-    rs.set("cursor_spin_speed", cursor_spin_speed);
-    rs.set("next_pluck_range", next_pluck_range);
-    rs.set("onion_open_range", onion_open_range);
-    rs.set("pikmin_grab_range", pikmin_grab_range);
-    rs.set("pluck_range", pluck_range);
-    rs.set("whistle_growth_speed", whistle_growth_speed);
+    rs.set("can_throw_leaders", game.config.can_throw_leaders);
+    rs.set("cursor_max_dist", game.config.cursor_max_dist);
+    rs.set("cursor_spin_speed", game.config.cursor_spin_speed);
+    rs.set("next_pluck_range", game.config.next_pluck_range);
+    rs.set("onion_open_range", game.config.onion_open_range);
+    rs.set("pikmin_grab_range", game.config.pikmin_grab_range);
+    rs.set("pluck_range", game.config.pluck_range);
+    rs.set("whistle_growth_speed", game.config.whistle_growth_speed);
     
-    rs.set("message_char_interval", message_char_interval);
-    rs.set("zoom_max_level", zoom_max_level);
-    rs.set("zoom_min_level", zoom_min_level);
+    rs.set("message_char_interval", game.config.message_char_interval);
+    rs.set("zoom_max_level", game.config.zoom_max_level);
+    rs.set("zoom_min_level", game.config.zoom_min_level);
     
     al_set_window_title(game.display, game.name.c_str());
     
     pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
     leader_order_strings = semicolon_list_to_vector(leader_order_string);
-    cursor_spin_speed = deg_to_rad(cursor_spin_speed);
+    game.config.cursor_spin_speed = deg_to_rad(game.config.cursor_spin_speed);
 }
 
 

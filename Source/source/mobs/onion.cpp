@@ -62,7 +62,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  */
 void onion::call_pikmin() {
 
-    if(pikmin_list.size() >= max_pikmin_in_field) return;
+    if(pikmin_list.size() >= game.config.max_pikmin_in_field) return;
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
@@ -141,7 +141,7 @@ void onion::spew() {
     
     unsigned total_after = pikmin_list.size() + 1;
     
-    if(total_after > max_pikmin_in_field) {
+    if(total_after > game.config.max_pikmin_in_field) {
         pikmin_inside[0]++;
         return;
     }

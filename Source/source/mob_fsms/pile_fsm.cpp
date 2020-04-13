@@ -14,6 +14,7 @@
 
 #include "../const.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../mobs/pile.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
@@ -90,7 +91,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             spawn_angle = get_angle(p_ptr->pos, pikmin_to_start_carrying->pos);
             spawn_pos =
                 pikmin_to_start_carrying->pos +
-                angle_to_coordinates(spawn_angle, standard_pikmin_radius * 1.5);
+                angle_to_coordinates(spawn_angle, game.config.standard_pikmin_radius * 1.5);
         } else {
             spawn_pos = p_ptr->pos;
             spawn_z = p_ptr->height + 32.0f;

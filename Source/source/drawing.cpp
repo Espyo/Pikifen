@@ -182,13 +182,13 @@ void gameplay::draw_cursor(
             64 + std::min(
                 191,
                 (int) (
-                    191 * (swarm_arrows[a] / (cursor_max_dist * 0.4))
+                    191 * (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
             bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
-            point(16 * (1 + swarm_arrows[a] / cursor_max_dist), -1),
+            point(16 * (1 + swarm_arrows[a] / game.config.cursor_max_dist), -1),
             swarm_angle,
             map_alpha(alpha)
         );
@@ -306,7 +306,7 @@ void gameplay::draw_cursor(
             game.cam.zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
             game.cam.zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
         ),
-        -(area_time_passed * cursor_spin_speed),
+        -(area_time_passed * game.config.cursor_spin_speed),
         change_color_lighting(
             cur_leader_ptr->lea_type->main_color,
             cursor_height_diff_light
@@ -394,10 +394,10 @@ void gameplay::draw_hud() {
     //Sun Meter.
     if(hud_items.get_draw_data(HUD_ITEM_TIME, &i_center, &i_size)) {
         unsigned char n_hours =
-            (day_minutes_end - day_minutes_start) / 60.0f;
+            (game.config.day_minutes_end - game.config.day_minutes_start) / 60.0f;
         float day_passed_ratio =
-            (float) (day_minutes - day_minutes_start) /
-            (float) (day_minutes_end - day_minutes_start);
+            (float) (day_minutes - game.config.day_minutes_start) /
+            (float) (game.config.day_minutes_end - game.config.day_minutes_start);
         float sun_radius = i_size.y / 2.0;
         float first_dot_x = (i_center.x - i_size.x / 2.0) + sun_radius;
         float last_dot_x = (i_center.x + i_size.x / 2.0) - sun_radius;
@@ -811,7 +811,7 @@ void gameplay::draw_ingame_text() {
                         mob_ptr->carry_info->destination ==
                         CARRY_DESTINATION_SHIP
                     ) {
-                        color = carrying_color_move;
+                        color = game.config.carrying_color_move;
                         valid = true;
                     } else if(mob_ptr->carry_info->intended_mob) {
                         color =
@@ -822,7 +822,7 @@ void gameplay::draw_ingame_text() {
                     }
                 }
                 if(!valid) {
-                    color = carrying_color_stop;
+                    color = game.config.carrying_color_stop;
                 }
                 draw_fraction(
                     point(
@@ -842,7 +842,7 @@ void gameplay::draw_ingame_text() {
             if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
                     font_main,
-                    carrying_color_stop,
+                    game.config.carrying_color_stop,
                     point(
                         p_ptr->pos.x,
                         p_ptr->pos.y - p_ptr->type->radius - font_main_h * 1.25
@@ -865,7 +865,7 @@ void gameplay::draw_ingame_text() {
                     ),
                     t_ptr->get_power(),
                     t_ptr->tas_type->power_goal,
-                    carrying_color_stop
+                    game.config.carrying_color_stop
                 );
             }
         }
@@ -884,12 +884,12 @@ void gameplay::draw_ingame_text() {
                         ),
                         w,
                         s_ptr->sca_type->goal_number,
-                        carrying_color_stop
+                        game.config.carrying_color_stop
                     );
                 } else {
                     draw_text_lines(
                         font_main,
-                        carrying_color_stop,
+                        game.config.carrying_color_stop,
                         point(
                             s_ptr->pos.x,
                             s_ptr->pos.y - s_ptr->type->radius -

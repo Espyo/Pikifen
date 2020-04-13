@@ -137,12 +137,6 @@ extern vector<bouncer*> bouncers;
 extern vector<bridge*> bridges;
 extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;
-extern bool can_throw_leaders;
-extern ALLEGRO_COLOR carrying_color_move;
-extern ALLEGRO_COLOR carrying_color_stop;
-extern float carrying_speed_base_mult;
-extern float carrying_speed_max_mult;
-extern float carrying_speed_weight_mult;
 extern vector<converter*> converters;
 extern map<string, converter_type*> converter_types;
 extern bool creator_tool_area_image_shadows;
@@ -167,18 +161,8 @@ extern size_t cur_message_section;
 extern ALLEGRO_BITMAP* cur_message_speaker;
 //The message stops scrolling when it reaches one of these characters.
 extern vector<size_t> cur_message_stopping_chars;
-//Maximum distance away from the leader the cursor can go.
-extern float cursor_max_dist;
-//How much the cursor spins per second.
-extern float cursor_spin_speed;
 extern map<string, mob_type*> custom_mob_types;
 extern map<string, particle_generator> custom_particle_generators;
-//The day ends when the in-game minutes reach this value.
-extern float day_minutes_end;
-//Every real-life second, these many in-game minutes pass.
-extern float day_minutes_per_irl_sec;
-//The in-game minutes start with this value every day.
-extern float day_minutes_start;
 extern map<string, decoration_type*> decoration_types;
 extern vector<decoration*> decorations;
 extern vector<drop*> drops;
@@ -198,7 +182,6 @@ extern map<string, group_task_type*> group_task_types;
 extern map<string, hazard> hazards;
 extern hud_item_manager hud_items;
 extern float hud_coords[N_HUD_ITEMS][4];
-extern float idle_task_range;
 extern float info_print_duration;
 extern float info_print_fade_duration;
 extern string info_print_text;
@@ -209,19 +192,9 @@ extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
 extern vector<string> leader_order_strings;
 extern map<string, leader_type*> leader_types;
-//Every level of maturity, multiply the power by 1 + this much.
-extern float maturity_power_mult;
-//Every level of maturity, multiply the attack by 1 + this much.
-extern float maturity_speed_mult;
-extern size_t max_pikmin_in_field;
-//These many seconds until a new character of the message is drawn.
-extern float message_char_interval;
 extern vector<mob_action> mob_actions;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
-//How far a leader can go to auto-pluck the next Pikmin.
-extern float next_pluck_range;
-extern float onion_open_range;
 extern map<string, onion_type*> onion_types;
 extern vector<onion*> onions;
 extern particle_manager particles;
@@ -229,14 +202,11 @@ extern map<string, pellet_type*> pellet_types;
 extern vector<pellet*> pellets;
 extern vector<point> precipitation;
 extern timer precipitation_timer;
-extern float pikmin_chase_range;
-extern float pikmin_grab_range;
 extern vector<pikmin*> pikmin_list;
 extern vector<string> pikmin_order_strings;
 extern map<string, pikmin_type*> pikmin_types;
 extern vector<pile*> piles;
 extern map<string, pile_type*> pile_types;
-extern float pluck_range;
 extern vector<resource*> resources;
 extern map<string, resource_type*> resource_types;
 extern map<string, scale_type*> scale_types;
@@ -249,14 +219,8 @@ extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
 extern map<string, spike_damage_type> spike_damage_types;
 extern vector<spray_type> spray_types;
-extern float standard_pikmin_height;
-extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
 extern subgroup_type_manager subgroup_types;
-//Distance of the arrows that appear
-//when the "swarm to cursor" button is held.
-extern vector<float> swarm_arrows;
-extern float swarm_task_range;
 extern bmp_manager textures;
 extern map<string, tool_type*> tool_types;
 extern vector<tool*> tools;
@@ -271,15 +235,12 @@ extern float whistle_dot_radius[6];
 extern float whistle_fade_radius;
 //Time left for the whistle's fading animations.
 extern timer whistle_fade_timer;
-extern float whistle_growth_speed;
 extern timer whistle_next_dot_timer;
 extern timer whistle_next_ring_timer;
 extern float whistle_radius;
 extern vector<unsigned char> whistle_ring_colors;
 extern unsigned char whistle_ring_prev_color;
 extern vector<float> whistle_rings;
-extern float zoom_max_level;
-extern float zoom_min_level;
 
 
 #endif //ifndef VARS_INCLUDED

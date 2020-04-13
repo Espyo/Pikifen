@@ -123,7 +123,7 @@ void mob::add_to_group(mob* new_member) {
     if(!group->cur_standby_type) {
         if(
             new_member->type->category->id != MOB_CATEGORY_LEADERS ||
-            can_throw_leaders
+            game.config.can_throw_leaders
         ) {
             group->cur_standby_type =
                 new_member->subgroup_type_ptr;
@@ -1838,7 +1838,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-        pikmin_list.size() >= max_pikmin_in_field
+        pikmin_list.size() >= game.config.max_pikmin_in_field
     ) {
         return NULL;
     }

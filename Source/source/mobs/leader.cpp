@@ -153,8 +153,8 @@ void leader::dismiss() {
         //it appears to the left and right of the center.
         //So count each one twice. Except for the central one.
         subgroups_info[s].radius =
-            standard_pikmin_radius +
-            standard_pikmin_radius * 2 *
+            game.config.standard_pikmin_radius +
+            game.config.standard_pikmin_radius * 2 *
             DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
     }
     
@@ -312,7 +312,7 @@ void leader::dismiss() {
                     subgroups_info[s].center +
                     angle_to_coordinates(
                         member_angle,
-                        cur_row_nr * standard_pikmin_radius * 2 *
+                        cur_row_nr * game.config.standard_pikmin_radius * 2 *
                         DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
@@ -545,7 +545,7 @@ void leader::tick_class_specifics(const float delta_t) {
                 group->anchor = pos + move_anchor_offset;
                 
                 float intensity_dist =
-                    cursor_max_dist * game.gameplay_state->swarm_magnitude;
+                    game.config.cursor_max_dist * game.gameplay_state->swarm_magnitude;
                 al_translate_transform(
                     &group->transform, -SWARM_MARGIN, 0
                 );

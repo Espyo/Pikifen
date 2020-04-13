@@ -45,7 +45,7 @@ void gameplay::do_aesthetic_logic() {
         
         dist max_dist =
             (swarm_magnitude > 0) ?
-            cursor_max_dist * swarm_magnitude :
+            game.config.cursor_max_dist * swarm_magnitude :
             leader_to_cursor_dist;
             
         if(max_dist < swarm_arrows[a]) {
@@ -68,7 +68,7 @@ void gameplay::do_aesthetic_logic() {
         for(unsigned char d = 0; d < 6; ++d) {
             if(whistle_dot_radius[d] == -1) continue;
             
-            whistle_dot_radius[d] += whistle_growth_speed * game.delta_t;
+            whistle_dot_radius[d] += game.config.whistle_growth_speed * game.delta_t;
             if(
                 whistle_radius > 0 &&
                 whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range
@@ -222,7 +222,7 @@ void gameplay::do_gameplay_logic() {
         *                              `-´  *
         *************************************/
         
-        day_minutes += (day_minutes_per_irl_sec * game.delta_t);
+        day_minutes += (game.config.day_minutes_per_irl_sec * game.delta_t);
         if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
         
         area_time_passed += game.delta_t;
@@ -279,7 +279,7 @@ void gameplay::do_gameplay_logic() {
             whistling &&
             whistle_radius < cur_leader_ptr->lea_type->whistle_range
         ) {
-            whistle_radius += whistle_growth_speed * game.delta_t;
+            whistle_radius += game.config.whistle_growth_speed * game.delta_t;
             if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_radius = cur_leader_ptr->lea_type->whistle_range;
             }
@@ -370,7 +370,7 @@ void gameplay::do_gameplay_logic() {
             close_to_pikmin_to_pluck = NULL;
             if(!done) {
                 pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
-                if(p && d <= pluck_range) {
+                if(p && d <= game.config.pluck_range) {
                     close_to_pikmin_to_pluck = p;
                     done = true;
                 }
@@ -382,7 +382,7 @@ void gameplay::do_gameplay_logic() {
             if(!done) {
                 for(size_t o = 0; o < onions.size(); ++o) {
                     d = dist(cur_leader_ptr->pos, onions[o]->pos);
-                    if(d > onion_open_range) continue;
+                    if(d > game.config.onion_open_range) continue;
                     if(d < closest_d || !close_to_onion_to_open) {
                         close_to_onion_to_open = onions[o];
                         closest_d = d;
@@ -434,12 +434,12 @@ void gameplay::do_gameplay_logic() {
         float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
         
         dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-        if(leader_to_cursor_dist > cursor_max_dist) {
+        if(leader_to_cursor_dist > game.config.cursor_max_dist) {
             //Cursor goes beyond the range limit.
             leader_cursor_w.x =
-                cur_leader_ptr->pos.x + (cos(cursor_angle) * cursor_max_dist);
+                cur_leader_ptr->pos.x + (cos(cursor_angle) * game.config.cursor_max_dist);
             leader_cursor_w.y =
-                cur_leader_ptr->pos.y + (sin(cursor_angle) * cursor_max_dist);
+                cur_leader_ptr->pos.y + (sin(cursor_angle) * game.config.cursor_max_dist);
                 
             if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
                 //If we're speeding the mouse cursor (via analog stick),
@@ -495,7 +495,7 @@ void gameplay::do_gameplay_logic() {
             float leader_to_cursor_dist =
                 dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
             swarm_magnitude =
-                leader_to_cursor_dist / cursor_max_dist;
+                leader_to_cursor_dist / game.config.cursor_max_dist;
         }
         
         if(old_swarm_magnitude != swarm_magnitude) {

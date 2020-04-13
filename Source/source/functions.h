@@ -72,7 +72,7 @@ enum FILE_DIALOG_RESULTS {
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range(p) \
     (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
-     swarm_task_range : idle_task_range)
+     game.config.swarm_task_range : game.config.idle_task_range)
 
 
 

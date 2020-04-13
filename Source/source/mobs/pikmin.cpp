@@ -102,9 +102,9 @@ void pikmin::draw_mob() {
         bitmap_effect_info idle_eff = eff;
         idle_eff.translation = pos;
         idle_eff.scale.x =
-            (standard_pikmin_radius * 8) / al_get_bitmap_width(bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_width(bmp_idle_glow);
         idle_eff.scale.y =
-            (standard_pikmin_radius * 8) / al_get_bitmap_height(bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_height(bmp_idle_glow);
         idle_eff.rotation =
             game.gameplay_state->area_time_passed * IDLE_GLOW_SPIN_SPEED;
         idle_eff.tint_color = type->main_color;
@@ -137,7 +137,7 @@ void pikmin::force_carry(mob* m) {
  */
 float pikmin::get_base_speed() {
     float base = mob::get_base_speed();
-    return base + (base * this->maturity * maturity_speed_mult);
+    return base + (base * this->maturity * game.config.maturity_speed_mult);
 }
 
 

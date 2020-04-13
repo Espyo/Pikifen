@@ -11,6 +11,7 @@
 #include "resource_fsm.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mobs/resource.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
@@ -188,8 +189,8 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
         r_ptr->carry_info->return_point = r_ptr->origin_pile->pos;
         r_ptr->carry_info->return_dist =
             r_ptr->origin_pile->type->radius +
-            standard_pikmin_radius +
-            idle_task_range / 2.0f;
+            game.config.standard_pikmin_radius +
+            game.config.idle_task_range / 2.0f;
     } else {
         r_ptr->carry_info->must_return = false;
     }

@@ -268,4 +268,4 @@ int game_class::start() {
 }
 
 
-game_class game = game_class();
+game_class game;

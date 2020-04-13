@@ -12,6 +12,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 #include "ship.h"
@@ -42,7 +43,7 @@ void treasure::draw_mob() {
     float delivery_time_ratio_left = LARGE_FLOAT;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        delivery_color = carrying_color_move;
+        delivery_color = game.config.carrying_color_move;
         delivery_time_ratio_left = script_timer.get_ratio_left();
     }
     

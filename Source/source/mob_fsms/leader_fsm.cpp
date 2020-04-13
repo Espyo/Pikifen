@@ -1208,7 +1208,7 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     
     float distance =
         m->following_group->type->radius +
-        m->type->radius + standard_pikmin_radius;
+        m->type->radius + game.config.standard_pikmin_radius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
         mob* member_ptr = leader_group_ptr->members[me];
@@ -1603,7 +1603,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(new_pikmin && d <= next_pluck_range) {
+    if(new_pikmin && d <= game.config.next_pluck_range) {
         l_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
         l_ptr->queued_pluck_cancel = false;
     } else {

@@ -506,7 +506,7 @@ void init_misc() {
     particles = particle_manager(game.options.max_particles);
     
     game.options.zoom_mid_level =
-        clamp(game.options.zoom_mid_level, zoom_min_level, zoom_max_level);
+        clamp(game.options.zoom_mid_level, game.config.zoom_min_level, game.config.zoom_max_level);
         
     //Some creator tool defaults that are convenient to have on.
     creator_tool_keys[10] = CREATOR_TOOL_AREA_IMAGE;

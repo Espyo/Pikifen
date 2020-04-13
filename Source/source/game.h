@@ -17,6 +17,7 @@
 
 #include "editors/animation_editor/editor.h"
 #include "editors/area_editor/editor.h"
+#include "game_config.h"
 #include "gameplay.h"
 #include "menus.h"
 #include "options.h"
@@ -38,6 +39,8 @@ public:
     area_menu* area_menu_state;
     //Player 1's camera.
     camera_info cam;
+    //Game's configuration.
+    game_config config;
     //Controls menu game state.
     controls_menu* controls_menu_state;
     //Data about the area that's currently being used.

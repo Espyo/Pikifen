@@ -1205,9 +1205,9 @@ void area_editor::do_drawing() {
             
             if(central_sector) {
                 float pikmin_silhouette_w =
-                    standard_pikmin_radius * 2.0 * proportion;
+                    game.config.standard_pikmin_radius * 2.0 * proportion;
                 float pikmin_silhouette_h =
-                    standard_pikmin_height * proportion;
+                    game.config.standard_pikmin_height * proportion;
                 float pikmin_silhouette_pivot_x =
                     (
                         cross_section_window_start.x +

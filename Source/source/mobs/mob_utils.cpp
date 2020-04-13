@@ -52,8 +52,8 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = TAU / m->type->max_carriers * c;
         point p(
-            cos(angle) * (m->type->radius + standard_pikmin_radius),
-            sin(angle) * (m->type->radius + standard_pikmin_radius)
+            cos(angle) * (m->type->radius + game.config.standard_pikmin_radius),
+            sin(angle) * (m->type->radius + game.config.standard_pikmin_radius)
         );
         spot_info.push_back(carrier_spot_struct(p));
     }
@@ -80,9 +80,9 @@ float carry_info_struct::get_speed() {
     //If the object has all carriers, the Pikmin move as fast
     //as possible, which looks bad, since they're not jogging,
     //they're carrying. Let's add a penalty for the weight...
-    max_speed *= (1 - carrying_speed_weight_mult * m->type->weight);
+    max_speed *= (1 - game.config.carrying_speed_weight_mult * m->type->weight);
     //...and a global carrying speed penalty.
-    max_speed *= carrying_speed_max_mult;
+    max_speed *= game.config.carrying_speed_max_mult;
     
     //The closer the mob is to having full carriers,
     //the closer to the max speed we get.
@@ -90,9 +90,9 @@ float carry_info_struct::get_speed() {
     //to max_speed (all carriers).
     return
         max_speed * (
-            carrying_speed_base_mult +
+            game.config.carrying_speed_base_mult +
             (cur_n_carriers / (float) spot_info.size()) *
-            (1 - carrying_speed_base_mult)
+            (1 - game.config.carrying_speed_base_mult)
         );
 }
 
@@ -129,8 +129,8 @@ void carry_info_struct::rotate_points(const float angle) {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
-            cos(s_angle) * (m->type->radius + standard_pikmin_radius),
-            sin(s_angle) * (m->type->radius + standard_pikmin_radius)
+            cos(s_angle) * (m->type->radius + game.config.standard_pikmin_radius),
+            sin(s_angle) * (m->type->radius + game.config.standard_pikmin_radius)
         );
         spot_info[s].pos = p;
     }
@@ -250,7 +250,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     
     vector<alpha_spot> alpha_spots;
     size_t current_wheel = 1;
-    radius = standard_pikmin_radius;
+    radius = game.config.standard_pikmin_radius;
     
     //Center spot first.
     alpha_spots.push_back(alpha_spot(point()));
@@ -260,7 +260,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
         //First, calculate how far the center
         //of these spots are from the central spot.
         float dist_from_center =
-            standard_pikmin_radius * current_wheel + //Spots.
+            game.config.standard_pikmin_radius * current_wheel + //Spots.
             GROUP_SPOT_INTERVAL * current_wheel; //Interval between spots.
             
         /* Now we need to figure out what's the angular distance
@@ -274,7 +274,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
          * and we know the distance from one spot to the center.
          */
         float actual_diameter =
-            standard_pikmin_radius * 2.0 + GROUP_SPOT_INTERVAL;
+            game.config.standard_pikmin_radius * 2.0 + GROUP_SPOT_INTERVAL;
             
         //Just calculate the remaining side of the triangle, now that we know
         //the hypotenuse and the actual diameter (one side of the triangle).
@@ -433,7 +433,7 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
         //For each type, let's check if there's any group member that matches.
         if(
             scanning_type == leader_subgroup_type &&
-            !can_throw_leaders
+            !game.config.can_throw_leaders
         ) {
             //If this is a leader, and leaders cannot be thrown, skip.
         } else {
