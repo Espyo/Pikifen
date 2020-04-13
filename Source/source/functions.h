@@ -8,8 +8,8 @@
  * Globally used functions.
  */
 
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef FUNCTIONS_INCLUDED
+#define FUNCTIONS_INCLUDED
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -147,4 +147,4 @@ point s2p(const string &s, float* z = NULL);
 string strsignal(const int signum);
 #endif //#if defined(_WIN32)
 
-#endif //ifndef FUNCTIONS_H
+#endif //ifndef FUNCTIONS_INCLUDED

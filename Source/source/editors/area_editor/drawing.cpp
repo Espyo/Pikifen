@@ -35,7 +35,7 @@ void area_editor::do_drawing() {
     float lowest_sector_z = 0.0f;
     float highest_sector_z = 0.0f;
     if(
-        area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
+        game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
         !game.cur_area_data.sectors.empty()
     ) {
         lowest_sector_z = game.cur_area_data.sectors[0]->z;
@@ -117,7 +117,7 @@ void area_editor::do_drawing() {
         bool view_brightness = false;
         
         if(
-            area_editor_view_mode == VIEW_MODE_TEXTURES ||
+            game.options.area_editor_view_mode == VIEW_MODE_TEXTURES ||
             sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW
         ) {
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
@@ -126,10 +126,10 @@ void area_editor::do_drawing() {
                 draw_sector_shadows(s_ptr, point(), 1.0);
             }
             
-        } else if(area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+        } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
             view_heightmap = true;
             
-        } else if(area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+        } else if(game.options.area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
             view_brightness = true;
             
         }
@@ -206,19 +206,21 @@ void area_editor::do_drawing() {
     );
     
     float x =
-        floor(cam_top_left_corner.x / area_editor_grid_interval) *
-        area_editor_grid_interval;
-    while(x < cam_bottom_right_corner.x + area_editor_grid_interval) {
+        floor(cam_top_left_corner.x / game.options.area_editor_grid_interval) *
+        game.options.area_editor_grid_interval;
+    while(
+        x < cam_bottom_right_corner.x + game.options.area_editor_grid_interval
+    ) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
-        if(fmod(x, area_editor_grid_interval * 2) == 0) {
+        if(fmod(x, game.options.area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((area_editor_grid_interval * 2) * cam_zoom <= 6) {
+            if((game.options.area_editor_grid_interval * 2) * cam_zoom <= 6) {
                 draw_line = false;
             }
         } else {
-            if(area_editor_grid_interval * cam_zoom <= 6) {
+            if(game.options.area_editor_grid_interval * cam_zoom <= 6) {
                 draw_line = false;
             }
         }
@@ -226,27 +228,27 @@ void area_editor::do_drawing() {
         if(draw_line) {
             al_draw_line(
                 x, cam_top_left_corner.y,
-                x, cam_bottom_right_corner.y + area_editor_grid_interval,
+                x, cam_bottom_right_corner.y + game.options.area_editor_grid_interval,
                 c, 1.0 / cam_zoom
             );
         }
-        x += area_editor_grid_interval;
+        x += game.options.area_editor_grid_interval;
     }
     
     float y =
-        floor(cam_top_left_corner.y / area_editor_grid_interval) *
-        area_editor_grid_interval;
-    while(y < cam_bottom_right_corner.y + area_editor_grid_interval) {
+        floor(cam_top_left_corner.y / game.options.area_editor_grid_interval) *
+        game.options.area_editor_grid_interval;
+    while(y < cam_bottom_right_corner.y + game.options.area_editor_grid_interval) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
-        if(fmod(y, area_editor_grid_interval * 2) == 0) {
+        if(fmod(y, game.options.area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((area_editor_grid_interval * 2) * cam_zoom <= 6) {
+            if((game.options.area_editor_grid_interval * 2) * cam_zoom <= 6) {
                 draw_line = false;
             }
         } else {
-            if(area_editor_grid_interval * cam_zoom <= 6) {
+            if(game.options.area_editor_grid_interval * cam_zoom <= 6) {
                 draw_line = false;
             }
         }
@@ -254,23 +256,23 @@ void area_editor::do_drawing() {
         if(draw_line) {
             al_draw_line(
                 cam_top_left_corner.x, y,
-                cam_bottom_right_corner.x + area_editor_grid_interval, y,
+                cam_bottom_right_corner.x + game.options.area_editor_grid_interval, y,
                 c, 1.0 / cam_zoom
             );
         }
-        y += area_editor_grid_interval;
+        y += game.options.area_editor_grid_interval;
     }
     
     //0,0 marker.
     al_draw_line(
-        -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0,
-        DEF_AREA_EDITOR_GRID_INTERVAL * 2, 0,
+        -(COMFY_DIST * 2), 0,
+        COMFY_DIST * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
     al_draw_line(
-        0, -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0,
-        DEF_AREA_EDITOR_GRID_INTERVAL * 2,
+        0, -(COMFY_DIST * 2), 0,
+        COMFY_DIST * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
@@ -355,7 +357,7 @@ void area_editor::do_drawing() {
         if(
             state == EDITOR_STATE_LAYOUT &&
             moving &&
-            area_editor_show_edge_length
+            game.options.area_editor_show_edge_length
         ) {
             bool draw_dist = false;
             point other_point;
@@ -595,7 +597,7 @@ void area_editor::do_drawing() {
             );
             
             if(
-                area_editor_show_territory &&
+                game.options.area_editor_show_territory &&
                 m_ptr->type->territory_radius > 0
             ) {
                 al_draw_circle(
@@ -940,7 +942,7 @@ void area_editor::do_drawing() {
                 3.0 / cam_zoom
             );
             
-            if(area_editor_show_edge_length) {
+            if(game.options.area_editor_show_edge_length) {
                 draw_line_dist(hotspot, drawing_nodes.back().snapped_spot);
             }
         }

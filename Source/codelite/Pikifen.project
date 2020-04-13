@@ -152,6 +152,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="source">
+    <File Name="../source/options.cpp"/>
+    <File Name="../source/options.h"/>
     <File Name="../source/game.cpp"/>
     <File Name="../source/game.h"/>
     <File Name="../source/mob_physics.cpp"/>

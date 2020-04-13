@@ -8,8 +8,8 @@
  * Header for the particle class and particle-related functions.
  */
 
-#ifndef REPLAY_H
-#define REPLAY_H
+#ifndef REPLAY_INCLUDED
+#define REPLAY_INCLUDED
 
 #include <vector>
 
@@ -125,4 +125,4 @@ private:
     
 };
 
-#endif //ifndef REPLAY_H
+#endif //ifndef REPLAY_INCLUDED

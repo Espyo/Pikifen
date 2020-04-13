@@ -29,12 +29,16 @@ using std::vector;
 
 //Radius to use when drawing a cross-section point.
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
+//A comfortable distance, useful for many scenarios.
+const float area_editor::COMFY_DIST = 32.0f;
 //The cursor snap for heavy modes updates these many times a second.
 const float area_editor::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
+//Amount to pan the camera by when using the keyboard.
+const float area_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum number of points that a circle sector can be created with.
 const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum grid interval.
@@ -77,7 +81,7 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
-    backup_timer(area_editor_backup_interval),
+    backup_timer(game.options.area_editor_backup_interval),
     cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
@@ -115,9 +119,12 @@ area_editor::area_editor() :
     [this] () {undo_save_lock_operation.clear();}
         );
         
-    if(area_editor_backup_interval > 0) {
+    if(game.options.area_editor_backup_interval > 0) {
         backup_timer =
-        timer(area_editor_backup_interval, [this] () {save_backup();});
+            timer(
+                game.options.area_editor_backup_interval,
+        [this] () {save_backup();}
+            );
     }
     
     selected_shadow_transformation.allow_rotation = true;
@@ -486,7 +493,7 @@ void area_editor::clear_current_area() {
     game.cur_area_data.clear();
     
     made_new_changes = false;
-    backup_timer.start(area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor_backup_interval);
     
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
@@ -584,7 +591,7 @@ void area_editor::create_area() {
     
     //Create a sector for it.
     clear_layout_drawing();
-    float r = DEF_AREA_EDITOR_GRID_INTERVAL * 10;
+    float r = COMFY_DIST * 10;
     
     layout_drawing_node n;
     n.raw_spot = point(-r, -r);
@@ -811,7 +818,7 @@ void area_editor::do_logic() {
     new_sector_error_tint_timer.tick(game.delta_t);
     undo_save_lock_timer.tick(game.delta_t);
     
-    if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
+    if(!cur_area_name.empty() && game.options.area_editor_backup_interval > 0) {
         backup_timer.tick(game.delta_t);
     }
     
@@ -2494,7 +2501,7 @@ void area_editor::load_backup() {
     if(!update_backup_status()) return;
     
     load_area(true);
-    backup_timer.start(area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor_backup_interval);
 }
 
 
@@ -2686,7 +2693,7 @@ area_data* area_editor::prepare_state() {
 void area_editor::register_change(
     const string &operation_name, area_data* pre_prepared_state
 ) {
-    if(area_editor_undo_limit == 0) {
+    if(game.options.area_editor_undo_limit == 0) {
         if(pre_prepared_state) {
             forget_prepared_state(pre_prepared_state);
         }
@@ -3217,7 +3224,7 @@ bool area_editor::save_area(const bool to_backup) {
         }
     }
     
-    backup_timer.start(area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor_backup_interval);
     enable_widget(frm_toolbar->widgets["but_reload"]);
     
     save_reference();
@@ -3232,7 +3239,7 @@ bool area_editor::save_area(const bool to_backup) {
  */
 void area_editor::save_backup() {
 
-    backup_timer.start(area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor_backup_interval);
     
     //First, check if the folder even exists.
     //If not, chances are this is a new area.
@@ -3415,10 +3422,10 @@ point area_editor::snap_point(const point &p) {
     if(snap_mode == SNAP_GRID) {
         return
             point(
-                round(p.x / area_editor_grid_interval) *
-                area_editor_grid_interval,
-                round(p.y / area_editor_grid_interval) *
-                area_editor_grid_interval
+                round(p.x / game.options.area_editor_grid_interval) *
+                game.options.area_editor_grid_interval,
+                round(p.y / game.options.area_editor_grid_interval) *
+                game.options.area_editor_grid_interval
             );
             
     } else if(snap_mode == SNAP_VERTEXES) {
@@ -3430,7 +3437,7 @@ point area_editor::snap_point(const point &p) {
         vector<std::pair<dist, vertex*> > v =
             get_merge_vertexes(
                 p, game.cur_area_data.vertexes,
-                area_editor_snap_threshold / cam_zoom
+                game.options.area_editor_snap_threshold / cam_zoom
             );
         if(v.empty()) {
             cursor_snap_cache = p;
@@ -3478,7 +3485,7 @@ point area_editor::snap_point(const point &p) {
             }
             
             dist d(p, edge_p);
-            if(d > area_editor_snap_threshold / cam_zoom) continue;
+            if(d > game.options.area_editor_snap_threshold / cam_zoom) continue;
             
             if(!got_one || d < closest_dist) {
                 got_one = true;
@@ -3863,7 +3870,7 @@ void area_editor::update_texture_suggestions(const string &n) {
  * the undo history.
  */
 void area_editor::update_undo_history() {
-    while(undo_history.size() > area_editor_undo_limit) {
+    while(undo_history.size() > game.options.area_editor_undo_limit) {
         undo_history.pop_back();
     };
     

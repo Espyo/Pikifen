@@ -11,6 +11,7 @@
 #include "editor.h"
 
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../LAFI/angle_picker.h"
 #include "../../LAFI/button.h"
 #include "../../LAFI/checkbox.h"
@@ -376,9 +377,9 @@ void animation_editor::gui_to_hitbox() {
  * Saves the options data to memory using info on the gui.
  */
 void animation_editor::gui_to_options() {
-    editor_mmb_pan =
+    game.options.editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
-    editor_mouse_drag_threshold =
+    game.options.editor_mouse_drag_threshold =
         s2i(get_textbox_text(frm_options, "txt_drag_threshold"));
         
     save_options();
@@ -675,9 +676,10 @@ void animation_editor::open_picker(
  * Loads the options data onto the GUI.
  */
 void animation_editor::options_to_gui() {
-    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
+    set_checkbox_check(frm_options, "chk_mmb_pan", game.options.editor_mmb_pan);
     set_textbox_text(
-        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
+        frm_options, "txt_drag_threshold",
+        i2s(game.options.editor_mouse_drag_threshold)
     );
 }
 

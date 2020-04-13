@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+#include <allegro5/allegro.h>
+
 using std::size_t;
 using std::string;
 using std::vector;

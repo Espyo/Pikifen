@@ -497,35 +497,35 @@ void area_editor::gui_to_mob() {
  * Saves the options data to memory using info on the gui.
  */
 void area_editor::gui_to_options() {
-    area_editor_show_edge_length =
+    game.options.area_editor_show_edge_length =
         get_checkbox_check(frm_options, "chk_edge_length");
-    area_editor_show_territory =
+    game.options.area_editor_show_territory =
         get_checkbox_check(frm_options, "chk_territory");
         
     if(get_radio_selection(frm_options, "rad_view_textures")) {
-        area_editor_view_mode = VIEW_MODE_TEXTURES;
+        game.options.area_editor_view_mode = VIEW_MODE_TEXTURES;
         
     } else if(get_radio_selection(frm_options, "rad_view_wireframe")) {
-        area_editor_view_mode = VIEW_MODE_WIREFRAME;
+        game.options.area_editor_view_mode = VIEW_MODE_WIREFRAME;
         
     } else if(get_radio_selection(frm_options, "rad_view_heightmap")) {
-        area_editor_view_mode = VIEW_MODE_HEIGHTMAP;
+        game.options.area_editor_view_mode = VIEW_MODE_HEIGHTMAP;
         
     } else if(get_radio_selection(frm_options, "rad_view_brightness")) {
-        area_editor_view_mode = VIEW_MODE_BRIGHTNESS;
+        game.options.area_editor_view_mode = VIEW_MODE_BRIGHTNESS;
         
     }
     
-    area_editor_backup_interval =
+    game.options.area_editor_backup_interval =
         s2i(get_textbox_text(frm_options, "txt_backup"));
-    area_editor_undo_limit =
+    game.options.area_editor_undo_limit =
         s2i(get_textbox_text(frm_options, "txt_undo_limit"));
-    area_editor_snap_threshold =
+    game.options.area_editor_snap_threshold =
         s2i(get_textbox_text(frm_options, "txt_snap_threshold"));
         
-    editor_mmb_pan =
+    game.options.editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
-    editor_mouse_drag_threshold =
+    game.options.editor_mouse_drag_threshold =
         s2i(get_textbox_text(frm_options, "txt_drag_threshold"));
         
     update_undo_history();
@@ -817,38 +817,38 @@ void area_editor::open_picker(const unsigned char id) {
  */
 void area_editor::options_to_gui() {
     set_label_text(
-        frm_options, "lbl_grid", "Grid: " + i2s(area_editor_grid_interval)
+        frm_options, "lbl_grid", "Grid: " + i2s(game.options.area_editor_grid_interval)
     );
     set_checkbox_check(
-        frm_options, "chk_edge_length", area_editor_show_edge_length
+        frm_options, "chk_edge_length", game.options.area_editor_show_edge_length
     );
     set_checkbox_check(
-        frm_options, "chk_territory", area_editor_show_territory
+        frm_options, "chk_territory", game.options.area_editor_show_territory
     );
     
-    if(area_editor_view_mode == VIEW_MODE_TEXTURES) {
+    if(game.options.area_editor_view_mode == VIEW_MODE_TEXTURES) {
         set_radio_selection(frm_options, "rad_view_textures", true);
         
-    } else if(area_editor_view_mode == VIEW_MODE_WIREFRAME) {
+    } else if(game.options.area_editor_view_mode == VIEW_MODE_WIREFRAME) {
         set_radio_selection(frm_options, "rad_view_wireframe", true);
-    } else if(area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+    } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
         set_radio_selection(frm_options, "rad_view_heightmap", true);
-    } else if(area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+    } else if(game.options.area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
         set_radio_selection(frm_options, "rad_view_brightness", true);
     }
     
     set_textbox_text(
-        frm_options, "txt_backup", i2s(area_editor_backup_interval)
+        frm_options, "txt_backup", i2s(game.options.area_editor_backup_interval)
     );
     set_textbox_text(
-        frm_options, "txt_undo_limit", i2s(area_editor_undo_limit)
+        frm_options, "txt_undo_limit", i2s(game.options.area_editor_undo_limit)
     );
     set_textbox_text(
-        frm_options, "txt_snap_threshold", i2s(area_editor_snap_threshold)
+        frm_options, "txt_snap_threshold", i2s(game.options.area_editor_snap_threshold)
     );
-    set_checkbox_check(frm_options, "chk_mmb_pan", editor_mmb_pan);
+    set_checkbox_check(frm_options, "chk_mmb_pan", game.options.editor_mmb_pan);
     set_textbox_text(
-        frm_options, "txt_drag_threshold", i2s(editor_mouse_drag_threshold)
+        frm_options, "txt_drag_threshold", i2s(game.options.editor_mouse_drag_threshold)
     );
 }
 

@@ -130,13 +130,6 @@ extern asset_file_names_struct asset_file_names;
 
 //General globals.
 
-extern float area_editor_backup_interval;
-extern float area_editor_grid_interval;
-extern bool area_editor_show_edge_length;
-extern bool area_editor_show_territory;
-extern size_t area_editor_snap_threshold;
-extern size_t area_editor_undo_limit;
-extern unsigned char area_editor_view_mode;
 extern timer area_title_fade_timer;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
@@ -157,7 +150,6 @@ extern ALLEGRO_COLOR carrying_color_stop;
 extern float carrying_speed_base_mult;
 extern float carrying_speed_max_mult;
 extern float carrying_speed_weight_mult;
-extern vector<vector<control_info> > controls;
 extern vector<converter*> converters;
 extern map<string, converter_type*> converter_types;
 extern bool creator_tool_area_image_shadows;
@@ -196,11 +188,8 @@ extern float day_minutes_per_irl_sec;
 extern float day_minutes_start;
 extern map<string, decoration_type*> decoration_types;
 extern vector<decoration*> decorations;
-extern bool draw_cursor_trail;
 extern vector<drop*> drops;
 extern map<string, drop_type*> drop_types;
-extern bool editor_mmb_pan;
-extern float editor_mouse_drag_threshold;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
 extern ALLEGRO_FONT* font_area_name;
@@ -223,8 +212,6 @@ extern string info_print_text;
 extern timer info_print_timer;
 extern vector<interactable*> interactables;
 extern map<string, interactable_type*> interactable_types;
-extern float joystick_min_deadzone;
-extern float joystick_max_deadzone;
 extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
 extern vector<string> leader_order_strings;
@@ -233,15 +220,12 @@ extern map<string, leader_type*> leader_types;
 extern float maturity_power_mult;
 //Every level of maturity, multiply the attack by 1 + this much.
 extern float maturity_speed_mult;
-extern size_t max_particles;
 extern size_t max_pikmin_in_field;
 //These many seconds until a new character of the message is drawn.
 extern float message_char_interval;
-extern bool mipmaps_enabled;
 extern vector<mob_action> mob_actions;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
-extern bool mouse_moves_cursor[MAX_PLAYERS];
 //How far a leader can go to auto-pluck the next Pikmin.
 extern float next_pluck_range;
 extern float onion_open_range;
@@ -260,9 +244,6 @@ extern map<string, pikmin_type*> pikmin_types;
 extern vector<pile*> piles;
 extern map<string, pile_type*> pile_types;
 extern float pluck_range;
-//If true, the whistle radius is merely drawn as a circle.
-//Used to improve performance.
-extern bool pretty_whistle;
 extern vector<resource*> resources;
 extern map<string, resource_type*> resource_types;
 extern map<string, scale_type*> scale_types;
@@ -271,8 +252,6 @@ extern sector_types_manager sector_types;
 extern replay session_replay;
 extern map<string, ship_type*> ship_types;
 extern vector<ship*> ships;
-//If false, images that are scaled up and down will look pixelated.
-extern bool smooth_scaling;
 extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
 extern map<string, spike_damage_type> spike_damage_types;
@@ -306,11 +285,7 @@ extern float whistle_radius;
 extern vector<unsigned char> whistle_ring_colors;
 extern unsigned char whistle_ring_prev_color;
 extern vector<float> whistle_rings;
-//Should we force the window's positioning
-//(on some systems it appears out-of-bounds by default)
-extern bool window_position_hack;
 extern float zoom_max_level;
-extern float zoom_mid_level;
 extern float zoom_min_level;
 
 

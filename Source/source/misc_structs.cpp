@@ -406,11 +406,11 @@ void movement_struct::get_clean_info(
 ) {
     get_raw_info(coords, angle, magnitude);
     *magnitude =
-        clamp(*magnitude, joystick_min_deadzone, joystick_max_deadzone);
+        clamp(*magnitude, game.options.joystick_min_deadzone, game.options.joystick_max_deadzone);
     *magnitude =
         interpolate_number(
             *magnitude,
-            joystick_min_deadzone, joystick_max_deadzone,
+            game.options.joystick_min_deadzone, game.options.joystick_max_deadzone,
             0.0f, 1.0f
         );
     *coords = angle_to_coordinates(*angle, *magnitude);

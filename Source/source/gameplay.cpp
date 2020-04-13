@@ -296,7 +296,7 @@ void gameplay::load() {
     cur_leader_ptr->active = true;
     
     cam_pos = cam_final_pos = cur_leader_ptr->pos;
-    cam_zoom = cam_final_zoom = zoom_mid_level;
+    cam_zoom = cam_final_zoom = game.options.zoom_mid_level;
     update_transformations();
     
     ALLEGRO_MOUSE_STATE mouse_state;
@@ -347,14 +347,14 @@ void gameplay::load() {
         spray_stats[spray_id].nr_sprays = s2i(s.second);
     }
     
-    for(size_t c = 0; c < controls[0].size(); ++c) {
-        if(controls[0][c].action == BUTTON_THROW) {
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        if(game.options.controls[0][c].action == BUTTON_THROW) {
             main_control_id = c;
             break;
         }
     }
-    for(size_t c = 0; c < controls[0].size(); ++c) {
-        if(controls[0][c].action == BUTTON_WHISTLE) {
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        if(game.options.controls[0][c].action == BUTTON_WHISTLE) {
             cancel_control_id = c;
             break;
         }

@@ -309,7 +309,7 @@ void init_controls() {
         BUTTON_MENU_BACK, "Menu back", "menu_back", "k_59"
     );
     
-    controls.assign(MAX_PLAYERS, vector<control_info>());
+    game.options.controls.assign(MAX_PLAYERS, vector<control_info>());
     
     //Populate the controls information with some default controls for player 1.
     //If the options are loaded successfully, these controls are overwritten.
@@ -317,7 +317,7 @@ void init_controls() {
         string dc = buttons.list[b].default_control_str;
         if(dc.empty()) continue;
         
-        controls[0].push_back(control_info(buttons.list[b].id, dc));
+        game.options.controls[0].push_back(control_info(buttons.list[b].id, dc));
     }
 }
 
@@ -361,7 +361,7 @@ void init_essentials() {
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
-    if(window_position_hack) al_set_new_window_position(64, 64);
+    if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
         al_set_new_display_flags(
             al_get_new_display_flags() | ALLEGRO_FULLSCREEN
@@ -380,7 +380,7 @@ void init_event_things(
             "preferably one from the options menu."
         );
         game.win_fullscreen = false;
-        game.intended_win_fullscreen = false;
+        game.options.intended_win_fullscreen = false;
         save_options();
         al_set_new_display_flags(
             al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN
@@ -392,7 +392,7 @@ void init_event_things(
         report_fatal_error("Could not create a display!");
     }
     
-    logic_timer = al_create_timer(1.0 / game.target_fps);
+    logic_timer = al_create_timer(1.0 / game.options.target_fps);
     if(!logic_timer) {
         report_fatal_error("Could not create the main logic timer!");
     }
@@ -470,10 +470,10 @@ void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
-    if(smooth_scaling) {
+    if(game.options.smooth_scaling) {
         new_bitmap_flags |= ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR;
     }
-    if(mipmaps_enabled) {
+    if(game.options.mipmaps_enabled) {
         new_bitmap_flags |= ALLEGRO_MIPMAP;
     }
     al_set_new_bitmap_flags(new_bitmap_flags);
@@ -503,10 +503,11 @@ void init_misc() {
     };
     whistle_next_ring_timer.start();
     
-    particles = particle_manager(max_particles);
+    particles = particle_manager(game.options.max_particles);
     
-    zoom_mid_level = clamp(zoom_mid_level, zoom_min_level, zoom_max_level);
-    
+    game.options.zoom_mid_level =
+        clamp(game.options.zoom_mid_level, zoom_min_level, zoom_max_level);
+        
     //Some creator tool defaults that are convenient to have on.
     creator_tool_keys[10] = CREATOR_TOOL_AREA_IMAGE;
     creator_tool_keys[11] = CREATOR_TOOL_CHANGE_SPEED;

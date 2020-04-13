@@ -935,19 +935,19 @@ void save_options() {
     
     //Write down their control strings.
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        size_t n_controls = controls[p].size();
+        size_t n_controls = game.options.controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
             string name = "p" + i2s(p + 1) + "_";
             
             for(size_t b = 0; b < N_BUTTONS; ++b) {
                 if(buttons.list[b].option_name.empty()) continue;
-                if(controls[p][c].action == buttons.list[b].id) {
+                if(game.options.controls[p][c].action == buttons.list[b].id) {
                     name += buttons.list[b].option_name;
                     break;
                 }
             }
             
-            grouped_controls[name] += controls[p][c].stringify() + ";";
+            grouped_controls[name] += game.options.controls[p][c].stringify() + ";";
         }
     }
     
@@ -963,7 +963,7 @@ void save_options() {
         file.add(
             new data_node(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
-                b2s(mouse_moves_cursor[p])
+                b2s(game.options.mouse_moves_cursor[p])
             )
         );
     }
@@ -971,74 +971,131 @@ void save_options() {
     //Other options.
     file.add(
         new data_node(
-            "area_editor_backup_interval", f2s(area_editor_backup_interval)
+            "area_editor_backup_interval",
+            f2s(game.options.area_editor_backup_interval)
         )
     );
     file.add(
         new data_node(
-            "area_editor_grid_interval", i2s(area_editor_grid_interval)
+            "area_editor_grid_interval",
+            i2s(game.options.area_editor_grid_interval)
         )
     );
     file.add(
         new data_node(
-            "area_editor_show_edge_length", b2s(area_editor_show_edge_length)
+            "area_editor_show_edge_length",
+            b2s(game.options.area_editor_show_edge_length)
         )
     );
     file.add(
         new data_node(
-            "area_editor_show_territory", b2s(area_editor_show_territory)
+            "area_editor_show_territory",
+            b2s(game.options.area_editor_show_territory)
         )
     );
     file.add(
         new data_node(
-            "area_editor_snap_threshold", i2s(area_editor_snap_threshold)
+            "area_editor_snap_threshold",
+            i2s(game.options.area_editor_snap_threshold)
         )
     );
     file.add(
         new data_node(
-            "area_editor_undo_limit", i2s(area_editor_undo_limit)
+            "area_editor_undo_limit",
+            i2s(game.options.area_editor_undo_limit)
         )
     );
     file.add(
         new data_node(
-            "area_editor_view_mode", i2s(area_editor_view_mode)
+            "area_editor_view_mode",
+            i2s(game.options.area_editor_view_mode)
         )
     );
     file.add(
         new data_node(
-            "draw_cursor_trail", b2s(draw_cursor_trail)
+            "draw_cursor_trail",
+            b2s(game.options.draw_cursor_trail)
         )
     );
     file.add(
         new data_node(
-            "editor_mmb_pan", b2s(editor_mmb_pan)
+            "editor_mmb_pan",
+            b2s(game.options.editor_mmb_pan)
         )
     );
     file.add(
         new data_node(
-            "editor_mouse_drag_threshold", i2s(editor_mouse_drag_threshold)
+            "editor_mouse_drag_threshold",
+            i2s(game.options.editor_mouse_drag_threshold)
         )
     );
-    file.add(new data_node("fps", i2s(game.target_fps)));
-    file.add(new data_node("fullscreen", b2s(game.intended_win_fullscreen)));
     file.add(
-        new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))
+        new data_node(
+            "fps",
+            i2s(game.options.target_fps)
+        )
     );
     file.add(
-        new data_node("joystick_max_deadzone", f2s(joystick_max_deadzone))
+        new data_node(
+            "fullscreen",
+            b2s(game.options.intended_win_fullscreen)
+        )
     );
-    file.add(new data_node("max_particles", i2s(max_particles)));
-    file.add(new data_node("middle_zoom_level", f2s(zoom_mid_level)));
-    file.add(new data_node("mipmaps", b2s(mipmaps_enabled)));
-    file.add(new data_node("pretty_whistle", b2s(pretty_whistle)));
+    file.add(
+        new data_node(
+            "joystick_min_deadzone",
+            f2s(game.options.joystick_min_deadzone)
+        )
+    );
+    file.add(
+        new data_node(
+            "joystick_max_deadzone",
+            f2s(game.options.joystick_max_deadzone)
+        )
+    );
+    file.add(
+        new data_node(
+            "max_particles",
+            i2s(game.options.max_particles)
+        )
+    );
+    file.add(
+        new data_node(
+            "middle_zoom_level",
+            f2s(game.options.zoom_mid_level)
+        )
+    );
+    file.add(
+        new data_node(
+            "mipmaps",
+            b2s(game.options.mipmaps_enabled)
+        )
+    );
+    file.add(
+        new data_node(
+            "pretty_whistle",
+            b2s(game.options.pretty_whistle)
+        )
+    );
     file.add(
         new data_node(
             "resolution",
-            i2s(game.intended_win_w) + " " + i2s(game.intended_win_h)
+            i2s(game.options.intended_win_w) + " " +
+            i2s(game.options.intended_win_h)
         )
     );
-    file.add(new data_node("smooth_scaling", b2s(smooth_scaling)));
-    file.add(new data_node("window_position_hack", b2s(window_position_hack)));
+    file.add(
+        new data_node(
+            "smooth_scaling",
+            b2s(game.options.smooth_scaling)
+        )
+    );
+    file.add(
+        new data_node(
+            "window_position_hack",
+            b2s(game.options.window_position_hack)
+        )
+    );
     
     for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
         file.add(

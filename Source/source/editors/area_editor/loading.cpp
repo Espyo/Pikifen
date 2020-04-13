@@ -1640,11 +1640,11 @@ void area_editor::load() {
             if(path_preview_checkpoints[0].x == LARGE_FLOAT) {
                 //No previous location. Place them on-camera.
                 path_preview_checkpoints[0].x =
-                    cam_pos.x - DEF_AREA_EDITOR_GRID_INTERVAL;
+                    cam_pos.x - COMFY_DIST;
                 path_preview_checkpoints[0].y =
                     cam_pos.y;
                 path_preview_checkpoints[1].x =
-                    cam_pos.x + DEF_AREA_EDITOR_GRID_INTERVAL;
+                    cam_pos.x + COMFY_DIST;
                 path_preview_checkpoints[1].y =
                     cam_pos.y;
             }
@@ -2063,11 +2063,11 @@ void area_editor::load() {
         ) {
             //No previous location. Place them on-camera.
             cross_section_checkpoints[0].x =
-                cam_pos.x - DEF_AREA_EDITOR_GRID_INTERVAL;
+                cam_pos.x - COMFY_DIST;
             cross_section_checkpoints[0].y =
                 cam_pos.y;
             cross_section_checkpoints[1].x =
-                cam_pos.x + DEF_AREA_EDITOR_GRID_INTERVAL;
+                cam_pos.x + COMFY_DIST;
             cross_section_checkpoints[1].y =
                 cam_pos.y;
         }
@@ -2527,9 +2527,9 @@ void area_editor::load() {
     
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        area_editor_grid_interval *= 2;
-        area_editor_grid_interval =
-            std::min(area_editor_grid_interval, MAX_GRID_INTERVAL);
+        game.options.area_editor_grid_interval *= 2;
+        game.options.area_editor_grid_interval =
+            std::min(game.options.area_editor_grid_interval, MAX_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };
@@ -2538,9 +2538,9 @@ void area_editor::load() {
         
     frm_options->widgets["but_grid_minus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        area_editor_grid_interval *= 0.5;
-        area_editor_grid_interval =
-            std::max(area_editor_grid_interval, MIN_GRID_INTERVAL);
+        game.options.area_editor_grid_interval *= 0.5;
+        game.options.area_editor_grid_interval =
+            std::max(game.options.area_editor_grid_interval, MIN_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };

@@ -8,8 +8,8 @@
  * Header for the class that holds everything about the game.
  */
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_INCLUDED
+#define GAME_INCLUDED
 
 #include <allegro5/allegro.h>
 
@@ -19,16 +19,9 @@
 #include "editors/area_editor/editor.h"
 #include "gameplay.h"
 #include "menus.h"
+#include "options.h"
 
 
-//Default target FPS.
-const unsigned int DEF_TARGET_FPS = 60;
-//Default fullscreen state.
-const bool DEF_WIN_FULLSCREEN = false;
-//Default window height.
-const unsigned int DEF_WIN_H = 768;
-//Default window width.
-const unsigned int DEF_WIN_W = 1024;
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 //Only save the latest N FPS samples.
@@ -63,12 +56,6 @@ public:
     gameplay* gameplay_state;
     //Identity matrix transformation. Cache for convenience.
     ALLEGRO_TRANSFORM identity_transform;
-    //Does the player intend to use fullscreen?
-    bool intended_win_fullscreen;
-    //Player's intended window height.
-    int intended_win_h;
-    //Player's intended window width.
-    int intended_win_w;
     //Set to false to stop program execution next frame.
     bool is_game_running;
     //What Allegro joystick maps to what number.
@@ -89,6 +76,8 @@ public:
     ALLEGRO_MIXER* mixer;
     //Name of the fan-game.
     string name;
+    //User options.
+    options_struct options;
     //Options game state.
     options_menu* options_menu_state;
     //Standard Pikmin order.
@@ -97,8 +86,6 @@ public:
     ALLEGRO_TRANSFORM screen_to_world_transform;
     //Should we be showing system info? (Framerate, version, etc.)
     bool show_system_info;
-    //Target framerate.
-    int target_fps;
     //Version of the fan-game.
     string version;
     //Current fullscreen state.
@@ -139,4 +126,4 @@ private:
 
 extern game_class game;
 
-#endif //ifndef GAME_H
+#endif //ifndef GAME_INCLUDED

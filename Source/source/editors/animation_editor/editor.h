@@ -79,6 +79,7 @@ private:
         PICKER_RENAME_SPRITE,
     };
     
+    static const float KEYBOARD_PAN_AMOUNT;
     static const float ZOOM_MAX_LEVEL_EDITOR;
     static const float ZOOM_MIN_LEVEL_EDITOR;
     

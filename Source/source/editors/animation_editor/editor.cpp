@@ -34,6 +34,8 @@
 using std::queue;
 
 
+//Amount to pan the camera by when using the keyboard.
+const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum zoom level possible in the editor.
 const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.

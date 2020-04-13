@@ -317,10 +317,10 @@ void controls_menu::do_drawing() {
     size_t list_nr = 0;
     for(
         ;
-        list_nr < 8 && control_nr < controls[cur_player_nr].size();
+        list_nr < 8 && control_nr < game.options.controls[cur_player_nr].size();
         ++control_nr, ++list_nr
     ) {
-        control_info* c_ptr = &controls[cur_player_nr][control_nr];
+        control_info* c_ptr = &game.options.controls[cur_player_nr][control_nr];
         
         draw_control(
             font_main, *c_ptr,
@@ -365,7 +365,7 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
     if(capturing_input) {
     
         control_info* c_ptr =
-            &controls[cur_player_nr][input_capture_control_nr];
+            &game.options.controls[cur_player_nr][input_capture_control_nr];
         bool valid = true;
         
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -554,10 +554,10 @@ void controls_menu::load() {
             point(game.win_w * 0.85, game.win_h * 0.90),
             point(game.win_w * 0.20, game.win_h * 0.07),
     [this] () {
-        if(controls[cur_player_nr].size()) {
+        if(game.options.controls[cur_player_nr].size()) {
             size_t last_action =
-                controls[cur_player_nr].back().action;
-            controls[cur_player_nr].push_back(
+                game.options.controls[cur_player_nr].back().action;
+            game.options.controls[cur_player_nr].push_back(
                 control_info(
                     last_action == N_BUTTONS - 1 ?
                     1 : //The "None" action is 0, so go to 1.
@@ -566,14 +566,14 @@ void controls_menu::load() {
                 )
             );
         } else {
-            controls[cur_player_nr].push_back(
+            game.options.controls[cur_player_nr].push_back(
                 control_info(BUTTON_NONE, "")
             );
         }
         //Go to the new control's page.
-        cur_page_nr = controls[cur_player_nr].size() / 8.0f;
+        cur_page_nr = game.options.controls[cur_player_nr].size() / 8.0f;
         this->control_widgets[
-        ((controls[cur_player_nr].size() - 1) % 8) * 5 + 2
+        ((game.options.controls[cur_player_nr].size() - 1) % 8) * 5 + 2
         ]->start_juicy_grow();
         update();
     },
@@ -596,7 +596,7 @@ void controls_menu::load() {
     [this] () {
         cur_page_nr =
             sum_and_wrap(
-                cur_page_nr, -1, ceil(controls[cur_player_nr].size() / 8.0)
+                cur_page_nr, -1, ceil(game.options.controls[cur_player_nr].size() / 8.0)
             );
         cur_page_nr_widget->start_juicy_grow();
         update();
@@ -621,7 +621,7 @@ void controls_menu::load() {
         cur_page_nr =
             sum_and_wrap(
                 cur_page_nr, 1,
-                (size_t) ceil(controls[cur_player_nr].size() / 8.0)
+                (size_t) ceil(game.options.controls[cur_player_nr].size() / 8.0)
             );
         cur_page_nr_widget->start_juicy_grow();
         update();
@@ -678,7 +678,7 @@ void controls_menu::update() {
     cur_page_nr =
         std::min(
             cur_page_nr,
-            (size_t) (ceil(controls[cur_player_nr].size() / 8.0) - 1)
+            (size_t) (ceil(game.options.controls[cur_player_nr].size() / 8.0) - 1)
         );
     cur_player_nr_widget->text = i2s(cur_player_nr + 1);
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
@@ -691,10 +691,10 @@ void controls_menu::update() {
     size_t list_nr = 0;
     for(
         ;
-        list_nr < 8 && control_nr < controls[cur_player_nr].size();
+        list_nr < 8 && control_nr < game.options.controls[cur_player_nr].size();
         ++control_nr, ++list_nr
     ) {
-        control_info* c_ptr = &controls[cur_player_nr][control_nr];
+        control_info* c_ptr = &game.options.controls[cur_player_nr][control_nr];
         
         string action_name;
         for(size_t b = 0; b < N_BUTTONS; ++b) {
@@ -710,8 +710,8 @@ void controls_menu::update() {
         //Delete button.
         ((menu_button*) control_widgets[list_nr * 5 + 0])->click_handler =
         [this, control_nr] () {
-            controls[cur_player_nr].erase(
-                controls[cur_player_nr].begin() + control_nr
+            game.options.controls[cur_player_nr].erase(
+                game.options.controls[cur_player_nr].begin() + control_nr
             );
             update();
         };
@@ -1109,7 +1109,7 @@ options_menu::options_menu() :
     
     //In case things go wrong, at least add these presets.
     resolution_presets.push_back(
-        std::make_pair(DEF_WIN_W, DEF_WIN_H)
+        std::make_pair(options_struct::DEF_WIN_W, options_struct::DEF_WIN_H)
     );
     resolution_presets.push_back(
         std::make_pair(SMALLEST_WIN_W, SMALLEST_WIN_H)
@@ -1145,8 +1145,8 @@ void options_menu::change_resolution(const signed int step) {
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
-            game.intended_win_w == resolution_presets[r].first &&
-            game.intended_win_h == resolution_presets[r].second
+            game.options.intended_win_w == resolution_presets[r].first &&
+            game.options.intended_win_h == resolution_presets[r].second
         ) {
             current_r_index = r;
             break;
@@ -1160,8 +1160,8 @@ void options_menu::change_resolution(const signed int step) {
             sum_and_wrap(current_r_index, step, resolution_presets.size());
     }
     
-    game.intended_win_w = resolution_presets[current_r_index].first;
-    game.intended_win_h = resolution_presets[current_r_index].second;
+    game.options.intended_win_w = resolution_presets[current_r_index].first;
+    game.options.intended_win_h = resolution_presets[current_r_index].second;
     
     if(!warning_widget->enabled) {
         warning_widget->enabled = true;
@@ -1267,7 +1267,7 @@ void options_menu::load() {
         point(game.win_w * 0.25, game.win_h * 0.20),
         point(game.win_w * 0.45, game.win_h * 0.08),
     [this] () {
-        game.intended_win_fullscreen = this->fullscreen_widget->checked;
+        game.options.intended_win_fullscreen = this->fullscreen_widget->checked;
         warning_widget->enabled = true;
         update();
     },
@@ -1361,8 +1361,8 @@ void options_menu::update() {
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
-            game.intended_win_w == resolution_presets[r].first &&
-            game.intended_win_h == resolution_presets[r].second
+            game.options.intended_win_w == resolution_presets[r].first &&
+            game.options.intended_win_h == resolution_presets[r].second
         ) {
             current_r_index = r;
             break;
@@ -1371,9 +1371,9 @@ void options_menu::update() {
     
     resolution_widget->text =
         "Resolution: " +
-        i2s(game.intended_win_w) + "x" +
-        i2s(game.intended_win_h) +
+        i2s(game.options.intended_win_w) + "x" +
+        i2s(game.options.intended_win_h) +
         (current_r_index == INVALID ? " (Custom)" : "");
         
-    fullscreen_widget->checked = game.intended_win_fullscreen;
+    fullscreen_widget->checked = game.options.intended_win_fullscreen;
 }

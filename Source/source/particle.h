@@ -8,8 +8,8 @@
  * Header for the particle class and particle-related functions.
  */
 
-#ifndef PARTICLE_H
-#define PARTICLE_H
+#ifndef PARTICLE_INCLUDED
+#define PARTICLE_INCLUDED
 
 #include <vector>
 
@@ -174,4 +174,4 @@ private:
     
 };
 
-#endif //ifndef PARTICLE_H
+#endif //ifndef PARTICLE_INCLUDED

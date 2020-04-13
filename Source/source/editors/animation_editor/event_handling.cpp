@@ -27,16 +27,16 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     }
     
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        cam_pos.x -= KEYBOARD_PAN_AMOUNT / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        cam_pos.x += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        cam_pos.x += KEYBOARD_PAN_AMOUNT / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-        cam_pos.y -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        cam_pos.y -= KEYBOARD_PAN_AMOUNT / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        cam_pos.y += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
+        cam_pos.y += KEYBOARD_PAN_AMOUNT / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
         zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
@@ -378,7 +378,7 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being double-clicked.
  */
 void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(!editor_mmb_pan) {
+    if(!game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
     }
 }
@@ -388,7 +388,7 @@ void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being pressed down.
  */
 void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    if(!editor_mmb_pan) {
+    if(!game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);
     }
 }
@@ -398,7 +398,7 @@ void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being dragged.
  */
 void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
-    if(editor_mmb_pan) {
+    if(game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
 }
@@ -435,7 +435,7 @@ void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being double-clicked.
  */
 void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(editor_mmb_pan) {
+    if(game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
     }
 }
@@ -445,7 +445,7 @@ void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being dragged.
  */
 void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    if(editor_mmb_pan) {
+    if(game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);
     }
 }
@@ -455,7 +455,7 @@ void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being dragged.
  */
 void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
-    if(!editor_mmb_pan) {
+    if(!game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
 }

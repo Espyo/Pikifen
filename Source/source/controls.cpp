@@ -428,12 +428,12 @@ void gameplay::handle_button(
             
             if(!is_down) return;
             
-            if(cam_final_zoom < zoom_mid_level) {
+            if(cam_final_zoom < game.options.zoom_mid_level) {
                 cam_final_zoom = zoom_max_level;
-            } else if(cam_final_zoom > zoom_mid_level) {
-                cam_final_zoom = zoom_mid_level;
+            } else if(cam_final_zoom > game.options.zoom_mid_level) {
+                cam_final_zoom = game.options.zoom_mid_level;
             } else {
-                if(zoom_mid_level == zoom_min_level) {
+                if(game.options.zoom_mid_level == zoom_min_level) {
                     cam_final_zoom = zoom_max_level;
                 } else {
                     cam_final_zoom = zoom_min_level;
@@ -763,7 +763,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
     }
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
+        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && game.options.mouse_moves_cursor[p]) {
             game.mouse_cursor_s.x = ev.mouse.x;
             game.mouse_cursor_s.y = ev.mouse.y;
             game.mouse_cursor_w = game.mouse_cursor_s;
@@ -789,10 +789,10 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
     vector<action_from_event> actions;
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        size_t n_controls = controls[p].size();
+        size_t n_controls = game.options.controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
         
-            control_info* con = &controls[p][c];
+            control_info* con = &game.options.controls[p][c];
             
             if(
                 con->type == CONTROL_TYPE_KEYBOARD_KEY &&

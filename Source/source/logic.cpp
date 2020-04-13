@@ -61,7 +61,7 @@ void gameplay::do_aesthetic_logic() {
         //Create rings.
         whistle_next_ring_timer.tick(game.delta_t);
         
-        if(pretty_whistle) {
+        if(game.options.pretty_whistle) {
             whistle_next_dot_timer.tick(game.delta_t);
         }
         
@@ -96,7 +96,7 @@ void gameplay::do_aesthetic_logic() {
     }
     
     //Cursor trail.
-    if(draw_cursor_trail) {
+    if(game.options.draw_cursor_trail) {
         cursor_save_timer.tick(game.delta_t);
     }
     
@@ -625,7 +625,7 @@ void gameplay::do_gameplay_logic() {
         string fps_str =
             box_string(f2s(sample_avg), 12, " avg, ") +
             box_string(f2s(1.0 / game.delta_t), 12, " now, ") +
-            i2s(game.target_fps) + " intended";
+            i2s(game.options.target_fps) + " intended";
         string n_mobs_str =
             box_string(i2s(mobs.size()), 7);
         string n_particles_str =

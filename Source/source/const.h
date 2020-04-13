@@ -46,16 +46,6 @@ const string AREA_EDITOR_TUTORIAL_URL =
 const float AREA_TITLE_FADE_DURATION = 3.0f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_SAVE_N_SPOTS = 10;
-//Default area editor auto-backup interval, in seconds.
-const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
-//Default area editor grid interval.
-const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
-//Default area editor snap threshold.
-const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
-//Default area editor undo history size limit.
-const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
-//Default editor mouse drag threshold range.
-const size_t DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //The whistle can't go past this radius, by default.

@@ -214,7 +214,7 @@ void gameplay::draw_cursor(
     }
     
     if(whistle_radius > 0 || whistle_fade_timer.time_left > 0.0f) {
-        if(pretty_whistle) {
+        if(game.options.pretty_whistle) {
             unsigned char n_dots = 16 * 6;
             for(unsigned char d = 0; d < 6; ++d) {
                 for(unsigned char d2 = 0; d2 < 16; ++d2) {
@@ -277,7 +277,7 @@ void gameplay::draw_cursor(
     
     //Cursor trail
     al_use_transform(&game.identity_transform);
-    if(draw_cursor_trail) {
+    if(game.options.draw_cursor_trail) {
         for(size_t p = 1; p < cursor_spots.size(); ++p) {
             point* p_ptr = &cursor_spots[p];
             point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
@@ -663,17 +663,17 @@ void gameplay::draw_hud() {
         if(
             hud_items.get_draw_data(HUD_ITEM_SPRAY_1_BUTTON, &i_center, &i_size)
         ) {
-            for(size_t c = 0; c < controls[0].size(); ++c) {
+            for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
                 if(
                     (
-                        controls[0][c].action == BUTTON_USE_SPRAY_1 &&
+                        game.options.controls[0][c].action == BUTTON_USE_SPRAY_1 &&
                         spray_types.size() <= 2
                     ) || (
-                        controls[0][c].action == BUTTON_USE_SPRAY &&
+                        game.options.controls[0][c].action == BUTTON_USE_SPRAY &&
                         spray_types.size() >= 3
                     )
                 ) {
-                    draw_control(font_main, controls[0][c], i_center, i_size);
+                    draw_control(font_main, game.options.controls[0][c], i_center, i_size);
                     break;
                 }
             }
@@ -709,10 +709,10 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_2_BUTTON, &i_center, &i_size
                 )
             ) {
-                for(size_t c = 0; c < controls[0].size(); ++c) {
-                    if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
+                for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+                    if(game.options.controls[0][c].action == BUTTON_USE_SPRAY_2) {
                         draw_control(
-                            font_main, controls[0][c], i_center, i_size
+                            font_main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -742,10 +742,10 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_PREV_BUTTON, &i_center, &i_size
                 )
             ) {
-                for(size_t c = 0; c < controls[0].size(); ++c) {
-                    if(controls[0][c].action == BUTTON_PREV_SPRAY) {
+                for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+                    if(game.options.controls[0][c].action == BUTTON_PREV_SPRAY) {
                         draw_control(
-                            font_main, controls[0][c], i_center, i_size
+                            font_main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -773,10 +773,10 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_NEXT_BUTTON, &i_center, &i_size
                 )
             ) {
-                for(size_t c = 0; c < controls[0].size(); ++c) {
-                    if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
+                for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+                    if(game.options.controls[0][c].action == BUTTON_NEXT_SPRAY) {
                         draw_control(
-                            font_main, controls[0][c], i_center, i_size
+                            font_main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -954,7 +954,7 @@ void gameplay::draw_ingame_text() {
                 cur_leader_ptr->pos.y -
                 cur_leader_ptr->type->radius
             ),
-            "Get up", &controls[0][cancel_control_id]
+            "Get up", &game.options.controls[0][cancel_control_id]
         );
         done = true;
     }
@@ -971,7 +971,7 @@ void gameplay::draw_ingame_text() {
                 cur_leader_ptr->pos.y -
                 cur_leader_ptr->type->radius
             ),
-            "Stop", &controls[0][cancel_control_id]
+            "Stop", &game.options.controls[0][cancel_control_id]
         );
         done = true;
     }
@@ -988,7 +988,7 @@ void gameplay::draw_ingame_text() {
                 close_to_ship_to_heal->beam_final_pos.y -
                 close_to_ship_to_heal->shi_type->beam_radius
             ),
-            "Repair suit", &controls[0][main_control_id]
+            "Repair suit", &game.options.controls[0][main_control_id]
         );
         done = true;
     }
@@ -1005,7 +1005,7 @@ void gameplay::draw_ingame_text() {
         draw_notification(
             point(close_to_interactable_to_use->pos.x, pivot_y),
             close_to_interactable_to_use->int_type->prompt_text,
-            &controls[0][main_control_id]
+            &game.options.controls[0][main_control_id]
         );
         done = true;
     }
@@ -1022,7 +1022,7 @@ void gameplay::draw_ingame_text() {
                 close_to_pikmin_to_pluck->pos.y -
                 close_to_pikmin_to_pluck->type->radius
             ),
-            "Pluck", &controls[0][main_control_id]
+            "Pluck", &game.options.controls[0][main_control_id]
         );
         done = true;
     }
@@ -1039,7 +1039,7 @@ void gameplay::draw_ingame_text() {
                 close_to_onion_to_open->pos.y -
                 close_to_onion_to_open->type->radius
             ),
-            "Call a Pikmin", &controls[0][main_control_id]
+            "Call a Pikmin", &game.options.controls[0][main_control_id]
         );
         done = true;
     }
@@ -1283,8 +1283,8 @@ void gameplay::draw_system_stuff() {
             );
         }
         al_draw_line(
-            game.win_w - FRAMERATE_HISTORY_SIZE, game.target_fps,
-            game.win_w, game.target_fps,
+            game.win_w - FRAMERATE_HISTORY_SIZE, game.options.target_fps,
+            game.win_w, game.options.target_fps,
             al_map_rgba(128, 224, 128, 48), 1
         );
     }

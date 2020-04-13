@@ -570,7 +570,7 @@ void load_control(
     size_t n_possible_controls = possible_controls.size();
     
     for(size_t c = 0; c < n_possible_controls; ++c) {
-        controls[player].push_back(control_info(action, possible_controls[c]));
+        game.options.controls[player].push_back(control_info(action, possible_controls[c]));
     }
 }
 
@@ -1051,7 +1051,7 @@ void load_options() {
      * Check the constructor of control_info for more information.
      */
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        controls[p].clear();
+        game.options.controls[p].clear();
         for(size_t b = 0; b < N_BUTTONS; ++b) {
             string option_name = buttons.list[b].option_name;
             if(option_name.empty()) continue;
@@ -1061,10 +1061,12 @@ void load_options() {
     
     //Weed out controls that didn't parse correctly.
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        size_t n_controls = controls[p].size();
+        size_t n_controls = game.options.controls[p].size();
         for(size_t c = 0; c < n_controls; ) {
-            if(controls[p][c].action == BUTTON_NONE) {
-                controls[p].erase(controls[p].begin() + c);
+            if(game.options.controls[p][c].action == BUTTON_NONE) {
+                game.options.controls[p].erase(
+                    game.options.controls[p].begin() + c
+                );
             } else {
                 c++;
             }
@@ -1072,7 +1074,7 @@ void load_options() {
     }
     
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        mouse_moves_cursor[p] =
+        game.options.mouse_moves_cursor[p] =
             s2b(
                 file.get_child_by_name(
                     "p" + i2s((p + 1)) + "_mouse_moves_cursor"
@@ -1083,33 +1085,104 @@ void load_options() {
     //Other options.
     reader_setter rs(&file);
     string resolution_str;
-    rs.set("area_editor_backup_interval", area_editor_backup_interval);
-    rs.set("area_editor_grid_interval", area_editor_grid_interval);
-    rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
-    rs.set("area_editor_show_territory", area_editor_show_territory);
-    rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
-    rs.set("area_editor_undo_limit", area_editor_undo_limit);
-    rs.set("area_editor_view_mode", area_editor_view_mode);
-    rs.set("draw_cursor_trail", draw_cursor_trail);
-    rs.set("editor_mmb_pan", editor_mmb_pan);
-    rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
-    rs.set("fps", game.target_fps);
-    rs.set("fullscreen", game.win_fullscreen);
-    rs.set("joystick_min_deadzone", joystick_min_deadzone);
-    rs.set("joystick_max_deadzone", joystick_max_deadzone);
-    rs.set("max_particles", max_particles);
-    rs.set("middle_zoom_level", zoom_mid_level);
-    rs.set("mipmaps", mipmaps_enabled);
-    rs.set("pretty_whistle", pretty_whistle);
-    rs.set("resolution", resolution_str);
-    rs.set("smooth_scaling", smooth_scaling);
-    rs.set("window_position_hack", window_position_hack);
+    rs.set(
+        "area_editor_backup_interval",
+        game.options.area_editor_backup_interval
+    );
+    rs.set(
+        "area_editor_grid_interval",
+        game.options.area_editor_grid_interval
+    );
+    rs.set(
+        "area_editor_show_edge_length",
+        game.options.area_editor_show_edge_length
+    );
+    rs.set(
+        "area_editor_show_territory",
+        game.options.area_editor_show_territory
+    );
+    rs.set(
+        "area_editor_snap_threshold",
+        game.options.area_editor_snap_threshold
+    );
+    rs.set(
+        "area_editor_undo_limit",
+        game.options.area_editor_undo_limit
+    );
+    rs.set(
+        "area_editor_view_mode",
+        game.options.area_editor_view_mode
+    );
+    rs.set(
+        "draw_cursor_trail",
+        game.options.draw_cursor_trail
+    );
+    rs.set(
+        "editor_mmb_pan",
+        game.options.editor_mmb_pan
+    );
+    rs.set(
+        "editor_mouse_drag_threshold",
+        game.options.editor_mouse_drag_threshold
+    );
+    rs.set(
+        "fps",
+        game.options.target_fps
+    );
+    rs.set(
+        "fullscreen",
+        game.win_fullscreen
+    );
+    rs.set(
+        "joystick_min_deadzone",
+        game.options.joystick_min_deadzone
+    );
+    rs.set(
+        "joystick_max_deadzone",
+        game.options.joystick_max_deadzone
+    );
+    rs.set(
+        "max_particles",
+        game.options.max_particles
+    );
+    rs.set(
+        "middle_zoom_level",
+        game.options.zoom_mid_level
+    );
+    rs.set(
+        "mipmaps",
+        game.options.mipmaps_enabled
+    );
+    rs.set(
+        "pretty_whistle",
+        game.options.pretty_whistle
+    );
+    rs.set(
+        "resolution",
+        resolution_str
+    );
+    rs.set(
+        "smooth_scaling",
+        game.options.smooth_scaling
+    );
+    rs.set(
+        "window_position_hack",
+        game.options.window_position_hack
+    );
     
-    game.target_fps = std::max(1, game.target_fps);
-    joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
-    joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
-    if(joystick_min_deadzone > joystick_max_deadzone) {
-        std::swap(joystick_min_deadzone, joystick_max_deadzone);
+    game.options.target_fps = std::max(1, game.options.target_fps);
+    game.options.joystick_min_deadzone =
+        clamp(game.options.joystick_min_deadzone, 0.0f, 1.0f);
+    game.options.joystick_max_deadzone =
+        clamp(game.options.joystick_max_deadzone, 0.0f, 1.0f);
+    if(
+        game.options.joystick_min_deadzone >
+        game.options.joystick_max_deadzone
+    ) {
+        std::swap(
+            game.options.joystick_min_deadzone,
+            game.options.joystick_max_deadzone
+        );
     }
     
     vector<string> resolution_parts = split(resolution_str);
@@ -1125,9 +1198,9 @@ void load_options() {
         );
     }
     
-    game.intended_win_fullscreen = game.win_fullscreen;
-    game.intended_win_w = game.win_w;
-    game.intended_win_h = game.win_h;
+    game.options.intended_win_fullscreen = game.win_fullscreen;
+    game.options.intended_win_w = game.win_w;
+    game.options.intended_win_h = game.win_h;
     
 }
 

@@ -45,7 +45,7 @@ public:
     float quick_play_cam_z;
     
     area_editor();
-
+    
 private:
     struct texture_suggestion {
         ALLEGRO_BITMAP* bmp;
@@ -176,11 +176,13 @@ private:
         N_VIEW_MODES,
     };
     
+    static const float         COMFY_DIST;
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         CURSOR_SNAP_DISTANCE;
     static const float         CURSOR_SNAP_UPDATE_INTERVAL;
     static const float         DEBUG_TEXT_SCALE;
     static const unsigned char DEF_REFERENCE_ALPHA;
+    static const float         KEYBOARD_PAN_AMOUNT;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
     static const float         MAX_GRID_INTERVAL;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
