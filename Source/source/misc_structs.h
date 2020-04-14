@@ -265,6 +265,28 @@ struct movement_struct {
 
 
 /* ----------------------------------------------------------------------------
+ * Information about the current on-screen message box, if any.
+ */
+struct msg_box_info {
+    //Timer until the next character shows up.
+    timer char_timer;
+    //What character are we in?
+    size_t cur_char;
+    //What section of the message are we in?
+    size_t cur_section;
+    //Full text of the message.
+    string message;
+    //Icon that represents the speaker, if any.
+    ALLEGRO_BITMAP* speaker_icon;
+    //Stops scrolling when it reaches one of these. There's one per section.
+    vector<size_t> stopping_chars;
+    
+    msg_box_info();
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * This structure makes reading values in data files
  * and setting them to variables much easier.
  * On the set functions, specify the name of the child and the variable.

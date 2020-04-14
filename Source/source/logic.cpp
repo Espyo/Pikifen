@@ -214,7 +214,7 @@ void gameplay::do_gameplay_logic() {
     game.cam.box[1].x += CAMERA_BOX_MARGIN;
     game.cam.box[1].y += CAMERA_BOX_MARGIN;
     
-    if(cur_message.empty()) {
+    if(!msg_box) {
     
         /************************************
         *                              .-.  *
@@ -554,16 +554,20 @@ void gameplay::do_gameplay_logic() {
     } else { //Displaying a message.
     
         if(
-            cur_message_char <
-            cur_message_stopping_chars[cur_message_section + 1]
+            msg_box->cur_char <
+            msg_box->stopping_chars[
+                msg_box->cur_section + 1
+            ]
         ) {
-            if(cur_message_char_timer.duration == 0.0f) {
+            if(msg_box->char_timer.duration == 0.0f) {
                 size_t stopping_char =
-                    cur_message_stopping_chars[cur_message_section + 1];
+                    msg_box->stopping_chars[
+                        msg_box->cur_section + 1
+                    ];
                 //Display everything right away.
-                cur_message_char = stopping_char;
+                msg_box->cur_char = stopping_char;
             } else {
-                cur_message_char_timer.tick(game.delta_t);
+                msg_box->char_timer.tick(game.delta_t);
             }
         }
         

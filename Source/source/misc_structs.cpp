@@ -464,6 +464,25 @@ void movement_struct::get_raw_info(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a message box information struct.
+ */
+msg_box_info::msg_box_info():
+    cur_char(0),
+    cur_section(0),
+    speaker_icon(nullptr) {
+    
+    char_timer =
+        timer(
+            game.config.message_char_interval,
+    [this] () {
+        char_timer.start();
+        cur_char++;
+    }
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a "reader setter".
  * dn: Pointer to the base data node.
  */

@@ -385,15 +385,7 @@ void gameplay::load() {
     hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
     
     //Aesthetic stuff.
-    cur_message_char_timer =
-        timer(
-            game.config.message_char_interval,
-    [] () {
-        cur_message_char_timer.start();
-        cur_message_char++;
-    }
-        );
-        
+    
     if(game.errors_reported_so_far > errors_reported_at_start) {
         print_info(
             "\n\n\nERRORS FOUND!\n"
@@ -577,7 +569,7 @@ void gameplay::unload() {
         bmp_fog = NULL;
     }
     
-    cur_message.clear();
+    if(msg_box) delete msg_box;
     game.creator_tools.info_print_text.clear();
 }
 

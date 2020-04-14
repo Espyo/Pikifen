@@ -50,6 +50,8 @@ public:
     sector* leader_cursor_sector;
     //Player 1's leader cursor, in world coordinates.
     point leader_cursor_w;
+    //Information about the message box currently active on player 1, if any.
+    msg_box_info* msg_box;
     //How many of each spray/ingredients player 1 has.
     vector<spray_stats_struct> spray_stats;
     //Angle at which player 1 is swarming.

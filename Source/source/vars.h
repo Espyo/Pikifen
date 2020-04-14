@@ -139,13 +139,6 @@ extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;
 extern vector<converter*> converters;
 extern map<string, converter_type*> converter_types;
-extern string cur_message;
-extern size_t cur_message_char;
-extern timer cur_message_char_timer;
-extern size_t cur_message_section;
-extern ALLEGRO_BITMAP* cur_message_speaker;
-//The message stops scrolling when it reaches one of these characters.
-extern vector<size_t> cur_message_stopping_chars;
 extern map<string, mob_type*> custom_mob_types;
 extern map<string, particle_generator> custom_particle_generators;
 extern map<string, decoration_type*> decoration_types;

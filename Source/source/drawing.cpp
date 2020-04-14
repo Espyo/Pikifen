@@ -89,7 +89,7 @@ void gameplay::do_game_drawing(
         draw_cursor(world_to_screen_drawing_transform);
         
         //Layer 8 -- HUD
-        if(cur_message.empty()) {
+        if(!msg_box) {
             draw_hud();
         } else {
             draw_message_box();
@@ -1189,9 +1189,9 @@ void gameplay::draw_message_box() {
         point(game.win_w - 16, font_main_h * 4)
     );
     
-    if(cur_message_speaker) {
+    if(msg_box->speaker_icon) {
         draw_bitmap(
-            cur_message_speaker,
+            msg_box->speaker_icon,
             point(40, game.win_h - font_main_h * 4 - 16),
             point(48, 48)
         );
@@ -1203,10 +1203,10 @@ void gameplay::draw_message_box() {
     }
     
     string text =
-        cur_message.substr(
-            cur_message_stopping_chars[cur_message_section],
-            cur_message_char -
-            cur_message_stopping_chars[cur_message_section]
+        msg_box->message.substr(
+            msg_box->stopping_chars[msg_box->cur_section],
+            msg_box->cur_char -
+            msg_box->stopping_chars[msg_box->cur_section]
         );
     vector<string> lines = split(text, "\n");
     

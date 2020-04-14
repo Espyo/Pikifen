@@ -141,7 +141,7 @@ void gameplay::handle_button(
     
     bool is_down = (pos >= 0.5);
     
-    if(cur_message.empty()) {
+    if(!msg_box) {
     
         if(
             button == BUTTON_RIGHT ||
@@ -625,15 +625,15 @@ void gameplay::handle_button(
     
         if((button == BUTTON_THROW || button == BUTTON_PAUSE) && is_down) {
             size_t stopping_char =
-                cur_message_stopping_chars[cur_message_section + 1];
-            if(cur_message_char == stopping_char) {
-                if(stopping_char == cur_message.size()) {
+                msg_box->stopping_chars[msg_box->cur_section + 1];
+            if(msg_box->cur_char == stopping_char) {
+                if(stopping_char == msg_box->message.size()) {
                     start_message("", NULL);
                 } else {
-                    cur_message_section++;
+                    msg_box->cur_section++;
                 }
             } else {
-                cur_message_char = stopping_char;
+                msg_box->cur_char = stopping_char;
             }
         }
         
