@@ -583,7 +583,7 @@ void load_creator_tools() {
     
     if(!file.file_was_opened) return;
     
-    creator_tools_enabled = s2b(file.get_child_by_name("enabled")->value);
+    game.creator_tools.enabled = s2b(file.get_child_by_name("enabled")->value);
     
     for(unsigned char k = 0; k < 20; k++) {
         string tool_name;
@@ -596,23 +596,23 @@ void load_creator_tools() {
         }
         
         if(tool_name == "area_image") {
-            creator_tool_keys[k] = CREATOR_TOOL_AREA_IMAGE;
+            game.creator_tools.keys[k] = CREATOR_TOOL_AREA_IMAGE;
         } else if(tool_name == "change_speed") {
-            creator_tool_keys[k] = CREATOR_TOOL_CHANGE_SPEED;
+            game.creator_tools.keys[k] = CREATOR_TOOL_CHANGE_SPEED;
         } else if(tool_name == "geometry_info") {
-            creator_tool_keys[k] = CREATOR_TOOL_GEOMETRY_INFO;
+            game.creator_tools.keys[k] = CREATOR_TOOL_GEOMETRY_INFO;
         } else if(tool_name == "hitboxes") {
-            creator_tool_keys[k] = CREATOR_TOOL_HITBOXES;
+            game.creator_tools.keys[k] = CREATOR_TOOL_HITBOXES;
         } else if(tool_name == "hurt_mob") {
-            creator_tool_keys[k] = CREATOR_TOOL_HURT_MOB;
+            game.creator_tools.keys[k] = CREATOR_TOOL_HURT_MOB;
         } else if(tool_name == "mob_info") {
-            creator_tool_keys[k] = CREATOR_TOOL_MOB_INFO;
+            game.creator_tools.keys[k] = CREATOR_TOOL_MOB_INFO;
         } else if(tool_name == "new_pikmin") {
-            creator_tool_keys[k] = CREATOR_TOOL_NEW_PIKMIN;
+            game.creator_tools.keys[k] = CREATOR_TOOL_NEW_PIKMIN;
         } else if(tool_name == "teleport") {
-            creator_tool_keys[k] = CREATOR_TOOL_TELEPORT;
+            game.creator_tools.keys[k] = CREATOR_TOOL_TELEPORT;
         } else {
-            creator_tool_keys[k] = CREATOR_TOOL_NONE;
+            game.creator_tools.keys[k] = CREATOR_TOOL_NONE;
         }
     }
     
@@ -620,19 +620,19 @@ void load_creator_tools() {
     
     data_node* mob_hurting_percentage_node;
     
-    rs.set("area_image_mobs", creator_tool_area_image_mobs);
-    rs.set("area_image_shadows", creator_tool_area_image_shadows);
-    rs.set("area_image_size", creator_tool_area_image_size);
-    rs.set("change_speed_multiplier", creator_tool_change_speed_mult);
+    rs.set("area_image_mobs", game.creator_tools.area_image_mobs);
+    rs.set("area_image_shadows", game.creator_tools.area_image_shadows);
+    rs.set("area_image_size", game.creator_tools.area_image_size);
+    rs.set("change_speed_multiplier", game.creator_tools.change_speed_mult);
     rs.set(
-        "mob_hurting_percentage", creator_tool_mob_hurting_ratio,
+        "mob_hurting_percentage", game.creator_tools.mob_hurting_ratio,
         &mob_hurting_percentage_node
     );
-    rs.set("auto_start_option", creator_tool_auto_start_option);
-    rs.set("auto_start_mode", creator_tool_auto_start_mode);
+    rs.set("auto_start_option", game.creator_tools.auto_start_option);
+    rs.set("auto_start_mode", game.creator_tools.auto_start_mode);
     
     if(mob_hurting_percentage_node) {
-        creator_tool_mob_hurting_ratio /= 100.0;
+        game.creator_tools.mob_hurting_ratio /= 100.0;
     }
 }
 

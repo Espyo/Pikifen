@@ -20,6 +20,7 @@
 #include "game_config.h"
 #include "gameplay.h"
 #include "menus.h"
+#include "misc_structs.h"
 #include "options.h"
 
 
@@ -43,6 +44,8 @@ public:
     game_config config;
     //Controls menu game state.
     controls_menu* controls_menu_state;
+    //Info about the creator tools.
+    creator_tools_info creator_tools;
     //Data about the area that's currently being used.
     area_data cur_area_data;
     //Time between the previous frame and the current.

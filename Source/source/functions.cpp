@@ -661,10 +661,10 @@ string p2s(const point &p, float* z) {
 void print_info(
     const string &text, const float total_duration, const float fade_duration
 ) {
-    info_print_text = text;
-    info_print_duration = total_duration;
-    info_print_fade_duration = fade_duration;
-    info_print_timer.start(total_duration);
+    game.creator_tools.info_print_text = text;
+    game.creator_tools.info_print_duration = total_duration;
+    game.creator_tools.info_print_fade_duration = fade_duration;
+    game.creator_tools.info_print_timer.start(total_duration);
 }
 
 
@@ -839,7 +839,7 @@ void save_creator_tools() {
     data_node file("", "");
     
     file.add(
-        new data_node("enabled", b2s(creator_tools_enabled))
+        new data_node("enabled", b2s(game.creator_tools.enabled))
     );
     
     for(unsigned char k = 0; k < 20; k++) {
@@ -853,21 +853,21 @@ void save_creator_tools() {
             tool_key = i2s(k - 10);
         }
         
-        if(creator_tool_keys[k] == CREATOR_TOOL_AREA_IMAGE) {
+        if(game.creator_tools.keys[k] == CREATOR_TOOL_AREA_IMAGE) {
             tool_name = "area_image";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_CHANGE_SPEED) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_CHANGE_SPEED) {
             tool_name = "change_speed";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_GEOMETRY_INFO) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_GEOMETRY_INFO) {
             tool_name = "geometry_info";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_HITBOXES) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_HITBOXES) {
             tool_name = "hitboxes";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_HURT_MOB) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_HURT_MOB) {
             tool_name = "hurt_mob";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_MOB_INFO) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_MOB_INFO) {
             tool_name = "mob_info";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_NEW_PIKMIN) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_NEW_PIKMIN) {
             tool_name = "new_pikmin";
-        } else if(creator_tool_keys[k] == CREATOR_TOOL_TELEPORT) {
+        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_TELEPORT) {
             tool_name = "teleport";
         }
         
@@ -876,38 +876,38 @@ void save_creator_tools() {
     
     file.add(
         new data_node(
-            "area_image_mobs", b2s(creator_tool_area_image_mobs)
+            "area_image_mobs", b2s(game.creator_tools.area_image_mobs)
         )
     );
     file.add(
         new data_node(
-            "area_image_shadows", b2s(creator_tool_area_image_shadows)
+            "area_image_shadows", b2s(game.creator_tools.area_image_shadows)
         )
     );
     file.add(
         new data_node(
-            "area_image_size", i2s(creator_tool_area_image_size)
+            "area_image_size", i2s(game.creator_tools.area_image_size)
         )
     );
     file.add(
         new data_node(
-            "change_speed_multiplier", f2s(creator_tool_change_speed_mult)
+            "change_speed_multiplier", f2s(game.creator_tools.change_speed_mult)
         )
     );
     file.add(
         new data_node(
-            "mob_hurting_percentage", f2s(creator_tool_mob_hurting_ratio * 100)
+            "mob_hurting_percentage", f2s(game.creator_tools.mob_hurting_ratio * 100)
         )
     );
     
     file.add(
         new data_node(
-            "auto_start_option", creator_tool_auto_start_option
+            "auto_start_option", game.creator_tools.auto_start_option
         )
     );
     file.add(
         new data_node(
-            "auto_start_mode", creator_tool_auto_start_mode
+            "auto_start_mode", game.creator_tools.auto_start_mode
         )
     );
     

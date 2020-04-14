@@ -509,14 +509,14 @@ void init_misc() {
         clamp(game.options.zoom_mid_level, game.config.zoom_min_level, game.config.zoom_max_level);
         
     //Some creator tool defaults that are convenient to have on.
-    creator_tool_keys[10] = CREATOR_TOOL_AREA_IMAGE;
-    creator_tool_keys[11] = CREATOR_TOOL_CHANGE_SPEED;
-    creator_tool_keys[12] = CREATOR_TOOL_TELEPORT;
-    creator_tool_keys[13] = CREATOR_TOOL_HURT_MOB;
-    creator_tool_keys[14] = CREATOR_TOOL_NEW_PIKMIN;
-    creator_tool_keys[15] = CREATOR_TOOL_MOB_INFO;
-    creator_tool_keys[16] = CREATOR_TOOL_GEOMETRY_INFO;
-    creator_tool_keys[17] = CREATOR_TOOL_HITBOXES;
+    game.creator_tools.keys[10] = CREATOR_TOOL_AREA_IMAGE;
+    game.creator_tools.keys[11] = CREATOR_TOOL_CHANGE_SPEED;
+    game.creator_tools.keys[12] = CREATOR_TOOL_TELEPORT;
+    game.creator_tools.keys[13] = CREATOR_TOOL_HURT_MOB;
+    game.creator_tools.keys[14] = CREATOR_TOOL_NEW_PIKMIN;
+    game.creator_tools.keys[15] = CREATOR_TOOL_MOB_INFO;
+    game.creator_tools.keys[16] = CREATOR_TOOL_GEOMETRY_INFO;
+    game.creator_tools.keys[17] = CREATOR_TOOL_HITBOXES;
 }
 
 

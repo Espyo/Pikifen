@@ -72,7 +72,7 @@ void gameplay::do_game_drawing(
         }
         
         //Layer 5 -- Tree shadows.
-        if(!(bmp_output && !creator_tool_area_image_shadows)) {
+        if(!(bmp_output && !game.creator_tools.area_image_shadows)) {
             draw_tree_shadows();
         }
         
@@ -920,7 +920,7 @@ void gameplay::draw_ingame_text() {
         }
         
         //Creator tool -- draw hitboxes.
-        if(creator_tool_hitboxes) {
+        if(game.creator_tools.hitboxes) {
             sprite* s = mob_ptr->anim.get_cur_sprite();
             if(s) {
                 for(size_t h = 0; h < s->hitboxes.size(); ++h) {
@@ -1246,13 +1246,13 @@ void gameplay::draw_precipitation() {
  * Draws system stuff.
  */
 void gameplay::draw_system_stuff() {
-    if(!info_print_text.empty()) {
+    if(!game.creator_tools.info_print_text.empty()) {
         float alpha_mult = 1;
-        if(info_print_timer.time_left < info_print_fade_duration) {
-            alpha_mult = info_print_timer.time_left / info_print_fade_duration;
+        if(game.creator_tools.info_print_timer.time_left < game.creator_tools.info_print_fade_duration) {
+            alpha_mult = game.creator_tools.info_print_timer.time_left / game.creator_tools.info_print_fade_duration;
         }
         
-        size_t n_lines = split(info_print_text, "\n", true).size();
+        size_t n_lines = split(game.creator_tools.info_print_text, "\n", true).size();
         int fh = al_get_font_line_height(font_builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = n_lines * fh + (n_lines - 1);
@@ -1263,7 +1263,7 @@ void gameplay::draw_system_stuff() {
         );
         draw_text_lines(
             font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-            point(8, 8), 0, 0, info_print_text
+            point(8, 8), 0, 0, game.creator_tools.info_print_text
         );
     }
     
@@ -1310,14 +1310,14 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     float area_w = max_x - min_x;
     float area_h = max_y - min_y;
     float scale = 1.0f;
-    float final_bmp_w = creator_tool_area_image_size;
-    float final_bmp_h = creator_tool_area_image_size;
+    float final_bmp_w = game.creator_tools.area_image_size;
+    float final_bmp_h = game.creator_tools.area_image_size;
     
     if(area_w > area_h) {
-        scale = creator_tool_area_image_size / area_w;
+        scale = game.creator_tools.area_image_size / area_w;
         final_bmp_h *= area_h / area_w;
     } else {
-        scale = creator_tool_area_image_size / area_h;
+        scale = game.creator_tools.area_image_size / area_h;
         final_bmp_w *= area_w / area_h;
     }
     

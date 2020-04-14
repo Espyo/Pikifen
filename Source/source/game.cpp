@@ -239,26 +239,26 @@ int game_class::start() {
     save_creator_tools();
     
     if(
-        creator_tools_enabled &&
-        creator_tool_auto_start_mode == "play" &&
-        !creator_tool_auto_start_option.empty()
+        game.creator_tools.enabled &&
+        game.creator_tools.auto_start_mode == "play" &&
+        !game.creator_tools.auto_start_option.empty()
     ) {
         game.gameplay_state->area_to_load =
-            creator_tool_auto_start_option;
+            game.creator_tools.auto_start_option;
         game.change_state(game.gameplay_state);
     } else if(
-        creator_tools_enabled &&
-        creator_tool_auto_start_mode == "animation_editor"
+        game.creator_tools.enabled &&
+        game.creator_tools.auto_start_mode == "animation_editor"
     ) {
         game.animation_editor_state->auto_load_anim =
-            creator_tool_auto_start_option;
+            game.creator_tools.auto_start_option;
         game.change_state(game.animation_editor_state);
     } else if(
-        creator_tools_enabled &&
-        creator_tool_auto_start_mode == "area_editor"
+        game.creator_tools.enabled &&
+        game.creator_tools.auto_start_mode == "area_editor"
     ) {
         game.area_editor_state->auto_load_area =
-            creator_tool_auto_start_option;
+            game.creator_tools.auto_start_option;
         game.change_state(game.area_editor_state);
     } else {
         game.change_state(game.main_menu_state);

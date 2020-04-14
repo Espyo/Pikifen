@@ -752,7 +752,7 @@ mob* create_mob(
  *   since everything is going to be destroyed.
  */
 void delete_mob(mob* m_ptr, const bool complete_destruction) {
-    if(creator_tool_info_lock == m_ptr) creator_tool_info_lock = NULL;
+    if(game.creator_tools.info_lock == m_ptr) game.creator_tools.info_lock = NULL;
     
     if(!complete_destruction) {
         m_ptr->leave_group();

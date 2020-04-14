@@ -103,8 +103,8 @@ void gameplay::do_drawing() {
  * Tick the gameplay logic by one frame.
  */
 void gameplay::do_logic() {
-    if(creator_tool_change_speed) {
-        game.delta_t *= creator_tool_change_speed_mult;
+    if(game.creator_tools.change_speed) {
+        game.delta_t *= game.creator_tools.change_speed_mult;
     }
     
     do_gameplay_logic();
@@ -578,7 +578,7 @@ void gameplay::unload() {
     }
     
     cur_message.clear();
-    info_print_text.clear();
+    game.creator_tools.info_print_text.clear();
 }
 
 

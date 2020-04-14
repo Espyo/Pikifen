@@ -71,20 +71,6 @@ mob* closest_group_member = NULL;
 bool closest_group_member_distant = false;
 vector<converter*> converters;
 map<string, converter_type*> converter_types;
-bool creator_tool_area_image_shadows = true;
-int creator_tool_area_image_size = 2048;
-bool creator_tool_area_image_mobs = true;
-string creator_tool_auto_start_option;
-string creator_tool_auto_start_mode;
-bool creator_tool_change_speed = false;
-float creator_tool_change_speed_mult = 2.0;
-bool creator_tool_geometry_info = false;
-bool creator_tool_hitboxes = false;
-mob* creator_tool_info_lock = NULL;
-float creator_tool_mob_hurting_ratio = 0.5;
-pikmin_type* creator_tool_last_pikmin_type = NULL;
-unsigned char creator_tool_keys[20];
-bool creator_tools_enabled = true;
 string cur_message;
 size_t cur_message_char = 0;
 timer cur_message_char_timer(0);
@@ -111,14 +97,6 @@ map<string, group_task_type*> group_task_types;
 map<string, hazard> hazards;
 hud_item_manager hud_items(N_HUD_ITEMS);
 float hud_coords[N_HUD_ITEMS][4];
-float info_print_duration = 5.0f;
-float info_print_fade_duration = 3.0f;
-string info_print_text;
-timer info_print_timer =
-    timer(
-        1.0f,
-[] () { info_print_text.clear(); }
-    );
 vector<interactable*> interactables;
 map<string, interactable_type*> interactable_types;
 vector<leader*> leaders;

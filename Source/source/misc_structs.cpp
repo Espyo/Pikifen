@@ -182,6 +182,27 @@ camera_info::camera_info() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a creator tool info struct.
+ */
+creator_tools_info::creator_tools_info() :
+    area_image_shadows(true),
+    area_image_size(2048),
+    area_image_mobs(true),
+    change_speed(false),
+    change_speed_mult(2.0f),
+    geometry_info(false),
+    hitboxes(false),
+    info_lock(nullptr),
+    info_print_duration(5.0f),
+    info_print_fade_duration(3.0f),
+    last_pikmin_type(nullptr),
+    mob_hurting_ratio(0.5) {
+    
+    info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
+}
+
+
 const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------

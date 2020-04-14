@@ -74,6 +74,51 @@ struct timer {
 
 
 /* ----------------------------------------------------------------------------
+ * Information about all of the creator tools.
+ */
+struct creator_tools_info {
+    //Show tree shadows in the area image tool?
+    bool area_image_shadows;
+    //Maximum width or height of the area image.
+    int area_image_size;
+    //Show mobs in the area image?
+    bool area_image_mobs;
+    //Automatically pick this from the list of the selected auto-entry mode.
+    string auto_start_option;
+    //Automatically enter this game mode when the game boots.
+    string auto_start_mode;
+    //Are we currently changing the game speed?
+    bool change_speed;
+    //Multiplier to change the game speed by.
+    float change_speed_mult;
+    //Are the tools enabled?
+    bool enabled;
+    //Is the geometry information tool enabled?
+    bool geometry_info;
+    //Are hitboxes visible in-game?
+    bool hitboxes;
+    //Mob currently locked-on to for the mob information tool. NULL if off.
+    mob* info_lock;
+    //If any creator info is being printed, this is how long it lasts on-screen.
+    float info_print_duration;
+    //If any creator info is being printed, this is how long its fade lasts.
+    float info_print_fade_duration;
+    //If any creator info is being printed, this is its text.
+    string info_print_text;
+    //If any creator info is being printed, this represents its time to live.
+    timer info_print_timer;
+    //For each key (F2 - F11, 0 - 9), what tool is bound to it?
+    unsigned char keys[20];
+    //When we last spawned a Pikmin, what was its type?
+    pikmin_type* last_pikmin_type;
+    //When hurting mobs with the hurting tool, dock this much of its max HP off.
+    float mob_hurting_ratio;
+    
+    creator_tools_info();
+};
+
+
+/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same

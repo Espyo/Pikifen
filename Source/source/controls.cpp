@@ -659,7 +659,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             game.show_system_info = !game.show_system_info;
             
         } else if(
-            creator_tools_enabled &&
+            game.creator_tools.enabled &&
             (
                 (
                     ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
@@ -678,14 +678,14 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             ) {
                 //The first ten indexes are the F2 - F11 keys.
                 id =
-                    creator_tool_keys[
-                        ev.keyboard.keycode - ALLEGRO_KEY_F2
+                    game.creator_tools.keys[
+                ev.keyboard.keycode - ALLEGRO_KEY_F2
                 ];
             } else {
                 //The second ten indexes are the 0 - 9 keys.
                 id =
-                    creator_tool_keys[
-                        10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
+                    game.creator_tools.keys[
+                10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
                 ];
             }
             
@@ -703,24 +703,24 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 }
                 
             } else if(id == CREATOR_TOOL_CHANGE_SPEED) {
-                creator_tool_change_speed = !creator_tool_change_speed;
+                game.creator_tools.change_speed = !game.creator_tools.change_speed;
                 
             } else if(id == CREATOR_TOOL_GEOMETRY_INFO) {
-                creator_tool_geometry_info = !creator_tool_geometry_info;
+                game.creator_tools.geometry_info = !game.creator_tools.geometry_info;
                 
             } else if(id == CREATOR_TOOL_HITBOXES) {
-                creator_tool_hitboxes = !creator_tool_hitboxes;
+                game.creator_tools.hitboxes = !game.creator_tools.hitboxes;
                 
             } else if(id == CREATOR_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->set_health(true, true, -creator_tool_mob_hurting_ratio);
+                    m->set_health(true, true, -game.creator_tools.mob_hurting_ratio);
                 }
                 
             } else if(id == CREATOR_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
-                creator_tool_info_lock =
-                    (creator_tool_info_lock == m ? NULL : m);
+                game.creator_tools.info_lock =
+                    (game.creator_tools.info_lock == m ? NULL : m);
                     
             } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < game.config.max_pikmin_in_field) {
@@ -728,7 +728,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     
                     auto p = pikmin_types.begin();
                     for(; p != pikmin_types.end(); ++p) {
-                        if(p->second == creator_tool_last_pikmin_type) {
+                        if(p->second == game.creator_tools.last_pikmin_type) {
                             ++p;
                             if(p != pikmin_types.end()) {
                                 new_pikmin_type = p->second;
@@ -736,7 +736,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                             break;
                         }
                     }
-                    creator_tool_last_pikmin_type = new_pikmin_type;
+                    game.creator_tools.last_pikmin_type = new_pikmin_type;
                     
                     create_mob(
                         mob_categories.get(MOB_CATEGORY_PIKMIN),
