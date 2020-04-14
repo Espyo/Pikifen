@@ -1078,3 +1078,46 @@ void timer::tick(const float amount) {
         on_end();
     }
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a whistle struct.
+ */
+whistle_struct::whistle_struct() :
+    fade_radius(0.0f),
+    fade_timer(WHISTLE_FADE_TIME),
+    next_dot_timer(WHISTLE_DOT_INTERVAL),
+    next_ring_timer(WHISTLE_RINGS_INTERVAL),
+    radius(0.0f),
+    ring_prev_color(0),
+    whistling(false) {
+    
+    dot_radius[0] = -1;
+    dot_radius[1] = -1;
+    dot_radius[2] = -1;
+    dot_radius[3] = -1;
+    dot_radius[4] = -1;
+    dot_radius[5] = -1;
+    
+    next_dot_timer.on_end = [this] () {
+        next_dot_timer.start();
+        unsigned char dot = 255;
+        for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
+            if(dot_radius[d] == -1) {
+                dot = d;
+                break;
+            }
+        }
+        
+        if(dot != 255) dot_radius[dot] = 0;
+    };
+    
+    next_ring_timer.on_end = [this] () {
+        next_ring_timer.start();
+        rings.push_back(0);
+        ring_colors.push_back(ring_prev_color);
+        ring_prev_color =
+            sum_and_wrap(ring_prev_color, 1, N_WHISTLE_RING_COLORS);
+    };
+    
+}

@@ -446,10 +446,10 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     lea_type->sfx_whistle.play(0, false);
     
-    for(unsigned char d = 0; d < 6; ++d) whistle_dot_radius[d] = -1;
-    whistle_fade_timer.start();
-    whistle_fade_radius = 0;
-    game.gameplay_state->whistling = true;
+    for(unsigned char d = 0; d < 6; ++d) game.gameplay_state->whistle.dot_radius[d] = -1;
+    game.gameplay_state->whistle.fade_timer.start();
+    game.gameplay_state->whistle.fade_radius = 0;
+    game.gameplay_state->whistle.whistling = true;
     lea_type->sfx_whistle.play(0, false);
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
@@ -460,15 +460,16 @@ void leader::start_whistling() {
  * Makes the leader stop whistling.
  */
 void leader::stop_whistling() {
-    if(!game.gameplay_state->whistling) return;
+    if(!game.gameplay_state->whistle.whistling) return;
     
     lea_type->sfx_whistle.stop();
     
-    whistle_fade_timer.start();
-    whistle_fade_radius = whistle_radius;
-    
-    game.gameplay_state->whistling = false;
-    whistle_radius = 0;
+    game.gameplay_state->whistle.fade_timer.start();
+    game.gameplay_state->whistle.fade_radius =
+        game.gameplay_state->whistle.radius;
+        
+    game.gameplay_state->whistle.whistling = false;
+    game.gameplay_state->whistle.radius = 0;
 }
 
 

@@ -55,41 +55,41 @@ void gameplay::do_aesthetic_logic() {
         }
     }
     
-    whistle_fade_timer.tick(game.delta_t);
+    whistle.fade_timer.tick(game.delta_t);
     
-    if(whistling) {
+    if(whistle.whistling) {
         //Create rings.
-        whistle_next_ring_timer.tick(game.delta_t);
+        whistle.next_ring_timer.tick(game.delta_t);
         
         if(game.options.pretty_whistle) {
-            whistle_next_dot_timer.tick(game.delta_t);
+            whistle.next_dot_timer.tick(game.delta_t);
         }
         
         for(unsigned char d = 0; d < 6; ++d) {
-            if(whistle_dot_radius[d] == -1) continue;
+            if(whistle.dot_radius[d] == -1) continue;
             
-            whistle_dot_radius[d] += game.config.whistle_growth_speed * game.delta_t;
+            whistle.dot_radius[d] += game.config.whistle_growth_speed * game.delta_t;
             if(
-                whistle_radius > 0 &&
-                whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range
+                whistle.radius > 0 &&
+                whistle.dot_radius[d] > cur_leader_ptr->lea_type->whistle_range
             ) {
-                whistle_dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
+                whistle.dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
                 
             } else if(
-                whistle_fade_radius > 0 &&
-                whistle_dot_radius[d] > whistle_fade_radius
+                whistle.fade_radius > 0 &&
+                whistle.dot_radius[d] > whistle.fade_radius
             ) {
-                whistle_dot_radius[d] = whistle_fade_radius;
+                whistle.dot_radius[d] = whistle.fade_radius;
             }
         }
     }
     
-    for(size_t r = 0; r < whistle_rings.size(); ) {
+    for(size_t r = 0; r < whistle.rings.size(); ) {
         //Erase rings that go beyond the cursor.
-        whistle_rings[r] += WHISTLE_RING_SPEED * game.delta_t;
-        if(leader_to_cursor_dist < whistle_rings[r]) {
-            whistle_rings.erase(whistle_rings.begin() + r);
-            whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
+        whistle.rings[r] += WHISTLE_RING_SPEED * game.delta_t;
+        if(leader_to_cursor_dist < whistle.rings[r]) {
+            whistle.rings.erase(whistle.rings.begin() + r);
+            whistle.ring_colors.erase(whistle.ring_colors.begin() + r);
         } else {
             r++;
         }
@@ -276,12 +276,12 @@ void gameplay::do_gameplay_logic() {
         ********************/
         
         if(
-            whistling &&
-            whistle_radius < cur_leader_ptr->lea_type->whistle_range
+            whistle.whistling &&
+            whistle.radius < cur_leader_ptr->lea_type->whistle_range
         ) {
-            whistle_radius += game.config.whistle_growth_speed * game.delta_t;
-            if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
-                whistle_radius = cur_leader_ptr->lea_type->whistle_range;
+            whistle.radius += game.config.whistle_growth_speed * game.delta_t;
+            if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
+                whistle.radius = cur_leader_ptr->lea_type->whistle_range;
             }
         }
         
@@ -556,14 +556,14 @@ void gameplay::do_gameplay_logic() {
         if(
             msg_box->cur_char <
             msg_box->stopping_chars[
-                msg_box->cur_section + 1
-            ]
+         msg_box->cur_section + 1
+        ]
         ) {
             if(msg_box->char_timer.duration == 0.0f) {
                 size_t stopping_char =
                     msg_box->stopping_chars[
-                        msg_box->cur_section + 1
-                    ];
+                msg_box->cur_section + 1
+                ];
                 //Display everything right away.
                 msg_box->cur_char = stopping_char;
             } else {

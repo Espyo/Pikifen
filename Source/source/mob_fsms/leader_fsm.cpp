@@ -1190,7 +1190,7 @@ void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
     
     if(
         tra_ptr->tra_type->cancellable_with_whistle &&
-        game.gameplay_state->whistling
+        game.gameplay_state->whistle.whistling
     ) {
         m->stop_track_ride();
         leader_fsm::join_group(m, NULL, NULL);

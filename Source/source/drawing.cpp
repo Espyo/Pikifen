@@ -194,14 +194,14 @@ void gameplay::draw_cursor(
         );
     }
     
-    size_t n_rings = whistle_rings.size();
+    size_t n_rings = whistle.rings.size();
     float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t r = 0; r < n_rings; ++r) {
         point pos(
-            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle_rings[r],
-            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle_rings[r]
+            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
+            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
         );
-        unsigned char n = whistle_ring_colors[r];
+        unsigned char n = whistle.ring_colors[r];
         al_draw_circle(
             pos.x, pos.y, 8,
             al_map_rgba(
@@ -213,7 +213,7 @@ void gameplay::draw_cursor(
         );
     }
     
-    if(whistle_radius > 0 || whistle_fade_timer.time_left > 0.0f) {
+    if(whistle.radius > 0 || whistle.fade_timer.time_left > 0.0f) {
         if(game.options.pretty_whistle) {
             unsigned char n_dots = 16 * 6;
             for(unsigned char d = 0; d < 6; ++d) {
@@ -226,15 +226,15 @@ void gameplay::draw_cursor(
                         
                     point dot_pos(
                         leader_cursor_w.x +
-                        cos(angle) * whistle_dot_radius[d],
+                        cos(angle) * whistle.dot_radius[d],
                         leader_cursor_w.y +
-                        sin(angle) * whistle_dot_radius[d]
+                        sin(angle) * whistle.dot_radius[d]
                     );
                     
                     ALLEGRO_COLOR c;
                     float alpha_mult;
-                    if(whistle_fade_timer.time_left > 0.0f)
-                        alpha_mult = whistle_fade_timer.get_ratio_left();
+                    if(whistle.fade_timer.time_left > 0.0f)
+                        alpha_mult = whistle.fade_timer.get_ratio_left();
                     else
                         alpha_mult = 1;
                         
@@ -262,11 +262,11 @@ void gameplay::draw_cursor(
                 }
             }
         } else {
-            unsigned char alpha = whistle_fade_timer.get_ratio_left() * 255;
-            float radius = whistle_fade_radius;
-            if(whistle_radius > 0) {
+            unsigned char alpha = whistle.fade_timer.get_ratio_left() * 255;
+            float radius = whistle.fade_radius;
+            if(whistle.radius > 0) {
                 alpha = 255;
-                radius = whistle_radius;
+                radius = whistle.radius;
             }
             al_draw_circle(
                 leader_cursor_w.x, leader_cursor_w.y, radius,

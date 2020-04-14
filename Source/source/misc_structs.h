@@ -514,4 +514,33 @@ struct spray_stats_struct {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Contains info about the current whistle usage.
+ */
+struct whistle_struct {
+    //Radius of every 6th dot.
+    float dot_radius[6];
+    //Radius the whistle was at pre-fade.
+    float fade_radius;
+    //Time left for the whistle's fading animations.
+    timer fade_timer;
+    //Time left until the next series of dots begins.
+    timer next_dot_timer;
+    //Time left until the next ring is spat out.
+    timer next_ring_timer;
+    //Current radius of the whistle.
+    float radius;
+    //Color index of each ring.
+    vector<unsigned char> ring_colors;
+    //Color index of the previous ring.
+    unsigned char ring_prev_color;
+    //Distance of each ring.
+    vector<float> rings;
+    //Is the whistle currently being blown?
+    bool whistling;
+    
+    whistle_struct();
+};
+
+
 #endif //ifndef MISC_STRUCTS_INCLUDED

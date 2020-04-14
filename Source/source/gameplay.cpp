@@ -52,7 +52,6 @@ gameplay::gameplay() :
     leader_cursor_sector(nullptr),
     swarm_angle(0),
     swarm_magnitude(0.0f),
-    whistling(false),
     bmp_bubble(nullptr),
     bmp_counter_bubble_group(nullptr),
     bmp_counter_bubble_field(nullptr),

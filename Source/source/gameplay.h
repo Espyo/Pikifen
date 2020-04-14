@@ -58,8 +58,8 @@ public:
     float swarm_angle;
     //General intensity of player 1's swarm in the specified angle.
     float swarm_magnitude;
-    //Is player 1 currently holding the whistle button?
-    bool whistling;
+    //Information about player 1's whistle.
+    whistle_struct whistle;
     
     void leave();
     void update_closest_group_member();

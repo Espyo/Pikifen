@@ -483,25 +483,8 @@ void init_misc() {
     
     srand(time(NULL));
     
-    whistle_next_dot_timer.on_end = [] () {
-        whistle_next_dot_timer.start();
-        unsigned char dot = 255;
-        for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
-            if(whistle_dot_radius[d] == -1) { dot = d; break;}
-        }
-        
-        if(dot != 255) whistle_dot_radius[dot] = 0;
-    };
-    whistle_next_dot_timer.start();
-    
-    whistle_next_ring_timer.on_end = [] () {
-        whistle_next_ring_timer.start();
-        whistle_rings.push_back(0);
-        whistle_ring_colors.push_back(whistle_ring_prev_color);
-        whistle_ring_prev_color =
-            sum_and_wrap(whistle_ring_prev_color, 1, N_WHISTLE_RING_COLORS);
-    };
-    whistle_next_ring_timer.start();
+    game.gameplay_state->whistle.next_dot_timer.start();
+    game.gameplay_state->whistle.next_ring_timer.start();
     
     particles = particle_manager(game.options.max_particles);
     

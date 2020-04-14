@@ -203,18 +203,6 @@ extern vector<track*> tracks;
 extern map<string, treasure_type*> treasure_types;
 extern vector<treasure*> treasures;
 extern map<string, weather> weather_conditions;
-//Radius of every 6th dot.
-extern float whistle_dot_radius[6];
-//Radius the whistle was at pre-fade.
-extern float whistle_fade_radius;
-//Time left for the whistle's fading animations.
-extern timer whistle_fade_timer;
-extern timer whistle_next_dot_timer;
-extern timer whistle_next_ring_timer;
-extern float whistle_radius;
-extern vector<unsigned char> whistle_ring_colors;
-extern unsigned char whistle_ring_prev_color;
-extern vector<float> whistle_rings;
 
 
 #endif //ifndef VARS_INCLUDED
