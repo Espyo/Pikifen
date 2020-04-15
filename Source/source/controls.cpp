@@ -23,7 +23,6 @@
 #include "game.h"
 #include "gameplay.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates information about a control.
@@ -440,7 +439,7 @@ void gameplay::handle_button(
                 }
             }
             
-            sfx_camera.play(0, false);
+            game.sys_assets.sfx_camera.play(0, false);
             
         } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
         
@@ -463,7 +462,7 @@ void gameplay::handle_button(
             if(game.cam.target_zoom > game.config.zoom_max_level) game.cam.target_zoom = game.config.zoom_max_level;
             if(game.cam.target_zoom < game.config.zoom_min_level) game.cam.target_zoom = game.config.zoom_min_level;
             
-            sfx_camera.play(-1, false);
+            game.sys_assets.sfx_camera.play(-1, false);
             
         } else if(button == BUTTON_LIE_DOWN) {
         
@@ -545,7 +544,7 @@ void gameplay::handle_button(
             }
             
             if(switch_successful) {
-                sfx_switch_pikmin.play(0, false);
+                game.sys_assets.sfx_switch_pikmin.play(0, false);
             }
             
         } else if(

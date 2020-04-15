@@ -16,9 +16,10 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
+#include "mobs/group_task.h"
 #include "mobs/pikmin.h"
+#include "mobs/tool.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 
@@ -167,7 +168,7 @@ void gameplay::do_aesthetic_logic() {
     
     
     //Specific animations.
-    spark_animation.instance.tick(game.delta_t);
+    game.sys_assets.spark_animation.instance.tick(game.delta_t);
     
     //Area title fade.
     area_title_fade_timer.tick(game.delta_t);

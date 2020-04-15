@@ -22,7 +22,6 @@
 #include "../../LAFI/scrollbar.h"
 #include "../../LAFI/textbox.h"
 #include "../../utils/string_utils.h"
-#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Loads the current advanced sector appearance data onto the GUI.

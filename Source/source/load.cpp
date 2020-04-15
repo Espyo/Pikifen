@@ -19,7 +19,6 @@
 #include "game.h"
 #include "init.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 using std::set;
 
@@ -477,36 +476,36 @@ void load_asset_file_names() {
     
     reader_setter rs(&file);
     
-    rs.set("area_name_font", asset_file_names.area_name_font);
-    rs.set("checkbox_check", asset_file_names.checkbox_check);
-    rs.set("cursor", asset_file_names.cursor);
-    rs.set("cursor_invalid", asset_file_names.cursor_invalid);
-    rs.set("counter_font", asset_file_names.counter_font);
-    rs.set("editor_icons", asset_file_names.editor_icons);
-    rs.set("enemy_spirit", asset_file_names.enemy_spirit);
-    rs.set("icon", asset_file_names.icon);
-    rs.set("idle_glow", asset_file_names.idle_glow);
-    rs.set("main_font", asset_file_names.main_font);
-    rs.set("main_menu", asset_file_names.main_menu);
-    rs.set("mouse_cursor", asset_file_names.mouse_cursor);
-    rs.set("mouse_wheel_down_icon", asset_file_names.mouse_wd_icon);
-    rs.set("mouse_wheel_up_icon", asset_file_names.mouse_wu_icon);
-    rs.set("notification", asset_file_names.notification);
-    rs.set("pikmin_silhouette", asset_file_names.pikmin_silhouette);
-    rs.set("pikmin_spirit", asset_file_names.pikmin_spirit);
-    rs.set("shadow", asset_file_names.shadow);
-    rs.set("smack", asset_file_names.smack);
-    rs.set("smoke", asset_file_names.smoke);
-    rs.set("sparkle", asset_file_names.sparkle);
-    rs.set("spotlight", asset_file_names.spotlight);
-    rs.set("swarm_arrow", asset_file_names.swarm_arrow);
-    rs.set("value_font", asset_file_names.value_font);
-    rs.set("wave_ring", asset_file_names.wave_ring);
+    rs.set("area_name_font", game.asset_file_names.area_name_font);
+    rs.set("checkbox_check", game.asset_file_names.checkbox_check);
+    rs.set("cursor", game.asset_file_names.cursor);
+    rs.set("cursor_invalid", game.asset_file_names.cursor_invalid);
+    rs.set("counter_font", game.asset_file_names.counter_font);
+    rs.set("editor_icons", game.asset_file_names.editor_icons);
+    rs.set("enemy_spirit", game.asset_file_names.enemy_spirit);
+    rs.set("icon", game.asset_file_names.icon);
+    rs.set("idle_glow", game.asset_file_names.idle_glow);
+    rs.set("main_font", game.asset_file_names.main_font);
+    rs.set("main_menu", game.asset_file_names.main_menu);
+    rs.set("mouse_cursor", game.asset_file_names.mouse_cursor);
+    rs.set("mouse_wheel_down_icon", game.asset_file_names.mouse_wd_icon);
+    rs.set("mouse_wheel_up_icon", game.asset_file_names.mouse_wu_icon);
+    rs.set("notification", game.asset_file_names.notification);
+    rs.set("pikmin_silhouette", game.asset_file_names.pikmin_silhouette);
+    rs.set("pikmin_spirit", game.asset_file_names.pikmin_spirit);
+    rs.set("shadow", game.asset_file_names.shadow);
+    rs.set("smack", game.asset_file_names.smack);
+    rs.set("smoke", game.asset_file_names.smoke);
+    rs.set("sparkle", game.asset_file_names.sparkle);
+    rs.set("spotlight", game.asset_file_names.spotlight);
+    rs.set("swarm_arrow", game.asset_file_names.swarm_arrow);
+    rs.set("value_font", game.asset_file_names.value_font);
+    rs.set("wave_ring", game.asset_file_names.wave_ring);
     
     for(unsigned char i = 0; i < 3; ++i) {
         rs.set(
             "mouse_button_" + i2s(i + 1) + "_icon",
-            asset_file_names.mouse_button_icon[i]
+            game.asset_file_names.mouse_button_icon[i]
         );
     }
     
@@ -750,7 +749,7 @@ void load_fonts() {
     //So we load them into bitmaps first.
     
     //Main font.
-    ALLEGRO_BITMAP* temp_font_bmp = load_bmp(asset_file_names.main_font);
+    ALLEGRO_BITMAP* temp_font_bmp = load_bmp(game.asset_file_names.main_font);
     if(temp_font_bmp) {
         game.fonts.main =
             al_grab_font_from_bitmap(
@@ -761,7 +760,7 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Area name font.
-    temp_font_bmp = load_bmp(asset_file_names.area_name_font);
+    temp_font_bmp = load_bmp(game.asset_file_names.area_name_font);
     if(temp_font_bmp) {
         game.fonts.area_name =
             al_grab_font_from_bitmap(
@@ -772,7 +771,7 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Counter font.
-    temp_font_bmp = load_bmp(asset_file_names.counter_font);
+    temp_font_bmp = load_bmp(game.asset_file_names.counter_font);
     if(temp_font_bmp) {
         game.fonts.counter =
             al_grab_font_from_bitmap(
@@ -783,7 +782,7 @@ void load_fonts() {
     al_destroy_bitmap(temp_font_bmp);
     
     //Value font.
-    temp_font_bmp = load_bmp(asset_file_names.value_font);
+    temp_font_bmp = load_bmp(game.asset_file_names.value_font);
     if(temp_font_bmp) {
         game.fonts.value =
             al_grab_font_from_bitmap(
@@ -952,32 +951,32 @@ void load_liquids(const bool load_resources) {
  */
 void load_misc_graphics() {
     //Icon.
-    bmp_icon = load_bmp(asset_file_names.icon);
-    al_set_display_icon(game.display, bmp_icon);
+    game.sys_assets.bmp_icon = load_bmp(game.asset_file_names.icon);
+    al_set_display_icon(game.display, game.sys_assets.bmp_icon);
     
     //Graphics.
-    bmp_checkbox_check = load_bmp(   asset_file_names.checkbox_check);
-    bmp_cursor = load_bmp(           asset_file_names.cursor);
-    bmp_cursor_invalid = load_bmp(   asset_file_names.cursor_invalid);
-    bmp_enemy_spirit = load_bmp(     asset_file_names.enemy_spirit);
-    bmp_idle_glow = load_bmp(        asset_file_names.idle_glow);
-    bmp_mouse_cursor = load_bmp(     asset_file_names.mouse_cursor);
-    bmp_mouse_wd_icon = load_bmp(    asset_file_names.mouse_wd_icon);
-    bmp_mouse_wu_icon = load_bmp(    asset_file_names.mouse_wu_icon);
-    bmp_notification = load_bmp(     asset_file_names.notification);
-    bmp_pikmin_silhouette = load_bmp(asset_file_names.pikmin_silhouette);
-    bmp_pikmin_spirit = load_bmp(    asset_file_names.pikmin_spirit);
-    bmp_rock = load_bmp(             asset_file_names.rock);
-    bmp_shadow = load_bmp(           asset_file_names.shadow);
-    bmp_smack = load_bmp(            asset_file_names.smack);
-    bmp_smoke = load_bmp(            asset_file_names.smoke);
-    bmp_sparkle = load_bmp(          asset_file_names.sparkle);
-    bmp_spotlight = load_bmp(        asset_file_names.spotlight);
-    bmp_swarm_arrow = load_bmp(      asset_file_names.swarm_arrow);
-    bmp_wave_ring = load_bmp(        asset_file_names.wave_ring);
+    game.sys_assets.bmp_checkbox_check = load_bmp(   game.asset_file_names.checkbox_check);
+    game.sys_assets.bmp_cursor = load_bmp(           game.asset_file_names.cursor);
+    game.sys_assets.bmp_cursor_invalid = load_bmp(   game.asset_file_names.cursor_invalid);
+    game.sys_assets.bmp_enemy_spirit = load_bmp(     game.asset_file_names.enemy_spirit);
+    game.sys_assets.bmp_idle_glow = load_bmp(        game.asset_file_names.idle_glow);
+    game.sys_assets.bmp_mouse_cursor = load_bmp(     game.asset_file_names.mouse_cursor);
+    game.sys_assets.bmp_mouse_wd_icon = load_bmp(    game.asset_file_names.mouse_wd_icon);
+    game.sys_assets.bmp_mouse_wu_icon = load_bmp(    game.asset_file_names.mouse_wu_icon);
+    game.sys_assets.bmp_notification = load_bmp(     game.asset_file_names.notification);
+    game.sys_assets.bmp_pikmin_silhouette = load_bmp(game.asset_file_names.pikmin_silhouette);
+    game.sys_assets.bmp_pikmin_spirit = load_bmp(    game.asset_file_names.pikmin_spirit);
+    game.sys_assets.bmp_rock = load_bmp(             game.asset_file_names.rock);
+    game.sys_assets.bmp_shadow = load_bmp(           game.asset_file_names.shadow);
+    game.sys_assets.bmp_smack = load_bmp(            game.asset_file_names.smack);
+    game.sys_assets.bmp_smoke = load_bmp(            game.asset_file_names.smoke);
+    game.sys_assets.bmp_sparkle = load_bmp(          game.asset_file_names.sparkle);
+    game.sys_assets.bmp_spotlight = load_bmp(        game.asset_file_names.spotlight);
+    game.sys_assets.bmp_swarm_arrow = load_bmp(      game.asset_file_names.swarm_arrow);
+    game.sys_assets.bmp_wave_ring = load_bmp(        game.asset_file_names.wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
-        bmp_mouse_button_icon[i] =
-            load_bmp(asset_file_names.mouse_button_icon[i]);
+        game.sys_assets.bmp_mouse_button_icon[i] =
+            load_bmp(game.asset_file_names.mouse_button_icon[i]);
     }
 }
 
@@ -997,21 +996,21 @@ void load_misc_sounds() {
         );
     al_attach_mixer_to_voice(game.mixer, game.voice);
     
-    sfx_attack = load_sample(              "Attack.ogg");
-    sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg");
-    sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg");
-    sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg");
-    sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg");
-    sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg");
-    sfx_pikmin_held = load_sample(         "Pikmin_held.ogg");
-    sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg");
-    sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg");
-    sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg");
-    sfx_pikmin_called = load_sample(       "Pikmin_called.ogg");
-    sfx_pluck = load_sample(               "Pluck.ogg");
-    sfx_throw = load_sample(               "Throw.ogg");
-    sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg");
-    sfx_camera = load_sample(              "Camera.ogg");
+    game.sys_assets.sfx_attack = load_sample(              "Attack.ogg");
+    game.sys_assets.sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg");
+    game.sys_assets.sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg");
+    game.sys_assets.sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg");
+    game.sys_assets.sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg");
+    game.sys_assets.sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg");
+    game.sys_assets.sfx_pikmin_held = load_sample(         "Pikmin_held.ogg");
+    game.sys_assets.sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg");
+    game.sys_assets.sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg");
+    game.sys_assets.sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg");
+    game.sys_assets.sfx_pikmin_called = load_sample(       "Pikmin_called.ogg");
+    game.sys_assets.sfx_pluck = load_sample(               "Pluck.ogg");
+    game.sys_assets.sfx_throw = load_sample(               "Throw.ogg");
+    game.sys_assets.sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg");
+    game.sys_assets.sfx_camera = load_sample(              "Camera.ogg");
 }
 
 
@@ -1429,7 +1428,7 @@ void load_system_animations() {
         load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
         
     init_single_animation(
-        &system_animations_file, "leader_damage_sparks", spark_animation
+        &system_animations_file, "leader_damage_sparks", game.sys_assets.spark_animation
     );
 }
 
@@ -1571,44 +1570,44 @@ void unload_liquids() {
  * Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
-    al_destroy_bitmap(bmp_checkbox_check);
-    al_destroy_bitmap(bmp_cursor);
-    al_destroy_bitmap(bmp_cursor_invalid);
-    al_destroy_bitmap(bmp_enemy_spirit);
-    al_destroy_bitmap(bmp_icon);
-    al_destroy_bitmap(bmp_idle_glow);
-    al_destroy_bitmap(bmp_mouse_cursor);
-    al_destroy_bitmap(bmp_mouse_wd_icon);
-    al_destroy_bitmap(bmp_mouse_wu_icon);
-    al_destroy_bitmap(bmp_notification);
-    al_destroy_bitmap(bmp_pikmin_silhouette);
-    al_destroy_bitmap(bmp_pikmin_spirit);
-    al_destroy_bitmap(bmp_rock);
-    al_destroy_bitmap(bmp_shadow);
-    al_destroy_bitmap(bmp_smack);
-    al_destroy_bitmap(bmp_smoke);
-    al_destroy_bitmap(bmp_sparkle);
-    al_destroy_bitmap(bmp_spotlight);
-    al_destroy_bitmap(bmp_swarm_arrow);
-    al_destroy_bitmap(bmp_wave_ring);
+    al_destroy_bitmap(game.sys_assets.bmp_checkbox_check);
+    al_destroy_bitmap(game.sys_assets.bmp_cursor);
+    al_destroy_bitmap(game.sys_assets.bmp_cursor_invalid);
+    al_destroy_bitmap(game.sys_assets.bmp_enemy_spirit);
+    al_destroy_bitmap(game.sys_assets.bmp_icon);
+    al_destroy_bitmap(game.sys_assets.bmp_idle_glow);
+    al_destroy_bitmap(game.sys_assets.bmp_mouse_cursor);
+    al_destroy_bitmap(game.sys_assets.bmp_mouse_wd_icon);
+    al_destroy_bitmap(game.sys_assets.bmp_mouse_wu_icon);
+    al_destroy_bitmap(game.sys_assets.bmp_notification);
+    al_destroy_bitmap(game.sys_assets.bmp_pikmin_silhouette);
+    al_destroy_bitmap(game.sys_assets.bmp_pikmin_spirit);
+    al_destroy_bitmap(game.sys_assets.bmp_rock);
+    al_destroy_bitmap(game.sys_assets.bmp_shadow);
+    al_destroy_bitmap(game.sys_assets.bmp_smack);
+    al_destroy_bitmap(game.sys_assets.bmp_smoke);
+    al_destroy_bitmap(game.sys_assets.bmp_sparkle);
+    al_destroy_bitmap(game.sys_assets.bmp_spotlight);
+    al_destroy_bitmap(game.sys_assets.bmp_swarm_arrow);
+    al_destroy_bitmap(game.sys_assets.bmp_wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
-        game.bitmaps.detach(bmp_mouse_button_icon[i]);
+        game.bitmaps.detach(game.sys_assets.bmp_mouse_button_icon[i]);
     }
     
-    sfx_attack.destroy();
-    sfx_pikmin_attack.destroy();
-    sfx_pikmin_carrying.destroy();
-    sfx_pikmin_carrying_grab.destroy();
-    sfx_pikmin_caught.destroy();
-    sfx_pikmin_dying.destroy();
-    sfx_pikmin_held.destroy();
-    sfx_pikmin_idle.destroy();
-    sfx_pikmin_thrown.destroy();
-    sfx_pikmin_plucked.destroy();
-    sfx_pikmin_called.destroy();
-    sfx_throw.destroy();
-    sfx_switch_pikmin.destroy();
-    sfx_camera.destroy();
+    game.sys_assets.sfx_attack.destroy();
+    game.sys_assets.sfx_pikmin_attack.destroy();
+    game.sys_assets.sfx_pikmin_carrying.destroy();
+    game.sys_assets.sfx_pikmin_carrying_grab.destroy();
+    game.sys_assets.sfx_pikmin_caught.destroy();
+    game.sys_assets.sfx_pikmin_dying.destroy();
+    game.sys_assets.sfx_pikmin_held.destroy();
+    game.sys_assets.sfx_pikmin_idle.destroy();
+    game.sys_assets.sfx_pikmin_thrown.destroy();
+    game.sys_assets.sfx_pikmin_plucked.destroy();
+    game.sys_assets.sfx_pikmin_called.destroy();
+    game.sys_assets.sfx_throw.destroy();
+    game.sys_assets.sfx_switch_pikmin.destroy();
+    game.sys_assets.sfx_camera.destroy();
 }
 
 

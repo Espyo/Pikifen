@@ -12,7 +12,6 @@
 
 #include "../drawing.h"
 #include "../functions.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a decoration mob.

@@ -12,10 +12,10 @@
 
 #include "../functions.h"
 #include "../game.h"
+#include "../mobs/resource.h"
 #include "../mobs/ship.h"
 #include "../particle.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the ship's logic.
@@ -84,7 +84,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, s_ptr->beam_final_pos,
         s_ptr->z + s_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
-    p.bitmap = bmp_smoke;
+    p.bitmap = game.sys_assets.bmp_smoke;
     particle_generator pg(0, p, 15);
     pg.number_deviation = 5;
     pg.angle = 0;

@@ -20,6 +20,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 
+#include "animation.h"
 #include "mob_categories/mob_category.h"
 #include "particle.h"
 #include "utils/data_file.h"
@@ -31,6 +32,40 @@ using std::map;
 using std::size_t;
 using std::string;
 using std::vector;
+
+
+/* ----------------------------------------------------------------------------
+ * List of file names of system assets.
+ */
+struct asset_file_names_struct {
+    string area_name_font;
+    string checkbox_check;
+    string cursor;
+    string cursor_invalid;
+    string counter_font;
+    string editor_icons;
+    string enemy_spirit;
+    string swarm_arrow;
+    string icon;
+    string idle_glow;
+    string main_font;
+    string main_menu;
+    string mouse_button_icon[3];
+    string mouse_cursor;
+    string mouse_wd_icon;
+    string mouse_wu_icon;
+    string notification;
+    string pikmin_silhouette;
+    string pikmin_spirit;
+    string rock;
+    string shadow;
+    string smack;
+    string smoke;
+    string sparkle;
+    string spotlight;
+    string value_font;
+    string wave_ring;
+};
 
 
 /* ----------------------------------------------------------------------------
@@ -401,6 +436,57 @@ struct script_var_reader {
     script_var_reader(map<string, string> &vars);
 };
 
+
+
+/* ----------------------------------------------------------------------------
+ * List of loaded system assets.
+ */
+struct system_asset_list {
+    //Bitmaps.
+    ALLEGRO_BITMAP* bmp_checkbox_check;
+    ALLEGRO_BITMAP* bmp_cursor;
+    ALLEGRO_BITMAP* bmp_cursor_invalid;
+    ALLEGRO_BITMAP* bmp_enemy_spirit;
+    ALLEGRO_BITMAP* bmp_icon;
+    ALLEGRO_BITMAP* bmp_idle_glow;
+    ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
+    ALLEGRO_BITMAP* bmp_mouse_cursor;
+    ALLEGRO_BITMAP* bmp_mouse_wd_icon;
+    ALLEGRO_BITMAP* bmp_mouse_wu_icon;
+    ALLEGRO_BITMAP* bmp_notification;
+    ALLEGRO_BITMAP* bmp_pikmin_silhouette;
+    ALLEGRO_BITMAP* bmp_pikmin_spirit;
+    ALLEGRO_BITMAP* bmp_rock;
+    ALLEGRO_BITMAP* bmp_shadow;
+    ALLEGRO_BITMAP* bmp_smack;
+    ALLEGRO_BITMAP* bmp_smoke;
+    ALLEGRO_BITMAP* bmp_sparkle;
+    ALLEGRO_BITMAP* bmp_spotlight;
+    ALLEGRO_BITMAP* bmp_swarm_arrow;
+    ALLEGRO_BITMAP* bmp_wave_ring;
+    
+    //Sound effects.
+    sample_struct sfx_attack;
+    sample_struct sfx_camera;
+    sample_struct sfx_pikmin_attack;
+    sample_struct sfx_pikmin_called;
+    sample_struct sfx_pikmin_carrying;
+    sample_struct sfx_pikmin_carrying_grab;
+    sample_struct sfx_pikmin_caught;
+    sample_struct sfx_pikmin_dying;
+    sample_struct sfx_pikmin_held;
+    sample_struct sfx_pikmin_idle;
+    sample_struct sfx_pluck;
+    sample_struct sfx_pikmin_plucked;
+    sample_struct sfx_pikmin_thrown;
+    sample_struct sfx_switch_pikmin;
+    sample_struct sfx_throw;
+    
+    //Animations.
+    single_animation_suite spark_animation;
+    
+    system_asset_list();
+};
 
 
 /* ----------------------------------------------------------------------------

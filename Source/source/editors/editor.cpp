@@ -22,7 +22,6 @@
 #include "../load.h"
 #include "../utils/math_utils.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 
 
 //Every icon in the icon bitmap file is these many pixels from the previous.
@@ -689,7 +688,7 @@ void editor::leave() {
  */
 void editor::load() {
     bmp_editor_icons =
-        load_bmp(asset_file_names.editor_icons, NULL, true, false);
+        load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
             editor_icons[i] =

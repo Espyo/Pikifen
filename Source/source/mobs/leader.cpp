@@ -16,7 +16,6 @@
 #include "../drawing.h"
 #include "../functions.h"
 #include "../game.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a leader mob.
@@ -369,7 +368,7 @@ void leader::draw_mob() {
     get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
     if(invuln_period.time_left > 0.0f) {
-        sprite* spark_s = spark_animation.instance.get_cur_sprite();
+        sprite* spark_s = game.sys_assets.spark_animation.instance.get_cur_sprite();
         
         if(spark_s && spark_s->bitmap) {
             bitmap_effect_info spark_eff = eff;
@@ -494,7 +493,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
         false, true
     );
     
-    sfx_switch_pikmin.play(0, false);
+    game.sys_assets.sfx_switch_pikmin.play(0, false);
 }
 
 

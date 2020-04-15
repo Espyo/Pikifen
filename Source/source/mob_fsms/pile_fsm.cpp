@@ -16,6 +16,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mobs/pile.h"
+#include "../mobs/resource.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 

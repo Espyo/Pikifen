@@ -13,7 +13,6 @@
 #include "../drawing.h"
 #include "../functions.h"
 #include "../game.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a resource.

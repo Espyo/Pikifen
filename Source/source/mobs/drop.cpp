@@ -14,7 +14,6 @@
 
 #include "../drawing.h"
 #include "../game.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a drop mob.

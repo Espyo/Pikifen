@@ -14,7 +14,6 @@
 #include "../game.h"
 #include "../mob_fsms/onion_fsm.h"
 #include "../mobs/onion.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a type of Onion.

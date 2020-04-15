@@ -16,7 +16,6 @@
 #include "../../game.h"
 #include "../../LAFI/textbox.h"
 #include "../../utils/string_utils.h"
-#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed on the canvas exclusively.

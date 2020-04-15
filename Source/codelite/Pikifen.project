@@ -197,9 +197,7 @@
     <File Name="../source/status.h"/>
     <File Name="../source/controls.h"/>
     <File Name="../source/spray_type.cpp"/>
-    <File Name="../source/vars.cpp"/>
     <File Name="../source/const.h"/>
-    <File Name="../source/vars.h"/>
     <File Name="../source/sector.cpp"/>
     <File Name="../source/init.h"/>
     <File Name="../source/hazard.cpp"/>

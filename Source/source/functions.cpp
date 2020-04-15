@@ -34,7 +34,6 @@
 #include "menus.h"
 #include "utils/backtrace.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 
 //Calls al_fwrite, but with an std::string instead of a c-string.

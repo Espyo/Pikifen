@@ -14,7 +14,6 @@
 #include "../game.h"
 #include "../mobs/bridge.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
@@ -66,7 +65,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1,
         80, 2.75, PARTICLE_PRIORITY_MEDIUM
     );
-    p.bitmap = bmp_smoke;
+    p.bitmap = game.sys_assets.bmp_smoke;
     p.color = al_map_rgb(238, 204, 170);
     particle_generator pg(0, p, 11);
     pg.number_deviation = 1;

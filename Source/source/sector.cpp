@@ -23,7 +23,6 @@
 #include "game.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 using std::unordered_set;
 using std::set;

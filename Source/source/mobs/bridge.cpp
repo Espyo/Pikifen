@@ -11,7 +11,6 @@
 #include "bridge.h"
 
 #include "../functions.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a bridge mob.

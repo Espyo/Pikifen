@@ -17,7 +17,6 @@
 #include "game.h"
 #include "mobs/mob.h"
 #include "utils/geometry_utils.h"
-#include "vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a particle.

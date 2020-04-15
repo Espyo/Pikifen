@@ -19,7 +19,6 @@
 #include "../../LAFI/button.h"
 #include "../../load.h"
 #include "../../utils/string_utils.h"
-#include "../../vars.h"
 
 using std::set;
 using std::size_t;

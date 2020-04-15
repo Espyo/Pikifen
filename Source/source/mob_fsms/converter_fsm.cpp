@@ -184,7 +184,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
-    p.bitmap = bmp_smoke;
+    p.bitmap = game.sys_assets.bmp_smoke;
     particle_generator pg(0, p, 15);
     pg.number_deviation = 5;
     pg.angle = 0;

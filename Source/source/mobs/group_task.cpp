@@ -11,7 +11,6 @@
 #include "group_task.h"
 
 #include "../game.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a new group task mob.

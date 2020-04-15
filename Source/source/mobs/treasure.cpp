@@ -14,7 +14,6 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "ship.h"
 
 /* ----------------------------------------------------------------------------

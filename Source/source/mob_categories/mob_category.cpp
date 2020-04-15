@@ -15,7 +15,6 @@
 #include "../functions.h"
 #include "../mobs/mob.h"
 #include "../mob_types/mob_type.h"
-#include "../vars.h"
 
 using std::size_t;
 using std::string;

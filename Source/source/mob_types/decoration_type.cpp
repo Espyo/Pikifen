@@ -13,7 +13,6 @@
 #include "../mob_fsms/decoration_fsm.h"
 #include "../mob_script.h"
 #include "../mobs/decoration.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a type of decoration.

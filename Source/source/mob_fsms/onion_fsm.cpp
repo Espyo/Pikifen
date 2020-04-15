@@ -13,9 +13,9 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mobs/onion.h"
+#include "../mobs/pellet.h"
 #include "../particle.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the Onion's logic.
@@ -71,7 +71,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height - 0.01,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
-    p.bitmap = bmp_smoke;
+    p.bitmap = game.sys_assets.bmp_smoke;
     particle_generator pg(0, p, 15);
     pg.number_deviation = 5;
     pg.angle = 0;

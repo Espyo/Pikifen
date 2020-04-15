@@ -18,7 +18,6 @@
 #include "functions.h"
 #include "game.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 using std::size_t;
 using std::string;

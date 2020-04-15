@@ -15,10 +15,11 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../gameplay.h"
+#include "../mobs/drop.h"
 #include "../mobs/leader.h"
+#include "../mobs/track.h"
 #include "../mob_types/leader_type.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "gen_mob_fsm.h"
 
 using std::unordered_set;
@@ -1330,8 +1331,8 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->leave_group();
     leader_ptr->release(holding_ptr);
     
-    sfx_throw.stop();
-    sfx_throw.play(0, false);
+    game.sys_assets.sfx_throw.stop();
+    game.sys_assets.sfx_throw.play(0, false);
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
 }
 
@@ -1711,7 +1712,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
-    p.bitmap = bmp_smoke;
+    p.bitmap = game.sys_assets.bmp_smoke;
     p.friction = 1;
     p.color = game.spray_types[spray_nr].main_color;
     particle_generator pg(0, p, 32);
@@ -1896,7 +1897,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
-            p.bitmap = bmp_wave_ring;
+            p.bitmap = game.sys_assets.bmp_wave_ring;
             p.size_grow_speed = m->type->radius * 4;
             particle_generator pg(0.3, p, 1);
             pg.follow_mob = m;

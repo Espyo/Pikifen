@@ -18,7 +18,6 @@
 #include "../mob_fsms/pikmin_fsm.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "mob.h"
 
 static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
@@ -102,15 +101,15 @@ void pikmin::draw_mob() {
         bitmap_effect_info idle_eff = eff;
         idle_eff.translation = pos;
         idle_eff.scale.x =
-            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_width(bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_width(game.sys_assets.bmp_idle_glow);
         idle_eff.scale.y =
-            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_height(bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_height(game.sys_assets.bmp_idle_glow);
         idle_eff.rotation =
             game.gameplay_state->area_time_passed * IDLE_GLOW_SPIN_SPEED;
         idle_eff.tint_color = type->main_color;
         idle_eff.glow_color = map_gray(0);
         
-        draw_bitmap_with_effects(bmp_idle_glow, idle_eff);
+        draw_bitmap_with_effects(game.sys_assets.bmp_idle_glow, idle_eff);
     }
     
     draw_status_effect_bmp(this, eff);
@@ -268,7 +267,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
             PARTICLE_TYPE_PIKMIN_SPIRIT, pos, LARGE_FLOAT,
             pik_type->radius * 2, 2.0f
         );
-        par.bitmap = bmp_pikmin_spirit;
+        par.bitmap = game.sys_assets.bmp_pikmin_spirit;
         par.speed.x = randomf(-20, 20);
         par.speed.y = randomf(-70, -30);
         par.friction = 0.8;
@@ -276,7 +275,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.color = pik_type->main_color;
         game.gameplay_state->particles.add(par);
         
-        sfx_pikmin_dying.play(0.03, false);
+        game.sys_assets.sfx_pikmin_dying.play(0.03, false);
     }
     
     //Tick the timer for the "missed" attack animation.

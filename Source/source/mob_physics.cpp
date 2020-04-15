@@ -13,7 +13,6 @@
 #include "mobs/mob.h"
 
 #include "game.h"
-#include "vars.h"
 
 using std::set;
 

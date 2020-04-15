@@ -40,6 +40,8 @@ public:
     area_editor* area_editor_state;
     //Area menu game state.
     area_menu* area_menu_state;
+    //List of asset file names.
+    asset_file_names_struct asset_file_names;
     //Manager of all main bitmaps (not floor textures).
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
@@ -128,6 +130,8 @@ public:
     vector<spray_type> spray_types;
     //List of status types.
     map<string, status_type> status_types;
+    //All system assets.
+    system_asset_list sys_assets;
     //Manager of all floor texture bitmaps.
     bmp_manager textures;
     //Version of the fan-game.

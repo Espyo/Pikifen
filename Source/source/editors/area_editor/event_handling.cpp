@@ -15,7 +15,6 @@
 
 #include "../../functions.h"
 #include "../../game.h"
-#include "../../vars.h"
 
 using std::set;
 

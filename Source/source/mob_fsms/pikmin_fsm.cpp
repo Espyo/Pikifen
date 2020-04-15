@@ -13,9 +13,12 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../hazard.h"
+#include "../mobs/drop.h"
+#include "../mobs/group_task.h"
 #include "../mobs/pikmin.h"
+#include "../mobs/tool.h"
+#include "../mobs/track.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "gen_mob_fsm.h"
 
 /* ----------------------------------------------------------------------------
@@ -1382,7 +1385,7 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
         NULL,
         false
     );
-    sfx_pikmin_idle.play(0, false);
+    game.sys_assets.sfx_pikmin_idle.play(0, false);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
 }
@@ -1403,7 +1406,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     
     ene_ptr->chomp(pik_ptr, h_ptr);
     
-    sfx_pikmin_caught.play(0.2, 0);
+    game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     pik_ptr->leave_group();
     
@@ -1414,7 +1417,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
  * When a Pikmin is grabbed by a leader.
  */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
-    sfx_pikmin_held.play(0, false);
+    game.sys_assets.sfx_pikmin_held.play(0, false);
     m->set_animation(PIKMIN_ANIM_IDLING);
 }
 
@@ -1431,9 +1434,9 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
  * When a Pikmin is thrown by a leader.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    sfx_pikmin_held.stop();
-    sfx_pikmin_thrown.stop();
-    sfx_pikmin_thrown.play(0, false);
+    game.sys_assets.sfx_pikmin_held.stop();
+    game.sys_assets.sfx_pikmin_thrown.stop();
+    game.sys_assets.sfx_pikmin_thrown.play(0, false);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
     
@@ -1529,7 +1532,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->consecutive_dud_hits = 0;
     
     game.gameplay_state->cur_leader_ptr->add_to_group(pik);
-    sfx_pikmin_called.play(0.03, false);
+    game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
 
@@ -1657,8 +1660,8 @@ void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
 void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     pik->set_animation(PIKMIN_ANIM_IDLING);
-    sfx_pikmin_plucked.play(0, false);
-    sfx_pluck.play(0, false);
+    game.sys_assets.sfx_pikmin_plucked.play(0, false);
+    game.sys_assets.sfx_pluck.play(0, false);
 }
 
 
@@ -2296,7 +2299,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
         4, 1, PARTICLE_PRIORITY_LOW
     );
-    pa.bitmap = bmp_rock;
+    pa.bitmap = game.sys_assets.bmp_rock;
     pa.color = al_map_rgb(160, 80, 32);
     pa.gravity = 50;
     particle_generator pg(0, pa, 8);
@@ -2350,7 +2353,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
-        pa.bitmap = bmp_sparkle;
+        pa.bitmap = game.sys_assets.bmp_sparkle;
         pa.color = al_map_rgb(255, 255, 255);
         particle_generator pg(0, pa, 8);
         pg.number_deviation = 1;
@@ -2372,7 +2375,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height,
             16, 1, PARTICLE_PRIORITY_LOW
         );
-        pa.bitmap = bmp_sparkle;
+        pa.bitmap = game.sys_assets.bmp_sparkle;
         pa.color = al_map_rgb(255, 224, 224);
         pa.gravity = 300;
         particle_generator pg(0, pa, 8);
@@ -2662,7 +2665,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
                 PARTICLE_TYPE_BITMAP, m->pos, m->z,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
-            par.bitmap = bmp_wave_ring;
+            par.bitmap = game.sys_assets.bmp_wave_ring;
             par.size_grow_speed = m->type->radius * 4;
             particle_generator pg(0.3, par, 1);
             pg.follow_mob = m;

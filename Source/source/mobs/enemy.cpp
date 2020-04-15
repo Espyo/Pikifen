@@ -88,7 +88,7 @@ void enemy::finish_dying_class_specifics() {
         ),
         2, PARTICLE_PRIORITY_MEDIUM
     );
-    par.bitmap = bmp_enemy_spirit;
+    par.bitmap = game.sys_assets.bmp_enemy_spirit;
     par.speed.x = 0;
     par.speed.y = -50;
     par.friction = 0.5;

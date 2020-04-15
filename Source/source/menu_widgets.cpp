@@ -16,7 +16,7 @@
 #include "menu_widgets.h"
 
 #include "drawing.h"
-#include "vars.h"
+#include "game.h"
 
 const float menu_widget::ICON_SWAY_DELTA = 1.0f;
 const float menu_widget::ICON_SWAY_TIME_SCALE = 1.0f;
@@ -55,12 +55,12 @@ void menu_button::draw(const float time_spent) {
     
     if(selected) {
         draw_bitmap(
-            bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
+            game.sys_assets.bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_bitmap(
-            bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
+            game.sys_assets.bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
@@ -118,12 +118,12 @@ void menu_checkbox::draw(const float time_spent) {
     
     if(selected) {
         draw_bitmap(
-            bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
+            game.sys_assets.bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_bitmap(
-            bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
+            game.sys_assets.bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
@@ -143,7 +143,7 @@ void menu_checkbox::draw(const float time_spent) {
     );
     if(checked) {
         draw_bitmap(
-            bmp_checkbox_check,
+            game.sys_assets.bmp_checkbox_check,
             point(center.x + size.x * 0.5 - 40, center.y),
             point(32, -1)
         );

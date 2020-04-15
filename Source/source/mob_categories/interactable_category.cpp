@@ -14,7 +14,6 @@
 
 #include "../game.h"
 #include "../mob_types/interactable_type.h"
-#include "../vars.h"
 
 
 /* ----------------------------------------------------------------------------

@@ -23,7 +23,6 @@
 #include "mobs/mob.h"
 #include "particle.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 
 

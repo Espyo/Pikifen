@@ -29,7 +29,6 @@
 #include "../../mob_categories/pikmin_category.h"
 #include "../../utils/math_utils.h"
 #include "../../utils/string_utils.h"
-#include "../../vars.h"
 
 using std::queue;
 

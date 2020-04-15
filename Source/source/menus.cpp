@@ -20,7 +20,6 @@
 #include "game.h"
 #include "load.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 using std::size_t;
 
@@ -133,7 +132,7 @@ void area_menu::load() {
     }
     
     //Resources.
-    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu widgets.
     back_widget =
@@ -446,7 +445,7 @@ void controls_menu::load() {
     capturing_input = false;
     
     //Resources.
-    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu widgets.
     menu_widgets.push_back(
@@ -955,7 +954,7 @@ void main_menu::load() {
     menu_widgets.push_back(back_widget);
     
     //Resources.
-    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
     
     //Logo pikmin.
@@ -1248,7 +1247,7 @@ void options_menu::leave() {
  */
 void options_menu::load() {
     //Resources.
-    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
+    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu widgets.
     back_widget =

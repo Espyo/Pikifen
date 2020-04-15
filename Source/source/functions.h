@@ -22,7 +22,6 @@
 #include "mobs/pikmin.h"
 #include "sector.h"
 #include "utils/data_file.h"
-#include "vars.h"
 
 enum FILE_DIALOG_RESULTS {
     FILE_DIALOG_RES_SUCCESS,

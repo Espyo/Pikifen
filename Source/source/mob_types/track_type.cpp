@@ -13,7 +13,6 @@
 #include "../functions.h"
 #include "../mob_fsms/track_fsm.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 
 
 /* ----------------------------------------------------------------------------

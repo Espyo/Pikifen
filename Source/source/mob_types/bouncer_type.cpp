@@ -13,7 +13,6 @@
 #include "../functions.h"
 #include "../mob_fsms/bouncer_fsm.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 
 
 /* ----------------------------------------------------------------------------

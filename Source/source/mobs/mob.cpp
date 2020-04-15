@@ -19,9 +19,10 @@
 #include "../mob_script_action.h"
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
 #include "pikmin.h"
 #include "ship.h"
+#include "tool.h"
+#include "track.h"
 
 
 size_t next_mob_id = 0;
@@ -1024,7 +1025,7 @@ void mob::do_attack_effects(
             std::max(z + height + 1, attacker->z + attacker->height + 1),
             64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
-        smack_p.bitmap = bmp_smack;
+        smack_p.bitmap = game.sys_assets.bmp_smack;
         smack_p.color = al_map_rgb(255, 160, 128);
         game.gameplay_state->particles.add(smack_p);
         
@@ -1034,7 +1035,7 @@ void mob::do_attack_effects(
             std::max(z + height + 1, attacker->z + attacker->height + 1),
             24, SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
-        ding_p.bitmap = bmp_wave_ring;
+        ding_p.bitmap = game.sys_assets.bmp_wave_ring;
         ding_p.color = al_map_rgb(192, 208, 224);
         game.gameplay_state->particles.add(ding_p);
         
@@ -1042,7 +1043,7 @@ void mob::do_attack_effects(
     
     //Play the sound.
     if(damage > 0) {
-        sfx_attack.play(0.06, false, 0.6f);
+        game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
     }
 }
 
@@ -1912,7 +1913,7 @@ void mob::start_dying() {
         PARTICLE_TYPE_BITMAP, pos, z + height + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW
     );
-    p.bitmap = bmp_sparkle;
+    p.bitmap = game.sys_assets.bmp_sparkle;
     p.color = al_map_rgb(255, 192, 192);
     particle_generator pg(0, p, 25);
     pg.number_deviation = 5;

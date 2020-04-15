@@ -14,7 +14,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../utils/string_utils.h"
-#include "../vars.h"
+#include "resource.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a pile.

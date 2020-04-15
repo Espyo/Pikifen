@@ -13,7 +13,6 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../misc_structs.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a converter mob.

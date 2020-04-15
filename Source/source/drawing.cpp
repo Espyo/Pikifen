@@ -18,9 +18,11 @@
 #include "functions.h"
 #include "game.h"
 #include "gameplay.h"
+#include "mobs/group_task.h"
+#include "mobs/pile.h"
+#include "mobs/scale.h"
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
@@ -186,7 +188,7 @@ void gameplay::draw_cursor(
                 )
             );
         draw_bitmap(
-            bmp_swarm_arrow,
+            game.sys_assets.bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
             point(16 * (1 + swarm_arrows[a] / game.config.cursor_max_dist), -1),
             swarm_angle,
@@ -300,11 +302,11 @@ void gameplay::draw_cursor(
     
     //Mouse cursor.
     draw_bitmap(
-        bmp_mouse_cursor,
+        game.sys_assets.bmp_mouse_cursor,
         game.mouse_cursor_s,
         point(
-            game.cam.zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
-            game.cam.zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
+            game.cam.zoom * al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
+            game.cam.zoom * al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
         ),
         -(area_time_passed * game.config.cursor_spin_speed),
         change_color_lighting(
@@ -316,11 +318,11 @@ void gameplay::draw_cursor(
     //Leader cursor.
     al_use_transform(&world_to_screen_drawing_transform);
     draw_bitmap(
-        bmp_cursor,
+        game.sys_assets.bmp_cursor,
         leader_cursor_w,
         point(
-            al_get_bitmap_width(bmp_cursor) * 0.5,
-            al_get_bitmap_height(bmp_cursor) * 0.5
+            al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
+            al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
         ),
         cursor_angle,
         change_color_lighting(
@@ -335,11 +337,11 @@ void gameplay::draw_cursor(
             (sin(area_time_passed * CURSOR_INVALID_EFFECT_SPEED) + 1) * 127.0;
             
         draw_bitmap(
-            bmp_cursor_invalid,
+            game.sys_assets.bmp_cursor_invalid,
             leader_cursor_w,
             point(
-                al_get_bitmap_width(bmp_cursor) * 0.5,
-                al_get_bitmap_height(bmp_cursor) * 0.5
+                al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
+                al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
             ),
             0,
             change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
@@ -732,7 +734,7 @@ void gameplay::draw_hud() {
                         (size_t) sum_and_wrap(
                             selected_spray, -1, game.spray_types.size()
                         )
-                    ].bmp_spray,
+                ].bmp_spray,
                     i_center, i_size
                 );
             }
@@ -763,7 +765,7 @@ void gameplay::draw_hud() {
                         (size_t) sum_and_wrap(
                             selected_spray, 1, game.spray_types.size()
                         )
-                    ].bmp_spray,
+                ].bmp_spray,
                     i_center, i_size
                 );
             }
@@ -1154,7 +1156,7 @@ void gameplay::draw_lighting_filter() {
             );
             float radius = mobs.all[m]->type->radius * 4.0 * game.cam.zoom;
             al_draw_scaled_bitmap(
-                bmp_spotlight,
+                game.sys_assets.bmp_spotlight,
                 0, 0, 64, 64,
                 pos.x - radius, pos.y - radius,
                 radius * 2.0, radius * 2.0,
@@ -1728,7 +1730,7 @@ void draw_control(
         if(c.button >= 1 && c.button <= 3) {
         
             draw_bitmap_in_box(
-                bmp_mouse_button_icon[c.button - 1], where, max_size
+                game.sys_assets.bmp_mouse_button_icon[c.button - 1], where, max_size
             );
             return;
             
@@ -1740,9 +1742,9 @@ void draw_control(
         c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
     ) {
         //Likewise, if it's a mouse wheel move, just draw the icon and leave.
-        ALLEGRO_BITMAP* b = bmp_mouse_wu_icon;
+        ALLEGRO_BITMAP* b = game.sys_assets.bmp_mouse_wu_icon;
         if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
-            b = bmp_mouse_wd_icon;
+            b = game.sys_assets.bmp_mouse_wd_icon;
         }
         
         draw_bitmap_in_box(b, where, max_size);
@@ -2278,9 +2280,9 @@ void draw_loading_screen(
             game.win_h - 8 - al_get_font_line_height(game.fonts.main) * 0.5
         );
         
-        if(bmp_icon && bmp_icon != game.bmp_error) {
+        if(game.sys_assets.bmp_icon && game.sys_assets.bmp_icon != game.bmp_error) {
             draw_bitmap(
-                bmp_icon, icon_pos, point(-1, al_get_font_line_height(game.fonts.main)),
+                game.sys_assets.bmp_icon, icon_pos, point(-1, al_get_font_line_height(game.fonts.main)),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
@@ -2329,7 +2331,7 @@ void draw_mob_shadow(
     
     
     draw_bitmap(
-        bmp_shadow,
+        game.sys_assets.bmp_shadow,
         point(center.x + shadow_x + shadow_w / 2, center.y),
         point(shadow_w, diameter),
         0,
@@ -2357,8 +2359,8 @@ void draw_notification(
     al_compose_transform(&tra, &old);
     al_use_transform(&tra);
     
-    int bmp_w = al_get_bitmap_width(bmp_notification);
-    int bmp_h = al_get_bitmap_height(bmp_notification);
+    int bmp_w = al_get_bitmap_width(game.sys_assets.bmp_notification);
+    int bmp_h = al_get_bitmap_height(game.sys_assets.bmp_notification);
     
     float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
     float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
@@ -2366,7 +2368,7 @@ void draw_notification(
     float text_box_y2 = NOTIFICATION_PADDING;
     
     draw_bitmap(
-        bmp_notification,
+        game.sys_assets.bmp_notification,
         point(0, -bmp_h * 0.5),
         point(bmp_w, bmp_h),
         0,

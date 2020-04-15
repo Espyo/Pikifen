@@ -15,7 +15,6 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mob_script_action.h"
-#include "../vars.h"
 #include "mob.h"
 
 using std::size_t;

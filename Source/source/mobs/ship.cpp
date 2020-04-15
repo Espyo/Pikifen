@@ -13,7 +13,6 @@
 #include "../drawing.h"
 #include "../game.h"
 #include "../utils/geometry_utils.h"
-#include "../vars.h"
 #include "leader.h"
 
 
@@ -69,7 +68,7 @@ void ship::heal_leader(leader* l) {
         l->pos, l->z + l->height, 16, 3,
         PARTICLE_PRIORITY_LOW
     );
-    p.bitmap = bmp_sparkle;
+    p.bitmap = game.sys_assets.bmp_sparkle;
     p.color = al_map_rgba(192, 255, 192, 255);
     p.speed = point(0, -24);
     

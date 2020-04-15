@@ -15,7 +15,6 @@
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
-#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the animation editor.
@@ -325,7 +324,7 @@ void animation_editor::draw_side_view_hitbox(
  */
 void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
     draw_bitmap(
-        bmp_pikmin_silhouette,
+        game.sys_assets.bmp_pikmin_silhouette,
         point(x_offset, -game.config.standard_pikmin_height / 2.0),
         point(-1, game.config.standard_pikmin_height),
         0, al_map_rgba(240, 240, 240, 160)
@@ -403,7 +402,7 @@ void animation_editor::draw_top_down_view_pikmin_silhouette(
     const float x_offset
 ) {
     draw_bitmap(
-        bmp_pikmin_silhouette, point(x_offset, 0),
+        game.sys_assets.bmp_pikmin_silhouette, point(x_offset, 0),
         point(-1, game.config.standard_pikmin_height),
         0, al_map_rgba(240, 240, 240, 160)
     );

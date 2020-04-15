@@ -15,6 +15,8 @@
 
 #include "functions.h"
 #include "game.h"
+#include "mobs/tool.h"
+#include "mobs/scale.h"
 #include "utils/string_utils.h"
 
 using std::set;

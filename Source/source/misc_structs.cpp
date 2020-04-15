@@ -20,7 +20,6 @@
 #include "game.h"
 #include "load.h"
 #include "utils/string_utils.h"
-#include "vars.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -1022,6 +1021,38 @@ void subgroup_type_manager::register_type(
     
     types.push_back(new_sg_type);
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a system asset list struct.
+ */
+system_asset_list::system_asset_list():
+    bmp_checkbox_check(nullptr),
+    bmp_cursor(nullptr),
+    bmp_cursor_invalid(nullptr),
+    bmp_enemy_spirit(nullptr),
+    bmp_icon(nullptr),
+    bmp_idle_glow(nullptr),
+    bmp_mouse_cursor(nullptr),
+    bmp_mouse_wd_icon(nullptr),
+    bmp_mouse_wu_icon(nullptr),
+    bmp_notification(nullptr),
+    bmp_pikmin_silhouette(nullptr),
+    bmp_pikmin_spirit(nullptr),
+    bmp_rock(nullptr),
+    bmp_shadow(nullptr),
+    bmp_smack(nullptr),
+    bmp_smoke(nullptr),
+    bmp_sparkle(nullptr),
+    bmp_spotlight(nullptr),
+    bmp_swarm_arrow(nullptr),
+    bmp_wave_ring(nullptr) {
+    
+    bmp_mouse_button_icon[0] = NULL;
+    bmp_mouse_button_icon[1] = NULL;
+    bmp_mouse_button_icon[2] = NULL;
+}
+
 
 
 /* ----------------------------------------------------------------------------

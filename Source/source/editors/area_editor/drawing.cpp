@@ -16,7 +16,6 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../utils/string_utils.h"
-#include "../../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the area editor.
@@ -1217,11 +1216,11 @@ void area_editor::do_drawing() {
                     cross_section_window_end.y - 8 -
                     ((central_sector->z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
-                    bmp_pikmin_silhouette,
+                    game.sys_assets.bmp_pikmin_silhouette,
                     al_map_rgba(255, 255, 255, 128),
                     0, 0,
-                    al_get_bitmap_width(bmp_pikmin_silhouette),
-                    al_get_bitmap_height(bmp_pikmin_silhouette),
+                    al_get_bitmap_width(game.sys_assets.bmp_pikmin_silhouette),
+                    al_get_bitmap_height(game.sys_assets.bmp_pikmin_silhouette),
                     pikmin_silhouette_pivot_x - pikmin_silhouette_w / 2.0,
                     pikmin_silhouette_pivot_y - pikmin_silhouette_h,
                     pikmin_silhouette_w, pikmin_silhouette_h,

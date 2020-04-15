@@ -11,7 +11,6 @@
 #include "scale.h"
 
 #include "../game.h"
-#include "../vars.h"
 
 /* ----------------------------------------------------------------------------
  * Creates a scale mob.
