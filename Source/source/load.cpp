@@ -87,8 +87,8 @@ void load_area(
             game.cur_area_data.weather_condition = weather();
             
         } else if(
-            weather_conditions.find(game.cur_area_data.weather_name) ==
-            weather_conditions.end()
+            game.weather_conditions.find(game.cur_area_data.weather_name) ==
+            game.weather_conditions.end()
         ) {
             log_error(
                 "Area " + name +
@@ -100,7 +100,7 @@ void load_area(
             
         } else {
             game.cur_area_data.weather_condition =
-                weather_conditions[game.cur_area_data.weather_name];
+                game.weather_conditions[game.cur_area_data.weather_name];
                 
         }
     }
@@ -228,13 +228,13 @@ void load_area(
             semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); ++h) {
             string hazard_name = hazards_strs[h];
-            if(hazards.find(hazard_name) == hazards.end()) {
+            if(game.hazards.find(hazard_name) == game.hazards.end()) {
                 log_error(
                     "Unknown hazard \"" + hazard_name +
                     "\"!", hazards_node
                 );
             } else {
-                new_sector->hazards.push_back(&(hazards[hazard_name]));
+                new_sector->hazards.push_back(&(game.hazards[hazard_name]));
             }
         }
         new_sector->hazards_str = hazards_node->value;
@@ -267,7 +267,7 @@ void load_area(
             );
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
         
-        mob_ptr->category = mob_categories.get_from_name(mob_node->name);
+        mob_ptr->category = game.mob_categories.get_from_name(mob_node->name);
         if(!mob_ptr->category) continue;
         
         string mt = mob_node->get_child_by_name("type")->value;
@@ -302,7 +302,7 @@ void load_area(
             log_error(
                 "Unknown mob category \"" + mob_node->name + "\"!", mob_node
             );
-            mob_ptr->category = mob_categories.get(MOB_CATEGORY_NONE);
+            mob_ptr->category = game.mob_categories.get(MOB_CATEGORY_NONE);
             problem = true;
             
         }
@@ -641,7 +641,7 @@ void load_creator_tools() {
  * Loads the user-made particle generators.
  */
 void load_custom_particle_generators(const bool load_resources) {
-    custom_particle_generators.clear();
+    game.custom_particle_generators.clear();
     
     data_node file(PARTICLE_GENERATORS_FILE_PATH);
     
@@ -703,7 +703,7 @@ void load_custom_particle_generators(const bool load_resources) {
         
         pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
         
-        custom_particle_generators[pg_node->name] = pg_struct;
+        game.custom_particle_generators[pg_node->name] = pg_struct;
     }
 }
 
@@ -848,8 +848,8 @@ void load_game_config() {
     
     al_set_window_title(game.display, game.name.c_str());
     
-    pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
-    leader_order_strings = semicolon_list_to_vector(leader_order_string);
+    game.pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
+    game.leader_order_strings = semicolon_list_to_vector(leader_order_string);
     game.config.cursor_spin_speed = deg_to_rad(game.config.cursor_spin_speed);
 }
 
@@ -873,30 +873,30 @@ void load_hazards() {
             semicolon_list_to_vector(effects_node->value);
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
-            if(status_types.find(effect_name) == status_types.end()) {
+            if(game.status_types.find(effect_name) == game.status_types.end()) {
                 log_error(
                     "Unknown status effect \"" + effect_name + "\"!",
                     effects_node
                 );
             } else {
-                h_struct.effects.push_back(&(status_types[effect_name]));
+                h_struct.effects.push_back(&(game.status_types[effect_name]));
             }
         }
         data_node* l_node = h_node->get_child_by_name("liquid");
         if(!l_node->value.empty()) {
-            if(liquids.find(l_node->value) == liquids.end()) {
+            if(game.liquids.find(l_node->value) == game.liquids.end()) {
                 log_error(
                     "Liquid \"" + l_node->value + "\" not found!",
                     l_node
                 );
             } else {
-                h_struct.associated_liquid = &(liquids[l_node->value]);
+                h_struct.associated_liquid = &(game.liquids[l_node->value]);
             }
         }
         
         reader_setter(h_node).set("color", h_struct.main_color);
         
-        hazards[h_node->name] = h_struct;
+        game.hazards[h_node->name] = h_struct;
     }
 }
 
@@ -922,12 +922,12 @@ void load_liquids(const bool load_resources) {
         rs.set("surface_2_speed", l_struct.surface_speed[0]);
         rs.set("surface_alpha", l_struct.surface_alpha);
         
-        liquids[l_node->name] = l_struct;
+        game.liquids[l_node->name] = l_struct;
         nodes[l_node->name] = l_node;
     }
     
     if(load_resources) {
-        for(auto &l : liquids) {
+        for(auto &l : game.liquids) {
             data_node anim_file =
                 load_data_file(
                     ANIMATIONS_FOLDER_PATH + "/" +
@@ -1245,8 +1245,8 @@ void load_spike_damage_types() {
         
         if(particle_generator_node) {
             if(
-                custom_particle_generators.find(particle_generator_name) ==
-                custom_particle_generators.end()
+                game.custom_particle_generators.find(particle_generator_name) ==
+                game.custom_particle_generators.end()
             ) {
                 log_error(
                     "Unknown particle generator \"" +
@@ -1254,7 +1254,7 @@ void load_spike_damage_types() {
                 );
             } else {
                 s_type.particle_gen =
-                    &custom_particle_generators[particle_generator_name];
+                    &game.custom_particle_generators[particle_generator_name];
                 s_type.particle_offset_pos =
                     s2p(
                         type_node->get_child_by_name("particle_offset")->value,
@@ -1271,7 +1271,7 @@ void load_spike_damage_types() {
             );
         }
         
-        spike_damage_types[s_type.name] = s_type;
+        game.spike_damage_types[s_type.name] = s_type;
     }
 }
 
@@ -1295,13 +1295,13 @@ void load_spray_types(const bool load_resources) {
             semicolon_list_to_vector(effects_node->value);
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
-            if(status_types.find(effect_name) == status_types.end()) {
+            if(game.status_types.find(effect_name) == game.status_types.end()) {
                 log_error(
                     "Unknown status effect \"" + effect_name + "\"!",
                     effects_node
                 );
             } else {
-                st.effects.push_back(&(status_types[effect_name]));
+                st.effects.push_back(&(game.status_types[effect_name]));
             }
         }
         
@@ -1322,7 +1322,7 @@ void load_spray_types(const bool load_resources) {
             st.bmp_spray = game.bitmaps.get(icon_node->value, icon_node);
         }
         
-        spray_types.push_back(st);
+        game.spray_types.push_back(st);
     }
 }
 
@@ -1383,8 +1383,8 @@ void load_status_types(const bool load_resources) {
         string pg_name = pg_node->value;
         if(!pg_name.empty()) {
             if(
-                custom_particle_generators.find(pg_name) ==
-                custom_particle_generators.end()
+                game.custom_particle_generators.find(pg_name) ==
+                game.custom_particle_generators.end()
             ) {
                 log_error(
                     "Unknown particle generator \"" +
@@ -1392,17 +1392,17 @@ void load_status_types(const bool load_resources) {
                 );
             } else {
                 st.generates_particles = true;
-                st.particle_gen = &custom_particle_generators[pg_name];
+                st.particle_gen = &game.custom_particle_generators[pg_name];
                 st.particle_offset_pos =
                     s2p(particle_offset_str, &st.particle_offset_z);
             }
         }
         
-        status_types[st.name] = st;
+        game.status_types[st.name] = st;
     }
     
     if(load_resources) {
-        for(auto &s : status_types) {
+        for(auto &s : game.status_types) {
             if(s.second.animation_name.empty()) continue;
             data_node anim_file =
                 load_data_file(
@@ -1520,7 +1520,7 @@ void load_weather() {
             );
             
         //Save it in the map.
-        weather_conditions[weather_struct.name] = weather_struct;
+        game.weather_conditions[weather_struct.name] = weather_struct;
     }
 }
 
@@ -1538,13 +1538,13 @@ void unload_area() {
  */
 void unload_custom_particle_generators() {
     for(
-        auto g = custom_particle_generators.begin();
-        g != custom_particle_generators.end();
+        auto g = game.custom_particle_generators.begin();
+        g != game.custom_particle_generators.end();
         ++g
     ) {
         game.bitmaps.detach(g->second.base_particle.bitmap);
     }
-    custom_particle_generators.clear();
+    game.custom_particle_generators.clear();
 }
 
 
@@ -1552,7 +1552,7 @@ void unload_custom_particle_generators() {
  * Unloads hazards loaded in memory.
  */
 void unload_hazards() {
-    hazards.clear();
+    game.hazards.clear();
 }
 
 
@@ -1560,10 +1560,10 @@ void unload_hazards() {
  * Unloads loaded liquids from memory.
  */
 void unload_liquids() {
-    for(auto &l : liquids) {
+    for(auto &l : game.liquids) {
         l.second.anim_db.destroy();
     }
-    liquids.clear();
+    game.liquids.clear();
 }
 
 
@@ -1616,7 +1616,7 @@ void unload_misc_resources() {
  * Unloads spike damage types loaded in memory.
  */
 void unload_spike_damage_types() {
-    spike_damage_types.clear();
+    game.spike_damage_types.clear();
 }
 
 
@@ -1624,10 +1624,10 @@ void unload_spike_damage_types() {
  * Unloads loaded spray types from memory.
  */
 void unload_spray_types() {
-    for(size_t s = 0; s < spray_types.size(); ++s) {
-        game.bitmaps.detach(spray_types[s].bmp_spray);
+    for(size_t s = 0; s < game.spray_types.size(); ++s) {
+        game.bitmaps.detach(game.spray_types[s].bmp_spray);
     }
-    spray_types.clear();
+    game.spray_types.clear();
 }
 
 
@@ -1637,11 +1637,11 @@ void unload_spray_types() {
 void unload_status_types(const bool unload_resources) {
 
     if(unload_resources) {
-        for(auto &s : status_types) {
+        for(auto &s : game.status_types) {
             s.second.anim_db.destroy();
         }
     }
-    status_types.clear();
+    game.status_types.clear();
 }
 
 
@@ -1649,5 +1649,5 @@ void unload_status_types(const bool unload_resources) {
  * Unloads loaded weather conditions.
  */
 void unload_weather() {
-    weather_conditions.clear();
+    game.weather_conditions.clear();
 }

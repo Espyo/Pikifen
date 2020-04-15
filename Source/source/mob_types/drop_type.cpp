@@ -11,6 +11,7 @@
 #include "drop_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/drop_fsm.h"
 
 
@@ -89,8 +90,8 @@ void drop_type::load_properties(data_node* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        for(size_t s = 0; s < spray_types.size(); ++s) {
-            if(spray_types[s].name == spray_name_str) {
+        for(size_t s = 0; s < game.spray_types.size(); ++s) {
+            if(game.spray_types[s].name == spray_name_str) {
                 spray_type_to_increase = s;
                 break;
             }
@@ -104,8 +105,8 @@ void drop_type::load_properties(data_node* file) {
     }
     
     if(status_name_node) {
-        auto s = status_types.find(status_name_str);
-        if(s != status_types.end()) {
+        auto s = game.status_types.find(status_name_str);
+        if(s != game.status_types.end()) {
             status_to_give = &(s->second);
         } else {
             log_error(

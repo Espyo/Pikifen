@@ -19,6 +19,8 @@
 #include "editors/area_editor/editor.h"
 #include "game_config.h"
 #include "gameplay.h"
+#include "liquid.h"
+#include "mob_script_action.h"
 #include "menus.h"
 #include "misc_structs.h"
 #include "options.h"
@@ -54,6 +56,8 @@ public:
     creator_tools_info creator_tools;
     //Data about the area that's currently being used.
     area_data cur_area_data;
+    //Particle generators declared by the user.
+    map<string, particle_generator> custom_particle_generators;
     //Time between the previous frame and the current.
     double delta_t;
     //Allegro display that represents the program window.
@@ -70,6 +74,8 @@ public:
     size_t framerate_last_avg_point;
     //Gameplay game state.
     gameplay* gameplay_state;
+    //List of hazards.
+    map<string, hazard> hazards;
     //Identity matrix transformation. Cache for convenience.
     ALLEGRO_TRANSFORM identity_transform;
     //Set to false to stop program execution next frame.
@@ -78,12 +84,20 @@ public:
     map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
     //Standard leader order.
     vector<leader_type*> leader_order;
+    //Loaded strings representing the standard leader order. Used for later.
+    vector<string> leader_order_strings;
+    //List of liquids.
+    map<string, liquid> liquids;
     //Loading screen subtext buffer.
     ALLEGRO_BITMAP* loading_subtext_bmp;
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loading_text_bmp;
     //Main menu game state.
     main_menu* main_menu_state;
+    //List of mob actions.
+    vector<mob_action> mob_actions;
+    //List of mob categories.
+    mob_category_manager mob_categories;
     //All mob types.
     mob_type_lists mob_types;
     //OS mouse cursor position, in screen coordinates.
@@ -100,16 +114,26 @@ public:
     options_menu* options_menu_state;
     //Standard Pikmin order.
     vector<pikmin_type*> pikmin_order;
+    //Loaded strings representing the standard Pikmin order. Used for later.
+    vector<string> pikmin_order_strings;
     //Manager of all sector types.
     sector_types_manager sector_types;
     //Screen to world coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM screen_to_world_transform;
     //Should we be showing system info? (Framerate, version, etc.)
     bool show_system_info;
+    //List of spike damage types.
+    map<string, spike_damage_type> spike_damage_types;
+    //List of spray types.
+    vector<spray_type> spray_types;
+    //List of status types.
+    map<string, status_type> status_types;
     //Manager of all floor texture bitmaps.
     bmp_manager textures;
     //Version of the fan-game.
     string version;
+    //List of weather conditions.
+    map<string, weather> weather_conditions;
     //Current fullscreen state.
     bool win_fullscreen;
     //Current window height.

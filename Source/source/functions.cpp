@@ -1221,7 +1221,7 @@ void spew_pikmin_seed(
         (
             (pikmin*)
             create_mob(
-                mob_categories.get(MOB_CATEGORY_PIKMIN),
+                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                 pos, pik_type, angle, ""
             )
         );

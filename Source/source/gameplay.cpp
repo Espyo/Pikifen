@@ -225,7 +225,7 @@ void gameplay::load() {
     load_game_content();
     
     //Initializing game things.
-    size_t n_spray_types = spray_types.size();
+    size_t n_spray_types = game.spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) {
         spray_stats.push_back(spray_stats_struct());
     }
@@ -336,12 +336,12 @@ void gameplay::load() {
         
     for(auto &s : spray_strs) {
         size_t spray_id = 0;
-        for(; spray_id < spray_types.size(); ++spray_id) {
-            if(spray_types[spray_id].name == s.first) {
+        for(; spray_id < game.spray_types.size(); ++spray_id) {
+            if(game.spray_types[spray_id].name == s.first) {
                 break;
             }
         }
-        if(spray_id == spray_types.size()) {
+        if(spray_id == game.spray_types.size()) {
             log_error(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
@@ -581,7 +581,7 @@ void gameplay::unload() {
  * Unloads loaded game content.
  */
 void gameplay::unload_game_content() {
-    weather_conditions.clear();
+    unload_weather();
     
     subgroup_types.clear();
     

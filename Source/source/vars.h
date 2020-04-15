@@ -25,7 +25,6 @@
 #include "hitbox.h"
 #include "LAFI/gui.h"
 #include "LAFI/label.h"
-#include "liquid.h"
 #include "mob_script_action.h"
 #include "mobs/bouncer.h"
 #include "mobs/bridge.h"
@@ -130,18 +129,7 @@ extern asset_file_names_struct asset_file_names;
 
 //General globals.
 
-extern map<string, particle_generator> custom_particle_generators;
-extern map<string, hazard> hazards;
-extern map<string, liquid> liquids;
-extern vector<string> leader_order_strings;
-extern vector<mob_action> mob_actions;
-extern mob_category_manager mob_categories;
-extern vector<string> pikmin_order_strings;
 extern single_animation_suite spark_animation;
-extern map<string, spike_damage_type> spike_damage_types;
-extern vector<spray_type> spray_types;
-extern map<string, status_type> status_types;
-extern map<string, weather> weather_conditions;
 
 
 #endif //ifndef VARS_INCLUDED

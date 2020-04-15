@@ -11,6 +11,7 @@
 #include "converter_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/converter_fsm.h"
 
 
@@ -72,7 +73,7 @@ void converter_type::load_properties(data_node* file) {
     );
     rs.set("type_change_interval", type_change_interval);
     
-    mob_category* pik_cat = mob_categories.get(MOB_CATEGORY_PIKMIN);
+    mob_category* pik_cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
         semicolon_list_to_vector(pikmin_types_str);
         

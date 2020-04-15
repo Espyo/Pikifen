@@ -766,7 +766,7 @@ void area_editor::open_picker(const unsigned char id) {
         id == PICKER_ADD_SECTOR_HAZARD
     ) {
     
-        for(auto &h : hazards) {
+        for(auto &h : game.hazards) {
             elements.push_back(make_pair("", h.first));
         }
         title = "Choose a hazard.";
@@ -780,9 +780,9 @@ void area_editor::open_picker(const unsigned char id) {
             if(f == MOB_CATEGORY_NONE) continue;
             
             vector<string> names;
-            mob_category* cat = mob_categories.get(f);
+            mob_category* cat = game.mob_categories.get(f);
             cat->get_type_names(names);
-            string cat_name = mob_categories.get(f)->plural_name;
+            string cat_name = game.mob_categories.get(f)->plural_name;
             
             for(size_t n = 0; n < names.size(); ++n) {
                 if(!cat->get_type(names[n])->appears_in_area_editor) {
@@ -799,8 +799,8 @@ void area_editor::open_picker(const unsigned char id) {
     ) {
     
         for(
-            auto w = weather_conditions.begin();
-            w != weather_conditions.end(); ++w
+            auto w = game.weather_conditions.begin();
+            w != game.weather_conditions.end(); ++w
         ) {
             elements.push_back(make_pair("", w->first));
         }
@@ -898,7 +898,7 @@ void area_editor::pick(
     } else if(picker_id == PICKER_SET_MOB_TYPE) {
         register_change("object type change");
         mob_gen* m_ptr = *selected_mobs.begin();
-        m_ptr->category = mob_categories.get_from_pname(category);
+        m_ptr->category = game.mob_categories.get_from_pname(category);
         m_ptr->type = m_ptr->category->get_type(name);
         last_mob_category = m_ptr->category;
         last_mob_type = m_ptr->type;

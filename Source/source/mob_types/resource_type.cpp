@@ -11,6 +11,7 @@
 #include "resource_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/resource_fsm.h"
 #include "../mobs/resource.h"
 #include "../utils/string_utils.h"
@@ -95,8 +96,8 @@ void resource_type::load_properties(data_node* file) {
     }
     
     if(delivery_result == RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS) {
-        for(size_t s = 0; s < spray_types.size(); ++s) {
-            if(spray_types[s].name == spray_to_concoct_str) {
+        for(size_t s = 0; s < game.spray_types.size(); ++s) {
+            if(game.spray_types[s].name == spray_to_concoct_str) {
                 spray_to_concoct = s;
                 break;
             }

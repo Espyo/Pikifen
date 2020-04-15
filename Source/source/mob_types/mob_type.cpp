@@ -33,7 +33,7 @@ using std::string;
  * Creates a non-specific mob type.
  */
 mob_type::mob_type(size_t category_id) :
-    category(mob_categories.get(category_id)),
+    category(game.mob_categories.get(category_id)),
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
@@ -292,8 +292,8 @@ void load_mob_type_from_file(
     data_node* vulnerabilities_node = file.get_child_by_name("vulnerabilities");
     for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); ++h) {
         data_node* vulnerability_node = vulnerabilities_node->get_child(h);
-        auto hazard_it = hazards.find(vulnerability_node->name);
-        if(hazard_it == hazards.end()) {
+        auto hazard_it = game.hazards.find(vulnerability_node->name);
+        if(hazard_it == game.hazards.end()) {
             log_error(
                 "Unknown hazard \"" + vulnerability_node->name + "\"!",
                 vulnerability_node
@@ -304,9 +304,9 @@ void load_mob_type_from_file(
         }
     }
     
-    auto sd_it = spike_damage_types.find(spike_damage_str);
+    auto sd_it = game.spike_damage_types.find(spike_damage_str);
     if(spike_damage_node) {
-        if(sd_it == spike_damage_types.end()) {
+        if(sd_it == game.spike_damage_types.end()) {
             log_error(
                 "Spike damage type \"" + spike_damage_str + "\" not found!",
                 spike_damage_node
@@ -337,8 +337,8 @@ void load_mob_type_from_file(
         data_node* vul_node =
             spike_damage_vuln_node->get_child(v);
             
-        auto sdv_it = spike_damage_types.find(vul_node->name);
-        if(sdv_it == spike_damage_types.end()) {
+        auto sdv_it = game.spike_damage_types.find(vul_node->name);
+        if(sdv_it == game.spike_damage_types.end()) {
             log_error(
                 "Spike damage type \"" + vul_node->name + "\" not found!",
                 vul_node
@@ -644,7 +644,7 @@ void load_mob_type_from_file(
 void load_mob_types(bool load_resources) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = mob_categories.get(c);
+        mob_category* category = game.mob_categories.get(c);
         load_mob_types(category, load_resources);
     }
     
@@ -652,19 +652,19 @@ void load_mob_types(bool load_resources) {
     for(auto &p : game.mob_types.pikmin) {
         if(
             find(
-                pikmin_order_strings.begin(), pikmin_order_strings.end(),
+                game.pikmin_order_strings.begin(), game.pikmin_order_strings.end(),
                 p.first
-            ) == pikmin_order_strings.end()
+            ) == game.pikmin_order_strings.end()
         ) {
             log_error(
                 "Pikmin type \"" + p.first + "\" was not found "
                 "in the Pikmin order list in the config file!"
             );
-            pikmin_order_strings.push_back(p.first);
+            game.pikmin_order_strings.push_back(p.first);
         }
     }
-    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
-        string s = pikmin_order_strings[o];
+    for(size_t o = 0; o < game.pikmin_order_strings.size(); ++o) {
+        string s = game.pikmin_order_strings[o];
         if(game.mob_types.pikmin.find(s) != game.mob_types.pikmin.end()) {
             game.pikmin_order.push_back(game.mob_types.pikmin[s]);
         } else {
@@ -679,19 +679,19 @@ void load_mob_types(bool load_resources) {
     for(auto &l : game.mob_types.leader) {
         if(
             find(
-                leader_order_strings.begin(), leader_order_strings.end(),
+                game.leader_order_strings.begin(), game.leader_order_strings.end(),
                 l.first
-            ) == leader_order_strings.end()
+            ) == game.leader_order_strings.end()
         ) {
             log_error(
                 "Leader type \"" + l.first + "\" was not found "
                 "in the leader order list in the config file!"
             );
-            leader_order_strings.push_back(l.first);
+            game.leader_order_strings.push_back(l.first);
         }
     }
-    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
-        string s = leader_order_strings[o];
+    for(size_t o = 0; o < game.leader_order_strings.size(); ++o) {
+        string s = game.leader_order_strings[o];
         if(game.mob_types.leader.find(s) != game.mob_types.leader.end()) {
             game.leader_order.push_back(game.mob_types.leader[s]);
         } else {
@@ -761,7 +761,7 @@ void unload_mob_types(const bool unload_resources) {
     game.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = mob_categories.get(c);
+        mob_category* category = game.mob_categories.get(c);
         unload_mob_types(category, unload_resources);
     }
 }

@@ -635,9 +635,9 @@ void gameplay::draw_hud() {
     
     
     //Sprays.
-    if(spray_types.size() > 0) {
+    if(game.spray_types.size() > 0) {
         size_t top_spray_nr;
-        if(spray_types.size() <= 2) top_spray_nr = 0;
+        if(game.spray_types.size() <= 2) top_spray_nr = 0;
         else top_spray_nr = selected_spray;
         
         //Top or current spray.
@@ -645,7 +645,7 @@ void gameplay::draw_hud() {
             hud_items.get_draw_data(HUD_ITEM_SPRAY_1_ICON, &i_center, &i_size)
         ) {
             draw_bitmap_in_box(
-                spray_types[top_spray_nr].bmp_spray, i_center, i_size
+                game.spray_types[top_spray_nr].bmp_spray, i_center, i_size
             );
         }
         
@@ -667,10 +667,10 @@ void gameplay::draw_hud() {
                 if(
                     (
                         game.options.controls[0][c].action == BUTTON_USE_SPRAY_1 &&
-                        spray_types.size() <= 2
+                        game.spray_types.size() <= 2
                     ) || (
                         game.options.controls[0][c].action == BUTTON_USE_SPRAY &&
-                        spray_types.size() >= 3
+                        game.spray_types.size() >= 3
                     )
                 ) {
                     draw_control(game.fonts.main, game.options.controls[0][c], i_center, i_size);
@@ -679,7 +679,7 @@ void gameplay::draw_hud() {
             }
         }
         
-        if(spray_types.size() == 2) {
+        if(game.spray_types.size() == 2) {
         
             //Secondary spray, when there're only two types.
             if(
@@ -687,7 +687,7 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_2_ICON, &i_center, &i_size
                 )
             ) {
-                draw_bitmap_in_box(spray_types[1].bmp_spray, i_center, i_size);
+                draw_bitmap_in_box(game.spray_types[1].bmp_spray, i_center, i_size);
             }
             
             if(
@@ -719,7 +719,7 @@ void gameplay::draw_hud() {
                 }
             }
             
-        } else if(spray_types.size() >= 3) {
+        } else if(game.spray_types.size() >= 3) {
         
             //Previous spray info.
             if(
@@ -728,9 +728,9 @@ void gameplay::draw_hud() {
                 )
             ) {
                 draw_bitmap_in_box(
-                    spray_types[
+                    game.spray_types[
                         (size_t) sum_and_wrap(
-                            selected_spray, -1, spray_types.size()
+                            selected_spray, -1, game.spray_types.size()
                         )
                     ].bmp_spray,
                     i_center, i_size
@@ -759,9 +759,9 @@ void gameplay::draw_hud() {
                 )
             ) {
                 draw_bitmap_in_box(
-                    spray_types[
+                    game.spray_types[
                         (size_t) sum_and_wrap(
-                            selected_spray, 1, spray_types.size()
+                            selected_spray, 1, game.spray_types.size()
                         )
                     ].bmp_spray,
                     i_center, i_size

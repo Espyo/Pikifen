@@ -71,10 +71,10 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             game.gameplay_state->spray_stats[type_nr].nr_ingredients++;
             if(
                 game.gameplay_state->spray_stats[type_nr].nr_ingredients >=
-                spray_types[type_nr].ingredients_needed
+                game.spray_types[type_nr].ingredients_needed
             ) {
                 game.gameplay_state->spray_stats[type_nr].nr_ingredients -=
-                    spray_types[type_nr].ingredients_needed;
+                    game.spray_types[type_nr].ingredients_needed;
                 game.gameplay_state->spray_stats[type_nr].nr_sprays++;
             }
         }

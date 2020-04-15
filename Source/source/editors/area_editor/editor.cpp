@@ -650,7 +650,7 @@ void area_editor::create_area() {
     //Now add a leader. The first available.
     game.cur_area_data.mob_generators.push_back(
         new mob_gen(
-            mob_categories.get(MOB_CATEGORY_LEADERS), point(),
+            game.mob_categories.get(MOB_CATEGORY_LEADERS), point(),
             game.leader_order[0], 0, ""
         )
     );

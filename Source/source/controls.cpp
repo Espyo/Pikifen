@@ -370,7 +370,7 @@ void gameplay::handle_button(
             
             if(!is_down) return;
             
-            if(spray_types.size() == 1 || spray_types.size() == 2) {
+            if(game.spray_types.size() == 1 || game.spray_types.size() == 2) {
                 size_t spray_nr = 0;
                 cur_leader_ptr->fsm.run_event(
                     LEADER_EV_SPRAY, (void*) &spray_nr
@@ -381,7 +381,7 @@ void gameplay::handle_button(
         
             if(!is_down) return;
             
-            if(spray_types.size() == 2) {
+            if(game.spray_types.size() == 2) {
                 size_t spray_nr = 1;
                 cur_leader_ptr->fsm.run_event(
                     LEADER_EV_SPRAY, (void*) &spray_nr
@@ -395,12 +395,12 @@ void gameplay::handle_button(
         
             if(!is_down) return;
             
-            if(spray_types.size() > 2) {
+            if(game.spray_types.size() > 2) {
                 if(button == BUTTON_NEXT_SPRAY) {
-                    selected_spray = (selected_spray + 1) % spray_types.size();
+                    selected_spray = (selected_spray + 1) % game.spray_types.size();
                 } else {
                     if(selected_spray == 0) {
-                        selected_spray = spray_types.size() - 1;
+                        selected_spray = game.spray_types.size() - 1;
                     } else {
                         selected_spray--;
                     }
@@ -411,7 +411,7 @@ void gameplay::handle_button(
         
             if(!is_down) return;
             
-            if(spray_types.size() > 2) {
+            if(game.spray_types.size() > 2) {
                 cur_leader_ptr->fsm.run_event(
                     LEADER_EV_SPRAY,
                     (void*) &selected_spray
@@ -739,7 +739,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     game.creator_tools.last_pikmin_type = new_pikmin_type;
                     
                     create_mob(
-                        mob_categories.get(MOB_CATEGORY_PIKMIN),
+                        game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                         game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
                     );
                 }

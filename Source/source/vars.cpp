@@ -60,15 +60,4 @@ sample_struct sfx_throw;
 
 asset_file_names_struct asset_file_names;
 
-map<string, particle_generator> custom_particle_generators;
-map<string, hazard> hazards;
-vector<string> leader_order_strings;
-map<string, liquid> liquids;
-vector<mob_action> mob_actions;
-mob_category_manager mob_categories;
-vector<string> pikmin_order_strings;
 single_animation_suite spark_animation;
-map<string, spike_damage_type> spike_damage_types;
-vector<spray_type> spray_types;
-map<string, status_type> status_types;
-map<string, weather> weather_conditions;

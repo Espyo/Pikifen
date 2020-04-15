@@ -1832,7 +1832,7 @@ void mob::set_var(const string &name, const string &value) {
 mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     //First, find the mob.
     if(!type_ptr) {
-        type_ptr = mob_categories.find_mob_type(info->mob_type_name);
+        type_ptr = game.mob_categories.find_mob_type(info->mob_type_name);
     }
     
     if(!type_ptr) return NULL;

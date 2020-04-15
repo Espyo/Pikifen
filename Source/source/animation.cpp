@@ -629,14 +629,14 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
             for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
                 string hazard_name = hazards_strs[hs];
-                if(hazards.find(hazard_name) == hazards.end()) {
+                if(game.hazards.find(hazard_name) == game.hazards.end()) {
                     log_error(
                         "Unknown hazard \"" + hazard_name + "\"!",
                         hazards_node
                     );
                 } else {
                     cur_hitbox.hazards.push_back(
-                        &(hazards[hazard_name])
+                        &(game.hazards[hazard_name])
                     );
                 }
             }

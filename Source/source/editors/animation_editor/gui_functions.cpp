@@ -605,9 +605,9 @@ void animation_editor::open_picker(
             if(f == MOB_CATEGORY_NONE) continue;
             
             vector<string> names;
-            mob_category* cat = mob_categories.get(f);
+            mob_category* cat = game.mob_categories.get(f);
             cat->get_type_names(names);
-            string cat_name = mob_categories.get(f)->plural_name;
+            string cat_name = game.mob_categories.get(f)->plural_name;
             
             for(size_t n = 0; n < names.size(); ++n) {
                 elements.push_back(make_pair(cat_name, names[n]));
@@ -695,7 +695,7 @@ void animation_editor::pick(
         picker_id == PICKER_LOAD_MOB_TYPE
     ) {
         loaded_mob_type =
-            mob_categories.get_from_pname(category)->get_type(name);
+            game.mob_categories.get_from_pname(category)->get_type(name);
             
         file_path =
             loaded_mob_type->category->folder + "/" +

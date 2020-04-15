@@ -231,7 +231,7 @@ void gameplay::do_gameplay_logic() {
         particles.tick_all(game.delta_t);
         
         //Ticks all status effect animations.
-        for(auto &s : status_types) {
+        for(auto &s : game.status_types) {
             s.second.anim_instance.tick(game.delta_t);
         }
         
@@ -547,7 +547,7 @@ void gameplay::do_gameplay_logic() {
         *   Liquids    ~ ~  *
         *             ~ ~ ~ *
         ********************/
-        for(auto &l : liquids) {
+        for(auto &l : game.liquids) {
             l.second.anim_instance.tick(game.delta_t);
         }
         

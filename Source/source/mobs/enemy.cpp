@@ -111,7 +111,7 @@ void enemy::read_script_vars(const script_var_reader &svr) {
         vector<string> spoils_strs = semicolon_list_to_vector(spoils_var, ",");
         for(size_t s = 0; s < spoils_strs.size(); ++s) {
             mob_type* type_ptr =
-                mob_categories.find_mob_type(spoils_strs[s]);
+                game.mob_categories.find_mob_type(spoils_strs[s]);
             if(!type_ptr) {
                 log_error(
                     "A mob (" + get_error_message_mob_info(this) +

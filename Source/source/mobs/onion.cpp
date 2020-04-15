@@ -72,7 +72,7 @@ void onion::call_pikmin() {
         
         pikmin_inside[cur_m]--;
         create_mob(
-            mob_categories.get(MOB_CATEGORY_PIKMIN),
+            game.mob_categories.get(MOB_CATEGORY_PIKMIN),
             pos, oni_type->pik_type, 0,
             "maturity=" + i2s(cur_m)
         );

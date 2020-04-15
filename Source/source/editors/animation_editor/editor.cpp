@@ -377,12 +377,12 @@ void animation_editor::load_animation_database(
             path_parts[path_parts.size() - 1] == "Animations.txt"
         ) {
             mob_category* cat =
-                mob_categories.get_from_folder_name(
+                game.mob_categories.get_from_folder_name(
                     TYPES_FOLDER_PATH + "/" + path_parts[path_parts.size() - 3]
                 );
             if(cat) {
                 loaded_mob_type =
-                    mob_categories.find_mob_type_from_folder_name(
+                    game.mob_categories.find_mob_type_from_folder_name(
                         cat,
                         path_parts[path_parts.size() - 2]
                     );

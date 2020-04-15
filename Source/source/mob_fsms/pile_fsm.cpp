@@ -104,7 +104,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             (
                 (resource*)
                 create_mob(
-                    mob_categories.get(MOB_CATEGORY_RESOURCES),
+                    game.mob_categories.get(MOB_CATEGORY_RESOURCES),
                     spawn_pos, p_ptr->pil_type->contents,
                     spawn_angle, "",
         [p_ptr] (mob * m) { ((resource*) m)->origin_pile = p_ptr; }

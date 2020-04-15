@@ -1662,10 +1662,10 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     float cursor_angle =
         get_angle(m->pos, game.gameplay_state->leader_cursor_w);
     float shoot_angle =
-        cursor_angle + ((spray_types[spray_nr].angle) ? TAU / 2 : 0);
+        cursor_angle + ((game.spray_types[spray_nr].angle) ? TAU / 2 : 0);
         
     unordered_set<mob*> affected_mobs;
-    if(spray_types[spray_nr].group) {
+    if(game.spray_types[spray_nr].group) {
         for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
             if(
                 m->group->members[gm]->type->category->id ==
@@ -1684,7 +1684,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             
             if(
                 dist(m->pos, am_ptr->pos) >
-                spray_types[spray_nr].distance_range + am_ptr->type->radius
+                game.spray_types[spray_nr].distance_range + am_ptr->type->radius
             ) {
                 continue;
             }
@@ -1694,7 +1694,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
                     shoot_angle,
                     get_angle(m->pos, am_ptr->pos)
                 );
-            if(angle_dif > spray_types[spray_nr].angle_range / 2) continue;
+            if(angle_dif > game.spray_types[spray_nr].angle_range / 2) continue;
             
             affected_mobs.insert(am_ptr);
         }
@@ -1703,7 +1703,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     for(auto am : affected_mobs) {
         am->fsm.run_event(
-            MOB_EV_TOUCHED_SPRAY, (void*) &spray_types[spray_nr]
+            MOB_EV_TOUCHED_SPRAY, (void*) &game.spray_types[spray_nr]
         );
     }
     
@@ -1713,12 +1713,12 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     );
     p.bitmap = bmp_smoke;
     p.friction = 1;
-    p.color = spray_types[spray_nr].main_color;
+    p.color = game.spray_types[spray_nr].main_color;
     particle_generator pg(0, p, 32);
     pg.angle = shoot_angle;
-    pg.angle_deviation = spray_types[spray_nr].angle_range / 2.0f;
-    pg.total_speed = spray_types[spray_nr].distance_range * 0.8;
-    pg.total_speed_deviation = spray_types[spray_nr].distance_range * 0.4;
+    pg.angle_deviation = game.spray_types[spray_nr].angle_range / 2.0f;
+    pg.total_speed = game.spray_types[spray_nr].distance_range * 0.8;
+    pg.total_speed_deviation = game.spray_types[spray_nr].distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(game.gameplay_state->particles);
     

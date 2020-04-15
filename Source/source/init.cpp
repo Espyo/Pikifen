@@ -111,7 +111,7 @@ void destroy_misc() {
  * Destroys registered mob categories.
  */
 void destroy_mob_categories() {
-    mob_categories.clear();
+    game.mob_categories.clear();
 }
 
 
@@ -513,7 +513,7 @@ void init_mob_actions() {
 #define reg_param(p_name, p_type, constant, extras) \
     params.push_back(mob_action_param(p_name, p_type, constant, extras));
 #define reg_action(a_type, a_name, run_code, load_code) \
-    a = &(mob_actions[a_type]); \
+    a = &(game.mob_actions[a_type]); \
     a->type = a_type; \
     a->name = a_name; \
     a->code = run_code; \
@@ -522,7 +522,7 @@ void init_mob_actions() {
     params.clear();
 
 
-    mob_actions.assign(N_MOB_ACTIONS, mob_action());
+    game.mob_actions.assign(N_MOB_ACTIONS, mob_action());
     vector<mob_action_param> params;
     mob_action* a;
     
@@ -1064,67 +1064,67 @@ void init_mob_actions() {
  */
 void init_mob_categories() {
 
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_NONE, new none_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_PIKMIN, new pikmin_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_ONIONS, new onion_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_LEADERS, new leader_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_ENEMIES, new enemy_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_TREASURES, new treasure_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_PELLETS, new pellet_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_CONVERTERS, new converter_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_DROPS, new drop_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_RESOURCES, new resource_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_PILES, new pile_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_TOOLS, new tool_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_SHIPS, new ship_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_BRIDGES, new bridge_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_GROUP_TASKS, new group_task_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_SCALES, new scale_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_TRACKS, new track_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_BOUNCERS, new bouncer_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_DECORATIONS, new decoration_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_INTERACTABLES, new interactable_category()
     );
-    mob_categories.register_category(
+    game.mob_categories.register_category(
         MOB_CATEGORY_CUSTOM, new custom_category()
     );
 }

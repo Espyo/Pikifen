@@ -40,9 +40,9 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
     parent_event(MOB_EV_UNKNOWN),
     mt(nullptr) {
     
-    for(size_t a = 0; a < mob_actions.size(); ++a) {
-        if(mob_actions[a].type == type) {
-            action = &(mob_actions[a]);
+    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+        if(game.mob_actions[a].type == type) {
+            action = &(game.mob_actions[a]);
             break;
         }
     }
@@ -59,9 +59,9 @@ mob_action_call::mob_action_call(custom_action_code code):
     parent_event(MOB_EV_UNKNOWN),
     mt(nullptr) {
     
-    for(size_t a = 0; a < mob_actions.size(); ++a) {
-        if(mob_actions[a].type == MOB_ACTION_UNKNOWN) {
-            action = &(mob_actions[a]);
+    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+        if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) {
+            action = &(game.mob_actions[a]);
             break;
         }
     }
@@ -91,10 +91,10 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     }
     
     //Find the corresponding action.
-    for(size_t a = 0; a < mob_actions.size(); ++a) {
-        if(mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
-        if(mob_actions[a].name == name) {
-            action = &(mob_actions[a]);
+    for(size_t a = 0; a < game.mob_actions.size(); ++a) {
+        if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
+        if(game.mob_actions[a].name == name) {
+            action = &(game.mob_actions[a]);
         }
     }
     
@@ -374,7 +374,7 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
  * Loading code for the status reception mob script action.
  */
 bool mob_action_loaders::receive_status(mob_action_call &call) {
-    if(status_types.find(call.args[0]) == status_types.end()) {
+    if(game.status_types.find(call.args[0]) == game.status_types.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -387,7 +387,7 @@ bool mob_action_loaders::receive_status(mob_action_call &call) {
  * Loading code for the status removal mob script action.
  */
 bool mob_action_loaders::remove_status(mob_action_call &call) {
-    if(status_types.find(call.args[0]) == status_types.end()) {
+    if(game.status_types.find(call.args[0]) == game.status_types.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -550,8 +550,8 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
  */
 bool mob_action_loaders::start_particles(mob_action_call &call) {
     if(
-        custom_particle_generators.find(call.args[0]) ==
-        custom_particle_generators.end()
+        game.custom_particle_generators.find(call.args[0]) ==
+        game.custom_particle_generators.end()
     ) {
         call.custom_error =
             "Particle generator \"" + call.args[0] + "\" not found!";
@@ -1094,7 +1094,7 @@ void mob_action_runners::print(mob_action_run_data &data) {
  * Code for the status reception mob script action.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
-    data.m->apply_status_effect(&status_types[data.args[0]], true, false);
+    data.m->apply_status_effect(&game.status_types[data.args[0]], true, false);
 }
 
 
@@ -1414,7 +1414,7 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
     if(data.args.size() > 2) offset_y = s2f(data.args[2]);
     if(data.args.size() > 3) offset_z = s2f(data.args[3]);
     
-    particle_generator pg = custom_particle_generators[data.args[0]];
+    particle_generator pg = game.custom_particle_generators[data.args[0]];
     pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
     pg.follow_mob = data.m;
     pg.follow_angle = &data.m->angle;

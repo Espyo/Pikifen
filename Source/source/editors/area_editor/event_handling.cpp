@@ -516,7 +516,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         mob_category* category_to_use = last_mob_category;
         if(!category_to_use) {
-            category_to_use = mob_categories.get(MOB_CATEGORY_PIKMIN);
+            category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
         }
         mob_type* type_to_use = last_mob_type;
         if(!type_to_use) {
