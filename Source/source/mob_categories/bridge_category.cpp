@@ -12,6 +12,7 @@
 
 #include "bridge_category.h"
 
+#include "../game.h"
 #include "../mobs/bridge.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ bridge_category::bridge_category() :
  * Clears the list of registered types of bridges.
  */
 void bridge_category::clear_types() {
-    for(auto &t : bridge_types) {
+    for(auto &t : game.mob_types.bridge) {
         delete t.second;
     }
-    bridge_types.clear();
+    game.mob_types.bridge.clear();
 }
 
 
@@ -73,8 +74,8 @@ void bridge_category::erase_mob(mob* m) {
  * Returns a type of bridge given its name, or NULL on error.
  */
 mob_type* bridge_category::get_type(const string &name) {
-    auto it = bridge_types.find(name);
-    if(it == bridge_types.end()) return NULL;
+    auto it = game.mob_types.bridge.find(name);
+    if(it == game.mob_types.bridge.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* bridge_category::get_type(const string &name) {
  * Returns all types of bridge by name.
  */
 void bridge_category::get_type_names(vector<string> &list) {
-    for(auto &t : bridge_types) {
+    for(auto &t : game.mob_types.bridge) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void bridge_category::get_type_names(vector<string> &list) {
  * Registers a created type of bridge.
  */
 void bridge_category::register_type(mob_type* type) {
-    bridge_types[type->name] = (bridge_type*) type;
+    game.mob_types.bridge[type->name] = (bridge_type*) type;
 }

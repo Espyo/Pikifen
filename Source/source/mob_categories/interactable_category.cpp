@@ -12,6 +12,7 @@
 
 #include "interactable_category.h"
 
+#include "../game.h"
 #include "../mob_types/interactable_type.h"
 #include "../vars.h"
 
@@ -32,13 +33,10 @@ interactable_category::interactable_category() :
  * Clears the list of registered types of interactables.
  */
 void interactable_category::clear_types() {
-    for(
-        auto t = interactable_types.begin();
-        t != interactable_types.end(); ++t
-    ) {
-        delete t->second;
+    for(auto &t : game.mob_types.interactable) {
+        delete t.second;
     }
-    interactable_types.clear();
+    game.mob_types.interactable.clear();
 }
 
 
@@ -76,8 +74,8 @@ void interactable_category::erase_mob(mob* m) {
  * Returns a type of interactable given its name, or NULL on error.
  */
 mob_type* interactable_category::get_type(const string &name) {
-    auto it = interactable_types.find(name);
-    if(it == interactable_types.end()) return NULL;
+    auto it = game.mob_types.interactable.find(name);
+    if(it == game.mob_types.interactable.end()) return NULL;
     return it->second;
 }
 
@@ -86,11 +84,8 @@ mob_type* interactable_category::get_type(const string &name) {
  * Returns all types of interactable by name.
  */
 void interactable_category::get_type_names(vector<string> &list) {
-    for(
-        auto t = interactable_types.begin();
-        t != interactable_types.end(); ++t
-    ) {
-        list.push_back(t->first);
+    for(auto &t : game.mob_types.interactable) {
+        list.push_back(t.first);
     }
 }
 
@@ -99,5 +94,5 @@ void interactable_category::get_type_names(vector<string> &list) {
  * Registers a created type of interactable.
  */
 void interactable_category::register_type(mob_type* type) {
-    interactable_types[type->name] = (interactable_type*) type;
+    game.mob_types.interactable[type->name] = (interactable_type*) type;
 }

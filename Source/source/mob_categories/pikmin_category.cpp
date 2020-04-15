@@ -12,6 +12,7 @@
 
 #include "pikmin_category.h"
 
+#include "../game.h"
 #include "../mobs/pikmin.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ pikmin_category::pikmin_category() :
  * Clears the list of registered types of Pikmin.
  */
 void pikmin_category::clear_types() {
-    for(auto &t : pikmin_types) {
+    for(auto &t : game.mob_types.pikmin) {
         delete t.second;
     }
-    pikmin_types.clear();
+    game.mob_types.pikmin.clear();
 }
 
 
@@ -73,8 +74,8 @@ void pikmin_category::erase_mob(mob* m) {
  * Returns a type of Pikmin given its name, or NULL on error.
  */
 mob_type* pikmin_category::get_type(const string &name) {
-    auto it = pikmin_types.find(name);
-    if(it == pikmin_types.end()) return NULL;
+    auto it = game.mob_types.pikmin.find(name);
+    if(it == game.mob_types.pikmin.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* pikmin_category::get_type(const string &name) {
  * Returns all types of Pikmin by name.
  */
 void pikmin_category::get_type_names(vector<string> &list) {
-    for(auto &t : pikmin_types) {
+    for(auto &t : game.mob_types.pikmin) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void pikmin_category::get_type_names(vector<string> &list) {
  * Registers a created type of Pikmin.
  */
 void pikmin_category::register_type(mob_type* type) {
-    pikmin_types[type->name] = (pikmin_type*) type;
+    game.mob_types.pikmin[type->name] = (pikmin_type*) type;
 }

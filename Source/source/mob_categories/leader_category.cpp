@@ -12,6 +12,7 @@
 
 #include "leader_category.h"
 
+#include "../game.h"
 #include "../mobs/leader.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ leader_category::leader_category() :
  * Clears the list of registered types of leader.
  */
 void leader_category::clear_types() {
-    for(auto &t : leader_types) {
+    for(auto &t : game.mob_types.leader) {
         delete t.second;
     }
-    leader_types.clear();
+    game.mob_types.leader.clear();
 }
 
 
@@ -73,8 +74,8 @@ void leader_category::erase_mob(mob* m) {
  * Returns a type of leader given its name, or NULL on error.
  */
 mob_type* leader_category::get_type(const string &name) {
-    auto it = leader_types.find(name);
-    if(it == leader_types.end()) return NULL;
+    auto it = game.mob_types.leader.find(name);
+    if(it == game.mob_types.leader.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* leader_category::get_type(const string &name) {
  * Returns all types of leader by name.
  */
 void leader_category::get_type_names(vector<string> &list) {
-    for(auto &t : leader_types) {
+    for(auto &t : game.mob_types.leader) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void leader_category::get_type_names(vector<string> &list) {
  * Registers a created type of leader.
  */
 void leader_category::register_type(mob_type* type) {
-    leader_types[type->name] = (leader_type*) type;
+    game.mob_types.leader[type->name] = (leader_type*) type;
 }

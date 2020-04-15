@@ -12,6 +12,7 @@
 
 #include "ship_category.h"
 
+#include "../game.h"
 #include "../mobs/ship.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ ship_category::ship_category() :
  * Clears the list of registered types of ship.
  */
 void ship_category::clear_types() {
-    for(auto &t : ship_types) {
+    for(auto &t : game.mob_types.ship) {
         delete t.second;
     }
-    ship_types.clear();
+    game.mob_types.ship.clear();
 }
 
 
@@ -73,8 +74,8 @@ void ship_category::erase_mob(mob* m) {
  * Returns a type of ship given its name, or NULL on error.
  */
 mob_type* ship_category::get_type(const string &name) {
-    auto it = ship_types.find(name);
-    if(it == ship_types.end()) return NULL;
+    auto it = game.mob_types.ship.find(name);
+    if(it == game.mob_types.ship.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* ship_category::get_type(const string &name) {
  * Returns all types of ship by name.
  */
 void ship_category::get_type_names(vector<string> &list) {
-    for(auto &t : ship_types) {
+    for(auto &t : game.mob_types.ship) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void ship_category::get_type_names(vector<string> &list) {
  * Registers a created type of ship.
  */
 void ship_category::register_type(mob_type* type) {
-    ship_types[type->name] = (ship_type*) type;
+    game.mob_types.ship[type->name] = (ship_type*) type;
 }

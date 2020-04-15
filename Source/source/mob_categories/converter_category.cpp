@@ -12,6 +12,7 @@
 
 #include "converter_category.h"
 
+#include "../game.h"
 #include "../mobs/converter.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ converter_category::converter_category() :
  * Clears the list of registered types of converters.
  */
 void converter_category::clear_types() {
-    for(auto &t : converter_types) {
+    for(auto &t : game.mob_types.converter) {
         delete t.second;
     }
-    converter_types.clear();
+    game.mob_types.converter.clear();
 }
 
 
@@ -73,8 +74,8 @@ void converter_category::erase_mob(mob* m) {
  * Returns a type of converter given its name, or NULL on error.
  */
 mob_type* converter_category::get_type(const string &name) {
-    auto it = converter_types.find(name);
-    if(it == converter_types.end()) return NULL;
+    auto it = game.mob_types.converter.find(name);
+    if(it == game.mob_types.converter.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* converter_category::get_type(const string &name) {
  * Returns all types of converter by name.
  */
 void converter_category::get_type_names(vector<string> &list) {
-    for(auto &t : converter_types) {
+    for(auto &t : game.mob_types.converter) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void converter_category::get_type_names(vector<string> &list) {
  * Registers a created type of converter.
  */
 void converter_category::register_type(mob_type* type) {
-    converter_types[type->name] = (converter_type*) type;
+    game.mob_types.converter[type->name] = (converter_type*) type;
 }

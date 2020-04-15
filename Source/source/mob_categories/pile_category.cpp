@@ -12,6 +12,7 @@
 
 #include "pile_category.h"
 
+#include "../game.h"
 #include "../mobs/pile.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ pile_category::pile_category() :
  * Clears the list of registered types of pile.
  */
 void pile_category::clear_types() {
-    for(auto &t : pile_types) {
+    for(auto &t : game.mob_types.pile) {
         delete t.second;
     }
-    pile_types.clear();
+    game.mob_types.pile.clear();
 }
 
 
@@ -73,8 +74,8 @@ void pile_category::erase_mob(mob* m) {
  * Returns a type of pile given its name, or NULL on error.
  */
 mob_type* pile_category::get_type(const string &name) {
-    auto it = pile_types.find(name);
-    if(it == pile_types.end()) return NULL;
+    auto it = game.mob_types.pile.find(name);
+    if(it == game.mob_types.pile.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* pile_category::get_type(const string &name) {
  * Returns all types of pile by name.
  */
 void pile_category::get_type_names(vector<string> &list) {
-    for(auto &t : pile_types) {
+    for(auto &t : game.mob_types.pile) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void pile_category::get_type_names(vector<string> &list) {
  * Registers a created type of pile.
  */
 void pile_category::register_type(mob_type* type) {
-    pile_types[type->name] = (pile_type*) type;
+    game.mob_types.pile[type->name] = (pile_type*) type;
 }

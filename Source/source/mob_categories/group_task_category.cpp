@@ -12,7 +12,7 @@
 
 #include "group_task_category.h"
 
-#include "../mob_types/group_task_type.h"
+#include "../game.h"
 #include "../vars.h"
 
 
@@ -32,10 +32,10 @@ group_task_category::group_task_category() :
  * Clears the list of registered types of group tasks.
  */
 void group_task_category::clear_types() {
-    for(auto &t : group_task_types) {
+    for(auto &t : game.mob_types.group_task) {
         delete t.second;
     }
-    group_task_types.clear();
+    game.mob_types.group_task.clear();
 }
 
 
@@ -73,8 +73,8 @@ void group_task_category::erase_mob(mob* m) {
  * Returns a type of group task given its name, or NULL on error.
  */
 mob_type* group_task_category::get_type(const string &name) {
-    auto it = group_task_types.find(name);
-    if(it == group_task_types.end()) return NULL;
+    auto it = game.mob_types.group_task.find(name);
+    if(it == game.mob_types.group_task.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +83,7 @@ mob_type* group_task_category::get_type(const string &name) {
  * Returns all types of group tasks by name.
  */
 void group_task_category::get_type_names(vector<string> &list) {
-    for(auto &t : group_task_types) {
+    for(auto &t : game.mob_types.group_task) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +93,5 @@ void group_task_category::get_type_names(vector<string> &list) {
  * Registers a created type of group task.
  */
 void group_task_category::register_type(mob_type* type) {
-    group_task_types[type->name] = (group_task_type*) type;
+    game.mob_types.group_task[type->name] = (group_task_type*) type;
 }

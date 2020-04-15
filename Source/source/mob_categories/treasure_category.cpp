@@ -12,6 +12,7 @@
 
 #include "treasure_category.h"
 
+#include "../game.h"
 #include "../mobs/treasure.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ treasure_category::treasure_category() :
  * Clears the list of registered types of treasure.
  */
 void treasure_category::clear_types() {
-    for(auto &t : treasure_types) {
+    for(auto &t : game.mob_types.treasure) {
         delete t.second;
     }
-    treasure_types.clear();
+    game.mob_types.treasure.clear();
 }
 
 
@@ -73,8 +74,8 @@ void treasure_category::erase_mob(mob* m) {
  * Returns a type of treasure given its name, or NULL on error.
  */
 mob_type* treasure_category::get_type(const string &name) {
-    auto it = treasure_types.find(name);
-    if(it == treasure_types.end()) return NULL;
+    auto it = game.mob_types.treasure.find(name);
+    if(it == game.mob_types.treasure.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* treasure_category::get_type(const string &name) {
  * Returns all types of treasure by name.
  */
 void treasure_category::get_type_names(vector<string> &list) {
-    for(auto &t : treasure_types) {
+    for(auto &t : game.mob_types.treasure) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void treasure_category::get_type_names(vector<string> &list) {
  * Registers a created type of treasure.
  */
 void treasure_category::register_type(mob_type* type) {
-    treasure_types[type->name] = (treasure_type*) type;
+    game.mob_types.treasure[type->name] = (treasure_type*) type;
 }

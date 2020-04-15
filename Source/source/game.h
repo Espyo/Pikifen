@@ -82,6 +82,8 @@ public:
     ALLEGRO_BITMAP* loading_text_bmp;
     //Main menu game state.
     main_menu* main_menu_state;
+    //All mob types.
+    mob_type_lists mob_types;
     //OS mouse cursor position, in screen coordinates.
     point mouse_cursor_s;
     //OS mouse cursor position, in world coordinates.

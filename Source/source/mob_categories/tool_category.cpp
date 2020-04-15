@@ -12,6 +12,7 @@
 
 #include "tool_category.h"
 
+#include "../game.h"
 #include "../mobs/tool.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ tool_category::tool_category() :
  * Clears the list of registered types of tools.
  */
 void tool_category::clear_types() {
-    for(auto &t : tool_types) {
+    for(auto &t : game.mob_types.tool) {
         delete t.second;
     }
-    tool_types.clear();
+    game.mob_types.tool.clear();
 }
 
 
@@ -73,8 +74,8 @@ void tool_category::erase_mob(mob* m) {
  * Returns a type of tool given its name, or NULL on error.
  */
 mob_type* tool_category::get_type(const string &name) {
-    auto it = tool_types.find(name);
-    if(it == tool_types.end()) return NULL;
+    auto it = game.mob_types.tool.find(name);
+    if(it == game.mob_types.tool.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* tool_category::get_type(const string &name) {
  * Returns all types of tool by name.
  */
 void tool_category::get_type_names(vector<string> &list) {
-    for(auto &t : tool_types) {
+    for(auto &t : game.mob_types.tool) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void tool_category::get_type_names(vector<string> &list) {
  * Registers a created type of tool.
  */
 void tool_category::register_type(mob_type* type) {
-    tool_types[type->name] = (tool_type*) type;
+    game.mob_types.tool[type->name] = (tool_type*) type;
 }

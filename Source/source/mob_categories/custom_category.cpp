@@ -12,6 +12,7 @@
 
 #include "custom_category.h"
 
+#include "../game.h"
 #include "../vars.h"
 
 
@@ -31,10 +32,10 @@ custom_category::custom_category() :
  * Clears the list of registered types of custom mob.
  */
 void custom_category::clear_types() {
-    for(auto &t : custom_mob_types) {
+    for(auto &t : game.mob_types.custom) {
         delete t.second;
     }
-    custom_mob_types.clear();
+    game.mob_types.custom.clear();
 }
 
 
@@ -67,8 +68,8 @@ void custom_category::erase_mob(mob* m) { }
  * Returns a custom type given its name, or NULL on error.
  */
 mob_type* custom_category::get_type(const string &name) {
-    auto it = custom_mob_types.find(name);
-    if(it == custom_mob_types.end()) return NULL;
+    auto it = game.mob_types.custom.find(name);
+    if(it == game.mob_types.custom.end()) return NULL;
     return it->second;
 }
 
@@ -77,7 +78,7 @@ mob_type* custom_category::get_type(const string &name) {
  * Returns all custom types by name.
  */
 void custom_category::get_type_names(vector<string> &list) {
-    for(auto &t : custom_mob_types) {
+    for(auto &t : game.mob_types.custom) {
         list.push_back(t.first);
     }
 }
@@ -87,5 +88,5 @@ void custom_category::get_type_names(vector<string> &list) {
  * Registers a created custom type.
  */
 void custom_category::register_type(mob_type* type) {
-    custom_mob_types[type->name] = type;
+    game.mob_types.custom[type->name] = type;
 }

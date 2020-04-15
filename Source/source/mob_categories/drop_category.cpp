@@ -12,6 +12,7 @@
 
 #include "drop_category.h"
 
+#include "../game.h"
 #include "../mobs/drop.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ drop_category::drop_category() :
  * Clears the list of registered types of drops.
  */
 void drop_category::clear_types() {
-    for(auto &t : drop_types) {
+    for(auto &t : game.mob_types.drop) {
         delete t.second;
     }
-    drop_types.clear();
+    game.mob_types.drop.clear();
 }
 
 
@@ -73,8 +74,8 @@ void drop_category::erase_mob(mob* m) {
  * Returns a type of drop given its name, or NULL on error.
  */
 mob_type* drop_category::get_type(const string &name) {
-    auto it = drop_types.find(name);
-    if(it == drop_types.end()) return NULL;
+    auto it = game.mob_types.drop.find(name);
+    if(it == game.mob_types.drop.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* drop_category::get_type(const string &name) {
  * Returns all types of drop by name.
  */
 void drop_category::get_type_names(vector<string> &list) {
-    for(auto &t : drop_types) {
+    for(auto &t : game.mob_types.drop) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void drop_category::get_type_names(vector<string> &list) {
  * Registers a created type of drop.
  */
 void drop_category::register_type(mob_type* type) {
-    drop_types[type->name] = (drop_type*) type;
+    game.mob_types.drop[type->name] = (drop_type*) type;
 }

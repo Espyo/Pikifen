@@ -12,6 +12,7 @@
 
 #include "decoration_category.h"
 
+#include "../game.h"
 #include "../mobs/decoration.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ decoration_category::decoration_category() :
  * Clears the list of registered types of decorations.
  */
 void decoration_category::clear_types() {
-    for(auto &t : decoration_types) {
+    for(auto &t : game.mob_types.decoration) {
         delete t.second;
     }
-    decoration_types.clear();
+    game.mob_types.decoration.clear();
 }
 
 
@@ -73,8 +74,8 @@ void decoration_category::erase_mob(mob* m) {
  * Returns a type of decoration given its name, or NULL on error.
  */
 mob_type* decoration_category::get_type(const string &name) {
-    auto it = decoration_types.find(name);
-    if(it == decoration_types.end()) return NULL;
+    auto it = game.mob_types.decoration.find(name);
+    if(it == game.mob_types.decoration.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* decoration_category::get_type(const string &name) {
  * Returns all types of decoration by name.
  */
 void decoration_category::get_type_names(vector<string> &list) {
-    for(auto &t : decoration_types) {
+    for(auto &t : game.mob_types.decoration) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void decoration_category::get_type_names(vector<string> &list) {
  * Registers a created type of decoration.
  */
 void decoration_category::register_type(mob_type* type) {
-    decoration_types[type->name] = (decoration_type*) type;
+    game.mob_types.decoration[type->name] = (decoration_type*) type;
 }

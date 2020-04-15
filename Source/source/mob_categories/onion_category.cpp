@@ -12,6 +12,7 @@
 
 #include "onion_category.h"
 
+#include "../game.h"
 #include "../mobs/onion.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ onion_category::onion_category() :
  * Clears the list of registered types of Onion.
  */
 void onion_category::clear_types() {
-    for(auto &t : onion_types) {
+    for(auto &t : game.mob_types.onion) {
         delete t.second;
     }
-    onion_types.clear();
+    game.mob_types.onion.clear();
 }
 
 
@@ -73,8 +74,8 @@ void onion_category::erase_mob(mob* m) {
  * Returns a type of Onion given its name, or NULL on error.
  */
 mob_type* onion_category::get_type(const string &name) {
-    auto it = onion_types.find(name);
-    if(it == onion_types.end()) return NULL;
+    auto it = game.mob_types.onion.find(name);
+    if(it == game.mob_types.onion.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* onion_category::get_type(const string &name) {
  * Returns all types of Onion by name.
  */
 void onion_category::get_type_names(vector<string> &list) {
-    for(auto &t : onion_types) {
+    for(auto &t : game.mob_types.onion) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void onion_category::get_type_names(vector<string> &list) {
  * Registers a created type of Onion.
  */
 void onion_category::register_type(mob_type* type) {
-    onion_types[type->name] = (onion_type*) type;
+    game.mob_types.onion[type->name] = (onion_type*) type;
 }

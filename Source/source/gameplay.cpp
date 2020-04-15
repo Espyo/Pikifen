@@ -427,12 +427,12 @@ void gameplay::load_game_content() {
     }
     
     vector<string> tool_types_vector;
-    for(auto &t : tool_types) {
+    for(auto &t : game.mob_types.tool) {
         tool_types_vector.push_back(t.first);
     }
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); ++t) {
-        tool_type* tt_ptr = tool_types[tool_types_vector[t]];
+        tool_type* tt_ptr = game.mob_types.tool[tool_types_vector[t]];
         subgroup_types.register_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
         );

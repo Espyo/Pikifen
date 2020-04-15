@@ -12,6 +12,7 @@
 
 #include "bouncer_category.h"
 
+#include "../game.h"
 #include "../mobs/bouncer.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ bouncer_category::bouncer_category() :
  * Clears the list of registered types of bouncers.
  */
 void bouncer_category::clear_types() {
-    for(auto &t : bouncer_types) {
+    for(auto &t : game.mob_types.bouncer) {
         delete t.second;
     }
-    bouncer_types.clear();
+    game.mob_types.bouncer.clear();
 }
 
 
@@ -73,8 +74,8 @@ void bouncer_category::erase_mob(mob* m) {
  * Returns a type of bouncer given its name, or NULL on error.
  */
 mob_type* bouncer_category::get_type(const string &name) {
-    auto it = bouncer_types.find(name);
-    if(it == bouncer_types.end()) return NULL;
+    auto it = game.mob_types.bouncer.find(name);
+    if(it == game.mob_types.bouncer.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* bouncer_category::get_type(const string &name) {
  * Returns all types of bouncer by name.
  */
 void bouncer_category::get_type_names(vector<string> &list) {
-    for(auto &t : bouncer_types) {
+    for(auto &t : game.mob_types.bouncer) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void bouncer_category::get_type_names(vector<string> &list) {
  * Registers a created type of bouncer.
  */
 void bouncer_category::register_type(mob_type* type) {
-    bouncer_types[type->name] = (bouncer_type*) type;
+    game.mob_types.bouncer[type->name] = (bouncer_type*) type;
 }

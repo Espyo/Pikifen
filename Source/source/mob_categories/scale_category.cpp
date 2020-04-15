@@ -12,6 +12,7 @@
 
 #include "scale_category.h"
 
+#include "../game.h"
 #include "../mobs/scale.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ scale_category::scale_category() :
  * Clears the list of registered types of scale.
  */
 void scale_category::clear_types() {
-    for(auto &t : scale_types) {
+    for(auto &t : game.mob_types.scale) {
         delete t.second;
     }
-    scale_types.clear();
+    game.mob_types.scale.clear();
 }
 
 
@@ -73,8 +74,8 @@ void scale_category::erase_mob(mob* m) {
  * Returns a type of scale given its name, or NULL on error.
  */
 mob_type* scale_category::get_type(const string &name) {
-    auto it = scale_types.find(name);
-    if(it == scale_types.end()) return NULL;
+    auto it = game.mob_types.scale.find(name);
+    if(it == game.mob_types.scale.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* scale_category::get_type(const string &name) {
  * Returns all types of scale by name.
  */
 void scale_category::get_type_names(vector<string> &list) {
-    for(auto &t : scale_types) {
+    for(auto &t : game.mob_types.scale) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void scale_category::get_type_names(vector<string> &list) {
  * Registers a created type of scale.
  */
 void scale_category::register_type(mob_type* type) {
-    scale_types[type->name] = (scale_type*) type;
+    game.mob_types.scale[type->name] = (scale_type*) type;
 }

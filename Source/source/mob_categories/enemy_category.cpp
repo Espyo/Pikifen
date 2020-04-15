@@ -12,6 +12,7 @@
 
 #include "enemy_category.h"
 
+#include "../game.h"
 #include "../mobs/enemy.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ enemy_category::enemy_category() :
  * Clears the list of registered types of enemy.
  */
 void enemy_category::clear_types() {
-    for(auto &t : enemy_types) {
+    for(auto &t : game.mob_types.enemy) {
         delete t.second;
     }
-    enemy_types.clear();
+    game.mob_types.enemy.clear();
 }
 
 
@@ -73,8 +74,8 @@ void enemy_category::erase_mob(mob* m) {
  * Returns a type of enemy given its name, or NULL on error.
  */
 mob_type* enemy_category::get_type(const string &name) {
-    auto it = enemy_types.find(name);
-    if(it == enemy_types.end()) return NULL;
+    auto it = game.mob_types.enemy.find(name);
+    if(it == game.mob_types.enemy.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* enemy_category::get_type(const string &name) {
  * Returns all types of enemy by name.
  */
 void enemy_category::get_type_names(vector<string> &list) {
-    for(auto &t : enemy_types) {
+    for(auto &t : game.mob_types.enemy) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void enemy_category::get_type_names(vector<string> &list) {
  * Registers a created type of enemy.
  */
 void enemy_category::register_type(mob_type* type) {
-    enemy_types[type->name] = (enemy_type*) type;
+    game.mob_types.enemy[type->name] = (enemy_type*) type;
 }

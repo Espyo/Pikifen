@@ -649,7 +649,7 @@ void load_mob_types(bool load_resources) {
     }
     
     //Pikmin type order.
-    for(auto &p : pikmin_types) {
+    for(auto &p : game.mob_types.pikmin) {
         if(
             find(
                 pikmin_order_strings.begin(), pikmin_order_strings.end(),
@@ -665,8 +665,8 @@ void load_mob_types(bool load_resources) {
     }
     for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
         string s = pikmin_order_strings[o];
-        if(pikmin_types.find(s) != pikmin_types.end()) {
-            game.pikmin_order.push_back(pikmin_types[s]);
+        if(game.mob_types.pikmin.find(s) != game.mob_types.pikmin.end()) {
+            game.pikmin_order.push_back(game.mob_types.pikmin[s]);
         } else {
             log_error(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -676,7 +676,7 @@ void load_mob_types(bool load_resources) {
     }
     
     //Leader type order.
-    for(auto &l : leader_types) {
+    for(auto &l : game.mob_types.leader) {
         if(
             find(
                 leader_order_strings.begin(), leader_order_strings.end(),
@@ -692,8 +692,8 @@ void load_mob_types(bool load_resources) {
     }
     for(size_t o = 0; o < leader_order_strings.size(); ++o) {
         string s = leader_order_strings[o];
-        if(leader_types.find(s) != leader_types.end()) {
-            game.leader_order.push_back(leader_types[s]);
+        if(game.mob_types.leader.find(s) != game.mob_types.leader.end()) {
+            game.leader_order.push_back(game.mob_types.leader[s]);
         } else {
             log_error(
                 "Unknown leader type \"" + s + "\" found "

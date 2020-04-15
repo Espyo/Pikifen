@@ -724,13 +724,13 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     
             } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < game.config.max_pikmin_in_field) {
-                    pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
+                    pikmin_type* new_pikmin_type = game.mob_types.pikmin.begin()->second;
                     
-                    auto p = pikmin_types.begin();
-                    for(; p != pikmin_types.end(); ++p) {
+                    auto p = game.mob_types.pikmin.begin();
+                    for(; p != game.mob_types.pikmin.end(); ++p) {
                         if(p->second == game.creator_tools.last_pikmin_type) {
                             ++p;
-                            if(p != pikmin_types.end()) {
+                            if(p != game.mob_types.pikmin.end()) {
                                 new_pikmin_type = p->second;
                             }
                             break;

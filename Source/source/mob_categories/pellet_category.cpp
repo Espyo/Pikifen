@@ -12,6 +12,7 @@
 
 #include "pellet_category.h"
 
+#include "../game.h"
 #include "../mobs/pellet.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ pellet_category::pellet_category() :
  * Clears the list of registered types of pellet.
  */
 void pellet_category::clear_types() {
-    for(auto &t : pellet_types) {
+    for(auto &t : game.mob_types.pellet) {
         delete t.second;
     }
-    pellet_types.clear();
+    game.mob_types.pellet.clear();
 }
 
 
@@ -73,8 +74,8 @@ void pellet_category::erase_mob(mob* m) {
  * Returns a type of pellet given its name, or NULL on error.
  */
 mob_type* pellet_category::get_type(const string &name) {
-    auto it = pellet_types.find(name);
-    if(it == pellet_types.end()) return NULL;
+    auto it = game.mob_types.pellet.find(name);
+    if(it == game.mob_types.pellet.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* pellet_category::get_type(const string &name) {
  * Returns all types of pellet by name.
  */
 void pellet_category::get_type_names(vector<string> &list) {
-    for(auto &t : pellet_types) {
+    for(auto &t : game.mob_types.pellet) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void pellet_category::get_type_names(vector<string> &list) {
  * Registers a created type of pellet.
  */
 void pellet_category::register_type(mob_type* type) {
-    pellet_types[type->name] = (pellet_type*) type;
+    game.mob_types.pellet[type->name] = (pellet_type*) type;
 }

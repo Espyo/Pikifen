@@ -11,6 +11,7 @@
 #include "onion_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/onion_fsm.h"
 #include "../mobs/onion.h"
 #include "../vars.h"
@@ -49,11 +50,11 @@ void onion_type::load_properties(data_node* file) {
     
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     
-    if(pikmin_types.find(pik_type_str) == pikmin_types.end()) {
+    if(game.mob_types.pikmin.find(pik_type_str) == game.mob_types.pikmin.end()) {
         log_error(
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     }
-    pik_type = pikmin_types[pik_type_str];
+    pik_type = game.mob_types.pikmin[pik_type_str];
 }

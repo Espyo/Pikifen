@@ -11,6 +11,7 @@
 #include "pile_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/pile_fsm.h"
 #include "../mobs/pile.h"
 #include "../utils/string_utils.h"
@@ -69,8 +70,8 @@ void pile_type::load_properties(data_node* file) {
     rs.set("show_amount", show_amount);
     rs.set("size_animation_suffixes", size_animation_suffixes_str);
     
-    auto res_type = resource_types.find(contents_str);
-    if(res_type != resource_types.end()) {
+    auto res_type = game.mob_types.resource.find(contents_str);
+    if(res_type != game.mob_types.resource.end()) {
         contents = res_type->second;
     } else {
         log_error(

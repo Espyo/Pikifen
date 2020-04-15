@@ -12,6 +12,7 @@
 
 #include "resource_category.h"
 
+#include "../game.h"
 #include "../mobs/resource.h"
 #include "../vars.h"
 
@@ -32,10 +33,10 @@ resource_category::resource_category() :
  * Clears the list of registered types of resource.
  */
 void resource_category::clear_types() {
-    for(auto &t : resource_types) {
+    for(auto &t : game.mob_types.resource) {
         delete t.second;
     }
-    resource_types.clear();
+    game.mob_types.resource.clear();
 }
 
 
@@ -73,8 +74,8 @@ void resource_category::erase_mob(mob* m) {
  * Returns a type of resource given its name, or NULL on error.
  */
 mob_type* resource_category::get_type(const string &name) {
-    auto it = resource_types.find(name);
-    if(it == resource_types.end()) return NULL;
+    auto it = game.mob_types.resource.find(name);
+    if(it == game.mob_types.resource.end()) return NULL;
     return it->second;
 }
 
@@ -83,7 +84,7 @@ mob_type* resource_category::get_type(const string &name) {
  * Returns all types of resource by name.
  */
 void resource_category::get_type_names(vector<string> &list) {
-    for(auto &t : resource_types) {
+    for(auto &t : game.mob_types.resource) {
         list.push_back(t.first);
     }
 }
@@ -93,5 +94,5 @@ void resource_category::get_type_names(vector<string> &list) {
  * Registers a created type of resource.
  */
 void resource_category::register_type(mob_type* type) {
-    resource_types[type->name] = (resource_type*) type;
+    game.mob_types.resource[type->name] = (resource_type*) type;
 }

@@ -18,6 +18,25 @@
 
 #include "../animation.h"
 #include "../misc_structs.h"
+#include "../mob_types/bouncer_type.h"
+#include "../mob_types/bridge_type.h"
+#include "../mob_types/converter_type.h"
+#include "../mob_types/decoration_type.h"
+#include "../mob_types/drop_type.h"
+#include "../mob_types/enemy_type.h"
+#include "../mob_types/group_task_type.h"
+#include "../mob_types/interactable_type.h"
+#include "../mob_types/leader_type.h"
+#include "../mob_types/onion_type.h"
+#include "../mob_types/pellet_type.h"
+#include "../mob_types/pikmin_type.h"
+#include "../mob_types/pile_type.h"
+#include "../mob_types/resource_type.h"
+#include "../mob_types/scale_type.h"
+#include "../mob_types/ship_type.h"
+#include "../mob_types/tool_type.h"
+#include "../mob_types/track_type.h"
+#include "../mob_types/treasure_type.h"
 #include "../sector.h"
 #include "../utils/geometry_utils.h"
 
@@ -206,6 +225,33 @@ struct hold_info_struct {
     hold_info_struct();
     void clear();
     point get_final_pos(float* final_z);
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Lists of all mob types.
+ */
+struct mob_type_lists {
+    map<string, bouncer_type*> bouncer;
+    map<string, bridge_type*> bridge;
+    map<string, converter_type*> converter;
+    map<string, mob_type*> custom;
+    map<string, decoration_type*> decoration;
+    map<string, drop_type*> drop;
+    map<string, enemy_type*> enemy;
+    map<string, group_task_type*> group_task;
+    map<string, interactable_type*> interactable;
+    map<string, leader_type*> leader;
+    map<string, onion_type*> onion;
+    map<string, pellet_type*> pellet;
+    map<string, pikmin_type*> pikmin;
+    map<string, pile_type*> pile;
+    map<string, resource_type*> resource;
+    map<string, scale_type*> scale;
+    map<string, ship_type*> ship;
+    map<string, tool_type*> tool;
+    map<string, track_type*> track;
+    map<string, treasure_type*> treasure;
 };
 
 

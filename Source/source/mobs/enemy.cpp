@@ -162,7 +162,7 @@ void enemy::start_dying_class_specifics() {
             
             //Check the pellet types that match that number and
             //also match the available Pikmin types.
-            for(auto &p : pellet_types) {
+            for(auto &p : game.mob_types.pellet) {
                 bool pik_type_ok = false;
                 for(size_t pt = 0; pt < available_pik_types.size(); ++pt) {
                     if(p.second->pik_type == available_pik_types[pt]) {
