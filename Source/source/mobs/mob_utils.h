@@ -228,6 +228,53 @@ struct hold_info_struct {
 };
 
 
+class bouncer;
+class bridge;
+class converter;
+class decoration;
+class drop;
+class enemy;
+class group_task;
+class interactable;
+class leader;
+class onion;
+class pellet;
+class pikmin;
+class pile;
+class resource;
+class scale;
+class ship;
+class tool;
+class track;
+class treasure;
+
+/* ----------------------------------------------------------------------------
+ * Lists of all mobs in the area.
+ */
+struct mob_lists {
+    vector<mob*> all;
+    vector<bouncer*> bouncer;
+    vector<bridge*> bridge;
+    vector<converter*> converter;
+    vector<decoration*> decoration;
+    vector<drop*> drop;
+    vector<enemy*> enemy;
+    vector<group_task*> group_task;
+    vector<interactable*> interactable;
+    vector<leader*> leader;
+    vector<onion*> onion;
+    vector<pellet*> pellet;
+    vector<pikmin*> pikmin;
+    vector<pile*> pile;
+    vector<resource*> resource;
+    vector<scale*> scale;
+    vector<ship*> ship;
+    vector<tool*> tool;
+    vector<track*> track;
+    vector<treasure*> treasure;
+};
+
+
 /* ----------------------------------------------------------------------------
  * Lists of all mob types.
  */

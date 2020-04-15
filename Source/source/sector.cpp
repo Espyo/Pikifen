@@ -2125,8 +2125,8 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     mob* closest_obs = NULL;
     dist closest_obs_dist;
     
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* m_ptr = mobs[m];
+    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+        mob* m_ptr = game.gameplay_state->mobs.all[m];
         if(!m_ptr->type->blocks_carrier_pikmin) continue;
         
         if(

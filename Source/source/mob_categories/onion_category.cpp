@@ -47,7 +47,7 @@ mob* onion_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     onion* m = new onion(pos, (onion_type*) type, angle);
-    onions.push_back(m);
+    game.gameplay_state->mobs.onion.push_back(m);
     return m;
 }
 
@@ -64,8 +64,8 @@ mob_type* onion_category::create_type() {
  * Clears an Onion from the list of Onions.
  */
 void onion_category::erase_mob(mob* m) {
-    onions.erase(
-        find(onions.begin(), onions.end(), (onion*) m)
+    game.gameplay_state->mobs.onion.erase(
+        find(game.gameplay_state->mobs.onion.begin(), game.gameplay_state->mobs.onion.end(), (onion*) m)
     );
 }
 

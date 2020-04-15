@@ -47,7 +47,7 @@ mob* pellet_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     pellet* m = new pellet(pos, (pellet_type*) type, angle);
-    pellets.push_back(m);
+    game.gameplay_state->mobs.pellet.push_back(m);
     return m;
 }
 
@@ -64,8 +64,8 @@ mob_type* pellet_category::create_type() {
  * Clears a pellet from the list of pellets.
  */
 void pellet_category::erase_mob(mob* m) {
-    pellets.erase(
-        find(pellets.begin(), pellets.end(), (pellet*) m)
+    game.gameplay_state->mobs.pellet.erase(
+        find(game.gameplay_state->mobs.pellet.begin(), game.gameplay_state->mobs.pellet.end(), (pellet*) m)
     );
 }
 

@@ -737,7 +737,7 @@ mob* create_mob(
         }
     }
     
-    mobs.push_back(m_ptr);
+    game.gameplay_state->mobs.all.push_back(m_ptr);
     return m_ptr;
 }
 
@@ -757,17 +757,18 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     if(!complete_destruction) {
         m_ptr->leave_group();
         
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            if(mobs[m]->focused_mob == m_ptr) {
-                mobs[m]->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-                mobs[m]->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
-                mobs[m]->fsm.run_event(MOB_EV_FOCUS_DIED);
-                mobs[m]->focused_mob = NULL;
+        for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+            mob* m_ptr = game.gameplay_state->mobs.all[m];
+            if(m_ptr->focused_mob == m_ptr) {
+                m_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+                m_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
+                m_ptr->fsm.run_event(MOB_EV_FOCUS_DIED);
+                m_ptr->focused_mob = NULL;
             }
-            if(mobs[m]->parent && mobs[m]->parent->m == m_ptr) {
-                delete mobs[m]->parent;
-                mobs[m]->parent = NULL;
-                mobs[m]->to_delete = true;
+            if(m_ptr->parent && m_ptr->parent->m == m_ptr) {
+                delete m_ptr->parent;
+                m_ptr->parent = NULL;
+                m_ptr->to_delete = true;
             }
         }
         
@@ -779,7 +780,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     }
     
     m_ptr->type->category->erase_mob(m_ptr);
-    mobs.erase(find(mobs.begin(), mobs.end(), m_ptr));
+    game.gameplay_state->mobs.all.erase(find(game.gameplay_state->mobs.all.begin(), game.gameplay_state->mobs.all.end(), m_ptr));
     
     delete m_ptr;
 }

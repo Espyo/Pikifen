@@ -142,7 +142,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
             game.delta_t == 0.0f ? "0" :
             f2s(game.delta_t) + " (" + f2s(1 / game.delta_t) + " FPS)"
         ) + ".\n"
-        "  Mob count: " + i2s(mobs.size()) + ". Particle count: " +
+        "  Mob count: " + i2s(game.gameplay_state->mobs.all.size()) + ". Particle count: " +
         i2s(game.gameplay_state->particles.get_count()) + ".\n" +
         "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
         i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
@@ -161,7 +161,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<pikmin*> closest_pikmin = pikmin_list;
+        vector<pikmin*> closest_pikmin = game.gameplay_state->mobs.pikmin;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (pikmin * p1, pikmin * p2) -> bool {
@@ -307,8 +307,8 @@ mob* get_closest_mob_to_cursor() {
     dist closest_mob_to_cursor_dist = 0;
     mob* closest_mob_to_cursor = NULL;
     
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* m_ptr = mobs[m];
+    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+        mob* m_ptr = game.gameplay_state->mobs.all[m];
         
         if(!m_ptr->fsm.cur_state) continue;
         

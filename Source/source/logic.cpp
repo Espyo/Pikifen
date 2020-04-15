@@ -104,8 +104,8 @@ void gameplay::do_aesthetic_logic() {
     cursor_height_diff_light = 0;
     
     leader_cursor_mob = NULL;
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* m_ptr = mobs[m];
+    for(size_t m = 0; m < mobs.all.size(); ++m) {
+        mob* m_ptr = mobs.all[m];
         if(!bbox_check(leader_cursor_w, m_ptr->pos, m_ptr->type->max_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
@@ -292,10 +292,10 @@ void gameplay::do_gameplay_logic() {
         *                *
         ******************/
         
-        size_t n_mobs = mobs.size();
+        size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
-            mob* m_ptr = mobs[m];
+            mob* m_ptr = mobs.all[m];
             m_ptr->tick(game.delta_t);
             
             if(m_ptr->fsm.cur_state) {
@@ -305,7 +305,7 @@ void gameplay::do_gameplay_logic() {
         
         for(size_t m = 0; m < n_mobs;) {
             //Mob deletion.
-            mob* m_ptr = mobs[m];
+            mob* m_ptr = mobs.all[m];
             if(m_ptr->to_delete) {
                 delete_mob(m_ptr);
                 n_mobs--;
@@ -346,8 +346,8 @@ void gameplay::do_gameplay_logic() {
             bool done = false;
             
             close_to_ship_to_heal = NULL;
-            for(size_t s = 0; s < ships.size(); ++s) {
-                ship* s_ptr = ships[s];
+            for(size_t s = 0; s < mobs.ship.size(); ++s) {
+                ship* s_ptr = mobs.ship[s];
                 d = dist(cur_leader_ptr->pos, s_ptr->pos);
                 if(!s_ptr->is_leader_under_beam(cur_leader_ptr)) {
                     continue;
@@ -380,11 +380,11 @@ void gameplay::do_gameplay_logic() {
             d = 0;
             close_to_onion_to_open = NULL;
             if(!done) {
-                for(size_t o = 0; o < onions.size(); ++o) {
-                    d = dist(cur_leader_ptr->pos, onions[o]->pos);
+                for(size_t o = 0; o < mobs.onion.size(); ++o) {
+                    d = dist(cur_leader_ptr->pos, mobs.onion[o]->pos);
                     if(d > game.config.onion_open_range) continue;
                     if(d < closest_d || !close_to_onion_to_open) {
-                        close_to_onion_to_open = onions[o];
+                        close_to_onion_to_open = mobs.onion[o];
                         closest_d = d;
                         done = true;
                     }
@@ -395,11 +395,11 @@ void gameplay::do_gameplay_logic() {
             d = 0;
             close_to_interactable_to_use = NULL;
             if(!done) {
-                for(size_t i = 0; i < interactables.size(); ++i) {
-                    d = dist(cur_leader_ptr->pos, interactables[i]->pos);
-                    if(d > interactables[i]->int_type->trigger_range) continue;
+                for(size_t i = 0; i < mobs.interactable.size(); ++i) {
+                    d = dist(cur_leader_ptr->pos, mobs.interactable[i]->pos);
+                    if(d > mobs.interactable[i]->int_type->trigger_range) continue;
                     if(d < closest_d || !close_to_interactable_to_use) {
-                        close_to_interactable_to_use = interactables[i];
+                        close_to_interactable_to_use = mobs.interactable[i];
                         closest_d = d;
                         done = true;
                     }
@@ -631,7 +631,7 @@ void gameplay::do_gameplay_logic() {
             box_string(f2s(1.0 / game.delta_t), 12, " now, ") +
             i2s(game.options.target_fps) + " intended";
         string n_mobs_str =
-            box_string(i2s(mobs.size()), 7);
+            box_string(i2s(mobs.all.size()), 7);
         string n_particles_str =
             box_string(i2s(particles.get_count()), 7);
         string resolution_str =
@@ -792,11 +792,11 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     vector<pending_intermob_event> pending_intermob_events;
     mob_state* state_before = m_ptr->fsm.cur_state;
     
-    size_t n_mobs = mobs.size();
+    size_t n_mobs = mobs.all.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
         if(m == m2) continue;
         
-        mob* m2_ptr = mobs[m2];
+        mob* m2_ptr = mobs.all[m2];
         if(m2_ptr->to_delete) continue;
         
         dist d(m_ptr->pos, m2_ptr->pos);

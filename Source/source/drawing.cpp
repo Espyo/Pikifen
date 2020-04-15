@@ -357,9 +357,9 @@ void gameplay::draw_hud() {
     
     //Leader health.
     for(size_t l = 0; l < 3; ++l) {
-        if(leaders.size() < l + 1) continue;
+        if(mobs.leader.size() < l + 1) continue;
         
-        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, leaders.size());
+        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leader.size());
         size_t icon_id = HUD_ITEM_LEADER_1_ICON + l;
         size_t health_id = HUD_ITEM_LEADER_1_HEALTH + l;
         
@@ -368,10 +368,10 @@ void gameplay::draw_hud() {
             al_draw_filled_circle(
                 i_center.x, i_center.y,
                 std::min(i_size.x, i_size.y) / 2.0f,
-                change_alpha(leaders[l_nr]->type->main_color, 128)
+                change_alpha(mobs.leader[l_nr]->type->main_color, 128)
             );
             draw_bitmap_in_box(
-                leaders[l_nr]->lea_type->bmp_icon,
+                mobs.leader[l_nr]->lea_type->bmp_icon,
                 i_center, i_size
             );
             draw_bitmap_in_box(bmp_bubble, i_center, i_size);
@@ -382,7 +382,7 @@ void gameplay::draw_hud() {
         if(hud_items.get_draw_data(health_id, &i_center, &i_size)) {
             draw_health(
                 i_center,
-                leaders[l_nr]->health, leaders[l_nr]->type->max_health,
+                mobs.leader[l_nr]->health, mobs.leader[l_nr]->type->max_health,
                 std::min(i_size.x, i_size.y) * 0.4f,
                 true
             );
@@ -559,11 +559,11 @@ void gameplay::draw_hud() {
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_GROUP_NR, &i_center, &i_size)
     ) {
         size_t pikmin_in_group = cur_leader_ptr->group->members.size();
-        for(size_t l = 0; l < leaders.size(); ++l) {
+        for(size_t l = 0; l < mobs.leader.size(); ++l) {
             //If this leader is following the current one,
             //then they're not a Pikmin.
             //Subtract them from the group count total.
-            if(leaders[l]->following_group == cur_leader_ptr) {
+            if(mobs.leader[l]->following_group == cur_leader_ptr) {
                 pikmin_in_group--;
             }
         }
@@ -584,7 +584,7 @@ void gameplay::draw_hud() {
         draw_compressed_text(
             font_counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(pikmin_list.size())
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(mobs.pikmin.size())
         );
     }
     
@@ -592,10 +592,10 @@ void gameplay::draw_hud() {
     if(
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_TOTAL_NR, &i_center, &i_size)
     ) {
-        size_t total_pikmin = pikmin_list.size();
-        for(size_t o = 0; o < onions.size(); ++o) {
+        size_t total_pikmin = mobs.pikmin.size();
+        for(size_t o = 0; o < mobs.onion.size(); ++o) {
             for(size_t m = 0; m < N_MATURITIES; ++m) {
-                total_pikmin += onions[o]->pikmin_inside[m];
+                total_pikmin += mobs.onion[o]->pikmin_inside[m];
             }
         }
         
@@ -792,9 +792,9 @@ void gameplay::draw_hud() {
  */
 void gameplay::draw_ingame_text() {
     //Fractions and health.
-    size_t n_mobs = mobs.size();
+    size_t n_mobs = mobs.all.size();
     for(size_t m = 0; m < n_mobs; ++m) {
-        mob* mob_ptr = mobs[m];
+        mob* mob_ptr = mobs.all[m];
         
         if(mob_ptr->carry_info) {
             if(
@@ -837,8 +837,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t p = 0; p < piles.size(); ++p) {
-            pile* p_ptr = piles[p];
+        for(size_t p = 0; p < mobs.pile.size(); ++p) {
+            pile* p_ptr = mobs.pile[p];
             if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
                     font_main,
@@ -854,8 +854,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t t = 0; t < group_tasks.size(); ++t) {
-            group_task* t_ptr = group_tasks[t];
+        for(size_t t = 0; t < mobs.group_task.size(); ++t) {
+            group_task* t_ptr = mobs.group_task[t];
             if(t_ptr->get_power() > 0) {
                 draw_fraction(
                     point(
@@ -870,8 +870,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t s = 0; s < scales.size(); ++s) {
-            scale* s_ptr = scales[s];
+        for(size_t s = 0; s < mobs.scale.size(); ++s) {
+            scale* s_ptr = mobs.scale[s];
             if(s_ptr->health <= 0) continue;
             float w = s_ptr->calculate_cur_weight();
             if(w > 0) {
@@ -1144,15 +1144,15 @@ void gameplay::draw_lighting_filter() {
         //Then, find out spotlights, and draw
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            if(mobs[m]->hide) continue;
+        for(size_t m = 0; m < mobs.all.size(); ++m) {
+            if(mobs.all[m]->hide) continue;
             
-            point pos = mobs[m]->pos;
+            point pos = mobs.all[m]->pos;
             al_transform_coordinates(
                 &game.world_to_screen_transform,
                 &pos.x, &pos.y
             );
-            float radius = mobs[m]->type->radius * 4.0 * game.cam.zoom;
+            float radius = mobs.all[m]->type->radius * 4.0 * game.cam.zoom;
             al_draw_scaled_bitmap(
                 bmp_spotlight,
                 0, 0, 64, 64,
@@ -1372,8 +1372,8 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     //but this is a nice estimate.
     components.reserve(
         game.cur_area_data.sectors.size() + //Sectors
-        mobs.size() + //Mob shadows
-        mobs.size() + //Mobs
+        mobs.all.size() + //Mob shadows
+        mobs.all.size() + //Mobs
         particles.get_count() //Particles
     );
     
@@ -1402,8 +1402,8 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     particles.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
     
     //Mobs.
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* mob_ptr = mobs[m];
+    for(size_t m = 0; m < mobs.all.size(); ++m) {
+        mob* mob_ptr = mobs.all[m];
         
         if(!bmp_output && mob_ptr->is_off_camera()) {
             //Off-camera.

@@ -130,13 +130,7 @@ extern asset_file_names_struct asset_file_names;
 
 //General globals.
 
-extern vector<bouncer*> bouncers;
-extern vector<bridge*> bridges;
-extern vector<converter*> converters;
 extern map<string, particle_generator> custom_particle_generators;
-extern vector<decoration*> decorations;
-extern vector<drop*> drops;
-extern vector<enemy*> enemies;
 extern ALLEGRO_FONT* font_area_name;
 extern ALLEGRO_FONT* font_builtin;
 extern ALLEGRO_FONT* font_counter;
@@ -145,30 +139,16 @@ extern unsigned int font_counter_h;
 extern unsigned int font_main_h;
 //Font for the carrying / money values.
 extern ALLEGRO_FONT* font_value;
-extern vector<group_task*> group_tasks;
 extern map<string, hazard> hazards;
-extern vector<interactable*> interactables;
 extern map<string, liquid> liquids;
-extern vector<leader*> leaders;
 extern vector<string> leader_order_strings;
 extern vector<mob_action> mob_actions;
 extern mob_category_manager mob_categories;
-extern vector<mob*> mobs;
-extern vector<onion*> onions;
-extern vector<pellet*> pellets;
-extern vector<pikmin*> pikmin_list;
 extern vector<string> pikmin_order_strings;
-extern vector<pile*> piles;
-extern vector<resource*> resources;
-extern vector<scale*> scales;
-extern vector<ship*> ships;
 extern single_animation_suite spark_animation;
 extern map<string, spike_damage_type> spike_damage_types;
 extern vector<spray_type> spray_types;
 extern map<string, status_type> status_types;
-extern vector<tool*> tools;
-extern vector<track*> tracks;
-extern vector<treasure*> treasures;
 extern map<string, weather> weather_conditions;
 
 

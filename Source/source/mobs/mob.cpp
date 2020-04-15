@@ -206,9 +206,9 @@ void mob::apply_status_effect(
     }
     
     //Let's start by sending the status to the child mobs.
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        if(mobs[m]->parent && mobs[m]->parent->m == this) {
-            mobs[m]->apply_status_effect(s, refill, true);
+    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+        if(game.gameplay_state->mobs.all[m]->parent && game.gameplay_state->mobs.all[m]->parent->m == this) {
+            game.gameplay_state->mobs.all[m]->apply_status_effect(s, refill, true);
         }
     }
     
@@ -439,8 +439,8 @@ bool mob::calculate_carrying_destination(
         ship* closest_ship = NULL;
         dist closest_ship_dist;
         
-        for(size_t s = 0; s < ships.size(); ++s) {
-            ship* s_ptr = ships[s];
+        for(size_t s = 0; s < game.gameplay_state->mobs.ship.size(); ++s) {
+            ship* s_ptr = game.gameplay_state->mobs.ship[s];
             dist d(pos, s_ptr->beam_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
@@ -483,8 +483,8 @@ bool mob::calculate_carrying_destination(
     unordered_set<pikmin_type*> available_onions;
     
     //First, check which Onions are even available.
-    for(size_t o = 0; o < onions.size(); o++) {
-        onion* o_ptr = onions[o];
+    for(size_t o = 0; o < game.gameplay_state->mobs.onion.size(); o++) {
+        onion* o_ptr = game.gameplay_state->mobs.onion[o];
         if(o_ptr->activated) {
             available_onions.insert(o_ptr->oni_type->pik_type);
         }
@@ -592,14 +592,14 @@ bool mob::calculate_carrying_destination(
     
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
-    for(; onion_nr < onions.size(); ++onion_nr) {
-        if(onions[onion_nr]->oni_type->pik_type == decided_type) {
+    for(; onion_nr < game.gameplay_state->mobs.onion.size(); ++onion_nr) {
+        if(game.gameplay_state->mobs.onion[onion_nr]->oni_type->pik_type == decided_type) {
             break;
         }
     }
     
     //Finally, set the destination data.
-    *target_mob = onions[onion_nr];
+    *target_mob = game.gameplay_state->mobs.onion[onion_nr];
     *target_point = (*target_mob)->pos;
     
     return true;
@@ -1332,8 +1332,8 @@ void mob::get_hitbox_hold_point(
  */
 size_t mob::get_latched_pikmin_amount() {
     size_t total = 0;
-    for(size_t p = 0; p < pikmin_list.size(); ++p) {
-        pikmin* p_ptr = pikmin_list[p];
+    for(size_t p = 0; p < game.gameplay_state->mobs.pikmin.size(); ++p) {
+        pikmin* p_ptr = game.gameplay_state->mobs.pikmin[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1349,8 +1349,8 @@ size_t mob::get_latched_pikmin_amount() {
  */
 float mob::get_latched_pikmin_weight() {
     float total = 0;
-    for(size_t p = 0; p < pikmin_list.size(); ++p) {
-        pikmin* p_ptr = pikmin_list[p];
+    for(size_t p = 0; p < game.gameplay_state->mobs.pikmin.size(); ++p) {
+        pikmin* p_ptr = game.gameplay_state->mobs.pikmin[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1838,7 +1838,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-        pikmin_list.size() >= game.config.max_pikmin_in_field
+        game.gameplay_state->mobs.pikmin.size() >= game.config.max_pikmin_in_field
     ) {
         return NULL;
     }

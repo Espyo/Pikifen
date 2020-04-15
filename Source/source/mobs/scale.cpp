@@ -10,6 +10,7 @@
 
 #include "scale.h"
 
+#include "../game.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -31,11 +32,11 @@ float scale::calculate_cur_weight() {
     //Start by figuring out which mobs are applying weight.
     set<mob*> weighing_mobs;
     
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        if(mobs[m]->standing_on_mob == this) {
-            weighing_mobs.insert(mobs[m]);
-            for(size_t h = 0; h < mobs[m]->holding.size(); ++h) {
-                weighing_mobs.insert(mobs[m]->holding[h]);
+    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+        if(game.gameplay_state->mobs.all[m]->standing_on_mob == this) {
+            weighing_mobs.insert(game.gameplay_state->mobs.all[m]);
+            for(size_t h = 0; h < game.gameplay_state->mobs.all[m]->holding.size(); ++h) {
+                weighing_mobs.insert(game.gameplay_state->mobs.all[m]->holding[h]);
             }
         }
     }

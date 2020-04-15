@@ -612,7 +612,7 @@ void leader::tick_class_specifics(const float delta_t) {
  * Switch active leader.
  */
 void change_to_next_leader(const bool forward, const bool force_success) {
-    if(leaders.size() == 1) return;
+    if(game.gameplay_state->mobs.leader.size() == 1) return;
     
     if(
         !game.gameplay_state->cur_leader_ptr->fsm.get_event(
@@ -637,8 +637,8 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     
     while(searching) {
         new_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
-        new_leader_ptr = leaders[new_leader_nr];
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), game.gameplay_state->mobs.leader.size());
+        new_leader_ptr = game.gameplay_state->mobs.leader[new_leader_nr];
         
         if(new_leader_nr == original_leader_nr) {
             //Back to the original; stop trying.
@@ -659,9 +659,9 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
         game.gameplay_state->cur_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), leaders.size());
+            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), game.gameplay_state->mobs.leader.size());
         game.gameplay_state->cur_leader_ptr =
-            leaders[game.gameplay_state->cur_leader_nr];
+            game.gameplay_state->mobs.leader[game.gameplay_state->cur_leader_nr];
             
         game.gameplay_state->cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }

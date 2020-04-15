@@ -145,8 +145,8 @@ void enemy::start_dying_class_specifics() {
         
         //Start by obtaining a list of available Pikmin types, given the
         //Onions currently in the area.
-        for(size_t o = 0; o < onions.size(); ++o) {
-            available_pik_types.push_back(onions[o]->oni_type->pik_type);
+        for(size_t o = 0; o < game.gameplay_state->mobs.onion.size(); ++o) {
+            available_pik_types.push_back(game.gameplay_state->mobs.onion[o]->oni_type->pik_type);
         }
         
         //Remove duplicates from the list.

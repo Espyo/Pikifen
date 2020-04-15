@@ -798,7 +798,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {
-        *var = i2s(pikmin_list.size());
+        *var = i2s(game.gameplay_state->mobs.pikmin.size());
         break;
         
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
@@ -1144,11 +1144,11 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
     float d = s2f(data.args[0]);
     
-    for(size_t m2 = 0; m2 < mobs.size(); ++m2) {
-        if(mobs[m2] == data.m) continue;
-        if(dist(data.m->pos, mobs[m2]->pos) > d) continue;
+    for(size_t m2 = 0; m2 < game.gameplay_state->mobs.all.size(); ++m2) {
+        if(game.gameplay_state->mobs.all[m2] == data.m) continue;
+        if(dist(data.m->pos, game.gameplay_state->mobs.all[m2]->pos) > d) continue;
         
-        data.m->send_message(mobs[m2], data.args[1]);
+        data.m->send_message(game.gameplay_state->mobs.all[m2], data.args[1]);
     }
 }
 
@@ -1198,9 +1198,9 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
     
     if(data.m->type->walkable) {
         //Update the Z of mobs standing on top of it.
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            if(mobs[m]->standing_on_mob == data.m) {
-                mobs[m]->z = data.m->z + data.m->height;
+        for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+            if(game.gameplay_state->mobs.all[m]->standing_on_mob == data.m) {
+                game.gameplay_state->mobs.all[m]->z = data.m->z + data.m->height;
             }
         }
     }

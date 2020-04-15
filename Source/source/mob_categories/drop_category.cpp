@@ -47,7 +47,7 @@ mob* drop_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     drop* m = new drop(pos, (drop_type*) type, angle);
-    drops.push_back(m);
+    game.gameplay_state->mobs.drop.push_back(m);
     return m;
 }
 
@@ -64,8 +64,8 @@ mob_type* drop_category::create_type() {
  * Clears a drop from the list of drops.
  */
 void drop_category::erase_mob(mob* m) {
-    drops.erase(
-        find(drops.begin(), drops.end(), (drop*) m)
+    game.gameplay_state->mobs.drop.erase(
+        find(game.gameplay_state->mobs.drop.begin(), game.gameplay_state->mobs.drop.end(), (drop*) m)
     );
 }
 

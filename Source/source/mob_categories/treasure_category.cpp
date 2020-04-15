@@ -47,7 +47,7 @@ mob* treasure_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     treasure* m = new treasure(pos, (treasure_type*) type, angle);
-    treasures.push_back(m);
+    game.gameplay_state->mobs.treasure.push_back(m);
     return m;
 }
 
@@ -64,8 +64,8 @@ mob_type* treasure_category::create_type() {
  * Clears a treasure from the list of treasures.
  */
 void treasure_category::erase_mob(mob* m) {
-    treasures.erase(
-        find(treasures.begin(), treasures.end(), (treasure*) m)
+    game.gameplay_state->mobs.treasure.erase(
+        find(game.gameplay_state->mobs.treasure.begin(), game.gameplay_state->mobs.treasure.end(), (treasure*) m)
     );
 }
 

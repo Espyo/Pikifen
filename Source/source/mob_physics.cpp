@@ -22,8 +22,8 @@ using std::set;
  * Returns NULL if none is found.
  */
 mob* mob::get_mob_to_walk_on() {
-    for(size_t m = 0; m < mobs.size(); ++m) {
-        mob* m_ptr = mobs[m];
+    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+        mob* m_ptr = game.gameplay_state->mobs.all[m];
         if(!m_ptr->type->walkable) {
             continue;
         }

@@ -55,6 +55,8 @@ public:
     sector* leader_cursor_sector;
     //Player 1's leader cursor, in world coordinates.
     point leader_cursor_w;
+    //List of all mobs in the area.
+    mob_lists mobs;
     //Manager of all particles.
     particle_manager particles;
     //Information about the message box currently active on player 1, if any.

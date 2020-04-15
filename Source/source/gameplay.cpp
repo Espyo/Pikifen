@@ -50,6 +50,7 @@ gameplay::gameplay() :
     day_minutes(0.0f),
     leader_cursor_mob(nullptr),
     leader_cursor_sector(nullptr),
+    msg_box(nullptr),
     swarm_angle(0),
     swarm_magnitude(0.0f),
     bmp_bubble(nullptr),
@@ -257,7 +258,7 @@ void gameplay::load() {
     }
     
     //Panic check -- If there are no leaders, abort.
-    if(leaders.empty()) {
+    if(mobs.leader.empty()) {
         show_message_box(
             game.display, "No leaders!", "No leaders!",
             "This area has no leaders! You need at least one "
@@ -283,7 +284,7 @@ void gameplay::load() {
     
     //Sort leaders.
     sort(
-        leaders.begin(), leaders.end(),
+        mobs.leader.begin(), mobs.leader.end(),
     [] (leader * l1, leader * l2) -> bool {
         size_t priority_l1 =
         find(game.leader_order.begin(), game.leader_order.end(), l1->lea_type) -
@@ -296,7 +297,7 @@ void gameplay::load() {
     );
     
     cur_leader_nr = 0;
-    cur_leader_ptr = leaders[cur_leader_nr];
+    cur_leader_ptr = mobs.leader[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->active = true;
     
@@ -539,8 +540,8 @@ void gameplay::unload() {
     game.cam.pos = game.cam.target_pos = point();
     game.cam.zoom = game.cam.target_zoom = 1.0f;
     
-    while(!mobs.empty()) {
-        delete_mob(*mobs.begin(), true);
+    while(!mobs.all.empty()) {
+        delete_mob(*mobs.all.begin(), true);
     }
     
     if(lightmap_bmp) {

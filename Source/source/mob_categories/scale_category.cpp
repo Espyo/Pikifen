@@ -47,7 +47,7 @@ mob* scale_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     scale* m = new scale(pos, (scale_type*) type, angle);
-    scales.push_back(m);
+    game.gameplay_state->mobs.scale.push_back(m);
     return m;
 }
 
@@ -64,8 +64,8 @@ mob_type* scale_category::create_type() {
  * Clears a scale from the list of scales.
  */
 void scale_category::erase_mob(mob* m) {
-    scales.erase(
-        find(scales.begin(), scales.end(), (scale*) m)
+    game.gameplay_state->mobs.scale.erase(
+        find(game.gameplay_state->mobs.scale.begin(), game.gameplay_state->mobs.scale.end(), (scale*) m)
     );
 }
 

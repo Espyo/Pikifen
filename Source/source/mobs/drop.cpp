@@ -13,6 +13,7 @@
 #include "drop.h"
 
 #include "../drawing.h"
+#include "../game.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -68,8 +69,8 @@ void drop::tick_class_specifics(const float delta_t) {
     if(cur_scale == 0) {
         //Disappeared into nothingness. Time to delete...if it's not being used.
         
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            if(mobs[m]->focused_mob == this) {
+        for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
+            if(game.gameplay_state->mobs.all[m]->focused_mob == this) {
                 return;
             }
         }

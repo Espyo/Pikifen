@@ -12,6 +12,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 
@@ -80,8 +81,8 @@ void pile::tick_class_specifics(const float delta_t) {
     if(amount == 0 && pil_type->delete_when_finished) {
         //Ready to delete. Unless it's being used, that is.
         
-        for(size_t r = 0; r < resources.size(); ++r) {
-            if(resources[r]->origin_pile == this) {
+        for(size_t r = 0; r < game.gameplay_state->mobs.resource.size(); ++r) {
+            if(game.gameplay_state->mobs.resource[r]->origin_pile == this) {
                 return;
             }
         }
