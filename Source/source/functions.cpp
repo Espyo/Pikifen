@@ -97,9 +97,9 @@ void clear_area_textures() {
         sector* s_ptr = game.cur_area_data.sectors[s];
         if(
             s_ptr->texture_info.bitmap &&
-            s_ptr->texture_info.bitmap != bmp_error
+            s_ptr->texture_info.bitmap != game.bmp_error
         ) {
-            textures.detach(s_ptr->texture_info.file_name);
+            game.textures.detach(s_ptr->texture_info.file_name);
             s_ptr->texture_info.bitmap = NULL;
         }
     }
@@ -143,9 +143,9 @@ void crash(const string &reason, const string &info, const int exit_status) {
             f2s(game.delta_t) + " (" + f2s(1 / game.delta_t) + " FPS)"
         ) + ".\n"
         "  Mob count: " + i2s(mobs.size()) + ". Particle count: " +
-        i2s(particles.get_count()) + ".\n" +
-        "  Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
-        i2s(bitmaps.get_total_calls()) + " total calls).\n" +
+        i2s(game.gameplay_state->particles.get_count()) + ".\n" +
+        "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
+        i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
         "  Current leader: " ;
         
     if(game.gameplay_state->cur_leader_ptr) {
@@ -927,7 +927,7 @@ void save_options() {
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
         for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string option_name = buttons.list[b].option_name;
+            string option_name = game.buttons.list[b].option_name;
             if(option_name.empty()) continue;
             grouped_controls[prefix + option_name].clear();
         }
@@ -940,9 +940,9 @@ void save_options() {
             string name = "p" + i2s(p + 1) + "_";
             
             for(size_t b = 0; b < N_BUTTONS; ++b) {
-                if(buttons.list[b].option_name.empty()) continue;
-                if(game.options.controls[p][c].action == buttons.list[b].id) {
-                    name += buttons.list[b].option_name;
+                if(game.buttons.list[b].option_name.empty()) continue;
+                if(game.options.controls[p][c].action == game.buttons.list[b].id) {
+                    name += game.buttons.list[b].option_name;
                     break;
                 }
             }

@@ -1720,7 +1720,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.total_speed = spray_types[spray_nr].distance_range * 0.8;
     pg.total_speed_deviation = spray_types[spray_nr].distance_range * 0.4;
     pg.size_deviation = 0.5;
-    pg.emit(particles);
+    pg.emit(game.gameplay_state->particles);
     
     game.gameplay_state->spray_stats[spray_nr].nr_sprays--;
     

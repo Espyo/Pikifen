@@ -10,6 +10,7 @@
 
 #include "bridge_type.h"
 
+#include "../game.h"
 #include "../mob_fsms/bridge_fsm.h"
 #include "../mob_script.h"
 #include "../mobs/bridge.h"
@@ -57,10 +58,10 @@ void bridge_type::load_resources(data_node* file) {
     rs.set("rail_texture", rail_texture_file_name);
     
     if(!main_texture_file_name.empty()) {
-        bmp_main_texture = textures.get(main_texture_file_name);
+        bmp_main_texture = game.textures.get(main_texture_file_name);
     }
     if(!rail_texture_file_name.empty()) {
-        bmp_rail_texture = textures.get(rail_texture_file_name);
+        bmp_rail_texture = game.textures.get(rail_texture_file_name);
     }
 }
 
@@ -69,6 +70,6 @@ void bridge_type::load_resources(data_node* file) {
  * Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
-    textures.detach(main_texture_file_name);
-    textures.detach(rail_texture_file_name);
+    game.textures.detach(main_texture_file_name);
+    game.textures.detach(rail_texture_file_name);
 }

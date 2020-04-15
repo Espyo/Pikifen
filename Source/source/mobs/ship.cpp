@@ -11,6 +11,7 @@
 #include "ship.h"
 
 #include "../drawing.h"
+#include "../game.h"
 #include "../utils/geometry_utils.h"
 #include "../vars.h"
 #include "leader.h"
@@ -75,7 +76,7 @@ void ship::heal_leader(leader* l) {
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;
     g.pos_deviation = point(l->type->radius, l->type->radius);
-    g.emit(particles);
+    g.emit(game.gameplay_state->particles);
 }
 
 

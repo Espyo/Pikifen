@@ -698,8 +698,8 @@ void controls_menu::update() {
         
         string action_name;
         for(size_t b = 0; b < N_BUTTONS; ++b) {
-            if(c_ptr->action == buttons.list[b].id) {
-                action_name = buttons.list[b].name;
+            if(c_ptr->action == game.buttons.list[b].id) {
+                action_name = game.buttons.list[b].name;
                 break;
             }
         }

@@ -141,13 +141,13 @@ void pikmin_type::load_resources(data_node* file) {
     rs.set("top_flower", top_flower_str, &top_flower_node);
     rs.set("top_leaf", top_leaf_str, &top_leaf_node);
     
-    bmp_icon = bitmaps.get(icon_str, icon_node);
-    bmp_maturity_icon[0] = bitmaps.get(icon_leaf_str, icon_leaf_node);
-    bmp_maturity_icon[1] = bitmaps.get(icon_bud_str, icon_bud_node);
-    bmp_maturity_icon[2] = bitmaps.get(icon_flower_str, icon_flower_node);
-    bmp_top[0] = bitmaps.get(top_leaf_str, top_leaf_node);
-    bmp_top[1] = bitmaps.get(top_bud_str, top_bud_node);
-    bmp_top[2] = bitmaps.get(top_flower_str, top_flower_node);
+    bmp_icon = game.bitmaps.get(icon_str, icon_node);
+    bmp_maturity_icon[0] = game.bitmaps.get(icon_leaf_str, icon_leaf_node);
+    bmp_maturity_icon[1] = game.bitmaps.get(icon_bud_str, icon_bud_node);
+    bmp_maturity_icon[2] = game.bitmaps.get(icon_flower_str, icon_flower_node);
+    bmp_top[0] = game.bitmaps.get(top_leaf_str, top_leaf_node);
+    bmp_top[1] = game.bitmaps.get(top_bud_str, top_bud_node);
+    bmp_top[2] = game.bitmaps.get(top_flower_str, top_flower_node);
 }
 
 
@@ -155,11 +155,11 @@ void pikmin_type::load_resources(data_node* file) {
  * Unloads resources from memory.
  */
 void pikmin_type::unload_resources() {
-    bitmaps.detach(bmp_icon);
-    bitmaps.detach(bmp_maturity_icon[0]);
-    bitmaps.detach(bmp_maturity_icon[1]);
-    bitmaps.detach(bmp_maturity_icon[2]);
-    bitmaps.detach(bmp_top[0]);
-    bitmaps.detach(bmp_top[1]);
-    bitmaps.detach(bmp_top[2]);
+    game.bitmaps.detach(bmp_icon);
+    game.bitmaps.detach(bmp_maturity_icon[0]);
+    game.bitmaps.detach(bmp_maturity_icon[1]);
+    game.bitmaps.detach(bmp_maturity_icon[2]);
+    game.bitmaps.detach(bmp_top[0]);
+    game.bitmaps.detach(bmp_top[1]);
+    game.bitmaps.detach(bmp_top[2]);
 }

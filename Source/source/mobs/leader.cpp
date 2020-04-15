@@ -35,7 +35,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     
     group = new group_info_struct(this);
     subgroup_type_ptr =
-        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+        game.gameplay_state->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
 
 
@@ -108,14 +108,14 @@ void leader::dismiss() {
     vector<subgroup_dismiss_info> subgroups_info;
     
     //Go through all subgroups and populate the vector of data.
-    subgroup_type* first_type = subgroup_types.get_first_type();
+    subgroup_type* first_type = game.gameplay_state->subgroup_types.get_first_type();
     subgroup_type* cur_type = first_type;
     
     do {
     
         if(
             cur_type !=
-            subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER)
+            game.gameplay_state->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER)
         ) {
         
             bool subgroup_exists = false;
@@ -135,7 +135,7 @@ void leader::dismiss() {
             
         }
         
-        cur_type = subgroup_types.get_next_type(cur_type);
+        cur_type = game.gameplay_state->subgroup_types.get_next_type(cur_type);
         
     } while(cur_type != first_type);
     

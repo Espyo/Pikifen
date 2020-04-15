@@ -864,7 +864,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
             victim->pos + type->spike_damage->particle_offset_pos;
         pg.base_particle.z =
             victim->z + type->spike_damage->particle_offset_z;
-        pg.emit(particles);
+        pg.emit(game.gameplay_state->particles);
     }
 }
 
@@ -1026,7 +1026,7 @@ void mob::do_attack_effects(
         );
         smack_p.bitmap = bmp_smack;
         smack_p.color = al_map_rgb(255, 160, 128);
-        particles.add(smack_p);
+        game.gameplay_state->particles.add(smack_p);
         
     } else {
         particle ding_p(
@@ -1036,7 +1036,7 @@ void mob::do_attack_effects(
         );
         ding_p.bitmap = bmp_wave_ring;
         ding_p.color = al_map_rgb(192, 208, 224);
-        particles.add(ding_p);
+        game.gameplay_state->particles.add(ding_p);
         
     }
     
@@ -1921,7 +1921,7 @@ void mob::start_dying() {
     pg.total_speed = 100;
     pg.total_speed_deviation = 40;
     pg.duration_deviation = 0.5;
-    pg.emit(particles);
+    pg.emit(game.gameplay_state->particles);
     
     start_dying_class_specifics();
 }
@@ -2233,7 +2233,7 @@ void mob::tick_misc_logic(const float delta_t) {
     delete_old_status_effects();
     
     for(size_t g = 0; g < particle_generators.size();) {
-        particle_generators[g].tick(delta_t, particles);
+        particle_generators[g].tick(delta_t, game.gameplay_state->particles);
         if(particle_generators[g].emission_interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {

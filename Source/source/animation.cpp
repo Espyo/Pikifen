@@ -16,6 +16,7 @@
 #include "animation.h"
 
 #include "functions.h"
+#include "game.h"
 #include "utils/string_utils.h"
 #include "vars.h"
 
@@ -518,7 +519,7 @@ void sprite::set_bitmap(
     const string &file_name, const point &file_pos, const point &file_size,
     data_node* node
 ) {
-    if(parent_bmp) bitmaps.detach(file);
+    if(parent_bmp) game.bitmaps.detach(file);
     if(bitmap) al_destroy_bitmap(bitmap);
     parent_bmp = NULL;
     bitmap = NULL;
@@ -529,7 +530,7 @@ void sprite::set_bitmap(
         return;
     }
     
-    parent_bmp = bitmaps.get(file_name, node);
+    parent_bmp = game.bitmaps.get(file_name, node);
     if(parent_bmp) {
         bitmap =
             al_create_sub_bitmap(

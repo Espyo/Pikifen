@@ -1569,7 +1569,7 @@ void draw_bitmap(
     if(size.x == 0 && size.y == 0) return;
     
     if(!bmp) {
-        bmp = bmp_error;
+        bmp = game.bmp_error;
     }
     
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
@@ -1623,7 +1623,7 @@ void draw_bitmap_with_effects(
 ) {
 
     if(!bmp) {
-        bmp = bmp_error;
+        bmp = game.bmp_error;
     }
     
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
@@ -2278,7 +2278,7 @@ void draw_loading_screen(
             game.win_h - 8 - font_main_h * 0.5
         );
         
-        if(bmp_icon && bmp_icon != bmp_error) {
+        if(bmp_icon && bmp_icon != game.bmp_error) {
             draw_bitmap(
                 bmp_icon, icon_pos, point(-1, font_main_h),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)

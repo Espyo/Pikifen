@@ -107,7 +107,7 @@ void load_area(
     
     if(!load_for_editor && !game.cur_area_data.bg_bmp_file_name.empty()) {
         game.cur_area_data.bg_bmp =
-            textures.get(game.cur_area_data.bg_bmp_file_name, &data_file);
+            game.textures.get(game.cur_area_data.bg_bmp_file_name, &data_file);
     }
     
     
@@ -173,7 +173,7 @@ void load_area(
         sector* new_sector = new sector();
         
         new_sector->type =
-            sector_types.get_nr(sector_data->get_child_by_name("type")->value);
+            game.sector_types.get_nr(sector_data->get_child_by_name("type")->value);
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
         new_sector->is_bottomless_pit =
             s2b(
@@ -220,7 +220,7 @@ void load_area(
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
-                textures.get(new_sector->texture_info.file_name, NULL);
+                game.textures.get(new_sector->texture_info.file_name, NULL);
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -388,13 +388,13 @@ void load_area(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = textures.get(s_ptr->file_name, NULL);
+        s_ptr->bitmap = game.textures.get(s_ptr->file_name, NULL);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
-        if(s_ptr->bitmap == bmp_error && !load_for_editor) {
+        if(s_ptr->bitmap == game.bmp_error && !load_for_editor) {
             log_error(
                 "Unknown tree shadow texture \"" + s_ptr->file_name + "\"!",
                 shadow_node
@@ -532,7 +532,7 @@ ALLEGRO_BITMAP* load_bmp(
 ) {
     if(file_name.empty()) {
         if(error_bmp_on_empty) {
-            return bmp_error;
+            return game.bmp_error;
         } else {
             return NULL;
         }
@@ -547,7 +547,7 @@ ALLEGRO_BITMAP* load_bmp(
             log_error("Could not open image " + file_name + "!", node);
         }
         if(error_bmp_on_error) {
-            b = bmp_error;
+            b = game.bmp_error;
         }
     }
     
@@ -669,7 +669,7 @@ void load_custom_particle_generators(const bool load_resources) {
         } else {
             if(load_resources) {
                 base_p.bitmap =
-                    bitmaps.get(
+                    game.bitmaps.get(
                         bitmap_name, p_node->get_child_by_name("bitmap")
                     );
             }
@@ -1053,9 +1053,9 @@ void load_options() {
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         game.options.controls[p].clear();
         for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string option_name = buttons.list[b].option_name;
+            string option_name = game.buttons.list[b].option_name;
             if(option_name.empty()) continue;
-            load_control(buttons.list[b].id, p, option_name, file);
+            load_control(game.buttons.list[b].id, p, option_name, file);
         }
     }
     
@@ -1322,7 +1322,7 @@ void load_spray_types(const bool load_resources) {
         
         if(load_resources) {
             data_node* icon_node = s_node->get_child_by_name("icon");
-            st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
+            st.bmp_spray = game.bitmaps.get(icon_node->value, icon_node);
         }
         
         spray_types.push_back(st);
@@ -1545,7 +1545,7 @@ void unload_custom_particle_generators() {
         g != custom_particle_generators.end();
         ++g
     ) {
-        bitmaps.detach(g->second.base_particle.bitmap);
+        game.bitmaps.detach(g->second.base_particle.bitmap);
     }
     custom_particle_generators.clear();
 }
@@ -1595,7 +1595,7 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_swarm_arrow);
     al_destroy_bitmap(bmp_wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
-        bitmaps.detach(bmp_mouse_button_icon[i]);
+        game.bitmaps.detach(bmp_mouse_button_icon[i]);
     }
     
     sfx_attack.destroy();
@@ -1628,7 +1628,7 @@ void unload_spike_damage_types() {
  */
 void unload_spray_types() {
     for(size_t s = 0; s < spray_types.size(); ++s) {
-        bitmaps.detach(spray_types[s].bmp_spray);
+        game.bitmaps.detach(spray_types[s].bmp_spray);
     }
     spray_types.clear();
 }

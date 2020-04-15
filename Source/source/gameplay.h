@@ -17,6 +17,7 @@
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "mobs/ship.h"
+#include "replay.h"
 
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
@@ -42,6 +43,10 @@ public:
     leader* cur_leader_ptr;
     //What time of the day is it in-game? In minutes.
     float day_minutes;
+    //Replay of the current day.
+    replay day_replay;
+    //Information about all HUD items.
+    hud_item_manager hud_items;
     //Mob that player 1's leader cursor is on top of, if any.
     mob* leader_cursor_mob;
     //Player 1's leader cursor, in screen coordinates.
@@ -50,10 +55,18 @@ public:
     sector* leader_cursor_sector;
     //Player 1's leader cursor, in world coordinates.
     point leader_cursor_w;
+    //Manager of all particles.
+    particle_manager particles;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+    //All droplets of precipitation.
+    vector<point> precipitation;
+    //Time until the next drop of precipitation.
+    timer precipitation_timer;
     //How many of each spray/ingredients player 1 has.
     vector<spray_stats_struct> spray_stats;
+    //All types of subgroups.
+    subgroup_type_manager subgroup_types;
     //Angle at which player 1 is swarming.
     float swarm_angle;
     //General intensity of player 1's swarm in the specified angle.

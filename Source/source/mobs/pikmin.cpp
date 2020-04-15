@@ -42,7 +42,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
-        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
+        game.gameplay_state->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
     near_reach = 0;
     far_reach = 2;
     
@@ -274,7 +274,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.friction = 0.8;
         par.gravity = -0.2;
         par.color = pik_type->main_color;
-        particles.add(par);
+        game.gameplay_state->particles.add(par);
         
         sfx_pikmin_dying.play(0.03, false);
     }

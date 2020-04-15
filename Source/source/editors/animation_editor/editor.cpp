@@ -392,7 +392,7 @@ void animation_editor::load_animation_database(
     
     //Top bitmap.
     for(unsigned char t = 0; t < N_MATURITIES; ++t) {
-        if(top_bmp[t] && top_bmp[t] != bmp_error) {
+        if(top_bmp[t] && top_bmp[t] != game.bmp_error) {
             al_destroy_bitmap(top_bmp[t]);
             top_bmp[t] = NULL;
         }

@@ -38,6 +38,12 @@ public:
     area_editor* area_editor_state;
     //Area menu game state.
     area_menu* area_menu_state;
+    //Manager of all main bitmaps (not floor textures).
+    bmp_manager bitmaps;
+    //The error bitmap used to represent bitmaps that were not loaded.
+    ALLEGRO_BITMAP* bmp_error;
+    //List of all virtual "buttons" that a player can press.
+    button_manager buttons;
     //Player 1's camera.
     camera_info cam;
     //Game's configuration.
@@ -90,10 +96,14 @@ public:
     options_menu* options_menu_state;
     //Standard Pikmin order.
     vector<pikmin_type*> pikmin_order;
+    //Manager of all sector types.
+    sector_types_manager sector_types;
     //Screen to world coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM screen_to_world_transform;
     //Should we be showing system info? (Framerate, version, etc.)
     bool show_system_info;
+    //Manager of all floor texture bitmaps.
+    bmp_manager textures;
     //Version of the fan-game.
     string version;
     //Current fullscreen state.

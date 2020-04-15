@@ -92,7 +92,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.total_speed = 70;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
-    pg.emit(particles);
+    pg.emit(game.gameplay_state->particles);
     
 }
 

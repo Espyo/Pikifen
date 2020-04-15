@@ -85,7 +85,7 @@ void area_editor::asb_to_gui() {
     }
     
     set_button_text(
-        frm_asb, "but_sector_type", sector_types.get_name(s_ptr->type)
+        frm_asb, "but_sector_type", game.sector_types.get_name(s_ptr->type)
     );
     
     if(s_ptr->hazards_str.empty()) {
@@ -393,11 +393,11 @@ void area_editor::gui_to_details() {
     
     if(new_file_name != selected_shadow->file_name) {
         //New image, delete the old one.
-        if(selected_shadow->bitmap != bmp_error) {
-            textures.detach(selected_shadow->file_name);
+        if(selected_shadow->bitmap != game.bmp_error) {
+            game.textures.detach(selected_shadow->file_name);
         }
         selected_shadow->bitmap =
-            textures.get(new_file_name, NULL);
+            game.textures.get(new_file_name, NULL);
         selected_shadow->file_name = new_file_name;
     }
     
@@ -757,8 +757,8 @@ void area_editor::open_picker(const unsigned char id) {
         id == PICKER_SET_SECTOR_TYPE
     ) {
     
-        for(size_t t = 0; t < sector_types.get_nr_of_types(); ++t) {
-            elements.push_back(make_pair("", sector_types.get_name(t)));
+        for(size_t t = 0; t < game.sector_types.get_nr_of_types(); ++t) {
+            elements.push_back(make_pair("", game.sector_types.get_name(t)));
         }
         title = "Choose a sector type.";
         
@@ -891,7 +891,7 @@ void area_editor::pick(
     } else if(picker_id == PICKER_SET_SECTOR_TYPE) {
         register_change("sector type change");
         sector* s_ptr = *selected_sectors.begin();
-        s_ptr->type = sector_types.get_nr(name);
+        s_ptr->type = game.sector_types.get_nr(name);
         homogenize_selected_sectors();
         asb_to_gui();
         

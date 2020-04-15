@@ -469,7 +469,7 @@ void area_editor::clear_current_area() {
     clear_area_textures();
     
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
-        textures.detach(game.cur_area_data.tree_shadows[s]->file_name);
+        game.textures.detach(game.cur_area_data.tree_shadows[s]->file_name);
     }
     
     sector_to_gui();
@@ -1122,7 +1122,7 @@ unsigned char area_editor::find_problems() {
     
     //Check if there are tree shadows with invalid images.
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
-        if(game.cur_area_data.tree_shadows[s]->bitmap == bmp_error) {
+        if(game.cur_area_data.tree_shadows[s]->bitmap == game.bmp_error) {
             problem_shadow_ptr = game.cur_area_data.tree_shadows[s];
             problem_string = game.cur_area_data.tree_shadows[s]->file_name;
             return EPT_INVALID_SHADOW;
@@ -2951,7 +2951,7 @@ bool area_editor::save_area(const bool to_backup) {
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
             sector_node->add(
-                new data_node("type", sector_types.get_name(s_ptr->type))
+                new data_node("type", game.sector_types.get_name(s_ptr->type))
             );
         }
         if(s_ptr->is_bottomless_pit) {
@@ -3782,7 +3782,7 @@ void area_editor::update_reference(const string &new_file_name) {
     
     reference_file_name = new_file_name;
     
-    if(reference_bitmap && reference_bitmap != bmp_error) {
+    if(reference_bitmap && reference_bitmap != game.bmp_error) {
         al_destroy_bitmap(reference_bitmap);
     }
     reference_bitmap = NULL;
@@ -3820,9 +3820,9 @@ void area_editor::update_reference(const string &new_file_name) {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
-    textures.detach(s_ptr->texture_info.file_name);
+    game.textures.detach(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap = textures.get(file_name);
+    s_ptr->texture_info.bitmap = game.textures.get(file_name);
 }
 
 
@@ -3958,7 +3958,7 @@ area_editor::texture_suggestion::texture_suggestion(
     bmp(NULL),
     name(n) {
     
-    bmp = textures.get(name, NULL, false);
+    bmp = game.textures.get(name, NULL, false);
 }
 
 
@@ -3966,5 +3966,5 @@ area_editor::texture_suggestion::texture_suggestion(
  * Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    textures.detach(name);
+    game.textures.detach(name);
 }

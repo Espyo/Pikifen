@@ -52,7 +52,7 @@ bmp_manager::bmp_manager(const string &base_dir) :
  */
 void bmp_manager::clear() {
     for(auto &b : list) {
-        if(b.second.b != bmp_error) {
+        if(b.second.b != game.bmp_error) {
             al_destroy_bitmap(b.second.b);
         }
     }
@@ -71,7 +71,7 @@ void bmp_manager::detach(map<string, bmp_info>::iterator it) {
     it->second.calls--;
     total_calls--;
     if(it->second.calls == 0) {
-        if(it->second.b != bmp_error) {
+        if(it->second.b != game.bmp_error) {
             al_destroy_bitmap(it->second.b);
         }
         list.erase(it);
@@ -94,7 +94,7 @@ void bmp_manager::detach(const string &name) {
  * If it has 0 calls, it's automatically cleared.
  */
 void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
-    if(!bmp || bmp == bmp_error) return;
+    if(!bmp || bmp == game.bmp_error) return;
     
     auto it = list.begin();
     for(; it != list.end(); ++it) {

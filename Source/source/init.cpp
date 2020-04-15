@@ -95,7 +95,7 @@ void destroy_game_states() {
  * Destroys miscellaneous things.
  */
 void destroy_misc() {
-    al_destroy_bitmap(bmp_error);
+    al_destroy_bitmap(game.bmp_error);
     al_destroy_font(font_area_name);
     al_destroy_font(font_counter);
     al_destroy_font(font_main);
@@ -191,121 +191,121 @@ void init_asset_file_names() {
  */
 void init_controls() {
     //Declare the existing buttons.
-    buttons.add(
+    game.buttons.add(
         BUTTON_NONE, "---", "", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_THROW, "Throw", "throw", "mb_1"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_WHISTLE, "Whistle", "whistle", "mb_2"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_RIGHT, "Right", "move_right", "k_4"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_UP, "Up", "move_up", "k_23"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_LEFT, "Left", "move_left", "k_1"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_DOWN, "Down", "move_down", "k_19"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_CURSOR_RIGHT, "Cursor right", "cursor_right", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_CURSOR_UP, "Cursor up", "cursor_up", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_CURSOR_LEFT, "Cursor left", "cursor_left", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_CURSOR_DOWN, "Cursor down", "cursor_down", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_GROUP_RIGHT, "Swarm right", "swarm_right", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_GROUP_UP, "Swarm up", "swarm_up", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_GROUP_LEFT, "Swarm left", "swarm_left", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_GROUP_DOWN, "Swarm down", "swarm_down", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_GROUP_CURSOR, "Swarm to cursor", "swarm_cursor", "k_75"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_NEXT_LEADER, "Next leader", "next_leader", "k_64"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_PREV_LEADER, "Prev. leader", "prev_leader", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_DISMISS, "Dismiss", "dismiss", "k_217"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_USE_SPRAY_1, "Use spray 1", "use_spray_1", "k_18"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_USE_SPRAY_2, "Use spray 2", "use_spray_2", "k_6"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_USE_SPRAY, "Use spray", "use_spray", "k_18"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_NEXT_SPRAY, "Next spray", "next_spray", "k_5"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_PREV_SPRAY, "Prev. spray", "prev_spray", "k_17"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_ZOOM_IN, "Zoom in", "zoom_in", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_ZOOM_OUT, "Zoom out", "zoom_out", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_NEXT_TYPE, "Next Pikmin", "next_type", "mwd"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_NEXT_MATURITY, "Next maturity", "next_maturity", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_LIE_DOWN, "Lie down", "lie_down", "k_26"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_PAUSE, "Pause", "pause", "k_59"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_RIGHT, "Menu right", "menu_right", "k_83"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_UP, "Menu up", "menu_up", "k_84"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_LEFT, "Menu left", "menu_left", "k_82"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_DOWN, "Menu down", "menu_down", "k_85"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_OK, "Menu OK", "menu_ok", "k_67"
     );
-    buttons.add(
+    game.buttons.add(
         BUTTON_MENU_BACK, "Menu back", "menu_back", "k_59"
     );
     
@@ -314,10 +314,10 @@ void init_controls() {
     //Populate the controls information with some default controls for player 1.
     //If the options are loaded successfully, these controls are overwritten.
     for(size_t b = 0; b < N_BUTTONS; ++b) {
-        string dc = buttons.list[b].default_control_str;
+        string dc = game.buttons.list[b].default_control_str;
         if(dc.empty()) continue;
         
-        game.options.controls[0].push_back(control_info(buttons.list[b].id, dc));
+        game.options.controls[0].push_back(control_info(game.buttons.list[b].id, dc));
     }
 }
 
@@ -327,8 +327,8 @@ void init_controls() {
  */
 void init_error_bitmap() {
     //Error bitmap.
-    bmp_error = al_create_bitmap(32, 32);
-    al_set_target_bitmap(bmp_error); {
+    game.bmp_error = al_create_bitmap(32, 32);
+    al_set_target_bitmap(game.bmp_error); {
         al_clear_to_color(al_map_rgba(0, 0, 0, 192));
         al_draw_filled_rectangle(
             0.0, 0.0, 16.0, 16.0,
@@ -339,7 +339,7 @@ void init_error_bitmap() {
             al_map_rgba(255, 0, 255, 192)
         );
     } al_set_target_backbuffer(game.display);
-    bmp_error = recreate_bitmap(bmp_error);
+    game.bmp_error = recreate_bitmap(game.bmp_error);
 }
 
 
@@ -431,35 +431,36 @@ void init_game_states() {
  * Initializes the HUD items, along with their default coordinates.
  */
 void init_hud_items() {
-    hud_items.set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
-    hud_items.set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
-    hud_items.set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
-    hud_items.set_item(HUD_ITEM_LEADER_1_ICON,         7,  90, 8,  10);
-    hud_items.set_item(HUD_ITEM_LEADER_2_ICON,         6,  80, 5,  9 );
-    hud_items.set_item(HUD_ITEM_LEADER_3_ICON,         6,  72, 5,  9 );
-    hud_items.set_item(HUD_ITEM_LEADER_1_HEALTH,       16, 90, 8,  10);
-    hud_items.set_item(HUD_ITEM_LEADER_2_HEALTH,       12, 80, 5,  9 );
-    hud_items.set_item(HUD_ITEM_LEADER_3_HEALTH,       12, 72, 5,  9 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 91, 8,  10);
-    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 88, 4,  8 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
-    hud_items.set_item(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
-    hud_items.set_item(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
-    hud_items.set_item(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
-    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_3,        0,  0,  0,  0 );
-    hud_items.set_item(HUD_ITEM_SPRAY_1_ICON,          6,  36, 4,  7 );
-    hud_items.set_item(HUD_ITEM_SPRAY_1_AMOUNT,        13, 37, 10, 5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_1_BUTTON,        10, 42, 10, 5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_2_ICON,          6,  52, 4,  7 );
-    hud_items.set_item(HUD_ITEM_SPRAY_2_AMOUNT,        13, 53, 10, 5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_2_BUTTON,        10, 47, 10, 5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_PREV_ICON,       6,  52, 3,  5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_PREV_BUTTON,     6,  47, 4,  4 );
-    hud_items.set_item(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52, 3,  5 );
-    hud_items.set_item(HUD_ITEM_SPRAY_NEXT_BUTTON,     13, 47, 4,  4 );
+    hud_item_manager* mgr = &game.gameplay_state->hud_items;
+    mgr->set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
+    mgr->set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
+    mgr->set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
+    mgr->set_item(HUD_ITEM_LEADER_1_ICON,         7,  90, 8,  10);
+    mgr->set_item(HUD_ITEM_LEADER_2_ICON,         6,  80, 5,  9 );
+    mgr->set_item(HUD_ITEM_LEADER_3_ICON,         6,  72, 5,  9 );
+    mgr->set_item(HUD_ITEM_LEADER_1_HEALTH,       16, 90, 8,  10);
+    mgr->set_item(HUD_ITEM_LEADER_2_HEALTH,       12, 80, 5,  9 );
+    mgr->set_item(HUD_ITEM_LEADER_3_HEALTH,       12, 72, 5,  9 );
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 91, 8,  10);
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 88, 4,  8 );
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
+    mgr->set_item(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
+    mgr->set_item(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
+    mgr->set_item(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_3,        0,  0,  0,  0 );
+    mgr->set_item(HUD_ITEM_SPRAY_1_ICON,          6,  36, 4,  7 );
+    mgr->set_item(HUD_ITEM_SPRAY_1_AMOUNT,        13, 37, 10, 5 );
+    mgr->set_item(HUD_ITEM_SPRAY_1_BUTTON,        10, 42, 10, 5 );
+    mgr->set_item(HUD_ITEM_SPRAY_2_ICON,          6,  52, 4,  7 );
+    mgr->set_item(HUD_ITEM_SPRAY_2_AMOUNT,        13, 53, 10, 5 );
+    mgr->set_item(HUD_ITEM_SPRAY_2_BUTTON,        10, 47, 10, 5 );
+    mgr->set_item(HUD_ITEM_SPRAY_PREV_ICON,       6,  52, 3,  5 );
+    mgr->set_item(HUD_ITEM_SPRAY_PREV_BUTTON,     6,  47, 4,  4 );
+    mgr->set_item(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52, 3,  5 );
+    mgr->set_item(HUD_ITEM_SPRAY_NEXT_BUTTON,     13, 47, 4,  4 );
 }
 
 
@@ -486,8 +487,9 @@ void init_misc() {
     game.gameplay_state->whistle.next_dot_timer.start();
     game.gameplay_state->whistle.next_ring_timer.start();
     
-    particles = particle_manager(game.options.max_particles);
-    
+    game.gameplay_state->particles =
+        particle_manager(game.options.max_particles);
+        
     game.options.zoom_mid_level =
         clamp(game.options.zoom_mid_level, game.config.zoom_min_level, game.config.zoom_max_level);
         
@@ -1132,10 +1134,10 @@ void init_mob_categories() {
  * Initializes the list of sector types.
  */
 void init_sector_types() {
-    sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
-    sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
-    sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
-    sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
+    game.sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
+    game.sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
+    game.sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
+    game.sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
 }
 
 

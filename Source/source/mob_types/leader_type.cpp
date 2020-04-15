@@ -95,7 +95,7 @@ void leader_type::load_resources(data_node* file) {
     rs.set("whistle_sfx", whistle_sfx_str);
     
     //TODO Replace load_sample with something better when it exists.
-    bmp_icon = bitmaps.get(icon_str, icon_node);
+    bmp_icon = game.bitmaps.get(icon_str, icon_node);
     sfx_dismiss = load_sample(dismiss_sfx_str);
     sfx_name_call = load_sample(name_call_sfx_str);
     sfx_whistle = load_sample(whistle_sfx_str);
@@ -106,7 +106,7 @@ void leader_type::load_resources(data_node* file) {
  * Unloads resources from memory.
  */
 void leader_type::unload_resources() {
-    bitmaps.detach(bmp_icon);
+    game.bitmaps.detach(bmp_icon);
     //TODO these samples are only being destroyed here because
     //they're being created in load_resource() with load_samples.
     //When the loading changes, update this unload accordingly.

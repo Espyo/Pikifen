@@ -15,6 +15,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_types/mob_type.h"
 #include "../utils/math_utils.h"
 #include "../utils/string_utils.h"
@@ -93,7 +94,7 @@ void enemy::finish_dying_class_specifics() {
     par.friction = 0.5;
     par.gravity = 0;
     par.color = al_map_rgb(255, 192, 255);
-    particles.add(par);
+    game.gameplay_state->particles.add(par);
 }
 
 

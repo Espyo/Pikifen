@@ -419,15 +419,15 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
     bool success = false;
     subgroup_type* starting_type = cur_standby_type;
     subgroup_type* final_type = cur_standby_type;
-    if(!starting_type) starting_type = subgroup_types.get_first_type();
+    if(!starting_type) starting_type = game.gameplay_state->subgroup_types.get_first_type();
     subgroup_type* scanning_type = starting_type;
     subgroup_type* leader_subgroup_type =
-        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+        game.gameplay_state->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
         
     if(move_backwards) {
-        scanning_type = subgroup_types.get_prev_type(scanning_type);
+        scanning_type = game.gameplay_state->subgroup_types.get_prev_type(scanning_type);
     } else {
-        scanning_type = subgroup_types.get_next_type(scanning_type);
+        scanning_type = game.gameplay_state->subgroup_types.get_next_type(scanning_type);
     }
     while(scanning_type != starting_type && !success) {
         //For each type, let's check if there's any group member that matches.
@@ -447,9 +447,9 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
         }
         
         if(move_backwards) {
-            scanning_type = subgroup_types.get_prev_type(scanning_type);
+            scanning_type = game.gameplay_state->subgroup_types.get_prev_type(scanning_type);
         } else {
-            scanning_type = subgroup_types.get_next_type(scanning_type);
+            scanning_type = game.gameplay_state->subgroup_types.get_next_type(scanning_type);
         }
     }
     
@@ -494,7 +494,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
         if(!closest_member) {
             //There are no more members of the current type left!
             //Next type.
-            cur_type = subgroup_types.get_next_type(cur_type);
+            cur_type = game.gameplay_state->subgroup_types.get_next_type(cur_type);
         } else {
             spots[cur_spot].mob_ptr = closest_member;
             closest_member->group_spot_index = cur_spot;

@@ -10,6 +10,7 @@
 
 #include "tool_type.h"
 
+#include "../game.h"
 #include "../utils/string_utils.h"
 #include "../vars.h"
 
@@ -70,5 +71,5 @@ void tool_type::load_resources(data_node* file) {
     
     rs.set("icon", icon_str, &icon_node);
     
-    bmp_icon = bitmaps.get(icon_str, icon_node);
+    bmp_icon = game.bitmaps.get(icon_str, icon_node);
 }

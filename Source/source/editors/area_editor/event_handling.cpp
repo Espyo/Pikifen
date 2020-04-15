@@ -714,7 +714,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         point hotspot = snap_point(game.mouse_cursor_w);
         
         tree_shadow* new_shadow = new tree_shadow(hotspot);
-        new_shadow->bitmap = bmp_error;
+        new_shadow->bitmap = game.bmp_error;
         
         game.cur_area_data.tree_shadows.push_back(new_shadow);
         

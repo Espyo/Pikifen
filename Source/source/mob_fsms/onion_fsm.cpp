@@ -11,6 +11,7 @@
 #include "onion_fsm.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mobs/onion.h"
 #include "../particle.h"
 #include "../utils/string_utils.h"
@@ -78,6 +79,6 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.total_speed = 70;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
-    pg.emit(particles);
+    pg.emit(game.gameplay_state->particles);
     
 }

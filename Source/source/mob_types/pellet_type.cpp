@@ -11,6 +11,7 @@
 #include "pellet_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_fsms/pellet_fsm.h"
 #include "../utils/string_utils.h"
@@ -80,7 +81,7 @@ void pellet_type::load_resources(data_node* file) {
     
     rs.set("number_image", number_image_str, &number_image_node);
     
-    bmp_number = bitmaps.get(number_image_str, number_image_node);
+    bmp_number = game.bitmaps.get(number_image_str, number_image_node);
 }
 
 
@@ -88,5 +89,5 @@ void pellet_type::load_resources(data_node* file) {
  * Unloads resources from memory.
  */
 void pellet_type::unload_resources() {
-    bitmaps.detach(bmp_number);
+    game.bitmaps.detach(bmp_number);
 }

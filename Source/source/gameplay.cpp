@@ -72,10 +72,13 @@ gameplay::gameplay() :
     cursor_height_diff_light(0.0f),
     cursor_save_timer(CURSOR_SAVE_INTERVAL),
     day(1),
+    hud_items(N_HUD_ITEMS),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
+    particles(0),
     paused(false),
+    precipitation(0),
     ready_for_input(false),
     selected_spray(0),
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
@@ -503,10 +506,10 @@ void gameplay::load_hud_info() {
     
 #define loader(var, name) \
     var = \
-          bitmaps.get( \
-                       bitmaps_node->get_child_by_name(name)->value, \
-                       bitmaps_node->get_child_by_name(name) \
-                     );
+          game.bitmaps.get( \
+                            bitmaps_node->get_child_by_name(name)->value, \
+                            bitmaps_node->get_child_by_name(name) \
+                          );
     
     loader(bmp_bubble,                 "bubble");
     loader(bmp_counter_bubble_field,   "counter_bubble_field");
@@ -552,17 +555,17 @@ void gameplay::unload() {
     
     unload_game_content();
     
-    bitmaps.detach(bmp_bubble);
-    bitmaps.detach(bmp_counter_bubble_field);
-    bitmaps.detach(bmp_counter_bubble_group);
-    bitmaps.detach(bmp_counter_bubble_standby);
-    bitmaps.detach(bmp_counter_bubble_total);
-    bitmaps.detach(bmp_day_bubble);
-    bitmaps.detach(bmp_distant_pikmin_marker);
-    bitmaps.detach(bmp_hard_bubble);
-    bitmaps.detach(bmp_message_box);
-    bitmaps.detach(bmp_no_pikmin_bubble);
-    bitmaps.detach(bmp_sun);
+    game.bitmaps.detach(bmp_bubble);
+    game.bitmaps.detach(bmp_counter_bubble_field);
+    game.bitmaps.detach(bmp_counter_bubble_group);
+    game.bitmaps.detach(bmp_counter_bubble_standby);
+    game.bitmaps.detach(bmp_counter_bubble_total);
+    game.bitmaps.detach(bmp_day_bubble);
+    game.bitmaps.detach(bmp_distant_pikmin_marker);
+    game.bitmaps.detach(bmp_hard_bubble);
+    game.bitmaps.detach(bmp_message_box);
+    game.bitmaps.detach(bmp_no_pikmin_bubble);
+    game.bitmaps.detach(bmp_sun);
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);
         bmp_fog = NULL;

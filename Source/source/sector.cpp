@@ -122,7 +122,7 @@ void area_data::clear() {
     bmap.clear();
     
     if(bg_bmp) {
-        bitmaps.detach(bg_bmp);
+        game.bitmaps.detach(bg_bmp);
         bg_bmp = NULL;
     }
     
@@ -147,13 +147,13 @@ void area_data::clone(area_data &other) {
     other.clear();
     
     if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        bitmaps.detach(other.bg_bmp_file_name);
+        game.bitmaps.detach(other.bg_bmp_file_name);
     }
     other.bg_bmp_file_name = bg_bmp_file_name;
     if(other.bg_bmp_file_name.empty()) {
         other.bg_bmp = NULL;
     } else {
-        other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
+        other.bg_bmp = game.bitmaps.get(bg_bmp_file_name, NULL, false);
     }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
@@ -226,7 +226,7 @@ void area_data::clone(area_data &other) {
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
         os_ptr->texture_info.bitmap =
-            textures.get(s_ptr->texture_info.file_name, NULL, false);
+            game.textures.get(s_ptr->texture_info.file_name, NULL, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -293,7 +293,7 @@ void area_data::clone(area_data &other) {
         ot_ptr->file_name = t_ptr->file_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = textures.get(t_ptr->file_name, NULL, false);
+        ot_ptr->bitmap = game.textures.get(t_ptr->file_name, NULL, false);
     }
     
     other.name = name;
@@ -1214,8 +1214,8 @@ sector::sector() :
  */
 sector::~sector() {
     for(size_t t = 0; t < 2; ++t) {
-        if(texture_info.bitmap && texture_info.bitmap != bmp_error) {
-            bitmaps.detach(texture_info.file_name);
+        if(texture_info.bitmap && texture_info.bitmap != game.bmp_error) {
+            game.bitmaps.detach(texture_info.file_name);
         }
     }
 }
@@ -1417,7 +1417,7 @@ tree_shadow::tree_shadow(
  * Destroys a tree shadow.
  */
 tree_shadow::~tree_shadow() {
-    textures.detach(file_name);
+    game.textures.detach(file_name);
 }
 
 
