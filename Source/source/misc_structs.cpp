@@ -283,6 +283,20 @@ void fade_manager::tick(const float time) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a font list struct.
+ */
+font_list::font_list() :
+    area_name(nullptr),
+    builtin(nullptr),
+    counter(nullptr),
+    main(nullptr),
+    value(nullptr) {
+    
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new HUD item.
  * center: Center coordinates, in screen dimension ratio.
  * size:   Dimensions, in screen dimension ratio.

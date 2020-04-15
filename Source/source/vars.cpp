@@ -61,13 +61,6 @@ sample_struct sfx_throw;
 asset_file_names_struct asset_file_names;
 
 map<string, particle_generator> custom_particle_generators;
-ALLEGRO_FONT* font_area_name = NULL;
-ALLEGRO_FONT* font_builtin = NULL;
-ALLEGRO_FONT* font_counter = NULL;
-ALLEGRO_FONT* font_main = NULL;
-unsigned int font_counter_h = 0;
-unsigned int font_main_h = 0;
-ALLEGRO_FONT* font_value = NULL;
 map<string, hazard> hazards;
 vector<string> leader_order_strings;
 map<string, liquid> liquids;

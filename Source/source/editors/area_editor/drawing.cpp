@@ -780,7 +780,7 @@ void area_editor::do_drawing() {
                     al_map_rgb(240, 224, 160)
                 );
                 draw_scaled_text(
-                    font_builtin, al_map_rgb(0, 64, 64),
+                    game.fonts.builtin, al_map_rgb(0, 64, 64),
                     path_preview_checkpoints[c],
                     point(
                         POINT_LETTER_TEXT_SCALE / game.cam.zoom,
@@ -874,7 +874,7 @@ void area_editor::do_drawing() {
                 al_map_rgb(255, 255, 32)
             );
             draw_scaled_text(
-                font_builtin, al_map_rgb(0, 64, 64),
+                game.fonts.builtin, al_map_rgb(0, 64, 64),
                 cross_section_checkpoints[p],
                 point(
                     POINT_LETTER_TEXT_SCALE / game.cam.zoom,
@@ -1246,7 +1246,7 @@ void area_editor::do_drawing() {
                     );
                     
                     draw_scaled_text(
-                        font_builtin, al_map_rgb(255, 255, 255),
+                        game.fonts.builtin, al_map_rgb(255, 255, 255),
                         point(
                             (cross_section_z_window_start.x + 8),
                             line_y
@@ -1260,7 +1260,7 @@ void area_editor::do_drawing() {
         } else {
         
             draw_scaled_text(
-                font_builtin, al_map_rgb(255, 255, 255),
+                game.fonts.builtin, al_map_rgb(255, 255, 255),
                 point(
                     (
                         cross_section_window_start.x +
@@ -1384,7 +1384,7 @@ void area_editor::draw_debug_text(
     int dw = 0;
     int dh = 0;
     al_get_text_dimensions(
-        font_builtin, text.c_str(),
+        game.fonts.builtin, text.c_str(),
         NULL, NULL, &dw, &dh
     );
     
@@ -1398,7 +1398,7 @@ void area_editor::draw_debug_text(
     );
     
     draw_scaled_text(
-        font_builtin, color,
+        game.fonts.builtin, color,
         where,
         point(
             DEBUG_TEXT_SCALE / game.cam.zoom,

@@ -62,6 +62,8 @@ public:
     size_t errors_reported_so_far = 0;
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;
+    //List of fonts.
+    font_list fonts;
     //Duration of the last few frames.
     vector<float> framerate_history;
     //Last framerate average started at this point in the history.

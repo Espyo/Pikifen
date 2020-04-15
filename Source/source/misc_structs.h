@@ -18,6 +18,7 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_font.h>
 
 #include "mob_categories/mob_category.h"
 #include "particle.h"
@@ -194,6 +195,25 @@ struct button_manager {
         const size_t id, const string &name, const string &option_name,
         const string &default_control_str
     );
+};
+
+
+/* ----------------------------------------------------------------------------
+ * List of fonts used in the game.
+ */
+struct font_list {
+    //Font for the area's name in loading screens.
+    ALLEGRO_FONT* area_name;
+    //Allegro's built-in font.
+    ALLEGRO_FONT* builtin;
+    //Font for HUD counters.
+    ALLEGRO_FONT* counter;
+    //Font for standard text.
+    ALLEGRO_FONT* main;
+    //Font for the carrying / money values.
+    ALLEGRO_FONT* value;
+    
+    font_list();
 };
 
 

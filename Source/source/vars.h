@@ -131,14 +131,6 @@ extern asset_file_names_struct asset_file_names;
 //General globals.
 
 extern map<string, particle_generator> custom_particle_generators;
-extern ALLEGRO_FONT* font_area_name;
-extern ALLEGRO_FONT* font_builtin;
-extern ALLEGRO_FONT* font_counter;
-extern ALLEGRO_FONT* font_main;
-extern unsigned int font_counter_h;
-extern unsigned int font_main_h;
-//Font for the carrying / money values.
-extern ALLEGRO_FONT* font_value;
 extern map<string, hazard> hazards;
 extern map<string, liquid> liquids;
 extern vector<string> leader_order_strings;

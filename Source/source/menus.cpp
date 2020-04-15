@@ -143,7 +143,7 @@ void area_menu::load() {
     [this] () {
         leave();
     },
-    "Back", font_main
+    "Back", game.fonts.main
     );
     menu_widgets.push_back(back_widget);
     
@@ -152,7 +152,7 @@ void area_menu::load() {
             point(game.win_w * 0.5, game.win_h * 0.1),
             point(game.win_w * 0.3, game.win_h * 0.1),
             "Pick an area:",
-            font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_CENTER
+            game.fonts.main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_CENTER
         )
     );
     
@@ -164,7 +164,7 @@ void area_menu::load() {
         [] () {
         
         },
-        "", font_area_name
+        "", game.fonts.area_name
             )
         );
         area_buttons.push_back(menu_widgets.back());
@@ -174,7 +174,7 @@ void area_menu::load() {
         new menu_text(
             point(game.win_w * 0.15, game.win_h * 0.9),
             point(game.win_w * 0.2, game.win_h * 0.1),
-            "Page:", font_main
+            "Page:", game.fonts.main
         )
     );
     menu_widgets.push_back(
@@ -189,14 +189,14 @@ void area_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font_main
+    "<", game.fonts.main
         )
     );
     cur_page_nr_widget =
         new menu_text(
         point(game.win_w * 0.4, game.win_h * 0.9),
         point(game.win_w * 0.1, game.win_h * 0.1),
-        "", font_main
+        "", game.fonts.main
     );
     menu_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(
@@ -211,7 +211,7 @@ void area_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font_main
+    ">", game.fonts.main
         )
     );
     
@@ -323,7 +323,7 @@ void controls_menu::do_drawing() {
         control_info* c_ptr = &game.options.controls[cur_player_nr][control_nr];
         
         draw_control(
-            font_main, *c_ptr,
+            game.fonts.main, *c_ptr,
             point(game.win_w * 0.83, game.win_h * (0.2 + 0.08 * list_nr)),
             point(game.win_w * 0.23, game.win_h * 0.07)
         );
@@ -453,7 +453,7 @@ void controls_menu::load() {
         new menu_text(
             point(game.win_w * 0.45, game.win_h * 0.10),
             point(game.win_w * 0.20, game.win_h * 0.08),
-            "Player:", font_main
+            "Player:", game.fonts.main
         )
     );
     
@@ -467,7 +467,7 @@ void controls_menu::load() {
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font_main
+    "<", game.fonts.main
         )
     );
     
@@ -475,7 +475,7 @@ void controls_menu::load() {
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.10),
         point(game.win_w * 0.10, game.win_h * 0.08),
-        "", font_main
+        "", game.fonts.main
     );
     menu_widgets.push_back(cur_player_nr_widget);
     
@@ -489,7 +489,7 @@ void controls_menu::load() {
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font_main
+    ">", game.fonts.main
         )
     );
     
@@ -500,7 +500,7 @@ void controls_menu::load() {
     [this] () {
         leave();
     },
-    "Back", font_main
+    "Back", game.fonts.main
     );
     menu_widgets.push_back(back_widget);
     
@@ -509,7 +509,7 @@ void controls_menu::load() {
             new menu_button(
                 point(game.win_w * 0.07, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "-", font_main
+        [] () { }, "-", game.fonts.main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -517,7 +517,7 @@ void controls_menu::load() {
             new menu_button(
                 point(game.win_w * 0.16, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "<", font_main
+        [] () { }, "<", game.fonts.main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -525,7 +525,7 @@ void controls_menu::load() {
             new menu_text(
                 point(game.win_w * 0.40, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.39, game.win_h * 0.07),
-                "", font_main, al_map_rgb(255, 255, 255),
+                "", game.fonts.main, al_map_rgb(255, 255, 255),
                 ALLEGRO_ALIGN_LEFT
             )
         );
@@ -534,7 +534,7 @@ void controls_menu::load() {
             new menu_button(
                 point(game.win_w * 0.65, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, ">", font_main
+        [] () { }, ">", game.fonts.main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -542,7 +542,7 @@ void controls_menu::load() {
             new menu_button(
                 point(game.win_w * 0.83, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.26, game.win_h * 0.07),
-        [] () { }, "", font_main
+        [] () { }, "", game.fonts.main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -577,7 +577,7 @@ void controls_menu::load() {
         ]->start_juicy_grow();
         update();
     },
-    "New", font_main
+    "New", game.fonts.main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -585,7 +585,7 @@ void controls_menu::load() {
         new menu_text(
             point(game.win_w * 0.15, game.win_h * 0.90),
             point(game.win_w * 0.20, game.win_h * 0.08),
-            "Page:", font_main
+            "Page:", game.fonts.main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -601,7 +601,7 @@ void controls_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font_main
+    "<", game.fonts.main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -609,7 +609,7 @@ void controls_menu::load() {
         new menu_text(
         point(game.win_w * 0.40, game.win_h * 0.90),
         point(game.win_w * 0.10, game.win_h * 0.08),
-        "", font_main
+        "", game.fonts.main
     );
     bottom_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(bottom_widgets.back());
@@ -626,7 +626,7 @@ void controls_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font_main
+    ">", game.fonts.main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -634,7 +634,7 @@ void controls_menu::load() {
         new menu_text(
         point(game.win_w * 0.50, game.win_h * 0.90),
         point(game.win_w * 1.00, game.win_h * 0.08),
-        "Waiting for any input...", font_main
+        "Waiting for any input...", game.fonts.main
     );
     menu_widgets.push_back(input_capture_msg_widget);
     
@@ -805,14 +805,14 @@ void main_menu::do_drawing() {
     }
     
     draw_scaled_text(
-        font_main, al_map_rgb(255, 255, 255),
+        game.fonts.main, al_map_rgb(255, 255, 255),
         point(8, game.win_h  - 8),
         point(0.4, 0.4),
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
     draw_scaled_text(
-        font_main, al_map_rgb(255, 255, 255),
+        game.fonts.main, al_map_rgb(255, 255, 255),
         point(game.win_w - 8, game.win_h  - 8),
         point(0.4, 0.4),
         ALLEGRO_ALIGN_RIGHT, 2,
@@ -908,7 +908,7 @@ void main_menu::load() {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.area_menu_state);
         });
-    }, "Play", font_area_name
+    }, "Play", game.fonts.area_name
         )
     );
     menu_widgets.push_back(
@@ -919,7 +919,7 @@ void main_menu::load() {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.options_menu_state);
         });
-    }, "Options", font_area_name
+    }, "Options", game.fonts.area_name
         )
     );
     menu_widgets.push_back(
@@ -930,7 +930,7 @@ void main_menu::load() {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.animation_editor_state);
         });
-    }, "Animation editor", font_area_name
+    }, "Animation editor", game.fonts.area_name
         )
     );
     menu_widgets.push_back(
@@ -941,7 +941,7 @@ void main_menu::load() {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.area_editor_state);
         });
-    }, "Area editor", font_area_name
+    }, "Area editor", game.fonts.area_name
         )
     );
     back_widget =
@@ -950,7 +950,7 @@ void main_menu::load() {
         point(game.win_w * 0.8, game.win_h * 0.06),
     [] () {
         game.is_game_running = false;
-    }, "Exit", font_area_name
+    }, "Exit", game.fonts.area_name
     );
     menu_widgets.push_back(back_widget);
     
@@ -1258,7 +1258,7 @@ void options_menu::load() {
     [this] () {
         leave();
     },
-    "Back", font_main
+    "Back", game.fonts.main
     );
     menu_widgets.push_back(back_widget);
     
@@ -1271,7 +1271,7 @@ void options_menu::load() {
         warning_widget->enabled = true;
         update();
     },
-    "Fullscreen", font_main
+    "Fullscreen", game.fonts.main
     );
     menu_widgets.push_back(fullscreen_widget);
     
@@ -1282,7 +1282,7 @@ void options_menu::load() {
     [this] () {
         change_resolution(-1);
     },
-    "<", font_main
+    "<", game.fonts.main
         )
     );
     
@@ -1290,7 +1290,7 @@ void options_menu::load() {
         new menu_text(
         point(game.win_w * 0.26, game.win_h * 0.30),
         point(game.win_w * 0.35, game.win_h * 0.08),
-        "Resolution: ", font_main,
+        "Resolution: ", game.fonts.main,
         al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(resolution_widget);
@@ -1302,7 +1302,7 @@ void options_menu::load() {
     [this] () {
         change_resolution(1);
     },
-    ">", font_main
+    ">", game.fonts.main
         )
     );
     
@@ -1313,7 +1313,7 @@ void options_menu::load() {
     [this] () {
         go_to_controls();
     },
-    "Edit controls...", font_main,
+    "Edit controls...", game.fonts.main,
     al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
         )
     );
@@ -1322,7 +1322,7 @@ void options_menu::load() {
         new menu_text(
         point(game.win_w * 0.50, game.win_h * 0.95),
         point(game.win_w * 0.95, game.win_h * 0.10),
-        "Please restart for the changes to take effect.", font_main
+        "Please restart for the changes to take effect.", game.fonts.main
     );
     warning_widget->enabled = false;
     menu_widgets.push_back(warning_widget);

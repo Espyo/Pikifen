@@ -752,7 +752,7 @@ void load_fonts() {
     //Main font.
     ALLEGRO_BITMAP* temp_font_bmp = load_bmp(asset_file_names.main_font);
     if(temp_font_bmp) {
-        font_main =
+        game.fonts.main =
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
@@ -763,7 +763,7 @@ void load_fonts() {
     //Area name font.
     temp_font_bmp = load_bmp(asset_file_names.area_name_font);
     if(temp_font_bmp) {
-        font_area_name =
+        game.fonts.area_name =
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
@@ -774,7 +774,7 @@ void load_fonts() {
     //Counter font.
     temp_font_bmp = load_bmp(asset_file_names.counter_font);
     if(temp_font_bmp) {
-        font_counter =
+        game.fonts.counter =
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges
@@ -785,7 +785,7 @@ void load_fonts() {
     //Value font.
     temp_font_bmp = load_bmp(asset_file_names.value_font);
     if(temp_font_bmp) {
-        font_value =
+        game.fonts.value =
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 VALUE_FONT_RANGES_SIZE / 2, value_font_ranges
@@ -793,10 +793,7 @@ void load_fonts() {
     }
     al_destroy_bitmap(temp_font_bmp);
     
-    if(font_main) font_main_h = al_get_font_line_height(font_main);
-    if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
-    
-    font_builtin = al_create_builtin_font();
+    game.fonts.builtin = al_create_builtin_font();
 }
 
 

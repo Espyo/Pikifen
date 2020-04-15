@@ -44,14 +44,14 @@ void area_editor::load() {
         al_map_rgb(192, 192, 208),
         al_map_rgb(32, 32, 64),
         al_map_rgb(96, 128, 160),
-        font_builtin
+        game.fonts.builtin
     );
     faded_style =
         new lafi::style(
         al_map_rgb(192, 192, 208),
         al_map_rgb(128, 128, 160),
         al_map_rgb(96, 128, 160),
-        font_builtin
+        game.fonts.builtin
     );
     gui = new lafi::gui(game.win_w, game.win_h, gui_style);
     

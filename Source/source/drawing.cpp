@@ -461,7 +461,7 @@ void gameplay::draw_hud() {
     //Day number text.
     if(hud_items.get_draw_data(HUD_ITEM_DAY_NUMBER, &i_center, &i_size)) {
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             i_center, ALLEGRO_ALIGN_CENTER, 1,
             i_size, i2s(day)
         );
@@ -521,7 +521,7 @@ void gameplay::draw_hud() {
     //Pikmin count "x".
     if(hud_items.get_draw_data(HUD_ITEM_PIKMIN_STANDBY_X, &i_center, &i_size)) {
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "x"
         );
     }
@@ -548,7 +548,7 @@ void gameplay::draw_hud() {
         
         draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
             ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(n_standby_pikmin)
         );
@@ -570,7 +570,7 @@ void gameplay::draw_hud() {
         
         draw_bitmap(bmp_counter_bubble_group, i_center, i_size);
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
             ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(pikmin_in_group)
         );
@@ -582,7 +582,7 @@ void gameplay::draw_hud() {
     ) {
         draw_bitmap(bmp_counter_bubble_field, i_center, i_size);
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
             ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(mobs.pikmin.size())
         );
@@ -601,7 +601,7 @@ void gameplay::draw_hud() {
         
         draw_bitmap(bmp_counter_bubble_total, i_center, i_size);
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
             ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(total_pikmin)
         );
@@ -612,7 +612,7 @@ void gameplay::draw_hud() {
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_1, &i_center, &i_size)
     ) {
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
         );
     }
@@ -620,7 +620,7 @@ void gameplay::draw_hud() {
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_2, &i_center, &i_size)
     ) {
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
         );
     }
@@ -628,7 +628,7 @@ void gameplay::draw_hud() {
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_3, &i_center, &i_size)
     ) {
         draw_compressed_text(
-            font_counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, al_map_rgb(255, 255, 255),
             i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
         );
     }
@@ -653,7 +653,7 @@ void gameplay::draw_hud() {
             hud_items.get_draw_data(HUD_ITEM_SPRAY_1_AMOUNT, &i_center, &i_size)
         ) {
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
+                game.fonts.counter, al_map_rgb(255, 255, 255),
                 point(i_center.x - i_size.x / 2.0, i_center.y),
                 ALLEGRO_ALIGN_LEFT, 1, i_size,
                 "x" + i2s(spray_stats[top_spray_nr].nr_sprays)
@@ -673,7 +673,7 @@ void gameplay::draw_hud() {
                         spray_types.size() >= 3
                     )
                 ) {
-                    draw_control(font_main, game.options.controls[0][c], i_center, i_size);
+                    draw_control(game.fonts.main, game.options.controls[0][c], i_center, i_size);
                     break;
                 }
             }
@@ -697,7 +697,7 @@ void gameplay::draw_hud() {
             ) {
             
                 draw_compressed_text(
-                    font_counter, al_map_rgb(255, 255, 255),
+                    game.fonts.counter, al_map_rgb(255, 255, 255),
                     point(i_center.x - i_size.x / 2.0, i_center.y),
                     ALLEGRO_ALIGN_LEFT, 1, i_size,
                     "x" + i2s(spray_stats[1].nr_sprays)
@@ -712,7 +712,7 @@ void gameplay::draw_hud() {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
                     if(game.options.controls[0][c].action == BUTTON_USE_SPRAY_2) {
                         draw_control(
-                            font_main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -745,7 +745,7 @@ void gameplay::draw_hud() {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
                     if(game.options.controls[0][c].action == BUTTON_PREV_SPRAY) {
                         draw_control(
-                            font_main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -776,7 +776,7 @@ void gameplay::draw_hud() {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
                     if(game.options.controls[0][c].action == BUTTON_NEXT_SPRAY) {
                         draw_control(
-                            font_main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main, game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -828,7 +828,7 @@ void gameplay::draw_ingame_text() {
                     point(
                         mob_ptr->pos.x,
                         mob_ptr->pos.y - mob_ptr->type->radius -
-                        font_main_h * 1.25
+                        al_get_font_line_height(game.fonts.main) * 1.25
                     ),
                     mob_ptr->carry_info->cur_carrying_strength,
                     mob_ptr->type->weight,
@@ -841,11 +841,11 @@ void gameplay::draw_ingame_text() {
             pile* p_ptr = mobs.pile[p];
             if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
-                    font_main,
+                    game.fonts.main,
                     game.config.carrying_color_stop,
                     point(
                         p_ptr->pos.x,
-                        p_ptr->pos.y - p_ptr->type->radius - font_main_h * 1.25
+                        p_ptr->pos.y - p_ptr->type->radius - al_get_font_line_height(game.fonts.main) * 1.25
                     ),
                     ALLEGRO_ALIGN_CENTER,
                     1,
@@ -861,7 +861,7 @@ void gameplay::draw_ingame_text() {
                     point(
                         t_ptr->pos.x,
                         t_ptr->pos.y - t_ptr->type->radius -
-                        font_main_h * 1.25
+                        al_get_font_line_height(game.fonts.main) * 1.25
                     ),
                     t_ptr->get_power(),
                     t_ptr->tas_type->power_goal,
@@ -880,7 +880,7 @@ void gameplay::draw_ingame_text() {
                         point(
                             s_ptr->pos.x,
                             s_ptr->pos.y - s_ptr->type->radius -
-                            font_main_h * 1.25
+                            al_get_font_line_height(game.fonts.main) * 1.25
                         ),
                         w,
                         s_ptr->sca_type->goal_number,
@@ -888,12 +888,12 @@ void gameplay::draw_ingame_text() {
                     );
                 } else {
                     draw_text_lines(
-                        font_main,
+                        game.fonts.main,
                         game.config.carrying_color_stop,
                         point(
                             s_ptr->pos.x,
                             s_ptr->pos.y - s_ptr->type->radius -
-                            font_main_h * 1.25
+                            al_get_font_line_height(game.fonts.main) * 1.25
                         ),
                         ALLEGRO_ALIGN_CENTER,
                         1,
@@ -1185,19 +1185,19 @@ void gameplay::draw_message_box() {
     
     draw_bitmap(
         bmp_message_box,
-        point(game.win_w / 2, game.win_h - font_main_h * 2 - 4),
-        point(game.win_w - 16, font_main_h * 4)
+        point(game.win_w / 2, game.win_h - al_get_font_line_height(game.fonts.main) * 2 - 4),
+        point(game.win_w - 16, al_get_font_line_height(game.fonts.main) * 4)
     );
     
     if(msg_box->speaker_icon) {
         draw_bitmap(
             msg_box->speaker_icon,
-            point(40, game.win_h - font_main_h * 4 - 16),
+            point(40, game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16),
             point(48, 48)
         );
         draw_bitmap(
             bmp_bubble,
-            point(40, game.win_h - font_main_h * 4 - 16),
+            point(40, game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16),
             point(64, 64)
         );
     }
@@ -1213,8 +1213,8 @@ void gameplay::draw_message_box() {
     for(size_t l = 0; l < lines.size(); ++l) {
     
         draw_compressed_text(
-            font_main, al_map_rgb(255, 255, 255),
-            point(24, game.win_h - font_main_h * (4 - l) + 8),
+            game.fonts.main, al_map_rgb(255, 255, 255),
+            point(24, game.win_h - al_get_font_line_height(game.fonts.main) * (4 - l) + 8),
             ALLEGRO_ALIGN_LEFT, 0, point(game.win_w - 64, 0),
             lines[l]
         );
@@ -1253,7 +1253,7 @@ void gameplay::draw_system_stuff() {
         }
         
         size_t n_lines = split(game.creator_tools.info_print_text, "\n", true).size();
-        int fh = al_get_font_line_height(font_builtin);
+        int fh = al_get_font_line_height(game.fonts.builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = n_lines * fh + (n_lines - 1);
         
@@ -1262,7 +1262,7 @@ void gameplay::draw_system_stuff() {
             al_map_rgba(0, 0, 0, 96 * alpha_mult)
         );
         draw_text_lines(
-            font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
+            game.fonts.builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
             point(8, 8), 0, 0, game.creator_tools.info_print_text
         );
     }
@@ -1825,11 +1825,11 @@ void draw_fraction(
     const point &center, const size_t current,
     const size_t needed, const ALLEGRO_COLOR &color
 ) {
-    float first_y = center.y - (font_main_h * 3) / 2;
-    float font_h = al_get_font_line_height(font_value);
+    float first_y = center.y - (al_get_font_line_height(game.fonts.main) * 3) / 2;
+    float font_h = al_get_font_line_height(game.fonts.value);
     
     draw_scaled_text(
-        font_value, color, point(center.x, first_y),
+        game.fonts.value, color, point(center.x, first_y),
         point(
             (current >= needed ? 1.2 : 1.0),
             (current >= needed ? 1.2 : 1.0)
@@ -1838,12 +1838,12 @@ void draw_fraction(
     );
     
     al_draw_text(
-        font_value, color, center.x, first_y + font_h * 0.75,
+        game.fonts.value, color, center.x, first_y + font_h * 0.75,
         ALLEGRO_ALIGN_CENTER, "-"
     );
     
     draw_scaled_text(
-        font_value, color, point(center.x, first_y + font_h * 1.5),
+        game.fonts.value, color, point(center.x, first_y + font_h * 1.5),
         point(
             (needed > current ? 1.2 : 1.0),
             (needed > current ? 1.2 : 1.0)
@@ -2075,7 +2075,7 @@ void draw_loading_screen(
             //No main text buffer? Create it!
             
             get_multiline_text_dimensions(
-                font_area_name, text, &text_w, &text_h
+                game.fonts.area_name, text, &text_w, &text_h
             );
             game.loading_text_bmp =
                 al_create_bitmap(text_w, text_h);
@@ -2084,7 +2084,7 @@ void draw_loading_screen(
             al_set_target_bitmap(game.loading_text_bmp); {
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
-                    font_area_name, al_map_rgb(255, 215, 0),
+                    game.fonts.area_name, al_map_rgb(255, 215, 0),
                     point(), ALLEGRO_ALIGN_LEFT, 0,
                     text
                 );
@@ -2105,7 +2105,7 @@ void draw_loading_screen(
         if(!game.loading_subtext_bmp) {
             //No subtext buffer? Create it!
             get_multiline_text_dimensions(
-                font_area_name, subtext, &subtext_w, &subtext_h
+                game.fonts.area_name, subtext, &subtext_w, &subtext_h
             );
             game.loading_subtext_bmp =
                 al_create_bitmap(subtext_w, subtext_h);
@@ -2113,7 +2113,7 @@ void draw_loading_screen(
             al_set_target_bitmap(game.loading_subtext_bmp); {
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
-                    font_area_name, al_map_rgb(224, 224, 224),
+                    game.fonts.area_name, al_map_rgb(224, 224, 224),
                     point(),
                     ALLEGRO_ALIGN_LEFT, 0,
                     subtext
@@ -2273,23 +2273,23 @@ void draw_loading_screen(
     //Draw the game's logo to the left of the "Loading..." text.
     if(opacity == 1.0f) {
         point icon_pos(
-            game.win_w - 8 - al_get_text_width(font_main, "Loading...") -
-            8 - font_main_h * 0.5,
-            game.win_h - 8 - font_main_h * 0.5
+            game.win_w - 8 - al_get_text_width(game.fonts.main, "Loading...") -
+            8 - al_get_font_line_height(game.fonts.main) * 0.5,
+            game.win_h - 8 - al_get_font_line_height(game.fonts.main) * 0.5
         );
         
         if(bmp_icon && bmp_icon != game.bmp_error) {
             draw_bitmap(
-                bmp_icon, icon_pos, point(-1, font_main_h),
+                bmp_icon, icon_pos, point(-1, al_get_font_line_height(game.fonts.main)),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         //Draw the "Loading..." text, if we're not fading.
         al_draw_text(
-            font_main, al_map_rgb(192, 192, 192),
+            game.fonts.main, al_map_rgb(192, 192, 192),
             game.win_w - 8,
-            game.win_h - 8 - font_main_h,
+            game.win_h - 8 - al_get_font_line_height(game.fonts.main),
             ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }
@@ -2376,7 +2376,7 @@ void draw_notification(
     if(control) {
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control(
-            font_main, *control,
+            game.fonts.main, *control,
             point(
                 -bmp_w * 0.5 + NOTIFICATION_PADDING +
                 NOTIFICATION_CONTROL_SIZE * 0.5,
@@ -2390,7 +2390,7 @@ void draw_notification(
     }
     
     draw_compressed_text(
-        font_main, map_alpha(NOTIFICATION_ALPHA),
+        game.fonts.main, map_alpha(NOTIFICATION_ALPHA),
         point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5
