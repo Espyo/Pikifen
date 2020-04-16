@@ -46,7 +46,7 @@ mob* converter_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     converter* m = new converter(pos, (converter_type*) type, angle);
-    game.gameplay_state->mobs.converter.push_back(m);
+    game.states.gameplay_st->mobs.converter.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* converter_category::create_type() {
  * Clears a converter from the list of converters.
  */
 void converter_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.converter.erase(
-        find(game.gameplay_state->mobs.converter.begin(), game.gameplay_state->mobs.converter.end(), (converter*) m)
+    game.states.gameplay_st->mobs.converter.erase(
+        find(game.states.gameplay_st->mobs.converter.begin(), game.states.gameplay_st->mobs.converter.end(), (converter*) m)
     );
 }
 

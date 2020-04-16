@@ -201,10 +201,10 @@ string gameplay::get_name() {
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay::leave() {
-    if(game.area_editor_state->quick_play_area.empty()) {
-        game.change_state(game.main_menu_state);
+    if(game.states.area_editor_st->quick_play_area.empty()) {
+        game.change_state(game.states.main_menu_st);
     } else {
-        game.change_state(game.area_editor_state);
+        game.change_state(game.states.area_editor_st);
     }
 }
 
@@ -611,7 +611,7 @@ void gameplay::update_closest_group_member() {
         closest_ptrs[m] = NULL;
     }
     
-    game.gameplay_state->closest_group_member = NULL;
+    game.states.gameplay_st->closest_group_member = NULL;
     
     //Fetch the closest, for each maturity.
     size_t n_members = cur_leader_ptr->group->members.size();
@@ -643,22 +643,22 @@ void gameplay::update_closest_group_member() {
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
         if(closest_dists[2 - m] > game.config.pikmin_grab_range) continue;
-        game.gameplay_state->closest_group_member = closest_ptrs[2 - m];
+        game.states.gameplay_st->closest_group_member = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
     }
     
-    if(!game.gameplay_state->closest_group_member) {
+    if(!game.states.gameplay_st->closest_group_member) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
         for(unsigned char m = 0; m < N_MATURITIES; ++m) {
             if(!closest_ptrs[m]) continue;
             
             if(
-                !game.gameplay_state->closest_group_member ||
+                !game.states.gameplay_st->closest_group_member ||
                 closest_dists[m] < closest_dist
             ) {
-                game.gameplay_state->closest_group_member = closest_ptrs[m];
+                game.states.gameplay_st->closest_group_member = closest_ptrs[m];
                 closest_dist = closest_dists[m];
             }
         }
@@ -666,14 +666,14 @@ void gameplay::update_closest_group_member() {
     }
     
     if(
-        fabs(game.gameplay_state->closest_group_member->z - cur_leader_ptr->z) >
+        fabs(game.states.gameplay_st->closest_group_member->z - cur_leader_ptr->z) >
         SECTOR_STEP
     ) {
         //If the group member is beyond a step, it's obviously above or below
         //a wall, compared to the leader. No grabbing allowed.
-        game.gameplay_state->closest_group_member_distant = true;
+        game.states.gameplay_st->closest_group_member_distant = true;
     } else {
-        game.gameplay_state->closest_group_member_distant =
+        game.states.gameplay_st->closest_group_member_distant =
             closest_dist > game.config.pikmin_grab_range;
     }
 }

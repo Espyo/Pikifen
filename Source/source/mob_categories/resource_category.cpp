@@ -46,7 +46,7 @@ mob* resource_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     resource* m = new resource(pos, (resource_type*) type, angle);
-    game.gameplay_state->mobs.resource.push_back(m);
+    game.states.gameplay_st->mobs.resource.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* resource_category::create_type() {
  * Clears a resource from the list of resources.
  */
 void resource_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.resource.erase(
-        find(game.gameplay_state->mobs.resource.begin(), game.gameplay_state->mobs.resource.end(), (resource*) m)
+    game.states.gameplay_st->mobs.resource.erase(
+        find(game.states.gameplay_st->mobs.resource.begin(), game.states.gameplay_st->mobs.resource.end(), (resource*) m)
     );
 }
 

@@ -94,7 +94,7 @@ void enemy::finish_dying_class_specifics() {
     par.friction = 0.5;
     par.gravity = 0;
     par.color = al_map_rgb(255, 192, 255);
-    game.gameplay_state->particles.add(par);
+    game.states.gameplay_st->particles.add(par);
 }
 
 
@@ -145,8 +145,8 @@ void enemy::start_dying_class_specifics() {
         
         //Start by obtaining a list of available Pikmin types, given the
         //Onions currently in the area.
-        for(size_t o = 0; o < game.gameplay_state->mobs.onion.size(); ++o) {
-            available_pik_types.push_back(game.gameplay_state->mobs.onion[o]->oni_type->pik_type);
+        for(size_t o = 0; o < game.states.gameplay_st->mobs.onion.size(); ++o) {
+            available_pik_types.push_back(game.states.gameplay_st->mobs.onion[o]->oni_type->pik_type);
         }
         
         //Remove duplicates from the list.

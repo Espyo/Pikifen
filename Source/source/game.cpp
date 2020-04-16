@@ -22,23 +22,16 @@
  * Constructor for the game class.
  */
 game_class::game_class() :
-    animation_editor_state(nullptr),
-    area_editor_state(nullptr),
-    area_menu_state(nullptr),
     bitmaps(""),
     bmp_error(nullptr),
-    controls_menu_state(nullptr),
     delta_t(0.0),
     display(nullptr),
     errors_reported_so_far(0),
     framerate_last_avg_point(0),
-    gameplay_state(nullptr),
     is_game_running(true),
     loading_subtext_bmp(nullptr),
     loading_text_bmp(nullptr),
-    main_menu_state(nullptr),
     mixer(nullptr),
-    options_menu_state(nullptr),
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
     win_fullscreen(options_struct::DEF_WIN_FULLSCREEN),
@@ -176,7 +169,7 @@ void game_class::shutdown() {
     }
     unload_misc_resources();
     destroy_mob_categories();
-    destroy_game_states();
+    states.destroy();
     destroy_misc();
     destroy_event_things(logic_timer, logic_queue);
     destroy_allegro();
@@ -208,7 +201,7 @@ int game_class::start() {
     
     //Essentials.
     init_essentials();
-    init_game_states();
+    states.init();
     
     //Controls and options.
     init_controls();
@@ -245,28 +238,79 @@ int game_class::start() {
         game.creator_tools.auto_start_mode == "play" &&
         !game.creator_tools.auto_start_option.empty()
     ) {
-        game.gameplay_state->area_to_load =
+        game.states.gameplay_st->area_to_load =
             game.creator_tools.auto_start_option;
-        game.change_state(game.gameplay_state);
+        game.change_state(game.states.gameplay_st);
     } else if(
         game.creator_tools.enabled &&
         game.creator_tools.auto_start_mode == "animation_editor"
     ) {
-        game.animation_editor_state->auto_load_anim =
+        game.states.animation_editor_st->auto_load_anim =
             game.creator_tools.auto_start_option;
-        game.change_state(game.animation_editor_state);
+        game.change_state(game.states.animation_editor_st);
     } else if(
         game.creator_tools.enabled &&
         game.creator_tools.auto_start_mode == "area_editor"
     ) {
-        game.area_editor_state->auto_load_area =
+        game.states.area_editor_st->auto_load_area =
             game.creator_tools.auto_start_option;
-        game.change_state(game.area_editor_state);
+        game.change_state(game.states.area_editor_st);
     } else {
-        game.change_state(game.main_menu_state);
+        game.change_state(game.states.main_menu_st);
     }
     
     return 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a game state list struct.
+ */
+game_state_list::game_state_list() :
+    animation_editor_st(nullptr),
+    area_editor_st(nullptr),
+    area_menu_st(nullptr),
+    controls_menu_st(nullptr),
+    gameplay_st(nullptr),
+    main_menu_st(nullptr),
+    options_menu_st(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys the states in the list.
+ */
+void game_state_list::destroy() {
+    delete animation_editor_st;
+    delete area_editor_st;
+    delete area_menu_st;
+    delete controls_menu_st;
+    delete gameplay_st;
+    delete main_menu_st;
+    delete options_menu_st;
+    
+    animation_editor_st = NULL;
+    area_editor_st = NULL;
+    area_menu_st = NULL;
+    controls_menu_st = NULL;
+    gameplay_st = NULL;
+    main_menu_st = NULL;
+    options_menu_st = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the states in the list.
+ */
+void game_state_list::init() {
+    animation_editor_st = new animation_editor();
+    area_editor_st = new area_editor();
+    area_menu_st = new area_menu();
+    controls_menu_st = new controls_menu();
+    gameplay_st = new gameplay();
+    main_menu_st = new main_menu();
+    options_menu_st = new options_menu();
 }
 
 

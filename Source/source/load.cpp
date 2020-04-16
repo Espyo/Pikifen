@@ -455,8 +455,8 @@ void load_area(
             triangulate(s_ptr, &lone_edges, false, false);
             
         if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
-            game.area_editor_state->non_simples[s_ptr] = res;
-            game.area_editor_state->lone_edges.insert(
+            game.states.area_editor_st->non_simples[s_ptr] = res;
+            game.states.area_editor_st->lone_edges.insert(
                 lone_edges.begin(), lone_edges.end()
             );
         }
@@ -939,12 +939,12 @@ void load_options() {
     //Set up the animation editor history.
     reader_setter rs(&file);
     
-    game.animation_editor_state->history.clear();
+    game.states.animation_editor_st->history.clear();
     for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
-        game.animation_editor_state->history.push_back("");
+        game.states.animation_editor_st->history.push_back("");
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
-            game.animation_editor_state->history[h]
+            game.states.animation_editor_st->history[h]
         );
     }
 }

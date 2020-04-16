@@ -1531,7 +1531,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
     
-    game.gameplay_state->cur_leader_ptr->add_to_group(pik);
+    game.states.gameplay_st->cur_leader_ptr->add_to_group(pik);
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
@@ -1547,7 +1547,7 @@ void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
     if(
         too_ptr->too_type->dropped_when_pikmin_is_whistled &&
         pik_ptr->is_tool_primed_for_whistle &&
-        game.gameplay_state->whistle.whistling
+        game.states.gameplay_st->whistle.whistling
     ) {
         //Since this event can be called when the Pikmin is bumped, we must add
         //a check to only release the tool if it's a real whistle. Checking
@@ -1569,7 +1569,7 @@ void pikmin_fsm::called_while_riding(mob* m, void* info1, void* info2) {
     
     if(
         tra_ptr->tra_type->cancellable_with_whistle &&
-        game.gameplay_state->whistle.whistling
+        game.states.gameplay_st->whistle.whistling
     ) {
         m->stop_track_ride();
         pikmin_fsm::called(m, NULL, NULL);
@@ -1724,7 +1724,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
     }
     
     m->subgroup_type_ptr =
-        game.gameplay_state->subgroup_types.get_type(
+        game.states.gameplay_st->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
     m->hold(m->focused_mob, INVALID, 4, 0, true, true);
@@ -1736,7 +1736,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
  * When the Pikmin must move towards the whistle.
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
-    m->chase(game.gameplay_state->cur_leader_ptr->pos, NULL, false, NULL, true);
+    m->chase(game.states.gameplay_st->cur_leader_ptr->pos, NULL, false, NULL, true);
 }
 
 
@@ -2266,10 +2266,10 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     t_ptr->speed = point();
     t_ptr->push_amount = 0.0f;
     m->subgroup_type_ptr =
-        game.gameplay_state->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type);
+        game.states.gameplay_st->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type);
     if(m->following_group) {
         m->following_group->group->change_standby_type_if_needed();
-        game.gameplay_state->update_closest_group_member();
+        game.states.gameplay_st->update_closest_group_member();
     }
 }
 
@@ -2310,7 +2310,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pg.total_speed = 50;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.25;
-    pg.emit(game.gameplay_state->particles);
+    pg.emit(game.states.gameplay_st->particles);
 }
 
 
@@ -2363,7 +2363,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed = 40;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
-        pg.emit(game.gameplay_state->particles);
+        pg.emit(game.states.gameplay_st->particles);
         
     } else {
         //Flower to leaf.
@@ -2386,7 +2386,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed = 50;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
-        pg.emit(game.gameplay_state->particles);
+        pg.emit(game.states.gameplay_st->particles);
     }
 }
 

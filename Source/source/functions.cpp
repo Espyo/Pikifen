@@ -141,32 +141,32 @@ void crash(const string &reason, const string &info, const int exit_status) {
             game.delta_t == 0.0f ? "0" :
             f2s(game.delta_t) + " (" + f2s(1 / game.delta_t) + " FPS)"
         ) + ".\n"
-        "  Mob count: " + i2s(game.gameplay_state->mobs.all.size()) + ". Particle count: " +
-        i2s(game.gameplay_state->particles.get_count()) + ".\n" +
+        "  Mob count: " + i2s(game.states.gameplay_st->mobs.all.size()) + ". Particle count: " +
+        i2s(game.states.gameplay_st->particles.get_count()) + ".\n" +
         "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
         i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
         "  Current leader: " ;
         
-    if(game.gameplay_state->cur_leader_ptr) {
+    if(game.states.gameplay_st->cur_leader_ptr) {
         error_str +=
-            game.gameplay_state->cur_leader_ptr->type->name + ", at " +
-            p2s(game.gameplay_state->cur_leader_ptr->pos) +
+            game.states.gameplay_st->cur_leader_ptr->type->name + ", at " +
+            p2s(game.states.gameplay_st->cur_leader_ptr->pos) +
             ", state history: " +
-            game.gameplay_state->cur_leader_ptr->fsm.cur_state->name;
+            game.states.gameplay_st->cur_leader_ptr->fsm.cur_state->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
             error_str +=
                 " " +
-                game.gameplay_state->cur_leader_ptr->fsm.prev_state_names[h];
+                game.states.gameplay_st->cur_leader_ptr->fsm.prev_state_names[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<pikmin*> closest_pikmin = game.gameplay_state->mobs.pikmin;
+        vector<pikmin*> closest_pikmin = game.states.gameplay_st->mobs.pikmin;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (pikmin * p1, pikmin * p2) -> bool {
             return
-            dist(game.gameplay_state->cur_leader_ptr->pos, p1->pos).to_float() <
-            dist(game.gameplay_state->cur_leader_ptr->pos, p2->pos).to_float();
+            dist(game.states.gameplay_st->cur_leader_ptr->pos, p1->pos).to_float() <
+            dist(game.states.gameplay_st->cur_leader_ptr->pos, p2->pos).to_float();
         }
         );
         
@@ -281,13 +281,13 @@ unsigned char get_blackout_strength() {
             &game.cur_area_data.weather_condition.blackout_strength[p + 1];
             
         if(
-            game.gameplay_state->day_minutes >= cur_ptr->first &&
-            game.gameplay_state->day_minutes < next_ptr->first
+            game.states.gameplay_st->day_minutes >= cur_ptr->first &&
+            game.states.gameplay_st->day_minutes < next_ptr->first
         ) {
         
             return
                 interpolate_number(
-                    game.gameplay_state->day_minutes,
+                    game.states.gameplay_st->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -306,8 +306,8 @@ mob* get_closest_mob_to_cursor() {
     dist closest_mob_to_cursor_dist = 0;
     mob* closest_mob_to_cursor = NULL;
     
-    for(size_t m = 0; m < game.gameplay_state->mobs.all.size(); ++m) {
-        mob* m_ptr = game.gameplay_state->mobs.all[m];
+    for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
+        mob* m_ptr = game.states.gameplay_st->mobs.all[m];
         
         if(!m_ptr->fsm.cur_state) continue;
         
@@ -363,13 +363,13 @@ ALLEGRO_COLOR get_daylight_color() {
         auto next_ptr = &game.cur_area_data.weather_condition.daylight[p + 1];
         
         if(
-            game.gameplay_state->day_minutes >= cur_ptr->first &&
-            game.gameplay_state->day_minutes < next_ptr->first
+            game.states.gameplay_st->day_minutes >= cur_ptr->first &&
+            game.states.gameplay_st->day_minutes < next_ptr->first
         ) {
         
             return
                 interpolate_color(
-                    game.gameplay_state->day_minutes,
+                    game.states.gameplay_st->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -398,13 +398,13 @@ ALLEGRO_COLOR get_fog_color() {
         auto next_ptr = &game.cur_area_data.weather_condition.fog_color[p + 1];
         
         if(
-            game.gameplay_state->day_minutes >= cur_ptr->first &&
-            game.gameplay_state->day_minutes < next_ptr->first
+            game.states.gameplay_st->day_minutes >= cur_ptr->first &&
+            game.states.gameplay_st->day_minutes < next_ptr->first
         ) {
         
             return
                 interpolate_color(
-                    game.gameplay_state->day_minutes,
+                    game.states.gameplay_st->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 );
@@ -468,13 +468,13 @@ float get_sun_strength() {
             &game.cur_area_data.weather_condition.sun_strength[p + 1];
             
         if(
-            game.gameplay_state->day_minutes >= cur_ptr->first &&
-            game.gameplay_state->day_minutes < next_ptr->first
+            game.states.gameplay_st->day_minutes >= cur_ptr->first &&
+            game.states.gameplay_st->day_minutes < next_ptr->first
         ) {
         
             return
                 interpolate_number(
-                    game.gameplay_state->day_minutes,
+                    game.states.gameplay_st->day_minutes,
                     cur_ptr->first, next_ptr->first,
                     cur_ptr->second, next_ptr->second
                 ) / 255.0f;
@@ -928,7 +928,7 @@ void save_options() {
         file.add(
             new data_node(
                 "animation_editor_history_" + i2s(h + 1),
-                game.animation_editor_state->history[h]
+                game.states.animation_editor_st->history[h]
             )
         );
     }
@@ -1083,10 +1083,10 @@ string standardize_path(const string &path) {
  */
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
-        game.gameplay_state->msg_box = new msg_box_info(text, speaker_bmp);
+        game.states.gameplay_st->msg_box = new msg_box_info(text, speaker_bmp);
     } else {
-        delete game.gameplay_state->msg_box;
-        game.gameplay_state->msg_box = NULL;
+        delete game.states.gameplay_st->msg_box;
+        game.states.gameplay_st->msg_box = NULL;
     }
 }
 

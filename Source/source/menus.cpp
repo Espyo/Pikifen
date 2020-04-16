@@ -93,7 +93,7 @@ void area_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void area_menu::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.main_menu_state);
+        game.change_state(game.states.main_menu_st);
     });
 }
 
@@ -112,9 +112,9 @@ void area_menu::load() {
     
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {
-        game.gameplay_state->area_to_load =
+        game.states.gameplay_st->area_to_load =
             areas_to_pick[0];
-        game.change_state(game.gameplay_state);
+        game.change_state(game.states.gameplay_st);
         return;
     }
     
@@ -268,9 +268,9 @@ void area_menu::update() {
         
         ((menu_button*) area_buttons[list_nr])->click_handler =
         [area_name, area_folder] () {
-            game.gameplay_state->area_to_load = area_folder;
+            game.states.gameplay_st->area_to_load = area_folder;
             game.fade_mgr.start_fade(false, [] () {
-                game.change_state(game.gameplay_state);
+                game.change_state(game.states.gameplay_st);
             });
         };
         ((menu_button*) area_buttons[list_nr])->text = area_name;
@@ -428,7 +428,7 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void controls_menu::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.options_menu_state);
+        game.change_state(game.states.options_menu_st);
     });
     save_options();
 }
@@ -905,7 +905,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.area_menu_state);
+            game.change_state(game.states.area_menu_st);
         });
     }, "Play", game.fonts.area_name
         )
@@ -916,7 +916,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.options_menu_state);
+            game.change_state(game.states.options_menu_st);
         });
     }, "Options", game.fonts.area_name
         )
@@ -927,7 +927,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.animation_editor_state);
+            game.change_state(game.states.animation_editor_st);
         });
     }, "Animation editor", game.fonts.area_name
         )
@@ -938,7 +938,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.area_editor_state);
+            game.change_state(game.states.area_editor_st);
         });
     }, "Area editor", game.fonts.area_name
         )
@@ -1208,7 +1208,7 @@ void options_menu::do_logic() {
  */
 void options_menu::go_to_controls() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.controls_menu_state);
+        game.change_state(game.states.controls_menu_st);
     });
 }
 
@@ -1236,7 +1236,7 @@ void options_menu::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void options_menu::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.main_menu_state);
+        game.change_state(game.states.main_menu_st);
     });
     save_options();
 }

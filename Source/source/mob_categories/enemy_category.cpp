@@ -46,7 +46,7 @@ mob* enemy_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     enemy* m = new enemy(pos, (enemy_type*) type, angle);
-    game.gameplay_state->mobs.enemy.push_back(m);
+    game.states.gameplay_st->mobs.enemy.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* enemy_category::create_type() {
  * Clears an enemy from the list of enemies.
  */
 void enemy_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.enemy.erase(
-        find(game.gameplay_state->mobs.enemy.begin(), game.gameplay_state->mobs.enemy.end(), (enemy*) m)
+    game.states.gameplay_st->mobs.enemy.erase(
+        find(game.states.gameplay_st->mobs.enemy.begin(), game.states.gameplay_st->mobs.enemy.end(), (enemy*) m)
     );
 }
 

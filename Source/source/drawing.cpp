@@ -1926,7 +1926,7 @@ void draw_liquid(
         
         float ground_wobble =
             -sin(
-                game.gameplay_state->area_time_passed *
+                game.states.gameplay_st->area_time_passed *
                 LIQUID_WOBBLE_TIME_SCALE
             ) * LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
@@ -2014,7 +2014,7 @@ void draw_liquid(
             av[v].y = vy - where.y;
             av[v].u =
                 vx +
-                (game.gameplay_state->area_time_passed * layer_speed[l]);
+                (game.states.gameplay_st->area_time_passed * layer_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
                 al_map_rgba(
@@ -2313,7 +2313,7 @@ void draw_mob_shadow(
     float shadow_w =
         diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
         
-    if(game.gameplay_state->day_minutes < 60 * 12) {
+    if(game.states.gameplay_st->day_minutes < 60 * 12) {
         //Shadows point to the West.
         shadow_x = -shadow_w + diameter * 0.5;
         shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;

@@ -20,8 +20,8 @@
 #include "game_config.h"
 #include "gameplay.h"
 #include "liquid.h"
-#include "mob_script_action.h"
 #include "menus.h"
+#include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"
 
@@ -31,15 +31,32 @@ const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 //Only save the latest N FPS samples.
 const size_t FRAMERATE_HISTORY_SIZE = 300;
 
+
+/* ----------------------------------------------------------------------------
+ * List of all game states.
+ */
+struct game_state_list {
+    animation_editor* animation_editor_st;
+    area_editor* area_editor_st;
+    area_menu* area_menu_st;
+    controls_menu* controls_menu_st;
+    gameplay* gameplay_st;
+    main_menu* main_menu_st;
+    options_menu* options_menu_st;
+    
+    void init();
+    void destroy();
+    
+    game_state_list();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Information about the whole game.
+ */
 class game_class {
 public:
 
-    //Animation editor game state.
-    animation_editor* animation_editor_state;
-    //Area editor game state.
-    area_editor* area_editor_state;
-    //Area menu game state.
-    area_menu* area_menu_state;
     //List of asset file names.
     asset_file_names_struct asset_file_names;
     //Manager of all main bitmaps (not floor textures).
@@ -52,8 +69,6 @@ public:
     camera_info cam;
     //Game's configuration.
     game_config config;
-    //Controls menu game state.
-    controls_menu* controls_menu_state;
     //Info about the creator tools.
     creator_tools_info creator_tools;
     //Data about the area that's currently being used.
@@ -74,8 +89,6 @@ public:
     vector<float> framerate_history;
     //Last framerate average started at this point in the history.
     size_t framerate_last_avg_point;
-    //Gameplay game state.
-    gameplay* gameplay_state;
     //List of hazards.
     map<string, hazard> hazards;
     //Identity matrix transformation. Cache for convenience.
@@ -90,8 +103,6 @@ public:
     ALLEGRO_BITMAP* loading_subtext_bmp;
     //Loading screen main text buffer.
     ALLEGRO_BITMAP* loading_text_bmp;
-    //Main menu game state.
-    main_menu* main_menu_state;
     //List of mob actions.
     vector<mob_action> mob_actions;
     //List of mob categories.
@@ -106,8 +117,6 @@ public:
     ALLEGRO_MIXER* mixer;
     //User options.
     options_struct options;
-    //Options game state.
-    options_menu* options_menu_state;
     //Manager of all sector types.
     sector_types_manager sector_types;
     //Screen to world coordinate matrix. Cache for convenience.
@@ -118,6 +127,8 @@ public:
     map<string, spike_damage_type> spike_damage_types;
     //List of spray types.
     vector<spray_type> spray_types;
+    //List of game states.
+    game_state_list states;
     //List of status types.
     map<string, status_type> status_types;
     //All system assets.

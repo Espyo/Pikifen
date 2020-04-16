@@ -46,7 +46,7 @@ mob* decoration_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     decoration* m = new decoration(pos, (decoration_type*) type, angle);
-    game.gameplay_state->mobs.decoration.push_back(m);
+    game.states.gameplay_st->mobs.decoration.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* decoration_category::create_type() {
  * Clears a decoration from the list of decorations.
  */
 void decoration_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.decoration.erase(
-        find(game.gameplay_state->mobs.decoration.begin(), game.gameplay_state->mobs.decoration.end(), (decoration*) m)
+    game.states.gameplay_st->mobs.decoration.erase(
+        find(game.states.gameplay_st->mobs.decoration.begin(), game.states.gameplay_st->mobs.decoration.end(), (decoration*) m)
     );
 }
 

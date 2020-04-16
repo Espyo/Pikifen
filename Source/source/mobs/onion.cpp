@@ -61,7 +61,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  */
 void onion::call_pikmin() {
 
-    if(game.gameplay_state->mobs.pikmin.size() >= game.config.max_pikmin_in_field) return;
+    if(game.states.gameplay_st->mobs.pikmin.size() >= game.config.max_pikmin_in_field) return;
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
@@ -138,7 +138,7 @@ void onion::spew() {
     if(spew_queue == 0) return;
     spew_queue--;
     
-    unsigned total_after = game.gameplay_state->mobs.pikmin.size() + 1;
+    unsigned total_after = game.states.gameplay_st->mobs.pikmin.size() + 1;
     
     if(total_after > game.config.max_pikmin_in_field) {
         pikmin_inside[0]++;
@@ -170,11 +170,11 @@ void onion::stow_pikmin() {
     for(; maturity < N_MATURITIES; ++maturity) {
         for(
             size_t p = 0;
-            p < game.gameplay_state->cur_leader_ptr->group->members.size();
+            p < game.states.gameplay_st->cur_leader_ptr->group->members.size();
             ++p
         ) {
             mob* mob_ptr =
-                game.gameplay_state->cur_leader_ptr->group->members[p];
+                game.states.gameplay_st->cur_leader_ptr->group->members[p];
             if(mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN) {
                 continue;
             }
@@ -202,8 +202,8 @@ void onion::stow_pikmin() {
  * Ticks some logic specific to Onions.
  */
 void onion::tick_class_specifics(const float delta_t) {
-    for(size_t o = 0; o < game.gameplay_state->mobs.onion.size(); ++o) {
-        onion* o_ptr = game.gameplay_state->mobs.onion[o];
+    for(size_t o = 0; o < game.states.gameplay_st->mobs.onion.size(); ++o) {
+        onion* o_ptr = game.states.gameplay_st->mobs.onion[o];
         
         if(o_ptr->spew_queue != 0) {
         
@@ -216,8 +216,8 @@ void onion::tick_class_specifics(const float delta_t) {
         
         if(
             bbox_check(
-                game.gameplay_state->cur_leader_ptr->pos, o_ptr->pos,
-                game.gameplay_state->cur_leader_ptr->type->radius +
+                game.states.gameplay_st->cur_leader_ptr->pos, o_ptr->pos,
+                game.states.gameplay_st->cur_leader_ptr->type->radius +
                 o_ptr->type->radius * 3
             )
         ) {
@@ -226,8 +226,8 @@ void onion::tick_class_specifics(const float delta_t) {
         
         if(
             bbox_check(
-                game.gameplay_state->leader_cursor_w, o_ptr->pos,
-                game.gameplay_state->cur_leader_ptr->type->radius +
+                game.states.gameplay_st->leader_cursor_w, o_ptr->pos,
+                game.states.gameplay_st->cur_leader_ptr->type->radius +
                 o_ptr->type->radius * 3
             )
         ) {

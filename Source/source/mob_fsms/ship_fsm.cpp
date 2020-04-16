@@ -68,14 +68,14 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS
         ) {
             size_t type_nr = r_ptr->res_type->spray_to_concoct;
-            game.gameplay_state->spray_stats[type_nr].nr_ingredients++;
+            game.states.gameplay_st->spray_stats[type_nr].nr_ingredients++;
             if(
-                game.gameplay_state->spray_stats[type_nr].nr_ingredients >=
+                game.states.gameplay_st->spray_stats[type_nr].nr_ingredients >=
                 game.spray_types[type_nr].ingredients_needed
             ) {
-                game.gameplay_state->spray_stats[type_nr].nr_ingredients -=
+                game.states.gameplay_st->spray_stats[type_nr].nr_ingredients -=
                     game.spray_types[type_nr].ingredients_needed;
-                game.gameplay_state->spray_stats[type_nr].nr_sprays++;
+                game.states.gameplay_st->spray_stats[type_nr].nr_sprays++;
             }
         }
     }
@@ -92,7 +92,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.total_speed = 70;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
-    pg.emit(game.gameplay_state->particles);
+    pg.emit(game.states.gameplay_st->particles);
     
 }
 

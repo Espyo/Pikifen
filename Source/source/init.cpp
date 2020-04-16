@@ -77,20 +77,6 @@ void destroy_event_things(
 
 
 /* ----------------------------------------------------------------------------
- * Destroys the list of game states.
- */
-void destroy_game_states() {
-    delete game.animation_editor_state;
-    delete game.area_editor_state;
-    delete game.area_menu_state;
-    delete game.controls_menu_state;
-    delete game.gameplay_state;
-    delete game.main_menu_state;
-    delete game.options_menu_state;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Destroys miscellaneous things.
  */
 void destroy_misc() {
@@ -375,24 +361,10 @@ void init_event_things(
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the game states.
- */
-void init_game_states() {
-    game.animation_editor_state = new animation_editor();
-    game.area_editor_state = new area_editor();
-    game.area_menu_state = new area_menu();
-    game.controls_menu_state = new controls_menu();
-    game.gameplay_state = new gameplay();
-    game.main_menu_state = new main_menu();
-    game.options_menu_state = new options_menu();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Initializes the HUD items, along with their default coordinates.
  */
 void init_hud_items() {
-    hud_item_manager* mgr = &game.gameplay_state->hud_items;
+    hud_item_manager* mgr = &game.states.gameplay_st->hud_items;
     mgr->set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
     mgr->set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
     mgr->set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
@@ -445,10 +417,10 @@ void init_misc() {
     
     srand(time(NULL));
     
-    game.gameplay_state->whistle.next_dot_timer.start();
-    game.gameplay_state->whistle.next_ring_timer.start();
+    game.states.gameplay_st->whistle.next_dot_timer.start();
+    game.states.gameplay_st->whistle.next_ring_timer.start();
     
-    game.gameplay_state->particles =
+    game.states.gameplay_st->particles =
         particle_manager(game.options.max_particles);
         
     game.options.zoom_mid_level =

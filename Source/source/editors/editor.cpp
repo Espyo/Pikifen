@@ -672,12 +672,12 @@ bool editor::is_mouse_in_gui(const point &mouse_coords) {
  */
 void editor::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        if(game.area_editor_state->quick_play_area.empty()) {
-            game.change_state(game.main_menu_state);
+        if(game.states.area_editor_st->quick_play_area.empty()) {
+            game.change_state(game.states.main_menu_st);
         } else {
-            game.gameplay_state->area_to_load =
-                game.area_editor_state->quick_play_area;
-            game.change_state(game.gameplay_state);
+            game.states.gameplay_st->area_to_load =
+                game.states.area_editor_st->quick_play_area;
+            game.change_state(game.states.gameplay_st);
         }
     });
 }

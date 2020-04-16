@@ -46,7 +46,7 @@ mob* bouncer_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     bouncer* m = new bouncer(pos, (bouncer_type*) type, angle);
-    game.gameplay_state->mobs.bouncer.push_back(m);
+    game.states.gameplay_st->mobs.bouncer.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* bouncer_category::create_type() {
  * Clears a bouncer from the list of bouncers.
  */
 void bouncer_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.bouncer.erase(
-        find(game.gameplay_state->mobs.bouncer.begin(), game.gameplay_state->mobs.bouncer.end(), (bouncer*) m)
+    game.states.gameplay_st->mobs.bouncer.erase(
+        find(game.states.gameplay_st->mobs.bouncer.begin(), game.states.gameplay_st->mobs.bouncer.end(), (bouncer*) m)
     );
 }
 

@@ -46,7 +46,7 @@ mob* ship_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     ship* m = new ship(pos, (ship_type*) type, angle);
-    game.gameplay_state->mobs.ship.push_back(m);
+    game.states.gameplay_st->mobs.ship.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* ship_category::create_type() {
  * Clears a ship from the list of ships.
  */
 void ship_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.ship.erase(
-        find(game.gameplay_state->mobs.ship.begin(), game.gameplay_state->mobs.ship.end(), (ship*) m)
+    game.states.gameplay_st->mobs.ship.erase(
+        find(game.states.gameplay_st->mobs.ship.begin(), game.states.gameplay_st->mobs.ship.end(), (ship*) m)
     );
 }
 

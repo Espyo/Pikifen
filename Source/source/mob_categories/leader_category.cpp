@@ -46,7 +46,7 @@ mob* leader_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     leader* m = new leader(pos, (leader_type*) type, angle);
-    game.gameplay_state->mobs.leader.push_back(m);
+    game.states.gameplay_st->mobs.leader.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* leader_category::create_type() {
  * Clears a leader from the list of leaders.
  */
 void leader_category::erase_mob(mob* m) {
-    game.gameplay_state->mobs.leader.erase(
-        find(game.gameplay_state->mobs.leader.begin(), game.gameplay_state->mobs.leader.end(), (leader*) m)
+    game.states.gameplay_st->mobs.leader.erase(
+        find(game.states.gameplay_st->mobs.leader.begin(), game.states.gameplay_st->mobs.leader.end(), (leader*) m)
     );
 }
 
