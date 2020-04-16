@@ -30,10 +30,6 @@ ALLEGRO_BITMAP* load_bmp(
     const bool report_error = true, const bool error_bmp_on_error = true,
     const bool error_bmp_on_empty = true, const bool path_from_root = false
 );
-void load_control(
-    const unsigned char action, const unsigned char player,
-    const string &name, data_node &file, const string &def = ""
-);
 void load_custom_particle_generators(const bool load_resources);
 data_node load_data_file(const string &file_name);
 void load_creator_tools();

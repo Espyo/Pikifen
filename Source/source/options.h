@@ -16,6 +16,7 @@
 
 #include "const.h"
 #include "controls.h"
+#include "utils/data_file.h"
 
 using std::size_t;
 using std::vector;
@@ -96,7 +97,17 @@ struct options_struct {
     //Set the camera's middle zoom level to this amount.
     float zoom_mid_level;
     
+    void load(data_node* file);
+    void save(data_node* file);
+    
     options_struct();
+    
+private:
+
+    void load_control(
+        const unsigned char action, const unsigned char player,
+        const string &name, data_node* file, const string &def = ""
+    );
     
 };
 

@@ -521,26 +521,6 @@ ALLEGRO_BITMAP* load_bmp(
 
 
 /* ----------------------------------------------------------------------------
- * Loads a game control.
- */
-void load_control(
-    const unsigned char action, const unsigned char player,
-    const string &name, data_node &file, const string &def
-) {
-    string s =
-        file.get_child_by_name(
-            "p" + i2s((player + 1)) + "_" + name
-        )->get_value_or_default((player == 0) ? def : "");
-    vector<string> possible_controls = semicolon_list_to_vector(s);
-    size_t n_possible_controls = possible_controls.size();
-    
-    for(size_t c = 0; c < n_possible_controls; ++c) {
-        game.options.controls[player].push_back(control_info(action, possible_controls[c]));
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Loads the creator tools from the tool config file.
  */
 void load_creator_tools() {
@@ -939,10 +919,6 @@ void load_misc_sounds() {
  * Loads the player's options.
  */
 void load_options() {
-    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
-        game.animation_editor_state->history.push_back("");
-    }
-    
     data_node file = data_node(OPTIONS_FILE_PATH);
     if(!file.file_was_opened) return;
     
@@ -953,172 +929,24 @@ void load_options() {
         game.joystick_numbers[al_get_joystick(j)] = j;
     }
     
-    /* Load controls.
-     * Format of a control:
-     * "p<player>_<action>=<possible control 1>,<possible control 2>,<...>"
-     * Format of a possible control:
-     * "<input method>_<parameters, underscore separated>"
-     * Input methods:
-     * "k" (keyboard key), "mb" (mouse button),
-     * "mwu" (mouse wheel up), "mwd" (down),
-     * "mwl" (left), "mwr" (right), "jb" (joystick button),
-     * "jap" (joystick axis, positive), "jan" (joystick axis, negative).
-     * The parameters are the key/button number, joystick number,
-     * joystick stick and axis, etc.
-     * Check the constructor of control_info for more information.
-     */
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        game.options.controls[p].clear();
-        for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string option_name = game.buttons.list[b].option_name;
-            if(option_name.empty()) continue;
-            load_control(game.buttons.list[b].id, p, option_name, file);
-        }
-    }
+    //Read the main options.
+    game.options.load(&file);
     
-    //Weed out controls that didn't parse correctly.
-    for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        size_t n_controls = game.options.controls[p].size();
-        for(size_t c = 0; c < n_controls; ) {
-            if(game.options.controls[p][c].action == BUTTON_NONE) {
-                game.options.controls[p].erase(
-                    game.options.controls[p].begin() + c
-                );
-            } else {
-                c++;
-            }
-        }
-    }
+    game.win_fullscreen = game.options.intended_win_fullscreen;
+    game.win_w = game.options.intended_win_w;
+    game.win_h = game.options.intended_win_h;
     
-    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        game.options.mouse_moves_cursor[p] =
-            s2b(
-                file.get_child_by_name(
-                    "p" + i2s((p + 1)) + "_mouse_moves_cursor"
-                )->get_value_or_default((p == 0) ? "true" : "false")
-            );
-    }
-    
-    //Other options.
+    //Set up the animation editor history.
     reader_setter rs(&file);
-    string resolution_str;
-    rs.set(
-        "area_editor_backup_interval",
-        game.options.area_editor_backup_interval
-    );
-    rs.set(
-        "area_editor_grid_interval",
-        game.options.area_editor_grid_interval
-    );
-    rs.set(
-        "area_editor_show_edge_length",
-        game.options.area_editor_show_edge_length
-    );
-    rs.set(
-        "area_editor_show_territory",
-        game.options.area_editor_show_territory
-    );
-    rs.set(
-        "area_editor_snap_threshold",
-        game.options.area_editor_snap_threshold
-    );
-    rs.set(
-        "area_editor_undo_limit",
-        game.options.area_editor_undo_limit
-    );
-    rs.set(
-        "area_editor_view_mode",
-        game.options.area_editor_view_mode
-    );
-    rs.set(
-        "draw_cursor_trail",
-        game.options.draw_cursor_trail
-    );
-    rs.set(
-        "editor_mmb_pan",
-        game.options.editor_mmb_pan
-    );
-    rs.set(
-        "editor_mouse_drag_threshold",
-        game.options.editor_mouse_drag_threshold
-    );
-    rs.set(
-        "fps",
-        game.options.target_fps
-    );
-    rs.set(
-        "fullscreen",
-        game.win_fullscreen
-    );
-    rs.set(
-        "joystick_min_deadzone",
-        game.options.joystick_min_deadzone
-    );
-    rs.set(
-        "joystick_max_deadzone",
-        game.options.joystick_max_deadzone
-    );
-    rs.set(
-        "max_particles",
-        game.options.max_particles
-    );
-    rs.set(
-        "middle_zoom_level",
-        game.options.zoom_mid_level
-    );
-    rs.set(
-        "mipmaps",
-        game.options.mipmaps_enabled
-    );
-    rs.set(
-        "pretty_whistle",
-        game.options.pretty_whistle
-    );
-    rs.set(
-        "resolution",
-        resolution_str
-    );
-    rs.set(
-        "smooth_scaling",
-        game.options.smooth_scaling
-    );
-    rs.set(
-        "window_position_hack",
-        game.options.window_position_hack
-    );
     
-    game.options.target_fps = std::max(1, game.options.target_fps);
-    game.options.joystick_min_deadzone =
-        clamp(game.options.joystick_min_deadzone, 0.0f, 1.0f);
-    game.options.joystick_max_deadzone =
-        clamp(game.options.joystick_max_deadzone, 0.0f, 1.0f);
-    if(
-        game.options.joystick_min_deadzone >
-        game.options.joystick_max_deadzone
-    ) {
-        std::swap(
-            game.options.joystick_min_deadzone,
-            game.options.joystick_max_deadzone
-        );
-    }
-    
-    vector<string> resolution_parts = split(resolution_str);
-    if(resolution_parts.size() >= 2) {
-        game.win_w = std::max(1, s2i(resolution_parts[0]));
-        game.win_h = std::max(1, s2i(resolution_parts[1]));
-    }
-    
+    game.animation_editor_state->history.clear();
     for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
+        game.animation_editor_state->history.push_back("");
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
             game.animation_editor_state->history[h]
         );
     }
-    
-    game.options.intended_win_fullscreen = game.win_fullscreen;
-    game.options.intended_win_w = game.win_w;
-    game.options.intended_win_h = game.win_h;
-    
 }
 
 
