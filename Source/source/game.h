@@ -84,10 +84,6 @@ public:
     bool is_game_running;
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
-    //Standard leader order.
-    vector<leader_type*> leader_order;
-    //Loaded strings representing the standard leader order. Used for later.
-    vector<string> leader_order_strings;
     //List of liquids.
     map<string, liquid> liquids;
     //Loading screen subtext buffer.
@@ -108,16 +104,10 @@ public:
     point mouse_cursor_w;
     //Global audio mixer.
     ALLEGRO_MIXER* mixer;
-    //Name of the fan-game.
-    string name;
     //User options.
     options_struct options;
     //Options game state.
     options_menu* options_menu_state;
-    //Standard Pikmin order.
-    vector<pikmin_type*> pikmin_order;
-    //Loaded strings representing the standard Pikmin order. Used for later.
-    vector<string> pikmin_order_strings;
     //Manager of all sector types.
     sector_types_manager sector_types;
     //Screen to world coordinate matrix. Cache for convenience.
@@ -134,8 +124,6 @@ public:
     system_asset_list sys_assets;
     //Manager of all floor texture bitmaps.
     bmp_manager textures;
-    //Version of the fan-game.
-    string version;
     //List of weather conditions.
     map<string, weather> weather_conditions;
     //Current fullscreen state.

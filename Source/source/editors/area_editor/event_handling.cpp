@@ -519,7 +519,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         mob_type* type_to_use = last_mob_type;
         if(!type_to_use) {
-            type_to_use = game.pikmin_order[0];
+            type_to_use = game.config.pikmin_order[0];
         }
         
         game.cur_area_data.mob_generators.push_back(

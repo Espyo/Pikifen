@@ -646,7 +646,7 @@ void gameplay::do_gameplay_logic() {
             i2s(VERSION_MINOR) + "." +
             i2s(VERSION_REV);
         string game_v_str =
-            game.version;
+            game.config.version;
             
         print_info(
             "FPS: " + fps_str +

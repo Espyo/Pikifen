@@ -815,7 +815,7 @@ void main_menu::do_drawing() {
         point(game.win_w - 8, game.win_h  - 8),
         point(0.4, 0.4),
         ALLEGRO_ALIGN_RIGHT, 2,
-        game.name + " " + game.version +
+        game.config.name + " " + game.config.version +
         ", powered by Pikifen " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
     );

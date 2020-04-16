@@ -286,11 +286,11 @@ void gameplay::load() {
         mobs.leader.begin(), mobs.leader.end(),
     [] (leader * l1, leader * l2) -> bool {
         size_t priority_l1 =
-        find(game.leader_order.begin(), game.leader_order.end(), l1->lea_type) -
-        game.leader_order.begin();
+        find(game.config.leader_order.begin(), game.config.leader_order.end(), l1->lea_type) -
+        game.config.leader_order.begin();
         size_t priority_l2 =
-        find(game.leader_order.begin(), game.leader_order.end(), l2->lea_type) -
-        game.leader_order.begin();
+        find(game.config.leader_order.begin(), game.config.leader_order.end(), l2->lea_type) -
+        game.config.leader_order.begin();
         return priority_l1 < priority_l2;
     }
     );
@@ -419,10 +419,10 @@ void gameplay::load_game_content() {
     load_mob_types(true);
     
     //Register leader sub-group types.
-    for(size_t p = 0; p < game.pikmin_order.size(); ++p) {
+    for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
         subgroup_types.register_type(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, game.pikmin_order[p],
-            game.pikmin_order[p]->bmp_icon
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin_order[p],
+            game.config.pikmin_order[p]->bmp_icon
         );
     }
     

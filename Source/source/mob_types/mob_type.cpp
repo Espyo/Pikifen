@@ -651,21 +651,21 @@ void load_mob_types(bool load_resources) {
     for(auto &p : game.mob_types.pikmin) {
         if(
             find(
-                game.pikmin_order_strings.begin(), game.pikmin_order_strings.end(),
+                game.config.pikmin_order_strings.begin(), game.config.pikmin_order_strings.end(),
                 p.first
-            ) == game.pikmin_order_strings.end()
+            ) == game.config.pikmin_order_strings.end()
         ) {
             log_error(
                 "Pikmin type \"" + p.first + "\" was not found "
                 "in the Pikmin order list in the config file!"
             );
-            game.pikmin_order_strings.push_back(p.first);
+            game.config.pikmin_order_strings.push_back(p.first);
         }
     }
-    for(size_t o = 0; o < game.pikmin_order_strings.size(); ++o) {
-        string s = game.pikmin_order_strings[o];
+    for(size_t o = 0; o < game.config.pikmin_order_strings.size(); ++o) {
+        string s = game.config.pikmin_order_strings[o];
         if(game.mob_types.pikmin.find(s) != game.mob_types.pikmin.end()) {
-            game.pikmin_order.push_back(game.mob_types.pikmin[s]);
+            game.config.pikmin_order.push_back(game.mob_types.pikmin[s]);
         } else {
             log_error(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -678,21 +678,21 @@ void load_mob_types(bool load_resources) {
     for(auto &l : game.mob_types.leader) {
         if(
             find(
-                game.leader_order_strings.begin(), game.leader_order_strings.end(),
+                game.config.leader_order_strings.begin(), game.config.leader_order_strings.end(),
                 l.first
-            ) == game.leader_order_strings.end()
+            ) == game.config.leader_order_strings.end()
         ) {
             log_error(
                 "Leader type \"" + l.first + "\" was not found "
                 "in the leader order list in the config file!"
             );
-            game.leader_order_strings.push_back(l.first);
+            game.config.leader_order_strings.push_back(l.first);
         }
     }
-    for(size_t o = 0; o < game.leader_order_strings.size(); ++o) {
-        string s = game.leader_order_strings[o];
+    for(size_t o = 0; o < game.config.leader_order_strings.size(); ++o) {
+        string s = game.config.leader_order_strings[o];
         if(game.mob_types.leader.find(s) != game.mob_types.leader.end()) {
-            game.leader_order.push_back(game.mob_types.leader[s]);
+            game.config.leader_order.push_back(game.mob_types.leader[s]);
         } else {
             log_error(
                 "Unknown leader type \"" + s + "\" found "
@@ -756,8 +756,8 @@ void unload_mob_type(mob_type* mt, const bool unload_resources) {
  * Unloads all loaded types of mob from memory.
  */
 void unload_mob_types(const bool unload_resources) {
-    game.leader_order.clear();
-    game.pikmin_order.clear();
+    game.config.leader_order.clear();
+    game.config.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* category = game.mob_categories.get(c);

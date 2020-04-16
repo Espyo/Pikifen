@@ -12,11 +12,16 @@
 #ifndef GAME_CONFIG_INCLUDED
 #define GAME_CONFIG_INCLUDED
 
-#include <cstddef>
+#include <string>
+#include <vector>
 
 #include <allegro5/allegro.h>
 
+#include "mob_types/leader_type.h"
+#include "mob_types/pikmin_type.h"
+
 using std::size_t;
+using std::vector;
 
 
 struct game_config {
@@ -73,6 +78,10 @@ struct game_config {
     float day_minutes_start;
     //Idle Pikmin will go for a task if they are within this distance of it.
     float idle_task_range;
+    //Standard leader order.
+    vector<leader_type*> leader_order;
+    //Loaded strings representing the standard leader order. Used for later.
+    vector<string> leader_order_strings;
     //Every level of maturity, multiply the attack power by 1 + this much.
     float maturity_power_mult;
     //Every level of maturity, multiply the speed by 1 + this much.
@@ -81,6 +90,8 @@ struct game_config {
     size_t max_pikmin_in_field;
     //These many seconds until a new character of the message is drawn.
     float message_char_interval;
+    //Name of the game.
+    string name;
     //How far a leader can go to auto-pluck the next Pikmin.
     float next_pluck_range;
     //Onions can be opened if the leader is within this distance.
@@ -89,6 +100,10 @@ struct game_config {
     float pikmin_chase_range;
     //A leader can grab a Pikmin only within this range.
     float pikmin_grab_range;
+    //Standard Pikmin order.
+    vector<pikmin_type*> pikmin_order;
+    //Loaded strings representing the standard Pikmin order. Used for later.
+    vector<string> pikmin_order_strings;
     //A leader can start the plucking mode if they're this close.
     float pluck_range;
     //A standard Pikmin is this tall.
@@ -97,12 +112,16 @@ struct game_config {
     float standard_pikmin_radius;
     //Pikmin that are swarming can go for tasks within this range.
     float swarm_task_range;
+    //Version of the game.
+    string version;
     //Speed at which the whistle grows.
     float whistle_growth_speed;
     //The closest zoom level the player can get.
     float zoom_max_level;
     //The farthest zoom level the player can get.
     float zoom_min_level;
+    
+    void load(data_node* file);
     
     game_config();
 };

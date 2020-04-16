@@ -8,6 +8,7 @@
  * Struct that holds the game's configuration, and related functions.
  */
 
+#include "functions.h"
 #include "game_config.h"
 
 
@@ -43,6 +44,9 @@ const float game_config::DEF_ZOOM_MAX_LEVEL = 3.0f;
 const float game_config::DEF_ZOOM_MIN_LEVEL = 0.66f;
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a game config struct.
+ */
 game_config::game_config() :
     can_throw_leaders(DEF_CAN_THROW_LEADERS),
     carrying_speed_base_mult(DEF_CARRYING_SPEED_BASE_MULT),
@@ -82,4 +86,57 @@ game_config::game_config() :
             DEF_CARRYING_COLOR_STOP[1],
             DEF_CARRYING_COLOR_STOP[2]
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the game's config from a file.
+ */
+void game_config::load(data_node* file) {
+    reader_setter rs(file);
+    string pikmin_order_str;
+    string leader_order_str;
+    
+    rs.set("game_name", name);
+    rs.set("game_version", version);
+    
+    rs.set("carrying_color_move", carrying_color_move);
+    rs.set("carrying_color_stop", carrying_color_stop);
+    rs.set("carrying_speed_base_mult", carrying_speed_base_mult);
+    rs.set("carrying_speed_max_mult", carrying_speed_max_mult);
+    rs.set("carrying_speed_weight_mult", carrying_speed_weight_mult);
+    
+    rs.set("day_minutes_start", day_minutes_start);
+    rs.set("day_minutes_end", day_minutes_end);
+    rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
+    
+    rs.set("pikmin_order", pikmin_order_str);
+    rs.set("standard_pikmin_height", standard_pikmin_height);
+    rs.set("standard_pikmin_radius", standard_pikmin_radius);
+    
+    rs.set("leader_order", leader_order_str);
+    
+    rs.set("idle_task_range", idle_task_range);
+    rs.set("swarm_task_range", swarm_task_range);
+    rs.set("pikmin_chase_range", pikmin_chase_range);
+    rs.set("max_pikmin_in_field", max_pikmin_in_field);
+    rs.set("maturity_power_mult", maturity_power_mult);
+    rs.set("maturity_speed_mult", maturity_speed_mult);
+    
+    rs.set("can_throw_leaders", can_throw_leaders);
+    rs.set("cursor_max_dist", cursor_max_dist);
+    rs.set("cursor_spin_speed", cursor_spin_speed);
+    rs.set("next_pluck_range", next_pluck_range);
+    rs.set("onion_open_range", onion_open_range);
+    rs.set("pikmin_grab_range", pikmin_grab_range);
+    rs.set("pluck_range", pluck_range);
+    rs.set("whistle_growth_speed", whistle_growth_speed);
+    
+    rs.set("message_char_interval", message_char_interval);
+    rs.set("zoom_max_level", zoom_max_level);
+    rs.set("zoom_min_level", zoom_min_level);
+    
+    pikmin_order_strings = semicolon_list_to_vector(pikmin_order_str);
+    leader_order_strings = semicolon_list_to_vector(leader_order_str);
+    cursor_spin_speed = deg_to_rad(cursor_spin_speed);
 }
