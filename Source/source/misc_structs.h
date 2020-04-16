@@ -87,6 +87,11 @@ struct camera_info {
     //Current zoom.
     float zoom;
     
+    void set_pos(const point &new_pos);
+    void set_zoom(const float new_zoom);
+    void tick(const float delta_t);
+    void update_box();
+    
     camera_info();
 };
 
@@ -340,7 +345,11 @@ struct msg_box_info {
     //Stops scrolling when it reaches one of these. There's one per section.
     vector<size_t> stopping_chars;
     
-    msg_box_info();
+    bool advance();
+    vector<string> get_current_lines();
+    void tick(const float delta_t);
+    
+    msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);
 };
 
 
@@ -648,6 +657,13 @@ struct whistle_struct {
     vector<float> rings;
     //Is the whistle currently being blown?
     bool whistling;
+    
+    void start_whistling();
+    void stop_whistling();
+    void tick(
+        const float delta_t,
+        const float whistle_range, const dist &leader_to_cursor_dist
+    );
     
     whistle_struct();
 };

@@ -60,21 +60,21 @@ public:
     dist(const point &p1, const point &p2);
     dist(const float d = 0.0f);
     dist &operator =(const float d);
-    bool operator <(const float d2);
-    bool operator <(const dist &d2);
-    bool operator <=(const float d2);
-    bool operator <=(const dist &d2);
-    bool operator >(const float d2);
-    bool operator >(const dist &d2);
-    bool operator >=(const float d2);
-    bool operator >=(const dist &d2);
-    bool operator ==(const float d2);
-    bool operator ==(const dist &d2);
-    bool operator !=(const float d2);
-    bool operator !=(const dist &d2);
+    bool operator <(const float d2) const;
+    bool operator <(const dist &d2) const;
+    bool operator <=(const float d2) const;
+    bool operator <=(const dist &d2) const;
+    bool operator >(const float d2) const;
+    bool operator >(const dist &d2) const;
+    bool operator >=(const float d2) const;
+    bool operator >=(const dist &d2) const;
+    bool operator ==(const float d2) const;
+    bool operator ==(const dist &d2) const;
+    bool operator !=(const float d2) const;
+    bool operator !=(const dist &d2) const;
     void operator +=(const dist &d2);
     float to_float();
-
+    
 private:
     float distance_squared;
     float normal_distance;

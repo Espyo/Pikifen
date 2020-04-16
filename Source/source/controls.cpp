@@ -623,16 +623,8 @@ void gameplay::handle_button(
     } else { //Displaying a message.
     
         if((button == BUTTON_THROW || button == BUTTON_PAUSE) && is_down) {
-            size_t stopping_char =
-                msg_box->stopping_chars[msg_box->cur_section + 1];
-            if(msg_box->cur_char == stopping_char) {
-                if(stopping_char == msg_box->message.size()) {
-                    start_message("", NULL);
-                } else {
-                    msg_box->cur_section++;
-                }
-            } else {
-                msg_box->cur_char = stopping_char;
+            if(!msg_box->advance()) {
+                start_message("", NULL);
             }
         }
         

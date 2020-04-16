@@ -1253,40 +1253,12 @@ string standardize_path(const string &path) {
  * speaker_bmp: Bitmap representing the speaker.
  */
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
-    if(text.empty()) {
+    if(!text.empty()) {
+        game.gameplay_state->msg_box = new msg_box_info(text, speaker_bmp);
+    } else {
         delete game.gameplay_state->msg_box;
         game.gameplay_state->msg_box = NULL;
-        return;
     }
-    
-    text = replace_all(text, "\\n", "\n");
-    if(text.size()) if(text.back() == '\n') text.pop_back();
-    
-    msg_box_info* info = new msg_box_info();
-    
-    info->message = text;
-    info->char_timer.start();
-    info->speaker_icon = speaker_bmp;
-    info->stopping_chars.clear();
-    //First character. Makes it easier.
-    info->stopping_chars.push_back(0);
-    
-    vector<string> lines = split(text, "\n");
-    size_t char_count = 0;
-    for(size_t l = 0; l < lines.size(); ++l) {
-        //+1 because of the new line character.
-        char_count += lines[l].size() + 1;
-        if((l + 1) % 3 == 0) info->stopping_chars.push_back(char_count);
-    }
-    
-    if(info->stopping_chars.size() > 1) {
-        //Remove one because the last line doesn't have a new line character.
-        //Even if it does, it's invisible.
-        info->stopping_chars.back()--;
-    }
-    info->stopping_chars.push_back(info->message.size());
-    
-    game.gameplay_state->msg_box = info;
 }
 
 

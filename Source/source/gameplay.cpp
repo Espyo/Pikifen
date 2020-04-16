@@ -300,8 +300,8 @@ void gameplay::load() {
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->active = true;
     
-    game.cam.pos = game.cam.target_pos = cur_leader_ptr->pos;
-    game.cam.zoom = game.cam.target_zoom = game.options.zoom_mid_level;
+    game.cam.set_pos(cur_leader_ptr->pos);
+    game.cam.set_zoom(game.options.zoom_mid_level);
     update_transformations();
     
     ALLEGRO_MOUSE_STATE mouse_state;
@@ -536,8 +536,8 @@ void gameplay::unload() {
     
     cur_leader_ptr = NULL;
     
-    game.cam.pos = game.cam.target_pos = point();
-    game.cam.zoom = game.cam.target_zoom = 1.0f;
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
     
     while(!mobs.all.empty()) {
         delete_mob(*mobs.all.begin(), true);

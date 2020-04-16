@@ -21,8 +21,6 @@
 #include "mobs/tool.h"
 #include "utils/string_utils.h"
 
-const float CAMERA_SMOOTHNESS_MULT = 4.5f;
-
 /* ----------------------------------------------------------------------------
  * Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.
@@ -56,45 +54,10 @@ void gameplay::do_aesthetic_logic() {
         }
     }
     
-    whistle.fade_timer.tick(game.delta_t);
-    
-    if(whistle.whistling) {
-        //Create rings.
-        whistle.next_ring_timer.tick(game.delta_t);
-        
-        if(game.options.pretty_whistle) {
-            whistle.next_dot_timer.tick(game.delta_t);
-        }
-        
-        for(unsigned char d = 0; d < 6; ++d) {
-            if(whistle.dot_radius[d] == -1) continue;
-            
-            whistle.dot_radius[d] += game.config.whistle_growth_speed * game.delta_t;
-            if(
-                whistle.radius > 0 &&
-                whistle.dot_radius[d] > cur_leader_ptr->lea_type->whistle_range
-            ) {
-                whistle.dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
-                
-            } else if(
-                whistle.fade_radius > 0 &&
-                whistle.dot_radius[d] > whistle.fade_radius
-            ) {
-                whistle.dot_radius[d] = whistle.fade_radius;
-            }
-        }
-    }
-    
-    for(size_t r = 0; r < whistle.rings.size(); ) {
-        //Erase rings that go beyond the cursor.
-        whistle.rings[r] += WHISTLE_RING_SPEED * game.delta_t;
-        if(leader_to_cursor_dist < whistle.rings[r]) {
-            whistle.rings.erase(whistle.rings.begin() + r);
-            whistle.ring_colors.erase(whistle.ring_colors.begin() + r);
-        } else {
-            r++;
-        }
-    }
+    whistle.tick(
+        game.delta_t,
+        cur_leader_ptr->lea_type->whistle_range, leader_to_cursor_dist
+    );
     
     //Cursor trail.
     if(game.options.draw_cursor_trail) {
@@ -180,40 +143,17 @@ void gameplay::do_aesthetic_logic() {
 }
 
 
-const float CAMERA_BOX_MARGIN = 128.0f;
-
 /* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
  */
 void gameplay::do_gameplay_logic() {
 
     //Camera movement.
-    game.cam.pos.x +=
-        (game.cam.target_pos.x - game.cam.pos.x) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
-    game.cam.pos.y +=
-        (game.cam.target_pos.y - game.cam.pos.y) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
-    game.cam.zoom +=
-        (game.cam.target_zoom - game.cam.zoom) * (CAMERA_SMOOTHNESS_MULT * game.delta_t);
-        
+    game.cam.tick(game.delta_t);
+    
     update_transformations();
     
-    //Set the camera bounding box.
-    game.cam.box[0] = point(0, 0);
-    game.cam.box[1] = point(game.win_w, game.win_h);
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.cam.box[0].x,
-        &game.cam.box[0].y
-    );
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.cam.box[1].x,
-        &game.cam.box[1].y
-    );
-    game.cam.box[0].x -= CAMERA_BOX_MARGIN;
-    game.cam.box[0].y -= CAMERA_BOX_MARGIN;
-    game.cam.box[1].x += CAMERA_BOX_MARGIN;
-    game.cam.box[1].y += CAMERA_BOX_MARGIN;
+    game.cam.update_box();
     
     if(!msg_box) {
     
@@ -554,24 +494,7 @@ void gameplay::do_gameplay_logic() {
         
     } else { //Displaying a message.
     
-        if(
-            msg_box->cur_char <
-            msg_box->stopping_chars[
-         msg_box->cur_section + 1
-        ]
-        ) {
-            if(msg_box->char_timer.duration == 0.0f) {
-                size_t stopping_char =
-                    msg_box->stopping_chars[
-                msg_box->cur_section + 1
-                ];
-                //Display everything right away.
-                msg_box->cur_char = stopping_char;
-            } else {
-                msg_box->char_timer.tick(game.delta_t);
-            }
-        }
-        
+        msg_box->tick(game.delta_t);
     }
     
     hud_items.tick(game.delta_t);

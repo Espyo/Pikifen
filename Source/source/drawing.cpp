@@ -1204,13 +1204,7 @@ void gameplay::draw_message_box() {
         );
     }
     
-    string text =
-        msg_box->message.substr(
-            msg_box->stopping_chars[msg_box->cur_section],
-            msg_box->cur_char -
-            msg_box->stopping_chars[msg_box->cur_section]
-        );
-    vector<string> lines = split(text, "\n");
+    vector<string> lines = msg_box->get_current_lines();
     
     for(size_t l = 0; l < lines.size(); ++l) {
     

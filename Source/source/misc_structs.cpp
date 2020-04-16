@@ -261,6 +261,60 @@ camera_info::camera_info() :
 
 
 /* ----------------------------------------------------------------------------
+ * Instantly places the camera at the specified coordinates.
+ */
+void camera_info::set_pos(const point &new_pos) {
+    pos = new_pos;
+    target_pos = new_pos;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Instantly places the camera at the specified zoom.
+ */
+void camera_info::set_zoom(const float new_zoom) {
+    zoom = new_zoom;
+    target_zoom = new_zoom;
+}
+
+
+const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame of camera movement.
+ */
+void camera_info::tick(const float delta_t) {
+    pos.x += (target_pos.x - pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    pos.y += (target_pos.y - pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    zoom += (target_zoom - zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+}
+
+
+const float CAMERA_BOX_MARGIN = 128.0f;
+
+/* ----------------------------------------------------------------------------
+ * Updates the camera's visibility box, based on the screen_to_world_transform
+ * transformation.
+ */
+void camera_info::update_box() {
+    box[0] = point(0, 0);
+    box[1] = point(game.win_w, game.win_h);
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &box[0].x, &box[0].y
+    );
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &box[1].x, &box[1].y
+    );
+    box[0].x -= CAMERA_BOX_MARGIN;
+    box[0].y -= CAMERA_BOX_MARGIN;
+    box[1].x += CAMERA_BOX_MARGIN;
+    box[1].y += CAMERA_BOX_MARGIN;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a creator tool info struct.
  */
 creator_tools_info::creator_tools_info() :
@@ -558,10 +612,15 @@ void movement_struct::get_raw_info(
 /* ----------------------------------------------------------------------------
  * Creates a message box information struct.
  */
-msg_box_info::msg_box_info():
+msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     cur_char(0),
     cur_section(0),
-    speaker_icon(nullptr) {
+    speaker_icon(speaker_icon) {
+    
+    message = replace_all(text, "\\n", "\n");
+    if(message.size() && message.back() == '\n') {
+        message.pop_back();
+    }
     
     char_timer =
         timer(
@@ -571,6 +630,74 @@ msg_box_info::msg_box_info():
         cur_char++;
     }
         );
+    char_timer.start();
+    
+    //Push the first character as a stopping character. Makes life easier.
+    stopping_chars.push_back(0);
+    
+    vector<string> lines = split(text, "\n");
+    size_t char_count = 0;
+    for(size_t l = 0; l < lines.size(); ++l) {
+        //+1 because of the new line character.
+        char_count += lines[l].size() + 1;
+        if((l + 1) % 3 == 0) stopping_chars.push_back(char_count);
+    }
+    
+    if(stopping_chars.size() > 1) {
+        //Remove one because the last line doesn't have a new line character.
+        //Even if it does, it's invisible.
+        stopping_chars.back()--;
+    }
+    stopping_chars.push_back(message.size());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the user having pressed the button to continue the message,
+ * or to skip to showing everything in the current section.
+ * Returns true if the message box continues active, false if it's over.
+ */
+bool msg_box_info::advance() {
+    size_t stopping_char =
+        stopping_chars[cur_section + 1];
+    if(cur_char == stopping_char) {
+        if(stopping_char == message.size()) {
+            return false;
+        } else {
+            cur_section++;
+        }
+    } else {
+        cur_char = stopping_char;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns what lines of text should be shown right now.
+ */
+vector<string> msg_box_info::get_current_lines() {
+    string text_to_show =
+        message.substr(
+            stopping_chars[cur_section],
+            cur_char - stopping_chars[cur_section]
+        );
+    return split(text_to_show, "\n");
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame of gameplay.
+ */
+void msg_box_info::tick(const float delta_t) {
+    if(cur_char < stopping_chars[cur_section + 1]) {
+        if(char_timer.duration == 0.0f) {
+            //Display everything right away.
+            cur_char = stopping_chars[cur_section + 1];
+        } else {
+            char_timer.tick(game.delta_t);
+        }
+    }
 }
 
 
@@ -1244,4 +1371,71 @@ whistle_struct::whistle_struct() :
             sum_and_wrap(ring_prev_color, 1, N_WHISTLE_RING_COLORS);
     };
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stuff to do when a leader starts whistling.
+ */
+void whistle_struct::start_whistling() {
+    for(unsigned char d = 0; d < 6; ++d) {
+        dot_radius[d] = -1;
+    }
+    fade_timer.start();
+    fade_radius = 0;
+    whistling = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stuff to do when a leader stops whistling.
+ */
+void whistle_struct::stop_whistling() {
+    whistling = false;
+    fade_timer.start();
+    fade_radius = radius;
+    radius = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame of gameplay.
+ */
+void whistle_struct::tick(
+    const float delta_t,
+    const float whistle_range, const dist &leader_to_cursor_dist
+) {
+    fade_timer.tick(delta_t);
+    
+    if(whistling) {
+        //Create rings.
+        next_ring_timer.tick(delta_t);
+        
+        if(game.options.pretty_whistle) {
+            next_dot_timer.tick(delta_t);
+        }
+        
+        for(unsigned char d = 0; d < 6; ++d) {
+            if(dot_radius[d] == -1) continue;
+            
+            dot_radius[d] += game.config.whistle_growth_speed * delta_t;
+            if(radius > 0 && dot_radius[d] > whistle_range) {
+                dot_radius[d] = whistle_range;
+                
+            } else if(fade_radius > 0 && dot_radius[d] > fade_radius) {
+                dot_radius[d] = fade_radius;
+            }
+        }
+    }
+    
+    for(size_t r = 0; r < rings.size(); ) {
+        //Erase rings that go beyond the cursor.
+        rings[r] += WHISTLE_RING_SPEED * delta_t;
+        if(leader_to_cursor_dist < rings[r]) {
+            rings.erase(rings.begin() + r);
+            ring_colors.erase(ring_colors.begin() + r);
+        } else {
+            r++;
+        }
+    }
 }
