@@ -23,6 +23,85 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new asset file name list struct.
+ */
+asset_file_names_struct::asset_file_names_struct() :
+    area_name_font("Area_name_font.png"),
+    checkbox_check("Checkbox_check.png"),
+    cursor("Cursor.png"),
+    cursor_invalid("Cursor_invalid.png"),
+    counter_font("Counter_font.png"),
+    editor_icons("Editor_icons.png"),
+    enemy_spirit("Enemy_spirit.png"),
+    icon("Icon.png"),
+    idle_glow("Idle_glow.png"),
+    main_font("Font.png"),
+    main_menu("Main_menu.jpg"),
+    mouse_cursor("Mouse_cursor.png"),
+    mouse_wd_icon("Mouse_wheel_down_icon.png"),
+    mouse_wu_icon("Mouse_wheel_up_icon.png"),
+    notification("Notification.png"),
+    pikmin_silhouette("Pikmin_silhouette.png"),
+    pikmin_spirit("Pikmin_spirit.png"),
+    rock("Rock.png"),
+    shadow("Shadow.png"),
+    smack("Smack.png"),
+    smoke("Smoke.png"),
+    sparkle("Sparkle.png"),
+    spotlight("Spotlight.png"),
+    swarm_arrow("Swarm_arrow.png"),
+    value_font("Value_font.png"),
+    wave_ring("Wave_ring.png") {
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        mouse_button_icon[i] =
+            "Mouse_button_" + i2s(i + 1) + "_icon.png";
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the asset file names from a file.
+ */
+void asset_file_names_struct::load(data_node* file) {
+    reader_setter rs(file);
+    
+    rs.set("area_name_font", area_name_font);
+    rs.set("checkbox_check", checkbox_check);
+    rs.set("cursor", cursor);
+    rs.set("cursor_invalid", cursor_invalid);
+    rs.set("counter_font", counter_font);
+    rs.set("editor_icons", editor_icons);
+    rs.set("enemy_spirit", enemy_spirit);
+    rs.set("icon", icon);
+    rs.set("idle_glow", idle_glow);
+    rs.set("main_font", main_font);
+    rs.set("main_menu", main_menu);
+    rs.set("mouse_cursor", mouse_cursor);
+    rs.set("mouse_wheel_down_icon", mouse_wd_icon);
+    rs.set("mouse_wheel_up_icon", mouse_wu_icon);
+    rs.set("notification", notification);
+    rs.set("pikmin_silhouette", pikmin_silhouette);
+    rs.set("pikmin_spirit", pikmin_spirit);
+    rs.set("shadow", shadow);
+    rs.set("smack", smack);
+    rs.set("smoke", smoke);
+    rs.set("sparkle", sparkle);
+    rs.set("spotlight", spotlight);
+    rs.set("swarm_arrow", swarm_arrow);
+    rs.set("value_font", value_font);
+    rs.set("wave_ring", wave_ring);
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        rs.set(
+            "mouse_button_" + i2s(i + 1) + "_icon",
+            mouse_button_icon[i]
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new, empty bitmap effect info struct.
  */
 bitmap_effect_info::bitmap_effect_info() :

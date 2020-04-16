@@ -474,41 +474,7 @@ void load_area(
 void load_asset_file_names() {
     data_node file(SYSTEM_ASSET_FILE_NAMES_FILE_PATH);
     
-    reader_setter rs(&file);
-    
-    rs.set("area_name_font", game.asset_file_names.area_name_font);
-    rs.set("checkbox_check", game.asset_file_names.checkbox_check);
-    rs.set("cursor", game.asset_file_names.cursor);
-    rs.set("cursor_invalid", game.asset_file_names.cursor_invalid);
-    rs.set("counter_font", game.asset_file_names.counter_font);
-    rs.set("editor_icons", game.asset_file_names.editor_icons);
-    rs.set("enemy_spirit", game.asset_file_names.enemy_spirit);
-    rs.set("icon", game.asset_file_names.icon);
-    rs.set("idle_glow", game.asset_file_names.idle_glow);
-    rs.set("main_font", game.asset_file_names.main_font);
-    rs.set("main_menu", game.asset_file_names.main_menu);
-    rs.set("mouse_cursor", game.asset_file_names.mouse_cursor);
-    rs.set("mouse_wheel_down_icon", game.asset_file_names.mouse_wd_icon);
-    rs.set("mouse_wheel_up_icon", game.asset_file_names.mouse_wu_icon);
-    rs.set("notification", game.asset_file_names.notification);
-    rs.set("pikmin_silhouette", game.asset_file_names.pikmin_silhouette);
-    rs.set("pikmin_spirit", game.asset_file_names.pikmin_spirit);
-    rs.set("shadow", game.asset_file_names.shadow);
-    rs.set("smack", game.asset_file_names.smack);
-    rs.set("smoke", game.asset_file_names.smoke);
-    rs.set("sparkle", game.asset_file_names.sparkle);
-    rs.set("spotlight", game.asset_file_names.spotlight);
-    rs.set("swarm_arrow", game.asset_file_names.swarm_arrow);
-    rs.set("value_font", game.asset_file_names.value_font);
-    rs.set("wave_ring", game.asset_file_names.wave_ring);
-    
-    for(unsigned char i = 0; i < 3; ++i) {
-        rs.set(
-            "mouse_button_" + i2s(i + 1) + "_icon",
-            game.asset_file_names.mouse_button_icon[i]
-        );
-    }
-    
+    game.asset_file_names.load(&file);
 }
 
 

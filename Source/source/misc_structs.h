@@ -65,6 +65,10 @@ struct asset_file_names_struct {
     string spotlight;
     string value_font;
     string wave_ring;
+    
+    void load(data_node* file);
+    
+    asset_file_names_struct();
 };
 
 

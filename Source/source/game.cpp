@@ -219,7 +219,6 @@ int game_class::start() {
     init_event_things(logic_timer, logic_queue);
     
     //Other fundamental initializations and loadings.
-    init_asset_file_names();
     init_misc();
     init_error_bitmap();
     load_asset_file_names();

@@ -148,44 +148,6 @@ void init_allegro() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the default asset file names.
- */
-void init_asset_file_names() {
-    game.asset_file_names.area_name_font =    "Area_name_font.png";
-    game.asset_file_names.checkbox_check =    "Checkbox_check.png";
-    game.asset_file_names.cursor =            "Cursor.png";
-    game.asset_file_names.cursor_invalid =    "Cursor_invalid.png";
-    game.asset_file_names.counter_font =      "Counter_font.png";
-    game.asset_file_names.editor_icons =      "Editor_icons.png";
-    game.asset_file_names.enemy_spirit =      "Enemy_spirit.png";
-    game.asset_file_names.icon =              "Icon.png";
-    game.asset_file_names.idle_glow =         "Idle_glow.png";
-    game.asset_file_names.main_font =         "Font.png";
-    game.asset_file_names.main_menu =         "Main_menu.jpg";
-    game.asset_file_names.mouse_cursor =      "Mouse_cursor.png";
-    game.asset_file_names.mouse_wd_icon =     "Mouse_wheel_down_icon.png";
-    game.asset_file_names.mouse_wu_icon =     "Mouse_wheel_up_icon.png";
-    game.asset_file_names.notification =      "Notification.png";
-    game.asset_file_names.pikmin_silhouette = "Pikmin_silhouette.png";
-    game.asset_file_names.pikmin_spirit =     "Pikmin_spirit.png";
-    game.asset_file_names.rock =              "Rock.png";
-    game.asset_file_names.shadow =            "Shadow.png";
-    game.asset_file_names.smack =             "Smack.png";
-    game.asset_file_names.smoke =             "Smoke.png";
-    game.asset_file_names.sparkle =           "Sparkle.png";
-    game.asset_file_names.spotlight =         "Spotlight.png";
-    game.asset_file_names.swarm_arrow =       "Swarm_arrow.png";
-    game.asset_file_names.value_font =        "Value_font.png";
-    game.asset_file_names.wave_ring =         "Wave_ring.png";
-    
-    for(unsigned char i = 0; i < 3; ++i) {
-        game.asset_file_names.mouse_button_icon[i] =
-            "Mouse_button_" + i2s(i + 1) + "_icon.png";
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Initializes the default controls.
  */
 void init_controls() {

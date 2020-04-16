@@ -15,7 +15,6 @@
 #include "utils/data_file.h"
 
 void init_allegro();
-void init_asset_file_names();
 void init_controls();
 void init_error_bitmap();
 void init_essentials();
