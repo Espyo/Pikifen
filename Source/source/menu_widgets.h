@@ -48,12 +48,12 @@ public:
     virtual ~menu_widget() = default;
     virtual void tick(const float time);
     virtual void draw(const float time_spent) = 0;
-    virtual bool is_clickable() = 0;
+    virtual bool is_clickable() const = 0;
     virtual void start_juicy_grow();
     
     void click();
     
-    bool mouse_on(const point &mc);
+    bool mouse_on(const point &mc) const;
 };
 
 class menu_button : public menu_widget {
@@ -71,8 +71,8 @@ public:
         const int align = ALLEGRO_ALIGN_CENTER
     );
     virtual void draw(const float time_spent);
-    virtual bool is_clickable();
-
+    virtual bool is_clickable() const;
+    
 private:
     virtual void on_click();
     
@@ -94,8 +94,8 @@ public:
         const int align = ALLEGRO_ALIGN_LEFT
     );
     virtual void draw(const float time_spent);
-    virtual bool is_clickable();
-
+    virtual bool is_clickable() const;
+    
 private:
     virtual void on_click();
     
@@ -115,8 +115,8 @@ public:
         const int align = ALLEGRO_ALIGN_CENTER
     );
     virtual void draw(const float time_spent);
-    virtual bool is_clickable();
-
+    virtual bool is_clickable() const;
+    
 private:
     virtual void on_click();
     

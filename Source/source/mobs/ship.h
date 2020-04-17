@@ -37,9 +37,9 @@ public:
     bool beam_ring_color_up[3];
     
     //Heal up a leader.
-    void heal_leader(leader* l);
+    void heal_leader(leader* l) const;
     //Checks if a leader is under the beam.
-    bool is_leader_under_beam(leader* l);
+    bool is_leader_under_beam(leader* l) const;
     
     //Constructor.
     ship(const point &pos, ship_type* type, float angle);

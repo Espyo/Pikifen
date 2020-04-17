@@ -296,7 +296,7 @@ mob_fsm::mob_fsm(mob* m) :
  * if it exists.
  * type: the event's type.
  */
-mob_event* mob_fsm::get_event(const size_t type) {
+mob_event* mob_fsm::get_event(const size_t type) const {
     if(!cur_state) return NULL;
     return cur_state->events[type];
 }
@@ -411,7 +411,7 @@ mob_state::mob_state(const string &name, const size_t id) :
  * if it exists.
  * type: the event's type.
  */
-mob_event* mob_state::get_event(const size_t type) {
+mob_event* mob_state::get_event(const size_t type) const {
     return events[type];
 }
 

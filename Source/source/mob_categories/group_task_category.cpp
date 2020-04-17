@@ -72,7 +72,7 @@ void group_task_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of group task given its name, or NULL on error.
  */
-mob_type* group_task_category::get_type(const string &name) {
+mob_type* group_task_category::get_type(const string &name) const {
     auto it = game.mob_types.group_task.find(name);
     if(it == game.mob_types.group_task.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* group_task_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of group tasks by name.
  */
-void group_task_category::get_type_names(vector<string> &list) {
+void group_task_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.group_task) {
         list.push_back(t.first);
     }

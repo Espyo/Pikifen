@@ -430,7 +430,7 @@ void mob::become_uncarriable() {
  */
 bool mob::calculate_carrying_destination(
     mob* added, mob* removed, mob** target_mob, point* target_point
-) {
+) const {
     if(!carry_info) return false;
     
     //For starters, check if this is to be carried to the ship.
@@ -618,7 +618,7 @@ bool mob::calculate_carrying_destination(
  */
 bool mob::calculate_damage(
     mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
-) {
+) const {
     float attacker_offense = 0;
     float defense_multiplier = 1;
     
@@ -696,7 +696,7 @@ bool mob::calculate_damage(
 void mob::calculate_knockback(
     mob* victim, hitbox* attack_h,
     hitbox* victim_h, float* kb_strength, float* kb_angle
-) {
+) const {
     if(attack_h) {
         *kb_strength = attack_h->knockback;
         if(attack_h->knockback_outward) {
@@ -727,7 +727,7 @@ void mob::calculate_knockback(
 void mob::calculate_throw(
     const point &target_xy, const float target_z, const float max_h,
     point* req_speed_xy, float* req_speed_z, float* final_h_angle
-) {
+) const {
 
     if(target_z > max_h) {
         //If the target is above the maximum height it can be thrown...
@@ -780,7 +780,7 @@ void mob::calculate_throw(
  * Does this mob want to attack mob v? Teams and other factors are used to
  * decide this.
  */
-bool mob::can_hunt(mob* v) {
+bool mob::can_hunt(mob* v) const {
     //Teammates cannot hunt each other down.
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
@@ -801,7 +801,7 @@ bool mob::can_hunt(mob* v) {
 /* ----------------------------------------------------------------------------
  * Can this mob damage v? Teams and other factors are used to decide this.
  */
-bool mob::can_hurt(mob* v) {
+bool mob::can_hurt(mob* v) const {
     //Teammates cannot hurt each other.
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
@@ -828,7 +828,7 @@ bool mob::can_hurt(mob* v) {
 /* ----------------------------------------------------------------------------
  * Returns whether or not a mob can receive a given status effect.
  */
-bool mob::can_receive_status(status_type* s) {
+bool mob::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_OTHERS;
 }
 
@@ -1228,7 +1228,7 @@ bool mob::follow_path(
  * Returns the base speed for this mob.
  * This is overwritten by some child classes.
  */
-float mob::get_base_speed() {
+float mob::get_base_speed() const {
     return this->type->move_speed;
 }
 
@@ -1236,7 +1236,7 @@ float mob::get_base_speed() {
 /* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
  */
-point mob::get_chase_target() {
+point mob::get_chase_target() const {
     point p = chase_info.offset;
     if(chase_info.orig_coords) p += (*chase_info.orig_coords);
     return p;
@@ -1250,7 +1250,9 @@ point mob::get_chase_target() {
  * h_type: Type of hitbox. INVALID means any.
  * d:      Return the distance here, optionally.
  */
-hitbox* mob::get_closest_hitbox(const point &p, const size_t h_type, dist* d) {
+hitbox* mob::get_closest_hitbox(
+    const point &p, const size_t h_type, dist* d
+) const {
     sprite* s = anim.get_cur_sprite();
     if(!s) return NULL;
     hitbox* closest_hitbox = NULL;
@@ -1280,7 +1282,7 @@ hitbox* mob::get_closest_hitbox(const point &p, const size_t h_type, dist* d) {
  * Returns how vulnerable the mob is to that specific hazard,
  * or the mob type's default if there is no vulnerability data for that hazard.
  */
-float mob::get_hazard_vulnerability(hazard* h_ptr) {
+float mob::get_hazard_vulnerability(hazard* h_ptr) const {
     float vulnerability_value = type->default_vulnerability;
     auto vul = type->hazard_vulnerabilities.find(h_ptr);
     if(vul != type->hazard_vulnerabilities.end()) {
@@ -1295,7 +1297,7 @@ float mob::get_hazard_vulnerability(hazard* h_ptr) {
  * Returns the hitbox in the current animation with
  * the specified number.
  */
-hitbox* mob::get_hitbox(const size_t nr) {
+hitbox* mob::get_hitbox(const size_t nr) const {
     sprite* s = anim.get_cur_sprite();
     if(!s) return NULL;
     if(s->hitboxes.empty()) return NULL;
@@ -1315,7 +1317,7 @@ hitbox* mob::get_hitbox(const size_t nr) {
  */
 void mob::get_hitbox_hold_point(
     mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
-) {
+) const {
     point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
     
     point pos_dif = mob_to_hold->pos - actual_h_pos;
@@ -1331,7 +1333,7 @@ void mob::get_hitbox_hold_point(
 /* ----------------------------------------------------------------------------
  * Returns how many Pikmin are currently latched on to this mob.
  */
-size_t mob::get_latched_pikmin_amount() {
+size_t mob::get_latched_pikmin_amount() const {
     size_t total = 0;
     for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin.size(); ++p) {
         pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin[p];
@@ -1348,7 +1350,7 @@ size_t mob::get_latched_pikmin_amount() {
  * Returns the total weight of the Pikmin that are currently
  * latched on to this mob.
  */
-float mob::get_latched_pikmin_weight() {
+float mob::get_latched_pikmin_weight() const {
     float total = 0;
     for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin.size(); ++p) {
         pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin[p];
@@ -1379,7 +1381,7 @@ void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info,
     const bool add_status, const bool add_sector_brightness,
     const float delivery_time_ratio_left, const ALLEGRO_COLOR &delivery_color
-) {
+) const {
     info->translation =
         point(
             pos.x + angle_cos * s_ptr->offset.x - angle_sin * s_ptr->offset.y,
@@ -1465,7 +1467,7 @@ void mob::get_sprite_bitmap_effects(
 /* ----------------------------------------------------------------------------
  * Returns where a sprite's center should be, for normal mob drawing routines.
  */
-point mob::get_sprite_center(sprite* s) {
+point mob::get_sprite_center(sprite* s) const {
     point p;
     p.x = pos.x + angle_cos * s->offset.x - angle_sin * s->offset.y;
     p.y = pos.y + angle_sin * s->offset.x + angle_cos * s->offset.y;
@@ -1479,7 +1481,7 @@ point mob::get_sprite_center(sprite* s) {
  * s:     the sprite.
  * scale: variable to return the scale used to. Optional.
  */
-point mob::get_sprite_dimensions(sprite* s, point* scale) {
+point mob::get_sprite_dimensions(sprite* s, point* scale) const {
     point dim;
     dim.x = s->file_size.x;
     dim.y = s->file_size.y;
@@ -1512,7 +1514,7 @@ point mob::get_sprite_dimensions(sprite* s, point* scale) {
  * that the mob is under.
  * bmp_scale: Returns the mob size's scale to apply to the image.
  */
-ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
+ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
     *bmp_scale = 0.0f;
     for(size_t st = 0; st < this->statuses.size(); ++st) {
         status_type* t = this->statuses[st].type;
@@ -1575,7 +1577,7 @@ void mob::hold(
 /* ----------------------------------------------------------------------------
  * Checks if a mob is completely off-camera.
  */
-bool mob::is_off_camera() {
+bool mob::is_off_camera() const {
     if(parent) return false;
     
     float m_radius;
@@ -1593,7 +1595,7 @@ bool mob::is_off_camera() {
 /* ----------------------------------------------------------------------------
  * Checks if a mob is resistant to all of the hazards inside a given list.
  */
-bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) {
+bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); ++h) {
         if(get_hazard_vulnerability(hazards[h]) != 0.0f) return false;
     }
@@ -1629,7 +1631,7 @@ void mob::leave_group() {
  * Returns a string containing the FSM state history for this mob.
  * This is used for debugging crashes.
  */
-string mob::print_state_history() {
+string mob::print_state_history() const {
     string str = "State history: ";
     
     if(fsm.cur_state) {
@@ -1732,7 +1734,7 @@ void mob::respawn() {
  * Sends a message to another mob. This calls the mob's "message received"
  * event, with the message as data.
  */
-void mob::send_message(mob* receiver, string &msg) {
+void mob::send_message(mob* receiver, string &msg) const {
     mob_event* ev = q_get_event(receiver, MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
@@ -2505,6 +2507,6 @@ mob_with_anim_groups::mob_with_anim_groups() :
 size_t mob_with_anim_groups::get_animation_nr_from_base_and_group(
     const size_t base_anim_nr, const size_t group_nr,
     const size_t base_anim_total
-) {
+) const {
     return group_nr * base_anim_total + base_anim_nr;
 }

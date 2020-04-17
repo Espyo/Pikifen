@@ -33,7 +33,7 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
 /* ----------------------------------------------------------------------------
  * Returns whether or not an enemy can receive a given status effect.
  */
-bool enemy::can_receive_status(status_type* s) {
+bool enemy::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_ENEMIES;
 }
 

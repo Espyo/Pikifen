@@ -192,7 +192,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string gameplay::get_name() {
+string gameplay::get_name() const {
     return "gameplay";
 }
 

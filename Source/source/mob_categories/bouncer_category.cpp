@@ -72,7 +72,7 @@ void bouncer_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of bouncer given its name, or NULL on error.
  */
-mob_type* bouncer_category::get_type(const string &name) {
+mob_type* bouncer_category::get_type(const string &name) const{
     auto it = game.mob_types.bouncer.find(name);
     if(it == game.mob_types.bouncer.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* bouncer_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of bouncer by name.
  */
-void bouncer_category::get_type_names(vector<string> &list) {
+void bouncer_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.bouncer) {
         list.push_back(t.first);
     }

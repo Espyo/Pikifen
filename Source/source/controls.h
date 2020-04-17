@@ -45,7 +45,7 @@ struct control_info {
     int axis;
     
     control_info(unsigned char action, const string &s);
-    string stringify();
+    string stringify() const;
 };
 
 

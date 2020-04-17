@@ -177,9 +177,9 @@ public:
         const vector<body_part*> &b = vector<body_part*>()
     );
     
-    size_t find_animation(const string &name);
-    size_t find_sprite(   const string &name);
-    size_t find_body_part(const string &name);
+    size_t find_animation(const string &name) const;
+    size_t find_sprite(   const string &name) const;
+    size_t find_body_part(const string &name) const;
     
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, data_node* file
@@ -209,7 +209,7 @@ public:
     void start();
     void skip_ahead_randomly();
     bool tick(const float time, vector<size_t>* signals = NULL);
-    sprite* get_cur_sprite();
+    sprite* get_cur_sprite() const;
 };
 
 

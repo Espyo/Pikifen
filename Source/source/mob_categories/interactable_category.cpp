@@ -72,7 +72,7 @@ void interactable_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of interactable given its name, or NULL on error.
  */
-mob_type* interactable_category::get_type(const string &name) {
+mob_type* interactable_category::get_type(const string &name) const {
     auto it = game.mob_types.interactable.find(name);
     if(it == game.mob_types.interactable.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* interactable_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of interactable by name.
  */
-void interactable_category::get_type_names(vector<string> &list) {
+void interactable_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.interactable) {
         list.push_back(t.first);
     }

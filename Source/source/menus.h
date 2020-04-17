@@ -30,8 +30,8 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
-    virtual string get_name();
-
+    virtual string get_name() const;
+    
 private:
     struct logo_pik {
         point pos;
@@ -71,8 +71,8 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
-    virtual string get_name();
-
+    virtual string get_name() const;
+    
 private:
     vector<std::pair<int, int> > resolution_presets;
     
@@ -99,8 +99,8 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
-    virtual string get_name();
-
+    virtual string get_name() const;
+    
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
@@ -132,8 +132,8 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
-    virtual string get_name();
-
+    virtual string get_name() const;
+    
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;

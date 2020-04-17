@@ -82,11 +82,11 @@ public:
     );
     point get_cur_pos(
         const point &mob_pos, const float mob_angle
-    );
+    ) const;
     point get_cur_pos(
         const point &mob_pos,
         const float mob_angle_cos, const float mob_angle_sin
-    );
+    ) const;
 };
 
 #endif //ifndef HITBOX_INCLUDED

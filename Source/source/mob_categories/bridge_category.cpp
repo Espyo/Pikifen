@@ -72,7 +72,7 @@ void bridge_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of bridge given its name, or NULL on error.
  */
-mob_type* bridge_category::get_type(const string &name) {
+mob_type* bridge_category::get_type(const string &name) const {
     auto it = game.mob_types.bridge.find(name);
     if(it == game.mob_types.bridge.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* bridge_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of bridge by name.
  */
-void bridge_category::get_type_names(vector<string> &list) {
+void bridge_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.bridge) {
         list.push_back(t.first);
     }

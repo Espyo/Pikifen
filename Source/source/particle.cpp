@@ -445,7 +445,7 @@ void particle_manager::fill_component_list(
 /* ----------------------------------------------------------------------------
  * Returns how many are in the list.
  */
-size_t particle_manager::get_count() {
+size_t particle_manager::get_count() const {
     return count;
 }
 

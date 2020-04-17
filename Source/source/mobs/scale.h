@@ -25,7 +25,7 @@ public:
     scale_type* sca_type;
     
     //Return the weight currently on top of it.
-    float calculate_cur_weight();
+    float calculate_cur_weight() const;
     
     //Constructor.
     scale(const point &pos, scale_type* type, float angle);

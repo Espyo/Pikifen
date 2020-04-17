@@ -72,7 +72,7 @@ void drop_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of drop given its name, or NULL on error.
  */
-mob_type* drop_category::get_type(const string &name) {
+mob_type* drop_category::get_type(const string &name) const {
     auto it = game.mob_types.drop.find(name);
     if(it == game.mob_types.drop.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* drop_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of drop by name.
  */
-void drop_category::get_type_names(vector<string> &list) {
+void drop_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.drop) {
         list.push_back(t.first);
     }

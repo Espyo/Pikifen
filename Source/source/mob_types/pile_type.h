@@ -48,7 +48,7 @@ public:
     
     pile_type();
     void load_properties(data_node* file);
-    anim_conversion_vector get_anim_conversions();
+    anim_conversion_vector get_anim_conversions() const;
 };
 
 #endif //ifndef PILE_TYPE_INCLUDED

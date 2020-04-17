@@ -98,7 +98,7 @@ struct options_struct {
     float zoom_mid_level;
     
     void load(data_node* file);
-    void save(data_node* file);
+    void save(data_node* file) const;
     
     options_struct();
     

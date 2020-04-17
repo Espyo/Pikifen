@@ -66,7 +66,7 @@ void custom_category::erase_mob(mob* m) { }
 /* ----------------------------------------------------------------------------
  * Returns a custom type given its name, or NULL on error.
  */
-mob_type* custom_category::get_type(const string &name) {
+mob_type* custom_category::get_type(const string &name) const {
     auto it = game.mob_types.custom.find(name);
     if(it == game.mob_types.custom.end()) return NULL;
     return it->second;
@@ -76,7 +76,7 @@ mob_type* custom_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all custom types by name.
  */
-void custom_category::get_type_names(vector<string> &list) {
+void custom_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.custom) {
         list.push_back(t.first);
     }

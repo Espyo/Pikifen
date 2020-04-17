@@ -60,7 +60,7 @@ void ship::draw_mob() {
 /* ----------------------------------------------------------------------------
  * Heals a leader, causes particle effects, etc.
  */
-void ship::heal_leader(leader* l) {
+void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
     
     particle p(
@@ -83,7 +83,7 @@ void ship::heal_leader(leader* l) {
  * Checks whether the specified leader is currently under the ship's
  * beam or not.
  */
-bool ship::is_leader_under_beam(leader* l) {
+bool ship::is_leader_under_beam(leader* l) const {
     return dist(l->pos, beam_final_pos) <= shi_type->beam_radius;
 }
 

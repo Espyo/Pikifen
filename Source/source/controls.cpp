@@ -98,7 +98,7 @@ control_info::control_info(unsigned char action, const string &s) :
  * Converts a control info's hardware input data into a string,
  * used in the options file.
  */
-string control_info::stringify() {
+string control_info::stringify() const {
     if(type == CONTROL_TYPE_KEYBOARD_KEY) {
         return "k_" + i2s(button);
     } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {

@@ -41,8 +41,8 @@ public:
     virtual void load();
     virtual void unload();
     virtual void update_transformations();
-    virtual string get_name() = 0;
-
+    virtual string get_name() const = 0;
+    
 protected:
 
     static const int   EDITOR_ICON_BMP_PADDING;
@@ -113,14 +113,14 @@ protected:
         bool handle_mouse_down(const point pos);
         void handle_mouse_up();
         bool handle_mouse_move(const point pos);
-        point get_center();
-        point get_size();
-        float get_angle();
+        point get_center() const;
+        point get_size() const;
+        float get_angle() const;
         void set_center(const point &center);
         void set_size(const point &size);
         void set_angle(const float angle);
         transformation_controller();
-    
+        
     private:
         static const float HANDLE_RADIUS;
         static const float ROTATION_HANDLE_THICKNESS;
@@ -134,7 +134,7 @@ protected:
         point pre_move_size;
         float pre_rotation_angle;
         float pre_rotation_mouse_angle;
-        point get_handle_pos(const unsigned char handle);
+        point get_handle_pos(const unsigned char handle) const;
         void update();
         
     };
@@ -159,9 +159,9 @@ protected:
         void register_point(
             point* var, const point &gui_value
         );
-        bool all_equal();
+        bool all_equal() const;
         void set_all();
-    
+        
     private:
         map<bool*, bool> bools;
         map<int*, int> ints;
@@ -230,7 +230,7 @@ protected:
         const size_t id, const vector<std::pair<string, string> > &elements,
         const string &title, const bool can_make_new
     );
-    bool is_mouse_in_gui(const point &mouse_coords);
+    bool is_mouse_in_gui(const point &mouse_coords) const;
     void leave();
     void populate_picker(const string &filter);
     void update_canvas_coordinates();
@@ -275,22 +275,22 @@ protected:
     //LAFI helper functions.
     float get_angle_picker_angle(
         lafi::widget* parent, const string &picker_name
-    );
+    ) const;
     string get_button_text(
         lafi::widget* parent, const string &button_name
-    );
+    ) const;
     bool get_checkbox_check(
         lafi::widget* parent, const string &checkbox_name
-    );
+    ) const;
     string get_label_text(
         lafi::widget* parent, const string &label_name
-    );
+    ) const;
     string get_textbox_text(
         lafi::widget* parent, const string &textbox_name
-    );
+    ) const;
     bool get_radio_selection(
         lafi::widget* parent, const string &radio_name
-    );
+    ) const;
     void set_angle_picker_angle(
         lafi::widget* parent, const string &picker_name, const float angle
     );

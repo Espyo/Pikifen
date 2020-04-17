@@ -190,7 +190,7 @@ void options_struct::load_control(
 /* ----------------------------------------------------------------------------
  * Saves the player's options into a file.
  */
-void options_struct::save(data_node* file) {
+void options_struct::save(data_node* file) const {
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     

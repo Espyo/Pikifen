@@ -109,9 +109,9 @@ struct carry_info_struct {
     float return_dist;
     
     carry_info_struct(mob* m, const size_t destination);
-    bool is_empty();
-    bool is_full();
-    float get_speed();
+    bool is_empty() const;
+    bool is_full() const;
+    float get_speed() const;
     void rotate_points(const float angle);
 };
 
@@ -195,8 +195,8 @@ struct group_info_struct {
     void init_spots(mob* affected_mob_ptr = NULL);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
-    point get_average_member_pos();
-    point get_spot_offset(const size_t spot_index);
+    point get_average_member_pos() const;
+    point get_spot_offset(const size_t spot_index) const;
     void reassign_spots();
     bool set_next_cur_standby_type(const bool move_backwards);
     group_info_struct(mob* leader_ptr);
@@ -224,7 +224,7 @@ struct hold_info_struct {
     
     hold_info_struct();
     void clear();
-    point get_final_pos(float* final_z);
+    point get_final_pos(float* final_z) const;
 };
 
 

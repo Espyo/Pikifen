@@ -113,7 +113,7 @@ struct timer {
     void start(const float new_duration);
     void stop();
     void tick(const float amount);
-    float get_ratio_left();
+    float get_ratio_left() const;
 };
 
 
@@ -205,8 +205,8 @@ public:
     void detach(const string &name);
     void clear();
     
-    long get_total_calls();
-    size_t get_list_size();
+    long get_total_calls() const;
+    size_t get_list_size() const;
     
 private:
     struct bmp_info {
@@ -283,7 +283,7 @@ public:
         const size_t id,
         const float x, const float y, const float w, const float h
     );
-    bool get_draw_data(const size_t id, point* center, point* size);
+    bool get_draw_data(const size_t id, point* center, point* size) const;
     void start_move(const bool in, const float duration);
     void tick(const float time);
     hud_item_manager(const size_t item_total);
@@ -321,8 +321,8 @@ struct movement_struct {
     float left;
     float down;
     
-    void get_raw_info(point* coords, float* angle, float* magnitude);
-    void get_clean_info(point* coords, float* angle, float* magnitude);
+    void get_raw_info(point* coords, float* angle, float* magnitude) const;
+    void get_clean_info(point* coords, float* angle, float* magnitude) const;
     movement_struct();
 };
 
@@ -346,7 +346,7 @@ struct msg_box_info {
     vector<size_t> stopping_chars;
     
     bool advance();
-    vector<string> get_current_lines();
+    vector<string> get_current_lines() const;
     void tick(const float delta_t);
     
     msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);
@@ -421,9 +421,9 @@ struct sample_struct {
 struct sector_types_manager {
 public:
     void register_type(const unsigned char nr, const string &name);
-    unsigned char get_nr(const string &name);
-    string get_name(const unsigned char nr);
-    unsigned char get_nr_of_types();
+    unsigned char get_nr(const string &name) const;
+    string get_name(const unsigned char nr) const;
+    unsigned char get_nr_of_types() const;
     
 private:
     vector<string> names;
@@ -511,9 +511,9 @@ public:
     
     fade_manager();
     void start_fade(const bool fade_in, const std::function<void()> &on_end);
-    bool is_fade_in();
-    bool is_fading();
-    float get_perc_left();
+    bool is_fade_in() const;
+    bool is_fading() const;
+    float get_perc_left() const;
     void tick(const float time);
     void draw();
     
@@ -586,8 +586,8 @@ struct subgroup_type_manager;
  */
 struct subgroup_type {
 public:
-    SUBGROUP_TYPE_CATEGORIES get_category() { return category; }
-    ALLEGRO_BITMAP* get_icon() { return icon; }
+    SUBGROUP_TYPE_CATEGORIES get_category() const { return category; }
+    ALLEGRO_BITMAP* get_icon() const { return icon; }
     
 private:
     friend subgroup_type_manager;
@@ -611,10 +611,10 @@ public:
     subgroup_type* get_type(
         const SUBGROUP_TYPE_CATEGORIES category,
         mob_type* specific_type = NULL
-    );
-    subgroup_type* get_first_type();
-    subgroup_type* get_prev_type(subgroup_type* sgt);
-    subgroup_type* get_next_type(subgroup_type* sgt);
+    ) const;
+    subgroup_type* get_first_type() const;
+    subgroup_type* get_prev_type(subgroup_type* sgt) const;
+    subgroup_type* get_next_type(subgroup_type* sgt) const;
     void clear();
     
 private:

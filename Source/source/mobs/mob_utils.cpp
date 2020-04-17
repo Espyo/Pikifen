@@ -62,12 +62,12 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
 /* ----------------------------------------------------------------------------
  * Returns the speed at which the object should move, given the carrier Pikmin.
  */
-float carry_info_struct::get_speed() {
+float carry_info_struct::get_speed() const {
     float max_speed = 0;
     
     //Begin by obtaining the average walking speed of the carriers.
     for(size_t s = 0; s < spot_info.size(); ++s) {
-        carrier_spot_struct* s_ptr = &spot_info[s];
+        const carrier_spot_struct* s_ptr = &spot_info[s];
         
         if(s_ptr->state != CARRY_SPOT_USED) continue;
         
@@ -99,7 +99,7 @@ float carry_info_struct::get_speed() {
 /* ----------------------------------------------------------------------------
  * Returns true if no spot is reserved or used. False otherwise.
  */
-bool carry_info_struct::is_empty() {
+bool carry_info_struct::is_empty() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         if(spot_info[s].state != CARRY_SPOT_FREE) return false;
     }
@@ -110,7 +110,7 @@ bool carry_info_struct::is_empty() {
 /* ----------------------------------------------------------------------------
  * Returns true if all spots are reserved. False otherwise.
  */
-bool carry_info_struct::is_full() {
+bool carry_info_struct::is_full() const {
     for(size_t s = 0; s < spot_info.size(); ++s) {
         if(spot_info[s].state == CARRY_SPOT_FREE) return false;
     }
@@ -198,7 +198,7 @@ void group_info_struct::change_standby_type_if_needed() {
 /* ----------------------------------------------------------------------------
  * Returns the average position of the members.
  */
-point group_info_struct::get_average_member_pos() {
+point group_info_struct::get_average_member_pos() const {
     point avg;
     for(size_t m = 0; m < members.size(); ++m) {
         avg += members[m]->pos;
@@ -211,7 +211,7 @@ point group_info_struct::get_average_member_pos() {
  * Returns a point's offset from the anchor,
  * given the current group transformation.
  */
-point group_info_struct::get_spot_offset(const size_t spot_index) {
+point group_info_struct::get_spot_offset(const size_t spot_index) const {
     point res = spots[spot_index].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
@@ -532,7 +532,7 @@ void hold_info_struct::clear() {
 /* ----------------------------------------------------------------------------
  * Returns the final coordinates this mob should be at.
  */
-point hold_info_struct::get_final_pos(float* final_z) {
+point hold_info_struct::get_final_pos(float* final_z) const {
     if(!m) return point();
     
     hitbox* h_ptr = NULL;

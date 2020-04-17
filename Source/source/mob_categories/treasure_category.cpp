@@ -72,7 +72,7 @@ void treasure_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of treasure given its name, or NULL on error.
  */
-mob_type* treasure_category::get_type(const string &name) {
+mob_type* treasure_category::get_type(const string &name) const {
     auto it = game.mob_types.treasure.find(name);
     if(it == game.mob_types.treasure.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* treasure_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of treasure by name.
  */
-void treasure_category::get_type_names(vector<string> &list) {
+void treasure_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.treasure) {
         list.push_back(t.first);
     }

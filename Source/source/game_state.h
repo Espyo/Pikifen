@@ -56,7 +56,7 @@ public:
     virtual void do_logic() = 0;
     virtual void do_drawing() = 0;
     virtual void update_transformations();
-    virtual string get_name() = 0;
+    virtual string get_name() const = 0;
 };
 
 #endif //ifndef GAME_STATE_INCLUDED

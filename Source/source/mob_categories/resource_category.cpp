@@ -72,7 +72,7 @@ void resource_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of resource given its name, or NULL on error.
  */
-mob_type* resource_category::get_type(const string &name) {
+mob_type* resource_category::get_type(const string &name) const {
     auto it = game.mob_types.resource.find(name);
     if(it == game.mob_types.resource.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* resource_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of resource by name.
  */
-void resource_category::get_type_names(vector<string> &list) {
+void resource_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.resource) {
         list.push_back(t.first);
     }

@@ -72,7 +72,7 @@ void leader_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of leader given its name, or NULL on error.
  */
-mob_type* leader_category::get_type(const string &name) {
+mob_type* leader_category::get_type(const string &name) const {
     auto it = game.mob_types.leader.find(name);
     if(it == game.mob_types.leader.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* leader_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of leader by name.
  */
-void leader_category::get_type_names(vector<string> &list) {
+void leader_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.leader) {
         list.push_back(t.first);
     }

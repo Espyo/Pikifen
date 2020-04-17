@@ -200,12 +200,12 @@ void replay::load_from_file(const string &file_name) {
 /* ----------------------------------------------------------------------------
  * Saves replay data to a file in the disk.
  */
-void replay::save_to_file(const string &file_name) {
+void replay::save_to_file(const string &file_name) const {
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "wb");
     
     al_fwrite32be(file, states.size());
     for(size_t s = 0; s < states.size(); ++s) {
-        replay_state* s_ptr = &states[s];
+        const replay_state* s_ptr = &states[s];
         
         al_fwrite32be(file, s_ptr->elements.size());
         for(size_t e = 0; e < s_ptr->elements.size(); ++e) {

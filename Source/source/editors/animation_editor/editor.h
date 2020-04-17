@@ -44,7 +44,7 @@ public:
     void do_drawing();
     void load();
     void unload();
-    virtual string get_name();
+    virtual string get_name() const;
     
 private:
 
@@ -167,7 +167,7 @@ private:
     void draw_top_down_view_sprite(sprite* s);
     void enter_side_view();
     void exit_side_view();
-    string get_cut_path(const string &p);
+    string get_cut_path(const string &p) const;
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);

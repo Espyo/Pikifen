@@ -37,7 +37,7 @@ class treasure_type : public mob_type {
 public:
 
     treasure_type();
-    anim_conversion_vector get_anim_conversions();
+    anim_conversion_vector get_anim_conversions() const;
 };
 
 #endif //ifndef TREASURE_TYPE_INCLUDED

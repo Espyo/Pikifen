@@ -65,11 +65,11 @@ public:
     pikmin(const point &pos, pikmin_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s);
+    virtual bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
     virtual void draw_mob();
     //Get the base movement speed.
-    virtual float get_base_speed();
+    virtual float get_base_speed() const;
     //Handler for when there is no longer any status effect-induced panic.
     virtual void handle_panic_loss();
     //Handler for a status effect.

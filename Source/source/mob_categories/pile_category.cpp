@@ -72,7 +72,7 @@ void pile_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of pile given its name, or NULL on error.
  */
-mob_type* pile_category::get_type(const string &name) {
+mob_type* pile_category::get_type(const string &name) const {
     auto it = game.mob_types.pile.find(name);
     if(it == game.mob_types.pile.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* pile_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of pile by name.
  */
-void pile_category::get_type_names(vector<string> &list) {
+void pile_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.pile) {
         list.push_back(t.first);
     }

@@ -32,7 +32,7 @@ treasure_type::treasure_type() :
 /* ----------------------------------------------------------------------------
  * Returns the vector of animation conversions.
  */
-anim_conversion_vector treasure_type::get_anim_conversions() {
+anim_conversion_vector treasure_type::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(ANIM_IDLING, "idling"));
     return v;

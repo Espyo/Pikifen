@@ -72,7 +72,7 @@ void ship_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of ship given its name, or NULL on error.
  */
-mob_type* ship_category::get_type(const string &name) {
+mob_type* ship_category::get_type(const string &name) const {
     auto it = game.mob_types.ship.find(name);
     if(it == game.mob_types.ship.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* ship_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of ship by name.
  */
-void ship_category::get_type_names(vector<string> &list) {
+void ship_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.ship) {
         list.push_back(t.first);
     }

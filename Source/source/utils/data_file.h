@@ -68,11 +68,11 @@ public:
     //Line on the text file this node's in.
     size_t line_nr;
     
-    string get_value_or_default(const string &def);
+    string get_value_or_default(const string &def) const;
     
-    size_t get_nr_of_children();
+    size_t get_nr_of_children() const;
     data_node* get_child(const size_t number);
-    size_t get_nr_of_children_by_name(const string &name);
+    size_t get_nr_of_children_by_name(const string &name) const;
     data_node* get_child_by_name(
         const string &name, const size_t occurrence_number = 0
     );
@@ -93,11 +93,11 @@ public:
     bool save_file(
         string file_name = "", const bool children_only = true,
         const bool include_empty_values = false
-    );
+    ) const;
     void save_node(
         ALLEGRO_FILE* file, const size_t level = 0,
         const bool include_empty_values = false
-    );
+    ) const;
     
     data_node();
     explicit data_node(const string &file_name);
@@ -111,7 +111,7 @@ private:
     vector<data_node*> dummy_children;
     data_node* create_dummy();
     
-    string trim_spaces(const string &s, const bool left_only = false);
+    static string trim_spaces(const string &s, const bool left_only = false);
     
 };
 

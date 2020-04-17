@@ -20,7 +20,7 @@ using std::set;
  * Returns which walkable mob this mob should be considered to be on top of.
  * Returns NULL if none is found.
  */
-mob* mob::get_mob_to_walk_on() {
+mob* mob::get_mob_to_walk_on() const {
     for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay_st->mobs.all[m];
         if(!m_ptr->type->walkable) {
@@ -91,7 +91,7 @@ mob* mob::get_mob_to_walk_on() {
  */
 H_MOVE_RESULTS mob::get_movement_edge_intersections(
     const point &new_pos, vector<edge*>* intersecting_edges
-) {
+) const {
     //Before checking the edges, let's consult the blockmap and look at
     //the edges in the same blocks the mob is on.
     //This way, we won't check for edges that are really far away.
@@ -322,7 +322,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
 H_MOVE_RESULTS mob::get_wall_slide_angle(
     edge* e_ptr, unsigned char wall_sector, const float move_angle,
     float* slide_angle
-) {
+) const {
     //The wall's normal is the direction the wall is facing.
     //i.e. the direction from the top floor to the bottom floor.
     //We know which side of an edge is which sector because of

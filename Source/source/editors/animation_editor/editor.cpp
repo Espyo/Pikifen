@@ -183,7 +183,7 @@ void animation_editor::exit_side_view() {
  * This implies cutting it in two lines, and even replacing the start with
  * ellipsis, if needed.
  */
-string animation_editor::get_cut_path(const string &p) {
+string animation_editor::get_cut_path(const string &p) const {
     if(p.size() <= 22) return p;
     
     string result = p;
@@ -204,7 +204,7 @@ string animation_editor::get_cut_path(const string &p) {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string animation_editor::get_name() {
+string animation_editor::get_name() const {
     return "animation editor";
 }
 

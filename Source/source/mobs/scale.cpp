@@ -26,7 +26,7 @@ scale::scale(const point &pos, scale_type* type, float angle) :
 /* ----------------------------------------------------------------------------
  * Calculates the total weight currently on top of the mob.
  */
-float scale::calculate_cur_weight() {
+float scale::calculate_cur_weight() const {
 
     //Start by figuring out which mobs are applying weight.
     set<mob*> weighing_mobs;

@@ -185,7 +185,7 @@ public:
     virtual ~mob_type();
     virtual void load_properties(data_node* file);
     virtual void load_resources(data_node* file);
-    virtual anim_conversion_vector get_anim_conversions();
+    virtual anim_conversion_vector get_anim_conversions() const;
     virtual void unload_resources();
     void add_carrying_states();
 };
@@ -206,7 +206,7 @@ public:
     vector<string> animation_group_suffixes;
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, const size_t base_anim_total
-    );
+    ) const;
     
     virtual ~mob_type_with_anim_groups() = default;
 };

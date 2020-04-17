@@ -185,7 +185,7 @@ group_task::group_task_spot* group_task::get_free_spot() {
 /* ----------------------------------------------------------------------------
  * Returns the current power put into the task.
  */
-float group_task::get_power() {
+float group_task::get_power() const {
     return power;
 }
 
@@ -195,7 +195,7 @@ float group_task::get_power() {
  * Returns a (0,0) point if that Pikmin doesn't have a spot.
  * whose: Pikmin whose spot to check.
  */
-point group_task::get_spot_pos(pikmin* whose) {
+point group_task::get_spot_pos(pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == whose) {
             return spots[s].absolute_pos;

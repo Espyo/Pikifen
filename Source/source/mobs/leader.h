@@ -44,9 +44,9 @@ public:
     //Dismiss current group.
     void dismiss();
     //Signal to every group member that swarm mode started.
-    void signal_swarm_start();
+    void signal_swarm_start() const;
     //Signal to every group member that swarm mode ended.
-    void signal_swarm_end();
+    void signal_swarm_end() const;
     //Starts the trail behind a thrown leader.
     void start_throw_trail();
     //Start whistling.
@@ -60,7 +60,7 @@ public:
     leader(const point &pos, leader_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s);
+    virtual bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
     virtual void draw_mob();
     
@@ -70,7 +70,7 @@ protected:
     
 private:
     //Returns how many rows are needed for all members' dismissal.
-    size_t get_dismiss_rows(const size_t n_members);
+    size_t get_dismiss_rows(const size_t n_members) const;
 };
 
 

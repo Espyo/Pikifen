@@ -51,7 +51,7 @@ void mob_category_manager::clear() {
  * multiple categories have a mob type of that name.
  * Returns NULL on error.
  */
-mob_type* mob_category_manager::find_mob_type(const string &name) {
+mob_type* mob_category_manager::find_mob_type(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         mob_type* t = categories[n]->get_type(name);
         if(t) return t;
@@ -67,7 +67,7 @@ mob_type* mob_category_manager::find_mob_type(const string &name) {
  */
 mob_type* mob_category_manager::find_mob_type_from_folder_name(
     mob_category* cat, const string &name
-) {
+) const {
     vector<string> types;
     cat->get_type_names(types);
     for(size_t t = 0 ; t < types.size(); ++t) {
@@ -82,7 +82,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
  * Returns a category given its ID.
  * Returns NULL on error.
  */
-mob_category* mob_category_manager::get(const size_t id) {
+mob_category* mob_category_manager::get(const size_t id) const {
     if(id >= categories.size()) return NULL;
     return categories[id];
 }
@@ -92,7 +92,9 @@ mob_category* mob_category_manager::get(const size_t id) {
  * Returns a category given its folder name.
  * Returns NULL on error.
  */
-mob_category* mob_category_manager::get_from_folder_name(const string &name) {
+mob_category* mob_category_manager::get_from_folder_name(
+    const string &name
+) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->folder == name) return categories[n];
     }
@@ -105,7 +107,7 @@ mob_category* mob_category_manager::get_from_folder_name(const string &name) {
  * Returns a category given its name.
  * Returns NULL on error.
  */
-mob_category* mob_category_manager::get_from_name(const string &name) {
+mob_category* mob_category_manager::get_from_name(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->name == name) return categories[n];
     }
@@ -118,7 +120,7 @@ mob_category* mob_category_manager::get_from_name(const string &name) {
  * Returns a category given its plural name.
  * Returns NULL on error.
  */
-mob_category* mob_category_manager::get_from_pname(const string &pname) {
+mob_category* mob_category_manager::get_from_pname(const string &pname) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->plural_name == pname) return categories[n];
     }
@@ -165,6 +167,6 @@ mob* none_category::create_mob(
 ) { return NULL; }
 mob_type* none_category::create_type() { return NULL; }
 void none_category::erase_mob(mob* m) { }
-mob_type* none_category::get_type(const string &name) { return NULL; }
-void none_category::get_type_names(vector<string> &list) { }
+mob_type* none_category::get_type(const string &name) const { return NULL; }
+void none_category::get_type_names(vector<string> &list) const { }
 void none_category::register_type(mob_type* type) { }

@@ -375,7 +375,7 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
  * Scans the list of edges and retrieves the number of the specified edge.
  * Returns INVALID if not found.
  */
-size_t area_data::find_edge_nr(const edge* e_ptr) {
+size_t area_data::find_edge_nr(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e] == e_ptr) return e;
     }
@@ -387,7 +387,7 @@ size_t area_data::find_edge_nr(const edge* e_ptr) {
  * Scans the list of mob generators and retrieves the number of
  * the specified mob generator. Returns INVALID if not found.
  */
-size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) {
+size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         if(mob_generators[m] == m_ptr) return m;
     }
@@ -399,7 +399,7 @@ size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) {
  * Scans the list of sectors and retrieves the number of the specified sector.
  * Returns INVALID if not found.
  */
-size_t area_data::find_sector_nr(const sector* s_ptr) {
+size_t area_data::find_sector_nr(const sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); ++s) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -411,7 +411,7 @@ size_t area_data::find_sector_nr(const sector* s_ptr) {
  * Scans the list of vertexes and retrieves the number of the specified vertex.
  * Returns INVALID if not found.
  */
-size_t area_data::find_vertex_nr(const vertex* v_ptr) {
+size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         if(vertexes[v] == v_ptr) return v;
     }
@@ -906,7 +906,7 @@ void blockmap::clear() {
  * Returns the block column in which an X coordinate is contained.
  * Returns INVALID on error.
  */
-size_t blockmap::get_col(const float x) {
+size_t blockmap::get_col(const float x) const {
     if(x < top_left_corner.x) return INVALID;
     float final_x = (x - top_left_corner.x) / BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
@@ -918,7 +918,7 @@ size_t blockmap::get_col(const float x) {
  * Returns the block row in which a Y coordinate is contained.
  * Returns INVALID on error.
  */
-size_t blockmap::get_row(const float y) {
+size_t blockmap::get_row(const float y) const {
     if(y < top_left_corner.y) return INVALID;
     float final_y = (y - top_left_corner.y) / BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
@@ -929,7 +929,7 @@ size_t blockmap::get_row(const float y) {
 /* ----------------------------------------------------------------------------
  * Returns the top-left coordinates for the specified column and row.
  */
-point blockmap::get_top_left_corner(const size_t col, const size_t row) {
+point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
     return
         point(
             col * BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
@@ -953,7 +953,7 @@ edge::edge(size_t v1, size_t v2) {
 /* ----------------------------------------------------------------------------
  * Returns the vertex that ISN'T the specified one.
  */
-vertex* edge::get_other_vertex(vertex* v_ptr) {
+vertex* edge::get_other_vertex(const vertex* v_ptr) const {
     if(vertexes[0] == v_ptr) return vertexes[1];
     return vertexes[0];
 }
@@ -962,7 +962,7 @@ vertex* edge::get_other_vertex(vertex* v_ptr) {
 /* ----------------------------------------------------------------------------
  * Returns which side has the specified sector, or INVALID if neither.
  */
-size_t edge::get_side_with_sector(sector* s_ptr) {
+size_t edge::get_side_with_sector(sector* s_ptr) const {
     for(unsigned char s = 0; s < 2; ++s) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -974,7 +974,7 @@ size_t edge::get_side_with_sector(sector* s_ptr) {
  * If the specified edge and this one are not neighbors, returns NULL.
  * Otherwise, returns the vertex that binds them.
  */
-vertex* edge::has_neighbor(edge* other) {
+vertex* edge::has_neighbor(edge* other) const {
     for(size_t v1 = 0; v1 < 2; ++v1) {
         for(size_t v2 = 0; v2 < 2; ++v2) {
             if(vertexes[v1] == other->vertexes[v2]) {
@@ -1170,7 +1170,7 @@ void path_stop::calculate_dists_plus_neighbors() {
  * is from the other stop to this one, it will not count.
  * Returns INVALID if it does not link to that stop.
  */
-size_t path_stop::get_link(path_stop* other_stop) {
+size_t path_stop::get_link(path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
         if(links[l].end_ptr == other_stop) return l;
     }
@@ -1297,7 +1297,7 @@ void sector::get_neighbor_sectors_conditionally(
  * If texture merging is required, this returns what two neighboring sectors
  * will be used for it.
  */
-void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
+void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //Check all edges to find which two textures need merging.
     edge* e_ptr = NULL;
     sector* neighbor = NULL;
@@ -1458,7 +1458,7 @@ void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
  * Returns the edge that has the specified vertex as a neighbor of this vertex.
  * Returns NULL if not found.
  */
-edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
+edge* vertex::get_edge_by_neighbor(vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e]->get_other_vertex(this) == neighbor) {
             return edges[e];
@@ -1471,7 +1471,7 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
 /* ----------------------------------------------------------------------------
  * Returns whether or not this vertex has the specified edge in its list.
  */
-bool vertex::has_edge(edge* e_ptr) {
+bool vertex::has_edge(edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e] == e_ptr) return true;
     }
@@ -1486,7 +1486,9 @@ bool vertex::has_edge(edge* e_ptr) {
  * first_neighbor: Return the common neighbor between them here,
  *   if the result is true.
  */
-bool vertex::is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor) {
+bool vertex::is_2nd_degree_neighbor(
+    vertex* other_v, vertex** first_neighbor
+) const {
     //Let's crawl forward through all edges and stop at the second level.
     //If there is any other_v at that distance, then we found it!
     

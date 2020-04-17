@@ -81,7 +81,7 @@ void menu_button::draw(const float time_spent) {
 }
 
 
-bool menu_button::is_clickable() { return enabled; }
+bool menu_button::is_clickable() const { return enabled; }
 void menu_button::on_click() { }
 
 
@@ -151,7 +151,7 @@ void menu_checkbox::draw(const float time_spent) {
 }
 
 
-bool menu_checkbox::is_clickable() { return enabled; }
+bool menu_checkbox::is_clickable() const { return enabled; }
 void menu_checkbox::on_click() { checked = !checked; }
 
 
@@ -200,7 +200,7 @@ void menu_text::draw(const float time_spent) {
 }
 
 
-bool menu_text::is_clickable() { return false; }
+bool menu_text::is_clickable() const { return false; }
 void menu_text::on_click() { }
 
 
@@ -236,7 +236,7 @@ void menu_widget::click() {
 /* ----------------------------------------------------------------------------
  * Returns whether or not the mouse cursor is on top of this widget.
  */
-bool menu_widget::mouse_on(const point &mc) {
+bool menu_widget::mouse_on(const point &mc) const {
     return
         (
             mc.x >= center.x - size.x * 0.5 &&

@@ -151,7 +151,7 @@ void animation_database::destroy() {
  * Returns the index of the specified animation.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_animation(const string &name) {
+size_t animation_database::find_animation(const string &name) const {
     for(size_t a = 0; a < animations.size(); ++a) {
         if(animations[a]->name == name) return a;
     }
@@ -163,7 +163,7 @@ size_t animation_database::find_animation(const string &name) {
  * Returns the index of the specified body part.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_body_part(const string &name) {
+size_t animation_database::find_body_part(const string &name) const {
     for(size_t b = 0; b < body_parts.size(); ++b) {
         if(body_parts[b]->name == name) return b;
     }
@@ -175,7 +175,7 @@ size_t animation_database::find_body_part(const string &name) {
  * Returns the index of the specified sprite.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_sprite(const string &name) {
+size_t animation_database::find_sprite(const string &name) const {
     for(size_t s = 0; s < sprites.size(); ++s) {
         if(sprites[s]->name == name) return s;
     }
@@ -277,7 +277,7 @@ const animation_instance &animation_instance::operator=(
 /* ----------------------------------------------------------------------------
  * Returns the sprite of the current frame of animation.
  */
-sprite* animation_instance::get_cur_sprite() {
+sprite* animation_instance::get_cur_sprite() const {
     if(!cur_anim) return NULL;
     if(cur_frame_index == INVALID) return NULL;
     return cur_anim->frames[cur_frame_index].sprite_ptr;

@@ -136,7 +136,7 @@ data_node* data_node::get_child_by_name(
 /* ----------------------------------------------------------------------------
  * Returns the number of children nodes (direct children only).
  */
-size_t data_node::get_nr_of_children() {
+size_t data_node::get_nr_of_children() const {
     return children.size();
 }
 
@@ -144,7 +144,7 @@ size_t data_node::get_nr_of_children() {
 /* ----------------------------------------------------------------------------
  * Returns the number of occurences of a child name (direct children only).
  */
-size_t data_node::get_nr_of_children_by_name(const string &name) {
+size_t data_node::get_nr_of_children_by_name(const string &name) const {
     size_t number = 0;
     
     for(size_t c = 0; c < children.size(); ++c) {
@@ -158,7 +158,7 @@ size_t data_node::get_nr_of_children_by_name(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns the value of a node, or def if it has no value.
  */
-string data_node::get_value_or_default(const string &def) {
+string data_node::get_value_or_default(const string &def) const {
     return (value.empty() ? def : value);
 }
 
@@ -345,7 +345,7 @@ bool data_node::remove(data_node* node_to_remove) {
 bool data_node::save_file(
     string file_name, const bool children_only,
     const bool include_empty_values
-) {
+) const {
     if(file_name == "") file_name = this->file_name;
     
     //Create any missing folders.
@@ -382,7 +382,7 @@ bool data_node::save_file(
 void data_node::save_node(
     ALLEGRO_FILE* file, const size_t level,
     const bool include_empty_values
-) {
+) const {
     string tabs = string(level, '\t');
     
     al_fwrite(file, tabs.c_str(), tabs.size());

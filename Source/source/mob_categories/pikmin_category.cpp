@@ -72,7 +72,7 @@ void pikmin_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of Pikmin given its name, or NULL on error.
  */
-mob_type* pikmin_category::get_type(const string &name) {
+mob_type* pikmin_category::get_type(const string &name) const {
     auto it = game.mob_types.pikmin.find(name);
     if(it == game.mob_types.pikmin.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* pikmin_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of Pikmin by name.
  */
-void pikmin_category::get_type_names(vector<string> &list) {
+void pikmin_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.pikmin) {
         list.push_back(t.first);
     }

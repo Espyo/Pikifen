@@ -66,7 +66,7 @@ void game_class::change_state(game_state* new_state) {
 /* ----------------------------------------------------------------------------
  * Returns the name of the current state.
  */
-string game_class::get_cur_state_name() {
+string game_class::get_cur_state_name() const {
     if(cur_state) {
         return cur_state->get_name();
     }

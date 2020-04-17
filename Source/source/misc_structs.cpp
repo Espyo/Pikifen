@@ -209,7 +209,7 @@ ALLEGRO_BITMAP* bmp_manager::get(
 /* ----------------------------------------------------------------------------
  * Returns the size of the list. Used for debugging.
  */
-size_t bmp_manager::get_list_size() {
+size_t bmp_manager::get_list_size() const {
     return list.size();
 }
 
@@ -218,7 +218,7 @@ size_t bmp_manager::get_list_size() {
 /* ----------------------------------------------------------------------------
  * Returns the total number of calls. Used for debugging.
  */
-long bmp_manager::get_total_calls() {
+long bmp_manager::get_total_calls() const {
     return total_calls;
 }
 
@@ -367,7 +367,7 @@ void fade_manager::draw() {
 /* ----------------------------------------------------------------------------
  * Returns the percentage of progress left in the current fade.
  */
-float fade_manager::get_perc_left() {
+float fade_manager::get_perc_left() const {
     return time_left / FADE_DURATION;
 }
 
@@ -375,7 +375,7 @@ float fade_manager::get_perc_left() {
 /* ----------------------------------------------------------------------------
  * Returns whether the current fade is a fade in or fade out.
  */
-bool fade_manager::is_fade_in() {
+bool fade_manager::is_fade_in() const {
     return fade_in;
 }
 
@@ -383,7 +383,7 @@ bool fade_manager::is_fade_in() {
 /* ----------------------------------------------------------------------------
  * Returns whether or not a fade is currently in progress.
  */
-bool fade_manager::is_fading() {
+bool fade_manager::is_fading() const {
     return time_left > 0;
 }
 
@@ -461,8 +461,8 @@ hud_item_manager::hud_item_manager(const size_t item_total) :
  */
 bool hud_item_manager::get_draw_data(
     const size_t id, point* center, point* size
-) {
-    hud_item* h = &items[id];
+) const {
+    const hud_item* h = &items[id];
     if(offscreen) return false;
     if(h->size.x <= 0 || h->size.y <= 0) return false;
     if(h->center.x + h->size.x / 2.0f < 0)    return false;
@@ -580,7 +580,7 @@ movement_struct::movement_struct() :
  */
 void movement_struct::get_clean_info(
     point* coords, float* angle, float* magnitude
-) {
+) const {
     get_raw_info(coords, angle, magnitude);
     *magnitude =
         clamp(*magnitude, game.options.joystick_min_deadzone, game.options.joystick_max_deadzone);
@@ -603,7 +603,7 @@ void movement_struct::get_clean_info(
  */
 void movement_struct::get_raw_info(
     point* coords, float* angle, float* magnitude
-) {
+) const {
     *coords = point(right - left, down - up);
     coordinates_to_angle(*coords, angle, magnitude);
 }
@@ -676,7 +676,7 @@ bool msg_box_info::advance() {
 /* ----------------------------------------------------------------------------
  * Returns what lines of text should be shown right now.
  */
-vector<string> msg_box_info::get_current_lines() {
+vector<string> msg_box_info::get_current_lines() const {
     string text_to_show =
         message.substr(
             stopping_chars[cur_section],
@@ -1093,7 +1093,7 @@ bool script_var_reader::get(const string &name, point &dest) const {
  * Returns the name of a sector type, given its number.
  * Returns an empty string on error.
  */
-string sector_types_manager::get_name(const unsigned char nr) {
+string sector_types_manager::get_name(const unsigned char nr) const {
     if(nr < names.size()) return names[nr];
     return "";
 }
@@ -1103,7 +1103,7 @@ string sector_types_manager::get_name(const unsigned char nr) {
  * Returns the number of a sector type, given its name.
  * Returns 255 on error.
  */
-unsigned char sector_types_manager::get_nr(const string &name) {
+unsigned char sector_types_manager::get_nr(const string &name) const {
     for(unsigned char n = 0; n < names.size(); ++n) {
         if(names[n] == name) return n;
     }
@@ -1114,7 +1114,7 @@ unsigned char sector_types_manager::get_nr(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns the number of sector types registered.
  */
-unsigned char sector_types_manager::get_nr_of_types() {
+unsigned char sector_types_manager::get_nr_of_types() const {
     return names.size();
 }
 
@@ -1150,7 +1150,7 @@ void subgroup_type_manager::clear() {
 /* ----------------------------------------------------------------------------
  * Returns the first registered subgroup type.
  */
-subgroup_type* subgroup_type_manager::get_first_type() {
+subgroup_type* subgroup_type_manager::get_first_type() const {
     return types.front();
 }
 
@@ -1160,7 +1160,7 @@ subgroup_type* subgroup_type_manager::get_first_type() {
  */
 subgroup_type* subgroup_type_manager::get_next_type(
     subgroup_type* sgt
-) {
+) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
             return get_next_in_vector(types, t);
@@ -1175,7 +1175,7 @@ subgroup_type* subgroup_type_manager::get_next_type(
  */
 subgroup_type* subgroup_type_manager::get_prev_type(
     subgroup_type* sgt
-) {
+) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
             return get_prev_in_vector(types, t);
@@ -1194,7 +1194,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
     mob_type* specific_type
-) {
+) const {
     for(size_t t = 0; t < types.size(); ++t) {
         subgroup_type* t_ptr = types[t];
         if(
@@ -1284,7 +1284,7 @@ timer::~timer() {
 /* ----------------------------------------------------------------------------
  * Returns the ratio of time left (i.e. 0 if done, 1 if all time is left).
  */
-float timer::get_ratio_left() {
+float timer::get_ratio_left() const {
     return time_left / duration;
 }
 

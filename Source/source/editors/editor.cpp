@@ -426,37 +426,37 @@ void editor::generate_and_open_picker(
 //LAFI helper functions.
 float editor::get_angle_picker_angle(
     lafi::widget* parent, const string &picker_name
-) {
+) const {
     return
         ((lafi::angle_picker*) parent->widgets[picker_name])->get_angle_rads();
 }
 string editor::get_button_text(
     lafi::widget* parent, const string &button_name
-) {
+) const {
     return
         ((lafi::button*) parent->widgets[button_name])->text;
 }
 bool editor::get_checkbox_check(
     lafi::widget* parent, const string &checkbox_name
-) {
+) const {
     return
         ((lafi::checkbox*) parent->widgets[checkbox_name])->checked;
 }
 string editor::get_label_text(
     lafi::widget* parent, const string &label_name
-) {
+) const {
     return
         ((lafi::label*) parent->widgets[label_name])->text;
 }
 bool editor::get_radio_selection(
     lafi::widget* parent, const string &radio_name
-) {
+) const {
     return
         ((lafi::radio_button*) parent->widgets[radio_name])->selected;
 }
 string editor::get_textbox_text(
     lafi::widget* parent, const string &textbox_name
-) {
+) const {
     return
         ((lafi::textbox*) parent->widgets[textbox_name])->text;
 }
@@ -660,7 +660,7 @@ void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
  * Returns whether the mouse cursor is inside the gui or not.
  * The status bar counts as the gui.
  */
-bool editor::is_mouse_in_gui(const point &mouse_coords) {
+bool editor::is_mouse_in_gui(const point &mouse_coords) const {
     return
         mouse_coords.x >= canvas_br.x || mouse_coords.y >= canvas_br.y ||
         mouse_coords.x <= canvas_tl.x || mouse_coords.y <= canvas_tl.y;
@@ -918,7 +918,7 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
 /* ----------------------------------------------------------------------------
  * Returns true if all registered variables equal the given GUI values.
  */
-bool editor::gui_to_var_helper::all_equal() {
+bool editor::gui_to_var_helper::all_equal() const {
     for(auto &b : bools) {
         if(*(b.first) != b.second) return false;
     }
@@ -1110,7 +1110,7 @@ void editor::transformation_controller::draw_handles() {
 /* ----------------------------------------------------------------------------
  * Returns the angle.
  */
-float editor::transformation_controller::get_angle() {
+float editor::transformation_controller::get_angle() const {
     return angle;
 }
 
@@ -1118,7 +1118,7 @@ float editor::transformation_controller::get_angle() {
 /* ----------------------------------------------------------------------------
  * Returns the center.
  */
-point editor::transformation_controller::get_center() {
+point editor::transformation_controller::get_center() const {
     return center;
 }
 
@@ -1128,7 +1128,7 @@ point editor::transformation_controller::get_center() {
  */
 point editor::transformation_controller::get_handle_pos(
     const unsigned char handle
-) {
+) const {
     point result;
     if(handle == 0 || handle == 3 || handle == 6) {
         result.x = -size.x / 2.0;
@@ -1148,7 +1148,7 @@ point editor::transformation_controller::get_handle_pos(
 /* ----------------------------------------------------------------------------
  * Returns the size.
  */
-point editor::transformation_controller::get_size() {
+point editor::transformation_controller::get_size() const {
     return size;
 }
 

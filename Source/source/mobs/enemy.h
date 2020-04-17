@@ -31,7 +31,7 @@ public:
     enemy(const point &pos, enemy_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s);
+    virtual bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
     virtual void draw_mob();
     //Death finish class-specific logic.

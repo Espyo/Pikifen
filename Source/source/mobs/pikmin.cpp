@@ -56,7 +56,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
 /* ----------------------------------------------------------------------------
  * Returns whether or not a Pikmin can receive a given status effect.
  */
-bool pikmin::can_receive_status(status_type* s) {
+bool pikmin::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_PIKMIN;
 }
 
@@ -134,7 +134,7 @@ void pikmin::force_carry(mob* m) {
  * Returns a Pikmin's base speed, without status effects and the like.
  * This depends on the maturity.
  */
-float pikmin::get_base_speed() {
+float pikmin::get_base_speed() const {
     float base = mob::get_base_speed();
     return base + (base * this->maturity * game.config.maturity_speed_mult);
 }

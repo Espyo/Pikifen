@@ -41,7 +41,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
 /* ----------------------------------------------------------------------------
  * Returns whether or not a leader can receive a given status effect.
  */
-bool leader::can_receive_status(status_type* s) {
+bool leader::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_LEADERS;
 }
 
@@ -390,7 +390,7 @@ void leader::draw_mob() {
  * Returns how many rows will be needed to fit all of the members.
  * Used to calculate how subgroup members will be placed when dismissing.
  */
-size_t leader::get_dismiss_rows(const size_t n_members) {
+size_t leader::get_dismiss_rows(const size_t n_members) const {
     size_t members_that_fit = 1;
     size_t rows_needed = 1;
     while(members_that_fit < n_members) {
@@ -405,7 +405,7 @@ size_t leader::get_dismiss_rows(const size_t n_members) {
 /* ----------------------------------------------------------------------------
  * Signals the group members that the swarm mode stopped.
  */
-void leader::signal_swarm_end() {
+void leader::signal_swarm_end() const {
     for(size_t m = 0; m < group->members.size(); ++m) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_ENDED);
     }
@@ -415,7 +415,7 @@ void leader::signal_swarm_end() {
 /* ----------------------------------------------------------------------------
  * Signals the group members that the swarm mode started.
  */
-void leader::signal_swarm_start() {
+void leader::signal_swarm_start() const {
     for(size_t m = 0; m < group->members.size(); ++m) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_STARTED);
     }

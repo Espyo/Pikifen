@@ -140,7 +140,7 @@ area_editor::area_editor() :
  */
 bool area_editor::are_nodes_traversable(
     const layout_drawing_node &n1, const layout_drawing_node &n2
-) {
+) const {
     if(n1.on_sector || n2.on_sector) return false;
     
     if(n1.on_edge && n2.on_edge) {
@@ -1700,7 +1700,7 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
  */
 unordered_set<sector*> area_editor::get_affected_sectors(
     set<vertex*> &vertexes
-) {
+) const {
     unordered_set<sector*> affected_sectors;
     for(auto v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); ++e) {
@@ -1717,7 +1717,7 @@ unordered_set<sector*> area_editor::get_affected_sectors(
  */
 void area_editor::get_clicked_layout_element(
     vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
-) {
+) const {
     *clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
     *clicked_edge = NULL;
     *clicked_sector = NULL;
@@ -1748,7 +1748,7 @@ void area_editor::get_clicked_layout_element(
 edge* area_editor::get_closest_edge_to_angle(
     vertex* v_ptr, const float angle, const bool clockwise,
     float* closest_edge_angle
-) {
+) const {
     edge* best_edge = NULL;
     float best_angle_diff = 0;
     float best_edge_angle = 0;
@@ -1795,7 +1795,7 @@ edge* area_editor::get_closest_edge_to_angle(
  */
 bool area_editor::get_common_sector(
     vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
-) {
+) const {
     unordered_set<sector*> sectors;
     
     //First, populate the list of common sectors with a sample.
@@ -1887,7 +1887,7 @@ bool area_editor::get_common_sector(
  */
 edge* area_editor::get_correct_post_split_edge(
     vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
-) {
+) const {
     float score1 = 0;
     float score2 = 0;
     get_closest_point_in_line(
@@ -1915,7 +1915,7 @@ edge* area_editor::get_correct_post_split_edge(
  * even if the sector is the void, or false if something's gone wrong.
  * The outer sector is returned to result.
  */
-bool area_editor::get_drawing_outer_sector(sector** result) {
+bool area_editor::get_drawing_outer_sector(sector** result) const {
     //Start by checking if there's a node on a sector. If so, that's it!
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         if(!drawing_nodes[n].on_vertex && !drawing_nodes[n].on_edge) {
@@ -1928,8 +1928,8 @@ bool area_editor::get_drawing_outer_sector(sector** result) {
     //Grab the first line that is not on top of an existing one,
     //and find the sector that line is on by checking its center.
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
-        layout_drawing_node* n1 = &drawing_nodes[n];
-        layout_drawing_node* n2 = &(get_next_in_vector(drawing_nodes, n));
+        const layout_drawing_node* n1 = &drawing_nodes[n];
+        const layout_drawing_node* n2 = &(get_next_in_vector(drawing_nodes, n));
         if(!are_nodes_traversable(*n1, *n2)) {
             *result =
                 get_sector(
@@ -1961,7 +1961,7 @@ bool area_editor::get_drawing_outer_sector(sector** result) {
  * p:     The point.
  * after: Only check edges that come after this one.
  */
-edge* area_editor::get_edge_under_point(const point &p, edge* after) {
+edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
     bool found_after = (!after ? true : false);
     
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -1997,7 +1997,7 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) {
 /* ----------------------------------------------------------------------------
  * Returns which edges are crossing against other edges, if any.
  */
-vector<edge_intersection> area_editor::get_intersecting_edges() {
+vector<edge_intersection> area_editor::get_intersecting_edges() const {
     vector<edge_intersection> intersections;
     
     for(size_t e1 = 0; e1 < game.cur_area_data.edges.size(); ++e1) {
@@ -2026,7 +2026,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() {
  * Returns the radius of the specific mob generator. Normally, this returns the
  * type's radius, but if the type/radius is invalid, it returns a default.
  */
-float area_editor::get_mob_gen_radius(mob_gen* m) {
+float area_editor::get_mob_gen_radius(mob_gen* m) const {
     return m->type ? m->type->radius == 0 ? 16 : m->type->radius : 16;
 }
 
@@ -2040,7 +2040,7 @@ float area_editor::get_mob_gen_radius(mob_gen* m) {
 bool area_editor::get_mob_link_under_point(
     const point &p,
     std::pair<mob_gen*, mob_gen*>* data1, std::pair<mob_gen*, mob_gen*>* data2
-) {
+) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         for(size_t l = 0; l < m_ptr->links.size(); ++l) {
@@ -2069,7 +2069,7 @@ bool area_editor::get_mob_link_under_point(
 /* ----------------------------------------------------------------------------
  * Returns the mob currently under the specified point, or NULL if none.
  */
-mob_gen* area_editor::get_mob_under_point(const point &p) {
+mob_gen* area_editor::get_mob_under_point(const point &p) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
@@ -2087,7 +2087,7 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string area_editor::get_name() {
+string area_editor::get_name() const {
     return "area editor";
 }
 
@@ -2102,7 +2102,7 @@ bool area_editor::get_path_link_under_point(
     const point &p,
     std::pair<path_stop*, path_stop*>* data1,
     std::pair<path_stop*, path_stop*>* data2
-) {
+) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
@@ -2129,7 +2129,7 @@ bool area_editor::get_path_link_under_point(
 /* ----------------------------------------------------------------------------
  * Returns the path stop currently under the specified point, or NULL if none.
  */
-path_stop* area_editor::get_path_stop_under_point(const point &p) {
+path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
@@ -2145,7 +2145,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) {
 /* ----------------------------------------------------------------------------
  * Returns the sector currently under the specified point, or NULL if none.
  */
-sector* area_editor::get_sector_under_point(const point &p) {
+sector* area_editor::get_sector_under_point(const point &p) const {
     return get_sector(p, NULL, false);
 }
 
@@ -2153,7 +2153,7 @@ sector* area_editor::get_sector_under_point(const point &p) {
 /* ----------------------------------------------------------------------------
  * Returns the vertex currently under the specified point, or NULL if none.
  */
-vertex* area_editor::get_vertex_under_point(const point &p) {
+vertex* area_editor::get_vertex_under_point(const point &p) const {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         

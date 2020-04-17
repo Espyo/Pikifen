@@ -52,9 +52,9 @@ public:
     //Returns a free spot, if any.
     group_task_spot* get_free_spot();
     //Returns the current working power.
-    float get_power();
+    float get_power() const;
     //Returns the absolute coordinates of a spot taken by a Pikmin.
-    point get_spot_pos(pikmin* whose);
+    point get_spot_pos(pikmin* whose) const;
     //Reserves a spot for a Pikmin.
     void reserve_spot(group_task_spot* spot, pikmin* who);
     

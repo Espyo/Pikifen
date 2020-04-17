@@ -85,7 +85,7 @@ public:
     virtual void do_logic();
     virtual void do_drawing();
     virtual void update_transformations();
-    virtual string get_name();
+    virtual string get_name() const;
     
 private:
 

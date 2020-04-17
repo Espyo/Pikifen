@@ -72,7 +72,7 @@ void area_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string area_menu::get_name() {
+string area_menu::get_name() const {
     return "area menu";
 }
 
@@ -350,7 +350,7 @@ void controls_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string controls_menu::get_name() {
+string controls_menu::get_name() const {
     return "controls menu";
 }
 
@@ -874,7 +874,7 @@ void main_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string main_menu::get_name() {
+string main_menu::get_name() const {
     return "main menu";
 }
 
@@ -1216,7 +1216,7 @@ void options_menu::go_to_controls() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string options_menu::get_name() {
+string options_menu::get_name() const {
     return "options menu";
 }
 

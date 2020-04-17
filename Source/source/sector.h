@@ -88,9 +88,9 @@ struct blockmap {
     size_t n_cols, n_rows;
     
     blockmap();
-    size_t get_col(const float x);
-    size_t get_row(const float y);
-    point get_top_left_corner(const size_t col, const size_t row);
+    size_t get_col(const float x) const;
+    size_t get_row(const float y) const;
+    point get_top_left_corner(const size_t col, const size_t row) const;
     void clear();
 };
 
@@ -108,9 +108,9 @@ struct edge {
     size_t sector_nrs[2];
     
     edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
-    vertex* get_other_vertex(vertex* v_ptr);
-    size_t get_side_with_sector(sector* s_ptr);
-    vertex* has_neighbor(edge* other);
+    vertex* get_other_vertex(const vertex* v_ptr) const;
+    size_t get_side_with_sector(sector* s_ptr) const;
+    vertex* has_neighbor(edge* other) const;
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
     void swap_vertexes();
@@ -135,7 +135,7 @@ struct path_stop {
         const vector<path_link> &links = vector<path_link>()
     );
     void add_link(path_stop* other_stop, const bool normal);
-    size_t get_link(path_stop* other_stop);
+    size_t get_link(path_stop* other_stop) const;
     void remove_link(path_stop* other_stop);
     void calculate_dists();
     void calculate_dists_plus_neighbors();
@@ -210,7 +210,7 @@ struct sector {
     sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
     void clone(sector* new_sector);
-    void get_texture_merge_sectors(sector** s1, sector** s2);
+    void get_texture_merge_sectors(sector** s1, sector** s2) const;
     void remove_edge(edge* e_ptr);
     void get_neighbor_sectors_conditionally(
         const std::function<bool(sector* s_ptr)> &condition,
@@ -246,9 +246,9 @@ struct vertex {
     
     vertex(float x = 0.0f, float y = 0.0f);
     void add_edge(edge* e_ptr, const size_t e_nr);
-    edge* get_edge_by_neighbor(vertex* neighbor);
-    bool has_edge(edge* e_ptr);
-    bool is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor);
+    edge* get_edge_by_neighbor(vertex* neighbor) const;
+    bool has_edge(edge* e_ptr) const;
+    bool is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor) const;
     void remove_edge(edge* e_ptr);
 };
 
@@ -346,10 +346,10 @@ struct area_data {
     void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
     void connect_sector_edges(sector* s_ptr);
     void connect_vertex_edges(vertex* v_ptr);
-    size_t find_edge_nr(const edge* e_ptr);
-    size_t find_mob_gen_nr(const mob_gen* m_ptr);
-    size_t find_sector_nr(const sector* s_ptr);
-    size_t find_vertex_nr(const vertex* v_ptr);
+    size_t find_edge_nr(const edge* e_ptr) const;
+    size_t find_mob_gen_nr(const mob_gen* m_ptr) const;
+    size_t find_sector_nr(const sector* s_ptr) const;
+    size_t find_vertex_nr(const vertex* v_ptr) const;
     void fix_edge_nrs(edge* e_ptr);
     void fix_edge_pointers(edge* e_ptr);
     void fix_path_stop_nrs(path_stop* s_ptr);

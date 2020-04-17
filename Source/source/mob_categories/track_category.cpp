@@ -72,7 +72,7 @@ void track_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of track given its name, or NULL on error.
  */
-mob_type* track_category::get_type(const string &name) {
+mob_type* track_category::get_type(const string &name) const {
     auto it = game.mob_types.track.find(name);
     if(it == game.mob_types.track.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* track_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of track by name.
  */
-void track_category::get_type_names(vector<string> &list) {
+void track_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.track) {
         list.push_back(t.first);
     }

@@ -284,29 +284,29 @@ public:
     void apply_knockback(const float knockback, const float knockback_angle);
     bool calculate_carrying_destination(
         mob* added, mob* removed, mob** target_mob, point* target_point
-    );
+    ) const;
     bool calculate_damage(
         mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
-    );
+    ) const;
     void calculate_knockback(
         mob* victim, hitbox* attack_h,
         hitbox* victim_h, float* knockback, float* angle
-    );
+    ) const;
     void calculate_throw(
         const point &target_xy, const float target_z, const float max_h,
         point* req_speed_xy, float* req_speed_z, float* final_h_angle
-    );
+    ) const;
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
     void get_hitbox_hold_point(
         mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
-    );
-    size_t get_latched_pikmin_amount();
-    float get_latched_pikmin_weight();
+    ) const;
+    size_t get_latched_pikmin_amount() const;
+    float get_latched_pikmin_weight() const;
     void do_attack_effects(
         mob* attacker, hitbox* attack_h, hitbox* victim_h, const float damage
     );
-    bool is_off_camera();
+    bool is_off_camera() const;
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void leave_group();
@@ -316,23 +316,23 @@ public:
         const bool above_holder, const unsigned char rotation_method
     );
     void release(mob* m);
-    bool can_hurt(mob* m);
-    bool can_hunt(mob* m);
-    float get_hazard_vulnerability(hazard* h_ptr);
-    bool is_resistant_to_hazards(vector<hazard*> &hazards);
+    bool can_hurt(mob* m) const;
+    bool can_hunt(mob* m) const;
+    float get_hazard_vulnerability(hazard* h_ptr) const;
+    bool is_resistant_to_hazards(vector<hazard*> &hazards) const;
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
     void stop_height_effect();
     void release_chomped_pikmin();
-    void send_message(mob* receiver, string &msg);
+    void send_message(mob* receiver, string &msg) const;
     mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
     void start_dying();
     void finish_dying();
     void respawn();
-    hitbox* get_hitbox(const size_t nr);
+    hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(
         const point &p, const size_t h_type = INVALID, dist* d = NULL
-    );
+    ) const;
     
     void chase(
         const point &offset, point* orig_coords,
@@ -353,8 +353,8 @@ public:
     );
     void stop_circling();
     void face(const float new_angle, point* new_pos);
-    point get_chase_target();
-    virtual float get_base_speed();
+    point get_chase_target() const;
+    virtual float get_base_speed() const;
     
     void arachnorb_head_turn_logic();
     void arachnorb_plan_logic(const unsigned char goal);
@@ -365,8 +365,8 @@ public:
     );
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
-    ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
-    virtual bool can_receive_status(status_type* s);
+    ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
+    virtual bool can_receive_status(status_type* s) const;
     virtual void handle_status_effect(status_type* s);
     virtual void handle_panic_loss();
     virtual void read_script_vars(const script_var_reader &svr);
@@ -381,11 +381,11 @@ public:
         const bool add_status, const bool add_sector_brightness,
         const float delivery_time_ratio_left = LARGE_FLOAT,
         const ALLEGRO_COLOR &delivery_color = al_map_rgb(0, 0, 0)
-    );
-    point get_sprite_center(sprite* s);
-    point get_sprite_dimensions(sprite* s, point* scale = NULL);
+    ) const;
+    point get_sprite_center(sprite* s) const;
+    point get_sprite_dimensions(sprite* s, point* scale = NULL) const;
     
-    string print_state_history();
+    string print_state_history() const;
     
     //Constructor.
     mob(const point &pos, mob_type* type, const float angle);
@@ -394,11 +394,11 @@ public:
     
 protected:
     //Returns a walkable mob to stand on.
-    mob* get_mob_to_walk_on();
+    mob* get_mob_to_walk_on() const;
     //Returns edge intersections at a certain spot.
     H_MOVE_RESULTS get_movement_edge_intersections(
         const point &new_pos, vector<edge*>* intersecting_edges
-    );
+    ) const;
     //Returns how the mob should move horizontally this frame.
     H_MOVE_RESULTS get_physics_horizontal_movement(
         const float delta_t, const float move_speed_mult, point* move_speed
@@ -407,7 +407,7 @@ protected:
     H_MOVE_RESULTS get_wall_slide_angle(
         edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
-    );
+    ) const;
     //Tick its animation logic.
     void tick_animation(const float delta_t);
     //Tick the mob's "thinking" logic.
@@ -446,7 +446,7 @@ public:
     size_t get_animation_nr_from_base_and_group(
         const size_t base_anim_nr, const size_t group_nr,
         const size_t base_anim_total
-    );
+    ) const;
     
     mob_with_anim_groups();
 };

@@ -72,7 +72,7 @@ void enemy_category::erase_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Returns a type of enemy given its name, or NULL on error.
  */
-mob_type* enemy_category::get_type(const string &name) {
+mob_type* enemy_category::get_type(const string &name) const {
     auto it = game.mob_types.enemy.find(name);
     if(it == game.mob_types.enemy.end()) return NULL;
     return it->second;
@@ -82,7 +82,7 @@ mob_type* enemy_category::get_type(const string &name) {
 /* ----------------------------------------------------------------------------
  * Returns all types of enemy by name.
  */
-void enemy_category::get_type_names(vector<string> &list) {
+void enemy_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.enemy) {
         list.push_back(t.first);
     }

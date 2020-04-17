@@ -151,7 +151,7 @@ public:
     //Change to a different state.
     void change_state(game_state* new_state);
     //Get the name of the current state.
-    string get_cur_state_name();
+    string get_cur_state_name() const;
     
     //Program execution.
     int start();

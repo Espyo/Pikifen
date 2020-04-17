@@ -182,7 +182,7 @@ void mob_type::add_carrying_states() {
 /* ----------------------------------------------------------------------------
  * Specifies what animation conversions there are, if any.
  */
-anim_conversion_vector mob_type::get_anim_conversions() {
+anim_conversion_vector mob_type::get_anim_conversions() const {
     return anim_conversion_vector();
 }
 
@@ -212,7 +212,7 @@ void mob_type::unload_resources() { }
 anim_conversion_vector
 mob_type_with_anim_groups::get_anim_conversions_with_groups(
     const anim_conversion_vector &v, const size_t base_anim_total
-) {
+) const {
     anim_conversion_vector new_v;
     
     for(size_t g = 0; g < animation_group_suffixes.size(); ++g) {

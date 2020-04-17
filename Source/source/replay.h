@@ -117,7 +117,7 @@ public:
     void clear();
     void finish_recording();
     void load_from_file(const string &file_name);
-    void save_to_file(const string &file_name);
+    void save_to_file(const string &file_name) const;
     
 private:
     vector<mob*> prev_state_mobs;

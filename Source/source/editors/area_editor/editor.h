@@ -29,7 +29,7 @@ public:
     void load();
     void unload();
     
-    virtual string get_name();
+    virtual string get_name() const;
     
     //Load this area when the area editor loads.
     string auto_load_area;
@@ -406,7 +406,7 @@ private:
     bool are_nodes_traversable(
         const layout_drawing_node &n1,
         const layout_drawing_node &n2
-    );
+    ) const;
     void cancel_circle_sector();
     void cancel_layout_drawing();
     void cancel_layout_moving();
@@ -444,38 +444,38 @@ private:
     void forget_prepared_state(area_data* prepared_change);
     unordered_set<sector*> get_affected_sectors(
         set<vertex*> &vertexes
-    );
+    ) const;
     void get_clicked_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
-    );
+    ) const;
     edge* get_closest_edge_to_angle(
         vertex* v_ptr, const float angle, const bool clockwise,
         float* closest_edge_angle
-    );
+    ) const;
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
-    );
+    ) const;
     edge* get_correct_post_split_edge(
         vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
-    );
-    bool get_drawing_outer_sector(sector** result);
-    edge* get_edge_under_point(const point &p, edge* after = NULL);
-    vector<edge_intersection> get_intersecting_edges();
-    float get_mob_gen_radius(mob_gen* m);
+    ) const;
+    bool get_drawing_outer_sector(sector** result) const;
+    edge* get_edge_under_point(const point &p, edge* after = NULL) const;
+    vector<edge_intersection> get_intersecting_edges() const;
+    float get_mob_gen_radius(mob_gen* m) const;
     bool get_mob_link_under_point(
         const point &p,
         std::pair<mob_gen*, mob_gen*>* data1,
         std::pair<mob_gen*, mob_gen*>* data2
-    );
-    mob_gen* get_mob_under_point(const point &p);
+    ) const;
+    mob_gen* get_mob_under_point(const point &p) const;
     bool get_path_link_under_point(
         const point &p,
         std::pair<path_stop*, path_stop*>* data1,
         std::pair<path_stop*, path_stop*>* data2
-    );
-    path_stop* get_path_stop_under_point(const point &p);
-    sector* get_sector_under_point(const point &p);
-    vertex* get_vertex_under_point(const point &p);
+    ) const;
+    path_stop* get_path_stop_under_point(const point &p) const;
+    sector* get_sector_under_point(const point &p) const;
+    vertex* get_vertex_under_point(const point &p) const;
     void goto_problem();
     void handle_line_error();
     void homogenize_selected_mobs();

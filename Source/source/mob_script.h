@@ -223,7 +223,7 @@ public:
     string name;
     size_t id;
     mob_event* events[N_MOB_EVENTS];
-    mob_event* get_event(const size_t type);
+    mob_event* get_event(const size_t type) const;
     
     mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
@@ -242,7 +242,7 @@ public:
     //If this is INVALID, use the mob type's first state nr. Else, use this.
     size_t first_state_override;
     
-    mob_event* get_event(const size_t type);
+    mob_event* get_event(const size_t type) const;
     void run_event(
         const size_t type,
         void* custom_data_1 = NULL, void* custom_data_2 = NULL
@@ -275,7 +275,7 @@ public:
     void run(custom_action_code code);
     vector<mob_state*> finish();
     easy_fsm_creator();
-
+    
 private:
     vector<mob_state*> states;
     mob_state* cur_state;

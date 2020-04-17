@@ -101,7 +101,7 @@ public:
         vector<world_component> &list,
         const point &cam_tl = point(), const point &cam_br = point()
     );
-    size_t get_count();
+    size_t get_count() const;
     void tick_all(const float delta_t);
     
     particle_manager(const size_t &max_nr = 0);
