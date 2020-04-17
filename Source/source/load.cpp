@@ -461,7 +461,7 @@ void load_area(
             );
         }
         
-        get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
+        s_ptr->get_bounding_box(&s_ptr->bbox[0], &s_ptr->bbox[1]);
     }
     
     if(!load_for_editor) game.cur_area_data.generate_blockmap();

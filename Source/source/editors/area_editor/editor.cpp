@@ -935,7 +935,7 @@ unsigned char area_editor::find_problems() {
         
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
-            if(!is_edge_valid(e_ptr)) continue;
+            if(!e_ptr->is_valid()) continue;
             
             if(
                 circle_intersects_line(
@@ -1323,14 +1323,13 @@ void area_editor::finish_layout_drawing() {
         vertex* v1_ptr = game.cur_area_data.edges[e]->vertexes[0];
         vertex* v2_ptr = game.cur_area_data.edges[e]->vertexes[1];
         if(
-            is_point_in_sector(point(v1_ptr->x, v1_ptr->y), new_sector) &&
-            is_point_in_sector(point(v2_ptr->x, v2_ptr->y), new_sector) &&
-            is_point_in_sector(
+            new_sector->is_point_in_sector(point(v1_ptr->x, v1_ptr->y)) &&
+            new_sector->is_point_in_sector(point(v2_ptr->x, v2_ptr->y)) &&
+            new_sector->is_point_in_sector(
                 point(
                     (v1_ptr->x + v2_ptr->x) / 2.0,
                     (v1_ptr->y + v2_ptr->y) / 2.0
-                ),
-                new_sector
+                )
             )
         ) {
             inner_edges.insert(game.cur_area_data.edges[e]);
@@ -1413,8 +1412,8 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Calculate the bounding box of this sector, now that it's finished.
-    get_sector_bounding_box(
-        new_sector, &new_sector->bbox[0], &new_sector->bbox[1]
+    new_sector->get_bounding_box(
+        &new_sector->bbox[0], &new_sector->bbox[1]
     );
     
     //Select the new sector, making it ready for editing.
@@ -1670,8 +1669,8 @@ void area_editor::finish_layout_moving() {
             last_triangulation_error = triangulation_error;
         }
         
-        get_sector_bounding_box(
-            s, &(s->bbox[0]), &(s->bbox[1])
+        s->get_bounding_box(
+            &(s->bbox[0]), &(s->bbox[1])
         );
     }
     
@@ -1867,7 +1866,7 @@ bool area_editor::get_common_sector(
     sector* best_rightmost_sector = NULL;
     for(auto s : sectors) {
         if(s == NULL) continue;
-        vertex* v_ptr = get_rightmost_vertex(s);
+        vertex* v_ptr = s->get_rightmost_vertex();
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
             best_rightmost_sector = s;
             best_rightmost_x = v_ptr->x;
@@ -1973,7 +1972,7 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
             continue;
         }
         
-        if(!is_edge_valid(e_ptr)) continue;
+        if(!e_ptr->is_valid()) continue;
         
         if(
             circle_intersects_line(
@@ -2278,7 +2277,7 @@ void area_editor::goto_problem() {
         
         sector* s_ptr = non_simples.begin()->first;
         point min_coords, max_coords;
-        get_sector_bounding_box(s_ptr, &min_coords, &max_coords);
+        s_ptr->get_bounding_box(&min_coords, &max_coords);
         
         center_camera(min_coords, max_coords);
         
@@ -2336,7 +2335,7 @@ void area_editor::goto_problem() {
         }
         
         point min_coords, max_coords;
-        get_sector_bounding_box(problem_sector_ptr, &min_coords, &max_coords);
+        problem_sector_ptr->get_bounding_box(&min_coords, &max_coords);
         center_camera(min_coords, max_coords);
         
     } else if(

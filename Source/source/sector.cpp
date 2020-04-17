@@ -987,6 +987,17 @@ vertex* edge::has_neighbor(edge* other) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not an edge is valid.
+ * An edge is valid if it has non-NULL vertexes.
+ */
+bool edge::is_valid() const {
+    if(!vertexes[0]) return false;
+    if(!vertexes[1]) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes the edge from its sectors, but doesn't mark
  * the sectors as "none".
  * Returns the edge number.
@@ -1192,6 +1203,312 @@ void path_stop::remove_link(path_stop* other_stop) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an empty polygon.
+ */
+polygon::polygon() {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a polygon with the specified list of vertexes.
+ */
+polygon::polygon(const vector<vertex*> &vertexes) :
+    vertexes(vertexes) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Cleans a polygon's vertexes.
+ * This deletes 0-length edges, and 180-degree vertexes.
+ */
+void polygon::clean() {
+    for(size_t v = 0; v < vertexes.size();) {
+        bool should_delete = false;
+        vertex* prev_v = get_prev_in_vector(vertexes, v);
+        vertex* cur_v = vertexes[v];
+        vertex* next_v = get_next_in_vector(vertexes, v);
+        
+        //If the distance between both vertexes is so small
+        //that it's basically 0, delete this vertex from the list.
+        if(
+            fabs(prev_v->x - cur_v->x) < 0.00001 &&
+            fabs(prev_v->y - cur_v->y) < 0.00001
+        ) {
+            should_delete = true;
+        }
+        
+        //If the angle between this vertex and the next is the same, then
+        //this is just a redundant point in the edge prev - next. Delete it.
+        if(
+            fabs(
+                get_angle(
+                    point(cur_v->x, cur_v->y),
+                    point(prev_v->x, prev_v->y)
+                ) -
+                get_angle(
+                    point(next_v->x, next_v->y),
+                    point(cur_v->x, cur_v->y)
+                )
+            ) < 0.000001
+        ) {
+            should_delete = true;
+        }
+        
+        if(should_delete) {
+            vertexes.erase(vertexes.begin() + v);
+        } else {
+            ++v;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When this polygon has inner polygons, a cut must be made between it
+ * and the inner polygons, as to make this one holeless.
+ */
+void polygon::cut(vector<polygon>* inners) {
+    if(vertexes.size() < 3) {
+        //Some error happened.
+        return;
+    }
+    
+    vertex* rightmost = get_rightmost_vertex();
+    
+    for(size_t i = 0; i < inners->size(); ++i) {
+        polygon* inner_p = &(inners->at(i));
+        vertex* closest_edge_v1 = NULL;
+        vertex* closest_edge_v2 = NULL;
+        float closest_edge_ur = FLT_MAX;
+        vertex* closest_vertex = NULL;
+        float closest_vertex_ur = FLT_MAX;
+        vertex* best_vertex = NULL;
+        
+        //Find the rightmost vertex on this inner.
+        vertex* start = inner_p->get_rightmost_vertex();
+        
+        if(!start) {
+            //Some error occured.
+            continue;
+        }
+        
+        //Imagine a line from this vertex to the right.
+        //If any edge of the outer polygon intersects it,
+        //we just find the best vertex on that edge, and make the cut.
+        //This line stretching right is known as a ray.
+        float ray_width = rightmost->x - start->x;
+        
+        //Let's also check the vertexes.
+        //If the closest thing is a vertex, not an edge, then
+        //we can skip a bunch of steps.
+        vertex* v1 = NULL, *v2 = NULL;
+        for(size_t v = 0; v < vertexes.size(); ++v) {
+            v1 = vertexes[v];
+            v2 = get_next_in_vector(vertexes, v);
+            if(
+                (v1->x >= start->x ||
+                 v2->x >= start->x) &&
+                (v1->x <= rightmost->x ||
+                 v2->x <= rightmost->x)
+            ) {
+                float ur;
+                if(
+                    lines_intersect(
+                        point(v1->x, v1->y), point(v2->x, v2->y),
+                        point(start->x, start->y),
+                        point(rightmost->x, start->y),
+                        &ur, NULL
+                    )
+                ) {
+                    if(!closest_edge_v1 || ur < closest_edge_ur) {
+                        closest_edge_v1 = v1;
+                        closest_edge_v2 = v2;
+                        closest_edge_ur = ur;
+                    }
+                }
+                
+                if(v1->y == start->y && v1->x >= start->x) {
+                    ur = (v1->x - start->x) / ray_width;
+                    if(!closest_vertex || ur < closest_vertex_ur) {
+                        closest_vertex = v1;
+                        closest_vertex_ur = ur;
+                    }
+                }
+                
+            }
+        }
+        
+        if(!closest_vertex && !closest_edge_v1) {
+            //Some error occured.
+            continue;
+        }
+        
+        //Which is closest, a vertex or an edge?
+        if(closest_vertex_ur <= closest_edge_ur) {
+            //If it's a vertex, done.
+            best_vertex = closest_vertex;
+        } else {
+            if(!closest_edge_v1) continue;
+            
+            //If it's an edge, some more complicated steps need to be done.
+            
+            //We're on the edge closest to the vertex.
+            //Go to the rightmost vertex of this edge.
+            vertex* vertex_to_compare =
+                ::get_rightmost_vertex(closest_edge_v1, closest_edge_v2);
+                
+            //Now get a list of all vertexes inside the triangle
+            //marked by the inner's vertex,
+            //the point on the edge,
+            //and the vertex we're comparing.
+            vector<vertex*> inside_triangle;
+            for(size_t v = 0; v < vertexes.size(); ++v) {
+                vertex* v_ptr = vertexes[v];
+                if(
+                    is_point_in_triangle(
+                        point(v_ptr->x, v_ptr->y),
+                        point(start->x, start->y),
+                        point(start->x + closest_edge_ur * ray_width, start->y),
+                        point(vertex_to_compare->x, vertex_to_compare->y),
+                        true) &&
+                    v_ptr != vertex_to_compare
+                ) {
+                    inside_triangle.push_back(v_ptr);
+                }
+            }
+            
+            //Check which one makes the smallest angle compared to 0.
+            best_vertex = vertex_to_compare;
+            float closest_angle = FLT_MAX;
+            
+            for(size_t v = 0; v < inside_triangle.size(); ++v) {
+                vertex* v_ptr = inside_triangle[v];
+                float angle =
+                    get_angle(
+                        point(start->x, start->y),
+                        point(v_ptr->x, v_ptr->y)
+                    );
+                if(fabs(angle) < closest_angle) {
+                    closest_angle = fabs(angle);
+                    best_vertex = v_ptr;
+                }
+            }
+        }
+        
+        //This is the final vertex. Make a bridge
+        //from the start vertex to this.
+        //First, we must find whether the outer vertex
+        //already has bridges or not.
+        //If so, we place the new bridge before or after,
+        //depending on the angle.
+        //We know a bridge exists if the same vertex
+        //appears twice.
+        vector<size_t> bridges;
+        for(size_t v = 0; v < vertexes.size(); ++v) {
+            if(vertexes[v] == best_vertex) {
+                bridges.push_back(v);
+            }
+        }
+        
+        //Insert the new bridge after this vertex.
+        size_t insertion_vertex_nr;
+        if(bridges.size() == 1) {
+            //No bridges found, just use this vertex.
+            insertion_vertex_nr = bridges[0];
+        } else {
+            //Find where to insert.
+            insertion_vertex_nr = bridges.back();
+            float new_bridge_angle =
+                get_angle_cw_dif(
+                    get_angle(
+                        point(best_vertex->x, best_vertex->y),
+                        point(start->x, start->y)
+                    ),
+                    0.0f
+                );
+                
+            for(size_t v = 0; v < bridges.size(); ++v) {
+                vertex* v_ptr = vertexes[bridges[v]];
+                vertex* nv_ptr = get_next_in_vector(vertexes, bridges[v]);
+                float a =
+                    get_angle_cw_dif(
+                        get_angle(
+                            point(v_ptr->x, v_ptr->y),
+                            point(nv_ptr->x, nv_ptr->y)
+                        ),
+                        0.0f
+                    );
+                if(a < new_bridge_angle) {
+                    insertion_vertex_nr = bridges[v];
+                    break;
+                }
+            }
+        }
+        
+        //Now, make the bridge.
+        //On the outer vertex, change the next vertex
+        //to be the start of the inner, then
+        //circle the inner, and go back to the outer vertex.
+        //Let's just find where the start vertex is...
+        size_t iv = 0;
+        for(; iv < inner_p->vertexes.size(); ++iv) {
+            if(inner_p->vertexes[iv] == start) {
+                break;
+            }
+        }
+        
+        auto it = inner_p->vertexes.begin() + iv;
+        size_t n_after = inner_p->vertexes.size() - iv;
+        //Finally, make the bridge.
+        vertexes.insert(
+            vertexes.begin() + insertion_vertex_nr + 1,
+            it, inner_p->vertexes.end()
+        );
+        vertexes.insert(
+            vertexes.begin() + insertion_vertex_nr + 1 + n_after,
+            inner_p->vertexes.begin(), it
+        );
+        //This last one closes the inner polygon.
+        vertexes.insert(
+            vertexes.begin() + insertion_vertex_nr + 1 + n_after + iv,
+            start
+        );
+        
+        //Before we close the inner polygon, let's
+        //check if the inner's rightmost and the outer best vertexes
+        //are not the same.
+        //This can happen if you have a square on the top-right
+        //and one on the bottom-left, united by the central vertex.
+        if(start != best_vertex) {
+            vertexes.insert(
+                vertexes.begin() + insertion_vertex_nr + 1 + n_after + iv + 1,
+                best_vertex
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a polygon.
+ */
+vertex* polygon::get_rightmost_vertex() const {
+    vertex* rightmost = NULL;
+    
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        if(!rightmost) {
+            rightmost = v_ptr;
+        } else {
+            rightmost = ::get_rightmost_vertex(v_ptr, rightmost);
+        }
+    }
+    
+    return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a sector.
  */
 sector::sector() :
@@ -1257,6 +1574,42 @@ void sector::clone(sector* new_sector) {
 
 
 /* ----------------------------------------------------------------------------
+ * Places the bounding box coordinates of a sector on the specified floats.
+ */
+void sector::get_bounding_box(
+    point* min_coords, point* max_coords
+) const {
+    if(!min_coords || !max_coords) return;
+    
+    if(edges.empty()) {
+        //Unused sector... This shouldn't exist.
+        *min_coords = point();
+        *max_coords = point();
+        return;
+    }
+    
+    min_coords->x = edges[0]->vertexes[0]->x;
+    max_coords->x = min_coords->x;
+    min_coords->y = edges[0]->vertexes[0]->y;
+    max_coords->y = min_coords->y;
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        for(unsigned char v = 0; v < 2; ++v) {
+            point coords(
+                edges[e]->vertexes[v]->x,
+                edges[e]->vertexes[v]->y
+            );
+            
+            min_coords->x = std::min(min_coords->x, coords.x);
+            max_coords->x = std::max(max_coords->x, coords.x);
+            min_coords->y = std::min(min_coords->y, coords.y);
+            max_coords->y = std::max(max_coords->y, coords.y);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Fills a vector with neighboring sectors, recursively, but only if they
  * meet certain criteria.
  * condition:       Function that accepts a sector and checks its criteria. This
@@ -1290,6 +1643,25 @@ void sector::get_neighbor_sectors_conditionally(
         
         other_s->get_neighbor_sectors_conditionally(condition, sector_list);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a sector.
+ */
+vertex* sector::get_rightmost_vertex() const {
+    vertex* rightmost = NULL;
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        if(!rightmost) rightmost = e_ptr->vertexes[0];
+        else {
+            rightmost = ::get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
+            rightmost = ::get_rightmost_vertex(e_ptr->vertexes[1], rightmost);
+        }
+    }
+    
+    return rightmost;
 }
 
 
@@ -1365,6 +1737,41 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     
     *s1 = texture_sector[0];
     *s2 = texture_sector[1];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a sector's vertexes are ordered clockwise or not.
+ */
+bool sector::is_clockwise() const {
+    vector<vertex*> vertexes;
+    for(size_t e = 0; e < edges.size(); ++e) {
+        vertexes.push_back(edges[e]->vertexes[0]);
+    }
+    return is_polygon_clockwise(vertexes);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a point is inside a sector by checking its triangles.
+ */
+bool sector::is_point_in_sector(const point &p) const {
+    for(size_t t = 0; t < triangles.size(); ++t) {
+        const triangle* t_ptr = &triangles[t];
+        if(
+            is_point_in_triangle(
+                p,
+                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
+                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
+                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
+                false
+            )
+        ) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 
@@ -1517,282 +1924,6 @@ void vertex::remove_edge(edge* e_ptr) {
             edges.erase(edges.begin() + i);
             edge_nrs.erase(edge_nrs.begin() + i);
             return;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Cleans a polygon's vertexes.
- * This deletes 0-length edges, and 180-degree vertexes.
- */
-void clean_poly(polygon* p) {
-    for(size_t v = 0; v < p->size();) {
-        bool should_delete = false;
-        vertex* prev_v = get_prev_in_vector((*p), v);
-        vertex* cur_v =  p->at(v);
-        vertex* next_v = get_next_in_vector((*p), v);
-        
-        //If the distance between both vertexes is so small
-        //that it's basically 0, delete this vertex from the list.
-        if(
-            fabs(prev_v->x - cur_v->x) < 0.00001 &&
-            fabs(prev_v->y - cur_v->y) < 0.00001
-        ) {
-            should_delete = true;
-        }
-        
-        //If the angle between this vertex and the next is the same, then
-        //this is just a redundant point in the edge prev - next. Delete it.
-        if(
-            fabs(
-                get_angle(
-                    point(cur_v->x, cur_v->y),
-                    point(prev_v->x, prev_v->y)
-                ) -
-                get_angle(
-                    point(next_v->x, next_v->y),
-                    point(cur_v->x, cur_v->y)
-                )
-            ) < 0.000001
-        ) {
-            should_delete = true;
-        }
-        
-        if(should_delete) {
-            p->erase(p->begin() + v);
-        } else {
-            ++v;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * When there are inner polygons, a cut must be made between it and the outer
- * polygon, as to make the outer holeless.
- */
-void cut_poly(polygon* outer, vector<polygon>* inners) {
-    bool outer_valid = true;
-    if(!outer) {
-        outer_valid = false;
-    } else {
-        if(outer->size() < 3) outer_valid = false;
-    }
-    
-    if(!outer_valid) {
-        //Some error happened.
-        return;
-    }
-    
-    vertex* outer_rightmost = get_rightmost_vertex(outer);
-    
-    for(size_t i = 0; i < inners->size(); ++i) {
-        polygon* p = &inners->at(i);
-        vertex* closest_edge_v1 = NULL;
-        vertex* closest_edge_v2 = NULL;
-        float closest_edge_ur = FLT_MAX;
-        vertex* closest_vertex = NULL;
-        float closest_vertex_ur = FLT_MAX;
-        vertex* best_vertex = NULL;
-        
-        //Find the rightmost vertex on this inner.
-        vertex* start = get_rightmost_vertex(p);
-        
-        if(!start) {
-            //Some error occured.
-            continue;
-        }
-        
-        //Imagine a line from this vertex to the right.
-        //If any edge of the outer polygon intersects it,
-        //we just find the best vertex on that edge, and make the cut.
-        //This line stretching right is known as a ray.
-        float ray_width = outer_rightmost->x - start->x;
-        
-        //Let's also check the vertexes.
-        //If the closest thing is a vertex, not an edge, then
-        //we can skip a bunch of steps.
-        vertex* v1 = NULL, *v2 = NULL;
-        for(size_t v = 0; v < outer->size(); ++v) {
-            v1 = outer->at(v);
-            v2 = get_next_in_vector(*outer, v);
-            if(
-                (v1->x >= start->x ||
-                 v2->x >= start->x) &&
-                (v1->x <= outer_rightmost->x ||
-                 v2->x <= outer_rightmost->x)
-            ) {
-                float ur;
-                if(
-                    lines_intersect(
-                        point(v1->x, v1->y), point(v2->x, v2->y),
-                        point(start->x, start->y),
-                        point(outer_rightmost->x, start->y),
-                        &ur, NULL
-                    )
-                ) {
-                    if(!closest_edge_v1 || ur < closest_edge_ur) {
-                        closest_edge_v1 = v1;
-                        closest_edge_v2 = v2;
-                        closest_edge_ur = ur;
-                    }
-                }
-                
-                if(v1->y == start->y && v1->x >= start->x) {
-                    ur = (v1->x - start->x) / ray_width;
-                    if(!closest_vertex || ur < closest_vertex_ur) {
-                        closest_vertex = v1;
-                        closest_vertex_ur = ur;
-                    }
-                }
-                
-            }
-        }
-        
-        if(!closest_vertex && !closest_edge_v1) {
-            //Some error occured.
-            continue;
-        }
-        
-        //Which is closest, a vertex or an edge?
-        if(closest_vertex_ur <= closest_edge_ur) {
-            //If it's a vertex, done.
-            best_vertex = closest_vertex;
-        } else {
-            if(!closest_edge_v1) continue;
-            
-            //If it's an edge, some more complicated steps need to be done.
-            
-            //We're on the edge closest to the vertex.
-            //Go to the rightmost vertex of this edge.
-            vertex* vertex_to_compare =
-                get_rightmost_vertex(closest_edge_v1, closest_edge_v2);
-                
-            //Now get a list of all vertexes inside the triangle
-            //marked by the inner's vertex,
-            //the point on the edge,
-            //and the vertex we're comparing.
-            vector<vertex*> inside_triangle;
-            for(size_t v = 0; v < outer->size(); ++v) {
-                vertex* v_ptr = outer->at(v);
-                if(
-                    is_point_in_triangle(
-                        point(v_ptr->x, v_ptr->y),
-                        point(start->x, start->y),
-                        point(start->x + closest_edge_ur * ray_width, start->y),
-                        point(vertex_to_compare->x, vertex_to_compare->y),
-                        true) &&
-                    v_ptr != vertex_to_compare
-                ) {
-                    inside_triangle.push_back(v_ptr);
-                }
-            }
-            
-            //Check which one makes the smallest angle compared to 0.
-            best_vertex = vertex_to_compare;
-            float closest_angle = FLT_MAX;
-            
-            for(size_t v = 0; v < inside_triangle.size(); ++v) {
-                vertex* v_ptr = inside_triangle[v];
-                float angle =
-                    get_angle(
-                        point(start->x, start->y),
-                        point(v_ptr->x, v_ptr->y)
-                    );
-                if(fabs(angle) < closest_angle) {
-                    closest_angle = fabs(angle);
-                    best_vertex = v_ptr;
-                }
-            }
-        }
-        
-        //This is the final vertex. Make a bridge
-        //from the start vertex to this.
-        //First, we must find whether the outer vertex
-        //already has bridges or not.
-        //If so, we place the new bridge before or after,
-        //depending on the angle.
-        //We know a bridge exists if the same vertex
-        //appears twice.
-        vector<size_t> bridges;
-        for(size_t v = 0; v < outer->size(); ++v) {
-            if(outer->at(v) == best_vertex) {
-                bridges.push_back(v);
-            }
-        }
-        
-        //Insert the new bridge after this vertex.
-        size_t insertion_vertex_nr;
-        if(bridges.size() == 1) {
-            //No bridges found, just use this vertex.
-            insertion_vertex_nr = bridges[0];
-        } else {
-            //Find where to insert.
-            insertion_vertex_nr = bridges.back();
-            float new_bridge_angle =
-                get_angle_cw_dif(
-                    get_angle(
-                        point(best_vertex->x, best_vertex->y),
-                        point(start->x, start->y)
-                    ),
-                    0.0f
-                );
-                
-            for(size_t v = 0; v < bridges.size(); ++v) {
-                vertex* v_ptr = outer->at(bridges[v]);
-                vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
-                float a =
-                    get_angle_cw_dif(
-                        get_angle(
-                            point(v_ptr->x, v_ptr->y),
-                            point(nv_ptr->x, nv_ptr->y)
-                        ),
-                        0.0f
-                    );
-                if(a < new_bridge_angle) {
-                    insertion_vertex_nr = bridges[v];
-                    break;
-                }
-            }
-        }
-        
-        //Now, make the bridge.
-        //On the outer vertex, change the next vertex
-        //to be the start of the inner, then
-        //circle the inner, and go back to the outer vertex.
-        //Let's just find where the start vertex is...
-        size_t iv = 0;
-        for(; iv < p->size(); ++iv) {
-            if(p->at(iv) == start) {
-                break;
-            }
-        }
-        
-        auto it = p->begin() + iv;
-        size_t n_after = p->size() - iv;
-        //Finally, make the bridge.
-        outer->insert(
-            outer->begin() + insertion_vertex_nr + 1, it, p->end()
-        );
-        outer->insert(
-            outer->begin() + insertion_vertex_nr + 1 + n_after, p->begin(), it
-        );
-        //This last one closes the inner polygon.
-        outer->insert(
-            outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start
-        );
-        
-        //Before we close the inner polygon, let's
-        //check if the inner's rightmost and the outer best vertexes
-        //are not the same.
-        //This can happen if you have a square on the top-right
-        //and one on the bottom-left, united by the central vertex.
-        if(start != best_vertex) {
-            outer->insert(
-                outer->begin() + insertion_vertex_nr + 1 + n_after + iv + 1,
-                best_vertex
-            );
         }
     }
 }
@@ -2257,9 +2388,9 @@ TRIANGULATION_ERRORS get_polys(
                 //Otherwise, something just went wrong, and this is
                 //a non-simple sector.
                 poly_done = true;
-                if(!doing_outer && inners->back().size() == 1) {
+                if(!doing_outer && inners->back().vertexes.size() == 1) {
                     if(lone_edges) {
-                        lone_edges->insert(inners->back()[0]->edges[0]);
+                        lone_edges->insert(inners->back().vertexes[0]->edges[0]);
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
@@ -2277,9 +2408,9 @@ TRIANGULATION_ERRORS get_polys(
             } else {
             
                 if(doing_outer) {
-                    outer->push_back(cur_vertex);
+                    outer->vertexes.push_back(cur_vertex);
                 } else {
-                    inners->back().push_back(cur_vertex);
+                    inners->back().vertexes.push_back(cur_vertex);
                 }
                 
                 //Continue onto the next edge.
@@ -2350,43 +2481,6 @@ vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a polygon.
- */
-vertex* get_rightmost_vertex(polygon* p) {
-    vertex* rightmost = NULL;
-    
-    for(size_t v = 0; v < p->size(); ++v) {
-        vertex* v_ptr = p->at(v);
-        if(!rightmost) rightmost = v_ptr;
-        else {
-            rightmost = get_rightmost_vertex(v_ptr, rightmost);
-        }
-    }
-    
-    return rightmost;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right in a sector.
- */
-vertex* get_rightmost_vertex(sector* s) {
-    vertex* rightmost = NULL;
-    
-    for(size_t e = 0; e < s->edges.size(); ++e) {
-        edge* e_ptr = s->edges[e];
-        if(!rightmost) rightmost = e_ptr->vertexes[0];
-        else {
-            rightmost = get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
-            rightmost = get_rightmost_vertex(e_ptr->vertexes[1], rightmost);
-        }
-    }
-    
-    return rightmost;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right between the two.
  * In the case of a tie, the highest one is returned.
  * This is necessary because at one point, the rightmost
@@ -2428,7 +2522,7 @@ sector* get_sector(
             if(!s) {
                 continue;
             }
-            if(is_point_in_sector(p, s)) {
+            if(s->is_point_in_sector(p)) {
                 return s;
             }
         }
@@ -2448,7 +2542,7 @@ sector* get_sector(
             ) {
                 continue;
             }
-            if(is_point_in_sector(p, s_ptr)) {
+            if(s_ptr->is_point_in_sector(p)) {
                 if(sector_nr) *sector_nr = s;
                 return s_ptr;
             }
@@ -2459,76 +2553,6 @@ sector* get_sector(
         return NULL;
         
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Places the bounding box coordinates of a sector on the specified floats.
- */
-void get_sector_bounding_box(
-    sector* s_ptr, point* min_coords, point* max_coords
-) {
-    if(!min_coords || !max_coords) return;
-    
-    if(s_ptr->edges.empty()) {
-        //Unused sector... This shouldn't exist.
-        *min_coords = point();
-        *max_coords = point();
-        return;
-    }
-    
-    min_coords->x = s_ptr->edges[0]->vertexes[0]->x;
-    max_coords->x = min_coords->x;
-    min_coords->y = s_ptr->edges[0]->vertexes[0]->y;
-    max_coords->y = min_coords->y;
-    
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        for(unsigned char v = 0; v < 2; ++v) {
-            point coords(
-                s_ptr->edges[e]->vertexes[v]->x,
-                s_ptr->edges[e]->vertexes[v]->y
-            );
-            
-            min_coords->x = std::min(min_coords->x, coords.x);
-            max_coords->x = std::max(max_coords->x, coords.x);
-            min_coords->y = std::min(min_coords->y, coords.y);
-            max_coords->y = std::max(max_coords->y, coords.y);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether or not an edge is valid.
- * An edge is valid if it has non-NULL vertexes.
- */
-bool is_edge_valid(edge* l) {
-    if(!l->vertexes[0]) return false;
-    if(!l->vertexes[1]) return false;
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a sector by checking its triangles.
- */
-bool is_point_in_sector(const point &p, sector* s_ptr) {
-    for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
-        triangle* t_ptr = &s_ptr->triangles[t];
-        if(
-            is_point_in_triangle(
-                p,
-                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
-                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
-                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
-                false
-            )
-        ) {
-            return true;
-        }
-    }
-    
-    return false;
 }
 
 
@@ -2545,18 +2569,6 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
         sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
     }
     return sum < 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a sector's vertexes are ordered clockwise or not.
- */
-bool is_sector_clockwise(sector* s_ptr) {
-    vector<vertex*> vertexes;
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        vertexes.push_back(s_ptr->edges[e]->vertexes[0]);
-    }
-    return is_polygon_clockwise(vertexes);
 }
 
 
@@ -2670,14 +2682,16 @@ TRIANGULATION_ERRORS triangulate(
         
     //Get rid of 0-length edges and 180-degree vertexes,
     //as they're redundant.
-    clean_poly(&outer_poly);
-    for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);
+    outer_poly.clean();
+    for(size_t i = 0; i < inner_polys.size(); ++i) {
+        inner_polys[i].clean();
+    }
     
     //Make cuts on the outer polygon between where it and inner polygons exist,
     //as to make it holeless.
-    cut_poly(&outer_poly, &inner_polys);
+    outer_poly.cut(&inner_polys);
     
-    vector<vertex*> vertexes_left = outer_poly;
+    vector<vertex*> vertexes_left = outer_poly.vertexes;
     vector<size_t> ears;
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;

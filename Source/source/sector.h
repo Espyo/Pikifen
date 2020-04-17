@@ -40,7 +40,6 @@ struct path_link;
 struct sector;
 struct triangle;
 struct vertex;
-typedef vector<vertex*> polygon;
 
 enum TRIANGULATION_ERRORS {
     //No error occured.
@@ -111,6 +110,7 @@ struct edge {
     vertex* get_other_vertex(const vertex* v_ptr) const;
     size_t get_side_with_sector(sector* s_ptr) const;
     vertex* has_neighbor(edge* other) const;
+    bool is_valid() const;
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
     void swap_vertexes();
@@ -210,7 +210,13 @@ struct sector {
     sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
     void clone(sector* new_sector);
+    vertex* get_rightmost_vertex() const;
+    void get_bounding_box(
+        point* min_coords, point* max_coords
+    ) const;
     void get_texture_merge_sectors(sector** s1, sector** s2) const;
+    bool is_clockwise() const;
+    bool is_point_in_sector(const point &p) const;
     void remove_edge(edge* e_ptr);
     void get_neighbor_sectors_conditionally(
         const std::function<bool(sector* s_ptr)> &condition,
@@ -223,7 +229,7 @@ struct sector {
 
 
 /* ----------------------------------------------------------------------------
- * A triangle. Sectors (polygons) are made out of triangles.
+ * A triangle. Sectors (essentially polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
  */
@@ -250,6 +256,23 @@ struct vertex {
     bool has_edge(edge* e_ptr) const;
     bool is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor) const;
     void remove_edge(edge* e_ptr);
+};
+
+
+
+
+/* ----------------------------------------------------------------------------
+ * Represents a series of vertexes that make up a polygon.
+ */
+struct polygon {
+    vector<vertex*> vertexes;
+    
+    void clean();
+    void cut(vector<polygon>* inners);
+    vertex* get_rightmost_vertex() const;
+    
+    polygon();
+    polygon(const vector<vertex*> &vertexes);
 };
 
 
@@ -375,8 +398,6 @@ struct area_data {
 
 
 
-void clean_poly(polygon* p);
-void cut_poly(polygon* outer, vector<polygon>* inners);
 void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
@@ -403,24 +424,15 @@ TRIANGULATION_ERRORS get_polys(
     set<edge*>* lone_edges, const bool check_vertex_reuse
 );
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
-vertex* get_rightmost_vertex(polygon* p);
-vertex* get_rightmost_vertex(sector* s);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(
     const point &p, size_t* sector_nr, const bool use_blockmap
 );
-void get_sector_bounding_box(
-    sector* s_ptr, point* min_coords, point* max_coords
-);
-bool is_edge_valid(edge* l);
-bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
-bool is_sector_clockwise(sector* s_ptr);
 bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
 );
-bool is_point_in_sector(const point &p, sector* s_ptr);
 TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
     const bool clear_lone_edges

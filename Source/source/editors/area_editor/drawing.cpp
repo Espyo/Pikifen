@@ -281,7 +281,7 @@ void area_editor::do_drawing() {
     for(size_t e = 0; e < n_edges; ++e) {
         edge* e_ptr = game.cur_area_data.edges[e];
         
-        if(!is_edge_valid(e_ptr)) continue;
+        if(!e_ptr->is_valid()) continue;
         
         bool one_sided = true;
         bool same_z = false;
