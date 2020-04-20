@@ -467,9 +467,8 @@ void area_editor::do_drawing() {
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
                 v_ptr != problem_vertex_ptr;
-            al_draw_filled_circle(
-                v_ptr->x,
-                v_ptr->y,
+            draw_filled_diamond(
+                point(v_ptr->x, v_ptr->y),
                 3.0 / game.cam.zoom,
                 selected ?
                 al_map_rgba(

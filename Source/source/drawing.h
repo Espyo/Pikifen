@@ -59,6 +59,9 @@ void draw_compressed_text(
     const point &where, const int flags, const unsigned char valign,
     const point &max_size, const string &text
 );
+void draw_filled_diamond(
+    const point &center, const float radius, const ALLEGRO_COLOR &color
+);
 void draw_fraction(
     const point &center, const size_t current,
     const size_t needed, const ALLEGRO_COLOR &color

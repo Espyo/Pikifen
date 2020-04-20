@@ -1842,6 +1842,34 @@ void draw_control(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a filled diamond shape.
+ * center: Center.
+ * radius: How far each point of the diamond reaches from the center.
+ * color:  Color the diamond with this color.
+ */
+void draw_filled_diamond(
+    const point &center, const float radius, const ALLEGRO_COLOR &color
+) {
+    ALLEGRO_VERTEX vert[4];
+    for(unsigned char v = 0; v < 4; ++v) {
+        vert[v].color = color;
+        vert[v].z = 0;
+    }
+    
+    vert[0].x = center.x;
+    vert[0].y = center.y - radius;
+    vert[1].x = center.x + radius;
+    vert[1].y = center.y;
+    vert[2].x = center.x;
+    vert[2].y = center.y + radius;
+    vert[3].x = center.x - radius;
+    vert[3].y = center.y;
+    
+    al_draw_prim(vert, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a strength/weight fraction, in the style of Pikmin 2.
  * The strength is above the weight.
  * center:  Center of the text.

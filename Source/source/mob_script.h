@@ -95,10 +95,10 @@ enum MOB_EV_TYPES {
     MOB_EV_TOUCHED_OBJECT,
     //When it gets touched by an opponent.
     MOB_EV_TOUCHED_OPPONENT,
-    //When its timer ticks.
-    MOB_EV_TIMER,
     //When it touches a wall.
     MOB_EV_TOUCHED_WALL,
+    //When its timer ticks.
+    MOB_EV_TIMER,
     //When weight has been added on top of it. Only if this mob's walkable.
     MOB_EV_WEIGHT_ADDED,
     //When weight was removed from on top of it. Only if this mob's walkable.
@@ -118,8 +118,6 @@ enum MOB_EV_TYPES {
     MOB_EV_LANDED,
     //When it is ordered to release whatever it is holding.
     MOB_EV_RELEASE_ORDER,
-    //When it is near a task (Pikmin only).
-    MOB_EV_NEAR_TASK,
     //When it is whistled by a leader.
     MOB_EV_WHISTLED,
     //When its spot on the group is now near, and the mob is in the group.
@@ -176,9 +174,9 @@ enum MOB_EV_TYPES {
     LEADER_EV_MOVE_START,
     //When the leader stops moving.
     LEADER_EV_MOVE_END,
-    //When the leader is holding a Pikmin on their hand.
+    //When the leader is holding a Pikmin in their hand.
     LEADER_EV_HOLDING,
-    //When the leader throws the Pikmin on their hand.
+    //When the leader throws the Pikmin in their hand.
     LEADER_EV_THROW,
     //When the leader begins whistling.
     LEADER_EV_START_WHISTLE,
@@ -196,8 +194,6 @@ enum MOB_EV_TYPES {
     LEADER_EV_GO_PLUCK,
     //When the leader has to go help pluck Pikmin, as an inactive leader.
     LEADER_EV_MUST_SEARCH_SEED,
-    //When the leader reaches the seed they're meant to pluck.
-    LEADER_EV_REACHED_SEED,
     //When the leader's pluck is canceled.
     LEADER_EV_CANCEL,
     

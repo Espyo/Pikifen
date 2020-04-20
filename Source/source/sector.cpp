@@ -2231,6 +2231,10 @@ vector<path_stop*> get_path(
         return full_path;
     }
     
+    //Potential optimization: instead of calculating with this graph, consult
+    //a different one where nodes that only have two links are removed.
+    //e.g. A -> B -> C becomes A -> C.
+    //This means traversing fewer nodes when figuring out the shortest path.
     
     //Calculate the path.
     full_path =
