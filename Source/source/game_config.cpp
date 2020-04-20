@@ -26,6 +26,7 @@ const float game_config::DEF_CURSOR_SPIN_SPEED = 180.0f;
 const float game_config::DEF_DAY_MINUTES_END = 60 * 19;
 const float game_config::DEF_DAY_MINUTES_PER_IRL_SEC = 2;
 const float game_config::DEF_DAY_MINUTES_START = 60 * 7;
+const float game_config::DEF_GROUP_MEMBER_GRAB_RANGE = 64.0f;
 const float game_config::DEF_IDLE_TASK_RANGE = 50.0f;
 const float game_config::DEF_MATURITY_POWER_MULT = 0.1f;
 const float game_config::DEF_MATURITY_SPEED_MULT = 0.1f;
@@ -34,7 +35,6 @@ const float game_config::DEF_MESSAGE_CHAR_INTERVAL = 0.02f;
 const float game_config::DEF_NEXT_PLUCK_RANGE = 160.0f;
 const float game_config::DEF_ONION_OPEN_RANGE = 24.0f;
 const float game_config::DEF_PIKMIN_CHASE_RANGE = 200.0f;
-const float game_config::DEF_PIKMIN_GRAB_RANGE = 64.0f;
 const float game_config::DEF_PLUCK_RANGE = 30.0f;
 const float game_config::DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
 const float game_config::DEF_STANDARD_PIKMIN_RADIUS = 5.0f;
@@ -57,6 +57,7 @@ game_config::game_config() :
     day_minutes_end(DEF_DAY_MINUTES_END),
     day_minutes_per_irl_sec(DEF_DAY_MINUTES_PER_IRL_SEC),
     day_minutes_start(DEF_DAY_MINUTES_START),
+    group_member_grab_range(DEF_GROUP_MEMBER_GRAB_RANGE),
     idle_task_range(DEF_IDLE_TASK_RANGE),
     maturity_power_mult(DEF_MATURITY_POWER_MULT),
     maturity_speed_mult(DEF_MATURITY_SPEED_MULT),
@@ -65,7 +66,6 @@ game_config::game_config() :
     next_pluck_range(DEF_NEXT_PLUCK_RANGE),
     onion_open_range(DEF_ONION_OPEN_RANGE),
     pikmin_chase_range(DEF_PIKMIN_CHASE_RANGE),
-    pikmin_grab_range(DEF_PIKMIN_GRAB_RANGE),
     pluck_range(DEF_PLUCK_RANGE),
     standard_pikmin_height(DEF_STANDARD_PIKMIN_HEIGHT),
     standard_pikmin_radius(DEF_STANDARD_PIKMIN_RADIUS),
@@ -128,7 +128,7 @@ void game_config::load(data_node* file) {
     rs.set("cursor_spin_speed", cursor_spin_speed);
     rs.set("next_pluck_range", next_pluck_range);
     rs.set("onion_open_range", onion_open_range);
-    rs.set("pikmin_grab_range", pikmin_grab_range);
+    rs.set("group_member_grab_range", group_member_grab_range);
     rs.set("pluck_range", pluck_range);
     rs.set("whistle_growth_speed", whistle_growth_speed);
     

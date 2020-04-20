@@ -642,7 +642,7 @@ void gameplay::update_closest_group_member() {
     dist closest_dist;
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
-        if(closest_dists[2 - m] > game.config.pikmin_grab_range) continue;
+        if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
         game.states.gameplay_st->closest_group_member = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
@@ -674,7 +674,7 @@ void gameplay::update_closest_group_member() {
         game.states.gameplay_st->closest_group_member_distant = true;
     } else {
         game.states.gameplay_st->closest_group_member_distant =
-            closest_dist > game.config.pikmin_grab_range;
+            closest_dist > game.config.group_member_grab_range;
     }
 }
 

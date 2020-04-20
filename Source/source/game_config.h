@@ -37,6 +37,7 @@ struct game_config {
     static const float DEF_DAY_MINUTES_END;
     static const float DEF_DAY_MINUTES_PER_IRL_SEC;
     static const float DEF_DAY_MINUTES_START;
+    static const float DEF_GROUP_MEMBER_GRAB_RANGE;
     static const float DEF_IDLE_TASK_RANGE;
     static const float DEF_MATURITY_POWER_MULT;
     static const float DEF_MATURITY_SPEED_MULT;
@@ -45,7 +46,6 @@ struct game_config {
     static const float DEF_NEXT_PLUCK_RANGE;
     static const float DEF_ONION_OPEN_RANGE;
     static const float DEF_PIKMIN_CHASE_RANGE;
-    static const float DEF_PIKMIN_GRAB_RANGE;
     static const float DEF_PLUCK_RANGE;
     static const float DEF_STANDARD_PIKMIN_HEIGHT;
     static const float DEF_STANDARD_PIKMIN_RADIUS;
@@ -76,6 +76,8 @@ struct game_config {
     float day_minutes_per_irl_sec;
     //The in-game minutes start with this value every day.
     float day_minutes_start;
+    //A leader can grab a group member only within this range.
+    float group_member_grab_range;
     //Idle Pikmin will go for a task if they are within this distance of it.
     float idle_task_range;
     //Standard leader order.
@@ -98,8 +100,6 @@ struct game_config {
     float onion_open_range;
     //Pikmin will only chase enemies in this range.
     float pikmin_chase_range;
-    //A leader can grab a Pikmin only within this range.
-    float pikmin_grab_range;
     //Standard Pikmin order.
     vector<pikmin_type*> pikmin_order;
     //Loaded strings representing the standard Pikmin order. Used for later.
