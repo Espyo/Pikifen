@@ -616,13 +616,19 @@ void mob::tick_physics(const float delta_t) {
     H_MOVE_RESULTS h_mov_type =
         get_physics_horizontal_movement(delta_t, move_speed_mult, &move_speed);
         
-    if(h_mov_type == H_MOVE_FAIL) {
+    switch (h_mov_type) {
+    case H_MOVE_FAIL: {
         return;
-    } else if (h_mov_type == H_MOVE_OK) {
+        break;
+    } case H_MOVE_TELEPORTED: {
+        break;
+    } case H_MOVE_OK: {
         //Horizontal movement time!
         tick_horizontal_movement_physics(
             delta_t, move_speed, &touched_wall
         );
+        break;
+    }
     }
     
     //Vertical movement.
@@ -672,14 +678,18 @@ void mob::tick_rotation_physics(
         );
         
     if(holder.m) {
-        if(holder.rotation_method == HOLD_ROTATION_METHOD_FACE_HOLDER) {
+        switch(holder.rotation_method) {
+        case HOLD_ROTATION_METHOD_FACE_HOLDER: {
             float dummy;
             point final_pos = holder.get_final_pos(&dummy);
             angle = get_angle(final_pos, holder.m->pos);
             stop_turning();
-        } else if(holder.rotation_method == HOLD_ROTATION_METHOD_COPY_HOLDER) {
+            break;
+        } case HOLD_ROTATION_METHOD_COPY_HOLDER: {
             angle = holder.m->angle;
             stop_turning();
+            break;
+        }
         }
     }
     

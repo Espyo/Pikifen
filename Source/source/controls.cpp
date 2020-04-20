@@ -99,24 +99,35 @@ control_info::control_info(unsigned char action, const string &s) :
  * used in the options file.
  */
 string control_info::stringify() const {
-    if(type == CONTROL_TYPE_KEYBOARD_KEY) {
+    switch(type) {
+    case CONTROL_TYPE_KEYBOARD_KEY: {
         return "k_" + i2s(button);
-    } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {
+        break;
+    } case CONTROL_TYPE_MOUSE_BUTTON: {
         return "mb_" + i2s(button);
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_UP: {
         return "mwu";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_DOWN: {
         return "mwd";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_LEFT: {
         return "mwl";
-    } else if(type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_RIGHT: {
         return "mwr";
-    } else if(type == CONTROL_TYPE_JOYSTICK_BUTTON) {
+        break;
+    } case CONTROL_TYPE_JOYSTICK_BUTTON: {
         return "jb_" + i2s(device_nr) + "_" + i2s(button);
-    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
+        break;
+    } case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
-    } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
+        break;
+    } case CONTROL_TYPE_JOYSTICK_AXIS_NEG: {
         return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
+        break;
+    }
     }
     
     return "";
@@ -142,79 +153,100 @@ void gameplay::handle_button(
     
     if(!msg_box) {
     
-        if(
-            button == BUTTON_RIGHT ||
-            button == BUTTON_UP ||
-            button == BUTTON_LEFT ||
-            button == BUTTON_DOWN
-        ) {
-        
+        switch(button) {
+        case BUTTON_RIGHT:
+        case BUTTON_UP:
+        case BUTTON_LEFT:
+        case BUTTON_DOWN: {
+    
             /*******************
             *               O_ *
             *   Move   --->/|  *
             *              V > *
             *******************/
             
-            if(button == BUTTON_RIGHT) {
+            switch(button) {
+            case BUTTON_RIGHT: {
                 leader_movement.right = pos;
-            } else if(button == BUTTON_LEFT) {
+                break;
+            } case BUTTON_LEFT: {
                 leader_movement.left = pos;
-            } else if(button == BUTTON_UP) {
+                break;
+            } case BUTTON_UP: {
                 leader_movement.up = pos;
-            } else if(button == BUTTON_DOWN) {
+                break;
+            } case BUTTON_DOWN: {
                 leader_movement.down = pos;
+                break;
+            }
             }
             
-        } else if(
-            button == BUTTON_CURSOR_RIGHT ||
-            button == BUTTON_CURSOR_UP ||
-            button == BUTTON_CURSOR_LEFT ||
-            button == BUTTON_CURSOR_DOWN
-        ) {
+            break;
+            
+        } case BUTTON_CURSOR_RIGHT:
+        case BUTTON_CURSOR_UP:
+        case BUTTON_CURSOR_LEFT:
+        case BUTTON_CURSOR_DOWN: {
             /********************
             *             .-.   *
             *   Cursor   ( = )> *
             *             '-'   *
             ********************/
             
-            if(button == BUTTON_CURSOR_RIGHT) {
+            switch(button) {
+            case BUTTON_CURSOR_RIGHT: {
                 cursor_movement.right = pos;
-            } else if(button == BUTTON_CURSOR_LEFT) {
+                break;
+            } case BUTTON_CURSOR_LEFT: {
                 cursor_movement.left = pos;
-            } else if(button == BUTTON_CURSOR_UP) {
+                break;
+            } case BUTTON_CURSOR_UP: {
                 cursor_movement.up = pos;
-            } else if(button == BUTTON_CURSOR_DOWN) {
+                break;
+            } case BUTTON_CURSOR_DOWN: {
                 cursor_movement.down = pos;
+                break;
+            }
             }
             
-        } else if(
-            button == BUTTON_GROUP_RIGHT ||
-            button == BUTTON_GROUP_UP ||
-            button == BUTTON_GROUP_LEFT ||
-            button == BUTTON_GROUP_DOWN
-        ) {
+            break;
+            
+        } case BUTTON_GROUP_RIGHT:
+        case BUTTON_GROUP_UP:
+        case BUTTON_GROUP_LEFT:
+        case BUTTON_GROUP_DOWN: {
             /******************
             *            ***  *
             *   Group   ****O *
             *            ***  *
             ******************/
             
-            if(button == BUTTON_GROUP_RIGHT) {
+            switch(button) {
+            case BUTTON_GROUP_RIGHT: {
                 swarm_movement.right = pos;
-            } else if(button == BUTTON_GROUP_LEFT) {
+                break;
+            } case BUTTON_GROUP_LEFT: {
                 swarm_movement.left = pos;
-            } else if(button == BUTTON_GROUP_UP) {
+                break;
+            } case BUTTON_GROUP_UP: {
                 swarm_movement.up = pos;
-            } else if(button == BUTTON_GROUP_DOWN) {
+                break;
+            } case BUTTON_GROUP_DOWN: {
                 swarm_movement.down = pos;
+                break;
+            }
             }
             
-        } else if(button == BUTTON_GROUP_CURSOR) {
-        
+            break;
+            
+        } case BUTTON_GROUP_CURSOR: {
+    
             swarm_cursor = is_down;
             
-        } else if(button == BUTTON_THROW) {
-        
+            break;
+            
+        } case BUTTON_THROW: {
+    
             /*******************
             *             .-.  *
             *   Throw    /   O *
@@ -285,8 +317,10 @@ void gameplay::handle_button(
                 }
             }
             
-        } else if(button == BUTTON_WHISTLE) {
-        
+            break;
+            
+        } case BUTTON_WHISTLE: {
+    
             /********************
             *              .--= *
             *   Whistle   ( @ ) *
@@ -312,11 +346,11 @@ void gameplay::handle_button(
                 
             }
             
-        } else if(
-            button == BUTTON_NEXT_LEADER ||
-            button == BUTTON_PREV_LEADER
-        ) {
-        
+            break;
+            
+        } case BUTTON_NEXT_LEADER:
+        case BUTTON_PREV_LEADER: {
+    
             /******************************
             *                    \O/  \O/ *
             *   Switch leader     | -> |  *
@@ -327,8 +361,10 @@ void gameplay::handle_button(
             
             change_to_next_leader(button == BUTTON_NEXT_LEADER, false);
             
-        } else if(button == BUTTON_DISMISS) {
-        
+            break;
+            
+        } case BUTTON_DISMISS: {
+    
             /***********************
             *             \O/ / *  *
             *   Dismiss    |   - * *
@@ -339,8 +375,10 @@ void gameplay::handle_button(
             
             cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
             
-        } else if(button == BUTTON_PAUSE) {
-        
+            break;
+            
+        } case BUTTON_PAUSE: {
+    
             /********************
             *           +-+ +-+ *
             *   Pause   | | | | *
@@ -359,8 +397,10 @@ void gameplay::handle_button(
             
             //paused = true;
             
-        } else if(button == BUTTON_USE_SPRAY_1) {
-        
+            break;
+            
+        } case BUTTON_USE_SPRAY_1: {
+    
             /*******************
             *             +=== *
             *   Sprays   (   ) *
@@ -376,8 +416,10 @@ void gameplay::handle_button(
                 );
             }
             
-        } else if(button == BUTTON_USE_SPRAY_2) {
-        
+            break;
+            
+        } case BUTTON_USE_SPRAY_2: {
+    
             if(!is_down) return;
             
             if(game.spray_types.size() == 2) {
@@ -387,11 +429,11 @@ void gameplay::handle_button(
                 );
             }
             
-        } else if(
-            button == BUTTON_NEXT_SPRAY ||
-            button == BUTTON_PREV_SPRAY
-        ) {
-        
+            break;
+            
+        } case BUTTON_NEXT_SPRAY:
+        case BUTTON_PREV_SPRAY: {
+    
             if(!is_down) return;
             
             if(game.spray_types.size() > 2) {
@@ -406,8 +448,10 @@ void gameplay::handle_button(
                 }
             }
             
-        } else if(button == BUTTON_USE_SPRAY) {
-        
+            break;
+            
+        } case BUTTON_USE_SPRAY: {
+    
             if(!is_down) return;
             
             if(game.spray_types.size() > 2) {
@@ -417,8 +461,10 @@ void gameplay::handle_button(
                 );
             }
             
-        } else if(button == BUTTON_CHANGE_ZOOM) {
-        
+            break;
+            
+        } case BUTTON_CHANGE_ZOOM: {
+    
             /***************
             *           _  *
             *   Zoom   (_) *
@@ -441,8 +487,11 @@ void gameplay::handle_button(
             
             game.sys_assets.sfx_camera.play(0, false);
             
-        } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
-        
+            break;
+            
+        } case BUTTON_ZOOM_IN:
+        case BUTTON_ZOOM_OUT: {
+    
             if(game.cam.target_zoom >= game.config.zoom_max_level && button == BUTTON_ZOOM_IN) {
                 return;
             }
@@ -464,8 +513,10 @@ void gameplay::handle_button(
             
             game.sys_assets.sfx_camera.play(-1, false);
             
-        } else if(button == BUTTON_LIE_DOWN) {
-        
+            break;
+            
+        } case BUTTON_LIE_DOWN: {
+    
             /**********************
             *                     *
             *   Lie down  -()/__/ *
@@ -476,12 +527,11 @@ void gameplay::handle_button(
             
             cur_leader_ptr->fsm.run_event(LEADER_EV_LIE_DOWN);
             
+            break;
             
-        } else if(
-            button == BUTTON_NEXT_TYPE ||
-            button == BUTTON_PREV_TYPE
-        ) {
-        
+        } case BUTTON_NEXT_TYPE:
+        case BUTTON_PREV_TYPE: {
+    
             /****************************
             *                     -->   *
             *   Switch type   <( )> (o) *
@@ -547,11 +597,11 @@ void gameplay::handle_button(
                 game.sys_assets.sfx_switch_pikmin.play(0, false);
             }
             
-        } else if(
-            button == BUTTON_NEXT_MATURITY ||
-            button == BUTTON_PREV_MATURITY
-        ) {
-        
+            break;
+            
+        } case BUTTON_NEXT_MATURITY:
+        case BUTTON_PREV_MATURITY: {
+    
             /**********************************
             *                      V  -->  *  *
             *   Switch maturity    |       |  *
@@ -618,6 +668,9 @@ void gameplay::handle_button(
                 cur_leader_ptr->swap_held_pikmin(new_pikmin);
             }
             
+            break;
+            
+        }
         }
         
     } else { //Displaying a message.
@@ -680,7 +733,8 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 ];
             }
             
-            if(id == CREATOR_TOOL_AREA_IMAGE) {
+            switch(id) {
+            case CREATOR_TOOL_AREA_IMAGE: {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
                 string file_name =
                     USER_DATA_FOLDER_PATH + "/Area_" + game.cur_area_data.name +
@@ -693,27 +747,34 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     );
                 }
                 
-            } else if(id == CREATOR_TOOL_CHANGE_SPEED) {
+                break;
+                
+            } case CREATOR_TOOL_CHANGE_SPEED: {
                 game.creator_tools.change_speed = !game.creator_tools.change_speed;
+                break;
                 
-            } else if(id == CREATOR_TOOL_GEOMETRY_INFO) {
+            } case CREATOR_TOOL_GEOMETRY_INFO: {
                 game.creator_tools.geometry_info = !game.creator_tools.geometry_info;
+                break;
                 
-            } else if(id == CREATOR_TOOL_HITBOXES) {
+            } case CREATOR_TOOL_HITBOXES: {
                 game.creator_tools.hitboxes = !game.creator_tools.hitboxes;
+                break;
                 
-            } else if(id == CREATOR_TOOL_HURT_MOB) {
+            } case CREATOR_TOOL_HURT_MOB: {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
                     m->set_health(true, true, -game.creator_tools.mob_hurting_ratio);
                 }
+                break;
                 
-            } else if(id == CREATOR_TOOL_MOB_INFO) {
+            } case CREATOR_TOOL_MOB_INFO: {
                 mob* m = get_closest_mob_to_cursor();
                 game.creator_tools.info_lock =
                     (game.creator_tools.info_lock == m ? NULL : m);
-                    
-            } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
+                break;
+                
+            } case CREATOR_TOOL_NEW_PIKMIN: {
                 if(mobs.pikmin.size() < game.config.max_pikmin_in_field) {
                     pikmin_type* new_pikmin_type = game.mob_types.pikmin.begin()->second;
                     
@@ -735,14 +796,18 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     );
                 }
                 
-            } else if(id == CREATOR_TOOL_TELEPORT) {
+                break;
+                
+            } case CREATOR_TOOL_TELEPORT: {
                 cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
                 sector* mouse_sector =
                     get_sector(game.mouse_cursor_w, NULL, true);
                 if(mouse_sector) {
                     cur_leader_ptr->z = mouse_sector->z;
                 }
+                break;
                 
+            }
             }
             
         }

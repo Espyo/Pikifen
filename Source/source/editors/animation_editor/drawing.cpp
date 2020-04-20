@@ -89,27 +89,39 @@ void animation_editor::do_drawing() {
             
             for(unsigned char x = 0; x < 3; ++x) {
                 point rec_tl, rec_br;
-                if(x == 0) {
+                switch(x) {
+                case 0: {
                     rec_tl.x = scene_tl.x;
                     rec_br.x = bmp_x + s->file_pos.x;
-                } else if(x == 1) {
+                    break;
+                } case 1: {
                     rec_tl.x = bmp_x + s->file_pos.x;
                     rec_br.x = bmp_x + s->file_pos.x + s->file_size.x;
-                } else {
+                    break;
+                } default: {
                     rec_tl.x = bmp_x + s->file_pos.x + s->file_size.x;
                     rec_br.x = scene_br.x;
+                    break;
                 }
+                }
+                
                 for(unsigned char y = 0; y < 3; ++y) {
                     if(x == 1 && y == 1) continue;
-                    if(y == 0) {
+                    
+                    switch(y) {
+                    case 0: {
                         rec_tl.y = scene_tl.y;
                         rec_br.y = bmp_y + s->file_pos.y;
-                    } else if(y == 1) {
+                        break;
+                    } case 1: {
                         rec_tl.y = bmp_y + s->file_pos.y;
                         rec_br.y = bmp_y + s->file_pos.y + s->file_size.y;
-                    } else {
+                        break;
+                    } default: {
                         rec_tl.y = bmp_y + s->file_pos.y + s->file_size.y;
                         rec_br.y = scene_br.y;
+                        break;
+                    }
                     }
                     
                     al_draw_filled_rectangle(
@@ -153,15 +165,20 @@ void animation_editor::do_drawing() {
                 float hitbox_outline_thickness =
                     (cur_hitbox_nr == h ? 3 / game.cam.zoom : 2 / game.cam.zoom);
                     
-                if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                switch(h_ptr->type) {
+                case HITBOX_TYPE_NORMAL: {
                     hitbox_color = al_map_rgba(0, 128, 0, 128);
                     hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
-                } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                    break;
+                } case HITBOX_TYPE_ATTACK: {
                     hitbox_color = al_map_rgba(128, 0, 0, 128);
                     hitbox_outline_color = al_map_rgba(64, 0, 0, 255);
-                } else {
+                    break;
+                } case HITBOX_TYPE_DISABLED: {
                     hitbox_color = al_map_rgba(128, 128, 0, 128);
                     hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
+                    break;
+                }
                 }
                 
                 if(cur_hitbox_nr == h) {

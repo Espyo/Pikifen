@@ -92,29 +92,42 @@ void animation_editor::body_part_to_gui() {
 void animation_editor::change_to_right_frame() {
     hide_all_frames();
     
-    if(state == EDITOR_STATE_MAIN) {
+    switch(state) {
+    case EDITOR_STATE_MAIN: {
         frm_main->show();
-    } else if(state == EDITOR_STATE_ANIMATION) {
+        break;
+    } case EDITOR_STATE_ANIMATION: {
         frm_anims->show();
-    } else if(state == EDITOR_STATE_SPRITE) {
+        break;
+    } case EDITOR_STATE_SPRITE: {
         frm_sprites->show();
-    } else if(state == EDITOR_STATE_BODY_PART) {
+        break;
+    } case EDITOR_STATE_BODY_PART: {
         frm_body_parts->show();
-    } else if(state == EDITOR_STATE_SPRITE_BITMAP) {
+        break;
+    } case EDITOR_STATE_SPRITE_BITMAP: {
         frm_sprite_bmp->show();
-    } else if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
+        break;
+    } case EDITOR_STATE_SPRITE_TRANSFORM: {
         frm_sprite_tra->show();
-    } else if(state == EDITOR_STATE_HITBOXES) {
+        break;
+    } case EDITOR_STATE_HITBOXES: {
         frm_hitboxes->show();
-    } else if(state == EDITOR_STATE_TOP) {
+        break;
+    } case EDITOR_STATE_TOP: {
         frm_top->show();
-    } else if(state == EDITOR_STATE_LOAD) {
+        break;
+    } case EDITOR_STATE_LOAD: {
         frm_load->show();
-    } else if(state == EDITOR_STATE_TOOLS) {
+        break;
+    } case EDITOR_STATE_TOOLS: {
         frm_tools->show();
-    } else if(state == EDITOR_STATE_OPTIONS) {
+        break;
+    } case EDITOR_STATE_OPTIONS: {
         frm_options->show();
         options_to_gui();
+        break;
+    }
     }
 }
 
@@ -344,15 +357,17 @@ void animation_editor::gui_to_hitbox() {
         cur_hitbox->type = HITBOX_TYPE_DISABLED;
     }
     
-    if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
+    switch(cur_hitbox->type) {
+    case HITBOX_TYPE_NORMAL: {
         cur_hitbox->value =
             s2f(get_textbox_text(frm_normal_h, "txt_mult"));
         cur_hitbox->can_pikmin_latch =
             get_checkbox_check(frm_normal_h, "chk_latch");
         cur_hitbox->hazards_str =
             get_textbox_text(frm_normal_h, "txt_hazards");
-            
-    } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
+        break;
+        
+    } case HITBOX_TYPE_ATTACK: {
         cur_hitbox->value =
             s2f(get_textbox_text(frm_attack_h, "txt_value"));
         cur_hitbox->hazards_str =
@@ -365,6 +380,12 @@ void animation_editor::gui_to_hitbox() {
             s2f(get_textbox_text(frm_attack_h, "txt_knockback"));
         cur_hitbox->wither_chance =
             s2i(get_textbox_text(frm_attack_h, "txt_wither"));
+        break;
+        
+    } case HITBOX_TYPE_DISABLED: {
+        break;
+        
+    }
     }
     
     hitbox_to_gui();
@@ -539,7 +560,8 @@ void animation_editor::hitbox_to_gui() {
     
     if(cur_hitbox) {
         frm_hitbox->show();
-        if(cur_hitbox->type == HITBOX_TYPE_NORMAL) {
+        switch(cur_hitbox->type) {
+        case HITBOX_TYPE_NORMAL: {
             set_textbox_text(frm_normal_h, "txt_mult", f2s(cur_hitbox->value));
             set_checkbox_check(
                 frm_normal_h, "chk_latch", cur_hitbox->can_pikmin_latch
@@ -547,8 +569,9 @@ void animation_editor::hitbox_to_gui() {
             set_textbox_text(
                 frm_normal_h, "txt_hazards", cur_hitbox->hazards_str
             );
+            break;
             
-        } else if(cur_hitbox->type == HITBOX_TYPE_ATTACK) {
+        } case HITBOX_TYPE_ATTACK: {
             set_textbox_text(
                 frm_attack_h, "txt_value", f2s(cur_hitbox->value)
             );
@@ -573,7 +596,12 @@ void animation_editor::hitbox_to_gui() {
             } else {
                 enable_widget(frm_attack_h->widgets["ang_angle"]);
             }
+            break;
             
+        } case HITBOX_TYPE_DISABLED: {
+            break;
+            
+        }
         }
     } else {
         frm_hitbox->hide();

@@ -25,38 +25,40 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_LEFT: {
         game.cam.pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        break;
+    } case ALLEGRO_KEY_RIGHT: {
         game.cam.pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+        break;
+    } case ALLEGRO_KEY_UP: {
         game.cam.pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        break;
+    } case ALLEGRO_KEY_DOWN: {
         game.cam.pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
+        break;
+    } case ALLEGRO_KEY_MINUS: {
         zoom(game.cam.zoom - (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
+        break;
+    } case ALLEGRO_KEY_EQUALS: {
         zoom(game.cam.zoom + (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
+        break;
+    } case ALLEGRO_KEY_0: {
         if(game.cam.zoom == 1.0f) {
             game.cam.pos.x = 0.0f;
             game.cam.pos.y = 0.0f;
         } else {
             zoom(1.0f, false);
         }
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+        break;
+    } case ALLEGRO_KEY_C: {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM && is_ctrl_pressed) {
             comparison = !comparison;
             sprite_transform_to_gui();
         }
-        
+        break;
+    }
     }
 }
 
@@ -69,27 +71,43 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_H && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_reload"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_O && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_toggle_origin"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_toggle_pik_sil"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_quit"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_toggle_mob_radius"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_save"]->simulate_click();
-        
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_H: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_L: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_reload"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_O: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_toggle_origin"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_P: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_toggle_pik_sil"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_Q: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_quit"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_R: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_toggle_mob_radius"]->simulate_click();
+        }
+        break;
+    } case ALLEGRO_KEY_S: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_save"]->simulate_click();
+        }
+        break;
+    }
     }
 }
 
@@ -102,10 +120,11 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_SPACE: {
         frm_anim->widgets["but_play"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+        break;
+    } case ALLEGRO_KEY_HOME: {
         if(!cur_sprite && !cur_sprite->bitmap) return;
         point cmin, cmax;
         get_transformed_rectangle_bounding_box(
@@ -135,14 +154,19 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
         center_camera(cmin, cmax);
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-        if(state == EDITOR_STATE_MAIN) {
+        break;
+    } case ALLEGRO_KEY_ESCAPE: {
+        switch(state) {
+        case EDITOR_STATE_MAIN: {
             frm_toolbar->widgets["but_quit"]->simulate_click();
-        } else if (state == EDITOR_STATE_LOAD) {
+            break;
+        } case EDITOR_STATE_LOAD: {
             frm_load->widgets["but_back"]->simulate_click();
+            break;
         }
-        
+        }
+        break;
+    }
     }
 }
 
@@ -165,12 +189,13 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
+    switch(state) {
+    case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_down(game.mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
         }
-        
-    } else if(state == EDITOR_STATE_HITBOXES) {
+        break;
+    } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite) {
             bool tc_handled = false;
             if(cur_hitbox) {
@@ -241,89 +266,90 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
             }
         }
-        
-    } else if(
-        state == EDITOR_STATE_SPRITE_BITMAP && cur_sprite &&
-        cur_sprite->parent_bmp
-    ) {
-        int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
-        int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
-        int bmp_x = -bmp_w / 2.0;
-        int bmp_y = -bmp_h / 2.0;
-        point bmp_click_pos = game.mouse_cursor_w;
-        bmp_click_pos.x = floor(bmp_click_pos.x - bmp_x);
-        bmp_click_pos.y = floor(bmp_click_pos.y - bmp_y);
-        
-        if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
-        if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
-        
-        bool add = get_checkbox_check(frm_sprite_bmp, "chk_add");
-        
-        point selection_tl;
-        point selection_br;
-        if(
-            (cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) ||
-            !add
-        ) {
-            selection_tl = bmp_click_pos;
-            selection_br = bmp_click_pos;
-        } else {
-            selection_tl = cur_sprite->file_pos;
-            selection_br.x =
-                cur_sprite->file_pos.x + cur_sprite->file_size.x - 1;
-            selection_br.y =
-                cur_sprite->file_pos.y + cur_sprite->file_size.y - 1;
+        break;
+    } case EDITOR_STATE_SPRITE_BITMAP: {
+        if(cur_sprite && cur_sprite->parent_bmp) {
+            int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
+            int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
+            int bmp_x = -bmp_w / 2.0;
+            int bmp_y = -bmp_h / 2.0;
+            point bmp_click_pos = game.mouse_cursor_w;
+            bmp_click_pos.x = floor(bmp_click_pos.x - bmp_x);
+            bmp_click_pos.y = floor(bmp_click_pos.y - bmp_y);
+            
+            if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
+            if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
+            
+            bool add = get_checkbox_check(frm_sprite_bmp, "chk_add");
+            
+            point selection_tl;
+            point selection_br;
+            if(
+                (cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) ||
+                !add
+            ) {
+                selection_tl = bmp_click_pos;
+                selection_br = bmp_click_pos;
+            } else {
+                selection_tl = cur_sprite->file_pos;
+                selection_br.x =
+                    cur_sprite->file_pos.x + cur_sprite->file_size.x - 1;
+                selection_br.y =
+                    cur_sprite->file_pos.y + cur_sprite->file_size.y - 1;
+            }
+            
+            bool* selection_pixels = new bool[bmp_w * bmp_h];
+            memset(selection_pixels, 0, sizeof(bool) * bmp_w * bmp_h);
+            
+            al_lock_bitmap(
+                cur_sprite->parent_bmp,
+                ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READONLY
+            );
+            
+            sprite_bmp_flood_fill(
+                cur_sprite->parent_bmp, selection_pixels,
+                bmp_click_pos.x, bmp_click_pos.y
+            );
+            
+            al_unlock_bitmap(cur_sprite->parent_bmp);
+            
+            size_t p;
+            for(size_t y = 0; y < (size_t) bmp_h; ++y) {
+                for(size_t x = 0; x < (size_t) bmp_w; ++x) {
+                    p = y * bmp_w + x;
+                    if(!selection_pixels[p]) continue;
+                    selection_tl.x = std::min(selection_tl.x, (float) x);
+                    selection_tl.y = std::min(selection_tl.y, (float) y);
+                    selection_br.x = std::max(selection_br.x, (float) x);
+                    selection_br.y = std::max(selection_br.y, (float) y);
+                }
+            }
+            
+            delete[] selection_pixels;
+            
+            set_textbox_text(
+                frm_sprite_bmp, "txt_x", i2s(selection_tl.x)
+            );
+            set_textbox_text(
+                frm_sprite_bmp, "txt_y", i2s(selection_tl.y)
+            );
+            set_textbox_text(
+                frm_sprite_bmp, "txt_w", i2s(selection_br.x - selection_tl.x + 1)
+            );
+            set_textbox_text(
+                frm_sprite_bmp, "txt_h", i2s(selection_br.y - selection_tl.y + 1)
+            );
+            gui_to_sprite_bmp();
         }
-        
-        bool* selection_pixels = new bool[bmp_w * bmp_h];
-        memset(selection_pixels, 0, sizeof(bool) * bmp_w * bmp_h);
-        
-        al_lock_bitmap(
-            cur_sprite->parent_bmp,
-            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READONLY
-        );
-        
-        sprite_bmp_flood_fill(
-            cur_sprite->parent_bmp, selection_pixels,
-            bmp_click_pos.x, bmp_click_pos.y
-        );
-        
-        al_unlock_bitmap(cur_sprite->parent_bmp);
-        
-        size_t p;
-        for(size_t y = 0; y < (size_t) bmp_h; ++y) {
-            for(size_t x = 0; x < (size_t) bmp_w; ++x) {
-                p = y * bmp_w + x;
-                if(!selection_pixels[p]) continue;
-                selection_tl.x = std::min(selection_tl.x, (float) x);
-                selection_tl.y = std::min(selection_tl.y, (float) y);
-                selection_br.x = std::max(selection_br.x, (float) x);
-                selection_br.y = std::max(selection_br.y, (float) y);
+        break;
+    } case EDITOR_STATE_TOP: {
+        if(cur_sprite && cur_sprite->top_visible) {
+            if(top_tc.handle_mouse_down(game.mouse_cursor_w)) {
+                top_tc_to_gui();
             }
         }
-        
-        delete[] selection_pixels;
-        
-        set_textbox_text(
-            frm_sprite_bmp, "txt_x", i2s(selection_tl.x)
-        );
-        set_textbox_text(
-            frm_sprite_bmp, "txt_y", i2s(selection_tl.y)
-        );
-        set_textbox_text(
-            frm_sprite_bmp, "txt_w", i2s(selection_br.x - selection_tl.x + 1)
-        );
-        set_textbox_text(
-            frm_sprite_bmp, "txt_h", i2s(selection_br.y - selection_tl.y + 1)
-        );
-        gui_to_sprite_bmp();
-        
-    } else if(
-        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
-    ) {
-        if(top_tc.handle_mouse_down(game.mouse_cursor_w)) {
-            top_tc_to_gui();
-        }
+        break;
+    }
     }
 }
 
@@ -332,25 +358,29 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
+    switch(state) {
+    case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_move(game.mouse_cursor_w)) {
             cur_sprite_tc_to_gui();
             made_new_changes = true;
         }
-        
-    } else if(state == EDITOR_STATE_HITBOXES) {
+        break;
+    } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_move(game.mouse_cursor_w)) {
                 cur_hitbox_tc_to_gui();
                 made_new_changes = true;
             }
         }
-    } else if(
-        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
-    ) {
-        if(top_tc.handle_mouse_move(game.mouse_cursor_w)) {
-            top_tc_to_gui();
+        break;
+    } case EDITOR_STATE_TOP: {
+        if(cur_sprite && cur_sprite->top_visible) {
+            if(top_tc.handle_mouse_move(game.mouse_cursor_w)) {
+                top_tc_to_gui();
+            }
         }
+        break;
+    }
     }
 }
 
@@ -359,16 +389,21 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
+    switch(state) {
+    case EDITOR_STATE_SPRITE_TRANSFORM: {
         cur_sprite_tc.handle_mouse_up();
-    } else if(
-        state == EDITOR_STATE_TOP && cur_sprite && cur_sprite->top_visible
-    ) {
-        top_tc.handle_mouse_up();
-    } else if(state == EDITOR_STATE_HITBOXES) {
+        break;
+    } case EDITOR_STATE_TOP: {
+        if(cur_sprite && cur_sprite->top_visible) {
+            top_tc.handle_mouse_up();
+        }
+        break;
+    } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite && cur_hitbox) {
             cur_hitbox_tc.handle_mouse_up();
         }
+        break;
+    }
     }
 }
 

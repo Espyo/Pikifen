@@ -206,7 +206,8 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     
     for(size_t a = 0; a < actions.size(); ++a) {
     
-        if(actions[a]->action->type == MOB_ACTION_IF) {
+        switch(actions[a]->action->type) {
+        case MOB_ACTION_IF: {
             //If statement. Look out for its return value, and
             //change the flow accordingly.
             
@@ -235,7 +236,9 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                 
             }
             
-        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
+            break;
+            
+        } case MOB_ACTION_ELSE: {
             //If we actually managed to read an "else", that means we were
             //running through the normal execution of a "then" section.
             //Jump to the "end if".
@@ -251,7 +254,9 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             }
             a = next_a;
             
-        } else if(actions[a]->action->type == MOB_ACTION_GOTO) {
+            break;
+            
+        } case MOB_ACTION_GOTO: {
             //Find the label that matches.
             for(size_t a2 = 0; a2 < actions.size(); ++a2) {
                 if(actions[a2]->action->type == MOB_ACTION_LABEL) {
@@ -261,19 +266,21 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
                     }
                 }
             }
+            break;
             
-        } else if(
-            actions[a]->action->type == MOB_ACTION_END_IF ||
-            actions[a]->action->type == MOB_ACTION_LABEL
-        ) {
+        } case MOB_ACTION_END_IF:
+        case MOB_ACTION_LABEL: {
             //Nothing to do.
+            break;
             
-        } else {
+        } default: {
             //Normal action.
             actions[a]->run(m, custom_data_1, custom_data_2);
             //If the state got changed, jump out.
             if(actions[a]->action->type == MOB_ACTION_SET_STATE) break;
             
+            break;
+        }
         }
     }
 }

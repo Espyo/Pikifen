@@ -54,24 +54,30 @@ void area_editor::do_drawing() {
     float edges_opacity = 0.25f;
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
-    if(
-        state == EDITOR_STATE_LAYOUT ||
-        state == EDITOR_STATE_ASB ||
-        state == EDITOR_STATE_ASA
-    ) {
+    
+    switch(state) {
+    case EDITOR_STATE_LAYOUT:
+    case EDITOR_STATE_ASB:
+    case EDITOR_STATE_ASA: {
         textures_opacity = 0.5f;
         edges_opacity = 1.0f;
+        break;
         
-    } else if(state == EDITOR_STATE_MOBS) {
+    } case EDITOR_STATE_MOBS: {
         mob_opacity = 1.0f;
+        break;
         
-    } else if(state == EDITOR_STATE_MAIN || state == EDITOR_STATE_REVIEW) {
+    } case EDITOR_STATE_MAIN:
+    case EDITOR_STATE_REVIEW: {
         textures_opacity = 0.6f;
         edges_opacity = 0.5f;
         grid_opacity = 0.3f;
         mob_opacity = 0.75f;
+        break;
         
     }
+    }
+    
     if(state == EDITOR_STATE_ASA) {
         selection_min_opacity = 0.0f;
         selection_max_opacity = 0.0f;
@@ -82,6 +88,7 @@ void area_editor::do_drawing() {
         edges_opacity = 0.8f;
         grid_opacity = 0.0f;
     }
+    
     if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
         textures_opacity = 1.0f;
         edges_opacity = 0.0f;
@@ -949,7 +956,8 @@ void area_editor::do_drawing() {
     
     //New circular sector drawing.
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-        if(new_circle_sector_step == 1) {
+        switch(new_circle_sector_step) {
+        case 1: {
             float circle_radius =
                 dist(
                     new_circle_sector_center, new_circle_sector_anchor
@@ -961,8 +969,9 @@ void area_editor::do_drawing() {
                 al_map_rgb(64, 255, 64),
                 3.0 / game.cam.zoom
             );
+            break;
             
-        } else if(new_circle_sector_step == 2) {
+        } case 2: {
             for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
                 point cur_point = new_circle_sector_points[p];
                 point next_point =
@@ -986,7 +995,8 @@ void area_editor::do_drawing() {
                     3.0 / game.cam.zoom, al_map_rgb(192, 255, 192)
                 );
             }
-            
+            break;
+        }
         }
     }
     

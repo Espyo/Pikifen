@@ -833,18 +833,30 @@ void area_editor::do_logic() {
 void area_editor::emit_triangulation_error_status_bar_message(
     const TRIANGULATION_ERRORS error
 ) {
-    if(error == TRIANGULATION_ERROR_LONE_EDGES) {
+    switch(error) {
+    case TRIANGULATION_ERROR_LONE_EDGES: {
         emit_status_bar_message(
             "Some sectors ended up with lone edges!", true
         );
-    } else if(error == TRIANGULATION_ERROR_NO_EARS) {
+        break;
+    } case TRIANGULATION_ERROR_NO_EARS: {
         emit_status_bar_message(
             "Some sectors could not be triangulated!", true
         );
-    } else if(error == TRIANGULATION_ERROR_VERTEXES_REUSED) {
+        break;
+    } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
         emit_status_bar_message(
             "Some sectors reuse vertexes -- there are likely gaps!", true
         );
+        break;
+    } case TRIANGULATION_ERROR_INVALID_ARGS: {
+        emit_status_bar_message(
+            "An unknown error has occured with the sector!", true
+        );
+        break;
+    } case TRIANGULATION_NO_ERROR: {
+        break;
+    }
     }
 }
 
@@ -2182,10 +2194,14 @@ vertex* area_editor::get_vertex_under_point(const point &p) const {
  * Focuses the camera on the problem found, if any.
  */
 void area_editor::goto_problem() {
-    if(problem_type == EPT_NONE || problem_type == EPT_NONE_YET) return;
-    
-    if(problem_type == EPT_INTERSECTING_EDGES) {
-    
+    switch(problem_type) {
+    case EPT_NONE:
+    case EPT_NONE_YET: {
+        return;
+        break;
+        
+    } case EPT_INTERSECTING_EDGES: {
+
         if(
             !problem_edge_intersection.e1 || !problem_edge_intersection.e2
         ) {
@@ -2267,8 +2283,10 @@ void area_editor::goto_problem() {
             
         center_camera(min_coords, max_coords);
         
-    } else if(problem_type == EPT_BAD_SECTOR) {
-    
+        break;
+        
+    } case EPT_BAD_SECTOR: {
+
         if(non_simples.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2281,8 +2299,10 @@ void area_editor::goto_problem() {
         
         center_camera(min_coords, max_coords);
         
-    } else if(problem_type == EPT_LONE_EDGE) {
-    
+        break;
+        
+    } case EPT_LONE_EDGE: {
+
         if(lone_edges.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2307,8 +2327,10 @@ void area_editor::goto_problem() {
         
         center_camera(min_coords, max_coords);
         
-    } else if(problem_type == EPT_OVERLAPPING_VERTEXES) {
-    
+        break;
+        
+    } case EPT_OVERLAPPING_VERTEXES: {
+
         if(!problem_vertex_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2326,8 +2348,10 @@ void area_editor::goto_problem() {
             )
         );
         
-    } else if(problem_type == EPT_UNKNOWN_TEXTURE) {
-    
+        break;
+        
+    } case EPT_UNKNOWN_TEXTURE: {
+
         if(!problem_sector_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2338,13 +2362,13 @@ void area_editor::goto_problem() {
         problem_sector_ptr->get_bounding_box(&min_coords, &max_coords);
         center_camera(min_coords, max_coords);
         
-    } else if(
-        problem_type == EPT_TYPELESS_MOB ||
-        problem_type == EPT_MOB_OOB ||
-        problem_type == EPT_MOB_IN_WALL ||
-        problem_type == EPT_SECTORLESS_BRIDGE
-    ) {
-    
+        break;
+        
+    } case EPT_TYPELESS_MOB:
+    case EPT_MOB_OOB:
+    case EPT_MOB_IN_WALL:
+    case EPT_SECTORLESS_BRIDGE: {
+
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2353,12 +2377,12 @@ void area_editor::goto_problem() {
         
         center_camera(problem_mob_ptr->pos - 64, problem_mob_ptr->pos + 64);
         
-    } else if(
-        problem_type == EPT_LONE_PATH_STOP ||
-        problem_type == EPT_PATH_STOPS_TOGETHER ||
-        problem_type == EPT_PATH_STOP_OOB
-    ) {
-    
+        break;
+        
+    } case EPT_LONE_PATH_STOP:
+    case EPT_PATH_STOPS_TOGETHER:
+    case EPT_PATH_STOP_OOB: {
+
         if(!problem_path_stop_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -2370,14 +2394,19 @@ void area_editor::goto_problem() {
             problem_path_stop_ptr->pos + 64
         );
         
-    } else if(problem_type == EPT_INVALID_SHADOW) {
-    
+        break;
+        
+    } case EPT_INVALID_SHADOW: {
+
         point min_coords, max_coords;
         get_transformed_rectangle_bounding_box(
             problem_shadow_ptr->center, problem_shadow_ptr->size,
             problem_shadow_ptr->angle, &min_coords, &max_coords
         );
         center_camera(min_coords, max_coords);
+        
+        break;
+    }
     }
 }
 
@@ -2388,18 +2417,23 @@ void area_editor::goto_problem() {
  */
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
-    if(drawing_line_error == DRAWING_LINE_CROSSES_DRAWING) {
+    switch(drawing_line_error) {
+    case DRAWING_LINE_CROSSES_DRAWING: {
         emit_status_bar_message(
             "That line crosses other lines in the drawing!", true
         );
-    } else if(drawing_line_error == DRAWING_LINE_CROSSES_EDGES) {
+        break;
+    } case DRAWING_LINE_CROSSES_EDGES: {
         emit_status_bar_message(
             "That line crosses existing edges!", true
         );
-    } else if(drawing_line_error == DRAWING_LINE_WAYWARD_SECTOR) {
+        break;
+    } case DRAWING_LINE_WAYWARD_SECTOR: {
         emit_status_bar_message(
             "That line goes out of the sector you're drawing on!", true
         );
+        break;
+    }
     }
 }
 
@@ -3417,7 +3451,8 @@ void area_editor::set_new_circle_sector_points() {
 point area_editor::snap_point(const point &p) {
     if(is_shift_pressed) return p;
     
-    if(snap_mode == SNAP_GRID) {
+    switch(snap_mode) {
+    case SNAP_GRID: {
         return
             point(
                 round(p.x / game.options.area_editor_grid_interval) *
@@ -3426,7 +3461,9 @@ point area_editor::snap_point(const point &p) {
                 game.options.area_editor_grid_interval
             );
             
-    } else if(snap_mode == SNAP_VERTEXES) {
+        break;
+        
+    } case SNAP_VERTEXES: {
         if(cursor_snap_timer.time_left > 0.0f) {
             return cursor_snap_cache;
         }
@@ -3455,7 +3492,9 @@ point area_editor::snap_point(const point &p) {
             return ret;
         }
         
-    } else if(snap_mode == SNAP_EDGES) {
+        break;
+        
+    } case SNAP_EDGES: {
         if(cursor_snap_timer.time_left > 0.0f) {
             return cursor_snap_cache;
         }
@@ -3495,6 +3534,9 @@ point area_editor::snap_point(const point &p) {
         cursor_snap_cache = closest_point;
         return closest_point;
         
+        break;
+        
+    }
     }
     
     return p;

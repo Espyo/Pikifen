@@ -1296,12 +1296,17 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     }
     
     float max_height;
-    if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+    switch (holding_ptr->type->category->id) {
+    case MOB_CATEGORY_PIKMIN: {
         max_height = ((pikmin*) holding_ptr)->pik_type->max_throw_height;
-    } else if(holding_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
+        break;
+    } case MOB_CATEGORY_LEADERS: {
         max_height = ((leader*) holding_ptr)->lea_type->max_throw_height;
-    } else {
+        break;
+    } default: {
         max_height = (target_z - leader_ptr->z) * 1.2f;
+        break;
+    }
     }
     
     if(max_height < target_z) {
@@ -1394,20 +1399,26 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     drop* d_ptr = (drop*) m->focused_mob;
     
-    if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
+    switch(d_ptr->dro_type->effect) {
+    case DROP_EFFECT_INCREASE_SPRAYS: {
         spray_stats_struct* stats =
             &game.states.gameplay_st->spray_stats[
-         d_ptr->dro_type->spray_type_to_increase
+        d_ptr->dro_type->spray_type_to_increase
         ];
         stats->nr_sprays =
             std::max(
                 (long long) stats->nr_sprays + d_ptr->dro_type->increase_amount,
                 (long long) 0
             );
-    } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+        break;
+    } case DROP_EFFECT_GIVE_STATUS: {
         m->apply_status_effect(
             d_ptr->dro_type->status_to_give, true, false
         );
+        break;
+    } default: {
+        break;
+    }
     }
     
     m->unfocus_from_mob();
@@ -1770,12 +1781,17 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->focus_on_mob(tra_ptr);
     m->start_height_effect();
     
-    if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
+    switch(tra_ptr->tra_type->riding_pose) {
+    case TRACK_RIDING_POSE_STOPPED: {
         m->set_animation(LEADER_ANIM_WALKING);
-    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
+        break;
+    } case TRACK_RIDING_POSE_CLIMBING: {
         m->set_animation(LEADER_ANIM_WALKING);
-    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
+        break;
+    } case TRACK_RIDING_POSE_SLIDING: {
         m->set_animation(LEADER_ANIM_WALKING);
+        break;
+    }
     }
     
     m->track_info = new track_info_struct(tra_ptr);

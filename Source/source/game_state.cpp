@@ -46,39 +46,41 @@ void game_state::handle_menu_button(
 
     bool is_down = (pos >= 0.5);
     
-    //Selecting a different widget with the arrow keys.
-    if(
-        action == BUTTON_MENU_RIGHT ||
-        action == BUTTON_MENU_UP ||
-        action == BUTTON_MENU_LEFT ||
-        action == BUTTON_MENU_DOWN
-    ) {
-    
+    switch(action) {
+    case BUTTON_MENU_RIGHT:
+    case BUTTON_MENU_UP:
+    case BUTTON_MENU_LEFT:
+    case BUTTON_MENU_DOWN: {
+
+        //Selecting a different widget with the arrow keys.
         size_t pressed = BUTTON_NONE;
-        if(action == BUTTON_MENU_RIGHT) {
+        
+        switch(action) {
+        case BUTTON_MENU_RIGHT: {
             if(!right_pressed && is_down) {
                 pressed = BUTTON_MENU_RIGHT;
             }
             right_pressed = is_down;
-            
-        } else if(action == BUTTON_MENU_UP) {
+            break;
+        } case BUTTON_MENU_UP: {
             if(!up_pressed && is_down) {
                 pressed = BUTTON_MENU_UP;
             }
             up_pressed = is_down;
-            
-        } else if(action == BUTTON_MENU_LEFT) {
+            break;
+        } case BUTTON_MENU_LEFT: {
             if(!left_pressed && is_down) {
                 pressed = BUTTON_MENU_LEFT;
             }
             left_pressed = is_down;
-            
-        } else if(action == BUTTON_MENU_DOWN) {
+            break;
+        } case BUTTON_MENU_DOWN: {
             if(!down_pressed && is_down) {
                 pressed = BUTTON_MENU_DOWN;
             }
             down_pressed = is_down;
-            
+            break;
+        }
         }
         
         if(pressed == BUTTON_NONE) return;
@@ -99,7 +101,8 @@ void game_state::handle_menu_button(
                 continue;
             }
             
-            if(pressed == BUTTON_MENU_RIGHT) {
+            switch(pressed) {
+            case BUTTON_MENU_RIGHT: {
                 cur_pivot.x =
                     selected_widget->center.x + selected_widget->size.x * 0.25;
                 cur_pivot.y =
@@ -109,8 +112,8 @@ void game_state::handle_menu_button(
                 
                 if(selected_widget->center.x == w_ptr->center.x) continue;
                 if(cur_pivot.x > w2_pivot.x) w2_pivot.x += game.win_w;
-                
-            } else if(pressed == BUTTON_MENU_UP) {
+                break;
+            } case BUTTON_MENU_UP: {
                 cur_pivot.x =
                     selected_widget->center.x;
                 cur_pivot.y =
@@ -120,8 +123,8 @@ void game_state::handle_menu_button(
                 
                 if(selected_widget->center.y == w_ptr->center.y) continue;
                 if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= game.win_h;
-                
-            } else if(pressed == BUTTON_MENU_LEFT) {
+                break;
+            } case BUTTON_MENU_LEFT: {
                 cur_pivot.x =
                     selected_widget->center.x - selected_widget->size.x * 0.25;
                 cur_pivot.y =
@@ -131,8 +134,8 @@ void game_state::handle_menu_button(
                 
                 if(selected_widget->center.x == w_ptr->center.x) continue;
                 if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= game.win_w;
-                
-            } else {
+                break;
+            } case BUTTON_MENU_DOWN: {
                 cur_pivot.x =
                     selected_widget->center.x;
                 cur_pivot.y =
@@ -142,6 +145,8 @@ void game_state::handle_menu_button(
                 
                 if(selected_widget->center.y == w_ptr->center.y) continue;
                 if(cur_pivot.y > w2_pivot.y) w2_pivot.y += game.win_h;
+                break;
+            }
             }
             
             dist d(cur_pivot, w2_pivot);
@@ -156,14 +161,21 @@ void game_state::handle_menu_button(
             set_selected_widget(closest_widget);
         }
         
-    } else if(action == BUTTON_MENU_OK && is_down) {
-    
-        if(selected_widget) selected_widget->click();
+        break;
         
-    } else if(action == BUTTON_MENU_BACK && is_down) {
-    
-        if(back_widget) back_widget->click();
+    } case BUTTON_MENU_OK: {
+        if(is_down && selected_widget) {
+            selected_widget->click();
+        }
+        break;
         
+    } case BUTTON_MENU_BACK: {
+        if(is_down && back_widget) {
+            back_widget->click();
+        }
+        break;
+        
+    }
     }
 }
 

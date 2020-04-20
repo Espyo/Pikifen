@@ -52,15 +52,19 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     onion* o_ptr = (onion*) m;
     size_t seeds = 0;
     
-    if(delivery->type->category->id == MOB_CATEGORY_ENEMIES) {
+    switch(delivery->type->category->id) {
+    case MOB_CATEGORY_ENEMIES: {
         seeds = ((enemy*) delivery)->ene_type->pikmin_seeds;
-    } else if(delivery->type->category->id == MOB_CATEGORY_PELLETS) {
+        break;
+    } case MOB_CATEGORY_PELLETS: {
         pellet* p_ptr = (pellet*) delivery;
         if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
             seeds = p_ptr->pel_type->match_seeds;
         } else {
             seeds = p_ptr->pel_type->non_match_seeds;
         }
+        break;
+    }
     }
     
     o_ptr->full_spew_timer.start();

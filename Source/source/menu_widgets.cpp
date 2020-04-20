@@ -67,10 +67,14 @@ void menu_button::draw(const float time_spent) {
     }
     
     int text_x = center.x;
-    if(text_align == ALLEGRO_ALIGN_LEFT) {
+    switch(text_align) {
+    case ALLEGRO_ALIGN_LEFT: {
         text_x = center.x - size.x * 0.5 + 32;
-    } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
+        break;
+    } case ALLEGRO_ALIGN_RIGHT: {
         text_x = center.x + size.x * 0.5 - 32;
+        break;
+    }
     }
     
     draw_text_lines(
@@ -130,10 +134,14 @@ void menu_checkbox::draw(const float time_spent) {
     }
     
     int text_x = center.x;
-    if(text_align == ALLEGRO_ALIGN_LEFT) {
+    switch(text_align) {
+    case ALLEGRO_ALIGN_LEFT: {
         text_x = center.x - size.x * 0.5 + 32;
-    } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
+        break;
+    } case ALLEGRO_ALIGN_RIGHT: {
         text_x = center.x + size.x * 0.5 - 32;
+        break;
+    }
     }
     
     draw_text_lines(
@@ -179,10 +187,14 @@ void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
     
     int text_x = center.x;
-    if(text_align == ALLEGRO_ALIGN_LEFT) {
+    switch(text_align) {
+    case ALLEGRO_ALIGN_LEFT: {
         text_x = center.x - size.x * 0.5;
-    } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
+        break;
+    } case ALLEGRO_ALIGN_RIGHT: {
         text_x = center.x + size.x * 0.5;
+        break;
+    }
     }
     
     float juicy_grow_amount =

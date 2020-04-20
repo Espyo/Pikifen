@@ -114,12 +114,16 @@ void gameplay::do_aesthetic_logic() {
         } else {
             float max_throw_z = 0;
             size_t cat = held_mob->type->category->id;
-            if(cat == MOB_CATEGORY_PIKMIN) {
+            switch(cat) {
+            case MOB_CATEGORY_PIKMIN: {
                 max_throw_z =
                     ((pikmin*) held_mob)->pik_type->max_throw_height;
-            } else if(cat == MOB_CATEGORY_LEADERS) {
+                break;
+            } case MOB_CATEGORY_LEADERS: {
                 max_throw_z =
                     ((leader*) held_mob)->lea_type->max_throw_height;
+                break;
+            }
             }
             
             if(max_throw_z > 0) {

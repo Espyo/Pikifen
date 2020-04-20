@@ -100,61 +100,71 @@ void game_class::main_loop() {
         
         cur_state->handle_controls(ev);
         
-        if(
-            ev.type == ALLEGRO_EVENT_TIMER &&
-            al_is_event_queue_empty(logic_queue)
-        ) {
-            double cur_time = al_get_time();
-            if(reset_delta_t) {
-                //Failsafe.
-                prev_frame_time = cur_time - 1.0f / options.target_fps;
-                reset_delta_t = false;
+        switch(ev.type) {
+        case ALLEGRO_EVENT_TIMER: {
+            if(al_is_event_queue_empty(logic_queue)) {
+                double cur_time = al_get_time();
+                if(reset_delta_t) {
+                    //Failsafe.
+                    prev_frame_time = cur_time - 1.0f / options.target_fps;
+                    reset_delta_t = false;
+                }
+                
+                //Anti speed-burst cap.
+                delta_t = std::min(cur_time - prev_frame_time, 0.2);
+                
+                game_state* prev_state = cur_state;
+                
+                cur_state->do_logic();
+                if(cur_state == prev_state) {
+                    //Only draw if we didn't change states in the meantime.
+                    cur_state->do_drawing();
+                }
+                
+                prev_frame_time = cur_time;
             }
+            break;
             
-            //Anti speed-burst cap.
-            delta_t = std::min(cur_time - prev_frame_time, 0.2);
-            
-            game_state* prev_state = cur_state;
-            
-            cur_state->do_logic();
-            if(cur_state == prev_state) {
-                //Only draw if we didn't change states in the meantime.
-                cur_state->do_drawing();
-            }
-            
-            prev_frame_time = cur_time;
-            
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        } case ALLEGRO_EVENT_DISPLAY_CLOSE: {
             is_game_running = false;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
+        } case ALLEGRO_EVENT_DISPLAY_RESIZE: {
             //scr_w = ev.display.width;
             //scr_h = ev.display.height;
+            break;
             
-        } else if(
-            ev.type == ALLEGRO_EVENT_KEY_DOWN &&
-            ev.keyboard.keycode == ALLEGRO_KEY_F12
-        ) {
-            save_screenshot();
+        } case ALLEGRO_EVENT_KEY_DOWN: {
+            if(ev.keyboard.keycode == ALLEGRO_KEY_F12) {
+                save_screenshot();
+            }
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_LOST) {
+        } case ALLEGRO_EVENT_DISPLAY_LOST: {
             window_found = false;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_FOUND) {
+        } case ALLEGRO_EVENT_DISPLAY_FOUND: {
             window_found = true;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+        } case ALLEGRO_EVENT_DISPLAY_SWITCH_OUT: {
             window_focused = false;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
+        } case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
             window_focused = true;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY) {
+        } case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY: {
             cursor_in_window = false;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
+        } case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY: {
             cursor_in_window = true;
+            break;
             
+        }
         }
     }
 }

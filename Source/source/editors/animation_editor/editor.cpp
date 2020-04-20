@@ -443,14 +443,19 @@ void animation_editor::open_hitbox_type(unsigned char type) {
     frm_normal_h->hide();
     frm_attack_h->hide();
     
-    if(type == HITBOX_TYPE_NORMAL) {
+    switch(type) {
+    case HITBOX_TYPE_NORMAL: {
         set_radio_selection(f, "rad_normal", true);
         frm_normal_h->show();
-    } else if(type == HITBOX_TYPE_ATTACK) {
+        break;
+    } case HITBOX_TYPE_ATTACK: {
         set_radio_selection(f, "rad_attack", true);
         frm_attack_h->show();
-    } else {
+        break;
+    } case HITBOX_TYPE_DISABLED: {
         set_radio_selection(f, "rad_disabled", true);
+        break;
+    }
     }
 }
 

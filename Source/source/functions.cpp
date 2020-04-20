@@ -1094,24 +1094,35 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
 #if defined(_WIN32)
 
 string strsignal(const int signum) {
-    if(signum == SIGINT) {
+    switch(signum) {
+    case SIGINT: {
         return "SIGINT";
-    } else if(signum == SIGILL) {
+        break;
+    } case SIGILL: {
         return "SIGILL";
-    } else if(signum == SIGFPE) {
+        break;
+    } case SIGFPE: {
         return "SIGFPE";
-    } else if(signum == SIGSEGV) {
+        break;
+    } case SIGSEGV: {
         return "SIGSEGV";
-    } else if(signum == SIGTERM) {
+        break;
+    } case SIGTERM: {
         return "SIGTERM";
-    } else if(signum == SIGBREAK) {
+        break;
+    } case SIGBREAK: {
         return "SIGBREAK";
-    } else if(signum == SIGABRT) {
+        break;
+    } case SIGABRT: {
         return "SIGABRT";
-    } else if(signum == SIGABRT_COMPAT) {
+        break;
+    } case SIGABRT_COMPAT: {
         return "SIGABRT_COMPAT";
-    } else {
+        break;
+    } default: {
         return "Unknown";
+        break;
+    }
     }
 }
 

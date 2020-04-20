@@ -450,16 +450,22 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
+        switch(result) {
+        case FILE_DIALOG_RES_WRONG_FOLDER: {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == FILE_DIALOG_RES_CANCELED) {
+            break;
+        } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
             return;
+            break;
+        } case FILE_DIALOG_RES_SUCCESS: {
+            break;
+        }
         }
         
         set_textbox_text(this->frm_info, "txt_bg_bitmap", f[0]);
@@ -1052,16 +1058,22 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
+        switch(result) {
+        case FILE_DIALOG_RES_WRONG_FOLDER: {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == FILE_DIALOG_RES_CANCELED) {
+            break;
+        } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
             return;
+            break;
+        } case FILE_DIALOG_RES_SUCCESS: {
+            break;
+        }
         }
         
         set_textbox_text(this->frm_texture, "txt_name", f[0]);
@@ -1853,16 +1865,22 @@ void area_editor::load() {
                 &result
             );
             
-        if(result == FILE_DIALOG_RES_WRONG_FOLDER) {
+        switch(result) {
+        case FILE_DIALOG_RES_WRONG_FOLDER: {
             //File doesn't belong to the folder.
             emit_status_bar_message(
                 "The chosen image is not in the textures folder!",
                 true
             );
             return;
-        } else if(result == FILE_DIALOG_RES_CANCELED) {
+            break;
+        } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
             return;
+            break;
+        } case FILE_DIALOG_RES_SUCCESS: {
+            break;
+        }
         }
         
         set_textbox_text(this->frm_shadow, "txt_file", f[0]);

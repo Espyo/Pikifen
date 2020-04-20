@@ -347,7 +347,8 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
     float amount_to_move = 0;
     float amount_to_turn = 0;
     
-    if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME) {
+    switch(goal) {
+    case MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME: {
         amount_to_turn = get_angle_cw_dif(angle, get_angle(pos, home));
         if(amount_to_turn > TAU / 2)  amount_to_turn -= TAU;
         if(amount_to_turn < -TAU / 2) amount_to_turn += TAU;
@@ -356,16 +357,21 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
             //We can also start moving towards home now.
             amount_to_move = dist(pos, home).to_float();
         }
+        break;
         
-    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD) {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_FORWARD: {
         amount_to_move = max_step_distance;
+        break;
         
-    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN) {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_CW_TURN: {
         amount_to_turn = randomf(min_turn_angle, TAU * 0.25);
+        break;
         
-    } else if(goal == MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN) {
+    } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN: {
         amount_to_turn = randomf(-TAU * 0.25, -min_turn_angle);
+        break;
         
+    }
     }
     
     amount_to_move = std::min(amount_to_move, max_step_distance);

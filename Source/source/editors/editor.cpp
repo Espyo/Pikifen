@@ -484,12 +484,17 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         !is_mouse_in_gui(game.mouse_cursor_s)
     ) {
     
-        if(ev.mouse.button == 1) {
+        switch (ev.mouse.button) {
+        case 1: {
             holding_m1 = true;
-        } else if(ev.mouse.button == 2) {
+            break;
+        } case 2: {
             holding_m2 = true;
-        } else if(ev.mouse.button == 3) {
+            break;
+        } case 3: {
             holding_m3 = true;
+            break;
+        }
         }
         
         mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
@@ -499,23 +504,34 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
         is_gui_focused = false;
         
         if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
-            if(ev.mouse.button == 1) {
+            switch(ev.mouse.button) {
+            case 1: {
+        
                 handle_lmb_double_click(ev);
-            } else if(ev.mouse.button == 2) {
+                break;
+            } case 2: {
                 handle_rmb_double_click(ev);
-            } else if(ev.mouse.button == 3) {
+                break;
+            } case 3: {
                 handle_mmb_double_click(ev);
+                break;
+            }
             }
             
             double_click_time = 0;
             
         } else {
-            if(ev.mouse.button == 1) {
+            switch(ev.mouse.button) {
+            case 1: {
                 handle_lmb_down(ev);
-            } else if(ev.mouse.button == 2) {
+                break;
+            } case 2: {
                 handle_rmb_down(ev);
-            } else if(ev.mouse.button == 3) {
+                break;
+            } case 3: {
                 handle_mmb_down(ev);
+                break;
+            }
             }
             
             last_mouse_click = ev.mouse.button;
@@ -532,15 +548,20 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
-        if(ev.mouse.button == 1) {
+        switch(ev.mouse.button) {
+        case 1: {
             holding_m1 = false;
             handle_lmb_up(ev);
-        } else if(ev.mouse.button == 2) {
+            break;
+        } case 2: {
             holding_m2 = false;
             handle_rmb_up(ev);
-        } else if(ev.mouse.button == 3) {
+            break;
+        } case 3: {
             holding_m3 = false;
             handle_mmb_up(ev);
+            break;
+        }
         }
         
     } else if(
@@ -1130,16 +1151,35 @@ point editor::transformation_controller::get_handle_pos(
     const unsigned char handle
 ) const {
     point result;
-    if(handle == 0 || handle == 3 || handle == 6) {
+    switch(handle) {
+    case 0:
+    case 3:
+    case 6: {
         result.x = -size.x / 2.0;
-    } else if(handle == 2 || handle == 5 || handle == 8) {
+        break;
+    } case 2:
+    case 5:
+    case 8: {
         result.x = size.x / 2.0;
+        break;
     }
-    if(handle == 0 || handle == 1 || handle == 2) {
+    }
+    
+    switch(handle) {
+    case 0:
+    case 1:
+    case 2: {
         result.y = -size.y / 2.0;
-    } else if(handle == 6 || handle == 7 || handle == 8) {
-        result.y = size.y / 2.0;
+        break;
     }
+    case 6:
+    case 7:
+    case 8: {
+        result.y = size.y / 2.0;
+        break;
+    }
+    }
+    
     al_transform_coordinates(&disalign_transform, &result.x, &result.y);
     return result;
 }
@@ -1220,16 +1260,32 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
         &aligned_new_center.x, &aligned_new_center.y
     );
     
-    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+    switch(moving_handle) {
+    case 0:
+    case 3:
+    case 6: {
         new_size.x = size.x / 2.0 - aligned_cursor_pos.x;
-    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        break;
+    } case 2:
+    case 5:
+    case 8: {
         new_size.x = aligned_cursor_pos.x - (-size.x / 2.0);
+        break;
+    }
     }
     
-    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+    switch(moving_handle) {
+    case 0:
+    case 1:
+    case 2: {
         new_size.y = (size.y / 2.0) - aligned_cursor_pos.y;
-    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        break;
+    } case 6:
+    case 7:
+    case 8: {
         new_size.y = aligned_cursor_pos.y - (-size.y / 2.0);
+        break;
+    }
     }
     
     if(keep_aspect_ratio) {
@@ -1253,16 +1309,32 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
         }
     }
     
-    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+    switch(moving_handle) {
+    case 0:
+    case 3:
+    case 6: {
         aligned_new_center.x = (size.x / 2.0) - new_size.x / 2.0;
-    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        break;
+    } case 2:
+    case 5:
+    case 8: {
         aligned_new_center.x = (-size.x / 2.0) + new_size.x / 2.0;
+        break;
+    }
     }
     
-    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+    switch(moving_handle) {
+    case 0:
+    case 1:
+    case 2: {
         aligned_new_center.y = (size.y / 2.0) - new_size.y / 2.0;
-    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        break;
+    } case 6:
+    case 7:
+    case 8: {
         aligned_new_center.y = (-size.y / 2.0) + new_size.y / 2.0;
+        break;
+    }
     }
     
     point new_center = aligned_new_center;

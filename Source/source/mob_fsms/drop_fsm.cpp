@@ -97,15 +97,19 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         //Pikmin is about to drink it.
         pikmin* p_ptr = (pikmin*) toucher;
         
-        if(
-            d_ptr->dro_type->effect == DROP_EFFECT_MATURATE &&
-            p_ptr->maturity < N_MATURITIES - 1
-        ) {
+        switch(d_ptr->dro_type->effect) {
+        case DROP_EFFECT_MATURATE: {
+            if(p_ptr->maturity < N_MATURITIES - 1) {
+                will_drink = true;
+            }
+            break;
+        } case DROP_EFFECT_GIVE_STATUS: {
             will_drink = true;
-        } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
-            will_drink = true;
+            break;
+        } default: {
+            break;
         }
-        
+        }
         
     } else if(
         d_ptr->dro_type->consumer == DROP_CONSUMER_LEADERS &&
@@ -113,10 +117,14 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to drink it.
-        if(d_ptr->dro_type->effect == DROP_EFFECT_INCREASE_SPRAYS) {
+        switch(d_ptr->dro_type->effect) {
+        case DROP_EFFECT_INCREASE_SPRAYS:
+        case DROP_EFFECT_GIVE_STATUS: {
             will_drink = true;
-        } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
-            will_drink = true;
+            break;
+        } default: {
+            break;
+        }
         }
         
     }

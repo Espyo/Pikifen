@@ -50,7 +50,8 @@ particle::particle(
  * Draws this particle onto the world.
  */
 void particle::draw() {
-    if(type == PARTICLE_TYPE_SQUARE) {
+    switch(type) {
+    case PARTICLE_TYPE_SQUARE: {
         al_draw_filled_rectangle(
             pos.x - size * 0.5,
             pos.y - size * 0.5,
@@ -62,8 +63,9 @@ void particle::draw() {
                 color.a * 255
             )
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_CIRCLE) {
+    } case PARTICLE_TYPE_CIRCLE: {
         al_draw_filled_circle(
             pos.x, pos.y,
             size * 0.5,
@@ -73,8 +75,9 @@ void particle::draw() {
                 color.a * 255
             )
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_BITMAP) {
+    } case PARTICLE_TYPE_BITMAP: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
             0, change_alpha(
@@ -83,8 +86,9 @@ void particle::draw() {
                 color.a * 255
             )
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
+    } case PARTICLE_TYPE_PIKMIN_SPIRIT: {
         draw_bitmap(
             bitmap, pos, point(size, -1),
             0, change_alpha(
@@ -94,8 +98,9 @@ void particle::draw() {
                 ) * color.a * 255
             )
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_ENEMY_SPIRIT) {
+    } case PARTICLE_TYPE_ENEMY_SPIRIT: {
         float s = sin((time / duration) * TAU / 2);
         draw_bitmap(
             bitmap,
@@ -105,8 +110,9 @@ void particle::draw() {
                 color, fabs(s) * color.a * 255
             )
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_SMACK) {
+    } case PARTICLE_TYPE_SMACK: {
         float r = time / duration;
         float s = size;
         float opacity = 255;
@@ -117,8 +123,9 @@ void particle::draw() {
             bitmap, pos, point(s, s),
             0, change_alpha(color, opacity)
         );
+        break;
         
-    } else if(type == PARTICLE_TYPE_DING) {
+    } case PARTICLE_TYPE_DING: {
         float r = time / duration;
         float s = size;
         float opacity = 255;
@@ -129,6 +136,8 @@ void particle::draw() {
             bitmap, pos, point(s, s),
             0, change_alpha(color, opacity)
         );
+        break;
+    }
     }
 }
 

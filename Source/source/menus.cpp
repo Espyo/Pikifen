@@ -367,15 +367,18 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
             &game.options.controls[cur_player_nr][input_capture_control_nr];
         bool valid = true;
         
-        if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        switch(ev.type) {
+        case ALLEGRO_EVENT_KEY_DOWN: {
             c_ptr->type = CONTROL_TYPE_KEYBOARD_KEY;
             c_ptr->button = ev.keyboard.keycode;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+        } case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
             c_ptr->type = CONTROL_TYPE_MOUSE_BUTTON;
             c_ptr->button = ev.mouse.button;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        } case ALLEGRO_EVENT_MOUSE_AXES: {
             if(ev.mouse.dz > 0) {
                 c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_UP;
             } else if(ev.mouse.dz < 0) {
@@ -387,13 +390,15 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
             } else {
                 valid = false;
             }
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
+        } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN: {
             c_ptr->type = CONTROL_TYPE_JOYSTICK_BUTTON;
             c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
             c_ptr->button = ev.joystick.button;
+            break;
             
-        } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+        } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
             c_ptr->type =
                 (
                     ev.joystick.pos > 0 ?
@@ -403,10 +408,13 @@ void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
             c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
             c_ptr->stick = ev.joystick.stick;
             c_ptr->axis = ev.joystick.axis;
+            break;
             
-        } else {
+        } default: {
             valid = false;
+            break;
             
+        }
         }
         
         if(valid) {

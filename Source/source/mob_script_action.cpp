@@ -1567,9 +1567,11 @@ bool assert_actions(
     //Check if the "if"-related actions are okay.
     int if_level = 0;
     for(size_t a = 0; a < actions.size(); ++a) {
-        if(actions[a]->action->type == MOB_ACTION_IF) {
+        switch(actions[a]->action->type) {
+        case MOB_ACTION_IF: {
             if_level++;
-        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
+            break;
+        } case MOB_ACTION_ELSE: {
             if(if_level == 0) {
                 log_error(
                     "Found an \"else\" action without a matching "
@@ -1577,7 +1579,8 @@ bool assert_actions(
                 );
                 return false;
             }
-        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
+            break;
+        } case MOB_ACTION_END_IF: {
             if(if_level == 0) {
                 log_error(
                     "Found an \"end_if\" action without a matching "
@@ -1586,6 +1589,8 @@ bool assert_actions(
                 return false;
             }
             if_level--;
+            break;
+        }
         }
     }
     if(if_level > 0) {
@@ -1629,15 +1634,20 @@ bool assert_actions(
     //Check if there are actions after a "set_state" action.
     bool passed_set_state = false;
     for(size_t a = 0; a < actions.size(); ++a) {
-        if(actions[a]->action->type == MOB_ACTION_SET_STATE) {
+        switch(actions[a]->action->type) {
+        case MOB_ACTION_SET_STATE: {
             passed_set_state = true;
-        } else if(actions[a]->action->type == MOB_ACTION_ELSE) {
+            break;
+        } case MOB_ACTION_ELSE: {
             passed_set_state = false;
-        } else if(actions[a]->action->type == MOB_ACTION_END_IF) {
+            break;
+        } case MOB_ACTION_END_IF: {
             passed_set_state = false;
-        } else if(actions[a]->action->type == MOB_ACTION_LABEL) {
+            break;
+        } case MOB_ACTION_LABEL: {
             passed_set_state = false;
-        } else {
+            break;
+        } default: {
             if(passed_set_state) {
                 log_error(
                     "There is an action \"" + actions[a]->action->name + "\" "
@@ -1646,6 +1656,8 @@ bool assert_actions(
                 );
                 return false;
             }
+            break;
+        }
         }
     }
     

@@ -1699,13 +1699,16 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
     drop* d_ptr = (drop*) m->focused_mob;
     
-    if(d_ptr->dro_type->effect == DROP_EFFECT_MATURATE) {
+    switch(d_ptr->dro_type->effect) {
+    case DROP_EFFECT_MATURATE: {
         p_ptr->increase_maturity(d_ptr->dro_type->increase_amount);
-        
-    } else if(d_ptr->dro_type->effect == DROP_EFFECT_GIVE_STATUS) {
+        break;
+    } case DROP_EFFECT_GIVE_STATUS: {
         p_ptr->apply_status_effect(
             d_ptr->dro_type->status_to_give, true, false
         );
+        break;
+    }
     }
     
     m->unfocus_from_mob();
@@ -2516,12 +2519,17 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->focus_on_mob(tra_ptr);
     m->start_height_effect();
     
-    if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_STOPPED) {
+    switch(tra_ptr->tra_type->riding_pose) {
+    case TRACK_RIDING_POSE_STOPPED: {
         m->set_animation(PIKMIN_ANIM_WALKING);
-    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_CLIMBING) {
+        break;
+    } case TRACK_RIDING_POSE_CLIMBING: {
         m->set_animation(PIKMIN_ANIM_WALKING);
-    } else if(tra_ptr->tra_type->riding_pose == TRACK_RIDING_POSE_SLIDING) {
+        break;
+    } case TRACK_RIDING_POSE_SLIDING: {
         m->set_animation(PIKMIN_ANIM_WALKING);
+        break;
+    }
     }
     
     m->track_info = new track_info_struct(tra_ptr);

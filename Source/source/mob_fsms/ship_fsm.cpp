@@ -54,9 +54,10 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     mob* delivery = (mob*) info1;
     ship* s_ptr = (ship*) m;
     
-    if(delivery->type->category->id == MOB_CATEGORY_TREASURES) {
-    
-    } else if(delivery->type->category->id == MOB_CATEGORY_RESOURCES) {
+    switch(delivery->type->category->id) {
+    case MOB_CATEGORY_TREASURES: {
+        break;
+    } case MOB_CATEGORY_RESOURCES: {
         resource* r_ptr = (resource*) delivery;
         if(
             r_ptr->res_type->delivery_result ==
@@ -78,6 +79,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
                 game.states.gameplay_st->spray_stats[type_nr].nr_sprays++;
             }
         }
+        break;
+    }
     }
     
     particle p(

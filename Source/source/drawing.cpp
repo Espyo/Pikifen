@@ -240,24 +240,32 @@ void gameplay::draw_cursor(
                     else
                         alpha_mult = 1;
                         
-                    if(d == 0) {
+                    switch(d) {
+                    case 0: {
                         //Red.
                         c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
-                    } else if(d == 1) {
+                        break;
+                    } case 1: {
                         //Orange.
                         c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
-                    } else if(d == 2) {
+                        break;
+                    } case 2: {
                         //Lime.
                         c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
-                    } else if(d == 3) {
+                        break;
+                    } case 3: {
                         //Cyan.
                         c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
-                    } else if(d == 4) {
+                        break;
+                    } case 4: {
                         //Blue.
                         c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
-                    } else {
+                        break;
+                    } default: {
                         //Purple.
                         c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
+                        break;
+                    }
                     }
                     
                     al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
@@ -476,19 +484,24 @@ void gameplay::draw_hud() {
         SUBGROUP_TYPE_CATEGORIES c =
             cur_leader_ptr->group->cur_standby_type->get_category();
             
-        if(c == SUBGROUP_TYPE_CATEGORY_LEADER) {
+        switch(c) {
+        case SUBGROUP_TYPE_CATEGORY_LEADER: {
             leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
             standby_bmp = l_ptr->lea_type->bmp_icon;
+            break;
             
-        } else if(c == SUBGROUP_TYPE_CATEGORY_PIKMIN) {
+        } case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
             pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
             standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
             standby_mat_bmp =
                 p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
-                
-        } else {
-            standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+            break;
             
+        } default: {
+            standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+            break;
+            
+        }
         }
     }
     if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
@@ -928,12 +941,17 @@ void gameplay::draw_ingame_text() {
                 for(size_t h = 0; h < s->hitboxes.size(); ++h) {
                     hitbox* h_ptr = &s->hitboxes[h];
                     ALLEGRO_COLOR hc;
-                    if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                    switch(h_ptr->type) {
+                    case HITBOX_TYPE_NORMAL: {
                         hc = al_map_rgba(0, 128, 0, 192); //Green.
-                    } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                        break;
+                    } case HITBOX_TYPE_ATTACK: {
                         hc = al_map_rgba(128, 0, 0, 192); //Red.
-                    } else {
+                        break;
+                    } case HITBOX_TYPE_DISABLED: {
                         hc = al_map_rgba(128, 128, 0, 192); //Yellow.
+                        break;
+                    }
                     }
                     point p =
                         mob_ptr->pos + rotate_point(h_ptr->pos, mob_ptr->angle);
@@ -1428,20 +1446,26 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             world_component c;
             c.mob_limb_ptr = mob_ptr;
             
-            if(method == LIMB_DRAW_BELOW_BOTH) {
+            switch(method) {
+            case LIMB_DRAW_BELOW_BOTH: {
                 c.z = std::min(mob_ptr->z, mob_ptr->parent->m->z);
-            } else if(method == LIMB_DRAW_BELOW_CHILD) {
+                break;
+            } case LIMB_DRAW_BELOW_CHILD: {
                 c.z = mob_ptr->z;
-            } else if(method == LIMB_DRAW_BELOW_PARENT) {
+                break;
+            } case LIMB_DRAW_BELOW_PARENT: {
                 c.z = mob_ptr->parent->m->z;
-            } else if(method == LIMB_DRAW_ABOVE_PARENT) {
+                break;
+            } case LIMB_DRAW_ABOVE_PARENT: {
                 c.z =
                     mob_ptr->parent->m->z +
                     mob_ptr->parent->m->height +
                     0.001;
-            } else if(method == LIMB_DRAW_ABOVE_CHILD) {
+                break;
+            } case LIMB_DRAW_ABOVE_CHILD: {
                 c.z = mob_ptr->z + mob_ptr->height + 0.001;
-            } else if(method == LIMB_DRAW_ABOVE_BOTH) {
+                break;
+            } case LIMB_DRAW_ABOVE_BOTH: {
                 c.z =
                     std::max(
                         mob_ptr->parent->m->z +
@@ -1449,6 +1473,8 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                         0.001,
                         mob_ptr->z + mob_ptr->height + 0.001
                     );
+                break;
+            }
             }
             
             components.push_back(c);
@@ -1746,22 +1772,28 @@ void draw_control(
     }
     
     string name;
-    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
+    switch(c.type) {
+    case CONTROL_TYPE_KEYBOARD_KEY: {
         name = str_to_upper(al_keycode_to_name(c.button));
-    } else if(
-        c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ||
-        c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS
-    ) {
+        break;
+    } case CONTROL_TYPE_JOYSTICK_AXIS_NEG:
+    case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         name = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
         name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
-    } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
+        break;
+    } case CONTROL_TYPE_JOYSTICK_BUTTON: {
         name = i2s(c.button + 1);
-    } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
+        break;
+    } case CONTROL_TYPE_MOUSE_BUTTON: {
         name = "M" + i2s(c.button);
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_LEFT: {
         name = "MWL";
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
+        break;
+    } case CONTROL_TYPE_MOUSE_WHEEL_RIGHT: {
         name = "MWR";
+        break;
+    }
     }
     
     int x1, y1, x2, y2;

@@ -125,45 +125,60 @@ void area_editor::change_to_right_frame() {
     frm_toolbar->show();
     hide_all_frames();
     
-    if(state == EDITOR_STATE_MAIN) {
+    switch(state) {
+    case EDITOR_STATE_MAIN: {
         frm_main->show();
         update_main_frame();
-    } else if(state == EDITOR_STATE_LAYOUT) {
+        break;
+    } case EDITOR_STATE_LAYOUT: {
         frm_layout->show();
         sector_to_gui();
-    } else if(state == EDITOR_STATE_ASB) {
+        break;
+    } case EDITOR_STATE_ASB: {
         frm_asb->show();
         asb_to_gui();
-    } else if(state == EDITOR_STATE_TEXTURE) {
+        break;
+    } case EDITOR_STATE_TEXTURE: {
         frm_texture->show();
         frm_toolbar->hide();
-    } else if(state == EDITOR_STATE_ASA) {
+        break;
+    } case EDITOR_STATE_ASA: {
         frm_asa->show();
         asa_to_gui();
-    } else if(state == EDITOR_STATE_MOBS) {
+        break;
+    } case EDITOR_STATE_MOBS: {
         frm_mobs->show();
         mob_to_gui();
-    } else if(state == EDITOR_STATE_PATHS) {
+        break;
+    } case EDITOR_STATE_PATHS: {
         frm_paths->show();
         path_to_gui();
-    } else if(state == EDITOR_STATE_DETAILS) {
+        break;
+    } case EDITOR_STATE_DETAILS: {
         frm_details->show();
         details_to_gui();
-    } else if(state == EDITOR_STATE_REVIEW) {
+        break;
+    } case EDITOR_STATE_REVIEW: {
         frm_review->show();
         review_to_gui();
-    } else if(state == EDITOR_STATE_INFO) {
+        break;
+    } case EDITOR_STATE_INFO: {
         frm_info->show();
         info_to_gui();
-    } else if(state == EDITOR_STATE_TOOLS) {
+        break;
+    } case EDITOR_STATE_TOOLS: {
         frm_tools->show();
         tools_to_gui();
-    } else if(state == EDITOR_STATE_STT) {
+        break;
+    } case EDITOR_STATE_STT: {
         frm_stt->show();
         stt_to_gui();
-    } else if(state == EDITOR_STATE_OPTIONS) {
+        break;
+    } case EDITOR_STATE_OPTIONS: {
         frm_options->show();
         options_to_gui();
+        break;
+    }
     }
 }
 
@@ -825,15 +840,20 @@ void area_editor::options_to_gui() {
         frm_options, "chk_territory", game.options.area_editor_show_territory
     );
     
-    if(game.options.area_editor_view_mode == VIEW_MODE_TEXTURES) {
+    switch(game.options.area_editor_view_mode) {
+    case VIEW_MODE_TEXTURES: {
         set_radio_selection(frm_options, "rad_view_textures", true);
-        
-    } else if(game.options.area_editor_view_mode == VIEW_MODE_WIREFRAME) {
+        break;
+    } case VIEW_MODE_WIREFRAME: {
         set_radio_selection(frm_options, "rad_view_wireframe", true);
-    } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+        break;
+    } case VIEW_MODE_HEIGHTMAP: {
         set_radio_selection(frm_options, "rad_view_heightmap", true);
-    } else if(game.options.area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+        break;
+    } case VIEW_MODE_BRIGHTNESS: {
         set_radio_selection(frm_options, "rad_view_brightness", true);
+        break;
+    }
     }
     
     set_textbox_text(
@@ -870,12 +890,14 @@ void area_editor::path_to_gui() {
 void area_editor::pick(
     const size_t picker_id, const string &name, const string &category
 ) {
-    if(picker_id == PICKER_LOAD_AREA) {
+    switch(picker_id) {
+    case PICKER_LOAD_AREA: {
         cur_area_name = name;
         area_editor::load_area(false);
         update_main_frame();
+        break;
         
-    } else if(picker_id == PICKER_ADD_SECTOR_HAZARD) {
+    } case PICKER_ADD_SECTOR_HAZARD: {
         register_change("hazard addition");
         sector* s_ptr = *selected_sectors.begin();
         vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
@@ -886,15 +908,17 @@ void area_editor::pick(
         homogenize_selected_sectors();
         asb_to_gui();
         cur_hazard_nr = list.size();
+        break;
         
-    } else if(picker_id == PICKER_SET_SECTOR_TYPE) {
+    } case PICKER_SET_SECTOR_TYPE: {
         register_change("sector type change");
         sector* s_ptr = *selected_sectors.begin();
         s_ptr->type = game.sector_types.get_nr(name);
         homogenize_selected_sectors();
         asb_to_gui();
+        break;
         
-    } else if(picker_id == PICKER_SET_MOB_TYPE) {
+    } case PICKER_SET_MOB_TYPE: {
         register_change("object type change");
         mob_gen* m_ptr = *selected_mobs.begin();
         m_ptr->category = game.mob_categories.get_from_pname(category);
@@ -903,12 +927,15 @@ void area_editor::pick(
         last_mob_type = m_ptr->type;
         homogenize_selected_mobs();
         mob_to_gui();
+        break;
         
-    } else if(picker_id == PICKER_SET_WEATHER) {
+    } case PICKER_SET_WEATHER: {
         register_change("weather change");
         game.cur_area_data.weather_name = name;
         info_to_gui();
+        break;
         
+    }
     }
     
     frm_toolbar->show();
@@ -1000,18 +1027,20 @@ void area_editor::review_to_gui() {
         enable_widget(but_goto_prob);
     }
     
-    if(problem_type == EPT_NONE_YET) {
-    
+    switch(problem_type) {
+    case EPT_NONE_YET: {
         disable_widget(but_goto_prob);
         lbl_prob_title_1->text = "---";
+        break;
         
-    } else if(problem_type == EPT_NONE) {
-    
+    } case EPT_NONE: {
+
         disable_widget(but_goto_prob);
         lbl_prob_title_1->text = "No problems found.";
+        break;
         
-    } else if(problem_type == EPT_INTERSECTING_EDGES) {
-    
+    } case EPT_INTERSECTING_EDGES: {
+
         if(
             !problem_edge_intersection.e1 || !problem_edge_intersection.e2
         ) {
@@ -1051,9 +1080,10 @@ void area_editor::review_to_gui() {
                 floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
                       d.to_float())
             ) + "). Edges should never cross each other.";
-            
-    } else if(problem_type == EPT_BAD_SECTOR) {
-    
+        break;
+        
+    } case EPT_BAD_SECTOR: {
+
         if(non_simples.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1079,9 +1109,10 @@ void area_editor::review_to_gui() {
                 "by multiple edges of the sector. Split popular vertexes "
                 "if you must.";
         }
+        break;
         
-    } else if(problem_type == EPT_LONE_EDGE) {
-    
+    } case EPT_LONE_EDGE: {
+
         if(lone_edges.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1092,9 +1123,10 @@ void area_editor::review_to_gui() {
         lbl_prob_desc->text =
             "Likely leftover of something that went wrong. "
             "You probably want to drag one vertex into the other.";
-            
-    } else if(problem_type == EPT_OVERLAPPING_VERTEXES) {
-    
+        break;
+        
+    } case EPT_OVERLAPPING_VERTEXES: {
+
         if(!problem_vertex_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1107,9 +1139,10 @@ void area_editor::review_to_gui() {
             f2s(problem_vertex_ptr->x) + "," +
             f2s(problem_vertex_ptr->y) + "), and should likely be merged "
             "together.";
-            
-    } else if(problem_type == EPT_UNKNOWN_TEXTURE) {
-    
+        break;
+        
+    } case EPT_UNKNOWN_TEXTURE: {
+
         if(!problem_sector_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1119,16 +1152,18 @@ void area_editor::review_to_gui() {
         lbl_prob_title_1->text = "Sector with unknown";
         lbl_prob_title_2->text = "texture!";
         lbl_prob_desc->text = "Texture name: \"" + problem_string + "\".";
+        break;
         
-    } else if(problem_type == EPT_MISSING_LEADER) {
-    
+    } case EPT_MISSING_LEADER: {
+
         disable_widget(gui->widgets["frm_review"]->widgets["but_goto_prob"]);
         lbl_prob_title_1->text = "No leader!";
         lbl_prob_desc->text =
             "You need at least one leader to play.";
-            
-    } else if(problem_type == EPT_TYPELESS_MOB) {
-    
+        break;
+        
+    } case EPT_TYPELESS_MOB: {
+
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1137,10 +1172,11 @@ void area_editor::review_to_gui() {
         
         lbl_prob_title_1->text = "Mob with no";
         lbl_prob_title_2->text = "type!";
+        break;
         
         
-    } else if(problem_type == EPT_MOB_OOB) {
-    
+    } case EPT_MOB_OOB: {
+
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1149,10 +1185,11 @@ void area_editor::review_to_gui() {
         
         lbl_prob_title_1->text = "Mob out of";
         lbl_prob_title_2->text = "bounds!";
+        break;
         
         
-    } else if(problem_type == EPT_MOB_IN_WALL) {
-    
+    } case EPT_MOB_IN_WALL: {
+
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1161,10 +1198,11 @@ void area_editor::review_to_gui() {
         
         lbl_prob_title_1->text = "Mob stuck";
         lbl_prob_title_2->text = "in wall!";
+        break;
         
         
-    } else if(problem_type == EPT_SECTORLESS_BRIDGE) {
-    
+    } case EPT_SECTORLESS_BRIDGE: {
+
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1176,10 +1214,11 @@ void area_editor::review_to_gui() {
         lbl_prob_desc->text =
             "This bridge mob should be on a sector of the "
             "\"Bridge\" type.";
-            
-            
-    } else if(problem_type == EPT_LONE_PATH_STOP) {
-    
+        break;
+        
+        
+    } case EPT_LONE_PATH_STOP: {
+
         if(!problem_path_stop_ptr) {
             //Uh, old information. Try searching for problems again.
             find_problems();
@@ -1187,35 +1226,40 @@ void area_editor::review_to_gui() {
         }
         
         lbl_prob_title_1->text = "Lone path stop!";
+        break;
         
-    } else if(problem_type == EPT_PATHS_UNCONNECTED) {
-    
+    } case EPT_PATHS_UNCONNECTED: {
+
         disable_widget(but_goto_prob);
         lbl_prob_title_1->text = "Path split into";
         lbl_prob_title_2->text = "multiple parts!";
         lbl_prob_desc->text =
             "The path graph is split into two or more parts. Connect them.";
-            
-    } else if(problem_type == EPT_PATH_STOPS_TOGETHER) {
-    
+        break;
+        
+    } case EPT_PATH_STOPS_TOGETHER: {
+
         lbl_prob_title_1->text = "Two close path";
         lbl_prob_title_2->text = "stops!";
         lbl_prob_desc->text =
             "These two are very close together. Separate them.";
-            
-    } else if(problem_type == EPT_PATH_STOP_OOB) {
-    
+        break;
+        
+    } case EPT_PATH_STOP_OOB: {
+
         lbl_prob_title_1->text = "Path stop out";
         lbl_prob_title_2->text = "of bounds!";
+        break;
         
-    } else if(problem_type == EPT_INVALID_SHADOW) {
-    
+    } case EPT_INVALID_SHADOW: {
+
         lbl_prob_title_1->text = "Tree shadow with";
         lbl_prob_title_2->text = "invalid texture!";
         lbl_prob_desc->text = "Texture name: \"" + problem_string + "\".";
+        break;
         
     }
-    
+    }
 }
 
 
@@ -1225,18 +1269,24 @@ void area_editor::review_to_gui() {
 void area_editor::sector_to_gui() {
     lafi::button* but_sel_filter =
         (lafi::button*) frm_layout->widgets["but_sel_filter"];
-    if(selection_filter == SELECTION_FILTER_SECTORS) {
+        
+    switch(selection_filter) {
+    case SELECTION_FILTER_SECTORS: {
         but_sel_filter->icon = editor_icons[ICON_SECTORS];
         but_sel_filter->description =
             "Current selection filter: Sectors + edges + vertexes. (F)";
-    } else if(selection_filter == SELECTION_FILTER_EDGES) {
+        break;
+    } case SELECTION_FILTER_EDGES: {
         but_sel_filter->icon = editor_icons[ICON_EDGES];
         but_sel_filter->description =
             "Current selection filter: Edges + vertexes. (F)";
-    } else {
+        break;
+    } case SELECTION_FILTER_VERTEXES: {
         but_sel_filter->icon = editor_icons[ICON_VERTEXES];
         but_sel_filter->description =
             "Current selection filter: Vertexes only. (F)";
+        break;
+    }
     }
     
     frm_sector->hide();
@@ -1286,12 +1336,17 @@ void area_editor::select_different_hazard(const bool next) {
  * Loads the current sector texture transformer data onto the GUI.
  */
 void area_editor::stt_to_gui() {
-    if(stt_mode == 0) {
+    switch(stt_mode) {
+    case 0: {
         set_radio_selection(frm_stt, "rad_offset", true);
-    } else if(stt_mode == 1) {
+        break;
+    } case 1: {
         set_radio_selection(frm_stt, "rad_scale", true);
-    } else {
+        break;
+    } default: {
         set_radio_selection(frm_stt, "rad_angle", true);
+        break;
+    }
     }
 }
 
@@ -1381,18 +1436,24 @@ void area_editor::update_toolbar() {
     ALLEGRO_BITMAP* new_snap_icon = NULL;
     string new_snap_name;
     
-    if(snap_mode == SNAP_GRID) {
+    switch(snap_mode) {
+    case SNAP_GRID: {
         new_snap_name = "Grid";
         new_snap_icon = editor_icons[ICON_SNAP_GRID];
-    } else if(snap_mode == SNAP_VERTEXES) {
+        break;
+    } case SNAP_VERTEXES: {
         new_snap_name = "Vertexes";
         new_snap_icon = editor_icons[ICON_SNAP_VERTEXES];
-    } else if(snap_mode == SNAP_EDGES) {
+        break;
+    } case SNAP_EDGES: {
         new_snap_name = "Edges";
         new_snap_icon = editor_icons[ICON_SNAP_EDGES];
-    } else if(snap_mode == SNAP_NOTHING) {
+        break;
+    } case SNAP_NOTHING: {
         new_snap_name = "Off. Shift also disables snapping";
         new_snap_icon = editor_icons[ICON_SNAP_NOTHING];
+        break;
+    }
     }
     
     but_snap->description =

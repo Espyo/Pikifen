@@ -26,7 +26,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_F1: {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
             emit_status_bar_message(
@@ -37,8 +38,9 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug edge number display.", false
             );
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
+    } case ALLEGRO_KEY_F2: {
         debug_sector_nrs = !debug_sector_nrs;
         if(debug_sector_nrs) {
             emit_status_bar_message(
@@ -49,8 +51,9 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug sector number display.", false
             );
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F3) {
+    } case ALLEGRO_KEY_F3: {
         debug_vertex_nrs = !debug_vertex_nrs;
         if(debug_vertex_nrs) {
             emit_status_bar_message(
@@ -61,8 +64,9 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug vertex number display.", false
             );
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F4) {
+    } case ALLEGRO_KEY_F4: {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
             emit_status_bar_message(
@@ -73,8 +77,9 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug triangulation display.", false
             );
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F5) {
+    } case ALLEGRO_KEY_F5: {
         debug_path_nrs = !debug_path_nrs;
         if(debug_path_nrs) {
             emit_status_bar_message(
@@ -85,6 +90,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug path number display.", false
             );
         }
+        break;
+    }
     }
 }
 
@@ -97,41 +104,53 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_LEFT: {
         game.cam.pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+    } case ALLEGRO_KEY_RIGHT: {
         game.cam.pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+    } case ALLEGRO_KEY_UP: {
         game.cam.pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+    } case ALLEGRO_KEY_DOWN: {
         game.cam.pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
+    } case ALLEGRO_KEY_MINUS: {
         zoom(game.cam.zoom - (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
+    } case ALLEGRO_KEY_EQUALS: {
         zoom(game.cam.zoom + (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_0) {
+    } case ALLEGRO_KEY_0: {
         if(game.cam.zoom == 1.0f) {
             game.cam.pos.x = 0.0f;
             game.cam.pos.y = 0.0f;
         } else {
             zoom(1.0f, false);
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R) {
+    } case ALLEGRO_KEY_R: {
         rotate_mob_gens_to_cursor();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_X) {
+    } case ALLEGRO_KEY_X: {
         frm_toolbar->widgets["but_snap"]->simulate_click();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+    } case ALLEGRO_KEY_BACKSPACE: {
         undo_layout_drawing_node();
+        break;
         
+    }
     }
 }
 
@@ -144,26 +163,46 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_reload"]->simulate_click();
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_L: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_reload"]->simulate_click();
+        }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_P && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_play"]->simulate_click();
+    } case ALLEGRO_KEY_P: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_play"]->simulate_click();
+        }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_quit"]->simulate_click();
+    } case ALLEGRO_KEY_Q: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_quit"]->simulate_click();
+        }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_reference"]->simulate_click();
+    } case ALLEGRO_KEY_R: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_reference"]->simulate_click();
+        }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
-        frm_toolbar->widgets["but_save"]->simulate_click();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            frm_toolbar->widgets["but_undo"]->simulate_click();
+    } case ALLEGRO_KEY_S: {
+        if(is_ctrl_pressed) {
+            frm_toolbar->widgets["but_save"]->simulate_click();
+            break;
         }
         
+    } case ALLEGRO_KEY_Z: {
+        if(is_ctrl_pressed) {
+            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+                frm_toolbar->widgets["but_undo"]->simulate_click();
+            }
+        }
+        break;
+        
+    }
     }
 }
 
@@ -176,80 +215,92 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_1: {
         frm_paths->widgets["rad_one_way"]->simulate_click();
         frm_stt->widgets["rad_offset"]->simulate_click();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_2) {
+    } case ALLEGRO_KEY_2: {
         frm_paths->widgets["rad_normal"]->simulate_click();
         frm_stt->widgets["rad_scale"]->simulate_click();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_3) {
+    } case ALLEGRO_KEY_3: {
         frm_stt->widgets["rad_angle"]->simulate_click();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            if(state == EDITOR_STATE_LAYOUT) {
-                selected_edges.insert(
-                    game.cur_area_data.edges.begin(),
-                    game.cur_area_data.edges.end()
-                );
-                selected_sectors.insert(
-                    game.cur_area_data.sectors.begin(),
-                    game.cur_area_data.sectors.end()
-                );
-                selected_vertexes.insert(
-                    game.cur_area_data.vertexes.begin(),
-                    game.cur_area_data.vertexes.end()
-                );
-                sector_to_gui();
-                
-            } else if(state == EDITOR_STATE_MOBS) {
-                selected_mobs.insert(
-                    game.cur_area_data.mob_generators.begin(),
-                    game.cur_area_data.mob_generators.end()
-                );
-                mob_to_gui();
-                
-            } else if(state == EDITOR_STATE_PATHS) {
-                selected_path_stops.insert(
-                    game.cur_area_data.path_stops.begin(),
-                    game.cur_area_data.path_stops.end()
-                );
-                path_to_gui();
+    } case ALLEGRO_KEY_A: {
+        if(is_ctrl_pressed) {
+            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+                if(state == EDITOR_STATE_LAYOUT) {
+                    selected_edges.insert(
+                        game.cur_area_data.edges.begin(),
+                        game.cur_area_data.edges.end()
+                    );
+                    selected_sectors.insert(
+                        game.cur_area_data.sectors.begin(),
+                        game.cur_area_data.sectors.end()
+                    );
+                    selected_vertexes.insert(
+                        game.cur_area_data.vertexes.begin(),
+                        game.cur_area_data.vertexes.end()
+                    );
+                    sector_to_gui();
+                    
+                } else if(state == EDITOR_STATE_MOBS) {
+                    selected_mobs.insert(
+                        game.cur_area_data.mob_generators.begin(),
+                        game.cur_area_data.mob_generators.end()
+                    );
+                    mob_to_gui();
+                    
+                } else if(state == EDITOR_STATE_PATHS) {
+                    selected_path_stops.insert(
+                        game.cur_area_data.path_stops.begin(),
+                        game.cur_area_data.path_stops.end()
+                    );
+                    path_to_gui();
+                }
             }
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+    } case ALLEGRO_KEY_C: {
         if(!moving && !selecting) {
             frm_layout->widgets["but_circle"]->simulate_click();
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_D) {
+    } case ALLEGRO_KEY_D: {
         if(!moving && !selecting) {
             frm_mobs->widgets["but_duplicate"]->simulate_click();
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
+    } case ALLEGRO_KEY_F: {
         frm_layout->widgets["but_sel_filter"]->simulate_click();
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
+    } case ALLEGRO_KEY_N: {
         if(!moving && !selecting) {
             frm_layout->widgets["but_new"]->simulate_click();
             frm_mobs->widgets["but_new"]->simulate_click();
             frm_paths->widgets["but_draw"]->simulate_click();
             frm_details->widgets["but_new"]->simulate_click();
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
+    } case ALLEGRO_KEY_DELETE: {
         if(!moving && !selecting) {
             frm_layout->widgets["but_rem"]->simulate_click();
             frm_mobs->widgets["but_del"]->simulate_click();
             frm_paths->widgets["but_del"]->simulate_click();
             frm_details->widgets["but_del"]->simulate_click();
         }
+        break;
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+    } case ALLEGRO_KEY_HOME: {
         bool got_something = false;
         point min_coords, max_coords;
         
@@ -308,7 +359,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
         center_camera(min_coords, max_coords);
         
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+        break;
+        
+    } case ALLEGRO_KEY_ESCAPE: {
         if(
             state == EDITOR_STATE_LAYOUT ||
             state == EDITOR_STATE_ASA ||
@@ -359,7 +412,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         } else if(state == EDITOR_STATE_MAIN) {
             frm_toolbar->widgets["but_quit"]->simulate_click();
         }
+        break;
         
+    }
     }
 }
 
@@ -425,537 +480,584 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+
+        switch(sub_state) {
+        case EDITOR_SUB_STATE_DRAWING: {
     
-        //Drawing the layout.
-        point hotspot = snap_point(game.mouse_cursor_w);
-        
-        //First, check if the user is trying to undo the previous node.
-        if(
-            !drawing_nodes.empty() &&
-            dist(
-                hotspot,
-                point(
-                    drawing_nodes.back().snapped_spot.x,
-                    drawing_nodes.back().snapped_spot.y
-                )
-            ) <= VERTEX_MERGE_RADIUS / game.cam.zoom
-        ) {
-            undo_layout_drawing_node();
-            return;
-        }
-        
-        if(drawing_nodes.empty()) {
-            //First node.
-            drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+            //Drawing the layout.
+            point hotspot = snap_point(game.mouse_cursor_w);
             
-        } else {
-        
-            check_drawing_line(hotspot);
-            
-            if(drawing_line_error != DRAWING_LINE_NO_ERROR) {
-                handle_line_error();
-                
-            } else if(
-                dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
-                VERTEX_MERGE_RADIUS / game.cam.zoom
+            //First, check if the user is trying to undo the previous node.
+            if(
+                !drawing_nodes.empty() &&
+                dist(
+                    hotspot,
+                    point(
+                        drawing_nodes.back().snapped_spot.x,
+                        drawing_nodes.back().snapped_spot.y
+                    )
+                ) <= VERTEX_MERGE_RADIUS / game.cam.zoom
             ) {
-                //Back to the first vertex. Finish the drawing.
-                finish_layout_drawing();
-                
-            } else {
-                //Add a new node.
+                undo_layout_drawing_node();
+                return;
+            }
+            
+            if(drawing_nodes.empty()) {
+                //First node.
                 drawing_nodes.push_back(layout_drawing_node(this, hotspot));
                 
-            }
-        }
-        
-        
-    } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-    
-        //Create a new circular sector.
-        point hotspot = snap_point(game.mouse_cursor_w);
-        
-        if(new_circle_sector_step == 0) {
-            new_circle_sector_center = hotspot;
-            new_circle_sector_anchor = new_circle_sector_center;
-            new_circle_sector_step++;
-            
-        } else if(new_circle_sector_step == 1) {
-            new_circle_sector_anchor = hotspot;
-            set_new_circle_sector_points();
-            new_circle_sector_step++;
-            
-        } else {
-            set_new_circle_sector_points();
-            
-            bool all_valid = true;
-            for(size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e) {
-                if(!new_circle_sector_valid_edges[e]) {
-                    all_valid = false;
-                    break;
-                }
-            }
-            if(!all_valid) {
-                emit_status_bar_message(
-                    "Some lines touch existing edges!", true
-                );
             } else {
-                finish_circle_sector();
-            }
             
-        }
-        
-    } else if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
-    
-        //Create a mob where the cursor is.
-        register_change("object creation");
-        sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_point(game.mouse_cursor_w);
-        
-        mob_category* category_to_use = last_mob_category;
-        if(!category_to_use) {
-            category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
-        }
-        mob_type* type_to_use = last_mob_type;
-        if(!type_to_use) {
-            type_to_use = game.config.pikmin_order[0];
-        }
-        
-        game.cur_area_data.mob_generators.push_back(
-            new mob_gen(category_to_use, hotspot, type_to_use)
-        );
-        
-        last_mob_category = category_to_use;
-        last_mob_type = type_to_use;
-        
-        selected_mobs.insert(game.cur_area_data.mob_generators.back());
-        mob_to_gui();
-        
-    } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
-    
-        //Duplicate the current mobs to where the cursor is.
-        register_change("object duplication");
-        sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_point(game.mouse_cursor_w);
-        
-        point selection_tl = (*selected_mobs.begin())->pos;
-        point selection_br = selection_tl;
-        for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
-            if(m == selected_mobs.begin()) continue;
-            if((*m)->pos.x < selection_tl.x) {
-                selection_tl.x = (*m)->pos.x;
-            }
-            if((*m)->pos.x > selection_br.x) {
-                selection_br.x = (*m)->pos.x;
-            }
-            if((*m)->pos.y < selection_tl.y) {
-                selection_tl.y = (*m)->pos.y;
-            }
-            if((*m)->pos.y > selection_br.y) {
-                selection_br.y = (*m)->pos.y;
-            }
-        }
-        point selection_center = (selection_br + selection_tl) / 2.0;
-        set<mob_gen*> mobs_to_select;
-        
-        for(auto m : selected_mobs) {
-            mob_gen* new_mg = new mob_gen(*m);
-            new_mg->pos = point(hotspot + (m->pos) - selection_center);
-            game.cur_area_data.mob_generators.push_back(new_mg);
-            mobs_to_select.insert(new_mg);
-        }
-        
-        clear_selection();
-        selected_mobs = mobs_to_select;
-        mob_to_gui();
-        
-    } else if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
-    
-        //Link two mobs.
-        mob_gen* target = get_mob_under_point(game.mouse_cursor_w);
-        if(!target) return;
-        
-        for(auto m : selected_mobs) {
-            if(m == target) {
-                emit_status_bar_message(
-                    "You can't link to an object to itself!", false
-                );
-                return;
-            }
-        }
-        mob_gen* m_ptr = *(selected_mobs.begin());
-        for(size_t l = 0; l < m_ptr->links.size(); ++l) {
-            if(m_ptr->links[l] == target) {
-                emit_status_bar_message(
-                    "The object already links to that object!", false
-                );
-                return;
-            }
-        }
-        
-        register_change("Object link creation");
-        
-        m_ptr->links.push_back(target);
-        m_ptr->link_nrs.push_back(game.cur_area_data.find_mob_gen_nr(target));
-        
-        homogenize_selected_mobs();
-        
-        sub_state = EDITOR_SUB_STATE_NONE;
-        mob_to_gui();
-        
-        
-    } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
-    
-        //Delete a mob link.
-        mob_gen* target = get_mob_under_point(game.mouse_cursor_w);
-        mob_gen* m_ptr = *(selected_mobs.begin());
-        
-        if(!target) {
-            std::pair<mob_gen*, mob_gen*> data1;
-            std::pair<mob_gen*, mob_gen*> data2;
-            if(!get_mob_link_under_point(game.mouse_cursor_w, &data1, &data2)) {
-                return;
-            }
-            
-            if(
-                data1.first != m_ptr &&
-                data1.second != m_ptr &&
-                data2.first != m_ptr &&
-                data2.second != m_ptr
-            ) {
-                emit_status_bar_message(
-                    "That link does not belong to the current object!", false
-                );
-                return;
-            }
-            
-            if(data1.first == m_ptr) {
-                target = data1.second;
-            } else if(data2.first == m_ptr) {
-                target = data2.second;
-            }
-        }
-        
-        size_t link_i = 0;
-        for(; link_i < m_ptr->links.size(); ++link_i) {
-            if(m_ptr->links[link_i] == target) {
-                break;
-            }
-        }
-        
-        if(link_i == m_ptr->links.size()) {
-            emit_status_bar_message(
-                "That object is not linked by the current one!", false
-            );
-            return;
-        } else {
-            register_change("Object link deletion");
-            m_ptr->links.erase(m_ptr->links.begin() + link_i);
-            m_ptr->link_nrs.erase(m_ptr->link_nrs.begin() + link_i);
-        }
-        
-        homogenize_selected_mobs();
-        
-        sub_state = EDITOR_SUB_STATE_NONE;
-        mob_to_gui();
-        
-    } else if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
-    
-        //Drawing a path.
-        point hotspot = snap_point(game.mouse_cursor_w);
-        path_stop* clicked_stop = get_path_stop_under_point(hotspot);
-        
-        if(path_drawing_stop_1) {
-            path_stop* next_stop = NULL;
-            if(clicked_stop) {
-                if(clicked_stop == path_drawing_stop_1) {
-                    path_drawing_stop_1 = NULL;
+                check_drawing_line(hotspot);
+                
+                if(drawing_line_error != DRAWING_LINE_NO_ERROR) {
+                    handle_line_error();
+                    
+                } else if(
+                    dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
+                    VERTEX_MERGE_RADIUS / game.cam.zoom
+                ) {
+                    //Back to the first vertex. Finish the drawing.
+                    finish_layout_drawing();
+                    
                 } else {
-                    next_stop = clicked_stop;
+                    //Add a new node.
+                    drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                    
                 }
-            } else {
-                register_change("path stop creation");
-                next_stop = new path_stop(hotspot);
-                game.cur_area_data.path_stops.push_back(next_stop);
             }
             
-            if(next_stop) {
-                register_change("path stop link");
-                path_drawing_stop_1->add_link(
-                    next_stop, path_drawing_normals
-                );
-                game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
-                game.cur_area_data.fix_path_stop_nrs(next_stop);
-                path_drawing_stop_1 = next_stop;
-                next_stop->calculate_dists_plus_neighbors();
+            break;
+            
+        } case EDITOR_SUB_STATE_CIRCLE_SECTOR: {
+    
+            //Create a new circular sector.
+            point hotspot = snap_point(game.mouse_cursor_w);
+            
+            if(new_circle_sector_step == 0) {
+                new_circle_sector_center = hotspot;
+                new_circle_sector_anchor = new_circle_sector_center;
+                new_circle_sector_step++;
+                
+            } else if(new_circle_sector_step == 1) {
+                new_circle_sector_anchor = hotspot;
+                set_new_circle_sector_points();
+                new_circle_sector_step++;
+                
+            } else {
+                set_new_circle_sector_points();
+                
+                bool all_valid = true;
+                for(size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e) {
+                    if(!new_circle_sector_valid_edges[e]) {
+                        all_valid = false;
+                        break;
+                    }
+                }
+                if(!all_valid) {
+                    emit_status_bar_message(
+                        "Some lines touch existing edges!", true
+                    );
+                } else {
+                    finish_circle_sector();
+                }
+                
             }
             
-        } else {
-            if(clicked_stop) {
-                path_drawing_stop_1 = clicked_stop;
-            } else {
-                register_change("path stop creation");
-                path_drawing_stop_1 = new path_stop(hotspot);
-                game.cur_area_data.path_stops.push_back(path_drawing_stop_1);
+            break;
+            
+        } case EDITOR_SUB_STATE_NONE: {
+    
+            //Start a new layout selection or select something.
+            bool start_new_selection = true;
+            
+            vertex* clicked_vertex = NULL;
+            edge* clicked_edge = NULL;
+            sector* clicked_sector = NULL;
+            get_clicked_layout_element(
+                &clicked_vertex, &clicked_edge, &clicked_sector
+            );
+            
+            if(!is_shift_pressed) {
+                if(clicked_vertex || clicked_edge || clicked_sector) {
+                    start_new_selection = false;
+                }
+                
             }
+            
+            if(start_new_selection) {
+                clear_selection();
+                selecting = true;
+                selection_start = game.mouse_cursor_w;
+                selection_end = game.mouse_cursor_w;
+                
+            } else {
+            
+                if(clicked_vertex) {
+                    if(
+                        selected_vertexes.find(clicked_vertex) ==
+                        selected_vertexes.end()
+                    ) {
+                        if(!is_ctrl_pressed) {
+                            clear_selection();
+                        }
+                        select_vertex(clicked_vertex);
+                    }
+                } else if(clicked_edge) {
+                    if(
+                        selected_edges.find(clicked_edge) ==
+                        selected_edges.end()
+                    ) {
+                        if(!is_ctrl_pressed) {
+                            clear_selection();
+                        }
+                        select_edge(clicked_edge);
+                    }
+                } else {
+                    if(
+                        selected_sectors.find(clicked_sector) ==
+                        selected_sectors.end()
+                    ) {
+                        if(!is_ctrl_pressed) {
+                            clear_selection();
+                        }
+                        select_sector(clicked_sector);
+                    }
+                }
+                
+            }
+            
+            selection_homogenized = false;
+            sector_to_gui();
+            asa_to_gui();
+            asb_to_gui();
+            
+            break;
             
         }
-        
-        path_preview.clear(); //Clear so it doesn't reference deleted stops.
-        path_preview_timer.start(false);
-        
-    } else if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-    
-        //Create a new shadow where the cursor is.
-        register_change("tree shadow creation");
-        sub_state = EDITOR_SUB_STATE_NONE;
-        point hotspot = snap_point(game.mouse_cursor_w);
-        
-        tree_shadow* new_shadow = new tree_shadow(hotspot);
-        new_shadow->bitmap = game.bmp_error;
-        
-        game.cur_area_data.tree_shadows.push_back(new_shadow);
-        
-        select_tree_shadow(new_shadow);
-        details_to_gui();
-        
-    } else if(
-        state == EDITOR_STATE_LAYOUT &&
-        sub_state == EDITOR_SUB_STATE_NONE
-    ) {
-    
-        //Start a new layout selection or select something.
-        bool start_new_selection = true;
-        
-        vertex* clicked_vertex = NULL;
-        edge* clicked_edge = NULL;
-        sector* clicked_sector = NULL;
-        get_clicked_layout_element(
-            &clicked_vertex, &clicked_edge, &clicked_sector
-        );
-        
-        if(!is_shift_pressed) {
-            if(clicked_vertex || clicked_edge || clicked_sector) {
-                start_new_selection = false;
-            }
-            
         }
         
-        if(start_new_selection) {
+        break;
+        
+    } case EDITOR_STATE_MOBS: {
+
+        switch(sub_state) {
+        case EDITOR_SUB_STATE_NEW_MOB: {
+    
+            //Create a mob where the cursor is.
+            register_change("object creation");
+            sub_state = EDITOR_SUB_STATE_NONE;
+            point hotspot = snap_point(game.mouse_cursor_w);
+            
+            mob_category* category_to_use = last_mob_category;
+            if(!category_to_use) {
+                category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
+            }
+            mob_type* type_to_use = last_mob_type;
+            if(!type_to_use) {
+                type_to_use = game.config.pikmin_order[0];
+            }
+            
+            game.cur_area_data.mob_generators.push_back(
+                new mob_gen(category_to_use, hotspot, type_to_use)
+            );
+            
+            last_mob_category = category_to_use;
+            last_mob_type = type_to_use;
+            
+            selected_mobs.insert(game.cur_area_data.mob_generators.back());
+            mob_to_gui();
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_DUPLICATE_MOB: {
+    
+            //Duplicate the current mobs to where the cursor is.
+            register_change("object duplication");
+            sub_state = EDITOR_SUB_STATE_NONE;
+            point hotspot = snap_point(game.mouse_cursor_w);
+            
+            point selection_tl = (*selected_mobs.begin())->pos;
+            point selection_br = selection_tl;
+            for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+                if(m == selected_mobs.begin()) continue;
+                if((*m)->pos.x < selection_tl.x) {
+                    selection_tl.x = (*m)->pos.x;
+                }
+                if((*m)->pos.x > selection_br.x) {
+                    selection_br.x = (*m)->pos.x;
+                }
+                if((*m)->pos.y < selection_tl.y) {
+                    selection_tl.y = (*m)->pos.y;
+                }
+                if((*m)->pos.y > selection_br.y) {
+                    selection_br.y = (*m)->pos.y;
+                }
+            }
+            point selection_center = (selection_br + selection_tl) / 2.0;
+            set<mob_gen*> mobs_to_select;
+            
+            for(auto m : selected_mobs) {
+                mob_gen* new_mg = new mob_gen(*m);
+                new_mg->pos = point(hotspot + (m->pos) - selection_center);
+                game.cur_area_data.mob_generators.push_back(new_mg);
+                mobs_to_select.insert(new_mg);
+            }
+            
             clear_selection();
-            selecting = true;
-            selection_start = game.mouse_cursor_w;
-            selection_end = game.mouse_cursor_w;
+            selected_mobs = mobs_to_select;
+            mob_to_gui();
             
-        } else {
-        
-            if(clicked_vertex) {
-                if(
-                    selected_vertexes.find(clicked_vertex) ==
-                    selected_vertexes.end()
-                ) {
-                    if(!is_ctrl_pressed) {
-                        clear_selection();
-                    }
-                    select_vertex(clicked_vertex);
-                }
-            } else if(clicked_edge) {
-                if(
-                    selected_edges.find(clicked_edge) ==
-                    selected_edges.end()
-                ) {
-                    if(!is_ctrl_pressed) {
-                        clear_selection();
-                    }
-                    select_edge(clicked_edge);
-                }
-            } else {
-                if(
-                    selected_sectors.find(clicked_sector) ==
-                    selected_sectors.end()
-                ) {
-                    if(!is_ctrl_pressed) {
-                        clear_selection();
-                    }
-                    select_sector(clicked_sector);
-                }
-            }
+            break;
             
-        }
-        
-        selection_homogenized = false;
-        sector_to_gui();
-        asa_to_gui();
-        asb_to_gui();
-        
-    } else if(
-        state == EDITOR_STATE_MOBS &&
-        sub_state == EDITOR_SUB_STATE_NONE
-    ) {
+        } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
     
-        //Start a new mob selection or select something.
-        bool start_new_selection = true;
-        mob_gen* clicked_mob = get_mob_under_point(game.mouse_cursor_w);
-        
-        if(!is_shift_pressed) {
-            if(clicked_mob) {
-                start_new_selection = false;
-            }
-        }
-        
-        if(start_new_selection) {
-            clear_selection();
-            selecting = true;
-            selection_start = game.mouse_cursor_w;
-            selection_end = game.mouse_cursor_w;
+            //Link two mobs.
+            mob_gen* target = get_mob_under_point(game.mouse_cursor_w);
+            if(!target) return;
             
-        } else {
-            if(selected_mobs.find(clicked_mob) == selected_mobs.end()) {
-                if(!is_ctrl_pressed) {
-                    clear_selection();
-                }
-                selected_mobs.insert(clicked_mob);
-            }
-            
-        }
-        
-        selection_homogenized = false;
-        mob_to_gui();
-        
-    } else if(
-        state == EDITOR_STATE_PATHS &&
-        sub_state == EDITOR_SUB_STATE_NONE
-    ) {
-    
-        //First, check if the user clicked on a path preview checkpoint.
-        if(show_path_preview) {
-            for(unsigned char c = 0; c < 2; ++c) {
-                if(
-                    bbox_check(
-                        path_preview_checkpoints[c],
-                        game.mouse_cursor_w,
-                        PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom
-                    )
-                ) {
-                    clear_selection();
-                    moving_path_preview_checkpoint = c;
+            for(auto m : selected_mobs) {
+                if(m == target) {
+                    emit_status_bar_message(
+                        "You can't link to an object to itself!", false
+                    );
                     return;
                 }
             }
-        }
-        
-        //Start a new path selection or select something.
-        bool start_new_selection = true;
-        
-        path_stop* clicked_stop =
-            get_path_stop_under_point(game.mouse_cursor_w);
-        std::pair<path_stop*, path_stop*> clicked_link_data_1;
-        std::pair<path_stop*, path_stop*> clicked_link_data_2;
-        bool clicked_link =
-            get_path_link_under_point(
-                game.mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
-            );
-            
-        if(!is_shift_pressed) {
-            if(clicked_stop || clicked_link) {
-                start_new_selection = false;
-            }
-            
-        }
-        
-        if(start_new_selection) {
-            clear_selection();
-            selecting = true;
-            selection_start = game.mouse_cursor_w;
-            selection_end = game.mouse_cursor_w;
-            
-        } else {
-        
-            if(clicked_stop) {
-                if(
-                    selected_path_stops.find(clicked_stop) ==
-                    selected_path_stops.end()
-                ) {
-                    if(!is_ctrl_pressed) {
-                        clear_selection();
-                    }
-                    selected_path_stops.insert(clicked_stop);
-                }
-            } else {
-                if(
-                    selected_path_links.find(clicked_link_data_1) ==
-                    selected_path_links.end()
-                ) {
-                    if(!is_ctrl_pressed) {
-                        clear_selection();
-                    }
-                    selected_path_links.insert(clicked_link_data_1);
-                    if(clicked_link_data_2.first != NULL) {
-                        selected_path_links.insert(clicked_link_data_2);
-                    }
+            mob_gen* m_ptr = *(selected_mobs.begin());
+            for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+                if(m_ptr->links[l] == target) {
+                    emit_status_bar_message(
+                        "The object already links to that object!", false
+                    );
+                    return;
                 }
             }
             
-        }
-        
-        path_to_gui();
-        
-    } else if(
-        state == EDITOR_STATE_DETAILS &&
-        sub_state == EDITOR_SUB_STATE_NONE
-    ) {
+            register_change("Object link creation");
+            
+            m_ptr->links.push_back(target);
+            m_ptr->link_nrs.push_back(game.cur_area_data.find_mob_gen_nr(target));
+            
+            homogenize_selected_mobs();
+            
+            sub_state = EDITOR_SUB_STATE_NONE;
+            mob_to_gui();
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_DEL_MOB_LINK: {
     
-        bool transformation_handled = false;
-        if(selected_shadow) {
-            transformation_handled =
-                selected_shadow_transformation.handle_mouse_down(
-                    game.mouse_cursor_w
-                );
-            if(transformation_handled) {
-                selected_shadow->angle =
-                    selected_shadow_transformation.get_angle();
-                selected_shadow->center =
-                    selected_shadow_transformation.get_center();
-                selected_shadow->size =
-                    selected_shadow_transformation.get_size();
-                details_to_gui();
-            }
-        }
-        
-        if(!transformation_handled) {
-            //Select a tree shadow.
-            selected_shadow = NULL;
-            for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+            //Delete a mob link.
+            mob_gen* target = get_mob_under_point(game.mouse_cursor_w);
+            mob_gen* m_ptr = *(selected_mobs.begin());
             
-                tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
-                point min_coords, max_coords;
-                get_transformed_rectangle_bounding_box(
-                    s_ptr->center, s_ptr->size, s_ptr->angle,
-                    &min_coords, &max_coords
-                );
+            if(!target) {
+                std::pair<mob_gen*, mob_gen*> data1;
+                std::pair<mob_gen*, mob_gen*> data2;
+                if(!get_mob_link_under_point(game.mouse_cursor_w, &data1, &data2)) {
+                    return;
+                }
                 
                 if(
-                    game.mouse_cursor_w.x >= min_coords.x &&
-                    game.mouse_cursor_w.x <= max_coords.x &&
-                    game.mouse_cursor_w.y >= min_coords.y &&
-                    game.mouse_cursor_w.y <= max_coords.y
+                    data1.first != m_ptr &&
+                    data1.second != m_ptr &&
+                    data2.first != m_ptr &&
+                    data2.second != m_ptr
                 ) {
-                    select_tree_shadow(s_ptr);
+                    emit_status_bar_message(
+                        "That link does not belong to the current object!", false
+                    );
+                    return;
+                }
+                
+                if(data1.first == m_ptr) {
+                    target = data1.second;
+                } else if(data2.first == m_ptr) {
+                    target = data2.second;
+                }
+            }
+            
+            size_t link_i = 0;
+            for(; link_i < m_ptr->links.size(); ++link_i) {
+                if(m_ptr->links[link_i] == target) {
                     break;
                 }
             }
+            
+            if(link_i == m_ptr->links.size()) {
+                emit_status_bar_message(
+                    "That object is not linked by the current one!", false
+                );
+                return;
+            } else {
+                register_change("Object link deletion");
+                m_ptr->links.erase(m_ptr->links.begin() + link_i);
+                m_ptr->link_nrs.erase(m_ptr->link_nrs.begin() + link_i);
+            }
+            
+            homogenize_selected_mobs();
+            
+            sub_state = EDITOR_SUB_STATE_NONE;
+            mob_to_gui();
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_NONE: {
+    
+            //Start a new mob selection or select something.
+            bool start_new_selection = true;
+            mob_gen* clicked_mob = get_mob_under_point(game.mouse_cursor_w);
+            
+            if(!is_shift_pressed) {
+                if(clicked_mob) {
+                    start_new_selection = false;
+                }
+            }
+            
+            if(start_new_selection) {
+                clear_selection();
+                selecting = true;
+                selection_start = game.mouse_cursor_w;
+                selection_end = game.mouse_cursor_w;
+                
+            } else {
+                if(selected_mobs.find(clicked_mob) == selected_mobs.end()) {
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
+                    selected_mobs.insert(clicked_mob);
+                }
+                
+            }
+            
+            selection_homogenized = false;
+            mob_to_gui();
+            
+            break;
+            
+        }
         }
         
-        details_to_gui();
+        break;
         
-    } else if(state == EDITOR_STATE_TOOLS) {
+    } case EDITOR_STATE_PATHS: {
+
+        switch(sub_state) {
+        case EDITOR_SUB_STATE_PATH_DRAWING: {
+    
+            //Drawing a path.
+            point hotspot = snap_point(game.mouse_cursor_w);
+            path_stop* clicked_stop = get_path_stop_under_point(hotspot);
+            
+            if(path_drawing_stop_1) {
+                path_stop* next_stop = NULL;
+                if(clicked_stop) {
+                    if(clicked_stop == path_drawing_stop_1) {
+                        path_drawing_stop_1 = NULL;
+                    } else {
+                        next_stop = clicked_stop;
+                    }
+                } else {
+                    register_change("path stop creation");
+                    next_stop = new path_stop(hotspot);
+                    game.cur_area_data.path_stops.push_back(next_stop);
+                }
+                
+                if(next_stop) {
+                    register_change("path stop link");
+                    path_drawing_stop_1->add_link(
+                        next_stop, path_drawing_normals
+                    );
+                    game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
+                    game.cur_area_data.fix_path_stop_nrs(next_stop);
+                    path_drawing_stop_1 = next_stop;
+                    next_stop->calculate_dists_plus_neighbors();
+                }
+                
+            } else {
+                if(clicked_stop) {
+                    path_drawing_stop_1 = clicked_stop;
+                } else {
+                    register_change("path stop creation");
+                    path_drawing_stop_1 = new path_stop(hotspot);
+                    game.cur_area_data.path_stops.push_back(path_drawing_stop_1);
+                }
+                
+            }
+            
+            path_preview.clear(); //Clear so it doesn't reference deleted stops.
+            path_preview_timer.start(false);
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_NONE: {
+    
+            //First, check if the user clicked on a path preview checkpoint.
+            if(show_path_preview) {
+                for(unsigned char c = 0; c < 2; ++c) {
+                    if(
+                        bbox_check(
+                            path_preview_checkpoints[c],
+                            game.mouse_cursor_w,
+                            PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom
+                        )
+                    ) {
+                        clear_selection();
+                        moving_path_preview_checkpoint = c;
+                        return;
+                    }
+                }
+            }
+            
+            //Start a new path selection or select something.
+            bool start_new_selection = true;
+            
+            path_stop* clicked_stop =
+                get_path_stop_under_point(game.mouse_cursor_w);
+            std::pair<path_stop*, path_stop*> clicked_link_data_1;
+            std::pair<path_stop*, path_stop*> clicked_link_data_2;
+            bool clicked_link =
+                get_path_link_under_point(
+                    game.mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
+                );
+                
+            if(!is_shift_pressed) {
+                if(clicked_stop || clicked_link) {
+                    start_new_selection = false;
+                }
+                
+            }
+            
+            if(start_new_selection) {
+                clear_selection();
+                selecting = true;
+                selection_start = game.mouse_cursor_w;
+                selection_end = game.mouse_cursor_w;
+                
+            } else {
+            
+                if(clicked_stop) {
+                    if(
+                        selected_path_stops.find(clicked_stop) ==
+                        selected_path_stops.end()
+                    ) {
+                        if(!is_ctrl_pressed) {
+                            clear_selection();
+                        }
+                        selected_path_stops.insert(clicked_stop);
+                    }
+                } else {
+                    if(
+                        selected_path_links.find(clicked_link_data_1) ==
+                        selected_path_links.end()
+                    ) {
+                        if(!is_ctrl_pressed) {
+                            clear_selection();
+                        }
+                        selected_path_links.insert(clicked_link_data_1);
+                        if(clicked_link_data_2.first != NULL) {
+                            selected_path_links.insert(clicked_link_data_2);
+                        }
+                    }
+                }
+                
+            }
+            
+            path_to_gui();
+            
+            break;
+            
+        }
+        }
+        
+        break;
+        
+    } case EDITOR_STATE_DETAILS: {
+
+        switch(sub_state) {
+        case EDITOR_SUB_STATE_NEW_SHADOW: {
+    
+            //Create a new shadow where the cursor is.
+            register_change("tree shadow creation");
+            sub_state = EDITOR_SUB_STATE_NONE;
+            point hotspot = snap_point(game.mouse_cursor_w);
+            
+            tree_shadow* new_shadow = new tree_shadow(hotspot);
+            new_shadow->bitmap = game.bmp_error;
+            
+            game.cur_area_data.tree_shadows.push_back(new_shadow);
+            
+            select_tree_shadow(new_shadow);
+            details_to_gui();
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_NONE: {
+    
+            bool transformation_handled = false;
+            if(selected_shadow) {
+                transformation_handled =
+                    selected_shadow_transformation.handle_mouse_down(
+                        game.mouse_cursor_w
+                    );
+                if(transformation_handled) {
+                    selected_shadow->angle =
+                        selected_shadow_transformation.get_angle();
+                    selected_shadow->center =
+                        selected_shadow_transformation.get_center();
+                    selected_shadow->size =
+                        selected_shadow_transformation.get_size();
+                    details_to_gui();
+                }
+            }
+            
+            if(!transformation_handled) {
+                //Select a tree shadow.
+                selected_shadow = NULL;
+                for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+                
+                    tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
+                    point min_coords, max_coords;
+                    get_transformed_rectangle_bounding_box(
+                        s_ptr->center, s_ptr->size, s_ptr->angle,
+                        &min_coords, &max_coords
+                    );
+                    
+                    if(
+                        game.mouse_cursor_w.x >= min_coords.x &&
+                        game.mouse_cursor_w.x <= max_coords.x &&
+                        game.mouse_cursor_w.y >= min_coords.y &&
+                        game.mouse_cursor_w.y <= max_coords.y
+                    ) {
+                        select_tree_shadow(s_ptr);
+                        break;
+                    }
+                }
+            }
+            
+            details_to_gui();
+            
+            break;
+            
+        }
+        }
+        
+        break;
+        
+    } case EDITOR_STATE_TOOLS: {
+
         if(reference_bitmap) {
             reference_transformation.handle_mouse_down(game.mouse_cursor_w);
             tools_to_gui();
         }
         
-    } else if(state == EDITOR_STATE_STT) {
+        break;
+        
+    } case EDITOR_STATE_STT: {
+
         moving = false;
         stt_drag_start = game.mouse_cursor_w;
         stt_sector = get_sector(game.mouse_cursor_w, NULL, false);
@@ -966,20 +1068,28 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             stt_orig_scale = stt_sector->texture_info.scale;
         }
         
-    } else if(state == EDITOR_STATE_REVIEW && show_cross_section) {
-        moving_cross_section_point = -1;
-        for(unsigned char p = 0; p < 2; ++p) {
-            if(
-                bbox_check(
-                    cross_section_checkpoints[p], game.mouse_cursor_w,
-                    CROSS_SECTION_POINT_RADIUS / game.cam.zoom
-                )
-            ) {
-                moving_cross_section_point = p;
-                break;
+        break;
+        
+    } case EDITOR_STATE_REVIEW: {
+
+        if(show_cross_section) {
+            moving_cross_section_point = -1;
+            for(unsigned char p = 0; p < 2; ++p) {
+                if(
+                    bbox_check(
+                        cross_section_checkpoints[p], game.mouse_cursor_w,
+                        CROSS_SECTION_POINT_RADIUS / game.cam.zoom
+                    )
+                ) {
+                    moving_cross_section_point = p;
+                    break;
+                }
             }
         }
         
+        break;
+        
+    }
     }
 }
 
@@ -1000,8 +1110,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         float selection_y2 = std::max(selection_start.y, selection_end.y);
         selection_end = game.mouse_cursor_w;
         
-        if(state == EDITOR_STATE_LAYOUT) {
-        
+        switch(state) {
+        case EDITOR_STATE_LAYOUT: {
+    
             //Selection box around the layout.
             clear_selection();
             
@@ -1071,8 +1182,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             asa_to_gui();
             asb_to_gui();
             
-        } else if(state == EDITOR_STATE_MOBS) {
-        
+            break;
+            
+        } case EDITOR_STATE_MOBS: {
+    
             //Selection box around mobs.
             clear_selection();
             
@@ -1093,8 +1206,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             selection_homogenized = false;
             mob_to_gui();
             
-        } else if(state == EDITOR_STATE_PATHS) {
-        
+            break;
+            
+        } case EDITOR_STATE_PATHS: {
+    
             //Selection box around path stops.
             clear_selection();
             
@@ -1135,165 +1250,192 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
             path_to_gui();
             
-        }
-        
-    } else if(
-        !selected_vertexes.empty() &&
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_LAYOUT
-    ) {
-    
-        //Move vertexes.
-        if(!moving) {
-            start_vertex_move();
-        }
-        
-        point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
-        point closest_vertex_new_p =
-            snap_point(move_closest_vertex_start_pos + mouse_offset);
-        point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
-        for(
-            auto v = selected_vertexes.begin();
-            v != selected_vertexes.end(); ++v
-        ) {
-            point orig = pre_move_vertex_coords[*v];
-            (*v)->x = orig.x + offset.x;
-            (*v)->y = orig.y + offset.y;
-        }
-        
-    } else if(
-        !selected_mobs.empty() &&
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_MOBS
-    ) {
-    
-        //Move mobs.
-        if(!moving) {
-            start_mob_move();
-        }
-        
-        point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
-        point closest_mob_new_p =
-            snap_point(move_closest_mob_start_pos + mouse_offset);
-        point offset = closest_mob_new_p - move_closest_mob_start_pos;
-        for(
-            auto m = selected_mobs.begin();
-            m != selected_mobs.end(); ++m
-        ) {
-            point orig = pre_move_mob_coords[*m];
-            (*m)->pos = orig + offset;
-        }
-        
-    } else if(
-        !selected_path_stops.empty() &&
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_PATHS
-    ) {
-    
-        //Move path stops.
-        if(!moving) {
-            start_path_stop_move();
-        }
-        
-        point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
-        point closest_stop_new_p =
-            snap_point(move_closest_stop_start_pos + mouse_offset);
-        point offset = closest_stop_new_p - move_closest_stop_start_pos;
-        for(
-            auto s = selected_path_stops.begin();
-            s != selected_path_stops.end(); ++s
-        ) {
-            point orig = pre_move_stop_coords[*s];
-            (*s)->pos.x = orig.x + offset.x;
-            (*s)->pos.y = orig.y + offset.y;
-        }
-        
-        for(
-            auto s = selected_path_stops.begin();
-            s != selected_path_stops.end(); ++s
-        ) {
-            (*s)->calculate_dists_plus_neighbors();
-        }
-        
-        path_preview_timer.start(false);
-        
-        
-    } else if(
-        selected_shadow &&
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_DETAILS
-    ) {
-    
-        if(selected_shadow) {
-            area_data* prepared_state = prepare_state();
-            if(
-                !selected_shadow_transformation.handle_mouse_move(
-                    snap_point(game.mouse_cursor_w)
-                )
-            ) {
-                forget_prepared_state(prepared_state);
-            } else {
-                register_change("tree shadow transformation", prepared_state);
-            }
-            selected_shadow->angle =
-                selected_shadow_transformation.get_angle();
-            selected_shadow->center =
-                selected_shadow_transformation.get_center();
-            selected_shadow->size =
-                selected_shadow_transformation.get_size();
-            details_to_gui();
+            break;
             
         }
-        
-    } else if(
-        moving_path_preview_checkpoint != -1 &&
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_PATHS
-    ) {
-    
-        //Move path preview checkpoints.
-        path_preview_checkpoints[moving_path_preview_checkpoint] =
-            snap_point(game.mouse_cursor_w);
-        path_preview_timer.start(false);
-        
-    } else if(state == EDITOR_STATE_TOOLS) {
-        //Move reference handle.
-        reference_transformation.handle_mouse_move(
-            snap_point(game.mouse_cursor_w)
-        );
-        tools_to_gui();
-        
-    } else if(state == EDITOR_STATE_STT) {
-        //Move sector texture transformation property.
-        if(stt_sector && moving) {
-            if(stt_mode == 0) {
-                register_change("texture offset change");
-                point diff = (game.mouse_cursor_w - stt_drag_start);
-                diff = rotate_point(diff, -stt_sector->texture_info.rot);
-                diff = diff / stt_sector->texture_info.scale;
-                stt_sector->texture_info.translation = stt_orig_offset + diff;
-            } else if(stt_mode == 1) {
-                register_change("texture scale change");
-                point diff = (game.mouse_cursor_w - stt_drag_start);
-                diff = rotate_point(diff, -stt_sector->texture_info.rot);
-                point drag_start_rot =
-                    rotate_point(stt_drag_start, -stt_sector->texture_info.rot);
-                diff = diff / drag_start_rot * stt_orig_scale;
-                stt_sector->texture_info.scale = stt_orig_scale + diff;
-            } else {
-                register_change("texture angle change");
-                float drag_start_a = get_angle(point(), stt_drag_start);
-                float cursor_a = get_angle(point(), game.mouse_cursor_w);
-                stt_sector->texture_info.rot =
-                    stt_orig_angle + (cursor_a - drag_start_a);
-            }
         }
         
-    } else if(state == EDITOR_STATE_REVIEW) {
-        //Move cross-section points.
-        if(moving_cross_section_point != -1) {
-            cross_section_checkpoints[moving_cross_section_point] =
-                snap_point(game.mouse_cursor_w);
+    } else {
+    
+        switch(state) {
+        case EDITOR_STATE_LAYOUT: {
+    
+            if(
+                !selected_vertexes.empty() &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                //Move vertexes.
+                if(!moving) {
+                    start_vertex_move();
+                }
+                
+                point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
+                point closest_vertex_new_p =
+                    snap_point(move_closest_vertex_start_pos + mouse_offset);
+                point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
+                for(
+                    auto v = selected_vertexes.begin();
+                    v != selected_vertexes.end(); ++v
+                ) {
+                    point orig = pre_move_vertex_coords[*v];
+                    (*v)->x = orig.x + offset.x;
+                    (*v)->y = orig.y + offset.y;
+                }
+            }
+            
+            break;
+            
+        } case EDITOR_STATE_MOBS: {
+    
+            if(
+                !selected_mobs.empty() &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                //Move mobs.
+                if(!moving) {
+                    start_mob_move();
+                }
+                
+                point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
+                point closest_mob_new_p =
+                    snap_point(move_closest_mob_start_pos + mouse_offset);
+                point offset = closest_mob_new_p - move_closest_mob_start_pos;
+                for(
+                    auto m = selected_mobs.begin();
+                    m != selected_mobs.end(); ++m
+                ) {
+                    point orig = pre_move_mob_coords[*m];
+                    (*m)->pos = orig + offset;
+                }
+            }
+            
+            break;
+            
+        } case EDITOR_STATE_PATHS: {
+    
+            if(
+                !selected_path_stops.empty() &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                //Move path stops.
+                if(!moving) {
+                    start_path_stop_move();
+                }
+                
+                point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
+                point closest_stop_new_p =
+                    snap_point(move_closest_stop_start_pos + mouse_offset);
+                point offset = closest_stop_new_p - move_closest_stop_start_pos;
+                for(
+                    auto s = selected_path_stops.begin();
+                    s != selected_path_stops.end(); ++s
+                ) {
+                    point orig = pre_move_stop_coords[*s];
+                    (*s)->pos.x = orig.x + offset.x;
+                    (*s)->pos.y = orig.y + offset.y;
+                }
+                
+                for(
+                    auto s = selected_path_stops.begin();
+                    s != selected_path_stops.end(); ++s
+                ) {
+                    (*s)->calculate_dists_plus_neighbors();
+                }
+                
+                path_preview_timer.start(false);
+                
+            } else if(
+                moving_path_preview_checkpoint != -1 &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                //Move path preview checkpoints.
+                path_preview_checkpoints[moving_path_preview_checkpoint] =
+                    snap_point(game.mouse_cursor_w);
+                path_preview_timer.start(false);
+            }
+            
+            break;
+            
+        } case EDITOR_STATE_DETAILS: {
+    
+            if(
+                selected_shadow &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                if(selected_shadow) {
+                    area_data* prepared_state = prepare_state();
+                    if(
+                        !selected_shadow_transformation.handle_mouse_move(
+                            snap_point(game.mouse_cursor_w)
+                        )
+                    ) {
+                        forget_prepared_state(prepared_state);
+                    } else {
+                        register_change("tree shadow transformation", prepared_state);
+                    }
+                    selected_shadow->angle =
+                        selected_shadow_transformation.get_angle();
+                    selected_shadow->center =
+                        selected_shadow_transformation.get_center();
+                    selected_shadow->size =
+                        selected_shadow_transformation.get_size();
+                    details_to_gui();
+                    
+                }
+            }
+            
+            break;
+            
+        } case EDITOR_STATE_TOOLS: {
+    
+            //Move reference handle.
+            reference_transformation.handle_mouse_move(
+                snap_point(game.mouse_cursor_w)
+            );
+            tools_to_gui();
+            
+            break;
+            
+        } case EDITOR_STATE_STT: {
+    
+            //Move sector texture transformation property.
+            if(stt_sector && moving) {
+                if(stt_mode == 0) {
+                    register_change("texture offset change");
+                    point diff = (game.mouse_cursor_w - stt_drag_start);
+                    diff = rotate_point(diff, -stt_sector->texture_info.rot);
+                    diff = diff / stt_sector->texture_info.scale;
+                    stt_sector->texture_info.translation = stt_orig_offset + diff;
+                } else if(stt_mode == 1) {
+                    register_change("texture scale change");
+                    point diff = (game.mouse_cursor_w - stt_drag_start);
+                    diff = rotate_point(diff, -stt_sector->texture_info.rot);
+                    point drag_start_rot =
+                        rotate_point(stt_drag_start, -stt_sector->texture_info.rot);
+                    diff = diff / drag_start_rot * stt_orig_scale;
+                    stt_sector->texture_info.scale = stt_orig_scale + diff;
+                } else {
+                    register_change("texture angle change");
+                    float drag_start_a = get_angle(point(), stt_drag_start);
+                    float cursor_a = get_angle(point(), game.mouse_cursor_w);
+                    stt_sector->texture_info.rot =
+                        stt_orig_angle + (cursor_a - drag_start_a);
+                }
+            }
+            
+            break;
+            
+        } case EDITOR_STATE_REVIEW: {
+    
+            //Move cross-section points.
+            if(moving_cross_section_point != -1) {
+                cross_section_checkpoints[moving_cross_section_point] =
+                    snap_point(game.mouse_cursor_w);
+            }
+            
+            break;
+            
+        }
         }
         
     }
@@ -1317,12 +1459,18 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         moving = false;
     }
     
-    if(state == EDITOR_STATE_DETAILS && selected_shadow) {
-        selected_shadow_transformation.handle_mouse_up();
+    switch(state) {
+    case EDITOR_STATE_DETAILS: {
+        if(selected_shadow) {
+            selected_shadow_transformation.handle_mouse_up();
+        }
+        break;
         
-    } else if(state == EDITOR_STATE_TOOLS) {
+    } case EDITOR_STATE_TOOLS: {
         reference_transformation.handle_mouse_up();
         tools_to_gui();
+        break;
+    }
     }
     
     moving_path_preview_checkpoint = -1;
