@@ -332,6 +332,9 @@ creator_tools_info::creator_tools_info() :
     mob_hurting_ratio(0.5) {
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
+    for(size_t k = 0; k < 20; ++k) {
+        keys[k] = CREATOR_TOOL_NONE;
+    }
 }
 
 

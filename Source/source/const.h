@@ -161,6 +161,19 @@ enum CREATOR_TOOL_IDS {
     CREATOR_TOOL_MOB_INFO,
     CREATOR_TOOL_NEW_PIKMIN,
     CREATOR_TOOL_TELEPORT,
+    N_CREATOR_TOOLS,
+};
+
+const string CREATOR_TOOL_NAMES[N_CREATOR_TOOLS] = {
+    "",
+    "area_image",
+    "change_speed",
+    "geometry_info",
+    "hitboxes",
+    "hurt_mob",
+    "mob_info",
+    "new_pikmin",
+    "teleport"
 };
 
 enum HUD_ITEMS {

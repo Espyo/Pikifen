@@ -158,7 +158,6 @@
     <File Name="../source/options.h"/>
     <File Name="../source/game.cpp"/>
     <File Name="../source/game.h"/>
-    <File Name="../source/mob_physics.cpp"/>
     <File Name="../source/mob_script_action.cpp"/>
     <File Name="../source/mob_script_action.h"/>
     <File Name="../source/world_component.cpp"/>
@@ -240,6 +239,7 @@
     <File Name="../source/LAFI/textbox.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/mob_physics.cpp"/>
     <File Name="../source/mobs/bouncer.cpp"/>
     <File Name="../source/mobs/bouncer.h"/>
     <File Name="../source/mobs/track.cpp"/>

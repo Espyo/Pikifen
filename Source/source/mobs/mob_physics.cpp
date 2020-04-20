@@ -10,9 +10,9 @@
 
 #include <algorithm>
 
-#include "mobs/mob.h"
+#include "mob.h"
 
-#include "game.h"
+#include "../game.h"
 
 using std::set;
 

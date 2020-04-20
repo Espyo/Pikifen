@@ -843,7 +843,6 @@ void save_creator_tools() {
     
     for(unsigned char k = 0; k < 20; k++) {
         string tool_key;
-        string tool_name;
         if(k < 10) {
             //The first ten indexes are the F2 - F11 keys.
             tool_key = "f" + i2s(k + 2);
@@ -851,24 +850,7 @@ void save_creator_tools() {
             //The second ten indexes are the 0 - 9 keys.
             tool_key = i2s(k - 10);
         }
-        
-        if(game.creator_tools.keys[k] == CREATOR_TOOL_AREA_IMAGE) {
-            tool_name = "area_image";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_CHANGE_SPEED) {
-            tool_name = "change_speed";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_GEOMETRY_INFO) {
-            tool_name = "geometry_info";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_HITBOXES) {
-            tool_name = "hitboxes";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_HURT_MOB) {
-            tool_name = "hurt_mob";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_MOB_INFO) {
-            tool_name = "mob_info";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_NEW_PIKMIN) {
-            tool_name = "new_pikmin";
-        } else if(game.creator_tools.keys[k] == CREATOR_TOOL_TELEPORT) {
-            tool_name = "teleport";
-        }
+        string tool_name = CREATOR_TOOL_NAMES[game.creator_tools.keys[k]];
         
         file.add(new data_node(tool_key, tool_name));
     }

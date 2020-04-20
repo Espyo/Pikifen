@@ -540,24 +540,10 @@ void load_creator_tools() {
             tool_name = file.get_child_by_name(i2s(k - 10))->value;
         }
         
-        if(tool_name == "area_image") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_AREA_IMAGE;
-        } else if(tool_name == "change_speed") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_CHANGE_SPEED;
-        } else if(tool_name == "geometry_info") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_GEOMETRY_INFO;
-        } else if(tool_name == "hitboxes") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_HITBOXES;
-        } else if(tool_name == "hurt_mob") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_HURT_MOB;
-        } else if(tool_name == "mob_info") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_MOB_INFO;
-        } else if(tool_name == "new_pikmin") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_NEW_PIKMIN;
-        } else if(tool_name == "teleport") {
-            game.creator_tools.keys[k] = CREATOR_TOOL_TELEPORT;
-        } else {
-            game.creator_tools.keys[k] = CREATOR_TOOL_NONE;
+        for(size_t t = 0; t < N_CREATOR_TOOLS; ++t) {
+            if(tool_name == CREATOR_TOOL_NAMES[t]) {
+                game.creator_tools.keys[k] = t;
+            }
         }
     }
     
