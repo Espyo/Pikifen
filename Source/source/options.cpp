@@ -148,11 +148,16 @@ void options_struct::load(data_node* file) {
     rs.set("window_position_hack", window_position_hack);
     
     target_fps = std::max(1, target_fps);
-    joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
-    joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
+    
     if(joystick_min_deadzone > joystick_max_deadzone) {
         std::swap(joystick_min_deadzone, joystick_max_deadzone);
     }
+    if(joystick_min_deadzone == joystick_max_deadzone) {
+        joystick_min_deadzone -= 0.1;
+        joystick_max_deadzone += 0.1;
+    }
+    joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
+    joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
     
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {

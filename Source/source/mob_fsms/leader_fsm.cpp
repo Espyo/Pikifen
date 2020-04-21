@@ -1666,10 +1666,12 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
  * info1: Pointer to a size_t with the spray's ID number.
  */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
-    m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
     
-    if(game.states.gameplay_st->spray_stats[spray_nr].nr_sprays == 0) return;
+    if(game.states.gameplay_st->spray_stats[spray_nr].nr_sprays == 0) {
+        m->fsm.set_state(LEADER_STATE_ACTIVE);
+        return;
+    }
     
     float cursor_angle =
         get_angle(m->pos, game.states.gameplay_st->leader_cursor_w);
@@ -1687,7 +1689,10 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             }
         }
         //If there is nothing to get sprayed, better not waste it.
-        if(affected_mobs.empty()) return;
+        if(affected_mobs.empty())  {
+            m->fsm.set_state(LEADER_STATE_ACTIVE);
+            return;
+        };
         
     } else {
         for(size_t am = 0; am < game.states.gameplay_st->mobs.all.size(); ++am) {
@@ -1736,6 +1741,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     game.states.gameplay_st->spray_stats[spray_nr].nr_sprays--;
     
+    m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);
 }
 

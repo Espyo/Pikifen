@@ -2990,15 +2990,12 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     
     if(!status_bmp) return;
-    bitmap_effect_info status_eff = effects;
-    status_eff.translation = m->pos;
-    status_eff.scale.x =
-        (m->type->radius * 2 * status_bmp_scale) /
-        al_get_bitmap_width(status_bmp);
-    status_eff.scale.y = -1;
-    status_eff.rotation = 0;
     
-    draw_bitmap_with_effects(status_bmp, status_eff);
+    draw_bitmap(
+        status_bmp,
+        m->pos,
+        point(m->type->radius * 2 * status_bmp_scale, -1)
+    );
 }
 
 

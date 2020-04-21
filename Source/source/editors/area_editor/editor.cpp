@@ -2909,6 +2909,8 @@ void area_editor::resize_everything(const float mult) {
  * mouse cursor is.
  */
 void area_editor::rotate_mob_gens_to_cursor() {
+    if(selected_mobs.empty()) return;
+    
     register_change("object rotation");
     selection_homogenized = false;
     for(auto m : selected_mobs) {

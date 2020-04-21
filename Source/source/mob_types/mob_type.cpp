@@ -59,7 +59,7 @@ mob_type::mob_type(size_t category_id) :
     ),
     hurtable_targets(
         MOB_TARGET_TYPE_PLAYER |
-        MOB_TARGET_TYPE_PLAYER |
+        MOB_TARGET_TYPE_ENEMY |
         MOB_TARGET_TYPE_FRAGILE
     ),
     starting_team(MOB_TEAM_NONE),
