@@ -91,7 +91,7 @@ void load_area(
         ) {
             log_error(
                 "Area " + name +
-                " refers to a non-existing weather condition, \"" +
+                " refers to an unknown weather condition, \"" +
                 game.cur_area_data.weather_name + "\"!",
                 weather_node
             );
@@ -772,7 +772,7 @@ void load_hazards() {
         if(!l_node->value.empty()) {
             if(game.liquids.find(l_node->value) == game.liquids.end()) {
                 log_error(
-                    "Liquid \"" + l_node->value + "\" not found!",
+                    "Unknown liquid \"" + l_node->value + "\"!",
                     l_node
                 );
             } else {

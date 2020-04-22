@@ -121,7 +121,7 @@ void animation_database::create_conversions(
         if(a_pos == INVALID) {
             log_error(
                 "Animation \"" + conversions[c].second + "\" is required "
-                "by the engine, but cannot be found!", file
+                "by the engine, but does not exist!", file
             );
         }
     }

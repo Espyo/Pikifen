@@ -145,8 +145,18 @@ void crash(const string &reason, const string &info, const int exit_status) {
         i2s(game.states.gameplay_st->particles.get_count()) + ".\n" +
         "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
         i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
-        "  Current leader: " ;
+        "  Current area: ";
         
+    if(!game.cur_area_data.name.empty()) {
+        error_str +=
+            game.cur_area_data.name + ", version " +
+            game.cur_area_data.version + ".\n";
+    } else {
+        error_str += "none.\n";
+    }
+    
+    error_str += "  Current leader: ";
+    
     if(game.states.gameplay_st->cur_leader_ptr) {
         error_str +=
             game.states.gameplay_st->cur_leader_ptr->type->name + ", at " +
@@ -617,7 +627,8 @@ void log_error(string s, data_node* d) {
             get_current_time(false) +
             "; Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-            "." + i2s(VERSION_REV) + "\n" + s;
+            "." + i2s(VERSION_REV) + ", game version " +
+            game.config.version + "\n" + s;
     }
     
     string prev_error_log;

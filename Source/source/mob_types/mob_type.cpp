@@ -307,7 +307,7 @@ void load_mob_type_from_file(
     if(spike_damage_node) {
         if(sd_it == game.spike_damage_types.end()) {
             log_error(
-                "Spike damage type \"" + spike_damage_str + "\" not found!",
+                "Unknown spike damage type \"" + spike_damage_str + "\"!",
                 spike_damage_node
             );
         } else {
@@ -339,7 +339,7 @@ void load_mob_type_from_file(
         auto sdv_it = game.spike_damage_types.find(vul_node->name);
         if(sdv_it == game.spike_damage_types.end()) {
             log_error(
-                "Spike damage type \"" + vul_node->name + "\" not found!",
+                "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
         } else {
@@ -580,8 +580,8 @@ void load_mob_type_from_file(
             }
             if(mt->first_state_nr == INVALID) {
                 log_error(
-                    "The name of the first state \"" +
-                    first_state_name + "\" is invalid!",
+                    "Unknown state \"" + first_state_name + "\" "
+                    "to set as the first state!",
                     first_state_name_node
                 );
             }
@@ -595,8 +595,8 @@ void load_mob_type_from_file(
                 }
                 if(mt->death_state_nr == INVALID) {
                     log_error(
-                        "The name of the death state \"" +
-                        mt->death_state_name + "\" is invalid!",
+                        "Unknown state \"" + mt->death_state_name + "\" "
+                        "to set as the death state!",
                         death_state_name_node
                     );
                 }

@@ -556,7 +556,7 @@ bool mob_action_loaders::start_particles(mob_action_call &call) {
         game.custom_particle_generators.end()
     ) {
         call.custom_error =
-            "Particle generator \"" + call.args[0] + "\" not found!";
+            "Unknown particle generator \"" + call.args[0] + "\"!";
         return false;
     }
     return true;
@@ -1652,7 +1652,8 @@ bool assert_actions(
                 log_error(
                     "There is an action \"" + actions[a]->action->name + "\" "
                     "placed after a \"set_state\" action, which means it will "
-                    "never get run!", dn
+                    "never get run! Make sure you didn't mean to call it "
+                    "before the \"set_state\" action.", dn
                 );
                 return false;
             }
