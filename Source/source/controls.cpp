@@ -775,7 +775,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 break;
                 
             } case CREATOR_TOOL_NEW_PIKMIN: {
-                if(mobs.pikmin.size() < game.config.max_pikmin_in_field) {
+                if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
                     pikmin_type* new_pikmin_type = game.mob_types.pikmin.begin()->second;
                     
                     auto p = game.mob_types.pikmin.begin();

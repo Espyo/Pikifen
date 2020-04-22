@@ -297,16 +297,16 @@ pikmin* get_closest_sprout(
     dist closest_distance = 0;
     pikmin* closest_pikmin = NULL;
     
-    size_t n_pikmin = game.states.gameplay_st->mobs.pikmin.size();
+    size_t n_pikmin = game.states.gameplay_st->mobs.pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; ++p) {
-        if(game.states.gameplay_st->mobs.pikmin[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
+        if(game.states.gameplay_st->mobs.pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
         
-        dist dis(pos, game.states.gameplay_st->mobs.pikmin[p]->pos);
+        dist dis(pos, game.states.gameplay_st->mobs.pikmin_list[p]->pos);
         if(closest_pikmin == NULL || dis < closest_distance) {
         
-            if(!(ignore_reserved || game.states.gameplay_st->mobs.pikmin[p]->pluck_reserved)) {
+            if(!(ignore_reserved || game.states.gameplay_st->mobs.pikmin_list[p]->pluck_reserved)) {
                 closest_distance = dis;
-                closest_pikmin = game.states.gameplay_st->mobs.pikmin[p];
+                closest_pikmin = game.states.gameplay_st->mobs.pikmin_list[p];
             }
         }
     }

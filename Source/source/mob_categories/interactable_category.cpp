@@ -46,7 +46,7 @@ mob* interactable_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     interactable* m = new interactable(pos, (interactable_type*) type, angle);
-    game.states.gameplay_st->mobs.interactable.push_back(m);
+    game.states.gameplay_st->mobs.interactables.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* interactable_category::create_type() {
  * Clears an interactable from the list of interactables.
  */
 void interactable_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.interactable.erase(
-        find(game.states.gameplay_st->mobs.interactable.begin(), game.states.gameplay_st->mobs.interactable.end(), (interactable*) m)
+    game.states.gameplay_st->mobs.interactables.erase(
+        find(game.states.gameplay_st->mobs.interactables.begin(), game.states.gameplay_st->mobs.interactables.end(), (interactable*) m)
     );
 }
 

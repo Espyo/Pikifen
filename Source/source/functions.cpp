@@ -160,7 +160,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<pikmin*> closest_pikmin = game.states.gameplay_st->mobs.pikmin;
+        vector<pikmin*> closest_pikmin = game.states.gameplay_st->mobs.pikmin_list;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (pikmin * p1, pikmin * p2) -> bool {

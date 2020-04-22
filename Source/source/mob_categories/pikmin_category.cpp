@@ -46,7 +46,7 @@ mob* pikmin_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     pikmin* m = new pikmin(pos, (pikmin_type*) type, angle);
-    game.states.gameplay_st->mobs.pikmin.push_back(m);
+    game.states.gameplay_st->mobs.pikmin_list.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* pikmin_category::create_type() {
  * Clears a Pikmin from the list of Pikmin.
  */
 void pikmin_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.pikmin.erase(
-        find(game.states.gameplay_st->mobs.pikmin.begin(), game.states.gameplay_st->mobs.pikmin.end(), (pikmin*) m)
+    game.states.gameplay_st->mobs.pikmin_list.erase(
+        find(game.states.gameplay_st->mobs.pikmin_list.begin(), game.states.gameplay_st->mobs.pikmin_list.end(), (pikmin*) m)
     );
 }
 

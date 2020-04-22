@@ -253,25 +253,25 @@ class treasure;
  */
 struct mob_lists {
     vector<mob*> all;
-    vector<bouncer*> bouncer;
-    vector<bridge*> bridge;
-    vector<converter*> converter;
-    vector<decoration*> decoration;
-    vector<drop*> drop;
-    vector<enemy*> enemy;
-    vector<group_task*> group_task;
-    vector<interactable*> interactable;
-    vector<leader*> leader;
-    vector<onion*> onion;
-    vector<pellet*> pellet;
-    vector<pikmin*> pikmin;
-    vector<pile*> pile;
-    vector<resource*> resource;
-    vector<scale*> scale;
-    vector<ship*> ship;
-    vector<tool*> tool;
-    vector<track*> track;
-    vector<treasure*> treasure;
+    vector<bouncer*> bouncers;
+    vector<bridge*> bridges;
+    vector<converter*> converters;
+    vector<decoration*> decorations;
+    vector<drop*> drops;
+    vector<enemy*> enemies;
+    vector<group_task*> group_tasks;
+    vector<interactable*> interactables;
+    vector<leader*> leaders;
+    vector<onion*> onions;
+    vector<pellet*> pellets;
+    vector<pikmin*> pikmin_list;
+    vector<pile*> piles;
+    vector<resource*> resources;
+    vector<scale*> scales;
+    vector<ship*> ships;
+    vector<tool*> tools;
+    vector<track*> tracks;
+    vector<treasure*> treasures;
 };
 
 

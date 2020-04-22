@@ -81,8 +81,8 @@ void pile::tick_class_specifics(const float delta_t) {
     if(amount == 0 && pil_type->delete_when_finished) {
         //Ready to delete. Unless it's being used, that is.
         
-        for(size_t r = 0; r < game.states.gameplay_st->mobs.resource.size(); ++r) {
-            if(game.states.gameplay_st->mobs.resource[r]->origin_pile == this) {
+        for(size_t r = 0; r < game.states.gameplay_st->mobs.resources.size(); ++r) {
+            if(game.states.gameplay_st->mobs.resources[r]->origin_pile == this) {
                 return;
             }
         }

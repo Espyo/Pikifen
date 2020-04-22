@@ -1,5 +1,5 @@
 PROG := pikifen
-SRCS := $(shell find Source/ -name '*.cpp')
+SRCS := $(shell find ../ -name '*.cpp')
 OBJS := ${SRCS:.cpp=.o}
 CXXFLAGS := -std=c++0x -g -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0
 LDFLAGS += -lm `pkg-config --libs allegro-5 allegro_audio-5 allegro_image-5 allegro_font-5 allegro_acodec-5 allegro_primitives-5 allegro_dialog-5`

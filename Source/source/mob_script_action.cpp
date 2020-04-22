@@ -800,7 +800,7 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {
-        *var = i2s(game.states.gameplay_st->mobs.pikmin.size());
+        *var = i2s(game.states.gameplay_st->mobs.pikmin_list.size());
         break;
         
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {

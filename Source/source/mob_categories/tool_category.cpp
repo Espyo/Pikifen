@@ -46,7 +46,7 @@ mob* tool_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     tool* m = new tool(pos, (tool_type*) type, angle);
-    game.states.gameplay_st->mobs.tool.push_back(m);
+    game.states.gameplay_st->mobs.tools.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* tool_category::create_type() {
  * Clears a tool from the list of tools.
  */
 void tool_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.tool.erase(
-        find(game.states.gameplay_st->mobs.tool.begin(), game.states.gameplay_st->mobs.tool.end(), (tool*) m)
+    game.states.gameplay_st->mobs.tools.erase(
+        find(game.states.gameplay_st->mobs.tools.begin(), game.states.gameplay_st->mobs.tools.end(), (tool*) m)
     );
 }
 

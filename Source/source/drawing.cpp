@@ -367,9 +367,9 @@ void gameplay::draw_hud() {
     
     //Leader health.
     for(size_t l = 0; l < 3; ++l) {
-        if(mobs.leader.size() < l + 1) continue;
+        if(mobs.leaders.size() < l + 1) continue;
         
-        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leader.size());
+        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
         size_t icon_id = HUD_ITEM_LEADER_1_ICON + l;
         size_t health_id = HUD_ITEM_LEADER_1_HEALTH + l;
         
@@ -378,10 +378,10 @@ void gameplay::draw_hud() {
             al_draw_filled_circle(
                 i_center.x, i_center.y,
                 std::min(i_size.x, i_size.y) / 2.0f,
-                change_alpha(mobs.leader[l_nr]->type->main_color, 128)
+                change_alpha(mobs.leaders[l_nr]->type->main_color, 128)
             );
             draw_bitmap_in_box(
-                mobs.leader[l_nr]->lea_type->bmp_icon,
+                mobs.leaders[l_nr]->lea_type->bmp_icon,
                 i_center, i_size
             );
             draw_bitmap_in_box(bmp_bubble, i_center, i_size);
@@ -392,7 +392,7 @@ void gameplay::draw_hud() {
         if(hud_items.get_draw_data(health_id, &i_center, &i_size)) {
             draw_health(
                 i_center,
-                mobs.leader[l_nr]->health, mobs.leader[l_nr]->type->max_health,
+                mobs.leaders[l_nr]->health, mobs.leaders[l_nr]->type->max_health,
                 std::min(i_size.x, i_size.y) * 0.4f,
                 true
             );
@@ -574,11 +574,11 @@ void gameplay::draw_hud() {
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_GROUP_NR, &i_center, &i_size)
     ) {
         size_t pikmin_in_group = cur_leader_ptr->group->members.size();
-        for(size_t l = 0; l < mobs.leader.size(); ++l) {
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
             //If this leader is following the current one,
             //then they're not a Pikmin.
             //Subtract them from the group count total.
-            if(mobs.leader[l]->following_group == cur_leader_ptr) {
+            if(mobs.leaders[l]->following_group == cur_leader_ptr) {
                 pikmin_in_group--;
             }
         }
@@ -599,7 +599,7 @@ void gameplay::draw_hud() {
         draw_compressed_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(i_center.x + i_size.x * 0.4, i_center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(mobs.pikmin.size())
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(mobs.pikmin_list.size())
         );
     }
     
@@ -607,10 +607,10 @@ void gameplay::draw_hud() {
     if(
         hud_items.get_draw_data(HUD_ITEM_PIKMIN_TOTAL_NR, &i_center, &i_size)
     ) {
-        size_t total_pikmin = mobs.pikmin.size();
-        for(size_t o = 0; o < mobs.onion.size(); ++o) {
+        size_t total_pikmin = mobs.pikmin_list.size();
+        for(size_t o = 0; o < mobs.onions.size(); ++o) {
             for(size_t m = 0; m < N_MATURITIES; ++m) {
-                total_pikmin += mobs.onion[o]->pikmin_inside[m];
+                total_pikmin += mobs.onions[o]->pikmin_inside[m];
             }
         }
         
@@ -852,8 +852,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t p = 0; p < mobs.pile.size(); ++p) {
-            pile* p_ptr = mobs.pile[p];
+        for(size_t p = 0; p < mobs.piles.size(); ++p) {
+            pile* p_ptr = mobs.piles[p];
             if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
                     game.fonts.main,
@@ -869,8 +869,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t t = 0; t < mobs.group_task.size(); ++t) {
-            group_task* t_ptr = mobs.group_task[t];
+        for(size_t t = 0; t < mobs.group_tasks.size(); ++t) {
+            group_task* t_ptr = mobs.group_tasks[t];
             if(t_ptr->get_power() > 0) {
                 draw_fraction(
                     point(
@@ -885,8 +885,8 @@ void gameplay::draw_ingame_text() {
             }
         }
         
-        for(size_t s = 0; s < mobs.scale.size(); ++s) {
-            scale* s_ptr = mobs.scale[s];
+        for(size_t s = 0; s < mobs.scales.size(); ++s) {
+            scale* s_ptr = mobs.scales[s];
             if(s_ptr->health <= 0) continue;
             float w = s_ptr->calculate_cur_weight();
             if(w > 0) {

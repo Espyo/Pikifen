@@ -61,7 +61,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  */
 void onion::call_pikmin() {
 
-    if(game.states.gameplay_st->mobs.pikmin.size() >= game.config.max_pikmin_in_field) return;
+    if(game.states.gameplay_st->mobs.pikmin_list.size() >= game.config.max_pikmin_in_field) return;
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
@@ -138,7 +138,7 @@ void onion::spew() {
     if(spew_queue == 0) return;
     spew_queue--;
     
-    unsigned total_after = game.states.gameplay_st->mobs.pikmin.size() + 1;
+    unsigned total_after = game.states.gameplay_st->mobs.pikmin_list.size() + 1;
     
     if(total_after > game.config.max_pikmin_in_field) {
         pikmin_inside[0]++;
@@ -202,8 +202,8 @@ void onion::stow_pikmin() {
  * Ticks some logic specific to Onions.
  */
 void onion::tick_class_specifics(const float delta_t) {
-    for(size_t o = 0; o < game.states.gameplay_st->mobs.onion.size(); ++o) {
-        onion* o_ptr = game.states.gameplay_st->mobs.onion[o];
+    for(size_t o = 0; o < game.states.gameplay_st->mobs.onions.size(); ++o) {
+        onion* o_ptr = game.states.gameplay_st->mobs.onions[o];
         
         if(o_ptr->spew_queue != 0) {
         

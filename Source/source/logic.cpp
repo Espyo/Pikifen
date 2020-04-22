@@ -291,8 +291,8 @@ void gameplay::do_gameplay_logic() {
             bool done = false;
             
             close_to_ship_to_heal = NULL;
-            for(size_t s = 0; s < mobs.ship.size(); ++s) {
-                ship* s_ptr = mobs.ship[s];
+            for(size_t s = 0; s < mobs.ships.size(); ++s) {
+                ship* s_ptr = mobs.ships[s];
                 d = dist(cur_leader_ptr->pos, s_ptr->pos);
                 if(!s_ptr->is_leader_under_beam(cur_leader_ptr)) {
                     continue;
@@ -325,11 +325,11 @@ void gameplay::do_gameplay_logic() {
             d = 0;
             close_to_onion_to_open = NULL;
             if(!done) {
-                for(size_t o = 0; o < mobs.onion.size(); ++o) {
-                    d = dist(cur_leader_ptr->pos, mobs.onion[o]->pos);
+                for(size_t o = 0; o < mobs.onions.size(); ++o) {
+                    d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
                     if(d > game.config.onion_open_range) continue;
                     if(d < closest_d || !close_to_onion_to_open) {
-                        close_to_onion_to_open = mobs.onion[o];
+                        close_to_onion_to_open = mobs.onions[o];
                         closest_d = d;
                         done = true;
                     }
@@ -340,11 +340,11 @@ void gameplay::do_gameplay_logic() {
             d = 0;
             close_to_interactable_to_use = NULL;
             if(!done) {
-                for(size_t i = 0; i < mobs.interactable.size(); ++i) {
-                    d = dist(cur_leader_ptr->pos, mobs.interactable[i]->pos);
-                    if(d > mobs.interactable[i]->int_type->trigger_range) continue;
+                for(size_t i = 0; i < mobs.interactables.size(); ++i) {
+                    d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
+                    if(d > mobs.interactables[i]->int_type->trigger_range) continue;
                     if(d < closest_d || !close_to_interactable_to_use) {
-                        close_to_interactable_to_use = mobs.interactable[i];
+                        close_to_interactable_to_use = mobs.interactables[i];
                         closest_d = d;
                         done = true;
                     }

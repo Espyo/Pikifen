@@ -46,7 +46,7 @@ mob* track_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     track* m = new track(pos, (track_type*) type, angle);
-    game.states.gameplay_st->mobs.track.push_back(m);
+    game.states.gameplay_st->mobs.tracks.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* track_category::create_type() {
  * Clears a track from the list of tracks.
  */
 void track_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.track.erase(
-        find(game.states.gameplay_st->mobs.track.begin(), game.states.gameplay_st->mobs.track.end(), (track*) m)
+    game.states.gameplay_st->mobs.tracks.erase(
+        find(game.states.gameplay_st->mobs.tracks.begin(), game.states.gameplay_st->mobs.tracks.end(), (track*) m)
     );
 }
 

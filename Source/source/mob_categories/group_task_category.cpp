@@ -46,7 +46,7 @@ mob* group_task_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     group_task* m = new group_task(pos, (group_task_type*) type, angle);
-    game.states.gameplay_st->mobs.group_task.push_back(m);
+    game.states.gameplay_st->mobs.group_tasks.push_back(m);
     return m;
 }
 
@@ -63,8 +63,8 @@ mob_type* group_task_category::create_type() {
  * Clears a group task from the list of group task.
  */
 void group_task_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.group_task.erase(
-        find(game.states.gameplay_st->mobs.group_task.begin(), game.states.gameplay_st->mobs.group_task.end(), (group_task*) m)
+    game.states.gameplay_st->mobs.group_tasks.erase(
+        find(game.states.gameplay_st->mobs.group_tasks.begin(), game.states.gameplay_st->mobs.group_tasks.end(), (group_task*) m)
     );
 }
 

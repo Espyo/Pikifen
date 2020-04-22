@@ -257,7 +257,7 @@ void gameplay::load() {
     }
     
     //Panic check -- If there are no leaders, abort.
-    if(mobs.leader.empty()) {
+    if(mobs.leaders.empty()) {
         show_message_box(
             game.display, "No leaders!", "No leaders!",
             "This area has no leaders! You need at least one "
@@ -283,7 +283,7 @@ void gameplay::load() {
     
     //Sort leaders.
     sort(
-        mobs.leader.begin(), mobs.leader.end(),
+        mobs.leaders.begin(), mobs.leaders.end(),
     [] (leader * l1, leader * l2) -> bool {
         size_t priority_l1 =
         find(game.config.leader_order.begin(), game.config.leader_order.end(), l1->lea_type) -
@@ -296,7 +296,7 @@ void gameplay::load() {
     );
     
     cur_leader_nr = 0;
-    cur_leader_ptr = mobs.leader[cur_leader_nr];
+    cur_leader_ptr = mobs.leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->active = true;
     

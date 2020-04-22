@@ -446,8 +446,8 @@ bool mob::calculate_carrying_destination(
         ship* closest_ship = NULL;
         dist closest_ship_dist;
         
-        for(size_t s = 0; s < game.states.gameplay_st->mobs.ship.size(); ++s) {
-            ship* s_ptr = game.states.gameplay_st->mobs.ship[s];
+        for(size_t s = 0; s < game.states.gameplay_st->mobs.ships.size(); ++s) {
+            ship* s_ptr = game.states.gameplay_st->mobs.ships[s];
             dist d(pos, s_ptr->beam_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
@@ -490,8 +490,8 @@ bool mob::calculate_carrying_destination(
     unordered_set<pikmin_type*> available_onions;
     
     //First, check which Onions are even available.
-    for(size_t o = 0; o < game.states.gameplay_st->mobs.onion.size(); o++) {
-        onion* o_ptr = game.states.gameplay_st->mobs.onion[o];
+    for(size_t o = 0; o < game.states.gameplay_st->mobs.onions.size(); o++) {
+        onion* o_ptr = game.states.gameplay_st->mobs.onions[o];
         if(o_ptr->activated) {
             available_onions.insert(o_ptr->oni_type->pik_type);
         }
@@ -599,14 +599,14 @@ bool mob::calculate_carrying_destination(
     
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
-    for(; onion_nr < game.states.gameplay_st->mobs.onion.size(); ++onion_nr) {
-        if(game.states.gameplay_st->mobs.onion[onion_nr]->oni_type->pik_type == decided_type) {
+    for(; onion_nr < game.states.gameplay_st->mobs.onions.size(); ++onion_nr) {
+        if(game.states.gameplay_st->mobs.onions[onion_nr]->oni_type->pik_type == decided_type) {
             break;
         }
     }
     
     //Finally, set the destination data.
-    *target_mob = game.states.gameplay_st->mobs.onion[onion_nr];
+    *target_mob = game.states.gameplay_st->mobs.onions[onion_nr];
     *target_point = (*target_mob)->pos;
     
     return true;
@@ -1341,8 +1341,8 @@ void mob::get_hitbox_hold_point(
  */
 size_t mob::get_latched_pikmin_amount() const {
     size_t total = 0;
-    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin.size(); ++p) {
-        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin[p];
+    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p) {
+        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1358,8 +1358,8 @@ size_t mob::get_latched_pikmin_amount() const {
  */
 float mob::get_latched_pikmin_weight() const {
     float total = 0;
-    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin.size(); ++p) {
-        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin[p];
+    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p) {
+        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1847,7 +1847,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-        game.states.gameplay_st->mobs.pikmin.size() >= game.config.max_pikmin_in_field
+        game.states.gameplay_st->mobs.pikmin_list.size() >= game.config.max_pikmin_in_field
     ) {
         return NULL;
     }
