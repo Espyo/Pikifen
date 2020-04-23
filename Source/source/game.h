@@ -130,7 +130,7 @@ public:
     //List of game states.
     game_state_list states;
     //List of status types.
-    map<string, status_type> status_types;
+    map<string, status_type*> status_types;
     //All system assets.
     system_asset_list sys_assets;
     //Manager of all floor texture bitmaps.

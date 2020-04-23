@@ -1,0 +1,6 @@
+name = spicy
+affects_pikmin = true
+auto_remove_time = 40
+color = 255 64 64
+speed_multiplier = 1.5
+tint = 255 192 160

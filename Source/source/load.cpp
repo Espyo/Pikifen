@@ -788,7 +788,7 @@ void load_hazards() {
                     );
                 } else {
                     new_h.effects.push_back(
-                        &(game.status_types[effect_name])
+                        game.status_types[effect_name]
                     );
                 }
             }
@@ -1078,7 +1078,7 @@ void load_spray_types(const bool load_resources) {
                         effects_node
                     );
                 } else {
-                    new_t.effects.push_back(&(game.status_types[effect_name]));
+                    new_t.effects.push_back(game.status_types[effect_name]);
                 }
             }
         }
@@ -1133,92 +1133,103 @@ void load_spray_types(const bool load_resources) {
  * Loads status effect types from the game data.
  */
 void load_status_types(const bool load_resources) {
-    data_node file = data_node(MISC_FOLDER_PATH + "/Statuses.txt");
-    if(!file.file_was_opened) return;
-    
-    size_t n_statuses = file.get_nr_of_children();
-    for(size_t s = 0; s < n_statuses; ++s) {
-        data_node* s_node = file.get_child(s);
-        status_type st;
+    vector<string> type_files =
+        folder_to_vector(STATUSES_FOLDER_PATH, false);
         
-        st.name = s_node->name;
+    for(size_t t = 0; t < type_files.size(); ++t) {
+        data_node file =
+            load_data_file(STATUSES_FOLDER_PATH + "/" + type_files[t]);
+        if(!file.file_was_opened) continue;
         
+        status_type* new_t = new status_type();
+        reader_setter rs(&file);
+        
+        bool affects_pikmin_bool;
+        bool affects_leaders_bool;
+        bool affects_enemies_bool;
+        bool affects_others_bool;
         string particle_offset_str;
+        string particle_gen_str;
+        data_node* particle_gen_node;
         
-        reader_setter rs(s_node);
-        rs.set("color",                   st.color);
-        rs.set("tint",                    st.tint);
-        rs.set("glow",                    st.glow);
-        rs.set("removable_with_whistle",  st.removable_with_whistle);
-        rs.set("auto_remove_time",        st.auto_remove_time);
-        rs.set("health_change_ratio",     st.health_change_ratio);
-        rs.set("causes_disable",          st.causes_disable);
-        rs.set("causes_flailing",         st.causes_flailing);
-        rs.set("causes_panic",            st.causes_panic);
-        rs.set("disabled_state_inedible", st.disabled_state_inedible);
-        rs.set("speed_multiplier",        st.speed_multiplier);
-        rs.set("attack_multiplier",       st.attack_multiplier);
-        rs.set("defense_multiplier",      st.defense_multiplier);
-        rs.set("maturity_change_amount",  st.maturity_change_amount);
-        rs.set("disables_attack",         st.disables_attack);
-        rs.set("turns_invisible",         st.turns_invisible);
-        rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);
-        rs.set("animation",               st.animation_name);
-        rs.set("animation_mob_scale",     st.animation_mob_scale);
+        rs.set("name",                    new_t->name);
+        rs.set("color",                   new_t->color);
+        rs.set("tint",                    new_t->tint);
+        rs.set("glow",                    new_t->glow);
+        rs.set("affects_pikmin",          affects_pikmin_bool);
+        rs.set("affects_leaders",         affects_leaders_bool);
+        rs.set("affects_enemies",         affects_enemies_bool);
+        rs.set("affects_others",          affects_others_bool);
+        rs.set("removable_with_whistle",  new_t->removable_with_whistle);
+        rs.set("auto_remove_time",        new_t->auto_remove_time);
+        rs.set("health_change_ratio",     new_t->health_change_ratio);
+        rs.set("causes_disable",          new_t->causes_disable);
+        rs.set("causes_flailing",         new_t->causes_flailing);
+        rs.set("causes_panic",            new_t->causes_panic);
+        rs.set("disabled_state_inedible", new_t->disabled_state_inedible);
+        rs.set("speed_multiplier",        new_t->speed_multiplier);
+        rs.set("attack_multiplier",       new_t->attack_multiplier);
+        rs.set("defense_multiplier",      new_t->defense_multiplier);
+        rs.set("maturity_change_amount",  new_t->maturity_change_amount);
+        rs.set("disables_attack",         new_t->disables_attack);
+        rs.set("turns_invisible",         new_t->turns_invisible);
+        rs.set("anim_speed_multiplier",   new_t->anim_speed_multiplier);
+        rs.set("animation",               new_t->animation_name);
+        rs.set("animation_mob_scale",     new_t->animation_mob_scale);
+        rs.set("particle_generator",      particle_gen_str, &particle_gen_node);
         rs.set("particle_offset",         particle_offset_str);
         
-        st.affects = 0;
-        if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
-            st.affects |= STATUS_AFFECTS_PIKMIN;
+        new_t->affects = 0;
+        if(affects_pikmin_bool) {
+            new_t->affects |= STATUS_AFFECTS_PIKMIN;
         }
-        if(s2b(s_node->get_child_by_name("affects_leaders")->value)) {
-            st.affects |= STATUS_AFFECTS_LEADERS;
+        if(affects_leaders_bool) {
+            new_t->affects |= STATUS_AFFECTS_LEADERS;
         }
-        if(s2b(s_node->get_child_by_name("affects_enemies")->value)) {
-            st.affects |= STATUS_AFFECTS_ENEMIES;
+        if(affects_enemies_bool) {
+            new_t->affects |= STATUS_AFFECTS_ENEMIES;
         }
-        if(s2b(s_node->get_child_by_name("affects_others")->value)) {
-            st.affects |= STATUS_AFFECTS_OTHERS;
+        if(affects_others_bool) {
+            new_t->affects |= STATUS_AFFECTS_OTHERS;
         }
         
-        data_node* pg_node = s_node->get_child_by_name("particle_generator");
-        string pg_name = pg_node->value;
-        if(!pg_name.empty()) {
+        if(particle_gen_node) {
             if(
-                game.custom_particle_generators.find(pg_name) ==
+                game.custom_particle_generators.find(particle_gen_str) ==
                 game.custom_particle_generators.end()
             ) {
                 log_error(
                     "Unknown particle generator \"" +
-                    pg_name + "\"!", pg_node
+                    particle_gen_str + "\"!", particle_gen_node
                 );
             } else {
-                st.generates_particles = true;
-                st.particle_gen = &game.custom_particle_generators[pg_name];
-                st.particle_offset_pos =
-                    s2p(particle_offset_str, &st.particle_offset_z);
+                new_t->generates_particles =
+                    true;
+                new_t->particle_gen =
+                    &game.custom_particle_generators[particle_gen_str];
+                new_t->particle_offset_pos =
+                    s2p(particle_offset_str, &new_t->particle_offset_z);
             }
         }
         
-        game.status_types[st.name] = st;
-    }
-    
-    if(load_resources) {
-        for(auto &s : game.status_types) {
-            if(s.second.animation_name.empty()) continue;
-            data_node anim_file =
-                load_data_file(
-                    ANIMATIONS_FOLDER_PATH + "/" + s.second.animation_name
-                );
-            s.second.anim_db = load_animation_database_from_file(&anim_file);
-            if(!s.second.anim_db.animations.empty()) {
-                s.second.anim_instance =
-                    animation_instance(&s.second.anim_db);
-                s.second.anim_instance.cur_anim =
-                    s.second.anim_db.animations[0];
-                s.second.anim_instance.start();
+        if(load_resources) {
+            if(!new_t->animation_name.empty()) {
+                data_node anim_file =
+                    load_data_file(
+                        ANIMATIONS_FOLDER_PATH + "/" + new_t->animation_name
+                    );
+                new_t->anim_db = load_animation_database_from_file(&anim_file);
+                if(!new_t->anim_db.animations.empty()) {
+                    new_t->anim_instance =
+                        animation_instance(&new_t->anim_db);
+                    new_t->anim_instance.cur_anim =
+                        new_t->anim_db.animations[0];
+                    new_t->anim_instance.start();
+                }
             }
         }
+        
+        game.status_types[new_t->name] = new_t;
     }
 }
 
@@ -1439,10 +1450,11 @@ void unload_spray_types() {
  */
 void unload_status_types(const bool unload_resources) {
 
-    if(unload_resources) {
-        for(auto &s : game.status_types) {
-            s.second.anim_db.destroy();
+    for(auto &s : game.status_types) {
+        if(unload_resources) {
+            s.second->anim_db.destroy();
         }
+        delete s.second;
     }
     game.status_types.clear();
 }

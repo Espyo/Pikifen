@@ -107,7 +107,7 @@ void drop_type::load_properties(data_node* file) {
     if(status_name_node) {
         auto s = game.status_types.find(status_name_str);
         if(s != game.status_types.end()) {
-            status_to_give = &(s->second);
+            status_to_give = s->second;
         } else {
             log_error(
                 "Unknown status type \"" + status_name_str + "\"!",

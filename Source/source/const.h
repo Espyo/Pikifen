@@ -143,6 +143,8 @@ const string SPIKE_DAMAGES_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Spike_damage_types";
 const string SPRAYS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Sprays";
+const string STATUSES_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Statuses";
 const string TEXTURES_FOLDER_PATH =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
 

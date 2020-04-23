@@ -1,0 +1,9 @@
+name = poisoned
+affects_pikmin = true
+causes_panic = true
+color = 128 16 112
+health_change_ratio = -0.3
+removable_with_whistle = true
+speed_multiplier = 2.0
+particle_generator = poison_gas
+particle_offset = 0 0 32

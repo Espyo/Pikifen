@@ -1096,7 +1096,7 @@ void mob_action_runners::print(mob_action_run_data &data) {
  * Code for the status reception mob script action.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
-    data.m->apply_status_effect(&game.status_types[data.args[0]], true, false);
+    data.m->apply_status_effect(game.status_types[data.args[0]], true, false);
 }
 
 

@@ -177,7 +177,7 @@ void gameplay::do_gameplay_logic() {
         
         //Ticks all status effect animations.
         for(auto &s : game.status_types) {
-            s.second.anim_instance.tick(game.delta_t);
+            s.second->anim_instance.tick(game.delta_t);
         }
         
         
