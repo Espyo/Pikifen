@@ -96,6 +96,7 @@ void game_config::load(data_node* file) {
     reader_setter rs(file);
     string pikmin_order_str;
     string leader_order_str;
+    string spray_order_str;
     
     rs.set("game_name", name);
     rs.set("game_version", version);
@@ -115,6 +116,7 @@ void game_config::load(data_node* file) {
     rs.set("standard_pikmin_radius", standard_pikmin_radius);
     
     rs.set("leader_order", leader_order_str);
+    rs.set("spray_order", spray_order_str);
     
     rs.set("idle_task_range", idle_task_range);
     rs.set("swarm_task_range", swarm_task_range);
@@ -138,5 +140,6 @@ void game_config::load(data_node* file) {
     
     pikmin_order_strings = semicolon_list_to_vector(pikmin_order_str);
     leader_order_strings = semicolon_list_to_vector(leader_order_str);
+    spray_order_strings = semicolon_list_to_vector(spray_order_str);
     cursor_spin_speed = deg_to_rad(cursor_spin_speed);
 }

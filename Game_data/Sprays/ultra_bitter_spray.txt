@@ -1,0 +1,9 @@
+name = Ultra-Bitter Spray
+effects = petrified
+group = false
+angle = 0
+distance_range = 128
+angle_range = 135
+color = 128 0 255
+icon = Ultra-bitter_spray.png
+ingredients = 10

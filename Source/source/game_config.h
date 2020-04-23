@@ -106,6 +106,8 @@ struct game_config {
     vector<string> pikmin_order_strings;
     //A leader can start the plucking mode if they're this close.
     float pluck_range;
+    //Loaded strings representing the standard spray order. Used for later.
+    vector<string> spray_order_strings;
     //A standard Pikmin is this tall.
     float standard_pikmin_height;
     //A standard Pikmin has this radius.

@@ -1035,49 +1035,96 @@ void load_spike_damage_types() {
  * Loads spray types from the game data.
  */
 void load_spray_types(const bool load_resources) {
-    data_node file = data_node(MISC_FOLDER_PATH + "/Sprays.txt");
-    if(!file.file_was_opened) return;
+    vector<string> type_files =
+        folder_to_vector(SPRAYS_FOLDER_PATH, false);
+        
+    vector<spray_type> temp_types;
     
-    size_t n_sprays = file.get_nr_of_children();
-    for(size_t s = 0; s < n_sprays; ++s) {
-        data_node* s_node = file.get_child(s);
-        spray_type st;
+    for(size_t t = 0; t < type_files.size(); ++t) {
+        data_node file =
+            load_data_file(SPRAYS_FOLDER_PATH + "/" + type_files[t]);
+        if(!file.file_was_opened) continue;
         
-        st.name = s_node->name;
+        spray_type new_t;
+        reader_setter rs(&file);
         
-        data_node* effects_node = s_node->get_child_by_name("effects");
-        vector<string> effects_strs =
-            semicolon_list_to_vector(effects_node->value);
-        for(size_t e = 0; e < effects_strs.size(); ++e) {
-            string effect_name = effects_strs[e];
-            if(game.status_types.find(effect_name) == game.status_types.end()) {
-                log_error(
-                    "Unknown status effect \"" + effect_name + "\"!",
-                    effects_node
-                );
-            } else {
-                st.effects.push_back(&(game.status_types[effect_name]));
+        string effects_str;
+        string icon_str;
+        data_node* effects_node;
+        data_node* icon_node;
+        
+        rs.set("name", new_t.name);
+        rs.set("effects", effects_str, &effects_node);
+        rs.set("icon", icon_str, &icon_node);
+        rs.set("group", new_t.group);
+        rs.set("angle", new_t.angle);
+        rs.set("distance_range", new_t.distance_range);
+        rs.set("angle_range", new_t.angle_range);
+        rs.set("color", new_t.main_color);
+        rs.set("ingredients_needed", new_t.ingredients_needed);
+        rs.set("buries_pikmin", new_t.buries_pikmin);
+        
+        if(effects_node) {
+            vector<string> effects_strs =
+                semicolon_list_to_vector(effects_node->value);
+            for(size_t e = 0; e < effects_strs.size(); ++e) {
+                string effect_name = effects_strs[e];
+                if(
+                    game.status_types.find(effect_name) ==
+                    game.status_types.end()
+                ) {
+                    log_error(
+                        "Unknown status effect \"" + effect_name + "\"!",
+                        effects_node
+                    );
+                } else {
+                    new_t.effects.push_back(&(game.status_types[effect_name]));
+                }
             }
         }
         
-        reader_setter rs(s_node);
-        rs.set("group", st.group);
-        rs.set("angle", st.angle);
-        rs.set("distance_range", st.distance_range);
-        rs.set("angle_range", st.angle_range);
-        rs.set("color", st.main_color);
-        rs.set("ingredients_needed", st.ingredients_needed);
-        rs.set("buries_pikmin", st.buries_pikmin);
-        
-        st.angle = deg_to_rad(st.angle);
-        st.angle_range = deg_to_rad(st.angle_range);
+        new_t.angle = deg_to_rad(new_t.angle);
+        new_t.angle_range = deg_to_rad(new_t.angle_range);
         
         if(load_resources) {
-            data_node* icon_node = s_node->get_child_by_name("icon");
-            st.bmp_spray = game.bitmaps.get(icon_node->value, icon_node);
+            new_t.bmp_spray = game.bitmaps.get(icon_str, icon_node);
         }
         
-        game.spray_types.push_back(st);
+        temp_types.push_back(new_t);
+    }
+    
+    //Check the registered order and sort.
+    for(size_t t = 0; t < temp_types.size(); ++t) {
+        if(
+            find(
+                game.config.spray_order_strings.begin(),
+                game.config.spray_order_strings.end(),
+                temp_types[t].name
+            ) == game.config.spray_order_strings.end()
+        ) {
+            log_error(
+                "Spray type \"" + temp_types[t].name + "\" was not found "
+                "in the spray order list in the config file!"
+            );
+            game.config.spray_order_strings.push_back(temp_types[t].name);
+        }
+    }
+    for(size_t o = 0; o < game.config.spray_order_strings.size(); ++o) {
+        string s = game.config.spray_order_strings[o];
+        bool found = false;
+        for(size_t t = 0; t < temp_types.size(); ++t) {
+            if(temp_types[t].name == s) {
+                game.spray_types.push_back(temp_types[t]);
+                found = true;
+            }
+        }
+        
+        if(!found) {
+            log_error(
+                "Unknown spray type \"" + s + "\" found "
+                "in the spray order list in the config file!"
+            );
+        }
     }
 }
 

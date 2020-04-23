@@ -1,0 +1,9 @@
+name = Ultra-Spicy Spray
+effects = spicy
+group = true
+angle = 180
+distance_range = 128
+angle_range = 90
+color = 255 64 64
+icon = Ultra-spicy_spray.png
+ingredients = 10
