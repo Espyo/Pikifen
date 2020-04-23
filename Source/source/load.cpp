@@ -792,7 +792,7 @@ void load_hazards() {
                     liquid_node
                 );
             } else {
-                new_h.associated_liquid = &(game.liquids[liquid_str]);
+                new_h.associated_liquid = game.liquids[liquid_str];
             }
         }
         
@@ -805,44 +805,41 @@ void load_hazards() {
  * Loads the liquids from the game data.
  */
 void load_liquids(const bool load_resources) {
-    data_node file = load_data_file(MISC_FOLDER_PATH + "/Liquids.txt");
-    if(!file.file_was_opened) return;
-    
-    map<string, data_node*> nodes;
-    
-    size_t n_liquids = file.get_nr_of_children();
-    for(size_t l = 0; l < n_liquids; ++l) {
-        data_node* l_node = file.get_child(l);
-        liquid l_struct;
+    vector<string> liquid_files =
+        folder_to_vector(LIQUIDS_FOLDER_PATH, false);
         
-        l_struct.name = l_node->name;
-        reader_setter rs(l_node);
-        rs.set("color", l_struct.main_color);
-        rs.set("surface_1_speed", l_struct.surface_speed[0]);
-        rs.set("surface_2_speed", l_struct.surface_speed[0]);
-        rs.set("surface_alpha", l_struct.surface_alpha);
+    for(size_t l = 0; l < liquid_files.size(); ++l) {
+        data_node file =
+            load_data_file(LIQUIDS_FOLDER_PATH + "/" + liquid_files[l]);
+        if(!file.file_was_opened) continue;
         
-        game.liquids[l_node->name] = l_struct;
-        nodes[l_node->name] = l_node;
-    }
-    
-    if(load_resources) {
-        for(auto &l : game.liquids) {
+        liquid* new_l = new liquid();
+        reader_setter rs(&file);
+        string animation_str;
+        
+        rs.set("name", new_l->name);
+        rs.set("animation", animation_str);
+        rs.set("color", new_l->main_color);
+        rs.set("surface_1_speed", new_l->surface_speed[0]);
+        rs.set("surface_2_speed", new_l->surface_speed[0]);
+        rs.set("surface_alpha", new_l->surface_alpha);
+        
+        if(load_resources) {
             data_node anim_file =
-                load_data_file(
-                    ANIMATIONS_FOLDER_PATH + "/" +
-                    nodes[l.first]->get_child_by_name("animation")->value
-                );
-            l.second.anim_db =
+                load_data_file(ANIMATIONS_FOLDER_PATH + "/" + animation_str);
+                
+            new_l->anim_db =
                 load_animation_database_from_file(&anim_file);
-            if(!l.second.anim_db.animations.empty()) {
-                l.second.anim_instance =
-                    animation_instance(&l.second.anim_db);
-                l.second.anim_instance.cur_anim =
-                    l.second.anim_db.animations[0];
-                l.second.anim_instance.start();
+            if(!new_l->anim_db.animations.empty()) {
+                new_l->anim_instance =
+                    animation_instance(&new_l->anim_db);
+                new_l->anim_instance.cur_anim =
+                    new_l->anim_db.animations[0];
+                new_l->anim_instance.start();
             }
         }
+        
+        game.liquids[new_l->name] = new_l;
     }
 }
 
@@ -1309,7 +1306,8 @@ void unload_hazards() {
  */
 void unload_liquids() {
     for(auto &l : game.liquids) {
-        l.second.anim_db.destroy();
+        l.second->anim_db.destroy();
+        delete l.second;
     }
     game.liquids.clear();
 }

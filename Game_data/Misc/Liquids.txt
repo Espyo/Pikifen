@@ -1,7 +1,0 @@
-water {
-    color = 0 0 64 96
-    animation = Water.txt
-    surface_1_speed = 10
-    surface_2_speed = -13
-    surface_alpha = 64
-}

@@ -98,7 +98,7 @@ public:
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
     //List of liquids.
-    map<string, liquid> liquids;
+    map<string, liquid*> liquids;
     //Loading screen subtext buffer.
     ALLEGRO_BITMAP* loading_subtext_bmp;
     //Loading screen main text buffer.

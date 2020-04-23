@@ -493,7 +493,7 @@ void gameplay::do_gameplay_logic() {
         *             ~ ~ ~ *
         ********************/
         for(auto &l : game.liquids) {
-            l.second.anim_instance.tick(game.delta_t);
+            l.second->anim_instance.tick(game.delta_t);
         }
         
     } else { //Displaying a message.
