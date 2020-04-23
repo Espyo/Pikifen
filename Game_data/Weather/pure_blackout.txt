@@ -1,0 +1,8 @@
+//A blackout effect with maximum darkness, and slightly darker lighting.
+name = Pure blackout
+lighting {
+    0    = 0   0   0   64
+}
+blackout_strength {
+    0    = 255
+}

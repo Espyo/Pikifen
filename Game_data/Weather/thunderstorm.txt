@@ -1,0 +1,21 @@
+//Heavy rain and random thunder. Lighting is darker.
+name = Thunderstorm
+lighting {
+    0    = 0   0   32  176
+    300  = 0   0   32  176
+    360  = 8   8   24  128
+    420  = 16  8   24  112
+    480  = 0   0   0   112
+    1020 = 0   0   0   112
+    1080 = 24  16  0   112
+    1140 = 0   0   32  112
+    1200 = 0   0   32  176
+}
+sun_strength {
+    0    = 96
+    360  = 96
+    480  = 128
+    1020 = 128
+    1140 = 96
+}
+//TODO add rain and thunder

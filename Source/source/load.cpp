@@ -1251,22 +1251,31 @@ void load_system_animations() {
  * Loads the weather conditions available.
  */
 void load_weather() {
-    data_node weather_file = load_data_file(WEATHER_FILE_PATH);
-    size_t n_weather_conditions =
-        weather_file.get_nr_of_children();
+    vector<string> weather_files =
+        folder_to_vector(WEATHER_FOLDER_PATH, false);
         
-    for(size_t wc = 0; wc < n_weather_conditions; ++wc) {
-        data_node* weather_node = weather_file.get_child(wc);
-        weather weather_struct;
+    for(size_t w = 0; w < weather_files.size(); ++w) {
+        data_node file =
+            load_data_file(WEATHER_FOLDER_PATH + "/" + weather_files[w]);
+        if(!file.file_was_opened) continue;
         
-        weather_struct.name = weather_node->name;
+        weather new_w;
+        reader_setter rs(&file);
+        
+        //General.
+        rs.set("name", new_w.name);
+        rs.set("fog_near", new_w.fog_near);
+        rs.set("fog_far", new_w.fog_far);
+        
+        new_w.fog_near = std::max(new_w.fog_near, 0.0f);
+        new_w.fog_far = std::max(new_w.fog_far, new_w.fog_near);
         
         //Lighting.
         vector<std::pair<size_t, string> > lighting_table =
-            get_weather_table(weather_node->get_child_by_name("lighting"));
+            get_weather_table(file.get_child_by_name("lighting"));
             
         for(size_t p = 0; p < lighting_table.size(); ++p) {
-            weather_struct.daylight.push_back(
+            new_w.daylight.push_back(
                 std::make_pair(
                     lighting_table[p].first,
                     s2c(lighting_table[p].second)
@@ -1276,10 +1285,10 @@ void load_weather() {
         
         //Sun's strength.
         vector<std::pair<size_t, string> > sun_strength_table =
-            get_weather_table(weather_node->get_child_by_name("sun_strength"));
+            get_weather_table(file.get_child_by_name("sun_strength"));
             
         for(size_t p = 0; p < sun_strength_table.size(); ++p) {
-            weather_struct.sun_strength.push_back(
+            new_w.sun_strength.push_back(
                 std::make_pair(
                     sun_strength_table[p].first,
                     s2i(sun_strength_table[p].second)
@@ -1290,11 +1299,11 @@ void load_weather() {
         //Blackout effect's strength.
         vector<std::pair<size_t, string> > blackout_strength_table =
             get_weather_table(
-                weather_node->get_child_by_name("blackout_strength")
+                file.get_child_by_name("blackout_strength")
             );
             
         for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
-            weather_struct.blackout_strength.push_back(
+            new_w.blackout_strength.push_back(
                 std::make_pair(
                     blackout_strength_table[p].first,
                     s2i(blackout_strength_table[p].second)
@@ -1303,20 +1312,12 @@ void load_weather() {
         }
         
         //Fog.
-        weather_struct.fog_near =
-            s2f(weather_node->get_child_by_name("fog_near")->value);
-        weather_struct.fog_far =
-            s2f(weather_node->get_child_by_name("fog_far")->value);
-        weather_struct.fog_near = std::max(weather_struct.fog_near, 0.0f);
-        weather_struct.fog_far =
-            std::max(weather_struct.fog_far, weather_struct.fog_near);
-            
         vector<std::pair<size_t, string> > fog_color_table =
             get_weather_table(
-                weather_node->get_child_by_name("fog_color")
+                file.get_child_by_name("fog_color")
             );
         for(size_t p = 0; p < fog_color_table.size(); ++p) {
-            weather_struct.fog_color.push_back(
+            new_w.fog_color.push_back(
                 std::make_pair(
                     fog_color_table[p].first,
                     s2c(fog_color_table[p].second)
@@ -1324,16 +1325,8 @@ void load_weather() {
             );
         }
         
-        //Precipitation.
-        weather_struct.precipitation_type =
-            s2i(
-                weather_node->get_child_by_name(
-                    "precipitation_type"
-                )->get_value_or_default(i2s(PRECIPITATION_TYPE_NONE))
-            );
-            
         //Save it in the map.
-        game.weather_conditions[weather_struct.name] = weather_struct;
+        game.weather_conditions[new_w.name] = new_w;
     }
 }
 

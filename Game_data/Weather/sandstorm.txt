@@ -1,0 +1,26 @@
+//Sand and dust floating about, wind, and a yellow fog.
+name = Sandstorm
+lighting {
+    0    = 32  24  8  192
+    300  = 32  24  8  192
+    360  = 64  48  0   160
+    420  = 255 128 96  96
+    480  = 255 192 96  64
+    1020 = 255 192 96  64
+    1080 = 255 160 64  96
+    1140 = 32  24  8  128
+    1200 = 32  24  8  192
+}
+sun_strength {
+    0    = 96
+    300  = 96
+    480  = 192
+    1020 = 192
+    1200 = 96
+}
+fog_color {
+    0    = 255 192 96  128
+}
+fog_near = 64
+fog_far = 256
+//TODO add sand

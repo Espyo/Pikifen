@@ -1,0 +1,21 @@
+//Light snow, and a light winter-blue lighting tint.
+name = Snowing
+lighting {
+    0    = 0   16  32  176
+    300  = 0   16  32  176
+    360  = 16  16  32  128
+    420  = 32  16  32  64
+    480  = 0   16  16  64
+    1020 = 0   16  16  64
+    1080 = 48  16  16  64
+    1140 = 0   0   32  96
+    1200 = 0   16  32  176
+}
+sun_strength {
+    0    = 96
+    300  = 96
+    480  = 192
+    1020 = 192
+    1200 = 96
+}
+//TODO add snow

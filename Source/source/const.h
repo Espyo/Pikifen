@@ -145,23 +145,19 @@ const string SPRAYS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Sprays";
 const string STATUSES_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Statuses";
+const string WEATHER_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Weather";
 const string TEXTURES_FOLDER_PATH =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
 
 const string CONFIG_FILE =
     MISC_FOLDER_PATH + "/Config.txt";
-const string PARTICLE_GENERATORS_FILE_PATH =
-    MISC_FOLDER_PATH + "/Particle_generators.txt";
-const string SPIKE_DAMAGE_TYPES_FILE_PATH =
-    MISC_FOLDER_PATH + "/Spike_damage.txt";
 const string SYSTEM_ANIMATIONS_FILE_PATH =
     MISC_FOLDER_PATH + "/System_animations.txt";
 const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
     MISC_FOLDER_PATH + "/System_asset_file_names.txt";
 const string TITLE_SCREEN_FILE_PATH =
     MISC_FOLDER_PATH + "/Title_screen.txt";
-const string WEATHER_FILE_PATH =
-    MISC_FOLDER_PATH + "/Weather.txt";
 
 enum CREATOR_TOOL_IDS {
     CREATOR_TOOL_NONE,
