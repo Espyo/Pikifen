@@ -1,0 +1,3 @@
+name = stunning_electricity
+color = 255 255 128
+effects = shocked

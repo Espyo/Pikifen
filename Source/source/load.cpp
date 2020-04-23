@@ -744,45 +744,59 @@ void load_game_config() {
  * Loads the hazards from the game data.
  */
 void load_hazards() {
-    data_node file = load_data_file(MISC_FOLDER_PATH + "/Hazards.txt");
-    if(!file.file_was_opened) return;
-    
-    size_t n_hazards = file.get_nr_of_children();
-    for(size_t h = 0; h < n_hazards; ++h) {
-        data_node* h_node = file.get_child(h);
-        hazard h_struct;
+    vector<string> hazard_files =
+        folder_to_vector(HAZARDS_FOLDER_PATH, false);
         
-        h_struct.name = h_node->name;
+    for(size_t h = 0; h < hazard_files.size(); ++h) {
+        data_node file =
+            load_data_file(HAZARDS_FOLDER_PATH + "/" + hazard_files[h]);
+        if(!file.file_was_opened) continue;
         
-        data_node* effects_node = h_node->get_child_by_name("effects");
-        vector<string> effects_strs =
-            semicolon_list_to_vector(effects_node->value);
-        for(size_t e = 0; e < effects_strs.size(); ++e) {
-            string effect_name = effects_strs[e];
-            if(game.status_types.find(effect_name) == game.status_types.end()) {
-                log_error(
-                    "Unknown status effect \"" + effect_name + "\"!",
-                    effects_node
-                );
-            } else {
-                h_struct.effects.push_back(&(game.status_types[effect_name]));
+        hazard new_h;
+        reader_setter rs(&file);
+        
+        string effects_str;
+        string liquid_str;
+        data_node* effects_node;
+        data_node* liquid_node;
+        
+        rs.set("name", new_h.name);
+        rs.set("color", new_h.main_color);
+        rs.set("effects", effects_str, &effects_node);
+        rs.set("liquid", liquid_str, &liquid_node);
+        
+        if(effects_node) {
+            vector<string> effects_strs = semicolon_list_to_vector(effects_str);
+            for(size_t e = 0; e < effects_strs.size(); ++e) {
+                string effect_name = effects_strs[e];
+                if(
+                    game.status_types.find(effect_name) ==
+                    game.status_types.end()
+                ) {
+                    log_error(
+                        "Unknown status effect \"" + effect_name + "\"!",
+                        effects_node
+                    );
+                } else {
+                    new_h.effects.push_back(
+                        &(game.status_types[effect_name])
+                    );
+                }
             }
         }
-        data_node* l_node = h_node->get_child_by_name("liquid");
-        if(!l_node->value.empty()) {
-            if(game.liquids.find(l_node->value) == game.liquids.end()) {
+        
+        if(liquid_node) {
+            if(game.liquids.find(liquid_str) == game.liquids.end()) {
                 log_error(
-                    "Unknown liquid \"" + l_node->value + "\"!",
-                    l_node
+                    "Unknown liquid \"" + liquid_str + "\"!",
+                    liquid_node
                 );
             } else {
-                h_struct.associated_liquid = &(game.liquids[l_node->value]);
+                new_h.associated_liquid = &(game.liquids[liquid_str]);
             }
         }
         
-        reader_setter(h_node).set("color", h_struct.main_color);
-        
-        game.hazards[h_node->name] = h_struct;
+        game.hazards[new_h.name] = new_h;
     }
 }
 

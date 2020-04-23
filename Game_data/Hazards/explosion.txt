@@ -1,0 +1,2 @@
+name = explosion
+color = 255 128 0
