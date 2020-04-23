@@ -137,6 +137,8 @@ const string HAZARDS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Hazards";
 const string LIQUIDS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Liquids";
+const string PARTICLE_GENERATORS_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Particle_generators";
 const string TEXTURES_FOLDER_PATH =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
 

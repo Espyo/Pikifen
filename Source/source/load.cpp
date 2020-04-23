@@ -572,40 +572,33 @@ void load_creator_tools() {
  * Loads the user-made particle generators.
  */
 void load_custom_particle_generators(const bool load_resources) {
-    game.custom_particle_generators.clear();
-    
-    data_node file(PARTICLE_GENERATORS_FILE_PATH);
-    
-    size_t n_pg = file.get_nr_of_children();
-    for(size_t pg = 0; pg < n_pg; ++pg) {
-    
-        data_node* pg_node = file.get_child(pg);
-        data_node* p_node = pg_node->get_child_by_name("base");
+    vector<string> generator_files =
+        folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
         
-        reader_setter grs(pg_node);
+    for(size_t g = 0; g < generator_files.size(); ++g) {
+        data_node file =
+            load_data_file(
+                PARTICLE_GENERATORS_FOLDER_PATH + "/" + generator_files[g]
+            );
+        if(!file.file_was_opened) continue;
+        
+        data_node* p_node = file.get_child_by_name("base");
+        reader_setter grs(&file);
         reader_setter prs(p_node);
         
-        float emission_interval;
-        size_t number;
-        string bitmap_name;
+        string name_str;
+        float emission_interval_float;
+        size_t number_int;
+        string bitmap_str;
+        data_node* bitmap_node;
+        
         particle base_p;
-        base_p.priority = PARTICLE_PRIORITY_MEDIUM;
         
-        grs.set("emission_interval", emission_interval);
-        grs.set("number", number);
+        grs.set("name", name_str);
+        grs.set("emission_interval", emission_interval_float);
+        grs.set("number", number_int);
         
-        prs.set("bitmap", bitmap_name);
-        if(bitmap_name.empty()) {
-            base_p.type = PARTICLE_TYPE_CIRCLE;
-        } else {
-            if(load_resources) {
-                base_p.bitmap =
-                    game.bitmaps.get(
-                        bitmap_name, p_node->get_child_by_name("bitmap")
-                    );
-            }
-            base_p.type = PARTICLE_TYPE_BITMAP;
-        }
+        prs.set("bitmap",          bitmap_str, &bitmap_node);
         prs.set("duration",        base_p.duration);
         prs.set("friction",        base_p.friction);
         prs.set("gravity",         base_p.gravity);
@@ -613,28 +606,44 @@ void load_custom_particle_generators(const bool load_resources) {
         prs.set("size",            base_p.size);
         prs.set("speed",           base_p.speed);
         prs.set("color",           base_p.color);
+        
+        if(bitmap_node) {
+            if(load_resources) {
+                base_p.bitmap =
+                    game.bitmaps.get(
+                        bitmap_str, bitmap_node
+                    );
+            }
+            base_p.type = PARTICLE_TYPE_BITMAP;
+        } else {
+            base_p.type = PARTICLE_TYPE_CIRCLE;
+        }
+        
         base_p.time = base_p.duration;
+        base_p.priority = PARTICLE_PRIORITY_MEDIUM;
         
-        particle_generator pg_struct(emission_interval, base_p, number);
+        particle_generator new_pg(emission_interval_float, base_p, number_int);
         
-        grs.set("number_deviation",      pg_struct.number_deviation);
-        grs.set("duration_deviation",    pg_struct.duration_deviation);
-        grs.set("friction_deviation",    pg_struct.friction_deviation);
-        grs.set("gravity_deviation",     pg_struct.gravity_deviation);
-        grs.set("size_deviation",        pg_struct.size_deviation);
-        grs.set("pos_deviation",         pg_struct.pos_deviation);
-        grs.set("speed_deviation",       pg_struct.speed_deviation);
-        grs.set("angle",                 pg_struct.angle);
-        grs.set("angle_deviation",       pg_struct.angle_deviation);
-        grs.set("total_speed",           pg_struct.total_speed);
-        grs.set("total_speed_deviation", pg_struct.total_speed_deviation);
+        grs.set("number_deviation",      new_pg.number_deviation);
+        grs.set("duration_deviation",    new_pg.duration_deviation);
+        grs.set("friction_deviation",    new_pg.friction_deviation);
+        grs.set("gravity_deviation",     new_pg.gravity_deviation);
+        grs.set("size_deviation",        new_pg.size_deviation);
+        grs.set("pos_deviation",         new_pg.pos_deviation);
+        grs.set("speed_deviation",       new_pg.speed_deviation);
+        grs.set("angle",                 new_pg.angle);
+        grs.set("angle_deviation",       new_pg.angle_deviation);
+        grs.set("total_speed",           new_pg.total_speed);
+        grs.set("total_speed_deviation", new_pg.total_speed_deviation);
         
-        pg_struct.angle = deg_to_rad(pg_struct.angle);
-        pg_struct.angle_deviation = deg_to_rad(pg_struct.angle_deviation);
+        new_pg.angle = deg_to_rad(new_pg.angle);
+        new_pg.angle_deviation = deg_to_rad(new_pg.angle_deviation);
         
-        pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
-        
-        game.custom_particle_generators[pg_node->name] = pg_struct;
+        new_pg.id =
+            MOB_PARTICLE_GENERATOR_STATUS +
+            game.custom_particle_generators.size();
+            
+        game.custom_particle_generators[name_str] = new_pg;
     }
 }
 
