@@ -1,0 +1,5 @@
+name = poison
+damage = 800
+ingestion_only = true
+particle_generator = poison_ingestion_explosion
+particle_offset = 0 0 300

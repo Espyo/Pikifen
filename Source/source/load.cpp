@@ -974,24 +974,25 @@ sample_struct load_sample(const string &file_name) {
  * Loads the spike damage types available.
  */
 void load_spike_damage_types() {
-    data_node types_file = load_data_file(SPIKE_DAMAGE_TYPES_FILE_PATH);
-    size_t n_types =
-        types_file.get_nr_of_children();
+    vector<string> type_files =
+        folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
         
-    for(size_t t = 0; t < n_types; ++t) {
-        data_node* type_node = types_file.get_child(t);
-        spike_damage_type s_type;
-        s_type.name = type_node->name;
+    for(size_t t = 0; t < type_files.size(); ++t) {
+        data_node file =
+            load_data_file(SPIKE_DAMAGES_FOLDER_PATH + "/" + type_files[t]);
+        if(!file.file_was_opened) continue;
         
-        reader_setter rs(type_node);
+        spike_damage_type new_t;
+        reader_setter rs(&file);
         
         string particle_generator_name;
         data_node* damage_node;
         data_node* particle_generator_node;
         
-        rs.set("damage", s_type.damage, &damage_node);
-        rs.set("ingestion_only", s_type.ingestion_only);
-        rs.set("is_damage_ratio", s_type.is_damage_ratio);
+        rs.set("name", new_t.name);
+        rs.set("damage", new_t.damage, &damage_node);
+        rs.set("ingestion_only", new_t.ingestion_only);
+        rs.set("is_damage_ratio", new_t.is_damage_ratio);
         rs.set(
             "particle_generator", particle_generator_name,
             &particle_generator_node
@@ -1007,25 +1008,25 @@ void load_spike_damage_types() {
                     particle_generator_name + "\"!", particle_generator_node
                 );
             } else {
-                s_type.particle_gen =
+                new_t.particle_gen =
                     &game.custom_particle_generators[particle_generator_name];
-                s_type.particle_offset_pos =
+                new_t.particle_offset_pos =
                     s2p(
-                        type_node->get_child_by_name("particle_offset")->value,
-                        &s_type.particle_offset_z
+                        file.get_child_by_name("particle_offset")->value,
+                        &new_t.particle_offset_z
                     );
             }
         }
         
-        if(s_type.damage == 0) {
+        if(new_t.damage == 0) {
             log_error(
-                "Spike damage type \"" + s_type.name +
+                "Spike damage type \"" + new_t.name +
                 "\" needs a damage number!",
-                (damage_node ? damage_node : type_node)
+                (damage_node ? damage_node : &file)
             );
         }
         
-        game.spike_damage_types[s_type.name] = s_type;
+        game.spike_damage_types[new_t.name] = new_t;
     }
 }
 
