@@ -917,7 +917,9 @@ void save_options() {
     game.options.save(&file);
     
     //Also add the animation editor history.
-    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
+    for(
+        size_t h = 0; h < game.states.animation_editor_st->history.size(); ++h
+    ) {
         file.add(
             new data_node(
                 "animation_editor_history_" + i2s(h + 1),

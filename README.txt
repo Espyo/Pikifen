@@ -185,9 +185,10 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
 ===============
 6) Tips
 ===============
-    * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
-    * To drop a held Pikmin without throwing it, keep holding the throw button, and press the whistle button.
-    * If you're having trouble understanding why your custom mob is acting the way it is, try aiming your cursor at it
+    * To drop a held Pikmin without throwing it, keep the throw button held, and press the whistle button.
+    * If you dismiss while warming in a certain direction, they will be dismissed in that direction.
+    * Your Pikmin actually have health. Though it slowly goes back up on its own, Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again!
+    * If you're having trouble understanding why your custom mob is acting the way it is, try enabling the creator tools, aiming your cursor at it
         and using the "mob info" creator tool (5 key, by default).
     * See http://www.pikminfanon.com/Pikifen/Area_tips for tips on how to make good areas.
 

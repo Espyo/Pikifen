@@ -799,11 +799,12 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 break;
                 
             } case CREATOR_TOOL_TELEPORT: {
-                cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
                 sector* mouse_sector =
                     get_sector(game.mouse_cursor_w, NULL, true);
                 if(mouse_sector) {
+                    cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
                     cur_leader_ptr->z = mouse_sector->z;
+                    game.cam.set_pos(game.mouse_cursor_w);
                 }
                 break;
                 
