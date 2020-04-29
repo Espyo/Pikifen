@@ -1,0 +1,158 @@
+This document lists a series of tests you should do after changing the logic for sectors, or physics, or what have you.
+Testing all of these scenarios helps make sure that the changes didn't break anything.
+
+###################################
+###################################
+AREA EDITOR SECTORS
+###################################
+###################################
+
+Sector drawing test cases.
+In the diagrams, at symbols are a sector being drawn.
+When testing, test with the specified sectors in the void, and inside a big sector.
+
+
++-------+      @@@@@@@-+
+| +-+   |      @ +-+ @ |
+| | |   |  ->  @ | | @ |
+| +-+   |      @ +-+ @ |
++-------+      @@@@@@@-+
+* Draw a rectangle inside another as a subset, but have the drawing encompass another sector.
+* The new sector should be created successfully.
+
+
++-+      @@@
+| |      @ @@@
+| |  ->  @ | @
+| |      @ @@@
++-+      @@@
+* Draw a T-shaped drawing such that it creates a wing in an existing rectangle.
+* It should create 2 sectors successfully.
+
+
++-----+      +-@@@-+
+|     |  ->  | @ @ |
++-----+      +-@@@-+
+* Draw a rectangle that is a subset of another, but slices it in two.
+* It should fail to create 3 sectors, and mark the sectors red.
+
+
+    +              +
+   / \            / \
+  /   \          @@@@@
+ /     \        /@   @\
++       +  ->  + @   @ +
+ \     /        \@   @/
+  \   /          @@@@@
+   \ /            \ /
+    +              +
+* Draw a rectangle inside another such that all four points are at the midpoints of the original rectangle's edges.
+* It should fail to create 2 sectors, and mark the sectors red.
+
+
+    +              +
+   / \            / \
+  /   \          /   \
+ /     \        /     \
++       +  ->  +   @@@ +
+ \     /        \  @ @/
+  \   /          \ @@@
+   \ /            \ /
+    +              +
+* Draw a rectangle inside another, such that one of its vertexes is in the midpoint of one of the original rectangle's edges.
+* It should fail to create 2 sectors, and mark the sectors red.
+
+
++-+  +-+      +-+  +-+
+| |  | |      | @@@@ |
+| |  | |  ->  | @  @ |
+| |  | |      | @@@@ |
++-+  +-+      +-+  +-+
+* Draw a rectangle between two other rectangles, connecting the two.
+* The new sector should connected to the other two sectors successfully.
+
+
++-----+      +-----+
+| +-+ |      | +-+ |
+| | | |  ->  @@@@@@@
+| +-+ |      @ +-+ @
++-----+      @@@@@@@
+* Draw a rectangle inside another such that it is a subset, but tries to cross another rectangle in the middle of the original one.
+* The engine doesn't let you cut through the sectors.
+
+
++-+  +      +-+  +
+| | /|      | | /|
+| |/ |      | |/ |
+| +--+  ->  | @@@@
+| |         | @ @
+| |         | @@
+| |         | @
++-+         +-+
+* Have a triangle where one vertex is at the midpoint of a rectangle's edge. Then, draw a triangle where two edges are subsets of the neighboring edges of the original triangle and the rectangle.
+* The engine should create the triangle sector successfully.
+
+
++---+      +---@
+|  /       |  @@
+| +    ->  | @ @
+|  \       |  @@
++---+      +---@
+* Have a rectangle where one of the edge midpoints is a new vertex, and moved a bit inward, making the sector a bit like a blocky Pac-Man. Then, draw a triangle that closes off the hole.
+* The triangle should be created successfully.
+
+
++-----+      @@@@@-+
+ \    |      @\  @ |
+  \   |  ->  @ \ @ |
+  /   |      @ / @ |
+ /    |      @/  @ |
++-----+      @@@@@-+
+* Draw a rectangle where one edge is inside a sector, the next shares surface with an edge of that same sector, the next goes from one vertex to another of the sector, but cross the parent sector, and then the next closes off.
+* The engine shouldn't let you work on different sectors.
+* Found a problem with this, and fixed it, in 70d7531d3b7d1542c201a674c4048cd149171e36
+
+
++        @@@@@@
+|\       |@   @
+| +  ->  | @  @
+|/       |@   @
++        @@@@@@
+* Have a triangle. Then, draw a sector that neighbors two out of the three edges of the triangle.
+* The sector should be created successfully.
+* Found a problem with this, and fixed it, in 64875fb5b7bada3dccefcc9505db87556ba0f518
+
+
+
+###################################
+###################################
+PHYSICS TESTS
+###################################
+###################################
+
+* With just a leader:
+1. Move
+2. Slide against walls
+3. Walk on edges
+4. Walk off an edge and try to move in mid-air
+5. Go up and down a rising bridge
+6. Go up and down a rising bridge while also rubbing against the rail
+7. Walk against all the test walls in the Tests area
+8. Try to wedge yourself between a pushing mob and a wall
+9. Fall on top of a walkable mob
+10. Go on top of a walkable mob that's flush to a wall and hug the walls
+11. Go on top of a walkable mob from a staircase sector
+12. Be bounced by a bouncer
+13. Be pushed by several mobs at once
+
+* Get some Pikmin and:
+1. Hold a Pikmin and move around
+2. Throw a Pikmin against a wall, but to an edge it can reach, at a slide angle
+3. Throw a Pikmin against a wall, but to an edge it can reach, straight-on
+4. Throw a Pikmin at an edge without touching a wall
+5. Throw a Pikmin to an edge that's just barely in its reach
+6. Have Pikmin carry something
+7. Have Pikmin latch on to something
+8. Have Pikmin drag something that can be pushed, like a cardboard box
+9. Move whilst on top of a moving walkable mob
+10. Move whilst on top of a mob that is changing its height

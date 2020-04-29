@@ -86,6 +86,9 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
             2. You need to include the extension. This is the ".jpg" or ".png" part of the file name.
             3. The engine only finds the image in one folder. General images go in "Game_data/Graphics", and textures go in "Game_data/Graphics/Textures".
         
+        One of my textures is cutting off to black or to garbage, in a repeating pattern.
+            Your texture's resolution does not use power-of-two numbers. It doesn't happen on all machines, but that's the solution, I guess...
+        
         I'm having a hard time understanding X.
             Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.
             If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.

@@ -82,3 +82,200 @@ To add a glow to the cursor on GIMP
     Selection blur by 5.
     Bucket fill the selection with white, in a layer under the cursor.
     Set that layer's opacity to 75%.
+
+
+Tips for when you're making content
+    Try not to use spaces in your file names, and replace them with underscores instead. It should be fine, but on some machines and installations, it could prove troublesome.
+    If you want to save space, use PNGCrush on your PNG files.
+    Normally, you don't need to make your game feel different from the rest. After all, this is a ''Pikmin'' game, so it's normal that it feels like a ''Pikmin'' game. On the other hand, though, giving your game a more unique feel can make it look like a brand new thing, instead of just a bunch of new elements that follow a stale mold.
+    ''Pikmin'' games take place over the course of several days, and the playable time in a day lasts from early dawn to night, normally. One of the engine's features is to cast a lighting effect that changes the lighting of the area as time passes, per weather condition. The standard one starts at a faint pink, goes to bright white, to sunset orange, to dark. However, if your game takes a more serious and dark tone, you could literally darken the lighting! Just decrease the existing weather lighting values by a small bit. It won't have much of a gameplay impact, but it'll feel darker, eerier, less cheery. On the other hand, if your game is more light-hearted, make the lighting slightly brighter.
+    Spruce up the existing particle effects. Particle effects exist to complement the game's feel, so changing that changes the feel of the game.
+    
+
+Bag of notes (useful stuff)
+    If mobs start moving so fast that they can clip through walls
+        Keep track of its sector before the move. If after the move, no wall collisions were registered, but it's on a different sector, then that's all you need to know: a collision happened
+    Carrying speed balancing
+        If I ever need to balance carrying speeds because heavy objects being carried at the same (max) speed as light objects looks bad
+            Instead of having a max speed penalty for the object's weight, have it for the number of max carriers instead
+        If the speed with multiple Pikmin of different types is unbalanced
+            The current code (as of September 2017) is averaging the speed of the carriers and then crunching the numbers based on the total of carriers. Maybe, it should instead SUM the speed of the carriers and then do whatever crunching stuff?
+    For the problem where JPGs don't appear under Wine
+        It's not related to bitmap formats, bitmap flags, display formats, etc.
+        Fixable by upgrading Wine from version 1.6!
+    Why don't mobs have more than one timer?
+        The actions for setting a different timer are easy, but on the event, having to check which timer is the one that triggered is going to complicate the script needlessly
+    Ideas for representing height
+        Distant sectors (above, below, or both?) could have fog drawn on top of them
+    What about upscaling the game?
+        Forget it. It's an insane headache. Between changing all of the file formats, variables, constants, etc. to the new numbers, you'd have to update the SVG and PNG files, and there are other tiny code problems that aren't immediately apparent. Players can just increase the resolution and zoom_mid_level.
+        What if a higher resolution zooms in the game further (except for the HUD and menus and such), and zoom_mid_level can be used to see more or less by default? This makes sense, since if the game's min zoom is 0.5, that's because the creator doesn't want you to see too far.
+    Area editor
+        Open problems
+            If the user turns a sector inside out, there's not much the engine can do...
+            If the user starts stitching by grabbing only one vertex, it'll complain that a sector is cut up
+            There should be a clear way to communicate that you can't drag a sector into another...
+            On the area editor, two triangular sectors, facing one another, sharing the middle vertex (like an hourglass lying down). The right triangle should be then turned into a rhombus, by adding a new vertex slightly above the joining vertex. Finally, drag the left triangle's top-left vertex and drop it in the top line. It will let you do so despite crossing lines. I have no idea how to solve this (January 2018)
+        Conclusions
+            Looks like there are only four ways for a new polygon (N) to be related to any existing polygon (E): N is parent of E, N is child of E, N is neighbor of E, or N is not connected to E
+            A sector can only be empty, have X holes, or be the void
+        Stuff me and others don't like about the Smash 4 stage creator
+            If you mistap while creating a polygon, it can close off the entire thing; this is extra cumbersome for long polygons
+            Creating a polygon next to another makes one of them go further above or below in the Z axis, which can look very awkward
+            You can't move a vertex/edge of an already-made polygon
+            Counting with the grid is so hard
+            1-level undo
+        Stuff me and others don't like about the Smash Ultimate stage creator
+            The B button doesn't cancel out of stuff, but instead, makes you quit
+            You can't cancel a line after you've started it
+            If you started a line, there's no quick way to finish it (at least, not by pressing any obvious button)
+            Sub-menus cannot be closed by pressing B
+            The grid is hidden behind the layers view
+            The grid can't be toggled with the GameCube controller
+            To select a platform and all platforms it's touching, you have to tap and hold, which isn't documented
+            The function of switches isn't obvious
+            There are three different sets of instructions
+            The grid is nearly invisible sometimes
+            One of the buttons is called "Play", and it's an ambiguous term (preview the physics, or playtest?)
+            You can't change the background music once you've started
+            A plain background would be better to work on (at least in the editor only, not in gameplay)
+            Making small terrain is only possible with workarounds (using the resize feature with more connected blocks)
+        Stuff me and others didn't like about Mario Maker 2's course maker
+            Second analog stick does nothing in controller mode
+            If you're on the menus, you can't scroll in controller mode
+            Placing a Fire Flower on a Mushroom does nothing, but the opposite does
+            Handheld mode forces you to not use controller mode
+            You can't place blocks when in zoomed-out mode
+    Steps I've followed to get the engine on VS 2010
+        I used Visual Studio 2010 to compile for XP
+        Used the msvc-10.0 library version of Allegro so it works on XP
+        Properties > Config. Properties > General > Platform Toolset set to v100
+        If it complains about min or max, add an #include <algorithm> to the top
+        If it complains about scopes inside lambdas, it probably wants a "this" to be passed into the lambda, or cannot infer a "this" inside the lambda
+        If it gives linker errors, check what classes it keeps complaining about, and see if the files where that class is declared/defined are part of the workspace
+    Steps I've followed to get the engine on VS 2019
+        Installed Visual Studio
+            I've installed Visual Studio Community, but any version should work
+            When asked for the features, I enabled the following:
+                MSVC v142 - VS 2019 C++ x64/x86 Build Tools (or whatever latest version)
+                Windows 10 SDK
+        Created a brand new solution
+            To get it to run on Wine
+                Changed the release build
+                    Properties, C/C++, Code Generation, Runtime Library: Multi-threaded (/MT)
+                    Properties/Configuration Properties/Allegro 5/Library Type/Library Type: Static Monolith Release
+            Properties/C/C++/Output Files/Object File Name: $(IntDir)/obj/%(RelativeDir) (fixes multiple files called the same freaking out during object creation time, even if they're in different folders)
+            Properties/Linker/Input/Additional Dependencies: Include winmm.lib (fixes "unresolved external symbol" errors)
+            Properties/C/C++/Preprocessor/Preprocessor Definitions: Include WIN32, _WINDOWS, (those two are probably needed), NOMINMAX (fixes std::min and std::max problems), WIN32_LEAN_AND_MEAN (fixes some "'byte' ambiguous symbol" errors), _CMATH_ (fixes the cmath file freaking out)
+    Why not use constexpr?
+        For one thing, it requires C++17, which MAY be incompatible with a Windows XP release?
+        For functions, this won't really do anything unless their calls use constants. Which is basically never.
+        For constants, first, you'd have to move all constant initializations in .cpp files to their declarations in .h files. Second, this removes your ability to do some things with them, like passing them into functions that have arguments by reference, or access an element of an array.
+    Why not use foreach and/or iterators?
+        In testing, it turned out to be slower than accessing by index, in vectors.
+    Possible optimizations
+        Create a Resource class, and make Texture and Sound inherit from it?
+            Here's an idea to save on loading times and resource usage: when an area is unloaded, its resources stay in memory, even if they are all marked as having 0 uses. Then, when loading a new area, for resources that are already loaded, simply point to them. This saves on loading times. Then, save a list of new requested resources. Unload all of the unused resources, to save on memory, and then load the new ones.
+        A class that divides tasks between frames (think C#'s things)?
+            Like: task_divisor(TASK_ID_CHECK_2ND_CLOSEST_PIKMIN, 4, 0, leaders.size(), [] (int p) { if(pikmin[p]...) });
+                This would make the task of checking for the 2nd closest Pikmin spread out through 4 frames.
+                Task ID, so the game can keep track of where it was last frame; number of frames to span; starting iterator number; ending iterator number; function to perform, receiving the iterator number from the divisor.
+            Re-read C#'s way for more tips
+            Other approach: for mobs that should have processing skips (mobs that are off-camera, or decorative mobs):
+                Only process them one out of every X frames
+                The mobs that get processed on this frame are the mobs whose array index mod the number of frames is 0 (or something like that)
+        Only load the mob types, hazards, etc. required by the area.
+        Vector -> list?
+        All maps of strings should be replaced with maps of ints
+        Make off-screen mobs only tick every other frame -- remember to make them tick worth the total amount of time they've missed out on
+            Certain mobs (decoration) shouldn't even tick at all when off-screen, and tick every other frame when on-screen
+        Don't re-calculate ALL the ears, convex, etc. every clip, when triangulating
+        http://blog2.emptycrate.com/content/c-loop-optimization
+        http://stackoverflow.com/questions/25078285/replacing-a-32-bit-loop-count-variable-with-64-bit-introduces-crazy-performance?rq=1
+        http://www.tantalon.com/pete/cppopt/compiler.htm#CppLanguage
+        s/find/lower_bound
+        x myx = x(abc) -> x myx(abc)
+        sin() vs lookup_sin()
+        http://msdn.microsoft.com/en-us/library/2e70t5y1.aspx
+        Use .reserve() on vectors of known size
+        Use .shrink_to_fit() on vectors where you want the memory to be freed
+        Declare variables next to the relevant code, not at the top of the function
+        static_cast instead of normal C-style cast
+
+
+Procedure for every version release
+    Release candidate
+        In Visual Studio
+            Add all added source files, and remove removed source files, if needed
+                Use the helper tool to get a list, or run:
+                    git diff --name-status $(git describe --abbrev=0 --tags) | grep ^\[AD\].Source/source
+            Confirm that the subsystem option in the release build's linker options is set to Windows
+        Compile as a release build
+        Point down all changes that were necessary for this to compile
+        Create a zip file (see below)
+        Send it to beta testers so they can check for stuff that's immediately wrong
+        After they're done, tell them to confirm that Error_log.txt reported nothing
+    Final preparations
+        Change version number in the code
+            Use the helper tool, or edit const.h and Pikifen.rc
+        Change version number of all areas
+        Pass all files through AStyle
+        Compile with -Wall and correct all problems
+        Use cppcheck on the code and correct the problems
+        Confirm that there are no superfluous #includes (how?)
+        Confirm that no line goes over 80 characters
+            Use the helper tool, or run:
+                grep -Enr --include="*.cpp" ^.\{81,\}$
+        Confirm that all function definitions are sorted alphabetically, and by namespace
+            Use the helper tool
+        Confirm that all includes are sorted alphabetically
+            Use the helper tool
+        Confirm that all functions have documentation, and that it has no missing/extra parameters
+            Use the helper tool
+        Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+        Fix up all changed images since the last release
+            Use the helper tool to get the list, or run:
+                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
+            Confirm that the most recent ground textures are a power of 2
+            PNGCrush the png files
+            This might help (make sure filelist.txt has LF linebreaks):
+                cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
+        Fix up all changed SVG files
+            Use the helper tool to get the list, or run:
+                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
+            Remove large reference images and screenshots
+            Use the cleanup document tool in Inkscape
+            Make sure they have a license
+                https://opensource.org/licenses/MIT
+            Make sure they have metadata
+                Title: <Object name> spritesheet
+                Author: André "Espyo" Silva
+                Keywords: Pikifen spritesheet
+                Description: Spritesheet for the <object name> pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen
+        Update the Allegro version number on the Compiling section of the README, if it changed
+        Check any changes made on Windows in order to compile, and port them over
+    Final build
+        Compile it once more on Linux just to be sure (full build)
+        Delete Error_log.txt
+        Make sure the title screen shows the right version
+        Test it out by playing a bit
+        Confirm that Error_log.txt reported no errors
+    Release
+        Commit all changes made in preparation for the next version, and push
+        Tag the commit (format "X.X.X"), but don't push
+        Compile it on Windows
+            Make sure it's the release target
+        Create a zip (see below)
+        Push the tag
+        Release the new version on GitHub
+    
+    When creating a zip to send somebody or to release
+        Zip the release's folder
+            The folder should be named "Pikifen_X.X" (or "Pikifen_X.X.X" if there are revision changes, or "Pikifen_X.X_RC" if it's a release candidate)
+            Executable for Windows
+            Game_data folder
+                Sans testing areas
+            README file
+            LICENSE file
+            Name the zip file the same as the folder
+            The file format is .zip, not .7z
