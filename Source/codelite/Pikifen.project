@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
+  <VirtualDirectory Name="imgui">
+    <File Name="../source/imgui/imstb_truetype.h"/>
+    <File Name="../source/imgui/imstb_textedit.h"/>
+    <File Name="../source/imgui/imstb_rectpack.h"/>
+    <File Name="../source/imgui/imgui_widgets.cpp"/>
+    <File Name="../source/imgui/imgui_internal.h"/>
+    <File Name="../source/imgui/imgui_impl_allegro5.h"/>
+    <File Name="../source/imgui/imgui_impl_allegro5.cpp"/>
+    <File Name="../source/imgui/imgui_draw.cpp"/>
+    <File Name="../source/imgui/imgui_demo.cpp"/>
+    <File Name="../source/imgui/imgui.h"/>
+    <File Name="../source/imgui/imgui.cpp"/>
+    <File Name="../source/imgui/imconfig.h"/>
+  </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
@@ -317,7 +331,7 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="clang( tags/RELEASE_380/final )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-Wmain;-g;-O0;-pedantic;-std=c++11;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0;-D_GLIBCXX_DEBUG" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-Wmain;-g;-O0;-pedantic;-std=c++11;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0;-D_GLIBCXX_DEBUG;-DImDrawIdx=int" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
       </Compiler>
       <Linker Options="-lm `pkg-config --libs allegro-5 allegro_audio-5 allegro_image-5 allegro_font-5 allegro_acodec-5 allegro_primitives-5 allegro_dialog-5` -rdynamic" Required="yes"/>
