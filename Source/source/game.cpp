@@ -15,6 +15,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "init.h"
+#include "imgui/imgui_impl_allegro5.h"
 #include "load.h"
 
 
@@ -97,6 +98,10 @@ void game_class::main_loop() {
             ************************************************/
         
         al_wait_for_event(logic_queue, &ev);
+        
+        if(cur_state->use_imgui) {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+        }
         
         cur_state->handle_controls(ev);
         
@@ -234,7 +239,10 @@ int game_class::start() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    //Init and load some other things.
+    //Init Dear ImGui.
+    init_dear_imgui();
+    
+    //Init and load some engine things.
     init_mob_actions();
     init_mob_categories();
     init_sector_types();

@@ -27,6 +27,7 @@
 #include "game.h"
 #include "game_state.h"
 #include "gameplay.h"
+#include "imgui/imgui_impl_allegro5.h"
 #include "menus.h"
 #include "mob_categories/bouncer_category.h"
 #include "mob_categories/bridge_category.h"
@@ -266,6 +267,16 @@ void init_controls() {
         
         game.options.controls[0].push_back(control_info(game.buttons.list[b].id, dc));
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes Dear ImGui.
+ */
+void init_dear_imgui() {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplAllegro5_Init(game.display);
 }
 
 

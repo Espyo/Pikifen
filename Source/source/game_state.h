@@ -43,6 +43,7 @@ public:
     vector<menu_widget*> menu_widgets;
     menu_widget* back_widget;
     menu_widget* selected_widget;
+    bool use_imgui;
     
     void handle_menu_button(
         const size_t action, const float pos, const size_t player
