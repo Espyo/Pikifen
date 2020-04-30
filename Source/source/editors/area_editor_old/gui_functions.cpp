@@ -26,7 +26,7 @@
 /* ----------------------------------------------------------------------------
  * Loads the current advanced sector appearance data onto the GUI.
  */
-void area_editor::asa_to_gui() {
+void area_editor_old::asa_to_gui() {
     if(selected_sectors.empty()) {
         if(state == EDITOR_STATE_ASA) {
             sector_to_gui();
@@ -55,7 +55,7 @@ void area_editor::asa_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the current advanced sector behavior data onto the GUI.
  */
-void area_editor::asb_to_gui() {
+void area_editor_old::asb_to_gui() {
     if(selected_sectors.empty()) {
         if(state == EDITOR_STATE_ASB) {
             sector_to_gui();
@@ -119,7 +119,7 @@ void area_editor::asb_to_gui() {
 /* ----------------------------------------------------------------------------
  * Switches to the correct frame, depending on the current editor mode.
  */
-void area_editor::change_to_right_frame() {
+void area_editor_old::change_to_right_frame() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
     frm_toolbar->show();
@@ -186,7 +186,7 @@ void area_editor::change_to_right_frame() {
 /* ----------------------------------------------------------------------------
  * GUI functions for clearing the data for the current area.
  */
-void area_editor::clear_current_area_gui() {
+void area_editor_old::clear_current_area_gui() {
     frm_area->show();
     enable_widget(frm_toolbar->widgets["but_save"]);
     frm_paths->widgets["lbl_path_dist"]->hide();
@@ -198,7 +198,7 @@ void area_editor::clear_current_area_gui() {
 /* ----------------------------------------------------------------------------
  * Deletes the currently selected hazard from the list.
  */
-void area_editor::delete_current_hazard() {
+void area_editor_old::delete_current_hazard() {
     register_change("hazard removal");
     
     sector* s_ptr = *selected_sectors.begin();
@@ -222,7 +222,7 @@ void area_editor::delete_current_hazard() {
 /* ----------------------------------------------------------------------------
  * Loads the current details data onto the GUI.
  */
-void area_editor::details_to_gui() {
+void area_editor_old::details_to_gui() {
     if(selected_shadow) {
     
         frm_shadow->show();
@@ -251,7 +251,7 @@ void area_editor::details_to_gui() {
 /* ----------------------------------------------------------------------------
  * Saves the advanced sector appearance data to memory using info on the gui.
  */
-void area_editor::gui_to_asa() {
+void area_editor_old::gui_to_asa() {
     sector* s_ptr = *selected_sectors.begin();
     gui_to_var_helper h;
     
@@ -300,7 +300,7 @@ void area_editor::gui_to_asa() {
 /* ----------------------------------------------------------------------------
  * Saves the advanced sector behavior data to memory using info on the gui.
  */
-void area_editor::gui_to_asb() {
+void area_editor_old::gui_to_asb() {
     sector* s_ptr = *selected_sectors.begin();
     gui_to_var_helper h;
     
@@ -331,7 +331,7 @@ void area_editor::gui_to_asb() {
 /* ----------------------------------------------------------------------------
  * Saves the details data to memory using info on the gui.
  */
-void area_editor::gui_to_details() {
+void area_editor_old::gui_to_details() {
     if(!selected_shadow) return;
     
     gui_to_var_helper h;
@@ -423,7 +423,7 @@ void area_editor::gui_to_details() {
 /* ----------------------------------------------------------------------------
  * Saves the area info data to memory using info on the gui.
  */
-void area_editor::gui_to_info() {
+void area_editor_old::gui_to_info() {
     gui_to_var_helper h;
     
     h.register_string(
@@ -484,7 +484,7 @@ void area_editor::gui_to_info() {
 /* ----------------------------------------------------------------------------
  * Saves the mob data to memory using info on the gui.
  */
-void area_editor::gui_to_mob() {
+void area_editor_old::gui_to_mob() {
     mob_gen* m_ptr = *selected_mobs.begin();
     gui_to_var_helper h;
     
@@ -510,7 +510,7 @@ void area_editor::gui_to_mob() {
 /* ----------------------------------------------------------------------------
  * Saves the options data to memory using info on the gui.
  */
-void area_editor::gui_to_options() {
+void area_editor_old::gui_to_options() {
     game.options.area_editor_show_edge_length =
         get_checkbox_check(frm_options, "chk_edge_length");
     game.options.area_editor_show_territory =
@@ -552,7 +552,7 @@ void area_editor::gui_to_options() {
 /* ----------------------------------------------------------------------------
  * Saves the sector data to memory using info on the gui.
  */
-void area_editor::gui_to_sector() {
+void area_editor_old::gui_to_sector() {
     sector* s_ptr = *selected_sectors.begin();
     gui_to_var_helper h;
     
@@ -586,7 +586,7 @@ void area_editor::gui_to_sector() {
 /* ----------------------------------------------------------------------------
  * Saves the tool data to memory using info on the gui.
  */
-void area_editor::gui_to_tools() {
+void area_editor_old::gui_to_tools() {
     string new_file_name = get_textbox_text(frm_tools, "txt_ref_file");
     
     reference_transformation.set_center(
@@ -644,7 +644,7 @@ void area_editor::gui_to_tools() {
 /* ----------------------------------------------------------------------------
  * Hides all menu frames.
  */
-void area_editor::hide_all_frames() {
+void area_editor_old::hide_all_frames() {
     frm_picker->hide();
     
     frm_main->hide();
@@ -666,7 +666,7 @@ void area_editor::hide_all_frames() {
 /* ----------------------------------------------------------------------------
  * Loads the current area metadata onto the GUI.
  */
-void area_editor::info_to_gui() {
+void area_editor_old::info_to_gui() {
     set_textbox_text(
         frm_info, "txt_name", game.cur_area_data.name
     );
@@ -707,7 +707,7 @@ void area_editor::info_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the current mob data onto the GUI.
  */
-void area_editor::mob_to_gui() {
+void area_editor_old::mob_to_gui() {
     frm_mob->hide();
     frm_mob_multi->hide();
     
@@ -749,10 +749,10 @@ void area_editor::mob_to_gui() {
 
 /* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
- * For the ID of the picker, use area_editor::PICKER_*.
+ * For the ID of the picker, use area_editor_old::PICKER_*.
  * The content to use is decided from that.
  */
-void area_editor::open_picker(const unsigned char id) {
+void area_editor_old::open_picker(const unsigned char id) {
     vector<std::pair<string, string> > elements;
     bool can_create_new = false;
     string title;
@@ -829,7 +829,7 @@ void area_editor::open_picker(const unsigned char id) {
 /* ----------------------------------------------------------------------------
  * Loads the options data onto the GUI.
  */
-void area_editor::options_to_gui() {
+void area_editor_old::options_to_gui() {
     set_label_text(
         frm_options, "lbl_grid", "Grid: " + i2s(game.options.area_editor_grid_interval)
     );
@@ -875,7 +875,7 @@ void area_editor::options_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the current path data onto the GUI.
  */
-void area_editor::path_to_gui() {
+void area_editor_old::path_to_gui() {
     if(path_drawing_normals) {
         set_radio_selection(frm_paths, "rad_normal", true);
     } else {
@@ -887,13 +887,13 @@ void area_editor::path_to_gui() {
 /* ----------------------------------------------------------------------------
  * Picks an item and closes the list picker frame.
  */
-void area_editor::pick(
+void area_editor_old::pick(
     const size_t picker_id, const string &name, const string &category
 ) {
     switch(picker_id) {
     case PICKER_LOAD_AREA: {
         cur_area_name = name;
-        area_editor::load_area(false);
+        area_editor_old::load_area(false);
         update_main_frame();
         break;
         
@@ -946,7 +946,7 @@ void area_editor::pick(
 /* ----------------------------------------------------------------------------
  * Adds texture suggestions to the gui frame.
  */
-void area_editor::populate_texture_suggestions() {
+void area_editor_old::populate_texture_suggestions() {
     lafi::frame* f = (lafi::frame*) frm_texture->widgets["frm_list"];
     
     while(!f->widgets.empty()) {
@@ -989,7 +989,7 @@ void area_editor::populate_texture_suggestions() {
 /* ----------------------------------------------------------------------------
  * Loads the current review data onto the GUI.
  */
-void area_editor::review_to_gui() {
+void area_editor_old::review_to_gui() {
     lafi::button* but_find_prob =
         (lafi::button*) frm_review->widgets["but_find_prob"];
     lafi::button* but_goto_prob =
@@ -1266,7 +1266,7 @@ void area_editor::review_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the current sector data onto the GUI.
  */
-void area_editor::sector_to_gui() {
+void area_editor_old::sector_to_gui() {
     lafi::button* but_sel_filter =
         (lafi::button*) frm_layout->widgets["but_sel_filter"];
         
@@ -1323,7 +1323,7 @@ void area_editor::sector_to_gui() {
 /* ----------------------------------------------------------------------------
  * Selects either the previous or the next hazard on the list.
  */
-void area_editor::select_different_hazard(const bool next) {
+void area_editor_old::select_different_hazard(const bool next) {
     sector* s_ptr = *selected_sectors.begin();
     vector<string> list = semicolon_list_to_vector(s_ptr->hazards_str);
     cur_hazard_nr = std::min(cur_hazard_nr, list.size() - 1);
@@ -1335,7 +1335,7 @@ void area_editor::select_different_hazard(const bool next) {
 /* ----------------------------------------------------------------------------
  * Loads the current sector texture transformer data onto the GUI.
  */
-void area_editor::stt_to_gui() {
+void area_editor_old::stt_to_gui() {
     switch(stt_mode) {
     case 0: {
         set_radio_selection(frm_stt, "rad_offset", true);
@@ -1354,7 +1354,7 @@ void area_editor::stt_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the current tools data onto the GUI.
  */
-void area_editor::tools_to_gui() {
+void area_editor_old::tools_to_gui() {
     set_textbox_text(
         frm_tools, "txt_ref_file", reference_file_name
     );
@@ -1382,7 +1382,7 @@ void area_editor::tools_to_gui() {
 /* ----------------------------------------------------------------------------
  * Updates the main frame.
  */
-void area_editor::update_main_frame() {
+void area_editor_old::update_main_frame() {
     if(cur_area_name.empty()) {
         frm_area->hide();
     } else {
@@ -1413,7 +1413,7 @@ void area_editor::update_main_frame() {
 /* ----------------------------------------------------------------------------
  * Updates the toolbar's widgets.
  */
-void area_editor::update_toolbar() {
+void area_editor_old::update_toolbar() {
     lafi::widget* but_undo = frm_toolbar->widgets["but_undo"];
     lafi::scrollbar* bar_reference =
         ((lafi::scrollbar*) frm_toolbar->widgets["bar_reference"]);

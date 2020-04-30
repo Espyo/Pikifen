@@ -20,7 +20,7 @@
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the area editor.
  */
-void area_editor::do_drawing() {
+void area_editor_old::do_drawing() {
     gui->draw();
     
     al_use_transform(&game.world_to_screen_transform);
@@ -1338,7 +1338,7 @@ void area_editor::do_drawing() {
  * lowest_z:   What z coordinate represents the bottom of the graph.
  * sector_ptr: Pointer to the sector to draw.
  */
-void area_editor::draw_cross_section_sector(
+void area_editor_old::draw_cross_section_sector(
     const float start_ratio, const float end_ratio, const float proportion,
     const float lowest_z, sector* sector_ptr
 ) {
@@ -1385,7 +1385,7 @@ void area_editor::draw_cross_section_sector(
  * text:  Text to show.
  * dots:  How many dots to draw above the text. 0, 1, or 2.
  */
-void area_editor::draw_debug_text(
+void area_editor_old::draw_debug_text(
     const ALLEGRO_COLOR color, const point &where, const string &text,
     const unsigned char dots
 ) {
@@ -1457,7 +1457,7 @@ void area_editor::draw_debug_text(
  * Draws a number signifying the distance between two points next to the
  * main one.
  */
-void area_editor::draw_line_dist(const point &focus, const point &other) {
+void area_editor_old::draw_line_dist(const point &focus, const point &other) {
     float d = dist(other, focus).to_float();
     if(d < 64) return;
     

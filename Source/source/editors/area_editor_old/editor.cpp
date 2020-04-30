@@ -27,59 +27,59 @@ using std::unordered_set;
 using std::vector;
 
 //Radius to use when drawing a cross-section point.
-const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
+const float area_editor_old::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //A comfortable distance, useful for many scenarios.
-const float area_editor::COMFY_DIST = 32.0f;
+const float area_editor_old::COMFY_DIST = 32.0f;
 //The cursor snap for heavy modes updates these many times a second.
-const float area_editor::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
+const float area_editor_old::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
-const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
+const float area_editor_old::DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
-const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
+const unsigned char area_editor_old::DEF_REFERENCE_ALPHA = 128;
 //Amount to pan the camera by when using the keyboard.
-const float area_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+const float area_editor_old::KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum number of points that a circle sector can be created with.
-const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
+const unsigned char area_editor_old::MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum grid interval.
-const float area_editor::MAX_GRID_INTERVAL = 4096;
+const float area_editor_old::MAX_GRID_INTERVAL = 4096;
 //Maximum number of texture suggestions.
-const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+const size_t area_editor_old::MAX_TEXTURE_SUGGESTIONS = 20;
 //Minimum number of points that a circle sector can be created with.
-const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
+const unsigned char area_editor_old::MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
-const float area_editor::MIN_GRID_INTERVAL = 2.0;
+const float area_editor_old::MIN_GRID_INTERVAL = 2.0;
 //Thickness to use when drawing a mob link line.
-const float area_editor::MOB_LINK_THICKNESS = 2.0f;
+const float area_editor_old::MOB_LINK_THICKNESS = 2.0f;
 //How long to tint the new sector's line(s) red for.
-const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
+const float area_editor_old::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
-const float area_editor::PATH_LINK_THICKNESS = 2.0f;
+const float area_editor_old::PATH_LINK_THICKNESS = 2.0f;
 //Radius to use when drawing a path preview checkpoint.
-const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+const float area_editor_old::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
-const float area_editor::PATH_PREVIEW_TIMER_DUR = 0.1f;
+const float area_editor_old::PATH_PREVIEW_TIMER_DUR = 0.1f;
 //Radius to use when drawing a path stop circle.
-const float area_editor::PATH_STOP_RADIUS = 16.0f;
+const float area_editor_old::PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
-const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
+const float area_editor_old::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Color of a selected element, or the selection box.
-const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
+const unsigned char area_editor_old::SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
-const float area_editor::SELECTION_EFFECT_SPEED = TAU * 2;
+const float area_editor_old::SELECTION_EFFECT_SPEED = TAU * 2;
 //Wait this long before letting a new repeat undo operation be saved.
-const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
+const float area_editor_old::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
-const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
+const float area_editor_old::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
-const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+const float area_editor_old::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
-const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
+const float area_editor_old::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
 
 /* ----------------------------------------------------------------------------
  * Initializes area editor class stuff.
  */
-area_editor::area_editor() :
+area_editor_old::area_editor_old() :
     backup_timer(game.options.area_editor_backup_interval),
     cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
@@ -138,7 +138,7 @@ area_editor::area_editor() :
  * with the existing edges and vertexes. In other words, if you draw a line
  * between n1 and n2, it will not go inside a sector.
  */
-bool area_editor::are_nodes_traversable(
+bool area_editor_old::are_nodes_traversable(
     const layout_drawing_node &n1, const layout_drawing_node &n2
 ) const {
     if(n1.on_sector || n2.on_sector) return false;
@@ -174,7 +174,7 @@ bool area_editor::are_nodes_traversable(
 /* ----------------------------------------------------------------------------
  * Calculates the preview path.
  */
-void area_editor::calculate_preview_path() {
+void area_editor_old::calculate_preview_path() {
     if(!show_path_preview) return;
     
     float d = 0;
@@ -200,7 +200,7 @@ void area_editor::calculate_preview_path() {
 /* ----------------------------------------------------------------------------
  * Cancels the circular sector creation operation and returns to normal.
  */
-void area_editor::cancel_circle_sector() {
+void area_editor_old::cancel_circle_sector() {
     clear_circle_sector();
     sub_state = EDITOR_SUB_STATE_NONE;
 }
@@ -209,7 +209,7 @@ void area_editor::cancel_circle_sector() {
 /* ----------------------------------------------------------------------------
  * Cancels the edge drawing operation and returns to normal.
  */
-void area_editor::cancel_layout_drawing() {
+void area_editor_old::cancel_layout_drawing() {
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
 }
@@ -218,7 +218,7 @@ void area_editor::cancel_layout_drawing() {
 /* ----------------------------------------------------------------------------
  * Cancels the vertex moving operation.
  */
-void area_editor::cancel_layout_moving() {
+void area_editor_old::cancel_layout_moving() {
     for(auto v : selected_vertexes) {
         v->x = pre_move_vertex_coords[v].x;
         v->y = pre_move_vertex_coords[v].y;
@@ -231,7 +231,7 @@ void area_editor::cancel_layout_moving() {
  * Checks if the line the user is trying to draw is okay. Sets the line's status
  * to drawing_line_error.
  */
-void area_editor::check_drawing_line(const point &pos) {
+void area_editor_old::check_drawing_line(const point &pos) {
     drawing_line_error = DRAWING_LINE_NO_ERROR;
     
     if(drawing_nodes.empty()) {
@@ -443,7 +443,7 @@ void area_editor::check_drawing_line(const point &pos) {
 /* ----------------------------------------------------------------------------
  * Clears the data about the circular sector creation.
  */
-void area_editor::clear_circle_sector() {
+void area_editor_old::clear_circle_sector() {
     new_circle_sector_step = 0;
     new_circle_sector_points.clear();
 }
@@ -452,7 +452,7 @@ void area_editor::clear_circle_sector() {
 /* ----------------------------------------------------------------------------
  * Clears the currently loaded area data.
  */
-void area_editor::clear_current_area() {
+void area_editor_old::clear_current_area() {
     clear_current_area_gui();
     
     reference_transformation.keep_aspect_ratio = true;
@@ -502,7 +502,7 @@ void area_editor::clear_current_area() {
 /* ----------------------------------------------------------------------------
  * Clears the data about the layout drawing.
  */
-void area_editor::clear_layout_drawing() {
+void area_editor_old::clear_layout_drawing() {
     drawing_nodes.clear();
     drawing_line_error = DRAWING_LINE_NO_ERROR;
 }
@@ -511,7 +511,7 @@ void area_editor::clear_layout_drawing() {
 /* ----------------------------------------------------------------------------
  * Clears the data about the layout moving.
  */
-void area_editor::clear_layout_moving() {
+void area_editor_old::clear_layout_moving() {
     if(pre_move_area_data) {
         forget_prepared_state(pre_move_area_data);
         pre_move_area_data = NULL;
@@ -525,7 +525,7 @@ void area_editor::clear_layout_moving() {
 /* ----------------------------------------------------------------------------
  * Clears the data about the current problems, if any.
  */
-void area_editor::clear_problems() {
+void area_editor_old::clear_problems() {
     problem_type = EPT_NONE_YET;
     problem_edge_intersection.e1 = NULL;
     problem_edge_intersection.e2 = NULL;
@@ -541,7 +541,7 @@ void area_editor::clear_problems() {
 /* ----------------------------------------------------------------------------
  * Clears the data about the current selection.
  */
-void area_editor::clear_selection() {
+void area_editor_old::clear_selection() {
     selected_vertexes.clear();
     selected_edges.clear();
     selected_sectors.clear();
@@ -562,7 +562,7 @@ void area_editor::clear_selection() {
 /* ----------------------------------------------------------------------------
  * Clears the list of texture suggestions. This frees up the bitmaps.
  */
-void area_editor::clear_texture_suggestions() {
+void area_editor_old::clear_texture_suggestions() {
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
         texture_suggestions[s].destroy();
     }
@@ -573,7 +573,7 @@ void area_editor::clear_texture_suggestions() {
 /* ----------------------------------------------------------------------------
  * Clears the undo history, deleting the memory allocated for them.
  */
-void area_editor::clear_undo_history() {
+void area_editor_old::clear_undo_history() {
     for(size_t h = 0; h < undo_history.size(); ++h) {
         delete undo_history[h].first;
     }
@@ -584,7 +584,7 @@ void area_editor::clear_undo_history() {
 /* ----------------------------------------------------------------------------
  * Creates a new area to work on.
  */
-void area_editor::create_area() {
+void area_editor_old::create_area() {
     clear_current_area();
     disable_widget(frm_toolbar->widgets["but_reload"]);
     
@@ -663,7 +663,7 @@ void area_editor::create_area() {
 /* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given its name.
  */
-void area_editor::create_new_from_picker(
+void area_editor_old::create_new_from_picker(
     const size_t picker_id, const string &name
 ) {
     string new_area_path =
@@ -674,7 +674,7 @@ void area_editor::create_new_from_picker(
     if(al_fs_entry_exists(new_area_folder_entry)) {
         //Already exists, just load it.
         cur_area_name = name;
-        area_editor::load_area(false);
+        area_editor_old::load_area(false);
     } else {
         //Create a new area.
         cur_area_name = name;
@@ -693,7 +693,7 @@ void area_editor::create_new_from_picker(
 /* ----------------------------------------------------------------------------
  * Runs custom code when the user presses the "cancel" button on a picker.
  */
-void area_editor::custom_picker_cancel_action() {
+void area_editor_old::custom_picker_cancel_action() {
     //If the user canceled out without picking an area yet, then they want
     //to leave the area editor.
     if(!loaded_content_yet) {
@@ -705,7 +705,7 @@ void area_editor::custom_picker_cancel_action() {
 /* ----------------------------------------------------------------------------
  * Deletes the selected mobs.
  */
-void area_editor::delete_selected_mobs() {
+void area_editor_old::delete_selected_mobs() {
     if(selected_mobs.empty()) {
         emit_status_bar_message(
             "You have to select mobs to delete!", false
@@ -751,7 +751,7 @@ void area_editor::delete_selected_mobs() {
 /* ----------------------------------------------------------------------------
  * Deletes the selected path links and/or stops.
  */
-void area_editor::delete_selected_path_elements() {
+void area_editor_old::delete_selected_path_elements() {
     if(selected_path_links.empty() && selected_path_stops.empty()) {
         emit_status_bar_message(
             "You have to select something to delete!", false
@@ -809,7 +809,7 @@ void area_editor::delete_selected_path_elements() {
 /* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the area editor.
  */
-void area_editor::do_logic() {
+void area_editor_old::do_logic() {
     editor::do_logic_pre();
     
     cursor_snap_timer.tick(game.delta_t);
@@ -830,7 +830,7 @@ void area_editor::do_logic() {
 /* ----------------------------------------------------------------------------
  * Emits a message onto the status bar, based on the given triangulation error.
  */
-void area_editor::emit_triangulation_error_status_bar_message(
+void area_editor_old::emit_triangulation_error_status_bar_message(
     const TRIANGULATION_ERRORS error
 ) {
     switch(error) {
@@ -865,7 +865,7 @@ void area_editor::emit_triangulation_error_status_bar_message(
  * Tries to find problems with the area. Returns the first one found,
  * or EPT_NONE if none found.
  */
-unsigned char area_editor::find_problems() {
+unsigned char area_editor_old::find_problems() {
     problem_sector_ptr = NULL;
     problem_vertex_ptr = NULL;
     problem_shadow_ptr = NULL;
@@ -1148,7 +1148,7 @@ unsigned char area_editor::find_problems() {
 /* ----------------------------------------------------------------------------
  * Finishes drawing a circular sector.
  */
-void area_editor::finish_circle_sector() {
+void area_editor_old::finish_circle_sector() {
     clear_layout_drawing();
     for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
         layout_drawing_node n;
@@ -1167,7 +1167,7 @@ void area_editor::finish_circle_sector() {
 /* ----------------------------------------------------------------------------
  * Finishes the layout drawing operation, and tries to create whatever sectors.
  */
-void area_editor::finish_layout_drawing() {
+void area_editor_old::finish_layout_drawing() {
     if(drawing_nodes.size() < 3) {
         cancel_layout_drawing();
         return;
@@ -1441,7 +1441,7 @@ void area_editor::finish_layout_drawing() {
 /* ----------------------------------------------------------------------------
  * Finishes a vertex moving procedure.
  */
-void area_editor::finish_layout_moving() {
+void area_editor_old::finish_layout_moving() {
     TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
     
     unordered_set<sector*> affected_sectors =
@@ -1700,7 +1700,7 @@ void area_editor::finish_layout_moving() {
  * Forgets a pre-prepared area state that was almost ready to be added to
  * the undo history.
  */
-void area_editor::forget_prepared_state(area_data* prepared_state) {
+void area_editor_old::forget_prepared_state(area_data* prepared_state) {
     delete prepared_state;
 }
 
@@ -1709,7 +1709,7 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
  * Returns all sectors affected by the specified vertexes.
  * This includes the NULL sector.
  */
-unordered_set<sector*> area_editor::get_affected_sectors(
+unordered_set<sector*> area_editor_old::get_affected_sectors(
     set<vertex*> &vertexes
 ) const {
     unordered_set<sector*> affected_sectors;
@@ -1726,7 +1726,7 @@ unordered_set<sector*> area_editor::get_affected_sectors(
 /* ----------------------------------------------------------------------------
  * Returns which layout element got clicked, if any.
  */
-void area_editor::get_clicked_layout_element(
+void area_editor_old::get_clicked_layout_element(
     vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
 ) const {
     *clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
@@ -1756,7 +1756,7 @@ void area_editor::get_clicked_layout_element(
  * closest_edge_angle: If not NULL, the angle the edge makes into its
  *   other vertex is returned here.
  */
-edge* area_editor::get_closest_edge_to_angle(
+edge* area_editor_old::get_closest_edge_to_angle(
     vertex* v_ptr, const float angle, const bool clockwise,
     float* closest_edge_angle
 ) const {
@@ -1804,7 +1804,7 @@ edge* area_editor::get_closest_edge_to_angle(
  * result:   Returns the common sector here.
  * Returns false if there is no common sector. True otherwise.
  */
-bool area_editor::get_common_sector(
+bool area_editor_old::get_common_sector(
     vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
 ) const {
     unordered_set<sector*> sectors;
@@ -1896,7 +1896,7 @@ bool area_editor::get_common_sector(
  * This function can check which is the "correct" edge to point to, from
  * the two provided.
  */
-edge* area_editor::get_correct_post_split_edge(
+edge* area_editor_old::get_correct_post_split_edge(
     vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
 ) const {
     float score1 = 0;
@@ -1926,7 +1926,7 @@ edge* area_editor::get_correct_post_split_edge(
  * even if the sector is the void, or false if something's gone wrong.
  * The outer sector is returned to result.
  */
-bool area_editor::get_drawing_outer_sector(sector** result) const {
+bool area_editor_old::get_drawing_outer_sector(sector** result) const {
     //Start by checking if there's a node on a sector. If so, that's it!
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         if(!drawing_nodes[n].on_vertex && !drawing_nodes[n].on_edge) {
@@ -1972,7 +1972,7 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
  * p:     The point.
  * after: Only check edges that come after this one.
  */
-edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
+edge* area_editor_old::get_edge_under_point(const point &p, edge* after) const {
     bool found_after = (!after ? true : false);
     
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -2008,7 +2008,7 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
 /* ----------------------------------------------------------------------------
  * Returns which edges are crossing against other edges, if any.
  */
-vector<edge_intersection> area_editor::get_intersecting_edges() const {
+vector<edge_intersection> area_editor_old::get_intersecting_edges() const {
     vector<edge_intersection> intersections;
     
     for(size_t e1 = 0; e1 < game.cur_area_data.edges.size(); ++e1) {
@@ -2037,7 +2037,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
  * Returns the radius of the specific mob generator. Normally, this returns the
  * type's radius, but if the type/radius is invalid, it returns a default.
  */
-float area_editor::get_mob_gen_radius(mob_gen* m) const {
+float area_editor_old::get_mob_gen_radius(mob_gen* m) const {
     return m->type ? m->type->radius == 0 ? 16 : m->type->radius : 16;
 }
 
@@ -2048,7 +2048,7 @@ float area_editor::get_mob_gen_radius(mob_gen* m) const {
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
  * with NULLs.
  */
-bool area_editor::get_mob_link_under_point(
+bool area_editor_old::get_mob_link_under_point(
     const point &p,
     std::pair<mob_gen*, mob_gen*>* data1, std::pair<mob_gen*, mob_gen*>* data2
 ) const {
@@ -2080,7 +2080,7 @@ bool area_editor::get_mob_link_under_point(
 /* ----------------------------------------------------------------------------
  * Returns the mob currently under the specified point, or NULL if none.
  */
-mob_gen* area_editor::get_mob_under_point(const point &p) const {
+mob_gen* area_editor_old::get_mob_under_point(const point &p) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
@@ -2098,7 +2098,7 @@ mob_gen* area_editor::get_mob_under_point(const point &p) const {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string area_editor::get_name() const {
+string area_editor_old::get_name() const {
     return "area editor";
 }
 
@@ -2109,7 +2109,7 @@ string area_editor::get_name() const {
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
  * with NULLs.
  */
-bool area_editor::get_path_link_under_point(
+bool area_editor_old::get_path_link_under_point(
     const point &p,
     std::pair<path_stop*, path_stop*>* data1,
     std::pair<path_stop*, path_stop*>* data2
@@ -2140,7 +2140,7 @@ bool area_editor::get_path_link_under_point(
 /* ----------------------------------------------------------------------------
  * Returns the path stop currently under the specified point, or NULL if none.
  */
-path_stop* area_editor::get_path_stop_under_point(const point &p) const {
+path_stop* area_editor_old::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
@@ -2156,7 +2156,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
 /* ----------------------------------------------------------------------------
  * Returns the sector currently under the specified point, or NULL if none.
  */
-sector* area_editor::get_sector_under_point(const point &p) const {
+sector* area_editor_old::get_sector_under_point(const point &p) const {
     return get_sector(p, NULL, false);
 }
 
@@ -2164,7 +2164,7 @@ sector* area_editor::get_sector_under_point(const point &p) const {
 /* ----------------------------------------------------------------------------
  * Returns the vertex currently under the specified point, or NULL if none.
  */
-vertex* area_editor::get_vertex_under_point(const point &p) const {
+vertex* area_editor_old::get_vertex_under_point(const point &p) const {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         
@@ -2193,7 +2193,7 @@ vertex* area_editor::get_vertex_under_point(const point &p) const {
 /* ----------------------------------------------------------------------------
  * Focuses the camera on the problem found, if any.
  */
-void area_editor::goto_problem() {
+void area_editor_old::goto_problem() {
     switch(problem_type) {
     case EPT_NONE:
     case EPT_NONE_YET: {
@@ -2415,7 +2415,7 @@ void area_editor::goto_problem() {
 /* ----------------------------------------------------------------------------
  * Handles an error in the line the user is trying to draw.
  */
-void area_editor::handle_line_error() {
+void area_editor_old::handle_line_error() {
     new_sector_error_tint_timer.start();
     switch(drawing_line_error) {
     case DRAWING_LINE_CROSSES_DRAWING: {
@@ -2442,7 +2442,7 @@ void area_editor::handle_line_error() {
  * Homogenizes all selected mobs,
  * based on the one at the head of the selection.
  */
-void area_editor::homogenize_selected_mobs() {
+void area_editor_old::homogenize_selected_mobs() {
     mob_gen* base = *selected_mobs.begin();
     for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
         if(m == selected_mobs.begin()) continue;
@@ -2461,7 +2461,7 @@ void area_editor::homogenize_selected_mobs() {
  * Homogenizes all selected sectors,
  * based on the one at the head of the selection.
  */
-void area_editor::homogenize_selected_sectors() {
+void area_editor_old::homogenize_selected_sectors() {
     sector* base = *selected_sectors.begin();
     for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
         if(s == selected_sectors.begin()) continue;
@@ -2475,7 +2475,7 @@ void area_editor::homogenize_selected_sectors() {
  * Load the area from the disk.
  * from_backup: If false, load it normally. If true, load from a backup, if any.
  */
-void area_editor::load_area(const bool from_backup) {
+void area_editor_old::load_area(const bool from_backup) {
     clear_current_area();
     
     ::load_area(cur_area_name, true, from_backup);
@@ -2529,7 +2529,7 @@ void area_editor::load_area(const bool from_backup) {
 /* ----------------------------------------------------------------------------
  * Loads a backup file.
  */
-void area_editor::load_backup() {
+void area_editor_old::load_backup() {
     if(!update_backup_status()) return;
     
     load_area(true);
@@ -2540,7 +2540,7 @@ void area_editor::load_backup() {
 /* ----------------------------------------------------------------------------
  * Loads the reference image data from the reference configuration file.
  */
-void area_editor::load_reference() {
+void area_editor_old::load_reference() {
     data_node file(
         USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
     );
@@ -2578,7 +2578,7 @@ void area_editor::load_reference() {
  * v2:               Vertex that is going to absorb v1.
  * affected_sectors: List of sectors that will be affected by this merge.
  */
-void area_editor::merge_vertex(
+void area_editor_old::merge_vertex(
     vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
 ) {
     vector<edge*> edges = v1->edges;
@@ -2705,7 +2705,7 @@ void area_editor::merge_vertex(
  * Prepares an area state to be delivered to register_change() later,
  * or forgotten altogether with forget_prepared_state().
  */
-area_data* area_editor::prepare_state() {
+area_data* area_editor_old::prepare_state() {
     area_data* new_state = new area_data();
     game.cur_area_data.clone(*new_state);
     return new_state;
@@ -2722,7 +2722,7 @@ area_data* area_editor::prepare_state() {
  * pre_prepared_state: If you have the area state prepared from elsewhere in
  *   the code, specify it here. Otherwise, it uses the current area state.
  */
-void area_editor::register_change(
+void area_editor_old::register_change(
     const string &operation_name, area_data* pre_prepared_state
 ) {
     if(game.options.area_editor_undo_limit == 0) {
@@ -2759,7 +2759,7 @@ void area_editor::register_change(
  * Removes the selected sectors, if they are isolated.
  * Returns true on success.
  */
-bool area_editor::remove_isolated_sectors() {
+bool area_editor_old::remove_isolated_sectors() {
     map<sector*, sector*> alt_sectors;
     
     for(auto s_ptr : selected_sectors) {
@@ -2858,7 +2858,7 @@ bool area_editor::remove_isolated_sectors() {
 /* ----------------------------------------------------------------------------
  * Resizes all X and Y coordinates by the specified multiplier.
  */
-void area_editor::resize_everything(const float mult) {
+void area_editor_old::resize_everything(const float mult) {
     if(mult == 0) {
         emit_status_bar_message("Can't resize everything to size 0!", true);
         return;
@@ -2908,7 +2908,7 @@ void area_editor::resize_everything(const float mult) {
  * Makes all currently selected mob generators (if any) rotate to where the
  * mouse cursor is.
  */
-void area_editor::rotate_mob_gens_to_cursor() {
+void area_editor_old::rotate_mob_gens_to_cursor() {
     if(selected_mobs.empty()) return;
     
     register_change("object rotation");
@@ -2925,7 +2925,7 @@ void area_editor::rotate_mob_gens_to_cursor() {
  * to_backup: If false, save normally. If true, save to an auto-backup file.
  * Returns true on success, false on failure.
  */
-bool area_editor::save_area(const bool to_backup) {
+bool area_editor_old::save_area(const bool to_backup) {
 
     //Before we start, let's get rid of unused sectors.
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ) {
@@ -3271,7 +3271,7 @@ bool area_editor::save_area(const bool to_backup) {
 /* ----------------------------------------------------------------------------
  * Saves the area onto a backup file.
  */
-void area_editor::save_backup() {
+void area_editor_old::save_backup() {
 
     backup_timer.start(game.options.area_editor_backup_interval);
     
@@ -3299,7 +3299,7 @@ void area_editor::save_backup() {
 /* ----------------------------------------------------------------------------
  * Saves the reference data to disk, in the area's reference config file.
  */
-void area_editor::save_reference() {
+void area_editor_old::save_reference() {
     string file_name =
         USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
         "/Reference.txt";
@@ -3341,7 +3341,7 @@ void area_editor::save_reference() {
 /* ----------------------------------------------------------------------------
  * Selects an edge and its vertexes.
  */
-void area_editor::select_edge(edge* e) {
+void area_editor_old::select_edge(edge* e) {
     if(selection_filter == SELECTION_FILTER_VERTEXES) return;
     selected_edges.insert(e);
     for(size_t v = 0; v < 2; ++v) {
@@ -3353,7 +3353,7 @@ void area_editor::select_edge(edge* e) {
 /* ----------------------------------------------------------------------------
  * Selects a sector and its edges and vertexes.
  */
-void area_editor::select_sector(sector* s) {
+void area_editor_old::select_sector(sector* s) {
     if(selection_filter != SELECTION_FILTER_SECTORS) return;
     selected_sectors.insert(s);
     for(size_t e = 0; e < s->edges.size(); ++e) {
@@ -3365,7 +3365,7 @@ void area_editor::select_sector(sector* s) {
 /* ----------------------------------------------------------------------------
  * Selects a tree shadow.
  */
-void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
+void area_editor_old::select_tree_shadow(tree_shadow* s_ptr) {
     selected_shadow = s_ptr;
     selected_shadow_transformation.set_angle(s_ptr->angle);
     selected_shadow_transformation.set_center(s_ptr->center);
@@ -3376,7 +3376,7 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
 /* ----------------------------------------------------------------------------
  * Selects a vertex.
  */
-void area_editor::select_vertex(vertex* v) {
+void area_editor_old::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
 }
 
@@ -3384,7 +3384,7 @@ void area_editor::select_vertex(vertex* v) {
 /* ----------------------------------------------------------------------------
  * Sets the vector of points that make up a new circle sector.
  */
-void area_editor::set_new_circle_sector_points() {
+void area_editor_old::set_new_circle_sector_points() {
     float anchor_angle =
         get_angle(new_circle_sector_center, new_circle_sector_anchor);
     float cursor_angle =
@@ -3450,7 +3450,7 @@ void area_editor::set_new_circle_sector_points() {
  * Snaps a point to the nearest available snapping space, based on the
  * current snap mode.
  */
-point area_editor::snap_point(const point &p) {
+point area_editor_old::snap_point(const point &p) {
     if(is_shift_pressed) return p;
     
     switch(snap_mode) {
@@ -3549,7 +3549,7 @@ point area_editor::snap_point(const point &p) {
  * Splits an edge into two, near the specified point, and returns the
  * newly-created vertex. The new vertex gets added to the current area.
  */
-vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
+vertex* area_editor_old::split_edge(edge* e_ptr, const point &where) {
     point new_v_pos =
         get_closest_point_in_line(
             point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
@@ -3588,7 +3588,7 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  * Splits a path link into two, near the specified point, and returns the
  * newly-created path stop. The new stop gets added to the current area.
  */
-path_stop* area_editor::split_path_link(
+path_stop* area_editor_old::split_path_link(
     const std::pair<path_stop*, path_stop*> &l1,
     const std::pair<path_stop*, path_stop*> &l2,
     const point &where
@@ -3629,7 +3629,7 @@ path_stop* area_editor::split_path_link(
 /* ----------------------------------------------------------------------------
  * Procedure to start moving the selected mobs.
  */
-void area_editor::start_mob_move() {
+void area_editor_old::start_mob_move() {
     register_change("object movement");
     
     move_closest_mob = NULL;
@@ -3653,7 +3653,7 @@ void area_editor::start_mob_move() {
 /* ----------------------------------------------------------------------------
  * Procedure to start moving the selected path stops.
  */
-void area_editor::start_path_stop_move() {
+void area_editor_old::start_path_stop_move() {
     register_change("path stop movement");
     
     move_closest_stop = NULL;
@@ -3680,7 +3680,7 @@ void area_editor::start_path_stop_move() {
 /* ----------------------------------------------------------------------------
  * Procedure to start moving the selected tree shadow.
  */
-void area_editor::start_shadow_move() {
+void area_editor_old::start_shadow_move() {
     pre_move_shadow_coords = selected_shadow->center;
     
     move_mouse_start_pos = game.mouse_cursor_w;
@@ -3691,7 +3691,7 @@ void area_editor::start_shadow_move() {
 /* ----------------------------------------------------------------------------
  * Procedure to start moving the selected vertexes.
  */
-void area_editor::start_vertex_move() {
+void area_editor_old::start_vertex_move() {
     pre_move_area_data = prepare_state();
     
     move_closest_vertex = NULL;
@@ -3719,7 +3719,7 @@ void area_editor::start_vertex_move() {
 /* ----------------------------------------------------------------------------
  * Undoes the last change to the area using the undo history, if available.
  */
-void area_editor::undo() {
+void area_editor_old::undo() {
     if(undo_history.empty()) {
         emit_status_bar_message("Nothing to undo.", false);
         return;
@@ -3761,7 +3761,7 @@ void area_editor::undo() {
 /* ----------------------------------------------------------------------------
  * Undoes the last placed layout drawing node.
  */
-void area_editor::undo_layout_drawing_node() {
+void area_editor_old::undo_layout_drawing_node() {
     drawing_nodes.erase(
         drawing_nodes.begin() + drawing_nodes.size() - 1
     );
@@ -3771,7 +3771,7 @@ void area_editor::undo_layout_drawing_node() {
 /* ----------------------------------------------------------------------------
  * Unloads the editor from memory.
  */
-void area_editor::unload() {
+void area_editor_old::unload() {
     editor::unload();
     
     clear_current_area();
@@ -3797,7 +3797,7 @@ void area_editor::unload() {
  * availability accordingly.
  * Returns true if it exists, false if not.
  */
-bool area_editor::update_backup_status() {
+bool area_editor_old::update_backup_status() {
     disable_widget(frm_tools->widgets["but_backup"]);
     
     if(cur_area_name.empty()) return false;
@@ -3816,7 +3816,7 @@ bool area_editor::update_backup_status() {
 /* ----------------------------------------------------------------------------
  * Updates the reference image's bitmap, given a new bitmap file name.
  */
-void area_editor::update_reference(const string &new_file_name) {
+void area_editor_old::update_reference(const string &new_file_name) {
     if(reference_file_name == new_file_name) {
         //Nothing to do.
         return;
@@ -3859,7 +3859,7 @@ void area_editor::update_reference(const string &new_file_name) {
 /* ----------------------------------------------------------------------------
  * Updates a sector's texture.
  */
-void area_editor::update_sector_texture(
+void area_editor_old::update_sector_texture(
     sector* s_ptr, const string &file_name
 ) {
     game.textures.detach(s_ptr->texture_info.file_name);
@@ -3871,7 +3871,7 @@ void area_editor::update_sector_texture(
 /* ----------------------------------------------------------------------------
  * Updates the list of texture suggestions, adding a new one or bumping it up.
  */
-void area_editor::update_texture_suggestions(const string &n) {
+void area_editor_old::update_texture_suggestions(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
@@ -3911,7 +3911,7 @@ void area_editor::update_texture_suggestions(const string &n) {
  * Updates the state and description of the undo button based on
  * the undo history.
  */
-void area_editor::update_undo_history() {
+void area_editor_old::update_undo_history() {
     while(undo_history.size() > game.options.area_editor_undo_limit) {
         undo_history.pop_back();
     };
@@ -3923,8 +3923,8 @@ void area_editor::update_undo_history() {
 /* ----------------------------------------------------------------------------
  * Creates a layout drawing node based on the mouse's click position.
  */
-area_editor::layout_drawing_node::layout_drawing_node(
-    area_editor* ae_ptr, const point &mouse_click
+area_editor_old::layout_drawing_node::layout_drawing_node(
+    area_editor_old* ae_ptr, const point &mouse_click
 ) :
     raw_spot(mouse_click),
     snapped_spot(mouse_click),
@@ -3979,7 +3979,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
 /* ----------------------------------------------------------------------------
  * Creates a layout drawing node with no info.
  */
-area_editor::layout_drawing_node::layout_drawing_node() :
+area_editor_old::layout_drawing_node::layout_drawing_node() :
     on_vertex(nullptr),
     on_vertex_nr(INVALID),
     on_edge(nullptr),
@@ -3994,7 +3994,7 @@ area_editor::layout_drawing_node::layout_drawing_node() :
 /* ----------------------------------------------------------------------------
  * Creates a texture suggestion.
  */
-area_editor::texture_suggestion::texture_suggestion(
+area_editor_old::texture_suggestion::texture_suggestion(
     const string &n
 ) :
     bmp(NULL),
@@ -4007,6 +4007,6 @@ area_editor::texture_suggestion::texture_suggestion(
 /* ----------------------------------------------------------------------------
  * Destroys a texture suggestion.
  */
-void area_editor::texture_suggestion::destroy() {
+void area_editor_old::texture_suggestion::destroy() {
     game.textures.detach(name);
 }

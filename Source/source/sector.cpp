@@ -18,7 +18,7 @@
 
 #include "sector.h"
 
-#include "editors/area_editor/editor.h"
+#include "editors/area_editor_old/editor.h"
 #include "functions.h"
 #include "game.h"
 #include "utils/geometry_utils.h"

@@ -14,7 +14,7 @@
 
 #include "const.h"
 #include "drawing.h"
-#include "editors/area_editor/editor.h"
+#include "editors/area_editor_old/editor.h"
 #include "functions.h"
 #include "game.h"
 #include "init.h"

@@ -268,7 +268,7 @@ int game_class::start() {
         game.change_state(game.states.animation_editor_st);
     } else if(
         game.creator_tools.enabled &&
-        game.creator_tools.auto_start_mode == "area_editor"
+        game.creator_tools.auto_start_mode == "area_editor_old"
     ) {
         game.states.area_editor_st->auto_load_area =
             game.creator_tools.auto_start_option;
@@ -323,7 +323,7 @@ void game_state_list::destroy() {
  */
 void game_state_list::init() {
     animation_editor_st = new animation_editor();
-    area_editor_st = new area_editor();
+    area_editor_st = new area_editor_old();
     area_menu_st = new area_menu();
     controls_menu_st = new controls_menu();
     gameplay_st = new gameplay();
