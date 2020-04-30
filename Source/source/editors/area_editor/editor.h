@@ -19,11 +19,14 @@ using std::string;
 
 class area_editor : public editor {
 public:
+    //Area being edited when using the quick-play button.
+    string quick_play_area;
+    
+    //Standard functions.
     void do_logic();
     void do_drawing();
     void load();
     void unload();
-    
     virtual string get_name() const;
     
     area_editor();
