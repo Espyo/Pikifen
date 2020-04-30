@@ -201,10 +201,10 @@ string gameplay::get_name() const {
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay::leave() {
-    if(game.states.area_editor_st->quick_play_area.empty()) {
+    if(game.states.area_editor_old_st->quick_play_area.empty()) {
         game.change_state(game.states.main_menu_st);
     } else {
-        game.change_state(game.states.area_editor_st);
+        game.change_state(game.states.area_editor_old_st);
     }
 }
 

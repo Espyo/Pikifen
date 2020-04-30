@@ -455,8 +455,8 @@ void load_area(
             triangulate(s_ptr, &lone_edges, false, false);
             
         if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
-            game.states.area_editor_st->non_simples[s_ptr] = res;
-            game.states.area_editor_st->lone_edges.insert(
+            game.states.area_editor_old_st->non_simples[s_ptr] = res;
+            game.states.area_editor_old_st->lone_edges.insert(
                 lone_edges.begin(), lone_edges.end()
             );
         }
