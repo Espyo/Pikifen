@@ -21,11 +21,11 @@
 #include "../../LAFI/gui.h"
 #include "../../LAFI/widget.h"
 #include "../../misc_structs.h"
-#include "../editor.h"
+#include "../editor_old.h"
 
 using std::size_t;
 
-class animation_editor : public editor {
+class animation_editor : public editor_old {
 public:
 
     //How many entries of the history to store, at most.

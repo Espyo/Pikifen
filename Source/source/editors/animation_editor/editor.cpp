@@ -116,7 +116,7 @@ void animation_editor::center_camera_on_sprite_bitmap() {
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
-    editor::do_logic_pre();
+    editor_old::do_logic_pre();
     
     if(
         anim_playing && state == EDITOR_STATE_ANIMATION &&
@@ -152,7 +152,7 @@ void animation_editor::do_logic() {
         comparison_blink_show = true;
     }
     
-    editor::do_logic_post();
+    editor_old::do_logic_post();
 }
 
 
@@ -928,7 +928,7 @@ void animation_editor::sprite_bmp_flood_fill(
  * Unloads the editor from memory.
  */
 void animation_editor::unload() {
-    editor::unload();
+    editor_old::unload();
     
     anims.destroy();
     delete(gui_style);

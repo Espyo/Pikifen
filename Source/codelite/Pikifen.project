@@ -300,6 +300,8 @@
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
   <VirtualDirectory Name="editors">
+    <File Name="../source/editors/editor_old.h"/>
+    <File Name="../source/editors/editor_old.cpp"/>
     <VirtualDirectory Name="area_editor">
       <File Name="../source/editors/area_editor/editor.h"/>
     </VirtualDirectory>
@@ -319,8 +321,6 @@
       <File Name="../source/editors/animation_editor/editor.h"/>
       <File Name="../source/editors/animation_editor/editor.cpp"/>
     </VirtualDirectory>
-    <File Name="../source/editors/editor.h"/>
-    <File Name="../source/editors/editor.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

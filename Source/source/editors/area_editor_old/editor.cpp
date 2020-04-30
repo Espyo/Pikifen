@@ -810,7 +810,7 @@ void area_editor_old::delete_selected_path_elements() {
  * Handles the logic part of the main loop of the area editor.
  */
 void area_editor_old::do_logic() {
-    editor::do_logic_pre();
+    editor_old::do_logic_pre();
     
     cursor_snap_timer.tick(game.delta_t);
     path_preview_timer.tick(game.delta_t);
@@ -823,7 +823,7 @@ void area_editor_old::do_logic() {
     
     selection_effect += SELECTION_EFFECT_SPEED * game.delta_t;
     
-    editor::do_logic_post();
+    editor_old::do_logic_post();
 }
 
 
@@ -3772,7 +3772,7 @@ void area_editor_old::undo_layout_drawing_node() {
  * Unloads the editor from memory.
  */
 void area_editor_old::unload() {
-    editor::unload();
+    editor_old::unload();
     
     clear_current_area();
     cur_area_name.clear();

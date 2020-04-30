@@ -11,13 +11,13 @@
 #ifndef AREA_EDITOR_INCLUDED
 #define AREA_EDITOR_INCLUDED
 
-#include "../editor.h"
+#include "../editor_old.h"
 
 using std::size_t;
 using std::string;
 
 
-class area_editor : public editor {
+class area_editor {
 public:
 
 };

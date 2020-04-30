@@ -34,7 +34,7 @@
  * Loads the area editor.
  */
 void area_editor_old::load() {
-    editor::load();
+    editor_old::load();
     
     update_canvas_coordinates();
     

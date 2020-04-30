@@ -13,7 +13,7 @@
 
 #include <deque>
 
-#include "../editor.h"
+#include "../editor_old.h"
 
 #include "../../LAFI/frame.h"
 #include "../../LAFI/label.h"
@@ -22,7 +22,7 @@ using std::size_t;
 using std::string;
 
 
-class area_editor_old : public editor {
+class area_editor_old : public editor_old {
 public:
     void do_logic();
     void do_drawing();

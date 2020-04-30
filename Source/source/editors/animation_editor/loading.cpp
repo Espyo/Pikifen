@@ -28,7 +28,7 @@
  * Loads the animation editor.
  */
 void animation_editor::load() {
-    editor::load();
+    editor_old::load();
     
     game.fade_mgr.start_fade(true, nullptr);
     
