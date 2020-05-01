@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikifen" InternalType="Console" Version="10.0.0">
-  <VirtualDirectory Name="imgui">
-    <File Name="../source/imgui/imstb_truetype.h"/>
-    <File Name="../source/imgui/imstb_textedit.h"/>
-    <File Name="../source/imgui/imstb_rectpack.h"/>
-    <File Name="../source/imgui/imgui_widgets.cpp"/>
-    <File Name="../source/imgui/imgui_internal.h"/>
-    <File Name="../source/imgui/imgui_impl_allegro5.h"/>
-    <File Name="../source/imgui/imgui_impl_allegro5.cpp"/>
-    <File Name="../source/imgui/imgui_draw.cpp"/>
-    <File Name="../source/imgui/imgui_demo.cpp"/>
-    <File Name="../source/imgui/imgui.h"/>
-    <File Name="../source/imgui/imgui.cpp"/>
-    <File Name="../source/imgui/imconfig.h"/>
-  </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00030001N0005Debug0000000000000001N0007Release0000000000000001N0007Windows000000000000]]>
@@ -32,6 +18,20 @@
  }]]]>
     </Plugin>
   </Plugins>
+  <VirtualDirectory Name="imgui">
+    <File Name="../source/imgui/imstb_truetype.h"/>
+    <File Name="../source/imgui/imstb_textedit.h"/>
+    <File Name="../source/imgui/imstb_rectpack.h"/>
+    <File Name="../source/imgui/imgui_widgets.cpp"/>
+    <File Name="../source/imgui/imgui_internal.h"/>
+    <File Name="../source/imgui/imgui_impl_allegro5.h"/>
+    <File Name="../source/imgui/imgui_impl_allegro5.cpp"/>
+    <File Name="../source/imgui/imgui_draw.cpp"/>
+    <File Name="../source/imgui/imgui_demo.cpp"/>
+    <File Name="../source/imgui/imgui.h"/>
+    <File Name="../source/imgui/imgui.cpp"/>
+    <File Name="../source/imgui/imconfig.h"/>
+  </VirtualDirectory>
   <VirtualDirectory Name="mob_fsms">
     <File Name="../source/mob_fsms/bouncer_fsm.cpp"/>
     <File Name="../source/mob_fsms/bouncer_fsm.h"/>
@@ -305,6 +305,8 @@
     <File Name="../source/editors/editor_old.h"/>
     <File Name="../source/editors/editor_old.cpp"/>
     <VirtualDirectory Name="area_editor">
+      <File Name="../source/editors/area_editor/event_handling.cpp"/>
+      <File Name="../source/editors/area_editor/geometry_logic.cpp"/>
       <File Name="../source/editors/area_editor/drawing.cpp"/>
       <File Name="../source/editors/area_editor/editor.cpp"/>
       <File Name="../source/editors/area_editor/editor.h"/>
