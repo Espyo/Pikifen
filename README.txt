@@ -218,6 +218,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikifen or by 
         
         Tools used
             Allegro
+            Dear ImGui
             Codelite
             Visual Studio
             Notepad++

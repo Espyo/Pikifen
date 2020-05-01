@@ -102,6 +102,7 @@ area_editor::area_editor() :
     selection_effect(0),
     selection_filter(SELECTION_FILTER_SECTORS),
     show_closest_stop(false),
+    show_imgui_demo(false),
     show_path_preview(false),
     show_reference(true),
     stt_mode(0),

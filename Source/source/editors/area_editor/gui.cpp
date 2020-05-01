@@ -37,11 +37,26 @@ void area_editor::process_gui() {
     //The menu bar.
     process_gui_menu_bar();
     
-    //The two main columns that split the canvas and control panel.
-    ImGui::Columns(2, "main");
+    //The two main columns that split the canvas (+ toolbar + status bar)
+    //and control panel.
+    ImGui::Columns(2, "colMain");
+    
+    //Do the toolbar.
+    process_gui_toolbar();
     
     //Draw the canvas now.
+    ImGui::BeginChild("canvas", ImVec2(0, -25));
+    ImGui::EndChild();
+    ImVec2 tl = ImGui::GetItemRectMin();
+    canvas_tl.x = tl.x;
+    canvas_tl.y = tl.y;
+    ImVec2 br = ImGui::GetItemRectMax();
+    canvas_br.x = br.x;
+    canvas_br.y = br.y;
     ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, NULL);
+    
+    //Status bar.
+    process_gui_status_bar();
     
     //Set up the separator for the control panel.
     ImGui::NextColumn();
@@ -52,19 +67,20 @@ void area_editor::process_gui() {
     } else {
         canvas_separator_x = ImGui::GetColumnOffset(1);
     }
-    update_canvas_coordinates();
     
     //Do the control panel now.
     process_gui_control_panel();
+    ImGui::NextColumn();
     
     //Finish the main window.
+    ImGui::Columns(1);
     ImGui::End();
+    
+    //TODO left here for debugging puporses.
+    if(show_imgui_demo) ImGui::ShowDemoWindow(&show_imgui_demo);
     
     //Finishing setup.
     ImGui::EndFrame();
-    
-    //TODO left here for debugging puporses.
-    //ImGui::ShowDemoWindow();
 }
 
 
@@ -97,9 +113,28 @@ void area_editor::process_gui_control_panel() {
 void area_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Editor")) {
+            if(ImGui::MenuItem("Show demo")) {
+                show_imgui_demo = true;
+            }
             ImGui::MenuItem("Quit"); //TODO
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui status bar for this frame.
+ */
+void area_editor::process_gui_status_bar() {
+    ImGui::Button("status");
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui toolbar for this frame.
+ */
+void area_editor::process_gui_toolbar() {
+    ImGui::Button("tool");
 }

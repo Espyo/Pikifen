@@ -352,6 +352,8 @@ void editor::unload() {
  * Updates the variables that hold the canvas's coordinates.
  */
 void editor::update_canvas_coordinates() {
+    //TODO is this still needed?
+    /*
     if(
         canvas_separator_x < 1.0f ||
         canvas_separator_x > game.win_w - 1.0f
@@ -364,8 +366,9 @@ void editor::update_canvas_coordinates() {
     }
     
     canvas_tl.x = 0;
-    canvas_tl.y = 20;
-    canvas_br.y = game.win_h;
+    canvas_tl.y = 50;
+    canvas_br.y = game.win_h - 30;
+    */
 }
 
 
