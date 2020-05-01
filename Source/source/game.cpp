@@ -268,11 +268,11 @@ int game_class::start() {
         game.change_state(game.states.animation_editor_st);
     } else if(
         game.creator_tools.enabled &&
-        game.creator_tools.auto_start_mode == "area_editor_old"
+        game.creator_tools.auto_start_mode == "area_editor"
     ) {
-        game.states.area_editor_old_st->auto_load_area =
+        game.states.area_editor_st->auto_load_area =
             game.creator_tools.auto_start_option;
-        game.change_state(game.states.area_editor_old_st);
+        game.change_state(game.states.area_editor_st);
     } else {
         game.change_state(game.states.main_menu_st);
     }

@@ -10,6 +10,7 @@
 
 #include "editor.h"
 
+#include "../../functions.h"
 #include "../../game.h"
 #include "../../imgui/imgui_impl_allegro5.h"
 
@@ -45,7 +46,7 @@ void area_editor::process_gui() {
     process_gui_toolbar();
     
     //Draw the canvas now.
-    ImGui::BeginChild("canvas", ImVec2(0, -25));
+    ImGui::BeginChild("canvas", ImVec2(0, -16));
     ImGui::EndChild();
     ImVec2 tl = ImGui::GetItemRectMin();
     canvas_tl.x = tl.x;
@@ -91,10 +92,6 @@ void area_editor::process_gui_control_panel() {
     ImGui::BeginChild("cp", ImVec2(200, 0));
     
     ImGui::Text("Editing area AAAAA");
-    if(ImGui::Button("Quit")) {
-        leave();
-    }
-    ImGui::SameLine();
     if(ImGui::Button("Load")) {
         //TODO
         cur_area_name = "Play";
@@ -112,11 +109,35 @@ void area_editor::process_gui_control_panel() {
  */
 void area_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("Editor")) {
+        if(ImGui::BeginMenu("Editor")) {
             if(ImGui::MenuItem("Show demo")) {
                 show_imgui_demo = true;
             }
-            ImGui::MenuItem("Quit"); //TODO
+            if(ImGui::MenuItem("Quit")) {
+                //TODO check if there are unsaved changes.
+                quick_play_area.clear();
+                leave();
+            }
+            ImGui::EndMenu();
+        }
+        if(ImGui::BeginMenu("Help")) {
+            if(ImGui::MenuItem("Help")) {
+                string help_str =
+                    "To create an area, start by drawing its layout. "
+                    "For this, you draw the polygons that make up the "
+                    "geometry of the area. These polygons cannot overlap, "
+                    "and a polygon whose floor is higher than its neighbor's "
+                    "makes a wall. After that, place objects where you want, "
+                    "specify the carrying paths, add details, and try it out."
+                    "\n\n"
+                    "If you need more help on how to use the area editor, "
+                    "check out the tutorial on\n" + AREA_EDITOR_TUTORIAL_URL;
+                show_message_box(
+                    game.display, "Help", "Area editor help",
+                    help_str.c_str(), NULL, 0
+                );
+            }
+            
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -128,7 +149,7 @@ void area_editor::process_gui_menu_bar() {
  * Processes the ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
-    ImGui::Button("status");
+    ImGui::Text("");
 }
 
 
@@ -136,5 +157,54 @@ void area_editor::process_gui_status_bar() {
  * Processes the ImGui toolbar for this frame.
  */
 void area_editor::process_gui_toolbar() {
-    ImGui::Button("tool");
+    if(ImGui::Button("Quit")) {
+        leave();
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Reload")) {
+        //TODO check if there are unsaved changes.
+        load_area(false);
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Save")) {
+        save_area(false);
+        clear_selection();
+        state = EDITOR_STATE_MAIN;
+        //TODO change_to_right_frame();
+        made_new_changes = false;
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Test")) {
+        if(!save_area(false)) return;
+        quick_play_area = cur_area_name;
+        quick_play_cam_pos = game.cam.pos;
+        quick_play_cam_z = game.cam.zoom;
+        leave();
+    }
+    
+    ImGui::SameLine(0, 16);
+    if(ImGui::Button("Undo")) {
+        undo();
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Ref")) {
+        show_reference = !show_reference;
+    }
+    
+    ImGui::SameLine();
+    static int temp; //TODO;
+    ImGui::VSliderInt("##refAlpha", ImVec2(12, 20), &temp, 0, 255, "");
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Snap")) {
+        if(!is_shift_pressed) {
+            snap_mode = sum_and_wrap(snap_mode, 1, N_SNAP_MODES);
+        } else {
+            snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
+        }
+    }
 }
