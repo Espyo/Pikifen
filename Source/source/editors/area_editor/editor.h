@@ -470,6 +470,8 @@ private:
     );
     area_data* prepare_state();
     void process_gui();
+    void process_gui_control_panel();
+    void process_gui_menu_bar();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );

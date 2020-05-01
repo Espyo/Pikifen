@@ -23,6 +23,7 @@ const float editor::KEYBOARD_CAM_ZOOM = 0.25f;
  * Initializes editor class stuff.
  */
 editor::editor() :
+    canvas_separator_x(-1),
     double_click_time(0),
     is_ctrl_pressed(false),
     is_m1_pressed(false),
@@ -351,9 +352,19 @@ void editor::unload() {
  * Updates the variables that hold the canvas's coordinates.
  */
 void editor::update_canvas_coordinates() {
+    if(
+        canvas_separator_x < 1.0f ||
+        canvas_separator_x > game.win_w - 1.0f
+    ) {
+        //Panic check: if the separator has crazy values, it's
+        //likely not set properly.
+        canvas_br.x = game.win_w * 0.675;
+    } else {
+        canvas_br.x = canvas_separator_x;
+    }
+    
     canvas_tl.x = 0;
     canvas_tl.y = 40;
-    canvas_br.x = game.win_w * 0.675;
     canvas_br.y = game.win_h - 16;
 }
 

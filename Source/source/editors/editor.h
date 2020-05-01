@@ -84,6 +84,8 @@ protected:
     point canvas_tl;
     //Bottom right corner of the canvas.
     point canvas_br;
+    //X coordinate of the canvas GUI separator. -1 = undefined.
+    int canvas_separator_x;
     //If the next click is within this time, it's a double-click.
     float double_click_time;
     //Is the Ctrl key currently pressed down?
