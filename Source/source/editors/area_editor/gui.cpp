@@ -24,5 +24,7 @@ void area_editor::process_gui() {
     ImGui::NewFrame();
     
     
+    
+    
     ImGui::ShowDemoWindow();
 }

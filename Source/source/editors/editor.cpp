@@ -343,7 +343,7 @@ void editor::load() {
  * Unloads loaded editor-related content.
  */
 void editor::unload() {
-
+    //TODO
 }
 
 
@@ -362,7 +362,22 @@ void editor::update_canvas_coordinates() {
  * Updates the transformations, with the current camera coordinates, zoom, etc.
  */
 void editor::update_transformations() {
-
+    //World coordinates to screen coordinates.
+    point canvas_center(
+        (canvas_tl.x + canvas_br.x) / 2.0,
+        (canvas_tl.y + canvas_br.y) / 2.0
+    );
+    game.world_to_screen_transform = game.identity_transform;
+    al_translate_transform(
+        &game.world_to_screen_transform,
+        -game.cam.pos.x + canvas_center.x / game.cam.zoom,
+        -game.cam.pos.y + canvas_center.y / game.cam.zoom
+    );
+    al_scale_transform(&game.world_to_screen_transform, game.cam.zoom, game.cam.zoom);
+    
+    //Screen coordinates to world coordinates.
+    game.screen_to_world_transform = game.world_to_screen_transform;
+    al_invert_transform(&game.screen_to_world_transform);
 }
 
 
