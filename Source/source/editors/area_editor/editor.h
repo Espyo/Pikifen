@@ -479,6 +479,8 @@ private:
     void process_gui();
     void process_gui_control_panel();
     void process_gui_menu_bar();
+    void process_gui_panel_info();
+    void process_gui_panel_main();
     void process_gui_status_bar();
     void process_gui_toolbar();
     void register_change(

@@ -19,6 +19,8 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="imgui">
+    <File Name="../source/imgui/imgui_stdlib.h"/>
+    <File Name="../source/imgui/imgui_stdlib.cpp"/>
     <File Name="../source/imgui/imstb_truetype.h"/>
     <File Name="../source/imgui/imstb_textedit.h"/>
     <File Name="../source/imgui/imstb_rectpack.h"/>

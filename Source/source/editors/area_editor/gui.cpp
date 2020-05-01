@@ -13,6 +13,8 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../imgui/imgui_impl_allegro5.h"
+#include "../../imgui/imgui_stdlib.h"
+#include "../../utils/string_utils.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -46,7 +48,7 @@ void area_editor::process_gui() {
     process_gui_toolbar();
     
     //Draw the canvas now.
-    ImGui::BeginChild("canvas", ImVec2(0, -16));
+    ImGui::BeginChild("canvas", ImVec2(0, -18));
     ImGui::EndChild();
     ImVec2 tl = ImGui::GetItemRectMin();
     canvas_tl.x = tl.x;
@@ -89,16 +91,17 @@ void area_editor::process_gui() {
  * Processes the ImGui control panel for this frame.
  */
 void area_editor::process_gui_control_panel() {
-    ImGui::BeginChild("cp", ImVec2(200, 0));
+    ImGui::BeginChild("panel");
     
-    ImGui::Text("Editing area AAAAA");
-    if(ImGui::Button("Load")) {
-        //TODO
-        cur_area_name = "Play";
-        load_area(false);
+    switch(state) {
+    case EDITOR_STATE_MAIN: {
+        process_gui_panel_main();
+        break;
+    } case EDITOR_STATE_INFO: {
+        process_gui_panel_info();
+        break;
     }
-    ImGui::SameLine();
-    ImGui::Button("Save");
+    }
     
     ImGui::EndChild();
 }
@@ -142,6 +145,128 @@ void area_editor::process_gui_menu_bar() {
         }
         ImGui::EndMenuBar();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui area info control panel for this frame.
+ */
+void area_editor::process_gui_panel_info() {
+    ImGui::BeginChild("info");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::CollapsingHeader("General")) {
+    
+        ImGui::InputText("Name", &game.cur_area_data.name);
+        
+        ImGui::InputText("Subtitle", &game.cur_area_data.subtitle);
+        
+        //TODO
+        static int temp = 0;
+        ImGui::Combo("Weather", &temp, "a\0b\0c");
+        
+        ImGui::Spacing();
+    }
+    
+    if(ImGui::CollapsingHeader("Background")) {
+    
+        //TODO
+        ImGui::Button("...##bg");
+        
+        ImGui::SameLine();
+        ImGui::InputText("Bitmap", &game.cur_area_data.bg_bmp_file_name);
+        
+        ImGui::ColorEdit4(
+            "Color", (float*) &game.cur_area_data.bg_color,
+            ImGuiColorEditFlags_NoInputs
+        );
+        
+        ImGui::DragFloat("Distance", &game.cur_area_data.bg_dist);
+        
+        ImGui::DragFloat("Zoom", &game.cur_area_data.bg_bmp_zoom);
+        
+        ImGui::Spacing();
+    }
+    
+    if(ImGui::CollapsingHeader("Metadata")) {
+    
+        ImGui::InputText("Creator", &game.cur_area_data.creator);
+        ImGui::InputText("Version", &game.cur_area_data.version);
+        ImGui::InputText("Notes", &game.cur_area_data.notes);
+        
+        ImGui::Spacing();
+    }
+    
+    if(ImGui::CollapsingHeader("Gameplay")) {
+        ImGui::InputText("Sprays", &game.cur_area_data.spray_amounts);
+        
+        ImGui::Spacing();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui main control panel for this frame.
+ */
+void area_editor::process_gui_panel_main() {
+    ImGui::BeginChild("main");
+    
+    if(ImGui::Button("Info")) {
+        state = EDITOR_STATE_INFO;
+    }
+    
+    if(ImGui::Button("Layout")) {
+        state = EDITOR_STATE_LAYOUT;
+    }
+    
+    if(ImGui::Button("Objects")) {
+        state = EDITOR_STATE_MOBS;
+    }
+    
+    if(ImGui::Button("Paths")) {
+        state = EDITOR_STATE_PATHS;
+    }
+    
+    if(ImGui::Button("Details")) {
+        state = EDITOR_STATE_DETAILS;
+    }
+    
+    if(ImGui::Button("Review")) {
+        state = EDITOR_STATE_REVIEW;
+    }
+    
+    if(ImGui::Button("Tools")) {
+        state = EDITOR_STATE_TOOLS;
+    }
+    
+    if(ImGui::Button("Options")) {
+        state = EDITOR_STATE_OPTIONS;
+    }
+    
+    if(ImGui::CollapsingHeader("Stats")) {
+        ImGui::Text(
+            "Sectors: %i", (int) game.cur_area_data.sectors.size()
+        );
+        
+        ImGui::Text(
+            "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
+        );
+        
+        ImGui::Text(
+            "Objects: %i", (int) game.cur_area_data.mob_generators.size()
+        );
+        
+        ImGui::Text(
+            "Path stops: %i", (int) game.cur_area_data.path_stops.size()
+        );
+    }
+    
+    ImGui::EndChild();
 }
 
 
