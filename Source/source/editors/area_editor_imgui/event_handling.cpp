@@ -27,9 +27,10 @@ void area_editor_imgui::handle_event(ALLEGRO_EVENT *ev) {
  * Handles a key being "char"-typed anywhere.
  */
 void area_editor_imgui::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
-    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+    //TODO
+    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
-    }
+    }*/
     
     if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         debug_edge_nrs = !debug_edge_nrs;
@@ -87,9 +88,10 @@ void area_editor_imgui::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being "char"-typed on the canvas exclusively.
  */
 void area_editor_imgui::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+    //TODO
+    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
-    }
+    }*/
     
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
@@ -131,9 +133,10 @@ void area_editor_imgui::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down anywhere.
  */
 void area_editor_imgui::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+    //TODO
+    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
-    }
+    }*/
     
     if(ev.keyboard.keycode == ALLEGRO_KEY_L && is_ctrl_pressed) {
         frm_toolbar->widgets["but_reload"]->simulate_click();
@@ -164,12 +167,12 @@ void area_editor_imgui::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down on the canvas exclusively.
  */
 void area_editor_imgui::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
+    //TODO
+    /*
     if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
         return;
     }
     
-    //TODO
-    /*
     if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
         frm_paths->widgets["rad_one_way"]->simulate_click();
         frm_stt->widgets["rad_offset"]->simulate_click();

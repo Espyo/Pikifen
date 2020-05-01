@@ -14,6 +14,7 @@
 #include <deque>
 
 #include "../editor.h"
+#include "../../imgui/imgui.h"
 
 using namespace std;
 
@@ -364,6 +365,10 @@ private:
     void create_area();
     void delete_selected_mobs();
     void delete_selected_path_elements();
+    static void draw_canvas_callback(
+        const ImDrawList* parent_list, const ImDrawCmd* cmd
+    );
+    void draw_canvas();
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,
         const float lowest_z, sector* sector_ptr

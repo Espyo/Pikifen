@@ -221,6 +221,10 @@ protected:
     );
     bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
+    void open_picker(
+        const vector<pair<string, string> > &elements,
+        const string &title, const bool can_make_new, const string &filter
+    );
     void populate_picker(const string &filter);
     void update_canvas_coordinates();
     void update_status_bar(

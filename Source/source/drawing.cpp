@@ -1399,7 +1399,13 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             
         } else if(c_ptr->mob_ptr) {
         
-            c_ptr->mob_ptr->draw();
+            //c_ptr->mob_ptr->draw();
+            al_draw_filled_circle(
+                c_ptr->mob_ptr->pos.x,
+                c_ptr->mob_ptr->pos.y,
+                c_ptr->mob_ptr->type->radius,
+                c_ptr->mob_ptr->type->main_color
+            );
             
         } else if(c_ptr->particle_ptr) {
         
@@ -2805,12 +2811,16 @@ void draw_sector_texture(
         for(size_t v = 0; v < n_vertexes; ++v) {
             av[v].x *= scale;
             av[v].y *= scale;
+            av[v].color = al_map_rgb(64, 64, 64);
         }
         
         ALLEGRO_BITMAP* tex =
             texture_sector[t] ?
             texture_sector[t]->texture_info.bitmap :
             texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
+        
+        tex = NULL;
+
             
         al_draw_prim(
             av, NULL, tex,

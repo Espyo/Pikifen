@@ -12,6 +12,8 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_allegro5.h"
 #include "../LAFI/angle_picker.h"
 #include "../LAFI/button.h"
 #include "../LAFI/checkbox.h"
@@ -558,12 +560,14 @@ void editor::handle_controls(const ALLEGRO_EVENT &ev) {
             handle_key_down_canvas(ev);
         }
         
+        //TODO
+        /*
         if(
             !(frm_picker->flags & lafi::FLAG_INVISIBLE) &&
             ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE
         ) {
             frm_picker->widgets["but_back"]->simulate_click();
-        }
+        }*/
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
         if(
@@ -736,6 +740,61 @@ void editor::load() {
                     0, EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE
                 );
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Opens the picker modal popup and populates it with the specified elements.
+ * Only the ones that apply to the specified filter will be present.
+ * elements:     List of elements to populate the picker with. This is a list
+ *   of string+string pairs, where the first element is the
+ *   category name (optional), and the second is the name
+ *   of the element proper.
+ * title:        Title of the picker, to place above the list. This is normally
+ *   a request to the user, like "Pick an area.".
+ * can_make_new: If true, the user can create a new element, by writing its
+ *   name on the textbox, and pressing the "+" button.
+ * filter:       Filter of names.
+ */
+void editor::open_picker(
+    const vector<pair<string, string> > &elements,
+    const string &title, const bool can_make_new, const string &filter
+) {
+    ImGui::SetNextWindowPosCenter();
+    ImGui::SetNextWindowSize(ImVec2(scr_w * 0.8, scr_h * 0.8), ImGuiCond_Once);
+    ImGui::OpenPopup("area_picker");
+
+    if(ImGui::BeginPopupModal("area_picker")) {
+
+        ImVec2 button_size(140, 30);
+        
+        vector<pair<string, string> > final_elements = elements;
+        if(can_make_new) {
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32));
+            ImGui::Button("+", button_size);
+            ImGui::PopStyleColor(3);
+            ImGui::SameLine();
+        }
+
+        static char search_term[128] = "";
+        ImGui::InputText("", search_term, IM_ARRAYSIZE(search_term));
+        
+        ImGuiStyle& style = ImGui::GetStyle();
+        float picker_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+        for(size_t e = 0; e < final_elements.size(); ++e) {
+            ImGui::PushID(e);
+            ImGui::Button(final_elements[e].second.c_str(), button_size);
+            float last_x2 = ImGui::GetItemRectMax().x;
+            float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
+            if (e + 1 < final_elements.size() && next_x2 < picker_x2)
+                ImGui::SameLine();
+            ImGui::PopID();
+        }
+        
+        ImGui::EndPopup();
     }
 }
 

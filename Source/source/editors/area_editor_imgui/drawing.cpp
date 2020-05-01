@@ -28,8 +28,29 @@ void area_editor_imgui::do_drawing() {
     ImGui::Render();
     al_clear_to_color(al_map_rgb(0, 0, 0));
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+    
+    fade_mgr.draw();
+    
+    al_flip_display();
+}
 
-    //And now, draw the canvas.
+
+/* ----------------------------------------------------------------------------
+ * Draws the canvas on-screen. This is a callback inside the
+ * ImGui rendering process.
+ */
+void area_editor_imgui::draw_canvas_callback(
+    const ImDrawList* parent_list, const ImDrawCmd* cmd
+) {
+    ((area_editor_imgui*) game_states[GAME_STATE_AREA_EDITOR])->draw_canvas();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the canvas on-screen. This is called as a callback inside the
+ * ImGui rendering process.
+ */
+void area_editor_imgui::draw_canvas() {
     al_use_transform(&world_to_screen_transform);
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
@@ -1279,10 +1300,6 @@ void area_editor_imgui::do_drawing() {
     
     al_reset_clipping_rectangle();
     al_use_transform(&identity_transform);
-    
-    fade_mgr.draw();
-    
-    al_flip_display();
 }
 
 

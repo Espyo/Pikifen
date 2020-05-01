@@ -23,11 +23,9 @@ using namespace std;
 void area_editor_imgui::process_gui() {
     //TODO
     ImGui_ImplAllegro5_NewFrame();
-    ImGui::NewFrame();
-
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::NewFrame();ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(scr_w, scr_h));
-    ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
+    ImGui::Begin("Main", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
 
     if(ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("Editor")) {
@@ -38,6 +36,9 @@ void area_editor_imgui::process_gui() {
     }
 
     ImGui::Columns(2, "main");
+
+    //Draw the canvas.
+    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_callback, NULL);
 
     ImGui::NextColumn();
 
@@ -63,5 +64,18 @@ void area_editor_imgui::process_gui() {
     ImGui::EndChild();
 
     ImGui::End();
-    
+
+    bool picker_active = true;
+    if(picker_active) {
+        vector<pair<string, string> > e;
+        e.push_back(make_pair("A", "A"));
+        e.push_back(make_pair("A", "B"));
+        e.push_back(make_pair("A", "The Great Big Area"));
+        e.push_back(make_pair("A", "D"));
+        open_picker(
+            e, "Pick an area.", true, ""
+        );
+    }
+
+    //ImGui::ShowDemoWindow();
 }
