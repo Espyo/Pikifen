@@ -132,6 +132,7 @@ area_editor::area_editor() :
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
     
+    use_imgui = true;
 }
 
 
@@ -436,6 +437,8 @@ void area_editor::delete_selected_path_elements() {
  */
 void area_editor::do_logic() {
     editor::do_logic_pre();
+    
+    process_gui();
     
     cursor_snap_timer.tick(game.delta_t);
     path_preview_timer.tick(game.delta_t);
@@ -1281,7 +1284,64 @@ void area_editor::handle_line_error() {
  * Loads the area editor.
  */
 void area_editor::load() {
-    //TODO
+    editor::load();
+    
+    //Reset some variables.
+    cross_section_window_start = point(0.0f, 0.0f);
+    cross_section_window_end = point(canvas_br.x * 0.5, canvas_br.y * 0.5);
+    cross_section_z_window_start =
+        point(cross_section_window_end.x, cross_section_window_start.y);
+    cross_section_z_window_end =
+        point(cross_section_window_end.x + 48, cross_section_window_end.y);
+    is_ctrl_pressed = false;
+    is_shift_pressed = false;
+    is_gui_focused = false;
+    last_mob_category = NULL;
+    last_mob_type = NULL;
+    loaded_content_yet = false;
+    problem_type = EPT_NONE_YET;
+    selected_shadow = NULL;
+    selection_effect = 0.0;
+    selection_homogenized = false;
+    show_closest_stop = false;
+    show_path_preview = false;
+    snap_mode = SNAP_GRID;
+    state = EDITOR_STATE_MAIN;
+    
+    //Reset some other states.
+    clear_selection();
+    //TODO gui->lose_focus();
+    //change_to_right_frame();
+    //update_status_bar();
+    
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
+    
+    //Load necessary game content.
+    load_custom_particle_generators(false);
+    load_spike_damage_types();
+    load_liquids(false);
+    load_status_types(false);
+    load_spray_types(false);
+    load_hazards();
+    load_mob_types(false);
+    load_weather();
+    
+    //Set up stuff to show the player.
+    //open_picker(PICKER_LOAD_AREA);
+    
+    if(!quick_play_area.empty()) {
+        cur_area_name = quick_play_area;
+        quick_play_area.clear();
+        load_area(false);
+        game.cam.pos = quick_play_cam_pos;
+        game.cam.zoom = quick_play_cam_z;
+        
+    } else if(!auto_load_area.empty()) {
+        cur_area_name = auto_load_area;
+        load_area(false);
+        
+    }
 }
 
 

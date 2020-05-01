@@ -334,7 +334,8 @@ void editor::leave() {
  * Loads content common for all editors.
  */
 void editor::load() {
-
+    update_canvas_coordinates();
+    game.fade_mgr.start_fade(true, nullptr);
 }
 
 

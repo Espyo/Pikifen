@@ -305,6 +305,7 @@
     <File Name="../source/editors/editor_old.h"/>
     <File Name="../source/editors/editor_old.cpp"/>
     <VirtualDirectory Name="area_editor">
+      <File Name="../source/editors/area_editor/gui.cpp"/>
       <File Name="../source/editors/area_editor/event_handling.cpp"/>
       <File Name="../source/editors/area_editor/geometry_logic.cpp"/>
       <File Name="../source/editors/area_editor/drawing.cpp"/>

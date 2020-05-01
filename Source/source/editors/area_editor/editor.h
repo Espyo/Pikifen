@@ -401,6 +401,7 @@ private:
     void delete_path_stops(const set<path_stop*> &which);
     void delete_selected_mobs();
     void delete_selected_path_elements();
+    void draw_canvas();
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,
         const float lowest_z, sector* sector_ptr
@@ -468,6 +469,7 @@ private:
         const size_t picker_id, const string &name, const string &category
     );
     area_data* prepare_state();
+    void process_gui();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
