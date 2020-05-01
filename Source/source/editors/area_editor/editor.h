@@ -15,6 +15,8 @@
 
 #include "../editor.h"
 
+#include "../../imgui/imgui_impl_allegro5.h"
+
 using std::deque;
 using std::size_t;
 using std::string;
@@ -39,6 +41,7 @@ public:
     //Standard functions.
     void do_logic();
     void do_drawing();
+    void draw_canvas();
     void load();
     void unload();
     virtual string get_name() const;
@@ -401,7 +404,9 @@ private:
     void delete_path_stops(const set<path_stop*> &which);
     void delete_selected_mobs();
     void delete_selected_path_elements();
-    void draw_canvas();
+    static void draw_canvas_imgui_callback(
+        const ImDrawList* parent_list, const ImDrawCmd* cmd
+    );
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,
         const float lowest_z, sector* sector_ptr

@@ -31,7 +31,7 @@ void area_editor::process_gui() {
         "Main", NULL,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground
+        ImGuiWindowFlags_NoCollapse// | ImGuiWindowFlags_NoBackground
     );
     
     //The menu bar.
@@ -39,6 +39,11 @@ void area_editor::process_gui() {
     
     //The two main columns that split the canvas and control panel.
     ImGui::Columns(2, "main");
+    
+    //Draw the canvas now.
+    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, NULL);
+    
+    //Set up the separator for the control panel.
     ImGui::NextColumn();
     
     if(canvas_separator_x == -1) {
@@ -49,11 +54,14 @@ void area_editor::process_gui() {
     }
     update_canvas_coordinates();
     
-    //Do the control panel.
+    //Do the control panel now.
     process_gui_control_panel();
     
     //Finish the main window.
     ImGui::End();
+    
+    //Finishing setup.
+    ImGui::EndFrame();
     
     //TODO left here for debugging puporses.
     //ImGui::ShowDemoWindow();
@@ -71,7 +79,11 @@ void area_editor::process_gui_control_panel() {
         leave();
     }
     ImGui::SameLine();
-    ImGui::Button("Load");
+    if(ImGui::Button("Load")) {
+        //TODO
+        cur_area_name = "Play";
+        load_area(false);
+    }
     ImGui::SameLine();
     ImGui::Button("Save");
     

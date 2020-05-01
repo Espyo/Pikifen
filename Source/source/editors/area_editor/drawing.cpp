@@ -23,23 +23,13 @@
  * Handles the drawing part of the main loop of the area editor.
  */
 void area_editor::do_drawing() {
-    //Draw the GUI first.
+    //Render what is needed for the GUI.
+    //This will also render the canvas in due time.
     ImGui::Render();
     
+    //Actually draw the GUI + canvas on-screen.
     al_clear_to_color(al_map_rgb(0, 0, 0));
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-    
-    //And now the canvas.
-    al_use_transform(&game.world_to_screen_transform);
-    al_set_clipping_rectangle(
-        canvas_tl.x, canvas_tl.y,
-        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
-    );
-    
-    draw_canvas();
-    
-    al_reset_clipping_rectangle();
-    al_use_transform(&game.identity_transform);
     
     //TODO draw_unsaved_changes_warning();
     
@@ -52,9 +42,18 @@ void area_editor::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
- * Draw the canvas.
+ * Draw the canvas. This is called as a callback inside the
+ * ImGui rendering process.
  */
 void area_editor::draw_canvas() {
+    al_use_transform(&game.world_to_screen_transform);
+    al_set_clipping_rectangle(
+        canvas_tl.x, canvas_tl.y,
+        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
+    );
+    
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    
     float lowest_sector_z = 0.0f;
     float highest_sector_z = 0.0f;
     if(
@@ -1343,6 +1342,10 @@ void area_editor::draw_canvas() {
             al_map_rgb(160, 96, 96), 2
         );
     }
+    
+    //Finish up.
+    al_reset_clipping_rectangle();
+    al_use_transform(&game.identity_transform);
 }
 
 

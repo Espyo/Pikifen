@@ -364,8 +364,8 @@ void editor::update_canvas_coordinates() {
     }
     
     canvas_tl.x = 0;
-    canvas_tl.y = 40;
-    canvas_br.y = game.win_h - 16;
+    canvas_tl.y = 20;
+    canvas_br.y = game.win_h;
 }
 
 

@@ -14,6 +14,7 @@
 
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../imgui/imgui_impl_allegro5.h"
 #include "../../load.h"
 #include "../../utils/string_utils.h"
 
@@ -452,6 +453,16 @@ void area_editor::do_logic() {
     selection_effect += SELECTION_EFFECT_SPEED * game.delta_t;
     
     editor::do_logic_post();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ */
+void area_editor::draw_canvas_imgui_callback(
+    const ImDrawList* parent_list, const ImDrawCmd* cmd
+) {
+    game.states.area_editor_st->draw_canvas();
 }
 
 
