@@ -82,6 +82,8 @@ Next tasks (roughly sorted most important first)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (elated)
         When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
         Improve the look of the ship's ring
+        Make the whistle look prettier and more like a mix between the classic and the new whistle
+            Suggestion: Make the light rings not be ugly circles, but sprites instead
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
@@ -460,7 +462,6 @@ Misc things (so I don't forget)
             HUD number of Pikmin on the field/army/etc. should grow when they change
             HUD should come in/out of frame when pause is used
             Find more ideas from the canon games
-        A "tick!" effect when attacking Pikmin are causing no damage
         When a spray is about to run out, make the mobs flash
         Health wheel should gradually turn from the current angle to the actual health
         Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
@@ -475,8 +476,6 @@ Misc things (so I don't forget)
                 Don't offset the camera negatively, but use something like offsetX = maxOffset * shake_mult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shake_mult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
         Dust particles while walking
-        Make the whistle look prettier and more like a mix between the classic and the new whistle
-            Suggestion: Make the light rings not be ugly circles, but sprites instead
         A spray of whistle particles for when there's a dismiss, and whistle particle "smoke" when group moving
         Camera should mostly center on the leader, but offset slightly towards where the group is, offsetting more the more the group is farther away
         Make the mob sprite scale when hurt, like an elastic
@@ -511,7 +510,6 @@ Misc things (so I don't forget)
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
     Maybe water should have random sparkle particles?
     A way for Pikmin to resist being shaken off
-        And a way for certain hazards to cause more or less damage to certain Pikmin types
     A way for status effects to add to the time left, instead of resetting it or leaving it as is
         Spicy spray to reset the time if it is re-applied
     Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
@@ -540,7 +538,6 @@ Misc things (so I don't forget)
     If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
     Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New actions
-        An action to set the timer to the amount in a var
         Logic for an arachnorb to turn to/chase the focused mob?
     Make it so enemies can understand what hazard they entered or left (needed for the Fiery Bulblax)
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this helps audibly impaired players who can't hear the Pikmin squeals

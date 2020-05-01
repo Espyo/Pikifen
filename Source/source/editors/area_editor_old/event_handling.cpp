@@ -139,7 +139,8 @@ void area_editor_old::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         break;
         
     } case ALLEGRO_KEY_R: {
-        rotate_mob_gens_to_cursor();
+        rotate_mob_gens_to_point(game.mouse_cursor_w);
+        mob_to_gui();
         break;
         
     } case ALLEGRO_KEY_X: {

@@ -410,7 +410,7 @@ private:
     void cancel_circle_sector();
     void cancel_layout_drawing();
     void cancel_layout_moving();
-    void calculate_preview_path();
+    float calculate_preview_path();
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -423,6 +423,11 @@ private:
     void create_area();
     void create_new_from_picker(const size_t picker_id, const string &name);
     void delete_current_hazard();
+    void delete_mobs(const set<mob_gen*> &which);
+    void delete_path_links(
+        const set<std::pair<path_stop*, path_stop*> > &which
+    );
+    void delete_path_stops(const set<path_stop*> &which);
     void delete_selected_mobs();
     void delete_selected_path_elements();
     void draw_cross_section_sector(
@@ -497,7 +502,7 @@ private:
     );
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
-    void rotate_mob_gens_to_cursor();
+    void rotate_mob_gens_to_point(const point &pos);
     bool save_area(const bool to_backup);
     void save_backup();
     void save_reference();

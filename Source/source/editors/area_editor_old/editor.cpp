@@ -110,7 +110,10 @@ area_editor_old::area_editor_old() :
     quick_play_cam_z(1.0f) {
     
     path_preview_timer =
-    timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
+    timer(PATH_PREVIEW_TIMER_DUR, [this] () {
+        float d = calculate_preview_path();
+        set_label_text(frm_paths, "lbl_path_dist", "  Total dist.: " + f2s(d));
+    });
     
     undo_save_lock_timer =
         timer(
@@ -174,8 +177,8 @@ bool area_editor_old::are_nodes_traversable(
 /* ----------------------------------------------------------------------------
  * Calculates the preview path.
  */
-void area_editor_old::calculate_preview_path() {
-    if(!show_path_preview) return;
+float area_editor_old::calculate_preview_path() {
+    if(!show_path_preview) return 0;
     
     float d = 0;
     path_preview =
@@ -193,7 +196,7 @@ void area_editor_old::calculate_preview_path() {
             ).to_float();
     }
     
-    set_label_text(frm_paths, "lbl_path_dist", "  Total dist.: " + f2s(d));
+    return d;
 }
 
 
@@ -703,19 +706,10 @@ void area_editor_old::custom_picker_cancel_action() {
 
 
 /* ----------------------------------------------------------------------------
- * Deletes the selected mobs.
+ * Deletes the specified mobs.
  */
-void area_editor_old::delete_selected_mobs() {
-    if(selected_mobs.empty()) {
-        emit_status_bar_message(
-            "You have to select mobs to delete!", false
-        );
-        return;
-    }
-    
-    register_change("object deletion");
-    for(auto sm : selected_mobs) {
-    
+void area_editor_old::delete_mobs(const set<mob_gen*> &which) {
+    for(auto sm : which) {
         size_t m_i = 0;
         for(; m_i < game.cur_area_data.mob_generators.size(); ++m_i) {
             if(game.cur_area_data.mob_generators[m_i] == sm) break;
@@ -742,6 +736,69 @@ void area_editor_old::delete_selected_mobs() {
         );
         delete sm;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the specified path links.
+ */
+void area_editor_old::delete_path_links(
+    const set<std::pair<path_stop*, path_stop*> > &which
+) {
+    for(auto l : which) {
+        l.first->remove_link(l.second);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the specified path stops.
+ */
+void area_editor_old::delete_path_stops(const set<path_stop*> &which) {
+    for(auto s : which) {
+        //Check all links to this stop.
+        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
+            path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
+            for(size_t l = 0; l < s2_ptr->links.size(); ++l) {
+                if(s2_ptr->links[l].end_ptr == s) {
+                    s2_ptr->links.erase(s2_ptr->links.begin() + l);
+                    break;
+                }
+            }
+        }
+        
+        //Finally, delete the stop.
+        delete s;
+        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
+            if(game.cur_area_data.path_stops[s2] == s) {
+                game.cur_area_data.path_stops.erase(
+                    game.cur_area_data.path_stops.begin() + s2
+                );
+                break;
+            }
+        }
+    }
+    
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        game.cur_area_data.fix_path_stop_nrs(game.cur_area_data.path_stops[s]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the selected mobs.
+ */
+void area_editor_old::delete_selected_mobs() {
+    if(selected_mobs.empty()) {
+        emit_status_bar_message(
+            "You have to select mobs to delete!", false
+        );
+        return;
+    }
+    
+    register_change("object deletion");
+    
+    delete_mobs(selected_mobs);
     
     clear_selection();
     sub_state = EDITOR_SUB_STATE_NONE;
@@ -760,45 +817,11 @@ void area_editor_old::delete_selected_path_elements() {
     }
     
     register_change("path deletion");
-    for(
-        auto l = selected_path_links.begin();
-        l != selected_path_links.end(); ++l
-    ) {
-        (*l).first->remove_link((*l).second);
-    }
+    
+    delete_path_links(selected_path_links);
     selected_path_links.clear();
     
-    for(
-        auto s = selected_path_stops.begin();
-        s != selected_path_stops.end(); ++s
-    ) {
-        //Check all links to this stop.
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
-            path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
-            for(size_t l = 0; l < s2_ptr->links.size(); ++l) {
-                if(s2_ptr->links[l].end_ptr == *s) {
-                    s2_ptr->links.erase(s2_ptr->links.begin() + l);
-                    break;
-                }
-            }
-        }
-        
-        //Finally, delete the stop.
-        delete *s;
-        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
-            if(game.cur_area_data.path_stops[s2] == *s) {
-                game.cur_area_data.path_stops.erase(
-                    game.cur_area_data.path_stops.begin() + s2
-                );
-                break;
-            }
-        }
-    }
-    
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        game.cur_area_data.fix_path_stop_nrs(game.cur_area_data.path_stops[s]);
-    }
-    
+    delete_path_stops(selected_path_stops);
     selected_path_stops.clear();
     
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
@@ -2859,13 +2882,6 @@ bool area_editor_old::remove_isolated_sectors() {
  * Resizes all X and Y coordinates by the specified multiplier.
  */
 void area_editor_old::resize_everything(const float mult) {
-    if(mult == 0) {
-        emit_status_bar_message("Can't resize everything to size 0!", true);
-        return;
-    }
-    
-    register_change("global resize");
-    
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
         v_ptr->x *= mult;
@@ -2899,24 +2915,21 @@ void area_editor_old::resize_everything(const float mult) {
         s_ptr->size   *= mult;
         s_ptr->sway   *= mult;
     }
-    
-    emit_status_bar_message("Resized successfully.", false);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Makes all currently selected mob generators (if any) rotate to where the
- * mouse cursor is.
+ * Makes all currently selected mob generators (if any) rotate to face where the
+ * the given point is.
  */
-void area_editor_old::rotate_mob_gens_to_cursor() {
+void area_editor_old::rotate_mob_gens_to_point(const point &pos) {
     if(selected_mobs.empty()) return;
     
     register_change("object rotation");
     selection_homogenized = false;
     for(auto m : selected_mobs) {
-        m->angle = get_angle(m->pos, game.mouse_cursor_w);
+        m->angle = get_angle(m->pos, pos);
     }
-    mob_to_gui();
 }
 
 

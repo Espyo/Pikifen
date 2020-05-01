@@ -1659,7 +1659,10 @@ void area_editor_old::load() {
                 path_preview_checkpoints[1].y =
                     game.cam.pos.y;
             }
-            calculate_preview_path();
+            float d = calculate_preview_path();
+            set_label_text(
+                frm_paths, "lbl_path_dist", "  Total dist.: " + f2s(d)
+            );
             this->frm_paths->widgets["lbl_path_dist"]->show();
         } else {
             this->frm_paths->widgets["lbl_path_dist"]->hide();
@@ -2332,7 +2335,13 @@ void area_editor_old::load() {
             (lafi::textbox*) frm_tools->widgets["txt_resize"];
         float mult = s2f(txt_resize->text);
         txt_resize->text.clear();
+        if(mult == 0) {
+            emit_status_bar_message("Can't resize everything to size 0!", true);
+            return;
+        }
+        register_change("global resize");
         resize_everything(mult);
+        emit_status_bar_message("Resized successfully.", false);
     };
     frm_tools->widgets["but_resize"]->description =
         "Resize all X/Y coordinates by the given amount.";
