@@ -4,9 +4,11 @@
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
         Don't forget that:
+            Areas cannot be picked to load from
             Each panel should have its name in the top-right corner
             Buttons don't have icons
             Switching states doesn't unselect selected stuff
+            Explanations for each panel widget
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

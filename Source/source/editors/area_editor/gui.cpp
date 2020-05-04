@@ -31,7 +31,7 @@ void area_editor::process_gui() {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
     ImGui::Begin(
-        "Main", NULL,
+        "Area editor", NULL,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoCollapse// | ImGuiWindowFlags_NoBackground
@@ -110,16 +110,16 @@ void area_editor::process_gui_control_panel() {
         process_gui_panel_paths();
         break;
     } case EDITOR_STATE_DETAILS: {
-        //TODO
+        process_gui_panel_details();
         break;
     } case EDITOR_STATE_REVIEW: {
-        //TODO
+        process_gui_panel_review();
         break;
     } case EDITOR_STATE_TOOLS: {
-        //TODO
+        process_gui_panel_tools();
         break;
     } case EDITOR_STATE_OPTIONS: {
-        //TODO
+        process_gui_panel_options();
         break;
     }
     }
@@ -170,6 +170,68 @@ void area_editor::process_gui_menu_bar() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui area details control panel for this frame.
+ */
+void area_editor::process_gui_panel_details() {
+    ImGui::BeginChild("info");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::TreeNode("Tree shadows")) {
+    
+        if(ImGui::Button("New")) {
+            //TODO
+        }
+        
+        ImGui::SameLine();
+        if(ImGui::Button("Delete")) {
+            //TODO
+        }
+        
+        if(selected_shadow) {
+        
+            ImGui::Button("...");
+            
+            ImGui::SameLine();
+            ImGui::InputText("Bitmap", &selected_shadow->file_name);
+            
+            //TODO aspect ratio and update the transformation controller
+            ImGui::DragFloat2(
+                "Center", (float*) &selected_shadow->center
+            );
+            
+            ImGui::DragFloat2(
+                "Size", (float*) &selected_shadow->size
+            );
+            
+            ImGui::Checkbox(
+                "Keep aspect ratio",
+                &selected_shadow_transformation.keep_aspect_ratio
+            );
+            
+            ImGui::SliderAngle("Angle", &selected_shadow->angle, 0, 359);
+            
+            int opacity = selected_shadow->alpha;
+            ImGui::SliderInt("Opacity", &opacity, 0, 255);
+            selected_shadow->alpha = opacity;
+            
+            ImGui::DragFloat2(
+                "Sway", (float*) &selected_shadow->sway, 0.1
+            );
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui area info control panel for this frame.
  */
 void area_editor::process_gui_panel_info() {
@@ -197,7 +259,7 @@ void area_editor::process_gui_panel_info() {
     if(ImGui::TreeNode("Background")) {
     
         //TODO
-        ImGui::Button("...##bg");
+        ImGui::Button("...");
         
         ImGui::SameLine();
         ImGui::InputText("Bitmap", &game.cur_area_data.bg_bmp_file_name);
@@ -520,6 +582,111 @@ void area_editor::process_gui_panel_mobs() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui options control panel for this frame.
+ */
+void area_editor::process_gui_panel_options() {
+    ImGui::BeginChild("options");
+    
+    if(ImGui::Button("Save and go back")) {
+        state = EDITOR_STATE_MAIN;
+        save_options();
+    }
+    
+    if(ImGui::TreeNode("Controls")) {
+    
+        int snap_threshold = (int) game.options.area_editor_snap_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Snap threshold", &snap_threshold,
+            1, 0, 9999
+        );
+        game.options.area_editor_snap_threshold = snap_threshold;
+        
+        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        
+        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Drag threshold", &drag_threshold,
+            1, 0, 9999
+        );
+        game.options.editor_mouse_drag_threshold = drag_threshold;
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    if(ImGui::TreeNode("View")) {
+    
+        ImGui::Checkbox(
+            "Show edge length", &game.options.area_editor_show_edge_length
+        );
+        
+        ImGui::Checkbox(
+            "Show territory", &game.options.area_editor_show_territory
+        );
+        
+        int view_mode = game.options.area_editor_view_mode;
+        ImGui::Text("View mode:");
+        
+        ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
+        
+        ImGui::RadioButton("Wireframe", &view_mode, VIEW_MODE_WIREFRAME);
+        
+        ImGui::RadioButton("Heightmap", &view_mode, VIEW_MODE_HEIGHTMAP);
+        
+        ImGui::RadioButton("Brightness", &view_mode, VIEW_MODE_BRIGHTNESS);
+        game.options.area_editor_view_mode = view_mode;
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    if(ImGui::TreeNode("Misc.")) {
+    
+        ImGui::Text(
+            "Grid interval: %i", (int) game.options.area_editor_grid_interval
+        );
+        
+        ImGui::SameLine();
+        if(ImGui::Button("+")) {
+            //TODO
+        }
+        
+        ImGui::SameLine();
+        if(ImGui::Button("-")) {
+            //TODO
+        }
+        
+        int backup_interval = game.options.area_editor_backup_interval;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Auto-backup interval", &backup_interval, 1, 0, 9999
+        );
+        game.options.area_editor_backup_interval = backup_interval;
+        
+        int undo_limit = game.options.area_editor_undo_limit;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Undo limit", &undo_limit, 1, 0, 9999
+        );
+        game.options.area_editor_undo_limit = undo_limit;
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui paths control panel for this frame.
  */
 void area_editor::process_gui_panel_paths() {
@@ -558,6 +725,138 @@ void area_editor::process_gui_panel_paths() {
         
         if(show_path_preview) {
             ImGui::Text("Total distance: %f", 0.0f); //TODO
+        }
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui review control panel for this frame.
+ */
+void area_editor::process_gui_panel_review() {
+    ImGui::BeginChild("review");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::TreeNode("Problem search")) {
+    
+        if(ImGui::Button("Search for problems")) {
+            //TODO
+        }
+        
+        ImGui::TextWrapped("Problem found:\n%s", "---");
+        
+        if(ImGui::Button("Go to problem")) {
+            //TODO
+        }
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    if(ImGui::TreeNode("Preview look")) {
+    
+        static bool temp; //TODO
+        ImGui::Checkbox("See textures", &temp);
+        
+        ImGui::Checkbox("See tree shadows", &show_shadows);
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    if(ImGui::TreeNode("Cross-section")) {
+    
+        //TODO not working
+        
+        ImGui::Checkbox("Show cross-section", &show_cross_section);
+        
+        ImGui::Checkbox("Show height grid", &show_cross_section_grid);
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui tools control panel for this frame.
+ */
+void area_editor::process_gui_panel_tools() {
+    ImGui::BeginChild("tools");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::TreeNode("Reference image")) {
+    
+        ImGui::Button("...");
+        
+        ImGui::SameLine();
+        ImGui::InputText("Bitmap", &reference_file_name);
+        
+        static point temp; //TODO
+        static float temp2; //TODO
+        ImGui::DragFloat2(
+            "Center", (float*) &temp
+        );
+        
+        ImGui::DragFloat2(
+            "Size", (float*) &temp
+        );
+        
+        ImGui::Checkbox(
+            "Keep aspect ratio",
+            &reference_transformation.keep_aspect_ratio
+        );
+        
+        ImGui::SliderAngle("Angle", &temp2, 0, 359);
+        
+        int opacity = reference_alpha;
+        ImGui::SliderInt("Opacity", &opacity, 0, 255);
+        reference_alpha = opacity;
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
+    
+    if(ImGui::TreeNode("Misc.")) {
+    
+        if(ImGui::Button("Load auto-backup")) {
+            //TODO
+        }
+        
+        if(ImGui::Button("Texture transformer")) {
+            //TODO
+        }
+        
+        static string temp; //TODO
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::InputText("##resizeMult", &temp);
+        
+        ImGui::SameLine();
+        if(ImGui::Button("Resize everything")) {
+            //TODO
         }
         
         ImGui::Dummy(ImVec2(0, 16));
