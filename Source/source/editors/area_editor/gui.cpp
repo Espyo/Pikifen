@@ -100,6 +100,27 @@ void area_editor::process_gui_control_panel() {
     } case EDITOR_STATE_INFO: {
         process_gui_panel_info();
         break;
+    } case EDITOR_STATE_LAYOUT: {
+        process_gui_panel_layout();
+        break;
+    } case EDITOR_STATE_MOBS: {
+        process_gui_panel_mobs();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        process_gui_panel_paths();
+        break;
+    } case EDITOR_STATE_DETAILS: {
+        //TODO
+        break;
+    } case EDITOR_STATE_REVIEW: {
+        //TODO
+        break;
+    } case EDITOR_STATE_TOOLS: {
+        //TODO
+        break;
+    } case EDITOR_STATE_OPTIONS: {
+        //TODO
+        break;
     }
     }
     
@@ -158,7 +179,7 @@ void area_editor::process_gui_panel_info() {
         state = EDITOR_STATE_MAIN;
     }
     
-    if(ImGui::CollapsingHeader("General")) {
+    if(ImGui::TreeNode("General")) {
     
         ImGui::InputText("Name", &game.cur_area_data.name);
         
@@ -166,12 +187,14 @@ void area_editor::process_gui_panel_info() {
         
         //TODO
         static int temp = 0;
-        ImGui::Combo("Weather", &temp, "a\0b\0c");
+        ImGui::Combo("Weather", &temp, "a\0b\0c\0");
         
-        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
     }
     
-    if(ImGui::CollapsingHeader("Background")) {
+    if(ImGui::TreeNode("Background")) {
     
         //TODO
         ImGui::Button("...##bg");
@@ -188,22 +211,174 @@ void area_editor::process_gui_panel_info() {
         
         ImGui::DragFloat("Zoom", &game.cur_area_data.bg_bmp_zoom);
         
-        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
     }
     
-    if(ImGui::CollapsingHeader("Metadata")) {
+    if(ImGui::TreeNode("Metadata")) {
     
         ImGui::InputText("Creator", &game.cur_area_data.creator);
         ImGui::InputText("Version", &game.cur_area_data.version);
         ImGui::InputText("Notes", &game.cur_area_data.notes);
         
-        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
     }
     
-    if(ImGui::CollapsingHeader("Gameplay")) {
+    if(ImGui::TreeNode("Gameplay")) {
         ImGui::InputText("Sprays", &game.cur_area_data.spray_amounts);
         
-        ImGui::Spacing();
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui layout control panel for this frame.
+ */
+void area_editor::process_gui_panel_layout() {
+    ImGui::BeginChild("main");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::Button("New")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Circle")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Delete")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Sel filter")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Sel none")) {
+        //TODO
+    }
+    
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    sector* s_ptr = NULL;
+    if(!selected_sectors.empty()) {
+        s_ptr = *selected_sectors.begin();
+    }
+    
+    //TODO logic to select multiple at once.
+    
+    if(s_ptr) {
+    
+        if(ImGui::TreeNode("Sector behavior")) {
+        
+            ImGui::DragFloat("Height", &s_ptr->z);
+            
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            if(ImGui::TreeNode("Hazards")) {
+            
+                //TODO
+                
+                ImGui::Checkbox("Floor only", &s_ptr->hazard_floor);
+                
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                ImGui::TreePop();
+            }
+            
+            if(ImGui::TreeNode("Advanced")) {
+            
+                //TODO
+                int temp = 0;
+                ImGui::Combo("Type", &temp, "Normal\0stuff\0");
+                
+                ImGui::Checkbox("Bottomless pit", &s_ptr->is_bottomless_pit);
+                
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                ImGui::TreePop();
+            }
+            
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+        }
+        
+        if(ImGui::TreeNode("Sector appearance")) {
+        
+            int texture_type = !s_ptr->fade;
+            
+            ImGui::RadioButton("Texture fader", &texture_type, 0);
+            
+            ImGui::RadioButton("Regular texture", &texture_type, 1);
+            //TODO texture chooser.
+            
+            s_ptr->fade = texture_type == 0;
+            
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            if(ImGui::TreeNode("Texture effects")) {
+            
+                ImGui::DragFloat2(
+                    "Offset", (float*) &s_ptr->texture_info.translation
+                );
+                
+                ImGui::DragFloat2(
+                    "Scale", (float*) &s_ptr->texture_info.scale, 0.01
+                );
+                
+                ImGui::SliderAngle("Angle", &s_ptr->texture_info.rot, 0, 359);
+                
+                ImGui::ColorEdit4(
+                    "Tint color", (float*) &s_ptr->texture_info.tint,
+                    ImGuiColorEditFlags_NoInputs
+                );
+                
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                ImGui::TreePop();
+            }
+            
+            if(ImGui::TreeNode("Sector mood")) {
+            
+                int sector_brightness = s_ptr->brightness;
+                ImGui::SetNextItemWidth(180);
+                ImGui::SliderInt("Brightness", &sector_brightness, 0, 255);
+                s_ptr->brightness = sector_brightness;
+                
+                ImGui::Checkbox(
+                    "Always cast shadow", &s_ptr->always_cast_shadow
+                );
+                
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                ImGui::TreePop();
+            }
+            
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+        }
+        
+    } else {
+    
+        ImGui::Text("No sector selected.");
+        
     }
     
     ImGui::EndChild();
@@ -248,7 +423,9 @@ void area_editor::process_gui_panel_main() {
         state = EDITOR_STATE_OPTIONS;
     }
     
-    if(ImGui::CollapsingHeader("Stats")) {
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    if(ImGui::TreeNode("Stats")) {
         ImGui::Text(
             "Sectors: %i", (int) game.cur_area_data.sectors.size()
         );
@@ -264,6 +441,129 @@ void area_editor::process_gui_panel_main() {
         ImGui::Text(
             "Path stops: %i", (int) game.cur_area_data.path_stops.size()
         );
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui mobs control panel for this frame.
+ */
+void area_editor::process_gui_panel_mobs() {
+    ImGui::BeginChild("mobs");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::Button("New")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Delete")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Duplicate")) {
+        //TODO
+    }
+    
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    mob_gen* m_ptr = NULL;
+    if(!selected_mobs.empty()) {
+        m_ptr = *selected_mobs.begin();
+    }
+    
+    //TODO logic to select multiple at once.
+    
+    if(m_ptr) {
+    
+        string cat_name = (m_ptr->category ? m_ptr->category->plural_name : "");
+        ImGui::Text("Category: %s", cat_name.c_str());
+        
+        //TODO mob type
+        
+        ImGui::SliderAngle("Angle", &m_ptr->angle, 0, 359);
+        
+        if(ImGui::TreeNode("Advanced")) {
+        
+            ImGui::InputText("Script vars", &m_ptr->vars);
+            
+            ImGui::Text(
+                "%i link%s", (int) m_ptr->links.size(),
+                m_ptr->links.size() == 1 ? "" : "s"
+            );
+            
+            ImGui::SameLine();
+            ImGui::Button("New");
+            
+            ImGui::SameLine();
+            ImGui::Button("Delete");
+            
+            ImGui::TreePop();
+        }
+        
+    } else {
+    
+        ImGui::Text("No object selected.");
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui paths control panel for this frame.
+ */
+void area_editor::process_gui_panel_paths() {
+    ImGui::BeginChild("paths");
+    
+    if(ImGui::Button("Back")) {
+        state = EDITOR_STATE_MAIN;
+    }
+    
+    if(ImGui::Button("New")) {
+        //TODO
+    }
+    
+    ImGui::SameLine();
+    if(ImGui::Button("Delete")) {
+        //TODO
+    }
+    
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    ImGui::Text("Drawing mode:");
+    
+    int one_way_mode = path_drawing_normals;
+    
+    ImGui::RadioButton("One-way links", &one_way_mode, 0);
+    
+    ImGui::RadioButton("Normal links", &one_way_mode, 1);
+    
+    path_drawing_normals = one_way_mode;
+    
+    if(ImGui::TreeNode("Tools")) {
+    
+        ImGui::Checkbox("Show closest stop", &show_closest_stop);
+        
+        ImGui::Checkbox("Show calculated path", &show_path_preview);
+        
+        if(show_path_preview) {
+            ImGui::Text("Total distance: %f", 0.0f); //TODO
+        }
+        
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
     }
     
     ImGui::EndChild();
