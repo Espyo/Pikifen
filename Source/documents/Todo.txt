@@ -9,6 +9,10 @@ Current tasks (tasks being worked on, but not yet committed)
             Buttons don't have icons
             Switching states doesn't unselect selected stuff
             Explanations for each panel widget
+            Panel changes are not being recorded as undoable changes
+            Keyboard shortcuts don't work
+            Don't let the user interact with the GUI while fading
+            Check all gui_to_* and *_to_gui functions for code I haven't ported over
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -61,6 +65,7 @@ Next tasks (roughly sorted most important first)
         When picking an object to edit, or to place in an area, the user must first select the category, so they are not swamped with choices. There should still be an option to show all at once though. Maybe an actual option in the options panel?
         When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
         Area editor should allow you to transform texture on several sectors at once, instead of one at a time (Jimble)
+        Area editor needs to have a button that lists all mob types
         When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
         Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
         A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
@@ -68,6 +73,7 @@ Next tasks (roughly sorted most important first)
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
+        A way to memorize which Tree Nodes are opened/closed
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
@@ -87,9 +93,11 @@ Next tasks (roughly sorted most important first)
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
         The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (elated)
+        Decorative objects shouldn't cast light in blackout mode
         When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
         Objects being carried by Pikmin should count as that object's weight + the Pikmin's weight for the purposes of a scale category mob
         Improve the look of the ship's ring
+        If a leader/Pikmin type is not in the list of order, don't give an error -- instead, just quietly put it at the end. This way, people can download new types and not have to go declare the list they don't care about (Kman)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
         Game feel
@@ -113,6 +121,7 @@ Next tasks (roughly sorted most important first)
     Pikmin should push each other a bit
     Objects should move with acceleration
     There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
+        Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
     Improve the way ceramic bridge textures work
     A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
     Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
@@ -304,8 +313,6 @@ Next tasks (roughly sorted most important first)
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
-    Make it so that all of the content for an enemy, area, etc. is contained within that enemy, area, etc.'s folder
-        When loading graphics, particle generators, etc., it could try checking that folder first, and if the requested one doesn't exist, check the default graphics folder/default generators file, etc.
     The ability for Blue Pikmin to rescue drowning Pikmin
     Floors-over-floors; mostly for bridges
         Revamp physics
@@ -642,6 +649,7 @@ Tasks for later on (I might never implement these)
                 c) Only use buttons for one-off actions, and use checkboxes or something else for these mode-changing widgets
     "'lafi_widget' : class has virtual functions, but destructor is not virtual" Is this important?
     Blood (optional, of course)
+    Some way to let users organize their mob types into sub-folders, and have that reflect in the area editor
     Enemies should have a cloud of breath in cold areas (GitHub issue #10)
     Resolution
         Players should be able to resize the window on-the-fly (GitHub issue #2)

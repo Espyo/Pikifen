@@ -184,7 +184,8 @@ void area_editor::clear_current_area() {
     //TODO clear_current_area_gui();
     
     reference_transformation.keep_aspect_ratio = true;
-    update_reference("");
+    reference_file_name.clear();
+    update_reference();
     clear_selection();
     clear_circle_sector();
     clear_layout_drawing();
@@ -255,6 +256,8 @@ void area_editor::clear_layout_moving() {
  */
 void area_editor::clear_problems() {
     problem_type = EPT_NONE_YET;
+    problem_title = "Haven't searched yet.";
+    problem_description.clear();
     problem_edge_intersection.e1 = NULL;
     problem_edge_intersection.e2 = NULL;
     problem_mob_ptr = NULL;
@@ -262,7 +265,6 @@ void area_editor::clear_problems() {
     problem_sector_ptr = NULL;
     problem_shadow_ptr = NULL;
     problem_vertex_ptr = NULL;
-    problem_string.clear();
 }
 
 
@@ -1268,7 +1270,7 @@ void area_editor::goto_problem() {
         
         break;
         
-    } case EPT_INVALID_SHADOW: {
+    } case EPT_UNKNOWN_SHADOW: {
 
         point min_coords, max_coords;
         get_transformed_rectangle_bounding_box(
@@ -1299,19 +1301,12 @@ void area_editor::load() {
     editor::load();
     
     //Reset some variables.
-    cross_section_window_start = point(0.0f, 0.0f);
-    cross_section_window_end = point(canvas_br.x * 0.5, canvas_br.y * 0.5);
-    cross_section_z_window_start =
-        point(cross_section_window_end.x, cross_section_window_start.y);
-    cross_section_z_window_end =
-        point(cross_section_window_end.x + 48, cross_section_window_end.y);
     is_ctrl_pressed = false;
     is_shift_pressed = false;
     is_gui_focused = false;
     last_mob_category = NULL;
     last_mob_type = NULL;
     loaded_content_yet = false;
-    problem_type = EPT_NONE_YET;
     selected_shadow = NULL;
     selection_effect = 0.0;
     selection_homogenized = false;
@@ -1321,6 +1316,7 @@ void area_editor::load() {
     state = EDITOR_STATE_MAIN;
     
     //Reset some other states.
+    clear_problems();
     clear_selection();
     //TODO gui->lose_focus();
     //change_to_right_frame();
@@ -1431,9 +1427,8 @@ void area_editor::load_reference() {
         USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
     );
     
-    string new_ref_file_name;
     if(file.file_was_opened) {
-        new_ref_file_name = file.get_child_by_name("file")->value;
+        reference_file_name = file.get_child_by_name("file")->value;
         reference_transformation.set_center(
             s2p(file.get_child_by_name("center")->value)
         );
@@ -1448,13 +1443,13 @@ void area_editor::load_reference() {
             );
             
     } else {
-        new_ref_file_name.clear();
+        reference_file_name.clear();
         reference_transformation.set_center(point());
         reference_transformation.set_size(point());
         reference_alpha = 0;
     }
     
-    update_reference(new_ref_file_name);
+    update_reference();
 }
 
 
@@ -2249,24 +2244,17 @@ bool area_editor::update_backup_status() {
 
 
 /* ----------------------------------------------------------------------------
- * Updates the reference image's bitmap, given a new bitmap file name.
+ * Updates the reference image's bitmap, since its file name just changed.
  */
-void area_editor::update_reference(const string &new_file_name) {
-    if(reference_file_name == new_file_name) {
-        //Nothing to do.
-        return;
-    }
-    
-    reference_file_name = new_file_name;
-    
+void area_editor::update_reference() {
     if(reference_bitmap && reference_bitmap != game.bmp_error) {
         al_destroy_bitmap(reference_bitmap);
     }
     reference_bitmap = NULL;
     
-    if(!new_file_name.empty()) {
+    if(!reference_file_name.empty()) {
         reference_bitmap =
-            load_bmp(new_file_name, NULL, false, true, true, true);
+            load_bmp(reference_file_name, NULL, false, true, true, true);
             
         if(
             reference_transformation.get_size().x == 0 ||
@@ -2286,7 +2274,6 @@ void area_editor::update_reference(const string &new_file_name) {
         reference_transformation.set_size(point());
     }
     
-    //TODO tools_to_gui();
     //TODO update_toolbar();
 }
 

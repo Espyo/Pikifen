@@ -15,6 +15,7 @@
 
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../utils/string_utils.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -375,20 +376,50 @@ void area_editor::delete_path_stops(const set<path_stop*> &which) {
 
 
 /* ----------------------------------------------------------------------------
- * Tries to find problems with the area. Returns the first one found,
- * or EPT_NONE if none found.
+ * Tries to find problems with the area.
+ * When it's done, sets the appropriate problem-related variables.
  */
-unsigned char area_editor::find_problems() {
+void area_editor::find_problems() {
     problem_sector_ptr = NULL;
     problem_vertex_ptr = NULL;
     problem_shadow_ptr = NULL;
-    problem_string.clear();
     
     //Check intersecting edges.
     vector<edge_intersection> intersections = get_intersecting_edges();
     if(!intersections.empty()) {
+        float u;
+        edge_intersection* ei_ptr = &(*intersections.begin());
+        lines_intersect(
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
+            point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
+            point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
+            NULL, &u
+        );
+        
+        float a =
+            get_angle(
+                point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+                point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+            );
+        dist d(
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+        );
+        
         problem_edge_intersection = *intersections.begin();
-        return EPT_INTERSECTING_EDGES;
+        problem_type = EPT_INTERSECTING_EDGES;
+        problem_title = "Two edges cross each other!";
+        problem_description =
+            "They cross at (" +
+            f2s(
+                floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u *
+                      d.to_float())
+            ) + "," + f2s(
+                floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
+                      d.to_float())
+            ) + "). Edges should never cross each other.";
+        return;
     }
     
     //Check overlapping vertexes.
@@ -400,19 +431,60 @@ unsigned char area_editor::find_problems() {
             
             if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
                 problem_vertex_ptr = v1_ptr;
-                return EPT_OVERLAPPING_VERTEXES;
+                problem_type = EPT_OVERLAPPING_VERTEXES;
+                problem_title = "Overlapping vertexes!";
+                problem_description =
+                    "They are very close together at (" +
+                    f2s(problem_vertex_ptr->x) + "," +
+                    f2s(problem_vertex_ptr->y) + "), and should likely "
+                    "be merged together.";
+                return;
             }
         }
     }
     
     //Check non-simple sectors.
     if(!non_simples.empty()) {
-        return EPT_BAD_SECTOR;
+        problem_type = EPT_BAD_SECTOR;
+        problem_title = "Non-simple sector!";
+        switch(non_simples.begin()->second) {
+        case TRIANGULATION_ERROR_LONE_EDGES: {
+            problem_description =
+                "It contains lone edges. Try clearing them up.";
+            break;
+        } case TRIANGULATION_ERROR_NO_EARS: {
+            problem_description =
+                "There's been a triangulation error. Try undoing or "
+                "deleting the sector, and then rebuild it. Make sure there "
+                "are no gaps, and keep it simple.";
+            break;
+        } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
+            problem_description =
+                "Some vertexes are re-used. Make sure the sector "
+                "has no loops or that the same vertex is not re-used "
+                "by multiple edges of the sector. Split popular vertexes "
+                "if you must.";
+            break;
+        } case TRIANGULATION_ERROR_INVALID_ARGS: {
+            problem_description =
+                "An unknown error has occured with the sector.";
+            break;
+        } case TRIANGULATION_NO_ERROR: {
+            problem_description.clear();
+            break;
+        }
+        }
+        return;
     }
     
     //Check lone edges.
     if(!lone_edges.empty()) {
-        return EPT_LONE_EDGE;
+        problem_type = EPT_LONE_EDGE;
+        problem_title = "Lone edge!";
+        problem_description =
+            "Likely leftover of something that went wrong. "
+            "You probably want to drag one vertex into the other.";
+        return;
     }
     
     //Check for the existence of a leader object.
@@ -428,14 +500,23 @@ unsigned char area_editor::find_problems() {
         }
     }
     if(!has_leader) {
-        return EPT_MISSING_LEADER;
+        problem_type = EPT_MISSING_LEADER;
+        problem_title = "No leader!";
+        problem_description =
+            "You need at least one leader to play.";
+        return;
     }
     
     //Objects with no type.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         if(!game.cur_area_data.mob_generators[m]->type) {
             problem_mob_ptr = game.cur_area_data.mob_generators[m];
-            return EPT_TYPELESS_MOB;
+            problem_type = EPT_TYPELESS_MOB;
+            problem_title = "Mob with no type!";
+            problem_description =
+                "It has a category set, but no valid type set. "
+                "Give it a type or delete it.";
+            return;
         }
     }
     
@@ -444,7 +525,11 @@ unsigned char area_editor::find_problems() {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         if(!get_sector(m_ptr->pos, NULL, false)) {
             problem_mob_ptr = m_ptr;
-            return EPT_MOB_OOB;
+            problem_type = EPT_MOB_OOB;
+            problem_title = "Mob out of bounds!";
+            problem_description =
+                "Move it to somewhere inside the area's geometry.";
+            return;
         }
     }
     
@@ -524,7 +609,12 @@ unsigned char area_editor::find_problems() {
                 
                 if(in_wall) {
                     problem_mob_ptr = m_ptr;
-                    return EPT_MOB_IN_WALL;
+                    problem_type = EPT_MOB_IN_WALL;
+                    problem_title = "Mob stuck in wall!";
+                    problem_description =
+                        "This object should not be stuck inside of a wall. "
+                        "Move it to somewhere where it has more space.";
+                    return;
                 }
                 
             }
@@ -539,7 +629,12 @@ unsigned char area_editor::find_problems() {
             sector* s_ptr = get_sector(m_ptr->pos, NULL, false);
             if(s_ptr->type != SECTOR_TYPE_BRIDGE) {
                 problem_mob_ptr = m_ptr;
-                return EPT_SECTORLESS_BRIDGE;
+                problem_type = EPT_SECTORLESS_BRIDGE;
+                problem_title = "Bridge mob on wrong sector!";
+                problem_description =
+                    "This bridge object should be on a sector of the "
+                    "\"Bridge\" type.";
+                return;
             }
         }
     }
@@ -549,59 +644,11 @@ unsigned char area_editor::find_problems() {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         if(!get_sector(s_ptr->pos, NULL, false)) {
             problem_path_stop_ptr = s_ptr;
-            return EPT_PATH_STOP_OOB;
-        }
-    }
-    
-    //Path graph is not connected.
-    if(!game.cur_area_data.path_stops.empty()) {
-        unordered_set<path_stop*> visited;
-        depth_first_search(
-            game.cur_area_data.path_stops,
-            visited,
-            game.cur_area_data.path_stops[0]
-        );
-        if(visited.size() != game.cur_area_data.path_stops.size()) {
-            return EPT_PATHS_UNCONNECTED;
-        }
-    }
-    
-    //Check for missing textures.
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
-    
-        sector* s_ptr = game.cur_area_data.sectors[s];
-        if(s_ptr->edges.empty()) continue;
-        if(s_ptr->is_bottomless_pit) continue;
-        if(
-            s_ptr->texture_info.file_name.empty() &&
-            !s_ptr->is_bottomless_pit && !s_ptr->fade
-        ) {
-            problem_string = "";
-            problem_sector_ptr = s_ptr;
-            return EPT_UNKNOWN_TEXTURE;
-        }
-    }
-    
-    //Check for unknown textures.
-    vector<string> texture_file_names =
-        folder_to_vector(TEXTURES_FOLDER_PATH, false);
-    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
-    
-        sector* s_ptr = game.cur_area_data.sectors[s];
-        if(s_ptr->edges.empty()) continue;
-        if(s_ptr->is_bottomless_pit) continue;
-        
-        if(s_ptr->texture_info.file_name.empty()) continue;
-        
-        if(
-            std::find(
-                texture_file_names.begin(), texture_file_names.end(),
-                s_ptr->texture_info.file_name
-            ) == texture_file_names.end()
-        ) {
-            problem_string = s_ptr->texture_info.file_name;
-            problem_sector_ptr = s_ptr;
-            return EPT_UNKNOWN_TEXTURE;
+            problem_type = EPT_PATH_STOP_OOB;
+            problem_title = "Path stop out of bounds!";
+            problem_description =
+                "Move it to somewhere inside the area's geometry.";
+            return;
         }
     }
     
@@ -626,7 +673,73 @@ unsigned char area_editor::find_problems() {
         
         if(!has_link) {
             problem_path_stop_ptr = s_ptr;
-            return EPT_LONE_PATH_STOP;
+            problem_type = EPT_LONE_PATH_STOP;
+            problem_title = "Lone path stop!";
+            problem_description =
+                "Either connect it to another stop, or delete it.";
+            return;
+        }
+    }
+    
+    //Path graph is not connected.
+    if(!game.cur_area_data.path_stops.empty()) {
+        unordered_set<path_stop*> visited;
+        depth_first_search(
+            game.cur_area_data.path_stops,
+            visited,
+            game.cur_area_data.path_stops[0]
+        );
+        if(visited.size() != game.cur_area_data.path_stops.size()) {
+            problem_type = EPT_PATHS_UNCONNECTED;
+            problem_title = "Path split into multiple parts!";
+            problem_description =
+                "The path graph is split into two or more parts. Connect them.";
+            return;
+        }
+    }
+    
+    //Check for missing textures.
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    
+        sector* s_ptr = game.cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) continue;
+        if(s_ptr->is_bottomless_pit) continue;
+        if(
+            s_ptr->texture_info.file_name.empty() &&
+            !s_ptr->is_bottomless_pit && !s_ptr->fade
+        ) {
+            problem_sector_ptr = s_ptr;
+            problem_type = EPT_UNKNOWN_TEXTURE;
+            problem_title = "Sector with missing texture!";
+            problem_description =
+                "Give it a valid texture.";
+            return;
+        }
+    }
+    
+    //Check for unknown textures.
+    vector<string> texture_file_names =
+        folder_to_vector(TEXTURES_FOLDER_PATH, false);
+    for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
+    
+        sector* s_ptr = game.cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) continue;
+        if(s_ptr->is_bottomless_pit) continue;
+        
+        if(s_ptr->texture_info.file_name.empty()) continue;
+        
+        if(
+            std::find(
+                texture_file_names.begin(), texture_file_names.end(),
+                s_ptr->texture_info.file_name
+            ) == texture_file_names.end()
+        ) {
+            problem_sector_ptr = s_ptr;
+            problem_type = EPT_UNKNOWN_TEXTURE;
+            problem_title = "Sector with unknown texture!";
+            problem_description =
+                "Texture name: \"" + s_ptr->texture_info.file_name + "\".";
+            return;
         }
     }
     
@@ -639,7 +752,11 @@ unsigned char area_editor::find_problems() {
             
             if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
                 problem_path_stop_ptr = s_ptr;
-                return EPT_PATH_STOPS_TOGETHER;
+                problem_type = EPT_PATH_STOPS_TOGETHER;
+                problem_title = "Two close path stops!";
+                problem_description =
+                    "These two are very close together. Separate them.";
+                return;
             }
         }
     }
@@ -648,13 +765,19 @@ unsigned char area_editor::find_problems() {
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         if(game.cur_area_data.tree_shadows[s]->bitmap == game.bmp_error) {
             problem_shadow_ptr = game.cur_area_data.tree_shadows[s];
-            problem_string = game.cur_area_data.tree_shadows[s]->file_name;
-            return EPT_INVALID_SHADOW;
+            problem_type = EPT_UNKNOWN_SHADOW;
+            problem_title = "Tree shadow with invalid texture!";
+            problem_description =
+                "Texture name: \"" +
+                game.cur_area_data.tree_shadows[s]->file_name + "\".";
+            return;
         }
     }
     
     //All good!
-    return EPT_NONE;
+    problem_type = EPT_NONE;
+    problem_title = "None!";
+    problem_description.clear();
 }
 
 

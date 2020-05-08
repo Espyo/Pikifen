@@ -138,7 +138,7 @@ private:
         EPT_PATH_STOP_OOB,        //A path stop is out of bounds.
         EPT_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
         EPT_PATHS_UNCONNECTED,    //The path graph is unconnected.
-        EPT_INVALID_SHADOW,       //Invalid tree shadow image.
+        EPT_UNKNOWN_SHADOW,       //Unknown tree shadow image.
     };
     
     enum DRAWING_LINE_ERRORS {
@@ -288,6 +288,8 @@ private:
     map<path_stop*, point> pre_move_stop_coords;
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
+    //Description of the current problem found.
+    string problem_description;
     //Information about the problematic intersecting edges, if any.
     edge_intersection problem_edge_intersection;
     //Pointer to the problematic mob, if any.
@@ -300,8 +302,8 @@ private:
     sector* problem_sector_ptr;
     //Pointer to the problematic tree shadow, if any.
     tree_shadow* problem_shadow_ptr;
-    //String with extra information about the current problem, if any.
-    string problem_string;
+    //Title of the current problem found.
+    string problem_title;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
     //Opacity of the reference image.
@@ -398,7 +400,6 @@ private:
     void clear_undo_history();
     void create_area();
     void create_new_from_picker(const size_t picker_id, const string &name);
-    void delete_current_hazard();
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(
         const set<std::pair<path_stop*, path_stop*> > &which
@@ -421,7 +422,7 @@ private:
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
-    unsigned char find_problems();
+    void find_problems();
     void finish_circle_sector();
     void finish_layout_drawing();
     void finish_layout_moving();
@@ -520,7 +521,7 @@ private:
     void undo();
     void undo_layout_drawing_node();
     bool update_backup_status();
-    void update_reference(const string &new_file_name);
+    void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
