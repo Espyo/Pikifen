@@ -10,6 +10,7 @@
 
 #include "editor.h"
 
+#include "../drawing.h"
 #include "../game.h"
 
 
@@ -17,6 +18,14 @@
 const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
 const float editor::KEYBOARD_CAM_ZOOM = 0.25f;
+//How long the unsaved changes warning stays on-screen for.
+const float editor::UNSAVED_CHANGES_WARNING_DURATION = 3.0f;
+//Height of the unsaved changes warning, sans spike.
+const int editor::UNSAVED_CHANGES_WARNING_HEIGHT = 30;
+//Width and height of the unsaved changes warning's spike.
+const int editor::UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
+//Width of the unsaved changes warning, sans spike.
+const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
 
 
 /* ----------------------------------------------------------------------------
@@ -34,6 +43,7 @@ editor::editor() :
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
+    unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     state(0),
     sub_state(0),
     zoom_max_level(0),
@@ -75,6 +85,28 @@ void editor::center_camera(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if there are any unsaved changes that have not been notified yet.
+ * Returns true if there are, and also sets up the unsaved changes warning.
+ * Returns false if everything is okay to continue.
+ */
+bool editor::check_new_unsaved_changes() {
+    unsaved_changes_warning_timer.stop();
+    
+    if(!made_new_changes) return false;
+    made_new_changes = false;
+    
+    unsaved_changes_warning_pos =
+        point(
+            ImGui::GetItemRectMin().x + ImGui::GetItemRectSize().x / 2.0,
+            ImGui::GetItemRectMin().y + ImGui::GetItemRectSize().y / 2.0
+        );
+    unsaved_changes_warning_timer.start();
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the area editor. This is meant to
  * be run after the editor's own logic code.
  */
@@ -94,6 +126,95 @@ void editor::do_logic_pre() {
         double_click_time -= game.delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
+    
+    unsaved_changes_warning_timer.tick(game.delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the unsaved changes warning, if it is visible.
+ */
+void editor::draw_unsaved_changes_warning() {
+    float r = unsaved_changes_warning_timer.get_ratio_left();
+    if(r == 0) return;
+    
+    ALLEGRO_COLOR back_color = al_map_rgba(192, 192, 64, r * 255);
+    ALLEGRO_COLOR outline_color = al_map_rgba(80, 80, 16, r * 255);
+    ALLEGRO_COLOR text_color = al_map_rgba(0, 0, 0, r * 255);
+    bool spike_up = unsaved_changes_warning_pos.y < game.win_h / 2.0;
+    
+    point box_center = unsaved_changes_warning_pos;
+    if(unsaved_changes_warning_pos.x < UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
+        box_center.x +=
+            UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
+    } else if(
+        unsaved_changes_warning_pos.x >
+        game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0
+    ) {
+        box_center.x -=
+            unsaved_changes_warning_pos.x -
+            (game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
+    }
+    if(spike_up) {
+        box_center.y += UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y += UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    } else {
+        box_center.y -= UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y -= UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    }
+    
+    point box_tl(
+        box_center.x - UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y - UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+    );
+    point box_br(
+        box_center.x + UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y + UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+    );
+    point spike_p1(
+        unsaved_changes_warning_pos.x,
+        unsaved_changes_warning_pos.y
+    );
+    point spike_p2(
+        unsaved_changes_warning_pos.x -
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        unsaved_changes_warning_pos.y +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+    );
+    point spike_p3(
+        unsaved_changes_warning_pos.x +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        unsaved_changes_warning_pos.y +
+        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+    );
+    
+    al_draw_filled_rectangle(
+        box_tl.x, box_tl.y, box_br.x, box_br.y, back_color
+    );
+    al_draw_filled_triangle(
+        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
+        back_color
+    );
+    al_draw_rectangle(
+        box_tl.x, box_tl.y, box_br.x, box_br.y, outline_color, 2
+    );
+    al_draw_line(
+        spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
+        back_color, 2
+    );
+    al_draw_line(
+        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y,
+        outline_color, 2
+    );
+    al_draw_line(
+        spike_p1.x, spike_p1.y, spike_p3.x, spike_p3.y,
+        outline_color, 2
+    );
+    draw_text_lines(
+        game.fonts.builtin, text_color,
+        box_center, ALLEGRO_ALIGN_CENTER, 1,
+        "You have\nunsaved changes!"
+    );
 }
 
 

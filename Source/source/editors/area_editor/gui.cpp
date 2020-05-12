@@ -139,9 +139,10 @@ void area_editor::process_gui_menu_bar() {
                 show_imgui_demo = true;
             }
             if(ImGui::MenuItem("Quit")) {
-                //TODO check if there are unsaved changes.
-                quick_play_area.clear();
-                leave();
+                if(!check_new_unsaved_changes()) {
+                    quick_play_area.clear();
+                    leave();
+                }
             }
             ImGui::EndMenu();
         }
@@ -670,6 +671,7 @@ void area_editor::process_gui_panel_main() {
     }
     
     if(ImGui::Button("Tools")) {
+        update_backup_status();
         state = EDITOR_STATE_TOOLS;
     }
     
@@ -1205,8 +1207,9 @@ void area_editor::process_gui_panel_tools() {
     
         if(ImGui::Button("Load auto-backup")) {
             if(can_load_backup) {
-                //TODO check for unsaved changes
-                load_backup();
+                if(!check_new_unsaved_changes()) {
+                    load_backup();
+                }
             }
         }
         
@@ -1263,14 +1266,17 @@ void area_editor::process_gui_status_bar() {
  */
 void area_editor::process_gui_toolbar() {
     if(ImGui::Button("Quit")) {
-        leave();
+        if(!check_new_unsaved_changes()) {
+            leave();
+        }
     }
     
     ImGui::SameLine();
     if(ImGui::Button("Reload")) {
         if(can_reload) {
-            //TODO check if there are unsaved changes.
-            load_area(false);
+            if(!check_new_unsaved_changes()) {
+                load_area(false);
+            }
         }
     }
     

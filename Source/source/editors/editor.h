@@ -42,6 +42,10 @@ protected:
 
     static const float KEYBOARD_CAM_ZOOM;
     static const float DOUBLE_CLICK_TIMEOUT;
+    static const float UNSAVED_CHANGES_WARNING_DURATION;
+    static const int   UNSAVED_CHANGES_WARNING_HEIGHT;
+    static const int   UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+    static const int   UNSAVED_CHANGES_WARNING_WIDTH;
     
     
     struct transformation_controller {
@@ -116,6 +120,10 @@ protected:
     string status_text;
     //Current sub-state.
     size_t sub_state;
+    //When placing the unsaved changes warning, focus on these coordinates.
+    point unsaved_changes_warning_pos;
+    //Time left for the unsaved changes warning to be on-screen.
+    timer unsaved_changes_warning_timer;
     //Maximum zoom level allowed.
     float zoom_max_level;
     //Minimum zoom level allowed.
@@ -126,8 +134,10 @@ protected:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
+    bool check_new_unsaved_changes();
     void do_logic_post();
     void do_logic_pre();
+    void draw_unsaved_changes_warning();
     bool is_mouse_in_gui(const point &mouse_coords) const;
     void leave();
     void update_canvas_coordinates();

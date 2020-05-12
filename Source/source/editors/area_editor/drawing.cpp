@@ -31,7 +31,7 @@ void area_editor::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     
-    //TODO draw_unsaved_changes_warning();
+    draw_unsaved_changes_warning();
     
     //And the fade manager atop it all.
     game.fade_mgr.draw();
