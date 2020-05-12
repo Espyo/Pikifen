@@ -13,6 +13,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Keyboard shortcuts don't work
             Don't let the user interact with the GUI while fading
             Check all gui_to_* and *_to_gui functions for code I haven't ported over
+            Buttons that are just icons should have a tooltip
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

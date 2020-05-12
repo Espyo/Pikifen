@@ -200,6 +200,10 @@ private:
     
     //Time left until a backup is generated.
     timer backup_timer;
+    //Can the user load the backup?
+    bool can_load_backup;
+    //Can the user use the "reload" button?
+    bool can_reload;
     //Where the cross-section tool points are.
     point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
@@ -274,6 +278,8 @@ private:
     path_stop* path_drawing_stop_1;
     //Path stops that make up the current path preview.
     vector<path_stop*> path_preview;
+    //Total distance of the previewed path.
+    float path_preview_dist;
     //Location of the two path preview checkpoints.
     point path_preview_checkpoints[2];
     //Only calculate the preview path when this time is up.

@@ -194,11 +194,7 @@ void area_editor::process_gui_panel_details() {
             ImGui::SameLine();
             if(ImGui::Button("Delete")) {
                 if(!selected_shadow) {
-                    //TODO
-                    /*
-                    emit_status_bar_message(
-                        "You have to select shadows to delete!", false
-                    );*/
+                    status_text = "You have to select shadows to delete!";
                 } else {
                     register_change("tree shadow deletion");
                     for(
@@ -229,21 +225,41 @@ void area_editor::process_gui_panel_details() {
             ImGui::SameLine();
             ImGui::InputText("Bitmap", &selected_shadow->file_name);
             
-            //TODO aspect ratio and update the transformation controller
-            ImGui::DragFloat2(
-                "Center", (float*) &selected_shadow->center
-            );
+            if(
+                ImGui::DragFloat2("Center", (float*) &selected_shadow->center)
+            ) {
+                selected_shadow_transformation.set_center(
+                    selected_shadow->center
+                );
+            }
             
-            ImGui::DragFloat2(
-                "Size", (float*) &selected_shadow->size
-            );
+            point old_size = selected_shadow->size;
+            if(
+                ImGui::DragFloat2("Size", (float*) &selected_shadow->size)
+            ) {
+                if(selected_shadow_transformation.keep_aspect_ratio) {
+                    float ratio = old_size.x / old_size.y;
+                    if(selected_shadow->size.x != old_size.x) {
+                        selected_shadow->size.y =
+                            selected_shadow->size.x / ratio;
+                    } else {
+                        selected_shadow->size.x =
+                            selected_shadow->size.y * ratio;
+                    }
+                }
+                selected_shadow_transformation.set_size(selected_shadow->size);
+            }
             
             ImGui::Checkbox(
                 "Keep aspect ratio",
                 &selected_shadow_transformation.keep_aspect_ratio
             );
             
-            ImGui::SliderAngle("Angle", &selected_shadow->angle, 0, 359);
+            if(ImGui::SliderAngle("Angle", &selected_shadow->angle, 0, 360)) {
+                selected_shadow_transformation.set_angle(
+                    selected_shadow->angle
+                );
+            }
             
             int opacity = selected_shadow->alpha;
             ImGui::SliderInt("Opacity", &opacity, 0, 255);
@@ -309,12 +325,7 @@ void area_editor::process_gui_panel_info() {
             switch(result) {
             case FILE_DIALOG_RES_WRONG_FOLDER: {
                 //File doesn't belong to the folder.
-                //TODO
-                /*
-                emit_status_bar_message(
-                    "The chosen image is not in the textures folder!",
-                    true
-                );*/
+                status_text = "The chosen image is not in the textures folder!";
                 break;
             } case FILE_DIALOG_RES_CANCELED: {
                 //User canceled.
@@ -399,26 +410,14 @@ void area_editor::process_gui_panel_layout() {
     ImGui::SameLine();
     if(ImGui::Button("Delete")) {
         if(selected_sectors.empty()) {
-            //TODO
-            /*
-            emit_status_bar_message(
-                "You have to select sectors to delete!", false
-            );*/
+            status_text = "You have to select sectors to delete!";
         } else {
             area_data* prepared_state = prepare_state();
             if(!remove_isolated_sectors()) {
-                //TODO
-                /*
-                emit_status_bar_message(
-                    "Some of the sectors are not isolated!", false
-                );*/
+                status_text = "Some of the sectors are not isolated!";
                 forget_prepared_state(prepared_state);
             } else {
-                //TODO
-                /*
-                emit_status_bar_message(
-                    "Deleted sectors.", false
-                );*/
+                status_text = "Deleted sectors.";
                 clear_selection();
                 register_change("sector removal", prepared_state);
             }
@@ -581,7 +580,7 @@ void area_editor::process_gui_panel_layout() {
                     "Scale", (float*) &s_ptr->texture_info.scale, 0.01
                 );
                 
-                ImGui::SliderAngle("Angle", &s_ptr->texture_info.rot, 0, 359);
+                ImGui::SliderAngle("Angle", &s_ptr->texture_info.rot, 0, 360);
                 
                 ImGui::ColorEdit4(
                     "Tint color", (float*) &s_ptr->texture_info.tint,
@@ -731,11 +730,7 @@ void area_editor::process_gui_panel_mobs() {
     ImGui::SameLine();
     if(ImGui::Button("Duplicate")) {
         if(selected_mobs.empty()) {
-            //TODO
-            /*
-            emit_status_bar_message(
-                "You have to select mobs to duplicate!", false
-            );*/
+            status_text = "You have to select mobs to duplicate!";
         } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
             sub_state = EDITOR_SUB_STATE_NONE;
         } else {
@@ -785,7 +780,7 @@ void area_editor::process_gui_panel_mobs() {
             }
         }
         
-        ImGui::SliderAngle("Angle", &m_ptr->angle, 0, 359);
+        ImGui::SliderAngle("Angle", &m_ptr->angle, 0, 360);
         
         if(ImGui::TreeNode("Advanced")) {
         
@@ -983,10 +978,26 @@ void area_editor::process_gui_panel_paths() {
     
         ImGui::Checkbox("Show closest stop", &show_closest_stop);
         
-        ImGui::Checkbox("Show calculated path", &show_path_preview);
+        if(ImGui::Checkbox("Show calculated path", &show_path_preview)) {
+            if(
+                show_path_preview &&
+                path_preview_checkpoints[0].x == LARGE_FLOAT
+            ) {
+                //No previous location. Place them on-camera.
+                path_preview_checkpoints[0].x =
+                    game.cam.pos.x - COMFY_DIST;
+                path_preview_checkpoints[0].y =
+                    game.cam.pos.y;
+                path_preview_checkpoints[1].x =
+                    game.cam.pos.x + COMFY_DIST;
+                path_preview_checkpoints[1].y =
+                    game.cam.pos.y;
+            }
+            path_preview_dist = calculate_preview_path();
+        }
         
         if(show_path_preview) {
-            ImGui::Text("Total distance: %f", 0.0f); //TODO
+            ImGui::Text("Total distance: %f", path_preview_dist);
         }
         
         ImGui::Dummy(ImVec2(0, 16));
@@ -1148,22 +1159,37 @@ void area_editor::process_gui_panel_tools() {
             update_reference();
         }
         
-        static point temp; //TODO
-        static float temp2; //TODO
-        ImGui::DragFloat2(
-            "Center", (float*) &temp
-        );
+        point reference_center = reference_transformation.get_center();
+        if(
+            ImGui::DragFloat2("Center", (float*) &reference_center)
+        ) {
+            reference_transformation.set_center(
+                reference_center
+            );
+        }
         
-        ImGui::DragFloat2(
-            "Size", (float*) &temp
-        );
+        point old_size = reference_transformation.get_size();
+        point reference_size = old_size;
+        if(
+            ImGui::DragFloat2("Size", (float*) &reference_size)
+        ) {
+            if(reference_transformation.keep_aspect_ratio) {
+                float ratio = old_size.x / old_size.y;
+                if(reference_size.x != old_size.x) {
+                    reference_size.y =
+                        reference_size.x / ratio;
+                } else {
+                    reference_size.x =
+                        reference_size.y * ratio;
+                }
+            }
+            reference_transformation.set_size(reference_size);
+        }
         
         ImGui::Checkbox(
             "Keep aspect ratio",
             &reference_transformation.keep_aspect_ratio
         );
-        
-        ImGui::SliderAngle("Angle", &temp2, 0, 359);
         
         int opacity = reference_alpha;
         ImGui::SliderInt("Opacity", &opacity, 0, 255);
@@ -1178,8 +1204,10 @@ void area_editor::process_gui_panel_tools() {
     if(ImGui::TreeNode("Misc.")) {
     
         if(ImGui::Button("Load auto-backup")) {
-            //TODO check for unsaved changes
-            load_backup();
+            if(can_load_backup) {
+                //TODO check for unsaved changes
+                load_backup();
+            }
         }
         
         if(ImGui::Button("Texture transformer")) {
@@ -1194,10 +1222,10 @@ void area_editor::process_gui_panel_tools() {
             if(resize_mult != 0.0f) {
                 register_change("global resize");
                 resize_everything(resize_mult);
-                //TODO emit_status_bar_message("Resized successfully.", false);
+                status_text = "Resized successfully.";
                 resize_mult = 1.0f;
             } else {
-                //TODO emit_status_bar_message("Can't resize everything to size 0!", true);
+                status_text = "Can't resize everything to size 0!";
             }
         }
         
@@ -1215,7 +1243,18 @@ void area_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
-    ImGui::Text(""); //TODO
+    ImGui::Text("%s", status_text.c_str());
+    
+    ImGui::SameLine();
+    float size = canvas_separator_x - ImGui::GetItemRectSize().x - 150.0f;
+    ImGui::Dummy(ImVec2(size, 0));
+    
+    ImGui::SameLine();
+    ImGui::Text(
+        "%s, %s",
+        box_string(f2s(game.mouse_cursor_w.x), 7).c_str(),
+        box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
+    );
 }
 
 
@@ -1229,8 +1268,10 @@ void area_editor::process_gui_toolbar() {
     
     ImGui::SameLine();
     if(ImGui::Button("Reload")) {
-        //TODO check if there are unsaved changes.
-        load_area(false);
+        if(can_reload) {
+            //TODO check if there are unsaved changes.
+            load_area(false);
+        }
     }
     
     ImGui::SameLine();
@@ -1238,7 +1279,6 @@ void area_editor::process_gui_toolbar() {
         save_area(false);
         clear_selection();
         state = EDITOR_STATE_MAIN;
-        //TODO change_to_right_frame();
         made_new_changes = false;
     }
     

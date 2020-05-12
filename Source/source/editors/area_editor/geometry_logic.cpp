@@ -1490,7 +1490,7 @@ bool area_editor::remove_isolated_sectors() {
     }
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
-        //TODO emit_triangulation_error_status_bar_message(last_triangulation_error);
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     
     return true;

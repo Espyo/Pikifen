@@ -112,6 +112,8 @@ protected:
     point mouse_drag_start;
     //Current state.
     size_t state;
+    //Status bar text.
+    string status_text;
     //Current sub-state.
     size_t sub_state;
     //Maximum zoom level allowed.

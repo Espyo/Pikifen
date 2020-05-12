@@ -80,6 +80,8 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
  */
 area_editor::area_editor() :
     backup_timer(game.options.area_editor_backup_interval),
+    can_load_backup(false),
+    can_reload(false),
     cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
@@ -111,8 +113,7 @@ area_editor::area_editor() :
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {
-        float d = calculate_preview_path();
-        //TODO update distance in gui.
+        path_preview_dist = calculate_preview_path();
     });
     
     undo_save_lock_timer =
@@ -224,7 +225,6 @@ void area_editor::clear_current_area() {
     backup_timer.start(game.options.area_editor_backup_interval);
     
     state = EDITOR_STATE_MAIN;
-    //TODO change_to_right_frame();
 }
 
 
@@ -316,7 +316,6 @@ void area_editor::clear_undo_history() {
  */
 void area_editor::create_area() {
     clear_current_area();
-    //TODO disable_widget(frm_toolbar->widgets["but_reload"]);
     
     //Create a sector for it.
     clear_layout_drawing();
@@ -386,6 +385,7 @@ void area_editor::create_area() {
     
     clear_undo_history();
     update_undo_history();
+    can_reload = false;
     //TODO update_toolbar();
 }
 
@@ -395,10 +395,7 @@ void area_editor::create_area() {
  */
 void area_editor::delete_selected_mobs() {
     if(selected_mobs.empty()) {
-        //TODO
-        /*emit_status_bar_message(
-            "You have to select mobs to delete!", false
-        );*/
+        status_text = "You have to select mobs to delete!";
         return;
     }
     
@@ -416,10 +413,7 @@ void area_editor::delete_selected_mobs() {
  */
 void area_editor::delete_selected_path_elements() {
     if(selected_path_links.empty() && selected_path_stops.empty()) {
-        //TODO
-        /*emit_status_bar_message(
-            "You have to select something to delete!", false
-        );*/
+        status_text = "You have to select something to delete!";
         return;
     }
     
@@ -470,6 +464,36 @@ void area_editor::draw_canvas_imgui_callback(
 
 
 /* ----------------------------------------------------------------------------
+ * Emits a message onto the status bar, based on the given triangulation error.
+ */
+void area_editor::emit_triangulation_error_status_bar_message(
+    const TRIANGULATION_ERRORS error
+) {
+    switch(error) {
+    case TRIANGULATION_ERROR_LONE_EDGES: {
+        status_text =
+            "Some sectors ended up with lone edges!";
+        break;
+    } case TRIANGULATION_ERROR_NO_EARS: {
+        status_text =
+            "Some sectors could not be triangulated!";
+        break;
+    } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
+        status_text =
+            "Some sectors reuse vertexes -- there are likely gaps!";
+        break;
+    } case TRIANGULATION_ERROR_INVALID_ARGS: {
+        status_text =
+            "An unknown error has occured with the sector!";
+        break;
+    } case TRIANGULATION_NO_ERROR: {
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Finishes drawing a circular sector.
  */
 void area_editor::finish_circle_sector() {
@@ -507,10 +531,7 @@ void area_editor::finish_layout_drawing() {
     if(!get_drawing_outer_sector(&outer_sector)) {
         //Something went wrong. Abort.
         cancel_layout_drawing();
-        //TODO
-        /*emit_status_bar_message(
-            "That sector wouldn't have a defined parent! Try again.", true
-        );*/
+        status_text = "That sector wouldn't have a defined parent! Try again.";
         return;
     }
     
@@ -745,7 +766,7 @@ void area_editor::finish_layout_drawing() {
     }
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
-        //TODO emit_triangulation_error_status_bar_message(last_triangulation_error);
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     
     //Calculate the bounding box of this sector, now that it's finished.
@@ -933,10 +954,7 @@ void area_editor::finish_layout_moving() {
     
     //If we ended up with any intersection still, abort!
     if(!intersections.empty()) {
-        //TODO
-        /*emit_status_bar_message(
-            "That move would cause edges to intersect!", true
-        );*/
+        status_text = "That move would cause edges to intersect!";
         cancel_layout_moving();
         forget_prepared_state(pre_move_area_data);
         pre_move_area_data = NULL;
@@ -954,11 +972,8 @@ void area_editor::finish_layout_moving() {
         
             for(auto &m2 : merges) {
                 if(m2.second == crushed_vertex) {
-                    //TODO
-                    /*emit_status_bar_message(
-                        "That move would crush an edge that's in the middle!",
-                        true
-                    );*/
+                    status_text =
+                        "That move would crush an edge that's in the middle!";
                     cancel_layout_moving();
                     forget_prepared_state(pre_move_area_data);
                     pre_move_area_data = NULL;
@@ -1014,7 +1029,7 @@ void area_editor::finish_layout_moving() {
     }
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
-        //TODO emit_triangulation_error_status_bar_message(last_triangulation_error);
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
     
     register_change("vertex movement", pre_move_area_data);
@@ -1290,7 +1305,22 @@ void area_editor::goto_problem() {
  * Handles an error in the line the user is trying to draw.
  */
 void area_editor::handle_line_error() {
-    //TODO
+    new_sector_error_tint_timer.start();
+    switch(drawing_line_error) {
+    case DRAWING_LINE_CROSSES_DRAWING: {
+        status_text =
+            "That line crosses other lines in the drawing!";
+        break;
+    } case DRAWING_LINE_CROSSES_EDGES: {
+        status_text =
+            "That line crosses existing edges!";
+        break;
+    } case DRAWING_LINE_WAYWARD_SECTOR: {
+        status_text =
+            "That line goes out of the sector you're drawing on!";
+        break;
+    }
+    }
 }
 
 
@@ -1314,6 +1344,7 @@ void area_editor::load() {
     show_path_preview = false;
     snap_mode = SNAP_GRID;
     state = EDITOR_STATE_MAIN;
+    status_text = "Ready.";
     
     //Reset some other states.
     clear_problems();
@@ -1399,12 +1430,12 @@ void area_editor::load_area(const bool from_backup) {
     clear_undo_history();
     update_undo_history();
     //TODO update_toolbar();
-    //TODO enable_widget(frm_toolbar->widgets["but_reload"]);
+    can_reload = true;
     
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
     
-    //TODO emit_status_bar_message("Loaded successfully.", false);
+    status_text = "Loaded area \"" + cur_area_name + "\" successfully.";
 }
 
 
@@ -1863,16 +1894,16 @@ bool area_editor::save_area(const bool to_backup) {
             ALLEGRO_MESSAGEBOX_WARN
         );
         
-        //TODO emit_status_bar_message("Could not save the area!", true);
+        status_text = "Could not save the area!";
         
     } else {
         if(!to_backup) {
-            //TODO emit_status_bar_message("Saved successfully.", false);
+            status_text = "Saved successfully.";
         }
     }
     
     backup_timer.start(game.options.area_editor_backup_interval);
-    //TODO enable_widget(frm_toolbar->widgets["but_reload"]);
+    can_reload = true;
     
     save_reference();
     
@@ -2154,16 +2185,13 @@ void area_editor::start_vertex_move() {
  */
 void area_editor::undo() {
     if(undo_history.empty()) {
-        //TODO emit_status_bar_message("Nothing to undo.", false);
+        status_text = "Nothing to undo.";
         return;
     }
     if(
         sub_state != EDITOR_SUB_STATE_NONE || moving || selecting
     ) {
-        //TODO
-        /*emit_status_bar_message(
-            "Can't undo in the middle of an operation.", false
-        );*/
+        status_text = "Can't undo in the middle of an operation.";
         return;
     }
     
@@ -2228,7 +2256,7 @@ void area_editor::unload() {
  * Returns true if it exists, false if not.
  */
 bool area_editor::update_backup_status() {
-    //TODO disable_widget(frm_tools->widgets["but_backup"]);
+    can_load_backup = false;
     
     if(cur_area_name.empty()) return false;
     
@@ -2238,7 +2266,7 @@ bool area_editor::update_backup_status() {
     );
     if(!file.file_was_opened) return false;
     
-    //TODO enable_widget(frm_tools->widgets["but_backup"]);
+    can_load_backup = true;
     return true;
 }
 
