@@ -95,6 +95,7 @@ area_editor::area_editor() :
     moving_path_preview_checkpoint(-1),
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
+    octee_mode(OCTEE_MODE_OFFSET),
     path_drawing_normals(true),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
@@ -107,8 +108,6 @@ area_editor::area_editor() :
     show_imgui_demo(false),
     show_path_preview(false),
     show_reference(true),
-    stt_mode(0),
-    stt_sector(nullptr),
     quick_play_cam_z(1.0f) {
     
     path_preview_timer =
@@ -182,8 +181,6 @@ void area_editor::clear_circle_sector() {
  * Clears the currently loaded area data.
  */
 void area_editor::clear_current_area() {
-    //TODO clear_current_area_gui();
-    
     reference_transformation.keep_aspect_ratio = true;
     reference_file_name.clear();
     update_reference();
@@ -200,10 +197,6 @@ void area_editor::clear_current_area() {
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         game.textures.detach(game.cur_area_data.tree_shadows[s]->file_name);
     }
-    
-    //TODO sector_to_gui();
-    //TODO mob_to_gui();
-    //TODO tools_to_gui();
     
     game.cam.pos = point();
     game.cam.zoom = 1.0f;
@@ -280,12 +273,6 @@ void area_editor::clear_selection() {
     selected_path_links.clear();
     selected_shadow = NULL;
     selection_homogenized = false;
-    
-    //TODO asa_to_gui();
-    //TODO asb_to_gui();
-    //TODO sector_to_gui();
-    //TODO mob_to_gui();
-    //TODO path_to_gui();
 }
 
 
@@ -386,7 +373,6 @@ void area_editor::create_area() {
     clear_undo_history();
     update_undo_history();
     can_reload = false;
-    //TODO update_toolbar();
 }
 
 
@@ -777,7 +763,6 @@ void area_editor::finish_layout_drawing() {
     //Select the new sector, making it ready for editing.
     clear_selection();
     select_sector(new_sector);
-    //TODO sector_to_gui();
     
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
@@ -1349,9 +1334,6 @@ void area_editor::load() {
     //Reset some other states.
     clear_problems();
     clear_selection();
-    //TODO gui->lose_focus();
-    //change_to_right_frame();
-    //update_status_bar();
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
@@ -1423,13 +1405,11 @@ void area_editor::load_area(const bool from_backup) {
     }
     
     load_reference();
-    //TODO update_main_frame();
     
     made_new_changes = false;
     
     clear_undo_history();
     update_undo_history();
-    //TODO update_toolbar();
     can_reload = true;
     
     game.cam.zoom = 1.0f;
@@ -1564,7 +1544,6 @@ void area_editor::register_change(
     undo_save_lock_timer.start();
     
     update_undo_history();
-    //TODO update_toolbar();
 }
 
 
@@ -2223,7 +2202,6 @@ void area_editor::undo() {
     undo_save_lock_timer.stop();
     undo_save_lock_operation.clear();
     update_undo_history();
-    //TODO update_toolbar();
     
     clear_selection();
     clear_circle_sector();
@@ -2232,7 +2210,6 @@ void area_editor::undo() {
     clear_problems();
     non_simples.clear();
     lone_edges.clear();
-    //TODO change_to_right_frame();
     
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
     path_preview_timer.start(false);
@@ -2323,8 +2300,6 @@ void area_editor::update_reference() {
         reference_transformation.set_center(point());
         reference_transformation.set_size(point());
     }
-    
-    //TODO update_toolbar();
 }
 
 
@@ -2387,8 +2362,6 @@ void area_editor::update_undo_history() {
     while(undo_history.size() > game.options.area_editor_undo_limit) {
         undo_history.pop_back();
     };
-    
-    //TODO update_toolbar();
 }
 
 

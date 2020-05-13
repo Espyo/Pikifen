@@ -31,75 +31,55 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     case ALLEGRO_KEY_F1: {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
-            //TODO
-            /*emit_status_bar_message(
-                "Enabled debug edge number display.", false
-            );*/
+            status_text =
+                "Enabled debug edge number display.";
         } else {
-            //TODO
-            /*emit_status_bar_message(
-                "Disabled debug edge number display.", false
-            );*/
+            status_text =
+                "Disabled debug edge number display.";
         }
         break;
         
     } case ALLEGRO_KEY_F2: {
         debug_sector_nrs = !debug_sector_nrs;
         if(debug_sector_nrs) {
-            //TODO
-            /*emit_status_bar_message(
-                "Enabled debug sector number display.", false
-            );*/
+            status_text =
+                "Enabled debug sector number display.";
         } else {
-            //TODO
-            /*emit_status_bar_message(
-                "Disabled debug sector number display.", false
-            );*/
+            status_text =
+                "Disabled debug sector number display.";
         }
         break;
         
     } case ALLEGRO_KEY_F3: {
         debug_vertex_nrs = !debug_vertex_nrs;
         if(debug_vertex_nrs) {
-            //TODO
-            /*emit_status_bar_message(
-                "Enabled debug vertex number display.", false
-            );*/
+            status_text =
+                "Enabled debug vertex number display.";
         } else {
-            //TODO
-            /*emit_status_bar_message(
-                "Disabled debug vertex number display.", false
-            );*/
+            status_text =
+                "Disabled debug vertex number display.";
         }
         break;
         
     } case ALLEGRO_KEY_F4: {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
-            //TODO
-            /*emit_status_bar_message(
-                "Enabled debug triangulation display.", false
-            );*/
+            status_text =
+                "Enabled debug triangulation display.";
         } else {
-            //TODO
-            /*emit_status_bar_message(
-                "Disabled debug triangulation display.", false
-            );*/
+            status_text =
+                "Disabled debug triangulation display.";
         }
         break;
         
     } case ALLEGRO_KEY_F5: {
         debug_path_nrs = !debug_path_nrs;
         if(debug_path_nrs) {
-            //TODO
-            /*emit_status_bar_message(
-                "Enabled debug path number display.", false
-            );*/
+            status_text =
+                "Enabled debug path number display.";
         } else {
-            //TODO
-            /*emit_status_bar_message(
-                "Disabled debug path number display.", false
-            );*/
+            status_text =
+                "Disabled debug path number display.";
         }
         break;
     }
@@ -152,7 +132,6 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         
     } case ALLEGRO_KEY_R: {
         rotate_mob_gens_to_point(game.mouse_cursor_w);
-        //TODO mob_to_gui();
         break;
         
     } case ALLEGRO_KEY_X: {
@@ -261,21 +240,18 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                         game.cur_area_data.vertexes.begin(),
                         game.cur_area_data.vertexes.end()
                     );
-                    //TODO sector_to_gui();
                     
                 } else if(state == EDITOR_STATE_MOBS) {
                     selected_mobs.insert(
                         game.cur_area_data.mob_generators.begin(),
                         game.cur_area_data.mob_generators.end()
                     );
-                    //TODO mob_to_gui();
                     
                 } else if(state == EDITOR_STATE_PATHS) {
                     selected_path_stops.insert(
                         game.cur_area_data.path_stops.begin(),
                         game.cur_area_data.path_stops.end()
                     );
-                    //TODO path_to_gui();
                 }
             }
         }
@@ -572,15 +548,24 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                 }
                 if(!all_valid) {
-                    //TODO
-                    /*emit_status_bar_message(
-                        "Some lines touch existing edges!", true
-                    );*/
+                    status_text =
+                        "Some lines touch existing edges!";
                 } else {
                     finish_circle_sector();
                 }
                 
             }
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_OCTEE: {
+    
+            moving = true;
+            octee_drag_start = game.mouse_cursor_w;
+            sector* s_ptr = *selected_sectors.begin();
+            octee_orig_angle = s_ptr->texture_info.rot;
+            octee_orig_offset = s_ptr->texture_info.translation;
+            octee_orig_scale = s_ptr->texture_info.scale;
             
             break;
             
@@ -646,9 +631,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
-            //TODO sector_to_gui();
-            //TODO asa_to_gui();
-            //TODO asb_to_gui();
             
             break;
             
@@ -684,7 +666,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             last_mob_type = type_to_use;
             
             selected_mobs.insert(game.cur_area_data.mob_generators.back());
-            //TODO mob_to_gui();
             
             break;
             
@@ -724,7 +705,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             clear_selection();
             selected_mobs = mobs_to_select;
-            //TODO mob_to_gui();
             
             break;
             
@@ -736,20 +716,16 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             for(auto m : selected_mobs) {
                 if(m == target) {
-                    //TODO
-                    /*emit_status_bar_message(
-                        "You can't link to an object to itself!", false
-                    );*/
+                    status_text =
+                        "You can't link to an object to itself!";
                     return;
                 }
             }
             mob_gen* m_ptr = *(selected_mobs.begin());
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 if(m_ptr->links[l] == target) {
-                    //TODO
-                    /*emit_status_bar_message(
-                        "The object already links to that object!", false
-                    );*/
+                    status_text =
+                        "The object already links to that object!";
                     return;
                 }
             }
@@ -762,7 +738,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
-            //TODO mob_to_gui();
             
             break;
             
@@ -785,10 +760,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     data2.first != m_ptr &&
                     data2.second != m_ptr
                 ) {
-                    //TODO
-                    /*emit_status_bar_message(
-                        "That link does not belong to the current object!", false
-                    );*/
+                    status_text =
+                        "That link does not belong to the current object!";
                     return;
                 }
                 
@@ -807,10 +780,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(link_i == m_ptr->links.size()) {
-                //TODO
-                /*emit_status_bar_message(
-                    "That object is not linked by the current one!", false
-                );*/
+                status_text =
+                    "That object is not linked by the current one!";
                 return;
             } else {
                 register_change("Object link deletion");
@@ -821,7 +792,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
-            //TODO mob_to_gui();
             
             break;
             
@@ -854,7 +824,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
-            //TODO mob_to_gui();
             
             break;
             
@@ -986,8 +955,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             }
             
-            //TODO path_to_gui();
-            
             break;
             
         }
@@ -1011,7 +978,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             game.cur_area_data.tree_shadows.push_back(new_shadow);
             
             select_tree_shadow(new_shadow);
-            //TODO details_to_gui();
             
             break;
             
@@ -1030,7 +996,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         selected_shadow_transformation.get_center();
                     selected_shadow->size =
                         selected_shadow_transformation.get_size();
-                    //TODO details_to_gui();
                 }
             }
             
@@ -1058,8 +1023,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            //TODO details_to_gui();
-            
             break;
             
         }
@@ -1071,21 +1034,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 
         if(reference_bitmap) {
             reference_transformation.handle_mouse_down(game.mouse_cursor_w);
-            //TODO tools_to_gui();
-        }
-        
-        break;
-        
-    } case EDITOR_STATE_STT: {
-
-        moving = false;
-        stt_drag_start = game.mouse_cursor_w;
-        stt_sector = get_sector(game.mouse_cursor_w, NULL, false);
-        if(stt_sector) {
-            moving = true;
-            stt_orig_angle = stt_sector->texture_info.rot;
-            stt_orig_offset = stt_sector->texture_info.translation;
-            stt_orig_scale = stt_sector->texture_info.scale;
         }
         
         break;
@@ -1199,9 +1147,6 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
-            //TODO sector_to_gui();
-            //TODO asa_to_gui();
-            //TODO asb_to_gui();
             
             break;
             
@@ -1225,7 +1170,6 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
-            //TODO mob_to_gui();
             
             break;
             
@@ -1269,8 +1213,6 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            //TODO path_to_gui();
-            
             break;
             
         }
@@ -1302,6 +1244,41 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     (*v)->x = orig.x + offset.x;
                     (*v)->y = orig.y + offset.y;
                 }
+                
+            } else if(
+                sub_state == EDITOR_SUB_STATE_OCTEE && moving
+            ) {
+                //Move sector texture transformation property.
+                sector* s_ptr = *selected_sectors.begin();
+                
+                switch(octee_mode) {
+                case OCTEE_MODE_OFFSET: {
+                    register_change("texture offset change");
+                    point diff = (game.mouse_cursor_w - octee_drag_start);
+                    diff = rotate_point(diff, -s_ptr->texture_info.rot);
+                    diff = diff / s_ptr->texture_info.scale;
+                    s_ptr->texture_info.translation = octee_orig_offset + diff;
+                    break;
+                } case OCTEE_MODE_SCALE: {
+                    register_change("texture scale change");
+                    point diff = (game.mouse_cursor_w - octee_drag_start);
+                    diff = rotate_point(diff, -s_ptr->texture_info.rot);
+                    point drag_start_rot =
+                        rotate_point(octee_drag_start, -s_ptr->texture_info.rot);
+                    diff = diff / drag_start_rot * octee_orig_scale;
+                    s_ptr->texture_info.scale = octee_orig_scale + diff;
+                    break;
+                } case OCTEE_MODE_ANGLE: {
+                    register_change("texture angle change");
+                    float drag_start_a = get_angle(point(), octee_drag_start);
+                    float cursor_a = get_angle(point(), game.mouse_cursor_w);
+                    s_ptr->texture_info.rot =
+                        octee_orig_angle + (cursor_a - drag_start_a);
+                    break;
+                }
+                };
+                
+                homogenize_selected_sectors();
             }
             
             break;
@@ -1400,8 +1377,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         selected_shadow_transformation.get_center();
                     selected_shadow->size =
                         selected_shadow_transformation.get_size();
-                    //TODO details_to_gui();
-                    
+                        
                 }
             }
             
@@ -1413,36 +1389,6 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             reference_transformation.handle_mouse_move(
                 snap_point(game.mouse_cursor_w)
             );
-            //TODO tools_to_gui();
-            
-            break;
-            
-        } case EDITOR_STATE_STT: {
-    
-            //Move sector texture transformation property.
-            if(stt_sector && moving) {
-                if(stt_mode == 0) {
-                    register_change("texture offset change");
-                    point diff = (game.mouse_cursor_w - stt_drag_start);
-                    diff = rotate_point(diff, -stt_sector->texture_info.rot);
-                    diff = diff / stt_sector->texture_info.scale;
-                    stt_sector->texture_info.translation = stt_orig_offset + diff;
-                } else if(stt_mode == 1) {
-                    register_change("texture scale change");
-                    point diff = (game.mouse_cursor_w - stt_drag_start);
-                    diff = rotate_point(diff, -stt_sector->texture_info.rot);
-                    point drag_start_rot =
-                        rotate_point(stt_drag_start, -stt_sector->texture_info.rot);
-                    diff = diff / drag_start_rot * stt_orig_scale;
-                    stt_sector->texture_info.scale = stt_orig_scale + diff;
-                } else {
-                    register_change("texture angle change");
-                    float drag_start_a = get_angle(point(), stt_drag_start);
-                    float cursor_a = get_angle(point(), game.mouse_cursor_w);
-                    stt_sector->texture_info.rot =
-                        stt_orig_angle + (cursor_a - drag_start_a);
-                }
-            }
             
             break;
             
@@ -1475,7 +1421,9 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
     
     if(moving) {
-        if(state == EDITOR_STATE_LAYOUT) {
+        if(
+            state == EDITOR_STATE_LAYOUT && sub_state != EDITOR_SUB_STATE_OCTEE
+        ) {
             finish_layout_moving();
         }
         moving = false;
@@ -1490,14 +1438,12 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         
     } case EDITOR_STATE_TOOLS: {
         reference_transformation.handle_mouse_up();
-        //TODO tools_to_gui();
         break;
     }
     }
     
     moving_path_preview_checkpoint = -1;
     moving_cross_section_point = -1;
-    stt_sector = NULL;
 }
 
 
@@ -1542,8 +1488,6 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-    
-    //TODO update_status_bar();
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         point hotspot = snap_point(game.mouse_cursor_w);

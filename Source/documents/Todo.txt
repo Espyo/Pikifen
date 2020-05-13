@@ -3,19 +3,20 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Don't forget that:
-            Areas cannot be picked to load from
-            Each panel should have its name in the top-right corner
-            Buttons don't have icons
-            Switching states doesn't unselect selected stuff
-            Explanations for each panel widget
-            Panel changes are not being recorded as undoable changes
-            Keyboard shortcuts don't work
-            Don't let the user interact with the GUI while fading
-            Check all gui_to_* and *_to_gui functions for code I haven't ported over
-            Buttons that are just icons should have a tooltip
-            Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
-            More stuff in the menu bar
+        Use ImGui::Indent()
+        Areas cannot be picked to load from
+        Each panel should have its name in the top-right corner
+        Buttons don't have icons
+        Switching states doesn't unselect selected stuff
+        Explanations for each panel widget
+        Panel changes are not being recorded as undoable changes
+        Keyboard shortcuts don't work
+        Don't let the user interact with the GUI while fading
+        Check all gui_to_* and *_to_gui functions for code I haven't ported over
+        Buttons that are just icons should have a tooltip
+        Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
+        Add more stuff to the menu bar
+        Standardize the visibility of delete buttons, the "No sector selected" messages, etc. between panels
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

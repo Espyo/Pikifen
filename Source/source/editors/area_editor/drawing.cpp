@@ -99,7 +99,7 @@ void area_editor::draw_canvas() {
     }
     }
     
-    if(state == EDITOR_STATE_STT) {
+    if(sub_state == EDITOR_SUB_STATE_OCTEE) {
         textures_opacity = 1.0f;
         edges_opacity = 0.8f;
         grid_opacity = 0.0f;

@@ -92,31 +92,11 @@ private:
     };
     
     
-    enum EDITOR_STATES {
-        EDITOR_STATE_INFO,
-        EDITOR_STATE_MAIN,
-        EDITOR_STATE_LAYOUT,
-        EDITOR_STATE_TEXTURE,
-        EDITOR_STATE_MOBS,
-        EDITOR_STATE_PATHS,
-        EDITOR_STATE_DETAILS,
-        EDITOR_STATE_REVIEW,
-        EDITOR_STATE_TOOLS,
-        EDITOR_STATE_STT,
-        EDITOR_STATE_OPTIONS,
-    };
-    
-    enum EDITOR_SUB_STATES {
-        EDITOR_SUB_STATE_NONE,
-        EDITOR_SUB_STATE_DRAWING,
-        EDITOR_SUB_STATE_CIRCLE_SECTOR,
-        EDITOR_SUB_STATE_NEW_MOB,
-        EDITOR_SUB_STATE_DUPLICATE_MOB,
-        EDITOR_SUB_STATE_ADD_MOB_LINK,
-        EDITOR_SUB_STATE_DEL_MOB_LINK,
-        EDITOR_SUB_STATE_PATH_DRAWING,
-        EDITOR_SUB_STATE_NEW_SHADOW,
-        EDITOR_SUB_STATE_TEXTURE_VIEW,
+    enum DRAWING_LINE_ERRORS {
+        DRAWING_LINE_NO_ERROR,
+        DRAWING_LINE_WAYWARD_SECTOR,
+        DRAWING_LINE_CROSSES_EDGES,
+        DRAWING_LINE_CROSSES_DRAWING,
     };
     
     enum EDITOR_PROBLEM_TYPES {
@@ -139,11 +119,37 @@ private:
         EPT_UNKNOWN_SHADOW,       //Unknown tree shadow image.
     };
     
-    enum DRAWING_LINE_ERRORS {
-        DRAWING_LINE_NO_ERROR,
-        DRAWING_LINE_WAYWARD_SECTOR,
-        DRAWING_LINE_CROSSES_EDGES,
-        DRAWING_LINE_CROSSES_DRAWING,
+    enum EDITOR_STATES {
+        EDITOR_STATE_INFO,
+        EDITOR_STATE_MAIN,
+        EDITOR_STATE_LAYOUT,
+        EDITOR_STATE_TEXTURE,
+        EDITOR_STATE_MOBS,
+        EDITOR_STATE_PATHS,
+        EDITOR_STATE_DETAILS,
+        EDITOR_STATE_REVIEW,
+        EDITOR_STATE_TOOLS,
+        EDITOR_STATE_OPTIONS,
+    };
+    
+    enum EDITOR_SUB_STATES {
+        EDITOR_SUB_STATE_NONE,
+        EDITOR_SUB_STATE_DRAWING,
+        EDITOR_SUB_STATE_CIRCLE_SECTOR,
+        EDITOR_SUB_STATE_OCTEE, //On-canvas texture effect editing.
+        EDITOR_SUB_STATE_NEW_MOB,
+        EDITOR_SUB_STATE_DUPLICATE_MOB,
+        EDITOR_SUB_STATE_ADD_MOB_LINK,
+        EDITOR_SUB_STATE_DEL_MOB_LINK,
+        EDITOR_SUB_STATE_PATH_DRAWING,
+        EDITOR_SUB_STATE_NEW_SHADOW,
+        EDITOR_SUB_STATE_TEXTURE_VIEW,
+    };
+    
+    enum OCTEE_MODES {
+        OCTEE_MODE_OFFSET,
+        OCTEE_MODE_SCALE,
+        OCTEE_MODE_ANGLE,
     };
     
     enum SELECTION_FILTERS {
@@ -270,6 +276,16 @@ private:
     vector<bool> new_circle_sector_valid_edges;
     //Time left to keep the error-redness of the new sector's line(s) for.
     timer new_sector_error_tint_timer;
+    //Mouse drag start coordinates, when using on-canvas texture effect editing.
+    point octee_drag_start;
+    //Texture's original angle, when using on-canvas texture effect editing.
+    float octee_orig_angle;
+    //Texture's original offset, when using on-canvas texture effect editing.
+    point octee_orig_offset;
+    //Texture's original scale, when using on-canvas texture effect editing.
+    point octee_orig_scale;
+    //Current on-canvas texture effect edit mode.
+    OCTEE_MODES octee_mode;
     //When drawing a path, create normal links. False for one-way links.
     bool path_drawing_normals;
     //First stop of the next link when drawing a path.
@@ -362,18 +378,6 @@ private:
     bool show_shadows;
     //Current cursor snapping mode.
     unsigned char snap_mode;
-    //Starting coordinates of a sector texture transformer drag.
-    point stt_drag_start;
-    //Original angle of the sector in the sector texture transformer.
-    float stt_orig_angle;
-    //Original offset of the sector in the sector texture transformer.
-    point stt_orig_offset;
-    //Original scale of the sector in the sector texture transformer.
-    point stt_orig_scale;
-    //Current mode for the sector texture transformer.
-    unsigned char stt_mode;
-    //Sector currently being edited in the sector texture transformer.
-    sector* stt_sector;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     //Undo history, with the state of the area at each point.

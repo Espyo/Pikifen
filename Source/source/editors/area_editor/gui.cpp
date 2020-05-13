@@ -181,6 +181,7 @@ void area_editor::process_gui_panel_details() {
     ImGui::BeginChild("info");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -290,6 +291,7 @@ void area_editor::process_gui_panel_info() {
     ImGui::BeginChild("info");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -389,6 +391,7 @@ void area_editor::process_gui_panel_layout() {
     
     if(ImGui::Button("Back")) {
         clear_selection();
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -623,6 +626,42 @@ void area_editor::process_gui_panel_layout() {
                     ImGuiColorEditFlags_NoInputs
                 );
                 
+                bool octee_on =
+                    sub_state == EDITOR_SUB_STATE_OCTEE;
+                if(ImGui::Checkbox("On-canvas editing", &octee_on)) {
+                    sub_state =
+                        octee_on ?
+                        EDITOR_SUB_STATE_OCTEE :
+                        EDITOR_SUB_STATE_NONE;
+                }
+                
+                if(octee_on) {
+                
+                    ImGui::Indent();
+                    
+                    int octee_mode_int = (int) octee_mode;
+                    
+                    ImGui::RadioButton(
+                        "Change offset", &octee_mode_int,
+                        (int) OCTEE_MODE_OFFSET
+                    );
+                    
+                    ImGui::RadioButton(
+                        "Change scale", &octee_mode_int,
+                        (int) OCTEE_MODE_SCALE
+                    );
+                    
+                    ImGui::RadioButton(
+                        "Change angle", &octee_mode_int,
+                        (int) OCTEE_MODE_ANGLE
+                    );
+                    
+                    octee_mode = (OCTEE_MODES) octee_mode_int;
+                    
+                    ImGui::Unindent();
+                    
+                }
+                
                 ImGui::Dummy(ImVec2(0, 16));
                 
                 ImGui::TreePop();
@@ -747,6 +786,7 @@ void area_editor::process_gui_panel_mobs() {
     ImGui::BeginChild("mobs");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -990,6 +1030,7 @@ void area_editor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -1062,6 +1103,7 @@ void area_editor::process_gui_panel_review() {
     ImGui::BeginChild("review");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
     }
     
@@ -1174,6 +1216,7 @@ void area_editor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
     
     if(ImGui::Button("Back")) {
+        sub_state = EDITOR_SUB_STATE_NONE;
         state = EDITOR_STATE_MAIN;
         save_reference();
     }
@@ -1254,10 +1297,6 @@ void area_editor::process_gui_panel_tools() {
                     load_backup();
                 }
             }
-        }
-        
-        if(ImGui::Button("Texture transformer")) {
-            //TODO state = EDITOR_STATE_STT;
         }
         
         static float resize_mult = 1.0f;
