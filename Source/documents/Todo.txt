@@ -14,6 +14,8 @@ Current tasks (tasks being worked on, but not yet committed)
             Don't let the user interact with the GUI while fading
             Check all gui_to_* and *_to_gui functions for code I haven't ported over
             Buttons that are just icons should have a tooltip
+            Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
+            More stuff in the menu bar
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

@@ -79,9 +79,7 @@ void area_editor::draw_canvas() {
     float mob_opacity = 0.15f;
     
     switch(state) {
-    case EDITOR_STATE_LAYOUT:
-    case EDITOR_STATE_ASB:
-    case EDITOR_STATE_ASA: {
+    case EDITOR_STATE_LAYOUT: {
         textures_opacity = 0.5f;
         edges_opacity = 1.0f;
         break;
@@ -101,11 +99,6 @@ void area_editor::draw_canvas() {
     }
     }
     
-    if(state == EDITOR_STATE_ASA) {
-        selection_min_opacity = 0.0f;
-        selection_max_opacity = 0.0f;
-        textures_opacity = 1.0f;
-    }
     if(state == EDITOR_STATE_STT) {
         textures_opacity = 1.0f;
         edges_opacity = 0.8f;
@@ -132,8 +125,6 @@ void area_editor::draw_canvas() {
             pre_move_area_data &&
             moving &&
             (
-                state == EDITOR_STATE_ASA ||
-                state == EDITOR_STATE_ASB ||
                 state == EDITOR_STATE_LAYOUT
             )
         ) {
@@ -482,7 +473,7 @@ void area_editor::draw_canvas() {
     }
     
     //Vertexes.
-    if(state == EDITOR_STATE_LAYOUT || state == EDITOR_STATE_ASB) {
+    if(state == EDITOR_STATE_LAYOUT) {
         size_t n_vertexes = game.cur_area_data.vertexes.size();
         for(size_t v = 0; v < n_vertexes; ++v) {
             vertex* v_ptr = game.cur_area_data.vertexes[v];

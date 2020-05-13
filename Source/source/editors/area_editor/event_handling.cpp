@@ -378,9 +378,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
     } case ALLEGRO_KEY_ESCAPE: {
         if(
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_ASA ||
-            state == EDITOR_STATE_ASB
+            state == EDITOR_STATE_LAYOUT
         ) {
             if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
                 cancel_circle_sector();

@@ -83,6 +83,41 @@ protected:
         
     };
     
+    struct picker_item {
+        //Its name.
+        string name;
+        //What category it belongs to, or empty string for none.
+        string category;
+        //Bitmap, if any.
+        ALLEGRO_BITMAP* bitmap;
+        picker_item(
+            const string &name,
+            const string &category = "", ALLEGRO_BITMAP* bitmap = nullptr
+        );
+    };
+    
+    struct picker_info {
+    public:
+        bool is_open;
+        void process();
+        void set(
+            const vector<picker_item> &items,
+            const string &title,
+            const std::function<void(const string &name)> pick_callback,
+            const string &list_header = "", const bool can_make_new = false,
+            const string &filter = ""
+        );
+        void reset();
+        picker_info();
+    private:
+        vector<picker_item> items;
+        string title;
+        std::function<void(const string &name)> pick_callback;
+        string list_header;
+        bool can_make_new;
+        string filter;
+    };
+    
     
     //Top-left corner of the canvas.
     point canvas_tl;
@@ -114,6 +149,8 @@ protected:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
+    //Information about the current picker dialog.
+    picker_info picker;
     //Current state.
     size_t state;
     //Status bar text.

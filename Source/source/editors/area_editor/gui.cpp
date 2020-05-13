@@ -80,6 +80,9 @@ void area_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
+    //Process the picker dialog, if any.
+    picker.process();
+    
     //TODO left here for debugging puporses.
     if(show_imgui_demo) ImGui::ShowDemoWindow(&show_imgui_demo);
     
@@ -565,9 +568,41 @@ void area_editor::process_gui_panel_layout() {
             ImGui::RadioButton("Texture fader", &texture_type, 0);
             
             ImGui::RadioButton("Regular texture", &texture_type, 1);
-            //TODO texture chooser.
             
             s_ptr->fade = texture_type == 0;
+            
+            if(!s_ptr->fade) {
+            
+                ImGui::Indent();
+                
+                if(ImGui::Button("Change")) {
+                    vector<picker_item> suggestions;
+                    
+                    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+                        suggestions.push_back(
+                            picker_item(
+                                texture_suggestions[s].name,
+                                "",
+                                texture_suggestions[s].bmp
+                            )
+                        );
+                    }
+                    picker.set(
+                        suggestions, "Pick a texture",
+                        std::bind(
+                            &area_editor::pick_texture, this,
+                            std::placeholders::_1
+                        ),
+                        "Suggestions:"
+                    );
+                }
+                
+                ImGui::SameLine();
+                ImGui::Text("%s", s_ptr->texture_info.file_name.c_str());
+                
+                ImGui::Unindent();
+                
+            }
             
             ImGui::Dummy(ImVec2(0, 16));
             
@@ -772,6 +807,14 @@ void area_editor::process_gui_panel_mobs() {
         
             vector<string> types;
             m_ptr->category->get_type_names(types);
+            for(size_t t = 0; t < types.size(); ) {
+                mob_type* t_ptr = m_ptr->category->get_type(types[t]);
+                if(t_ptr->appears_in_area_editor) {
+                    ++t;
+                } else {
+                    types.erase(types.begin() + t);
+                }
+            }
             
             string selected_type_name;
             if(m_ptr->type) {

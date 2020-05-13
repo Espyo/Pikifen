@@ -1494,6 +1494,27 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Callback for when the user picks a texture from the picker.
+ */
+void area_editor::pick_texture(const string &name) {
+    sector* s_ptr = NULL;
+    if(selected_sectors.size() == 1 || selection_homogenized) {
+        s_ptr = *selected_sectors.begin();
+    }
+    
+    if(!s_ptr) {
+        return;
+    }
+    
+    update_texture_suggestions(name);
+    
+    update_sector_texture(s_ptr, name);
+    
+    homogenize_selected_sectors();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Prepares an area state to be delivered to register_change() later,
  * or forgotten altogether with forget_prepared_state().
  */
@@ -2224,6 +2245,7 @@ void area_editor::undo() {
  * Undoes the last placed layout drawing node.
  */
 void area_editor::undo_layout_drawing_node() {
+    if(drawing_nodes.empty()) return;
     drawing_nodes.erase(
         drawing_nodes.begin() + drawing_nodes.size() - 1
     );

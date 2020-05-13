@@ -96,9 +96,7 @@ private:
         EDITOR_STATE_INFO,
         EDITOR_STATE_MAIN,
         EDITOR_STATE_LAYOUT,
-        EDITOR_STATE_ASB,
         EDITOR_STATE_TEXTURE,
-        EDITOR_STATE_ASA,
         EDITOR_STATE_MOBS,
         EDITOR_STATE_PATHS,
         EDITOR_STATE_DETAILS,
@@ -477,11 +475,8 @@ private:
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
-    void open_picker(const unsigned char type);
     void populate_texture_suggestions();
-    void pick(
-        const size_t picker_id, const string &name, const string &category
-    );
+    void pick_texture(const string &name);
     area_data* prepare_state();
     void process_gui();
     void process_gui_control_panel();
