@@ -14,9 +14,14 @@
 #include "../game.h"
 #include "../imgui/imgui_impl_allegro5.h"
 #include "../imgui/imgui_stdlib.h"
+#include "../load.h"
 #include "../utils/string_utils.h"
 
 
+//Every icon in the icon bitmap file is these many pixels from the previous.
+const int editor::EDITOR_ICON_BMP_PADDING = 1;
+//Every icon in the icon bitmap file has this size.
+const int editor::EDITOR_ICON_BMP_SIZE = 24;
 //Time until the next click is no longer considered a double-click.
 const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
@@ -52,7 +57,10 @@ editor::editor() :
     zoom_max_level(0),
     zoom_min_level(0) {
     
-    
+    editor_icons.reserve(N_EDITOR_ICONS);
+    for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+        editor_icons.push_back(NULL);
+    }
 }
 
 
@@ -460,6 +468,20 @@ void editor::leave() {
  */
 void editor::load() {
     picker.reset();
+    
+    bmp_editor_icons =
+        load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
+    if(bmp_editor_icons) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+            editor_icons[i] =
+                al_create_sub_bitmap(
+                    bmp_editor_icons,
+                    EDITOR_ICON_BMP_SIZE * i + EDITOR_ICON_BMP_PADDING * i,
+                    0, EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE
+                );
+        }
+    }
+    
     update_canvas_coordinates();
     game.fade_mgr.start_fade(true, nullptr);
 }
@@ -470,6 +492,36 @@ void editor::load() {
  */
 void editor::unload() {
     //TODO
+    if(bmp_editor_icons) {
+        for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
+            al_destroy_bitmap(editor_icons[i]);
+            editor_icons[i] = NULL;
+        }
+        al_destroy_bitmap(bmp_editor_icons);
+        bmp_editor_icons = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the tooltip of the previous widget.
+ * explanation:
+ *   Text explaining the widget.
+ * shortcut:
+ *   If the widget has a shortcut key, specify its name here.
+ */
+void editor::set_tooltip(const string &explanation, const string &shortcut){
+    if(ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
+        ImGui::Text("%s", explanation.c_str());
+        if(!shortcut.empty()) {
+            ImGui::TextColored(
+                ImVec4(0.66f, 0.66f, 0.66f, 1.0f),
+                "Shortcut key: %s", shortcut.c_str()
+            );
+        }
+        ImGui::EndTooltip();
+    }
 }
 
 

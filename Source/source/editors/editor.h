@@ -40,12 +40,62 @@ public:
     
 protected:
 
-    static const float KEYBOARD_CAM_ZOOM;
+    static const int   EDITOR_ICON_BMP_PADDING;
+    static const int   EDITOR_ICON_BMP_SIZE;
     static const float DOUBLE_CLICK_TIMEOUT;
+    static const float KEYBOARD_CAM_ZOOM;
     static const float UNSAVED_CHANGES_WARNING_DURATION;
     static const int   UNSAVED_CHANGES_WARNING_HEIGHT;
     static const int   UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
     static const int   UNSAVED_CHANGES_WARNING_WIDTH;
+    
+    enum EDITOR_ICONS {
+        ICON_SAVE,
+        ICON_LOAD,
+        ICON_QUIT,
+        ICON_HITBOXES,
+        ICON_REFERENCE,
+        ICON_INFO,
+        ICON_HELP,
+        ICON_PLAY_PAUSE,
+        ICON_NEXT,
+        ICON_PREVIOUS,
+        ICON_ADD,
+        ICON_REMOVE,
+        ICON_MOVE_RIGHT,
+        ICON_MOVE_LEFT,
+        ICON_SELECT_NONE,
+        ICON_DUPLICATE,
+        ICON_ADD_STOP,
+        ICON_ADD_LINK,
+        ICON_ADD_1W_LINK,
+        ICON_REMOVE_STOP,
+        ICON_REMOVE_LINK,
+        ICON_ADD_CIRCLE_SECTOR,
+        ICON_VERTEXES,
+        ICON_EDGES,
+        ICON_SECTORS,
+        ICON_MOBS,
+        ICON_PATHS,
+        ICON_DETAILS,
+        ICON_REVIEW,
+        ICON_TOOLS,
+        ICON_OPTIONS,
+        ICON_UNDO,
+        ICON_ORIGIN,
+        ICON_MOB_RADIUS,
+        ICON_PIKMIN_SILHOUETTE,
+        ICON_ANIMATIONS,
+        ICON_SPRITES,
+        ICON_BODY_PARTS,
+        ICON_PLAY,
+        ICON_SNAP_GRID,
+        ICON_SNAP_VERTEXES,
+        ICON_SNAP_EDGES,
+        ICON_SNAP_NOTHING,
+        
+        N_EDITOR_ICONS
+    };
     
     
     struct transformation_controller {
@@ -119,6 +169,8 @@ protected:
     };
     
     
+    //Bitmap with all of the editor icons.
+    ALLEGRO_BITMAP* bmp_editor_icons;
     //Top-left corner of the canvas.
     point canvas_tl;
     //Bottom right corner of the canvas.
@@ -127,6 +179,8 @@ protected:
     int canvas_separator_x;
     //If the next click is within this time, it's a double-click.
     float double_click_time;
+    //List of every individual editor icon.
+    vector<ALLEGRO_BITMAP*> editor_icons;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
     //Is the GUI currently in focus? False if it's the canvas.
@@ -177,6 +231,7 @@ protected:
     void draw_unsaved_changes_warning();
     bool is_mouse_in_gui(const point &mouse_coords) const;
     void leave();
+    void set_tooltip(const string &explanation, const string &shortcut = "");
     void update_canvas_coordinates();
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     

@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Buttons don't have icons
         Switching states doesn't unselect selected stuff
         Explanations for each panel widget
         Panel changes are not being recorded as undoable changes

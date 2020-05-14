@@ -15,6 +15,31 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Helps creating an ImGui ImageButton, followed by a centered Text.
+ */
+bool ImGui::ImageButtonAndText(
+    ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
+    const string &text
+) {
+    bool result =
+        ImGui::ImageButton(
+            icon, icon_size,
+            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
+            button_padding
+        );
+        
+    float offset = (icon_size.y + button_padding * 2 - 16.0f) / 2.0f;
+    
+    ImGui::SameLine();
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
+    ImGui::Text("%s", text.c_str());
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - offset);
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Helps creating an ImGui combo box, using a vector of strings for the
  * list of items.
  */
@@ -28,9 +53,9 @@ bool ImGui::Combo(
     }
     
     return ImGui::Combo(
-        label.c_str(), current_item, items_str.c_str(),
-        popup_max_height_in_items
-    );
+               label.c_str(), current_item, items_str.c_str(),
+               popup_max_height_in_items
+           );
 }
 
 
@@ -53,9 +78,9 @@ bool ImGui::Combo(
     }
     
     bool result = ImGui::Combo(
-        label.c_str(), &item_nr, items_str.c_str(), popup_max_height_in_items
-    );
-    
+                      label.c_str(), &item_nr, items_str.c_str(), popup_max_height_in_items
+                  );
+                  
     if(item_nr < items.size()) {
         *current_item = items[item_nr];
     } else {
@@ -81,6 +106,6 @@ bool ImGui::ListBox(
     }
     
     return ImGui::ListBox(
-        label.c_str(), current_item, array, items.size(), height_in_items
-    );
+               label.c_str(), current_item, array, items.size(), height_in_items
+           );
 }
