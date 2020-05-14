@@ -590,6 +590,19 @@ void editor::picker_info::process() {
             final_items.push_back(items[i]);
         }
         
+        auto try_make_new = [this] () {
+            bool is_really_new = true;
+            for(size_t i = 0; i < items.size(); ++i) {
+                if(filter == items[i].name) {
+                    is_really_new = false;
+                    break;
+                }
+            }
+            
+            pick_callback(filter, is_really_new);
+            is_open = false;
+        };
+        
         if(can_make_new) {
             ImGui::PushStyleColor(
                 ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
@@ -601,7 +614,7 @@ void editor::picker_info::process() {
             (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
             );
             if(ImGui::Button("+", ImVec2(160.0f, 32.0f))) {
-                pick_callback(filter);
+                try_make_new();
             }
             ImGui::PopStyleColor(3);
             ImGui::SameLine();
@@ -617,7 +630,9 @@ void editor::picker_info::process() {
                 ImGuiInputTextFlags_EnterReturnsTrue
             )
         ) {
-            pick_callback(filter);
+            if(can_make_new) {
+                try_make_new();
+            }
         }
         
         if(!list_header.empty()) {
@@ -646,7 +661,7 @@ void editor::picker_info::process() {
                         4.0f
                     )
                 ) {
-                    pick_callback(final_items[i].name);
+                    pick_callback(final_items[i].name, false);
                     is_open = false;
                 }
                 ImGui::SetNextItemWidth(20.0f);
@@ -658,7 +673,7 @@ void editor::picker_info::process() {
             
                 button_size = ImVec2(160.0f, 32.0f);
                 if(ImGui::Button(final_items[i].name.c_str(), button_size)) {
-                    pick_callback(final_items[i].name);
+                    pick_callback(final_items[i].name, false);
                     is_open = false;
                 }
                 
@@ -686,7 +701,8 @@ void editor::picker_info::process() {
  *   a request to the user, like "Pick an area.".
  * pick_callback:
  *   A function to call when the user clicks an item or enters a new one.
- *   This function has one argument, which is the name of the item.
+ *   This function's first argument is the name of the item.
+ *   Its second argument is whether it's a new item or not.
  * list_header:
  *   If not-empty, display this text above the list.
  * can_make_new:
@@ -698,7 +714,7 @@ void editor::picker_info::process() {
 void editor::picker_info::set(
     const vector<picker_item> &items,
     const string &title,
-    const std::function<void(const string &name)> pick_callback,
+    const std::function<void(const string &, const bool)> pick_callback,
     const string &list_header, const bool can_make_new,
     const string &filter
 ) {

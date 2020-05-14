@@ -108,7 +108,8 @@ area_editor::area_editor() :
     show_imgui_demo(false),
     show_path_preview(false),
     show_reference(true),
-    quick_play_cam_z(1.0f) {
+    quick_play_cam_z(1.0f),
+    user_closed_picker(false) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {
@@ -422,7 +423,15 @@ void area_editor::delete_selected_path_elements() {
 void area_editor::do_logic() {
     editor::do_logic_pre();
     
+    user_closed_picker = false;
+    
     process_gui();
+    
+    if(user_closed_picker && !loaded_content_yet && cur_area_name.empty()) {
+        //The user cancelled the area selection picker
+        //presented when you enter the area editor. Quit out.
+        leave();
+    }
     
     cursor_snap_timer.tick(game.delta_t);
     path_preview_timer.tick(game.delta_t);
@@ -1349,7 +1358,6 @@ void area_editor::load() {
     load_weather();
     
     //Set up stuff to show the player.
-    //open_picker(PICKER_LOAD_AREA);
     
     if(!quick_play_area.empty()) {
         cur_area_name = quick_play_area;
@@ -1361,6 +1369,9 @@ void area_editor::load() {
     } else if(!auto_load_area.empty()) {
         cur_area_name = auto_load_area;
         load_area(false);
+        
+    } else {
+        open_area_picker();
         
     }
 }
@@ -1474,9 +1485,42 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Callback for when the user picks an area from the picker.
+ */
+void area_editor::pick_area(const string &name, const bool is_new) {
+    cur_area_name = name;
+    
+    if(is_new) {
+        string new_area_path =
+            AREAS_FOLDER_PATH + "/" + name;
+        ALLEGRO_FS_ENTRY* new_area_folder_entry =
+            al_create_fs_entry(new_area_path.c_str());
+            
+        if(al_fs_entry_exists(new_area_folder_entry)) {
+            //Already exists, just load it.
+            area_editor::load_area(false);
+        } else {
+            //Create a new area.
+            create_area();
+        }
+        
+        al_destroy_fs_entry(new_area_folder_entry);
+        
+        status_text = "Created area \"" + cur_area_name + "\" successfully.";
+        
+    } else {
+        area_editor::load_area(false);
+        
+    }
+    
+    state = EDITOR_STATE_MAIN;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Callback for when the user picks a texture from the picker.
  */
-void area_editor::pick_texture(const string &name) {
+void area_editor::pick_texture(const string &name, const bool is_new) {
     sector* s_ptr = NULL;
     if(selected_sectors.size() == 1 || selection_homogenized) {
         s_ptr = *selected_sectors.begin();

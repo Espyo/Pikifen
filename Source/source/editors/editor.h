@@ -103,7 +103,7 @@ protected:
         void set(
             const vector<picker_item> &items,
             const string &title,
-            const std::function<void(const string &name)> pick_callback,
+            const std::function<void(const string &, const bool)> pick_callback,
             const string &list_header = "", const bool can_make_new = false,
             const string &filter = ""
         );
@@ -112,7 +112,7 @@ protected:
     private:
         vector<picker_item> items;
         string title;
-        std::function<void(const string &name)> pick_callback;
+        std::function<void(const string &, const bool)> pick_callback;
         string list_header;
         bool can_make_new;
         string filter;

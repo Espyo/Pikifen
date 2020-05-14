@@ -21,6 +21,31 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Shows the area picker, if possible.
+ */
+void area_editor::open_area_picker() {
+    if(!check_new_unsaved_changes()) {
+        vector<picker_item> areas;
+        vector<string> folders =
+            folder_to_vector(AREAS_FOLDER_PATH, true);
+            
+        for(size_t f = 0; f < folders.size(); ++f) {
+            areas.push_back(picker_item(folders[f]));
+        }
+        picker.set(
+            areas, "Pick an area, or create a new one",
+            std::bind(
+                &area_editor::pick_area, this,
+                std::placeholders::_1,
+                std::placeholders::_2
+            ),
+            "", true
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes ImGui for this frame.
  */
 void area_editor::process_gui() {
@@ -81,7 +106,11 @@ void area_editor::process_gui() {
     ImGui::End();
     
     //Process the picker dialog, if any.
+    bool picker_was_open = picker.is_open;
     picker.process();
+    if(picker.is_open != picker_was_open) {
+        user_closed_picker = true;
+    }
     
     //TODO left here for debugging puporses.
     if(show_imgui_demo) ImGui::ShowDemoWindow(&show_imgui_demo);
@@ -137,19 +166,30 @@ void area_editor::process_gui_control_panel() {
  */
 void area_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
+    
         if(ImGui::BeginMenu("Editor")) {
+        
+            if(ImGui::MenuItem("Load or create area...")) {
+                open_area_picker();
+            }
+            
             if(ImGui::MenuItem("Show demo")) {
                 show_imgui_demo = true;
             }
+            
             if(ImGui::MenuItem("Quit")) {
                 if(!check_new_unsaved_changes()) {
                     quick_play_area.clear();
                     leave();
                 }
             }
+            
             ImGui::EndMenu();
+            
         }
+        
         if(ImGui::BeginMenu("Help")) {
+        
             if(ImGui::MenuItem("Help")) {
                 string help_str =
                     "To create an area, start by drawing its layout. "
@@ -168,9 +208,13 @@ void area_editor::process_gui_menu_bar() {
             }
             
             ImGui::EndMenu();
+            
         }
+        
         ImGui::EndMenuBar();
+        
     }
+    
 }
 
 
@@ -594,7 +638,8 @@ void area_editor::process_gui_panel_layout() {
                         suggestions, "Pick a texture",
                         std::bind(
                             &area_editor::pick_texture, this,
-                            std::placeholders::_1
+                            std::placeholders::_1,
+                            std::placeholders::_2
                         ),
                         "Suggestions:"
                     );
@@ -718,6 +763,10 @@ void area_editor::process_gui_panel_layout() {
  */
 void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
+    
+    ImGui::Text("Area: %s", cur_area_name.c_str());
+    
+    ImGui::Dummy(ImVec2(0, 16));
     
     if(ImGui::Button("Info")) {
         state = EDITOR_STATE_INFO;

@@ -386,6 +386,8 @@ private:
     string undo_save_lock_operation;
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
+    //Has the user closed the picker in this frame?
+    bool user_closed_picker;
     
     
     //General functions.
@@ -479,8 +481,10 @@ private:
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
+    void open_area_picker();
     void populate_texture_suggestions();
-    void pick_texture(const string &name);
+    void pick_area(const string &name, const bool is_new);
+    void pick_texture(const string &name, const bool is_new);
     area_data* prepare_state();
     void process_gui();
     void process_gui_control_panel();
