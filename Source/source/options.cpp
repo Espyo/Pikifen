@@ -26,6 +26,7 @@ const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE = 0;
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
+const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
 const size_t options_struct::DEF_MAX_PARTICLES = 200;
@@ -56,6 +57,7 @@ options_struct::options_struct() :
     draw_cursor_trail(DEF_DRAW_CURSOR_TRAIL),
     editor_mmb_pan(DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
+    editor_show_tooltips(DEF_EDITOR_SHOW_TOOLTIPS),
     intended_win_fullscreen(DEF_WIN_FULLSCREEN),
     intended_win_h(DEF_WIN_H),
     intended_win_w(DEF_WIN_W),
@@ -135,6 +137,7 @@ void options_struct::load(data_node* file) {
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
+    rs.set("editor_show_tooltips", editor_show_tooltips);
     rs.set("fps", target_fps);
     rs.set("fullscreen", intended_win_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
@@ -301,6 +304,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "editor_mouse_drag_threshold",
             i2s(editor_mouse_drag_threshold)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_show_tooltips",
+            b2s(editor_show_tooltips)
         )
     );
     file->add(

@@ -188,9 +188,93 @@ void area_editor::process_gui_menu_bar() {
             
         }
         
+        if(ImGui::BeginMenu("Debug")) {
+        
+            if(
+                ImGui::MenuItem(
+                    "Show edge numbers", "F1", &debug_edge_nrs
+                )
+            ) {
+                if(debug_edge_nrs) {
+                    status_text =
+                        "Enabled debug edge number display.";
+                } else {
+                    status_text =
+                        "Disabled debug edge number display.";
+                }
+            }
+            
+            if(
+                ImGui::MenuItem(
+                    "Show sector numbers", "F2", &debug_sector_nrs
+                )
+            ) {
+                if(debug_sector_nrs) {
+                    status_text =
+                        "Enabled debug sector number display.";
+                } else {
+                    status_text =
+                        "Disabled debug sector number display.";
+                }
+            }
+            
+            if(
+                ImGui::MenuItem(
+                    "Show vertex numbers", "F3", &debug_vertex_nrs
+                )
+            ) {
+                if(debug_vertex_nrs) {
+                    status_text =
+                        "Enabled debug vertex number display.";
+                } else {
+                    status_text =
+                        "Disabled debug vertex number display.";
+                }
+            }
+            
+            if(
+                ImGui::MenuItem(
+                    "Show sector triangulation", "F4", &debug_triangulation
+                )
+            ) {
+                if(debug_triangulation) {
+                    status_text =
+                        "Enabled debug triangulation display.";
+                } else {
+                    status_text =
+                        "Disabled debug triangulation display.";
+                }
+            }
+            
+            if(
+                ImGui::MenuItem(
+                    "Show path numbers", "F5", &debug_path_nrs
+                )
+            ) {
+                if(debug_path_nrs) {
+                    status_text =
+                        "Enabled debug path number display.";
+                } else {
+                    status_text =
+                        "Disabled debug path number display.";
+                }
+            }
+            
+            ImGui::EndMenu();
+            
+        }
+        
         if(ImGui::BeginMenu("Help")) {
         
-            if(ImGui::MenuItem("Help")) {
+            if(
+                ImGui::MenuItem(
+                    "Show tooltips", "", &game.options.editor_show_tooltips
+                )
+            ) {
+                save_options();
+            }
+            
+            if(ImGui::MenuItem("Help...")) {
                 string help_str =
                     "To create an area, start by drawing its layout. "
                     "For this, you draw the polygons that make up the "

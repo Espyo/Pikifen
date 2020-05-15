@@ -3,14 +3,10 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Explanations for each panel widget
-            And a menu bar option to toggle tooltips
         Switching states doesn't unselect selected stuff
         Panel changes are not being recorded as undoable changes
         Keyboard shortcuts don't work
-        Buttons that are just icons should have a tooltip
         Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
-        Add more stuff to the menu bar
         Make use of imgui.ini?
         Set the ImGui color scheme
         Minor

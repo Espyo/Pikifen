@@ -33,6 +33,7 @@ struct options_struct {
     static const bool DEF_DRAW_CURSOR_TRAIL;
     static const bool DEF_EDITOR_MMB_PAN;
     static const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
+    static const bool DEF_EDITOR_SHOW_TOOLTIPS;
     static const float DEF_JOYSTICK_MIN_DEADZONE;
     static const float DEF_JOYSTICK_MAX_DEADZONE;
     static const size_t DEF_MAX_PARTICLES;
@@ -69,6 +70,8 @@ struct options_struct {
     bool editor_mmb_pan;
     //In editors, only consider a mouse drag if it moves these many pixels.
     float editor_mouse_drag_threshold;
+    //In editors, show widget tooltips when the mouse is over them.
+    bool editor_show_tooltips;
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen;
     //Player's intended option for window height, before restarting the game.

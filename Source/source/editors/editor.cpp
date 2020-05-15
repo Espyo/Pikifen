@@ -488,6 +488,32 @@ void editor::load() {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets the tooltip of the previous widget.
+ * explanation:
+ *   Text explaining the widget.
+ * shortcut:
+ *   If the widget has a shortcut key, specify its name here.
+ */
+void editor::set_tooltip(const string &explanation, const string &shortcut) {
+    if(!game.options.editor_show_tooltips) {
+        return;
+    }
+    
+    if(ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
+        ImGui::Text("%s", explanation.c_str());
+        if(!shortcut.empty()) {
+            ImGui::TextColored(
+                ImVec4(0.66f, 0.66f, 0.66f, 1.0f),
+                "Shortcut key: %s", shortcut.c_str()
+            );
+        }
+        ImGui::EndTooltip();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads loaded editor-related content.
  */
 void editor::unload() {
@@ -499,28 +525,6 @@ void editor::unload() {
         }
         al_destroy_bitmap(bmp_editor_icons);
         bmp_editor_icons = NULL;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the tooltip of the previous widget.
- * explanation:
- *   Text explaining the widget.
- * shortcut:
- *   If the widget has a shortcut key, specify its name here.
- */
-void editor::set_tooltip(const string &explanation, const string &shortcut) {
-    if(ImGui::IsItemHovered()) {
-        ImGui::BeginTooltip();
-        ImGui::Text("%s", explanation.c_str());
-        if(!shortcut.empty()) {
-            ImGui::TextColored(
-                ImVec4(0.66f, 0.66f, 0.66f, 1.0f),
-                "Shortcut key: %s", shortcut.c_str()
-            );
-        }
-        ImGui::EndTooltip();
     }
 }
 
