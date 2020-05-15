@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Switching states doesn't unselect selected stuff
         Panel changes are not being recorded as undoable changes
         Keyboard shortcuts don't work
         Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)

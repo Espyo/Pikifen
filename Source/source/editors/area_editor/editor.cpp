@@ -170,6 +170,16 @@ void area_editor::cancel_layout_moving() {
 
 
 /* ----------------------------------------------------------------------------
+ * Changes to a new state, cleaning up whatever is needed.
+ */
+void area_editor::change_state(const EDITOR_STATES new_state) {
+    clear_selection();
+    state = new_state;
+    sub_state = EDITOR_SUB_STATE_NONE;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears the data about the circular sector creation.
  */
 void area_editor::clear_circle_sector() {

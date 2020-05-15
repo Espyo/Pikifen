@@ -123,7 +123,6 @@ private:
         EDITOR_STATE_INFO,
         EDITOR_STATE_MAIN,
         EDITOR_STATE_LAYOUT,
-        EDITOR_STATE_TEXTURE,
         EDITOR_STATE_MOBS,
         EDITOR_STATE_PATHS,
         EDITOR_STATE_DETAILS,
@@ -399,6 +398,7 @@ private:
     void cancel_layout_drawing();
     void cancel_layout_moving();
     float calculate_preview_path();
+    void change_state(const EDITOR_STATES new_state);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();

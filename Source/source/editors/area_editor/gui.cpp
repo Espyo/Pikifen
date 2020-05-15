@@ -309,8 +309,7 @@ void area_editor::process_gui_panel_details() {
     ImGui::BeginChild("details");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(ImGui::TreeNode("Tree shadows")) {
@@ -450,8 +449,7 @@ void area_editor::process_gui_panel_info() {
     ImGui::BeginChild("info");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(ImGui::TreeNode("General")) {
@@ -598,9 +596,7 @@ void area_editor::process_gui_panel_layout() {
     ImGui::BeginChild("main");
     
     if(ImGui::Button("Back")) {
-        clear_selection();
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(
@@ -1079,7 +1075,7 @@ void area_editor::process_gui_panel_main() {
             "Info"
         )
     ) {
-        state = EDITOR_STATE_INFO;
+        change_state(EDITOR_STATE_INFO);
     }
     set_tooltip(
         "Set the area's name, weather, and other basic information here."
@@ -1093,7 +1089,7 @@ void area_editor::process_gui_panel_main() {
             "Layout"
         )
     ) {
-        state = EDITOR_STATE_LAYOUT;
+        change_state(EDITOR_STATE_LAYOUT);
     }
     set_tooltip(
         "Draw sectors (polygons) to create the area's layout."
@@ -1107,7 +1103,7 @@ void area_editor::process_gui_panel_main() {
             "Mobs"
         )
     ) {
-        state = EDITOR_STATE_MOBS;
+        change_state(EDITOR_STATE_MOBS);
     }
     set_tooltip(
         "Change object settings and placements."
@@ -1121,7 +1117,7 @@ void area_editor::process_gui_panel_main() {
             "Paths"
         )
     ) {
-        state = EDITOR_STATE_PATHS;
+        change_state(EDITOR_STATE_PATHS);
     }
     set_tooltip(
         "Draw movement paths, and their stops."
@@ -1135,7 +1131,7 @@ void area_editor::process_gui_panel_main() {
             "Details"
         )
     ) {
-        state = EDITOR_STATE_DETAILS;
+        change_state(EDITOR_STATE_DETAILS);
     }
     set_tooltip(
         "Edit misc. details, like tree shadows."
@@ -1150,7 +1146,7 @@ void area_editor::process_gui_panel_main() {
         )
     ) {
         clear_problems();
-        state = EDITOR_STATE_REVIEW;
+        change_state(EDITOR_STATE_REVIEW);
     }
     set_tooltip(
         "Use this to make sure everything is okay with the area."
@@ -1165,7 +1161,7 @@ void area_editor::process_gui_panel_main() {
         )
     ) {
         update_backup_status();
-        state = EDITOR_STATE_TOOLS;
+        change_state(EDITOR_STATE_TOOLS);
     }
     set_tooltip(
         "Special tools to help you develop the area."
@@ -1179,7 +1175,7 @@ void area_editor::process_gui_panel_main() {
             "Options"
         )
     ) {
-        state = EDITOR_STATE_OPTIONS;
+        change_state(EDITOR_STATE_OPTIONS);
     }
     set_tooltip(
         "Options for the area editor."
@@ -1218,8 +1214,7 @@ void area_editor::process_gui_panel_mobs() {
     ImGui::BeginChild("mobs");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(
@@ -1431,8 +1426,8 @@ void area_editor::process_gui_panel_options() {
     ImGui::BeginChild("options");
     
     if(ImGui::Button("Save and go back")) {
-        state = EDITOR_STATE_MAIN;
         save_options();
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(ImGui::TreeNode("Controls")) {
@@ -1586,8 +1581,7 @@ void area_editor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(
@@ -1698,8 +1692,8 @@ void area_editor::process_gui_panel_review() {
     ImGui::BeginChild("review");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
+        clear_problems();
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(ImGui::TreeNode("Problem search")) {
@@ -1827,9 +1821,8 @@ void area_editor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
     
     if(ImGui::Button("Back")) {
-        sub_state = EDITOR_SUB_STATE_NONE;
-        state = EDITOR_STATE_MAIN;
         save_reference();
+        change_state(EDITOR_STATE_MAIN);
     }
     
     if(ImGui::TreeNode("Reference image")) {
@@ -2015,8 +2008,7 @@ void area_editor::process_gui_toolbar() {
         )
     ) {
         save_area(false);
-        clear_selection();
-        state = EDITOR_STATE_MAIN;
+        change_state(EDITOR_STATE_MAIN);
         made_new_changes = false;
     }
     set_tooltip(
