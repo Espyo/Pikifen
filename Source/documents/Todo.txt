@@ -3,8 +3,9 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Switching states doesn't unselect selected stuff
         Explanations for each panel widget
+            And a menu bar option to toggle tooltips
+        Switching states doesn't unselect selected stuff
         Panel changes are not being recorded as undoable changes
         Keyboard shortcuts don't work
         Buttons that are just icons should have a tooltip
@@ -15,6 +16,7 @@ Current tasks (tasks being worked on, but not yet committed)
         Minor
             Don't let the user interact with the GUI while fading
             Check all gui_to_* and *_to_gui functions for code I haven't ported over
+            When editing the texture effects, show the sectors fully bright, hide the grid, etc.
         Look
             Each panel should have its name in the top-right corner
             Use ImGui::Indent()

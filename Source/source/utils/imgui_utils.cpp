@@ -21,6 +21,8 @@ bool ImGui::ImageButtonAndText(
     ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
     const string &text
 ) {
+    ImGui::BeginGroup();
+    
     bool result =
         ImGui::ImageButton(
             icon, icon_size,
@@ -29,11 +31,15 @@ bool ImGui::ImageButtonAndText(
         );
         
     float offset = (icon_size.y + button_padding * 2 - 16.0f) / 2.0f;
+    offset -= 3.0f; //It's 3.0 too far, with the group + dummy approach.
     
     ImGui::SameLine();
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
+    ImGui::BeginGroup();
+    ImGui::Dummy(ImVec2(0.0f, offset));
     ImGui::Text("%s", text.c_str());
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - offset);
+    ImGui::EndGroup();
+    
+    ImGui::EndGroup();
     
     return result;
 }
@@ -52,10 +58,11 @@ bool ImGui::Combo(
         items_str += items[i] + '\0';
     }
     
-    return ImGui::Combo(
-               label.c_str(), current_item, items_str.c_str(),
-               popup_max_height_in_items
-           );
+    return
+        ImGui::Combo(
+            label.c_str(), current_item, items_str.c_str(),
+            popup_max_height_in_items
+        );
 }
 
 
@@ -77,10 +84,11 @@ bool ImGui::Combo(
         }
     }
     
-    bool result = ImGui::Combo(
-                      label.c_str(), &item_nr, items_str.c_str(), popup_max_height_in_items
-                  );
-                  
+    bool result =
+        ImGui::Combo(
+            label.c_str(), &item_nr, items_str.c_str(), popup_max_height_in_items
+        );
+        
     if(item_nr < items.size()) {
         *current_item = items[item_nr];
     } else {

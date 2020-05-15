@@ -510,7 +510,7 @@ void editor::unload() {
  * shortcut:
  *   If the widget has a shortcut key, specify its name here.
  */
-void editor::set_tooltip(const string &explanation, const string &shortcut){
+void editor::set_tooltip(const string &explanation, const string &shortcut) {
     if(ImGui::IsItemHovered()) {
         ImGui::BeginTooltip();
         ImGui::Text("%s", explanation.c_str());
