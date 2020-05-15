@@ -25,8 +25,7 @@ game_state::game_state() :
     ok_pressed(false),
     back_pressed(false),
     back_widget(NULL),
-    selected_widget(NULL),
-    use_imgui(false) {
+    selected_widget(NULL) {
     
 }
 

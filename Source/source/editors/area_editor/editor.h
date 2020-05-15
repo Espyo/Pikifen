@@ -510,10 +510,10 @@ private:
     void save_backup();
     void save_reference();
     void select_different_hazard(const bool next);
-    void select_edge(edge* e);
-    void select_sector(sector* s);
-    void select_tree_shadow(tree_shadow* v);
-    void select_vertex(vertex* v);
+    void select_edge(edge* e_ptr);
+    void select_sector(sector* s_ptr);
+    void select_tree_shadow(tree_shadow* s_ptr);
+    void select_vertex(vertex* v_ptr);
     void set_new_circle_sector_points();
     point snap_point(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);

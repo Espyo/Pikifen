@@ -134,8 +134,6 @@ area_editor::area_editor() :
     
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
-    
-    use_imgui = true;
 }
 
 

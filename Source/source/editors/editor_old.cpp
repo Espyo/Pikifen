@@ -465,7 +465,7 @@ string editor_old::get_textbox_text(
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event for control-related things.
  */
-void editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
+void editor_old::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     gui->handle_event(ev);

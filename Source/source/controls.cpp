@@ -690,7 +690,7 @@ void gameplay::handle_button(
  * Handles an Allegro event related to hardware input,
  * and triggers the corresponding controls, if any.
  */
-void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
+void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
         

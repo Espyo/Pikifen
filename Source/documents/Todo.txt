@@ -9,8 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
         Make use of imgui.ini?
         Set the ImGui color scheme
         Minor
-            Don't let the user interact with the GUI while fading
-            Check all gui_to_* and *_to_gui functions for code I haven't ported over
+            Looks like there's inconsistency between where I do sector homogenization and mob homogenization -- at the end of the panel process, or at every change
             When editing the texture effects, show the sectors fully bright, hide the grid, etc.
         Look
             Each panel should have its name in the top-right corner

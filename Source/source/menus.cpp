@@ -80,7 +80,7 @@ string area_menu::get_name() const {
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
  */
-void area_menu::handle_controls(const ALLEGRO_EVENT &ev) {
+void area_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -358,7 +358,7 @@ string controls_menu::get_name() const {
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
  */
-void controls_menu::handle_controls(const ALLEGRO_EVENT &ev) {
+void controls_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(capturing_input) {
@@ -890,7 +890,7 @@ string main_menu::get_name() const {
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
  */
-void main_menu::handle_controls(const ALLEGRO_EVENT &ev) {
+void main_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -1238,7 +1238,7 @@ string options_menu::get_name() const {
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
  */
-void options_menu::handle_controls(const ALLEGRO_EVENT &ev) {
+void options_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);

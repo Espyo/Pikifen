@@ -653,11 +653,9 @@ void area_editor_old::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             point hotspot = snap_point(game.mouse_cursor_w);
             
             mob_category* category_to_use = last_mob_category;
+            mob_type* type_to_use = last_mob_type;
             if(!category_to_use) {
                 category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
-            }
-            mob_type* type_to_use = last_mob_type;
-            if(!type_to_use) {
                 type_to_use = game.config.pikmin_order[0];
             }
             

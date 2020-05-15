@@ -99,11 +99,7 @@ void game_class::main_loop() {
         
         al_wait_for_event(logic_queue, &ev);
         
-        if(cur_state->use_imgui) {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-        }
-        
-        cur_state->handle_controls(ev);
+        cur_state->handle_allegro_event(ev);
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {

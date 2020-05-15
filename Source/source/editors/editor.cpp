@@ -232,8 +232,10 @@ void editor::draw_unsaved_changes_warning() {
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event for control-related things.
  */
-void editor::handle_controls(const ALLEGRO_EVENT &ev) {
+void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
+    
+    ImGui_ImplAllegro5_ProcessEvent(&ev);
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||

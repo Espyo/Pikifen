@@ -372,7 +372,35 @@ void area_editor::process_gui_panel_details() {
         
         if(selected_shadow) {
         
-            ImGui::Button("...");
+            string old_shadow_file_name = selected_shadow->file_name;
+            
+            if(ImGui::Button("...")) {
+                FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+                vector<string> f =
+                    prompt_file_dialog_locked_to_folder(
+                        TEXTURES_FOLDER_PATH,
+                        "Please choose the texture to use for the tree shadow.",
+                        "*.png",
+                        ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                        ALLEGRO_FILECHOOSER_PICTURES,
+                        &result
+                    );
+                    
+                switch(result) {
+                case FILE_DIALOG_RES_WRONG_FOLDER: {
+                    //File doesn't belong to the folder.
+                    status_text =
+                        "The chosen image is not in the textures folder!";
+                    break;
+                } case FILE_DIALOG_RES_CANCELED: {
+                    //User canceled.
+                    break;
+                } case FILE_DIALOG_RES_SUCCESS: {
+                    selected_shadow->file_name = f[0];
+                    break;
+                }
+                }
+            }
             set_tooltip("Browse for a file to use.");
             
             ImGui::SameLine();
@@ -382,6 +410,15 @@ void area_editor::process_gui_panel_details() {
                 "Textures folder. Extension included. e.g. "
                 "\"Palmtree_shadow.png\""
             );
+            
+            if(selected_shadow->file_name != old_shadow_file_name) {
+                //New image, delete the old one.
+                if(selected_shadow->bitmap != game.bmp_error) {
+                    game.textures.detach(selected_shadow->file_name);
+                }
+                selected_shadow->bitmap =
+                    game.textures.get(selected_shadow->file_name, NULL);
+            }
             
             if(
                 ImGui::DragFloat2("Center", (float*) &selected_shadow->center)
@@ -1299,6 +1336,9 @@ void area_editor::process_gui_panel_mobs() {
             if(!type_names.empty()) {
                 m_ptr->type = m_ptr->category->get_type(type_names[0]);
             }
+            
+            last_mob_category = m_ptr->category;
+            last_mob_type = m_ptr->type;
         }
         set_tooltip(
             "What category this object belongs to: a Pikmin, a leader, etc."
@@ -1323,6 +1363,8 @@ void area_editor::process_gui_panel_mobs() {
             }
             if(ImGui::Combo("Type", &selected_type_name, types)) {
                 m_ptr->type = m_ptr->category->get_type(selected_type_name);
+                
+                last_mob_type = m_ptr->type;
             }
             set_tooltip(
                 "The specific type of object this is, from the chosen category."
@@ -1554,6 +1596,7 @@ void area_editor::process_gui_panel_options() {
         );
         game.options.area_editor_backup_interval = backup_interval;
         
+        size_t old_undo_limit = game.options.area_editor_undo_limit;
         int undo_limit = game.options.area_editor_undo_limit;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
@@ -1563,6 +1606,10 @@ void area_editor::process_gui_panel_options() {
             "Maximum number of operations that can be undone. 0 = off."
         );
         game.options.area_editor_undo_limit = undo_limit;
+        
+        if(game.options.area_editor_undo_limit != old_undo_limit) {
+            update_undo_history();
+        }
         
         ImGui::Dummy(ImVec2(0, 16));
         

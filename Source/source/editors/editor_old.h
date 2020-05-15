@@ -37,7 +37,7 @@ public:
     
     virtual void do_drawing() = 0;
     virtual void do_logic() = 0;
-    virtual void handle_controls(const ALLEGRO_EVENT &ev);
+    virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
     virtual void update_transformations();
