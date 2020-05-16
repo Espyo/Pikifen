@@ -413,6 +413,7 @@ void area_editor::process_gui_panel_details() {
             
             if(selected_shadow->file_name != old_shadow_file_name) {
                 //New image, delete the old one.
+                register_change("tree shadow file change");
                 if(selected_shadow->bitmap != game.bmp_error) {
                     game.textures.detach(selected_shadow->file_name);
                 }
@@ -420,28 +421,34 @@ void area_editor::process_gui_panel_details() {
                     game.textures.get(selected_shadow->file_name, NULL);
             }
             
+            point shadow_center = selected_shadow->center;
             if(
-                ImGui::DragFloat2("Center", (float*) &selected_shadow->center)
+                ImGui::DragFloat2("Center", (float*) &shadow_center)
             ) {
+                register_change("tree shadow center change");
+                selected_shadow->center = shadow_center;
                 selected_shadow_transformation.set_center(
                     selected_shadow->center
                 );
             }
             
-            point old_size = selected_shadow->size;
+            point shadow_size = selected_shadow->size;
             if(
-                ImGui::DragFloat2("Size", (float*) &selected_shadow->size)
+                ImGui::DragFloat2("Size", (float*) &shadow_size)
             ) {
+                register_change("tree shadow size change");
                 if(selected_shadow_transformation.keep_aspect_ratio) {
-                    float ratio = old_size.x / old_size.y;
-                    if(selected_shadow->size.x != old_size.x) {
-                        selected_shadow->size.y =
-                            selected_shadow->size.x / ratio;
+                    float ratio =
+                        selected_shadow->size.x / selected_shadow->size.y;
+                    if(shadow_size.x != selected_shadow->size.x) {
+                        shadow_size.y =
+                            shadow_size.x / ratio;
                     } else {
-                        selected_shadow->size.x =
-                            selected_shadow->size.y * ratio;
+                        shadow_size.x =
+                            shadow_size.y * ratio;
                     }
                 }
+                selected_shadow->size = shadow_size;
                 selected_shadow_transformation.set_size(selected_shadow->size);
             }
             
@@ -451,19 +458,26 @@ void area_editor::process_gui_panel_details() {
             );
             set_tooltip("Keep the aspect ratio when resizing the image.");
             
-            if(ImGui::SliderAngle("Angle", &selected_shadow->angle, 0, 360)) {
+            float shadow_angle = selected_shadow->angle;
+            if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
+                register_change("tree shadow angle change");
+                selected_shadow->angle = shadow_angle;
                 selected_shadow_transformation.set_angle(
                     selected_shadow->angle
                 );
             }
             
-            int opacity = selected_shadow->alpha;
-            ImGui::SliderInt("Opacity", &opacity, 0, 255);
-            selected_shadow->alpha = opacity;
+            int shadow_opacity = selected_shadow->alpha;
+            if(ImGui::SliderInt("Opacity", &shadow_opacity, 0, 255)) {
+                register_change("tree shadow opacity change");
+                selected_shadow->alpha = shadow_opacity;
+            }
             
-            ImGui::DragFloat2(
-                "Sway", (float*) &selected_shadow->sway, 0.1
-            );
+            point shadow_sway = selected_shadow->sway;
+            if(ImGui::DragFloat2("Sway", (float*) &shadow_sway, 0.1)) {
+                register_change("tree shadow sway change");
+                selected_shadow->sway = shadow_sway;
+            }
             set_tooltip(
                 "Multiply the amount of swaying by this much. 0 means "
                 "no swaying in that direction."
@@ -491,12 +505,20 @@ void area_editor::process_gui_panel_info() {
     
     if(ImGui::TreeNode("General")) {
     
-        ImGui::InputText("Name", &game.cur_area_data.name);
+        string name = game.cur_area_data.name;
+        if(ImGui::InputText("Name", &name)) {
+            register_change("area name change");
+            game.cur_area_data.name = name;
+        }
         set_tooltip(
             "Name of the area."
         );
         
-        ImGui::InputText("Subtitle", &game.cur_area_data.subtitle);
+        string subtitle = game.cur_area_data.subtitle;
+        if(ImGui::InputText("Subtitle", &subtitle)) {
+            register_change("area subtitle change");
+            game.cur_area_data.subtitle = subtitle;
+        }
         set_tooltip(
             "Subtitle, if any. Appears on the loading screen."
         );
@@ -509,15 +531,17 @@ void area_editor::process_gui_panel_info() {
         if(game.cur_area_data.weather_name.empty()) {
             game.cur_area_data.weather_name = "(None)";
         }
-        ImGui::Combo(
-            "Weather", &game.cur_area_data.weather_name, weather_conditions
-        );
+        string weather_name = game.cur_area_data.weather_name;
+        if(ImGui::Combo("Weather", &weather_name, weather_conditions)) {
+            register_change("area weather change");
+            game.cur_area_data.weather_name =
+                weather_name == "(None)" ?
+                "" :
+                weather_name;
+        }
         set_tooltip(
             "The weather condition to use."
         );
-        if(game.cur_area_data.weather_name == "(None)") {
-            game.cur_area_data.weather_name.clear();
-        }
         
         ImGui::Dummy(ImVec2(0, 16));
         
@@ -526,6 +550,8 @@ void area_editor::process_gui_panel_info() {
     
     if(ImGui::TreeNode("Background")) {
     
+        string bg_file_name = game.cur_area_data.bg_bmp_file_name;
+        
         if(ImGui::Button("...")) {
             FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
             vector<string> f =
@@ -547,7 +573,7 @@ void area_editor::process_gui_panel_info() {
                 //User canceled.
                 break;
             } case FILE_DIALOG_RES_SUCCESS: {
-                game.cur_area_data.bg_bmp_file_name = f[0];
+                bg_file_name = f[0];
                 break;
             }
             }
@@ -558,7 +584,7 @@ void area_editor::process_gui_panel_info() {
         );
         
         ImGui::SameLine();
-        ImGui::InputText("Bitmap", &game.cur_area_data.bg_bmp_file_name);
+        ImGui::InputText("Bitmap", &bg_file_name);
         set_tooltip(
             "File name of the texture to use as a background, in the "
             "Textures folder.\n"
@@ -566,22 +592,41 @@ void area_editor::process_gui_panel_info() {
             "This repeating texture can be seen when looking at the void."
         );
         
-        ImGui::ColorEdit4(
-            "Color", (float*) &game.cur_area_data.bg_color,
-            ImGuiColorEditFlags_NoInputs
-        );
+        if(bg_file_name != game.cur_area_data.bg_bmp_file_name) {
+            register_change("area background change");
+            game.cur_area_data.bg_bmp_file_name = bg_file_name;
+        }
+        
+        ALLEGRO_COLOR bg_color = game.cur_area_data.bg_color;
+        if(
+            ImGui::ColorEdit4(
+                "Color", (float*) &bg_color,
+                ImGuiColorEditFlags_NoInputs
+            )
+        ) {
+            register_change("area background color change");
+            game.cur_area_data.bg_color = bg_color;
+        }
         set_tooltip(
             "Set the color of the void. If you have a background image,\n"
             "this will appear below it."
         );
         
-        ImGui::DragFloat("Distance", &game.cur_area_data.bg_dist);
+        float bg_dist = game.cur_area_data.bg_dist;
+        if(ImGui::DragFloat("Distance", &bg_dist)) {
+            register_change("area background distance change");
+            game.cur_area_data.bg_dist = bg_dist;
+        }
         set_tooltip(
             "How far away the background image is. Affects paralax scrolling.\n"
             "2 is a good value."
         );
         
-        ImGui::DragFloat("Zoom", &game.cur_area_data.bg_bmp_zoom);
+        float bg_bmp_zoom = game.cur_area_data.bg_bmp_zoom;
+        if(ImGui::DragFloat("Zoom", &bg_bmp_zoom)) {
+            register_change("area background zoom change");
+            game.cur_area_data.bg_bmp_zoom = bg_bmp_zoom;
+        }
         set_tooltip(
             "Scale the texture by this amount."
         );
@@ -593,16 +638,28 @@ void area_editor::process_gui_panel_info() {
     
     if(ImGui::TreeNode("Metadata")) {
     
-        ImGui::InputText("Creator", &game.cur_area_data.creator);
+        string creator = game.cur_area_data.creator;
+        if(ImGui::InputText("Creator", &creator)) {
+            register_change("area creator change");
+            game.cur_area_data.creator = creator;
+        }
         set_tooltip("Name (or nickname) of who created this area. Optional.");
         
-        ImGui::InputText("Version", &game.cur_area_data.version);
+        string version = game.cur_area_data.version;
+        if(ImGui::InputText("Version", &version)) {
+            register_change("area version change");
+            game.cur_area_data.version = version;
+        }
         set_tooltip(
             "Version of the area, preferably in the \"X.Y.Z\" format. "
             "Optional."
         );
         
-        ImGui::InputText("Notes", &game.cur_area_data.notes);
+        string notes = game.cur_area_data.notes;
+        if(ImGui::InputText("Notes", &notes)) {
+            register_change("area notes change");
+            game.cur_area_data.notes = notes;
+        }
         set_tooltip("Extra notes or comments about the area, if any.");
         
         ImGui::Dummy(ImVec2(0, 16));
@@ -611,7 +668,12 @@ void area_editor::process_gui_panel_info() {
     }
     
     if(ImGui::TreeNode("Gameplay")) {
-        ImGui::InputText("Sprays", &game.cur_area_data.spray_amounts);
+    
+        string spray_amounts = game.cur_area_data.spray_amounts;
+        if(ImGui::InputText("Sprays", &spray_amounts)) {
+            register_change("area spray amounts change");
+            game.cur_area_data.spray_amounts = spray_amounts;
+        }
         set_tooltip(
             "Starting amount of each spray type to give the player. e.g.:\n"
             "\"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\"."
@@ -763,7 +825,11 @@ void area_editor::process_gui_panel_layout() {
         
         if(ImGui::TreeNode("Sector behavior")) {
         
-            ImGui::DragFloat("Height", &s_ptr->z);
+            float sector_z = s_ptr->z;
+            if(ImGui::DragFloat("Height", &sector_z)) {
+                register_change("sector height change");
+                s_ptr->z = sector_z;
+            }
             set_tooltip(
                 "Height of the floor. Positive numbers are higher."
             );
@@ -795,7 +861,7 @@ void area_editor::process_gui_panel_layout() {
                             list.begin(), list.end(), new_hazard_selected_name
                         ) == list.end()
                     ) {
-                        register_change("hazard addition");
+                        register_change("sector hazard addition");
                         if(!s_ptr->hazards_str.empty()) {
                             s_ptr->hazards_str += ";";
                         }
@@ -818,7 +884,7 @@ void area_editor::process_gui_panel_layout() {
                         selected_hazard_nr >= 0 &&
                         selected_hazard_nr < list.size()
                     ) {
-                        register_change("hazard removal");
+                        register_change("sector hazard removal");
                         s_ptr->hazards_str.clear();
                         for(size_t h = 0; h < list.size(); ++h) {
                             if(h == selected_hazard_nr) continue;
@@ -847,7 +913,11 @@ void area_editor::process_gui_panel_layout() {
                     "List of hazards this sector has."
                 );
                 
-                ImGui::Checkbox("Floor only", &s_ptr->hazard_floor);
+                bool sector_hazard_floor = s_ptr->hazard_floor;
+                if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
+                    register_change("sector hazard floor option change");
+                    s_ptr->hazard_floor = sector_hazard_floor;
+                }
                 set_tooltip(
                     "Do the hazards only affects objects on the floor,\n"
                     "or do they affect airborne objects in the sector too?"
@@ -866,12 +936,14 @@ void area_editor::process_gui_panel_layout() {
                 ) {
                     types_list.push_back(game.sector_types.get_name(t));
                 }
-                int type = s_ptr->type;
-                ImGui::Combo("Type", &type, types_list);
+                int sector_type = s_ptr->type;
+                if(ImGui::Combo("Type", &sector_type, types_list)) {
+                    register_change("sector type change");
+                    s_ptr->type = sector_type;
+                }
                 set_tooltip(
                     "What type of sector this is."
                 );
-                s_ptr->type = type;
                 
                 if(
                     s_ptr->type == SECTOR_TYPE_BRIDGE ||
@@ -880,17 +952,26 @@ void area_editor::process_gui_panel_layout() {
                 
                     float bridge_height = s2f(s_ptr->tag);
                     ImGui::SetNextItemWidth(96.0f);
-                    ImGui::DragFloat("Bridge height", &bridge_height);
+                    if(ImGui::DragFloat("Bridge height", &bridge_height)) {
+                        register_change("sector bridge height change");
+                        s_ptr->tag = f2s(bridge_height);
+                    }
                     set_tooltip(
                         "When the bridge opens, "
                         "set the sector's height to this."
                     );
-                    s_ptr->tag = f2s(bridge_height);
                     
                 }
                 
-                ImGui::Checkbox("Bottomless pit", &s_ptr->is_bottomless_pit);
-                set_tooltip("Is this sector's floor a bottomless pit?");
+                bool sector_bottomless_pit = s_ptr->is_bottomless_pit;
+                if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
+                    register_change("sector bottomless pit change");
+                    s_ptr->is_bottomless_pit = sector_bottomless_pit;
+                }
+                set_tooltip(
+                    "Is this sector's floor a bottomless pit?\n"
+                    "Pikmin die when they fall in, and you can see the void."
+                );
                 
                 ImGui::Dummy(ImVec2(0, 16));
                 
@@ -916,7 +997,10 @@ void area_editor::process_gui_panel_layout() {
                 "Makes the sector use a regular texture."
             );
             
-            s_ptr->fade = texture_type == 0;
+            if(s_ptr->fade != (texture_type == 0)) {
+                register_change("sector texture type change");
+                s_ptr->fade = texture_type == 0;
+            }
             
             if(!s_ptr->fade) {
             
@@ -959,17 +1043,21 @@ void area_editor::process_gui_panel_layout() {
             
             if(ImGui::TreeNode("Texture effects")) {
             
-                ImGui::DragFloat2(
-                    "Offset", (float*) &s_ptr->texture_info.translation
-                );
+                point texture_translation = s_ptr->texture_info.translation;
+                if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
+                    register_change("sector texture offset change");
+                    s_ptr->texture_info.translation = texture_translation;
+                }
                 set_tooltip(
                     "Offset the texture horizontally or vertically "
                     "by this much."
                 );
                 
-                ImGui::DragFloat2(
-                    "Scale", (float*) &s_ptr->texture_info.scale, 0.01
-                );
+                point texture_scale = s_ptr->texture_info.scale;
+                if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
+                    register_change("sector texture scale change");
+                    s_ptr->texture_info.scale = texture_scale;
+                }
                 set_tooltip(
                     "Scale the texture horizontally or vertically "
                     "by this much.\n"
@@ -977,17 +1065,27 @@ void area_editor::process_gui_panel_layout() {
                     "of the area, at coordinates 0,0."
                 );
                 
-                ImGui::SliderAngle("Angle", &s_ptr->texture_info.rot, 0, 360);
+                float texture_rotation = s_ptr->texture_info.rot;
+                if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
+                    register_change("sector texture angle change");
+                    s_ptr->texture_info.rot = texture_rotation;
+                }
                 set_tooltip(
                     "Rotate the texture by these many degrees.\n"
                     "The rotation's center point is at the origin "
                     "of the area, at coordinates 0,0."
                 );
                 
-                ImGui::ColorEdit4(
-                    "Tint color", (float*) &s_ptr->texture_info.tint,
-                    ImGuiColorEditFlags_NoInputs
-                );
+                ALLEGRO_COLOR texture_tint = s_ptr->texture_info.tint;
+                if(
+                    ImGui::ColorEdit4(
+                        "Tint color", (float*) &texture_tint,
+                        ImGuiColorEditFlags_NoInputs
+                    )
+                ) {
+                    register_change("sector texture tint change");
+                    s_ptr->texture_info.tint = texture_tint;
+                }
                 set_tooltip(
                     "Tint the texture with this color. White means no tint."
                 );
@@ -1043,17 +1141,21 @@ void area_editor::process_gui_panel_layout() {
             
                 int sector_brightness = s_ptr->brightness;
                 ImGui::SetNextItemWidth(180);
-                ImGui::SliderInt("Brightness", &sector_brightness, 0, 255);
+                if(ImGui::SliderInt("Brightness", &sector_brightness, 0, 255)) {
+                    register_change("sector brightness change");
+                    s_ptr->brightness = sector_brightness;
+                }
                 set_tooltip(
                     "How bright the sector is. Affects not just the sector's "
                     "appearance, but everything inside it.\n"
                     "0 is fully dark, 255 is fully lit."
                 );
-                s_ptr->brightness = sector_brightness;
                 
-                ImGui::Checkbox(
-                    "Always cast shadow", &s_ptr->always_cast_shadow
-                );
+                bool sector_cast_shadow = s_ptr->always_cast_shadow;
+                if(ImGui::Checkbox("Always cast shadow", &sector_cast_shadow)) {
+                    register_change("sector cast shadow option change");
+                    s_ptr->always_cast_shadow = sector_cast_shadow;
+                }
                 set_tooltip(
                     "Always cast a shadow onto lower sectors, "
                     "even if they're just a step below."
@@ -1327,6 +1429,7 @@ void area_editor::process_gui_panel_mobs() {
         int selected_category_nr = m_ptr->category->id;
         
         if(ImGui::Combo("Category", &selected_category_nr, categories)) {
+            register_change("object category change");
             m_ptr->category = game.mob_categories.get(selected_category_nr);
             
             vector<string> type_names;
@@ -1362,6 +1465,7 @@ void area_editor::process_gui_panel_mobs() {
                 selected_type_name = m_ptr->type->name;
             }
             if(ImGui::Combo("Type", &selected_type_name, types)) {
+                register_change("object type change");
                 m_ptr->type = m_ptr->category->get_type(selected_type_name);
                 
                 last_mob_type = m_ptr->type;
@@ -1371,7 +1475,11 @@ void area_editor::process_gui_panel_mobs() {
             );
         }
         
-        ImGui::SliderAngle("Angle", &m_ptr->angle, 0, 360);
+        float mob_angle = m_ptr->angle;
+        if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
+            register_change("object angle change");
+            m_ptr->angle = mob_angle;
+        }
         set_tooltip(
             "Angle that the object is facing.\n"
             "You can also use R in the canvas to "
@@ -1380,7 +1488,11 @@ void area_editor::process_gui_panel_mobs() {
         
         if(ImGui::TreeNode("Advanced")) {
         
-            ImGui::InputText("Script vars", &m_ptr->vars);
+            string mob_vars = m_ptr->vars;
+            if(ImGui::InputText("Script vars", &mob_vars)) {
+                register_change("object script vars change");
+                m_ptr->vars = mob_vars;
+            }
             set_tooltip(
                 "Extra variables you want the object to have.\n"
                 "e.g.: \"sleep=y;jumping=n\"."
@@ -2082,11 +2194,17 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + P"
     );
     
+    float undo_opacity = undo_history.empty() ? 0.2f : 1.0f;
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
             editor_icons[ICON_UNDO],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(0.0f, 0.0f),
+            ImVec2(1.0f, 1.0f),
+            -1,
+            ImVec4(0.0f, 0.0f, 0.0f, 0.0f),
+            ImVec4(1.0f, 1.0f, 1.0f, undo_opacity)
         )
     ) {
         undo();

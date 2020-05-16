@@ -3,7 +3,7 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Panel changes are not being recorded as undoable changes
+        Add a comment before each widget, so it's easier to follow.
         Keyboard shortcuts don't work
         Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
         Make use of imgui.ini?
@@ -14,6 +14,8 @@ Current tasks (tasks being worked on, but not yet committed)
         Look
             Each panel should have its name in the top-right corner
             Use ImGui::Indent()
+                "Keep aspect ratio" boxes
+                More...
             Standardize the visibility of delete buttons, the "No sector selected" messages, etc. between panels
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
@@ -50,6 +52,7 @@ Next tasks (roughly sorted most important first)
     Some mob events check whether the mob has been bumped or whistled by checking if whistle.whistling is true; this isn't enough, since the leader could be moving while whistling something else
         Note that these events exists: MOB_EV_TOUCHED_ACTIVE_LEADER, MOB_EV_WHISTLED
     All key shortcuts in the editors should check if their modifier key is pressed AND other modifier keys are not pressed (e.g. Ctrl+R is both toggling the reference and rotating mobs)
+    Linking a Burgeoning Spiderwort to, say, a leader, will crash when it drops a berry (Kman)
     
     --- v0.19.0 ---
     Revamp editors
@@ -76,6 +79,7 @@ Next tasks (roughly sorted most important first)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
         A way to memorize which Tree Nodes are opened/closed
+        Options should go in a pop-up menu
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
@@ -99,6 +103,7 @@ Next tasks (roughly sorted most important first)
         When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
         Objects being carried by Pikmin should count as that object's weight + the Pikmin's weight for the purposes of a scale category mob
         Improve the look of the ship's ring
+        An option to control the cursor's movement speed, when not using the mouse (MonkeyUhOh)
         If a leader/Pikmin type is not in the list of order, don't give an error -- instead, just quietly put it at the end. This way, people can download new types and not have to go declare the list they don't care about (Kman)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead

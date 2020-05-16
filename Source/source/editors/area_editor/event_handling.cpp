@@ -1251,14 +1251,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 switch(octee_mode) {
                 case OCTEE_MODE_OFFSET: {
-                    register_change("texture offset change");
+                    register_change("sector texture offset change");
                     point diff = (game.mouse_cursor_w - octee_drag_start);
                     diff = rotate_point(diff, -s_ptr->texture_info.rot);
                     diff = diff / s_ptr->texture_info.scale;
                     s_ptr->texture_info.translation = octee_orig_offset + diff;
                     break;
                 } case OCTEE_MODE_SCALE: {
-                    register_change("texture scale change");
+                    register_change("sector texture scale change");
                     point diff = (game.mouse_cursor_w - octee_drag_start);
                     diff = rotate_point(diff, -s_ptr->texture_info.rot);
                     point drag_start_rot =
@@ -1267,7 +1267,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     s_ptr->texture_info.scale = octee_orig_scale + diff;
                     break;
                 } case OCTEE_MODE_ANGLE: {
-                    register_change("texture angle change");
+                    register_change("sector texture angle change");
                     float drag_start_a = get_angle(point(), octee_drag_start);
                     float cursor_a = get_angle(point(), game.mouse_cursor_w);
                     s_ptr->texture_info.rot =
