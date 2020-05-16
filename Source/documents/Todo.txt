@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Add a comment before each widget, so it's easier to follow.
         Keyboard shortcuts don't work
         Button inputs aren't caring about the gui being in focus or not (remember to block inputs when the picker is open too)
         Make use of imgui.ini?
@@ -80,6 +79,7 @@ Next tasks (roughly sorted most important first)
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
         A way to memorize which Tree Nodes are opened/closed
         Options should go in a pop-up menu
+        "Remove" icon should be a garbage bin
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)

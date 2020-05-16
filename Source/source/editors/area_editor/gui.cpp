@@ -126,6 +126,7 @@ void area_editor::process_gui() {
 void area_editor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
     
+    //Basically, just show the correct panel for the current state.
     switch(state) {
     case EDITOR_STATE_MAIN: {
         process_gui_panel_main();
@@ -167,16 +168,20 @@ void area_editor::process_gui_control_panel() {
 void area_editor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
     
+        //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
+            //Load/create area item.
             if(ImGui::MenuItem("Load or create area...")) {
                 open_area_picker();
             }
             
+            //Show Dear ImGui demo item.
             if(ImGui::MenuItem("Show demo")) {
                 show_imgui_demo = true;
             }
             
+            //Quit editor item.
             if(ImGui::MenuItem("Quit")) {
                 if(!check_new_unsaved_changes()) {
                     quick_play_area.clear();
@@ -188,8 +193,10 @@ void area_editor::process_gui_menu_bar() {
             
         }
         
+        //Debug menu.
         if(ImGui::BeginMenu("Debug")) {
         
+            //Show edge numbers item.
             if(
                 ImGui::MenuItem(
                     "Show edge numbers", "F1", &debug_edge_nrs
@@ -204,6 +211,7 @@ void area_editor::process_gui_menu_bar() {
                 }
             }
             
+            //Show sector numbers item.
             if(
                 ImGui::MenuItem(
                     "Show sector numbers", "F2", &debug_sector_nrs
@@ -218,6 +226,7 @@ void area_editor::process_gui_menu_bar() {
                 }
             }
             
+            //Show vertex numbers item.
             if(
                 ImGui::MenuItem(
                     "Show vertex numbers", "F3", &debug_vertex_nrs
@@ -232,6 +241,7 @@ void area_editor::process_gui_menu_bar() {
                 }
             }
             
+            //Show sector triangulation item.
             if(
                 ImGui::MenuItem(
                     "Show sector triangulation", "F4", &debug_triangulation
@@ -246,6 +256,7 @@ void area_editor::process_gui_menu_bar() {
                 }
             }
             
+            //Show path numbers item.
             if(
                 ImGui::MenuItem(
                     "Show path numbers", "F5", &debug_path_nrs
@@ -264,8 +275,10 @@ void area_editor::process_gui_menu_bar() {
             
         }
         
+        //Help menu.
         if(ImGui::BeginMenu("Help")) {
         
+            //Show tooltips item.
             if(
                 ImGui::MenuItem(
                     "Show tooltips", "", &game.options.editor_show_tooltips
@@ -274,6 +287,7 @@ void area_editor::process_gui_menu_bar() {
                 save_options();
             }
             
+            //General help item.
             if(ImGui::MenuItem("Help...")) {
                 string help_str =
                     "To create an area, start by drawing its layout. "
@@ -308,12 +322,15 @@ void area_editor::process_gui_menu_bar() {
 void area_editor::process_gui_panel_details() {
     ImGui::BeginChild("details");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Tree shadows node.
     if(ImGui::TreeNode("Tree shadows")) {
     
+        //New tree shadow button.
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
@@ -334,6 +351,8 @@ void area_editor::process_gui_panel_details() {
         );
         
         if(selected_shadow) {
+        
+            //Delete shadow button.
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -368,12 +387,10 @@ void area_editor::process_gui_panel_details() {
                 "Delete the selected tree shadow.",
                 "Delete"
             );
-        }
-        
-        if(selected_shadow) {
-        
+            
             string old_shadow_file_name = selected_shadow->file_name;
             
+            //Browse for tree shadow texture button.
             if(ImGui::Button("...")) {
                 FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
                 vector<string> f =
@@ -403,6 +420,7 @@ void area_editor::process_gui_panel_details() {
             }
             set_tooltip("Browse for a file to use.");
             
+            //Tree shadow texture file name input.
             ImGui::SameLine();
             ImGui::InputText("Bitmap", &selected_shadow->file_name);
             set_tooltip(
@@ -421,6 +439,7 @@ void area_editor::process_gui_panel_details() {
                     game.textures.get(selected_shadow->file_name, NULL);
             }
             
+            //Tree shadow center value.
             point shadow_center = selected_shadow->center;
             if(
                 ImGui::DragFloat2("Center", (float*) &shadow_center)
@@ -432,6 +451,7 @@ void area_editor::process_gui_panel_details() {
                 );
             }
             
+            //Tree shadow size value.
             point shadow_size = selected_shadow->size;
             if(
                 ImGui::DragFloat2("Size", (float*) &shadow_size)
@@ -452,12 +472,14 @@ void area_editor::process_gui_panel_details() {
                 selected_shadow_transformation.set_size(selected_shadow->size);
             }
             
+            //Tree shadow aspect ratio checkbox.
             ImGui::Checkbox(
                 "Keep aspect ratio",
                 &selected_shadow_transformation.keep_aspect_ratio
             );
             set_tooltip("Keep the aspect ratio when resizing the image.");
             
+            //Tree shadow angle value.
             float shadow_angle = selected_shadow->angle;
             if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
                 register_change("tree shadow angle change");
@@ -467,12 +489,14 @@ void area_editor::process_gui_panel_details() {
                 );
             }
             
+            //Tree shadow opacity value.
             int shadow_opacity = selected_shadow->alpha;
             if(ImGui::SliderInt("Opacity", &shadow_opacity, 0, 255)) {
                 register_change("tree shadow opacity change");
                 selected_shadow->alpha = shadow_opacity;
             }
             
+            //Tree shadow sway value.
             point shadow_sway = selected_shadow->sway;
             if(ImGui::DragFloat2("Sway", (float*) &shadow_sway, 0.1)) {
                 register_change("tree shadow sway change");
@@ -499,12 +523,15 @@ void area_editor::process_gui_panel_details() {
 void area_editor::process_gui_panel_info() {
     ImGui::BeginChild("info");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //General node.
     if(ImGui::TreeNode("General")) {
     
+        //Area name input.
         string name = game.cur_area_data.name;
         if(ImGui::InputText("Name", &name)) {
             register_change("area name change");
@@ -514,6 +541,7 @@ void area_editor::process_gui_panel_info() {
             "Name of the area."
         );
         
+        //Area subtitle input.
         string subtitle = game.cur_area_data.subtitle;
         if(ImGui::InputText("Subtitle", &subtitle)) {
             register_change("area subtitle change");
@@ -523,6 +551,7 @@ void area_editor::process_gui_panel_info() {
             "Subtitle, if any. Appears on the loading screen."
         );
         
+        //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back("(None)");
         for(auto w : game.weather_conditions) {
@@ -548,10 +577,12 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
+    //Background node.
     if(ImGui::TreeNode("Background")) {
     
         string bg_file_name = game.cur_area_data.bg_bmp_file_name;
         
+        //Browse for background image button.
         if(ImGui::Button("...")) {
             FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
             vector<string> f =
@@ -583,6 +614,7 @@ void area_editor::process_gui_panel_info() {
             "This repeating texture can be seen when looking at the void."
         );
         
+        //Background image file name input.
         ImGui::SameLine();
         ImGui::InputText("Bitmap", &bg_file_name);
         set_tooltip(
@@ -597,6 +629,7 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.bg_bmp_file_name = bg_file_name;
         }
         
+        //Background color value.
         ALLEGRO_COLOR bg_color = game.cur_area_data.bg_color;
         if(
             ImGui::ColorEdit4(
@@ -612,6 +645,7 @@ void area_editor::process_gui_panel_info() {
             "this will appear below it."
         );
         
+        //Background distance value.
         float bg_dist = game.cur_area_data.bg_dist;
         if(ImGui::DragFloat("Distance", &bg_dist)) {
             register_change("area background distance change");
@@ -622,6 +656,7 @@ void area_editor::process_gui_panel_info() {
             "2 is a good value."
         );
         
+        //Background zoom value.
         float bg_bmp_zoom = game.cur_area_data.bg_bmp_zoom;
         if(ImGui::DragFloat("Zoom", &bg_bmp_zoom)) {
             register_change("area background zoom change");
@@ -636,8 +671,10 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
+    //Metadata node.
     if(ImGui::TreeNode("Metadata")) {
     
+        //Creator input.
         string creator = game.cur_area_data.creator;
         if(ImGui::InputText("Creator", &creator)) {
             register_change("area creator change");
@@ -645,6 +682,7 @@ void area_editor::process_gui_panel_info() {
         }
         set_tooltip("Name (or nickname) of who created this area. Optional.");
         
+        //Version input.
         string version = game.cur_area_data.version;
         if(ImGui::InputText("Version", &version)) {
             register_change("area version change");
@@ -655,6 +693,7 @@ void area_editor::process_gui_panel_info() {
             "Optional."
         );
         
+        //Notes input.
         string notes = game.cur_area_data.notes;
         if(ImGui::InputText("Notes", &notes)) {
             register_change("area notes change");
@@ -667,6 +706,7 @@ void area_editor::process_gui_panel_info() {
         ImGui::TreePop();
     }
     
+    //Gameplay node.
     if(ImGui::TreeNode("Gameplay")) {
     
         string spray_amounts = game.cur_area_data.spray_amounts;
@@ -694,10 +734,12 @@ void area_editor::process_gui_panel_info() {
 void area_editor::process_gui_panel_layout() {
     ImGui::BeginChild("main");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //New sector button.
     if(
         ImGui::ImageButton(
             editor_icons[ICON_ADD],
@@ -718,6 +760,7 @@ void area_editor::process_gui_panel_layout() {
         "N"
     );
     
+    //New circle sector button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -740,6 +783,7 @@ void area_editor::process_gui_panel_layout() {
         "C"
     );
     
+    //Remove isolated sector button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -766,6 +810,7 @@ void area_editor::process_gui_panel_layout() {
         "Delete"
     );
     
+    //Selection filter button.
     ALLEGRO_BITMAP* sel_filter_bmp = NULL;
     string sel_filter_description;
     switch(selection_filter) {
@@ -803,6 +848,7 @@ void area_editor::process_gui_panel_layout() {
         "F"
     );
     
+    //Clear selection button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -823,8 +869,10 @@ void area_editor::process_gui_panel_layout() {
     if(selected_sectors.size() == 1 || selection_homogenized) {
         s_ptr = *selected_sectors.begin();
         
-        if(ImGui::TreeNode("Sector behavior")) {
+        //Sector behavior node.
+        if(ImGui::TreeNode("Behavior")) {
         
+            //Sector height value.
             float sector_z = s_ptr->z;
             if(ImGui::DragFloat("Height", &sector_z)) {
                 register_change("sector height change");
@@ -836,6 +884,7 @@ void area_editor::process_gui_panel_layout() {
             
             ImGui::Dummy(ImVec2(0, 16));
             
+            //Sector hazards node.
             if(ImGui::TreeNode("Hazards")) {
             
                 vector<string> all_hazards_list;
@@ -846,12 +895,20 @@ void area_editor::process_gui_panel_layout() {
                 static string new_hazard_selected_name;
                 static int selected_hazard_nr = 0;
                 
+                //Sector hazard selection combobox.
+                ImGui::SetNextItemWidth(160.0f);
                 ImGui::Combo(
                     "##hazards", &new_hazard_selected_name, all_hazards_list
                 );
                 
+                //Sector hazard addition button.
                 ImGui::SameLine();
-                if(ImGui::Button("+")) {
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_ADD],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
                     sector* s_ptr = *selected_sectors.begin();
                     vector<string> list =
                         semicolon_list_to_vector(s_ptr->hazards_str);
@@ -875,8 +932,14 @@ void area_editor::process_gui_panel_layout() {
                     "sector has."
                 );
                 
+                //Sector hzard removal button.
                 ImGui::SameLine();
-                if(ImGui::Button("-")) {
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_REMOVE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
                     sector* s_ptr = *selected_sectors.begin();
                     vector<string> list =
                         semicolon_list_to_vector(s_ptr->hazards_str);
@@ -904,6 +967,7 @@ void area_editor::process_gui_panel_layout() {
                     "sector has."
                 );
                 
+                //Sector hazard list.
                 ImGui::ListBox(
                     "Hazards", &selected_hazard_nr,
                     semicolon_list_to_vector(s_ptr->hazards_str),
@@ -928,8 +992,10 @@ void area_editor::process_gui_panel_layout() {
                 ImGui::TreePop();
             }
             
+            //Sector advanced behavior node.
             if(ImGui::TreeNode("Advanced")) {
             
+                //Sector type combobox.
                 vector<string> types_list;
                 for(
                     size_t t = 0; t < game.sector_types.get_nr_of_types(); ++t
@@ -945,6 +1011,7 @@ void area_editor::process_gui_panel_layout() {
                     "What type of sector this is."
                 );
                 
+                //Sector bridge height value.
                 if(
                     s_ptr->type == SECTOR_TYPE_BRIDGE ||
                     s_ptr->type == SECTOR_TYPE_BRIDGE_RAIL
@@ -963,6 +1030,7 @@ void area_editor::process_gui_panel_layout() {
                     
                 }
                 
+                //Sector bottomless pit checkbox.
                 bool sector_bottomless_pit = s_ptr->is_bottomless_pit;
                 if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
                     register_change("sector bottomless pit change");
@@ -983,15 +1051,18 @@ void area_editor::process_gui_panel_layout() {
             ImGui::TreePop();
         }
         
-        if(ImGui::TreeNode("Sector appearance")) {
+        //Sector appearance node.
+        if(ImGui::TreeNode("Appearance")) {
         
             int texture_type = !s_ptr->fade;
             
+            //Sector texture fader radio button.
             ImGui::RadioButton("Texture fader", &texture_type, 0);
             set_tooltip(
                 "Makes the surrounding textures fade into each other."
             );
             
+            //Sector regular texture radio button.
             ImGui::RadioButton("Regular texture", &texture_type, 1);
             set_tooltip(
                 "Makes the sector use a regular texture."
@@ -1006,6 +1077,7 @@ void area_editor::process_gui_panel_layout() {
             
                 ImGui::Indent();
                 
+                //Sector texture button.
                 if(ImGui::Button("Change")) {
                     vector<picker_item> suggestions;
                     
@@ -1032,6 +1104,7 @@ void area_editor::process_gui_panel_layout() {
                     "Pick a texture to use."
                 );
                 
+                //Sector texture name text.
                 ImGui::SameLine();
                 ImGui::Text("%s", s_ptr->texture_info.file_name.c_str());
                 
@@ -1041,8 +1114,10 @@ void area_editor::process_gui_panel_layout() {
             
             ImGui::Dummy(ImVec2(0, 16));
             
+            //Sector texture effects node.
             if(ImGui::TreeNode("Texture effects")) {
             
+                //Sector texture offset value.
                 point texture_translation = s_ptr->texture_info.translation;
                 if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
                     register_change("sector texture offset change");
@@ -1053,6 +1128,7 @@ void area_editor::process_gui_panel_layout() {
                     "by this much."
                 );
                 
+                //Sector texture scale value.
                 point texture_scale = s_ptr->texture_info.scale;
                 if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
                     register_change("sector texture scale change");
@@ -1065,6 +1141,7 @@ void area_editor::process_gui_panel_layout() {
                     "of the area, at coordinates 0,0."
                 );
                 
+                //Sector texture rotation value.
                 float texture_rotation = s_ptr->texture_info.rot;
                 if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
                     register_change("sector texture angle change");
@@ -1076,6 +1153,7 @@ void area_editor::process_gui_panel_layout() {
                     "of the area, at coordinates 0,0."
                 );
                 
+                //Sector texture tint value.
                 ALLEGRO_COLOR texture_tint = s_ptr->texture_info.tint;
                 if(
                     ImGui::ColorEdit4(
@@ -1090,6 +1168,7 @@ void area_editor::process_gui_panel_layout() {
                     "Tint the texture with this color. White means no tint."
                 );
                 
+                //On-canvas texture effect editing checkbox.
                 bool octee_on =
                     sub_state == EDITOR_SUB_STATE_OCTEE;
                 if(ImGui::Checkbox("On-canvas editing", &octee_on)) {
@@ -1111,16 +1190,19 @@ void area_editor::process_gui_panel_layout() {
                     
                     int octee_mode_int = (int) octee_mode;
                     
+                    //On-canvas texture effect editing offset radio button.
                     ImGui::RadioButton(
                         "Change offset", &octee_mode_int,
                         (int) OCTEE_MODE_OFFSET
                     );
                     
+                    //On-canvas texture effect editing scale radio button.
                     ImGui::RadioButton(
                         "Change scale", &octee_mode_int,
                         (int) OCTEE_MODE_SCALE
                     );
                     
+                    //On-canvas texture effect editing angle radio button.
                     ImGui::RadioButton(
                         "Change angle", &octee_mode_int,
                         (int) OCTEE_MODE_ANGLE
@@ -1137,8 +1219,10 @@ void area_editor::process_gui_panel_layout() {
                 ImGui::TreePop();
             }
             
+            //Sector mood node.
             if(ImGui::TreeNode("Sector mood")) {
             
+                //Sector brightness value.
                 int sector_brightness = s_ptr->brightness;
                 ImGui::SetNextItemWidth(180);
                 if(ImGui::SliderInt("Brightness", &sector_brightness, 0, 255)) {
@@ -1151,6 +1235,7 @@ void area_editor::process_gui_panel_layout() {
                     "0 is fully dark, 255 is fully lit."
                 );
                 
+                //Sector always casts shadow checkbox.
                 bool sector_cast_shadow = s_ptr->always_cast_shadow;
                 if(ImGui::Checkbox("Always cast shadow", &sector_cast_shadow)) {
                     register_change("sector cast shadow option change");
@@ -1175,15 +1260,18 @@ void area_editor::process_gui_panel_layout() {
         
     } else if(selected_sectors.empty()) {
     
+        //"No sector selected" text.
         ImGui::Text("No sector selected.");
         
     } else {
     
+        //Non-homogenized sectors warning.
         ImGui::TextWrapped(
             "Multiple different sectors selected. To make all their properties "
             "the same and edit them all together, click here:"
         );
         
+        //Homogenize sectors button.
         if(ImGui::Button("Edit all together")) {
             register_change("sector combining");
             selection_homogenized = true;
@@ -1202,10 +1290,12 @@ void area_editor::process_gui_panel_layout() {
 void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
+    //Area name text.
     ImGui::Text("Area: %s", cur_area_name.c_str());
     
     ImGui::Dummy(ImVec2(0, 16));
     
+    //Area info button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_INFO],
@@ -1220,6 +1310,7 @@ void area_editor::process_gui_panel_main() {
         "Set the area's name, weather, and other basic information here."
     );
     
+    //Layout button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_SECTORS],
@@ -1234,12 +1325,13 @@ void area_editor::process_gui_panel_main() {
         "Draw sectors (polygons) to create the area's layout."
     );
     
+    //Objects button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_MOBS],
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
             16.0f,
-            "Mobs"
+            "Objects"
         )
     ) {
         change_state(EDITOR_STATE_MOBS);
@@ -1248,6 +1340,7 @@ void area_editor::process_gui_panel_main() {
         "Change object settings and placements."
     );
     
+    //Paths button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_PATHS],
@@ -1262,6 +1355,7 @@ void area_editor::process_gui_panel_main() {
         "Draw movement paths, and their stops."
     );
     
+    //Details button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_DETAILS],
@@ -1276,6 +1370,7 @@ void area_editor::process_gui_panel_main() {
         "Edit misc. details, like tree shadows."
     );
     
+    //Review button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_REVIEW],
@@ -1291,6 +1386,7 @@ void area_editor::process_gui_panel_main() {
         "Use this to make sure everything is okay with the area."
     );
     
+    //Tools button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_TOOLS],
@@ -1306,6 +1402,7 @@ void area_editor::process_gui_panel_main() {
         "Special tools to help you develop the area."
     );
     
+    //Options button.
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_OPTIONS],
@@ -1322,19 +1419,25 @@ void area_editor::process_gui_panel_main() {
     
     ImGui::Dummy(ImVec2(0, 16));
     
+    //Stats node.
     if(ImGui::TreeNode("Stats")) {
+    
+        //Sector amount text.
         ImGui::Text(
             "Sectors: %i", (int) game.cur_area_data.sectors.size()
         );
         
+        //Vertex amount text.
         ImGui::Text(
             "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
         );
         
+        //Object amount text.
         ImGui::Text(
             "Objects: %i", (int) game.cur_area_data.mob_generators.size()
         );
         
+        //Path stop amount text.
         ImGui::Text(
             "Path stops: %i", (int) game.cur_area_data.path_stops.size()
         );
@@ -1352,10 +1455,12 @@ void area_editor::process_gui_panel_main() {
 void area_editor::process_gui_panel_mobs() {
     ImGui::BeginChild("mobs");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //New object button.
     if(
         ImGui::ImageButton(
             editor_icons[ICON_ADD],
@@ -1376,6 +1481,7 @@ void area_editor::process_gui_panel_mobs() {
         "N"
     );
     
+    //Delete object button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -1390,6 +1496,7 @@ void area_editor::process_gui_panel_mobs() {
         "Delete"
     );
     
+    //Duplicate object button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -1418,6 +1525,7 @@ void area_editor::process_gui_panel_mobs() {
     if(selected_mobs.size() == 1 || selection_homogenized) {
         m_ptr = *selected_mobs.begin();
         
+        //Object category combobox.
         if(!m_ptr->category) {
             m_ptr->category = game.mob_categories.get(MOB_CATEGORY_NONE);
         }
@@ -1449,6 +1557,7 @@ void area_editor::process_gui_panel_mobs() {
         
         if(m_ptr->category->id != MOB_CATEGORY_NONE) {
         
+            //Object type combobox.
             vector<string> types;
             m_ptr->category->get_type_names(types);
             for(size_t t = 0; t < types.size(); ) {
@@ -1475,6 +1584,7 @@ void area_editor::process_gui_panel_mobs() {
             );
         }
         
+        //Object angle value.
         float mob_angle = m_ptr->angle;
         if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
             register_change("object angle change");
@@ -1486,8 +1596,10 @@ void area_editor::process_gui_panel_mobs() {
             "make it face the cursor."
         );
         
+        //Object advanced node.
         if(ImGui::TreeNode("Advanced")) {
         
+            //Object script vars input.
             string mob_vars = m_ptr->vars;
             if(ImGui::InputText("Script vars", &mob_vars)) {
                 register_change("object script vars change");
@@ -1498,11 +1610,13 @@ void area_editor::process_gui_panel_mobs() {
                 "e.g.: \"sleep=y;jumping=n\"."
             );
             
+            //Object link amount text.
             ImGui::Text(
                 "%i link%s", (int) m_ptr->links.size(),
                 m_ptr->links.size() == 1 ? "" : "s"
             );
             
+            //Object new link button.
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -1522,6 +1636,7 @@ void area_editor::process_gui_panel_mobs() {
                 "Click this button again to cancel."
             );
             
+            //Object remove link button.
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -1552,15 +1667,18 @@ void area_editor::process_gui_panel_mobs() {
         
     } else if(selected_mobs.empty()) {
     
+        //"No object selected" text.
         ImGui::Text("No object selected.");
         
     } else {
     
+        //Non-homogenized objects warning.
         ImGui::TextWrapped(
             "Multiple different objects selected. To make all their properties "
             "the same and edit them all together, click here:"
         );
         
+        //Homogenize objects button.
         if(ImGui::Button("Edit all together")) {
             register_change("object combining");
             selection_homogenized = true;
@@ -1579,13 +1697,16 @@ void area_editor::process_gui_panel_mobs() {
 void area_editor::process_gui_panel_options() {
     ImGui::BeginChild("options");
     
+    //Back button.
     if(ImGui::Button("Save and go back")) {
         save_options();
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Controls node.
     if(ImGui::TreeNode("Controls")) {
     
+        //Snap threshold value.
         int snap_threshold = (int) game.options.area_editor_snap_threshold;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
@@ -1598,12 +1719,14 @@ void area_editor::process_gui_panel_options() {
         );
         game.options.area_editor_snap_threshold = snap_threshold;
         
+        //Middle mouse button pans checkbox.
         ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
         set_tooltip(
             "Use the middle mouse button to pan the camera "
             "(and RMB to reset camera/zoom)."
         );
         
+        //Drag threshold value.
         int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
@@ -1621,8 +1744,10 @@ void area_editor::process_gui_panel_options() {
         
     }
     
+    //View node.
     if(ImGui::TreeNode("View")) {
     
+        //Show edge length checkbox.
         ImGui::Checkbox(
             "Show edge length", &game.options.area_editor_show_edge_length
         );
@@ -1630,6 +1755,7 @@ void area_editor::process_gui_panel_options() {
             "Show the length of nearby edges when drawing or moving vertexes."
         );
         
+        //Show territory checkbox.
         ImGui::Checkbox(
             "Show territory", &game.options.area_editor_show_territory
         );
@@ -1637,25 +1763,30 @@ void area_editor::process_gui_panel_options() {
             "Show the territory of selected objects, when applicable."
         );
         
+        //View mode text.
         int view_mode = game.options.area_editor_view_mode;
         ImGui::Text("View mode:");
         
+        //Textures view mode radio button.
         ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
         set_tooltip(
             "Draw textures on the sectors."
         );
         
+        //Wireframe view mode radio button.
         ImGui::RadioButton("Wireframe", &view_mode, VIEW_MODE_WIREFRAME);
         set_tooltip(
             "Do not draw sectors, only edges and vertexes. "
             "Best for performance."
         );
         
+        //Heightmap view mode radio button.
         ImGui::RadioButton("Heightmap", &view_mode, VIEW_MODE_HEIGHTMAP);
         set_tooltip(
             "Draw sectors as heightmaps. Lighter means taller."
         );
         
+        //Brightness view mode radio button.
         ImGui::RadioButton("Brightness", &view_mode, VIEW_MODE_BRIGHTNESS);
         set_tooltip(
             "Draw sectors as solid grays based on their brightness."
@@ -1668,12 +1799,15 @@ void area_editor::process_gui_panel_options() {
         
     }
     
+    //Misc. node.
     if(ImGui::TreeNode("Misc.")) {
     
+        //Grid interval text.
         ImGui::Text(
             "Grid interval: %i", (int) game.options.area_editor_grid_interval
         );
         
+        //Increase grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("+")) {
             game.options.area_editor_grid_interval =
@@ -1686,6 +1820,7 @@ void area_editor::process_gui_panel_options() {
             "Increase the spacing on the grid."
         );
         
+        //Decrease grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("-")) {
             game.options.area_editor_grid_interval =
@@ -1698,6 +1833,7 @@ void area_editor::process_gui_panel_options() {
             "Decrease the spacing on the grid."
         );
         
+        //Auto-backup interval value.
         int backup_interval = game.options.area_editor_backup_interval;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
@@ -1708,6 +1844,7 @@ void area_editor::process_gui_panel_options() {
         );
         game.options.area_editor_backup_interval = backup_interval;
         
+        //Undo limit value.
         size_t old_undo_limit = game.options.area_editor_undo_limit;
         int undo_limit = game.options.area_editor_undo_limit;
         ImGui::SetNextItemWidth(64.0f);
@@ -1739,10 +1876,12 @@ void area_editor::process_gui_panel_options() {
 void area_editor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //New path button.
     if(
         ImGui::ImageButton(
             editor_icons[ICON_ADD],
@@ -1765,6 +1904,7 @@ void area_editor::process_gui_panel_paths() {
         "N"
     );
     
+    //Delete path button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -1781,16 +1921,19 @@ void area_editor::process_gui_panel_paths() {
     
     ImGui::Dummy(ImVec2(0, 16));
     
+    //Drawing mode text.
     ImGui::Text("Drawing mode:");
     
     int one_way_mode = path_drawing_normals;
     
+    //One-way links radio button.
     ImGui::RadioButton("One-way links", &one_way_mode, 0);
     set_tooltip(
         "When drawing, new links drawn will be one-way links.",
         "1"
     );
     
+    //Normal links radio button.
     ImGui::RadioButton("Normal links", &one_way_mode, 1);
     set_tooltip(
         "When drawing, new links drawn will be normal (two-way) links.",
@@ -1799,8 +1942,10 @@ void area_editor::process_gui_panel_paths() {
     
     path_drawing_normals = one_way_mode;
     
+    //Path tools node.
     if(ImGui::TreeNode("Tools")) {
     
+        //Show closest stop checkbox.
         ImGui::Checkbox("Show closest stop", &show_closest_stop);
         set_tooltip(
             "Show the closest stop to the cursor.\n"
@@ -1808,6 +1953,7 @@ void area_editor::process_gui_panel_paths() {
             "Pikmin will go to when starting to carry."
         );
         
+        //Show calculated path checkbox.
         if(ImGui::Checkbox("Show calculated path", &show_path_preview)) {
             if(
                 show_path_preview &&
@@ -1830,6 +1976,7 @@ void area_editor::process_gui_panel_paths() {
             "These points can be dragged in the canvas."
         );
         
+        //Total travel distance text.
         if(show_path_preview) {
             ImGui::Text("Total travel distance: %f", path_preview_dist);
         }
@@ -1850,15 +1997,18 @@ void area_editor::process_gui_panel_paths() {
 void area_editor::process_gui_panel_review() {
     ImGui::BeginChild("review");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         clear_problems();
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Problem search node.
     if(ImGui::TreeNode("Problem search")) {
     
         if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
         
+            //Problem search button.
             if(ImGui::Button("Search for problems")) {
                 find_problems();
             }
@@ -1866,6 +2016,7 @@ void area_editor::process_gui_panel_review() {
                 "Search for problems with the area."
             );
             
+            //Problem texts.
             ImGui::Text("Problem found:");
             
             ImGui::TextWrapped("%s", problem_title.c_str());
@@ -1874,6 +2025,7 @@ void area_editor::process_gui_panel_review() {
             
                 ImGui::TextWrapped("%s", problem_description.c_str());
                 
+                //Go to problem button.
                 if(ImGui::Button("Go to problem")) {
                     goto_problem();
                 }
@@ -1885,6 +2037,7 @@ void area_editor::process_gui_panel_review() {
             
         } else {
         
+            //Area preview mode unavailability warning.
             ImGui::TextWrapped("Not available during area preview mode.");
             
         }
@@ -1895,8 +2048,10 @@ void area_editor::process_gui_panel_review() {
         
     }
     
+    //Preview node.
     if(ImGui::TreeNode("Preview")) {
     
+        //Area preview checkbox.
         static bool see_textures;
         if(ImGui::Checkbox("Preview area", &see_textures)) {
             clear_problems();
@@ -1911,6 +2066,7 @@ void area_editor::process_gui_panel_review() {
             "area editor's components in the way."
         );
         
+        //Tree shadows checkbox.
         ImGui::Checkbox("Show tree shadows", &show_shadows);
         
         ImGui::Dummy(ImVec2(0, 16));
@@ -1919,8 +2075,10 @@ void area_editor::process_gui_panel_review() {
         
     }
     
+    //Cross-section node.
     if(ImGui::TreeNode("Cross-section")) {
     
+        //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &show_cross_section)) {
             if(show_cross_section) {
                 cross_section_window_start =
@@ -1958,6 +2116,7 @@ void area_editor::process_gui_panel_review() {
             "Show a 2D cross-section between points A and B."
         );
         
+        //Show height grid checkbox.
         ImGui::Checkbox("Show height grid", &show_cross_section_grid);
         set_tooltip(
             "Show a height grid in the cross-section window."
@@ -1979,15 +2138,18 @@ void area_editor::process_gui_panel_review() {
 void area_editor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
     
+    //Back button.
     if(ImGui::Button("Back")) {
         save_reference();
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Reference image node.
     if(ImGui::TreeNode("Reference image")) {
     
         string old_ref_file_name = reference_file_name;
         
+        //Browse for a reference image button.
         if(ImGui::Button("...")) {
             vector<string> f =
                 prompt_file_dialog(
@@ -2006,6 +2168,7 @@ void area_editor::process_gui_panel_tools() {
             "Browse for a file to use."
         );
         
+        //Reference image file name input.
         ImGui::SameLine();
         ImGui::InputText("Bitmap", &reference_file_name);
         set_tooltip(
@@ -2017,6 +2180,7 @@ void area_editor::process_gui_panel_tools() {
             update_reference();
         }
         
+        //Reference center value.
         point reference_center = reference_transformation.get_center();
         if(
             ImGui::DragFloat2("Center", (float*) &reference_center)
@@ -2026,6 +2190,7 @@ void area_editor::process_gui_panel_tools() {
             );
         }
         
+        //Reference size value.
         point old_size = reference_transformation.get_size();
         point reference_size = old_size;
         if(
@@ -2044,12 +2209,14 @@ void area_editor::process_gui_panel_tools() {
             reference_transformation.set_size(reference_size);
         }
         
+        //Reference keep aspect ratio checkbox.
         ImGui::Checkbox(
             "Keep aspect ratio",
             &reference_transformation.keep_aspect_ratio
         );
         set_tooltip("Keep the aspect ratio when resizing the image.");
         
+        //Reference opacity value.
         int opacity = reference_alpha;
         ImGui::SliderInt("Opacity", &opacity, 0, 255);
         reference_alpha = opacity;
@@ -2060,8 +2227,10 @@ void area_editor::process_gui_panel_tools() {
         
     }
     
+    //Misc. node.
     if(ImGui::TreeNode("Misc.")) {
     
+        //Load auto-backup button.
         if(ImGui::Button("Load auto-backup")) {
             if(can_load_backup) {
                 if(!check_new_unsaved_changes()) {
@@ -2073,10 +2242,12 @@ void area_editor::process_gui_panel_tools() {
             "Discard all changes made and load the auto-backup, if any exists."
         );
         
+        //Resize everything multiplier value.
         static float resize_mult = 1.0f;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragFloat("##resizeMult", &resize_mult, 0.01);
         
+        //Resize everything button.
         ImGui::SameLine();
         if(ImGui::Button("Resize everything")) {
             if(resize_mult != 0.0f) {
@@ -2107,12 +2278,19 @@ void area_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
+    const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+    
+    //Status bar text.
     ImGui::Text("%s", status_text.c_str());
     
+    //Spacer dummy widget.
     ImGui::SameLine();
-    float size = canvas_separator_x - ImGui::GetItemRectSize().x - 150.0f;
+    float size =
+        canvas_separator_x - ImGui::GetItemRectSize().x -
+        MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
+    //Mouse coordinates text.
     ImGui::SameLine();
     ImGui::Text(
         "%s, %s",
@@ -2126,6 +2304,7 @@ void area_editor::process_gui_status_bar() {
  * Processes the ImGui toolbar for this frame.
  */
 void area_editor::process_gui_toolbar() {
+    //Quit button.
     if(
         ImGui::ImageButton(
             editor_icons[ICON_QUIT],
@@ -2141,6 +2320,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + Q"
     );
     
+    //Reload button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -2159,6 +2339,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + L"
     );
     
+    //Save button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -2175,6 +2356,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + S"
     );
     
+    //Play button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -2194,6 +2376,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + P"
     );
     
+    //Undo button.
     float undo_opacity = undo_history.empty() ? 0.2f : 1.0f;
     ImGui::SameLine(0, 16);
     if(
@@ -2222,6 +2405,7 @@ void area_editor::process_gui_toolbar() {
     
     if(!reference_file_name.empty()) {
     
+        //Reference image toggle button.
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
@@ -2236,6 +2420,7 @@ void area_editor::process_gui_toolbar() {
             "Ctrl + R"
         );
         
+        //Reference image opacity value.
         int reference_alpha_int = reference_alpha;
         ImGui::SameLine();
         ImGui::BeginGroup();
@@ -2250,6 +2435,7 @@ void area_editor::process_gui_toolbar() {
         
     }
     
+    //Snap mode button.
     ALLEGRO_BITMAP* snap_mode_bmp = NULL;
     string snap_mode_description;
     switch(snap_mode) {
