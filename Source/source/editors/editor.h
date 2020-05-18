@@ -185,6 +185,8 @@ protected:
     bool is_ctrl_pressed;
     //Is the GUI currently in focus? False if it's the canvas.
     bool is_gui_focused;
+    //Is the mouse currently hovering the gui? False if it's the canvas.
+    bool is_mouse_in_gui;
     //Is the left mouse button currently pressed down?
     bool is_m1_pressed;
     //Is the right mouse button currently pressed down?
@@ -229,7 +231,6 @@ protected:
     void do_logic_post();
     void do_logic_pre();
     void draw_unsaved_changes_warning();
-    bool is_mouse_in_gui(const point &mouse_coords) const;
     void leave();
     void set_tooltip(const string &explanation, const string &shortcut = "");
     void update_canvas_coordinates();

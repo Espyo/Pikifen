@@ -22,10 +22,7 @@ using std::set;
  * Handles a key being "char"-typed anywhere.
  */
 void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_F1: {
@@ -82,6 +79,15 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
                 "Disabled debug path number display.";
         }
         break;
+        
+    } case ALLEGRO_KEY_Z: {
+        if(is_ctrl_pressed) {
+            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+                //TODO frm_toolbar->widgets["but_undo"]->simulate_click();
+            }
+        }
+        break;
+        
     }
     }
 }
@@ -91,10 +97,7 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being "char"-typed on the canvas exclusively.
  */
 void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open || is_gui_focused) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_LEFT: {
@@ -151,10 +154,7 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down anywhere.
  */
 void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_L: {
@@ -187,11 +187,54 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             break;
         }
         
-    } case ALLEGRO_KEY_Z: {
-        if(is_ctrl_pressed) {
-            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-                //TODO frm_toolbar->widgets["but_undo"]->simulate_click();
+    } case ALLEGRO_KEY_ESCAPE: {
+        if(
+            state == EDITOR_STATE_LAYOUT
+        ) {
+            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+                cancel_circle_sector();
+            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+                cancel_layout_drawing();
             }
+            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
+                cancel_layout_moving();
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+            if(
+                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+                sub_state == EDITOR_SUB_STATE_NEW_MOB ||
+                sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+                sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
+            ) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+            
+        } else if(state == EDITOR_STATE_PATHS) {
+            if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+        } else if(state == EDITOR_STATE_DETAILS) {
+            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                selected_shadow = NULL;
+            }
+        } else if(state == EDITOR_STATE_MAIN) {
+            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
         }
         break;
         
@@ -204,10 +247,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down on the canvas exclusively.
  */
 void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open || is_gui_focused) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_1: {
@@ -352,57 +392,6 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
         break;
         
-    } case ALLEGRO_KEY_ESCAPE: {
-        if(
-            state == EDITOR_STATE_LAYOUT
-        ) {
-            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-                cancel_circle_sector();
-            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
-                cancel_layout_drawing();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
-                cancel_layout_moving();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-            
-        } else if(state == EDITOR_STATE_MOBS) {
-            if(
-                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-                sub_state == EDITOR_SUB_STATE_NEW_MOB ||
-                sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
-                sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
-            ) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-            
-        } else if(state == EDITOR_STATE_PATHS) {
-            if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                clear_selection();
-                selecting = false;
-            }
-        } else if(state == EDITOR_STATE_DETAILS) {
-            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
-                selected_shadow = NULL;
-            }
-        } else if(state == EDITOR_STATE_MAIN) {
-            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
-        }
-        break;
-        
     }
     }
 }
@@ -412,10 +401,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open || is_mouse_in_gui) return;
     
     if(sub_state == EDITOR_SUB_STATE_NONE && state == EDITOR_STATE_LAYOUT) {
         vertex* clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
@@ -466,10 +452,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open || is_mouse_in_gui) return;
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
@@ -1064,10 +1047,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open) return;
     
     if(selecting) {
     
@@ -1411,10 +1391,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    //TODO
-    /*if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
-        return;
-    }*/
+    if(picker.is_open) return;
     
     selecting = false;
     
@@ -1449,6 +1426,8 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being double-clicked.
  */
 void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(picker.is_open || is_mouse_in_gui) return;
+    
     if(!game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
     }
@@ -1459,6 +1438,8 @@ void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being pressed down.
  */
 void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
+    if(picker.is_open || is_mouse_in_gui) return;
+    
     if(!game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);
     }
@@ -1502,6 +1483,8 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  * Handles the mouse wheel being moved.
  */
 void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
+    if(picker.is_open || is_mouse_in_gui) return;
+    
     zoom(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
@@ -1510,6 +1493,8 @@ void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being double-clicked.
  */
 void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(picker.is_open || is_mouse_in_gui) return;
+    
     if(game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
     }
@@ -1520,6 +1505,8 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being dragged.
  */
 void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
+    if(picker.is_open || is_mouse_in_gui) return;
+    
     if(game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);
     }

@@ -248,7 +248,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui(game.mouse_cursor_s)
+        !is_mouse_in_gui
     ) {
     
         switch (ev.mouse.button) {
@@ -267,7 +267,9 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
         mouse_drag_confirmed = false;
         
-        is_gui_focused = false;
+        if(ev.mouse.button == 1) {
+            is_gui_focused = false;
+        }
         
         if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
             switch(ev.mouse.button) {
@@ -307,7 +309,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        is_mouse_in_gui(game.mouse_cursor_s)
+        is_mouse_in_gui
     ) {
         is_gui_focused = true;
         
@@ -356,7 +358,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
-            !is_mouse_in_gui(game.mouse_cursor_s)
+            !is_mouse_in_gui
         ) {
             handle_mouse_wheel(ev);
         }
@@ -436,17 +438,6 @@ void editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the mouse cursor is inside the gui or not.
- * The status bar counts as the gui.
- */
-bool editor::is_mouse_in_gui(const point &mouse_coords) const {
-    return
-        mouse_coords.x >= canvas_br.x || mouse_coords.y >= canvas_br.y ||
-        mouse_coords.x <= canvas_tl.x || mouse_coords.y <= canvas_tl.y;
-}
 
 
 /* ----------------------------------------------------------------------------
