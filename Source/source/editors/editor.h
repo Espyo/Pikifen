@@ -149,6 +149,7 @@ protected:
     struct picker_info {
     public:
         bool is_open;
+        std::function<void()> close_callback;
         void process();
         void set(
             const vector<picker_item> &items,
@@ -227,13 +228,13 @@ protected:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
-    bool check_new_unsaved_changes();
+    bool check_new_unsaved_changes(const point &pos = point());
     void do_logic_post();
     void do_logic_pre();
     void draw_unsaved_changes_warning();
+    point get_last_widget_pos();
     void leave();
     void set_tooltip(const string &explanation, const string &shortcut = "");
-    void update_canvas_coordinates();
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     

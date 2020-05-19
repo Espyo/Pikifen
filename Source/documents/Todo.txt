@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Quite a few keyboard handler cases are just TODO
         Text inputs are throwing question marks if you don't hit a letter key
         Make use of imgui.ini?
         Set the ImGui color scheme
@@ -16,6 +15,7 @@ Current tasks (tasks being worked on, but not yet committed)
                 "Keep aspect ratio" boxes
                 More...
             Standardize the visibility of delete buttons, the "No sector selected" messages, etc. between panels
+        Remove the ImGui demo button
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

@@ -108,8 +108,7 @@ area_editor::area_editor() :
     show_imgui_demo(false),
     show_path_preview(false),
     show_reference(true),
-    quick_play_cam_z(1.0f),
-    user_closed_picker(false) {
+    quick_play_cam_z(1.0f) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {
@@ -308,6 +307,18 @@ void area_editor::clear_undo_history() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the area picker is closed.
+ */
+void area_editor::close_area_picker() {
+    if(!loaded_content_yet && cur_area_name.empty()) {
+        //The user cancelled the area selection picker
+        //presented when you enter the area editor. Quit out.
+        leave();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new area to work on.
  */
 void area_editor::create_area() {
@@ -431,15 +442,7 @@ void area_editor::delete_selected_path_elements() {
 void area_editor::do_logic() {
     editor::do_logic_pre();
     
-    user_closed_picker = false;
-    
     process_gui();
-    
-    if(user_closed_picker && !loaded_content_yet && cur_area_name.empty()) {
-        //The user cancelled the area selection picker
-        //presented when you enter the area editor. Quit out.
-        leave();
-    }
     
     cursor_snap_timer.tick(game.delta_t);
     path_preview_timer.tick(game.delta_t);
@@ -1564,6 +1567,279 @@ area_data* area_editor::prepare_state() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the circle sector button widget is pressed.
+ */
+void area_editor::press_circle_sector_button() {
+    clear_circle_sector();
+    if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+        cancel_circle_sector();
+    } else {
+        sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the duplicate mobs button widget is pressed.
+ */
+void area_editor::press_duplicate_mobs_button() {
+    if(selected_mobs.empty()) {
+        status_text = "You have to select mobs to duplicate!";
+    } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    } else {
+        sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the new mob button widget is pressed.
+ */
+void area_editor::press_new_mob_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    } else {
+        clear_selection();
+        sub_state = EDITOR_SUB_STATE_NEW_MOB;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the new path button widget is pressed.
+ */
+void area_editor::press_new_path_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    } else {
+        path_drawing_stop_1 = NULL;
+        sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the new sector button widget is pressed.
+ */
+void area_editor::press_new_sector_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    clear_layout_drawing();
+    if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+        cancel_layout_drawing();
+    } else {
+        sub_state = EDITOR_SUB_STATE_DRAWING;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the new tree shadow button widget is pressed.
+ */
+void area_editor::press_new_tree_shadow_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    } else {
+        sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the quick play button widget is pressed.
+ */
+void area_editor::press_quick_play_button() {
+    if(!save_area(false)) return;
+    quick_play_area = cur_area_name;
+    quick_play_cam_pos = game.cam.pos;
+    quick_play_cam_z = game.cam.zoom;
+    leave();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the quit button widget is pressed.
+ */
+void area_editor::press_quit_button() {
+    if(!check_new_unsaved_changes(quit_widget_pos)) {
+        leave();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the toggle reference button widget is pressed.
+ */
+void area_editor::press_reference_button() {
+    show_reference = !show_reference;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the reload button widget is pressed.
+ */
+void area_editor::press_reload_button() {
+    if(!can_reload) {
+        return;
+    }
+    if(!check_new_unsaved_changes(reload_widget_pos)) {
+        load_area(false);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the remove mob button widget is pressed.
+ */
+void area_editor::press_remove_mob_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    delete_selected_mobs();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the remove path button widget is pressed.
+ */
+void area_editor::press_remove_path_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    delete_selected_path_elements();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the remove sector button widget is pressed.
+ */
+void area_editor::press_remove_sector_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(selected_sectors.empty()) {
+        status_text = "You have to select sectors to delete!";
+    } else {
+        area_data* prepared_state = prepare_state();
+        if(!remove_isolated_sectors()) {
+            status_text = "Some of the sectors are not isolated!";
+            forget_prepared_state(prepared_state);
+        } else {
+            status_text = "Deleted sectors.";
+            clear_selection();
+            register_change("sector removal", prepared_state);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the remove tree shadow button widget is pressed.
+ */
+void area_editor::press_remove_tree_shadow_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(!selected_shadow) {
+        status_text = "You have to select shadows to delete!";
+    } else {
+        register_change("tree shadow deletion");
+        for(
+            size_t s = 0;
+            s < game.cur_area_data.tree_shadows.size();
+            ++s
+        ) {
+            if(
+                game.cur_area_data.tree_shadows[s] ==
+                selected_shadow
+            ) {
+                game.cur_area_data.tree_shadows.erase(
+                    game.cur_area_data.tree_shadows.begin() + s
+                );
+                delete selected_shadow;
+                selected_shadow = NULL;
+                break;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the save button widget is pressed.
+ */
+void area_editor::press_save_button() {
+    if(!save_area(false)) {
+        return;
+    }
+    
+    change_state(EDITOR_STATE_MAIN);
+    made_new_changes = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the selection filter button widget is pressed.
+ */
+void area_editor::press_selection_filter_button() {
+    clear_selection();
+    if(!is_shift_pressed) {
+        selection_filter =
+            sum_and_wrap(selection_filter, 1, N_SELECTION_FILTERS);
+    } else {
+        selection_filter =
+            sum_and_wrap(selection_filter, -1, N_SELECTION_FILTERS);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the snap mode button widget is pressed.
+ */
+void area_editor::press_snap_mode_button() {
+    if(!is_shift_pressed) {
+        snap_mode = sum_and_wrap(snap_mode, 1, N_SNAP_MODES);
+    } else {
+        snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the undo button widget is pressed.
+ */
+void area_editor::press_undo_button() {
+    if(
+        sub_state != EDITOR_SUB_STATE_NONE || moving || selecting
+    ) {
+        status_text = "Can't undo in the middle of an operation.";
+        return;
+    }
+    
+    undo();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the state of the area in the undo history.
  * When this happens, a timer is set. During this timer, if the next change's
  * operation is the same as the previous one's, then it is ignored.
@@ -2244,12 +2520,6 @@ void area_editor::start_vertex_move() {
 void area_editor::undo() {
     if(undo_history.empty()) {
         status_text = "Nothing to undo.";
-        return;
-    }
-    if(
-        sub_state != EDITOR_SUB_STATE_NONE || moving || selecting
-    ) {
-        status_text = "Can't undo in the middle of an operation.";
         return;
     }
     

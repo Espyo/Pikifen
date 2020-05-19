@@ -385,8 +385,10 @@ private:
     string undo_save_lock_operation;
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
-    //Has the user closed the picker in this frame?
-    bool user_closed_picker;
+    
+    //Position of some important widgets.
+    point reload_widget_pos;
+    point quit_widget_pos;
     
     
     //General functions.
@@ -408,6 +410,7 @@ private:
     void clear_selection();
     void clear_texture_suggestions();
     void clear_undo_history();
+    void close_area_picker();
     void create_area();
     void create_new_from_picker(const size_t picker_id, const string &name);
     void delete_mobs(const set<mob_gen*> &which);
@@ -486,6 +489,24 @@ private:
     void pick_area(const string &name, const bool is_new);
     void pick_texture(const string &name, const bool is_new);
     area_data* prepare_state();
+    void press_circle_sector_button();
+    void press_duplicate_mobs_button();
+    void press_new_mob_button();
+    void press_new_path_button();
+    void press_new_sector_button();
+    void press_new_tree_shadow_button();
+    void press_reference_button();
+    void press_reload_button();
+    void press_remove_mob_button();
+    void press_remove_path_button();
+    void press_remove_sector_button();
+    void press_remove_tree_shadow_button();
+    void press_quick_play_button();
+    void press_quit_button();
+    void press_save_button();
+    void press_selection_filter_button();
+    void press_snap_mode_button();
+    void press_undo_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_menu_bar();

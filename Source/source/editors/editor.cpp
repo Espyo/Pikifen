@@ -100,17 +100,17 @@ void editor::center_camera(
  * Returns true if there are, and also sets up the unsaved changes warning.
  * Returns false if everything is okay to continue.
  */
-bool editor::check_new_unsaved_changes() {
+bool editor::check_new_unsaved_changes(const point &pos) {
     unsaved_changes_warning_timer.stop();
     
     if(!made_new_changes) return false;
     made_new_changes = false;
     
-    unsaved_changes_warning_pos =
-        point(
-            ImGui::GetItemRectMin().x + ImGui::GetItemRectSize().x / 2.0,
-            ImGui::GetItemRectMin().y + ImGui::GetItemRectSize().y / 2.0
-        );
+    if(pos.x == 0 && pos.y == 0) {
+        unsaved_changes_warning_pos = get_last_widget_pos();
+    } else {
+        unsaved_changes_warning_pos = pos;
+    }
     unsaved_changes_warning_timer.start();
     
     return true;
@@ -226,6 +226,18 @@ void editor::draw_unsaved_changes_warning() {
         box_center, ALLEGRO_ALIGN_CENTER, 1,
         "You have\nunsaved changes!"
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the position of the last widget, in screen coordinates.
+ */
+point editor::get_last_widget_pos() {
+    return
+        point(
+            ImGui::GetItemRectMin().x + ImGui::GetItemRectSize().x / 2.0,
+            ImGui::GetItemRectMin().y + ImGui::GetItemRectSize().y / 2.0
+        );
 }
 
 
@@ -384,7 +396,15 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             handle_key_down_canvas(ev);
         }
         
-        //TODO logic to go back when Escape is pressed.
+        if(
+            ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE &&
+            picker.is_open
+        ) {
+            picker.is_open = false;
+            if(picker.close_callback) {
+                picker.close_callback();
+            }
+        }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
         if(
@@ -475,7 +495,6 @@ void editor::load() {
         }
     }
     
-    update_canvas_coordinates();
     game.fade_mgr.start_fade(true, nullptr);
 }
 
@@ -510,7 +529,6 @@ void editor::set_tooltip(const string &explanation, const string &shortcut) {
  * Unloads loaded editor-related content.
  */
 void editor::unload() {
-    //TODO
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
             al_destroy_bitmap(editor_icons[i]);
@@ -519,30 +537,6 @@ void editor::unload() {
         al_destroy_bitmap(bmp_editor_icons);
         bmp_editor_icons = NULL;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the variables that hold the canvas's coordinates.
- */
-void editor::update_canvas_coordinates() {
-    //TODO is this still needed?
-    /*
-    if(
-        canvas_separator_x < 1.0f ||
-        canvas_separator_x > game.win_w - 1.0f
-    ) {
-        //Panic check: if the separator has crazy values, it's
-        //likely not set properly.
-        canvas_br.x = game.win_w * 0.675;
-    } else {
-        canvas_br.x = canvas_separator_x;
-    }
-    
-    canvas_tl.x = 0;
-    canvas_tl.y = 50;
-    canvas_br.y = game.win_h - 30;
-    */
 }
 
 
@@ -604,7 +598,8 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
 editor::picker_info::picker_info() :
     is_open(false),
     can_make_new(false),
-    pick_callback(nullptr) {
+    pick_callback(nullptr),
+    close_callback(nullptr) {
     
 }
 
@@ -738,6 +733,13 @@ void editor::picker_info::process() {
         
         ImGui::EndPopup();
     }
+    
+    if(!is_open) {
+        //The user closed it.
+        if(close_callback) {
+            close_callback();
+        }
+    }
 }
 
 
@@ -767,6 +769,7 @@ void editor::picker_info::set(
     const string &list_header, const bool can_make_new,
     const string &filter
 ) {
+    reset();
     this->items = items;
     this->title = title;
     this->list_header = list_header;
@@ -788,6 +791,7 @@ void editor::picker_info::reset() {
     list_header.clear();
     can_make_new = false;
     filter.clear();
+    close_callback = nullptr;
     
     is_open = false;
 }

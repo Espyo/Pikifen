@@ -41,6 +41,8 @@ void area_editor::open_area_picker() {
             ),
             "", true
         );
+        picker.close_callback =
+            std::bind(&area_editor::close_area_picker, this);
     }
 }
 
@@ -107,11 +109,7 @@ void area_editor::process_gui() {
     ImGui::End();
     
     //Process the picker dialog, if any.
-    bool picker_was_open = picker.is_open;
     picker.process();
-    if(picker.is_open != picker_was_open) {
-        user_closed_picker = true;
-    }
     
     //TODO left here for debugging purposes.
     if(show_imgui_demo) ImGui::ShowDemoWindow(&show_imgui_demo);
@@ -184,10 +182,7 @@ void area_editor::process_gui_menu_bar() {
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit")) {
-                if(!check_new_unsaved_changes()) {
-                    quick_play_area.clear();
-                    leave();
-                }
+                press_quit_button();
             }
             
             ImGui::EndMenu();
@@ -338,11 +333,7 @@ void area_editor::process_gui_panel_details() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            } else {
-                sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
-            }
+            press_new_tree_shadow_button();
         }
         set_tooltip(
             "Start creating a new tree shadow.\n"
@@ -361,28 +352,7 @@ void area_editor::process_gui_panel_details() {
                     ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                 )
             ) {
-                if(!selected_shadow) {
-                    status_text = "You have to select shadows to delete!";
-                } else {
-                    register_change("tree shadow deletion");
-                    for(
-                        size_t s = 0;
-                        s < game.cur_area_data.tree_shadows.size();
-                        ++s
-                    ) {
-                        if(
-                            game.cur_area_data.tree_shadows[s] ==
-                            selected_shadow
-                        ) {
-                            game.cur_area_data.tree_shadows.erase(
-                                game.cur_area_data.tree_shadows.begin() + s
-                            );
-                            delete selected_shadow;
-                            selected_shadow = NULL;
-                            break;
-                        }
-                    }
-                }
+                press_remove_tree_shadow_button();
             }
             set_tooltip(
                 "Delete the selected tree shadow.",
@@ -747,12 +717,7 @@ void area_editor::process_gui_panel_layout() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        clear_layout_drawing();
-        if(sub_state == EDITOR_SUB_STATE_DRAWING) {
-            cancel_layout_drawing();
-        } else {
-            sub_state = EDITOR_SUB_STATE_DRAWING;
-        }
+        press_new_sector_button();
     }
     set_tooltip(
         "Start creating a new sector.\n"
@@ -769,12 +734,7 @@ void area_editor::process_gui_panel_layout() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        clear_circle_sector();
-        if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-            cancel_circle_sector();
-        } else {
-            sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
-        }
+        press_circle_sector_button();
     }
     set_tooltip(
         "Start creating a new circular sector.\n"
@@ -792,19 +752,7 @@ void area_editor::process_gui_panel_layout() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(selected_sectors.empty()) {
-            status_text = "You have to select sectors to delete!";
-        } else {
-            area_data* prepared_state = prepare_state();
-            if(!remove_isolated_sectors()) {
-                status_text = "Some of the sectors are not isolated!";
-                forget_prepared_state(prepared_state);
-            } else {
-                status_text = "Deleted sectors.";
-                clear_selection();
-                register_change("sector removal", prepared_state);
-            }
-        }
+        press_remove_sector_button();
     }
     set_tooltip(
         "Remove the selected sectors, if they're isolated.",
@@ -838,9 +786,7 @@ void area_editor::process_gui_panel_layout() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        clear_selection();
-        selection_filter =
-            sum_and_wrap(selection_filter, 1, N_SELECTION_FILTERS);
+        press_selection_filter_button();
     }
     ImGui::PopID();
     set_tooltip(
@@ -1196,17 +1142,29 @@ void area_editor::process_gui_panel_layout() {
                         "Change offset", &octee_mode_int,
                         (int) OCTEE_MODE_OFFSET
                     );
+                    set_tooltip(
+                        "Dragging will change the texture's offset.",
+                        "1"
+                    );
                     
                     //On-canvas texture effect editing scale radio button.
                     ImGui::RadioButton(
                         "Change scale", &octee_mode_int,
                         (int) OCTEE_MODE_SCALE
                     );
+                    set_tooltip(
+                        "Dragging will change the texture's scale.",
+                        "2"
+                    );
                     
                     //On-canvas texture effect editing angle radio button.
                     ImGui::RadioButton(
                         "Change angle", &octee_mode_int,
                         (int) OCTEE_MODE_ANGLE
+                    );
+                    set_tooltip(
+                        "Dragging will change the texture's angle.",
+                        "3"
                     );
                     
                     octee_mode = (OCTEE_MODES) octee_mode_int;
@@ -1468,12 +1426,7 @@ void area_editor::process_gui_panel_mobs() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
-            sub_state = EDITOR_SUB_STATE_NONE;
-        } else {
-            clear_selection();
-            sub_state = EDITOR_SUB_STATE_NEW_MOB;
-        }
+        press_new_mob_button();
     }
     set_tooltip(
         "Start creating a new object.\n"
@@ -1490,7 +1443,7 @@ void area_editor::process_gui_panel_mobs() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        delete_selected_mobs();
+        press_remove_mob_button();
     }
     set_tooltip(
         "Delete all selected objects.\n",
@@ -1505,13 +1458,7 @@ void area_editor::process_gui_panel_mobs() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(selected_mobs.empty()) {
-            status_text = "You have to select mobs to duplicate!";
-        } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
-            sub_state = EDITOR_SUB_STATE_NONE;
-        } else {
-            sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
-        }
+        press_duplicate_mobs_button();
     }
     set_tooltip(
         "Start duplicating the selected objects.\n"
@@ -1889,12 +1836,7 @@ void area_editor::process_gui_panel_paths() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
-            sub_state = EDITOR_SUB_STATE_NONE;
-        } else {
-            path_drawing_stop_1 = NULL;
-            sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
-        }
+        press_new_path_button();
     }
     set_tooltip(
         "Start drawing a new path.\n"
@@ -1913,7 +1855,7 @@ void area_editor::process_gui_panel_paths() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        delete_selected_path_elements();
+        press_remove_path_button();
     }
     set_tooltip(
         "Delete all selected path stops and/or path links.\n",
@@ -2292,12 +2234,14 @@ void area_editor::process_gui_status_bar() {
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
-    ImGui::SameLine();
-    ImGui::Text(
-        "%s, %s",
-        box_string(f2s(game.mouse_cursor_w.x), 7).c_str(),
-        box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
-    );
+    if(!is_mouse_in_gui) {
+        ImGui::SameLine();
+        ImGui::Text(
+            "%s, %s",
+            box_string(f2s(game.mouse_cursor_w.x), 7).c_str(),
+            box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
+        );
+    }
 }
 
 
@@ -2312,10 +2256,9 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(!check_new_unsaved_changes()) {
-            leave();
-        }
+        press_quit_button();
     }
+    quit_widget_pos = get_last_widget_pos();
     set_tooltip(
         "Quit the area editor.",
         "Ctrl + Q"
@@ -2329,12 +2272,9 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(can_reload) {
-            if(!check_new_unsaved_changes()) {
-                load_area(false);
-            }
-        }
+        press_reload_button();
     }
+    reload_widget_pos = get_last_widget_pos();
     set_tooltip(
         "Discard all changes made and load the area again.",
         "Ctrl + L"
@@ -2348,9 +2288,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        save_area(false);
-        change_state(EDITOR_STATE_MAIN);
-        made_new_changes = false;
+        press_save_button();
     }
     set_tooltip(
         "Save the area into the files on disk.",
@@ -2365,11 +2303,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(!save_area(false)) return;
-        quick_play_area = cur_area_name;
-        quick_play_cam_pos = game.cam.pos;
-        quick_play_cam_z = game.cam.zoom;
-        leave();
+        press_quick_play_button();
     }
     set_tooltip(
         "Save, quit, and start playing the area. Leaving will return"
@@ -2391,7 +2325,7 @@ void area_editor::process_gui_toolbar() {
             ImVec4(1.0f, 1.0f, 1.0f, undo_opacity)
         )
     ) {
-        undo();
+        press_undo_button();
     }
     string undo_text;
     if(undo_history.empty()) {
@@ -2414,7 +2348,7 @@ void area_editor::process_gui_toolbar() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            show_reference = !show_reference;
+            press_reference_button();
         }
         set_tooltip(
             "Toggle the visibility of the reference image.",
@@ -2466,11 +2400,7 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(!is_shift_pressed) {
-            snap_mode = sum_and_wrap(snap_mode, 1, N_SNAP_MODES);
-        } else {
-            snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
-        }
+        press_snap_mode_button();
     }
     set_tooltip(
         "Snap mode: " + snap_mode_description,

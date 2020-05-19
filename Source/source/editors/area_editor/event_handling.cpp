@@ -82,9 +82,7 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
         
     } case ALLEGRO_KEY_Z: {
         if(is_ctrl_pressed) {
-            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-                //TODO frm_toolbar->widgets["but_undo"]->simulate_click();
-            }
+            press_undo_button();
         }
         break;
         
@@ -138,7 +136,7 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         break;
         
     } case ALLEGRO_KEY_X: {
-        //TODO frm_toolbar->widgets["but_snap"]->simulate_click();
+        press_snap_mode_button();
         break;
         
     } case ALLEGRO_KEY_BACKSPACE: {
@@ -159,38 +157,36 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_L: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_reload"]->simulate_click();
+            press_reload_button();
         }
         break;
         
     } case ALLEGRO_KEY_P: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_play"]->simulate_click();
+            press_quick_play_button();
         }
         break;
         
     } case ALLEGRO_KEY_Q: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
+            press_quit_button();
         }
         break;
         
     } case ALLEGRO_KEY_R: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_reference"]->simulate_click();
+            press_reference_button();
         }
         break;
         
     } case ALLEGRO_KEY_S: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_save"]->simulate_click();
-            break;
+            press_save_button();
         }
+        break;
         
     } case ALLEGRO_KEY_ESCAPE: {
-        if(
-            state == EDITOR_STATE_LAYOUT
-        ) {
+        if(state == EDITOR_STATE_LAYOUT) {
             if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
                 cancel_circle_sector();
             } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
@@ -226,6 +222,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
                 clear_selection();
                 selecting = false;
             }
+            
         } else if(state == EDITOR_STATE_DETAILS) {
             if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
                 sub_state = EDITOR_SUB_STATE_NONE;
@@ -233,8 +230,10 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             if(sub_state == EDITOR_SUB_STATE_NONE) {
                 selected_shadow = NULL;
             }
+            
         } else if(state == EDITOR_STATE_MAIN) {
-            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
+            press_quit_button();
+            
         }
         break;
         
@@ -251,17 +250,25 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_1: {
-        //TODO frm_paths->widgets["rad_one_way"]->simulate_click();
-        //TODO frm_stt->widgets["rad_offset"]->simulate_click();
+        if(state == EDITOR_STATE_PATHS) {
+            path_drawing_normals = false;
+        } else if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+            octee_mode = OCTEE_MODE_OFFSET;
+        }
         break;
         
     } case ALLEGRO_KEY_2: {
-        //TODO frm_paths->widgets["rad_normal"]->simulate_click();
-        //TODO frm_stt->widgets["rad_scale"]->simulate_click();
+        if(state == EDITOR_STATE_PATHS) {
+            path_drawing_normals = true;
+        } else if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+            octee_mode = OCTEE_MODE_SCALE;
+        }
         break;
         
     } case ALLEGRO_KEY_3: {
-        //TODO frm_stt->widgets["rad_angle"]->simulate_click();
+        if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+            octee_mode = OCTEE_MODE_ANGLE;
+        }
         break;
         
     } case ALLEGRO_KEY_A: {
@@ -299,35 +306,53 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
     } case ALLEGRO_KEY_C: {
         if(!moving && !selecting) {
-            //TODO frm_layout->widgets["but_circle"]->simulate_click();
+            press_circle_sector_button();
         }
         break;
         
     } case ALLEGRO_KEY_D: {
         if(!moving && !selecting) {
-            //TODO frm_mobs->widgets["but_duplicate"]->simulate_click();
+            press_duplicate_mobs_button();
         }
         break;
         
     } case ALLEGRO_KEY_F: {
-        //TODO frm_layout->widgets["but_sel_filter"]->simulate_click();
+        press_selection_filter_button();
         break;
         
     } case ALLEGRO_KEY_N: {
-        if(!moving && !selecting) {
-            //TODO frm_layout->widgets["but_new"]->simulate_click();
-            //TODO frm_mobs->widgets["but_new"]->simulate_click();
-            //TODO frm_paths->widgets["but_draw"]->simulate_click();
-            //TODO frm_details->widgets["but_new"]->simulate_click();
+        switch(state) {
+        case EDITOR_STATE_LAYOUT: {
+            press_new_sector_button();
+            break;
+        } case EDITOR_STATE_MOBS: {
+            press_new_mob_button();
+            break;
+        } case EDITOR_STATE_PATHS: {
+            press_new_path_button();
+            break;
+        } case EDITOR_STATE_DETAILS: {
+            press_new_tree_shadow_button();
+            break;
+        }
         }
         break;
         
     } case ALLEGRO_KEY_DELETE: {
-        if(!moving && !selecting) {
-            //TODO frm_layout->widgets["but_rem"]->simulate_click();
-            //TODO frm_mobs->widgets["but_del"]->simulate_click();
-            //TODO frm_paths->widgets["but_del"]->simulate_click();
-            //TODO frm_details->widgets["but_del"]->simulate_click();
+        switch(state) {
+        case EDITOR_STATE_LAYOUT: {
+            press_remove_sector_button();
+            break;
+        } case EDITOR_STATE_MOBS: {
+            press_remove_mob_button();
+            break;
+        } case EDITOR_STATE_PATHS: {
+            press_remove_path_button();
+            break;
+        } case EDITOR_STATE_DETAILS: {
+            press_remove_tree_shadow_button();
+            break;
+        }
         }
         break;
         
