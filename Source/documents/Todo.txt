@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Text inputs are throwing question marks if you don't hit a letter key
         Make use of imgui.ini?
         Set the ImGui color scheme
         Minor
