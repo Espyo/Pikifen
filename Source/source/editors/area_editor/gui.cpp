@@ -323,6 +323,9 @@ void area_editor::process_gui_panel_details() {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Panel title text.
+    panel_title("DETAILS", 88.0f);
+    
     //Tree shadows node.
     if(saveable_tree_node("details", "Tree shadows")) {
     
@@ -498,6 +501,9 @@ void area_editor::process_gui_panel_info() {
     if(ImGui::Button("Back")) {
         change_state(EDITOR_STATE_MAIN);
     }
+    
+    //Panel title text.
+    panel_title("INFO", 64.0f);
     
     //General node.
     if(saveable_tree_node("info", "General")) {
@@ -710,6 +716,9 @@ void area_editor::process_gui_panel_layout() {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Panel title text.
+    panel_title("LAYOUT", 80.0f);
+    
     //New sector button.
     if(
         ImGui::ImageButton(
@@ -870,7 +879,6 @@ void area_editor::process_gui_panel_layout() {
                             s_ptr->hazards_str += ";";
                         }
                         s_ptr->hazards_str += new_hazard_selected_name;
-                        homogenize_selected_sectors();
                         selected_hazard_nr = list.size();
                     }
                 }
@@ -906,7 +914,6 @@ void area_editor::process_gui_panel_layout() {
                         }
                         selected_hazard_nr =
                             std::min(selected_hazard_nr, (int) list.size() - 2);
-                        homogenize_selected_sectors();
                     }
                 }
                 set_tooltip(
@@ -1419,6 +1426,9 @@ void area_editor::process_gui_panel_mobs() {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Panel title text.
+    panel_title("OBJECTS", 90.0f);
+    
     //New object button.
     if(
         ImGui::ImageButton(
@@ -1651,6 +1661,9 @@ void area_editor::process_gui_panel_options() {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Panel title text.
+    panel_title("OPTIONS", 88.0f);
+    
     //Controls node.
     if(saveable_tree_node("options", "Controls")) {
     
@@ -1829,6 +1842,9 @@ void area_editor::process_gui_panel_paths() {
         change_state(EDITOR_STATE_MAIN);
     }
     
+    //Panel title text.
+    panel_title("PATHS", 72.0f);
+    
     //New path button.
     if(
         ImGui::ImageButton(
@@ -1945,6 +1961,9 @@ void area_editor::process_gui_panel_review() {
         clear_problems();
         change_state(EDITOR_STATE_MAIN);
     }
+    
+    //Panel title text.
+    panel_title("REVIEW", 80.0f);
     
     //Problem search node.
     if(saveable_tree_node("review", "Problem search")) {
@@ -2086,6 +2105,9 @@ void area_editor::process_gui_panel_tools() {
         save_reference();
         change_state(EDITOR_STATE_MAIN);
     }
+    
+    //Panel title text.
+    panel_title("TOOLS", 75.0f);
     
     //Reference image node.
     if(saveable_tree_node("tools", "Reference image")) {
@@ -2234,7 +2256,7 @@ void area_editor::process_gui_status_bar() {
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
-    if(!is_mouse_in_gui) {
+    if(!is_mouse_in_gui || is_m1_pressed) {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",

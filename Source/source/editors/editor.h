@@ -234,6 +234,7 @@ protected:
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
     void leave();
+    void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
     void set_tooltip(const string &explanation, const string &shortcut = "");
     void zoom(const float new_zoom, const bool anchor_cursor = true);

@@ -507,6 +507,26 @@ void editor::load() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates widgets with the goal of placing a disabled text widget to the
+ * right side of the panel.
+ * title: Title to write.
+ * width: Width to reserve for it.
+ */
+void editor::panel_title(const char* title, const float width) {
+    //Spacer dummy widget.
+    ImGui::SameLine();
+    float size =
+        game.win_w - canvas_separator_x - ImGui::GetItemRectSize().x -
+        width;
+    ImGui::Dummy(ImVec2(size, 0));
+    
+    //Text widget.
+    ImGui::SameLine();
+    ImGui::TextDisabled("%s", title);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
  * based on the user's preferences. It also saves the user's preferences as
  * they open and close the node.

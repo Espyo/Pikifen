@@ -3,18 +3,29 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Set the ImGui color scheme
         Minor
-            Looks like there's inconsistency between where I do sector homogenization and mob homogenization -- at the end of the panel process, or at every change
             When editing the texture effects, show the sectors fully bright, hide the grid, etc.
         Look
-            Each panel should have its name in the top-right corner
+            Nodes should always have spaces before them, even if closed
+            Buttons to hide if not applicable
+                Delete sectors
+                Select none
+                Delete mobs
+                Delete mob link
+                Delete path
+                Show tree shadows
+                Show height grid
             Use ImGui::Indent()
                 "Keep aspect ratio" boxes
-                More...
-            Standardize the visibility of delete buttons, the "No sector selected" messages, etc. between panels
+                Problem found description
+                Show tree shadows
+                Show height grid
+                View mode
+            Add "no tree shadow selected" widget
+            Add parenthesis when no sector/mob/shadow is selected
             If no search for problems has been made, write a "DisabledText"
         Remove the ImGui demo button
+        Test everything
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -80,6 +91,7 @@ Next tasks (roughly sorted most important first)
         Options should go in a pop-up menu
         "Remove" icon should be a garbage bin
         When editing an animation, have a timeline?
+        Style the editors
         Delete LAFI
     Details
         Shadows
