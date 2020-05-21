@@ -61,6 +61,8 @@ const float area_editor::PATH_PREVIEW_TIMER_DUR = 0.1f;
 const float area_editor::PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
 const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
+//Quick previewing lasts this long in total, including the fade out.
+const float area_editor::QUICK_PREVIEW_DURATION = 4.0f;
 //Color of a selected element, or the selection box.
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
@@ -99,6 +101,7 @@ area_editor::area_editor() :
     path_drawing_normals(true),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
+    quick_preview_timer(QUICK_PREVIEW_DURATION),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
@@ -446,6 +449,7 @@ void area_editor::do_logic() {
     
     cursor_snap_timer.tick(game.delta_t);
     path_preview_timer.tick(game.delta_t);
+    quick_preview_timer.tick(game.delta_t);
     new_sector_error_tint_timer.tick(game.delta_t);
     undo_save_lock_timer.tick(game.delta_t);
     

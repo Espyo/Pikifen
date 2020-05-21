@@ -1102,6 +1102,7 @@ void area_editor::process_gui_panel_layout() {
                 if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
                     register_change("sector texture offset change");
                     s_ptr->texture_info.translation = texture_translation;
+                    quick_preview_timer.start();
                 }
                 set_tooltip(
                     "Offset the texture horizontally or vertically "
@@ -1113,6 +1114,7 @@ void area_editor::process_gui_panel_layout() {
                 if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
                     register_change("sector texture scale change");
                     s_ptr->texture_info.scale = texture_scale;
+                    quick_preview_timer.start();
                 }
                 set_tooltip(
                     "Scale the texture horizontally or vertically "
@@ -1126,6 +1128,7 @@ void area_editor::process_gui_panel_layout() {
                 if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
                     register_change("sector texture angle change");
                     s_ptr->texture_info.rot = texture_rotation;
+                    quick_preview_timer.start();
                 }
                 set_tooltip(
                     "Rotate the texture by these many degrees.\n"
@@ -1143,6 +1146,7 @@ void area_editor::process_gui_panel_layout() {
                 ) {
                     register_change("sector texture tint change");
                     s_ptr->texture_info.tint = texture_tint;
+                    quick_preview_timer.start();
                 }
                 set_tooltip(
                     "Tint the texture with this color. White means no tint."

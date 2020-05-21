@@ -99,17 +99,51 @@ void area_editor::draw_canvas() {
     }
     }
     
-    if(sub_state == EDITOR_SUB_STATE_OCTEE) {
-        textures_opacity = 1.0f;
-        edges_opacity = 0.8f;
-        grid_opacity = 0.0f;
-    }
-    
     if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
         textures_opacity = 1.0f;
         edges_opacity = 0.0f;
         grid_opacity = 0.0f;
         mob_opacity = 0.0f;
+    } else if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+        quick_preview_timer.start();
+    }
+    
+    if(quick_preview_timer.time_left > 0) {
+        float t =
+            std::min(
+                quick_preview_timer.time_left,
+                quick_preview_timer.duration / 2.0f
+            );
+        selection_min_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                selection_min_opacity, 0.0f
+            );
+        selection_max_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                selection_max_opacity, 0.0f
+            );
+        textures_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                textures_opacity, 1.0f
+            );
+        edges_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                edges_opacity, 0.5f
+            );
+        grid_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                grid_opacity, 0.0f
+            );
+        mob_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                mob_opacity, 0.0f
+            );
     }
     
     float selection_opacity =

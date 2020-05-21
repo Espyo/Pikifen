@@ -193,6 +193,7 @@ private:
     static const float         PATH_PREVIEW_TIMER_DUR;
     static const float         PATH_STOP_RADIUS;
     static const float         POINT_LETTER_TEXT_SCALE;
+    static const float         QUICK_PREVIEW_DURATION;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
     static const float         UNDO_SAVE_LOCK_DURATION;
@@ -325,6 +326,8 @@ private:
     string problem_title;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
+    //Time left in the quick preview mode, including fade out.
+    timer quick_preview_timer;
     //Opacity of the reference image.
     unsigned char reference_alpha;
     //Bitmap of the reference image.
