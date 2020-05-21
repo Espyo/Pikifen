@@ -345,9 +345,8 @@ void area_editor::process_gui_panel_details() {
             "N"
         );
         
+        //Delete shadow button.
         if(selected_shadow) {
-        
-            //Delete shadow button.
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -361,7 +360,13 @@ void area_editor::process_gui_panel_details() {
                 "Delete the selected tree shadow.",
                 "Delete"
             );
-            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        if(selected_shadow) {
+        
             string old_shadow_file_name = selected_shadow->file_name;
             
             //Browse for tree shadow texture button.
@@ -447,10 +452,12 @@ void area_editor::process_gui_panel_details() {
             }
             
             //Tree shadow aspect ratio checkbox.
+            ImGui::Indent();
             ImGui::Checkbox(
                 "Keep aspect ratio",
                 &selected_shadow_transformation.keep_aspect_ratio
             );
+            ImGui::Unindent();
             set_tooltip("Keep the aspect ratio when resizing the image.");
             
             //Tree shadow angle value.
@@ -480,6 +487,11 @@ void area_editor::process_gui_panel_details() {
                 "Multiply the amount of swaying by this much. 0 means "
                 "no swaying in that direction."
             );
+            
+        } else {
+        
+            //"No tree shadow selected" text.
+            ImGui::TextDisabled("(No tree shadow selected)");
             
         }
         
@@ -549,10 +561,11 @@ void area_editor::process_gui_panel_info() {
             "The weather condition to use."
         );
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Background node.
     if(saveable_tree_node("info", "Background")) {
@@ -643,10 +656,11 @@ void area_editor::process_gui_panel_info() {
             "Scale the texture by this amount."
         );
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Metadata node.
     if(saveable_tree_node("info", "Metadata")) {
@@ -678,10 +692,11 @@ void area_editor::process_gui_panel_info() {
         }
         set_tooltip("Extra notes or comments about the area, if any.");
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Gameplay node.
     if(saveable_tree_node("info", "Gameplay")) {
@@ -696,6 +711,7 @@ void area_editor::process_gui_panel_info() {
             "\"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\"."
         );
         
+        //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();
@@ -753,20 +769,22 @@ void area_editor::process_gui_panel_layout() {
         "C"
     );
     
-    //Remove isolated sector button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_remove_sector_button();
+    //Delete isolated sector button.
+    if(!selected_sectors.empty()) {
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_remove_sector_button();
+        }
+        set_tooltip(
+            "Delete the selected sectors, if they're isolated.",
+            "Delete"
+        );
     }
-    set_tooltip(
-        "Remove the selected sectors, if they're isolated.",
-        "Delete"
-    );
     
     //Selection filter button.
     ALLEGRO_BITMAP* sel_filter_bmp = NULL;
@@ -805,20 +823,23 @@ void area_editor::process_gui_panel_layout() {
     );
     
     //Clear selection button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_SELECT_NONE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        clear_selection();
+    if(!selected_sectors.empty()) {
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_SELECT_NONE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            clear_selection();
+        }
+        set_tooltip(
+            "Clear the selection.",
+            "Escape"
+        );
     }
-    set_tooltip(
-        "Clear the selection.",
-        "Escape"
-    );
     
+    //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
     sector* s_ptr = NULL;
@@ -838,6 +859,7 @@ void area_editor::process_gui_panel_layout() {
                 "Height of the floor. Positive numbers are higher."
             );
             
+            //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             
             //Sector hazards node.
@@ -909,7 +931,7 @@ void area_editor::process_gui_panel_layout() {
                             s_ptr->hazards_str += list[h] + ";";
                         }
                         if(!s_ptr->hazards_str.empty()) {
-                            //Remove the trailing semicolon.
+                            //Delete the trailing semicolon.
                             s_ptr->hazards_str.pop_back();
                         }
                         selected_hazard_nr =
@@ -941,10 +963,11 @@ void area_editor::process_gui_panel_layout() {
                     "or do they affect airborne objects in the sector too?"
                 );
                 
-                ImGui::Dummy(ImVec2(0, 16));
-                
                 ImGui::TreePop();
             }
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
             
             //Sector advanced behavior node.
             if(saveable_tree_node("layout", "Advanced")) {
@@ -995,15 +1018,17 @@ void area_editor::process_gui_panel_layout() {
                     "Pikmin die when they fall in, and you can see the void."
                 );
                 
+                //Spacer dummy widget.
                 ImGui::Dummy(ImVec2(0, 16));
                 
                 ImGui::TreePop();
             }
             
-            ImGui::Dummy(ImVec2(0, 16));
-            
             ImGui::TreePop();
         }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
         
         //Sector appearance node.
         if(saveable_tree_node("layout", "Appearance")) {
@@ -1066,6 +1091,7 @@ void area_editor::process_gui_panel_layout() {
                 
             }
             
+            //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             
             //Sector texture effects node.
@@ -1180,10 +1206,11 @@ void area_editor::process_gui_panel_layout() {
                     
                 }
                 
-                ImGui::Dummy(ImVec2(0, 16));
-                
                 ImGui::TreePop();
             }
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
             
             //Sector mood node.
             if(saveable_tree_node("layout", "Sector mood")) {
@@ -1212,11 +1239,13 @@ void area_editor::process_gui_panel_layout() {
                     "even if they're just a step below."
                 );
                 
+                //Spacer dummy widget.
                 ImGui::Dummy(ImVec2(0, 16));
                 
                 ImGui::TreePop();
             }
             
+            //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             
             ImGui::TreePop();
@@ -1227,7 +1256,7 @@ void area_editor::process_gui_panel_layout() {
     } else if(selected_sectors.empty()) {
     
         //"No sector selected" text.
-        ImGui::Text("No sector selected.");
+        ImGui::TextDisabled("(No sector selected)");
         
     } else {
     
@@ -1259,6 +1288,7 @@ void area_editor::process_gui_panel_main() {
     //Area name text.
     ImGui::Text("Area: %s", cur_area_name.c_str());
     
+    //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
     //Area info button.
@@ -1383,6 +1413,7 @@ void area_editor::process_gui_panel_main() {
         "Options for the area editor."
     );
     
+    //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
     //Stats node.
@@ -1446,19 +1477,21 @@ void area_editor::process_gui_panel_mobs() {
     );
     
     //Delete object button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_remove_mob_button();
+    if(!selected_mobs.empty()) {
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_remove_mob_button();
+        }
+        set_tooltip(
+            "Delete all selected objects.\n",
+            "Delete"
+        );
     }
-    set_tooltip(
-        "Delete all selected objects.\n",
-        "Delete"
-    );
     
     //Duplicate object button.
     ImGui::SameLine();
@@ -1477,6 +1510,7 @@ void area_editor::process_gui_panel_mobs() {
         "D"
     );
     
+    //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
     mob_gen* m_ptr = NULL;
@@ -1554,6 +1588,9 @@ void area_editor::process_gui_panel_mobs() {
             "make it face the cursor."
         );
         
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Object advanced node.
         if(saveable_tree_node("mobs", "Advanced")) {
         
@@ -1594,29 +1631,31 @@ void area_editor::process_gui_panel_mobs() {
                 "Click this button again to cancel."
             );
             
-            //Object remove link button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                )
-            ) {
-                if((*selected_mobs.begin())->links.empty()) {
-                    status_text =
-                        "This mob has no links to delete!";
-                } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
-                    sub_state = EDITOR_SUB_STATE_NONE;
-                } else {
-                    sub_state = EDITOR_SUB_STATE_DEL_MOB_LINK;
+            //Object delete link button.
+            if(!(*selected_mobs.begin())->links.empty()) {
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_REMOVE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    if((*selected_mobs.begin())->links.empty()) {
+                        status_text =
+                            "This mob has no links to delete!";
+                    } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
+                        sub_state = EDITOR_SUB_STATE_NONE;
+                    } else {
+                        sub_state = EDITOR_SUB_STATE_DEL_MOB_LINK;
+                    }
                 }
+                set_tooltip(
+                    "Start deleting an object link.\n"
+                    "Click on the other object whose link you want to delete, "
+                    "or click the link proper.\n"
+                    "Click this button again to cancel."
+                );
             }
-            set_tooltip(
-                "Start deleting an object link.\n"
-                "Click on the other object whose link you want to delete, "
-                "or click the link proper.\n"
-                "Click this button again to cancel."
-            );
             
             ImGui::TreePop();
         }
@@ -1626,7 +1665,7 @@ void area_editor::process_gui_panel_mobs() {
     } else if(selected_mobs.empty()) {
     
         //"No object selected" text.
-        ImGui::Text("No object selected.");
+        ImGui::TextDisabled("(No object selected)");
         
     } else {
     
@@ -1699,11 +1738,12 @@ void area_editor::process_gui_panel_options() {
         );
         game.options.editor_mouse_drag_threshold = drag_threshold;
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
         
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //View node.
     if(saveable_tree_node("options", "View")) {
@@ -1727,6 +1767,8 @@ void area_editor::process_gui_panel_options() {
         //View mode text.
         int view_mode = game.options.area_editor_view_mode;
         ImGui::Text("View mode:");
+        
+        ImGui::Indent();
         
         //Textures view mode radio button.
         ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
@@ -1754,11 +1796,14 @@ void area_editor::process_gui_panel_options() {
         );
         game.options.area_editor_view_mode = view_mode;
         
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::Unindent();
         
         ImGui::TreePop();
         
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
@@ -1821,6 +1866,7 @@ void area_editor::process_gui_panel_options() {
             update_undo_history();
         }
         
+        //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();
@@ -1864,20 +1910,23 @@ void area_editor::process_gui_panel_paths() {
     );
     
     //Delete path button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_remove_path_button();
+    if(!selected_path_links.empty() || !selected_path_stops.empty()) {
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_remove_path_button();
+        }
+        set_tooltip(
+            "Delete all selected path stops and/or path links.\n",
+            "Delete"
+        );
     }
-    set_tooltip(
-        "Delete all selected path stops and/or path links.\n",
-        "Delete"
-    );
     
+    //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
     //Drawing mode text.
@@ -1900,6 +1949,9 @@ void area_editor::process_gui_panel_paths() {
     );
     
     path_drawing_normals = one_way_mode;
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Path tools node.
     if(saveable_tree_node("paths", "Tools")) {
@@ -1940,6 +1992,7 @@ void area_editor::process_gui_panel_paths() {
             ImGui::Text("Total travel distance: %f", path_preview_dist);
         }
         
+        //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();
@@ -1981,11 +2034,19 @@ void area_editor::process_gui_panel_review() {
             //Problem texts.
             ImGui::Text("Problem found:");
             
-            ImGui::TextWrapped("%s", problem_title.c_str());
+            ImGui::Indent();
+            if(problem_type == EPT_NONE_YET) {
+                ImGui::TextDisabled("Haven't searched yet.");
+            } else {
+                ImGui::TextWrapped("%s", problem_title.c_str());
+            }
+            ImGui::Unindent();
             
             if(!problem_description.empty()) {
             
+                ImGui::Indent();
                 ImGui::TextWrapped("%s", problem_description.c_str());
+                ImGui::Unindent();
                 
                 //Go to problem button.
                 if(ImGui::Button("Go to problem")) {
@@ -2004,11 +2065,12 @@ void area_editor::process_gui_panel_review() {
             
         }
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
         
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Preview node.
     if(saveable_tree_node("review", "Preview")) {
@@ -2029,13 +2091,18 @@ void area_editor::process_gui_panel_review() {
         );
         
         //Tree shadows checkbox.
-        ImGui::Checkbox("Show tree shadows", &show_shadows);
-        
-        ImGui::Dummy(ImVec2(0, 16));
+        if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+            ImGui::Indent();
+            ImGui::Checkbox("Show tree shadows", &show_shadows);
+            ImGui::Unindent();
+        }
         
         ImGui::TreePop();
         
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Cross-section node.
     if(saveable_tree_node("review", "Cross-section")) {
@@ -2043,8 +2110,7 @@ void area_editor::process_gui_panel_review() {
         //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &show_cross_section)) {
             if(show_cross_section) {
-                cross_section_window_start =
-                    point(0.0f, 0.0f);
+                cross_section_window_start = canvas_tl;
                 cross_section_window_end =
                     point(canvas_br.x * 0.5, canvas_br.y * 0.5);
                 cross_section_z_window_start =
@@ -2079,11 +2145,16 @@ void area_editor::process_gui_panel_review() {
         );
         
         //Show height grid checkbox.
-        ImGui::Checkbox("Show height grid", &show_cross_section_grid);
-        set_tooltip(
-            "Show a height grid in the cross-section window."
-        );
+        if(show_cross_section) {
+            ImGui::Indent();
+            ImGui::Checkbox("Show height grid", &show_cross_section_grid);
+            set_tooltip(
+                "Show a height grid in the cross-section window."
+            );
+            ImGui::Unindent();
+        }
         
+        //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();
@@ -2175,10 +2246,12 @@ void area_editor::process_gui_panel_tools() {
         }
         
         //Reference keep aspect ratio checkbox.
+        ImGui::Indent();
         ImGui::Checkbox(
             "Keep aspect ratio",
             &reference_transformation.keep_aspect_ratio
         );
+        ImGui::Unindent();
         set_tooltip("Keep the aspect ratio when resizing the image.");
         
         //Reference opacity value.
@@ -2186,11 +2259,12 @@ void area_editor::process_gui_panel_tools() {
         ImGui::SliderInt("Opacity", &opacity, 0, 255);
         reference_alpha = opacity;
         
-        ImGui::Dummy(ImVec2(0, 16));
-        
         ImGui::TreePop();
         
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Misc. node.
     if(saveable_tree_node("tools", "Misc.")) {
@@ -2229,6 +2303,7 @@ void area_editor::process_gui_panel_tools() {
             "0.5 will resize everything to half size, 2.0 to double, etc."
         );
         
+        //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();

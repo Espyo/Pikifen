@@ -5,25 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
         Minor
             When editing the texture effects, show the sectors fully bright, hide the grid, etc.
-        Look
-            Nodes should always have spaces before them, even if closed
-            Buttons to hide if not applicable
-                Delete sectors
-                Select none
-                Delete mobs
-                Delete mob link
-                Delete path
-                Show tree shadows
-                Show height grid
-            Use ImGui::Indent()
-                "Keep aspect ratio" boxes
-                Problem found description
-                Show tree shadows
-                Show height grid
-                View mode
-            Add "no tree shadow selected" widget
-            Add parenthesis when no sector/mob/shadow is selected
-            If no search for problems has been made, write a "DisabledText"
         Remove the ImGui demo button
         Test everything
     

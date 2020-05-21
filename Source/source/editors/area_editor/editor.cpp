@@ -257,7 +257,7 @@ void area_editor::clear_layout_moving() {
  */
 void area_editor::clear_problems() {
     problem_type = EPT_NONE_YET;
-    problem_title = "Haven't searched yet.";
+    problem_title.clear();
     problem_description.clear();
     problem_edge_intersection.e1 = NULL;
     problem_edge_intersection.e2 = NULL;
