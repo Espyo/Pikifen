@@ -12,12 +12,14 @@
 #define OPTIONS_INCLUDED
 
 #include <cstddef>
+#include <map>
 #include <vector>
 
 #include "const.h"
 #include "controls.h"
 #include "utils/data_file.h"
 
+using std::map;
 using std::size_t;
 using std::vector;
 
@@ -70,6 +72,8 @@ struct options_struct {
     bool editor_mmb_pan;
     //In editors, only consider a mouse drag if it moves these many pixels.
     float editor_mouse_drag_threshold;
+    //List of which editor node widgets the user wants open.
+    map<string, bool> editor_open_nodes;
     //In editors, show widget tooltips when the mouse is over them.
     bool editor_show_tooltips;
     //Player's intended option for fullscreen, before restarting the game.

@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change area editor to Dear ImGui
-        Make use of imgui.ini?
         Set the ImGui color scheme
         Minor
             Looks like there's inconsistency between where I do sector homogenization and mob homogenization -- at the end of the panel process, or at every change
@@ -14,6 +13,7 @@ Current tasks (tasks being worked on, but not yet committed)
                 "Keep aspect ratio" boxes
                 More...
             Standardize the visibility of delete buttons, the "No sector selected" messages, etc. between panels
+            If no search for problems has been made, write a "DisabledText"
         Remove the ImGui demo button
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)

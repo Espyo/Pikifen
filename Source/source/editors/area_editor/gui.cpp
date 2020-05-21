@@ -324,7 +324,7 @@ void area_editor::process_gui_panel_details() {
     }
     
     //Tree shadows node.
-    if(ImGui::TreeNode("Tree shadows")) {
+    if(saveable_tree_node("details", "Tree shadows")) {
     
         //New tree shadow button.
         if(
@@ -500,7 +500,7 @@ void area_editor::process_gui_panel_info() {
     }
     
     //General node.
-    if(ImGui::TreeNode("General")) {
+    if(saveable_tree_node("info", "General")) {
     
         //Area name input.
         string name = game.cur_area_data.name;
@@ -549,7 +549,7 @@ void area_editor::process_gui_panel_info() {
     }
     
     //Background node.
-    if(ImGui::TreeNode("Background")) {
+    if(saveable_tree_node("info", "Background")) {
     
         string bg_file_name = game.cur_area_data.bg_bmp_file_name;
         
@@ -643,7 +643,7 @@ void area_editor::process_gui_panel_info() {
     }
     
     //Metadata node.
-    if(ImGui::TreeNode("Metadata")) {
+    if(saveable_tree_node("info", "Metadata")) {
     
         //Creator input.
         string creator = game.cur_area_data.creator;
@@ -678,7 +678,7 @@ void area_editor::process_gui_panel_info() {
     }
     
     //Gameplay node.
-    if(ImGui::TreeNode("Gameplay")) {
+    if(saveable_tree_node("info", "Gameplay")) {
     
         string spray_amounts = game.cur_area_data.spray_amounts;
         if(ImGui::InputText("Sprays", &spray_amounts)) {
@@ -817,7 +817,7 @@ void area_editor::process_gui_panel_layout() {
         s_ptr = *selected_sectors.begin();
         
         //Sector behavior node.
-        if(ImGui::TreeNode("Behavior")) {
+        if(saveable_tree_node("layout", "Behavior")) {
         
             //Sector height value.
             float sector_z = s_ptr->z;
@@ -832,7 +832,7 @@ void area_editor::process_gui_panel_layout() {
             ImGui::Dummy(ImVec2(0, 16));
             
             //Sector hazards node.
-            if(ImGui::TreeNode("Hazards")) {
+            if(saveable_tree_node("layout", "Hazards")) {
             
                 vector<string> all_hazards_list;
                 for(auto h : game.hazards) {
@@ -940,7 +940,7 @@ void area_editor::process_gui_panel_layout() {
             }
             
             //Sector advanced behavior node.
-            if(ImGui::TreeNode("Advanced")) {
+            if(saveable_tree_node("layout", "Advanced")) {
             
                 //Sector type combobox.
                 vector<string> types_list;
@@ -999,7 +999,7 @@ void area_editor::process_gui_panel_layout() {
         }
         
         //Sector appearance node.
-        if(ImGui::TreeNode("Appearance")) {
+        if(saveable_tree_node("layout", "Appearance")) {
         
             int texture_type = !s_ptr->fade;
             
@@ -1062,7 +1062,7 @@ void area_editor::process_gui_panel_layout() {
             ImGui::Dummy(ImVec2(0, 16));
             
             //Sector texture effects node.
-            if(ImGui::TreeNode("Texture effects")) {
+            if(saveable_tree_node("layout", "Texture effects")) {
             
                 //Sector texture offset value.
                 point texture_translation = s_ptr->texture_info.translation;
@@ -1179,7 +1179,7 @@ void area_editor::process_gui_panel_layout() {
             }
             
             //Sector mood node.
-            if(ImGui::TreeNode("Sector mood")) {
+            if(saveable_tree_node("layout", "Sector mood")) {
             
                 //Sector brightness value.
                 int sector_brightness = s_ptr->brightness;
@@ -1379,7 +1379,7 @@ void area_editor::process_gui_panel_main() {
     ImGui::Dummy(ImVec2(0, 16));
     
     //Stats node.
-    if(ImGui::TreeNode("Stats")) {
+    if(saveable_tree_node("main", "Stats")) {
     
         //Sector amount text.
         ImGui::Text(
@@ -1545,7 +1545,7 @@ void area_editor::process_gui_panel_mobs() {
         );
         
         //Object advanced node.
-        if(ImGui::TreeNode("Advanced")) {
+        if(saveable_tree_node("mobs", "Advanced")) {
         
             //Object script vars input.
             string mob_vars = m_ptr->vars;
@@ -1652,7 +1652,7 @@ void area_editor::process_gui_panel_options() {
     }
     
     //Controls node.
-    if(ImGui::TreeNode("Controls")) {
+    if(saveable_tree_node("options", "Controls")) {
     
         //Snap threshold value.
         int snap_threshold = (int) game.options.area_editor_snap_threshold;
@@ -1693,7 +1693,7 @@ void area_editor::process_gui_panel_options() {
     }
     
     //View node.
-    if(ImGui::TreeNode("View")) {
+    if(saveable_tree_node("options", "View")) {
     
         //Show edge length checkbox.
         ImGui::Checkbox(
@@ -1748,7 +1748,7 @@ void area_editor::process_gui_panel_options() {
     }
     
     //Misc. node.
-    if(ImGui::TreeNode("Misc.")) {
+    if(saveable_tree_node("options", "Misc.")) {
     
         //Grid interval text.
         ImGui::Text(
@@ -1886,7 +1886,7 @@ void area_editor::process_gui_panel_paths() {
     path_drawing_normals = one_way_mode;
     
     //Path tools node.
-    if(ImGui::TreeNode("Tools")) {
+    if(saveable_tree_node("paths", "Tools")) {
     
         //Show closest stop checkbox.
         ImGui::Checkbox("Show closest stop", &show_closest_stop);
@@ -1947,7 +1947,7 @@ void area_editor::process_gui_panel_review() {
     }
     
     //Problem search node.
-    if(ImGui::TreeNode("Problem search")) {
+    if(saveable_tree_node("review", "Problem search")) {
     
         if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
         
@@ -1992,7 +1992,7 @@ void area_editor::process_gui_panel_review() {
     }
     
     //Preview node.
-    if(ImGui::TreeNode("Preview")) {
+    if(saveable_tree_node("review", "Preview")) {
     
         //Area preview checkbox.
         static bool see_textures;
@@ -2019,7 +2019,7 @@ void area_editor::process_gui_panel_review() {
     }
     
     //Cross-section node.
-    if(ImGui::TreeNode("Cross-section")) {
+    if(saveable_tree_node("review", "Cross-section")) {
     
         //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &show_cross_section)) {
@@ -2088,7 +2088,7 @@ void area_editor::process_gui_panel_tools() {
     }
     
     //Reference image node.
-    if(ImGui::TreeNode("Reference image")) {
+    if(saveable_tree_node("tools", "Reference image")) {
     
         string old_ref_file_name = reference_file_name;
         
@@ -2171,7 +2171,7 @@ void area_editor::process_gui_panel_tools() {
     }
     
     //Misc. node.
-    if(ImGui::TreeNode("Misc.")) {
+    if(saveable_tree_node("tools", "Misc.")) {
     
         //Load auto-backup button.
         if(ImGui::Button("Load auto-backup")) {

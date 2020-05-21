@@ -124,6 +124,16 @@ void options_struct::load(data_node* file) {
         );
     }
     
+    //Opened tree nodes in editors.
+    editor_open_nodes.clear();
+    vector<string> open_nodes_vector =
+        semicolon_list_to_vector(
+            file->get_child_by_name("editor_open_nodes")->value
+        );
+    for(size_t n = 0; n < open_nodes_vector.size(); ++n) {
+        editor_open_nodes[open_nodes_vector[n]] = true;
+    }
+    
     //Other options.
     string resolution_str;
     
@@ -244,6 +254,16 @@ void options_struct::save(data_node* file) const {
             )
         );
     }
+    
+    //Save the editor tree node preferences.
+    string open_nodes_str;
+    for(auto n : editor_open_nodes) {
+        if(n.second) {
+            open_nodes_str += n.first + ";";
+        }
+    }
+    if(!open_nodes_str.empty()) open_nodes_str.pop_back();
+    file->add(new data_node("editor_open_nodes", open_nodes_str));
     
     //Other options.
     file->add(

@@ -12,6 +12,7 @@
 
 #include "../drawing.h"
 #include "../game.h"
+#include "../functions.h"
 #include "../imgui/imgui_impl_allegro5.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../load.h"
@@ -464,6 +465,9 @@ void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
  * Exits out of the editor, with a fade.
  */
 void editor::leave() {
+    //Save the user's preferred tree node open states.
+    save_options();
+    
     game.fade_mgr.start_fade(false, [] () {
         if(game.states.area_editor_st->quick_play_area.empty()) {
             game.change_state(game.states.main_menu_st);
@@ -496,6 +500,28 @@ void editor::load() {
     }
     
     game.fade_mgr.start_fade(true, nullptr);
+    
+    //Load the user's preferred tree node open states.
+    load_options();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
+ * based on the user's preferences. It also saves the user's preferences as
+ * they open and close the node.
+ * In order for these preferences to be saved onto disk, save_options must
+ * be called.
+ * category: Category this node belongs to. This is just a generic term, and
+ *   you likely want to use the panel this node belongs to.
+ * label:    Label to give to Dear ImGui.
+ */
+bool editor::saveable_tree_node(const string &category, const string &label) {
+    string node_name = get_name() + "/" + category + "/" + label;
+    ImGui::SetNextTreeNodeOpen(game.options.editor_open_nodes[node_name]);
+    bool is_open = ImGui::TreeNode(label.c_str());
+    game.options.editor_open_nodes[node_name] = is_open;
+    return is_open;
 }
 
 

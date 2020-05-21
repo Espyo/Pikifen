@@ -277,6 +277,7 @@ void init_dear_imgui() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplAllegro5_Init(game.display);
+    ImGui::GetIO().IniFilename = "";
 }
 
 
