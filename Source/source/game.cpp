@@ -261,9 +261,9 @@ int game_class::start() {
         game.creator_tools.enabled &&
         game.creator_tools.auto_start_mode == "animation_editor"
     ) {
-        game.states.animation_editor_old_st->auto_load_anim =
+        game.states.animation_editor_st->auto_load_anim =
             game.creator_tools.auto_start_option;
-        game.change_state(game.states.animation_editor_old_st);
+        game.change_state(game.states.animation_editor_st);
     } else if(
         game.creator_tools.enabled &&
         game.creator_tools.auto_start_mode == "area_editor"
@@ -283,6 +283,7 @@ int game_class::start() {
  * Creates a game state list struct.
  */
 game_state_list::game_state_list() :
+    animation_editor_st(nullptr),
     animation_editor_old_st(nullptr),
     area_editor_st(nullptr),
     area_menu_st(nullptr),
@@ -298,6 +299,7 @@ game_state_list::game_state_list() :
  * Destroys the states in the list.
  */
 void game_state_list::destroy() {
+    delete animation_editor_st;
     delete animation_editor_old_st;
     delete area_menu_st;
     delete controls_menu_st;
@@ -305,6 +307,7 @@ void game_state_list::destroy() {
     delete main_menu_st;
     delete options_menu_st;
     
+    animation_editor_st = NULL;
     animation_editor_old_st = NULL;
     area_menu_st = NULL;
     controls_menu_st = NULL;
@@ -318,6 +321,7 @@ void game_state_list::destroy() {
  * Initializes the states in the list.
  */
 void game_state_list::init() {
+    animation_editor_st = new animation_editor();
     animation_editor_old_st = new animation_editor_old();
     area_editor_st = new area_editor();
     area_menu_st = new area_menu();

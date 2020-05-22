@@ -15,6 +15,7 @@
 
 #include "game_state.h"
 
+#include "editors/animation_editor/editor.h"
 #include "editors/animation_editor_old/editor.h"
 #include "editors/area_editor/editor.h"
 #include "game_config.h"
@@ -36,6 +37,7 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * List of all game states.
  */
 struct game_state_list {
+    animation_editor* animation_editor_st;
     animation_editor_old* animation_editor_old_st;
     area_editor* area_editor_st;
     area_menu* area_menu_st;

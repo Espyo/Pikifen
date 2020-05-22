@@ -305,6 +305,9 @@
   <Dependencies Name="Release"/>
   <VirtualDirectory Name="editors">
     <VirtualDirectory Name="animation_editor">
+      <File Name="../source/editors/animation_editor/event_handling.cpp"/>
+      <File Name="../source/editors/animation_editor/drawing.cpp"/>
+      <File Name="../source/editors/animation_editor/editor.cpp"/>
       <File Name="../source/editors/animation_editor/editor.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="animation_editor_old">

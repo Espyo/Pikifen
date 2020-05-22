@@ -70,6 +70,7 @@ Next tasks (roughly sorted most important first)
         Options should go in a pop-up menu
         "Remove" icon should be a garbage bin
         When editing an animation, have a timeline?
+        Put the canvas in one ImGui window and the panel in another?
         Style the editors
         Delete LAFI
     Details
