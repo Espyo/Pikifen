@@ -25,7 +25,7 @@
 /* ----------------------------------------------------------------------------
  * Loads the animation's data onto the gui.
  */
-void animation_editor::animation_to_gui() {
+void animation_editor_old::animation_to_gui() {
     set_button_text(frm_anims, "but_anim", cur_anim ? cur_anim->name : "");
     
     if(!cur_anim) {
@@ -60,7 +60,7 @@ void animation_editor::animation_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the body part's data onto the gui.
  */
-void animation_editor::body_part_to_gui() {
+void animation_editor_old::body_part_to_gui() {
     set_label_text(
         frm_body_parts, "lbl_nr",
         (
@@ -89,7 +89,7 @@ void animation_editor::body_part_to_gui() {
 /* ----------------------------------------------------------------------------
  * Switches to the correct frame, depending on the current editor state.
  */
-void animation_editor::change_to_right_frame() {
+void animation_editor_old::change_to_right_frame() {
     hide_all_frames();
     
     switch(state) {
@@ -135,7 +135,7 @@ void animation_editor::change_to_right_frame() {
 /* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given the item's name.
  */
-void animation_editor::create_new_from_picker(
+void animation_editor_old::create_new_from_picker(
     const size_t picker_id, const string &name
 ) {
     if(
@@ -168,7 +168,7 @@ void animation_editor::create_new_from_picker(
 /* ----------------------------------------------------------------------------
  * Adds the current hitbox's transformation controller data to the GUI.
  */
-void animation_editor::cur_hitbox_tc_to_gui() {
+void animation_editor_old::cur_hitbox_tc_to_gui() {
     if(!cur_sprite && !cur_hitbox) return;
     
     if(side_view) {
@@ -208,7 +208,7 @@ void animation_editor::cur_hitbox_tc_to_gui() {
 /* ----------------------------------------------------------------------------
  * Adds the current sprite's transformation controller data to the GUI.
  */
-void animation_editor::cur_sprite_tc_to_gui() {
+void animation_editor_old::cur_sprite_tc_to_gui() {
     set_textbox_text(
         frm_sprite_tra, "txt_x", f2s(cur_sprite_tc.get_center().x)
     );
@@ -235,7 +235,7 @@ void animation_editor::cur_sprite_tc_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the frame's data from memory to the gui.
  */
-void animation_editor::frame_to_gui() {
+void animation_editor_old::frame_to_gui() {
     bool valid = cur_frame_nr != INVALID && cur_anim;
     
     set_label_text(
@@ -277,7 +277,7 @@ void animation_editor::frame_to_gui() {
 /* ----------------------------------------------------------------------------
  * Saves the animation's data to memory using info on the gui.
  */
-void animation_editor::gui_to_animation() {
+void animation_editor_old::gui_to_animation() {
     if(!cur_anim) return;
     
     cur_anim->loop_frame =
@@ -303,7 +303,7 @@ void animation_editor::gui_to_animation() {
 /* ----------------------------------------------------------------------------
  * Saves the body part's data from the gui.
  */
-void animation_editor::gui_to_body_part() {
+void animation_editor_old::gui_to_body_part() {
     body_part_to_gui();
     
     made_new_changes = true;
@@ -313,7 +313,7 @@ void animation_editor::gui_to_body_part() {
 /* ----------------------------------------------------------------------------
  * Saves the frame's data to memory using info on the gui.
  */
-void animation_editor::gui_to_frame() {
+void animation_editor_old::gui_to_frame() {
     bool valid = cur_frame_nr != INVALID && cur_anim;
     if(!valid) return;
     
@@ -337,7 +337,7 @@ void animation_editor::gui_to_frame() {
 /* ----------------------------------------------------------------------------
  * Saves the hitbox's data to memory using info on the gui.
  */
-void animation_editor::gui_to_hitbox() {
+void animation_editor_old::gui_to_hitbox() {
     bool valid = cur_sprite && cur_hitbox;
     if(!valid) return;
     
@@ -396,7 +396,7 @@ void animation_editor::gui_to_hitbox() {
 /* ----------------------------------------------------------------------------
  * Saves the options data to memory using info on the gui.
  */
-void animation_editor::gui_to_options() {
+void animation_editor_old::gui_to_options() {
     game.options.editor_mmb_pan =
         get_checkbox_check(frm_options, "chk_mmb_pan");
     game.options.editor_mouse_drag_threshold =
@@ -410,7 +410,7 @@ void animation_editor::gui_to_options() {
 /* ----------------------------------------------------------------------------
  * Saves the sprite's bitmap data to memory using info on the gui.
  */
-void animation_editor::gui_to_sprite_bmp() {
+void animation_editor_old::gui_to_sprite_bmp() {
     if(!cur_sprite) return;
     
     string new_file;
@@ -457,7 +457,7 @@ void animation_editor::gui_to_sprite_bmp() {
 /* ----------------------------------------------------------------------------
  * Saves the sprite's transform data to memory using info on the gui.
  */
-void animation_editor::gui_to_sprite_transform() {
+void animation_editor_old::gui_to_sprite_transform() {
     cur_sprite->offset.x =
         s2f(get_textbox_text(frm_sprite_tra, "txt_x"));
     cur_sprite->offset.y =
@@ -497,7 +497,7 @@ void animation_editor::gui_to_sprite_transform() {
 /* ----------------------------------------------------------------------------
  * Saves the Pikmin top's data to memory using info on the gui.
  */
-void animation_editor::gui_to_top() {
+void animation_editor_old::gui_to_top() {
     cur_sprite->top_visible =
         get_checkbox_check(frm_top, "chk_visible");
     cur_sprite->top_pos.x =
@@ -525,7 +525,7 @@ void animation_editor::gui_to_top() {
 /* ----------------------------------------------------------------------------
  * Hides all menu frames.
  */
-void animation_editor::hide_all_frames() {
+void animation_editor_old::hide_all_frames() {
     frm_main->hide();
     frm_picker->hide();
     frm_load->hide();
@@ -544,7 +544,7 @@ void animation_editor::hide_all_frames() {
 /* ----------------------------------------------------------------------------
  * Loads the hitbox's data from memory to the gui.
  */
-void animation_editor::hitbox_to_gui() {
+void animation_editor_old::hitbox_to_gui() {
     if(cur_hitbox) {
         set_label_text(frm_hitboxes, "lbl_name", cur_hitbox->body_part_name);
         set_textbox_text(frm_hitbox, "txt_x", f2s(cur_hitbox->pos.x));
@@ -615,10 +615,10 @@ void animation_editor::hitbox_to_gui() {
 
 /* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
- * For the ID of the picker, use animation_editor::PICKER_*.
+ * For the ID of the picker, use animation_editor_old::PICKER_*.
  * The content to use is decided from that.
  */
-void animation_editor::open_picker(
+void animation_editor_old::open_picker(
     const unsigned char id, const bool can_make_new
 ) {
     vector<std::pair<string, string> > elements;
@@ -702,7 +702,7 @@ void animation_editor::open_picker(
 /* ----------------------------------------------------------------------------
  * Loads the options data onto the GUI.
  */
-void animation_editor::options_to_gui() {
+void animation_editor_old::options_to_gui() {
     set_checkbox_check(frm_options, "chk_mmb_pan", game.options.editor_mmb_pan);
     set_textbox_text(
         frm_options, "txt_drag_threshold",
@@ -715,7 +715,7 @@ void animation_editor::options_to_gui() {
  * Picks an element from the picker, closes the picker, and then
  * does something with the chosen element.
  */
-void animation_editor::pick(
+void animation_editor_old::pick(
     const size_t picker_id, const string &name, const string &category
 ) {
     if(
@@ -816,7 +816,7 @@ void animation_editor::pick(
 /* ----------------------------------------------------------------------------
  * Picks an animation to edit.
  */
-void animation_editor::pick_animation(const string &name) {
+void animation_editor_old::pick_animation(const string &name) {
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr =
         (cur_anim->frames.size()) ? 0 : INVALID;
@@ -830,7 +830,7 @@ void animation_editor::pick_animation(const string &name) {
 /* ----------------------------------------------------------------------------
  * Picks a sprite to edit.
  */
-void animation_editor::pick_sprite(const string &name) {
+void animation_editor_old::pick_sprite(const string &name) {
     cur_sprite = anims.sprites[anims.find_sprite(name)];
     cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
@@ -846,7 +846,7 @@ void animation_editor::pick_sprite(const string &name) {
 /* ----------------------------------------------------------------------------
  * Populates the history frame with the most recent files.
  */
-void animation_editor::populate_history() {
+void animation_editor_old::populate_history() {
     lafi::frame* f =
         (lafi::frame*) frm_load->widgets["frm_list"];
         
@@ -903,7 +903,7 @@ void animation_editor::populate_history() {
 /* ----------------------------------------------------------------------------
  * Loads the sprite's bitmap data from memory to the gui.
  */
-void animation_editor::sprite_bmp_to_gui() {
+void animation_editor_old::sprite_bmp_to_gui() {
     set_textbox_text(frm_sprite_bmp, "txt_file", cur_sprite->file);
     set_textbox_text(frm_sprite_bmp, "txt_x", i2s(cur_sprite->file_pos.x));
     set_textbox_text(frm_sprite_bmp, "txt_y", i2s(cur_sprite->file_pos.y));
@@ -915,7 +915,7 @@ void animation_editor::sprite_bmp_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the sprite's data from memory to the gui.
  */
-void animation_editor::sprite_to_gui() {
+void animation_editor_old::sprite_to_gui() {
     set_button_text(
         frm_sprites, "but_sprite", cur_sprite ? cur_sprite->name : ""
     );
@@ -946,7 +946,7 @@ void animation_editor::sprite_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the sprite transformation's data from memory to the gui.
  */
-void animation_editor::sprite_transform_to_gui() {
+void animation_editor_old::sprite_transform_to_gui() {
     set_textbox_text(frm_sprite_tra, "txt_x", f2s(cur_sprite->offset.x));
     set_textbox_text(frm_sprite_tra, "txt_y", f2s(cur_sprite->offset.y));
     set_textbox_text(frm_sprite_tra, "txt_sx", f2s(cur_sprite->scale.x));
@@ -974,7 +974,7 @@ void animation_editor::sprite_transform_to_gui() {
  * Adds the current sprite Pikmin top's transformation controller data
  * to the GUI.
  */
-void animation_editor::top_tc_to_gui() {
+void animation_editor_old::top_tc_to_gui() {
     set_textbox_text(
         frm_top, "txt_x", f2s(top_tc.get_center().x)
     );
@@ -997,7 +997,7 @@ void animation_editor::top_tc_to_gui() {
 /* ----------------------------------------------------------------------------
  * Loads the Pikmin top's data onto the gui.
  */
-void animation_editor::top_to_gui() {
+void animation_editor_old::top_to_gui() {
     lafi::checkbox* c = (lafi::checkbox*) frm_top->widgets["chk_visible"];
     if(cur_sprite->top_visible) c->check();
     else c->uncheck();
@@ -1014,7 +1014,7 @@ void animation_editor::top_to_gui() {
  * Updates the current hitbox's transformation controller, based on whether
  * we're using the side view or not.
  */
-void animation_editor::update_cur_hitbox_tc() {
+void animation_editor_old::update_cur_hitbox_tc() {
     if(!cur_hitbox) return;
     if(side_view) {
         cur_hitbox_tc.set_center(
@@ -1038,7 +1038,7 @@ void animation_editor::update_cur_hitbox_tc() {
 /* ----------------------------------------------------------------------------
  * Update the stats on the main menu, as well as some other minor things.
  */
-void animation_editor::update_stats() {
+void animation_editor_old::update_stats() {
     if(file_path.empty()) {
         frm_object->hide();
     } else {

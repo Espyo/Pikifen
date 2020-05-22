@@ -304,6 +304,17 @@
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
   <VirtualDirectory Name="editors">
+    <VirtualDirectory Name="animation_editor">
+      <File Name="../source/editors/animation_editor/editor.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="animation_editor_old">
+      <File Name="../source/editors/animation_editor_old/loading.cpp"/>
+      <File Name="../source/editors/animation_editor_old/gui_functions.cpp"/>
+      <File Name="../source/editors/animation_editor_old/event_handling.cpp"/>
+      <File Name="../source/editors/animation_editor_old/editor.h"/>
+      <File Name="../source/editors/animation_editor_old/editor.cpp"/>
+      <File Name="../source/editors/animation_editor_old/drawing.cpp"/>
+    </VirtualDirectory>
     <File Name="../source/editors/editor.cpp"/>
     <File Name="../source/editors/editor.h"/>
     <File Name="../source/editors/editor_old.h"/>
@@ -315,14 +326,6 @@
       <File Name="../source/editors/area_editor/drawing.cpp"/>
       <File Name="../source/editors/area_editor/editor.cpp"/>
       <File Name="../source/editors/area_editor/editor.h"/>
-    </VirtualDirectory>
-    <VirtualDirectory Name="animation_editor">
-      <File Name="../source/editors/animation_editor/drawing.cpp"/>
-      <File Name="../source/editors/animation_editor/loading.cpp"/>
-      <File Name="../source/editors/animation_editor/gui_functions.cpp"/>
-      <File Name="../source/editors/animation_editor/event_handling.cpp"/>
-      <File Name="../source/editors/animation_editor/editor.h"/>
-      <File Name="../source/editors/animation_editor/editor.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">

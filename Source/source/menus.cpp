@@ -935,7 +935,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.animation_editor_st);
+            game.change_state(game.states.animation_editor_old_st);
         });
     }, "Animation editor", game.fonts.area_name
         )

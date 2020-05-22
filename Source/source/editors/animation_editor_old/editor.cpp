@@ -34,17 +34,17 @@ using std::queue;
 
 
 //Amount to pan the camera by when using the keyboard.
-const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+const float animation_editor_old::KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum zoom level possible in the editor.
-const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
+const float animation_editor_old::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
-const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
+const float animation_editor_old::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
 
 /* ----------------------------------------------------------------------------
  * Initializes animation editor class stuff.
  */
-animation_editor::animation_editor() :
+animation_editor_old::animation_editor_old() :
     anim_playing(false),
     comparison(false),
     comparison_above(true),
@@ -97,7 +97,7 @@ animation_editor::animation_editor() :
  * Centers the camera on the sprite's parent bitmap, so the user can choose
  * what part of the bitmap they want to use for the sprite.
  */
-void animation_editor::center_camera_on_sprite_bitmap() {
+void animation_editor_old::center_camera_on_sprite_bitmap() {
     if(cur_sprite && cur_sprite->parent_bmp) {
         int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
         int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
@@ -115,7 +115,7 @@ void animation_editor::center_camera_on_sprite_bitmap() {
 /* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the animation editor.
  */
-void animation_editor::do_logic() {
+void animation_editor_old::do_logic() {
     editor_old::do_logic_pre();
     
     if(
@@ -159,7 +159,7 @@ void animation_editor::do_logic() {
 /* ----------------------------------------------------------------------------
  * Enters the side view mode.
  */
-void animation_editor::enter_side_view() {
+void animation_editor_old::enter_side_view() {
     side_view = true;
     set_checkbox_check(frm_hitboxes, "chk_side_view", true);
     update_cur_hitbox_tc();
@@ -170,7 +170,7 @@ void animation_editor::enter_side_view() {
 /* ----------------------------------------------------------------------------
  * Exits the side view mode.
  */
-void animation_editor::exit_side_view() {
+void animation_editor_old::exit_side_view() {
     side_view = false;
     set_checkbox_check(frm_hitboxes, "chk_side_view", false);
     update_cur_hitbox_tc();
@@ -183,7 +183,7 @@ void animation_editor::exit_side_view() {
  * This implies cutting it in two lines, and even replacing the start with
  * ellipsis, if needed.
  */
-string animation_editor::get_cut_path(const string &p) const {
+string animation_editor_old::get_cut_path(const string &p) const {
     if(p.size() <= 22) return p;
     
     string result = p;
@@ -204,7 +204,7 @@ string animation_editor::get_cut_path(const string &p) const {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string animation_editor::get_name() const {
+string animation_editor_old::get_name() const {
     return "animation editor";
 }
 
@@ -212,7 +212,7 @@ string animation_editor::get_name() const {
 /* ----------------------------------------------------------------------------
  * Imports the animation data from a different animation to the current.
  */
-void animation_editor::import_animation_data(const string &name) {
+void animation_editor_old::import_animation_data(const string &name) {
     animation* a = anims.animations[anims.find_animation(name)];
     
     cur_anim->frames = a->frames;
@@ -227,7 +227,7 @@ void animation_editor::import_animation_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Imports the sprite file data from a different sprite to the current.
  */
-void animation_editor::import_sprite_file_data(const string &name) {
+void animation_editor_old::import_sprite_file_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     set_textbox_text(frm_sprite_bmp, "txt_file", s->file);
     set_textbox_text(frm_sprite_bmp, "txt_x", i2s(s->file_pos.x));
@@ -242,7 +242,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Imports the sprite hitbox data from a different sprite to the current.
  */
-void animation_editor::import_sprite_hitbox_data(const string &name) {
+void animation_editor_old::import_sprite_hitbox_data(const string &name) {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         if(anims.sprites[s]->name == name) {
             cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
@@ -262,7 +262,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Imports the sprite top data from a different sprite to the current.
  */
-void animation_editor::import_sprite_top_data(const string &name) {
+void animation_editor_old::import_sprite_top_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     set_checkbox_check(frm_top, "chk_visible", s->top_visible);
     set_textbox_text(frm_top, "txt_x", f2s(s->top_pos.x));
@@ -280,7 +280,7 @@ void animation_editor::import_sprite_top_data(const string &name) {
  * Imports the sprite transformation data from
  * a different sprite to the current.
  */
-void animation_editor::import_sprite_transformation_data(const string &name) {
+void animation_editor_old::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     set_textbox_text(frm_sprite_tra, "txt_x", f2s(s->offset.x));
     set_textbox_text(frm_sprite_tra, "txt_y", f2s(s->offset.y));
@@ -296,7 +296,7 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Loads the animation database for the current object.
  */
-void animation_editor::load_animation_database(
+void animation_editor_old::load_animation_database(
     const bool should_update_history
 ) {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
@@ -433,7 +433,7 @@ void animation_editor::load_animation_database(
 /* ----------------------------------------------------------------------------
  * Opens the correct radio button and frame for the specified hitbox type.
  */
-void animation_editor::open_hitbox_type(unsigned char type) {
+void animation_editor_old::open_hitbox_type(unsigned char type) {
     lafi::widget* f = frm_hitboxes->widgets["frm_hitbox"];
     
     set_radio_selection(f, "rad_normal", false);
@@ -463,7 +463,7 @@ void animation_editor::open_hitbox_type(unsigned char type) {
 /* ----------------------------------------------------------------------------
  * Renames the chosen animation to the chosen name, in the "tools" menu.
  */
-void animation_editor::rename_animation() {
+void animation_editor_old::rename_animation() {
     lafi::button* but_ptr =
         (lafi::button*) frm_tools->widgets["but_rename_anim_name"];
     lafi::textbox* txt_ptr =
@@ -502,7 +502,7 @@ void animation_editor::rename_animation() {
 /* ----------------------------------------------------------------------------
  * Renames the chosen sprite to the chosen name, in the "tools" menu.
  */
-void animation_editor::rename_sprite() {
+void animation_editor_old::rename_sprite() {
     lafi::button* but_ptr =
         (lafi::button*) frm_tools->widgets["but_rename_sprite_name"];
     lafi::textbox* txt_ptr =
@@ -549,7 +549,7 @@ void animation_editor::rename_sprite() {
 /* ----------------------------------------------------------------------------
  * Resizes sprites, body parts, etc. by a multiplier.
  */
-void animation_editor::resize_everything() {
+void animation_editor_old::resize_everything() {
     float mult = s2f(get_textbox_text(frm_tools, "txt_resize"));
     
     if(mult == 0) {
@@ -582,7 +582,7 @@ void animation_editor::resize_everything() {
 /* ----------------------------------------------------------------------------
  * Saves the animation database onto the mob's file.
  */
-void animation_editor::save_animation_database() {
+void animation_editor_old::save_animation_database() {
     data_node file_node = data_node("", "");
     
     data_node* animations_node = new data_node("animations", "");
@@ -785,7 +785,7 @@ void animation_editor::save_animation_database() {
 /* ----------------------------------------------------------------------------
  * Sets all sprite scales to the value specified in the textbox.
  */
-void animation_editor::set_all_sprite_scales() {
+void animation_editor_old::set_all_sprite_scales() {
     float mult = s2f(get_textbox_text(frm_tools, "txt_set_scales"));
     
     if(mult == 0) {
@@ -814,7 +814,7 @@ static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
  * selection_pixels: Array that controls which pixels are selected or not.
  * x, y:             Image coordinates to start on.
  */
-void animation_editor::sprite_bmp_flood_fill(
+void animation_editor_old::sprite_bmp_flood_fill(
     ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
 ) {
     //https://en.wikipedia.org/wiki/Flood_fill#The_algorithm
@@ -927,7 +927,7 @@ void animation_editor::sprite_bmp_flood_fill(
 /* ----------------------------------------------------------------------------
  * Unloads the editor from memory.
  */
-void animation_editor::unload() {
+void animation_editor_old::unload() {
     editor_old::unload();
     
     anims.destroy();
@@ -948,7 +948,7 @@ void animation_editor::unload() {
 /* ----------------------------------------------------------------------------
  * Updates the history list, by adding a new entry or bumping it up.
  */
-void animation_editor::update_history(const string &n) {
+void animation_editor_old::update_history(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
@@ -980,7 +980,7 @@ void animation_editor::update_history(const string &n) {
 /* ----------------------------------------------------------------------------
  * Update every frame's hitbox instances in light of new hitbox info.
  */
-void animation_editor::update_hitboxes() {
+void animation_editor_old::update_hitboxes() {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
     
         sprite* s_ptr = anims.sprites[s];

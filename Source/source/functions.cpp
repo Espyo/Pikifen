@@ -28,7 +28,7 @@
 
 #include "const.h"
 #include "drawing.h"
-#include "editors/animation_editor/editor.h"
+#include "editors/animation_editor_old/editor.h"
 #include "game.h"
 #include "init.h"
 #include "menus.h"
@@ -918,12 +918,12 @@ void save_options() {
     
     //Also add the animation editor history.
     for(
-        size_t h = 0; h < game.states.animation_editor_st->history.size(); ++h
+        size_t h = 0; h < game.states.animation_editor_old_st->history.size(); ++h
     ) {
         file.add(
             new data_node(
                 "animation_editor_history_" + i2s(h + 1),
-                game.states.animation_editor_st->history[h]
+                game.states.animation_editor_old_st->history[h]
             )
         );
     }

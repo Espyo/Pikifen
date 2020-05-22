@@ -19,7 +19,7 @@
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the animation editor.
  */
-void animation_editor::do_drawing() {
+void animation_editor_old::do_drawing() {
 
     gui->draw();
     
@@ -266,7 +266,7 @@ void animation_editor::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Draws the comparison sprite on the canvas, all tinted and everything.
  */
-void animation_editor::draw_comparison() {
+void animation_editor_old::draw_comparison() {
     if(
         comparison && comparison_blink_show &&
         comparison_sprite && comparison_sprite->bitmap
@@ -293,7 +293,7 @@ void animation_editor::draw_comparison() {
 /* ----------------------------------------------------------------------------
  * Draws a hitbox on the canvas in the sideways view.
  */
-void animation_editor::draw_side_view_hitbox(
+void animation_editor_old::draw_side_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, const float outline_thickness
 ) {
@@ -339,7 +339,7 @@ void animation_editor::draw_side_view_hitbox(
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin silhouette on the canvas in the sideways view.
  */
-void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
+void animation_editor_old::draw_side_view_pikmin_silhouette(const float x_offset) {
     draw_bitmap(
         game.sys_assets.bmp_pikmin_silhouette,
         point(x_offset, -game.config.standard_pikmin_height / 2.0),
@@ -352,7 +352,7 @@ void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
 /* ----------------------------------------------------------------------------
  * Draws a sprite on the canvas in the sideways view.
  */
-void animation_editor::draw_side_view_sprite(sprite* s) {
+void animation_editor_old::draw_side_view_sprite(sprite* s) {
     point min, max;
     ALLEGRO_COLOR color = al_map_rgba(0, 0, 0, 0);
     
@@ -379,7 +379,7 @@ void animation_editor::draw_side_view_sprite(sprite* s) {
 /* ----------------------------------------------------------------------------
  * Draws a hitbox on the canvas in the standard top-down view.
  */
-void animation_editor::draw_top_down_view_hitbox(
+void animation_editor_old::draw_top_down_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, const float outline_thickness
 ) {
@@ -397,7 +397,7 @@ void animation_editor::draw_top_down_view_hitbox(
 /* ----------------------------------------------------------------------------
  * Draws the mob radius on the canvas in the standard top-down view.
  */
-void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
+void animation_editor_old::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
         0, 0, mt->radius,
         al_map_rgb(240, 240, 240), 1.0 / game.cam.zoom
@@ -415,7 +415,7 @@ void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin silhouette on the canvas in the standard top-down view.
  */
-void animation_editor::draw_top_down_view_pikmin_silhouette(
+void animation_editor_old::draw_top_down_view_pikmin_silhouette(
     const float x_offset
 ) {
     draw_bitmap(
@@ -429,7 +429,7 @@ void animation_editor::draw_top_down_view_pikmin_silhouette(
 /* ----------------------------------------------------------------------------
  * Draws a sprite on the canvas in the standard top-down view.
  */
-void animation_editor::draw_top_down_view_sprite(sprite* s) {
+void animation_editor_old::draw_top_down_view_sprite(sprite* s) {
     if(!comparison_above) {
         draw_comparison();
     }

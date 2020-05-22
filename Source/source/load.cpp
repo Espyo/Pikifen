@@ -944,12 +944,12 @@ void load_options() {
     //Set up the animation editor history.
     reader_setter rs(&file);
     
-    game.states.animation_editor_st->history.clear();
-    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
-        game.states.animation_editor_st->history.push_back("");
+    game.states.animation_editor_old_st->history.clear();
+    for(size_t h = 0; h < animation_editor_old::HISTORY_SIZE; ++h) {
+        game.states.animation_editor_old_st->history.push_back("");
         rs.set(
-            "animation_editor_history_" + i2s(h + 1),
-            game.states.animation_editor_st->history[h]
+            "animation_editor_old_history_" + i2s(h + 1),
+            game.states.animation_editor_old_st->history[h]
         );
     }
 }
