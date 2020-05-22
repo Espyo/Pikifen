@@ -62,7 +62,7 @@ void area_editor::process_gui() {
         "Area editor", NULL,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoCollapse// | ImGuiWindowFlags_NoBackground
+        ImGuiWindowFlags_NoCollapse
     );
     
     //The menu bar.

@@ -14,6 +14,8 @@
 #include <string>
 
 #include "../editor.h"
+#include "../../imgui/imgui_impl_allegro5.h"
+
 
 class animation_editor : public editor {
 public:
@@ -29,6 +31,7 @@ public:
     
     void do_logic();
     void do_drawing();
+    void draw_canvas();
     void load();
     void unload();
     virtual string get_name() const;
@@ -96,6 +99,9 @@ private:
     
     //General functions.
     void center_camera_on_sprite_bitmap();
+    static void draw_canvas_imgui_callback(
+        const ImDrawList* parent_list, const ImDrawCmd* cmd
+    );
     void draw_comparison();
     void draw_side_view_hitbox(
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
@@ -119,6 +125,11 @@ private:
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
     void load_animation_database(const bool should_update_history);
+    void process_gui();
+    void process_gui_control_panel();
+    void process_gui_menu_bar();
+    void process_gui_status_bar();
+    void process_gui_toolbar();
     void rename_animation();
     void rename_sprite();
     void resize_everything();

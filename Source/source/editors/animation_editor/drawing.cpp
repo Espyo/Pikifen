@@ -20,9 +20,29 @@
  * Handles the drawing part of the main loop of the animation editor.
  */
 void animation_editor::do_drawing() {
-
-    //TODO gui->draw();
+    //Render what is needed for the GUI.
+    //This will also render the canvas in due time.
+    ImGui::Render();
     
+    //Actually draw the GUI + canvas on-screen.
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+    
+    draw_unsaved_changes_warning();
+    
+    //And the fade manager atop it all.
+    game.fade_mgr.draw();
+    
+    //Finally, swap buffers.
+    al_flip_display();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draw the canvas. This is called as a callback inside the
+ * ImGui rendering process.
+ */
+void animation_editor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
     
     al_set_clipping_rectangle(
@@ -252,14 +272,9 @@ void animation_editor::do_drawing() {
         }
     }
     
+    //Finish up.
     al_reset_clipping_rectangle();
     al_use_transform(&game.identity_transform);
-    
-    draw_unsaved_changes_warning();
-    
-    game.fade_mgr.draw();
-    
-    al_flip_display();
 }
 
 

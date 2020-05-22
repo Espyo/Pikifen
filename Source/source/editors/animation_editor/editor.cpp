@@ -108,6 +108,8 @@ void animation_editor::center_camera_on_sprite_bitmap() {
 void animation_editor::do_logic() {
     editor::do_logic_pre();
     
+    process_gui();
+    
     if(
         anim_playing && state == EDITOR_STATE_ANIMATION &&
         cur_anim && cur_frame_nr != INVALID
@@ -143,6 +145,16 @@ void animation_editor::do_logic() {
     }
     
     editor::do_logic_post();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ */
+void animation_editor::draw_canvas_imgui_callback(
+    const ImDrawList* parent_list, const ImDrawCmd* cmd
+) {
+    game.states.animation_editor_st->draw_canvas();
 }
 
 
