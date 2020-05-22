@@ -648,7 +648,7 @@ void area_editor::process_gui_panel_info() {
         
         //Background zoom value.
         float bg_bmp_zoom = game.cur_area_data.bg_bmp_zoom;
-        if(ImGui::DragFloat("Zoom", &bg_bmp_zoom)) {
+        if(ImGui::DragFloat("Zoom", &bg_bmp_zoom, 0.01)) {
             register_change("area background zoom change");
             game.cur_area_data.bg_bmp_zoom = bg_bmp_zoom;
         }
@@ -870,78 +870,87 @@ void area_editor::process_gui_panel_layout() {
                     all_hazards_list.push_back(h.first);
                 }
                 
-                static string new_hazard_selected_name;
                 static int selected_hazard_nr = 0;
                 
-                //Sector hazard selection combobox.
-                ImGui::SetNextItemWidth(160.0f);
-                ImGui::Combo(
-                    "##hazards", &new_hazard_selected_name, all_hazards_list
-                );
-                
                 //Sector hazard addition button.
-                ImGui::SameLine();
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_ADD],
                         ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                     )
                 ) {
-                    sector* s_ptr = *selected_sectors.begin();
-                    vector<string> list =
-                        semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(
-                        !new_hazard_selected_name.empty() &&
-                        std::find(
-                            list.begin(), list.end(), new_hazard_selected_name
-                        ) == list.end()
-                    ) {
-                        register_change("sector hazard addition");
-                        if(!s_ptr->hazards_str.empty()) {
-                            s_ptr->hazards_str += ";";
-                        }
-                        s_ptr->hazards_str += new_hazard_selected_name;
-                        selected_hazard_nr = list.size();
-                    }
+                    ImGui::OpenPopup("selectHazard");
                 }
                 set_tooltip(
-                    "Add the specified hazard to the list of hazards this "
-                    "sector has."
+                    "Add a new hazard to the list of hazards this sector has.\n"
+                    "Click to open a pop-up for you to choose from."
                 );
                 
-                //Sector hzard removal button.
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                    )
-                ) {
-                    sector* s_ptr = *selected_sectors.begin();
-                    vector<string> list =
-                        semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(
-                        selected_hazard_nr >= 0 &&
-                        selected_hazard_nr < list.size()
-                    ) {
-                        register_change("sector hazard removal");
-                        s_ptr->hazards_str.clear();
-                        for(size_t h = 0; h < list.size(); ++h) {
-                            if(h == selected_hazard_nr) continue;
-                            s_ptr->hazards_str += list[h] + ";";
+                if(ImGui::BeginPopup("selectHazard")) {
+                    for(size_t h = 0; h < all_hazards_list.size(); ++h) {
+                        string name = all_hazards_list[h];
+                        if(ImGui::Selectable(name.c_str())) {
+                        
+                            sector* s_ptr = *selected_sectors.begin();
+                            vector<string> list =
+                                semicolon_list_to_vector(s_ptr->hazards_str);
+                            if(
+                                std::find(
+                                    list.begin(), list.end(), name
+                                ) == list.end()
+                            ) {
+                                register_change("sector hazard addition");
+                                if(!s_ptr->hazards_str.empty()) {
+                                    s_ptr->hazards_str += ";";
+                                }
+                                s_ptr->hazards_str += name;
+                                selected_hazard_nr = list.size();
+                            }
                         }
-                        if(!s_ptr->hazards_str.empty()) {
-                            //Delete the trailing semicolon.
-                            s_ptr->hazards_str.pop_back();
-                        }
-                        selected_hazard_nr =
-                            std::min(selected_hazard_nr, (int) list.size() - 2);
                     }
+                    ImGui::EndPopup();
                 }
-                set_tooltip(
-                    "Remove the selected hazard from the list of hazards this "
-                    "sector has."
-                );
+                
+                //Sector hazard removal button.
+                if(
+                    selected_hazard_nr >= 0 &&
+                    !(*selected_sectors.begin())->hazards_str.empty()
+                ) {
+                    ImGui::SameLine();
+                    if(
+                        ImGui::ImageButton(
+                            editor_icons[ICON_REMOVE],
+                            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        )
+                    ) {
+                        sector* s_ptr = *selected_sectors.begin();
+                        vector<string> list =
+                            semicolon_list_to_vector(s_ptr->hazards_str);
+                        if(
+                            selected_hazard_nr >= 0 &&
+                            selected_hazard_nr < list.size()
+                        ) {
+                            register_change("sector hazard removal");
+                            s_ptr->hazards_str.clear();
+                            for(size_t h = 0; h < list.size(); ++h) {
+                                if(h == selected_hazard_nr) continue;
+                                s_ptr->hazards_str += list[h] + ";";
+                            }
+                            if(!s_ptr->hazards_str.empty()) {
+                                //Delete the trailing semicolon.
+                                s_ptr->hazards_str.pop_back();
+                            }
+                            selected_hazard_nr =
+                                std::min(
+                                    selected_hazard_nr, (int) list.size() - 2
+                                );
+                        }
+                    }
+                    set_tooltip(
+                        "Remove the selected hazard from the list of "
+                        "hazards this sector has."
+                    );
+                }
                 
                 //Sector hazard list.
                 ImGui::ListBox(
@@ -1859,7 +1868,7 @@ void area_editor::process_gui_panel_options() {
         int undo_limit = game.options.area_editor_undo_limit;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
-            "Undo limit", &undo_limit, 1, 0, 9999
+            "Undo limit", &undo_limit, 0.1, 0, 9999
         );
         set_tooltip(
             "Maximum number of operations that can be undone. 0 = off."
@@ -2080,7 +2089,7 @@ void area_editor::process_gui_panel_review() {
     if(saveable_tree_node("review", "Preview")) {
     
         //Area preview checkbox.
-        static bool see_textures;
+        bool see_textures = (sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW);
         if(ImGui::Checkbox("Preview area", &see_textures)) {
             clear_problems();
             if(see_textures) {

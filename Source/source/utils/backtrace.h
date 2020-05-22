@@ -142,7 +142,7 @@ vector<string> get_backtrace() {
     for(size_t s = 0; s < n_symbols; ++s) {
         SymFromAddr(process, (DWORD64) stack[s], NULL, symbol);
         
-        stringstream str;
+        std::stringstream str;
         if(
             SymGetLineFromAddr64(
                 process, (DWORD64) stack[s],

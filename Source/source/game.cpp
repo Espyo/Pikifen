@@ -8,6 +8,8 @@
  * Global game-related functions.
  */
 
+#include <algorithm>
+
 #include <allegro5/allegro_native_dialog.h>
 
 #include "game.h"
