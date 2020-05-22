@@ -22,7 +22,6 @@
 
 #include "controls.h"
 #include "editors/animation_editor/editor.h"
-#include "editors/area_editor_old/editor.h"
 #include "functions.h"
 #include "game.h"
 #include "game_state.h"

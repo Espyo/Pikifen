@@ -2,9 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Change area editor to Dear ImGui
-        Remove the ImGui demo button
-        Delete old area editor
+    Change animation editor to Dear ImGui
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

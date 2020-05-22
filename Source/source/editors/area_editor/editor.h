@@ -370,8 +370,6 @@ private:
     bool show_cross_section;
     //When using the cross-section view tool, render the grid?
     bool show_cross_section_grid;
-    //Show the Dear ImGui demo window?
-    bool show_imgui_demo; //TODO TEMP
     //Show the path preview and the checkpoints?
     bool show_path_preview;
     //Render the reference image?

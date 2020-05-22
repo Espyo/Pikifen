@@ -316,14 +316,6 @@
       <File Name="../source/editors/area_editor/editor.cpp"/>
       <File Name="../source/editors/area_editor/editor.h"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="area_editor_old">
-      <File Name="../source/editors/area_editor_old/loading.cpp"/>
-      <File Name="../source/editors/area_editor_old/gui_functions.cpp"/>
-      <File Name="../source/editors/area_editor_old/event_handling.cpp"/>
-      <File Name="../source/editors/area_editor_old/editor.h"/>
-      <File Name="../source/editors/area_editor_old/editor.cpp"/>
-      <File Name="../source/editors/area_editor_old/drawing.cpp"/>
-    </VirtualDirectory>
     <VirtualDirectory Name="animation_editor">
       <File Name="../source/editors/animation_editor/drawing.cpp"/>
       <File Name="../source/editors/animation_editor/loading.cpp"/>

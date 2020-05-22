@@ -285,7 +285,6 @@ int game_class::start() {
 game_state_list::game_state_list() :
     animation_editor_st(nullptr),
     area_editor_st(nullptr),
-    area_editor_old_st(nullptr),
     area_menu_st(nullptr),
     controls_menu_st(nullptr),
     gameplay_st(nullptr),
@@ -300,7 +299,6 @@ game_state_list::game_state_list() :
  */
 void game_state_list::destroy() {
     delete animation_editor_st;
-    delete area_editor_old_st;
     delete area_menu_st;
     delete controls_menu_st;
     delete gameplay_st;
@@ -308,7 +306,6 @@ void game_state_list::destroy() {
     delete options_menu_st;
     
     animation_editor_st = NULL;
-    area_editor_old_st = NULL;
     area_menu_st = NULL;
     controls_menu_st = NULL;
     gameplay_st = NULL;
@@ -322,7 +319,6 @@ void game_state_list::destroy() {
  */
 void game_state_list::init() {
     animation_editor_st = new animation_editor();
-    area_editor_old_st = new area_editor_old();
     area_editor_st = new area_editor();
     area_menu_st = new area_menu();
     controls_menu_st = new controls_menu();

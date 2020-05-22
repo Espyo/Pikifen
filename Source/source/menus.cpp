@@ -946,13 +946,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            ALLEGRO_KEYBOARD_STATE st;
-            al_get_keyboard_state(&st);
-            if(al_key_down(&st, ALLEGRO_KEY_LSHIFT)) {
-                game.change_state(game.states.area_editor_old_st);
-            } else {
-                game.change_state(game.states.area_editor_st);
-            }
+            game.change_state(game.states.area_editor_st);
         });
     }, "Area editor", game.fonts.area_name
         )

@@ -111,9 +111,6 @@ void area_editor::process_gui() {
     //Process the picker dialog, if any.
     picker.process();
     
-    //TODO left here for debugging purposes.
-    if(show_imgui_demo) ImGui::ShowDemoWindow(&show_imgui_demo);
-    
     //Finishing setup.
     ImGui::EndFrame();
 }
@@ -173,11 +170,6 @@ void area_editor::process_gui_menu_bar() {
             //Load/create area item.
             if(ImGui::MenuItem("Load or create area...")) {
                 open_area_picker();
-            }
-            
-            //Show Dear ImGui demo item.
-            if(ImGui::MenuItem("Show demo")) {
-                show_imgui_demo = true;
             }
             
             //Quit editor item.
