@@ -99,6 +99,7 @@ private:
     
     //General functions.
     void center_camera_on_sprite_bitmap();
+    void change_state(const EDITOR_STATES new_state);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -125,8 +126,11 @@ private:
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
     void load_animation_database(const bool should_update_history);
+    void pick_animation(const string &name, const bool is_new);
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_panel_animation();
+    void process_gui_panel_main();
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();

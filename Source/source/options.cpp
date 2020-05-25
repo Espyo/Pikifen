@@ -8,6 +8,8 @@
  * Game options class and related functions.
  */
 
+#include <algorithm>
+
 #include "options.h"
 
 #include "functions.h"

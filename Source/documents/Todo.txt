@@ -3,6 +3,9 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change animation editor to Dear ImGui
+        Make the general editor first!
+        Hide buttons and such when they are not applicable
+        Spacing before every tree node
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -39,7 +42,7 @@ Next tasks (roughly sorted most important first)
         Note that these events exists: MOB_EV_TOUCHED_ACTIVE_LEADER, MOB_EV_WHISTLED
     All key shortcuts in the editors should check if their modifier key is pressed AND other modifier keys are not pressed (e.g. Ctrl+R is both toggling the reference and rotating mobs)
     Linking a bridge pile to, say, a leader, will crash when it drops a berry (Kman)
-    Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (Kman)
+    Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (neutral carrying numbers appear black; probably the same problem) (Kman)
     A clog won't drain all the water if there's a bridge sector in-between (Kman)
     
     --- v0.19.0 ---
@@ -68,6 +71,8 @@ Next tasks (roughly sorted most important first)
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
         A way to memorize which Tree Nodes are opened/closed
         Options should go in a pop-up menu
+        More options
+            A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
         "Remove" icon should be a garbage bin
         When editing an animation, have a timeline?
         Put the canvas in one ImGui window and the panel in another?
@@ -571,6 +576,7 @@ Misc things (so I don't forget)
     Carrying path revamping
         Patrolling enemies need to follow a path -- they can't reuse the carrying path (e.g. Nectarous Dandelflies). Maybe make it so you can create multiple paths on the area editor?
         Paths that only Pikmin exclusive to a certain hazard can take (paths on the water for Blue Pikmin)
+        Maybe make it so some paths can only be crossed if what is being carried is less than X width?
     If a Pikmin is too far away, it should sigh and lose the party
     The ability for objects to be not-circular, but ellipses
         Used for placing carrier Pikmin around irregular-shaped objects

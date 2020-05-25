@@ -103,6 +103,14 @@ void animation_editor::center_camera_on_sprite_bitmap() {
 
 
 /* ----------------------------------------------------------------------------
+ * Changes to a new state, cleaning up whatever is needed.
+ */
+void animation_editor::change_state(const EDITOR_STATES new_state) {
+    state = new_state;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
@@ -433,7 +441,7 @@ void animation_editor::load_animation_database(
     }
     
     //TODO frm_toolbar->show();
-    state = EDITOR_STATE_MAIN;
+    change_state(EDITOR_STATE_MAIN);
     //TODO change_to_right_frame();
     loaded_content_yet = true;
     
@@ -458,13 +466,31 @@ void animation_editor::load() {
     file_path.clear();
     loaded_content_yet = false;
     side_view = false;
-    state = EDITOR_STATE_LOAD;
+    //TODO state = EDITOR_STATE_LOAD;
+    change_state(EDITOR_STATE_MAIN);
     
     if(!auto_load_anim.empty()) {
         loaded_mob_type = NULL;
         file_path = auto_load_anim;
         load_animation_database(true);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Callback for when the user picks an area from the picker.
+ */
+void animation_editor::pick_animation(const string &name, const bool is_new) {
+    if(is_new) {
+        anims.animations.push_back(new animation(name));
+        anims.sort_alphabetically();
+    }
+    cur_anim = anims.animations[anims.find_animation(name)];
+    cur_frame_nr =
+        (cur_anim->frames.size()) ? 0 : INVALID;
+    cur_sprite = NULL;
+    cur_hitbox = NULL;
+    cur_hitbox_nr = INVALID;
 }
 
 
