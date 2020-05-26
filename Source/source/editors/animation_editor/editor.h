@@ -93,9 +93,15 @@ private:
     point                     pre_sprite_bmp_cam_pos;
     float                     pre_sprite_bmp_cam_zoom;
     bool                      side_view;
+    bool                      sprite_bmp_add_mode;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*           top_bmp[N_MATURITIES];
     transformation_controller top_tc;
+    
+    //Position of some important widgets.
+    point reload_widget_pos;
+    point quit_widget_pos;
+    
     
     //General functions.
     void center_camera_on_sprite_bitmap();
@@ -127,10 +133,17 @@ private:
     void import_sprite_transformation_data(const string &name);
     void load_animation_database(const bool should_update_history);
     void pick_animation(const string &name, const bool is_new);
+    void pick_sprite(const string &name, const bool is_new);
+    void press_quit_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_panel_animation();
     void process_gui_panel_main();
+    void process_gui_panel_sprite();
+    void process_gui_panel_sprite_bitmap();
+    void process_gui_panel_sprite_hitboxes();
+    void process_gui_panel_sprite_top();
+    void process_gui_panel_sprite_transform();
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();

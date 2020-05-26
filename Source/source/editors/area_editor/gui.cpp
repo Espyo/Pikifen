@@ -300,7 +300,6 @@ void area_editor::process_gui_menu_bar() {
         ImGui::EndMenuBar();
         
     }
-    
 }
 
 

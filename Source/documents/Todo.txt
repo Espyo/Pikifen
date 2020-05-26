@@ -69,7 +69,7 @@ Next tasks (roughly sorted most important first)
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-        A way to memorize which Tree Nodes are opened/closed
+        In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
         Options should go in a pop-up menu
         More options
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)

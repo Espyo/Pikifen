@@ -57,6 +57,7 @@ animation_editor::animation_editor() :
     mob_radius_visible(false),
     origin_visible(true),
     pikmin_silhouette_visible(false),
+    sprite_bmp_add_mode(false),
     side_view(false) {
     
     top_bmp[0] = NULL;
@@ -478,7 +479,17 @@ void animation_editor::load() {
 
 
 /* ----------------------------------------------------------------------------
- * Callback for when the user picks an area from the picker.
+ * Code to run when the snap mode button widget is pressed.
+ */
+void animation_editor::press_quit_button() {
+    if(!check_new_unsaved_changes(quit_widget_pos)) {
+        leave();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Callback for when the user picks an animation from the picker.
  */
 void animation_editor::pick_animation(const string &name, const bool is_new) {
     if(is_new) {
@@ -491,6 +502,32 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
     cur_sprite = NULL;
     cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Callback for when the user picks a sprite from the picker.
+ */
+void animation_editor::pick_sprite(const string &name, const bool is_new) {
+    if(is_new) {
+        if(anims.find_sprite(name) == INVALID) {
+            anims.sprites.push_back(new sprite(name));
+            anims.sprites.back()->create_hitboxes(
+                &anims,
+                loaded_mob_type ? loaded_mob_type->height : 128,
+                loaded_mob_type ? loaded_mob_type->radius : 32
+            );
+            anims.sort_alphabetically();
+        }
+    }
+    cur_sprite = anims.sprites[anims.find_sprite(name)];
+    cur_hitbox = NULL;
+    cur_hitbox_nr = INVALID;
+    if(is_new) {
+        //New sprite. Suggest file name.
+        cur_sprite->file = last_file_used;
+        cur_sprite->set_bitmap(last_file_used, point(), point());
+    }
 }
 
 
