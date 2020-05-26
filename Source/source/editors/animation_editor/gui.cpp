@@ -105,7 +105,7 @@ void animation_editor::process_gui_control_panel() {
         process_gui_panel_sprite();
         break;
     } case EDITOR_STATE_BODY_PART: {
-        //TODO process_gui_panel_body_part();
+        process_gui_panel_body_part();
         break;
     } case EDITOR_STATE_HITBOXES: {
         process_gui_panel_sprite_hitboxes();
@@ -120,13 +120,13 @@ void animation_editor::process_gui_control_panel() {
         process_gui_panel_sprite_top();
         break;
     } case EDITOR_STATE_LOAD: {
-        //TODO process_gui_panel_load();
+        process_gui_panel_load();
         break;
     } case EDITOR_STATE_TOOLS: {
-        //TODO process_gui_panel_tools();
+        process_gui_panel_tools();
         break;
     } case EDITOR_STATE_OPTIONS: {
-        //TODO process_gui_panel_options();
+        process_gui_panel_options();
         break;
     }
     }
@@ -467,6 +467,101 @@ void animation_editor::process_gui_panel_animation() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui body part control panel for this frame.
+ */
+void animation_editor::process_gui_panel_body_part() {
+    ImGui::BeginChild("bodyPart");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        change_state(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panel_title("BODY PARTS", 108.0f);
+    
+    //Explanation text.
+    ImGui::TextWrapped(
+        "The higher on the list, the more priority that body part's hitboxes "
+        "have when the game checks collisions. Drag and drop items in the list "
+        "to sort them."
+    );
+    
+    //New body part name.
+    static string new_part_name;
+    static int selected_part = 0;;
+    ImGui::InputText("New part name", &new_part_name);
+    
+    //Add body part button.
+    if(
+        ImGui::ImageButton(
+            editor_icons[ICON_ADD],
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+        )
+    ) {
+        //TODO
+    }
+    set_tooltip(
+        "Create a new body part, using the name in the text box above.\n"
+        "It will be placed after the currently selected body part."
+    );
+    
+    //Delete body part button.
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            editor_icons[ICON_REMOVE],
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+        )
+    ) {
+        //TODO
+    }
+    set_tooltip(
+        "Delete the currently selected body part from the list."
+    );
+    
+    //Body part list.
+    if(ImGui::BeginChild("partsList", ImVec2(0.0f, 80.0f), true)) {
+    
+        for(size_t p = 0; p < anims.body_parts.size(); ++p) {
+        
+            //Body part selectable.
+            bool is_selected = (p == selected_part);
+            ImGui::Selectable(anims.body_parts[p]->name.c_str(), &is_selected);
+            
+            if(ImGui::IsItemActive()) {
+                selected_part = p;
+                if(!ImGui::IsItemHovered()) {
+                    int p2 =
+                        p + (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
+                    if(p2 >= 0 && p2 < anims.body_parts.size()) {
+                        body_part* p_ptr = anims.body_parts[p];
+                        anims.body_parts[p] = anims.body_parts[p2];
+                        anims.body_parts[p2] = p_ptr;
+                        ImGui::ResetMouseDragDelta();
+                    }
+                }
+            }
+            
+        }
+        
+        ImGui::EndChild();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui load part control panel for this frame.
+ */
+void animation_editor::process_gui_panel_load() {
+    //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui main control panel for this frame.
  */
 void animation_editor::process_gui_panel_main() {
@@ -516,7 +611,7 @@ void animation_editor::process_gui_panel_main() {
             "Body parts"
         )
     ) {
-        //TODO
+        change_state(EDITOR_STATE_BODY_PART);
     }
     set_tooltip(
         "Change what body parts exist, and their order."
@@ -531,7 +626,7 @@ void animation_editor::process_gui_panel_main() {
             "Tools"
         )
     ) {
-        //TODO
+        change_state(EDITOR_STATE_TOOLS);
     }
     set_tooltip(
         "Special tools to help with specific tasks."
@@ -546,7 +641,7 @@ void animation_editor::process_gui_panel_main() {
             "Options"
         )
     ) {
-        //TODO
+        change_state(EDITOR_STATE_OPTIONS);
     }
     set_tooltip(
         "Options for the area editor."
@@ -578,6 +673,52 @@ void animation_editor::process_gui_panel_main() {
     
     ImGui::EndChild();
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui options control panel for this frame.
+ */
+void animation_editor::process_gui_panel_options() {
+    ImGui::BeginChild("options");
+    
+    //Back button.
+    if(ImGui::Button("Save and go back")) {
+        save_options();
+        change_state(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panel_title("OPTIONS", 88.0f);
+    
+    //Controls node.
+    if(saveable_tree_node("options", "Controls")) {
+    
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        set_tooltip(
+            "Use the middle mouse button to pan the camera "
+            "(and RMB to reset camera/zoom)."
+        );
+        
+        //Drag threshold value.
+        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Drag threshold", &drag_threshold,
+            0.1f, 0, 9999
+        );
+        set_tooltip(
+            "Cursor must move these many pixels to be considered a drag."
+        );
+        game.options.editor_mouse_drag_threshold = drag_threshold;
+        
+        ImGui::TreePop();
+        
+    }
+    
+    ImGui::EndChild();
+}
+
 
 /* ----------------------------------------------------------------------------
  * Processes the ImGui sprite control panel for this frame.
@@ -1209,6 +1350,53 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::TreePop();
         
     }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui tools control panel for this frame.
+ */
+void animation_editor::process_gui_panel_tools() {
+    ImGui::BeginChild("tools");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        change_state(EDITOR_STATE_MAIN);
+    }
+    
+    //Panel title text.
+    panel_title("TOOLS", 74.0f);
+    
+    //Resize everything value.
+    static float resize_mult = 1.0f;
+    ImGui::SetNextItemWidth(96.0f);
+    ImGui::DragFloat("##resizeMult", &resize_mult, 0.01);
+    
+    //Resize everything button.
+    ImGui::SameLine();
+    if(ImGui::Button("Resize everything")) {
+        //TODO
+    }
+    set_tooltip(
+        "Resize everything by the given multiplier.\n"
+        "0.5 resizes everyting to half size, 2.0 to double, etc."
+    );
+    
+    //Set sprite scales value.
+    static float scales_value = 1.0f;
+    ImGui::SetNextItemWidth(96.0f);
+    ImGui::DragFloat("##scalesValue", &scales_value, 0.01);
+    
+    //Set sprite scales button.
+    ImGui::SameLine();
+    if(ImGui::Button("Set all scales")) {
+        //TODO
+    }
+    set_tooltip(
+        "Set the X/Y scales of all sprites to the given value."
+    );
     
     ImGui::EndChild();
 }

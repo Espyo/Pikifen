@@ -1715,7 +1715,7 @@ void area_editor::process_gui_panel_options() {
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Snap threshold", &snap_threshold,
-            1, 0, 9999
+            0.1f, 0, 9999
         );
         set_tooltip(
             "Cursor must be these many pixels close to a vertex/edge in order "
@@ -1735,7 +1735,7 @@ void area_editor::process_gui_panel_options() {
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Drag threshold", &drag_threshold,
-            1, 0, 9999
+            0.1f, 0, 9999
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag."

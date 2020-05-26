@@ -4,8 +4,10 @@
 Current tasks (tasks being worked on, but not yet committed)
     Change animation editor to Dear ImGui
         Make the general editor first!
+        A way to rename sprites/animations/body parts
         Hide buttons and such when they are not applicable
         Spacing before every tree node
+        Fix the panel_title function
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

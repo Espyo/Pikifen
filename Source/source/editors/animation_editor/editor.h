@@ -138,12 +138,16 @@ private:
     void process_gui();
     void process_gui_control_panel();
     void process_gui_panel_animation();
+    void process_gui_panel_body_part();
+    void process_gui_panel_load();
     void process_gui_panel_main();
+    void process_gui_panel_options();
     void process_gui_panel_sprite();
     void process_gui_panel_sprite_bitmap();
     void process_gui_panel_sprite_hitboxes();
     void process_gui_panel_sprite_top();
     void process_gui_panel_sprite_transform();
+    void process_gui_panel_tools();
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();
