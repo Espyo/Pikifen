@@ -63,9 +63,22 @@ bool is_number(const string &s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Given a file name as a string, it removes the extension.
+ * Returns the string as it is if there is no extension.
+ */
+string remove_extension(const string &s) {
+    size_t pos = s.find_last_of('.');
+    if(pos == string::npos) {
+        return s;
+    }
+    return s.substr(0, pos);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Replaces all instances of x with y.
  */
-string replace_all(string s, string search, string replacement) {
+string replace_all(string s, const string &search, const string &replacement) {
     size_t pos = s.find(search);
     while(pos != string::npos) {
         s.replace(pos, search.size(), replacement);

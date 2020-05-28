@@ -140,33 +140,11 @@ protected:
         string category;
         //Bitmap, if any.
         ALLEGRO_BITMAP* bitmap;
+        
         picker_item(
             const string &name,
             const string &category = "", ALLEGRO_BITMAP* bitmap = nullptr
         );
-    };
-    
-    struct picker_info {
-    public:
-        bool is_open;
-        std::function<void()> close_callback;
-        void process();
-        void set(
-            const vector<picker_item> &items,
-            const string &title,
-            const std::function<void(const string &, const bool)> pick_callback,
-            const string &list_header = "", const bool can_make_new = false,
-            const string &filter = ""
-        );
-        void reset();
-        picker_info();
-    private:
-        vector<picker_item> items;
-        string title;
-        std::function<void(const string &, const bool)> pick_callback;
-        string list_header;
-        bool can_make_new;
-        string filter;
     };
     
     
@@ -178,12 +156,20 @@ protected:
     point canvas_br;
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvas_separator_x;
+    //Callback for when it's time to process the dialog's contents.
+    std::function<void()> dialog_process_callback;
+    //Callback for when the user closes the dialog, if any.
+    std::function<void()> dialog_close_callback;
+    //Title to display on the dialog.
+    string dialog_title;
     //If the next click is within this time, it's a double-click.
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
+    //Is a dialog currently open?
+    bool is_dialog_open;
     //Is the GUI currently in focus? False if it's the canvas.
     bool is_gui_focused;
     //Is the mouse currently hovering the gui? False if it's the canvas.
@@ -206,8 +192,16 @@ protected:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
-    //Information about the current picker dialog.
-    picker_info picker;
+    //List of picker dialog items to choose from.
+    vector<picker_item> picker_items;
+    //Callback for when the user picks an item from the picker dialog.
+    std::function<void(const string &, const bool)> picker_pick_callback;
+    //Text to display above the picker dialog list.
+    string picker_list_header;
+    //Can the user make a new item in the picker dialog?
+    bool picker_can_make_new;
+    //Only show picker dialog items matching this filter.
+    string picker_filter;
     //Current state.
     size_t state;
     //Status bar text.
@@ -234,6 +228,25 @@ protected:
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
     void leave();
+    void open_dialog(
+        const string &title,
+        const std::function<void()> &process_callback
+    );
+    void open_picker(
+        const string &title,
+        const vector<picker_item> &items,
+        const std::function<void(const string &, const bool)> &pick_callback,
+        const string &list_header = "",
+        const bool can_make_new = false,
+        const string &filter = ""
+    );
+    void process_dialog();
+    void process_mob_type_widgets(
+        mob_category** cat, mob_type** typ,
+        const bool only_show_area_editor_types,
+        const std::function<void()> &category_change_callback = nullptr,
+        const std::function<void()> &type_change_callback = nullptr
+    );
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
     void set_tooltip(const string &explanation, const string &shortcut = "");
@@ -264,6 +277,7 @@ protected:
     
 private:
 
+    void process_picker();
 };
 
 #endif //ifndef EDITOR_INCLUDED

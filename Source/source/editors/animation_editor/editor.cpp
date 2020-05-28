@@ -44,7 +44,6 @@ animation_editor::animation_editor() :
     comparison_sprite(nullptr),
     comparison_tint(true),
     cur_anim(NULL),
-    cur_body_part_nr(INVALID),
     cur_frame_nr(INVALID),
     cur_frame_time(0),
     cur_hitbox(nullptr),
@@ -57,6 +56,7 @@ animation_editor::animation_editor() :
     mob_radius_visible(false),
     origin_visible(true),
     pikmin_silhouette_visible(false),
+    reset_load_dialog(true),
     sprite_bmp_add_mode(false),
     side_view(false) {
     
@@ -108,6 +108,18 @@ void animation_editor::center_camera_on_sprite_bitmap() {
  */
 void animation_editor::change_state(const EDITOR_STATES new_state) {
     state = new_state;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the load dialog is closed.
+ */
+void animation_editor::close_load_dialog() {
+    if(!loaded_content_yet && file_path.empty()) {
+        //The user cancelled the load dialog
+        //presented when you enter the animation editor. Quit out.
+        leave();
+    }
 }
 
 
@@ -190,33 +202,42 @@ void animation_editor::exit_side_view() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a file path, but cropped to fit on the gui's buttons.
- * This implies cutting it in two lines, and even replacing the start with
- * ellipsis, if needed.
- */
-string animation_editor::get_cut_path(const string &p) const {
-    if(p.size() <= 22) return p;
-    
-    string result = p;
-    if(p.size() > 44) {
-        result = "..." + p.substr(p.size() - 41, 41);
-    }
-    
-    if(p.size() > 22) {
-        result =
-            result.substr(0, result.size() / 2) + "\n" +
-            result.substr(result.size() / 2, (result.size() / 2) + 1);
-    }
-    
-    return result;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string animation_editor::get_name() const {
     return "animation editor";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a file path, but shortened in such a way that only the text file's
+ * name and brief context about its folder remain. If that's not possible, it
+ * is returned as is, though its beginning may be cropped off with ellipsis
+ * if it's too big.
+ */
+string animation_editor::get_path_short_name(const string &p) const {
+    if(p.find(TYPES_FOLDER_PATH) != string::npos) {
+        vector<string> path_parts = split(p, "/");
+        if(
+            path_parts.size() > 3 &&
+            path_parts[path_parts.size() - 1] == "Animations.txt"
+        ) {
+            return
+                path_parts[path_parts.size() - 3] + "/" +
+                path_parts[path_parts.size() - 2];
+        }
+    } else if(p.find(ANIMATIONS_FOLDER_PATH) != string::npos) {
+        vector<string> path_parts = split(p, "/");
+        if(!path_parts.empty()) {
+            return path_parts[path_parts.size() - 1];
+        }
+    }
+    
+    if(p.size() > 33) {
+        return "..." + p.substr(p.size() - 30, 30);
+    }
+    
+    return p;
 }
 
 
@@ -364,7 +385,7 @@ void animation_editor::load_animation_database(
     game.cam.zoom = 1;
     
     //Find the most popular file name to suggest for new sprites.
-    last_file_used.clear();
+    last_spritesheet_used.clear();
     
     if(!anims.sprites.empty()) {
         map<string, size_t> file_uses_map;
@@ -384,7 +405,7 @@ void animation_editor::load_animation_database(
             return u1.first > u2.first;
         }
         );
-        last_file_used = file_uses_vector[0].second;
+        last_spritesheet_used = file_uses_vector[0].second;
     }
     
     vector<string> file_path_parts = split(file_path, "/");
@@ -467,13 +488,14 @@ void animation_editor::load() {
     file_path.clear();
     loaded_content_yet = false;
     side_view = false;
-    //TODO state = EDITOR_STATE_LOAD;
     change_state(EDITOR_STATE_MAIN);
     
     if(!auto_load_anim.empty()) {
         loaded_mob_type = NULL;
         file_path = auto_load_anim;
         load_animation_database(true);
+    } else {
+        open_load_dialog();
     }
 }
 
@@ -525,8 +547,8 @@ void animation_editor::pick_sprite(const string &name, const bool is_new) {
     cur_hitbox_nr = INVALID;
     if(is_new) {
         //New sprite. Suggest file name.
-        cur_sprite->file = last_file_used;
-        cur_sprite->set_bitmap(last_file_used, point(), point());
+        cur_sprite->file = last_spritesheet_used;
+        cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
     }
 }
 

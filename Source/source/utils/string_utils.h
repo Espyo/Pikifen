@@ -28,7 +28,10 @@ string box_string(
 string b2s(const bool b);
 string f2s(const float f);
 bool is_number(const string &s);
-string replace_all(string s, string search, string replacement);
+string remove_extension(const string &s);
+string replace_all(
+    string s, const string &search, const string &replacement
+);
 bool s2b(const string &s);
 double s2f(const string &s);
 int s2i(const string &s);

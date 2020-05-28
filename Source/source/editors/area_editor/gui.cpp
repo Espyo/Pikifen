@@ -32,8 +32,9 @@ void area_editor::open_area_picker() {
         for(size_t f = 0; f < folders.size(); ++f) {
             areas.push_back(picker_item(folders[f]));
         }
-        picker.set(
-            areas, "Pick an area, or create a new one",
+        open_picker(
+            "Pick an area, or create a new one",
+            areas,
             std::bind(
                 &area_editor::pick_area, this,
                 std::placeholders::_1,
@@ -41,7 +42,7 @@ void area_editor::open_area_picker() {
             ),
             "", true
         );
-        picker.close_callback =
+        dialog_close_callback =
             std::bind(&area_editor::close_area_picker, this);
     }
 }
@@ -109,7 +110,7 @@ void area_editor::process_gui() {
     ImGui::End();
     
     //Process the picker dialog, if any.
-    picker.process();
+    process_dialog();
     
     //Finishing setup.
     ImGui::EndFrame();
@@ -173,7 +174,7 @@ void area_editor::process_gui_menu_bar() {
             }
             
             //Quit editor item.
-            if(ImGui::MenuItem("Quit")) {
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 press_quit_button();
             }
             
@@ -1069,8 +1070,9 @@ void area_editor::process_gui_panel_layout() {
                             )
                         );
                     }
-                    picker.set(
-                        suggestions, "Pick a texture",
+                    open_picker(
+                        "Pick a texture",
+                        suggestions,
                         std::bind(
                             &area_editor::pick_texture, this,
                             std::placeholders::_1,
@@ -1424,22 +1426,22 @@ void area_editor::process_gui_panel_main() {
     if(saveable_tree_node("main", "Stats")) {
     
         //Sector amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Sectors: %i", (int) game.cur_area_data.sectors.size()
         );
         
         //Vertex amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
         );
         
         //Object amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Objects: %i", (int) game.cur_area_data.mob_generators.size()
         );
         
         //Path stop amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Path stops: %i", (int) game.cur_area_data.path_stops.size()
         );
         
@@ -1521,63 +1523,21 @@ void area_editor::process_gui_panel_mobs() {
     if(selected_mobs.size() == 1 || selection_homogenized) {
         m_ptr = *selected_mobs.begin();
         
-        //Object category combobox.
-        if(!m_ptr->category) {
-            m_ptr->category = game.mob_categories.get(MOB_CATEGORY_NONE);
-        }
+        //Category and type comboboxes.
+        mob_category* category_before = m_ptr->category;
+        mob_type* type_before = m_ptr->type;
         
-        vector<string> categories;
-        for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-            categories.push_back(game.mob_categories.get(c)->plural_name);
-        }
-        int selected_category_nr = m_ptr->category->id;
-        
-        if(ImGui::Combo("Category", &selected_category_nr, categories)) {
-            register_change("object category change");
-            m_ptr->category = game.mob_categories.get(selected_category_nr);
-            
-            vector<string> type_names;
-            m_ptr->category->get_type_names(type_names);
-            
-            m_ptr->type = NULL;
-            if(!type_names.empty()) {
-                m_ptr->type = m_ptr->category->get_type(type_names[0]);
-            }
-            
-            last_mob_category = m_ptr->category;
-            last_mob_type = m_ptr->type;
-        }
-        set_tooltip(
-            "What category this object belongs to: a Pikmin, a leader, etc."
+        process_mob_type_widgets(
+            &m_ptr->category, &m_ptr->type, true,
+        [this] () { register_change("object category change"); },
+        [this] () { register_change("object type change"); }
         );
         
-        if(m_ptr->category->id != MOB_CATEGORY_NONE) {
-        
-            //Object type combobox.
-            vector<string> types;
-            m_ptr->category->get_type_names(types);
-            for(size_t t = 0; t < types.size(); ) {
-                mob_type* t_ptr = m_ptr->category->get_type(types[t]);
-                if(t_ptr->appears_in_area_editor) {
-                    ++t;
-                } else {
-                    types.erase(types.begin() + t);
-                }
-            }
-            
-            string selected_type_name;
-            if(m_ptr->type) {
-                selected_type_name = m_ptr->type->name;
-            }
-            if(ImGui::Combo("Type", &selected_type_name, types)) {
-                register_change("object type change");
-                m_ptr->type = m_ptr->category->get_type(selected_type_name);
-                
-                last_mob_type = m_ptr->type;
-            }
-            set_tooltip(
-                "The specific type of object this is, from the chosen category."
-            );
+        if(m_ptr->category != category_before) {
+            last_mob_category = m_ptr->category;
+        }
+        if(m_ptr->type != type_before) {
+            last_mob_type = m_ptr->type;
         }
         
         //Object angle value.

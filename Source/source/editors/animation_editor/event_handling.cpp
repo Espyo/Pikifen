@@ -22,7 +22,7 @@
  * Handles a key being "char"-typed on the canvas exclusively.
  */
 void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(picker.is_open) {
+    if(is_dialog_open) {
         return;
     }
     
@@ -68,7 +68,7 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down anywhere.
  */
 void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(picker.is_open) {
+    if(is_dialog_open) {
         return;
     }
     
@@ -117,7 +117,7 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down on the canvas exclusively.
  */
 void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(picker.is_open) {
+    if(is_dialog_open) {
         return;
     }
     
@@ -186,7 +186,7 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(picker.is_open) {
+    if(is_dialog_open) {
         return;
     }
     

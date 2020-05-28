@@ -19,6 +19,27 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Opens the "load" dialog.
+ */
+void animation_editor::open_load_dialog() {
+    global_anim_files_cache =
+        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
+    for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
+        global_anim_files_cache[f] =
+            remove_extension(global_anim_files_cache[f]);
+    }
+    
+    open_dialog(
+        "Load a file or create a new one",
+        std::bind(&animation_editor::process_gui_load_dialog, this)
+    );
+    dialog_close_callback =
+        std::bind(&animation_editor::close_load_dialog, this);
+    reset_load_dialog = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes ImGui for this frame.
  */
 void animation_editor::process_gui() {
@@ -79,8 +100,11 @@ void animation_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
-    //Process the picker dialog, if any.
-    picker.process();
+    //Process the dialog, if any.
+    process_dialog();
+    
+    //TODO left here for development purposes.
+    ImGui::ShowDemoWindow();
     
     //Finishing setup.
     ImGui::EndFrame();
@@ -119,9 +143,6 @@ void animation_editor::process_gui_control_panel() {
     } case EDITOR_STATE_TOP: {
         process_gui_panel_sprite_top();
         break;
-    } case EDITOR_STATE_LOAD: {
-        process_gui_panel_load();
-        break;
     } case EDITOR_STATE_TOOLS: {
         process_gui_panel_tools();
         break;
@@ -136,6 +157,149 @@ void animation_editor::process_gui_control_panel() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the "load" dialog for this frame.
+ */
+void animation_editor::process_gui_load_dialog() {
+    //History node.
+    if(saveable_tree_node("load", "History")) {
+    
+        if(!history[0].empty()) {
+        
+            for(size_t h = 0; h < history.size(); ++h) {
+                string name = history[h];
+                if(name.empty()) continue;
+                
+                string button_text = get_path_short_name(name);
+                
+                //History number text.
+                ImGui::Text("%i.", (int) (h + 1));
+                
+                //History entry button.
+                ImGui::SameLine();
+                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
+                    file_path = name;
+                    loaded_mob_type = NULL;
+                    load_animation_database(true);
+                    is_dialog_open = false;
+                }
+            }
+            
+        } else {
+        
+            //No history text.
+            ImGui::TextDisabled("(Empty)");
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Object animation node.
+    if(saveable_tree_node("load", "Object animation")) {
+        static mob_category* cat = NULL;
+        static mob_type* typ = NULL;
+        
+        if(reset_load_dialog) {
+            cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
+            typ = game.config.pikmin_order[0];
+            reset_load_dialog = false;
+        }
+        
+        //Category and type comboboxes.
+        process_mob_type_widgets(&cat, &typ, false);
+        
+        //Load button.
+        if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
+            if(typ) {
+                loaded_mob_type = typ;
+                file_path =
+                    loaded_mob_type->category->folder + "/" +
+                    loaded_mob_type->folder_name + "/Animations.txt";
+                load_animation_database(true);
+                is_dialog_open = false;
+            }
+        }
+        set_tooltip(
+            "Load/create the animation file for the chosen mob type."
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Global animation node.
+    if(saveable_tree_node("load", "Global animation")) {
+    
+        //Animations combobox.
+        static string chosen_anim;
+        if(!global_anim_files_cache.empty() && chosen_anim.empty()) {
+            chosen_anim = global_anim_files_cache[0];
+        }
+        ImGui::Combo("Animation", &chosen_anim, global_anim_files_cache);
+        
+        //Load button.
+        if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
+            if(!chosen_anim.empty()) {
+                loaded_mob_type = NULL;
+                file_path = ANIMATIONS_FOLDER_PATH + "/" + chosen_anim + ".txt";
+                load_animation_database(true);
+                is_dialog_open = false;
+            }
+        }
+        set_tooltip(
+            "Load the animation file for the chosen generic global animation."
+        );
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Other node.
+    if(saveable_tree_node("load", "Other")) {
+    
+        //Load button.
+        if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
+            string last_file_opened;
+            if(history.size()) {
+                last_file_opened = history[0];
+            }
+            
+            vector<string> f =
+                prompt_file_dialog(
+                    last_file_opened,
+                    "Please choose an animation text file to load or create.",
+                    "*.txt", 0
+                );
+                
+            if(!f.empty() && !f[0].empty()) {
+                file_path = f[0];
+                
+                loaded_mob_type = NULL;
+                load_animation_database(true);
+                is_dialog_open = false;
+            }
+        }
+        set_tooltip(
+            "Browse your disk for an animation file to load/create."
+        );
+        
+        ImGui::TreePop();
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui menu bar for this frame.
  */
 void animation_editor::process_gui_menu_bar() {
@@ -146,11 +310,11 @@ void animation_editor::process_gui_menu_bar() {
         
             //Load/create file item.
             if(ImGui::MenuItem("Load or create file...")) {
-                //TODO
+                open_load_dialog();
             }
             
             //Quit editor item.
-            if(ImGui::MenuItem("Quit")) {
+            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 press_quit_button();
             }
             
@@ -218,9 +382,9 @@ void animation_editor::process_gui_panel_animation() {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             anim_names.push_back(picker_item(anims.animations[a]->name));
         }
-        picker.set(
-            anim_names,
+        open_picker(
             "Pick an animation, or create a new one",
+            anim_names,
             std::bind(
                 &animation_editor::pick_animation, this,
                 std::placeholders::_1,
@@ -554,20 +718,14 @@ void animation_editor::process_gui_panel_body_part() {
 
 
 /* ----------------------------------------------------------------------------
- * Processes the ImGui load part control panel for this frame.
- */
-void animation_editor::process_gui_panel_load() {
-    //TODO
-}
-
-
-/* ----------------------------------------------------------------------------
  * Processes the ImGui main control panel for this frame.
  */
 void animation_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
-    //TODO current file stuff.
+    //Current file text.
+    ImGui::Text("Animation: %s", get_path_short_name(file_path).c_str());
+    set_tooltip("Full file path: " + file_path);
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -654,17 +812,17 @@ void animation_editor::process_gui_panel_main() {
     if(saveable_tree_node("main", "Stats")) {
     
         //Animation amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Animations: %i", (int) anims.animations.size()
         );
         
         //Sprite amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Sprites: %i", (int) anims.sprites.size()
         );
         
         //Body part amount text.
-        ImGui::Text(
+        ImGui::BulletText(
             "Body parts: %i", (int) anims.body_parts.size()
         );
         
@@ -740,9 +898,9 @@ void animation_editor::process_gui_panel_sprite() {
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
             sprite_names.push_back(picker_item(anims.sprites[s]->name));
         }
-        picker.set(
-            sprite_names,
+        open_picker(
             "Pick a sprite, or create a new one",
+            sprite_names,
             std::bind(
                 &animation_editor::pick_sprite, this,
                 std::placeholders::_1,

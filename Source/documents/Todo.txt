@@ -46,6 +46,7 @@ Next tasks (roughly sorted most important first)
     Linking a bridge pile to, say, a leader, will crash when it drops a berry (Kman)
     Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (neutral carrying numbers appear black; probably the same problem) (Kman)
     A clog won't drain all the water if there's a bridge sector in-between (Kman)
+    The "Bubble.txt" global animation is using the HUD day sprite
     
     --- v0.19.0 ---
     Revamp editors
@@ -695,6 +696,7 @@ Tasks for later on (I might never implement these)
             Thoughts:
                 Actually, the only advantage of this is the auto-ticking... But it might introduce a performance penalty, having to add and remove hundreds of timers in a vector
         https://www.gamasutra.com/blogs/ScottLembcke/20180404/316046/Improved_Lerp_Smoothing.php
+        https://gamasutra.com/blogs/JiriHolba/20200511/362690/Should_STL_containers_be_used_in_game_engines.php
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard

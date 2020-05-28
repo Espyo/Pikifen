@@ -16,6 +16,9 @@
 #include "../imgui/imgui_impl_allegro5.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../load.h"
+#include "../mob_categories/mob_category.h"
+#include "../mob_types/mob_type.h"
+#include "../utils/imgui_utils.h"
 #include "../utils/string_utils.h"
 
 
@@ -42,8 +45,11 @@ const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
  */
 editor::editor() :
     canvas_separator_x(-1),
+    dialog_close_callback(nullptr),
+    dialog_process_callback(nullptr),
     double_click_time(0),
     is_ctrl_pressed(false),
+    is_dialog_open(false),
     is_m1_pressed(false),
     is_m2_pressed(false),
     is_m3_pressed(false),
@@ -52,6 +58,8 @@ editor::editor() :
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
+    picker_can_make_new(false),
+    picker_pick_callback(nullptr),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     state(0),
     sub_state(0),
@@ -399,11 +407,11 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE &&
-            picker.is_open
+            is_dialog_open
         ) {
-            picker.is_open = false;
-            if(picker.close_callback) {
-                picker.close_callback();
+            is_dialog_open = false;
+            if(dialog_close_callback) {
+                dialog_close_callback();
             }
         }
         
@@ -484,7 +492,7 @@ void editor::leave() {
  * Loads content common for all editors.
  */
 void editor::load() {
-    picker.reset();
+    is_dialog_open = false;
     
     bmp_editor_icons =
         load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
@@ -507,6 +515,64 @@ void editor::load() {
 
 
 /* ----------------------------------------------------------------------------
+ * Opens a dialog.
+ * title:
+ *   Title of the dialog window. This is normally a request to the user,
+ *   like "Pick an area.".
+ * process_callback:
+ *   A function to call when it's time to process the contents inside
+ *   the dialog.
+ */
+void editor::open_dialog(
+    const string &title,
+    const std::function<void()> &process_callback
+) {
+    dialog_title = title;
+    dialog_close_callback = nullptr;
+    dialog_process_callback = process_callback;
+    
+    is_dialog_open = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Opens a picker dialog with the given content.
+ * title:
+ *   Title of the picker's dialog window. This is normally
+ *   a request to the user, like "Pick an area.".
+ * items:
+ *   List of items to populate the picker with.
+ * pick_callback:
+ *   A function to call when the user clicks an item or enters a new one.
+ *   This function's first argument is the name of the item.
+ *   Its second argument is whether it's a new item or not.
+ * list_header:
+ *   If not-empty, display this text above the list.
+ * can_make_new:
+ *   If true, the user can create a new element, by writing its
+ *   name on the textbox, and pressing the "+" button.
+ * filter:
+ *   Filter of names. Only items that match this will appear.
+ */
+void editor::open_picker(
+    const string &title,
+    const vector<picker_item> &items,
+    const std::function<void(const string &, const bool)> &pick_callback,
+    const string &list_header,
+    const bool can_make_new,
+    const string &filter
+) {
+    picker_items = items;
+    picker_list_header = list_header;
+    picker_pick_callback = pick_callback;
+    picker_can_make_new = can_make_new;
+    picker_filter = filter;
+    
+    open_dialog(title, std::bind(&editor::process_picker, this));
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates widgets with the goal of placing a disabled text widget to the
  * right side of the panel.
  * title: Title to write.
@@ -523,6 +589,238 @@ void editor::panel_title(const char* title, const float width) {
     //Text widget.
     ImGui::SameLine();
     ImGui::TextDisabled("%s", title);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the dialog for this frame.
+ */
+void editor::process_dialog() {
+    if(!is_dialog_open) return;
+    
+    ImGui::SetNextWindowPos(
+        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
+        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
+    );
+    ImGui::SetNextWindowSize(
+        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
+    );
+    ImGui::OpenPopup((dialog_title + "##dialog").c_str());
+    
+    if(
+        ImGui::BeginPopupModal(
+            (dialog_title + "##dialog").c_str(), &is_dialog_open
+        )
+    ) {
+    
+        dialog_process_callback();
+        
+        ImGui::EndPopup();
+    }
+    
+    if(!is_dialog_open) {
+        //The user closed it.
+        if(dialog_close_callback) {
+            dialog_close_callback();
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the picker dialog for this frame.
+ */
+void editor::process_picker() {
+    vector<picker_item> final_items;
+    string filter_lower = str_to_lower(picker_filter);
+    
+    for(size_t i = 0; i < picker_items.size(); ++i) {
+        if(!picker_filter.empty()) {
+            string name_lower = str_to_lower(picker_items[i].name);
+            if(name_lower.find(filter_lower) == string::npos) {
+                continue;
+            }
+        }
+        final_items.push_back(picker_items[i]);
+    }
+    
+    auto try_make_new = [this] () {
+        bool is_really_new = true;
+        for(size_t i = 0; i < picker_items.size(); ++i) {
+            if(picker_filter == picker_items[i].name) {
+                is_really_new = false;
+                break;
+            }
+        }
+        
+        picker_pick_callback(picker_filter, is_really_new);
+        is_dialog_open = false;
+    };
+    
+    if(picker_can_make_new) {
+        ImGui::PushStyleColor(
+            ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48)
+        );
+        ImGui::PushStyleColor
+        (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
+        );
+        if(ImGui::Button("+", ImVec2(160.0f, 32.0f))) {
+            try_make_new();
+        }
+        ImGui::PopStyleColor(3);
+        ImGui::SameLine();
+    }
+    
+    string filter_widget_hint =
+        picker_can_make_new ?
+        "Search filter or new item name" :
+        "Search filter";
+    if(
+        ImGui::InputTextWithHint(
+            "##filter", filter_widget_hint.c_str(), &picker_filter,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        if(picker_can_make_new) {
+            try_make_new();
+        }
+    }
+    
+    if(!picker_list_header.empty()) {
+        ImGui::Text("%s", picker_list_header.c_str());
+    }
+    
+    ImGuiStyle &style = ImGui::GetStyle();
+    float picker_x2 =
+        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+        
+    for(size_t i = 0; i < final_items.size(); ++i) {
+        ImGui::PushID(i);
+        
+        ImVec2 button_size;
+        
+        if(final_items[i].bitmap) {
+        
+            ImGui::BeginGroup();
+            button_size = ImVec2(160.0f, 160.0f);
+            if(
+                ImGui::ImageButton(
+                    (void*) final_items[i].bitmap,
+                    button_size,
+                    ImVec2(0.0f, 0.0f),
+                    ImVec2(1.0f, 1.0f),
+                    4.0f
+                )
+            ) {
+                picker_pick_callback(final_items[i].name, false);
+                is_dialog_open = false;
+            }
+            ImGui::SetNextItemWidth(20.0f);
+            ImGui::TextWrapped("%s", final_items[i].name.c_str());
+            ImGui::Dummy(ImVec2(0.0f, 8.0f));
+            ImGui::EndGroup();
+            
+        } else {
+        
+            button_size = ImVec2(160.0f, 32.0f);
+            if(ImGui::Button(final_items[i].name.c_str(), button_size)) {
+                picker_pick_callback(final_items[i].name, false);
+                is_dialog_open = false;
+            }
+            
+        }
+        
+        float last_x2 = ImGui::GetItemRectMax().x;
+        float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
+        if(i + 1 < final_items.size() && next_x2 < picker_x2) {
+            ImGui::SameLine();
+        }
+        ImGui::PopID();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the category and type widgets that allow a user to select a mob
+ * type.
+ * cat:
+ *   Pointer to the category reflected in the combo box.
+ * typ:
+ *   Pointer to the type reflected in the combo box.
+ * only_show_area_editor_types:
+ *   If true, object types that cannot appear in the area editor will not
+ *   be included.
+ * category_change_callback:
+ *   If not NULL, this is called as soon as the category combobox is changed.
+ * type_change_callback:
+ *   If not NULL, this is called as soon as the type combobox is changed.
+ */
+void editor::process_mob_type_widgets(
+    mob_category** cat, mob_type** typ,
+    const bool only_show_area_editor_types,
+    const std::function<void()> &category_change_callback,
+    const std::function<void()> &type_change_callback
+) {
+    //Object category combobox.
+    if(!(*cat)) {
+        *cat = game.mob_categories.get(MOB_CATEGORY_NONE);
+    }
+    
+    vector<string> categories;
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        categories.push_back(game.mob_categories.get(c)->plural_name);
+    }
+    int selected_category_nr = (*cat)->id;
+    
+    if(ImGui::Combo("Category", &selected_category_nr, categories)) {
+        if(category_change_callback) {
+            category_change_callback();
+        }
+        *cat = game.mob_categories.get(selected_category_nr);
+        
+        vector<string> type_names;
+        (*cat)->get_type_names(type_names);
+        
+        *typ = NULL;
+        if(!type_names.empty()) {
+            *typ = (*cat)->get_type(type_names[0]);
+        }
+    }
+    set_tooltip(
+        "What category this object belongs to: a Pikmin, a leader, etc."
+    );
+    
+    if((*cat)->id != MOB_CATEGORY_NONE) {
+    
+        //Object type combobox.
+        vector<string> types;
+        (*cat)->get_type_names(types);
+        for(size_t t = 0; t < types.size(); ) {
+            mob_type* t_ptr = (*cat)->get_type(types[t]);
+            if(only_show_area_editor_types && !t_ptr->appears_in_area_editor) {
+                types.erase(types.begin() + t);
+            } else {
+                ++t;
+            }
+        }
+        
+        string selected_type_name;
+        if(*typ) {
+            selected_type_name = (*typ)->name;
+        }
+        if(ImGui::Combo("Type", &selected_type_name, types)) {
+            if(type_change_callback) {
+                type_change_callback();
+            }
+            *typ = (*cat)->get_type(selected_type_name);
+        }
+        set_tooltip(
+            "The specific type of object this is, from the chosen category."
+        );
+    }
 }
 
 
@@ -639,214 +937,9 @@ void editor::zoom(const float new_zoom, const bool anchor_cursor) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a picker.
- */
-editor::picker_info::picker_info() :
-    is_open(false),
-    can_make_new(false),
-    pick_callback(nullptr),
-    close_callback(nullptr) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Processes the picker for this frame.
- */
-void editor::picker_info::process() {
-    if(!is_open) return;
-    
-    ImGui::SetNextWindowPos(
-        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
-        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
-    );
-    ImGui::SetNextWindowSize(
-        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
-    );
-    ImGui::OpenPopup((title + "##picker").c_str());
-    
-    if(ImGui::BeginPopupModal((title + "##picker").c_str(), &is_open)) {
-    
-        vector<picker_item> final_items;
-        string filter_lower = str_to_lower(filter);
-        
-        for(size_t i = 0; i < items.size(); ++i) {
-            if(!filter.empty()) {
-                string name_lower = str_to_lower(items[i].name);
-                if(name_lower.find(filter_lower) == string::npos) {
-                    continue;
-                }
-            }
-            final_items.push_back(items[i]);
-        }
-        
-        auto try_make_new = [this] () {
-            bool is_really_new = true;
-            for(size_t i = 0; i < items.size(); ++i) {
-                if(filter == items[i].name) {
-                    is_really_new = false;
-                    break;
-                }
-            }
-            
-            pick_callback(filter, is_really_new);
-            is_open = false;
-        };
-        
-        if(can_make_new) {
-            ImGui::PushStyleColor(
-                ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
-            );
-            ImGui::PushStyleColor(
-                ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48)
-            );
-            ImGui::PushStyleColor
-            (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
-            );
-            if(ImGui::Button("+", ImVec2(160.0f, 32.0f))) {
-                try_make_new();
-            }
-            ImGui::PopStyleColor(3);
-            ImGui::SameLine();
-        }
-        
-        string filter_widget_hint =
-            can_make_new ?
-            "Search filter or new item name" :
-            "Search filter";
-        if(
-            ImGui::InputTextWithHint(
-                "##filter", filter_widget_hint.c_str(), &filter,
-                ImGuiInputTextFlags_EnterReturnsTrue
-            )
-        ) {
-            if(can_make_new) {
-                try_make_new();
-            }
-        }
-        
-        if(!list_header.empty()) {
-            ImGui::Text("%s", list_header.c_str());
-        }
-        
-        ImGuiStyle &style = ImGui::GetStyle();
-        float picker_x2 =
-            ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-            
-        for(size_t i = 0; i < final_items.size(); ++i) {
-            ImGui::PushID(i);
-            
-            ImVec2 button_size;
-            
-            if(final_items[i].bitmap) {
-            
-                ImGui::BeginGroup();
-                button_size = ImVec2(160.0f, 160.0f);
-                if(
-                    ImGui::ImageButton(
-                        (void*) final_items[i].bitmap,
-                        button_size,
-                        ImVec2(0.0f, 0.0f),
-                        ImVec2(1.0f, 1.0f),
-                        4.0f
-                    )
-                ) {
-                    pick_callback(final_items[i].name, false);
-                    is_open = false;
-                }
-                ImGui::SetNextItemWidth(20.0f);
-                ImGui::TextWrapped("%s", final_items[i].name.c_str());
-                ImGui::Dummy(ImVec2(0.0f, 8.0f));
-                ImGui::EndGroup();
-                
-            } else {
-            
-                button_size = ImVec2(160.0f, 32.0f);
-                if(ImGui::Button(final_items[i].name.c_str(), button_size)) {
-                    pick_callback(final_items[i].name, false);
-                    is_open = false;
-                }
-                
-            }
-            
-            float last_x2 = ImGui::GetItemRectMax().x;
-            float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
-            if(i + 1 < final_items.size() && next_x2 < picker_x2) {
-                ImGui::SameLine();
-            }
-            ImGui::PopID();
-        }
-        
-        ImGui::EndPopup();
-    }
-    
-    if(!is_open) {
-        //The user closed it.
-        if(close_callback) {
-            close_callback();
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the picker's content, and opens it.
- * items:
- *   List of items to populate the picker with.
- * title:
- *   Title of the picker's dialog window. This is normally
- *   a request to the user, like "Pick an area.".
- * pick_callback:
- *   A function to call when the user clicks an item or enters a new one.
- *   This function's first argument is the name of the item.
- *   Its second argument is whether it's a new item or not.
- * list_header:
- *   If not-empty, display this text above the list.
- * can_make_new:
- *   If true, the user can create a new element, by writing its
- *   name on the textbox, and pressing the "+" button.
- * filter:
- *   Filter of names. Only items that match this will appear.
- */
-void editor::picker_info::set(
-    const vector<picker_item> &items,
-    const string &title,
-    const std::function<void(const string &, const bool)> pick_callback,
-    const string &list_header, const bool can_make_new,
-    const string &filter
-) {
-    reset();
-    this->items = items;
-    this->title = title;
-    this->list_header = list_header;
-    this->pick_callback = pick_callback;
-    this->can_make_new = can_make_new;
-    this->filter = filter;
-    
-    is_open = true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the picker's information.
- */
-void editor::picker_info::reset() {
-    items.clear();
-    title.clear();
-    pick_callback = nullptr;
-    list_header.clear();
-    can_make_new = false;
-    filter.clear();
-    close_callback = nullptr;
-    
-    is_open = false;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a picker item.
  */
-area_editor::picker_item::picker_item(
+editor::picker_item::picker_item(
     const string &name, const string &category, ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
