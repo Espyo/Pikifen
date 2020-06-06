@@ -484,7 +484,6 @@ const sprite &sprite::operator=(const sprite &s2) {
     if(this != &s2) {
         name = s2.name;
         parent_bmp = NULL;
-        file = s2.file;
         file_pos = s2.file_pos;
         file_size = s2.file_size;
         offset = s2.offset;
@@ -496,7 +495,7 @@ const sprite &sprite::operator=(const sprite &s2) {
         top_visible = s2.top_visible;
         bitmap = NULL;
         hitboxes = s2.hitboxes;
-        set_bitmap(file, file_pos, file_size);
+        set_bitmap(s2.file, file_pos, file_size);
     }
     
     return *this;
@@ -518,10 +517,15 @@ void sprite::set_bitmap(
     const string &file_name, const point &file_pos, const point &file_size,
     data_node* node
 ) {
-    if(parent_bmp) game.bitmaps.detach(file);
-    if(bitmap) al_destroy_bitmap(bitmap);
-    parent_bmp = NULL;
-    bitmap = NULL;
+    if(bitmap) {
+        al_destroy_bitmap(bitmap);
+        bitmap = NULL;
+    }
+    if(file_name != file && parent_bmp) {
+        game.bitmaps.detach(file);
+        parent_bmp = NULL;
+    }
+    
     if(file_name.empty()) {
         file.clear();
         this->file_size = point();
@@ -529,17 +533,28 @@ void sprite::set_bitmap(
         return;
     }
     
-    parent_bmp = game.bitmaps.get(file_name, node);
-    if(parent_bmp) {
-        bitmap =
-            al_create_sub_bitmap(
-                parent_bmp, file_pos.x, file_pos.y,
-                file_size.x, file_size.y
-            );
+    if(file_name != file || !parent_bmp) {
+        parent_bmp = game.bitmaps.get(file_name, node);
     }
+    
+    int parent_w = al_get_bitmap_width(parent_bmp);
+    int parent_h = al_get_bitmap_height(parent_bmp);
+    
     file = file_name;
     this->file_pos = file_pos;
     this->file_size = file_size;
+    this->file_pos.x = clamp(file_pos.x, 0, parent_w - 1);
+    this->file_pos.y = clamp(file_pos.y, 0, parent_h - 1);
+    this->file_size.x = clamp(file_size.x, 0, parent_w - this->file_pos.x);
+    this->file_size.y = clamp(file_size.y, 0, parent_h - this->file_pos.y);
+    
+    if(parent_bmp) {
+        bitmap =
+            al_create_sub_bitmap(
+                parent_bmp, this->file_pos.x, this->file_pos.y,
+                this->file_size.x, this->file_size.y
+            );
+    }
 }
 
 

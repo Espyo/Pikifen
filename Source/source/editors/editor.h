@@ -227,6 +227,9 @@ protected:
     void do_logic_pre();
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
+    bool list_popup(
+        const char* label, const vector<string> &items, string* picked_item
+    );
     void leave();
     void open_dialog(
         const string &title,

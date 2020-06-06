@@ -857,11 +857,6 @@ void area_editor::process_gui_panel_layout() {
             //Sector hazards node.
             if(saveable_tree_node("layout", "Hazards")) {
             
-                vector<string> all_hazards_list;
-                for(auto h : game.hazards) {
-                    all_hazards_list.push_back(h.first);
-                }
-                
                 static int selected_hazard_nr = 0;
                 
                 //Sector hazard addition button.
@@ -871,36 +866,39 @@ void area_editor::process_gui_panel_layout() {
                         ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                     )
                 ) {
-                    ImGui::OpenPopup("selectHazard");
+                    ImGui::OpenPopup("addHazard");
                 }
                 set_tooltip(
                     "Add a new hazard to the list of hazards this sector has.\n"
                     "Click to open a pop-up for you to choose from."
                 );
                 
-                if(ImGui::BeginPopup("selectHazard")) {
-                    for(size_t h = 0; h < all_hazards_list.size(); ++h) {
-                        string name = all_hazards_list[h];
-                        if(ImGui::Selectable(name.c_str())) {
-                        
-                            sector* s_ptr = *selected_sectors.begin();
-                            vector<string> list =
-                                semicolon_list_to_vector(s_ptr->hazards_str);
-                            if(
-                                std::find(
-                                    list.begin(), list.end(), name
-                                ) == list.end()
-                            ) {
-                                register_change("sector hazard addition");
-                                if(!s_ptr->hazards_str.empty()) {
-                                    s_ptr->hazards_str += ";";
-                                }
-                                s_ptr->hazards_str += name;
-                                selected_hazard_nr = list.size();
-                            }
+                //Sector hazard addition popup.
+                vector<string> all_hazards_list;
+                for(auto h : game.hazards) {
+                    all_hazards_list.push_back(h.first);
+                }
+                string picked_hazard;
+                if(
+                    list_popup(
+                        "addHazard", all_hazards_list, &picked_hazard
+                    )
+                ) {
+                    sector* s_ptr = *selected_sectors.begin();
+                    vector<string> list =
+                        semicolon_list_to_vector(s_ptr->hazards_str);
+                    if(
+                        std::find(
+                            list.begin(), list.end(), picked_hazard
+                        ) == list.end()
+                    ) {
+                        register_change("sector hazard addition");
+                        if(!s_ptr->hazards_str.empty()) {
+                            s_ptr->hazards_str += ";";
                         }
+                        s_ptr->hazards_str += picked_hazard;
+                        selected_hazard_nr = list.size();
                     }
-                    ImGui::EndPopup();
                 }
                 
                 //Sector hazard removal button.
@@ -1675,7 +1673,7 @@ void area_editor::process_gui_panel_options() {
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Snap threshold", &snap_threshold,
-            0.1f, 0, 9999
+            0.1f, 0, INT_MAX
         );
         set_tooltip(
             "Cursor must be these many pixels close to a vertex/edge in order "
@@ -1695,7 +1693,7 @@ void area_editor::process_gui_panel_options() {
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Drag threshold", &drag_threshold,
-            0.1f, 0, 9999
+            0.1f, 0, INT_MAX
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag."
@@ -1807,7 +1805,7 @@ void area_editor::process_gui_panel_options() {
         int backup_interval = game.options.area_editor_backup_interval;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
-            "Auto-backup interval", &backup_interval, 1, 0, 9999
+            "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
         );
         set_tooltip(
             "Interval between auto-backup saves, in seconds. 0 = off."
@@ -1819,7 +1817,7 @@ void area_editor::process_gui_panel_options() {
         int undo_limit = game.options.area_editor_undo_limit;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
-            "Undo limit", &undo_limit, 0.1, 0, 9999
+            "Undo limit", &undo_limit, 0.1, 0, INT_MAX
         );
         set_tooltip(
             "Maximum number of operations that can be undone. 0 = off."

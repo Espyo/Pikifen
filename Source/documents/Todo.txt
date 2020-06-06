@@ -1,13 +1,15 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
     
-    
 Current tasks (tasks being worked on, but not yet committed)
     Change animation editor to Dear ImGui
         Make the general editor first!
+        Set "made_new_changes" everywhere
+        Going from anims to sprites is making it so no sprite is selected?
         A way to rename sprites/animations/body parts
         Hide buttons and such when they are not applicable
         Spacing before every tree node
         Fix the panel_title function
+        Test if body part addition/moving is working -- it should be re-ordering the hitboxes in each sprite
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -47,6 +49,7 @@ Next tasks (roughly sorted most important first)
     Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (neutral carrying numbers appear black; probably the same problem) (Kman)
     A clog won't drain all the water if there's a bridge sector in-between (Kman)
     The "Bubble.txt" global animation is using the HUD day sprite
+    Pikmin sprout sprites have their hitboxes swapped
     
     --- v0.19.0 ---
     Revamp editors

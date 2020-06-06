@@ -193,7 +193,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_down(game.mouse_cursor_w)) {
-            //TODO cur_sprite_tc_to_gui();
+            handle_cur_sprite_tc();
         }
         break;
     } case EDITOR_STATE_HITBOXES: {
@@ -205,7 +205,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(tc_handled) {
-                //TODO cur_hitbox_tc_to_gui();
+                handle_cur_hitbox_tc();
             } else {
                 vector<size_t> clicked_hitboxes;
                 for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
@@ -281,14 +281,11 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
             if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
             
-            //TODO bool add = get_checkbox_check(frm_sprite_bmp, "chk_add");
-            bool add = false; //TODO
-            
             point selection_tl;
             point selection_br;
             if(
                 (cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) ||
-                !add
+                !sprite_bmp_add_mode
             ) {
                 selection_tl = bmp_click_pos;
                 selection_br = bmp_click_pos;
@@ -329,32 +326,18 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             delete[] selection_pixels;
             
-            //TODO
-            /*
-            set_textbox_text(
-                frm_sprite_bmp, "txt_x", i2s(selection_tl.x)
+            cur_sprite->file_pos = selection_tl;
+            cur_sprite->file_size = selection_br - selection_tl + 1;
+            cur_sprite->set_bitmap(
+                cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
             );
-            set_textbox_text(
-                frm_sprite_bmp, "txt_y", i2s(selection_tl.y)
-            );
-            set_textbox_text(
-                frm_sprite_bmp, "txt_w", i2s(selection_br.x - selection_tl.x + 1)
-            );
-            set_textbox_text(
-                frm_sprite_bmp, "txt_h", i2s(selection_br.y - selection_tl.y + 1)
-            );
-            gui_to_sprite_bmp();
-            */
         }
         break;
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
-            //TODO
-            /*
             if(top_tc.handle_mouse_down(game.mouse_cursor_w)) {
-                top_tc_to_gui();
+                handle_top_tc();
             }
-            */
         }
         break;
     }
@@ -369,14 +352,14 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_move(game.mouse_cursor_w)) {
-            //TODO cur_sprite_tc_to_gui();
+            handle_cur_sprite_tc();
             made_new_changes = true;
         }
         break;
     } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_move(game.mouse_cursor_w)) {
-                //TODO cur_hitbox_tc_to_gui();
+                handle_cur_hitbox_tc();
                 made_new_changes = true;
             }
         }
@@ -384,7 +367,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
             if(top_tc.handle_mouse_move(game.mouse_cursor_w)) {
-                //TODO top_tc_to_gui();
+                handle_top_tc();
             }
         }
         break;

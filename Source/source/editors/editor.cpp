@@ -470,6 +470,35 @@ void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
 
 /* ----------------------------------------------------------------------------
+ * Displays a popup, if applicable, and fills it with selectable items
+ * from a list. Returns true if one of the items was clicked on,
+ * false otherwise.
+ * label:
+ *   Name of the popup.
+ * items:
+ *   List of items.
+ * picked_item:
+ *   If an item was picked, set this to its name.
+ */
+bool editor::list_popup(
+    const char* label, const vector<string> &items, string* picked_item
+) {
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        for(size_t i = 0; i < items.size(); ++i) {
+            string name = items[i];
+            if(ImGui::Selectable(name.c_str())) {
+                *picked_item = name;
+                ret = true;
+            }
+        }
+        ImGui::EndPopup();
+    }
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Exits out of the editor, with a fade.
  */
 void editor::leave() {

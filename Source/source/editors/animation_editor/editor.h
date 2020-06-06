@@ -158,6 +158,9 @@ private:
     void enter_side_view();
     void exit_side_view();
     string get_path_short_name(const string &p) const;
+    void handle_cur_hitbox_tc();
+    void handle_cur_sprite_tc();
+    void handle_top_tc();
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
@@ -167,7 +170,13 @@ private:
     void open_load_dialog();
     void pick_animation(const string &name, const bool is_new);
     void pick_sprite(const string &name, const bool is_new);
+    void press_hitboxes_button();
+    void press_mob_radius_button();
+    void press_origin_button();
+    void press_pikmin_silhouette_button();
     void press_quit_button();
+    void press_reload_button();
+    void press_save_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_load_dialog();
@@ -186,13 +195,14 @@ private:
     void process_gui_toolbar();
     void rename_animation();
     void rename_sprite();
-    void resize_everything();
+    void resize_everything(const float mult);
     void save_animation_database();
-    void set_all_sprite_scales();
+    void set_all_sprite_scales(const float scale);
     void sprite_bmp_flood_fill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
     );
     void update_cur_hitbox_tc();
+    void update_cur_sprite_tc();
     void update_hitboxes();
     void update_stats();
     

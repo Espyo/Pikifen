@@ -107,6 +107,8 @@ void animation_editor::center_camera_on_sprite_bitmap() {
  * Changes to a new state, cleaning up whatever is needed.
  */
 void animation_editor::change_state(const EDITOR_STATES new_state) {
+    comparison = false;
+    comparison_sprite = NULL;
     state = new_state;
 }
 
@@ -180,28 +182,6 @@ void animation_editor::draw_canvas_imgui_callback(
 
 
 /* ----------------------------------------------------------------------------
- * Enters the side view mode.
- */
-void animation_editor::enter_side_view() {
-    side_view = true;
-    //TODO set_checkbox_check(frm_hitboxes, "chk_side_view", true);
-    update_cur_hitbox_tc();
-    cur_hitbox_tc.keep_aspect_ratio = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Exits the side view mode.
- */
-void animation_editor::exit_side_view() {
-    side_view = false;
-    //TODO set_checkbox_check(frm_hitboxes, "chk_side_view", false);
-    update_cur_hitbox_tc();
-    cur_hitbox_tc.keep_aspect_ratio = true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string animation_editor::get_name() const {
@@ -242,6 +222,60 @@ string animation_editor::get_path_short_name(const string &p) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the current hitbox's transformation controller having been altered.
+ */
+void animation_editor::handle_cur_hitbox_tc() {
+    if(!cur_sprite && !cur_hitbox) return;
+    
+    if(side_view) {
+        cur_hitbox->pos.x = cur_hitbox_tc.get_center().x;
+        cur_hitbox->radius = cur_hitbox_tc.get_size().x / 2.0f;
+        cur_hitbox->z =
+            -(
+                cur_hitbox_tc.get_center().y +
+                cur_hitbox_tc.get_size().y / 2.0f
+            );
+        cur_hitbox->height = cur_hitbox_tc.get_size().y;
+    } else {
+        cur_hitbox->pos = cur_hitbox_tc.get_center();
+        cur_hitbox->radius = cur_hitbox_tc.get_size().x / 2.0f;
+    }
+    
+    if(cur_hitbox->radius <= 0.0f) {
+        cur_hitbox->radius = 16.0f;
+        update_cur_hitbox_tc();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the current sprite's transformation controller having
+ * been altered.
+ */
+void animation_editor::handle_cur_sprite_tc() {
+    if(!cur_sprite) return;
+    
+    cur_sprite->offset = cur_sprite_tc.get_center();
+    cur_sprite->scale =
+        cur_sprite_tc.get_size() / cur_sprite->file_size;
+    cur_sprite->angle = cur_sprite_tc.get_angle();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the current sprite's top transformation controller having
+ * been altered.
+ */
+void animation_editor::handle_top_tc() {
+    if(!cur_sprite) return;
+    
+    cur_sprite->top_pos = top_tc.get_center();
+    cur_sprite->top_size = top_tc.get_size();
+    cur_sprite->top_angle = top_tc.get_angle();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Imports the animation data from a different animation to the current.
  */
 void animation_editor::import_animation_data(const string &name) {
@@ -261,15 +295,10 @@ void animation_editor::import_animation_data(const string &name) {
  */
 void animation_editor::import_sprite_file_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
-    //TODO
-    /*
-    set_textbox_text(frm_sprite_bmp, "txt_file", s->file);
-    set_textbox_text(frm_sprite_bmp, "txt_x", i2s(s->file_pos.x));
-    set_textbox_text(frm_sprite_bmp, "txt_y", i2s(s->file_pos.y));
-    set_textbox_text(frm_sprite_bmp, "txt_w", i2s(s->file_size.x));
-    set_textbox_text(frm_sprite_bmp, "txt_h", i2s(s->file_size.y));
-    gui_to_sprite_bmp();
-    */
+    
+    //TODO gui_to_sprite_bmp();, or probably the
+    //whole "//New image? Might as well re-center the camera." logic
+    cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     status_text = "Data imported.";
 }
 
@@ -299,16 +328,11 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
  */
 void animation_editor::import_sprite_top_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
-    //TODO
-    /*set_checkbox_check(frm_top, "chk_visible", s->top_visible);
-    set_textbox_text(frm_top, "txt_x", f2s(s->top_pos.x));
-    set_textbox_text(frm_top, "txt_y", f2s(s->top_pos.y));
-    set_textbox_text(frm_top, "txt_w", f2s(s->top_size.x));
-    set_textbox_text(frm_top, "txt_h", f2s(s->top_size.y));
-    set_angle_picker_angle(frm_top, "ang_angle", s->top_angle);
-    
-    gui_to_top();
-    */
+    cur_sprite->top_visible = s->top_visible;
+    cur_sprite->top_pos = s->top_pos;
+    cur_sprite->top_size = s->top_size;
+    cur_sprite->top_angle = s->top_angle;
+    //TODO gui_to_top();
     status_text = "Data imported.";
 }
 
@@ -319,16 +343,10 @@ void animation_editor::import_sprite_top_data(const string &name) {
  */
 void animation_editor::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
-    //TODO
-    /*
-    set_textbox_text(frm_sprite_tra, "txt_x", f2s(s->offset.x));
-    set_textbox_text(frm_sprite_tra, "txt_y", f2s(s->offset.y));
-    set_textbox_text(frm_sprite_tra, "txt_sx", f2s(s->scale.x));
-    set_textbox_text(frm_sprite_tra, "txt_sy", f2s(s->scale.y));
-    set_angle_picker_angle(frm_sprite_tra, "ang_a", s->angle);
-    
-    gui_to_sprite_transform();
-    */
+    cur_sprite->offset = s->offset;
+    cur_sprite->scale = s->scale;
+    cur_sprite->angle = s->angle;
+    //TODO gui_to_sprite_transform();
     status_text = "Data imported.";
 }
 
@@ -488,6 +506,7 @@ void animation_editor::load() {
     file_path.clear();
     loaded_content_yet = false;
     side_view = false;
+    cur_hitbox_tc.keep_aspect_ratio = true;
     change_state(EDITOR_STATE_MAIN);
     
     if(!auto_load_anim.empty()) {
@@ -501,12 +520,62 @@ void animation_editor::load() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the snap mode button widget is pressed.
+ * Code to run when the mob radius button widget is pressed.
+ */
+void animation_editor::press_mob_radius_button() {
+    mob_radius_visible = !mob_radius_visible;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the hitboxes button widget is pressed.
+ */
+void animation_editor::press_hitboxes_button() {
+    hitboxes_visible = !hitboxes_visible;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the origin button widget is pressed.
+ */
+void animation_editor::press_origin_button() {
+    origin_visible = !origin_visible;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the Pikmin silhouette button widget is pressed.
+ */
+void animation_editor::press_pikmin_silhouette_button() {
+    pikmin_silhouette_visible = !pikmin_silhouette_visible;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the quit button widget is pressed.
  */
 void animation_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
         leave();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the reload button widget is pressed.
+ */
+void animation_editor::press_reload_button() {
+    if(!check_new_unsaved_changes(reload_widget_pos)) {
+        load_animation_database(false);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the save button widget is pressed.
+ */
+void animation_editor::press_save_button() {
+    save_animation_database();
 }
 
 
@@ -519,8 +588,7 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
         anims.sort_alphabetically();
     }
     cur_anim = anims.animations[anims.find_animation(name)];
-    cur_frame_nr =
-        (cur_anim->frames.size()) ? 0 : INVALID;
+    cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
     cur_sprite = NULL;
     cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
@@ -547,7 +615,6 @@ void animation_editor::pick_sprite(const string &name, const bool is_new) {
     cur_hitbox_nr = INVALID;
     if(is_new) {
         //New sprite. Suggest file name.
-        cur_sprite->file = last_spritesheet_used;
         cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
     }
 }
@@ -648,36 +715,30 @@ void animation_editor::rename_sprite() {
 /* ----------------------------------------------------------------------------
  * Resizes sprites, body parts, etc. by a multiplier.
  */
-void animation_editor::resize_everything() {
-    //TODO
-    /*
-    float mult = s2f(get_textbox_text(frm_tools, "txt_resize"));
-    
+void animation_editor::resize_everything(const float mult) {
     if(mult == 0) {
-        emit_status_bar_message("Can't resize everything to size 0!", true);
+        status_text = "Can't resize everything to size 0!";
         return;
     }
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
-    
+        
         s_ptr->scale    *= mult;
         s_ptr->offset   *= mult;
         s_ptr->top_pos  *= mult;
         s_ptr->top_size *= mult;
-    
+        
         for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
-    
+            
             h_ptr->radius *= mult;
             h_ptr->pos    *= mult;
         }
     }
     
-    set_textbox_text(frm_tools, "txt_resize", "");
     made_new_changes = true;
     status_text = "Resized successfully.";
-    */
 }
 
 
@@ -887,26 +948,20 @@ void animation_editor::save_animation_database() {
 /* ----------------------------------------------------------------------------
  * Sets all sprite scales to the value specified in the textbox.
  */
-void animation_editor::set_all_sprite_scales() {
-    //TODO
-    /*
-    float mult = s2f(get_textbox_text(frm_tools, "txt_set_scales"));
-    
-    if(mult == 0) {
-        emit_status_bar_message("The scales can't be 0!", true);
+void animation_editor::set_all_sprite_scales(const float scale) {
+    if(scale == 0) {
+        status_text = "The scales can't be 0!";
         return;
     }
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
-        s_ptr->scale.x = mult;
-        s_ptr->scale.y = mult;
+        s_ptr->scale.x = scale;
+        s_ptr->scale.y = scale;
     }
     
-    set_textbox_text(frm_tools, "txt_set_scales", "");
     made_new_changes = true;
-    emit_status_bar_message("Sprite scales set successfully.", false);
-    */
+    status_text = "Sprite scales set successfully.";
 }
 
 
@@ -1069,6 +1124,22 @@ void animation_editor::update_cur_hitbox_tc() {
             point(cur_hitbox->radius * 2, cur_hitbox->radius * 2)
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the current sprite's transformation controller.
+ */
+void animation_editor::update_cur_sprite_tc() {
+    if(!cur_sprite) return;
+    cur_sprite_tc.set_center(cur_sprite->offset);
+    cur_sprite_tc.set_size(
+        point(
+            cur_sprite->file_size.x * cur_sprite->scale.x,
+            cur_sprite->file_size.y * cur_sprite->scale.y
+        )
+    );
+    cur_sprite_tc.set_angle(cur_sprite->angle);
 }
 
 

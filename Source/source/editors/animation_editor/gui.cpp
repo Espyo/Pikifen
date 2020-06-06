@@ -376,8 +376,50 @@ void animation_editor::process_gui_panel_animation() {
     //Panel title text.
     panel_title("ANIMATIONS", 118.0f);
     
+    //Current animation text.
+    size_t cur_anim_nr = INVALID;
+    if(cur_anim) {
+        cur_anim_nr = anims.find_animation(cur_anim->name);
+    }
+    ImGui::Text(
+        "Current animation: %s / %i",
+        (cur_anim_nr == INVALID ? "--" : i2s(cur_anim_nr + 1).c_str()),
+        (int) anims.animations.size()
+    );
+    
+    //Previous animation button.
+    if(
+        ImGui::ImageButton(
+            editor_icons[ICON_PREVIOUS],
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+        )
+    ) {
+        if(!anims.animations.empty()) {
+            if(!cur_anim) {
+                pick_animation(anims.animations[0]->name, false);
+            } else {
+                size_t new_nr =
+                    sum_and_wrap(
+                        anims.find_animation(cur_anim->name),
+                        -1,
+                        anims.animations.size()
+                    );
+                pick_animation(anims.animations[new_nr]->name, false);
+            }
+        }
+    }
+    set_tooltip(
+        "Previous\nanimation."
+    );
+    
     //Change current animation button.
-    if(ImGui::Button("Change")) {
+    string anim_button_name =
+        (cur_anim ? cur_anim->name : "(None)") + "##anim";
+    ImVec2 anim_button_size(
+        -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
+    );
+    ImGui::SameLine();
+    if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             anim_names.push_back(picker_item(anims.animations[a]->name));
@@ -398,26 +440,6 @@ void animation_editor::process_gui_panel_animation() {
         "Pick an animation, or create a new one."
     );
     
-    //Current animation text.
-    ImGui::SameLine();
-    ImGui::Text("Animation: %s", cur_anim ? cur_anim->name.c_str() : "(None)");
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Previous animation button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_PREVIOUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Select the previous animation in the list."
-    );
-    
     //Next animation button.
     ImGui::SameLine();
     if(
@@ -426,54 +448,108 @@ void animation_editor::process_gui_panel_animation() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(!anims.animations.empty()) {
+            if(!cur_anim) {
+                pick_animation(anims.animations[0]->name, false);
+            } else {
+                size_t new_nr =
+                    sum_and_wrap(
+                        anims.find_animation(cur_anim->name),
+                        1,
+                        anims.animations.size()
+                    );
+                pick_animation(anims.animations[new_nr]->name, false);
+            }
+        }
     }
     set_tooltip(
-        "Select the next animation in the list."
+        "Next\nanimation."
     );
     
-    //Delete animation button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Delete the current animation."
-    );
-    
-    //Import animation button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Import the data from another animation."
-    );
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     if(cur_anim) {
+    
+        //Delete animation button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            if(cur_anim) {
+                size_t nr = anims.find_animation(cur_anim->name);
+                anims.animations.erase(anims.animations.begin() + nr);
+                if(anims.animations.empty()) {
+                    nr = INVALID;
+                    cur_anim = NULL;
+                    cur_frame_nr = INVALID;
+                    cur_sprite = NULL;
+                    cur_hitbox = NULL;
+                    cur_hitbox_nr = INVALID;
+                } else {
+                    nr = std::min(nr, anims.animations.size() - 1);
+                    pick_animation(anims.animations[nr]->name, false);
+                }
+                anim_playing = false;
+                made_new_changes = true;
+                status_text = "Animation deleted.";
+            } else {
+                status_text = "You have to select an animation to delete!";
+            }
+        }
+        set_tooltip(
+            "Delete the current animation."
+        );
+        
+    }
+    
+    if(cur_anim) {
+    
+        //Import animation button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importAnim");
+        }
+        set_tooltip(
+            "Import the data from another animation."
+        );
+        
+        //Import animation popup.
+        vector<string> import_anim_names;
+        for(size_t a = 0; a < anims.animations.size(); ++a) {
+            if(anims.animations[a] == cur_anim) continue;
+            import_anim_names.push_back(anims.animations[a]->name);
+        }
+        string picked_anim;
+        if(list_popup("importAnim", import_anim_names, &picked_anim)) {
+            import_animation_data(picked_anim);
+        }
+        
         //Animation data node.
         if(saveable_tree_node("animation", "Animation data")) {
         
             //Loop frame value.
             int loop_frame = cur_anim->loop_frame + 1;
             ImGui::DragInt(
-                "Loop frame", &loop_frame, 0.1, 1,
+                "Loop frame", &loop_frame, 0.1f, 1,
                 cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
             );
             set_tooltip(
-                "The animation loops back to this frame when it reaches the "
-                "last one."
+                "The animation loops back to this frame when it "
+                "reaches the last one."
             );
+            loop_frame =
+                clamp(
+                    loop_frame, 1,
+                    cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
+                );
             cur_anim->loop_frame = loop_frame - 1;
             
             //Hit rate slider.
@@ -481,21 +557,29 @@ void animation_editor::process_gui_panel_animation() {
             ImGui::SliderInt("Hit rate", &hit_rate, 0, 100);
             cur_anim->hit_rate = hit_rate;
             set_tooltip(
-                "If this attack can knock back Pikmin, this indicates the chance "
-                "that it will miss.\n"
-                "0 means it will always hit, 50 means it will miss half the "
-                "time, etc."
+                "If this attack can knock back Pikmin, this indicates "
+                "the chance that it will miss.\n"
+                "0 means it will always hit, 50 means it will miss "
+                "half the time, etc."
             );
             
             ImGui::TreePop();
         }
         
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Frame list node.
         if(saveable_tree_node("animation", "Frame list")) {
         
             frame* frame_ptr = NULL;
-            if(cur_frame_nr != INVALID && cur_anim) {
-                frame_ptr = &(cur_anim->frames[cur_frame_nr]);
+            if(cur_anim) {
+                if(cur_frame_nr == INVALID && !cur_anim->frames.empty()) {
+                    cur_frame_nr = 0;
+                }
+                if(cur_frame_nr != INVALID) {
+                    frame_ptr = &(cur_anim->frames[cur_frame_nr]);
+                }
             }
             
             //Current frame text.
@@ -505,121 +589,193 @@ void animation_editor::process_gui_panel_animation() {
                 (int) cur_anim->frames.size()
             );
             
-            //Play/pause button.
-            if(
-                ImGui::ImageButton(
-                    editor_icons[ICON_PLAY_PAUSE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                )
-            ) {
-                //TODO
+            if(frame_ptr) {
+                //Play/pause button.
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_PLAY_PAUSE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    if(cur_anim->frames.size() < 2) {
+                        anim_playing = false;
+                    } else {
+                        anim_playing = !anim_playing;
+                        if(
+                            !cur_anim->frames.empty() &&
+                            cur_frame_nr == INVALID
+                        ) {
+                            cur_frame_nr = 0;
+                        }
+                        cur_frame_time = 0;
+                    }
+                }
+                set_tooltip(
+                    "Play or pause the animation.",
+                    "Spacebar"
+                );
+                
+                //Previous frame button.
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_PREVIOUS],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    anim_playing = false;
+                    if(!cur_anim->frames.empty()) {
+                        if(cur_frame_nr == INVALID) {
+                            cur_frame_nr = 0;
+                        } else if(cur_frame_nr == 0) {
+                            cur_frame_nr =
+                                cur_anim->frames.size() - 1;
+                        } else {
+                            cur_frame_nr--;
+                        }
+                    }
+                }
+                set_tooltip(
+                    "Previous frame."
+                );
+                
+                //Next frame button.
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_NEXT],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    anim_playing = false;
+                    if(!cur_anim->frames.empty()) {
+                        if(
+                            cur_frame_nr ==
+                            cur_anim->frames.size() - 1 ||
+                            cur_frame_nr == INVALID
+                        ) {
+                            cur_frame_nr = 0;
+                        } else {
+                            cur_frame_nr++;
+                        }
+                    }
+                }
+                set_tooltip(
+                    "Next frame."
+                );
+                
             }
-            set_tooltip(
-                "Play or pause the animation.",
-                "Spacebar"
-            );
-            
-            //Previous frame button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    editor_icons[ICON_PREVIOUS],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                )
-            ) {
-                //TODO
-            }
-            set_tooltip(
-                "Previous frame."
-            );
-            
-            //Next frame button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    editor_icons[ICON_NEXT],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                )
-            ) {
-                //TODO
-            }
-            set_tooltip(
-                "Next frame."
-            );
             
             //Add frame button.
-            ImGui::SameLine();
+            if(frame_ptr) {
+                ImGui::SameLine();
+            }
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
                     ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                 )
             ) {
-                //TODO
-            }
-            set_tooltip(
-                "Add a new frame after the curret one, by copying data from "
-                "the current one."
-            );
-            
-            //Delete frame button.
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                )
-            ) {
-                //TODO
-            }
-            set_tooltip(
-                "Delete the current frame."
-            );
-            
-            //Sprite combobox.
-            vector<string> sprite_names;
-            for(size_t s = 0; s < anims.sprites.size(); ++s) {
-                sprite_names.push_back(anims.sprites[s]->name);
-            }
-            ImGui::Combo(
-                "Sprite", &frame_ptr->sprite_name, sprite_names
-            );
-            set_tooltip(
-                "The sprite to use for this frame."
-            );
-            
-            //Duration value.
-            ImGui::DragFloat(
-                "Duration", &frame_ptr->duration, 0.01, 0.0f, 9999.0f
-            );
-            set_tooltip(
-                "How long this frame lasts for, in seconds."
-            );
-            
-            //Signal checkbox.
-            bool use_signal = (frame_ptr->signal != INVALID);
-            if(ImGui::Checkbox("Signal", &use_signal)) {
-                if(use_signal) {
-                    frame_ptr->signal = 0;
+                anim_playing = false;
+                if(cur_frame_nr != INVALID) {
+                    cur_frame_nr++;
+                    cur_anim->frames.insert(
+                        cur_anim->frames.begin() + cur_frame_nr,
+                        frame(cur_anim->frames[cur_frame_nr - 1])
+                    );
                 } else {
-                    frame_ptr->signal = INVALID;
+                    cur_anim->frames.push_back(frame());
+                    cur_frame_nr = 0;
                 }
+                made_new_changes = true;
             }
+            set_tooltip(
+                "Add a new frame after the curret one, by copying "
+                "data from the current one."
+            );
             
-            //Signal value.
-            if(use_signal) {
+            if(frame_ptr) {
+            
+                //Delete frame button.
                 ImGui::SameLine();
-                int f_signal = frame_ptr->signal;
-                ImGui::DragInt("##signal", &f_signal, 0.1, 0, 9999);
-                frame_ptr->signal = f_signal;
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_REMOVE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    anim_playing = false;
+                    if(cur_frame_nr != INVALID) {
+                        cur_anim->frames.erase(
+                            cur_anim->frames.begin() + cur_frame_nr
+                        );
+                        if(cur_anim->frames.empty()) {
+                            cur_frame_nr = INVALID;
+                        } else if(cur_frame_nr >= cur_anim->frames.size()) {
+                            cur_frame_nr = cur_anim->frames.size() - 1;
+                        }
+                    }
+                    made_new_changes = true;
+                }
+                set_tooltip(
+                    "Delete the current frame."
+                );
+                
             }
             
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
+            if(frame_ptr) {
             
-            //Apply duration to all button.
-            if(ImGui::Button("Apply duration to all frames")) {
-                //TODO
+                //Sprite combobox.
+                vector<string> sprite_names;
+                for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                    sprite_names.push_back(anims.sprites[s]->name);
+                }
+                ImGui::Combo(
+                    "Sprite", &frame_ptr->sprite_name, sprite_names
+                );
+                set_tooltip(
+                    "The sprite to use for this frame."
+                );
+                
+                //Duration value.
+                ImGui::DragFloat(
+                    "Duration", &frame_ptr->duration, 0.005, 0.0f, FLT_MAX
+                );
+                set_tooltip(
+                    "How long this frame lasts for, in seconds."
+                );
+                
+                //Signal checkbox.
+                bool use_signal = (frame_ptr->signal != INVALID);
+                if(ImGui::Checkbox("Signal", &use_signal)) {
+                    if(use_signal) {
+                        frame_ptr->signal = 0;
+                    } else {
+                        frame_ptr->signal = INVALID;
+                    }
+                }
+                
+                //Signal value.
+                if(use_signal) {
+                    ImGui::SameLine();
+                    int f_signal = frame_ptr->signal;
+                    ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX);
+                    frame_ptr->signal = f_signal;
+                }
+                
+                //Spacer dummy widget.
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                //Apply duration to all button.
+                if(ImGui::Button("Apply duration to all frames")) {
+                    float d = cur_anim->frames[cur_frame_nr].duration;
+                    for(size_t i = 0; i < cur_anim->frames.size(); ++i) {
+                        cur_anim->frames[i].duration = d;
+                    }
+                    made_new_changes = true;
+                    status_text =
+                        "Applied the duration " + f2s(d) + " to all frames.";
+                }
             }
             
             ImGui::TreePop();
@@ -653,7 +809,7 @@ void animation_editor::process_gui_panel_body_part() {
     
     //New body part name.
     static string new_part_name;
-    static int selected_part = 0;;
+    static int selected_part = 0;
     ImGui::InputText("New part name", &new_part_name);
     
     //Add body part button.
@@ -663,7 +819,30 @@ void animation_editor::process_gui_panel_body_part() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(!new_part_name.empty()) {
+            bool already_exists = false;
+            for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+                if(anims.body_parts[b]->name == new_part_name) {
+                    selected_part = b;
+                    already_exists = true;
+                }
+            }
+            if(!already_exists) {
+                anims.body_parts.insert(
+                    anims.body_parts.begin() + selected_part +
+                    (anims.body_parts.empty() ? 0 : 1),
+                    new body_part(new_part_name)
+                );
+                if(anims.body_parts.size() == 1) {
+                    selected_part = 0;
+                } else {
+                    selected_part++;
+                }
+                update_hitboxes();
+                new_part_name.clear();
+                made_new_changes = true;
+            }
+        }
     }
     set_tooltip(
         "Create a new body part, using the name in the text box above.\n"
@@ -678,7 +857,15 @@ void animation_editor::process_gui_panel_body_part() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(selected_part >= 0 && !anims.body_parts.empty()) {
+            delete anims.body_parts[selected_part];
+            anims.body_parts.erase(anims.body_parts.begin() + selected_part);
+            if(selected_part > 0) {
+                selected_part--;
+            }
+            update_hitboxes();
+            made_new_changes = true;
+        }
     }
     set_tooltip(
         "Delete the currently selected body part from the list."
@@ -703,6 +890,8 @@ void animation_editor::process_gui_panel_body_part() {
                         anims.body_parts[p] = anims.body_parts[p2];
                         anims.body_parts[p2] = p_ptr;
                         ImGui::ResetMouseDragDelta();
+                        update_hitboxes();
+                        made_new_changes = true;
                     }
                 }
             }
@@ -724,7 +913,7 @@ void animation_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Current file text.
-    ImGui::Text("Animation: %s", get_path_short_name(file_path).c_str());
+    ImGui::Text("Current file: %s", get_path_short_name(file_path).c_str());
     set_tooltip("Full file path: " + file_path);
     
     //Spacer dummy widget.
@@ -863,7 +1052,7 @@ void animation_editor::process_gui_panel_options() {
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Drag threshold", &drag_threshold,
-            0.1f, 0, 9999
+            0.1f, 0, INT_MAX
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag."
@@ -892,8 +1081,48 @@ void animation_editor::process_gui_panel_sprite() {
     //Panel title text.
     panel_title("SPRITES", 88.0f);
     
+    //Current sprite text.
+    size_t cur_sprite_nr = INVALID;
+    if(cur_sprite) {
+        cur_sprite_nr = anims.find_sprite(cur_sprite->name);
+    }
+    ImGui::Text(
+        "Current sprite: %s / %i",
+        (cur_sprite_nr == INVALID ? "--" : i2s(cur_sprite_nr + 1).c_str()),
+        (int) anims.sprites.size()
+    );
+    
+    //Previous sprite button.
+    if(
+        ImGui::ImageButton(
+            editor_icons[ICON_PREVIOUS],
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+        )
+    ) {
+        if(!cur_sprite && !anims.sprites.empty()) {
+            pick_sprite(anims.sprites[0]->name, false);
+        } else {
+            size_t new_nr =
+                sum_and_wrap(
+                    anims.find_sprite(cur_sprite->name),
+                    -1,
+                    anims.sprites.size()
+                );
+            pick_sprite(anims.sprites[new_nr]->name, false);
+        }
+    }
+    set_tooltip(
+        "Previous\nsprite."
+    );
+    
     //Change current sprite button.
-    if(ImGui::Button("Change")) {
+    string sprite_button_name =
+        (cur_sprite ? cur_sprite->name : "(None)") + "##sprite";
+    ImVec2 sprite_button_size(
+        -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
+    );
+    ImGui::SameLine();
+    if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
         vector<picker_item> sprite_names;
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
             sprite_names.push_back(picker_item(anims.sprites[s]->name));
@@ -914,26 +1143,6 @@ void animation_editor::process_gui_panel_sprite() {
         "Pick a sprite, or create a new one."
     );
     
-    //Current sprite text.
-    ImGui::SameLine();
-    ImGui::Text("Sprite: %s", cur_sprite ? cur_sprite->name.c_str() : "(None)");
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Previous sprite button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_PREVIOUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Select the previous sprite in the list."
-    );
-    
     //Next sprite button.
     ImGui::SameLine();
     if(
@@ -942,44 +1151,93 @@ void animation_editor::process_gui_panel_sprite() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(!cur_sprite && !anims.sprites.empty()) {
+            pick_sprite(anims.sprites[0]->name, false);
+        } else {
+            size_t new_nr =
+                sum_and_wrap(
+                    anims.find_sprite(cur_sprite->name),
+                    1,
+                    anims.sprites.size()
+                );
+            pick_sprite(anims.sprites[new_nr]->name, false);
+        }
     }
     set_tooltip(
-        "Select the next sprite in the list."
+        "Next\nsprite."
     );
     
-    //Delete sprite button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Delete the current sprite."
-    );
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
-    //Import sprite button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
+    if(cur_sprite) {
+        //Delete sprite button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            if(cur_sprite) {
+                size_t nr = anims.find_sprite(cur_sprite->name);
+                anims.sprites.erase(anims.sprites.begin() + nr);
+                if(anims.sprites.empty()) {
+                    nr = INVALID;
+                    cur_sprite = NULL;
+                    cur_hitbox = NULL;
+                    cur_hitbox_nr = INVALID;
+                } else {
+                    nr = std::min(nr, anims.sprites.size() - 1);
+                    pick_sprite(anims.sprites[nr]->name, false);
+                }
+                made_new_changes = true;
+                status_text = "Sprite deleted.";
+            } else {
+                status_text = "You have to select a sprite to delete!";
+            }
+        }
+        set_tooltip(
+            "Delete the current sprite."
+        );
     }
-    set_tooltip(
-        "Import the data from another sprite."
-    );
     
     if(cur_sprite) {
     
+        //Import sprite button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSprite");
+        }
+        set_tooltip(
+            "Import the data from another sprite."
+        );
+        
+        //Import sprite popup.
+        vector<string> import_sprite_names;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(anims.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(anims.sprites[s]->name);
+        }
+        string picked_sprite;
+        if(list_popup("importSprite", import_sprite_names, &picked_sprite)) {
+            import_sprite_file_data(picked_sprite);
+            import_sprite_transformation_data(picked_sprite);
+            import_sprite_hitbox_data(picked_sprite);
+            import_sprite_top_data(picked_sprite);
+        }
+        
+        ImVec2 mode_buttons_size(-1.0f, 24.0f);
+        
         //Sprite bitmap button.
-        if(ImGui::Button("Bitmap")) {
+        if(ImGui::Button("Bitmap", mode_buttons_size)) {
+            pre_sprite_bmp_cam_pos = game.cam.pos;
+            pre_sprite_bmp_cam_zoom = game.cam.zoom;
+            center_camera_on_sprite_bitmap();
             change_state(EDITOR_STATE_SPRITE_BITMAP);
         }
         set_tooltip(
@@ -987,7 +1245,15 @@ void animation_editor::process_gui_panel_sprite() {
         );
         
         //Sprite transformation button.
-        if(ImGui::Button("Transformation")) {
+        if(ImGui::Button("Transformation", mode_buttons_size)) {
+            cur_sprite_tc.set_center(cur_sprite->offset);
+            cur_sprite_tc.set_size(
+                point(
+                    cur_sprite->file_size.x * cur_sprite->scale.x,
+                    cur_sprite->file_size.y * cur_sprite->scale.y
+                )
+            );
+            cur_sprite_tc.set_angle(cur_sprite->angle);
             change_state(EDITOR_STATE_SPRITE_TRANSFORM);
         }
         set_tooltip(
@@ -995,15 +1261,22 @@ void animation_editor::process_gui_panel_sprite() {
         );
         
         //Sprite hitboxes button.
-        if(ImGui::Button("Hitboxes")) {
-            change_state(EDITOR_STATE_HITBOXES);
+        if(ImGui::Button("Hitboxes", mode_buttons_size)) {
+            if(cur_sprite && !cur_sprite->hitboxes.empty()) {
+                cur_hitbox = &cur_sprite->hitboxes[0];
+                cur_hitbox_nr = 0;
+                update_cur_hitbox_tc();
+                change_state(EDITOR_STATE_HITBOXES);
+            }
         }
         set_tooltip(
             "Edit this sprite's hitboxes."
         );
         
         //Sprite Pikmin top button.
-        if(ImGui::Button("Pikmin top")) {
+        if(ImGui::Button("Pikmin top", mode_buttons_size)) {
+            top_tc.set_center(cur_sprite->top_pos);
+            top_tc.set_size(cur_sprite->top_size);
             change_state(EDITOR_STATE_TOP);
         }
         set_tooltip(
@@ -1024,6 +1297,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     
     //Back button.
     if(ImGui::Button("Back")) {
+        game.cam.pos = pre_sprite_bmp_cam_pos;
+        game.cam.zoom = pre_sprite_bmp_cam_zoom;
         change_state(EDITOR_STATE_SPRITE);
     }
     
@@ -1037,21 +1312,62 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        ImGui::OpenPopup("importSpriteBitmap");
     }
     set_tooltip(
         "Import the bitmap data from another sprite."
     );
     
+    //Import bitmap popup.
+    vector<string> import_sprite_names;
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        if(anims.sprites[s] == cur_sprite) continue;
+        import_sprite_names.push_back(anims.sprites[s]->name);
+    }
+    string picked_sprite;
+    if(list_popup("importSpriteBitmap", import_sprite_names, &picked_sprite)) {
+        import_sprite_file_data(picked_sprite);
+    }
+    
     //Browse for spritesheet button.
     if(ImGui::Button("...")) {
-        //TODO
+        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+        vector<string> f =
+            prompt_file_dialog_locked_to_folder(
+                GRAPHICS_FOLDER_PATH,
+                "Please choose the bitmap to get the sprites from.",
+                "*.png",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
+            );
+            
+        switch(result) {
+        case FILE_DIALOG_RES_WRONG_FOLDER: {
+            //File doesn't belong to the folder.
+            status_text = "The chosen image is not in the graphics folder!";
+            break;
+        } case FILE_DIALOG_RES_CANCELED: {
+            //User canceled.
+            break;
+        } case FILE_DIALOG_RES_SUCCESS: {
+            cur_sprite->set_bitmap(
+                f[0], cur_sprite->file_pos, cur_sprite->file_size
+            );
+            break;
+        }
+        }
     }
     set_tooltip("Browse for a spritesheet file to use.");
     
     //Spritesheet file name input.
+    string file_name = cur_sprite->file;
     ImGui::SameLine();
-    ImGui::InputText("File", &cur_sprite->file);
+    if(ImGui::InputText("File", &file_name)) {
+        cur_sprite->set_bitmap(
+            file_name, cur_sprite->file_pos, cur_sprite->file_size
+        );
+    }
     set_tooltip(
         "File name of the bitmap to use as a spritesheet, in the "
         "Graphics folder. Extension included. e.g. "
@@ -1059,17 +1375,31 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     );
     
     //Sprite top-left coordinates value.
+    int top_left[2] =
+    { (int) cur_sprite->file_pos.x, (int) cur_sprite->file_pos.y };
     if(
-        ImGui::DragFloat2("Top-left", (float*) &cur_sprite->file_pos)
+        ImGui::DragInt2(
+            "Top-left", top_left, 0.05f, 0.0f, INT_MAX
+        )
     ) {
-        //TODO
+        cur_sprite->set_bitmap(
+            cur_sprite->file,
+            point(top_left[0], top_left[1]), cur_sprite->file_size
+        );
     }
     
     //Sprite size value.
+    int size[2] =
+    { (int) cur_sprite->file_size.x, (int) cur_sprite->file_size.y };
     if(
-        ImGui::DragFloat2("Size", (float*) &cur_sprite->file_size)
+        ImGui::DragInt2(
+            "Size", size, 0.05f, 0.0f, INT_MAX
+        )
     ) {
-        //TODO
+        cur_sprite->set_bitmap(
+            cur_sprite->file,
+            cur_sprite->file_pos, point(size[0], size[1])
+        );
     }
     
     //Canvas explanation text.
@@ -1079,11 +1409,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     );
     
     //Add to selection checkbox.
-    if(
-        ImGui::Checkbox("Add to selection", &sprite_bmp_add_mode)
-    ) {
-        //TODO
-    }
+    ImGui::Checkbox("Add to selection", &sprite_bmp_add_mode);
     set_tooltip(
         "Add to the existing selection instead of replacing it."
     );
@@ -1092,7 +1418,11 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     if(
         ImGui::Button("Clear selection")
     ) {
-        //TODO
+        cur_sprite->file_pos = point();
+        cur_sprite->file_size = point();
+        cur_sprite->set_bitmap(
+            cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
+        );
     }
     
     ImGui::EndChild();
@@ -1113,6 +1443,12 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     //Panel title text.
     panel_title("HITBOXES", 96.0f);
     
+    //Hitbox name text.
+    ImGui::Text(
+        "Hitbox: %s",
+        cur_hitbox ? cur_hitbox->body_part_name.c_str() : "(None)"
+    );
+    
     //Previous hitbox button.
     if(
         ImGui::ImageButton(
@@ -1120,7 +1456,19 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(cur_sprite->hitboxes.size()) {
+            if(!cur_hitbox) {
+                cur_hitbox = &cur_sprite->hitboxes[0];
+                cur_hitbox_nr = 0;
+            } else {
+                cur_hitbox_nr =
+                    sum_and_wrap(
+                        cur_hitbox_nr, -1, cur_sprite->hitboxes.size()
+                    );
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+            }
+        }
+        update_cur_hitbox_tc();
     }
     set_tooltip(
         "Select the previous hitbox."
@@ -1134,189 +1482,204 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        if(cur_sprite->hitboxes.size()) {
+            if(cur_hitbox_nr == INVALID) {
+                cur_hitbox = &cur_sprite->hitboxes[0];
+                cur_hitbox_nr = 0;
+            } else {
+                cur_hitbox_nr =
+                    sum_and_wrap(cur_hitbox_nr, 1, cur_sprite->hitboxes.size());
+                cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
+            }
+        }
+        update_cur_hitbox_tc();
     }
     set_tooltip(
         "Select the next hitbox."
     );
     
-    //Import hitbox data button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        //TODO
+    if(cur_hitbox) {
+        //Import hitbox data button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSpriteHitboxes");
+        }
+        set_tooltip(
+            "Import the hitbox data from another sprite."
+        );
+        
+        //Import sprite popup.
+        vector<string> import_sprite_names;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(anims.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(anims.sprites[s]->name);
+        }
+        string picked_sprite;
+        if(
+            list_popup(
+                "importSpriteHitboxes", import_sprite_names, &picked_sprite
+            )
+        ) {
+            import_sprite_hitbox_data(picked_sprite);
+        }
     }
-    set_tooltip(
-        "Import the hitbox data from another sprite."
-    );
     
     //Side view checkbox.
-    ImGui::Checkbox("Use side view", &side_view);
+    if(ImGui::Checkbox("Use side view", &side_view)) {
+        update_cur_hitbox_tc();
+        cur_hitbox_tc.keep_aspect_ratio = !side_view;
+    }
     set_tooltip(
         "Use a side view of the object, so you can adjust hitboxes "
         "horizontally."
     );
     
-    //Hitbox name text.
-    ImGui::Text(
-        "Hitbox: %s",
-        cur_hitbox ? cur_hitbox->body_part_name.c_str() : "(None)"
-    );
-    
-    //Hitbox center value.
-    if(
-        ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.1f)
-    ) {
-        //TODO
-    }
-    
-    //Hitbox radius value.
-    if(
-        ImGui::DragFloat("Radius", &cur_hitbox->radius, 0.01f, 0.001f, 9999.0f)
-    ) {
-        //TODO
-    }
-    
-    //Hitbox Z value.
-    if(
-        ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Altitude of the hitbox's bottom."
-    );
-    
-    //Hitbox height value.
-    if(
-        ImGui::DragFloat("Height", &cur_hitbox->height, 0.1f, 0.0f, 9999.0f)
-    ) {
-        //TODO
-    }
-    set_tooltip(
-        "Hitbox's height. 0 = spans infinitely vertically."
-    );
-    
-    //Hitbox type text.
-    ImGui::Text("Hitbox type:");
-    
-    //Normal hitbox radio button.
-    int type_int = cur_hitbox->type;
-    ImGui::RadioButton("Normal", &type_int, HITBOX_TYPE_NORMAL);
-    set_tooltip(
-        "Normal hitbox, one that can be damaged."
-    );
-    
-    //Attack hitbox radio button.
-    ImGui::RadioButton("Attack", &type_int, HITBOX_TYPE_ATTACK);
-    set_tooltip(
-        "Attack hitbox, one that damages opponents."
-    );
-    
-    //Disabled hitbox radio button.
-    ImGui::RadioButton("Disabled", &type_int, HITBOX_TYPE_DISABLED);
-    set_tooltip(
-        "Disabled hitbox, one that cannot be interacted with."
-    );
-    cur_hitbox->type = type_int;
-    
-    switch(cur_hitbox->type) {
-    case HITBOX_TYPE_NORMAL: {
-
-        //Defense multiplier value.
-        ImGui::SetNextItemWidth(64.0f);
-        if(ImGui::DragFloat("Defense multiplier", &cur_hitbox->value, 0.01)) {
-            //TODO
+    if(cur_hitbox) {
+        //Hitbox center value.
+        if(ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.05f)) {
+            update_cur_hitbox_tc();
         }
-        set_tooltip(
-            "Opponent attacks will have their damage divided by this amount.\n"
-            "0 = invulnerable."
-        );
         
-        //Pikmin latch checkbox.
-        if(ImGui::Checkbox("Pikmin can latch", &cur_hitbox->can_pikmin_latch)) {
-            //TODO
-        }
-        set_tooltip(
-            "Can the Pikmin latch on to this hitbox?"
-        );
-        
-        //Hazards input.
-        //TODO replace with a list like in the area editor.
-        if(ImGui::InputText("Hazards", &cur_hitbox->hazards_str)) {
-            //TODO
-        }
-        set_tooltip(
-            "List of hazards, separated by semicolon."
-        );
-        
-        break;
-    } case HITBOX_TYPE_ATTACK: {
-
-        //Power value.
-        if(ImGui::DragFloat("Power", &cur_hitbox->value, 0.01)) {
-            //TODO
-        }
-        set_tooltip(
-            "Attack power, in hit points."
-        );
-        
-        //Hazards input.
-        //TODO replace with a list like in the area editor.
-        if(ImGui::InputText("Hazards", &cur_hitbox->hazards_str)) {
-            //TODO
-        }
-        set_tooltip(
-            "List of hazards, separated by semicolon."
-        );
-        
-        //Outward knockback checkbox.
+        //Hitbox radius value.
         if(
-            ImGui::Checkbox("Outward knockback", &cur_hitbox->knockback_outward)
+            ImGui::DragFloat(
+                "Radius", &cur_hitbox->radius, 0.05f, 0.001f, FLT_MAX
+            )
         ) {
-            //TODO
+            update_cur_hitbox_tc();
+        }
+        
+        //Hitbox Z value.
+        if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
+            update_cur_hitbox_tc();
         }
         set_tooltip(
-            "If true, opponents are knocked away from the hitbox's center."
+            "Altitude of the hitbox's bottom."
         );
         
-        //Knockback angle value.
-        if(!cur_hitbox->knockback_outward) {
-            if(
+        if(
+            ImGui::DragFloat("Height", &cur_hitbox->height, 0.1f, 0.0f, FLT_MAX)
+        ) {
+            update_cur_hitbox_tc();
+        }
+        set_tooltip(
+            "Hitbox's height. 0 = spans infinitely vertically."
+        );
+        
+        //Hitbox type text.
+        ImGui::Text("Hitbox type:");
+        
+        //Normal hitbox radio button.
+        int type_int = cur_hitbox->type;
+        ImGui::RadioButton("Normal", &type_int, HITBOX_TYPE_NORMAL);
+        set_tooltip(
+            "Normal hitbox, one that can be damaged."
+        );
+        
+        //Attack hitbox radio button.
+        ImGui::RadioButton("Attack", &type_int, HITBOX_TYPE_ATTACK);
+        set_tooltip(
+            "Attack hitbox, one that damages opponents."
+        );
+        
+        //Disabled hitbox radio button.
+        ImGui::RadioButton("Disabled", &type_int, HITBOX_TYPE_DISABLED);
+        set_tooltip(
+            "Disabled hitbox, one that cannot be interacted with."
+        );
+        cur_hitbox->type = type_int;
+        
+        ImGui::Indent();
+        
+        switch(cur_hitbox->type) {
+        case HITBOX_TYPE_NORMAL: {
+    
+            //Defense multiplier value.
+            ImGui::SetNextItemWidth(128.0f);
+            ImGui::DragFloat("Defense multiplier", &cur_hitbox->value, 0.01);
+            set_tooltip(
+                "Opponent attacks will have their damage divided "
+                "by this amount.\n"
+                "0 = invulnerable."
+            );
+            
+            //Pikmin latch checkbox.
+            ImGui::Checkbox("Pikmin can latch", &cur_hitbox->can_pikmin_latch);
+            set_tooltip(
+                "Can the Pikmin latch on to this hitbox?"
+            );
+            
+            //Hazards input.
+            //TODO replace with a list like in the area editor.
+            ImGui::InputText("Hazards", &cur_hitbox->hazards_str);
+            set_tooltip(
+                "List of hazards, separated by semicolon."
+            );
+            
+            break;
+        } case HITBOX_TYPE_ATTACK: {
+    
+            //Power value.
+            ImGui::SetNextItemWidth(128.0f);
+            ImGui::DragFloat("Power", &cur_hitbox->value, 0.01);
+            set_tooltip(
+                "Attack power, in hit points."
+            );
+            
+            //Hazards input.
+            //TODO replace with a list like in the area editor.
+            ImGui::InputText("Hazards", &cur_hitbox->hazards_str);
+            set_tooltip(
+                "List of hazards, separated by semicolon."
+            );
+            
+            //Outward knockback checkbox.
+            ImGui::Checkbox(
+                "Outward knockback", &cur_hitbox->knockback_outward
+            );
+            set_tooltip(
+                "If true, opponents are knocked away from the hitbox's center."
+            );
+            
+            //Knockback angle value.
+            if(!cur_hitbox->knockback_outward) {
+                ImGui::SetNextItemWidth(128.0f);
                 ImGui::SliderAngle(
                     "Knockback angle", &cur_hitbox->knockback_angle,
                     0.0f, 360.0f
-                )
-            ) {
-                //TODO
+                );
             }
+            
+            //Knockback strength value.
+            ImGui::SetNextItemWidth(128.0f);
+            ImGui::DragFloat(
+                "Knockback value", &cur_hitbox->knockback, 0.01
+            );
+            set_tooltip(
+                "How strong the knockback is. 3 is a good value."
+            );
+            
+            //Wither chance value.
+            int wither_chance_int = cur_hitbox->wither_chance;
+            ImGui::SetNextItemWidth(128.0f);
+            if(ImGui::SliderInt("Wither chance", &wither_chance_int, 0, 100)) {
+                cur_hitbox->wither_chance = wither_chance_int;
+            }
+            set_tooltip(
+                "Chance of the attack lowering a Pikmin's maturity by one."
+            );
+            
+            break;
+        }
         }
         
-        //Knockback strength value.
-        if(ImGui::DragFloat("Knockback value", &cur_hitbox->knockback, 0.01)) {
-            //TODO
-        }
-        set_tooltip(
-            "How strong the knockback is. 3 is a good value."
-        );
+        ImGui::Unindent();
         
-        //Wither chance value.
-        int wither_chance_int = cur_hitbox->wither_chance;
-        if(
-            ImGui::SliderInt("Wither chance", &wither_chance_int, 0, 100)
-        ) {
-            //TODO
-        }
-        set_tooltip(
-            "Chance of the attack lowering a Pikmin's maturity by one."
-        );
-        
-        break;
-    }
     }
     
     ImGui::EndChild();
@@ -1344,16 +1707,32 @@ void animation_editor::process_gui_panel_sprite_top() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        ImGui::OpenPopup("importSpriteTop");
     }
     set_tooltip(
         "Import the top data from another sprite."
     );
     
-    //Visible checkbox.
-    if(ImGui::Checkbox("Visible", &cur_sprite->top_visible)) {
-        //TODO
+    //Import sprite popup.
+    vector<string> import_sprite_names;
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        if(anims.sprites[s] == cur_sprite) continue;
+        import_sprite_names.push_back(anims.sprites[s]->name);
     }
+    string picked_sprite;
+    if(
+        list_popup(
+            "importSpriteTop", import_sprite_names, &picked_sprite
+        )
+    ) {
+        import_sprite_top_data(picked_sprite);
+        top_tc.set_center(cur_sprite->top_pos);
+        top_tc.set_size(cur_sprite->top_size);
+        top_tc.set_angle(cur_sprite->top_angle);
+    }
+    
+    //Visible checkbox.
+    ImGui::Checkbox("Visible", &cur_sprite->top_visible);
     set_tooltip(
         "Is the top visible in this sprite?"
     );
@@ -1362,14 +1741,25 @@ void animation_editor::process_gui_panel_sprite_top() {
     if(
         ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.01f)
     ) {
-        //TODO
+        top_tc.set_center(cur_sprite->top_pos);
     }
     
     //Top size value.
+    point top_size = cur_sprite->top_size;
     if(
-        ImGui::DragFloat2("Size", (float*) &cur_sprite->top_size, 0.01f)
+        ImGui::DragFloat2("Size", (float*) &top_size, 0.01f)
     ) {
-        //TODO
+        if(top_tc.keep_aspect_ratio) {
+            float ratio =
+                cur_sprite->top_size.x / cur_sprite->top_size.y;
+            if(top_size.x != cur_sprite->top_size.x) {
+                top_size.y = top_size.x / ratio;
+            } else {
+                top_size.x = top_size.y * ratio;
+            }
+        }
+        cur_sprite->top_size = top_size;
+        top_tc.set_size(cur_sprite->top_size);
     }
     
     //Keep aspect ratio checkbox.
@@ -1380,12 +1770,12 @@ void animation_editor::process_gui_panel_sprite_top() {
     
     //Top angle value.
     if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
-        //TODO
+        top_tc.set_angle(cur_sprite->top_angle);
     }
     
     //Toggle maturity button.
     if(ImGui::Button("Toggle maturity")) {
-        //TODO
+        cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
     }
     set_tooltip(
         "View a different maturity top."
@@ -1416,24 +1806,51 @@ void animation_editor::process_gui_panel_sprite_transform() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO
+        ImGui::OpenPopup("importSpriteTransform");
     }
     set_tooltip(
         "Import the transformation data from another sprite."
     );
     
+    //Import sprite popup.
+    vector<string> import_sprite_names;
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        if(anims.sprites[s] == cur_sprite) continue;
+        import_sprite_names.push_back(anims.sprites[s]->name);
+    }
+    string picked_sprite;
+    if(
+        list_popup(
+            "importSpriteTransform", import_sprite_names, &picked_sprite
+        )
+    ) {
+        import_sprite_transformation_data(picked_sprite);
+        update_cur_sprite_tc();
+    }
+    
     //Sprite offset value.
     if(
-        ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.1)
+        ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.01f)
     ) {
-        //TODO
+        update_cur_sprite_tc();
     }
     
     //Sprite scale value.
+    point sprite_scale = cur_sprite->scale;
     if(
-        ImGui::DragFloat2("Scale", (float*) &cur_sprite->scale, 0.01)
+        ImGui::DragFloat2("Scale", (float*) &sprite_scale, 0.005f)
     ) {
-        //TODO
+        if(cur_sprite_tc.keep_aspect_ratio) {
+            float ratio =
+                cur_sprite->scale.x / cur_sprite->scale.y;
+            if(sprite_scale.x != cur_sprite->scale.x) {
+                sprite_scale.y = sprite_scale.x / ratio;
+            } else {
+                sprite_scale.x = sprite_scale.y * ratio;
+            }
+        }
+        cur_sprite->scale = sprite_scale;
+        update_cur_sprite_tc();
     }
     
     //Sprite flip X button.
@@ -1442,6 +1859,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip X")
     ) {
         cur_sprite->scale.x *= -1.0f;
+        update_cur_sprite_tc();
     }
     
     //Sprite flip Y button.
@@ -1450,6 +1868,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip Y")
     ) {
         cur_sprite->scale.y *= -1.0f;
+        update_cur_sprite_tc();
     }
     
     //Keep aspect ratio checkbox.
@@ -1459,8 +1878,11 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
     //Sprite angle value.
     if(ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f)) {
-        //TODO
+        update_cur_sprite_tc();
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Comparison sprite node.
     if(saveable_tree_node("transformation", "Comparison sprite")) {
@@ -1473,16 +1895,17 @@ void animation_editor::process_gui_panel_sprite_transform() {
             //Comparison sprite combobox.
             vector<string> all_sprites;
             for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                if(cur_sprite == anims.sprites[s]) continue;
                 all_sprites.push_back(anims.sprites[s]->name);
             }
-            string comparison_sprite_name;
-            if(ImGui::Combo("Sprite", &comparison_sprite_name, all_sprites)) {
-                //TODO
-            }
+            static string comparison_sprite_name;
+            ImGui::Combo("Sprite", &comparison_sprite_name, all_sprites);
             set_tooltip(
                 "Choose another sprite to serve as a comparison."
             );
-            
+            comparison_sprite =
+                anims.sprites[anims.find_sprite(comparison_sprite_name)];
+                
             //Comparison blinks checkbox.
             ImGui::Checkbox("Blink comparison", &comparison_blink);
             set_tooltip(
@@ -1535,7 +1958,8 @@ void animation_editor::process_gui_panel_tools() {
     //Resize everything button.
     ImGui::SameLine();
     if(ImGui::Button("Resize everything")) {
-        //TODO
+        resize_everything(resize_mult);
+        resize_mult = 1.0f;
     }
     set_tooltip(
         "Resize everything by the given multiplier.\n"
@@ -1550,7 +1974,7 @@ void animation_editor::process_gui_panel_tools() {
     //Set sprite scales button.
     ImGui::SameLine();
     if(ImGui::Button("Set all scales")) {
-        //TODO
+        set_all_sprite_scales(scales_value);
     }
     set_tooltip(
         "Set the X/Y scales of all sprites to the given value."
@@ -1615,7 +2039,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_reload_button();
+        press_reload_button();
     }
     reload_widget_pos = get_last_widget_pos();
     set_tooltip(
@@ -1631,7 +2055,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_save_button();
+        press_save_button();
     }
     set_tooltip(
         "Save the animation data into the files on disk.",
@@ -1646,7 +2070,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_origin_button();
+        press_origin_button();
     }
     set_tooltip(
         "Toggle visibility of the center-point (origin).",
@@ -1661,7 +2085,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_hitboxes_button();
+        press_hitboxes_button();
     }
     set_tooltip(
         "Toggle visibility of the hitboxes, if any.",
@@ -1676,7 +2100,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_mob_radius_button();
+        press_mob_radius_button();
     }
     set_tooltip(
         "Toggle visibility of the mob's radius, if applicable.",
@@ -1691,7 +2115,7 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        //TODO press_pikmin_silhouette_button();
+        press_pikmin_silhouette_button();
     }
     set_tooltip(
         "Toggle visibility of a lying Pikmin silhouette.",
