@@ -186,7 +186,13 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         break;
         
     } case ALLEGRO_KEY_ESCAPE: {
-        if(state == EDITOR_STATE_LAYOUT) {
+        if(is_dialog_open) {
+            is_dialog_open = false;
+            if(dialog_close_callback) {
+                dialog_close_callback();
+            }
+            
+        } else if(state == EDITOR_STATE_LAYOUT) {
             if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
                 cancel_circle_sector();
             } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {

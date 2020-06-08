@@ -156,7 +156,6 @@ void animation_editor::do_logic() {
         } else {
             anim_playing = false;
         }
-        //TODO animation_to_gui();
     }
     
     cur_hitbox_alpha += TAU * 1.5 * game.delta_t;
@@ -285,7 +284,7 @@ void animation_editor::import_animation_data(const string &name) {
     cur_anim->hit_rate = a->hit_rate;
     cur_anim->loop_frame = a->loop_frame;
     
-    //TODO animation_to_gui();
+    made_new_changes = true;
     status_text = "Data imported.";
 }
 
@@ -296,9 +295,10 @@ void animation_editor::import_animation_data(const string &name) {
 void animation_editor::import_sprite_file_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
     
-    //TODO gui_to_sprite_bmp();, or probably the
-    //whole "//New image? Might as well re-center the camera." logic
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
+    
+    center_camera_on_sprite_bitmap();
+    made_new_changes = true;
     status_text = "Data imported.";
 }
 
@@ -312,13 +312,16 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
             cur_sprite->hitboxes = anims.sprites[s]->hitboxes;
         }
     }
+    
     cur_hitbox_nr = INVALID;
     cur_hitbox = NULL;
     if(!cur_sprite->hitboxes.empty()) {
         cur_hitbox_nr = 0;
         cur_hitbox = &cur_sprite->hitboxes[0];
     }
-    //TODO hitbox_to_gui();
+    
+    update_cur_hitbox_tc();
+    made_new_changes = true;
     status_text = "Data imported.";
 }
 
@@ -332,7 +335,12 @@ void animation_editor::import_sprite_top_data(const string &name) {
     cur_sprite->top_pos = s->top_pos;
     cur_sprite->top_size = s->top_size;
     cur_sprite->top_angle = s->top_angle;
-    //TODO gui_to_top();
+    
+    top_tc.set_center(cur_sprite->top_pos);
+    top_tc.set_size(cur_sprite->top_size);
+    top_tc.set_angle(cur_sprite->top_angle);
+    
+    made_new_changes = true;
     status_text = "Data imported.";
 }
 
@@ -346,7 +354,7 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     cur_sprite->offset = s->offset;
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
-    //TODO gui_to_sprite_transform();
+    update_cur_sprite_tc();
     status_text = "Data imported.";
 }
 
@@ -392,12 +400,8 @@ void animation_editor::load_animation_database(
         }
     }
     
-    //TODO
-    /*enable_widget(frm_toolbar->widgets["but_reload"]);
-    enable_widget(frm_toolbar->widgets["but_save"]);
-    frm_hitboxes->hide();
-    frm_top->hide();
-    */
+    can_reload = true;
+    can_save = true;
     
     game.cam.pos.x = game.cam.pos.y = 0;
     game.cam.zoom = 1;
@@ -427,7 +431,6 @@ void animation_editor::load_animation_database(
     }
     
     vector<string> file_path_parts = split(file_path, "/");
-    //TODO set_button_text(frm_main, "but_file", get_cut_path(file_path));
     
     if(file_path.find(TYPES_FOLDER_PATH) != string::npos) {
         vector<string> path_parts = split(file_path, "/");
@@ -480,9 +483,7 @@ void animation_editor::load_animation_database(
         save_options(); //Save the history on the options.
     }
     
-    //TODO frm_toolbar->show();
     change_state(EDITOR_STATE_MAIN);
-    //TODO change_to_right_frame();
     loaded_content_yet = true;
     
     status_text = "Loaded successfully.";
@@ -504,6 +505,8 @@ void animation_editor::load() {
     load_mob_types(false);
     
     file_path.clear();
+    can_reload = false;
+    can_save = false;
     loaded_content_yet = false;
     side_view = false;
     cur_hitbox_tc.keep_aspect_ratio = true;
@@ -552,6 +555,25 @@ void animation_editor::press_pikmin_silhouette_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the play animation button widget is pressed.
+ */
+void animation_editor::press_play_animation_button() {
+    if(cur_anim->frames.size() < 2) {
+        anim_playing = false;
+    } else {
+        anim_playing = !anim_playing;
+        if(
+            !cur_anim->frames.empty() &&
+            cur_frame_nr == INVALID
+        ) {
+            cur_frame_nr = 0;
+        }
+        cur_frame_time = 0;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the quit button widget is pressed.
  */
 void animation_editor::press_quit_button() {
@@ -565,6 +587,7 @@ void animation_editor::press_quit_button() {
  * Code to run when the reload button widget is pressed.
  */
 void animation_editor::press_reload_button() {
+    if(!can_reload) return;
     if(!check_new_unsaved_changes(reload_widget_pos)) {
         load_animation_database(false);
     }
@@ -575,6 +598,7 @@ void animation_editor::press_reload_button() {
  * Code to run when the save button widget is pressed.
  */
 void animation_editor::press_save_button() {
+    if(!can_save) return;
     save_animation_database();
 }
 
@@ -586,6 +610,7 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
     if(is_new) {
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
+        made_new_changes = true;
     }
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
@@ -608,6 +633,7 @@ void animation_editor::pick_sprite(const string &name, const bool is_new) {
                 loaded_mob_type ? loaded_mob_type->radius : 32
             );
             anims.sort_alphabetically();
+            made_new_changes = true;
         }
     }
     cur_sprite = anims.sprites[anims.find_sprite(name)];

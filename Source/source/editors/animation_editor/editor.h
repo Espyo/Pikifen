@@ -51,7 +51,6 @@ private:
         EDITOR_STATE_SPRITE_BITMAP,
         EDITOR_STATE_SPRITE_TRANSFORM,
         EDITOR_STATE_TOP,
-        EDITOR_STATE_LOAD,
         EDITOR_STATE_TOOLS,
         EDITOR_STATE_OPTIONS,
     };
@@ -64,6 +63,10 @@ private:
     animation_database anims;
     //Is the current animation playing?
     bool anim_playing;
+    //Can the user use the "reload" button?
+    bool can_reload;
+    //Can the user use the "save" button?
+    bool can_save;
     //Is the sprite comparison mode on?
     bool comparison;
     //Is the comparison sprite above the working sprite?
@@ -174,6 +177,7 @@ private:
     void press_mob_radius_button();
     void press_origin_button();
     void press_pikmin_silhouette_button();
+    void press_play_animation_button();
     void press_quit_button();
     void press_reload_button();
     void press_save_button();

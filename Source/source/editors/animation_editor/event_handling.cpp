@@ -56,7 +56,6 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     } case ALLEGRO_KEY_C: {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM && is_ctrl_pressed) {
             comparison = !comparison;
-            //TODO sprite_transform_to_gui();
         }
         break;
     }
@@ -75,37 +74,37 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_H: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_toggle_hitboxes"]->simulate_click();
+            press_hitboxes_button();
         }
         break;
     } case ALLEGRO_KEY_L: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_reload"]->simulate_click();
+            press_reload_button();
         }
         break;
     } case ALLEGRO_KEY_O: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_toggle_origin"]->simulate_click();
+            press_origin_button();
         }
         break;
     } case ALLEGRO_KEY_P: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_toggle_pik_sil"]->simulate_click();
+            press_pikmin_silhouette_button();
         }
         break;
     } case ALLEGRO_KEY_Q: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
+            press_quit_button();
         }
         break;
     } case ALLEGRO_KEY_R: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_toggle_mob_radius"]->simulate_click();
+            press_mob_radius_button();
         }
         break;
     } case ALLEGRO_KEY_S: {
         if(is_ctrl_pressed) {
-            //TODO frm_toolbar->widgets["but_save"]->simulate_click();
+            press_save_button();
         }
         break;
     }
@@ -123,7 +122,7 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_SPACE: {
-        //TODO frm_anim->widgets["but_play"]->simulate_click();
+        press_play_animation_button();
         break;
     } case ALLEGRO_KEY_HOME: {
         if(!cur_sprite && !cur_sprite->bitmap) return;
@@ -157,14 +156,20 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         center_camera(cmin, cmax);
         break;
     } case ALLEGRO_KEY_ESCAPE: {
-        switch(state) {
-        case EDITOR_STATE_MAIN: {
-            //TODO frm_toolbar->widgets["but_quit"]->simulate_click();
-            break;
-        } case EDITOR_STATE_LOAD: {
-            //TODO frm_load->widgets["but_back"]->simulate_click();
-            break;
-        }
+
+        if(is_dialog_open) {
+            is_dialog_open = false;
+            if(dialog_close_callback) {
+                dialog_close_callback();
+            }
+            
+        } else {
+            switch(state) {
+            case EDITOR_STATE_MAIN: {
+                press_quit_button();
+                break;
+            }
+            }
         }
         break;
     }
@@ -240,7 +245,6 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 if(clicked_hitboxes.empty()) {
                     cur_hitbox = NULL;
                     cur_hitbox_nr = INVALID;
-                    //TODO hitbox_to_gui();
                     
                 } else {
                     size_t cur_hitbox_nr_index = INVALID;
@@ -261,7 +265,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         );
                     cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
                     cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
-                    //TODO hitbox_to_gui();
+                    update_cur_hitbox_tc();
                     
                     made_new_changes = true;
                 }
@@ -440,13 +444,6 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-    
-    //TODO
-    /*update_status_bar(
-        state == EDITOR_STATE_SPRITE_BITMAP,
-        state == EDITOR_STATE_HITBOXES && side_view
-    );
-    */
 }
 
 

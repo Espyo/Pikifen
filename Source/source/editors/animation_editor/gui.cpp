@@ -537,10 +537,14 @@ void animation_editor::process_gui_panel_animation() {
         
             //Loop frame value.
             int loop_frame = cur_anim->loop_frame + 1;
-            ImGui::DragInt(
-                "Loop frame", &loop_frame, 0.1f, 1,
-                cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
-            );
+            if(
+                ImGui::DragInt(
+                    "Loop frame", &loop_frame, 0.1f, 1,
+                    cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
+                )
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "The animation loops back to this frame when it "
                 "reaches the last one."
@@ -554,8 +558,10 @@ void animation_editor::process_gui_panel_animation() {
             
             //Hit rate slider.
             int hit_rate = cur_anim->hit_rate;
-            ImGui::SliderInt("Hit rate", &hit_rate, 0, 100);
-            cur_anim->hit_rate = hit_rate;
+            if(ImGui::SliderInt("Hit rate", &hit_rate, 0, 100)) {
+                made_new_changes = true;
+                cur_anim->hit_rate = hit_rate;
+            }
             set_tooltip(
                 "If this attack can knock back Pikmin, this indicates "
                 "the chance that it will miss.\n"
@@ -597,18 +603,7 @@ void animation_editor::process_gui_panel_animation() {
                         ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                     )
                 ) {
-                    if(cur_anim->frames.size() < 2) {
-                        anim_playing = false;
-                    } else {
-                        anim_playing = !anim_playing;
-                        if(
-                            !cur_anim->frames.empty() &&
-                            cur_frame_nr == INVALID
-                        ) {
-                            cur_frame_nr = 0;
-                        }
-                        cur_frame_time = 0;
-                    }
+                    press_play_animation_button();
                 }
                 set_tooltip(
                     "Play or pause the animation.",
@@ -730,17 +725,25 @@ void animation_editor::process_gui_panel_animation() {
                 for(size_t s = 0; s < anims.sprites.size(); ++s) {
                     sprite_names.push_back(anims.sprites[s]->name);
                 }
-                ImGui::Combo(
-                    "Sprite", &frame_ptr->sprite_name, sprite_names
-                );
+                if(
+                    ImGui::Combo(
+                        "Sprite", &frame_ptr->sprite_name, sprite_names
+                    )
+                ) {
+                    made_new_changes = true;
+                }
                 set_tooltip(
                     "The sprite to use for this frame."
                 );
                 
                 //Duration value.
-                ImGui::DragFloat(
-                    "Duration", &frame_ptr->duration, 0.005, 0.0f, FLT_MAX
-                );
+                if(
+                    ImGui::DragFloat(
+                        "Duration", &frame_ptr->duration, 0.005, 0.0f, FLT_MAX
+                    )
+                ) {
+                    made_new_changes = true;
+                }
                 set_tooltip(
                     "How long this frame lasts for, in seconds."
                 );
@@ -753,14 +756,19 @@ void animation_editor::process_gui_panel_animation() {
                     } else {
                         frame_ptr->signal = INVALID;
                     }
+                    made_new_changes = true;
                 }
                 
                 //Signal value.
                 if(use_signal) {
                     ImGui::SameLine();
                     int f_signal = frame_ptr->signal;
-                    ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX);
-                    frame_ptr->signal = f_signal;
+                    if(
+                        ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX)
+                    ) {
+                        made_new_changes = true;
+                        frame_ptr->signal = f_signal;
+                    }
                 }
                 
                 //Spacer dummy widget.
@@ -841,6 +849,9 @@ void animation_editor::process_gui_panel_body_part() {
                 update_hitboxes();
                 new_part_name.clear();
                 made_new_changes = true;
+                status_text = "Body part created.";
+            } else {
+                status_text = "A body part by that name already exists!";
             }
         }
     }
@@ -1354,6 +1365,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->set_bitmap(
                 f[0], cur_sprite->file_pos, cur_sprite->file_size
             );
+            center_camera_on_sprite_bitmap();
+            made_new_changes = true;
             break;
         }
         }
@@ -1367,6 +1380,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         cur_sprite->set_bitmap(
             file_name, cur_sprite->file_pos, cur_sprite->file_size
         );
+        center_camera_on_sprite_bitmap();
+        made_new_changes = true;
     }
     set_tooltip(
         "File name of the bitmap to use as a spritesheet, in the "
@@ -1386,6 +1401,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->file,
             point(top_left[0], top_left[1]), cur_sprite->file_size
         );
+        made_new_changes = true;
     }
     
     //Sprite size value.
@@ -1400,6 +1416,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->file,
             cur_sprite->file_pos, point(size[0], size[1])
         );
+        made_new_changes = true;
     }
     
     //Canvas explanation text.
@@ -1423,6 +1440,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         cur_sprite->set_bitmap(
             cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
         );
+        made_new_changes = true;
     }
     
     ImGui::EndChild();
@@ -1543,6 +1561,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         //Hitbox center value.
         if(ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.05f)) {
             update_cur_hitbox_tc();
+            made_new_changes = true;
         }
         
         //Hitbox radius value.
@@ -1552,11 +1571,13 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             )
         ) {
             update_cur_hitbox_tc();
+            made_new_changes = true;
         }
         
         //Hitbox Z value.
         if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
             update_cur_hitbox_tc();
+            made_new_changes = true;
         }
         set_tooltip(
             "Altitude of the hitbox's bottom."
@@ -1566,6 +1587,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             ImGui::DragFloat("Height", &cur_hitbox->height, 0.1f, 0.0f, FLT_MAX)
         ) {
             update_cur_hitbox_tc();
+            made_new_changes = true;
         }
         set_tooltip(
             "Hitbox's height. 0 = spans infinitely vertically."
@@ -1576,19 +1598,25 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Normal hitbox radio button.
         int type_int = cur_hitbox->type;
-        ImGui::RadioButton("Normal", &type_int, HITBOX_TYPE_NORMAL);
+        if(ImGui::RadioButton("Normal", &type_int, HITBOX_TYPE_NORMAL)) {
+            made_new_changes = true;
+        }
         set_tooltip(
             "Normal hitbox, one that can be damaged."
         );
         
         //Attack hitbox radio button.
-        ImGui::RadioButton("Attack", &type_int, HITBOX_TYPE_ATTACK);
+        if(ImGui::RadioButton("Attack", &type_int, HITBOX_TYPE_ATTACK)) {
+            made_new_changes = true;
+        }
         set_tooltip(
             "Attack hitbox, one that damages opponents."
         );
         
         //Disabled hitbox radio button.
-        ImGui::RadioButton("Disabled", &type_int, HITBOX_TYPE_DISABLED);
+        if(ImGui::RadioButton("Disabled", &type_int, HITBOX_TYPE_DISABLED)) {
+            made_new_changes = true;
+        }
         set_tooltip(
             "Disabled hitbox, one that cannot be interacted with."
         );
@@ -1601,7 +1629,11 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     
             //Defense multiplier value.
             ImGui::SetNextItemWidth(128.0f);
-            ImGui::DragFloat("Defense multiplier", &cur_hitbox->value, 0.01);
+            if(
+                ImGui::DragFloat("Defense multiplier", &cur_hitbox->value, 0.01)
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "Opponent attacks will have their damage divided "
                 "by this amount.\n"
@@ -1609,14 +1641,24 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             );
             
             //Pikmin latch checkbox.
-            ImGui::Checkbox("Pikmin can latch", &cur_hitbox->can_pikmin_latch);
+            if(
+                ImGui::Checkbox(
+                    "Pikmin can latch", &cur_hitbox->can_pikmin_latch
+                )
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "Can the Pikmin latch on to this hitbox?"
             );
             
             //Hazards input.
             //TODO replace with a list like in the area editor.
-            ImGui::InputText("Hazards", &cur_hitbox->hazards_str);
+            if(
+                ImGui::InputText("Hazards", &cur_hitbox->hazards_str)
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "List of hazards, separated by semicolon."
             );
@@ -1626,22 +1668,34 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     
             //Power value.
             ImGui::SetNextItemWidth(128.0f);
-            ImGui::DragFloat("Power", &cur_hitbox->value, 0.01);
+            if(
+                ImGui::DragFloat("Power", &cur_hitbox->value, 0.01)
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "Attack power, in hit points."
             );
             
             //Hazards input.
             //TODO replace with a list like in the area editor.
-            ImGui::InputText("Hazards", &cur_hitbox->hazards_str);
+            if(
+                ImGui::InputText("Hazards", &cur_hitbox->hazards_str)
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "List of hazards, separated by semicolon."
             );
             
             //Outward knockback checkbox.
-            ImGui::Checkbox(
-                "Outward knockback", &cur_hitbox->knockback_outward
-            );
+            if(
+                ImGui::Checkbox(
+                    "Outward knockback", &cur_hitbox->knockback_outward
+                )
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "If true, opponents are knocked away from the hitbox's center."
             );
@@ -1649,17 +1703,25 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             //Knockback angle value.
             if(!cur_hitbox->knockback_outward) {
                 ImGui::SetNextItemWidth(128.0f);
-                ImGui::SliderAngle(
-                    "Knockback angle", &cur_hitbox->knockback_angle,
-                    0.0f, 360.0f
-                );
+                if(
+                    ImGui::SliderAngle(
+                        "Knockback angle", &cur_hitbox->knockback_angle,
+                        0.0f, 360.0f
+                    )
+                ) {
+                    made_new_changes = true;
+                }
             }
             
             //Knockback strength value.
             ImGui::SetNextItemWidth(128.0f);
-            ImGui::DragFloat(
-                "Knockback value", &cur_hitbox->knockback, 0.01
-            );
+            if(
+                ImGui::DragFloat(
+                    "Knockback value", &cur_hitbox->knockback, 0.01
+                )
+            ) {
+                made_new_changes = true;
+            }
             set_tooltip(
                 "How strong the knockback is. 3 is a good value."
             );
@@ -1668,6 +1730,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             int wither_chance_int = cur_hitbox->wither_chance;
             ImGui::SetNextItemWidth(128.0f);
             if(ImGui::SliderInt("Wither chance", &wither_chance_int, 0, 100)) {
+                made_new_changes = true;
                 cur_hitbox->wither_chance = wither_chance_int;
             }
             set_tooltip(
@@ -1732,7 +1795,9 @@ void animation_editor::process_gui_panel_sprite_top() {
     }
     
     //Visible checkbox.
-    ImGui::Checkbox("Visible", &cur_sprite->top_visible);
+    if(ImGui::Checkbox("Visible", &cur_sprite->top_visible)) {
+        made_new_changes = true;
+    }
     set_tooltip(
         "Is the top visible in this sprite?"
     );
@@ -1742,6 +1807,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.01f)
     ) {
         top_tc.set_center(cur_sprite->top_pos);
+        made_new_changes = true;
     }
     
     //Top size value.
@@ -1760,6 +1826,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         }
         cur_sprite->top_size = top_size;
         top_tc.set_size(cur_sprite->top_size);
+        made_new_changes = true;
     }
     
     //Keep aspect ratio checkbox.
@@ -1771,6 +1838,7 @@ void animation_editor::process_gui_panel_sprite_top() {
     //Top angle value.
     if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
         top_tc.set_angle(cur_sprite->top_angle);
+        made_new_changes = true;
     }
     
     //Toggle maturity button.
@@ -1833,6 +1901,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.01f)
     ) {
         update_cur_sprite_tc();
+        made_new_changes = true;
     }
     
     //Sprite scale value.
@@ -1851,6 +1920,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         }
         cur_sprite->scale = sprite_scale;
         update_cur_sprite_tc();
+        made_new_changes = true;
     }
     
     //Sprite flip X button.
@@ -1860,6 +1930,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     ) {
         cur_sprite->scale.x *= -1.0f;
         update_cur_sprite_tc();
+        made_new_changes = true;
     }
     
     //Sprite flip Y button.
@@ -1869,6 +1940,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     ) {
         cur_sprite->scale.y *= -1.0f;
         update_cur_sprite_tc();
+        made_new_changes = true;
     }
     
     //Keep aspect ratio checkbox.
@@ -1879,6 +1951,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     //Sprite angle value.
     if(ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f)) {
         update_cur_sprite_tc();
+        made_new_changes = true;
     }
     
     //Spacer dummy widget.
@@ -1889,6 +1962,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
         //Use comparison checkbox.
         ImGui::Checkbox("Use comparison", &comparison);
+        set_tooltip(
+            "Show another sprite, to help you align and scale this one."
+        );
         
         if(comparison) {
         
@@ -2001,7 +2077,11 @@ void animation_editor::process_gui_status_bar() {
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
-    if(!is_mouse_in_gui || is_m1_pressed) {
+    if(
+        (!is_mouse_in_gui || is_m1_pressed) &&
+        state != EDITOR_STATE_SPRITE_BITMAP &&
+        (state != EDITOR_STATE_HITBOXES || !side_view)
+    ) {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
