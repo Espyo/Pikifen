@@ -22,20 +22,22 @@
  * Opens the "load" dialog.
  */
 void animation_editor::open_load_dialog() {
-    global_anim_files_cache =
-        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
-    for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
-        global_anim_files_cache[f] =
-            remove_extension(global_anim_files_cache[f]);
+    if(!check_new_unsaved_changes()) {
+        global_anim_files_cache =
+            folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
+        for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
+            global_anim_files_cache[f] =
+                remove_extension(global_anim_files_cache[f]);
+        }
+        
+        open_dialog(
+            "Load a file or create a new one",
+            std::bind(&animation_editor::process_gui_load_dialog, this)
+        );
+        dialog_close_callback =
+            std::bind(&animation_editor::close_load_dialog, this);
+        reset_load_dialog = true;
     }
-    
-    open_dialog(
-        "Load a file or create a new one",
-        std::bind(&animation_editor::process_gui_load_dialog, this)
-    );
-    dialog_close_callback =
-        std::bind(&animation_editor::close_load_dialog, this);
-    reset_load_dialog = true;
 }
 
 
@@ -485,9 +487,6 @@ void animation_editor::process_gui_panel_animation() {
                     nr = INVALID;
                     cur_anim = NULL;
                     cur_frame_nr = INVALID;
-                    cur_sprite = NULL;
-                    cur_hitbox = NULL;
-                    cur_hitbox_nr = INVALID;
                 } else {
                     nr = std::min(nr, anims.animations.size() - 1);
                     pick_animation(anims.animations[nr]->name, false);
@@ -507,29 +506,33 @@ void animation_editor::process_gui_panel_animation() {
     
     if(cur_anim) {
     
-        //Import animation button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            ImGui::OpenPopup("importAnim");
-        }
-        set_tooltip(
-            "Import the data from another animation."
-        );
+        if(anims.animations.size() > 1) {
         
-        //Import animation popup.
-        vector<string> import_anim_names;
-        for(size_t a = 0; a < anims.animations.size(); ++a) {
-            if(anims.animations[a] == cur_anim) continue;
-            import_anim_names.push_back(anims.animations[a]->name);
-        }
-        string picked_anim;
-        if(list_popup("importAnim", import_anim_names, &picked_anim)) {
-            import_animation_data(picked_anim);
+            //Import animation button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_DUPLICATE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                ImGui::OpenPopup("importAnim");
+            }
+            set_tooltip(
+                "Import the data from another animation."
+            );
+            
+            //Import animation popup.
+            vector<string> import_anim_names;
+            for(size_t a = 0; a < anims.animations.size(); ++a) {
+                if(anims.animations[a] == cur_anim) continue;
+                import_anim_names.push_back(anims.animations[a]->name);
+            }
+            string picked_anim;
+            if(list_popup("importAnim", import_anim_names, &picked_anim)) {
+                import_animation_data(picked_anim);
+            }
+            
         }
         
         //Animation data node.
@@ -682,6 +685,7 @@ void animation_editor::process_gui_panel_animation() {
                     cur_anim->frames.push_back(frame());
                     cur_frame_nr = 0;
                 }
+                frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                 made_new_changes = true;
             }
             set_tooltip(
@@ -706,11 +710,13 @@ void animation_editor::process_gui_panel_animation() {
                         );
                         if(cur_anim->frames.empty()) {
                             cur_frame_nr = INVALID;
+                            frame_ptr = NULL;
                         } else if(cur_frame_nr >= cur_anim->frames.size()) {
                             cur_frame_nr = cur_anim->frames.size() - 1;
+                            frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                         }
+                        made_new_changes = true;
                     }
-                    made_new_changes = true;
                 }
                 set_tooltip(
                     "Delete the current frame."
@@ -815,6 +821,9 @@ void animation_editor::process_gui_panel_body_part() {
         "to sort them."
     );
     
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
     //New body part name.
     static string new_part_name;
     static int selected_part = 0;
@@ -860,56 +869,64 @@ void animation_editor::process_gui_panel_body_part() {
         "It will be placed after the currently selected body part."
     );
     
-    //Delete body part button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_REMOVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        if(selected_part >= 0 && !anims.body_parts.empty()) {
-            delete anims.body_parts[selected_part];
-            anims.body_parts.erase(anims.body_parts.begin() + selected_part);
-            if(selected_part > 0) {
-                selected_part--;
+    if(!anims.body_parts.empty()) {
+    
+        //Delete body part button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_REMOVE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            if(selected_part >= 0 && !anims.body_parts.empty()) {
+                delete anims.body_parts[selected_part];
+                anims.body_parts.erase(
+                    anims.body_parts.begin() + selected_part
+                );
+                if(selected_part > 0) {
+                    selected_part--;
+                }
+                update_hitboxes();
+                made_new_changes = true;
             }
-            update_hitboxes();
-            made_new_changes = true;
         }
-    }
-    set_tooltip(
-        "Delete the currently selected body part from the list."
-    );
-    
-    //Body part list.
-    if(ImGui::BeginChild("partsList", ImVec2(0.0f, 80.0f), true)) {
-    
-        for(size_t p = 0; p < anims.body_parts.size(); ++p) {
+        set_tooltip(
+            "Delete the currently selected body part from the list."
+        );
         
-            //Body part selectable.
-            bool is_selected = (p == selected_part);
-            ImGui::Selectable(anims.body_parts[p]->name.c_str(), &is_selected);
+        //Body part list.
+        if(ImGui::BeginChild("partsList", ImVec2(0.0f, 80.0f), true)) {
+        
+            for(size_t p = 0; p < anims.body_parts.size(); ++p) {
             
-            if(ImGui::IsItemActive()) {
-                selected_part = p;
-                if(!ImGui::IsItemHovered()) {
-                    int p2 =
-                        p + (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
-                    if(p2 >= 0 && p2 < anims.body_parts.size()) {
-                        body_part* p_ptr = anims.body_parts[p];
-                        anims.body_parts[p] = anims.body_parts[p2];
-                        anims.body_parts[p2] = p_ptr;
-                        ImGui::ResetMouseDragDelta();
-                        update_hitboxes();
-                        made_new_changes = true;
+                //Body part selectable.
+                bool is_selected = (p == selected_part);
+                ImGui::Selectable(
+                    anims.body_parts[p]->name.c_str(), &is_selected
+                );
+                
+                if(ImGui::IsItemActive()) {
+                    selected_part = p;
+                    if(!ImGui::IsItemHovered()) {
+                        int p2 =
+                            p + (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
+                        if(p2 >= 0 && p2 < anims.body_parts.size()) {
+                            body_part* p_ptr = anims.body_parts[p];
+                            anims.body_parts[p] = anims.body_parts[p2];
+                            anims.body_parts[p2] = p_ptr;
+                            ImGui::ResetMouseDragDelta();
+                            update_hitboxes();
+                            made_new_changes = true;
+                        }
                     }
                 }
+                
             }
             
+            ImGui::EndChild();
+            
         }
-        
-        ImGui::EndChild();
         
     }
     
@@ -1214,32 +1231,38 @@ void animation_editor::process_gui_panel_sprite() {
     
     if(cur_sprite) {
     
-        //Import sprite button.
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            ImGui::OpenPopup("importSprite");
-        }
-        set_tooltip(
-            "Import the data from another sprite."
-        );
+        if(anims.sprites.size() > 1) {
         
-        //Import sprite popup.
-        vector<string> import_sprite_names;
-        for(size_t s = 0; s < anims.sprites.size(); ++s) {
-            if(anims.sprites[s] == cur_sprite) continue;
-            import_sprite_names.push_back(anims.sprites[s]->name);
-        }
-        string picked_sprite;
-        if(list_popup("importSprite", import_sprite_names, &picked_sprite)) {
-            import_sprite_file_data(picked_sprite);
-            import_sprite_transformation_data(picked_sprite);
-            import_sprite_hitbox_data(picked_sprite);
-            import_sprite_top_data(picked_sprite);
+            //Import sprite button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_DUPLICATE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                ImGui::OpenPopup("importSprite");
+            }
+            set_tooltip(
+                "Import the data from another sprite."
+            );
+            
+            //Import sprite popup.
+            vector<string> import_sprite_names;
+            for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                if(anims.sprites[s] == cur_sprite) continue;
+                import_sprite_names.push_back(anims.sprites[s]->name);
+            }
+            string picked_sprite;
+            if(
+                list_popup("importSprite", import_sprite_names, &picked_sprite)
+            ) {
+                import_sprite_file_data(picked_sprite);
+                import_sprite_transformation_data(picked_sprite);
+                import_sprite_hitbox_data(picked_sprite);
+                import_sprite_top_data(picked_sprite);
+            }
+            
         }
         
         ImVec2 mode_buttons_size(-1.0f, 24.0f);
@@ -1316,29 +1339,40 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     //Panel title text.
     panel_title("BITMAP", 78.0f);
     
-    //Import bitmap data button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        ImGui::OpenPopup("importSpriteBitmap");
-    }
-    set_tooltip(
-        "Import the bitmap data from another sprite."
-    );
+    if(anims.sprites.size() > 1) {
     
-    //Import bitmap popup.
-    vector<string> import_sprite_names;
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        if(anims.sprites[s] == cur_sprite) continue;
-        import_sprite_names.push_back(anims.sprites[s]->name);
+        //Import bitmap data button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSpriteBitmap");
+        }
+        set_tooltip(
+            "Import the bitmap data from another sprite."
+        );
+        
+        //Import bitmap popup.
+        vector<string> import_sprite_names;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(anims.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(anims.sprites[s]->name);
+        }
+        string picked_sprite;
+        if(
+            list_popup(
+                "importSpriteBitmap", import_sprite_names, &picked_sprite
+            )
+        ) {
+            import_sprite_file_data(picked_sprite);
+        }
+        
     }
-    string picked_sprite;
-    if(list_popup("importSpriteBitmap", import_sprite_names, &picked_sprite)) {
-        import_sprite_file_data(picked_sprite);
-    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Browse for spritesheet button.
     if(ImGui::Button("...")) {
@@ -1419,6 +1453,9 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         made_new_changes = true;
     }
     
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
     //Canvas explanation text.
     ImGui::TextWrapped(
         "Click parts of the image on the left to %s the selection limits.",
@@ -1431,16 +1468,25 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         "Add to the existing selection instead of replacing it."
     );
     
-    //Clear selection button.
     if(
-        ImGui::Button("Clear selection")
+        cur_sprite->file_pos.x != 0.0f ||
+        cur_sprite->file_pos.y != 0.0f ||
+        cur_sprite->file_size.x != 0.0f ||
+        cur_sprite->file_size.y != 0.0f
     ) {
-        cur_sprite->file_pos = point();
-        cur_sprite->file_size = point();
-        cur_sprite->set_bitmap(
-            cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
-        );
-        made_new_changes = true;
+    
+        //Clear selection button.
+        if(
+            ImGui::Button("Clear selection")
+        ) {
+            cur_sprite->file_pos = point();
+            cur_sprite->file_size = point();
+            cur_sprite->set_bitmap(
+                cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
+            );
+            made_new_changes = true;
+        }
+        
     }
     
     ImGui::EndChild();
@@ -1516,7 +1562,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         "Select the next hitbox."
     );
     
-    if(cur_hitbox) {
+    if(cur_hitbox && anims.sprites.size() > 1) {
+    
         //Import hitbox data button.
         ImGui::SameLine();
         if(
@@ -1545,7 +1592,11 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         ) {
             import_sprite_hitbox_data(picked_sprite);
         }
+        
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Side view checkbox.
     if(ImGui::Checkbox("Use side view", &side_view)) {
@@ -1592,6 +1643,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         set_tooltip(
             "Hitbox's height. 0 = spans infinitely vertically."
         );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
         
         //Hitbox type text.
         ImGui::Text("Hitbox type:");
@@ -1763,36 +1817,43 @@ void animation_editor::process_gui_panel_sprite_top() {
     //Panel title text.
     panel_title("TOP", 60.0f);
     
-    //Import top data button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        ImGui::OpenPopup("importSpriteTop");
-    }
-    set_tooltip(
-        "Import the top data from another sprite."
-    );
+    if(anims.sprites.size() > 1) {
     
-    //Import sprite popup.
-    vector<string> import_sprite_names;
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        if(anims.sprites[s] == cur_sprite) continue;
-        import_sprite_names.push_back(anims.sprites[s]->name);
+        //Import top data button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSpriteTop");
+        }
+        set_tooltip(
+            "Import the top data from another sprite."
+        );
+        
+        //Import sprite popup.
+        vector<string> import_sprite_names;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(anims.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(anims.sprites[s]->name);
+        }
+        string picked_sprite;
+        if(
+            list_popup(
+                "importSpriteTop", import_sprite_names, &picked_sprite
+            )
+        ) {
+            import_sprite_top_data(picked_sprite);
+            top_tc.set_center(cur_sprite->top_pos);
+            top_tc.set_size(cur_sprite->top_size);
+            top_tc.set_angle(cur_sprite->top_angle);
+        }
+        
     }
-    string picked_sprite;
-    if(
-        list_popup(
-            "importSpriteTop", import_sprite_names, &picked_sprite
-        )
-    ) {
-        import_sprite_top_data(picked_sprite);
-        top_tc.set_center(cur_sprite->top_pos);
-        top_tc.set_size(cur_sprite->top_size);
-        top_tc.set_angle(cur_sprite->top_angle);
-    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Visible checkbox.
     if(ImGui::Checkbox("Visible", &cur_sprite->top_visible)) {
@@ -1802,52 +1863,59 @@ void animation_editor::process_gui_panel_sprite_top() {
         "Is the top visible in this sprite?"
     );
     
-    //Top center value.
-    if(
-        ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.01f)
-    ) {
-        top_tc.set_center(cur_sprite->top_pos);
-        made_new_changes = true;
-    }
+    if(cur_sprite->top_visible) {
     
-    //Top size value.
-    point top_size = cur_sprite->top_size;
-    if(
-        ImGui::DragFloat2("Size", (float*) &top_size, 0.01f)
-    ) {
-        if(top_tc.keep_aspect_ratio) {
-            float ratio =
-                cur_sprite->top_size.x / cur_sprite->top_size.y;
-            if(top_size.x != cur_sprite->top_size.x) {
-                top_size.y = top_size.x / ratio;
-            } else {
-                top_size.x = top_size.y * ratio;
-            }
+        //Top center value.
+        if(
+            ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.01f)
+        ) {
+            top_tc.set_center(cur_sprite->top_pos);
+            made_new_changes = true;
         }
-        cur_sprite->top_size = top_size;
-        top_tc.set_size(cur_sprite->top_size);
-        made_new_changes = true;
+        
+        //Top size value.
+        point top_size = cur_sprite->top_size;
+        if(
+            ImGui::DragFloat2("Size", (float*) &top_size, 0.01f)
+        ) {
+            if(top_tc.keep_aspect_ratio) {
+                float ratio =
+                    cur_sprite->top_size.x / cur_sprite->top_size.y;
+                if(top_size.x != cur_sprite->top_size.x) {
+                    top_size.y = top_size.x / ratio;
+                } else {
+                    top_size.x = top_size.y * ratio;
+                }
+            }
+            cur_sprite->top_size = top_size;
+            top_tc.set_size(cur_sprite->top_size);
+            made_new_changes = true;
+        }
+        
+        //Keep aspect ratio checkbox.
+        ImGui::Indent();
+        ImGui::Checkbox("Keep aspect ratio", &top_tc.keep_aspect_ratio);
+        ImGui::Unindent();
+        set_tooltip("Keep the aspect ratio when resizing the top.");
+        
+        //Top angle value.
+        if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
+            top_tc.set_angle(cur_sprite->top_angle);
+            made_new_changes = true;
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Toggle maturity button.
+        if(ImGui::Button("Toggle maturity")) {
+            cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
+        }
+        set_tooltip(
+            "View a different maturity top."
+        );
+        
     }
-    
-    //Keep aspect ratio checkbox.
-    ImGui::Indent();
-    ImGui::Checkbox("Keep aspect ratio", &top_tc.keep_aspect_ratio);
-    ImGui::Unindent();
-    set_tooltip("Keep the aspect ratio when resizing the top.");
-    
-    //Top angle value.
-    if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
-        top_tc.set_angle(cur_sprite->top_angle);
-        made_new_changes = true;
-    }
-    
-    //Toggle maturity button.
-    if(ImGui::Button("Toggle maturity")) {
-        cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
-    }
-    set_tooltip(
-        "View a different maturity top."
-    );
     
     ImGui::EndChild();
 }
@@ -1867,34 +1935,41 @@ void animation_editor::process_gui_panel_sprite_transform() {
     //Panel title text.
     panel_title("TRANSFORM", 102.0f);
     
-    //Import transformation data button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        ImGui::OpenPopup("importSpriteTransform");
-    }
-    set_tooltip(
-        "Import the transformation data from another sprite."
-    );
+    if(anims.sprites.size() > 1) {
     
-    //Import sprite popup.
-    vector<string> import_sprite_names;
-    for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        if(anims.sprites[s] == cur_sprite) continue;
-        import_sprite_names.push_back(anims.sprites[s]->name);
+        //Import transformation data button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_DUPLICATE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("importSpriteTransform");
+        }
+        set_tooltip(
+            "Import the transformation data from another sprite."
+        );
+        
+        //Import sprite popup.
+        vector<string> import_sprite_names;
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            if(anims.sprites[s] == cur_sprite) continue;
+            import_sprite_names.push_back(anims.sprites[s]->name);
+        }
+        string picked_sprite;
+        if(
+            list_popup(
+                "importSpriteTransform", import_sprite_names, &picked_sprite
+            )
+        ) {
+            import_sprite_transformation_data(picked_sprite);
+            update_cur_sprite_tc();
+        }
+        
     }
-    string picked_sprite;
-    if(
-        list_popup(
-            "importSpriteTransform", import_sprite_names, &picked_sprite
-        )
-    ) {
-        import_sprite_transformation_data(picked_sprite);
-        update_cur_sprite_tc();
-    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Sprite offset value.
     if(
@@ -1957,54 +2032,59 @@ void animation_editor::process_gui_panel_sprite_transform() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Comparison sprite node.
-    if(saveable_tree_node("transformation", "Comparison sprite")) {
+    if(anims.sprites.size() > 1) {
     
-        //Use comparison checkbox.
-        ImGui::Checkbox("Use comparison", &comparison);
-        set_tooltip(
-            "Show another sprite, to help you align and scale this one."
-        );
+        //Comparison sprite node.
+        if(saveable_tree_node("transformation", "Comparison sprite")) {
         
-        if(comparison) {
-        
-            //Comparison sprite combobox.
-            vector<string> all_sprites;
-            for(size_t s = 0; s < anims.sprites.size(); ++s) {
-                if(cur_sprite == anims.sprites[s]) continue;
-                all_sprites.push_back(anims.sprites[s]->name);
-            }
-            static string comparison_sprite_name;
-            ImGui::Combo("Sprite", &comparison_sprite_name, all_sprites);
+            //Use comparison checkbox.
+            ImGui::Checkbox("Use comparison", &comparison);
             set_tooltip(
-                "Choose another sprite to serve as a comparison."
+                "Show another sprite, to help you align and scale this one.",
+                "Ctrl + C"
             );
-            comparison_sprite =
-                anims.sprites[anims.find_sprite(comparison_sprite_name)];
+            
+            if(comparison) {
+            
+                //Comparison sprite combobox.
+                vector<string> all_sprites;
+                for(size_t s = 0; s < anims.sprites.size(); ++s) {
+                    if(cur_sprite == anims.sprites[s]) continue;
+                    all_sprites.push_back(anims.sprites[s]->name);
+                }
+                static string comparison_sprite_name;
+                ImGui::Combo("Sprite", &comparison_sprite_name, all_sprites);
+                set_tooltip(
+                    "Choose another sprite to serve as a comparison."
+                );
+                comparison_sprite =
+                    anims.sprites[anims.find_sprite(comparison_sprite_name)];
+                    
+                //Comparison blinks checkbox.
+                ImGui::Checkbox("Blink comparison", &comparison_blink);
+                set_tooltip(
+                    "Blink the comparison in and out?"
+                );
                 
-            //Comparison blinks checkbox.
-            ImGui::Checkbox("Blink comparison", &comparison_blink);
-            set_tooltip(
-                "Blink the comparison in and out?"
-            );
+                //Comparison above checkbox.
+                ImGui::Checkbox("Comparison above", &comparison_above);
+                set_tooltip(
+                    "Should the comparison appear above or below the working "
+                    "sprite?"
+                );
+                
+                //Tint both checkbox.
+                ImGui::Checkbox("Tint both", &comparison_tint);
+                set_tooltip(
+                    "Tint the working sprite blue, and the comparison "
+                    "sprite orange."
+                );
+                
+            }
             
-            //Comparison above checkbox.
-            ImGui::Checkbox("Comparison above", &comparison_above);
-            set_tooltip(
-                "Should the comparison appear above or below the working "
-                "sprite?"
-            );
-            
-            //Tint both checkbox.
-            ImGui::Checkbox("Tint both", &comparison_tint);
-            set_tooltip(
-                "Tint the working sprite blue, and the comparison "
-                "sprite orange."
-            );
+            ImGui::TreePop();
             
         }
-        
-        ImGui::TreePop();
         
     }
     

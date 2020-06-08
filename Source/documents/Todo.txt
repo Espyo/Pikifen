@@ -2,13 +2,9 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change animation editor to Dear ImGui
-        Going from anims to sprites is making it so no sprite is selected?
         A way to rename sprites/animations/body parts
-        Make sure all shortcuts are documented
-        Hide buttons and such when they are not applicable
-        Spacing before every tree node
+        Pikmin top button is still accessible even if the current object is not a Pikmin
         Fix the panel_title function
-        Test if body part addition/moving is working -- it should be re-ordering the hitboxes in each sprite
         Test a completely new file -- this helps test what happens how the panels behave when there no animations/sprites/body parts
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)

@@ -614,9 +614,6 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
     }
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
-    cur_sprite = NULL;
-    cur_hitbox = NULL;
-    cur_hitbox_nr = INVALID;
 }
 
 

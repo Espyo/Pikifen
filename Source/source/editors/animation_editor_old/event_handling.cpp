@@ -107,6 +107,17 @@ void animation_editor_old::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             frm_toolbar->widgets["but_save"]->simulate_click();
         }
         break;
+    } case ALLEGRO_KEY_ESCAPE: {
+        switch(state) {
+        case EDITOR_STATE_MAIN: {
+            frm_toolbar->widgets["but_quit"]->simulate_click();
+            break;
+        } case EDITOR_STATE_LOAD: {
+            frm_load->widgets["but_back"]->simulate_click();
+            break;
+        }
+        }
+        break;
     }
     }
 }
@@ -154,17 +165,6 @@ void animation_editor_old::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
         center_camera(cmin, cmax);
-        break;
-    } case ALLEGRO_KEY_ESCAPE: {
-        switch(state) {
-        case EDITOR_STATE_MAIN: {
-            frm_toolbar->widgets["but_quit"]->simulate_click();
-            break;
-        } case EDITOR_STATE_LOAD: {
-            frm_load->widgets["but_back"]->simulate_click();
-            break;
-        }
-        }
         break;
     }
     }
