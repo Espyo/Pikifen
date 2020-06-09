@@ -183,6 +183,7 @@ private:
     void press_save_button();
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_hitbox_hazards();
     void process_gui_load_dialog();
     void process_gui_panel_animation();
     void process_gui_panel_body_part();

@@ -398,6 +398,8 @@ void animation_editor::draw_top_down_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, const float outline_thickness
 ) {
+    if(h_ptr->radius <= 0) return;
+    
     al_draw_filled_circle(
         h_ptr->pos.x, h_ptr->pos.y, h_ptr->radius, color
     );

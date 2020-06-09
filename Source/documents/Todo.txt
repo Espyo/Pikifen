@@ -1,12 +1,8 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
     
+    
 Current tasks (tasks being worked on, but not yet committed)
-    Change animation editor to Dear ImGui
-        Pikmin top button is still accessible even if the current object is not a Pikmin
-        Replace the hazard text inputs with a proper list, like the area editor
-        Fix the panel_title function
-        Test a completely new file -- this helps test what happens how the panels behave when there no animations/sprites/body parts
-        Remove the ImGui demo window
+    
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -67,6 +63,8 @@ Next tasks (roughly sorted most important first)
         Area editor needs to have a button that lists all mob types
         When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
         Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
+        Animation editor should start zoomed in...maybe also include a grid, so users can get a sense of scale?
+        Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
         A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
         Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)

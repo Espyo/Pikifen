@@ -8,6 +8,8 @@
  * Animation editor Dear ImGui logic.
  */
 
+#include <algorithm>
+
 #include "editor.h"
 
 #include "../../game.h"
@@ -105,9 +107,6 @@ void animation_editor::process_gui() {
     //Process the dialog, if any.
     process_dialog();
     
-    //TODO left here for development purposes.
-    ImGui::ShowDemoWindow();
-    
     //Finishing setup.
     ImGui::EndFrame();
 }
@@ -155,6 +154,108 @@ void animation_editor::process_gui_control_panel() {
     }
     
     ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the list of the current hitbox's hazards,
+ * as well as the widgets necessary to control it, for this frame.
+ */
+void animation_editor::process_gui_hitbox_hazards() {
+    //Hitbox hazards node.
+    if(saveable_tree_node("hitbox", "Hazards")) {
+    
+        static int selected_hazard_nr = 0;
+        
+        //Hitbox hazard addition button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_ADD],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            ImGui::OpenPopup("addHazard");
+        }
+        set_tooltip(
+            "Add a new hazard to the list of hazards this hitbox has.\n"
+            "Click to open a pop-up for you to choose from."
+        );
+        
+        //Hitbox hazard addition popup.
+        vector<string> all_hazards_list;
+        for(auto h : game.hazards) {
+            all_hazards_list.push_back(h.first);
+        }
+        string picked_hazard;
+        if(
+            list_popup(
+                "addHazard", all_hazards_list, &picked_hazard
+            )
+        ) {
+            vector<string> list =
+                semicolon_list_to_vector(cur_hitbox->hazards_str);
+            if(
+                std::find(list.begin(), list.end(), picked_hazard) ==
+                list.end()
+            ) {
+                if(!cur_hitbox->hazards_str.empty()) {
+                    cur_hitbox->hazards_str += ";";
+                }
+                cur_hitbox->hazards_str += picked_hazard;
+                selected_hazard_nr = list.size();
+                made_new_changes = true;
+            }
+        }
+        
+        //Hitbox hazard removal button.
+        if(selected_hazard_nr >= 0 && !cur_hitbox->hazards_str.empty()) {
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_REMOVE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                vector<string> list =
+                    semicolon_list_to_vector(cur_hitbox->hazards_str);
+                if(
+                    selected_hazard_nr >= 0 &&
+                    selected_hazard_nr < list.size()
+                ) {
+                    cur_hitbox->hazards_str.clear();
+                    for(size_t h = 0; h < list.size(); ++h) {
+                        if(h == selected_hazard_nr) continue;
+                        cur_hitbox->hazards_str += list[h] + ";";
+                    }
+                    if(!cur_hitbox->hazards_str.empty()) {
+                        //Delete the trailing semicolon.
+                        cur_hitbox->hazards_str.pop_back();
+                    }
+                    selected_hazard_nr =
+                        std::min(
+                            selected_hazard_nr, (int) list.size() - 2
+                        );
+                    made_new_changes = true;
+                }
+            }
+            set_tooltip(
+                "Remove the selected hazard from the list of "
+                "hazards this hitbox has."
+            );
+        }
+        
+        //Hitbox hazard list.
+        ImGui::ListBox(
+            "Hazards", &selected_hazard_nr,
+            semicolon_list_to_vector(cur_hitbox->hazards_str),
+            4
+        );
+        set_tooltip(
+            "List of hazards this hitbox has."
+        );
+        
+        ImGui::TreePop();
+    }
 }
 
 
@@ -836,16 +937,6 @@ void animation_editor::process_gui_panel_body_part() {
     //Panel title text.
     panel_title("BODY PARTS", 108.0f);
     
-    //Explanation text.
-    ImGui::TextWrapped(
-        "The higher on the list, the more priority that body part's hitboxes "
-        "have when the game checks collisions. Drag and drop items in the list "
-        "to sort them."
-    );
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     static string new_part_name;
     static int selected_part = 0;
     
@@ -876,6 +967,7 @@ void animation_editor::process_gui_panel_body_part() {
                 }
             }
             if(!already_exists) {
+                selected_part = std::max(0, selected_part);
                 anims.body_parts.insert(
                     anims.body_parts.begin() + selected_part +
                     (anims.body_parts.empty() ? 0 : 1),
@@ -981,6 +1073,16 @@ void animation_editor::process_gui_panel_body_part() {
             
         }
         
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Explanation text.
+        ImGui::TextWrapped(
+            "The higher on the list, the more priority that body "
+            "part's hitboxes have when the game checks collisions. "
+            "Drag and drop items in the list to sort them."
+        );
+        
     }
     
     ImGui::EndChild();
@@ -1009,6 +1111,10 @@ void animation_editor::process_gui_panel_main() {
             "Animations"
         )
     ) {
+        if(!cur_anim && !anims.animations.empty()) {
+            cur_anim = anims.animations[0];
+            if(cur_anim->frames.size()) cur_frame_nr = 0;
+        }
         change_state(EDITOR_STATE_ANIMATION);
     }
     set_tooltip(
@@ -1024,6 +1130,9 @@ void animation_editor::process_gui_panel_main() {
             "Sprites"
         )
     ) {
+        if(!cur_sprite && !anims.sprites.empty()) {
+            cur_sprite = anims.sprites[0];
+        }
         change_state(EDITOR_STATE_SPRITE);
     }
     set_tooltip(
@@ -1180,16 +1289,18 @@ void animation_editor::process_gui_panel_sprite() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(!cur_sprite && !anims.sprites.empty()) {
-            pick_sprite(anims.sprites[0]->name, false);
-        } else {
-            size_t new_nr =
-                sum_and_wrap(
-                    anims.find_sprite(cur_sprite->name),
-                    -1,
-                    anims.sprites.size()
-                );
-            pick_sprite(anims.sprites[new_nr]->name, false);
+        if(!anims.sprites.empty()) {
+            if(!cur_sprite) {
+                pick_sprite(anims.sprites[0]->name, false);
+            } else {
+                size_t new_nr =
+                    sum_and_wrap(
+                        anims.find_sprite(cur_sprite->name),
+                        -1,
+                        anims.sprites.size()
+                    );
+                pick_sprite(anims.sprites[new_nr]->name, false);
+            }
         }
     }
     set_tooltip(
@@ -1232,16 +1343,18 @@ void animation_editor::process_gui_panel_sprite() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        if(!cur_sprite && !anims.sprites.empty()) {
-            pick_sprite(anims.sprites[0]->name, false);
-        } else {
-            size_t new_nr =
-                sum_and_wrap(
-                    anims.find_sprite(cur_sprite->name),
-                    1,
-                    anims.sprites.size()
-                );
-            pick_sprite(anims.sprites[new_nr]->name, false);
+        if(!anims.sprites.empty()) {
+            if(!cur_sprite) {
+                pick_sprite(anims.sprites[0]->name, false);
+            } else {
+                size_t new_nr =
+                    sum_and_wrap(
+                        anims.find_sprite(cur_sprite->name),
+                        1,
+                        anims.sprites.size()
+                    );
+                pick_sprite(anims.sprites[new_nr]->name, false);
+            }
         }
     }
     set_tooltip(
@@ -1353,44 +1466,55 @@ void animation_editor::process_gui_panel_sprite() {
             "Pick what part of an image makes up this sprite."
         );
         
-        //Sprite transformation button.
-        if(ImGui::Button("Transformation", mode_buttons_size)) {
-            cur_sprite_tc.set_center(cur_sprite->offset);
-            cur_sprite_tc.set_size(
-                point(
-                    cur_sprite->file_size.x * cur_sprite->scale.x,
-                    cur_sprite->file_size.y * cur_sprite->scale.y
-                )
-            );
-            cur_sprite_tc.set_angle(cur_sprite->angle);
-            change_state(EDITOR_STATE_SPRITE_TRANSFORM);
-        }
-        set_tooltip(
-            "Offset, scale, or rotate the sprite's image."
-        );
-        
-        //Sprite hitboxes button.
-        if(ImGui::Button("Hitboxes", mode_buttons_size)) {
-            if(cur_sprite && !cur_sprite->hitboxes.empty()) {
-                cur_hitbox = &cur_sprite->hitboxes[0];
-                cur_hitbox_nr = 0;
-                update_cur_hitbox_tc();
-                change_state(EDITOR_STATE_HITBOXES);
+        if(cur_sprite->bitmap) {
+            //Sprite transformation button.
+            if(ImGui::Button("Transformation", mode_buttons_size)) {
+                cur_sprite_tc.set_center(cur_sprite->offset);
+                cur_sprite_tc.set_size(
+                    point(
+                        cur_sprite->file_size.x * cur_sprite->scale.x,
+                        cur_sprite->file_size.y * cur_sprite->scale.y
+                    )
+                );
+                cur_sprite_tc.set_angle(cur_sprite->angle);
+                change_state(EDITOR_STATE_SPRITE_TRANSFORM);
             }
+            set_tooltip(
+                "Offset, scale, or rotate the sprite's image."
+            );
         }
-        set_tooltip(
-            "Edit this sprite's hitboxes."
-        );
         
-        //Sprite Pikmin top button.
-        if(ImGui::Button("Pikmin top", mode_buttons_size)) {
-            top_tc.set_center(cur_sprite->top_pos);
-            top_tc.set_size(cur_sprite->top_size);
-            change_state(EDITOR_STATE_TOP);
+        if(!anims.body_parts.empty()) {
+            //Sprite hitboxes button.
+            if(ImGui::Button("Hitboxes", mode_buttons_size)) {
+                if(cur_sprite && !cur_sprite->hitboxes.empty()) {
+                    cur_hitbox = &cur_sprite->hitboxes[0];
+                    cur_hitbox_nr = 0;
+                    update_cur_hitbox_tc();
+                    change_state(EDITOR_STATE_HITBOXES);
+                }
+            }
+            set_tooltip(
+                "Edit this sprite's hitboxes."
+            );
         }
-        set_tooltip(
-            "Edit the Pikmin's top (maturity) for this sprite."
-        );
+        
+        if(
+            loaded_mob_type &&
+            loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        ) {
+        
+            //Sprite Pikmin top button.
+            if(ImGui::Button("Pikmin top", mode_buttons_size)) {
+                top_tc.set_center(cur_sprite->top_pos);
+                top_tc.set_size(cur_sprite->top_size);
+                change_state(EDITOR_STATE_TOP);
+            }
+            set_tooltip(
+                "Edit the Pikmin's top (maturity) for this sprite."
+            );
+            
+        }
         
     }
     
@@ -1576,6 +1700,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     
     //Back button.
     if(ImGui::Button("Back")) {
+        cur_hitbox = NULL;
+        cur_hitbox_nr = INVALID;
         change_state(EDITOR_STATE_SPRITE);
     }
     
@@ -1781,16 +1907,11 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 "Can the Pikmin latch on to this hitbox?"
             );
             
-            //Hazards input.
-            //TODO replace with a list like in the area editor.
-            if(
-                ImGui::InputText("Hazards", &cur_hitbox->hazards_str)
-            ) {
-                made_new_changes = true;
-            }
-            set_tooltip(
-                "List of hazards, separated by semicolon."
-            );
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Hazards list.
+            process_gui_hitbox_hazards();
             
             break;
         } case HITBOX_TYPE_ATTACK: {
@@ -1804,17 +1925,6 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             }
             set_tooltip(
                 "Attack power, in hit points."
-            );
-            
-            //Hazards input.
-            //TODO replace with a list like in the area editor.
-            if(
-                ImGui::InputText("Hazards", &cur_hitbox->hazards_str)
-            ) {
-                made_new_changes = true;
-            }
-            set_tooltip(
-                "List of hazards, separated by semicolon."
             );
             
             //Outward knockback checkbox.
@@ -1865,6 +1975,12 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             set_tooltip(
                 "Chance of the attack lowering a Pikmin's maturity by one."
             );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Hazards list.
+            process_gui_hitbox_hazards();
             
             break;
         }
@@ -1942,7 +2058,7 @@ void animation_editor::process_gui_panel_sprite_top() {
     
         //Top center value.
         if(
-            ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.01f)
+            ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.05f)
         ) {
             top_tc.set_center(cur_sprite->top_pos);
             made_new_changes = true;
@@ -2048,7 +2164,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
     //Sprite offset value.
     if(
-        ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.01f)
+        ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.05f)
     ) {
         update_cur_sprite_tc();
         made_new_changes = true;

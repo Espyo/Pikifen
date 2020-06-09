@@ -1053,7 +1053,7 @@ void editor::transformation_controller::draw_handles() {
     if(size.x == 0 || size.y == 0) return;
     
     //Rotation handle.
-    if(allow_rotation) {
+    if(allow_rotation && !isnanf(radius)) {
         al_draw_circle(
             center.x, center.y, radius,
             al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS / game.cam.zoom

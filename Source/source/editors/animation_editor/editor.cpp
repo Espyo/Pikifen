@@ -388,17 +388,6 @@ void animation_editor::load_animation_database(
     cur_frame_nr = INVALID;
     cur_hitbox = NULL;
     cur_hitbox_nr = INVALID;
-    if(!anims.animations.empty()) {
-        cur_anim = anims.animations[0];
-        if(cur_anim->frames.size()) cur_frame_nr = 0;
-    }
-    if(!anims.sprites.empty()) {
-        cur_sprite = anims.sprites[0];
-        if(!cur_sprite->hitboxes.empty()) {
-            cur_hitbox = &cur_sprite->hitboxes[0];
-            cur_hitbox_nr = 0;
-        }
-    }
     
     can_reload = true;
     can_save = true;
@@ -798,7 +787,7 @@ void animation_editor::resize_everything(const float mult) {
         for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
             
-            h_ptr->radius *= mult;
+            h_ptr->radius = fabs(h_ptr->radius * mult);
             h_ptr->pos    *= mult;
         }
     }
