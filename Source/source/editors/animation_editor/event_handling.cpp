@@ -14,7 +14,6 @@
 
 #include "../../functions.h"
 #include "../../game.h"
-#include "../../LAFI/textbox.h"
 #include "../../utils/string_utils.h"
 
 

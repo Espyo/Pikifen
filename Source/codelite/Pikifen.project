@@ -227,35 +227,6 @@
     <File Name="../source/replay.h"/>
     <File Name="../source/replay.cpp"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="LAFI">
-    <File Name="../source/LAFI/frame.cpp"/>
-    <File Name="../source/LAFI/gui.cpp"/>
-    <File Name="../source/LAFI/label.cpp"/>
-    <File Name="../source/LAFI/angle_picker.cpp"/>
-    <File Name="../source/LAFI/widget.cpp"/>
-    <File Name="../source/LAFI/scrollbar.cpp"/>
-    <File Name="../source/LAFI/textbox.h"/>
-    <File Name="../source/LAFI/minor.h"/>
-    <File Name="../source/LAFI/label.h"/>
-    <File Name="../source/LAFI/radio_button.h"/>
-    <File Name="../source/LAFI/image.cpp"/>
-    <File Name="../source/LAFI/checkbox.cpp"/>
-    <File Name="../source/LAFI/radio_button.cpp"/>
-    <File Name="../source/LAFI/checkbox.h"/>
-    <File Name="../source/LAFI/frame.h"/>
-    <File Name="../source/LAFI/widget.h"/>
-    <File Name="../source/LAFI/image.h"/>
-    <File Name="../source/LAFI/minor.cpp"/>
-    <File Name="../source/LAFI/scrollbar.h"/>
-    <File Name="../source/LAFI/button.cpp"/>
-    <File Name="../source/LAFI/gui.h"/>
-    <File Name="../source/LAFI/button.h"/>
-    <File Name="../source/LAFI/style.h"/>
-    <File Name="../source/LAFI/angle_picker.h"/>
-    <File Name="../source/LAFI/const.h"/>
-    <File Name="../source/LAFI/style.cpp"/>
-    <File Name="../source/LAFI/textbox.cpp"/>
-  </VirtualDirectory>
   <VirtualDirectory Name="mobs">
     <File Name="../source/mobs/mob_physics.cpp"/>
     <File Name="../source/mobs/bouncer.cpp"/>
@@ -311,18 +282,8 @@
       <File Name="../source/editors/animation_editor/editor.cpp"/>
       <File Name="../source/editors/animation_editor/editor.h"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="animation_editor_old">
-      <File Name="../source/editors/animation_editor_old/loading.cpp"/>
-      <File Name="../source/editors/animation_editor_old/gui_functions.cpp"/>
-      <File Name="../source/editors/animation_editor_old/event_handling.cpp"/>
-      <File Name="../source/editors/animation_editor_old/editor.h"/>
-      <File Name="../source/editors/animation_editor_old/editor.cpp"/>
-      <File Name="../source/editors/animation_editor_old/drawing.cpp"/>
-    </VirtualDirectory>
     <File Name="../source/editors/editor.cpp"/>
     <File Name="../source/editors/editor.h"/>
-    <File Name="../source/editors/editor_old.h"/>
-    <File Name="../source/editors/editor_old.cpp"/>
     <VirtualDirectory Name="area_editor">
       <File Name="../source/editors/area_editor/gui.cpp"/>
       <File Name="../source/editors/area_editor/event_handling.cpp"/>

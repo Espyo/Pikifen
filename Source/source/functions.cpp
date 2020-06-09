@@ -28,7 +28,6 @@
 
 #include "const.h"
 #include "drawing.h"
-#include "editors/animation_editor_old/editor.h"
 #include "game.h"
 #include "init.h"
 #include "menus.h"
