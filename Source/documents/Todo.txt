@@ -2,10 +2,11 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Change animation editor to Dear ImGui
-        A way to rename sprites/animations/body parts
         Pikmin top button is still accessible even if the current object is not a Pikmin
+        Replace the hazard text inputs with a proper list, like the area editor
         Fix the panel_title function
         Test a completely new file -- this helps test what happens how the panels behave when there no animations/sprites/body parts
+        Remove the ImGui demo window
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes

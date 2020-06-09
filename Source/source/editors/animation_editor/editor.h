@@ -197,8 +197,9 @@ private:
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    void rename_animation();
-    void rename_sprite();
+    void rename_animation(animation* a, const string &new_name);
+    void rename_body_part(body_part* p, const string &new_name);
+    void rename_sprite(sprite* s, const string &new_name);
     void resize_everything(const float mult);
     void save_animation_database();
     void set_all_sprite_scales(const float scale);

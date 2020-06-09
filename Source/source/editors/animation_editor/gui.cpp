@@ -535,6 +535,28 @@ void animation_editor::process_gui_panel_animation() {
             
         }
         
+        //Rename animation button.
+        static string rename_anim_name;
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_INFO],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            rename_anim_name = cur_anim->name;
+            input_popup_focus_controller = 2;
+            ImGui::OpenPopup("renameAnim");
+        }
+        set_tooltip(
+            "Rename the current animation."
+        );
+        
+        //Rename animation popup.
+        if(input_popup("renameAnim", "New name:", &rename_anim_name)) {
+            rename_animation(cur_anim, rename_anim_name);
+        }
+        
         //Animation data node.
         if(saveable_tree_node("animation", "Animation data")) {
         
@@ -824,10 +846,8 @@ void animation_editor::process_gui_panel_body_part() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //New body part name.
     static string new_part_name;
     static int selected_part = 0;
-    ImGui::InputText("New part name", &new_part_name);
     
     //Add body part button.
     if(
@@ -836,6 +856,17 @@ void animation_editor::process_gui_panel_body_part() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
+        new_part_name.clear();
+        input_popup_focus_controller = 2;
+        ImGui::OpenPopup("newPartName");
+    }
+    set_tooltip(
+        "Create a new body part."
+        "It will be placed after the currently selected body part."
+    );
+    
+    //Add body part popup.
+    if(input_popup("newPartName", "New body part's name:", &new_part_name)) {
         if(!new_part_name.empty()) {
             bool already_exists = false;
             for(size_t b = 0; b < anims.body_parts.size(); ++b) {
@@ -864,10 +895,6 @@ void animation_editor::process_gui_panel_body_part() {
             }
         }
     }
-    set_tooltip(
-        "Create a new body part, using the name in the text box above.\n"
-        "It will be placed after the currently selected body part."
-    );
     
     if(!anims.body_parts.empty()) {
     
@@ -884,7 +911,9 @@ void animation_editor::process_gui_panel_body_part() {
                 anims.body_parts.erase(
                     anims.body_parts.begin() + selected_part
                 );
-                if(selected_part > 0) {
+                if(anims.body_parts.empty()) {
+                    selected_part = -1;
+                } else if(selected_part > 0) {
                     selected_part--;
                 }
                 update_hitboxes();
@@ -894,6 +923,30 @@ void animation_editor::process_gui_panel_body_part() {
         set_tooltip(
             "Delete the currently selected body part from the list."
         );
+        
+        //Rename body part button.
+        static string rename_part_name;
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_INFO],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            rename_part_name = anims.body_parts[selected_part]->name;
+            input_popup_focus_controller = 2;
+            ImGui::OpenPopup("renamePart");
+        }
+        set_tooltip(
+            "Rename the current body part."
+        );
+        
+        //Rename body part popup.
+        if(input_popup("renamePart", "New name:", &rename_part_name)) {
+            rename_body_part(
+                anims.body_parts[selected_part], rename_part_name
+            );
+        }
         
         //Body part list.
         if(ImGui::BeginChild("partsList", ImVec2(0.0f, 80.0f), true)) {
@@ -1263,6 +1316,28 @@ void animation_editor::process_gui_panel_sprite() {
                 import_sprite_top_data(picked_sprite);
             }
             
+        }
+        
+        //Rename sprite button.
+        static string rename_sprite_name;
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_INFO],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            rename_sprite_name = cur_sprite->name;
+            input_popup_focus_controller = 2;
+            ImGui::OpenPopup("renameSprite");
+        }
+        set_tooltip(
+            "Rename the current sprite."
+        );
+        
+        //Rename sprite popup.
+        if(input_popup("renameSprite", "New name:", &rename_sprite_name)) {
+            rename_sprite(cur_sprite, rename_sprite_name);
         }
         
         ImVec2 mode_buttons_size(-1.0f, 24.0f);

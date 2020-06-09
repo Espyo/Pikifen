@@ -166,6 +166,8 @@ protected:
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
+    //Controls the input popup's focus on the text input widget.
+    unsigned char input_popup_focus_controller;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
     //Is a dialog currently open?
@@ -227,6 +229,9 @@ protected:
     void do_logic_pre();
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
+    bool input_popup(
+        const char* label, const char* prompt, string* text
+    );
     bool list_popup(
         const char* label, const vector<string> &items, string* picked_item
     );

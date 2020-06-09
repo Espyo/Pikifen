@@ -644,78 +644,124 @@ void animation_editor::pick_sprite(const string &name, const bool is_new) {
 
 
 /* ----------------------------------------------------------------------------
- * Renames the chosen animation to the chosen name, in the "tools" menu.
+ * Renames an animation to the given name.
  */
-void animation_editor::rename_animation() {
-    //TODO
-    /*
-    lafi::button* but_ptr =
-        (lafi::button*) frm_tools->widgets["but_rename_anim_name"];
-    lafi::textbox* txt_ptr =
-        (lafi::textbox*) frm_tools->widgets["txt_rename_anim"];
-    size_t old_anim_id = INVALID;
-    string old_name = but_ptr->text;
-    string new_name = txt_ptr->text;
+void animation_editor::rename_animation(animation* a, const string &new_name) {
+    //Check if it's valid.
+    if(!a) {
+        return;
+    }
     
+    string old_name = a->name;
+    
+    //Check if the name is the same.
+    if(new_name == old_name) {
+        return;
+    }
+    
+    //Check if the name is empty.
     if(new_name.empty()) {
-        emit_status_bar_message("You need to specify the new name!", true);
+        status_text = "You need to specify the animation's new name!";
         return;
     }
     
     //Check if the name already exists.
     for(size_t a = 0; a < anims.animations.size(); ++a) {
-        if(anims.animations[a]->name == old_name) old_anim_id = a;
         if(anims.animations[a]->name == new_name) {
-            status_text = "That name is already being used!";
+            status_text = "That animation name is already being used!";
             return;
         }
     }
     
-    if(old_anim_id == INVALID) return;
-    
-    anims.animations[old_anim_id]->name = new_name;
+    //Rename!
+    a->name = new_name;
     anims.sort_alphabetically();
     
-    but_ptr->text = "";
-    txt_ptr->text = "";
-    
     made_new_changes = true;
-    status_text = "Renamed successfully.";
-    */
+    status_text =
+        "Renamed animation \"" + old_name + "\" to \"" + new_name + "\".";
 }
 
 
 /* ----------------------------------------------------------------------------
- * Renames the chosen sprite to the chosen name, in the "tools" menu.
+ * Renames a body part to the given name.
  */
-void animation_editor::rename_sprite() {
-    //TODO
-    /*
-    lafi::button* but_ptr =
-        (lafi::button*) frm_tools->widgets["but_rename_sprite_name"];
-    lafi::textbox* txt_ptr =
-        (lafi::textbox*) frm_tools->widgets["txt_rename_sprite"];
-    size_t old_sprite_id = INVALID;
-    string old_name = but_ptr->text;
-    string new_name = txt_ptr->text;
+void animation_editor::rename_body_part(body_part* p, const string &new_name) {
+    //Check if it's valid.
+    if(!p) {
+        return;
+    }
     
+    string old_name = p->name;
+    
+    //Check if the name is the same.
+    if(new_name == old_name) {
+        return;
+    }
+    
+    //Check if the name is empty.
     if(new_name.empty()) {
-        emit_status_bar_message("You need to specify the new name!", true);
+        status_text = "You need to specify the body part's new name!";
+        return;
+    }
+    
+    //Check if the name already exists.
+    for(size_t b = 0; b < anims.body_parts.size(); ++b) {
+        if(anims.body_parts[b]->name == new_name) {
+            status_text = "That body part name is already being used!";
+            return;
+        }
+    }
+    
+    //Rename!
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        for(size_t h = 0; h < anims.sprites[s]->hitboxes.size(); ++h) {
+            if(anims.sprites[s]->hitboxes[h].body_part_name == old_name) {
+                anims.sprites[s]->hitboxes[h].body_part_name = new_name;
+            }
+        }
+    }
+    p->name = new_name;
+    update_hitboxes();
+    
+    made_new_changes = true;
+    status_text =
+        "Renamed body part \"" + old_name + "\" to \"" + new_name + "\".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Renames a sprite to the given name.
+ */
+void animation_editor::rename_sprite(sprite* s, const string &new_name) {
+    //Check if it's valid.
+    if(!s) {
+        return;
+    }
+    
+    string old_name = s->name;
+    
+    //Check if the name is the same.
+    if(new_name == old_name) {
+        return;
+    }
+    
+    //Check if the name is empty.
+    if(new_name.empty()) {
+        status_text = "You need to specify the sprite's new name!";
         return;
     }
     
     //Check if the name already exists.
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        if(anims.sprites[s]->name == old_name) old_sprite_id = s;
         if(anims.sprites[s]->name == new_name) {
             status_text = "That name is already being used!";
             return;
         }
     }
     
-    if(old_sprite_id == INVALID) return;
-    
-    anims.sprites[old_sprite_id]->name = new_name;
+    //Rename!
+    s->name = new_name;
     for(size_t a = 0; a < anims.animations.size(); ++a) {
         animation* a_ptr = anims.animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
@@ -726,12 +772,9 @@ void animation_editor::rename_sprite() {
     }
     anims.sort_alphabetically();
     
-    but_ptr->text = "";
-    txt_ptr->text = "";
-    
     made_new_changes = true;
-    status_text = "Renamed successfully.";
-    */
+    status_text =
+        "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\".";
 }
 
 

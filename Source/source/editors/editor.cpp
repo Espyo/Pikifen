@@ -48,6 +48,7 @@ editor::editor() :
     dialog_close_callback(nullptr),
     dialog_process_callback(nullptr),
     double_click_time(0),
+    input_popup_focus_controller(2),
     is_ctrl_pressed(false),
     is_dialog_open(false),
     is_m1_pressed(false),
@@ -467,6 +468,55 @@ void editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Displays a popup, if applicable, and fills it with a text input for the
+ * user to type something in.
+ * Returns true if the user pressed Return or the Ok button.
+ * label:
+ *   Name of the popup.
+ * prompt:
+ *   What to prompt to the user. e.g.: "New name:"
+ * text:
+ *   Pointer to the starting text, as well as the user's final text.
+ */
+bool editor::input_popup(
+    const char* label, const char* prompt, string* text
+) {
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        ImGui::Text("%s", prompt);
+        if(input_popup_focus_controller > 0) {
+            //In order to focus on the InputText when the input popup is
+            //opened, we need to call SetKeyboardFocusHere two frames in
+            //a row. I'm not quite sure why, but it's likely the same as
+            //this: https://github.com/ocornut/imgui/issues/343
+            ImGui::SetKeyboardFocusHere();
+            input_popup_focus_controller--;
+        }
+        if(
+            ImGui::InputText(
+                "##inputPopupText", text,
+                ImGuiInputTextFlags_EnterReturnsTrue |
+                ImGuiInputTextFlags_AutoSelectAll
+            )
+        ) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if(ImGui::Button("Ok")) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Cancel")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+    return ret;
+}
 
 
 /* ----------------------------------------------------------------------------
