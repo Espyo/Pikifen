@@ -24,6 +24,16 @@ onion_type::onion_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     
+    area_editor_prop_struct aep_pik_inside;
+    aep_pik_inside.name = "Pikmin inside";
+    aep_pik_inside.var = "pikmin_inside";
+    aep_pik_inside.type = AEMP_TEXT;
+    aep_pik_inside.def_value = "";
+    aep_pik_inside.tooltip =
+        "How many Pikmin, per maturity, are inside, separated by space.\n"
+        "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
+    area_editor_props.push_back(aep_pik_inside);
+    
     onion_fsm::create_fsm(this);
 }
 

@@ -33,6 +33,15 @@ pile_type::pile_type() :
     
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
+    area_editor_prop_struct aep_amount;
+    aep_amount.name = "Amount";
+    aep_amount.var = "amount";
+    aep_amount.type = AEMP_TEXT;
+    aep_amount.def_value = "";
+    aep_amount.tooltip =
+        "How many resources this pile starts with, or leave empty for the max.";
+    area_editor_props.push_back(aep_amount);
+    
     pile_fsm::create_fsm(this);
 }
 

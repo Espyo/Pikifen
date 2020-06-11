@@ -29,3 +29,11 @@ spawns {
         momentum = 100
     }
 }
+area_editor_properties {
+    Contents {
+        var = contents
+        type = list
+        list = random;nectar;nectar_2;spicy_drop;bitter_drop
+        tooltip = What contents this egg contains.
+    }
+}

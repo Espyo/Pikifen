@@ -6,3 +6,11 @@ pushable = false
 pushes = false
 radius = 16
 trigger_range = 64
+
+area_editor_properties {
+    Text {
+        var = text
+        type = text
+        tooltip = Text to show when the player reads the sign.
+    }
+}

@@ -70,6 +70,27 @@ pikmin_type::pikmin_type() :
         MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE |
         MOB_TARGET_TYPE_FRAGILE;
         
+    area_editor_prop_struct aep_maturity;
+    aep_maturity.name = "Maturity";
+    aep_maturity.var = "maturity";
+    aep_maturity.type = AEMP_NUMBER_LIST;
+    aep_maturity.def_value = "2";
+    aep_maturity.value_list.push_back("Leaf");
+    aep_maturity.value_list.push_back("Bud");
+    aep_maturity.value_list.push_back("Flower");
+    aep_maturity.tooltip = "The Pikmin's starting maturity.";
+    area_editor_props.push_back(aep_maturity);
+    
+    area_editor_prop_struct aep_sprout;
+    aep_sprout.name = "Sprout";
+    aep_sprout.var = "sprout";
+    aep_sprout.type = AEMP_BOOL;
+    aep_sprout.def_value = "false";
+    aep_sprout.tooltip =
+        "True if this Pikmin spawns as a sprout, "
+        "false if it spawns as an idle Pikmin.";
+    area_editor_props.push_back(aep_sprout);
+    
     pikmin_fsm::create_fsm(this);
 }
 

@@ -25,3 +25,11 @@ children {
         hold_offset_angle = 0
     }
 }
+area_editor_properties {
+    Start down {
+        var = start_down
+        type = bool
+        def_value = false
+        tooltip = True if this block starts in the down position, false if it starts up.
+    }
+}
