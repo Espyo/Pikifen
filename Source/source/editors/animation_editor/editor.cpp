@@ -87,8 +87,10 @@ animation_editor::animation_editor() :
 /* ----------------------------------------------------------------------------
  * Centers the camera on the sprite's parent bitmap, so the user can choose
  * what part of the bitmap they want to use for the sprite.
+ * instant:
+ *   If true, change the camera instantly.
  */
-void animation_editor::center_camera_on_sprite_bitmap() {
+void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
     if(cur_sprite && cur_sprite->parent_bmp) {
         int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
         int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
@@ -97,9 +99,15 @@ void animation_editor::center_camera_on_sprite_bitmap() {
         
         center_camera(point(bmp_x, bmp_y), point(bmp_x + bmp_w, bmp_y + bmp_h));
     } else {
-        game.cam.zoom = 1.0f;
-        game.cam.pos = point();
+        game.cam.target_zoom = 1.0f;
+        game.cam.target_pos = point();
     }
+    
+    if(instant) {
+        game.cam.pos = game.cam.target_pos;
+        game.cam.zoom = game.cam.target_zoom;
+    }
+    update_transformations();
 }
 
 
@@ -297,7 +305,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
     
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     
-    center_camera_on_sprite_bitmap();
+    center_camera_on_sprite_bitmap(false);
     made_new_changes = true;
     status_text = "Data imported.";
 }
@@ -368,8 +376,8 @@ void animation_editor::load_animation_database(
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
-        game.cam.pos = pre_sprite_bmp_cam_pos;
-        game.cam.zoom = pre_sprite_bmp_cam_zoom;
+        game.cam.set_pos(pre_sprite_bmp_cam_pos);
+        game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
     }
     
     file_path = standardize_path(file_path);
@@ -392,8 +400,8 @@ void animation_editor::load_animation_database(
     can_reload = true;
     can_save = true;
     
-    game.cam.pos.x = game.cam.pos.y = 0;
-    game.cam.zoom = 1;
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
     
     //Find the most popular file name to suggest for new sprites.
     last_spritesheet_used.clear();

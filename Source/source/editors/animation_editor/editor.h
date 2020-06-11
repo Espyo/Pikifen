@@ -138,7 +138,7 @@ private:
     
     
     //General functions.
-    void center_camera_on_sprite_bitmap();
+    void center_camera_on_sprite_bitmap(const bool instant);
     void change_state(const EDITOR_STATES new_state);
     void close_load_dialog();
     static void draw_canvas_imgui_callback(

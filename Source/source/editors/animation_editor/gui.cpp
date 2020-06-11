@@ -1457,9 +1457,9 @@ void animation_editor::process_gui_panel_sprite() {
         
         //Sprite bitmap button.
         if(ImGui::Button("Bitmap", mode_buttons_size)) {
-            pre_sprite_bmp_cam_pos = game.cam.pos;
-            pre_sprite_bmp_cam_zoom = game.cam.zoom;
-            center_camera_on_sprite_bitmap();
+            pre_sprite_bmp_cam_pos = game.cam.target_pos;
+            pre_sprite_bmp_cam_zoom = game.cam.target_zoom;
+            center_camera_on_sprite_bitmap(true);
             change_state(EDITOR_STATE_SPRITE_BITMAP);
         }
         set_tooltip(
@@ -1530,8 +1530,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     
     //Back button.
     if(ImGui::Button("Back")) {
-        game.cam.pos = pre_sprite_bmp_cam_pos;
-        game.cam.zoom = pre_sprite_bmp_cam_zoom;
+        game.cam.set_pos(pre_sprite_bmp_cam_pos);
+        game.cam.set_zoom(pre_sprite_bmp_cam_zoom);
         change_state(EDITOR_STATE_SPRITE);
     }
     
@@ -1598,7 +1598,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->set_bitmap(
                 f[0], cur_sprite->file_pos, cur_sprite->file_size
             );
-            center_camera_on_sprite_bitmap();
+            center_camera_on_sprite_bitmap(true);
             made_new_changes = true;
             break;
         }
@@ -1613,7 +1613,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         cur_sprite->set_bitmap(
             file_name, cur_sprite->file_pos, cur_sprite->file_size
         );
-        center_camera_on_sprite_bitmap();
+        center_camera_on_sprite_bitmap(true);
         made_new_changes = true;
     }
     set_tooltip(

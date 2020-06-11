@@ -258,7 +258,7 @@ protected:
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
     void set_tooltip(const string &explanation, const string &shortcut = "");
-    void zoom(const float new_zoom, const bool anchor_cursor = true);
+    void zoom_with_cursor(const float new_zoom);
     
     
     //Input handler functions.

@@ -93,15 +93,16 @@ void editor::center_camera(
     float width = max_c.x - min_c.x;
     float height = max_c.y - min_c.y;
     
-    game.cam.pos.x = floor(min_c.x + width  / 2);
-    game.cam.pos.y = floor(min_c.y + height / 2);
+    game.cam.target_pos.x = floor(min_c.x + width  / 2);
+    game.cam.target_pos.y = floor(min_c.y + height / 2);
     
     float z;
     if(width > height) z = (canvas_br.x - canvas_tl.x) / width;
     else z = (canvas_br.y - canvas_tl.y) / height;
     z -= z * 0.1;
     
-    zoom(z, false);
+    game.cam.target_zoom = z;
+    update_transformations();
 }
 
 
@@ -141,14 +142,16 @@ void editor::do_logic_post() {
  * be run before the editor's own logic code.
  */
 void editor::do_logic_pre() {
-    update_transformations();
-    
     if(double_click_time > 0) {
         double_click_time -= game.delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
     
+    game.cam.tick(game.delta_t);
+    
     unsaved_changes_warning_timer.tick(game.delta_t);
+    
+    update_transformations();
 }
 
 
@@ -987,29 +990,30 @@ void editor::update_transformations() {
 
 
 /* ----------------------------------------------------------------------------
- * Zooms in or out to a specific amount, optionally keeping the mouse cursor
- * in the same spot.
+ * Zooms to the specified level, keeping the mouse cursor in the same spot.
  */
-void editor::zoom(const float new_zoom, const bool anchor_cursor) {
-    game.cam.zoom = clamp(new_zoom, zoom_min_level, zoom_max_level);
+void editor::zoom_with_cursor(const float new_zoom) {
+    game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
     
-    if(anchor_cursor) {
-        //Keep a backup of the old mouse coordinates.
-        point old_mouse_pos = game.mouse_cursor_w;
-        
-        //Figure out where the mouse will be after the zoom.
-        update_transformations();
-        game.mouse_cursor_w = game.mouse_cursor_s;
-        al_transform_coordinates(
-            &game.screen_to_world_transform,
-            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-        );
-        
-        //Readjust the transformation by shifting the camera
-        //so that the cursor ends up where it was before.
-        game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x);
-        game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y);
-    }
+    //Keep a backup of the old mouse coordinates.
+    point old_mouse_pos = game.mouse_cursor_w;
+    
+    //Figure out where the mouse will be after the zoom.
+    update_transformations();
+    game.mouse_cursor_w = game.mouse_cursor_s;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+    );
+    
+    //Readjust the transformation by shifting the camera
+    //so that the cursor ends up where it was before.
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x),
+            game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y)
+        )
+    );
     
     update_transformations();
 }

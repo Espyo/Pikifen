@@ -27,29 +27,36 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_LEFT: {
-        game.cam.pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
     } case ALLEGRO_KEY_RIGHT: {
-        game.cam.pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
     } case ALLEGRO_KEY_UP: {
-        game.cam.pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
     } case ALLEGRO_KEY_DOWN: {
-        game.cam.pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
     } case ALLEGRO_KEY_MINUS: {
-        zoom(game.cam.zoom - (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        game.cam.target_zoom =
+            clamp(
+                game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                zoom_min_level, zoom_max_level
+            );
         break;
     } case ALLEGRO_KEY_EQUALS: {
-        zoom(game.cam.zoom + (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        game.cam.target_zoom =
+            clamp(
+                game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                zoom_min_level, zoom_max_level
+            );
         break;
     } case ALLEGRO_KEY_0: {
-        if(game.cam.zoom == 1.0f) {
-            game.cam.pos.x = 0.0f;
-            game.cam.pos.y = 0.0f;
+        if(game.cam.target_zoom == 1.0f) {
+            game.cam.target_pos = point();
         } else {
-            zoom(1.0f, false);
+            game.cam.target_zoom = 1.0f;
         }
         break;
     } case ALLEGRO_KEY_C: {
@@ -124,18 +131,26 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         press_play_animation_button();
         break;
     } case ALLEGRO_KEY_HOME: {
-        if(!cur_sprite && !cur_sprite->bitmap) return;
+        sprite* s_ptr = cur_sprite;
+        if(!s_ptr && cur_anim && cur_frame_nr != INVALID) {
+            string name =
+                cur_anim->frames[cur_frame_nr].sprite_name;
+            size_t s_pos = anims.find_sprite(name);
+            if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
+        }
+        if(!s_ptr || !s_ptr->bitmap) return;
+        
         point cmin, cmax;
         get_transformed_rectangle_bounding_box(
-            cur_sprite->offset, cur_sprite->file_size * cur_sprite->scale,
-            cur_sprite->angle, &cmin, &cmax
+            s_ptr->offset, s_ptr->file_size * s_ptr->scale,
+            s_ptr->angle, &cmin, &cmax
         );
         
-        if(cur_sprite->top_visible) {
+        if(s_ptr->top_visible) {
             point top_min, top_max;
             get_transformed_rectangle_bounding_box(
-                cur_sprite->top_pos, cur_sprite->top_size,
-                cur_sprite->top_angle,
+                s_ptr->top_pos, s_ptr->top_size,
+                s_ptr->top_angle,
                 &top_min, &top_max
             );
             cmin.x = std::min(cmin.x, top_min.x);
@@ -144,8 +159,8 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             cmax.y = std::max(cmax.y, top_max.y);
         }
         
-        for(size_t h = 0; h < cur_sprite->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &cur_sprite->hitboxes[h];
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            hitbox* h_ptr = &s_ptr->hitboxes[h];
             cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
             cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
             cmax.x = std::max(cmax.x, h_ptr->pos.x + h_ptr->radius);
@@ -450,7 +465,9 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  * Handles the mouse wheel being moved.
  */
 void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    zoom(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
+    if(is_dialog_open || is_mouse_in_gui) return;
+    
+    zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
@@ -488,8 +505,12 @@ void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
  * Pans the camera around.
  */
 void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
-    game.cam.pos.x -= ev.mouse.dx / game.cam.zoom;
-    game.cam.pos.y -= ev.mouse.dy / game.cam.zoom;
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
+            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+        )
+    );
 }
 
 
@@ -497,8 +518,7 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * Resets the camera's X and Y coordinates.
  */
 void animation_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
-    game.cam.pos.x = 0;
-    game.cam.pos.y = 0;
+    game.cam.target_pos = point();
 }
 
 
@@ -506,5 +526,5 @@ void animation_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
  * Resets the camera's zoom.
  */
 void animation_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
-    zoom(1.0f);
+    zoom_with_cursor(1.0f);
 }

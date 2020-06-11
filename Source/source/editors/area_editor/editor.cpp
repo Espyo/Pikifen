@@ -208,8 +208,8 @@ void area_editor::clear_current_area() {
         game.textures.detach(game.cur_area_data.tree_shadows[s]->file_name);
     }
     
-    game.cam.pos = point();
-    game.cam.zoom = 1.0f;
+    game.cam.set_pos(point());
+    game.cam.set_zoom(1.0f);
     show_cross_section = false;
     show_cross_section_grid = false;
     show_path_preview = false;
@@ -1377,8 +1377,8 @@ void area_editor::load() {
         cur_area_name = quick_play_area;
         quick_play_area.clear();
         load_area(false);
-        game.cam.pos = quick_play_cam_pos;
-        game.cam.zoom = quick_play_cam_z;
+        game.cam.set_pos(quick_play_cam_pos);
+        game.cam.set_zoom(quick_play_cam_z);
         
     } else if(!auto_load_area.empty()) {
         cur_area_name = auto_load_area;
@@ -1486,15 +1486,6 @@ void area_editor::load_reference() {
     }
     
     update_reference();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- */
-void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
-    game.cam.pos.x -= ev.mouse.dx / game.cam.zoom;
-    game.cam.pos.y -= ev.mouse.dy / game.cam.zoom;
 }
 
 
@@ -1881,23 +1872,6 @@ void area_editor::register_change(
     undo_save_lock_timer.start();
     
     update_undo_history();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the camera's X and Y coordinates.
- */
-void area_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
-    game.cam.pos.x = 0;
-    game.cam.pos.y = 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the camera's zoom.
- */
-void area_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
-    zoom(1.0f);
 }
 
 

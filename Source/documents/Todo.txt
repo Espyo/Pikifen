@@ -2,7 +2,31 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Revamp editors
+        The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
+        A tutorial built into each editor?
+        Everything that requires a tutorial should probably be streamlined, or have some option in the panel to make it more automatic and intuitive
+        Add a section to the object editing panel in the area editor that automatically contains checkboxes, radio buttons, etc. for some mob types to fill in the tags. Like a "sprout" checkbox for Pikmin, or a "text" textbox for signs.
+        Maybe mob types could have a help section, that shows up when you click a mob of that type in the editor. It could inform people on how to use bridges, write \n for info spots, etc.
+        epicRedHot suggests a view mode that color-codes the sectors by type, since they keep forgetting what sectors are set to blocking; this may not be needed if after ImGui, it's easier to see what type a sector is
+        When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
+        When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
+        Animation editor should start zoomed in...maybe also include a grid, so users can get a sense of scale?
+        Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
+        A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
+        Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
+        Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
+        A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
+        When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
+        The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
+        In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
+        Options should go in a pop-up menu
+        More options
+            A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
+        "Remove" icon should be a garbage bin
+        When editing an animation, have a timeline?
+        Put the canvas in one ImGui window and the panel in another?
+        Style the editors
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -45,32 +69,6 @@ Next tasks (roughly sorted most important first)
     Pikmin sprout sprites have their hitboxes swapped
     
     --- v0.19.0 ---
-    Revamp editors
-        Why aren't the editors using smooth cam like in-game?
-        The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
-        A tutorial built into each editor?
-        Everything that requires a tutorial should probably be streamlined, or have some option in the panel to make it more automatic and intuitive
-        Add a section to the object editing panel in the area editor that automatically contains checkboxes, radio buttons, etc. for some mob types to fill in the tags. Like a "sprout" checkbox for Pikmin, or a "text" textbox for signs.
-        Maybe mob types could have a help section, that shows up when you click a mob of that type in the editor. It could inform people on how to use bridges, write \n for info spots, etc.
-        epicRedHot suggests a view mode that color-codes the sectors by type, since they keep forgetting what sectors are set to blocking; this may not be needed if after ImGui, it's easier to see what type a sector is
-        When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
-        When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
-        Animation editor should start zoomed in...maybe also include a grid, so users can get a sense of scale?
-        Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
-        A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
-        Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
-        Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
-        A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
-        When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
-        The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-        In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
-        Options should go in a pop-up menu
-        More options
-            A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
-        "Remove" icon should be a garbage bin
-        When editing an animation, have a timeline?
-        Put the canvas in one ImGui window and the panel in another?
-        Style the editors
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
@@ -123,6 +121,7 @@ Next tasks (roughly sorted most important first)
     Improve the way ceramic bridge textures work
     A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
     Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
+    If something is under construction, like a menu or something, add a small "WIP" blurb
     There should be a way to add custom scripting to the objects with hardcoded scripts
         Idea
             The user can write a script text file like they would for a customizable object type

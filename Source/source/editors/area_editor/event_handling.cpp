@@ -99,35 +99,42 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_LEFT: {
-        game.cam.pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
         
     } case ALLEGRO_KEY_RIGHT: {
-        game.cam.pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
         
     } case ALLEGRO_KEY_UP: {
-        game.cam.pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
         
     } case ALLEGRO_KEY_DOWN: {
-        game.cam.pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         break;
         
     } case ALLEGRO_KEY_MINUS: {
-        zoom(game.cam.zoom - (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        game.cam.target_zoom =
+            clamp(
+                game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                zoom_min_level, zoom_max_level
+            );
         break;
         
     } case ALLEGRO_KEY_EQUALS: {
-        zoom(game.cam.zoom + (game.cam.zoom * KEYBOARD_CAM_ZOOM), false);
+        game.cam.target_zoom =
+            clamp(
+                game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                zoom_min_level, zoom_max_level
+            );
         break;
         
     } case ALLEGRO_KEY_0: {
-        if(game.cam.zoom == 1.0f) {
-            game.cam.pos.x = 0.0f;
-            game.cam.pos.y = 0.0f;
+        if(game.cam.target_zoom == 1.0f) {
+            game.cam.target_pos = point();
         } else {
-            zoom(1.0f, false);
+            game.cam.target_zoom = 1.0f;
         }
         break;
         
@@ -1516,7 +1523,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
     if(is_dialog_open || is_mouse_in_gui) return;
     
-    zoom(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
+    zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
@@ -1551,4 +1558,33 @@ void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pans the camera around.
+ */
+void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
+            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's X and Y coordinates.
+ */
+void area_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
+    game.cam.target_pos = point();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's zoom.
+ */
+void area_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
+    zoom_with_cursor(1.0f);
 }
