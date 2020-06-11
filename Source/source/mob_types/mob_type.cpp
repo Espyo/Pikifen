@@ -29,6 +29,17 @@
 using std::string;
 
 /* ----------------------------------------------------------------------------
+ * Creates a structure with info about an area editor's mob property.
+ */
+mob_type::area_editor_prop_struct::area_editor_prop_struct() :
+    type(AEMP_TEXT) {
+    
+    min_value = -LARGE_FLOAT;
+    max_value = LARGE_FLOAT;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  */
 mob_type::mob_type(size_t category_id) :
@@ -479,6 +490,72 @@ void load_mob_type_from_file(
         }
         
         mt->children.push_back(new_child);
+    }
+    
+    data_node* ae_props_node =
+        file.get_child_by_name("area_editor_properties");
+    size_t n_ae_props = ae_props_node->get_nr_of_children();
+    for(size_t p = 0; p < n_ae_props; ++p) {
+    
+        data_node* prop_node = ae_props_node->get_child(p);
+        reader_setter prop_rs(prop_node);
+        string type_str;
+        data_node* type_node;
+        string list_str;
+        
+        mob_type::area_editor_prop_struct new_prop;
+        new_prop.name = prop_node->name;
+        
+        prop_rs.set("var", new_prop.var);
+        prop_rs.set("type", type_str, &type_node);
+        prop_rs.set("def_value", new_prop.def_value);
+        prop_rs.set("min_value", new_prop.min_value);
+        prop_rs.set("max_value", new_prop.max_value);
+        prop_rs.set("list", list_str);
+        prop_rs.set("tooltip", new_prop.tooltip);
+        
+        if(new_prop.var.empty()) {
+            log_error(
+                "You need to specify the area editor property's name!",
+                prop_node
+            );
+        }
+        
+        if(type_str == "text") {
+            new_prop.type = AEMP_TEXT;
+        } else if(type_str == "int") {
+            new_prop.type = AEMP_INT;
+        } else if(type_str == "decimal") {
+            new_prop.type = AEMP_DECIMAL;
+        } else if(type_str == "bool") {
+            new_prop.type = AEMP_BOOL;
+        } else if(type_str == "list") {
+            new_prop.type = AEMP_LIST;
+        } else if(type_str == "number_list") {
+            new_prop.type = AEMP_NUMBER_LIST;
+        } else {
+            log_error(
+                "Unknown area editor property type \"" + type_str + "\"!",
+                type_node
+            );
+        }
+        
+        if(new_prop.min_value > new_prop.max_value) {
+            std::swap(new_prop.min_value, new_prop.max_value);
+        }
+        
+        if(new_prop.type == AEMP_LIST || new_prop.type == AEMP_NUMBER_LIST) {
+            if(list_str.empty()) {
+                log_error(
+                    "For this area editor property type, you need to specify "
+                    "a list of values!", prop_node
+                );
+            } else {
+                new_prop.value_list = semicolon_list_to_vector(list_str);
+            }
+        }
+        
+        mt->area_editor_props.push_back(new_prop);
     }
     
     if(target_type_node) {

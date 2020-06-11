@@ -44,6 +44,29 @@ game_class::game_class() :
     reset_delta_t(true),
     voice(nullptr) {
     
+    team_internal_names[MOB_TEAM_NONE] = "none";
+    team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
+    team_internal_names[MOB_TEAM_PLAYER_2] = "player_2";
+    team_internal_names[MOB_TEAM_PLAYER_3] = "player_3";
+    team_internal_names[MOB_TEAM_PLAYER_4] = "player_4";
+    team_internal_names[MOB_TEAM_ENEMY_1] = "enemy_1";
+    team_internal_names[MOB_TEAM_ENEMY_2] = "enemy_2";
+    team_internal_names[MOB_TEAM_ENEMY_3] = "enemy_3";
+    team_internal_names[MOB_TEAM_ENEMY_4] = "enemy_4";
+    team_internal_names[MOB_TEAM_OBSTACLE] = "obstacle";
+    team_internal_names[MOB_TEAM_OTHER] = "other";
+    
+    team_names[MOB_TEAM_NONE] = "None";
+    team_names[MOB_TEAM_PLAYER_1] = "Player 1";
+    team_names[MOB_TEAM_PLAYER_2] = "Player 2";
+    team_names[MOB_TEAM_PLAYER_3] = "Player 3";
+    team_names[MOB_TEAM_PLAYER_4] = "Player 4";
+    team_names[MOB_TEAM_ENEMY_1] = "Enemy 1";
+    team_names[MOB_TEAM_ENEMY_2] = "Enemy 2";
+    team_names[MOB_TEAM_ENEMY_3] = "Enemy 3";
+    team_names[MOB_TEAM_ENEMY_4] = "Enemy 4";
+    team_names[MOB_TEAM_OBSTACLE] = "Obstacle";
+    team_names[MOB_TEAM_OTHER] = "Other";
 }
 
 

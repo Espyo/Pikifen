@@ -277,7 +277,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
             //Normal action.
             actions[a]->run(m, custom_data_1, custom_data_2);
             //If the state got changed, jump out.
-            if(actions[a]->action->type == MOB_ACTION_SET_STATE) break;
+            if(actions[a]->action->type == MOB_ACTION_SET_STATE) return;
             
             break;
         }

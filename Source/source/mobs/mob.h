@@ -77,6 +77,8 @@ enum MOB_TEAMS {
     MOB_TEAM_OBSTACLE,
     //Whatever else.
     MOB_TEAM_OTHER,
+    //Number of teams.
+    N_MOB_TEAMS,
 };
 
 enum MOB_TARGET_TYPES {

@@ -305,6 +305,193 @@ void area_editor::process_gui_menu_bar() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui mob script vars for this frame.
+ */
+void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
+    map<string, string> vars_map = get_var_map(m_ptr->vars);
+    map<string, string> new_vars_map;
+    map<string, bool> vars_in_widgets;
+    
+    //Start with the properties that apply to all objects.
+    
+    //Team property.
+    string team_value;
+    if(vars_map.find("team") != vars_map.end()) {
+        team_value = vars_map["team"];
+    }
+    
+    vector<string> team_names;
+    team_names.push_back("(Default)");
+    for(unsigned char t = 0; t < N_MOB_TEAMS; ++t) {
+        team_names.push_back(game.team_names[t]);
+    }
+    
+    int team_nr;
+    if(team_value.empty()) {
+        team_nr = 0;
+    } else {
+        size_t team_nr_st = string_to_team_nr(team_value);
+        if(team_nr_st == INVALID) {
+            team_nr = 0;
+        } else {
+            //0 is reserved in this widget for "default".
+            //Increase it by one to get the widget's team index number.
+            team_nr = team_nr_st + 1;
+        }
+    }
+    
+    if(ImGui::Combo("Team", &team_nr, team_names)) {
+        register_change("object script vars change");
+        if(team_nr > 0) {
+            //0 is reserved in this widget for "default".
+            //Decrease it by one to get the real team index number.
+            team_nr--;
+            team_value = game.team_internal_names[team_nr];
+        } else {
+            team_value.clear();
+        }
+    }
+    set_tooltip("What sort of team this object belongs to.");
+    
+    if(!team_value.empty()) new_vars_map["team"] = team_value;
+    vars_in_widgets["team"] = true;
+    
+    //Now, dynamically create widgets for all properties this mob type has.
+    
+    for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); ++p) {
+    
+        mob_type::area_editor_prop_struct* p_ptr =
+            &m_ptr->type->area_editor_props[p];
+            
+        string value;
+        if(vars_map.find(p_ptr->var) == vars_map.end()) {
+            value = p_ptr->def_value;
+        } else {
+            value = vars_map[p_ptr->var];
+        }
+        
+        switch(p_ptr->type) {
+        case AEMP_TEXT: {
+    
+            string value_s = value;
+            if(ImGui::InputText(p_ptr->name.c_str(), &value_s)) {
+                register_change("object script vars change");
+                value = value_s;
+            }
+            
+            break;
+            
+        } case AEMP_INT: {
+    
+            int value_i = s2i(value);
+            if(
+                ImGui::DragInt(
+                    p_ptr->name.c_str(), &value_i, 0.1f,
+                    p_ptr->min_value, p_ptr->max_value
+                )
+            ) {
+                register_change("object script vars change");
+                value = i2s(value_i);
+            }
+            
+            break;
+            
+        } case AEMP_DECIMAL: {
+    
+            float value_f = s2f(value);
+            if(
+                ImGui::DragFloat(
+                    p_ptr->name.c_str(), &value_f, 0.1f,
+                    p_ptr->min_value, p_ptr->max_value
+                )
+            ) {
+                register_change("object script vars change");
+                value = f2s(value_f);
+            }
+            
+            break;
+            
+        } case AEMP_BOOL: {
+    
+            bool value_b = s2b(value);
+            if(ImGui::Checkbox(p_ptr->name.c_str(), &value_b)) {
+                register_change("object script vars change");
+                value = b2s(value_b);
+            }
+            
+            break;
+            
+        } case AEMP_LIST: {
+    
+            string value_s = value;
+            if(ImGui::Combo(p_ptr->name, &value_s, p_ptr->value_list)) {
+                register_change("object script vars change");
+                value = value_s;
+            }
+            
+            break;
+            
+        } case AEMP_NUMBER_LIST: {
+    
+            int item_nr = s2i(value);
+            if(ImGui::Combo(p_ptr->name, &item_nr, p_ptr->value_list)) {
+                register_change("object script vars change");
+                value = i2s(item_nr);
+            }
+            
+            break;
+            
+        }
+        }
+        
+        if(!p_ptr->tooltip.empty()) {
+            set_tooltip(p_ptr->tooltip);
+        }
+        
+        if(value != p_ptr->def_value) {
+            new_vars_map[p_ptr->var] = value;
+        }
+        
+        vars_in_widgets[p_ptr->var] = true;
+        
+    }
+    
+    string other_vars_str;
+    for(auto v : vars_map) {
+        if(!vars_in_widgets[v.first]) {
+            other_vars_str += v.first + "=" + v.second + ";";
+        }
+    }
+    
+    m_ptr->vars.clear();
+    for(auto v : new_vars_map) {
+        m_ptr->vars += v.first + "=" + v.second + ";";
+    }
+    m_ptr->vars += other_vars_str;
+    
+    if(!m_ptr->vars.empty() && m_ptr->vars[m_ptr->vars.size() - 1] == ';') {
+        m_ptr->vars.pop_back();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Finally, a widget for the entire list.
+    string mob_vars = m_ptr->vars;
+    if(ImGui::InputText("Full list", &mob_vars)) {
+        register_change("object script vars change");
+        m_ptr->vars = mob_vars;
+    }
+    set_tooltip(
+        "This is the full list of script variables to use.\n"
+        "You can add variables here, though variables in the "
+        "wrong format will be removed.\n"
+        "Format example: \"sleep=y;jumping=n\"."
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui area details control panel for this frame.
  */
 void area_editor::process_gui_panel_details() {
@@ -1553,20 +1740,21 @@ void area_editor::process_gui_panel_mobs() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
+        //Object script vars node.
+        if(saveable_tree_node("mobs", "Script vars")) {
+        
+            process_gui_mob_script_vars(m_ptr);
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Object advanced node.
         if(saveable_tree_node("mobs", "Advanced")) {
         
-            //Object script vars input.
-            string mob_vars = m_ptr->vars;
-            if(ImGui::InputText("Script vars", &mob_vars)) {
-                register_change("object script vars change");
-                m_ptr->vars = mob_vars;
-            }
-            set_tooltip(
-                "Extra variables you want the object to have.\n"
-                "e.g.: \"sleep=y;jumping=n\"."
-            );
-            
             //Object link amount text.
             ImGui::Text(
                 "%i link%s", (int) m_ptr->links.size(),

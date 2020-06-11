@@ -133,6 +133,10 @@ public:
     map<string, status_type*> status_types;
     //All system assets.
     system_asset_list sys_assets;
+    //List of all mob team's internal names.
+    string team_internal_names[N_MOB_TEAMS];
+    //List of all mob team names, in proper English.
+    string team_names[N_MOB_TEAMS];
     //Manager of all floor texture bitmaps.
     bmp_manager textures;
     //List of weather conditions.

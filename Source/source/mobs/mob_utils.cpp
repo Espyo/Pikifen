@@ -829,28 +829,10 @@ size_t string_to_mob_target_type(const string &type_str) {
  * Returns INVALID if the string is not valid.
  */
 size_t string_to_team_nr(const string &team_str) {
-    if(team_str == "none") {
-        return MOB_TEAM_NONE;
-    } else if(team_str == "player_1") {
-        return MOB_TEAM_PLAYER_1;
-    } else if(team_str == "player_2") {
-        return MOB_TEAM_PLAYER_2;
-    } else if(team_str == "player_3") {
-        return MOB_TEAM_PLAYER_3;
-    } else if(team_str == "player_4") {
-        return MOB_TEAM_PLAYER_4;
-    } else if(team_str == "enemy_1") {
-        return MOB_TEAM_ENEMY_1;
-    } else if(team_str == "enemy_2") {
-        return MOB_TEAM_ENEMY_2;
-    } else if(team_str == "enemy_3") {
-        return MOB_TEAM_ENEMY_3;
-    } else if(team_str == "enemy_4") {
-        return MOB_TEAM_ENEMY_4;
-    } else if(team_str == "obstacle") {
-        return MOB_TEAM_OBSTACLE;
-    } else if(team_str == "other") {
-        return MOB_TEAM_OTHER;
+    for(size_t t = 0; t < N_MOB_TEAMS; ++t) {
+        if(team_str == game.team_internal_names[t]) {
+            return t;
+        }
     }
     return INVALID;
 }

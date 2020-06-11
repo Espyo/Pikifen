@@ -3,11 +3,8 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
-        A tutorial built into each editor?
         Everything that requires a tutorial should probably be streamlined, or have some option in the panel to make it more automatic and intuitive
-        Add a section to the object editing panel in the area editor that automatically contains checkboxes, radio buttons, etc. for some mob types to fill in the tags. Like a "sprout" checkbox for Pikmin, or a "text" textbox for signs.
-        Maybe mob types could have a help section, that shows up when you click a mob of that type in the editor. It could inform people on how to use bridges, write \n for info spots, etc.
+            Maybe mob types could have a help section, that shows up when you click a mob of that type in the editor. It could inform people on how to use bridges, write \n for info spots, etc.
         epicRedHot suggests a view mode that color-codes the sectors by type, since they keep forgetting what sectors are set to blocking; this may not be needed if after ImGui, it's easier to see what type a sector is
         When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
         When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
@@ -15,7 +12,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
         A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
         Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
-        Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
@@ -625,22 +621,21 @@ Tasks for later on (I might never implement these)
     A colorblind-helping mode?
     Editors
         Area editor
-            Hold Ctrl while dragging to lock to an axis?
+            Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
             A tool that checks every point in the map (more like every 2 units) and checks if the closest carrying point is on the other side of a wall or something
-            More widgets that replace boring textboxes (like the angle picker)?
             When choosing textures, list all of the existing ones, if plausible
+            The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
             Double-click in object mode -> create new object on cursor. There are a lot of corner cases though, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc. This can result in the player accidentally adding a new mob while trying to do something else
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?
                 You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
-            A way to add and remove hazards from a hitbox, like the area editor
-            Hold Ctrl while dragging to lock to an axis?
-            More widgets that replace boring textboxes (like the angle picker)?
             Add a section to find errors
                 It could check what kind of animation this is, like a Pikmin type, and determine that there are some needed animations that are not included
-                Enemy has attack hitboxes that don't hit below it
+                Enemy has attack hitboxes that don't hit below it?
         Both editors
+            A tutorial built into each editor?
+            Hold Ctrl while dragging to lock to an axis?
             For buttons that change the state of something (e.g. toggle reference image on/off, change current snapping mode), I need to figure out what to do...
                 a) Have the icon represent the current mode?
                 b) Have the icon represent the next mode?

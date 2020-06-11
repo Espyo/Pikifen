@@ -511,6 +511,7 @@ private:
     void process_gui();
     void process_gui_control_panel();
     void process_gui_menu_bar();
+    void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();
     void process_gui_panel_info();
     void process_gui_panel_layout();
