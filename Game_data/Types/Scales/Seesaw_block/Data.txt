@@ -1,5 +1,6 @@
 name = Seesaw block
 
+area_editor_tips = Link this object to another seesaw block object, so they\nwork in tandem. Remember to link the other back to this one!
 casts_shadow = false
 height = 20
 pushes = true

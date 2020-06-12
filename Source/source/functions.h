@@ -134,6 +134,7 @@ void spew_pikmin_seed(
 );
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
+string unescape_string(const string &s);
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
 
 

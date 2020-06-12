@@ -26,6 +26,11 @@ bouncer_type::bouncer_type() :
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;
     
+    area_editor_tips =
+        "Link this object to another object, so that\n"
+        "bounced Pikmin land in that location.\n"
+        "A \"Dummy\" object works perfectly for this.";
+        
     bouncer_fsm::create_fsm(this);
 }
 

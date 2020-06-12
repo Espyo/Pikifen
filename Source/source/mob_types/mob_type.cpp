@@ -257,12 +257,14 @@ void load_mob_type_from_file(
     string huntable_targets_str;
     string hurtable_targets_str;
     string team_str;
+    data_node* area_editor_tips_node;
     data_node* spike_damage_node;
     data_node* target_type_node;
     data_node* huntable_targets_node;
     data_node* hurtable_targets_node;
     data_node* team_node;
     
+    rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
     rs.set("blocks_carrier_pikmin", mt->blocks_carrier_pikmin);
     rs.set("can_free_move", mt->can_free_move);
@@ -296,6 +298,10 @@ void load_mob_type_from_file(
     rs.set("territory_radius", mt->territory_radius);
     rs.set("walkable", mt->walkable);
     rs.set("weight", mt->weight);
+    
+    if(area_editor_tips_node) {
+        mt->area_editor_tips = unescape_string(mt->area_editor_tips);
+    }
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
     
@@ -554,6 +560,8 @@ void load_mob_type_from_file(
                 new_prop.value_list = semicolon_list_to_vector(list_str);
             }
         }
+        
+        new_prop.tooltip = unescape_string(new_prop.tooltip);
         
         mt->area_editor_props.push_back(new_prop);
     }

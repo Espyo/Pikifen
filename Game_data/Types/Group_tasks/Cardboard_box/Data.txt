@@ -1,5 +1,6 @@
 name = Cardboard box
 
+area_editor_tips = Link this object to another object, so that the box\nmoves to that location when it's pushed.\nA "Dummy" object works perfectly for this.
 height = 64
 max_health = 50
 move_speed = 10

@@ -1124,6 +1124,40 @@ string strsignal(const int signum) {
 
 
 /* ----------------------------------------------------------------------------
+ * Unescapes a user string. This converts two backslashes into one, and
+ * converts backslash n into a newline character.
+ */
+string unescape_string(const string &s) {
+    string ret;
+    ret.reserve(s.size());
+    for(size_t c = 0; c < s.size() - 1;) {
+        if(s[c] == '\\') {
+            switch(s[c + 1]) {
+            case 'n': {
+                ret.push_back('\n');
+                c += 2;
+                break;
+            } case '\\': {
+                ret.push_back('\\');
+                c += 2;
+                break;
+            } default: {
+                ret.push_back('\\');
+                ++c;
+                break;
+            }
+            }
+        } else {
+            ret.push_back(s[c]);
+            ++c;
+        }
+    }
+    ret.push_back(s.back());
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a string that's a join of the strings in the specified vector,
  * but only past a certain position. The strings are joined with a space
  * character.

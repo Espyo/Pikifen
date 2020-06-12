@@ -3,8 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        Everything that requires a tutorial should probably be streamlined, or have some option in the panel to make it more automatic and intuitive
-            Maybe mob types could have a help section, that shows up when you click a mob of that type in the editor. It could inform people on how to use bridges, write \n for info spots, etc.
         epicRedHot suggests a view mode that color-codes the sectors by type, since they keep forgetting what sectors are set to blocking; this may not be needed if after ImGui, it's easier to see what type a sector is
         When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
         When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode

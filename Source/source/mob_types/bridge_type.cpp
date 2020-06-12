@@ -32,6 +32,13 @@ bridge_type::bridge_type() :
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     starting_team = MOB_TEAM_OBSTACLE;
     
+    area_editor_tips =
+        "Place this object on a sector of the \"Bridge\" type.\n"
+        "When the bridge object is destroyed, that sector, as well as\n"
+        "all neighboring sectors of the \"Bridge\" and \"Bridge rail\" types\n"
+        "will be converted into bridges. Their heights will also change to\n"
+        "whatever you specify in the sector's \"bridge height\" property.";
+        
     bridge_fsm::create_fsm(this);
 }
 

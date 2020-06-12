@@ -1725,6 +1725,15 @@ void area_editor::process_gui_panel_mobs() {
             last_mob_type = m_ptr->type;
         }
         
+        if(m_ptr->type && !m_ptr->type->area_editor_tips.empty()) {
+            //Tips text.
+            ImGui::TextDisabled("(%s tips)", m_ptr->type->name.c_str());
+            set_tooltip(m_ptr->type->area_editor_tips);
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Object angle value.
         float mob_angle = m_ptr->angle;
         if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
@@ -1733,7 +1742,7 @@ void area_editor::process_gui_panel_mobs() {
         }
         set_tooltip(
             "Angle that the object is facing.\n"
-            "You can also use R in the canvas to "
+            "You can also press R in the canvas to "
             "make it face the cursor."
         );
         

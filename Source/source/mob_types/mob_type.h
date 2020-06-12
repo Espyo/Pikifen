@@ -248,6 +248,8 @@ public:
     vector<area_editor_prop_struct> area_editor_props;
     
     //Misc.
+    //Tips to show in the area editor about this mob type, if any.
+    string area_editor_tips;
     //Can the player choose to place one of these in the area editor?
     bool appears_in_area_editor;
     //If true, carrier Pikmin will be considered blocked if it's in the way.

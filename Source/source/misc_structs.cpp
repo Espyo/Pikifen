@@ -620,7 +620,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     cur_section(0),
     speaker_icon(speaker_icon) {
     
-    message = replace_all(text, "\\n", "\n");
+    message = unescape_string(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();
     }

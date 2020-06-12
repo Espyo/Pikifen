@@ -1,5 +1,6 @@
 name = Ceramic pile red
 
+area_editor_tips = Link this object to a bridge object, so the Pikmin\nknow what bridge to take the ceramic shards to.
 can_drop_multiple = false
 contents = Ceramic fragment red
 delete_when_finished = true
