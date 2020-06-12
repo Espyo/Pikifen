@@ -2413,19 +2413,19 @@ void animation_editor::process_gui_toolbar() {
         "Ctrl + S"
     );
     
-    //Toggle origin button.
+    //Toggle grid button.
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
-            editor_icons[ICON_ORIGIN],
+            editor_icons[ICON_GRID],
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        press_origin_button();
+        press_grid_button();
     }
     set_tooltip(
-        "Toggle visibility of the center-point (origin).",
-        "Ctrl + O"
+        "Toggle visibility of the grid.",
+        "Ctrl + G"
     );
     
     //Toggle hitboxes button.

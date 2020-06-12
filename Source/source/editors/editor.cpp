@@ -156,6 +156,85 @@ void editor::do_logic_pre() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws the grid, using the current game camera.
+ * interval:
+ *   Interval between grid lines.
+ * major_color:
+ *   Color to use for major lines. These are lines that happen at major
+ *   milestones (i.e. twice the interval).
+ * minor_color:
+ *   Color to use for minor lines. These are lines that aren't major.
+ */
+void editor::draw_grid(
+    const float interval,
+    const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
+) {
+    point cam_top_left_corner(0, 0);
+    point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &cam_top_left_corner.x, &cam_top_left_corner.y
+    );
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+    );
+    
+    float x = floor(cam_top_left_corner.x / interval) * interval;
+    while(x < cam_bottom_right_corner.x + interval) {
+        ALLEGRO_COLOR c = minor_color;
+        bool draw_line = true;
+        
+        if(fmod(x, interval * 2) == 0) {
+            c = major_color;
+            if((interval * 2) * game.cam.zoom <= 6) {
+                draw_line = false;
+            }
+        } else {
+            if(interval * game.cam.zoom <= 6) {
+                draw_line = false;
+            }
+        }
+        
+        if(draw_line) {
+            al_draw_line(
+                x, cam_top_left_corner.y,
+                x, cam_bottom_right_corner.y + interval,
+                c, 1.0 / game.cam.zoom
+            );
+        }
+        x += interval;
+    }
+    
+    float y = floor(cam_top_left_corner.y / interval) * interval;
+    while(y < cam_bottom_right_corner.y + interval) {
+        ALLEGRO_COLOR c = minor_color;
+        bool draw_line = true;
+        
+        if(fmod(y, interval * 2) == 0) {
+            c = major_color;
+            if((interval * 2) * game.cam.zoom <= 6) {
+                draw_line = false;
+            }
+        } else {
+            if(interval * game.cam.zoom <= 6) {
+                draw_line = false;
+            }
+        }
+        
+        if(draw_line) {
+            al_draw_line(
+                cam_top_left_corner.x, y,
+                cam_bottom_right_corner.x + interval, y,
+                c, 1.0 / game.cam.zoom
+            );
+        }
+        y += interval;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the unsaved changes warning, if it is visible.
  */
 void editor::draw_unsaved_changes_warning() {

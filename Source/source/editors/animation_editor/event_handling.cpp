@@ -78,7 +78,12 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     }
     
     switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_H: {
+    case ALLEGRO_KEY_G: {
+        if(is_ctrl_pressed) {
+            press_grid_button();
+        }
+        break;
+    } case ALLEGRO_KEY_H: {
         if(is_ctrl_pressed) {
             press_hitboxes_button();
         }
@@ -86,11 +91,6 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } case ALLEGRO_KEY_L: {
         if(is_ctrl_pressed) {
             press_reload_button();
-        }
-        break;
-    } case ALLEGRO_KEY_O: {
-        if(is_ctrl_pressed) {
-            press_origin_button();
         }
         break;
     } case ALLEGRO_KEY_P: {

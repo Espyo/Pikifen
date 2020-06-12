@@ -3,17 +3,13 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        epicRedHot suggests a view mode that color-codes the sectors by type, since they keep forgetting what sectors are set to blocking; this may not be needed if after ImGui, it's easier to see what type a sector is
+        "Plus" cursor when creating a new sector should scale with the zoom, so it's not tiny or gigantic (Kman)
         When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
-        When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
-        Animation editor should start zoomed in...maybe also include a grid, so users can get a sense of scale?
-        Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
         A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
         Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-        In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
         Options should go in a pop-up menu
         More options
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
@@ -21,9 +17,21 @@ Current tasks (tasks being worked on, but not yet committed)
         When editing an animation, have a timeline?
         Put the canvas in one ImGui window and the panel in another?
         Style the editors
+        Minor
+            Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
+            In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
+            When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
+    * Revamped editors
+    ** The GUI now uses ImGui.
+    ** More information fits in a single panel now, and the user can open or close parts of the panel at will (this is memorized between sessions).
+    ** Information on widgets is now shown via (toggleable) tooltips, instead of the status bar.
+    ** The way some things are done has been changed to be more streamlined. e.g.: picking a texture now shows a dedicated dialog, renaming animations is now done in-place in the animation panel.
+    ** If you select an object that can change its behavior thanks to certain script vars, the panel will now show widgets that let you tweak those properties yourself, instead of having to write script vars by hand.
+    ** Objects with certain tricks to them (e.g. they must be linked to another mob) will now show hints in the object panel, when you select them.
+    ** Several small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     

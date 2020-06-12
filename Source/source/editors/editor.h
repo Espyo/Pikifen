@@ -82,7 +82,7 @@ protected:
         ICON_TOOLS,
         ICON_OPTIONS,
         ICON_UNDO,
-        ICON_ORIGIN,
+        ICON_GRID,
         ICON_MOB_RADIUS,
         ICON_PIKMIN_SILHOUETTE,
         ICON_ANIMATIONS,
@@ -227,6 +227,10 @@ protected:
     bool check_new_unsaved_changes(const point &pos = point());
     void do_logic_post();
     void do_logic_pre();
+    void draw_grid(
+        const float interval,
+        const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
+    );
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
     bool input_popup(

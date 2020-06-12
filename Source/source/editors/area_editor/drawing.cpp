@@ -248,74 +248,11 @@ void area_editor::draw_canvas() {
     }
     
     //Grid.
-    point cam_top_left_corner(0, 0);
-    point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &cam_top_left_corner.x, &cam_top_left_corner.y
+    draw_grid(
+        game.options.area_editor_grid_interval,
+        al_map_rgba(64, 64, 64, grid_opacity * 255),
+        al_map_rgba(48, 48, 48, grid_opacity * 255)
     );
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
-    );
-    
-    float x =
-        floor(cam_top_left_corner.x / game.options.area_editor_grid_interval) *
-        game.options.area_editor_grid_interval;
-    while(
-        x < cam_bottom_right_corner.x + game.options.area_editor_grid_interval
-    ) {
-        ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
-        bool draw_line = true;
-        
-        if(fmod(x, game.options.area_editor_grid_interval * 2) == 0) {
-            c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((game.options.area_editor_grid_interval * 2) * game.cam.zoom <= 6) {
-                draw_line = false;
-            }
-        } else {
-            if(game.options.area_editor_grid_interval * game.cam.zoom <= 6) {
-                draw_line = false;
-            }
-        }
-        
-        if(draw_line) {
-            al_draw_line(
-                x, cam_top_left_corner.y,
-                x, cam_bottom_right_corner.y + game.options.area_editor_grid_interval,
-                c, 1.0 / game.cam.zoom
-            );
-        }
-        x += game.options.area_editor_grid_interval;
-    }
-    
-    float y =
-        floor(cam_top_left_corner.y / game.options.area_editor_grid_interval) *
-        game.options.area_editor_grid_interval;
-    while(y < cam_bottom_right_corner.y + game.options.area_editor_grid_interval) {
-        ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
-        bool draw_line = true;
-        
-        if(fmod(y, game.options.area_editor_grid_interval * 2) == 0) {
-            c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((game.options.area_editor_grid_interval * 2) * game.cam.zoom <= 6) {
-                draw_line = false;
-            }
-        } else {
-            if(game.options.area_editor_grid_interval * game.cam.zoom <= 6) {
-                draw_line = false;
-            }
-        }
-        
-        if(draw_line) {
-            al_draw_line(
-                cam_top_left_corner.x, y,
-                cam_bottom_right_corner.x + game.options.area_editor_grid_interval, y,
-                c, 1.0 / game.cam.zoom
-            );
-        }
-        y += game.options.area_editor_grid_interval;
-    }
     
     //0,0 marker.
     al_draw_line(

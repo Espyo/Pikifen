@@ -54,7 +54,7 @@ animation_editor::animation_editor() :
     hitboxes_visible(true),
     loaded_mob_type(nullptr),
     mob_radius_visible(false),
-    origin_visible(true),
+    grid_visible(true),
     pikmin_silhouette_visible(false),
     reset_load_dialog(true),
     sprite_bmp_add_mode(false),
@@ -520,10 +520,10 @@ void animation_editor::load() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the mob radius button widget is pressed.
+ * Code to run when the grid button widget is pressed.
  */
-void animation_editor::press_mob_radius_button() {
-    mob_radius_visible = !mob_radius_visible;
+void animation_editor::press_grid_button() {
+    grid_visible = !grid_visible;
 }
 
 
@@ -536,10 +536,10 @@ void animation_editor::press_hitboxes_button() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the origin button widget is pressed.
+ * Code to run when the mob radius button widget is pressed.
  */
-void animation_editor::press_origin_button() {
-    origin_visible = !origin_visible;
+void animation_editor::press_mob_radius_button() {
+    mob_radius_visible = !mob_radius_visible;
 }
 
 

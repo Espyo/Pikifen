@@ -16,6 +16,8 @@
 #include "../../functions.h"
 #include "../../game.h"
 
+const float ANIMATION_EDITOR_GRID_INTERVAL = 16.0f;
+
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the animation editor.
  */
@@ -71,23 +73,23 @@ void animation_editor::draw_canvas() {
         
     }
     
-    bool draw_origin = origin_visible;
     bool draw_hitboxes = hitboxes_visible;
     bool draw_mob_radius = mob_radius_visible;
     bool draw_pikmin_silhouette = pikmin_silhouette_visible;
+    float grid_opacity = grid_visible ? 0.33f : 0.0f;
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
         draw_hitboxes = false;
     }
     
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
-        draw_origin = false;
+        grid_opacity = 0.0f;
         draw_hitboxes = false;
         draw_mob_radius = false;
         draw_pikmin_silhouette = false;
         
         if(s && s->parent_bmp) {
-            draw_origin = false;
+            grid_opacity = 0.0f;
             draw_hitboxes = false;
             draw_mob_radius = false;
             draw_pikmin_silhouette = false;
@@ -229,7 +231,15 @@ void animation_editor::draw_canvas() {
         }
     }
     
-    if(draw_origin) {
+    //Grid.
+    if(grid_opacity != 0.0f) {
+    
+        draw_grid(
+            ANIMATION_EDITOR_GRID_INTERVAL,
+            al_map_rgba(64, 64, 64, grid_opacity * 255),
+            al_map_rgba(48, 48, 48, grid_opacity * 255)
+        );
+        
         point cam_top_left_corner(0, 0);
         point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
         al_transform_coordinates(

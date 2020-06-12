@@ -105,6 +105,8 @@ private:
     string file_path;
     //Cache with the names of all global animation files (sans extension).
     vector<string> global_anim_files_cache;
+    //Is the grid visible?
+    bool grid_visible;
     //Are the hitboxes currently visible?
     bool hitboxes_visible;
     //Last file used as for a spritesheet.
@@ -113,8 +115,6 @@ private:
     mob_type* loaded_mob_type;
     //Is the mob radius visible?
     bool mob_radius_visible;
-    //Is the origin visible?
-    bool origin_visible;
     //Is the Pikmin silhouette visible?
     bool pikmin_silhouette_visible;
     //Before entering the sprite bitmap state, this was the camera position.
@@ -173,9 +173,9 @@ private:
     void open_load_dialog();
     void pick_animation(const string &name, const bool is_new);
     void pick_sprite(const string &name, const bool is_new);
+    void press_grid_button();
     void press_hitboxes_button();
     void press_mob_radius_button();
-    void press_origin_button();
     void press_pikmin_silhouette_button();
     void press_play_animation_button();
     void press_quit_button();
