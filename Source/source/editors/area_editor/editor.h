@@ -414,6 +414,7 @@ private:
     void close_area_picker();
     void create_area();
     void create_new_from_picker(const size_t picker_id, const string &name);
+    void delete_edge(edge* e_ptr);
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(
         const set<std::pair<path_stop*, path_stop*> > &which
@@ -441,8 +442,14 @@ private:
     void finish_layout_drawing();
     void finish_layout_moving();
     void forget_prepared_state(area_data* prepared_change);
-    unordered_set<sector*> get_affected_sectors(
-        set<vertex*> &vertexes
+    void get_affected_sectors(
+        sector* s_ptr, unordered_set<sector*> &list
+    ) const;
+    void get_affected_sectors(
+        set<sector*> &sectors, unordered_set<sector*> &list
+    ) const;
+    void get_affected_sectors(
+        set<vertex*> &vertexes, unordered_set<sector*> &list
     ) const;
     void get_clicked_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
@@ -482,6 +489,7 @@ private:
     void load_area(const bool from_backup);
     void load_backup();
     void load_reference();
+    bool merge_sectors(sector* s1, sector* s2);
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
@@ -552,6 +560,9 @@ private:
     void toggle_duplicate_mob_mode();
     void undo();
     void undo_layout_drawing_node();
+    void update_affected_sectors(
+        const unordered_set<sector*> &affected_sectors
+    );
     bool update_backup_status();
     void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);

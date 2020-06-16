@@ -460,7 +460,7 @@ void load_area(
             );
         }
         
-        s_ptr->get_bounding_box(&s_ptr->bbox[0], &s_ptr->bbox[1]);
+        s_ptr->calculate_bounding_box();
     }
     
     if(!load_for_editor) game.cur_area_data.generate_blockmap();

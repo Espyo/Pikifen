@@ -107,6 +107,7 @@ struct edge {
     size_t sector_nrs[2];
     
     edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
+    sector* get_other_sector(const sector* v_ptr) const;
     vertex* get_other_vertex(const vertex* v_ptr) const;
     size_t get_side_with_sector(sector* s_ptr) const;
     vertex* has_neighbor(edge* other) const;
@@ -114,6 +115,9 @@ struct edge {
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
     void swap_vertexes();
+    void transfer_sector(
+        sector* from, sector* to, const size_t to_nr, const size_t edge_nr
+    );
 };
 
 
@@ -209,11 +213,9 @@ struct sector {
     
     sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
+    void calculate_bounding_box();
     void clone(sector* new_sector);
     vertex* get_rightmost_vertex() const;
-    void get_bounding_box(
-        point* min_coords, point* max_coords
-    ) const;
     void get_texture_merge_sectors(sector** s1, sector** s2) const;
     bool is_clockwise() const;
     bool is_point_in_sector(const point &p) const;

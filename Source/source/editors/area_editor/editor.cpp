@@ -779,9 +779,7 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Calculate the bounding box of this sector, now that it's finished.
-    new_sector->get_bounding_box(
-        &new_sector->bbox[0], &new_sector->bbox[1]
-    );
+    new_sector->calculate_bounding_box();
     
     //Select the new sector, making it ready for editing.
     clear_selection();
@@ -798,8 +796,8 @@ void area_editor::finish_layout_drawing() {
 void area_editor::finish_layout_moving() {
     TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
     
-    unordered_set<sector*> affected_sectors =
-        get_affected_sectors(selected_vertexes);
+    unordered_set<sector*> affected_sectors;
+    get_affected_sectors(selected_vertexes, affected_sectors);
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
     unordered_set<sector*> merge_affected_sectors;
@@ -1031,9 +1029,7 @@ void area_editor::finish_layout_moving() {
             last_triangulation_error = triangulation_error;
         }
         
-        s->get_bounding_box(
-            &(s->bbox[0]), &(s->bbox[1])
-        );
+        s->calculate_bounding_box();
     }
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
@@ -1191,10 +1187,7 @@ void area_editor::goto_problem() {
         }
         
         sector* s_ptr = non_simples.begin()->first;
-        point min_coords, max_coords;
-        s_ptr->get_bounding_box(&min_coords, &max_coords);
-        
-        center_camera(min_coords, max_coords);
+        center_camera(s_ptr->bbox[0], s_ptr->bbox[1]);
         
         break;
         
@@ -1255,9 +1248,7 @@ void area_editor::goto_problem() {
             return;
         }
         
-        point min_coords, max_coords;
-        problem_sector_ptr->get_bounding_box(&min_coords, &max_coords);
-        center_camera(min_coords, max_coords);
+        center_camera(problem_sector_ptr->bbox[0], problem_sector_ptr->bbox[1]);
         
         break;
         
@@ -2483,9 +2474,6 @@ void area_editor::start_vertex_move() {
         }
     }
     
-    unordered_set<sector*> affected_sectors =
-        get_affected_sectors(selected_vertexes);
-        
     move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
 }

@@ -950,6 +950,15 @@ edge::edge(size_t v1, size_t v2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the sector that ISN'T the specified one.
+ */
+sector* edge::get_other_sector(const sector* s_ptr) const {
+    if(sectors[0] == s_ptr) return sectors[1];
+    return sectors[0];
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the vertex that ISN'T the specified one.
  */
 vertex* edge::get_other_vertex(const vertex* v_ptr) const {
@@ -1016,6 +1025,8 @@ size_t edge::remove_from_sectors() {
                 break;
             }
         }
+        sectors[s] = NULL;
+        sector_nrs[s] = INVALID;
     }
     return e_nr;
 }
@@ -1041,6 +1052,8 @@ size_t edge::remove_from_vertexes() {
                 break;
             }
         }
+        vertexes[v] = NULL;
+        vertex_nrs[v] = INVALID;
     }
     return e_nr;
 }
@@ -1055,6 +1068,34 @@ void edge::swap_vertexes() {
     std::swap(vertex_nrs[0], vertex_nrs[1]);
     std::swap(sectors[0], sectors[1]);
     std::swap(sector_nrs[0], sector_nrs[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Transfers this edge from one sector to a different one.
+ * from:
+ *   Sector to transfer from.
+ * to:
+ *   Sector to transfer to.
+ * to_nr:
+ *   Number of the sector to transfer to.
+ * edge_nr:
+ *   Number of the current edge.
+ */
+void edge::transfer_sector(
+    sector* from, sector* to, const size_t to_nr, const size_t edge_nr
+) {
+    size_t index = get_side_with_sector(from);
+    engine_assert(
+        index != INVALID,
+        i2s(to_nr)
+    );
+    
+    sectors[index] = to;
+    sector_nrs[index] = to_nr;
+    
+    if(from) from->remove_edge(this);
+    if(to) to->add_edge(this, edge_nr);
 }
 
 
@@ -1551,6 +1592,39 @@ void sector::add_edge(edge* e_ptr, const size_t e_nr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates the bounding box coordinates and saves them
+ * in the object's bbox variables.
+ */
+void sector::calculate_bounding_box() {
+    if(edges.empty()) {
+        //Unused sector... This shouldn't exist.
+        bbox[0] = point();
+        bbox[1] = point();
+        return;
+    }
+    
+    bbox[0].x = edges[0]->vertexes[0]->x;
+    bbox[1].x = bbox[0].x;
+    bbox[0].y = edges[0]->vertexes[0]->y;
+    bbox[1].y = bbox[0].y;
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        for(unsigned char v = 0; v < 2; ++v) {
+            point coords(
+                edges[e]->vertexes[v]->x,
+                edges[e]->vertexes[v]->y
+            );
+            
+            bbox[0].x = std::min(bbox[0].x, coords.x);
+            bbox[1].x = std::max(bbox[1].x, coords.x);
+            bbox[0].y = std::min(bbox[0].y, coords.y);
+            bbox[1].y = std::max(bbox[1].y, coords.y);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clones a sector's properties onto another,
  * not counting the list of edges, bounding box, or bitmap
  * (the file name is cloned too, though).
@@ -1569,42 +1643,6 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.tint = texture_info.tint;
     new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Places the bounding box coordinates of a sector on the specified floats.
- */
-void sector::get_bounding_box(
-    point* min_coords, point* max_coords
-) const {
-    if(!min_coords || !max_coords) return;
-    
-    if(edges.empty()) {
-        //Unused sector... This shouldn't exist.
-        *min_coords = point();
-        *max_coords = point();
-        return;
-    }
-    
-    min_coords->x = edges[0]->vertexes[0]->x;
-    max_coords->x = min_coords->x;
-    min_coords->y = edges[0]->vertexes[0]->y;
-    max_coords->y = min_coords->y;
-    
-    for(size_t e = 0; e < edges.size(); ++e) {
-        for(unsigned char v = 0; v < 2; ++v) {
-            point coords(
-                edges[e]->vertexes[v]->x,
-                edges[e]->vertexes[v]->y
-            );
-            
-            min_coords->x = std::min(min_coords->x, coords.x);
-            max_coords->x = std::max(max_coords->x, coords.x);
-            min_coords->y = std::min(min_coords->y, coords.y);
-            max_coords->y = std::max(max_coords->y, coords.y);
-        }
-    }
 }
 
 
@@ -1637,7 +1675,7 @@ void sector::get_neighbor_sectors_conditionally(
     sector* other_s = NULL;
     for(size_t e = 0; e < edges.size(); ++e) {
         e_ptr = edges[e];
-        other_s = e_ptr->sectors[(e_ptr->sectors[0] == this ? 1 : 0)];
+        other_s = e_ptr->get_other_sector(this);
         if(!other_s) continue;
         
         other_s->get_neighbor_sectors_conditionally(condition, sector_list);
@@ -1684,8 +1722,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
         e_ptr = edges[e];
         valid = true;
         
-        if(e_ptr->sectors[0] == this) neighbor = e_ptr->sectors[1];
-        else neighbor = e_ptr->sectors[0];
+        neighbor = e_ptr->get_other_sector(this);
         
         if(neighbor) {
             if(neighbor->fade) valid = false;

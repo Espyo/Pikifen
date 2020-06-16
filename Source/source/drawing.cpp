@@ -2534,8 +2534,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         edge* e_ptr = s_ptr->edges[e];
         ALLEGRO_VERTEX av[4];
         
-        sector* other_sector =
-            e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)];
+        sector* other_sector = e_ptr->get_other_sector(s_ptr);
             
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
@@ -2636,8 +2635,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                     neighbor_angle_difs[v] = d;
                     got_first[v] = true;
                     
-                    sector* edge_other_sec =
-                        ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
+                    sector* edge_other_sec = ve_ptr->get_other_sector(s_ptr);
                     neighbor_shadow[v] =
                         casts_shadow(edge_other_sec, s_ptr);
                         

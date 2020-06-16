@@ -296,6 +296,35 @@ void area_editor::check_drawing_line(const point &pos) {
 
 
 /* ----------------------------------------------------------------------------
+ * Deletes the specified edge, removing it from all sectors and vertexes that
+ * use it, as well as removing any now-useless sectors or vertexes.
+ */
+void area_editor::delete_edge(edge* e_ptr) {
+    //Remove sectors first.
+    sector* sectors[2] = { e_ptr->sectors[0], e_ptr->sectors[1] };
+    e_ptr->remove_from_sectors();
+    for(size_t s = 0; s < 2; ++s) {
+        if(!sectors[s]) continue;
+        if(sectors[s]->edges.empty()) {
+            game.cur_area_data.remove_sector(sectors[s]);
+        }
+    }
+    
+    //Now, remove vertexes.
+    vertex* vertexes[2] = { e_ptr->vertexes[0], e_ptr->vertexes[1] };
+    e_ptr->remove_from_vertexes();
+    for(size_t v = 0; v < 2; ++v) {
+        if(vertexes[v]->edges.empty()) {
+            game.cur_area_data.remove_vertex(vertexes[v]);
+        }
+    }
+    
+    //Finally, delete the edge proper.
+    game.cur_area_data.remove_edge(e_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Deletes the specified mobs.
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
@@ -782,20 +811,47 @@ void area_editor::find_problems() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns all sectors affected by the specified vertexes.
- * This includes the NULL sector.
+ * Adds to the list all sectors affected by the specified sector.
+ * The list can include the NULL sector, and will include the
+ * provided sector too.
  */
-unordered_set<sector*> area_editor::get_affected_sectors(
-    set<vertex*> &vertexes
+void area_editor::get_affected_sectors(
+    sector* s_ptr, unordered_set<sector*> &list
 ) const {
-    unordered_set<sector*> affected_sectors;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        list.insert(s_ptr->edges[e]->sectors[0]);
+        list.insert(s_ptr->edges[e]->sectors[1]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds to the list all sectors affected by the specified sectors.
+ * The list can include the NULL sector, and will include the
+ * provided sectors too.
+ */
+void area_editor::get_affected_sectors(
+    set<sector*> &sectors, unordered_set<sector*> &list
+) const {
+    for(auto s : sectors) {
+        get_affected_sectors(s, list);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds to the list all sectors affected by the specified vertexes.
+ * The list can include the NULL sector.
+ */
+void area_editor::get_affected_sectors(
+    set<vertex*> &vertexes, unordered_set<sector*> &list
+) const {
     for(auto v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); ++e) {
-            affected_sectors.insert(v->edges[e]->sectors[0]);
-            affected_sectors.insert(v->edges[e]->sectors[1]);
+            list.insert(v->edges[e]->sectors[0]);
+            list.insert(v->edges[e]->sectors[1]);
         }
     }
-    return affected_sectors;
 }
 
 
@@ -1268,6 +1324,85 @@ void area_editor::homogenize_selected_sectors() {
 
 
 /* ----------------------------------------------------------------------------
+ * Merges two neighboring sectors into one. The final sector will
+ * be the largest of the two.
+ */
+bool area_editor::merge_sectors(sector* s1, sector* s2) {
+    //Of the two sectors, figure out which is the largest.
+    sector* main_sector = s1;
+    sector* small_sector = s2;
+    if(!s2) {
+        main_sector = s2;
+        small_sector = s1;
+    } else if(s1 && s2) {
+        float s1_area =
+            (s1->bbox[1].x - s1->bbox[0].x) *
+            (s1->bbox[1].y - s1->bbox[0].y);
+        float s2_area =
+            (s2->bbox[1].x - s2->bbox[0].x) *
+            (s2->bbox[1].y - s2->bbox[0].y);
+        if(s1_area < s2_area) {
+            main_sector = s2;
+            small_sector = s1;
+        }
+    }
+    
+    //For all of the smaller sector's edges, either mark them
+    //as edges to transfer to the large sector, or edges
+    //to delete (because they'd just end up having the larger sector on
+    //both sides).
+    unordered_set<edge*> common_edges;
+    unordered_set<edge*> edges_to_transfer;
+    
+    for(size_t e = 0; e < small_sector->edges.size(); ++e) {
+        edge* e_ptr = small_sector->edges[e];
+        if(e_ptr->get_other_sector(small_sector) == main_sector) {
+            common_edges.insert(e_ptr);
+        } else {
+            edges_to_transfer.insert(e_ptr);
+        }
+    }
+    
+    //However, if there are no common edges beween sectors,
+    //this operation is invalid.
+    if(common_edges.empty()) {
+        status_text = "Those two sectors are not neighbors!";
+        return false;
+    }
+    
+    //Before doing anything, get the list of sectors that will be affected.
+    unordered_set<sector*> affected_sectors;
+    get_affected_sectors(small_sector, affected_sectors);
+    if(main_sector) get_affected_sectors(main_sector, affected_sectors);
+    
+    //Transfer edges that need transferal.
+    for(edge* e_ptr : edges_to_transfer) {
+        e_ptr->transfer_sector(
+            small_sector, main_sector,
+            main_sector ?
+            game.cur_area_data.find_sector_nr(main_sector) :
+            INVALID,
+            game.cur_area_data.find_edge_nr(e_ptr)
+        );
+    }
+    
+    //Delete the other ones.
+    for(edge* e_ptr : common_edges) {
+        delete_edge(e_ptr);
+    }
+    
+    //Delete the now-merged sector.
+    game.cur_area_data.remove_sector(small_sector);
+    
+    //Update all affected sectors.
+    affected_sectors.erase(small_sector);
+    update_affected_sectors(affected_sectors);
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Merges vertex 1 into vertex 2.
  * v1:               Vertex that is being moved and will be merged.
  * v2:               Vertex that is going to absorb v1.
@@ -1289,11 +1424,8 @@ void area_editor::merge_vertex(
             affected_sectors->insert(e_ptr->sectors[0]);
             affected_sectors->insert(e_ptr->sectors[1]);
             
-            e_ptr->remove_from_vertexes();
-            e_ptr->remove_from_sectors();
-            
             //Delete it.
-            game.cur_area_data.remove_edge(e_ptr);
+            delete_edge(e_ptr);
             
         } else {
         
@@ -1333,13 +1465,8 @@ void area_editor::merge_vertex(
                         );
                     }
                     
-                    //Go to the edge's old vertexes and sectors
-                    //and tell them that it no longer exists.
-                    e_ptr->remove_from_vertexes();
-                    e_ptr->remove_from_sectors();
-                    
                     //Delete it.
-                    game.cur_area_data.remove_edge(e_ptr);
+                    delete_edge(e_ptr);
                     
                     break;
                 }
@@ -1365,9 +1492,7 @@ void area_editor::merge_vertex(
     for(size_t ve = 0; ve < v2->edges.size(); ) {
         edge* ve_ptr = v2->edges[ve];
         if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
-            ve_ptr->remove_from_sectors();
-            ve_ptr->remove_from_vertexes();
-            game.cur_area_data.remove_edge(ve_ptr);
+            delete_edge(ve_ptr);
         } else {
             ++ve;
         }
@@ -1729,4 +1854,43 @@ path_stop* area_editor::split_path_link(
     new_s_ptr->calculate_dists_plus_neighbors();
     
     return new_s_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the triangles and bounding box of the specified sectors, and
+ * reports any errors found.
+ */
+void area_editor::update_affected_sectors(
+    const unordered_set<sector*> &affected_sectors
+) {
+    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
+    
+    for(sector* s_ptr : affected_sectors) {
+        if(!s_ptr) continue;
+        
+        set<edge*> triangulation_lone_edges;
+        TRIANGULATION_ERRORS triangulation_error =
+            triangulate(s_ptr, &triangulation_lone_edges, true, true);
+            
+        if(triangulation_error == TRIANGULATION_NO_ERROR) {
+            auto it = non_simples.find(s_ptr);
+            if(it != non_simples.end()) {
+                non_simples.erase(it);
+            }
+        } else {
+            non_simples[s_ptr] = triangulation_error;
+            last_triangulation_error = triangulation_error;
+        }
+        lone_edges.insert(
+            triangulation_lone_edges.begin(),
+            triangulation_lone_edges.end()
+        );
+        
+        s_ptr->calculate_bounding_box();
+    }
+    
+    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
+    }
 }
