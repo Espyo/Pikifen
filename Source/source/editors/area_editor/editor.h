@@ -420,6 +420,7 @@ private:
         const set<std::pair<path_stop*, path_stop*> > &which
     );
     void delete_path_stops(const set<path_stop*> &which);
+    bool delete_selected_edges();
     void delete_selected_mobs();
     void delete_selected_path_elements();
     static void draw_canvas_imgui_callback(
@@ -506,9 +507,9 @@ private:
     void press_new_tree_shadow_button();
     void press_reference_button();
     void press_reload_button();
+    void press_remove_edge_button();
     void press_remove_mob_button();
     void press_remove_path_button();
-    void press_remove_sector_button();
     void press_remove_tree_shadow_button();
     void press_quick_play_button();
     void press_quit_button();
@@ -534,7 +535,7 @@ private:
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
-    bool remove_isolated_sectors();
+    bool remove_isolated_sector(sector* s_ptr);
     void resize_everything(const float mult);
     void rotate_mob_gens_to_point(const point &pos);
     bool save_area(const bool to_backup);

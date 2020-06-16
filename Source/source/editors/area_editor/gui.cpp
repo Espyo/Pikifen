@@ -948,8 +948,8 @@ void area_editor::process_gui_panel_layout() {
         "C"
     );
     
-    //Delete isolated sector button.
-    if(!selected_sectors.empty()) {
+    //Delete edges button.
+    if(!selected_edges.empty()) {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
@@ -957,10 +957,14 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            press_remove_sector_button();
+            press_remove_edge_button();
         }
         set_tooltip(
-            "Delete the selected sectors, if they're isolated.",
+            "Delete the selected edges.\n"
+            "Sectors without any edges left get deleted too.\n"
+            "Sectors that would end up with edge gaps also get deleted.\n"
+            "If you delete an edge between two sectors,\n"
+            "the smallest will merge into the largest.",
             "Delete"
         );
     }

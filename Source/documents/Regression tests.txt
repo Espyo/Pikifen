@@ -3,11 +3,10 @@ Testing all of these scenarios helps make sure that the changes didn't break any
 
 ###################################
 ###################################
-AREA EDITOR SECTORS
+AREA EDITOR SECTOR DRAWING
 ###################################
 ###################################
 
-Sector drawing test cases.
 In the diagrams, at symbols are a sector being drawn.
 When testing, test with the specified sectors in the void, and inside a big sector.
 
@@ -126,7 +125,91 @@ When testing, test with the specified sectors in the void, and inside a big sect
 
 ###################################
 ###################################
-PHYSICS TESTS
+AREA EDITOR EDGE DELETION
+###################################
+###################################
+
+In the diagrams, at symbols are the edges being deleted.
+When testing, test with the specified sectors in the void, and inside a big sector.
+
+
+@---+---+
+@   |   |
+@   |   |
+@   |   |
+@---+---+
+* Have two rectangles joined by one edge. Then, delete one of the edges parallel to the common edge.
+* The sector that belongs to the deleted edge should be deleted.
+
+
++---@---+
+|   @   |
+|   @   |
+|   @   |
++---@---+
+* Have two rectangles joined by one edge. Then, delete that one edge.
+* Only one of the sectors should remain, with the shape of both combined.
+
+
++-----+
+|     |
+| @@@ |
+| @ @ |
+| @@@ |
+|     |
++-----+
+* Have two rectangles, one inside the other. Then, delete the inner rectangle's edges.
+* The inner rectangle should be deleted.
+
+
+@@@@@@@
+@     @
+@ +-+ @
+@ | | @
+@ +-+ @
+@     @
+@@@@@@@
+* Have two rectangles, one inside the other. Then, delete the outer rectangle's edges.
+* The inner rectangle should remain, and the sector outside the outer rectangle should take its old space.
+
+
+
+###################################
+###################################
+AREA EDITOR VERTEX MOVING
+###################################
+###################################
+
+In the diagrams, at symbols are the edges/vertexes being moved.
+When testing, test with the specified sectors in the void, and inside a big sector.
+
+
++-----+    @@@---+
+|     |    @ @   |
+| @@@ |    @@@   |
+| @ @ | -> |     |
+| @@@ |    |     |
+|     |    |     |
++-----+    +-----+
+* Have two rectangles, one inside the other. Then, drag the inner rectangle such that one of its corners merges with the outer rectangle's corresponding corner.
+* The two sectors should remain as they are, but stitched.
+
+
++-----+    +-----+
+|     |    |     |
+| @-+ |    @---+ |
+| @ | | -> @   | |
+| @-+ |    @---+ |
+|     |    |     |
++-----+    +-----+
+* Have two rectangles, one inside the other. Then, drag one of the inner rectangle's walls such that it merges with the outer rectangle's corresponding wall.
+* The two sectors should remain as they are, but stitched.
+
+
+
+###################################
+###################################
+PHYSICS
 ###################################
 ###################################
 

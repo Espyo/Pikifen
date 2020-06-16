@@ -417,6 +417,32 @@ void area_editor::delete_selected_mobs() {
 
 
 /* ----------------------------------------------------------------------------
+ * Deletes the selected edges. The sectors on each side of the edge
+ * are merged, so the smallest sector will be deleted. In addition,
+ * this operation will delete any sectors that would end up incomplete.
+ * Returns false if one of the edges couldn't be deleted.
+ */
+bool area_editor::delete_selected_edges() {
+    bool ret = true;
+    
+    for(edge* e_ptr : selected_edges) {
+        if(!e_ptr->vertexes[0]) {
+            //Huh, looks like one of the edge deletion procedures already
+            //wiped this edge out. Skip it.
+            continue;
+        }
+        if(!merge_sectors(e_ptr->sectors[0], e_ptr->sectors[1])) {
+            ret = false;
+        }
+    }
+    
+    clear_selection();
+    
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Deletes the selected path links and/or stops.
  */
 void area_editor::delete_selected_path_elements() {
@@ -1012,29 +1038,8 @@ void area_editor::finish_layout_moving() {
         merge_affected_sectors.begin(), merge_affected_sectors.end()
     );
     
-    //Triangulate all affected sectors.
-    for(auto s : affected_sectors) {
-        if(!s) continue;
-        
-        set<edge*> triangulation_lone_edges;
-        TRIANGULATION_ERRORS triangulation_error =
-            triangulate(s, &triangulation_lone_edges, true, true);
-        if(triangulation_error == TRIANGULATION_NO_ERROR) {
-            auto it = non_simples.find(s);
-            if(it != non_simples.end()) {
-                non_simples.erase(it);
-            }
-        } else {
-            non_simples[s] = triangulation_error;
-            last_triangulation_error = triangulation_error;
-        }
-        
-        s->calculate_bounding_box();
-    }
-    
-    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
-        emit_triangulation_error_status_bar_message(last_triangulation_error);
-    }
+    //Update all affected sectors.
+    update_affected_sectors(affected_sectors);
     
     register_change("vertex movement", pre_move_area_data);
     pre_move_area_data = NULL;
@@ -1689,6 +1694,27 @@ void area_editor::press_reload_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the remove edge button widget is pressed.
+ */
+void area_editor::press_remove_edge_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(selected_edges.empty()) {
+        status_text = "You have to select edges to delete!";
+    } else {
+        register_change("edge deletion");
+        if(delete_selected_edges()) {
+            status_text = "Deleted edges.";
+        } else {
+            status_text = "Some of the edges could not be deleted!";
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the remove mob button widget is pressed.
  */
 void area_editor::press_remove_mob_button() {
@@ -1709,30 +1735,6 @@ void area_editor::press_remove_path_button() {
     }
     
     delete_selected_path_elements();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the remove sector button widget is pressed.
- */
-void area_editor::press_remove_sector_button() {
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(selected_sectors.empty()) {
-        status_text = "You have to select sectors to delete!";
-    } else {
-        area_data* prepared_state = prepare_state();
-        if(!remove_isolated_sectors()) {
-            status_text = "Some of the sectors are not isolated!";
-            forget_prepared_state(prepared_state);
-        } else {
-            status_text = "Deleted sectors.";
-            clear_selection();
-            register_change("sector removal", prepared_state);
-        }
-    }
 }
 
 

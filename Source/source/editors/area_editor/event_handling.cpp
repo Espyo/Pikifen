@@ -354,7 +354,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } case ALLEGRO_KEY_DELETE: {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
-            press_remove_sector_button();
+            press_remove_edge_button();
             break;
         } case EDITOR_STATE_MOBS: {
             press_remove_mob_button();

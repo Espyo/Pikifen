@@ -4,9 +4,11 @@
 Current tasks (tasks being worked on, but not yet committed)
     If you're dragging a sector, you can't zoom or pan?
     When a picker dialog appears, focus on the textbox right away
+    Load/Create area/animation button should be in the toolbar, not the menu bar
+    If Ctrl is held, don't create a new vertex
+    If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
+    Report in the status bar whenever something happened successfully, otherwise errors will stay there even if nothing went wrong
     Revamp editors
-        A button to merge two selected neighboring sectors -- it finds the major sector (the largest one), and for every edge of the lesser sector, turn it into an edge of the major one. Then, delete the edges that made those two neighbors in the first place. (Neo)
-        Can't I make it so that deleting an edge is the same as pinching both of its vertexes together?
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
@@ -32,7 +34,9 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** The way some things are done has been changed to be more streamlined. e.g.: picking a texture now shows a dedicated dialog, renaming animations is now done in-place in the animation panel.
     ** If you select an object that can change its behavior thanks to certain script vars, the panel will now show widgets that let you tweak those properties yourself, instead of having to write script vars by hand.
     ** Objects with certain tricks to them (e.g. they must be linked to another mob) will now show hints in the object panel, when you select them.
-    ** Several small things have been tweaked.
+    ** Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)
+    ** The animation editor now has a grid too.
+    ** Several other small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     
