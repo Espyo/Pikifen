@@ -96,6 +96,27 @@ void area_editor::check_drawing_line(const point &pos) {
     layout_drawing_node* prev_node = &drawing_nodes.back();
     layout_drawing_node tentative_node(this, pos);
     
+    //Check if the user is trying to close a loop, but the drawing is meant
+    //to be a split between two sectors.
+    if(
+        !drawing_nodes[0].on_sector &&
+        dist(pos, drawing_nodes[0].snapped_spot) <=
+        VERTEX_MERGE_RADIUS / game.cam.zoom
+    ) {
+        drawing_line_error = DRAWING_LINE_LOOPS_IN_SPLIT;
+        return;
+    }
+    
+    //Check if the user hits a vertex or an edge, but the drawing is
+    //meant to be a new sector shape.
+    if(
+        drawing_nodes[0].on_sector &&
+        !tentative_node.on_sector
+    ) {
+        drawing_line_error = DRAWING_LINE_HIT_EDGE_OR_VERTEX;
+        return;
+    }
+    
     //Check for edge collisions.
     if(!tentative_node.on_vertex) {
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -163,132 +184,6 @@ void area_editor::check_drawing_line(const point &pos) {
             )
         ) {
             drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
-            return;
-        }
-    }
-    
-    //Check if this line is entering a sector different from the one the
-    //rest of the drawing is on.
-    
-    unordered_set<sector*> common_sectors;
-    
-    if(drawing_nodes[0].on_edge) {
-        common_sectors.insert(drawing_nodes[0].on_edge->sectors[0]);
-        common_sectors.insert(drawing_nodes[0].on_edge->sectors[1]);
-    } else if(drawing_nodes[0].on_vertex) {
-        for(size_t e = 0; e < drawing_nodes[0].on_vertex->edges.size(); ++e) {
-            edge* e_ptr = drawing_nodes[0].on_vertex->edges[e];
-            common_sectors.insert(e_ptr->sectors[0]);
-            common_sectors.insert(e_ptr->sectors[1]);
-        }
-    } else {
-        //It's all right if this includes the "NULL" sector.
-        common_sectors.insert(drawing_nodes[0].on_sector);
-    }
-    
-    for(size_t n = 1; n < drawing_nodes.size(); ++n) {
-        layout_drawing_node* n_ptr = &drawing_nodes[n];
-        unordered_set<sector*> node_sectors;
-        
-        if(n_ptr->on_edge || n_ptr->on_vertex) {
-            layout_drawing_node* prev_n_ptr = &drawing_nodes[n - 1];
-            if(!are_nodes_traversable(*n_ptr, *prev_n_ptr)) {
-                //If you can't traverse from this node and the previous, that
-                //means it's a line that goes inside a sector. Only add that
-                //sector to the list. We can know what sector this is
-                //from the line's midpoint.
-                node_sectors.insert(
-                    get_sector(
-                        (n_ptr->snapped_spot + prev_n_ptr->snapped_spot) / 2.0,
-                        NULL, false
-                    )
-                );
-            }
-        }
-        
-        if(node_sectors.empty()) {
-            if(n_ptr->on_edge) {
-                node_sectors.insert(n_ptr->on_edge->sectors[0]);
-                node_sectors.insert(n_ptr->on_edge->sectors[1]);
-            } else if(n_ptr->on_vertex) {
-                for(size_t e = 0; e < n_ptr->on_vertex->edges.size(); ++e) {
-                    edge* e_ptr = n_ptr->on_vertex->edges[e];
-                    node_sectors.insert(e_ptr->sectors[0]);
-                    node_sectors.insert(e_ptr->sectors[1]);
-                }
-            } else {
-                //Again, it's all right if this includes the "NULL" sector.
-                node_sectors.insert(n_ptr->on_sector);
-            }
-        }
-        
-        for(auto s = common_sectors.begin(); s != common_sectors.end();) {
-            if(node_sectors.find(*s) == node_sectors.end()) {
-                common_sectors.erase(s++);
-            } else {
-                ++s;
-            }
-        }
-    }
-    
-    bool prev_node_on_sector =
-        (!prev_node->on_edge && !prev_node->on_vertex);
-    bool tent_node_on_sector =
-        (!tentative_node.on_edge && !tentative_node.on_vertex);
-        
-    if(
-        !prev_node_on_sector && !tent_node_on_sector &&
-        !are_nodes_traversable(*prev_node, tentative_node)
-    ) {
-        //Useful check if, for instance, you have a square in the middle
-        //of your working sector, you draw a node to the left of the square,
-        //a node on the square's left line, and then a node on the square's
-        //right line. Technically, these last two nodes are related to the
-        //outer sector, but shouldn't be allowed because the line between them
-        //goes through a different sector.
-        point center =
-            (prev_node->snapped_spot + tentative_node.snapped_spot) / 2;
-        sector* crossing_sector = get_sector(center, NULL, false);
-        if(common_sectors.find(crossing_sector) == common_sectors.end()) {
-            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
-            return;
-        }
-    }
-    
-    if(tentative_node.on_edge) {
-        if(
-            common_sectors.find(tentative_node.on_edge->sectors[0]) ==
-            common_sectors.end() &&
-            common_sectors.find(tentative_node.on_edge->sectors[1]) ==
-            common_sectors.end()
-        ) {
-            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
-            return;
-        }
-    } else if(tentative_node.on_vertex) {
-        bool vertex_ok = false;
-        for(size_t e = 0; e < tentative_node.on_vertex->edges.size(); ++e) {
-            edge* e_ptr = tentative_node.on_vertex->edges[e];
-            if(
-                common_sectors.find(e_ptr->sectors[0]) !=
-                common_sectors.end() ||
-                common_sectors.find(e_ptr->sectors[1]) !=
-                common_sectors.end()
-            ) {
-                vertex_ok = true;
-                break;
-            }
-        }
-        if(!vertex_ok) {
-            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
-            return;
-        }
-    } else {
-        if(
-            common_sectors.find(tentative_node.on_sector) ==
-            common_sectors.end()
-        ) {
-            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
             return;
         }
     }

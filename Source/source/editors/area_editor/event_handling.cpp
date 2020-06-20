@@ -532,12 +532,19 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Back to the first vertex. Finish the drawing.
-                    finish_layout_drawing();
+                    finish_new_sector_drawing();
                     
                 } else {
                     //Add a new node.
                     drawing_nodes.push_back(layout_drawing_node(this, hotspot));
                     
+                    if(
+                        drawing_nodes.back().on_edge ||
+                        drawing_nodes.back().on_vertex
+                    ) {
+                        //Finish splitting the sector.
+                        split_sector_with_drawing();
+                    }
                 }
             }
             

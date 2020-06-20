@@ -2,11 +2,9 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    If you're dragging a sector, you can't zoom or pan?
     When a picker dialog appears, focus on the textbox right away
     Load/Create area/animation button should be in the toolbar, not the menu bar
     If Ctrl is held, don't create a new vertex
-    If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
     Report in the status bar whenever something happened successfully, otherwise errors will stay there even if nothing went wrong
     Revamp editors
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
@@ -74,6 +72,10 @@ Next tasks (roughly sorted most important first)
     A clog won't drain all the water if there's a bridge sector in-between (Kman)
     The "Bubble.txt" global animation is using the HUD day sprite
     Pikmin sprout sprites have their hitboxes swapped
+    If you're dragging a sector, you can't zoom or pan
+    If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
+    Reloading the area isn't setting the sub-state to normal
+    Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
     
     --- v0.19.0 ---
     Details

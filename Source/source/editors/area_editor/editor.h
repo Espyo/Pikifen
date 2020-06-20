@@ -94,7 +94,8 @@ private:
     
     enum DRAWING_LINE_ERRORS {
         DRAWING_LINE_NO_ERROR,
-        DRAWING_LINE_WAYWARD_SECTOR,
+        DRAWING_LINE_LOOPS_IN_SPLIT,
+        DRAWING_LINE_HIT_EDGE_OR_VERTEX,
         DRAWING_LINE_CROSSES_EDGES,
         DRAWING_LINE_CROSSES_DRAWING,
     };
@@ -413,6 +414,7 @@ private:
     void clear_undo_history();
     void close_area_picker();
     void create_area();
+    void create_drawing_vertexes();
     void create_new_from_picker(const size_t picker_id, const string &name);
     void delete_edge(edge* e_ptr);
     void delete_mobs(const set<mob_gen*> &which);
@@ -440,8 +442,8 @@ private:
     );
     void find_problems();
     void finish_circle_sector();
-    void finish_layout_drawing();
     void finish_layout_moving();
+    void finish_new_sector_drawing();
     void forget_prepared_state(area_data* prepared_change);
     void get_affected_sectors(
         sector* s_ptr, unordered_set<sector*> &list
@@ -537,6 +539,7 @@ private:
     );
     bool remove_isolated_sector(sector* s_ptr);
     void resize_everything(const float mult);
+    void rollback_to_prepared_state(area_data* prepared_state);
     void rotate_mob_gens_to_point(const point &pos);
     bool save_area(const bool to_backup);
     void save_backup();
@@ -548,6 +551,7 @@ private:
     void select_vertex(vertex* v_ptr);
     void set_new_circle_sector_points();
     point snap_point(const point &p);
+    void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
         const std::pair<path_stop*, path_stop*> &l1,
@@ -559,6 +563,11 @@ private:
     void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();
+    void traverse_sector_for_split(
+        sector* s_ptr, vertex* begin, vertex* checkpoint,
+        vector<edge*>* edges, vector<vertex*>* vertexes,
+        bool* working_sector_left
+    );
     void undo();
     void undo_layout_drawing_node();
     void update_affected_sectors(
