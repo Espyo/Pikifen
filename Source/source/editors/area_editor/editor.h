@@ -416,6 +416,7 @@ private:
     void create_area();
     void create_drawing_vertexes();
     void create_new_from_picker(const size_t picker_id, const string &name);
+    sector* create_sector_for_layout_drawing(sector* copy_from);
     void delete_edge(edge* e_ptr);
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(
@@ -574,6 +575,10 @@ private:
         const unordered_set<sector*> &affected_sectors
     );
     bool update_backup_status();
+    void update_inner_sectors_outer_sector(
+        const vector<edge*> &edges_to_check,
+        sector* old_outer, sector* new_outer
+    );
     void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);

@@ -99,7 +99,7 @@ void area_editor::check_drawing_line(const point &pos) {
     //Check if the user is trying to close a loop, but the drawing is meant
     //to be a split between two sectors.
     if(
-        !drawing_nodes[0].on_sector &&
+        (drawing_nodes[0].on_edge || drawing_nodes[0].on_vertex) &&
         dist(pos, drawing_nodes[0].snapped_spot) <=
         VERTEX_MERGE_RADIUS / game.cam.zoom
     ) {
@@ -110,8 +110,8 @@ void area_editor::check_drawing_line(const point &pos) {
     //Check if the user hits a vertex or an edge, but the drawing is
     //meant to be a new sector shape.
     if(
-        drawing_nodes[0].on_sector &&
-        !tentative_node.on_sector
+        (!drawing_nodes[0].on_edge && !drawing_nodes[0].on_vertex) &&
+        (tentative_node.on_edge || tentative_node.on_vertex)
     ) {
         drawing_line_error = DRAWING_LINE_HIT_EDGE_OR_VERTEX;
         return;
@@ -187,6 +187,29 @@ void area_editor::check_drawing_line(const point &pos) {
             return;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new sector for use in layout drawing operations.
+ * This automatically clones it from another sector, if not NULL, or gives it
+ * a recommended texture if the other sector NULL.
+ */
+sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
+    sector* new_sector = game.cur_area_data.new_sector();
+    
+    if(copy_from) {
+        copy_from->clone(new_sector);
+        update_sector_texture(new_sector, copy_from->texture_info.file_name);
+    } else {
+        if(!texture_suggestions.empty()) {
+            update_sector_texture(new_sector, texture_suggestions[0].name);
+        } else {
+            update_sector_texture(new_sector, "");
+        }
+    }
+    
+    return new_sector;
 }
 
 
@@ -1687,5 +1710,48 @@ void area_editor::update_affected_sectors(
     
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the user creates a new sector, which houses other sectors inside,
+ * and these inner sectors need to know their outer sector changed.
+ * This will go through a list of edges, check if they are inside
+ * the new sector, and if so, update their outer sector.
+ * edges_to_check:
+ *   List of edges to check if they belong inside the new sector or not.
+ * old_outer:
+ *   What the old outer sector used to be.
+ * new_outer:
+ *   What the new outer sector is.
+ */
+void area_editor::update_inner_sectors_outer_sector(
+    const vector<edge*> &edges_to_check,
+    sector* old_outer, sector* new_outer
+) {
+    for(size_t e = 0; e < edges_to_check.size(); ++e) {
+        edge* e_ptr = edges_to_check[e];
+        vertex* v1_ptr = e_ptr->vertexes[0];
+        vertex* v2_ptr = e_ptr->vertexes[1];
+        if(
+            new_outer->is_point_in_sector(point(v1_ptr->x, v1_ptr->y)) &&
+            new_outer->is_point_in_sector(point(v2_ptr->x, v2_ptr->y)) &&
+            new_outer->is_point_in_sector(
+                point(
+                    (v1_ptr->x + v2_ptr->x) / 2.0f,
+                    (v1_ptr->y + v2_ptr->y) / 2.0f
+                )
+            )
+        ) {
+            for(size_t s = 0; s < 2; ++s) {
+                if(e_ptr->sectors[s] == old_outer) {
+                    game.cur_area_data.connect_edge_to_sector(
+                        e_ptr, new_outer, s
+                    );
+                    break;
+                }
+            }
+        }
     }
 }

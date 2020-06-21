@@ -3,7 +3,7 @@ Testing all of these scenarios helps make sure that the changes didn't break any
 
 ###################################
 ###################################
-AREA EDITOR SECTOR DRAWING
+AREA EDITOR NEW SECTOR DRAWING
 ###################################
 ###################################
 
@@ -11,116 +11,253 @@ In the diagrams, at symbols are a sector being drawn.
 When testing, test with the specified sectors in the void, and inside a big sector.
 
 
-+-------+      @@@@@@@-+
-| +-+   |      @ +-+ @ |
-| | |   |  ->  @ | | @ |
-| +-+   |      @ +-+ @ |
-+-------+      @@@@@@@-+
-* Draw a rectangle inside another as a subset, but have the drawing encompass another sector.
+@@@
+@ @
+@@@
+* Draw a rectangle with nothing in it, or touching anything else.
 * The new sector should be created successfully.
 
 
-+-+      @@@
-| |      @ @@@
-| |  ->  @ | @
-| |      @ @@@
-+-+      @@@
-* Draw a T-shaped drawing such that it creates a wing in an existing rectangle.
-* It should create 2 sectors successfully.
+       @@@@@@@
+       @     @
++-+    @ +-+ @
+| | -> @ | | @
++-+    @ +-+ @
+       @     @
+       @@@@@@@
+* Draw a rectangle that encompasses an existing rectangle sector.
+* The new sector should be created successfully, with the other rectangle inside.
 
 
-+-----+      +-@@@-+
-|     |  ->  | @ @ |
-+-----+      +-@@@-+
-* Draw a rectangle that is a subset of another, but slices it in two.
-* It should fail to create 3 sectors, and mark the sectors red.
++-+    +-+
+| | -> | @@@
++-+    +-+
+* Starting drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing edge.
+* The line will be rejected, since drawing a new sector shouldn't hit an edge or vertex.
 
 
-    +              +
-   / \            / \
-  /   \          @@@@@
- /     \        /@   @\
-+       +  ->  + @   @ +
- \     /        \@   @/
-  \   /          @@@@@
-   \ /            \ /
-    +              +
-* Draw a rectangle inside another such that all four points are at the midpoints of the original rectangle's edges.
-* It should fail to create 2 sectors, and mark the sectors red.
++-+    +-@@@
+| | -> | |
++-+    +-+
+* Starting drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing vertex.
+* The line will be rejected, since drawing a new sector shouldn't hit an edge or vertex.
 
 
-    +              +
-   / \            / \
-  /   \          /   \
- /     \        /     \
-+       +  ->  +   @@@ +
- \     /        \  @ @/
-  \   /          \ @@@
-   \ /            \ /
-    +              +
-* Draw a rectangle inside another, such that one of its vertexes is in the midpoint of one of the original rectangle's edges.
-* It should fail to create 2 sectors, and mark the sectors red.
++--+    +--+
+|  |    |  |
+|  | -> | @@@
+|  |    |  |
++--+    +--+
+* Starting drawing somewhere that's not an edge/vertex, and draw a line going through an existing edge.
+* The editor doesn't let you draw through edges.
 
 
-+-+  +-+      +-+  +-+
-| |  | |      | @@@@ |
-| |  | |  ->  | @  @ |
-| |  | |      | @@@@ |
-+-+  +-+      +-+  +-+
-* Draw a rectangle between two other rectangles, connecting the two.
-* The new sector should connected to the other two sectors successfully.
-
-
-+-----+      +-----+
-| +-+ |      | +-+ |
-| | | |  ->  @@@@@@@
-| +-+ |      @ +-+ @
-+-----+      @@@@@@@
-* Draw a rectangle inside another such that it is a subset, but tries to cross another rectangle in the middle of the original one.
-* The engine doesn't let you cut through the sectors.
+        @
++-+    +-@
+| | -> | |@
++-+    +-+ @
+* Starting drawing somewhere that's not an edge/vertex, and draw a line going through an existing vertex.
+* The editor doesn't let you draw through vertexes.
 
 
 +-+  +      +-+  +
 | | /|      | | /|
 | |/ |      | |/ |
-| +--+  ->  | @@@@
-| |         | @ @
-| |         | @@
-| |         | @
+| +--+  ->  | +--+
+| |         | |
+| |         | | @@@
+| |         | |
 +-+         +-+
-* Have a triangle where one vertex is at the midpoint of a rectangle's edge. Then, draw a triangle where two edges are subsets of the neighboring edges of the original triangle and the rectangle.
-* The engine should create the triangle sector successfully.
+* Have a triangle sector where one vertex is at the midpoint of a rectangle sector's edge. Then, start drawing in a free space.
+* If the two sectors are in the void, everything should be normal. Otherwise the editor shouldn't let you draw something new because there are broken sectors.
 
 
-+---+      +---@
-|  /       |  @@
-| +    ->  | @ @
-|  \       |  @@
-+---+      +---@
-* Have a rectangle where one of the edge midpoints is a new vertex, and moved a bit inward, making the sector a bit like a blocky Pac-Man. Then, draw a triangle that closes off the hole.
+
+###################################
+###################################
+AREA EDITOR SECTOR SPLITTING
+###################################
+###################################
+
+In the diagrams, at symbols are the splitting line.
+When testing, test with the specified sectors in the void, and inside a big sector.
+
+
++-@-+
+| @ |
++-@-+
+* Have a rectangle sector. Then, draw a line from one edge to the opposite edge.
+* The sector should be split into two.
+
+
++------+
+|      |
++-@--@-+
+  @  @
+  @@@@
+* Have a rectangle sector. Then, draw a line starting on one edge, going out of the sector, draw some shape, and the final line going back into the same edge.
+* A new sector will have been created, neighboring the existing sector.
+
+
++-@@@
+| | @
++-@@@
+* Have a rectangle sector. Then, draw a line starting at the top-right vertex going right, then another going down, the end at the rectangle's bottom-right vertex.
+* A new sector will have been created, neighboring the existing sector.
+
+
+  @@@@@
+  @   @
++---+ @
+|   | @
+|   |@@
+|   |
++---+
+* Have a rectangle sector. Then, draw a line starting on one edge, going out of the sector, draw some shape, and  the final line going into a neighboring edge from the starting one.
+* A new sector will have been created, neighboring the existing sector.
+
+
+@@@@@@@@@@@
+@         @
+@ +-----+ @
+@ |     | @
+@ +-@-@-+ @
+@   @ @   @
+@@@@@ @@@@@
+* Have a rectangle sector. Then, draw a line starting on one edge, going out of the sector, draw some shape that goes around the sector, and the final line going back into the same edge.
+* A new sector will have been created, neighboring the existing sector.
+
+
++-------------@-+
+|             @ |
+| +-+         @ |
+| | |         @ |
+| +-+         @ |
+|             @ |
++-------------@-+
+* Have a long rectangle sector with an inner sector on one side. Then, draw an orthogonal line splitting the sector such that the side with the inner sector is on the largest side of the split.
+* A new sector will have been created, on the smallest side of the original sector.
+
+
++-----@---------+
+|     @         |
+| +-+ @         |
+| | | @         |
+| +-+ @         |
+|     @         |
++-----@---------+
+* Have a long rectangle sector with an inner sector on one side. Then, draw an orthogonal line splitting the sector such that the side with the inner sector is on the smallest side of the split.
+* A new sector will have been created, on the smallest side of the original sector.
+
+
++---+---+
+|   |   |
++-@-+-@-+
+  @   @
+  @@@@@
+* Have two neighboring rectangle sectors. Then, draw a line from one of the rectangles's non-shared edges, some shape, and the final line going back into an edge on the same side as the starting one, but on the other sector.
+* A new sector will have been created, neighboring both sectors.
+
+
++-----+
+|     |
+| +-+ |
+| | | |
+@@@ | |
+| | | |
+| +-+ |
+|     |
++-----+
+* Have a rectangle sector with another rectangle sector inside, without shared edges. Then, draw a line going from the outer rectangle to the inner.
+* The editor won't let you do that split, since it would be meaningless.
+
+
++---+
+|   |
++-+ |
+| | |
+| @@@
+| | |
++-+ |
+|   |
++---+
+* Have a rectangle sector with another rectangle sector inside, where one of the inner's edges is the same as one of the outer's edges. Then, draw a line from the outer rectangle to the inner.
+* A new sector will have been created, inside the outer sector, neighboring the inner sector.
+
+
++---@-+
+|   @ |
++-+ @ |
+| | @ |
+| | @ |
+| | @ |
++-+ @ |
+|   @ |
++---@-+
+* Have a rectangle sector with another rectangle sector inside, where one of the inner's edges is the same as one of the outer's edges. Then, draw a line inside the outer rectangle such that the inner rectangle is entirely to one side of the split.
+* A new sector will have been created, inside the outer sector.
+
+
++-+
+| |
+| @@@@@@@
+| |     @
+| | +-+ @
+| | | | @
+| | +-+ @
+| |     @
+| @@@@@@@
+| |
++-+
+* Have a rectangle sector, and another rectangle sector nearby, but both isolated. Then, draw around the second rectangle such that the start and end points are on the same edge of the first rectangle.
+* A new sector will have been created, neighboring sector 1, and becoming a parent of sector 2.
+
+
++-+ +-+
+| | | |
+| @@@ |
+| | | |
++-+ +-+
+* Have a rectangle sector, and another rectangle sector nearby, but both isolated. Then, draw a line between the two.
+* The editor won't let you do that split, since it would be meaningless.
+
+
++-----+
+|     |
+| +-@-+
+| | @
+| +-@-+
+|     |
++-----+
+* Have a sector shaped like a C. Then, draw a vertical line between the top of the C and its bottom.
+* A new sector will have been created, nuzzled to the right of the C shape's center.
+
+
++---@
+|  /@
+| + @
+|  \@
++---@
+* Have a rectangle sector where one of the edge midpoints is a new vertex, and moved a bit inward, making the sector a bit like a blocky Pac-Man. Then, draw a triangle that closes off the hole.
 * The triangle should be created successfully.
 
 
-+-----+      @@@@@-+
- \    |      @\  @ |
-  \   |  ->  @ \ @ |
-  /   |      @ / @ |
- /    |      @/  @ |
-+-----+      @@@@@-+
-* Draw a rectangle where one edge is inside a sector, the next shares surface with an edge of that same sector, the next goes from one vertex to another of the sector, but cross the parent sector, and then the next closes off.
-* The engine shouldn't let you work on different sectors.
-* Found a problem with this, and fixed it, in 70d7531d3b7d1542c201a674c4048cd149171e36
-
-
-+        @@@@@@
-|\       |@   @
-| +  ->  | @  @
-|/       |@   @
-+        @@@@@@
-* Have a triangle. Then, draw a sector that neighbors two out of the three edges of the triangle.
+@@@@@@
+|\   @
+| +  @
+|/   @
+@@@@@@
+* Have a triangle sector. Then, draw a sector that neighbors two out of the three edges of the triangle.
 * The sector should be created successfully.
-* Found a problem with this, and fixed it, in 64875fb5b7bada3dccefcc9505db87556ba0f518
+* Found a problem with this, and fixed it in 64875fb5b7bada3dccefcc9505db87556ba0f518, though this was before the drawing modes changed in fd2dfaef5d99a04af726b1be5c59a8884a755884.
 
+
++-@@@@
+| |@ @
+| | @@
++-+  @
+* Have a rectangle sector. Then, draw a line starting at a vertex, doing some shape, and ending in the same vertex.
+* The editor won't let you finish it, since sector splits shouldn't loop back onto themselves.
 
 
 ###################################
@@ -138,8 +275,17 @@ When testing, test with the specified sectors in the void, and inside a big sect
 @   |   |
 @   |   |
 @---+---+
-* Have two rectangles joined by one edge. Then, delete one of the edges parallel to the common edge.
-* The sector that belongs to the deleted edge should be deleted.
+* Have two rectangle sectors joined by one edge. Then, delete one of the edges parallel to the common edge.
+* The sector that the deleted edge belongs to should be deleted.
+
+
+@@@@+---+
+@   |   |
+@   |   |
+@   |   |
+@@@@+---+
+* Have two rectangle sectors joined by one edge. Then, delete the three edges exclusive to one of the sectors.
+* That sector and its edges should be deleted.
 
 
 +---@---+
@@ -147,8 +293,19 @@ When testing, test with the specified sectors in the void, and inside a big sect
 |   @   |
 |   @   |
 +---@---+
-* Have two rectangles joined by one edge. Then, delete that one edge.
+* Have two rectangle sectors joined by one edge. Then, delete that one edge.
 * Only one of the sectors should remain, with the shape of both combined.
+
+
++-----+
+|     |
+| +-@ |
+| | @ |
+| +-@ |
+|     |
++-----+
+* Have two rectangle sectors, one inside the other. Then, delete the inner rectangle's rightmost edge.
+* The inner rectangle should be deleted.
 
 
 +-----+
@@ -158,8 +315,19 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | @@@ |
 |     |
 +-----+
-* Have two rectangles, one inside the other. Then, delete the inner rectangle's edges.
+* Have two rectangle sectors, one inside the other. Then, delete all of the inner rectangle's edges.
 * The inner rectangle should be deleted.
+
+
++-----@
+|     @
+| +-+ @
+| | | @
+| +-+ @
+|     @
++-----@
+* Have two rectangle sectors, one inside the other. Then, delete the outer rectangle's edges.
+* The inner rectangle should remain, and the sector outside the outer rectangle should take its old space.
 
 
 @@@@@@@
@@ -169,7 +337,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 @ +-+ @
 @     @
 @@@@@@@
-* Have two rectangles, one inside the other. Then, delete the outer rectangle's edges.
+* Have two rectangle sectors, one inside the other. Then, delete the outer rectangle's edges.
 * The inner rectangle should remain, and the sector outside the outer rectangle should take its old space.
 
 
@@ -191,7 +359,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | @@@ |    |     |
 |     |    |     |
 +-----+    +-----+
-* Have two rectangles, one inside the other. Then, drag the inner rectangle such that one of its corners merges with the outer rectangle's corresponding corner.
+* Have two rectangle sectors, one inside the other. Then, drag the inner rectangle such that one of its corners merges with the outer rectangle's corresponding corner.
 * The two sectors should remain as they are, but stitched.
 
 
@@ -202,8 +370,61 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | @-+ |    @---+ |
 |     |    |     |
 +-----+    +-----+
-* Have two rectangles, one inside the other. Then, drag one of the inner rectangle's walls such that it merges with the outer rectangle's corresponding wall.
+* Have two rectangle sectors, one inside the other. Then, drag one of the inner rectangle's walls such that it merges with the outer rectangle's corresponding wall.
 * The two sectors should remain as they are, but stitched.
+
+
+@-----+    @---+
+@     |    @   |
+@ +-+ |    @-+ |
+@ | | | -> @ | |
+@ +-+ |    @-+ |
+@     |    @   |
+@-----+    @---+
+* Have two rectangle sectors, one inside the other. Then, drag one of the outer rectangle's walls such that it merges with the inner rectangle's corresponding wall.
+* The two sectors should remain as they are, but stitched.
+
+
++-@    +
+| | -> |\
++-+    +-@
+* Have a rectangle sector. Then, drag one of its vertexes to its neighbor vertex.
+* The rectangle should become a triangle.
+
+
++-+-+    +-@-+
+| | | -> | |\|
++-+@+    +-+ +
+* Have two neighboring rectangle sectors. Then, split one of the edges neighboring the common edge. Then, grab that vertex and merge it with the common edge's vertex on the opposite side.
+* The sector whose edge got split will have turned into a triangle, and the outer sector, if any, will have become broken.
+
+
++-+---+    +-+ @--+
+| |\  |    | | \  |
+| | @ | -> | |  \ |
+| |  \|    | |   \|
++-+   +    +-+    +
+* Have a rectangle sector, a triangle sector to its right, and the triangle's leftmost vertex shared with one of the rectangle's rightmost. Then, split the edge of the triangle to the right of the rectangle's rightmost edge. Then, drag that vertex to the middle of the triangle's other edge that is on the shared vertex.
+* The two sectors will have been split successfully.
+
+
+@-+    @
+ \| -> |
+  +    +
+* Have a triangle sector. Then, drag one of its vertexes to a neighboring vertex.
+* The entire sector will disappear.
+
+
++-+    @        +-+  @
+| |   @@        | | @@
+| |  @ @        | |@ @
+| | @@@@ ->     | @@@@
+| |             | |
+| |             | |
+| |             | |
++-+             +-+
+* Have a rectangle sector and a triangle sector side by side, such that one of the triangle's vertexes is close to one of the rectangle's edges. Then, drag the triangle such that its vertex melds with the rectangle's edge, splitting it.
+* The triangle will have moved, but the outer sector (if any) will become broken, due to a "loop" in the inner sector edges.
 
 
 

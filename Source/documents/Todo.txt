@@ -5,7 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
     When a picker dialog appears, focus on the textbox right away
     Load/Create area/animation button should be in the toolbar, not the menu bar
     If Ctrl is held, don't create a new vertex
-    Report in the status bar whenever something happened successfully, otherwise errors will stay there even if nothing went wrong
+    Report in the status bar whenever something happened successfully, and when entering a new state/sub-state, otherwise errors will stay there even if nothing went wrong
+    There is no way to use a new texture, only the suggested ones
     Revamp editors
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
@@ -33,6 +34,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** If you select an object that can change its behavior thanks to certain script vars, the panel will now show widgets that let you tweak those properties yourself, instead of having to write script vars by hand.
     ** Objects with certain tricks to them (e.g. they must be linked to another mob) will now show hints in the object panel, when you select them.
     ** Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)
+    ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
     ** The animation editor now has a grid too.
     ** Several other small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.

@@ -835,24 +835,19 @@ void area_editor::finish_new_sector_drawing() {
         return;
     }
     
-    register_change("sector creation");
-    
-    //Start creating the new sector.
-    sector* new_sector = game.cur_area_data.new_sector();
-    
+    vector<edge*> outer_sector_old_edges;
     if(outer_sector) {
-        outer_sector->clone(new_sector);
-        update_sector_texture(
-            new_sector,
-            outer_sector->texture_info.file_name
-        );
+        outer_sector_old_edges = outer_sector->edges;
     } else {
-        if(!texture_suggestions.empty()) {
-            update_sector_texture(new_sector, texture_suggestions[0].name);
-        } else {
-            update_sector_texture(new_sector, "");
+        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = game.cur_area_data.edges[e];
+            if(e_ptr->sectors[0] == NULL || e_ptr->sectors[1] == NULL) {
+                outer_sector_old_edges.push_back(e_ptr);
+            }
         }
     }
+    
+    register_change("sector creation");
     
     //First, create vertexes wherever necessary.
     create_drawing_vertexes();
@@ -884,110 +879,37 @@ void area_editor::finish_new_sector_drawing() {
         drawing_edges.push_back(prev_node_edge);
     }
     
-    bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
-    
-    //Organize all edges such that their vertexes v1 and v2 are also in the same
-    //order as the vertex order in the drawing.
-    for(size_t e = 0; e < drawing_edges.size(); ++e) {
-        if(drawing_edges[e]->vertexes[1] != drawing_vertexes[e]) {
-            drawing_edges[e]->swap_vertexes();
-        }
-    }
+    //Create the new sector, empty.
+    sector* new_sector = create_sector_for_layout_drawing(outer_sector);
     
     //Connect the edges to the sectors.
+    bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
     unsigned char inner_sector_side = (is_clockwise ? 1 : 0);
     unsigned char outer_sector_side = (is_clockwise ? 0 : 1);
-    
-    map<edge*, std::pair<sector*, sector*> > edge_sector_backups;
     
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
         edge* e_ptr = drawing_edges[e];
         
-        if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
-            //If it's a new edge, set it up properly.
-            game.cur_area_data.connect_edge_to_sector(
-                e_ptr, outer_sector, outer_sector_side
-            );
-            game.cur_area_data.connect_edge_to_sector(
-                e_ptr, new_sector, inner_sector_side
-            );
-            
-        } else {
-            //If not, let's just add the info for the new sector,
-            //and keep the information from the previous sector it was
-            //pointing to. This will be cleaned up later on.
-            edge_sector_backups[e_ptr].first = e_ptr->sectors[0];
-            edge_sector_backups[e_ptr].second = e_ptr->sectors[1];
-            
-            if(e_ptr->sectors[0] == outer_sector) {
-                game.cur_area_data.connect_edge_to_sector(
-                    e_ptr, new_sector, 0
-                );
-            } else {
-                game.cur_area_data.connect_edge_to_sector(
-                    e_ptr, new_sector, 1
-                );
-            }
-        }
+        game.cur_area_data.connect_edge_to_sector(
+            e_ptr, outer_sector, outer_sector_side
+        );
+        game.cur_area_data.connect_edge_to_sector(
+            e_ptr, new_sector, inner_sector_side
+        );
     }
     
-    //Triangulate new sector so we can check what's inside.
+    //The new sector is created, but only its outer edges exist.
+    //Triangulate these so we can check what's inside.
     triangulate(new_sector, NULL, true, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
-    unordered_set<edge*> inner_edges;
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
-        vertex* v1_ptr = game.cur_area_data.edges[e]->vertexes[0];
-        vertex* v2_ptr = game.cur_area_data.edges[e]->vertexes[1];
-        if(
-            new_sector->is_point_in_sector(point(v1_ptr->x, v1_ptr->y)) &&
-            new_sector->is_point_in_sector(point(v2_ptr->x, v2_ptr->y)) &&
-            new_sector->is_point_in_sector(
-                point(
-                    (v1_ptr->x + v2_ptr->x) / 2.0,
-                    (v1_ptr->y + v2_ptr->y) / 2.0
-                )
-            )
-        ) {
-            inner_edges.insert(game.cur_area_data.edges[e]);
-        }
-    }
+    update_inner_sectors_outer_sector(
+        outer_sector_old_edges, outer_sector, new_sector
+    );
     
-    for(auto i : inner_edges) {
-        auto de_it = find(drawing_edges.begin(), drawing_edges.end(), i);
-        
-        if(de_it != drawing_edges.end()) {
-            //If this edge is a part of the drawing, then we know
-            //that it's already set correctly from previous parts of
-            //the algorithm. However, in the case where the new sector
-            //is on the outside (i.e. this edge is both inside AND a neighbor)
-            //then let's simplify the procedure and remove this edge from
-            //the new sector, letting it keep its old data.
-            //The new sector will still be closed using other edges; that's
-            //guaranteed.
-            if(i->sectors[outer_sector_side] == new_sector) {
-                new_sector->remove_edge(i);
-                game.cur_area_data.connect_edge_to_sector(
-                    i, edge_sector_backups[i].first, 0
-                );
-                game.cur_area_data.connect_edge_to_sector(
-                    i, edge_sector_backups[i].second, 1
-                );
-                drawing_edges.erase(de_it);
-            }
-            
-        } else {
-            for(size_t s = 0; s < 2; ++s) {
-                if(i->sectors[s] == outer_sector) {
-                    game.cur_area_data.connect_edge_to_sector(i, new_sector, s);
-                }
-            }
-            
-        }
-    }
-    
-    //Final triangulations.
+    //Finally, update all affected sectors. Only the working sector and
+    //the new sector have had their triangles changed, so work only on those.
     unordered_set<sector*> affected_sectors;
     affected_sectors.insert(new_sector);
     affected_sectors.insert(outer_sector);
@@ -2560,22 +2482,8 @@ void area_editor::split_sector_with_drawing() {
     }
     
     //Create the new sector, empty.
-    sector* new_sector = game.cur_area_data.new_sector();
+    sector* new_sector = create_sector_for_layout_drawing(working_sector);
     size_t new_sector_nr = game.cur_area_data.sectors.size() - 1;
-    
-    if(working_sector) {
-        working_sector->clone(new_sector);
-        update_sector_texture(
-            new_sector,
-            working_sector->texture_info.file_name
-        );
-    } else {
-        if(!texture_suggestions.empty()) {
-            update_sector_texture(new_sector, texture_suggestions[0].name);
-        } else {
-            update_sector_texture(new_sector, "");
-        }
-    }
     
     //Connect the edges to the sectors.
     unsigned char new_sector_side = (is_new_clockwise ? 1 : 0);
@@ -2610,30 +2518,9 @@ void area_editor::split_sector_with_drawing() {
     //their outer sector changed. Since we're only checking from the edges
     //that used to be long to the working sector, the edges that were created
     //with the drawing will not be included.
-    for(size_t e = 0; e < working_sector_old_edges.size(); ++e) {
-        edge* e_ptr = working_sector_old_edges[e];
-        vertex* v1_ptr = e_ptr->vertexes[0];
-        vertex* v2_ptr = e_ptr->vertexes[1];
-        if(
-            new_sector->is_point_in_sector(point(v1_ptr->x, v1_ptr->y)) &&
-            new_sector->is_point_in_sector(point(v2_ptr->x, v2_ptr->y)) &&
-            new_sector->is_point_in_sector(
-                point(
-                    (v1_ptr->x + v2_ptr->x) / 2.0,
-                    (v1_ptr->y + v2_ptr->y) / 2.0
-                )
-            )
-        ) {
-            for(size_t s = 0; s < 2; ++s) {
-                if(e_ptr->sectors[s] == working_sector) {
-                    game.cur_area_data.connect_edge_to_sector(
-                        e_ptr, new_sector, s
-                    );
-                    break;
-                }
-            }
-        }
-    }
+    update_inner_sectors_outer_sector(
+        working_sector_old_edges, working_sector, new_sector
+    );
     
     //Finally, update all affected sectors. Only the working sector and
     //the new sector have had their triangles changed, so work only on those.
@@ -2650,17 +2537,21 @@ void area_editor::split_sector_with_drawing() {
     //not that you had a "triangle" and wanted to make a complex shape.
     clear_selection();
     
-    float working_sector_area =
-        (working_sector->bbox[1].x - working_sector->bbox[0].x) *
-        (working_sector->bbox[1].y - working_sector->bbox[0].y);
-    float new_sector_area =
-        (new_sector->bbox[1].x - new_sector->bbox[0].x) *
-        (new_sector->bbox[1].y - new_sector->bbox[0].y);
-        
-    if(working_sector_area < new_sector_area) {
-        select_sector(working_sector);
-    } else {
+    if(!working_sector) {
         select_sector(new_sector);
+    } else {
+        float working_sector_area =
+            (working_sector->bbox[1].x - working_sector->bbox[0].x) *
+            (working_sector->bbox[1].y - working_sector->bbox[0].y);
+        float new_sector_area =
+            (new_sector->bbox[1].x - new_sector->bbox[0].x) *
+            (new_sector->bbox[1].y - new_sector->bbox[0].y);
+            
+        if(working_sector_area < new_sector_area) {
+            select_sector(working_sector);
+        } else {
+            select_sector(new_sector);
+        }
     }
     
     clear_layout_drawing();
