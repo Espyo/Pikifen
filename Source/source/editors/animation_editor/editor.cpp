@@ -535,6 +535,16 @@ void animation_editor::press_hitboxes_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the load file button widget is pressed.
+ */
+void animation_editor::press_load_button() {
+    if(!check_new_unsaved_changes(load_widget_pos)) {
+        open_load_dialog();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the mob radius button widget is pressed.
  */
 void animation_editor::press_mob_radius_button() {

@@ -2,7 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Load/Create area/animation button should be in the toolbar, not the menu bar
     Revamp editors
         A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.

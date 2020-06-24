@@ -24,22 +24,20 @@
  * Opens the "load" dialog.
  */
 void animation_editor::open_load_dialog() {
-    if(!check_new_unsaved_changes()) {
-        global_anim_files_cache =
-            folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
-        for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
-            global_anim_files_cache[f] =
-                remove_extension(global_anim_files_cache[f]);
-        }
-        
-        open_dialog(
-            "Load a file or create a new one",
-            std::bind(&animation_editor::process_gui_load_dialog, this)
-        );
-        dialog_close_callback =
-            std::bind(&animation_editor::close_load_dialog, this);
-        reset_load_dialog = true;
+    global_anim_files_cache =
+        folder_to_vector(ANIMATIONS_FOLDER_PATH, false, NULL);
+    for(size_t f = 0; f < global_anim_files_cache.size(); ++f) {
+        global_anim_files_cache[f] =
+            remove_extension(global_anim_files_cache[f]);
     }
+    
+    open_dialog(
+        "Load a file or create a new one",
+        std::bind(&animation_editor::process_gui_load_dialog, this)
+    );
+    dialog_close_callback =
+        std::bind(&animation_editor::close_load_dialog, this);
+    reset_load_dialog = true;
 }
 
 
@@ -417,10 +415,11 @@ void animation_editor::process_gui_menu_bar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
-            //Load/create file item.
-            if(ImGui::MenuItem("Load or create file...")) {
-                open_load_dialog();
+            //Reload current file item.
+            if(ImGui::MenuItem("Reload current file")) {
+                press_reload_button();
             }
+            reload_widget_pos = get_last_widget_pos();
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
@@ -2416,7 +2415,7 @@ void animation_editor::process_gui_toolbar() {
         "Ctrl + Q"
     );
     
-    //Reload button.
+    //Load button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -2424,11 +2423,11 @@ void animation_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        press_reload_button();
+        press_load_button();
     }
-    reload_widget_pos = get_last_widget_pos();
+    load_widget_pos = get_last_widget_pos();
     set_tooltip(
-        "Discard all changes made and load the file again.",
+        "Pick a file to load.",
         "Ctrl + L"
     );
     

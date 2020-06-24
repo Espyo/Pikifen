@@ -133,6 +133,7 @@ private:
     transformation_controller top_tc;
     
     //Position of some important widgets.
+    point load_widget_pos;
     point reload_widget_pos;
     point quit_widget_pos;
     
@@ -175,6 +176,7 @@ private:
     void pick_sprite(const string &name, const bool is_new);
     void press_grid_button();
     void press_hitboxes_button();
+    void press_load_button();
     void press_mob_radius_button();
     void press_pikmin_silhouette_button();
     void press_play_animation_button();

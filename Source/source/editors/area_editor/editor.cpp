@@ -1454,6 +1454,20 @@ void area_editor::press_duplicate_mobs_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the load area button widget is pressed.
+ */
+void area_editor::press_load_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(!check_new_unsaved_changes(load_widget_pos)) {
+        open_area_picker();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the new mob button widget is pressed.
  */
 void area_editor::press_new_mob_button() {

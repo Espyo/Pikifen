@@ -90,7 +90,7 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         break;
     } case ALLEGRO_KEY_L: {
         if(is_ctrl_pressed) {
-            press_reload_button();
+            press_load_button();
         }
         break;
     } case ALLEGRO_KEY_P: {

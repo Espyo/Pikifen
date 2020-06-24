@@ -389,6 +389,7 @@ private:
     timer undo_save_lock_timer;
     
     //Position of some important widgets.
+    point load_widget_pos;
     point reload_widget_pos;
     point quit_widget_pos;
     
@@ -502,6 +503,7 @@ private:
     area_data* prepare_state();
     void press_circle_sector_button();
     void press_duplicate_mobs_button();
+    void press_load_button();
     void press_new_mob_button();
     void press_new_path_button();
     void press_new_sector_button();

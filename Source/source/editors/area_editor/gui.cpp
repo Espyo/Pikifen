@@ -21,30 +21,28 @@
 
 
 /* ----------------------------------------------------------------------------
- * Shows the area picker, if possible.
+ * Shows the area picker.
  */
 void area_editor::open_area_picker() {
-    if(!check_new_unsaved_changes()) {
-        vector<picker_item> areas;
-        vector<string> folders =
-            folder_to_vector(AREAS_FOLDER_PATH, true);
-            
-        for(size_t f = 0; f < folders.size(); ++f) {
-            areas.push_back(picker_item(folders[f]));
-        }
-        open_picker(
-            "Pick an area, or create a new one",
-            areas,
-            std::bind(
-                &area_editor::pick_area, this,
-                std::placeholders::_1,
-                std::placeholders::_2
-            ),
-            "", true
-        );
-        dialog_close_callback =
-            std::bind(&area_editor::close_area_picker, this);
+    vector<picker_item> areas;
+    vector<string> folders =
+        folder_to_vector(AREAS_FOLDER_PATH, true);
+        
+    for(size_t f = 0; f < folders.size(); ++f) {
+        areas.push_back(picker_item(folders[f]));
     }
+    open_picker(
+        "Pick an area, or create a new one",
+        areas,
+        std::bind(
+            &area_editor::pick_area, this,
+            std::placeholders::_1,
+            std::placeholders::_2
+        ),
+        "", true
+    );
+    dialog_close_callback =
+        std::bind(&area_editor::close_area_picker, this);
 }
 
 
@@ -168,10 +166,11 @@ void area_editor::process_gui_menu_bar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
-            //Load/create area item.
-            if(ImGui::MenuItem("Load or create area...")) {
-                open_area_picker();
+            //Reload current area item.
+            if(ImGui::MenuItem("Reload current area")) {
+                press_reload_button();
             }
+            reload_widget_pos = get_last_widget_pos();
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
@@ -2547,7 +2546,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + Q"
     );
     
-    //Reload button.
+    //Load button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
@@ -2555,11 +2554,11 @@ void area_editor::process_gui_toolbar() {
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
-        press_reload_button();
+        press_load_button();
     }
-    reload_widget_pos = get_last_widget_pos();
+    load_widget_pos = get_last_widget_pos();
     set_tooltip(
-        "Discard all changes made and load the area again.",
+        "Pick an area to load, or create a new one.",
         "Ctrl + L"
     );
     
