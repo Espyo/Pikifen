@@ -17,6 +17,32 @@
 #include "string_utils.h"
 
 
+/* ----------------------------------------------------------------------------
+ * Returns a string representing an amount, and the unit, though the unit
+ * is in either plural form or singular form, depending on the amount.
+ * amount:
+ *   Amount to compare against.
+ * singular_text:
+ *   Text to write if the amount is singular.
+ * plural_text:
+ *   Text to write if the amount is plural. If empty, it'll use the singular
+ *   text plus an 's'.
+ */
+string amount_str(
+    const int amount, const string &singular_text, const string &plural_text
+) {
+    string result = i2s(amount) + " ";
+    if(amount == 1) {
+        result += singular_text;
+    } else if(plural_text.empty()) {
+        result += singular_text + "s";
+    } else {
+        result += plural_text;
+    }
+    return result;
+}
+
+
 //Converts a boolean to a string, returning either "true" or "false".
 string b2s(const bool b) { return b ? "true" : "false"; }
 

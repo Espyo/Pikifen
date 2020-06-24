@@ -144,6 +144,7 @@ area_editor::area_editor() :
 void area_editor::cancel_circle_sector() {
     clear_circle_sector();
     sub_state = EDITOR_SUB_STATE_NONE;
+    status_text.clear();
 }
 
 
@@ -153,6 +154,7 @@ void area_editor::cancel_circle_sector() {
 void area_editor::cancel_layout_drawing() {
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
+    status_text.clear();
 }
 
 
@@ -175,6 +177,7 @@ void area_editor::change_state(const EDITOR_STATES new_state) {
     clear_selection();
     state = new_state;
     sub_state = EDITOR_SUB_STATE_NONE;
+    status_text.clear();
 }
 
 
@@ -283,6 +286,7 @@ void area_editor::clear_selection() {
     selected_path_links.clear();
     selected_shadow = NULL;
     selection_homogenized = false;
+    set_selection_status_text();
 }
 
 
@@ -433,72 +437,6 @@ void area_editor::create_drawing_vertexes() {
 
 
 /* ----------------------------------------------------------------------------
- * Deletes the selected mobs.
- */
-void area_editor::delete_selected_mobs() {
-    if(selected_mobs.empty()) {
-        status_text = "You have to select mobs to delete!";
-        return;
-    }
-    
-    register_change("object deletion");
-    
-    delete_mobs(selected_mobs);
-    
-    clear_selection();
-    sub_state = EDITOR_SUB_STATE_NONE;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Deletes the selected edges. The sectors on each side of the edge
- * are merged, so the smallest sector will be deleted. In addition,
- * this operation will delete any sectors that would end up incomplete.
- * Returns false if one of the edges couldn't be deleted.
- */
-bool area_editor::delete_selected_edges() {
-    bool ret = true;
-    
-    for(edge* e_ptr : selected_edges) {
-        if(!e_ptr->vertexes[0]) {
-            //Huh, looks like one of the edge deletion procedures already
-            //wiped this edge out. Skip it.
-            continue;
-        }
-        if(!merge_sectors(e_ptr->sectors[0], e_ptr->sectors[1])) {
-            ret = false;
-        }
-    }
-    
-    clear_selection();
-    
-    return ret;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Deletes the selected path links and/or stops.
- */
-void area_editor::delete_selected_path_elements() {
-    if(selected_path_links.empty() && selected_path_stops.empty()) {
-        status_text = "You have to select something to delete!";
-        return;
-    }
-    
-    register_change("path deletion");
-    
-    delete_path_links(selected_path_links);
-    selected_path_links.clear();
-    
-    delete_path_stops(selected_path_stops);
-    selected_path_stops.clear();
-    
-    path_preview.clear(); //Clear so it doesn't reference deleted stops.
-    path_preview_timer.start(false);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the area editor.
  */
 void area_editor::do_logic() {
@@ -541,7 +479,7 @@ void area_editor::emit_triangulation_error_status_bar_message(
     switch(error) {
     case TRIANGULATION_ERROR_LONE_EDGES: {
         status_text =
-            "Some sectors ended up with lone edges!";
+            "Some sectors have lone edges!";
         break;
     } case TRIANGULATION_ERROR_NO_EARS: {
         status_text =
@@ -553,7 +491,7 @@ void area_editor::emit_triangulation_error_status_bar_message(
         break;
     } case TRIANGULATION_ERROR_INVALID_ARGS: {
         status_text =
-            "An unknown error has occured with the sector!";
+            "An unknown error has occured with some sectors!";
         break;
     } case TRIANGULATION_NO_ERROR: {
         break;
@@ -592,6 +530,7 @@ void area_editor::finish_layout_moving() {
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
     unordered_set<sector*> merge_affected_sectors;
+    size_t vertex_amount = selected_vertexes.size();
     
     //Find merge vertexes and edges to split, if any.
     for(auto v : selected_vertexes) {
@@ -751,10 +690,10 @@ void area_editor::finish_layout_moving() {
     
     //If we ended up with any intersection still, abort!
     if(!intersections.empty()) {
-        status_text = "That move would cause edges to intersect!";
         cancel_layout_moving();
         forget_prepared_state(pre_move_area_data);
         pre_move_area_data = NULL;
+        status_text = "That move would cause edges to intersect!";
         return;
     }
     
@@ -769,11 +708,11 @@ void area_editor::finish_layout_moving() {
         
             for(auto &m2 : merges) {
                 if(m2.second == crushed_vertex) {
-                    status_text =
-                        "That move would crush an edge that's in the middle!";
                     cancel_layout_moving();
                     forget_prepared_state(pre_move_area_data);
                     pre_move_area_data = NULL;
+                    status_text =
+                        "That move would crush an edge that's in the middle!";
                     return;
                 }
             }
@@ -921,6 +860,11 @@ void area_editor::finish_new_sector_drawing() {
     
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
+    
+    status_text =
+        "Created sector with " +
+        amount_str(new_sector->edges.size(), "edge") + ", " +
+        amount_str(drawing_vertexes.size(), "vertex", "vertexes") + ".";
 }
 
 
@@ -1229,7 +1173,7 @@ void area_editor::load() {
     show_path_preview = false;
     snap_mode = SNAP_GRID;
     state = EDITOR_STATE_MAIN;
-    status_text = "Ready.";
+    status_text.clear();
     
     //Reset some other states.
     clear_problems();
@@ -1456,6 +1400,7 @@ void area_editor::press_circle_sector_button() {
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         cancel_circle_sector();
     } else {
+        status_text = "Use the canvas to place a circular sector.";
         sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
     }
 }
@@ -1468,8 +1413,10 @@ void area_editor::press_duplicate_mobs_button() {
     if(selected_mobs.empty()) {
         status_text = "You have to select mobs to duplicate!";
     } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
+        status_text.clear();
         sub_state = EDITOR_SUB_STATE_NONE;
     } else {
+        status_text = "Use the canvas to place the duplicated objects.";
         sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
     }
 }
@@ -1484,9 +1431,11 @@ void area_editor::press_new_mob_button() {
     }
     
     if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
+        status_text.clear();
         sub_state = EDITOR_SUB_STATE_NONE;
     } else {
         clear_selection();
+        status_text = "Use the canvas to place a new object.";
         sub_state = EDITOR_SUB_STATE_NEW_MOB;
     }
 }
@@ -1501,9 +1450,11 @@ void area_editor::press_new_path_button() {
     }
     
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+        status_text.clear();
         sub_state = EDITOR_SUB_STATE_NONE;
     } else {
         path_drawing_stop_1 = NULL;
+        status_text = "Use the canvas to draw a path.";
         sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
     }
 }
@@ -1528,6 +1479,7 @@ void area_editor::press_new_sector_button() {
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
         cancel_layout_drawing();
     } else {
+        status_text = "Use the canvas to draw a sector.";
         sub_state = EDITOR_SUB_STATE_DRAWING;
     }
 }
@@ -1542,8 +1494,10 @@ void area_editor::press_new_tree_shadow_button() {
     }
     
     if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+        status_text.clear();
         sub_state = EDITOR_SUB_STATE_NONE;
     } else {
+        status_text = "Use the canvas to place a new tree shadow.";
         sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
     }
 }
@@ -1566,6 +1520,7 @@ void area_editor::press_quick_play_button() {
  */
 void area_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
+        status_text = "Bye!";
         leave();
     }
 }
@@ -1576,6 +1531,8 @@ void area_editor::press_quit_button() {
  */
 void area_editor::press_reference_button() {
     show_reference = !show_reference;
+    string state_str = (show_reference ? "visible" : "invisible");
+    status_text = "The reference image is now " + state_str + ".";
 }
 
 
@@ -1596,19 +1553,34 @@ void area_editor::press_reload_button() {
  * Code to run when the remove edge button widget is pressed.
  */
 void area_editor::press_remove_edge_button() {
+    //Check if the user can delete.
     if(moving || selecting) {
         return;
     }
     
     if(selected_edges.empty()) {
         status_text = "You have to select edges to delete!";
-    } else {
-        register_change("edge deletion");
-        if(delete_selected_edges()) {
-            status_text = "Deleted edges.";
-        } else {
-            status_text = "Some of the edges could not be deleted!";
-        }
+        return;
+    }
+    
+    //Prepare everything.
+    register_change("edge deletion");
+    size_t n_before = game.cur_area_data.edges.size();
+    size_t n_selected = selected_edges.size();
+    
+    //Delete!
+    bool success = delete_edges(selected_edges);
+    
+    //Cleanup.
+    clear_selection();
+    sub_state = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    if(success) {
+        status_text =
+            "Deleted " +
+            amount_str(n_before - game.cur_area_data.edges.size(), "edge") +
+            " (" + i2s(n_selected) + " were selected).";
     }
 }
 
@@ -1617,11 +1589,29 @@ void area_editor::press_remove_edge_button() {
  * Code to run when the remove mob button widget is pressed.
  */
 void area_editor::press_remove_mob_button() {
+    //Check if the user can delete.
     if(moving || selecting) {
         return;
     }
     
-    delete_selected_mobs();
+    if(selected_mobs.empty()) {
+        status_text = "You have to select mobs to delete!";
+        return;
+    }
+    
+    //Prepare everything.
+    register_change("object deletion");
+    size_t amount = selected_mobs.size();
+    
+    //Delete!
+    delete_mobs(selected_mobs);
+    
+    //Cleanup.
+    clear_selection();
+    sub_state = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    status_text = "Deleted " + amount_str(amount, "object") + ".";
 }
 
 
@@ -1629,11 +1619,36 @@ void area_editor::press_remove_mob_button() {
  * Code to run when the remove path button widget is pressed.
  */
 void area_editor::press_remove_path_button() {
+    //Check if the user can delete.
     if(moving || selecting) {
         return;
     }
     
-    delete_selected_path_elements();
+    if(selected_path_links.empty() && selected_path_stops.empty()) {
+        status_text = "You have to select something to delete!";
+        return;
+    }
+    
+    //Prepare everything.
+    register_change("path deletion");
+    size_t path_link_amount = selected_path_links.size();
+    size_t path_stop_amount = selected_path_stops.size();
+    
+    //Delete!
+    delete_path_links(selected_path_links);
+    delete_path_stops(selected_path_stops);
+    
+    //Cleanup.
+    clear_selection();
+    sub_state = EDITOR_SUB_STATE_NONE;
+    path_preview.clear(); //Clear so it doesn't reference deleted stops.
+    path_preview_timer.start(false);
+    
+    //Report.
+    status_text =
+        "Deleted " +
+        amount_str(path_link_amount, "path link") + ", " +
+        amount_str(path_stop_amount, "path stop") + ".";
 }
 
 
@@ -1646,7 +1661,7 @@ void area_editor::press_remove_tree_shadow_button() {
     }
     
     if(!selected_shadow) {
-        status_text = "You have to select shadows to delete!";
+        status_text = "You have to select a shadow to delete!";
     } else {
         register_change("tree shadow deletion");
         for(
@@ -1666,6 +1681,7 @@ void area_editor::press_remove_tree_shadow_button() {
                 break;
             }
         }
+        status_text = "Deleted tree shadow.";
     }
 }
 
@@ -1680,6 +1696,7 @@ void area_editor::press_save_button() {
     
     change_state(EDITOR_STATE_MAIN);
     made_new_changes = false;
+    status_text = "Saved area successfully.";
 }
 
 
@@ -1695,6 +1712,21 @@ void area_editor::press_selection_filter_button() {
         selection_filter =
             sum_and_wrap(selection_filter, -1, N_SELECTION_FILTERS);
     }
+    
+    status_text = "Set selection filter to ";
+    switch(selection_filter) {
+    case SELECTION_FILTER_SECTORS: {
+        status_text += "sectors + edges + vertexes";
+        break;
+    } case SELECTION_FILTER_EDGES: {
+        status_text += "edges + vertexes";
+        break;
+    } case SELECTION_FILTER_VERTEXES: {
+        status_text += "vertexes";
+        break;
+    }
+    }
+    status_text += ".";
 }
 
 
@@ -1707,6 +1739,24 @@ void area_editor::press_snap_mode_button() {
     } else {
         snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
     }
+    
+    status_text = "Set snap mode to ";
+    switch(snap_mode) {
+    case SNAP_GRID: {
+        status_text += "grid";
+        break;
+    } case SNAP_VERTEXES: {
+        status_text += "vertexes";
+        break;
+    } case SNAP_EDGES: {
+        status_text += "edges";
+        break;
+    } case SNAP_NOTHING: {
+        status_text += "nothing";
+        break;
+    }
+    }
+    status_text += ".";
 }
 
 
@@ -2107,10 +2157,6 @@ bool area_editor::save_area(const bool to_backup) {
         
         status_text = "Could not save the area!";
         
-    } else {
-        if(!to_backup) {
-            status_text = "Saved successfully.";
-        }
     }
     
     backup_timer.start(game.options.area_editor_backup_interval);
@@ -2202,6 +2248,7 @@ void area_editor::select_edge(edge* e) {
     for(size_t v = 0; v < 2; ++v) {
         select_vertex(e->vertexes[v]);
     }
+    set_selection_status_text();
 }
 
 
@@ -2214,6 +2261,7 @@ void area_editor::select_sector(sector* s) {
     for(size_t e = 0; e < s->edges.size(); ++e) {
         select_edge(s->edges[e]);
     }
+    set_selection_status_text();
 }
 
 
@@ -2225,6 +2273,7 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
     selected_shadow_transformation.set_angle(s_ptr->angle);
     selected_shadow_transformation.set_center(s_ptr->center);
     selected_shadow_transformation.set_size(s_ptr->size);
+    set_selection_status_text();
 }
 
 
@@ -2233,6 +2282,7 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
  */
 void area_editor::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
+    set_selection_status_text();
 }
 
 
@@ -2297,6 +2347,63 @@ void area_editor::set_new_circle_sector_points() {
         }
         
         new_circle_sector_valid_edges.push_back(valid);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the status text based on how many things are selected.
+ */
+void area_editor::set_selection_status_text() {
+    status_text.clear();
+    
+    if(!non_simples.empty()) {
+        emit_triangulation_error_status_bar_message(
+            non_simples.begin()->second
+        );
+    }
+    
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selected_vertexes.empty()) {
+            status_text =
+                "Selected " +
+                amount_str(selected_sectors.size(), "sector") +
+                ", " +
+                amount_str(selected_edges.size(), "edge") +
+                ", " +
+                amount_str(selected_vertexes.size(), "vertex", "vertexes") +
+                ".";
+        }
+        break;
+        
+    } case EDITOR_STATE_MOBS: {
+        if(!selected_mobs.empty()) {
+            status_text =
+                "Selected " +
+                amount_str(selected_mobs.size(), "object") +
+                ".";
+        }
+        break;
+        
+    } case EDITOR_STATE_PATHS: {
+        if(!selected_path_links.empty() || !selected_path_stops.empty()) {
+            status_text =
+                "Selected " +
+                amount_str(selected_path_links.size(), "path link") +
+                ", " +
+                amount_str(selected_path_stops.size(), "path stop") +
+                ".";
+        }
+        break;
+        
+    } case EDITOR_STATE_DETAILS: {
+        if(selected_shadow) {
+            status_text = "Selected a tree shadow.";
+        }
+        break;
+        
+    }
     }
 }
 
@@ -2371,13 +2478,13 @@ void area_editor::split_sector_with_drawing() {
     
     if(traversed_edges[0].empty()) {
         //Something went wrong.
-        status_text =
-            "That's not a valid split!";
         rollback_to_prepared_state(pre_split_area_data);
         forget_prepared_state(pre_split_area_data);
         clear_selection();
         clear_layout_drawing();
         sub_state = EDITOR_SUB_STATE_NONE;
+        status_text =
+            "That's not a valid split!";
         return;
     }
     
@@ -2389,13 +2496,13 @@ void area_editor::split_sector_with_drawing() {
         //one of them is in an inner sector.
         //If the user were to split in this way, the sector would still be
         //in one piece, except with a disallowed gash. Cancel.
-        status_text =
-            "That wouldn't split the sector in any useful way!";
         rollback_to_prepared_state(pre_split_area_data);
         forget_prepared_state(pre_split_area_data);
         clear_selection();
         clear_layout_drawing();
         sub_state = EDITOR_SUB_STATE_NONE;
+        status_text =
+            "That wouldn't split the sector in any useful way!";
         return;
     }
     
@@ -2558,6 +2665,9 @@ void area_editor::split_sector_with_drawing() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
     register_change("sector split", pre_split_area_data);
+    status_text =
+        "Split sector, creating one with " +
+        amount_str(new_sector->edges.size(), "edge") + ".";
 }
 
 
@@ -2764,6 +2874,8 @@ void area_editor::undo() {
         return;
     }
     
+    string operation_name = undo_history[0].second;
+    
     undo_history[0].first->clone(game.cur_area_data);
     delete undo_history[0].first;
     undo_history.pop_front();
@@ -2784,6 +2896,7 @@ void area_editor::undo() {
     path_preview_timer.start(false);
     
     made_new_changes = true;
+    status_text = "Undo successful: " + operation_name + ".";
 }
 
 

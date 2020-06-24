@@ -118,6 +118,7 @@ void animation_editor::change_state(const EDITOR_STATES new_state) {
     comparison = false;
     comparison_sprite = NULL;
     state = new_state;
+    status_text.clear();
 }
 
 
@@ -293,7 +294,6 @@ void animation_editor::import_animation_data(const string &name) {
     cur_anim->loop_frame = a->loop_frame;
     
     made_new_changes = true;
-    status_text = "Data imported.";
 }
 
 
@@ -305,9 +305,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
     
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     
-    center_camera_on_sprite_bitmap(false);
     made_new_changes = true;
-    status_text = "Data imported.";
 }
 
 
@@ -330,7 +328,6 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
     
     update_cur_hitbox_tc();
     made_new_changes = true;
-    status_text = "Data imported.";
 }
 
 
@@ -349,7 +346,6 @@ void animation_editor::import_sprite_top_data(const string &name) {
     top_tc.set_angle(cur_sprite->top_angle);
     
     made_new_changes = true;
-    status_text = "Data imported.";
 }
 
 
@@ -363,7 +359,6 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
     update_cur_sprite_tc();
-    status_text = "Data imported.";
 }
 
 
@@ -483,7 +478,7 @@ void animation_editor::load_animation_database(
     change_state(EDITOR_STATE_MAIN);
     loaded_content_yet = true;
     
-    status_text = "Loaded successfully.";
+    status_text = "Loaded file successfully.";
 }
 
 
@@ -524,6 +519,8 @@ void animation_editor::load() {
  */
 void animation_editor::press_grid_button() {
     grid_visible = !grid_visible;
+    string state_str = (grid_visible ? "visible" : "invisible");
+    status_text = "The grid is now " + state_str + ".";
 }
 
 
@@ -532,6 +529,8 @@ void animation_editor::press_grid_button() {
  */
 void animation_editor::press_hitboxes_button() {
     hitboxes_visible = !hitboxes_visible;
+    string state_str = (hitboxes_visible ? "visible" : "invisible");
+    status_text = "The hitboxes are now " + state_str + ".";
 }
 
 
@@ -540,6 +539,8 @@ void animation_editor::press_hitboxes_button() {
  */
 void animation_editor::press_mob_radius_button() {
     mob_radius_visible = !mob_radius_visible;
+    string state_str = (mob_radius_visible ? "visible" : "invisible");
+    status_text = "The object radius is now " + state_str + ".";
 }
 
 
@@ -548,6 +549,8 @@ void animation_editor::press_mob_radius_button() {
  */
 void animation_editor::press_pikmin_silhouette_button() {
     pikmin_silhouette_visible = !pikmin_silhouette_visible;
+    string state_str = (pikmin_silhouette_visible ? "visible" : "invisible");
+    status_text = "The Pikmin silhouette is now " + state_str + ".";
 }
 
 
@@ -566,6 +569,11 @@ void animation_editor::press_play_animation_button() {
             cur_frame_nr = 0;
         }
         cur_frame_time = 0;
+        if(anim_playing) {
+            status_text = "Animation playback started.";
+        } else {
+            status_text = "Animation playback stopped.";
+        }
     }
 }
 
@@ -575,6 +583,7 @@ void animation_editor::press_play_animation_button() {
  */
 void animation_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
+        status_text = "Bye!";
         leave();
     }
 }
@@ -608,6 +617,7 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
         made_new_changes = true;
+        status_text = "Created animation \"" + name + "\".";
     }
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
@@ -628,6 +638,7 @@ void animation_editor::pick_sprite(const string &name, const bool is_new) {
             );
             anims.sort_alphabetically();
             made_new_changes = true;
+            status_text = "Created sprite \"" + name + "\".";
         }
     }
     cur_sprite = anims.sprites[anims.find_sprite(name)];
@@ -653,6 +664,7 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
     
     //Check if the name is the same.
     if(new_name == old_name) {
+        status_text.clear();
         return;
     }
     
@@ -693,6 +705,7 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
     
     //Check if the name is the same.
     if(new_name == old_name) {
+        status_text.clear();
         return;
     }
     
@@ -740,6 +753,7 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
     
     //Check if the name is the same.
     if(new_name == old_name) {
+        status_text.clear();
         return;
     }
     
@@ -779,8 +793,12 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
  * Resizes sprites, body parts, etc. by a multiplier.
  */
 void animation_editor::resize_everything(const float mult) {
-    if(mult == 0) {
+    if(mult == 0.0f) {
         status_text = "Can't resize everything to size 0!";
+        return;
+    }
+    if(mult == 1.0f) {
+        status_text = "Resizing everything by 1 wouldn't make a difference!";
         return;
     }
     
@@ -801,7 +819,7 @@ void animation_editor::resize_everything(const float mult) {
     }
     
     made_new_changes = true;
-    status_text = "Resized successfully.";
+    status_text = "Resized everything by " + f2s(mult) + ".";
 }
 
 
@@ -1000,9 +1018,9 @@ void animation_editor::save_animation_database() {
             NULL,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        status_text = "Could not save the animation!";
+        status_text = "Could not save the animation file!";
     } else {
-        status_text = "Saved successfully.";
+        status_text = "Saved file successfully.";
     }
     made_new_changes = false;
 }
@@ -1024,7 +1042,7 @@ void animation_editor::set_all_sprite_scales(const float scale) {
     }
     
     made_new_changes = true;
-    status_text = "Sprite scales set successfully.";
+    status_text = "Set all sprite scales to " + f2s(scale) + ".";
 }
 
 

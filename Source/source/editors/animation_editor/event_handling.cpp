@@ -215,6 +215,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             handle_cur_sprite_tc();
         }
         break;
+        
     } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite) {
             bool tc_handled = false;
@@ -286,6 +287,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
         }
         break;
+        
     } case EDITOR_STATE_SPRITE_BITMAP: {
         if(cur_sprite && cur_sprite->parent_bmp) {
             int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
@@ -351,6 +353,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             );
         }
         break;
+        
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
             if(top_tc.handle_mouse_down(game.mouse_cursor_w)) {
@@ -358,6 +361,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
         }
         break;
+        
     }
     }
 }
@@ -374,6 +378,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             made_new_changes = true;
         }
         break;
+        
     } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite && cur_hitbox) {
             if(cur_hitbox_tc.handle_mouse_move(game.mouse_cursor_w)) {
@@ -382,6 +387,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
         }
         break;
+        
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
             if(top_tc.handle_mouse_move(game.mouse_cursor_w)) {
@@ -389,6 +395,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
         }
         break;
+        
     }
     }
 }
@@ -402,16 +409,19 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         cur_sprite_tc.handle_mouse_up();
         break;
+        
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
             top_tc.handle_mouse_up();
         }
         break;
+        
     } case EDITOR_STATE_HITBOXES: {
         if(cur_sprite && cur_hitbox) {
             cur_hitbox_tc.handle_mouse_up();
         }
         break;
+        
     }
     }
 }

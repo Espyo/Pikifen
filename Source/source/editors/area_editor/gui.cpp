@@ -273,6 +273,9 @@ void area_editor::process_gui_menu_bar() {
                     "Show tooltips", "", &game.options.editor_show_tooltips
                 )
             ) {
+                string state_str =
+                    game.options.editor_show_tooltips ? "on" : "off";
+                status_text = "Tooltips are now " + state_str + ".";
                 save_options();
             }
             
@@ -572,6 +575,7 @@ void area_editor::process_gui_panel_details() {
                     break;
                 } case FILE_DIALOG_RES_SUCCESS: {
                     selected_shadow->file_name = f[0];
+                    status_text = "Picked an image successfully.";
                     break;
                 }
                 }
@@ -774,6 +778,7 @@ void area_editor::process_gui_panel_info() {
                 break;
             } case FILE_DIALOG_RES_SUCCESS: {
                 bg_file_name = f[0];
+                status_text = "Picked an image successfully.";
                 break;
             }
             }
@@ -1089,6 +1094,9 @@ void area_editor::process_gui_panel_layout() {
                         }
                         s_ptr->hazards_str += picked_hazard;
                         selected_hazard_nr = list.size();
+                        status_text =
+                            "Added hazard \"" + picked_hazard +
+                            "\" to the sector.";
                     }
                 }
                 
@@ -1112,6 +1120,7 @@ void area_editor::process_gui_panel_layout() {
                             selected_hazard_nr < list.size()
                         ) {
                             register_change("sector hazard removal");
+                            string hazard_name = list[selected_hazard_nr];
                             s_ptr->hazards_str.clear();
                             for(size_t h = 0; h < list.size(); ++h) {
                                 if(h == selected_hazard_nr) continue;
@@ -1125,6 +1134,9 @@ void area_editor::process_gui_panel_layout() {
                                 std::min(
                                     selected_hazard_nr, (int) list.size() - 2
                                 );
+                            status_text =
+                                "Removed hazard \"" + hazard_name +
+                                "\" from the sector.";
                         }
                     }
                     set_tooltip(
@@ -1617,6 +1629,11 @@ void area_editor::process_gui_panel_main() {
         //Sector amount text.
         ImGui::BulletText(
             "Sectors: %i", (int) game.cur_area_data.sectors.size()
+        );
+        
+        //Edge amount text.
+        ImGui::BulletText(
+            "Edges: %i", (int) game.cur_area_data.edges.size()
         );
         
         //Vertex amount text.
@@ -2452,13 +2469,17 @@ void area_editor::process_gui_panel_tools() {
         //Resize everything button.
         ImGui::SameLine();
         if(ImGui::Button("Resize everything")) {
-            if(resize_mult != 0.0f) {
+            if(resize_mult == 0.0f) {
+                status_text = "Can't resize everything to size 0!";
+            } else if(resize_mult == 1.0f) {
+                status_text =
+                    "Resizing everything by 1 wouldn't make a difference!";
+            } else {
                 register_change("global resize");
                 resize_everything(resize_mult);
-                status_text = "Resized successfully.";
+                status_text =
+                    "Resized everything by " + f2s(resize_mult) + ".";
                 resize_mult = 1.0f;
-            } else {
-                status_text = "Can't resize everything to size 0!";
             }
         }
         set_tooltip(
@@ -2484,7 +2505,7 @@ void area_editor::process_gui_status_bar() {
     const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
     
     //Status bar text.
-    ImGui::Text("%s", status_text.c_str());
+    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
     //Spacer dummy widget.
     ImGui::SameLine();

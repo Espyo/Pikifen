@@ -22,6 +22,10 @@ using std::vector;
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))
 
+string amount_str(
+    const int amount, const string &singular_text,
+    const string &plural_text = ""
+);
 string box_string(
     const string &s, const size_t size, const string &finisher = ""
 );

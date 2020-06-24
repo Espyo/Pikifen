@@ -214,6 +214,30 @@ sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
 
 
 /* ----------------------------------------------------------------------------
+ * Deletes the specified edges. The sectors on each side of the edge
+ * are merged, so the smallest sector will be deleted. In addition,
+ * this operation will delete any sectors that would end up incomplete.
+ * Returns false if one of the edges couldn't be deleted.
+ */
+bool area_editor::delete_edges(const set<edge*> &which) {
+    bool ret = true;
+    
+    for(edge* e_ptr : which) {
+        if(!e_ptr->vertexes[0]) {
+            //Huh, looks like one of the edge deletion procedures already
+            //wiped this edge out. Skip it.
+            continue;
+        }
+        if(!merge_sectors(e_ptr->sectors[0], e_ptr->sectors[1])) {
+            ret = false;
+        }
+    }
+    
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Deletes the specified edge, removing it from all sectors and vertexes that
  * use it, as well as removing any now-useless sectors or vertexes.
  */
@@ -1213,6 +1237,8 @@ vertex* area_editor::get_vertex_under_point(const point &p) const {
  * based on the one at the head of the selection.
  */
 void area_editor::homogenize_selected_mobs() {
+    if(selected_mobs.size() < 2) return;
+    
     mob_gen* base = *selected_mobs.begin();
     for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
         if(m == selected_mobs.begin()) continue;
@@ -1224,6 +1250,8 @@ void area_editor::homogenize_selected_mobs() {
         m_ptr->links = base->links;
         m_ptr->link_nrs = base->link_nrs;
     }
+    status_text =
+        "Homogenized " + amount_str(selected_mobs.size(), "object") + ".";
 }
 
 
@@ -1232,12 +1260,16 @@ void area_editor::homogenize_selected_mobs() {
  * based on the one at the head of the selection.
  */
 void area_editor::homogenize_selected_sectors() {
+    if(selected_sectors.size() < 2) return;
+    
     sector* base = *selected_sectors.begin();
     for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
         if(s == selected_sectors.begin()) continue;
         base->clone(*s);
         update_sector_texture(*s, base->texture_info.file_name);
     }
+    status_text =
+        "Homogenized " + amount_str(selected_sectors.size(), "sector") + ".";
 }
 
 
@@ -1492,6 +1524,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
     for(auto m : selected_mobs) {
         m->angle = get_angle(m->pos, pos);
     }
+    status_text = "Rotated objects to face " + p2s(pos) + ".";
 }
 
 

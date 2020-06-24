@@ -15,6 +15,7 @@
 
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../utils/string_utils.h"
 
 using std::set;
 
@@ -221,6 +222,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
             ) {
                 sub_state = EDITOR_SUB_STATE_NONE;
+                status_text.clear();
             }
             if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
@@ -230,6 +232,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         } else if(state == EDITOR_STATE_PATHS) {
             if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
                 sub_state = EDITOR_SUB_STATE_NONE;
+                status_text.clear();
             }
             if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
@@ -239,9 +242,10 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         } else if(state == EDITOR_STATE_DETAILS) {
             if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
                 sub_state = EDITOR_SUB_STATE_NONE;
+                status_text.clear();
             }
             if(sub_state == EDITOR_SUB_STATE_NONE) {
-                selected_shadow = NULL;
+                clear_selection();
             }
             
         } else if(state == EDITOR_STATE_MAIN) {
@@ -314,6 +318,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                     );
                 }
             }
+            set_selection_status_text();
         }
         break;
         
@@ -659,6 +664,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
+            set_selection_status_text();
             
             break;
             
@@ -692,6 +698,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             last_mob_type = type_to_use;
             
             selected_mobs.insert(game.cur_area_data.mob_generators.back());
+            
+            status_text = "Object created.";
             
             break;
             
@@ -732,6 +740,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             clear_selection();
             selected_mobs = mobs_to_select;
             
+            status_text =
+                "Duplicated " +
+                amount_str(selected_mobs.size(), "object") + ".";
+                
             break;
             
         } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
@@ -764,6 +776,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
+            status_text = "Linked the two objects.";
             
             break;
             
@@ -818,6 +831,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
+            status_text = "Deleted object link.";
             
             break;
             
@@ -850,6 +864,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
+            set_selection_status_text();
             
             break;
             
@@ -879,6 +894,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     register_change("path stop creation");
                     next_stop = new path_stop(hotspot);
                     game.cur_area_data.path_stops.push_back(next_stop);
+                    status_text = "Created path stop.";
                 }
                 
                 if(next_stop) {
@@ -890,6 +906,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     game.cur_area_data.fix_path_stop_nrs(next_stop);
                     path_drawing_stop_1 = next_stop;
                     next_stop->calculate_dists_plus_neighbors();
+                    status_text = "Created path link.";
                 }
                 
             } else {
@@ -899,6 +916,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     register_change("path stop creation");
                     path_drawing_stop_1 = new path_stop(hotspot);
                     game.cur_area_data.path_stops.push_back(path_drawing_stop_1);
+                    status_text = "Created path stop.";
                 }
                 
             }
@@ -979,6 +997,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                 }
                 
+                set_selection_status_text();
+                
             }
             
             break;
@@ -1047,6 +1067,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         break;
                     }
                 }
+                
+                set_selection_status_text();
             }
             
             break;
@@ -1170,6 +1192,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
+            set_selection_status_text();
             
             break;
             
@@ -1193,6 +1216,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             selection_homogenized = false;
+            set_selection_status_text();
             
             break;
             
@@ -1235,6 +1259,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     }
                 }
             }
+            
+            set_selection_status_text();
             
             break;
             

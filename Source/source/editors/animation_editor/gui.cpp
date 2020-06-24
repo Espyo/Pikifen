@@ -204,6 +204,8 @@ void animation_editor::process_gui_hitbox_hazards() {
                 cur_hitbox->hazards_str += picked_hazard;
                 selected_hazard_nr = list.size();
                 made_new_changes = true;
+                status_text =
+                    "Added hazard \"" + picked_hazard + "\" to the hitbox.";
             }
         }
         
@@ -222,6 +224,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                     selected_hazard_nr >= 0 &&
                     selected_hazard_nr < list.size()
                 ) {
+                    string hazard_name = list[selected_hazard_nr];
                     cur_hitbox->hazards_str.clear();
                     for(size_t h = 0; h < list.size(); ++h) {
                         if(h == selected_hazard_nr) continue;
@@ -236,6 +239,9 @@ void animation_editor::process_gui_hitbox_hazards() {
                             selected_hazard_nr, (int) list.size() - 2
                         );
                     made_new_changes = true;
+                    status_text =
+                        "Removed hazard \"" + hazard_name +
+                        "\" from the hitbox.";
                 }
             }
             set_tooltip(
@@ -434,6 +440,9 @@ void animation_editor::process_gui_menu_bar() {
                     "Show tooltips", "", &game.options.editor_show_tooltips
                 )
             ) {
+                string state_str =
+                    game.options.editor_show_tooltips ? "on" : "off";
+                status_text = "Tooltips are now " + state_str + ".";
                 save_options();
             }
             
@@ -582,7 +591,8 @@ void animation_editor::process_gui_panel_animation() {
             )
         ) {
             if(cur_anim) {
-                size_t nr = anims.find_animation(cur_anim->name);
+                string cur_anim_name = cur_anim->name;
+                size_t nr = anims.find_animation(cur_anim_name);
                 anims.animations.erase(anims.animations.begin() + nr);
                 if(anims.animations.empty()) {
                     nr = INVALID;
@@ -594,7 +604,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
                 anim_playing = false;
                 made_new_changes = true;
-                status_text = "Animation deleted.";
+                status_text = "Deleted animation \"" + cur_anim_name + "\".";
             } else {
                 status_text = "You have to select an animation to delete!";
             }
@@ -632,6 +642,8 @@ void animation_editor::process_gui_panel_animation() {
             string picked_anim;
             if(list_popup("importAnim", import_anim_names, &picked_anim)) {
                 import_animation_data(picked_anim);
+                status_text =
+                    "Imported animation data from \"" + picked_anim + "\".";
             }
             
         }
@@ -810,6 +822,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
                 frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                 made_new_changes = true;
+                status_text = "Added frame #" + i2s(cur_frame_nr + 1) + ".";
             }
             set_tooltip(
                 "Add a new frame after the curret one, by copying "
@@ -827,6 +840,7 @@ void animation_editor::process_gui_panel_animation() {
                     )
                 ) {
                     anim_playing = false;
+                    size_t deleted_frame_nr = cur_frame_nr;
                     if(cur_frame_nr != INVALID) {
                         cur_anim->frames.erase(
                             cur_anim->frames.begin() + cur_frame_nr
@@ -839,6 +853,8 @@ void animation_editor::process_gui_panel_animation() {
                             frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                         }
                         made_new_changes = true;
+                        status_text =
+                            "Deleted frame #" + i2s(deleted_frame_nr + 1) + ".";
                     }
                 }
                 set_tooltip(
@@ -979,11 +995,13 @@ void animation_editor::process_gui_panel_body_part() {
                     selected_part++;
                 }
                 update_hitboxes();
-                new_part_name.clear();
                 made_new_changes = true;
-                status_text = "Body part created.";
+                status_text = "Crated body part \"" + new_part_name + "\".";
+                new_part_name.clear();
             } else {
-                status_text = "A body part by that name already exists!";
+                status_text =
+                    "A body part called \"" + new_part_name +
+                    "\" already exists!";
             }
         }
     }
@@ -999,6 +1017,8 @@ void animation_editor::process_gui_panel_body_part() {
             )
         ) {
             if(selected_part >= 0 && !anims.body_parts.empty()) {
+                string deleted_part_name =
+                    anims.body_parts[selected_part]->name;
                 delete anims.body_parts[selected_part];
                 anims.body_parts.erase(
                     anims.body_parts.begin() + selected_part
@@ -1010,6 +1030,8 @@ void animation_editor::process_gui_panel_body_part() {
                 }
                 update_hitboxes();
                 made_new_changes = true;
+                status_text =
+                    "Deleted body part \"" + deleted_part_name + "\".";
             }
         }
         set_tooltip(
@@ -1373,7 +1395,8 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             if(cur_sprite) {
-                size_t nr = anims.find_sprite(cur_sprite->name);
+                string deleted_sprite_name = cur_sprite->name;
+                size_t nr = anims.find_sprite(deleted_sprite_name);
                 anims.sprites.erase(anims.sprites.begin() + nr);
                 if(anims.sprites.empty()) {
                     nr = INVALID;
@@ -1385,7 +1408,7 @@ void animation_editor::process_gui_panel_sprite() {
                     pick_sprite(anims.sprites[nr]->name, false);
                 }
                 made_new_changes = true;
-                status_text = "Sprite deleted.";
+                status_text = "Deleted sprite \"" + deleted_sprite_name + "\".";
             } else {
                 status_text = "You have to select a sprite to delete!";
             }
@@ -1427,6 +1450,8 @@ void animation_editor::process_gui_panel_sprite() {
                 import_sprite_transformation_data(picked_sprite);
                 import_sprite_hitbox_data(picked_sprite);
                 import_sprite_top_data(picked_sprite);
+                status_text =
+                    "Imported all sprite data from \"" + picked_sprite + "\".";
             }
             
         }
@@ -1566,6 +1591,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             )
         ) {
             import_sprite_file_data(picked_sprite);
+            center_camera_on_sprite_bitmap(false);
+            status_text = "Imported file data from \"" + picked_sprite + "\".";
         }
         
     }
@@ -1600,6 +1627,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             );
             center_camera_on_sprite_bitmap(true);
             made_new_changes = true;
+            status_text = "Picked an image successfully.";
             break;
         }
         }
@@ -1792,6 +1820,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             )
         ) {
             import_sprite_hitbox_data(picked_sprite);
+            status_text =
+                "Imported hitbox data from \"" + picked_sprite + "\".";
         }
         
     }
@@ -2039,6 +2069,8 @@ void animation_editor::process_gui_panel_sprite_top() {
             top_tc.set_center(cur_sprite->top_pos);
             top_tc.set_size(cur_sprite->top_size);
             top_tc.set_angle(cur_sprite->top_angle);
+            status_text =
+                "Imported Pikmin top data from \"" + picked_sprite + "\".";
         }
         
     }
@@ -2155,6 +2187,8 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ) {
             import_sprite_transformation_data(picked_sprite);
             update_cur_sprite_tc();
+            status_text =
+                "Imported transformation data from \"" + picked_sprite + "\".";
         }
         
     }
@@ -2338,7 +2372,7 @@ void animation_editor::process_gui_status_bar() {
     const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
     
     //Status bar text.
-    ImGui::Text("%s", status_text.c_str());
+    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
     //Spacer dummy widget.
     ImGui::SameLine();

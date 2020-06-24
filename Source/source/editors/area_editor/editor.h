@@ -418,14 +418,12 @@ private:
     void create_new_from_picker(const size_t picker_id, const string &name);
     sector* create_sector_for_layout_drawing(sector* copy_from);
     void delete_edge(edge* e_ptr);
+    bool delete_edges(const set<edge*> &which);
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(
         const set<std::pair<path_stop*, path_stop*> > &which
     );
     void delete_path_stops(const set<path_stop*> &which);
-    bool delete_selected_edges();
-    void delete_selected_mobs();
-    void delete_selected_path_elements();
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -550,6 +548,7 @@ private:
     void select_sector(sector* s_ptr);
     void select_tree_shadow(tree_shadow* s_ptr);
     void select_vertex(vertex* v_ptr);
+    void set_selection_status_text();
     void set_new_circle_sector_points();
     point snap_point(const point &p);
     void split_sector_with_drawing();
