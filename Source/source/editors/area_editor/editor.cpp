@@ -1348,6 +1348,7 @@ void area_editor::pick_area(const string &name, const bool is_new) {
  */
 void area_editor::pick_texture(const string &name, const bool is_new) {
     sector* s_ptr = NULL;
+    string final_name = name;
     if(selected_sectors.size() == 1 || selection_homogenized) {
         s_ptr = *selected_sectors.begin();
     }
@@ -1356,15 +1357,45 @@ void area_editor::pick_texture(const string &name, const bool is_new) {
         return;
     }
     
-    if(s_ptr->texture_info.file_name == name) {
+    if(final_name == "Browse...") {
+        FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+        vector<string> f =
+            prompt_file_dialog_locked_to_folder(
+                TEXTURES_FOLDER_PATH,
+                "Please choose the texture to use for the sector.",
+                "*.*",
+                ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                ALLEGRO_FILECHOOSER_PICTURES,
+                &result
+            );
+            
+        switch(result) {
+        case FILE_DIALOG_RES_WRONG_FOLDER: {
+            //File doesn't belong to the folder.
+            status_text = "The chosen image is not in the textures folder!";
+            return;
+            break;
+        } case FILE_DIALOG_RES_CANCELED: {
+            //User canceled.
+            return;
+            break;
+        } case FILE_DIALOG_RES_SUCCESS: {
+            final_name = f[0];
+            status_text = "Picked an image successfully.";
+            break;
+        }
+        }
+    }
+    
+    if(s_ptr->texture_info.file_name == final_name) {
         return;
     }
     
     register_change("sector texture change");
     
-    update_texture_suggestions(name);
+    update_texture_suggestions(final_name);
     
-    update_sector_texture(s_ptr, name);
+    update_sector_texture(s_ptr, final_name);
     
     homogenize_selected_sectors();
 }

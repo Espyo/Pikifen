@@ -1260,10 +1260,12 @@ void area_editor::process_gui_panel_layout() {
                 
                 //Sector texture button.
                 if(ImGui::Button("Change")) {
-                    vector<picker_item> suggestions;
+                    vector<picker_item> picker_buttons;
+                    
+                    picker_buttons.push_back(picker_item("Browse..."));
                     
                     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
-                        suggestions.push_back(
+                        picker_buttons.push_back(
                             picker_item(
                                 texture_suggestions[s].name,
                                 "",
@@ -1273,7 +1275,7 @@ void area_editor::process_gui_panel_layout() {
                     }
                     open_picker(
                         "Pick a texture",
-                        suggestions,
+                        picker_buttons,
                         std::bind(
                             &area_editor::pick_texture, this,
                             std::placeholders::_1,

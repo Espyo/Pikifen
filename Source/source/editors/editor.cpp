@@ -828,7 +828,7 @@ void editor::process_picker() {
         ImGui::PushStyleColor
         (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
-        if(ImGui::Button("+", ImVec2(160.0f, 32.0f))) {
+        if(ImGui::Button("+", ImVec2(64.0f, 32.0f))) {
             try_make_new();
         }
         ImGui::PopStyleColor(3);
@@ -886,7 +886,7 @@ void editor::process_picker() {
             
         } else {
         
-            button_size = ImVec2(160.0f, 32.0f);
+            button_size = ImVec2(168.0f, 32.0f);
             if(ImGui::Button(final_items[i].name.c_str(), button_size)) {
                 picker_pick_callback(final_items[i].name, false);
                 is_dialog_open = false;
