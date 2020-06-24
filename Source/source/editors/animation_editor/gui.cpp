@@ -42,6 +42,19 @@ void animation_editor::open_load_dialog() {
 
 
 /* ----------------------------------------------------------------------------
+ * Opens the options dialog.
+ */
+void animation_editor::open_options_dialog() {
+    open_dialog(
+        "Options",
+        std::bind(&animation_editor::process_gui_options_dialog, this)
+    );
+    dialog_close_callback =
+        std::bind(&animation_editor::close_options_dialog, this);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes ImGui for this frame.
  */
 void animation_editor::process_gui() {
@@ -144,9 +157,6 @@ void animation_editor::process_gui_control_panel() {
         break;
     } case EDITOR_STATE_TOOLS: {
         process_gui_panel_tools();
-        break;
-    } case EDITOR_STATE_OPTIONS: {
-        process_gui_panel_options();
         break;
     }
     }
@@ -421,6 +431,11 @@ void animation_editor::process_gui_menu_bar() {
             }
             reload_widget_pos = get_last_widget_pos();
             
+            //Options menu item.
+            if(ImGui::MenuItem("Options")) {
+                open_options_dialog();
+            }
+            
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 press_quit_button();
@@ -468,6 +483,38 @@ void animation_editor::process_gui_menu_bar() {
         }
         
         ImGui::EndMenuBar();
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the options dialog for this frame.
+ */
+void animation_editor::process_gui_options_dialog() {
+    //Controls node.
+    if(saveable_tree_node("options", "Controls")) {
+    
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        set_tooltip(
+            "Use the middle mouse button to pan the camera "
+            "(and RMB to reset camera/zoom)."
+        );
+        
+        //Drag threshold value.
+        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Drag threshold", &drag_threshold,
+            0.1f, 0, INT_MAX
+        );
+        set_tooltip(
+            "Cursor must move these many pixels to be considered a drag."
+        );
+        game.options.editor_mouse_drag_threshold = drag_threshold;
+        
+        ImGui::TreePop();
         
     }
 }
@@ -1190,21 +1237,6 @@ void animation_editor::process_gui_panel_main() {
         "Special tools to help with specific tasks."
     );
     
-    //Options button.
-    if(
-        ImGui::ImageButtonAndText(
-            editor_icons[ICON_OPTIONS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
-            16.0f,
-            "Options"
-        )
-    ) {
-        change_state(EDITOR_STATE_OPTIONS);
-    }
-    set_tooltip(
-        "Options for the area editor."
-    );
-    
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
@@ -1227,51 +1259,6 @@ void animation_editor::process_gui_panel_main() {
         );
         
         ImGui::TreePop();
-    }
-    
-    ImGui::EndChild();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Processes the ImGui options control panel for this frame.
- */
-void animation_editor::process_gui_panel_options() {
-    ImGui::BeginChild("options");
-    
-    //Back button.
-    if(ImGui::Button("Save and go back")) {
-        save_options();
-        change_state(EDITOR_STATE_MAIN);
-    }
-    
-    //Panel title text.
-    panel_title("OPTIONS", 88.0f);
-    
-    //Controls node.
-    if(saveable_tree_node("options", "Controls")) {
-    
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
-        set_tooltip(
-            "Use the middle mouse button to pan the camera "
-            "(and RMB to reset camera/zoom)."
-        );
-        
-        //Drag threshold value.
-        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Drag threshold", &drag_threshold,
-            0.1f, 0, INT_MAX
-        );
-        set_tooltip(
-            "Cursor must move these many pixels to be considered a drag."
-        );
-        game.options.editor_mouse_drag_threshold = drag_threshold;
-        
-        ImGui::TreePop();
-        
     }
     
     ImGui::EndChild();

@@ -135,6 +135,14 @@ void animation_editor::close_load_dialog() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the options dialog is closed.
+ */
+void animation_editor::close_options_dialog() {
+    save_options();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {

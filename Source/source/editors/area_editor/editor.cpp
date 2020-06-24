@@ -325,6 +325,14 @@ void area_editor::close_area_picker() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the options dialog is closed.
+ */
+void area_editor::close_options_dialog() {
+    save_options();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new area to work on.
  */
 void area_editor::create_area() {

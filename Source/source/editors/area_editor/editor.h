@@ -129,7 +129,6 @@ private:
         EDITOR_STATE_DETAILS,
         EDITOR_STATE_REVIEW,
         EDITOR_STATE_TOOLS,
-        EDITOR_STATE_OPTIONS,
     };
     
     enum EDITOR_SUB_STATES {
@@ -414,6 +413,7 @@ private:
     void clear_texture_suggestions();
     void clear_undo_history();
     void close_area_picker();
+    void close_options_dialog();
     void create_area();
     void create_drawing_vertexes();
     void create_new_from_picker(const size_t picker_id, const string &name);
@@ -497,6 +497,7 @@ private:
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
     void open_area_picker();
+    void open_options_dialog();
     void populate_texture_suggestions();
     void pick_area(const string &name, const bool is_new);
     void pick_texture(const string &name, const bool is_new);
@@ -533,6 +534,7 @@ private:
     void process_gui_panel_paths();
     void process_gui_panel_review();
     void process_gui_panel_tools();
+    void process_gui_options_dialog();
     void process_gui_status_bar();
     void process_gui_toolbar();
     void register_change(

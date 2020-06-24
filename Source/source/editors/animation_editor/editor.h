@@ -52,7 +52,6 @@ private:
         EDITOR_STATE_SPRITE_TRANSFORM,
         EDITOR_STATE_TOP,
         EDITOR_STATE_TOOLS,
-        EDITOR_STATE_OPTIONS,
     };
     
     static const float KEYBOARD_PAN_AMOUNT;
@@ -142,6 +141,7 @@ private:
     void center_camera_on_sprite_bitmap(const bool instant);
     void change_state(const EDITOR_STATES new_state);
     void close_load_dialog();
+    void close_options_dialog();
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -172,6 +172,7 @@ private:
     void import_sprite_transformation_data(const string &name);
     void load_animation_database(const bool should_update_history);
     void open_load_dialog();
+    void open_options_dialog();
     void pick_animation(const string &name, const bool is_new);
     void pick_sprite(const string &name, const bool is_new);
     void press_grid_button();
@@ -187,6 +188,7 @@ private:
     void process_gui_control_panel();
     void process_gui_hitbox_hazards();
     void process_gui_load_dialog();
+    void process_gui_options_dialog();
     void process_gui_panel_animation();
     void process_gui_panel_body_part();
     void process_gui_panel_main();

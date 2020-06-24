@@ -47,6 +47,19 @@ void area_editor::open_area_picker() {
 
 
 /* ----------------------------------------------------------------------------
+ * Opens the options dialog.
+ */
+void area_editor::open_options_dialog() {
+    open_dialog(
+        "Options",
+        std::bind(&area_editor::process_gui_options_dialog, this)
+    );
+    dialog_close_callback =
+        std::bind(&area_editor::close_options_dialog, this);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes ImGui for this frame.
  */
 void area_editor::process_gui() {
@@ -147,9 +160,6 @@ void area_editor::process_gui_control_panel() {
     } case EDITOR_STATE_TOOLS: {
         process_gui_panel_tools();
         break;
-    } case EDITOR_STATE_OPTIONS: {
-        process_gui_panel_options();
-        break;
     }
     }
     
@@ -171,6 +181,11 @@ void area_editor::process_gui_menu_bar() {
                 press_reload_button();
             }
             reload_widget_pos = get_last_widget_pos();
+            
+            //Options menu item.
+            if(ImGui::MenuItem("Options")) {
+                open_options_dialog();
+            }
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
@@ -490,6 +505,182 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         "wrong format will be removed.\n"
         "Format example: \"sleep=y;jumping=n\"."
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the options dialog for this frame.
+ */
+void area_editor::process_gui_options_dialog() {
+    //Controls node.
+    if(saveable_tree_node("options", "Controls")) {
+    
+        //Snap threshold value.
+        int snap_threshold = (int) game.options.area_editor_snap_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Snap threshold", &snap_threshold,
+            0.1f, 0, INT_MAX
+        );
+        set_tooltip(
+            "Cursor must be these many pixels close to a vertex/edge in order "
+            "to snap there."
+        );
+        game.options.area_editor_snap_threshold = snap_threshold;
+        
+        //Middle mouse button pans checkbox.
+        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        set_tooltip(
+            "Use the middle mouse button to pan the camera "
+            "(and RMB to reset camera/zoom)."
+        );
+        
+        //Drag threshold value.
+        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Drag threshold", &drag_threshold,
+            0.1f, 0, INT_MAX
+        );
+        set_tooltip(
+            "Cursor must move these many pixels to be considered a drag."
+        );
+        game.options.editor_mouse_drag_threshold = drag_threshold;
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //View node.
+    if(saveable_tree_node("options", "View")) {
+    
+        //Show edge length checkbox.
+        ImGui::Checkbox(
+            "Show edge length", &game.options.area_editor_show_edge_length
+        );
+        set_tooltip(
+            "Show the length of nearby edges when drawing or moving vertexes."
+        );
+        
+        //Show territory checkbox.
+        ImGui::Checkbox(
+            "Show territory", &game.options.area_editor_show_territory
+        );
+        set_tooltip(
+            "Show the territory of selected objects, when applicable."
+        );
+        
+        //View mode text.
+        int view_mode = game.options.area_editor_view_mode;
+        ImGui::Text("View mode:");
+        
+        ImGui::Indent();
+        
+        //Textures view mode radio button.
+        ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
+        set_tooltip(
+            "Draw textures on the sectors."
+        );
+        
+        //Wireframe view mode radio button.
+        ImGui::RadioButton("Wireframe", &view_mode, VIEW_MODE_WIREFRAME);
+        set_tooltip(
+            "Do not draw sectors, only edges and vertexes. "
+            "Best for performance."
+        );
+        
+        //Heightmap view mode radio button.
+        ImGui::RadioButton("Heightmap", &view_mode, VIEW_MODE_HEIGHTMAP);
+        set_tooltip(
+            "Draw sectors as heightmaps. Lighter means taller."
+        );
+        
+        //Brightness view mode radio button.
+        ImGui::RadioButton("Brightness", &view_mode, VIEW_MODE_BRIGHTNESS);
+        set_tooltip(
+            "Draw sectors as solid grays based on their brightness."
+        );
+        game.options.area_editor_view_mode = view_mode;
+        
+        ImGui::Unindent();
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Misc. node.
+    if(saveable_tree_node("options", "Misc.")) {
+    
+        //Grid interval text.
+        ImGui::Text(
+            "Grid interval: %i", (int) game.options.area_editor_grid_interval
+        );
+        
+        //Increase grid interval button.
+        ImGui::SameLine();
+        if(ImGui::Button("+")) {
+            game.options.area_editor_grid_interval =
+                std::min(
+                    game.options.area_editor_grid_interval * 2.0f,
+                    MAX_GRID_INTERVAL
+                );
+        }
+        set_tooltip(
+            "Increase the spacing on the grid."
+        );
+        
+        //Decrease grid interval button.
+        ImGui::SameLine();
+        if(ImGui::Button("-")) {
+            game.options.area_editor_grid_interval =
+                std::max(
+                    game.options.area_editor_grid_interval * 0.5f,
+                    MIN_GRID_INTERVAL
+                );
+        }
+        set_tooltip(
+            "Decrease the spacing on the grid."
+        );
+        
+        //Auto-backup interval value.
+        int backup_interval = game.options.area_editor_backup_interval;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
+        );
+        set_tooltip(
+            "Interval between auto-backup saves, in seconds. 0 = off."
+        );
+        game.options.area_editor_backup_interval = backup_interval;
+        
+        //Undo limit value.
+        size_t old_undo_limit = game.options.area_editor_undo_limit;
+        int undo_limit = game.options.area_editor_undo_limit;
+        ImGui::SetNextItemWidth(64.0f);
+        ImGui::DragInt(
+            "Undo limit", &undo_limit, 0.1, 0, INT_MAX
+        );
+        set_tooltip(
+            "Maximum number of operations that can be undone. 0 = off."
+        );
+        game.options.area_editor_undo_limit = undo_limit;
+        
+        if(game.options.area_editor_undo_limit != old_undo_limit) {
+            update_undo_history();
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+        
+    }
 }
 
 
@@ -1606,21 +1797,6 @@ void area_editor::process_gui_panel_main() {
         "Special tools to help you develop the area."
     );
     
-    //Options button.
-    if(
-        ImGui::ImageButtonAndText(
-            editor_icons[ICON_OPTIONS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
-            16.0f,
-            "Options"
-        )
-    ) {
-        change_state(EDITOR_STATE_OPTIONS);
-    }
-    set_tooltip(
-        "Options for the area editor."
-    );
-    
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
@@ -1862,195 +2038,6 @@ void area_editor::process_gui_panel_mobs() {
             selection_homogenized = true;
             homogenize_selected_mobs();
         }
-        
-    }
-    
-    ImGui::EndChild();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Processes the ImGui options control panel for this frame.
- */
-void area_editor::process_gui_panel_options() {
-    ImGui::BeginChild("options");
-    
-    //Back button.
-    if(ImGui::Button("Save and go back")) {
-        save_options();
-        change_state(EDITOR_STATE_MAIN);
-    }
-    
-    //Panel title text.
-    panel_title("OPTIONS", 88.0f);
-    
-    //Controls node.
-    if(saveable_tree_node("options", "Controls")) {
-    
-        //Snap threshold value.
-        int snap_threshold = (int) game.options.area_editor_snap_threshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Snap threshold", &snap_threshold,
-            0.1f, 0, INT_MAX
-        );
-        set_tooltip(
-            "Cursor must be these many pixels close to a vertex/edge in order "
-            "to snap there."
-        );
-        game.options.area_editor_snap_threshold = snap_threshold;
-        
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
-        set_tooltip(
-            "Use the middle mouse button to pan the camera "
-            "(and RMB to reset camera/zoom)."
-        );
-        
-        //Drag threshold value.
-        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Drag threshold", &drag_threshold,
-            0.1f, 0, INT_MAX
-        );
-        set_tooltip(
-            "Cursor must move these many pixels to be considered a drag."
-        );
-        game.options.editor_mouse_drag_threshold = drag_threshold;
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //View node.
-    if(saveable_tree_node("options", "View")) {
-    
-        //Show edge length checkbox.
-        ImGui::Checkbox(
-            "Show edge length", &game.options.area_editor_show_edge_length
-        );
-        set_tooltip(
-            "Show the length of nearby edges when drawing or moving vertexes."
-        );
-        
-        //Show territory checkbox.
-        ImGui::Checkbox(
-            "Show territory", &game.options.area_editor_show_territory
-        );
-        set_tooltip(
-            "Show the territory of selected objects, when applicable."
-        );
-        
-        //View mode text.
-        int view_mode = game.options.area_editor_view_mode;
-        ImGui::Text("View mode:");
-        
-        ImGui::Indent();
-        
-        //Textures view mode radio button.
-        ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
-        set_tooltip(
-            "Draw textures on the sectors."
-        );
-        
-        //Wireframe view mode radio button.
-        ImGui::RadioButton("Wireframe", &view_mode, VIEW_MODE_WIREFRAME);
-        set_tooltip(
-            "Do not draw sectors, only edges and vertexes. "
-            "Best for performance."
-        );
-        
-        //Heightmap view mode radio button.
-        ImGui::RadioButton("Heightmap", &view_mode, VIEW_MODE_HEIGHTMAP);
-        set_tooltip(
-            "Draw sectors as heightmaps. Lighter means taller."
-        );
-        
-        //Brightness view mode radio button.
-        ImGui::RadioButton("Brightness", &view_mode, VIEW_MODE_BRIGHTNESS);
-        set_tooltip(
-            "Draw sectors as solid grays based on their brightness."
-        );
-        game.options.area_editor_view_mode = view_mode;
-        
-        ImGui::Unindent();
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Misc. node.
-    if(saveable_tree_node("options", "Misc.")) {
-    
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %i", (int) game.options.area_editor_grid_interval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(ImGui::Button("+")) {
-            game.options.area_editor_grid_interval =
-                std::min(
-                    game.options.area_editor_grid_interval * 2.0f,
-                    MAX_GRID_INTERVAL
-                );
-        }
-        set_tooltip(
-            "Increase the spacing on the grid."
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(ImGui::Button("-")) {
-            game.options.area_editor_grid_interval =
-                std::max(
-                    game.options.area_editor_grid_interval * 0.5f,
-                    MIN_GRID_INTERVAL
-                );
-        }
-        set_tooltip(
-            "Decrease the spacing on the grid."
-        );
-        
-        //Auto-backup interval value.
-        int backup_interval = game.options.area_editor_backup_interval;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
-        );
-        set_tooltip(
-            "Interval between auto-backup saves, in seconds. 0 = off."
-        );
-        game.options.area_editor_backup_interval = backup_interval;
-        
-        //Undo limit value.
-        size_t old_undo_limit = game.options.area_editor_undo_limit;
-        int undo_limit = game.options.area_editor_undo_limit;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Undo limit", &undo_limit, 0.1, 0, INT_MAX
-        );
-        set_tooltip(
-            "Maximum number of operations that can be undone. 0 = off."
-        );
-        game.options.area_editor_undo_limit = undo_limit;
-        
-        if(game.options.area_editor_undo_limit != old_undo_limit) {
-            update_undo_history();
-        }
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
-        ImGui::TreePop();
         
     }
     

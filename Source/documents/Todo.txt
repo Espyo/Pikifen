@@ -3,9 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
-        The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-        Options should go in a pop-up menu
         More options
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
         When editing an animation, have a timeline?
@@ -638,6 +635,8 @@ Tasks for later on (I might never implement these)
             The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
             When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Double-click in object mode -> create new object on cursor. There are a lot of corner cases though, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc. This can result in the player accidentally adding a new mob while trying to do something else
+            When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
+            The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?
