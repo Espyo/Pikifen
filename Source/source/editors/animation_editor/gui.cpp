@@ -1477,6 +1477,28 @@ void animation_editor::process_gui_panel_sprite() {
             rename_sprite(cur_sprite, rename_sprite_name);
         }
         
+        //Resize sprite button.
+        static string resize_sprite_mult;
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_RESIZE],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            resize_sprite_mult = "1.0";
+            input_popup_focus_controller = 2;
+            ImGui::OpenPopup("resizeSprite");
+        }
+        set_tooltip(
+            "Resize the current sprite."
+        );
+        
+        //Resize sprite popup.
+        if(input_popup("resizeSprite", "Resize by:", &resize_sprite_mult)) {
+            resize_sprite(cur_sprite, s2f(resize_sprite_mult));
+        }
+        
         ImVec2 mode_buttons_size(-1.0f, 24.0f);
         
         //Sprite bitmap button.

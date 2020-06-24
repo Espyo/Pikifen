@@ -3,13 +3,11 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        A way to resize a sprite, and it resizes hitboxes and all. Useful for creating smaller copies of existing sprites (Kman)
         When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
         The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
         Options should go in a pop-up menu
         More options
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
-        "Remove" icon should be a garbage bin
         When editing an animation, have a timeline?
         Put the canvas in one ImGui window and the panel in another?
         Style the editors
@@ -33,6 +31,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)
     ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
     ** The animation editor now has a grid too.
+    ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
     ** Several other small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)

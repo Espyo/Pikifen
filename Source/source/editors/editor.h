@@ -56,7 +56,7 @@ protected:
         ICON_HITBOXES,
         ICON_REFERENCE,
         ICON_INFO,
-        ICON_HELP,
+        ICON_RESIZE,
         ICON_PLAY_PAUSE,
         ICON_NEXT,
         ICON_PREVIOUS,

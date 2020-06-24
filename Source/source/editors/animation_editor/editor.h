@@ -204,6 +204,7 @@ private:
     void rename_body_part(body_part* p, const string &new_name);
     void rename_sprite(sprite* s, const string &new_name);
     void resize_everything(const float mult);
+    void resize_sprite(sprite* s, const float mult);
     void save_animation_database();
     void set_all_sprite_scales(const float scale);
     void sprite_bmp_flood_fill(

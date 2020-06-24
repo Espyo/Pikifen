@@ -800,7 +800,7 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
 
 
 /* ----------------------------------------------------------------------------
- * Resizes sprites, body parts, etc. by a multiplier.
+ * Resizes all sprites, hitboxes, etc. by a multiplier.
  */
 void animation_editor::resize_everything(const float mult) {
     if(mult == 0.0f) {
@@ -813,23 +813,41 @@ void animation_editor::resize_everything(const float mult) {
     }
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
-        sprite* s_ptr = anims.sprites[s];
-        
-        s_ptr->scale    *= mult;
-        s_ptr->offset   *= mult;
-        s_ptr->top_pos  *= mult;
-        s_ptr->top_size *= mult;
-        
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
-            
-            h_ptr->radius = fabs(h_ptr->radius * mult);
-            h_ptr->pos    *= mult;
-        }
+        resize_sprite(anims.sprites[s], mult);
     }
     
     made_new_changes = true;
     status_text = "Resized everything by " + f2s(mult) + ".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resizes a sprite by a multiplier.
+ */
+void animation_editor::resize_sprite(sprite* s, const float mult) {
+    if(mult == 0.0f) {
+        status_text = "Can't resize a sprite to size 0!";
+        return;
+    }
+    if(mult == 1.0f) {
+        status_text = "Resizing a sprite by 1 wouldn't make a difference!";
+        return;
+    }
+    
+    s->scale    *= mult;
+    s->offset   *= mult;
+    s->top_pos  *= mult;
+    s->top_size *= mult;
+    
+    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+        hitbox* h_ptr = &s->hitboxes[h];
+        
+        h_ptr->radius = fabs(h_ptr->radius * mult);
+        h_ptr->pos    *= mult;
+    }
+    
+    made_new_changes = true;
+    status_text = "Resized sprite by " + f2s(mult) + ".";
 }
 
 
