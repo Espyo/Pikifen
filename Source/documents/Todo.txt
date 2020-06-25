@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
         More options
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
-        When editing an animation, have a timeline?
         Put the canvas in one ImGui window and the panel in another?
         Style the editors
         Minor
@@ -27,7 +26,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** Objects with certain tricks to them (e.g. they must be linked to another mob) will now show hints in the object panel, when you select them.
     ** Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)
     ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
-    ** The animation editor now has a grid too.
+    ** The animation editor now has a grid too, and animations have a simple timeline.
     ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
     ** Several other small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.

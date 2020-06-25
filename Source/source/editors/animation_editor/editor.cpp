@@ -25,6 +25,14 @@ using std::queue;
 const size_t animation_editor::HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
 const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+//How tall the animation timeline header is.
+const size_t animation_editor::TIMELINE_HEADER_HEIGHT = 12;
+//How tall the animation timeline is, in total.
+const size_t animation_editor::TIMELINE_HEIGHT = 48;
+//Size of each side of the triangle that marks the loop frame.
+const size_t animation_editor::TIMELINE_LOOP_TRI_SIZE = 8;
+//Pad the left, right, and bottom of the timeline by this much.
+const size_t animation_editor::TIMELINE_PADDING = 6;
 //Maximum zoom level possible in the editor.
 const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
@@ -576,7 +584,7 @@ void animation_editor::press_pikmin_silhouette_button() {
  * Code to run when the play animation button widget is pressed.
  */
 void animation_editor::press_play_animation_button() {
-    if(cur_anim->frames.size() < 2) {
+    if(cur_anim->frames.empty()) {
         anim_playing = false;
     } else {
         anim_playing = !anim_playing;
@@ -639,6 +647,7 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
     }
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
+    cur_frame_time = 0;
 }
 
 

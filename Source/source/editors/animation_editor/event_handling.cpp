@@ -209,6 +209,14 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         return;
     }
     
+    if(
+        state == EDITOR_STATE_ANIMATION &&
+        ev.mouse.y >= canvas_br.y - TIMELINE_HEIGHT
+    ) {
+        handle_mouse_in_timeline();
+        return;
+    }
+    
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_down(game.mouse_cursor_w)) {
@@ -371,6 +379,14 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
+    if(
+        state == EDITOR_STATE_ANIMATION &&
+        ev.mouse.y >= canvas_br.y - TIMELINE_HEIGHT
+    ) {
+        handle_mouse_in_timeline();
+        return;
+    }
+    
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         if(cur_sprite_tc.handle_mouse_move(game.mouse_cursor_w)) {
@@ -453,6 +469,48 @@ void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
         pan_cam(ev);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the mouse being clicked/dragged in the animation timeline.
+ */
+void animation_editor::handle_mouse_in_timeline() {
+    if(!cur_anim || cur_anim->frames.empty()) return;
+    
+    float mouse_x = game.mouse_cursor_s.x - TIMELINE_PADDING - canvas_tl.x;
+    
+    float anim_total_duration = 0.0f;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        anim_total_duration += cur_anim->frames[f].duration;
+    }
+    
+    float scale =
+        (canvas_br.x - canvas_tl.x - TIMELINE_PADDING * 2.0f) /
+        anim_total_duration;
+        
+    float f_x1 = 0.0f;
+    float f_x2 = 0.0f;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        float f_dur = cur_anim->frames[f].duration;
+        
+        f_x2 += f_dur * scale;
+        
+        if(mouse_x >= f_x1 && mouse_x < f_x2) {
+            cur_frame_nr = f;
+            cur_frame_time = (mouse_x - f_x1) / scale;
+        }
+        
+        f_x1 = f_x2;
+    }
+    
+    if(mouse_x < 0.0f) {
+        cur_frame_nr = 0;
+        cur_frame_time = 0.0f;
+    } else if(mouse_x > f_x2) {
+        cur_frame_nr = cur_anim->frames.size() - 1;
+        cur_frame_time = cur_anim->frames.back().duration;
     }
 }
 

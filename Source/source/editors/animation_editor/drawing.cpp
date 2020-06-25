@@ -15,6 +15,7 @@
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../utils/string_utils.h"
 
 const float ANIMATION_EDITOR_GRID_INTERVAL = 16.0f;
 
@@ -282,6 +283,11 @@ void animation_editor::draw_canvas() {
         }
     }
     
+    if(state == EDITOR_STATE_ANIMATION) {
+        al_use_transform(&game.identity_transform);
+        draw_timeline();
+    }
+    
     //Finish up.
     al_reset_clipping_rectangle();
     al_use_transform(&game.identity_transform);
@@ -398,6 +404,145 @@ void animation_editor::draw_side_view_sprite(sprite* s) {
     }
     min.y = -min.y; //Up is negative Y.
     al_draw_filled_rectangle(min.x, min.y, max.x, max.y, color);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a timeline for the current animation.
+ */
+void animation_editor::draw_timeline() {
+    if(!cur_anim || cur_anim->frames.empty()) return;
+    
+    //Some initial calculations.
+    float anim_total_duration = 0;
+    float anim_cur_time = 0;
+    float anim_loop_time = 0;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        float f_dur = cur_anim->frames[f].duration;
+        
+        if(f < cur_frame_nr) {
+            anim_cur_time += f_dur;
+        } else if(f == cur_frame_nr) {
+            anim_cur_time += cur_frame_time;
+        }
+        
+        if(f < cur_anim->loop_frame) {
+            anim_loop_time += f_dur;
+        }
+        
+        anim_total_duration += f_dur;
+    }
+    float scale =
+        (canvas_br.x - canvas_tl.x - TIMELINE_PADDING * 2.0f) /
+        anim_total_duration;
+    float milestone_interval = 32.0f / scale;
+    milestone_interval = floor(milestone_interval * 100.0f) / 100.0f;
+    milestone_interval = std::max(milestone_interval, 0.01f);
+    
+    //Draw the entire timeline's rectangle.
+    al_draw_filled_rectangle(
+        canvas_tl.x, canvas_br.y - TIMELINE_HEIGHT,
+        canvas_br.x, canvas_br.y,
+        al_map_rgb(160, 180, 160)
+    );
+    
+    //Draw every frame as a rectangle.
+    float frame_rectangles_cur_x = canvas_tl.x + TIMELINE_PADDING;
+    float frame_rectangle_top =
+        canvas_br.y - TIMELINE_HEIGHT + TIMELINE_HEADER_HEIGHT;
+    float frame_rectangle_bottom =
+        canvas_br.y - TIMELINE_PADDING;
+    for(size_t f = 0; f < cur_anim->frames.size(); ++f) {
+        float end_x =
+            frame_rectangles_cur_x +
+            cur_anim->frames[f].duration * scale;
+        ALLEGRO_COLOR color =
+            f % 2 == 0 ?
+            al_map_rgb(128, 132, 128) :
+            al_map_rgb(148, 152, 148);
+            
+        al_draw_filled_rectangle(
+            frame_rectangles_cur_x, frame_rectangle_top,
+            end_x, frame_rectangle_bottom,
+            color
+        );
+        frame_rectangles_cur_x = end_x;
+    }
+    
+    //Draw a triangle for the start of the loop frame.
+    if(anim_total_duration) {
+        float loop_x =
+            canvas_tl.x + TIMELINE_PADDING +
+            anim_loop_time * scale;
+        al_draw_filled_triangle(
+            loop_x, frame_rectangle_bottom,
+            loop_x, frame_rectangle_bottom - TIMELINE_LOOP_TRI_SIZE,
+            loop_x + TIMELINE_LOOP_TRI_SIZE, frame_rectangle_bottom,
+            al_map_rgb(64, 64, 96)
+        );
+    }
+    
+    //Draw a line indicating where we are in the animation.
+    float cur_time_line_x =
+        canvas_tl.x + TIMELINE_PADDING + anim_cur_time * scale;
+    al_draw_line(
+        cur_time_line_x, canvas_br.y - TIMELINE_HEIGHT,
+        cur_time_line_x, canvas_br.y,
+        al_map_rgb(128, 48, 48), 2.0f
+    );
+    
+    //Draw the milestone markers.
+    float next_marker_x = 0.0f;
+    unsigned char next_marker_type = 0;
+    
+    while(next_marker_x < canvas_br.x - canvas_tl.x - TIMELINE_PADDING * 2) {
+        float x_to_use = next_marker_x + canvas_tl.x + TIMELINE_PADDING;
+        switch(next_marker_type) {
+        case 0: {
+            string text = f2s(next_marker_x / scale);
+            if(text.size() >= 4) {
+                text = text.substr(1, 3);
+            }
+            al_draw_text(
+                game.fonts.builtin, al_map_rgb(32, 32, 32),
+                floor(x_to_use) + 2,
+                canvas_br.y - TIMELINE_HEIGHT + 2,
+                ALLEGRO_ALIGN_LEFT,
+                text.c_str()
+            );
+            al_draw_line(
+                x_to_use + 0.5, canvas_br.y - TIMELINE_HEIGHT,
+                x_to_use + 0.5, canvas_br.y - TIMELINE_HEIGHT +
+                TIMELINE_HEADER_HEIGHT,
+                al_map_rgb(32, 32, 32), 1.0f
+            );
+            break;
+            
+        } case 1:
+        case 3: {
+            al_draw_line(
+                x_to_use + 0.5, canvas_br.y - TIMELINE_HEIGHT,
+                x_to_use + 0.5,
+                canvas_br.y - TIMELINE_HEIGHT + TIMELINE_HEADER_HEIGHT * 0.66f,
+                al_map_rgb(32, 32, 32), 1.0f
+            );
+            break;
+            
+        } case 2: {
+            al_draw_line(
+                x_to_use + 0.5, canvas_br.y - TIMELINE_HEIGHT,
+                x_to_use + 0.5,
+                canvas_br.y - TIMELINE_HEIGHT + TIMELINE_HEADER_HEIGHT * 0.33f,
+                al_map_rgb(32, 32, 32), 1.0f
+            );
+            break;
+            
+        }
+        }
+        
+        next_marker_x += scale * milestone_interval;
+        next_marker_type = sum_and_wrap(next_marker_type, 1, 4);
+    }
 }
 
 

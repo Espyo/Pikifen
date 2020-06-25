@@ -55,6 +55,10 @@ private:
     };
     
     static const float KEYBOARD_PAN_AMOUNT;
+    static const size_t TIMELINE_HEADER_HEIGHT;
+    static const size_t TIMELINE_HEIGHT;
+    static const size_t TIMELINE_LOOP_TRI_SIZE;
+    static const size_t TIMELINE_PADDING;
     static const float ZOOM_MAX_LEVEL_EDITOR;
     static const float ZOOM_MIN_LEVEL_EDITOR;
     
@@ -152,6 +156,7 @@ private:
     );
     void draw_side_view_pikmin_silhouette(const float x_offset);
     void draw_side_view_sprite(sprite* s);
+    void draw_timeline();
     void draw_top_down_view_hitbox(
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, const float outline_thickness
@@ -164,6 +169,7 @@ private:
     string get_path_short_name(const string &p) const;
     void handle_cur_hitbox_tc();
     void handle_cur_sprite_tc();
+    void handle_mouse_in_timeline();
     void handle_top_tc();
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
