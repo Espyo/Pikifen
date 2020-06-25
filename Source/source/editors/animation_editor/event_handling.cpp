@@ -279,13 +279,13 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                     
                     if(cur_hitbox_nr_index == INVALID) {
-                        cur_hitbox_nr_index = clicked_hitboxes[0];
+                        cur_hitbox_nr_index = 0;
+                    } else {
+                        cur_hitbox_nr_index =
+                            sum_and_wrap(
+                                cur_hitbox_nr_index, 1, clicked_hitboxes.size()
+                            );
                     }
-                    
-                    cur_hitbox_nr_index =
-                        sum_and_wrap(
-                            cur_hitbox_nr_index, 1, clicked_hitboxes.size()
-                        );
                     cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
                     cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
                     update_cur_hitbox_tc();

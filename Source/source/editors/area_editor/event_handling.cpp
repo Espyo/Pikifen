@@ -445,6 +445,10 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     if(is_dialog_open || is_mouse_in_gui) return;
+    if(is_ctrl_pressed) {
+        handle_lmb_down(ev);
+        return;
+    }
     
     if(sub_state == EDITOR_SUB_STATE_NONE && state == EDITOR_STATE_LAYOUT) {
         vertex* clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);

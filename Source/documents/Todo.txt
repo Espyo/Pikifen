@@ -3,15 +3,8 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        More options
-            A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
-        Put the canvas in one ImGui window and the panel in another?
         Style the editors
         Minor
-            If Ctrl is held, don't create a new vertex
-            When a picker dialog appears, focus on the textbox right away
-            "Plus" cursor when creating a new sector should scale with the zoom, so it's not tiny or gigantic (Kman)
-            Clicking on hitboxes in the animation editor should go in reverse order, to respect the same priority that collision checking has
             In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
             When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
     
@@ -636,6 +629,7 @@ Tasks for later on (I might never implement these)
             Double-click in object mode -> create new object on cursor. There are a lot of corner cases though, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc. This can result in the player accidentally adding a new mob while trying to do something else
             When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
             The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
+            A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?
@@ -644,6 +638,7 @@ Tasks for later on (I might never implement these)
                 It could check what kind of animation this is, like a Pikmin type, and determine that there are some needed animations that are not included
                 Enemy has attack hitboxes that don't hit below it?
         Both editors
+            Put the canvas in one ImGui window and the panel in another?
             A tutorial built into each editor?
             Hold Ctrl while dragging to lock to an axis?
             For buttons that change the state of something (e.g. toggle reference image on/off, change current snapping mode), I need to figure out what to do...

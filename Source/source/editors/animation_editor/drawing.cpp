@@ -182,7 +182,11 @@ void animation_editor::draw_canvas() {
                 63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
             size_t n_hitboxes = s->hitboxes.size();
             
-            for(size_t h = 0; h < n_hitboxes; ++h) {
+            for(int h = n_hitboxes - 1; h >= 0; --h) {
+                //Iterate the hitboxes in reverse order, since this is
+                //the order of priority the engine has when checking for
+                //collisions. Making higher priority hitboxes appear above
+                //lower ones makes it all more intuitive and cohesive.
                 hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
                 float hitbox_outline_thickness =

@@ -1033,12 +1033,18 @@ void area_editor::draw_canvas() {
         }
         
         al_draw_line(
-            marker.x - 16, marker.y, marker.x + 16, marker.y,
-            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
+            marker.x - 10 / game.cam.zoom,
+            marker.y,
+            marker.x + 10 / game.cam.zoom,
+            marker.y,
+            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
         );
         al_draw_line(
-            marker.x, marker.y - 16, marker.x, marker.y + 16,
-            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
+            marker.x,
+            marker.y - 10 / game.cam.zoom,
+            marker.x,
+            marker.y + 10 / game.cam.zoom,
+            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
         );
     }
     
@@ -1049,12 +1055,18 @@ void area_editor::draw_canvas() {
         point marker = game.mouse_cursor_w;
         
         al_draw_line(
-            marker.x - 16, marker.y - 16, marker.x + 16, marker.y + 16,
-            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
+            marker.x - 10 / game.cam.zoom,
+            marker.y - 10 / game.cam.zoom,
+            marker.x + 10 / game.cam.zoom,
+            marker.y + 10 / game.cam.zoom,
+            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
         );
         al_draw_line(
-            marker.x - 16, marker.y + 16, marker.x + 16, marker.y - 16,
-            al_map_rgb(255, 255, 255), 1.0 / game.cam.zoom
+            marker.x - 10 / game.cam.zoom,
+            marker.y + 10 / game.cam.zoom,
+            marker.x + 10 / game.cam.zoom,
+            marker.y - 10 / game.cam.zoom,
+            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
         );
     }
     

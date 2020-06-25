@@ -704,7 +704,7 @@ void animation_editor::process_gui_panel_animation() {
             )
         ) {
             rename_anim_name = cur_anim->name;
-            input_popup_focus_controller = 2;
+            focus_next_special_input();
             ImGui::OpenPopup("renameAnim");
         }
         set_tooltip(
@@ -1010,7 +1010,7 @@ void animation_editor::process_gui_panel_body_part() {
         )
     ) {
         new_part_name.clear();
-        input_popup_focus_controller = 2;
+        focus_next_special_input();
         ImGui::OpenPopup("newPartName");
     }
     set_tooltip(
@@ -1094,7 +1094,7 @@ void animation_editor::process_gui_panel_body_part() {
             )
         ) {
             rename_part_name = anims.body_parts[selected_part]->name;
-            input_popup_focus_controller = 2;
+            focus_next_special_input();
             ImGui::OpenPopup("renamePart");
         }
         set_tooltip(
@@ -1452,7 +1452,7 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             rename_sprite_name = cur_sprite->name;
-            input_popup_focus_controller = 2;
+            focus_next_special_input();
             ImGui::OpenPopup("renameSprite");
         }
         set_tooltip(
@@ -1474,7 +1474,7 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             resize_sprite_mult = "1.0";
-            input_popup_focus_controller = 2;
+            focus_next_special_input();
             ImGui::OpenPopup("resizeSprite");
         }
         set_tooltip(

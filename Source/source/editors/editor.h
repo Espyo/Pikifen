@@ -166,8 +166,6 @@ protected:
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
-    //Controls the input popup's focus on the text input widget.
-    unsigned char input_popup_focus_controller;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
     //Is a dialog currently open?
@@ -232,6 +230,7 @@ protected:
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
     void draw_unsaved_changes_warning();
+    void focus_next_special_input();
     point get_last_widget_pos();
     bool input_popup(
         const char* label, const char* prompt, string* text
@@ -240,6 +239,7 @@ protected:
         const char* label, const vector<string> &items, string* picked_item
     );
     void leave();
+    void next_input_needs_special_focus();
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback
@@ -289,6 +289,9 @@ protected:
     
 private:
 
+    //Controls text input widget focus, when focusing on one is necessary.
+    unsigned char special_input_focus_controller;
+    
     void process_picker();
 };
 

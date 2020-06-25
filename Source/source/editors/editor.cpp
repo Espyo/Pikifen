@@ -48,7 +48,6 @@ editor::editor() :
     dialog_close_callback(nullptr),
     dialog_process_callback(nullptr),
     double_click_time(0),
-    input_popup_focus_controller(2),
     is_ctrl_pressed(false),
     is_dialog_open(false),
     is_m1_pressed(false),
@@ -62,6 +61,7 @@ editor::editor() :
     picker_can_make_new(false),
     picker_pick_callback(nullptr),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
+    special_input_focus_controller(0),
     state(0),
     sub_state(0),
     zoom_max_level(0),
@@ -322,6 +322,15 @@ void editor::draw_unsaved_changes_warning() {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets up logic to focus on the next input widget, if it is one of the
+ * input widgets with logic to focus on it.
+ */
+void editor::focus_next_special_input() {
+    special_input_focus_controller = 2;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the position of the last widget, in screen coordinates.
  */
 point editor::get_last_widget_pos() {
@@ -569,14 +578,7 @@ bool editor::input_popup(
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
         ImGui::Text("%s", prompt);
-        if(input_popup_focus_controller > 0) {
-            //In order to focus on the InputText when the input popup is
-            //opened, we need to call SetKeyboardFocusHere two frames in
-            //a row. I'm not quite sure why, but it's likely the same as
-            //this: https://github.com/ocornut/imgui/issues/343
-            ImGui::SetKeyboardFocusHere();
-            input_popup_focus_controller--;
-        }
+        next_input_needs_special_focus();
         if(
             ImGui::InputText(
                 "##inputPopupText", text,
@@ -676,6 +678,22 @@ void editor::load() {
 
 
 /* ----------------------------------------------------------------------------
+ * The next input widget requires special focus logic.
+ * It will only be focused on if focus_next_special_input() was called.
+ */
+void editor::next_input_needs_special_focus() {
+    //In order to focus on the InputText when the input popup is
+    //opened, we need to call SetKeyboardFocusHere two frames in
+    //a row. I'm not quite sure why, but it's likely the same as
+    //this: https://github.com/ocornut/imgui/issues/343
+    if(special_input_focus_controller > 0) {
+        ImGui::SetKeyboardFocusHere();
+        special_input_focus_controller--;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Opens a dialog.
  * title:
  *   Title of the dialog window. This is normally a request to the user,
@@ -728,6 +746,8 @@ void editor::open_picker(
     picker_pick_callback = pick_callback;
     picker_can_make_new = can_make_new;
     picker_filter = filter;
+    
+    focus_next_special_input();
     
     open_dialog(title, std::bind(&editor::process_picker, this));
 }
@@ -839,6 +859,7 @@ void editor::process_picker() {
         picker_can_make_new ?
         "Search filter or new item name" :
         "Search filter";
+    next_input_needs_special_focus();
     if(
         ImGui::InputTextWithHint(
             "##filter", filter_widget_hint.c_str(), &picker_filter,
