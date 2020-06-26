@@ -201,30 +201,27 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             }
             
         } else if(state == EDITOR_STATE_LAYOUT) {
-            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-                cancel_circle_sector();
-            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+            if(sub_state == EDITOR_SUB_STATE_DRAWING) {
                 cancel_layout_drawing();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
+            } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+                cancel_circle_sector();
+            } else if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
                 cancel_layout_moving();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
+            } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
             }
             
         } else if(state == EDITOR_STATE_MOBS) {
             if(
-                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
                 sub_state == EDITOR_SUB_STATE_NEW_MOB ||
+                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
                 sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
                 sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
             ) {
                 sub_state = EDITOR_SUB_STATE_NONE;
                 status_text.clear();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
+            } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
             }
@@ -233,8 +230,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
                 sub_state = EDITOR_SUB_STATE_NONE;
                 status_text.clear();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
+            } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
             }
@@ -243,8 +239,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
                 sub_state = EDITOR_SUB_STATE_NONE;
                 status_text.clear();
-            }
-            if(sub_state == EDITOR_SUB_STATE_NONE) {
+            } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
             }
             

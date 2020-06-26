@@ -690,185 +690,209 @@ void area_editor::process_gui_options_dialog() {
 void area_editor::process_gui_panel_details() {
     ImGui::BeginChild("details");
     
-    //Back button.
-    if(ImGui::Button("Back")) {
-        change_state(EDITOR_STATE_MAIN);
-    }
+    if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
     
-    //Panel title text.
-    panel_title("DETAILS", 88.0f);
-    
-    //Tree shadows node.
-    if(saveable_tree_node("details", "Tree shadows")) {
-    
-        //New tree shadow button.
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            press_new_tree_shadow_button();
-        }
-        set_tooltip(
-            "Start creating a new tree shadow.\n"
-            "Click on the canvas where you want the shadow to be.\n"
-            "Click this button again to cancel.",
-            "N"
+        //Creation explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to place a tree shadow. It'll appear where "
+            "you click."
         );
         
-        //Delete shadow button.
-        if(selected_shadow) {
-            ImGui::SameLine();
+        //Creation cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the creation.",
+            "Escape"
+        );
+        
+    } else {
+    
+        //Back button.
+        if(ImGui::Button("Back")) {
+            change_state(EDITOR_STATE_MAIN);
+        }
+        
+        //Panel title text.
+        panel_title("DETAILS", 88.0f);
+        
+        //Tree shadows node.
+        if(saveable_tree_node("details", "Tree shadows")) {
+        
+            //New tree shadow button.
             if(
                 ImGui::ImageButton(
-                    editor_icons[ICON_REMOVE],
+                    editor_icons[ICON_ADD],
                     ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                 )
             ) {
-                press_remove_tree_shadow_button();
+                press_new_tree_shadow_button();
             }
             set_tooltip(
-                "Delete the selected tree shadow.",
-                "Delete"
-            );
-        }
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
-        if(selected_shadow) {
-        
-            string old_shadow_file_name = selected_shadow->file_name;
-            
-            //Browse for tree shadow texture button.
-            if(ImGui::Button("...")) {
-                FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
-                vector<string> f =
-                    prompt_file_dialog_locked_to_folder(
-                        TEXTURES_FOLDER_PATH,
-                        "Please choose the texture to use for the tree shadow.",
-                        "*.png",
-                        ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
-                        ALLEGRO_FILECHOOSER_PICTURES,
-                        &result
-                    );
-                    
-                switch(result) {
-                case FILE_DIALOG_RES_WRONG_FOLDER: {
-                    //File doesn't belong to the folder.
-                    status_text =
-                        "The chosen image is not in the textures folder!";
-                    break;
-                } case FILE_DIALOG_RES_CANCELED: {
-                    //User canceled.
-                    break;
-                } case FILE_DIALOG_RES_SUCCESS: {
-                    selected_shadow->file_name = f[0];
-                    status_text = "Picked an image successfully.";
-                    break;
-                }
-                }
-            }
-            set_tooltip("Browse for a file to use.");
-            
-            //Tree shadow texture file name input.
-            ImGui::SameLine();
-            ImGui::InputText("Bitmap", &selected_shadow->file_name);
-            set_tooltip(
-                "File name of the texture to use as a background, in the "
-                "Textures folder. Extension included. e.g. "
-                "\"Palmtree_shadow.png\""
+                "Start creating a new tree shadow.\n"
+                "Click on the canvas where you want the shadow to be.",
+                "N"
             );
             
-            if(selected_shadow->file_name != old_shadow_file_name) {
-                //New image, delete the old one.
-                register_change("tree shadow file change");
-                if(selected_shadow->bitmap != game.bmp_error) {
-                    game.textures.detach(selected_shadow->file_name);
+            //Delete shadow button.
+            if(selected_shadow) {
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_REMOVE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    press_remove_tree_shadow_button();
                 }
-                selected_shadow->bitmap =
-                    game.textures.get(selected_shadow->file_name, NULL);
-            }
-            
-            //Tree shadow center value.
-            point shadow_center = selected_shadow->center;
-            if(
-                ImGui::DragFloat2("Center", (float*) &shadow_center)
-            ) {
-                register_change("tree shadow center change");
-                selected_shadow->center = shadow_center;
-                selected_shadow_transformation.set_center(
-                    selected_shadow->center
+                set_tooltip(
+                    "Delete the selected tree shadow.",
+                    "Delete"
                 );
             }
             
-            //Tree shadow size value.
-            point shadow_size = selected_shadow->size;
-            if(
-                ImGui::DragFloat2("Size", (float*) &shadow_size)
-            ) {
-                register_change("tree shadow size change");
-                if(selected_shadow_transformation.keep_aspect_ratio) {
-                    float ratio =
-                        selected_shadow->size.x / selected_shadow->size.y;
-                    if(shadow_size.x != selected_shadow->size.x) {
-                        shadow_size.y =
-                            shadow_size.x / ratio;
-                    } else {
-                        shadow_size.x =
-                            shadow_size.y * ratio;
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            if(selected_shadow) {
+            
+                string old_shadow_file_name = selected_shadow->file_name;
+                
+                //Browse for tree shadow texture button.
+                if(ImGui::Button("...")) {
+                    FILE_DIALOG_RESULTS result = FILE_DIALOG_RES_SUCCESS;
+                    vector<string> f =
+                        prompt_file_dialog_locked_to_folder(
+                            TEXTURES_FOLDER_PATH,
+                            "Please choose the texture to use for the "
+                            "tree shadow.",
+                            "*.png",
+                            ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                            ALLEGRO_FILECHOOSER_PICTURES,
+                            &result
+                        );
+                        
+                    switch(result) {
+                    case FILE_DIALOG_RES_WRONG_FOLDER: {
+                        //File doesn't belong to the folder.
+                        status_text =
+                            "The chosen image is not in the textures folder!";
+                        break;
+                    } case FILE_DIALOG_RES_CANCELED: {
+                        //User canceled.
+                        break;
+                    } case FILE_DIALOG_RES_SUCCESS: {
+                        selected_shadow->file_name = f[0];
+                        status_text = "Picked an image successfully.";
+                        break;
+                    }
                     }
                 }
-                selected_shadow->size = shadow_size;
-                selected_shadow_transformation.set_size(selected_shadow->size);
-            }
-            
-            //Tree shadow aspect ratio checkbox.
-            ImGui::Indent();
-            ImGui::Checkbox(
-                "Keep aspect ratio",
-                &selected_shadow_transformation.keep_aspect_ratio
-            );
-            ImGui::Unindent();
-            set_tooltip("Keep the aspect ratio when resizing the image.");
-            
-            //Tree shadow angle value.
-            float shadow_angle = selected_shadow->angle;
-            if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
-                register_change("tree shadow angle change");
-                selected_shadow->angle = shadow_angle;
-                selected_shadow_transformation.set_angle(
-                    selected_shadow->angle
+                set_tooltip("Browse for a file to use.");
+                
+                //Tree shadow texture file name input.
+                ImGui::SameLine();
+                ImGui::InputText("Bitmap", &selected_shadow->file_name);
+                set_tooltip(
+                    "File name of the texture to use as a background, in the "
+                    "Textures folder. Extension included. e.g. "
+                    "\"Palmtree_shadow.png\""
                 );
+                
+                if(selected_shadow->file_name != old_shadow_file_name) {
+                    //New image, delete the old one.
+                    register_change("tree shadow file change");
+                    if(selected_shadow->bitmap != game.bmp_error) {
+                        game.textures.detach(selected_shadow->file_name);
+                    }
+                    selected_shadow->bitmap =
+                        game.textures.get(selected_shadow->file_name, NULL);
+                }
+                
+                //Tree shadow center value.
+                point shadow_center = selected_shadow->center;
+                if(
+                    ImGui::DragFloat2("Center", (float*) &shadow_center)
+                ) {
+                    register_change("tree shadow center change");
+                    selected_shadow->center = shadow_center;
+                    selected_shadow_transformation.set_center(
+                        selected_shadow->center
+                    );
+                }
+                
+                //Tree shadow size value.
+                point shadow_size = selected_shadow->size;
+                if(
+                    ImGui::DragFloat2("Size", (float*) &shadow_size)
+                ) {
+                    register_change("tree shadow size change");
+                    if(selected_shadow_transformation.keep_aspect_ratio) {
+                        float ratio =
+                            selected_shadow->size.x / selected_shadow->size.y;
+                        if(shadow_size.x != selected_shadow->size.x) {
+                            shadow_size.y =
+                                shadow_size.x / ratio;
+                        } else {
+                            shadow_size.x =
+                                shadow_size.y * ratio;
+                        }
+                    }
+                    selected_shadow->size = shadow_size;
+                    selected_shadow_transformation.set_size(
+                        selected_shadow->size
+                    );
+                }
+                
+                //Tree shadow aspect ratio checkbox.
+                ImGui::Indent();
+                ImGui::Checkbox(
+                    "Keep aspect ratio",
+                    &selected_shadow_transformation.keep_aspect_ratio
+                );
+                ImGui::Unindent();
+                set_tooltip("Keep the aspect ratio when resizing the image.");
+                
+                //Tree shadow angle value.
+                float shadow_angle = selected_shadow->angle;
+                if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
+                    register_change("tree shadow angle change");
+                    selected_shadow->angle = shadow_angle;
+                    selected_shadow_transformation.set_angle(
+                        selected_shadow->angle
+                    );
+                }
+                
+                //Tree shadow opacity value.
+                int shadow_opacity = selected_shadow->alpha;
+                if(ImGui::SliderInt("Opacity", &shadow_opacity, 0, 255)) {
+                    register_change("tree shadow opacity change");
+                    selected_shadow->alpha = shadow_opacity;
+                }
+                
+                //Tree shadow sway value.
+                point shadow_sway = selected_shadow->sway;
+                if(ImGui::DragFloat2("Sway", (float*) &shadow_sway, 0.1)) {
+                    register_change("tree shadow sway change");
+                    selected_shadow->sway = shadow_sway;
+                }
+                set_tooltip(
+                    "Multiply the amount of swaying by this much. 0 means "
+                    "no swaying in that direction."
+                );
+                
+            } else {
+            
+                //"No tree shadow selected" text.
+                ImGui::TextDisabled("(No tree shadow selected)");
+                
             }
             
-            //Tree shadow opacity value.
-            int shadow_opacity = selected_shadow->alpha;
-            if(ImGui::SliderInt("Opacity", &shadow_opacity, 0, 255)) {
-                register_change("tree shadow opacity change");
-                selected_shadow->alpha = shadow_opacity;
-            }
-            
-            //Tree shadow sway value.
-            point shadow_sway = selected_shadow->sway;
-            if(ImGui::DragFloat2("Sway", (float*) &shadow_sway, 0.1)) {
-                register_change("tree shadow sway change");
-                selected_shadow->sway = shadow_sway;
-            }
-            set_tooltip(
-                "Multiply the amount of swaying by this much. 0 means "
-                "no swaying in that direction."
-            );
-            
-        } else {
-        
-            //"No tree shadow selected" text.
-            ImGui::TextDisabled("(No tree shadow selected)");
+            ImGui::TreePop();
             
         }
-        
-        ImGui::TreePop();
         
     }
     
@@ -1101,577 +1125,185 @@ void area_editor::process_gui_panel_info() {
 void area_editor::process_gui_panel_layout() {
     ImGui::BeginChild("main");
     
-    //Back button.
-    if(ImGui::Button("Back")) {
-        change_state(EDITOR_STATE_MAIN);
-    }
-    
-    //Panel title text.
-    panel_title("LAYOUT", 80.0f);
-    
-    //New sector button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_ADD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_new_sector_button();
-    }
-    set_tooltip(
-        "Start creating a new sector.\n"
-        "Click on the canvas to draw the lines that make up the sector.\n"
-        "Click this button again to cancel.",
-        "N"
-    );
-    
-    //New circle sector button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_ADD_CIRCLE_SECTOR],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_circle_sector_button();
-    }
-    set_tooltip(
-        "Start creating a new circular sector.\n"
-        "Click on the canvas to set the center, then radius, then the "
-        "number of edges.\n"
-        "Click this button again to cancel.",
-        "C"
-    );
-    
-    //Delete edges button.
-    if(!selected_edges.empty()) {
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_REMOVE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            press_remove_edge_button();
-        }
-        set_tooltip(
-            "Delete the selected edges.\n"
-            "Sectors without any edges left get deleted too.\n"
-            "Sectors that would end up with edge gaps also get deleted.\n"
-            "If you delete an edge between two sectors,\n"
-            "the smallest will merge into the largest.",
-            "Delete"
+    if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+        //Drawing explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to draw a sector. Each click places a vertex. "
+            "Either draw edges from one edge/vertex to another edge/vertex, "
+            "or draw a sector's shape and finish on the starting vertex."
         );
-    }
-    
-    //Selection filter button.
-    ALLEGRO_BITMAP* sel_filter_bmp = NULL;
-    string sel_filter_description;
-    switch(selection_filter) {
-    case SELECTION_FILTER_VERTEXES: {
-        sel_filter_bmp = editor_icons[ICON_VERTEXES];
-        sel_filter_description = "vertexes only";
-        break;
-    } case SELECTION_FILTER_EDGES: {
-        sel_filter_bmp = editor_icons[ICON_EDGES];
-        sel_filter_description = "edges + vertexes";
-        break;
-    } case SELECTION_FILTER_SECTORS: {
-        sel_filter_bmp = editor_icons[ICON_SECTORS];
-        sel_filter_description = "sectors + edges + vertexes";
-        break;
-    }
-    }
-    
-    ImGui::SameLine();
-    ImGui::PushID("selFilter");
-    if(
-        ImGui::ImageButton(
-            sel_filter_bmp,
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_selection_filter_button();
-    }
-    ImGui::PopID();
-    set_tooltip(
-        "Current selection filter: " + sel_filter_description + ".\n"
-        "When selecting things in the canvas, only these will become selected.",
-        "F"
-    );
-    
-    //Clear selection button.
-    if(!selected_sectors.empty()) {
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_SELECT_NONE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            clear_selection();
+        
+        //Drawing cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            clear_layout_drawing();
+            cancel_layout_drawing();
         }
         set_tooltip(
-            "Clear the selection.",
+            "Cancel the drawing.",
             "Escape"
         );
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    sector* s_ptr = NULL;
-    if(selected_sectors.size() == 1 || selection_homogenized) {
-        s_ptr = *selected_sectors.begin();
         
-        //Sector behavior node.
-        if(saveable_tree_node("layout", "Behavior")) {
+    } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+        //Drawing explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to draw a circle sector. First, click to choose "
+            "the sector's center. Then, choose how large the circle is. "
+            "Finally, choose how many edges it'll have."
+        );
         
-            //Sector height value.
-            float sector_z = s_ptr->z;
-            if(ImGui::DragFloat("Height", &sector_z)) {
-                register_change("sector height change");
-                s_ptr->z = sector_z;
+        //Drawing cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            clear_circle_sector();
+            cancel_circle_sector();
+        }
+        set_tooltip(
+            "Cancel the drawing.",
+            "Escape"
+        );
+        
+    } else {
+    
+        //Back button.
+        if(ImGui::Button("Back")) {
+            change_state(EDITOR_STATE_MAIN);
+        }
+        
+        //Panel title text.
+        panel_title("LAYOUT", 80.0f);
+        
+        //New sector button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_ADD],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_new_sector_button();
+        }
+        set_tooltip(
+            "Start creating a new sector.\n"
+            "Click on the canvas to draw the lines that make up the sector.",
+            "N"
+        );
+        
+        //New circle sector button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_ADD_CIRCLE_SECTOR],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_circle_sector_button();
+        }
+        set_tooltip(
+            "Start creating a new circular sector.\n"
+            "Click on the canvas to set the center, then radius, then the "
+            "number of edges.",
+            "C"
+        );
+        
+        //Delete edges button.
+        if(!selected_edges.empty()) {
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_REMOVE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                press_remove_edge_button();
             }
             set_tooltip(
-                "Height of the floor. Positive numbers are higher."
+                "Delete the selected edges.\n"
+                "Sectors without any edges left get deleted too.\n"
+                "Sectors that would end up with edge gaps also get deleted.\n"
+                "If you delete an edge between two sectors,\n"
+                "the smallest will merge into the largest.",
+                "Delete"
             );
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            //Sector hazards node.
-            if(saveable_tree_node("layout", "Hazards")) {
-            
-                static int selected_hazard_nr = 0;
-                
-                //Sector hazard addition button.
-                if(
-                    ImGui::ImageButton(
-                        editor_icons[ICON_ADD],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                    )
-                ) {
-                    ImGui::OpenPopup("addHazard");
-                }
-                set_tooltip(
-                    "Add a new hazard to the list of hazards this sector has.\n"
-                    "Click to open a pop-up for you to choose from."
-                );
-                
-                //Sector hazard addition popup.
-                vector<string> all_hazards_list;
-                for(auto h : game.hazards) {
-                    all_hazards_list.push_back(h.first);
-                }
-                string picked_hazard;
-                if(
-                    list_popup(
-                        "addHazard", all_hazards_list, &picked_hazard
-                    )
-                ) {
-                    sector* s_ptr = *selected_sectors.begin();
-                    vector<string> list =
-                        semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(
-                        std::find(
-                            list.begin(), list.end(), picked_hazard
-                        ) == list.end()
-                    ) {
-                        register_change("sector hazard addition");
-                        if(!s_ptr->hazards_str.empty()) {
-                            s_ptr->hazards_str += ";";
-                        }
-                        s_ptr->hazards_str += picked_hazard;
-                        selected_hazard_nr = list.size();
-                        status_text =
-                            "Added hazard \"" + picked_hazard +
-                            "\" to the sector.";
-                    }
-                }
-                
-                //Sector hazard removal button.
-                if(
-                    selected_hazard_nr >= 0 &&
-                    !(*selected_sectors.begin())->hazards_str.empty()
-                ) {
-                    ImGui::SameLine();
-                    if(
-                        ImGui::ImageButton(
-                            editor_icons[ICON_REMOVE],
-                            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                        )
-                    ) {
-                        sector* s_ptr = *selected_sectors.begin();
-                        vector<string> list =
-                            semicolon_list_to_vector(s_ptr->hazards_str);
-                        if(
-                            selected_hazard_nr >= 0 &&
-                            selected_hazard_nr < list.size()
-                        ) {
-                            register_change("sector hazard removal");
-                            string hazard_name = list[selected_hazard_nr];
-                            s_ptr->hazards_str.clear();
-                            for(size_t h = 0; h < list.size(); ++h) {
-                                if(h == selected_hazard_nr) continue;
-                                s_ptr->hazards_str += list[h] + ";";
-                            }
-                            if(!s_ptr->hazards_str.empty()) {
-                                //Delete the trailing semicolon.
-                                s_ptr->hazards_str.pop_back();
-                            }
-                            selected_hazard_nr =
-                                std::min(
-                                    selected_hazard_nr, (int) list.size() - 2
-                                );
-                            status_text =
-                                "Removed hazard \"" + hazard_name +
-                                "\" from the sector.";
-                        }
-                    }
-                    set_tooltip(
-                        "Remove the selected hazard from the list of "
-                        "hazards this sector has."
-                    );
-                }
-                
-                //Sector hazard list.
-                ImGui::ListBox(
-                    "Hazards", &selected_hazard_nr,
-                    semicolon_list_to_vector(s_ptr->hazards_str),
-                    4
-                );
-                set_tooltip(
-                    "List of hazards this sector has."
-                );
-                
-                bool sector_hazard_floor = s_ptr->hazard_floor;
-                if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
-                    register_change("sector hazard floor option change");
-                    s_ptr->hazard_floor = sector_hazard_floor;
-                }
-                set_tooltip(
-                    "Do the hazards only affects objects on the floor,\n"
-                    "or do they affect airborne objects in the sector too?"
-                );
-                
-                ImGui::TreePop();
+        }
+        
+        //Selection filter button.
+        ALLEGRO_BITMAP* sel_filter_bmp = NULL;
+        string sel_filter_description;
+        switch(selection_filter) {
+        case SELECTION_FILTER_VERTEXES: {
+            sel_filter_bmp = editor_icons[ICON_VERTEXES];
+            sel_filter_description = "vertexes only";
+            break;
+        } case SELECTION_FILTER_EDGES: {
+            sel_filter_bmp = editor_icons[ICON_EDGES];
+            sel_filter_description = "edges + vertexes";
+            break;
+        } case SELECTION_FILTER_SECTORS: {
+            sel_filter_bmp = editor_icons[ICON_SECTORS];
+            sel_filter_description = "sectors + edges + vertexes";
+            break;
+        }
+        }
+        
+        ImGui::SameLine();
+        ImGui::PushID("selFilter");
+        if(
+            ImGui::ImageButton(
+                sel_filter_bmp,
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_selection_filter_button();
+        }
+        ImGui::PopID();
+        set_tooltip(
+            "Current selection filter: " + sel_filter_description + ".\n"
+            "When selecting things in the canvas, only these will "
+            "become selected.",
+            "F"
+        );
+        
+        //Clear selection button.
+        if(!selected_sectors.empty()) {
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_SELECT_NONE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                clear_selection();
             }
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            //Sector advanced behavior node.
-            if(saveable_tree_node("layout", "Advanced")) {
-            
-                //Sector type combobox.
-                vector<string> types_list;
-                for(
-                    size_t t = 0; t < game.sector_types.get_nr_of_types(); ++t
-                ) {
-                    types_list.push_back(game.sector_types.get_name(t));
-                }
-                int sector_type = s_ptr->type;
-                if(ImGui::Combo("Type", &sector_type, types_list)) {
-                    register_change("sector type change");
-                    s_ptr->type = sector_type;
-                }
-                set_tooltip(
-                    "What type of sector this is."
-                );
-                
-                //Sector bridge height value.
-                if(
-                    s_ptr->type == SECTOR_TYPE_BRIDGE ||
-                    s_ptr->type == SECTOR_TYPE_BRIDGE_RAIL
-                ) {
-                
-                    float bridge_height = s2f(s_ptr->tag);
-                    ImGui::SetNextItemWidth(96.0f);
-                    if(ImGui::DragFloat("Bridge height", &bridge_height)) {
-                        register_change("sector bridge height change");
-                        s_ptr->tag = f2s(bridge_height);
-                    }
-                    set_tooltip(
-                        "When the bridge opens, "
-                        "set the sector's height to this."
-                    );
-                    
-                }
-                
-                //Sector bottomless pit checkbox.
-                bool sector_bottomless_pit = s_ptr->is_bottomless_pit;
-                if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
-                    register_change("sector bottomless pit change");
-                    s_ptr->is_bottomless_pit = sector_bottomless_pit;
-                }
-                set_tooltip(
-                    "Is this sector's floor a bottomless pit?\n"
-                    "Pikmin die when they fall in, and you can see the void."
-                );
-                
-                //Spacer dummy widget.
-                ImGui::Dummy(ImVec2(0, 16));
-                
-                ImGui::TreePop();
-            }
-            
-            ImGui::TreePop();
+            set_tooltip(
+                "Clear the selection.",
+                "Escape"
+            );
         }
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        //Sector appearance node.
-        if(saveable_tree_node("layout", "Appearance")) {
-        
-            int texture_type = !s_ptr->fade;
+        if(selected_sectors.size() == 1 || selection_homogenized) {
+            process_gui_panel_sector();
             
-            //Sector texture fader radio button.
-            ImGui::RadioButton("Texture fader", &texture_type, 0);
-            set_tooltip(
-                "Makes the surrounding textures fade into each other."
+        } else if(selected_sectors.empty()) {
+        
+            //"No sector selected" text.
+            ImGui::TextDisabled("(No sector selected)");
+            
+        } else {
+        
+            //Non-homogenized sectors warning.
+            ImGui::TextWrapped(
+                "Multiple different sectors selected. To make all their "
+                "properties the same and edit them all together, click here:"
             );
             
-            //Sector regular texture radio button.
-            ImGui::RadioButton("Regular texture", &texture_type, 1);
-            set_tooltip(
-                "Makes the sector use a regular texture."
-            );
-            
-            if(s_ptr->fade != (texture_type == 0)) {
-                register_change("sector texture type change");
-                s_ptr->fade = texture_type == 0;
+            //Homogenize sectors button.
+            if(ImGui::Button("Edit all together")) {
+                register_change("sector combining");
+                selection_homogenized = true;
+                homogenize_selected_sectors();
             }
-            
-            if(!s_ptr->fade) {
-            
-                ImGui::Indent();
-                
-                //Sector texture button.
-                if(ImGui::Button("Change")) {
-                    vector<picker_item> picker_buttons;
-                    
-                    picker_buttons.push_back(picker_item("Browse..."));
-                    
-                    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
-                        picker_buttons.push_back(
-                            picker_item(
-                                texture_suggestions[s].name,
-                                "",
-                                texture_suggestions[s].bmp
-                            )
-                        );
-                    }
-                    open_picker(
-                        "Pick a texture",
-                        picker_buttons,
-                        std::bind(
-                            &area_editor::pick_texture, this,
-                            std::placeholders::_1,
-                            std::placeholders::_2
-                        ),
-                        "Suggestions:"
-                    );
-                }
-                set_tooltip(
-                    "Pick a texture to use."
-                );
-                
-                //Sector texture name text.
-                ImGui::SameLine();
-                ImGui::Text("%s", s_ptr->texture_info.file_name.c_str());
-                
-                ImGui::Unindent();
-                
-            }
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            //Sector texture effects node.
-            if(saveable_tree_node("layout", "Texture effects")) {
-            
-                //Sector texture offset value.
-                point texture_translation = s_ptr->texture_info.translation;
-                if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
-                    register_change("sector texture offset change");
-                    s_ptr->texture_info.translation = texture_translation;
-                    quick_preview_timer.start();
-                }
-                set_tooltip(
-                    "Offset the texture horizontally or vertically "
-                    "by this much."
-                );
-                
-                //Sector texture scale value.
-                point texture_scale = s_ptr->texture_info.scale;
-                if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
-                    register_change("sector texture scale change");
-                    s_ptr->texture_info.scale = texture_scale;
-                    quick_preview_timer.start();
-                }
-                set_tooltip(
-                    "Scale the texture horizontally or vertically "
-                    "by this much.\n"
-                    "The scale's anchor point is at the origin "
-                    "of the area, at coordinates 0,0."
-                );
-                
-                //Sector texture rotation value.
-                float texture_rotation = s_ptr->texture_info.rot;
-                if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
-                    register_change("sector texture angle change");
-                    s_ptr->texture_info.rot = texture_rotation;
-                    quick_preview_timer.start();
-                }
-                set_tooltip(
-                    "Rotate the texture by these many degrees.\n"
-                    "The rotation's center point is at the origin "
-                    "of the area, at coordinates 0,0."
-                );
-                
-                //Sector texture tint value.
-                ALLEGRO_COLOR texture_tint = s_ptr->texture_info.tint;
-                if(
-                    ImGui::ColorEdit4(
-                        "Tint color", (float*) &texture_tint,
-                        ImGuiColorEditFlags_NoInputs
-                    )
-                ) {
-                    register_change("sector texture tint change");
-                    s_ptr->texture_info.tint = texture_tint;
-                    quick_preview_timer.start();
-                }
-                set_tooltip(
-                    "Tint the texture with this color. White means no tint."
-                );
-                
-                //On-canvas texture effect editing checkbox.
-                bool octee_on =
-                    sub_state == EDITOR_SUB_STATE_OCTEE;
-                if(ImGui::Checkbox("On-canvas editing", &octee_on)) {
-                    sub_state =
-                        octee_on ?
-                        EDITOR_SUB_STATE_OCTEE :
-                        EDITOR_SUB_STATE_NONE;
-                }
-                set_tooltip(
-                    "Enable on-canvas texture effect editing.\n"
-                    "With this, you can click and drag on the canvas "
-                    "to adjust the texture,\n"
-                    "based on whatever mode is currently active."
-                );
-                
-                if(octee_on) {
-                
-                    ImGui::Indent();
-                    
-                    int octee_mode_int = (int) octee_mode;
-                    
-                    //On-canvas texture effect editing offset radio button.
-                    ImGui::RadioButton(
-                        "Change offset", &octee_mode_int,
-                        (int) OCTEE_MODE_OFFSET
-                    );
-                    set_tooltip(
-                        "Dragging will change the texture's offset.",
-                        "1"
-                    );
-                    
-                    //On-canvas texture effect editing scale radio button.
-                    ImGui::RadioButton(
-                        "Change scale", &octee_mode_int,
-                        (int) OCTEE_MODE_SCALE
-                    );
-                    set_tooltip(
-                        "Dragging will change the texture's scale.",
-                        "2"
-                    );
-                    
-                    //On-canvas texture effect editing angle radio button.
-                    ImGui::RadioButton(
-                        "Change angle", &octee_mode_int,
-                        (int) OCTEE_MODE_ANGLE
-                    );
-                    set_tooltip(
-                        "Dragging will change the texture's angle.",
-                        "3"
-                    );
-                    
-                    octee_mode = (OCTEE_MODES) octee_mode_int;
-                    
-                    ImGui::Unindent();
-                    
-                }
-                
-                ImGui::TreePop();
-            }
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            //Sector mood node.
-            if(saveable_tree_node("layout", "Sector mood")) {
-            
-                //Sector brightness value.
-                int sector_brightness = s_ptr->brightness;
-                ImGui::SetNextItemWidth(180);
-                if(ImGui::SliderInt("Brightness", &sector_brightness, 0, 255)) {
-                    register_change("sector brightness change");
-                    s_ptr->brightness = sector_brightness;
-                }
-                set_tooltip(
-                    "How bright the sector is. Affects not just the sector's "
-                    "appearance, but everything inside it.\n"
-                    "0 is fully dark, 255 is fully lit."
-                );
-                
-                //Sector always casts shadow checkbox.
-                bool sector_cast_shadow = s_ptr->always_cast_shadow;
-                if(ImGui::Checkbox("Always cast shadow", &sector_cast_shadow)) {
-                    register_change("sector cast shadow option change");
-                    s_ptr->always_cast_shadow = sector_cast_shadow;
-                }
-                set_tooltip(
-                    "Always cast a shadow onto lower sectors, "
-                    "even if they're just a step below."
-                );
-                
-                //Spacer dummy widget.
-                ImGui::Dummy(ImVec2(0, 16));
-                
-                ImGui::TreePop();
-            }
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            ImGui::TreePop();
         }
-        
-        homogenize_selected_sectors();
-        
-    } else if(selected_sectors.empty()) {
-    
-        //"No sector selected" text.
-        ImGui::TextDisabled("(No sector selected)");
-        
-    } else {
-    
-        //Non-homogenized sectors warning.
-        ImGui::TextWrapped(
-            "Multiple different sectors selected. To make all their properties "
-            "the same and edit them all together, click here:"
-        );
-        
-        //Homogenize sectors button.
-        if(ImGui::Button("Edit all together")) {
-            register_change("sector combining");
-            selection_homogenized = true;
-            homogenize_selected_sectors();
-        }
-        
     }
     
     ImGui::EndChild();
@@ -1836,209 +1468,288 @@ void area_editor::process_gui_panel_main() {
 
 
 /* ----------------------------------------------------------------------------
- * Processes the ImGui mobs control panel for this frame.
+ * Processes the ImGui mob control panel for this frame.
  */
-void area_editor::process_gui_panel_mobs() {
-    ImGui::BeginChild("mobs");
+void area_editor::process_gui_panel_mob() {
+    mob_gen* m_ptr = *selected_mobs.begin();
     
-    //Back button.
-    if(ImGui::Button("Back")) {
-        change_state(EDITOR_STATE_MAIN);
-    }
+    //Category and type comboboxes.
+    mob_category* category_before = m_ptr->category;
+    mob_type* type_before = m_ptr->type;
     
-    //Panel title text.
-    panel_title("OBJECTS", 90.0f);
-    
-    //New object button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_ADD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_new_mob_button();
-    }
-    set_tooltip(
-        "Start creating a new object.\n"
-        "Click on the canvas where you want the object to be.\n"
-        "Click this button again to cancel.",
-        "N"
+    process_mob_type_widgets(
+        &m_ptr->category, &m_ptr->type, true,
+    [this] () { register_change("object category change"); },
+    [this] () { register_change("object type change"); }
     );
     
-    //Delete object button.
-    if(!selected_mobs.empty()) {
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                editor_icons[ICON_REMOVE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-            )
-        ) {
-            press_remove_mob_button();
-        }
-        set_tooltip(
-            "Delete all selected objects.\n",
-            "Delete"
-        );
+    if(m_ptr->category != category_before) {
+        last_mob_category = m_ptr->category;
+    }
+    if(m_ptr->type != type_before) {
+        last_mob_type = m_ptr->type;
     }
     
-    //Duplicate object button.
-    ImGui::SameLine();
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_DUPLICATE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_duplicate_mobs_button();
+    if(m_ptr->type && !m_ptr->type->area_editor_tips.empty()) {
+        //Tips text.
+        ImGui::TextDisabled("(%s tips)", m_ptr->type->name.c_str());
+        set_tooltip(m_ptr->type->area_editor_tips);
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Object angle value.
+    float mob_angle = m_ptr->angle;
+    if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
+        register_change("object angle change");
+        m_ptr->angle = mob_angle;
     }
     set_tooltip(
-        "Start duplicating the selected objects.\n"
-        "Click on the canvas where you want the copied objects to be.\n"
-        "Click this button again to cancel.",
-        "D"
+        "Angle that the object is facing.\n"
+        "You can also press R in the canvas to "
+        "make it face the cursor."
     );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    mob_gen* m_ptr = NULL;
-    if(selected_mobs.size() == 1 || selection_homogenized) {
-        m_ptr = *selected_mobs.begin();
+    //Object script vars node.
+    if(saveable_tree_node("mobs", "Script vars")) {
+    
+        process_gui_mob_script_vars(m_ptr);
         
-        //Category and type comboboxes.
-        mob_category* category_before = m_ptr->category;
-        mob_type* type_before = m_ptr->type;
+        ImGui::TreePop();
         
-        process_mob_type_widgets(
-            &m_ptr->category, &m_ptr->type, true,
-        [this] () { register_change("object category change"); },
-        [this] () { register_change("object type change"); }
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Object advanced node.
+    if(saveable_tree_node("mobs", "Advanced")) {
+    
+        //Object link amount text.
+        ImGui::Text(
+            "%i link%s", (int) m_ptr->links.size(),
+            m_ptr->links.size() == 1 ? "" : "s"
         );
         
-        if(m_ptr->category != category_before) {
-            last_mob_category = m_ptr->category;
-        }
-        if(m_ptr->type != type_before) {
-            last_mob_type = m_ptr->type;
-        }
-        
-        if(m_ptr->type && !m_ptr->type->area_editor_tips.empty()) {
-            //Tips text.
-            ImGui::TextDisabled("(%s tips)", m_ptr->type->name.c_str());
-            set_tooltip(m_ptr->type->area_editor_tips);
-        }
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
-        //Object angle value.
-        float mob_angle = m_ptr->angle;
-        if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
-            register_change("object angle change");
-            m_ptr->angle = mob_angle;
+        //Object new link button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_ADD],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            } else {
+                sub_state = EDITOR_SUB_STATE_ADD_MOB_LINK;
+            }
         }
         set_tooltip(
-            "Angle that the object is facing.\n"
-            "You can also press R in the canvas to "
-            "make it face the cursor."
+            "Start creating a new object link.\n"
+            "Click on the other object you want to link to."
         );
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
-        //Object script vars node.
-        if(saveable_tree_node("mobs", "Script vars")) {
-        
-            process_gui_mob_script_vars(m_ptr);
-            
-            ImGui::TreePop();
-            
-        }
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
-        //Object advanced node.
-        if(saveable_tree_node("mobs", "Advanced")) {
-        
-            //Object link amount text.
-            ImGui::Text(
-                "%i link%s", (int) m_ptr->links.size(),
-                m_ptr->links.size() == 1 ? "" : "s"
-            );
-            
-            //Object new link button.
+        //Object delete link button.
+        if(!(*selected_mobs.begin())->links.empty()) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
-                    editor_icons[ICON_ADD],
+                    editor_icons[ICON_REMOVE],
                     ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                 )
             ) {
-                if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+                if((*selected_mobs.begin())->links.empty()) {
+                    status_text =
+                        "This mob has no links to delete!";
+                } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
                     sub_state = EDITOR_SUB_STATE_NONE;
                 } else {
-                    sub_state = EDITOR_SUB_STATE_ADD_MOB_LINK;
+                    sub_state = EDITOR_SUB_STATE_DEL_MOB_LINK;
                 }
             }
             set_tooltip(
-                "Start creating a new object link.\n"
-                "Click on the other object you want to link to.\n"
-                "Click this button again to cancel."
+                "Start deleting an object link.\n"
+                "Click on the other object whose link you want to delete, "
+                "or click the link proper."
             );
-            
-            //Object delete link button.
-            if(!(*selected_mobs.begin())->links.empty()) {
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-                    )
-                ) {
-                    if((*selected_mobs.begin())->links.empty()) {
-                        status_text =
-                            "This mob has no links to delete!";
-                    } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
-                        sub_state = EDITOR_SUB_STATE_NONE;
-                    } else {
-                        sub_state = EDITOR_SUB_STATE_DEL_MOB_LINK;
-                    }
-                }
-                set_tooltip(
-                    "Start deleting an object link.\n"
-                    "Click on the other object whose link you want to delete, "
-                    "or click the link proper.\n"
-                    "Click this button again to cancel."
-                );
-            }
-            
-            ImGui::TreePop();
         }
         
-        homogenize_selected_mobs();
-        
-    } else if(selected_mobs.empty()) {
+        ImGui::TreePop();
+    }
     
-        //"No object selected" text.
-        ImGui::TextDisabled("(No object selected)");
+    homogenize_selected_mobs();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui mobs control panel for this frame.
+ */
+void area_editor::process_gui_panel_mobs() {
+    ImGui::BeginChild("mobs");
+    
+    if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
+    
+        //Creation explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to place an object. It'll appear where you click."
+        );
+        
+        //Creation cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the creation.",
+            "Escape"
+        );
+        
+    } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
+    
+        //Duplication explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to place the new duplicated object(s). "
+            "It/They will appear where you click."
+        );
+        
+        //Duplication cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the duplication.",
+            "Escape"
+        );
+        
+    } else if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+    
+        //Link addition explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to link to an object. Click on the object you "
+            "want this one to link to."
+        );
+        
+        //Link addition cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the linking.",
+            "Escape"
+        );
+        
+    } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
+    
+        //Link deletion explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to delete an object link. Click on a linked object "
+            "or on its link to delete the corresponding link."
+        );
+        
+        //Link deletion cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the link removal.",
+            "Escape"
+        );
         
     } else {
     
-        //Non-homogenized objects warning.
-        ImGui::TextWrapped(
-            "Multiple different objects selected. To make all their properties "
-            "the same and edit them all together, click here:"
-        );
-        
-        //Homogenize objects button.
-        if(ImGui::Button("Edit all together")) {
-            register_change("object combining");
-            selection_homogenized = true;
-            homogenize_selected_mobs();
+        //Back button.
+        if(ImGui::Button("Back")) {
+            change_state(EDITOR_STATE_MAIN);
         }
         
+        //Panel title text.
+        panel_title("OBJECTS", 90.0f);
+        
+        //New object button.
+        if(
+            ImGui::ImageButton(
+                editor_icons[ICON_ADD],
+                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            )
+        ) {
+            press_new_mob_button();
+        }
+        set_tooltip(
+            "Start creating a new object.\n"
+            "Click on the canvas where you want the object to be.",
+            "N"
+        );
+        
+        if(!selected_mobs.empty()) {
+        
+            //Delete object button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_REMOVE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                press_remove_mob_button();
+            }
+            set_tooltip(
+                "Delete all selected objects.\n",
+                "Delete"
+            );
+            
+            //Duplicate object button.
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_DUPLICATE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                press_duplicate_mobs_button();
+            }
+            set_tooltip(
+                "Start duplicating the selected objects.\n"
+                "Click on the canvas where you want the copied objects to be.",
+                "D"
+            );
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        if(selected_mobs.size() == 1 || selection_homogenized) {
+        
+            process_gui_panel_mob();
+            
+        } else if(selected_mobs.empty()) {
+        
+            //"No object selected" text.
+            ImGui::TextDisabled("(No object selected)");
+            
+        } else {
+        
+            //Non-homogenized objects warning.
+            ImGui::TextWrapped(
+                "Multiple different objects selected. To make all their "
+                "properties the same and edit them all together, click here:"
+            );
+            
+            //Homogenize objects button.
+            if(ImGui::Button("Edit all together")) {
+                register_change("object combining");
+                selection_homogenized = true;
+                homogenize_selected_mobs();
+            }
+        }
     }
     
     ImGui::EndChild();
@@ -2051,119 +1762,140 @@ void area_editor::process_gui_panel_mobs() {
 void area_editor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
     
-    //Back button.
-    if(ImGui::Button("Back")) {
-        change_state(EDITOR_STATE_MAIN);
-    }
+    if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
     
-    //Panel title text.
-    panel_title("PATHS", 72.0f);
+        //Drawing explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to draw path links and path stops. "
+            "Each click places a stop and/or connects to a stop."
+            "Use the following controls the change the type of link that will "
+            "be drawn."
+        );
+        
+        int one_way_mode = path_drawing_normals;
+        
+        //One-way links radio button.
+        ImGui::RadioButton("Draw one-way links", &one_way_mode, 0);
+        set_tooltip(
+            "When drawing, new links drawn will be one-way links.",
+            "1"
+        );
+        
+        //Normal links radio button.
+        ImGui::RadioButton("Draw normal links", &one_way_mode, 1);
+        set_tooltip(
+            "When drawing, new links drawn will be normal (two-way) links.",
+            "2"
+        );
+        
+        path_drawing_normals = one_way_mode;
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Drawing stop button.
+        if(ImGui::Button("Stop", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Stop drawing.",
+            "Escape"
+        );
+        
+    } else {
     
-    //New path button.
-    if(
-        ImGui::ImageButton(
-            editor_icons[ICON_ADD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
-        )
-    ) {
-        press_new_path_button();
-    }
-    set_tooltip(
-        "Start drawing a new path.\n"
-        "Click on a path stop to start there, or click somewhere empty "
-        "to start on a new stop.\n"
-        "Then, click a path stop or somewhere empty to create a link there.\n"
-        "Click this button again to stop drawing.",
-        "N"
-    );
-    
-    //Delete path button.
-    if(!selected_path_links.empty() || !selected_path_stops.empty()) {
-        ImGui::SameLine();
+        //Back button.
+        if(ImGui::Button("Back")) {
+            change_state(EDITOR_STATE_MAIN);
+        }
+        
+        //Panel title text.
+        panel_title("PATHS", 72.0f);
+        
+        //New path button.
         if(
             ImGui::ImageButton(
-                editor_icons[ICON_REMOVE],
+                editor_icons[ICON_ADD],
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            press_remove_path_button();
+            press_new_path_button();
         }
         set_tooltip(
-            "Delete all selected path stops and/or path links.\n",
-            "Delete"
-        );
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Drawing mode text.
-    ImGui::Text("Drawing mode:");
-    
-    int one_way_mode = path_drawing_normals;
-    
-    //One-way links radio button.
-    ImGui::RadioButton("One-way links", &one_way_mode, 0);
-    set_tooltip(
-        "When drawing, new links drawn will be one-way links.",
-        "1"
-    );
-    
-    //Normal links radio button.
-    ImGui::RadioButton("Normal links", &one_way_mode, 1);
-    set_tooltip(
-        "When drawing, new links drawn will be normal (two-way) links.",
-        "2"
-    );
-    
-    path_drawing_normals = one_way_mode;
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Path tools node.
-    if(saveable_tree_node("paths", "Tools")) {
-    
-        //Show closest stop checkbox.
-        ImGui::Checkbox("Show closest stop", &show_closest_stop);
-        set_tooltip(
-            "Show the closest stop to the cursor.\n"
-            "Useful to know which stop "
-            "Pikmin will go to when starting to carry."
+            "Start drawing a new path.\n"
+            "Click on a path stop to start there, or click somewhere empty "
+            "to start on a new stop.\n"
+            "Then, click a path stop or somewhere empty to create a "
+            "link there.",
+            "N"
         );
         
-        //Show calculated path checkbox.
-        if(ImGui::Checkbox("Show calculated path", &show_path_preview)) {
+        //Delete path button.
+        if(!selected_path_links.empty() || !selected_path_stops.empty()) {
+            ImGui::SameLine();
             if(
-                show_path_preview &&
-                path_preview_checkpoints[0].x == LARGE_FLOAT
+                ImGui::ImageButton(
+                    editor_icons[ICON_REMOVE],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
             ) {
-                //No previous location. Place them on-camera.
-                path_preview_checkpoints[0].x =
-                    game.cam.pos.x - COMFY_DIST;
-                path_preview_checkpoints[0].y =
-                    game.cam.pos.y;
-                path_preview_checkpoints[1].x =
-                    game.cam.pos.x + COMFY_DIST;
-                path_preview_checkpoints[1].y =
-                    game.cam.pos.y;
+                press_remove_path_button();
             }
-            path_preview_dist = calculate_preview_path();
-        }
-        set_tooltip(
-            "Show the path to take to travel from point A to point B.\n"
-            "These points can be dragged in the canvas."
-        );
-        
-        //Total travel distance text.
-        if(show_path_preview) {
-            ImGui::Text("Total travel distance: %f", path_preview_dist);
+            set_tooltip(
+                "Delete all selected path stops and/or path links.\n",
+                "Delete"
+            );
         }
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        ImGui::TreePop();
+        //Path tools node.
+        if(saveable_tree_node("paths", "Tools")) {
+        
+            //Show closest stop checkbox.
+            ImGui::Checkbox("Show closest stop", &show_closest_stop);
+            set_tooltip(
+                "Show the closest stop to the cursor.\n"
+                "Useful to know which stop "
+                "Pikmin will go to when starting to carry."
+            );
+            
+            //Show calculated path checkbox.
+            if(ImGui::Checkbox("Show calculated path", &show_path_preview)) {
+                if(
+                    show_path_preview &&
+                    path_preview_checkpoints[0].x == LARGE_FLOAT
+                ) {
+                    //No previous location. Place them on-camera.
+                    path_preview_checkpoints[0].x =
+                        game.cam.pos.x - COMFY_DIST;
+                    path_preview_checkpoints[0].y =
+                        game.cam.pos.y;
+                    path_preview_checkpoints[1].x =
+                        game.cam.pos.x + COMFY_DIST;
+                    path_preview_checkpoints[1].y =
+                        game.cam.pos.y;
+                }
+                path_preview_dist = calculate_preview_path();
+            }
+            set_tooltip(
+                "Show the path to take to travel from point A to point B.\n"
+                "These points can be dragged in the canvas."
+            );
+            
+            //Total travel distance text.
+            if(show_path_preview) {
+                ImGui::Text("Total travel distance: %f", path_preview_dist);
+            }
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+            
+        }
         
     }
     
@@ -2330,6 +2062,442 @@ void area_editor::process_gui_panel_review() {
     }
     
     ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui sector control panel for this frame.
+ */
+void area_editor::process_gui_panel_sector() {
+    sector* s_ptr = *selected_sectors.begin();
+    
+    //Sector behavior node.
+    if(saveable_tree_node("layout", "Behavior")) {
+    
+        //Sector height value.
+        float sector_z = s_ptr->z;
+        if(ImGui::DragFloat("Height", &sector_z)) {
+            register_change("sector height change");
+            s_ptr->z = sector_z;
+        }
+        set_tooltip(
+            "Height of the floor. Positive numbers are higher."
+        );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Sector hazards node.
+        if(saveable_tree_node("layout", "Hazards")) {
+        
+            static int selected_hazard_nr = 0;
+            
+            //Sector hazard addition button.
+            if(
+                ImGui::ImageButton(
+                    editor_icons[ICON_ADD],
+                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                )
+            ) {
+                ImGui::OpenPopup("addHazard");
+            }
+            set_tooltip(
+                "Add a new hazard to the list of hazards this sector has.\n"
+                "Click to open a pop-up for you to choose from."
+            );
+            
+            //Sector hazard addition popup.
+            vector<string> all_hazards_list;
+            for(auto h : game.hazards) {
+                all_hazards_list.push_back(h.first);
+            }
+            string picked_hazard;
+            if(
+                list_popup(
+                    "addHazard", all_hazards_list, &picked_hazard
+                )
+            ) {
+                sector* s_ptr = *selected_sectors.begin();
+                vector<string> list =
+                    semicolon_list_to_vector(s_ptr->hazards_str);
+                if(
+                    std::find(
+                        list.begin(), list.end(), picked_hazard
+                    ) == list.end()
+                ) {
+                    register_change("sector hazard addition");
+                    if(!s_ptr->hazards_str.empty()) {
+                        s_ptr->hazards_str += ";";
+                    }
+                    s_ptr->hazards_str += picked_hazard;
+                    selected_hazard_nr = list.size();
+                    status_text =
+                        "Added hazard \"" + picked_hazard +
+                        "\" to the sector.";
+                }
+            }
+            
+            //Sector hazard removal button.
+            if(
+                selected_hazard_nr >= 0 &&
+                !(*selected_sectors.begin())->hazards_str.empty()
+            ) {
+                ImGui::SameLine();
+                if(
+                    ImGui::ImageButton(
+                        editor_icons[ICON_REMOVE],
+                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    )
+                ) {
+                    sector* s_ptr = *selected_sectors.begin();
+                    vector<string> list =
+                        semicolon_list_to_vector(s_ptr->hazards_str);
+                    if(
+                        selected_hazard_nr >= 0 &&
+                        selected_hazard_nr < list.size()
+                    ) {
+                        register_change("sector hazard removal");
+                        string hazard_name = list[selected_hazard_nr];
+                        s_ptr->hazards_str.clear();
+                        for(size_t h = 0; h < list.size(); ++h) {
+                            if(h == selected_hazard_nr) continue;
+                            s_ptr->hazards_str += list[h] + ";";
+                        }
+                        if(!s_ptr->hazards_str.empty()) {
+                            //Delete the trailing semicolon.
+                            s_ptr->hazards_str.pop_back();
+                        }
+                        selected_hazard_nr =
+                            std::min(
+                                selected_hazard_nr, (int) list.size() - 2
+                            );
+                        status_text =
+                            "Removed hazard \"" + hazard_name +
+                            "\" from the sector.";
+                    }
+                }
+                set_tooltip(
+                    "Remove the selected hazard from the list of "
+                    "hazards this sector has."
+                );
+            }
+            
+            //Sector hazard list.
+            ImGui::ListBox(
+                "Hazards", &selected_hazard_nr,
+                semicolon_list_to_vector(s_ptr->hazards_str),
+                4
+            );
+            set_tooltip(
+                "List of hazards this sector has."
+            );
+            
+            bool sector_hazard_floor = s_ptr->hazard_floor;
+            if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
+                register_change("sector hazard floor option change");
+                s_ptr->hazard_floor = sector_hazard_floor;
+            }
+            set_tooltip(
+                "Do the hazards only affects objects on the floor,\n"
+                "or do they affect airborne objects in the sector too?"
+            );
+            
+            ImGui::TreePop();
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Sector advanced behavior node.
+        if(saveable_tree_node("layout", "Advanced")) {
+        
+            //Sector type combobox.
+            vector<string> types_list;
+            for(
+                size_t t = 0; t < game.sector_types.get_nr_of_types(); ++t
+            ) {
+                types_list.push_back(game.sector_types.get_name(t));
+            }
+            int sector_type = s_ptr->type;
+            if(ImGui::Combo("Type", &sector_type, types_list)) {
+                register_change("sector type change");
+                s_ptr->type = sector_type;
+            }
+            set_tooltip(
+                "What type of sector this is."
+            );
+            
+            //Sector bridge height value.
+            if(
+                s_ptr->type == SECTOR_TYPE_BRIDGE ||
+                s_ptr->type == SECTOR_TYPE_BRIDGE_RAIL
+            ) {
+            
+                float bridge_height = s2f(s_ptr->tag);
+                ImGui::SetNextItemWidth(96.0f);
+                if(ImGui::DragFloat("Bridge height", &bridge_height)) {
+                    register_change("sector bridge height change");
+                    s_ptr->tag = f2s(bridge_height);
+                }
+                set_tooltip(
+                    "When the bridge opens, "
+                    "set the sector's height to this."
+                );
+                
+            }
+            
+            //Sector bottomless pit checkbox.
+            bool sector_bottomless_pit = s_ptr->is_bottomless_pit;
+            if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
+                register_change("sector bottomless pit change");
+                s_ptr->is_bottomless_pit = sector_bottomless_pit;
+            }
+            set_tooltip(
+                "Is this sector's floor a bottomless pit?\n"
+                "Pikmin die when they fall in, and you can see the void."
+            );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Sector appearance node.
+    if(saveable_tree_node("layout", "Appearance")) {
+    
+        int texture_type = !s_ptr->fade;
+        
+        //Sector texture fader radio button.
+        ImGui::RadioButton("Texture fader", &texture_type, 0);
+        set_tooltip(
+            "Makes the surrounding textures fade into each other."
+        );
+        
+        //Sector regular texture radio button.
+        ImGui::RadioButton("Regular texture", &texture_type, 1);
+        set_tooltip(
+            "Makes the sector use a regular texture."
+        );
+        
+        if(s_ptr->fade != (texture_type == 0)) {
+            register_change("sector texture type change");
+            s_ptr->fade = texture_type == 0;
+        }
+        
+        if(!s_ptr->fade) {
+        
+            ImGui::Indent();
+            
+            //Sector texture button.
+            if(ImGui::Button("Change")) {
+                vector<picker_item> picker_buttons;
+                
+                picker_buttons.push_back(picker_item("Browse..."));
+                
+                for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+                    picker_buttons.push_back(
+                        picker_item(
+                            texture_suggestions[s].name,
+                            "",
+                            texture_suggestions[s].bmp
+                        )
+                    );
+                }
+                open_picker(
+                    "Pick a texture",
+                    picker_buttons,
+                    std::bind(
+                        &area_editor::pick_texture, this,
+                        std::placeholders::_1,
+                        std::placeholders::_2
+                    ),
+                    "Suggestions:"
+                );
+            }
+            set_tooltip(
+                "Pick a texture to use."
+            );
+            
+            //Sector texture name text.
+            ImGui::SameLine();
+            ImGui::Text("%s", s_ptr->texture_info.file_name.c_str());
+            
+            ImGui::Unindent();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Sector texture effects node.
+        if(saveable_tree_node("layout", "Texture effects")) {
+        
+            //Sector texture offset value.
+            point texture_translation = s_ptr->texture_info.translation;
+            if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
+                register_change("sector texture offset change");
+                s_ptr->texture_info.translation = texture_translation;
+                quick_preview_timer.start();
+            }
+            set_tooltip(
+                "Offset the texture horizontally or vertically "
+                "by this much."
+            );
+            
+            //Sector texture scale value.
+            point texture_scale = s_ptr->texture_info.scale;
+            if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
+                register_change("sector texture scale change");
+                s_ptr->texture_info.scale = texture_scale;
+                quick_preview_timer.start();
+            }
+            set_tooltip(
+                "Scale the texture horizontally or vertically "
+                "by this much.\n"
+                "The scale's anchor point is at the origin "
+                "of the area, at coordinates 0,0."
+            );
+            
+            //Sector texture rotation value.
+            float texture_rotation = s_ptr->texture_info.rot;
+            if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
+                register_change("sector texture angle change");
+                s_ptr->texture_info.rot = texture_rotation;
+                quick_preview_timer.start();
+            }
+            set_tooltip(
+                "Rotate the texture by these many degrees.\n"
+                "The rotation's center point is at the origin "
+                "of the area, at coordinates 0,0."
+            );
+            
+            //Sector texture tint value.
+            ALLEGRO_COLOR texture_tint = s_ptr->texture_info.tint;
+            if(
+                ImGui::ColorEdit4(
+                    "Tint color", (float*) &texture_tint,
+                    ImGuiColorEditFlags_NoInputs
+                )
+            ) {
+                register_change("sector texture tint change");
+                s_ptr->texture_info.tint = texture_tint;
+                quick_preview_timer.start();
+            }
+            set_tooltip(
+                "Tint the texture with this color. White means no tint."
+            );
+            
+            //On-canvas texture effect editing checkbox.
+            bool octee_on =
+                sub_state == EDITOR_SUB_STATE_OCTEE;
+            if(ImGui::Checkbox("On-canvas editing", &octee_on)) {
+                sub_state =
+                    octee_on ?
+                    EDITOR_SUB_STATE_OCTEE :
+                    EDITOR_SUB_STATE_NONE;
+            }
+            set_tooltip(
+                "Enable on-canvas texture effect editing.\n"
+                "With this, you can click and drag on the canvas "
+                "to adjust the texture,\n"
+                "based on whatever mode is currently active."
+            );
+            
+            if(octee_on) {
+            
+                ImGui::Indent();
+                
+                int octee_mode_int = (int) octee_mode;
+                
+                //On-canvas texture effect editing offset radio button.
+                ImGui::RadioButton(
+                    "Change offset", &octee_mode_int,
+                    (int) OCTEE_MODE_OFFSET
+                );
+                set_tooltip(
+                    "Dragging will change the texture's offset.",
+                    "1"
+                );
+                
+                //On-canvas texture effect editing scale radio button.
+                ImGui::RadioButton(
+                    "Change scale", &octee_mode_int,
+                    (int) OCTEE_MODE_SCALE
+                );
+                set_tooltip(
+                    "Dragging will change the texture's scale.",
+                    "2"
+                );
+                
+                //On-canvas texture effect editing angle radio button.
+                ImGui::RadioButton(
+                    "Change angle", &octee_mode_int,
+                    (int) OCTEE_MODE_ANGLE
+                );
+                set_tooltip(
+                    "Dragging will change the texture's angle.",
+                    "3"
+                );
+                
+                octee_mode = (OCTEE_MODES) octee_mode_int;
+                
+                ImGui::Unindent();
+                
+            }
+            
+            ImGui::TreePop();
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Sector mood node.
+        if(saveable_tree_node("layout", "Sector mood")) {
+        
+            //Sector brightness value.
+            int sector_brightness = s_ptr->brightness;
+            ImGui::SetNextItemWidth(180);
+            if(ImGui::SliderInt("Brightness", &sector_brightness, 0, 255)) {
+                register_change("sector brightness change");
+                s_ptr->brightness = sector_brightness;
+            }
+            set_tooltip(
+                "How bright the sector is. Affects not just the sector's "
+                "appearance, but everything inside it.\n"
+                "0 is fully dark, 255 is fully lit."
+            );
+            
+            //Sector always casts shadow checkbox.
+            bool sector_cast_shadow = s_ptr->always_cast_shadow;
+            if(ImGui::Checkbox("Always cast shadow", &sector_cast_shadow)) {
+                register_change("sector cast shadow option change");
+                s_ptr->always_cast_shadow = sector_cast_shadow;
+            }
+            set_tooltip(
+                "Always cast a shadow onto lower sectors, "
+                "even if they're just a step below."
+            );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+    }
+    
+    homogenize_selected_sectors();
 }
 
 

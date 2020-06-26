@@ -1428,6 +1428,13 @@ void area_editor::press_circle_sector_button() {
         return;
     }
     
+    if(
+        sub_state == EDITOR_SUB_STATE_DRAWING ||
+        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
     if(!non_simples.empty() || !lone_edges.empty()) {
         status_text =
             "Please fix any broken sectors or edges before trying to make "
@@ -1435,13 +1442,10 @@ void area_editor::press_circle_sector_button() {
         return;
     }
     
+    clear_selection();
     clear_circle_sector();
-    if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-        cancel_circle_sector();
-    } else {
-        status_text = "Use the canvas to place a circular sector.";
-        sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
-    }
+    status_text = "Use the canvas to place a circular sector.";
+    sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
 }
 
 
@@ -1449,11 +1453,17 @@ void area_editor::press_circle_sector_button() {
  * Code to run when the duplicate mobs button widget is pressed.
  */
 void area_editor::press_duplicate_mobs_button() {
+    if(
+        sub_state == EDITOR_SUB_STATE_NEW_MOB ||
+        sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
+    }
+    
     if(selected_mobs.empty()) {
         status_text = "You have to select mobs to duplicate!";
-    } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
-        status_text.clear();
-        sub_state = EDITOR_SUB_STATE_NONE;
     } else {
         status_text = "Use the canvas to place the duplicated objects.";
         sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
@@ -1483,14 +1493,18 @@ void area_editor::press_new_mob_button() {
         return;
     }
     
-    if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
-        status_text.clear();
-        sub_state = EDITOR_SUB_STATE_NONE;
-    } else {
-        clear_selection();
-        status_text = "Use the canvas to place a new object.";
-        sub_state = EDITOR_SUB_STATE_NEW_MOB;
+    if(
+        sub_state == EDITOR_SUB_STATE_NEW_MOB ||
+        sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
     }
+    
+    clear_selection();
+    status_text = "Use the canvas to place a new object.";
+    sub_state = EDITOR_SUB_STATE_NEW_MOB;
 }
 
 
@@ -1503,13 +1517,13 @@ void area_editor::press_new_path_button() {
     }
     
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
-        status_text.clear();
-        sub_state = EDITOR_SUB_STATE_NONE;
-    } else {
-        path_drawing_stop_1 = NULL;
-        status_text = "Use the canvas to draw a path.";
-        sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
+        return;
     }
+    
+    clear_selection();
+    path_drawing_stop_1 = NULL;
+    status_text = "Use the canvas to draw a path.";
+    sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
 }
 
 
@@ -1521,6 +1535,13 @@ void area_editor::press_new_sector_button() {
         return;
     }
     
+    if(
+        sub_state == EDITOR_SUB_STATE_DRAWING ||
+        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
     if(!non_simples.empty() || !lone_edges.empty()) {
         status_text =
             "Please fix any broken sectors or edges before trying to make "
@@ -1528,13 +1549,10 @@ void area_editor::press_new_sector_button() {
         return;
     }
     
+    clear_selection();
     clear_layout_drawing();
-    if(sub_state == EDITOR_SUB_STATE_DRAWING) {
-        cancel_layout_drawing();
-    } else {
-        status_text = "Use the canvas to draw a sector.";
-        sub_state = EDITOR_SUB_STATE_DRAWING;
-    }
+    status_text = "Use the canvas to draw a sector.";
+    sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
 
@@ -1547,12 +1565,12 @@ void area_editor::press_new_tree_shadow_button() {
     }
     
     if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-        status_text.clear();
-        sub_state = EDITOR_SUB_STATE_NONE;
-    } else {
-        status_text = "Use the canvas to place a new tree shadow.";
-        sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
+        return;
     }
+    
+    clear_selection();
+    status_text = "Use the canvas to place a new tree shadow.";
+    sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
 }
 
 

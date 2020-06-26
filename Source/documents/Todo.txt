@@ -4,9 +4,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
         Style the editors
-        Minor
-            In the area editor, hide most of the panel's widgets when drawing, and keep only the relevant ones
-            When drawing a new sector and such, unselect the current stuff, so it's easier for the user to realize they're now in a different, specific mode
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -63,6 +60,7 @@ Next tasks (roughly sorted most important first)
     If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
     Reloading the area isn't setting the sub-state to normal
     Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
+    Deleting a stop says you deleted 1 stop, 0 links
     
     --- v0.19.0 ---
     Details

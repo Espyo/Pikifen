@@ -529,10 +529,12 @@ private:
     void process_gui_panel_info();
     void process_gui_panel_layout();
     void process_gui_panel_main();
+    void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_options();
     void process_gui_panel_paths();
     void process_gui_panel_review();
+    void process_gui_panel_sector();
     void process_gui_panel_tools();
     void process_gui_options_dialog();
     void process_gui_status_bar();
