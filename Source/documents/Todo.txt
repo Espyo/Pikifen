@@ -4,6 +4,7 @@
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
         Style the editors
+        A way to access all mobs in the area editor's picker
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -63,6 +64,36 @@ Next tasks (roughly sorted most important first)
     Deleting a stop says you deleted 1 stop, 0 links
     
     --- v0.19.0 ---
+    Misc.
+        When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
+        Objects being carried by Pikmin should count as that object's weight + the Pikmin's weight for the purposes of a scale category mob
+        If a leader/Pikmin type is not in the list of order, don't give an error -- instead, just quietly put it at the end. This way, people can download new types and not have to go declare the list they don't care about (Kman)
+        Data file file names, screenshot file names, etc. should be sanitized when saving. e.g. if somebody creates an area called "Stuff?", they won't be able to save a screenshot of it
+        Tiny
+            sector.cpp has "Dijstra" in a comment...
+        If a Pikmin carrying something is hurt, but the attack is randomly decided to miss, the Pikmin will still release and whatnot
+    There should be a way to add custom scripting to the objects with hardcoded scripts
+        Idea
+            The user can write a script text file like they would for a customizable object type
+            If the write the name of a new state, that's fine, but if they write the name of an existing one, they're editing it
+            If they write a new event inside, that's fine, but if they write an existing event, then one of their actions MUST be "run_engine_code"
+    There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
+        Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
+    Performance monitoring improvements
+        F1 mode should tell you how long the frame took to process, by measuring it
+            A different measurement for logic and rendering, and for both combined, as well as more specific points, like mob physics, scripting, etc.
+        A maker tool option to toggle loading times for mobs, textures, vertexes, etc.
+        Maybe a tool that dumps really extensive measurements into a text file?
+        Try to figure out why Play has such varying framerate (use F1), but other areas don't
+    Documentation update
+        Document tutorials and the like offline
+        The tutorials should be "making X" instead of "creating a new X"
+        Use the term "make" more, to refer to anything a maker does (instead of "creator"); both inside documentation and in the actual engine
+            Rename the creator tools to maker tools
+        Recreate the script and animation tutorials to be like the area one
+    Try to compile on Mac
+    
+    --- v0.20.0 ---
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
@@ -72,7 +103,6 @@ Next tasks (roughly sorted most important first)
             If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (suggested by Kman)
         Make White Pikmin inflict enemies with a "poisoned" status effect that saps away health over time
         "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" -- Kman
-        Revamp some enemies's scripting now that we have the power of inserting variables in action calls, and gotos
         Add the Inkscape noise filter to more sprites? Or even a different filter
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
@@ -83,19 +113,13 @@ Next tasks (roughly sorted most important first)
         The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (elated)
         Decorative objects shouldn't cast light in blackout mode
-        When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
-        Objects being carried by Pikmin should count as that object's weight + the Pikmin's weight for the purposes of a scale category mob
         Improve the look of the ship's ring
         An option to control the cursor's movement speed, when not using the mouse (MonkeyUhOh)
-        If a leader/Pikmin type is not in the list of order, don't give an error -- instead, just quietly put it at the end. This way, people can download new types and not have to go declare the list they don't care about (Kman)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
-        Tiny
-            Data file file names, screenshot file names, etc. should be sanitized when saving. e.g. if somebody creates an area called "Stuff?", they won't be able to save a screenshot of it
-            sector.cpp has "Dijstra" in a comment...
     Add rudimentary menus
         Pause
             Continue, end day, quit
@@ -106,21 +130,13 @@ Next tasks (roughly sorted most important first)
         End of day
             Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
     Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
-    If a Pikmin carrying something is hurt, but the attack is randomly decided to miss, the Pikmin will still release and whatnot
     Sounds really need a makeover...
     Pikmin should push each other a bit
     Objects should move with acceleration
-    There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
-        Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
     Improve the way ceramic bridge textures work
     A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
     Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
     If something is under construction, like a menu or something, add a small "WIP" blurb
-    There should be a way to add custom scripting to the objects with hardcoded scripts
-        Idea
-            The user can write a script text file like they would for a customizable object type
-            If the write the name of a new state, that's fine, but if they write the name of an existing one, they're editing it
-            If they write a new event inside, that's fine, but if they write an existing event, then one of their actions MUST be "run_engine_code"
     Maybe add an F1 screen with quick-start help?
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
@@ -137,20 +153,15 @@ Next tasks (roughly sorted most important first)
     Add a ball of yarn treasure
     Cursor improvements
         The cursor should change to the standby color, and show the number of Pikmin of that type next to it
-        When holding a Pikmin (or maybe just always?9, a trajectory predictor line should appear
+        When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
             It should in reality be two quadrilaterals: one funnel-shaped growing away from the leader, till halfway across the throw distance, then another that shrinks till the landing spot; this gives a pseudo height effect
             If a Pikmin/leader cannot reach on top of a ledge, the predictor should cut off at the wall; this is more intuitive than the cursor getting a cross that blinks
             The indicator should have a texture that's like a zebra-crossing, and the texture should animate by moving forward in the direction of the throw
+        Maybe make it so that terrain too high for the current standby Pikmin type to reach receive a semi-opaque dark overlay?
         Game configurations for the cursor
             Leader cursor: unlimited or distance-limited?
             Whistling: can be on cursor or distance-limited?
             Throwing: can be on cursor or distance-limited?
-    Performance monitoring improvements
-        F1 mode should tell you how long the frame took to process, by measuring it
-            A different measurement for logic and rendering, and for both combined, as well as more specific points, like mob physics, scripting, etc.
-        A maker tool option to toggle loading times for mobs, textures, vertexes, etc.
-    Try to figure out why Play has such varying framerate (use F1), but other areas don't
-    Maybe make it so that terrain too high for the current standby Pikmin type to reach receive a semi-opaque dark overlay?
     Whistling lying Pikmin should make them get up and go to you
         Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
         When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
@@ -187,15 +198,8 @@ Next tasks (roughly sorted most important first)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
-    Documentation update
-        Document tutorials and the like offline
-        The tutorials should be "making X" instead of "creating a new X"
-        Use the term "make" more, to refer to anything a maker does (instead of "creator"); both inside documentation and in the actual engine
-            Rename the creator tools to maker tools
-        Recreate the script and animation tutorials to be like the area one
-    Try to compile on Mac
-
-    --- v0.20.0 ---
+    
+    --- Future ---
     Menus
         Pause screen
             Radar

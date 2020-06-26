@@ -46,18 +46,22 @@ script {
                 get_random_decimal c 1 100
                 if $c < 55
                     set_var contents nectar
+                    goto spawn
+                end_if
+                if $c < 90
+                    set_var contents nectar_2
+                    goto spawn
+                end_if
+                if $c < 95
+                    set_var contents spicy_drop
+                    goto spawn
                 else
-                    if $c < 90
-                        set_var contents nectar_2
-                    else
-                        if $c < 95
-                            set_var contents spicy_drop
-                        else
-                            set_var contents bitter_drop
-                        end_if
-                    end_if
+                    set_var contents bitter_drop
+                    goto spawn
                 end_if
             end_if
+            
+            label spawn
             
             if $contents = nectar
                 spawn nectar

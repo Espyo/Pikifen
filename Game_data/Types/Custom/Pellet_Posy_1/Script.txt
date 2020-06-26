@@ -1,4 +1,4 @@
-first_state = sprout
+first_state = check_ok
 death_state = destroyed
 
 init {
@@ -10,6 +10,23 @@ init {
 }
 
 script {
+    check_ok {
+        on_enter {
+            if $red = true
+                set_state sprout
+            end_if
+            if $yellow = true
+                set_state sprout
+            end_if
+            if $blue = true
+                set_state sprout
+            end_if
+            
+            //If it got here, that means it has no chosen content. Pick red.
+            set_var red true
+            set_state sprout
+        }
+    }
     sprout {
         on_enter {
             set_animation sprout
@@ -53,50 +70,50 @@ script {
         on_enter {
             set_timer 3
             
-            if $red != true
-                if $yellow != true
-                    if $blue != true
-                        set_var red true
+            label try_next
+            
+            if $cur_color = red
+                set_var cur_color yellow
+            else
+                if $cur_color = yellow
+                    set_var cur_color blue
+                else
+                    if $cur_color = blue
+                        set_var cur_color red
                     end_if
                 end_if
             end_if
             
             if $cur_color = red
-                set_var cur_color yellow
-                set_state idling
+                if $red != true
+                    goto try_next
+                end_if
             end_if
-            
             if $cur_color = yellow
-                set_var cur_color blue
-                set_state idling
+                if $yellow != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = blue
+                if $blue != true
+                    goto try_next
+                end_if
             end_if
             
-            if $cur_color = blue
-                set_var cur_color red
-                set_state idling
-            end_if
+            set_state idling
         }
     }
     idling {
         on_enter {
             if $cur_color = red
-                if $red != true
-                    set_state picking_next_color
-                end_if
                 set_animation idling_red no_restart
             end_if
             
             if $cur_color = yellow
-                if $yellow != true
-                    set_state picking_next_color
-                end_if
                 set_animation idling_yellow no_restart
             end_if
             
             if $cur_color = blue
-                if $blue != true
-                    set_state picking_next_color
-                end_if
                 set_animation idling_blue no_restart
             end_if
         }
