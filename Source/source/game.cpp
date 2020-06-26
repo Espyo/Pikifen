@@ -108,8 +108,6 @@ void game_class::main_loop() {
     bool cursor_in_window = true;
     //Used to calculate the time difference between the current and last frames.
     double prev_frame_time = 0.0;
-    bool window_found = true;
-    bool window_focused = true;
     ALLEGRO_EVENT ev;
     
     //Main loop.
@@ -155,39 +153,10 @@ void game_class::main_loop() {
             is_game_running = false;
             break;
             
-        } case ALLEGRO_EVENT_DISPLAY_RESIZE: {
-            //scr_w = ev.display.width;
-            //scr_h = ev.display.height;
-            break;
-            
         } case ALLEGRO_EVENT_KEY_DOWN: {
             if(ev.keyboard.keycode == ALLEGRO_KEY_F12) {
                 save_screenshot();
             }
-            break;
-            
-        } case ALLEGRO_EVENT_DISPLAY_LOST: {
-            window_found = false;
-            break;
-            
-        } case ALLEGRO_EVENT_DISPLAY_FOUND: {
-            window_found = true;
-            break;
-            
-        } case ALLEGRO_EVENT_DISPLAY_SWITCH_OUT: {
-            window_focused = false;
-            break;
-            
-        } case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
-            window_focused = true;
-            break;
-            
-        } case ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY: {
-            cursor_in_window = false;
-            break;
-            
-        } case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY: {
-            cursor_in_window = true;
             break;
             
         }

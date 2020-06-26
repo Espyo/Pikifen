@@ -3,8 +3,9 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        Style the editors
         A way to access all mobs in the area editor's picker
+        A feature with which to search for mobs/sectors?
+        Style the editors
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -21,6 +22,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
     ** Several other small things have been tweaked.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
+    * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     
     ;Compatibility warnings
@@ -34,6 +36,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     * Some definitions have been changed from being all lumped into a single file, to being spread over several files in a folder. This should allow makers to share their content more easily by only including new files, thus avoiding replacing the files players already had.
     ** The following have been affected: hazards, liquids, particle generators, spike damage types, spray types, status effects, weather conditions.
     ** In addition, added the <code>spray_order</code> property to the game configuration file; use this to set the standard order of sprays.
+    * Some file name logic was changed to sanitize the file names. This is to make it so you can still save an area called "Secret?", for instance, since otherwise the question mark would be illegal. That said, if one of your areas fails to load, try changing its folder name to something simpler (letters, numbers, spaces, dashes, and underscores allowed).
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
@@ -62,15 +65,10 @@ Next tasks (roughly sorted most important first)
     Reloading the area isn't setting the sub-state to normal
     Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
     Deleting a stop says you deleted 1 stop, 0 links
+    Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
     
     --- v0.19.0 ---
     Misc.
-        When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
-        Objects being carried by Pikmin should count as that object's weight + the Pikmin's weight for the purposes of a scale category mob
-        If a leader/Pikmin type is not in the list of order, don't give an error -- instead, just quietly put it at the end. This way, people can download new types and not have to go declare the list they don't care about (Kman)
-        Data file file names, screenshot file names, etc. should be sanitized when saving. e.g. if somebody creates an area called "Stuff?", they won't be able to save a screenshot of it
-        Tiny
-            sector.cpp has "Dijstra" in a comment...
         If a Pikmin carrying something is hurt, but the attack is randomly decided to miss, the Pikmin will still release and whatnot
     There should be a way to add custom scripting to the objects with hardcoded scripts
         Idea
@@ -296,6 +294,7 @@ Next tasks (roughly sorted most important first)
         If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
         There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
         If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+        When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
         New approach, thought of long after I've paused this project:
             One layer transforms hardware inputs into clean inputs, like mouse down, joystick axis positive (after joystick sanitization), etc.
             Another layer transforms those inputs into actions, and it knows that some actions only want 0/1, others want the raw value, etc.

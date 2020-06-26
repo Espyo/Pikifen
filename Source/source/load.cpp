@@ -37,18 +37,19 @@ void load_area(
     
     string geometry_file_name;
     string data_file_name;
+    string sanitized_area_name = sanitize_file_name(name);
     if(from_backup) {
         geometry_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + name +
+            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
             "/Geometry_backup.txt";
         data_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + name +
+            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
             "/Data_backup.txt";
     } else {
         geometry_file_name =
-            AREAS_FOLDER_PATH + "/" + name + "/Geometry.txt";
+            AREAS_FOLDER_PATH + "/" + sanitized_area_name + "/Geometry.txt";
         data_file_name =
-            AREAS_FOLDER_PATH + "/" + name + "/Data.txt";
+            AREAS_FOLDER_PATH + "/" + sanitized_area_name + "/Data.txt";
     }
     
     //First, load the area's configuration data.

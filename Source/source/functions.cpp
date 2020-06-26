@@ -842,6 +842,31 @@ point s2p(const string &s, float* z) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sanitizes a file name (or part of it), such that it doesn't use any
+ * weird characters.
+ * Do not use on paths, since colons, slashes, and backslashes will be replaced!
+ */
+string sanitize_file_name(const string &s) {
+    string ret;
+    ret.reserve(s.size());
+    for(size_t c = 0; c < s.size(); ++c) {
+        if(
+            (s[c] >= 'A' && s[c] <= 'Z') ||
+            (s[c] >= 'a' && s[c] <= 'z') ||
+            (s[c] >= '0' && s[c] <= '9') ||
+            s[c] == '-' ||
+            s[c] == ' '
+        ) {
+            ret.push_back(s[c]);
+        } else {
+            ret.push_back('_');
+        }
+    }
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the creator tools settings.
  */
 void save_creator_tools() {

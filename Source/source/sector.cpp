@@ -1998,7 +1998,7 @@ void depth_first_search(
 }
 
 /* ----------------------------------------------------------------------------
- * Uses Dijstra's algorithm to get the shortest path between two nodes.
+ * Uses Dijkstra's algorithm to get the shortest path between two nodes.
  * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
  * *node:           Start and end node.
  * obstacles_found: If there is no clear path, this points to all obstacles

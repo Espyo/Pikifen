@@ -117,6 +117,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
 );
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 void report_fatal_error(const string &s, data_node* dn = NULL);
+string sanitize_file_name(const string &s);
 void save_creator_tools();
 void save_options();
 void save_screenshot();

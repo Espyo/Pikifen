@@ -736,14 +736,12 @@ void load_mob_types(bool load_resources) {
     for(auto &p : game.mob_types.pikmin) {
         if(
             find(
-                game.config.pikmin_order_strings.begin(), game.config.pikmin_order_strings.end(),
+                game.config.pikmin_order_strings.begin(),
+                game.config.pikmin_order_strings.end(),
                 p.first
             ) == game.config.pikmin_order_strings.end()
         ) {
-            log_error(
-                "Pikmin type \"" + p.first + "\" was not found "
-                "in the Pikmin order list in the config file!"
-            );
+            //Missing from the list? Add it to the end.
             game.config.pikmin_order_strings.push_back(p.first);
         }
     }
@@ -763,14 +761,12 @@ void load_mob_types(bool load_resources) {
     for(auto &l : game.mob_types.leader) {
         if(
             find(
-                game.config.leader_order_strings.begin(), game.config.leader_order_strings.end(),
+                game.config.leader_order_strings.begin(),
+                game.config.leader_order_strings.end(),
                 l.first
             ) == game.config.leader_order_strings.end()
         ) {
-            log_error(
-                "Leader type \"" + l.first + "\" was not found "
-                "in the leader order list in the config file!"
-            );
+            //Missing from the list? Add it to the end.
             game.config.leader_order_strings.push_back(l.first);
         }
     }

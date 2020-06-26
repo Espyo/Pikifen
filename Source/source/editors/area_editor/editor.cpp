@@ -1289,7 +1289,8 @@ void area_editor::load_backup() {
  */
 void area_editor::load_reference() {
     data_node file(
-        USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name + "/Reference.txt"
+        USER_AREA_DATA_FOLDER_PATH + "/" + sanitize_file_name(cur_area_name) +
+        "/Reference.txt"
     );
     
     if(file.file_was_opened) {
@@ -2195,19 +2196,20 @@ bool area_editor::save_area(const bool to_backup) {
     //Finally, save.
     string geometry_file_name;
     string data_file_name;
+    string sanitized_area_name = sanitize_file_name(cur_area_name);
     if(to_backup) {
         geometry_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
+            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
             "/Geometry_backup.txt";
         data_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
+            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
             "/Data_backup.txt";
     } else {
         geometry_file_name =
-            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            AREAS_FOLDER_PATH + "/" + sanitized_area_name +
             "/Geometry.txt";
         data_file_name =
-            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            AREAS_FOLDER_PATH + "/" + sanitized_area_name +
             "/Data.txt";
     }
     bool geo_save_ok = geometry_file.save_file(geometry_file_name);
@@ -2219,8 +2221,9 @@ bool area_editor::save_area(const bool to_backup) {
             "Could not save the area!",
             (
                 "An error occured while saving the area to the folder \"" +
-                AREAS_FOLDER_PATH + "/" + cur_area_name + "\". Make sure that "
-                "the folder exists and it is not read-only, and try again."
+                AREAS_FOLDER_PATH + "/" + sanitized_area_name + "\". "
+                "Make sure that the folder exists and it is not read-only, "
+                "and try again."
             ).c_str(),
             NULL,
             ALLEGRO_MESSAGEBOX_WARN
@@ -2273,7 +2276,7 @@ void area_editor::save_backup() {
  */
 void area_editor::save_reference() {
     string file_name =
-        USER_AREA_DATA_FOLDER_PATH + "/" + cur_area_name +
+        USER_AREA_DATA_FOLDER_PATH + "/" + sanitize_file_name(cur_area_name) +
         "/Reference.txt";
         
     if(!reference_bitmap) {
@@ -3014,7 +3017,7 @@ bool area_editor::update_backup_status() {
     
     data_node file(
         USER_AREA_DATA_FOLDER_PATH + "/" +
-        cur_area_name + "/Geometry_backup.txt"
+        sanitize_file_name(cur_area_name) + "/Geometry_backup.txt"
     );
     if(!file.file_was_opened) return false;
     
