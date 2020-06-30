@@ -23,7 +23,7 @@ using std::set;
  * Handles a key being "char"-typed anywhere.
  */
 void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) return;
+    if(!dialogs.empty()) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_F1: {
@@ -96,7 +96,7 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being "char"-typed on the canvas exclusively.
  */
 void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_gui_focused) return;
+    if(!dialogs.empty() || is_gui_focused) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_LEFT: {
@@ -160,7 +160,7 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down anywhere.
  */
 void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) return;
+    if(!dialogs.empty()) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_L: {
@@ -194,11 +194,8 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         break;
         
     } case ALLEGRO_KEY_ESCAPE: {
-        if(is_dialog_open) {
-            is_dialog_open = false;
-            if(dialog_close_callback) {
-                dialog_close_callback();
-            }
+        if(!dialogs.empty()) {
+            close_top_dialog();
             
         } else if(state == EDITOR_STATE_LAYOUT) {
             if(sub_state == EDITOR_SUB_STATE_DRAWING) {
@@ -258,7 +255,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down on the canvas exclusively.
  */
 void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_gui_focused) return;
+    if(!dialogs.empty() || is_gui_focused) return;
     
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_1: {
@@ -439,7 +436,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     if(is_ctrl_pressed) {
         handle_lmb_down(ev);
         return;
@@ -494,7 +491,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
@@ -1113,7 +1110,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) return;
+    if(!dialogs.empty()) return;
     
     if(selecting) {
     
@@ -1461,7 +1458,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) return;
+    if(!dialogs.empty()) return;
     
     selecting = false;
     
@@ -1496,7 +1493,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being double-clicked.
  */
 void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(!game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
@@ -1508,7 +1505,7 @@ void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the middle mouse button being pressed down.
  */
 void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(!game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);
@@ -1553,7 +1550,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  * Handles the mouse wheel being moved.
  */
 void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
@@ -1563,7 +1560,7 @@ void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being double-clicked.
  */
 void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(game.options.editor_mmb_pan) {
         reset_cam_xy(ev);
@@ -1575,7 +1572,7 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being dragged.
  */
 void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(game.options.editor_mmb_pan) {
         reset_cam_zoom(ev);

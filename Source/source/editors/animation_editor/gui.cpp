@@ -35,7 +35,7 @@ void animation_editor::open_load_dialog() {
         "Load a file or create a new one",
         std::bind(&animation_editor::process_gui_load_dialog, this)
     );
-    dialog_close_callback =
+    dialogs.back()->close_callback =
         std::bind(&animation_editor::close_load_dialog, this);
     reset_load_dialog = true;
 }
@@ -49,7 +49,7 @@ void animation_editor::open_options_dialog() {
         "Options",
         std::bind(&animation_editor::process_gui_options_dialog, this)
     );
-    dialog_close_callback =
+    dialogs.back()->close_callback =
         std::bind(&animation_editor::close_options_dialog, this);
 }
 
@@ -115,8 +115,8 @@ void animation_editor::process_gui() {
     ImGui::Columns(1);
     ImGui::End();
     
-    //Process the dialog, if any.
-    process_dialog();
+    //Process the dialogs, if any.
+    process_dialogs();
     
     //Finishing setup.
     ImGui::EndFrame();
@@ -297,7 +297,7 @@ void animation_editor::process_gui_load_dialog() {
                     file_path = name;
                     loaded_mob_type = NULL;
                     load_animation_database(true);
-                    is_dialog_open = false;
+                    close_top_dialog();
                 }
             }
             
@@ -337,7 +337,7 @@ void animation_editor::process_gui_load_dialog() {
                     loaded_mob_type->category->folder + "/" +
                     loaded_mob_type->folder_name + "/Animations.txt";
                 load_animation_database(true);
-                is_dialog_open = false;
+                close_top_dialog();
             }
         }
         set_tooltip(
@@ -367,7 +367,7 @@ void animation_editor::process_gui_load_dialog() {
                 loaded_mob_type = NULL;
                 file_path = ANIMATIONS_FOLDER_PATH + "/" + chosen_anim + ".txt";
                 load_animation_database(true);
-                is_dialog_open = false;
+                close_top_dialog();
             }
         }
         set_tooltip(
@@ -403,7 +403,7 @@ void animation_editor::process_gui_load_dialog() {
                 
                 loaded_mob_type = NULL;
                 load_animation_database(true);
-                is_dialog_open = false;
+                close_top_dialog();
             }
         }
         set_tooltip(
@@ -554,7 +554,7 @@ void animation_editor::process_gui_panel_animation() {
     ) {
         if(!anims.animations.empty()) {
             if(!cur_anim) {
-                pick_animation(anims.animations[0]->name, false);
+                pick_animation(anims.animations[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
@@ -562,7 +562,7 @@ void animation_editor::process_gui_panel_animation() {
                         -1,
                         anims.animations.size()
                     );
-                pick_animation(anims.animations[new_nr]->name, false);
+                pick_animation(anims.animations[new_nr]->name, "", false);
             }
         }
     }
@@ -588,7 +588,8 @@ void animation_editor::process_gui_panel_animation() {
             std::bind(
                 &animation_editor::pick_animation, this,
                 std::placeholders::_1,
-                std::placeholders::_2
+                std::placeholders::_2,
+                std::placeholders::_3
             ),
             "",
             true
@@ -608,7 +609,7 @@ void animation_editor::process_gui_panel_animation() {
     ) {
         if(!anims.animations.empty()) {
             if(!cur_anim) {
-                pick_animation(anims.animations[0]->name, false);
+                pick_animation(anims.animations[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
@@ -616,7 +617,7 @@ void animation_editor::process_gui_panel_animation() {
                         1,
                         anims.animations.size()
                     );
-                pick_animation(anims.animations[new_nr]->name, false);
+                pick_animation(anims.animations[new_nr]->name, "", false);
             }
         }
     }
@@ -646,7 +647,7 @@ void animation_editor::process_gui_panel_animation() {
                     cur_frame_nr = INVALID;
                 } else {
                     nr = std::min(nr, anims.animations.size() - 1);
-                    pick_animation(anims.animations[nr]->name, false);
+                    pick_animation(anims.animations[nr]->name, "", false);
                 }
                 anim_playing = false;
                 made_new_changes = true;
@@ -1299,7 +1300,7 @@ void animation_editor::process_gui_panel_sprite() {
     ) {
         if(!anims.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, false);
+                pick_sprite(anims.sprites[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
@@ -1307,7 +1308,7 @@ void animation_editor::process_gui_panel_sprite() {
                         -1,
                         anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_nr]->name, false);
+                pick_sprite(anims.sprites[new_nr]->name, "", false);
             }
         }
     }
@@ -1333,7 +1334,8 @@ void animation_editor::process_gui_panel_sprite() {
             std::bind(
                 &animation_editor::pick_sprite, this,
                 std::placeholders::_1,
-                std::placeholders::_2
+                std::placeholders::_2,
+                std::placeholders::_3
             ),
             "",
             true
@@ -1353,7 +1355,7 @@ void animation_editor::process_gui_panel_sprite() {
     ) {
         if(!anims.sprites.empty()) {
             if(!cur_sprite) {
-                pick_sprite(anims.sprites[0]->name, false);
+                pick_sprite(anims.sprites[0]->name, "", false);
             } else {
                 size_t new_nr =
                     sum_and_wrap(
@@ -1361,7 +1363,7 @@ void animation_editor::process_gui_panel_sprite() {
                         1,
                         anims.sprites.size()
                     );
-                pick_sprite(anims.sprites[new_nr]->name, false);
+                pick_sprite(anims.sprites[new_nr]->name, "", false);
             }
         }
     }
@@ -1391,7 +1393,7 @@ void animation_editor::process_gui_panel_sprite() {
                     cur_hitbox_nr = INVALID;
                 } else {
                     nr = std::min(nr, anims.sprites.size() - 1);
-                    pick_sprite(anims.sprites[nr]->name, false);
+                    pick_sprite(anims.sprites[nr]->name, "", false);
                 }
                 made_new_changes = true;
                 status_text = "Deleted sprite \"" + deleted_sprite_name + "\".";

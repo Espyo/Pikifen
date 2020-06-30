@@ -93,6 +93,7 @@ protected:
         ICON_SNAP_VERTEXES,
         ICON_SNAP_EDGES,
         ICON_SNAP_NOTHING,
+        ICON_SEARCH,
         
         N_EDITOR_ICONS
     };
@@ -133,6 +134,21 @@ protected:
         
     };
     
+    class dialog_info {
+    public:
+        //Callback for when it's time to process the dialog's contents.
+        std::function<void()> process_callback;
+        //Callback for when the user closes the dialog, if any.
+        std::function<void()> close_callback;
+        //Title to display on the dialog.
+        string title;
+        //Is it open?
+        bool is_open;
+        
+        dialog_info();
+        void process();
+    };
+    
     struct picker_item {
         //Its name.
         string name;
@@ -147,6 +163,25 @@ protected:
         );
     };
     
+    class picker_info : public dialog_info {
+    public:
+        //List of picker dialog items to choose from.
+        vector<picker_item> items;
+        //Callback for when the user picks an item from the picker dialog.
+        std::function<void(
+            const string &, const string &, const bool
+        )> pick_callback;
+        //Text to display above the picker dialog list.
+        string list_header;
+        //Can the user make a new item in the picker dialog?
+        bool can_make_new;
+        //Only show picker dialog items matching this filter.
+        string filter;
+        
+        picker_info();
+        void process();
+    };
+    
     
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons;
@@ -156,20 +191,14 @@ protected:
     point canvas_br;
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvas_separator_x;
-    //Callback for when it's time to process the dialog's contents.
-    std::function<void()> dialog_process_callback;
-    //Callback for when the user closes the dialog, if any.
-    std::function<void()> dialog_close_callback;
-    //Title to display on the dialog.
-    string dialog_title;
+    //Currently open dialogs, if any.
+    vector<dialog_info*> dialogs;
     //If the next click is within this time, it's a double-click.
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
-    //Is a dialog currently open?
-    bool is_dialog_open;
     //Is the GUI currently in focus? False if it's the canvas.
     bool is_gui_focused;
     //Is the mouse currently hovering the gui? False if it's the canvas.
@@ -192,16 +221,6 @@ protected:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
-    //List of picker dialog items to choose from.
-    vector<picker_item> picker_items;
-    //Callback for when the user picks an item from the picker dialog.
-    std::function<void(const string &, const bool)> picker_pick_callback;
-    //Text to display above the picker dialog list.
-    string picker_list_header;
-    //Can the user make a new item in the picker dialog?
-    bool picker_can_make_new;
-    //Only show picker dialog items matching this filter.
-    string picker_filter;
     //Current state.
     size_t state;
     //Status bar text.
@@ -223,6 +242,7 @@ protected:
         const point &min_coords, const point &max_coords
     );
     bool check_new_unsaved_changes(const point &pos = point());
+    void close_top_dialog();
     void do_logic_post();
     void do_logic_pre();
     void draw_grid(
@@ -247,12 +267,14 @@ protected:
     void open_picker(
         const string &title,
         const vector<picker_item> &items,
-        const std::function<void(const string &, const bool)> &pick_callback,
+        const std::function<void(
+            const string &, const string &, const bool
+        )> &pick_callback,
         const string &list_header = "",
         const bool can_make_new = false,
         const string &filter = ""
     );
-    void process_dialog();
+    void process_dialogs();
     void process_mob_type_widgets(
         mob_category** cat, mob_type** typ,
         const bool only_show_area_editor_types,
@@ -291,8 +313,6 @@ private:
 
     //Controls text input widget focus, when focusing on one is necessary.
     unsigned char special_input_focus_controller;
-    
-    void process_picker();
 };
 
 #endif //ifndef EDITOR_INCLUDED

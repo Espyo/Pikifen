@@ -21,7 +21,7 @@
  * Handles a key being "char"-typed on the canvas exclusively.
  */
 void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) {
+    if(!dialogs.empty()) {
         return;
     }
     
@@ -73,7 +73,7 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down anywhere.
  */
 void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) {
+    if(!dialogs.empty()) {
         return;
     }
     
@@ -122,7 +122,7 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down on the canvas exclusively.
  */
 void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) {
+    if(!dialogs.empty()) {
         return;
     }
     
@@ -171,11 +171,8 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         break;
     } case ALLEGRO_KEY_ESCAPE: {
 
-        if(is_dialog_open) {
-            is_dialog_open = false;
-            if(dialog_close_callback) {
-                dialog_close_callback();
-            }
+        if(!dialogs.empty()) {
+            close_top_dialog();
             
         } else {
             switch(state) {
@@ -205,7 +202,7 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open) {
+    if(!dialogs.empty()) {
         return;
     }
     
@@ -533,7 +530,7 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  * Handles the mouse wheel being moved.
  */
 void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    if(is_dialog_open || is_mouse_in_gui) return;
+    if(!dialogs.empty() || is_mouse_in_gui) return;
     
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }

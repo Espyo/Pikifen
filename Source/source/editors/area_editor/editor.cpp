@@ -1322,7 +1322,9 @@ void area_editor::load_reference() {
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks an area from the picker.
  */
-void area_editor::pick_area(const string &name, const bool is_new) {
+void area_editor::pick_area(
+    const string &name, const string &category, const bool is_new
+) {
     cur_area_name = name;
     
     if(is_new) {
@@ -1355,7 +1357,9 @@ void area_editor::pick_area(const string &name, const bool is_new) {
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks a texture from the picker.
  */
-void area_editor::pick_texture(const string &name, const bool is_new) {
+void area_editor::pick_texture(
+    const string &name, const string &category, const bool is_new
+) {
     sector* s_ptr = NULL;
     string final_name = name;
     if(selected_sectors.size() == 1 || selection_homogenized) {

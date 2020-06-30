@@ -37,11 +37,12 @@ void area_editor::open_area_picker() {
         std::bind(
             &area_editor::pick_area, this,
             std::placeholders::_1,
-            std::placeholders::_2
+            std::placeholders::_2,
+            std::placeholders::_3
         ),
         "", true
     );
-    dialog_close_callback =
+    dialogs.back()->close_callback =
         std::bind(&area_editor::close_area_picker, this);
 }
 
@@ -54,7 +55,7 @@ void area_editor::open_options_dialog() {
         "Options",
         std::bind(&area_editor::process_gui_options_dialog, this)
     );
-    dialog_close_callback =
+    dialogs.back()->close_callback =
         std::bind(&area_editor::close_options_dialog, this);
 }
 
@@ -121,7 +122,7 @@ void area_editor::process_gui() {
     ImGui::End();
     
     //Process the picker dialog, if any.
-    process_dialog();
+    process_dialogs();
     
     //Finishing setup.
     ImGui::EndFrame();
@@ -2316,7 +2317,8 @@ void area_editor::process_gui_panel_sector() {
                     std::bind(
                         &area_editor::pick_texture, this,
                         std::placeholders::_1,
-                        std::placeholders::_2
+                        std::placeholders::_2,
+                        std::placeholders::_3
                     ),
                     "Suggestions:"
                 );

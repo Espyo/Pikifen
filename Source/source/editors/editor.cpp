@@ -41,15 +41,51 @@ const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new dialog info.
+ */
+editor::dialog_info::dialog_info() :
+    close_callback(nullptr),
+    process_callback(nullptr),
+    is_open(true) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the dialog for this frame.
+ */
+void editor::dialog_info::process() {
+    if(!is_open) return;
+    
+    ImGui::SetNextWindowPos(
+        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
+        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
+    );
+    ImGui::SetNextWindowSize(
+        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
+    );
+    ImGui::OpenPopup((title + "##dialog").c_str());
+    
+    if(
+        ImGui::BeginPopupModal(
+            (title + "##dialog").c_str(), &is_open
+        )
+    ) {
+    
+        process_callback();
+        
+        ImGui::EndPopup();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
  */
 editor::editor() :
     canvas_separator_x(-1),
-    dialog_close_callback(nullptr),
-    dialog_process_callback(nullptr),
     double_click_time(0),
     is_ctrl_pressed(false),
-    is_dialog_open(false),
     is_m1_pressed(false),
     is_m2_pressed(false),
     is_m3_pressed(false),
@@ -58,8 +94,6 @@ editor::editor() :
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
-    picker_can_make_new(false),
-    picker_pick_callback(nullptr),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     special_input_focus_controller(0),
     state(0),
@@ -125,6 +159,15 @@ bool editor::check_new_unsaved_changes(const point &pos) {
     unsaved_changes_warning_timer.start();
     
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Closes the topmost dialog.
+ */
+void editor::close_top_dialog() {
+    if(dialogs.empty()) return;
+    dialogs.back()->is_open = false;
 }
 
 
@@ -499,12 +542,9 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE &&
-            is_dialog_open
+            !dialogs.empty()
         ) {
-            is_dialog_open = false;
-            if(dialog_close_callback) {
-                dialog_close_callback();
-            }
+            close_top_dialog();
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -655,8 +695,6 @@ void editor::leave() {
  * Loads content common for all editors.
  */
 void editor::load() {
-    is_dialog_open = false;
-    
     bmp_editor_icons =
         load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
     if(bmp_editor_icons) {
@@ -706,11 +744,12 @@ void editor::open_dialog(
     const string &title,
     const std::function<void()> &process_callback
 ) {
-    dialog_title = title;
-    dialog_close_callback = nullptr;
-    dialog_process_callback = process_callback;
+    dialog_info* new_dialog = new dialog_info();
     
-    is_dialog_open = true;
+    new_dialog->title = title;
+    new_dialog->process_callback = process_callback;
+    
+    dialogs.push_back(new_dialog);
 }
 
 
@@ -724,7 +763,8 @@ void editor::open_dialog(
  * pick_callback:
  *   A function to call when the user clicks an item or enters a new one.
  *   This function's first argument is the name of the item.
- *   Its second argument is whether it's a new item or not.
+ *   Its second argument is the category of the item, or an empty string.
+ *   Its third argument is whether it's a new item or not.
  * list_header:
  *   If not-empty, display this text above the list.
  * can_make_new:
@@ -736,20 +776,28 @@ void editor::open_dialog(
 void editor::open_picker(
     const string &title,
     const vector<picker_item> &items,
-    const std::function<void(const string &, const bool)> &pick_callback,
+    const std::function <void(
+        const string &, const string &, const bool
+    )> &pick_callback,
     const string &list_header,
     const bool can_make_new,
     const string &filter
 ) {
-    picker_items = items;
-    picker_list_header = list_header;
-    picker_pick_callback = pick_callback;
-    picker_can_make_new = can_make_new;
-    picker_filter = filter;
+    picker_info* new_picker = new picker_info();
+    
+    new_picker->title = title;
+    new_picker->process_callback =
+        std::bind(&editor::picker_info::process, new_picker);
+        
+    new_picker->items = items;
+    new_picker->list_header = list_header;
+    new_picker->pick_callback = pick_callback;
+    new_picker->can_make_new = can_make_new;
+    new_picker->filter = filter;
     
     focus_next_special_input();
     
-    open_dialog(title, std::bind(&editor::process_picker, this));
+    dialogs.push_back(new_picker);
 }
 
 
@@ -774,153 +822,27 @@ void editor::panel_title(const char* title, const float width) {
 
 
 /* ----------------------------------------------------------------------------
- * Processes the dialog for this frame.
+ * Processes all currently open dialogs for this frame.
  */
-void editor::process_dialog() {
-    if(!is_dialog_open) return;
-    
-    ImGui::SetNextWindowPos(
-        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
-        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
-    );
-    ImGui::SetNextWindowSize(
-        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
-    );
-    ImGui::OpenPopup((dialog_title + "##dialog").c_str());
-    
-    if(
-        ImGui::BeginPopupModal(
-            (dialog_title + "##dialog").c_str(), &is_dialog_open
-        )
-    ) {
-    
-        dialog_process_callback();
+void editor::process_dialogs() {
+    //Delete closed ones.
+    for(size_t d = 0; d < dialogs.size();) {
+        dialog_info* d_ptr = dialogs[d];
         
-        ImGui::EndPopup();
-    }
-    
-    if(!is_dialog_open) {
-        //The user closed it.
-        if(dialog_close_callback) {
-            dialog_close_callback();
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Processes the picker dialog for this frame.
- */
-void editor::process_picker() {
-    vector<picker_item> final_items;
-    string filter_lower = str_to_lower(picker_filter);
-    
-    for(size_t i = 0; i < picker_items.size(); ++i) {
-        if(!picker_filter.empty()) {
-            string name_lower = str_to_lower(picker_items[i].name);
-            if(name_lower.find(filter_lower) == string::npos) {
-                continue;
+        if(!d_ptr->is_open) {
+            if(d_ptr->close_callback) {
+                d_ptr->close_callback();
             }
-        }
-        final_items.push_back(picker_items[i]);
-    }
-    
-    auto try_make_new = [this] () {
-        bool is_really_new = true;
-        for(size_t i = 0; i < picker_items.size(); ++i) {
-            if(picker_filter == picker_items[i].name) {
-                is_really_new = false;
-                break;
-            }
-        }
-        
-        picker_pick_callback(picker_filter, is_really_new);
-        is_dialog_open = false;
-    };
-    
-    if(picker_can_make_new) {
-        ImGui::PushStyleColor(
-            ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
-        );
-        ImGui::PushStyleColor(
-            ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48)
-        );
-        ImGui::PushStyleColor
-        (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
-        );
-        if(ImGui::Button("+", ImVec2(64.0f, 32.0f))) {
-            try_make_new();
-        }
-        ImGui::PopStyleColor(3);
-        ImGui::SameLine();
-    }
-    
-    string filter_widget_hint =
-        picker_can_make_new ?
-        "Search filter or new item name" :
-        "Search filter";
-    next_input_needs_special_focus();
-    if(
-        ImGui::InputTextWithHint(
-            "##filter", filter_widget_hint.c_str(), &picker_filter,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        if(picker_can_make_new) {
-            try_make_new();
-        }
-    }
-    
-    if(!picker_list_header.empty()) {
-        ImGui::Text("%s", picker_list_header.c_str());
-    }
-    
-    ImGuiStyle &style = ImGui::GetStyle();
-    float picker_x2 =
-        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-        
-    for(size_t i = 0; i < final_items.size(); ++i) {
-        ImGui::PushID(i);
-        
-        ImVec2 button_size;
-        
-        if(final_items[i].bitmap) {
-        
-            ImGui::BeginGroup();
-            button_size = ImVec2(160.0f, 160.0f);
-            if(
-                ImGui::ImageButton(
-                    (void*) final_items[i].bitmap,
-                    button_size,
-                    ImVec2(0.0f, 0.0f),
-                    ImVec2(1.0f, 1.0f),
-                    4.0f
-                )
-            ) {
-                picker_pick_callback(final_items[i].name, false);
-                is_dialog_open = false;
-            }
-            ImGui::SetNextItemWidth(20.0f);
-            ImGui::TextWrapped("%s", final_items[i].name.c_str());
-            ImGui::Dummy(ImVec2(0.0f, 8.0f));
-            ImGui::EndGroup();
-            
+            delete d_ptr;
+            dialogs.erase(dialogs.begin() + d);
         } else {
-        
-            button_size = ImVec2(168.0f, 32.0f);
-            if(ImGui::Button(final_items[i].name.c_str(), button_size)) {
-                picker_pick_callback(final_items[i].name, false);
-                is_dialog_open = false;
-            }
-            
+            ++d;
         }
-        
-        float last_x2 = ImGui::GetItemRectMax().x;
-        float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
-        if(i + 1 < final_items.size() && next_x2 < picker_x2) {
-            ImGui::SameLine();
-        }
-        ImGui::PopID();
+    }
+    
+    //Process the latest one.
+    if(!dialogs.empty()) {
+        dialogs.back()->process();
     }
 }
 
@@ -946,6 +868,57 @@ void editor::process_mob_type_widgets(
     const std::function<void()> &category_change_callback,
     const std::function<void()> &type_change_callback
 ) {
+    //Column setup.
+    ImGui::Columns(2, NULL, false);
+    ImGui::SetColumnWidth(-1, 51.0f);
+    
+    //Search button.
+    if(
+        ImGui::ImageButton(
+            editor_icons[ICON_SEARCH],
+            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
+            9.0f
+        )
+    ) {
+        vector<picker_item> items;
+        for(unsigned char c = 0; c < N_MOB_CATEGORIES; ++c) {
+            if(c == MOB_CATEGORY_NONE) continue;
+            
+            vector<string> names;
+            mob_category* c_ptr = game.mob_categories.get(c);
+            c_ptr->get_type_names(names);
+            string cat_name = game.mob_categories.get(c)->plural_name;
+            
+            for(size_t n = 0; n < names.size(); ++n) {
+                if(
+                    only_show_area_editor_types &&
+                    !c_ptr->get_type(names[n])->appears_in_area_editor
+                ) {
+                    continue;
+                }
+                items.push_back(picker_item(names[n], cat_name));
+            }
+        }
+        open_picker(
+            "Pick an object type", items,
+            [cat, typ, category_change_callback, type_change_callback]
+        (const string & n, const string & c, const bool) {
+            if(type_change_callback) {
+                type_change_callback();
+            }
+            (*cat) = game.mob_categories.get_from_pname(c);
+            (*typ) = (*cat)->get_type(n);
+        },
+        "", false
+        );
+    }
+    set_tooltip(
+        "Search for an object type from the entire list."
+    );
+    
+    ImGui::NextColumn();
+    
     //Object category combobox.
     if(!(*cat)) {
         *cat = game.mob_categories.get(MOB_CATEGORY_NONE);
@@ -1003,6 +976,8 @@ void editor::process_mob_type_widgets(
             "The specific type of object this is, from the chosen category."
         );
     }
+    
+    ImGui::Columns();
 }
 
 
@@ -1116,6 +1091,169 @@ void editor::zoom_with_cursor(const float new_zoom) {
     );
     
     update_transformations();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new picker info.
+ */
+editor::picker_info::picker_info() :
+    can_make_new(false),
+    pick_callback(nullptr) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the picker dialog for this frame.
+ */
+void editor::picker_info::process() {
+    vector<string> category_names;
+    vector<vector<picker_item> > final_items;
+    string filter_lower = str_to_lower(filter);
+    
+    for(size_t i = 0; i < items.size(); ++i) {
+        if(!filter.empty()) {
+            string name_lower = str_to_lower(items[i].name);
+            if(name_lower.find(filter_lower) == string::npos) {
+                continue;
+            }
+        }
+        
+        size_t cat_index = INVALID;
+        for(size_t c = 0; c < category_names.size(); ++c) {
+            if(category_names[c] == items[i].category) {
+                cat_index = c;
+                break;
+            }
+        }
+        
+        if(cat_index == INVALID) {
+            category_names.push_back(items[i].category);
+            final_items.push_back(vector<picker_item>());
+            cat_index = category_names.size() - 1;
+        }
+        
+        final_items[cat_index].push_back(items[i]);
+    }
+    
+    auto try_make_new = [this] () {
+        bool is_really_new = true;
+        for(size_t i = 0; i < items.size(); ++i) {
+            if(filter == items[i].name) {
+                is_really_new = false;
+                break;
+            }
+        }
+        
+        pick_callback(filter, "", is_really_new);
+        is_open = false;
+    };
+    
+    if(can_make_new) {
+        ImGui::PushStyleColor(
+            ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_ButtonHovered, (ImVec4) ImColor(208, 48, 48)
+        );
+        ImGui::PushStyleColor
+        (ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
+        );
+        if(ImGui::Button("+", ImVec2(64.0f, 32.0f))) {
+            try_make_new();
+        }
+        ImGui::PopStyleColor(3);
+        ImGui::SameLine();
+    }
+    
+    string filter_widget_hint =
+        can_make_new ?
+        "Search filter or new item name" :
+        "Search filter";
+    //TODO next_input_needs_special_focus();
+    if(
+        ImGui::InputTextWithHint(
+            "##filter", filter_widget_hint.c_str(), &filter,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        if(can_make_new) {
+            try_make_new();
+        }
+    }
+    
+    if(!list_header.empty()) {
+        ImGui::Text("%s", list_header.c_str());
+    }
+    
+    ImGuiStyle &style = ImGui::GetStyle();
+    float picker_x2 =
+        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+        
+    for(size_t c = 0; c < final_items.size(); ++c) {
+    
+        bool show = true;
+        if(!category_names[c].empty()) {
+            ImGui::SetNextTreeNodeOpen(true, ImGuiCond_Once);
+            show = ImGui::TreeNode(category_names[c].c_str());
+        }
+        
+        if(show) {
+            for(size_t i = 0; i < final_items[c].size(); ++i) {
+                picker_item* i_ptr = &final_items[c][i];
+                ImGui::PushID((i2s(c) + "-" + i2s(i)).c_str());
+                
+                ImVec2 button_size;
+                
+                if(i_ptr->bitmap) {
+                
+                    ImGui::BeginGroup();
+                    button_size = ImVec2(160.0f, 160.0f);
+                    if(
+                        ImGui::ImageButton(
+                            (void*) i_ptr->bitmap,
+                            button_size,
+                            ImVec2(0.0f, 0.0f),
+                            ImVec2(1.0f, 1.0f),
+                            4.0f
+                        )
+                    ) {
+                        pick_callback(
+                            i_ptr->name, i_ptr->category, false
+                        );
+                        is_open = false;
+                    }
+                    ImGui::SetNextItemWidth(20.0f);
+                    ImGui::TextWrapped("%s", i_ptr->name.c_str());
+                    ImGui::Dummy(ImVec2(0.0f, 8.0f));
+                    ImGui::EndGroup();
+                    
+                } else {
+                
+                    button_size = ImVec2(168.0f, 32.0f);
+                    if(ImGui::Button(i_ptr->name.c_str(), button_size)) {
+                        pick_callback(
+                            i_ptr->name, i_ptr->category, false
+                        );
+                        is_open = false;
+                    }
+                    
+                }
+                
+                float last_x2 = ImGui::GetItemRectMax().x;
+                float next_x2 = last_x2 + style.ItemSpacing.x + button_size.x;
+                if(i + 1 < final_items[c].size() && next_x2 < picker_x2) {
+                    ImGui::SameLine();
+                }
+                ImGui::PopID();
+            }
+            
+            if(!category_names[c].empty()) {
+                ImGui::TreePop();
+            }
+            
+        }
+    }
 }
 
 

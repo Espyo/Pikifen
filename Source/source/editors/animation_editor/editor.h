@@ -179,8 +179,12 @@ private:
     void load_animation_database(const bool should_update_history);
     void open_load_dialog();
     void open_options_dialog();
-    void pick_animation(const string &name, const bool is_new);
-    void pick_sprite(const string &name, const bool is_new);
+    void pick_animation(
+        const string &name, const string &category, const bool is_new
+    );
+    void pick_sprite(
+        const string &name, const string &category, const bool is_new
+    );
     void press_grid_button();
     void press_hitboxes_button();
     void press_load_button();

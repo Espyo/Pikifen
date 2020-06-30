@@ -499,8 +499,12 @@ private:
     void open_area_picker();
     void open_options_dialog();
     void populate_texture_suggestions();
-    void pick_area(const string &name, const bool is_new);
-    void pick_texture(const string &name, const bool is_new);
+    void pick_area(
+        const string &name, const string &category, const bool is_new
+    );
+    void pick_texture(
+        const string &name, const string &category, const bool is_new
+    );
     area_data* prepare_state();
     void press_circle_sector_button();
     void press_duplicate_mobs_button();

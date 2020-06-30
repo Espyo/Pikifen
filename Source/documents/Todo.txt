@@ -3,8 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Revamp editors
-        A way to access all mobs in the area editor's picker
-        A feature with which to search for mobs/sectors?
         Style the editors
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
@@ -631,6 +629,7 @@ Tasks for later on (I might never implement these)
             When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
             The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
+            A feature with which to search for mobs/sectors
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?

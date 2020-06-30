@@ -638,7 +638,9 @@ void animation_editor::press_save_button() {
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks an animation from the picker.
  */
-void animation_editor::pick_animation(const string &name, const bool is_new) {
+void animation_editor::pick_animation(
+    const string &name, const string &category, const bool is_new
+) {
     if(is_new) {
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
@@ -654,7 +656,9 @@ void animation_editor::pick_animation(const string &name, const bool is_new) {
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks a sprite from the picker.
  */
-void animation_editor::pick_sprite(const string &name, const bool is_new) {
+void animation_editor::pick_sprite(
+    const string &name, const string &category, const bool is_new
+) {
     if(is_new) {
         if(anims.find_sprite(name) == INVALID) {
             anims.sprites.push_back(new sprite(name));
