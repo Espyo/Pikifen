@@ -124,6 +124,8 @@ const string CREATOR_TOOLS_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Tools.txt";
 const string OPTIONS_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Options.txt";
+const string PERFORMANCE_LOG_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Performance_log.txt";
 
 const string ANIMATIONS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Animations";

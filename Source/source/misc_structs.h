@@ -158,6 +158,8 @@ struct creator_tools_info {
     pikmin_type* last_pikmin_type;
     //When hurting mobs with the hurting tool, dock this much of its max HP off.
     float mob_hurting_ratio;
+    //Use the performance monitor?
+    bool use_perf_mon;
     
     creator_tools_info();
 };
@@ -569,6 +571,49 @@ struct bitmap_effect_info {
     ALLEGRO_COLOR tint_color;
     ALLEGRO_COLOR glow_color;
     bitmap_effect_info();
+};
+
+
+
+enum PERF_MON_POINTS {
+    PERF_MON_START_LOAD,
+    PERF_MON_LOAD_CUSTOM_PARTICLE_GENS,
+    PERF_MON_LOAD_LIQUIDS,
+    PERF_MON_LOAD_STATUS_TYPES,
+    PERF_MON_LOAD_SPRAY_TYPES,
+    PERF_MON_LOAD_HAZARDS,
+    PERF_MON_LOAD_HUD_INFO,
+    PERF_MON_LOAD_WEATHER,
+    PERF_MON_LOAD_SPIKE_DAMAGE_TYPES,
+    PERF_MON_LOAD_MOB_TYPES,
+    PERF_MON_LOAD_AREA_DATA,
+    PERF_MON_LOAD_AREA_ASSETS,
+    PERF_MON_LOAD_VERTEXES,
+    PERF_MON_LOAD_EDGES,
+    PERF_MON_LOAD_SECTORS,
+    PERF_MON_LOAD_MOB_GENS,
+    PERF_MON_LOAD_PATHS,
+    PERF_MON_LOAD_TREE_SHADOWS,
+    PERF_MON_LOAD_GEOMETRY,
+    PERF_MON_LOAD_GENERATE_MOBS,
+    PERF_MON_FINISH_LOAD,
+    N_PERF_MON_POINTS,
+};
+
+/* ----------------------------------------------------------------------------
+ * Contains information about how long certain things took. Useful for makers
+ * to monitor performance with.
+ */
+struct performance_monitor_struct {
+    string area_name;
+    double mob_cat_points[N_MOB_CATEGORIES];
+    double points[N_PERF_MON_POINTS];
+    
+    performance_monitor_struct();
+    void handle_load_mob_category(const MOB_CATEGORIES c);
+    void handle_load_point(const PERF_MON_POINTS p);
+    void save_log();
+    void reset();
 };
 
 

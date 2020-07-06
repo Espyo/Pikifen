@@ -82,6 +82,10 @@ void load_area(
     
     if(!load_for_editor) {
     
+        if(game.perf_mon) {
+            game.perf_mon->handle_load_point(PERF_MON_LOAD_AREA_DATA);
+        }
+        
         if(game.cur_area_data.weather_name.empty()) {
             game.cur_area_data.weather_condition = weather();
             
@@ -109,6 +113,10 @@ void load_area(
             game.textures.get(game.cur_area_data.bg_bmp_file_name, &data_file);
     }
     
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_AREA_ASSETS);
+    }
+    
     
     //Time to load the geometry.
     data_node geometry_file = load_data_file(geometry_file_name);
@@ -129,6 +137,10 @@ void load_area(
                 new vertex(s2f(words[0]), s2f(words[1]))
             );
         }
+    }
+    
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_VERTEXES);
     }
     
     //Edges.
@@ -157,6 +169,10 @@ void load_area(
         new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
         
         game.cur_area_data.edges.push_back(new_edge);
+    }
+    
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_EDGES);
     }
     
     //Sectors.
@@ -247,6 +263,10 @@ void load_area(
         game.cur_area_data.sectors.push_back(new_sector);
     }
     
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_SECTORS);
+    }
+    
     //Mobs.
     vector<std::pair<size_t, size_t> > mob_links_buffer;
     size_t n_mobs =
@@ -322,6 +342,10 @@ void load_area(
         game.cur_area_data.mob_generators[f]->link_nrs.push_back(s);
     }
     
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_MOB_GENS);
+    }
+    
     //Path stops.
     size_t n_stops =
         geometry_file.get_child_by_name("path_stops")->get_nr_of_children();
@@ -354,6 +378,9 @@ void load_area(
         game.cur_area_data.path_stops.push_back(s_ptr);
     }
     
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_PATHS);
+    }
     
     //Tree shadows.
     size_t n_shadows =
@@ -404,6 +431,9 @@ void load_area(
         
     }
     
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_TREE_SHADOWS);
+    }
     
     //Set up stuff.
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -465,6 +495,10 @@ void load_area(
     }
     
     if(!load_for_editor) game.cur_area_data.generate_blockmap();
+    
+    if(!load_for_editor && game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_GEOMETRY);
+    }
 }
 
 
@@ -561,6 +595,7 @@ void load_creator_tools() {
     );
     rs.set("auto_start_option", game.creator_tools.auto_start_option);
     rs.set("auto_start_mode", game.creator_tools.auto_start_mode);
+    rs.set("performance_monitor", game.creator_tools.use_perf_mon);
     
     if(mob_hurting_percentage_node) {
         game.creator_tools.mob_hurting_ratio /= 100.0;

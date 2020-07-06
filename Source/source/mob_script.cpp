@@ -494,7 +494,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     
         data_node* state_node = node->get_child(s);
         //Let's save the state now, so that the state switching events
-        //can now what numbers the events they need correspond to.
+        //can know what numbers the events they need correspond to.
         states->push_back(new mob_state(state_node->name));
     }
     

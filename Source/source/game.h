@@ -117,6 +117,8 @@ public:
     ALLEGRO_MIXER* mixer;
     //User options.
     options_struct options;
+    //Performance monitor.
+    performance_monitor_struct* perf_mon;
     //Manager of all sector types.
     sector_types_manager sector_types;
     //Screen to world coordinate matrix. Cache for convenience.

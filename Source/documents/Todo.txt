@@ -2,7 +2,14 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
+    Performance monitoring improvements
+        F1 mode should tell you how long the frame took to process, by measuring it
+            A different measurement for logic and rendering, and for both combined, as well as more specific points, like mob physics, scripting, etc.
+        A maker tool option to toggle loading times for mobs, textures, vertexes, etc.
+        Maybe a tool that dumps really extensive measurements into a text file?
+        Try to figure out why Play has such varying framerate (use F1), but other areas don't
     Revamp editors
+        A way to scale/rotate the currently selected vertexes
         Style the editors
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
@@ -50,6 +57,7 @@ Next tasks (roughly sorted most important first)
     Bridges leave behind a missing texture texture
     Bulborbs shaking make the no-damage "ding" show up (Kman)
     A Pikmin that loses its target while attacking will keep facing it (at least it did in a stage that just had Olimar and a Pikmin in an opposing team)
+    If a Pikmin carrying something is hurt, but the attack is randomly decided to miss, the Pikmin will still release and whatnot (might not apply to attacks with hazards)
     Some mob events check whether the mob has been bumped or whistled by checking if whistle.whistling is true; this isn't enough, since the leader could be moving while whistling something else
         Note that these events exists: MOB_EV_TOUCHED_ACTIVE_LEADER, MOB_EV_WHISTLED
     All key shortcuts in the editors should check if their modifier key is pressed AND other modifier keys are not pressed (e.g. Ctrl+R is both toggling the reference and rotating mobs)
@@ -64,10 +72,9 @@ Next tasks (roughly sorted most important first)
     Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
     Deleting a stop says you deleted 1 stop, 0 links
     Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
+    Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
     
     --- v0.19.0 ---
-    Misc.
-        If a Pikmin carrying something is hurt, but the attack is randomly decided to miss, the Pikmin will still release and whatnot
     There should be a way to add custom scripting to the objects with hardcoded scripts
         Idea
             The user can write a script text file like they would for a customizable object type
@@ -75,12 +82,6 @@ Next tasks (roughly sorted most important first)
             If they write a new event inside, that's fine, but if they write an existing event, then one of their actions MUST be "run_engine_code"
     There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
         Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
-    Performance monitoring improvements
-        F1 mode should tell you how long the frame took to process, by measuring it
-            A different measurement for logic and rendering, and for both combined, as well as more specific points, like mob physics, scripting, etc.
-        A maker tool option to toggle loading times for mobs, textures, vertexes, etc.
-        Maybe a tool that dumps really extensive measurements into a text file?
-        Try to figure out why Play has such varying framerate (use F1), but other areas don't
     Documentation update
         Document tutorials and the like offline
         The tutorials should be "making X" instead of "creating a new X"
@@ -195,7 +196,7 @@ Next tasks (roughly sorted most important first)
         Should be unable to latch
         Should lunge on their own when attacking
     
-    --- Future ---
+    --- v0.21.0 ---
     Menus
         Pause screen
             Radar
@@ -224,6 +225,8 @@ Next tasks (roughly sorted most important first)
         Sunset
             On-screen warning
             Draw down the safe radius around all Onions
+    
+    --- v0.22.0 ---
     Music
         Day + fight
         Sunset + fight
@@ -273,6 +276,8 @@ Next tasks (roughly sorted most important first)
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
         Fixes
             When you cancel holding a Pikmin, its standby squeal sound should stop
+    
+    --- Future ---
     Input handling needs to be more robust and modular
         Clean up terms -- button, input, action, are all ambiguous and mean different things in different functions
         An Allegro event is turned into a abstract action report and pre-processed (some actions only want 0/1, others want it raw), and only then sent
@@ -484,7 +489,7 @@ Misc things (so I don't forget)
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
         Dust particles while walking
         A spray of whistle particles for when there's a dismiss, and whistle particle "smoke" when group moving
-        Camera should mostly center on the leader, but offset slightly towards where the group is, offsetting more the more the group is farther away
+        Camera should mostly center on the leader, but offset slightly towards where the group is, offsetting more the more the group is farther away, maybe also pointing a bit to where the leader is headed, etc.
         Make the mob sprite scale when hurt, like an elastic
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
     The makefile should have a "clean" rule, a "debug" rule a "release" rule, (with -Wall) etc.
@@ -630,6 +635,7 @@ Tasks for later on (I might never implement these)
             The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
             A way to set the opacity of mobs in layout mode; possibly others of the sort (Kman)
             A feature with which to search for mobs/sectors
+            Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?

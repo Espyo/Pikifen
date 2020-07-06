@@ -35,6 +35,7 @@ game_class::game_class() :
     loading_subtext_bmp(nullptr),
     loading_text_bmp(nullptr),
     mixer(nullptr),
+    perf_mon(nullptr),
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
     win_fullscreen(options_struct::DEF_WIN_FULLSCREEN),
@@ -169,6 +170,10 @@ void game_class::main_loop() {
  * Shuts down the program, cleanly freeing everything.
  */
 void game_class::shutdown() {
+    if(perf_mon) {
+        perf_mon->save_log();
+    }
+    
     if(cur_state) {
         cur_state->unload();
     }
@@ -240,6 +245,10 @@ int game_class::start() {
     load_game_config();
     load_creator_tools();
     save_creator_tools();
+    
+    if(game.creator_tools.use_perf_mon) {
+        game.perf_mon = new performance_monitor_struct();
+    }
     
     if(
         game.creator_tools.enabled &&

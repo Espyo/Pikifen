@@ -627,25 +627,15 @@ void load_mob_type_from_file(
         mt->death_state_name = death_state_name_node->value;
         
         mt->states_ignoring_death =
-            split(
-                script_file.get_child_by_name("states_ignoring_death")->value,
-                ";"
+            semicolon_list_to_vector(
+                script_file.get_child_by_name("states_ignoring_death")->value
             );
-        for(size_t s = 0; s < mt->states_ignoring_death.size(); ++s) {
-            mt->states_ignoring_death[s] =
-                trim_spaces(mt->states_ignoring_death[s]);
-        }
-        
+            
         mt->states_ignoring_spray =
-            split(
-                script_file.get_child_by_name("states_ignoring_spray")->value,
-                ";"
+            semicolon_list_to_vector(
+                script_file.get_child_by_name("states_ignoring_spray")->value
             );
-        for(size_t s = 0; s < mt->states_ignoring_spray.size(); ++s) {
-            mt->states_ignoring_spray[s] =
-                trim_spaces(mt->states_ignoring_spray[s]);
-        }
-        
+            
         load_init_actions(
             mt, script_file.get_child_by_name("init"), &mt->init_actions
         );
@@ -730,6 +720,10 @@ void load_mob_types(bool load_resources) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* category = game.mob_categories.get(c);
         load_mob_types(category, load_resources);
+        
+        if(game.perf_mon) {
+            game.perf_mon->handle_load_mob_category((MOB_CATEGORIES) c);
+        }
     }
     
     //Pikmin type order.

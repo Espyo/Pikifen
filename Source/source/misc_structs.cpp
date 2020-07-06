@@ -329,7 +329,8 @@ creator_tools_info::creator_tools_info() :
     info_print_duration(5.0f),
     info_print_fade_duration(3.0f),
     last_pikmin_type(nullptr),
-    mob_hurting_ratio(0.5) {
+    mob_hurting_ratio(0.5),
+    use_perf_mon(false) {
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
     for(size_t k = 0; k < 20; ++k) {
@@ -700,6 +701,169 @@ void msg_box_info::tick(const float delta_t) {
         } else {
             char_timer.tick(game.delta_t);
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a performance monitor.
+ */
+performance_monitor_struct::performance_monitor_struct() {
+    reset();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a certain point having been reached in the mob category loading
+ * process.
+ */
+void performance_monitor_struct::handle_load_mob_category(
+    const MOB_CATEGORIES c
+) {
+    mob_cat_points[c] = al_get_time();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a certain point having been reached in the gameplay loading
+ * process.
+ */
+void performance_monitor_struct::handle_load_point(const PERF_MON_POINTS p) {
+    if(p == PERF_MON_START_LOAD) {
+        reset();
+    } else if(p == PERF_MON_FINISH_LOAD) {
+        area_name = game.cur_area_data.name;
+    }
+    
+    points[p] = al_get_time();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets all of the performance monitor's information.
+ */
+void performance_monitor_struct::reset() {
+    for(size_t p = 0; p < N_PERF_MON_POINTS; ++p) {
+        points[p] = 0.0;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves a log file with all known stats, if there is anything to save.
+ */
+void performance_monitor_struct::save_log() {
+    if(points[PERF_MON_START_LOAD] == 0.0) {
+        //Nothing to save.
+        return;
+    }
+    
+    string s =
+        "\n" +
+        get_current_time(false) +
+        "; Pikifen version " +
+        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
+        "." + i2s(VERSION_REV) + ", game version " +
+        game.config.version + "\n";
+        
+    s += "Latest area loading times (for area " + area_name + "):\n";
+    
+    static const string point_names[N_PERF_MON_POINTS] = {
+        "Loading start",
+        "Custom particle generators",
+        "Liquid types",
+        "Status effect types",
+        "Spray types",
+        "Hazards",
+        "HUD info",
+        "Weather",
+        "Spike damage types",
+        "Object types",
+        "Area data",
+        "Area initial assets",
+        "Area vertexes",
+        "Area edges",
+        "Area sectors",
+        "Area object generators",
+        "Area paths",
+        "Area tree shadows",
+        "Area geometry calculations",
+        "Object generation",
+        "Finishing touches",
+    };
+    
+    double total_duration =
+        points[PERF_MON_FINISH_LOAD] - points[PERF_MON_START_LOAD];
+        
+    unsigned char p = PERF_MON_START_LOAD + 1;
+    unsigned char mc = MOB_CATEGORY_NONE + 1; //Skip "none".
+    
+    while(p <= PERF_MON_FINISH_LOAD) {
+    
+        double dur = 0.0;
+        string name;
+        
+        if(p == PERF_MON_LOAD_MOB_TYPES) {
+            if(mc == N_MOB_CATEGORIES) {
+                //Reached the final mob category. Next load point.
+                ++p;
+                continue;
+            }
+            
+            if(mc == MOB_CATEGORY_NONE + 1) {
+                //For the first category, we actually want to check
+                //against the previous major loading point, not the previous
+                //mob category (since it's none!)
+                dur = mob_cat_points[mc] - points[p - 1];
+            } else {
+                dur = mob_cat_points[mc] - mob_cat_points[mc - 1];
+            }
+            name = game.mob_categories.get(mc)->name + " object types";
+            mc++;
+            
+        } else {
+            dur = points[p] - points[p - 1];
+            name = point_names[p];
+            ++p;
+            
+        }
+        
+        float dur_perc = (dur / total_duration) * 100.0;
+        
+        //Write it down.
+        s +=
+            "  " + name + "\n" +
+            "    " + box_string(std::to_string(dur), 8) +
+            " (" + f2s(dur_perc) + "%)\n    ";
+        for(unsigned char perc = 0; perc < 100; perc++) {
+            if(perc < dur_perc) {
+                s.push_back('#');
+            } else {
+                s.push_back('_');
+            }
+        }
+        s += "\n";
+        
+    }
+    
+    s += "\n  TOTAL: " + std::to_string(total_duration) + "\n";
+    
+    string prev_log;
+    ALLEGRO_FILE* file_i = al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "r");
+    if(file_i) {
+        string line;
+        while(!al_feof(file_i)) {
+            getline(file_i, line);
+            prev_log += line + "\n";
+        }
+        prev_log.erase(prev_log.size() - 1);
+        al_fclose(file_i);
+    }
+    
+    ALLEGRO_FILE* file_o = al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "w");
+    if(file_o) {
+        al_fwrite(file_o, prev_log + s);
+        al_fclose(file_o);
     }
 }
 

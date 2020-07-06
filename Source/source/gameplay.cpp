@@ -213,6 +213,10 @@ void gameplay::leave() {
  * Loads the "gameplay" state into memory.
  */
 void gameplay::load() {
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_START_LOAD);
+    }
+    
     size_t errors_reported_at_start = game.errors_reported_so_far;
     
     ready_for_input = false;
@@ -294,6 +298,10 @@ void gameplay::load() {
         return priority_l1 < priority_l2;
     }
     );
+    
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_GENERATE_MOBS);
+    }
     
     cur_leader_nr = 0;
     cur_leader_ptr = mobs.leaders[cur_leader_nr];
@@ -398,7 +406,9 @@ void gameplay::load() {
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
-    
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_FINISH_LOAD);
+    }
 }
 
 
@@ -407,13 +417,45 @@ void gameplay::load() {
  */
 void gameplay::load_game_content() {
     load_custom_particle_generators(true);
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_CUSTOM_PARTICLE_GENS);
+    }
+    
     load_liquids(true);
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_LIQUIDS);
+    }
+    
     load_status_types(true);
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_STATUS_TYPES);
+    }
+    
     load_spray_types(true);
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_SPRAY_TYPES);
+    }
+    
     load_hazards();
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_HAZARDS);
+    }
+    
     load_hud_info();
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_HUD_INFO);
+    }
+    
     load_weather();
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_WEATHER);
+    }
+    
     load_spike_damage_types();
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_SPIKE_DAMAGE_TYPES);
+    }
+    
     
     //Mob types.
     load_mob_types(true);
@@ -440,6 +482,9 @@ void gameplay::load_game_content() {
     
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     
+    if(game.perf_mon) {
+        game.perf_mon->handle_load_point(PERF_MON_LOAD_MOB_TYPES);
+    }
 }
 
 

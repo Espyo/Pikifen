@@ -926,6 +926,11 @@ void save_creator_tools() {
             "auto_start_mode", game.creator_tools.auto_start_mode
         )
     );
+    file.add(
+        new data_node(
+            "performance_monitor", b2s(game.creator_tools.use_perf_mon)
+        )
+    );
     
     file.save_file(CREATOR_TOOLS_FILE_PATH, true, true);
 }
