@@ -718,11 +718,21 @@ void load_mob_type_from_file(
 void load_mob_types(bool load_resources) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        if(c == MOB_CATEGORY_NONE) {
+            continue;
+        }
+        
         mob_category* category = game.mob_categories.get(c);
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement(
+                "Object types -- " + category->name
+            );
+        }
+        
         load_mob_types(category, load_resources);
         
         if(game.perf_mon) {
-            game.perf_mon->handle_load_mob_category((MOB_CATEGORIES) c);
+            game.perf_mon->finish_measurement();
         }
     }
     

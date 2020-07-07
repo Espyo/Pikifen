@@ -708,34 +708,57 @@ void msg_box_info::tick(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Creates a performance monitor.
  */
-performance_monitor_struct::performance_monitor_struct() {
+performance_monitor_struct::performance_monitor_struct() :
+    cur_state(PERF_MON_STATE_LOADING),
+    measurement_start_time(0.0),
+    load_state_start_time(0.0),
+    load_state_total_time(0.0) {
+    
     reset();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles a certain point having been reached in the mob category loading
- * process.
+ * Enters the given state of the measurement process.
  */
-void performance_monitor_struct::handle_load_mob_category(
-    const MOB_CATEGORIES c
-) {
-    mob_cat_points[c] = al_get_time();
+void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
+    cur_state = state;
+    switch(state) {
+    case PERF_MON_STATE_LOADING: {
+        load_state_start_time = al_get_time();
+        break;
+    }
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles a certain point having been reached in the gameplay loading
- * process.
+ * Finishes the latest loading procedure measurement.
  */
-void performance_monitor_struct::handle_load_point(const PERF_MON_POINTS p) {
-    if(p == PERF_MON_START_LOAD) {
-        reset();
-    } else if(p == PERF_MON_FINISH_LOAD) {
-        area_name = game.cur_area_data.name;
-    }
+void performance_monitor_struct::finish_measurement() {
+    //Check if we were measuring something.
+    engine_assert(
+        measurement_start_time != 0.0,
+        load_measurements.empty() ?
+        "(No measurements)" :
+        "Last measurement: " + load_measurements.back().first
+    );
     
-    points[p] = al_get_time();
+    load_measurements.back().second = al_get_time() - measurement_start_time;
+    measurement_start_time = 0.0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Leaves the current state of the measurement process.
+ */
+void performance_monitor_struct::leave_state() {
+    switch(cur_state) {
+    case PERF_MON_STATE_LOADING: {
+        load_state_total_time = al_get_time() - load_state_start_time;
+        break;
+    }
+    }
 }
 
 
@@ -743,9 +766,13 @@ void performance_monitor_struct::handle_load_point(const PERF_MON_POINTS p) {
  * Resets all of the performance monitor's information.
  */
 void performance_monitor_struct::reset() {
-    for(size_t p = 0; p < N_PERF_MON_POINTS; ++p) {
-        points[p] = 0.0;
-    }
+    area_name.clear();
+    cur_state = PERF_MON_STATE_LOADING;
+    measurement_start_time = 0.0;
+    load_measurements.clear();
+    load_state_start_time = 0.0;
+    load_state_total_time = 0.0;
+    
 }
 
 
@@ -753,7 +780,7 @@ void performance_monitor_struct::reset() {
  * Saves a log file with all known stats, if there is anything to save.
  */
 void performance_monitor_struct::save_log() {
-    if(points[PERF_MON_START_LOAD] == 0.0) {
+    if(load_measurements.empty()) {
         //Nothing to save.
         return;
     }
@@ -768,86 +795,28 @@ void performance_monitor_struct::save_log() {
         
     s += "Latest area loading times (for area " + area_name + "):\n";
     
-    static const string point_names[N_PERF_MON_POINTS] = {
-        "Loading start",
-        "Custom particle generators",
-        "Liquid types",
-        "Status effect types",
-        "Spray types",
-        "Hazards",
-        "HUD info",
-        "Weather",
-        "Spike damage types",
-        "Object types",
-        "Area data",
-        "Area initial assets",
-        "Area vertexes",
-        "Area edges",
-        "Area sectors",
-        "Area object generators",
-        "Area paths",
-        "Area tree shadows",
-        "Area geometry calculations",
-        "Object generation",
-        "Finishing touches",
-    };
-    
-    double total_duration =
-        points[PERF_MON_FINISH_LOAD] - points[PERF_MON_START_LOAD];
-        
-    unsigned char p = PERF_MON_START_LOAD + 1;
-    unsigned char mc = MOB_CATEGORY_NONE + 1; //Skip "none".
-    
-    while(p <= PERF_MON_FINISH_LOAD) {
-    
-        double dur = 0.0;
-        string name;
-        
-        if(p == PERF_MON_LOAD_MOB_TYPES) {
-            if(mc == N_MOB_CATEGORIES) {
-                //Reached the final mob category. Next load point.
-                ++p;
-                continue;
-            }
-            
-            if(mc == MOB_CATEGORY_NONE + 1) {
-                //For the first category, we actually want to check
-                //against the previous major loading point, not the previous
-                //mob category (since it's none!)
-                dur = mob_cat_points[mc] - points[p - 1];
-            } else {
-                dur = mob_cat_points[mc] - mob_cat_points[mc - 1];
-            }
-            name = game.mob_categories.get(mc)->name + " object types";
-            mc++;
-            
-        } else {
-            dur = points[p] - points[p - 1];
-            name = point_names[p];
-            ++p;
-            
-        }
-        
-        float dur_perc = (dur / total_duration) * 100.0;
-        
-        //Write it down.
-        s +=
-            "  " + name + "\n" +
-            "    " + box_string(std::to_string(dur), 8) +
-            " (" + f2s(dur_perc) + "%)\n    ";
-        for(unsigned char perc = 0; perc < 100; perc++) {
-            if(perc < dur_perc) {
-                s.push_back('#');
-            } else {
-                s.push_back('_');
-            }
-        }
-        s += "\n";
-        
+    //Get the total measured time.
+    double total_measured_time = 0.0;
+    for(size_t m = 0; m < load_measurements.size(); ++m) {
+        total_measured_time += load_measurements[m].second;
     }
     
-    s += "\n  TOTAL: " + std::to_string(total_duration) + "\n";
+    //Write each measurement into the string.
+    for(size_t m = 0; m < load_measurements.size(); ++m) {
+        write_measurement(
+            s, load_measurements[m].first, load_measurements[m].second,
+            load_state_total_time
+        );
+    }
     
+    write_measurement(
+        s, "Everything else", load_state_total_time - total_measured_time,
+        load_state_total_time
+    );
+    
+    s += "\n  TOTAL: " + std::to_string(load_state_total_time) + "\n";
+    
+    //Finally, write the string to a file.
     string prev_log;
     ALLEGRO_FILE* file_i = al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "r");
     if(file_i) {
@@ -865,6 +834,61 @@ void performance_monitor_struct::save_log() {
         al_fwrite(file_o, prev_log + s);
         al_fclose(file_o);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the name of the area that was monitored.
+ */
+void performance_monitor_struct::set_area_name(const string &name) {
+    area_name = name;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts measuring a certain point in the loading procedure.
+ */
+void performance_monitor_struct::start_measurement(const string &name) {
+    //Check if we were already measuring something.
+    engine_assert(
+        measurement_start_time == 0.0,
+        load_measurements.empty() ?
+        "(No measurements)" :
+        "Last measurement: " + load_measurements.back().first
+    );
+    
+    measurement_start_time = al_get_time();
+    load_measurements.push_back(std::make_pair(name, 0.0));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Writes a measurement in a human-friendly format onto a string.
+ * str:
+ *   The string to write to.
+ * name:
+ *   The name of this measurement.
+ * dur:
+ *   How long it lasted for, in seconds.
+ * total:
+ *   How long the entire procedure lasted for.
+ */
+void performance_monitor_struct::write_measurement(
+    string &str, const string &name, const double dur, const float total
+) {
+    float perc = dur / total * 100.0;
+    str +=
+        "  " + name + "\n" +
+        "    " + box_string(std::to_string(dur), 8) +
+        " (" + f2s(perc) + "%)\n    ";
+    for(unsigned char p = 0; p < 100; p++) {
+        if(p < perc) {
+            str.push_back('#');
+        } else {
+            str.push_back('_');
+        }
+    }
+    str += "\n";
 }
 
 

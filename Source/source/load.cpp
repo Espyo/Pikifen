@@ -32,7 +32,10 @@ using std::set;
 void load_area(
     const string &name, const bool load_for_editor, const bool from_backup
 ) {
-
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Data");
+    }
+    
     game.cur_area_data.clear();
     
     string geometry_file_name;
@@ -75,6 +78,10 @@ void load_area(
     game.loading_text_bmp = NULL;
     game.loading_subtext_bmp = NULL;
     
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
     draw_loading_screen(
         game.cur_area_data.name, game.cur_area_data.subtitle, 1.0
     );
@@ -83,7 +90,7 @@ void load_area(
     if(!load_for_editor) {
     
         if(game.perf_mon) {
-            game.perf_mon->handle_load_point(PERF_MON_LOAD_AREA_DATA);
+            game.perf_mon->start_measurement("Area -- Initial assets");
         }
         
         if(game.cur_area_data.weather_name.empty()) {
@@ -114,14 +121,17 @@ void load_area(
     }
     
     if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_AREA_ASSETS);
+        game.perf_mon->finish_measurement();
     }
-    
     
     //Time to load the geometry.
     data_node geometry_file = load_data_file(geometry_file_name);
     
     //Vertexes.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Vertexes");
+    }
+    
     size_t n_vertexes =
         geometry_file.get_child_by_name(
             "vertexes"
@@ -139,11 +149,15 @@ void load_area(
         }
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_VERTEXES);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Edges.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Edges");
+    }
+    
     size_t n_edges =
         geometry_file.get_child_by_name(
             "edges"
@@ -171,11 +185,15 @@ void load_area(
         game.cur_area_data.edges.push_back(new_edge);
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_EDGES);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Sectors.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Sectors");
+    }
+    
     size_t n_sectors =
         geometry_file.get_child_by_name(
             "sectors"
@@ -263,11 +281,15 @@ void load_area(
         game.cur_area_data.sectors.push_back(new_sector);
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_SECTORS);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Mobs.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Object generators");
+    }
+    
     vector<std::pair<size_t, size_t> > mob_links_buffer;
     size_t n_mobs =
         geometry_file.get_child_by_name("mobs")->get_nr_of_children();
@@ -342,11 +364,15 @@ void load_area(
         game.cur_area_data.mob_generators[f]->link_nrs.push_back(s);
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_MOB_GENS);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Path stops.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Paths");
+    }
+    
     size_t n_stops =
         geometry_file.get_child_by_name("path_stops")->get_nr_of_children();
     for(size_t s = 0; s < n_stops; ++s) {
@@ -378,11 +404,15 @@ void load_area(
         game.cur_area_data.path_stops.push_back(s_ptr);
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_PATHS);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Tree shadows.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Tree shadows");
+    }
+    
     size_t n_shadows =
         geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; ++s) {
@@ -431,11 +461,15 @@ void load_area(
         
     }
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_TREE_SHADOWS);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
     
     //Set up stuff.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Area -- Geometry calculations");
+    }
+    
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
         game.cur_area_data.fix_edge_pointers(
             game.cur_area_data.edges[e]
@@ -496,8 +530,8 @@ void load_area(
     
     if(!load_for_editor) game.cur_area_data.generate_blockmap();
     
-    if(!load_for_editor && game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_GEOMETRY);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
 }
 
@@ -607,6 +641,10 @@ void load_creator_tools() {
  * Loads the user-made particle generators.
  */
 void load_custom_particle_generators(const bool load_resources) {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Custom particle generators");
+    }
+    
     vector<string> generator_files =
         folder_to_vector(PARTICLE_GENERATORS_FOLDER_PATH, false);
         
@@ -679,6 +717,10 @@ void load_custom_particle_generators(const bool load_resources) {
             game.custom_particle_generators.size();
             
         game.custom_particle_generators[name_str] = new_pg;
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
 }
 
@@ -788,6 +830,10 @@ void load_game_config() {
  * Loads the hazards from the game data.
  */
 void load_hazards() {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Hazards");
+    }
+    
     vector<string> hazard_files =
         folder_to_vector(HAZARDS_FOLDER_PATH, false);
         
@@ -842,6 +888,10 @@ void load_hazards() {
         
         game.hazards[new_h.name] = new_h;
     }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 
@@ -849,6 +899,10 @@ void load_hazards() {
  * Loads the liquids from the game data.
  */
 void load_liquids(const bool load_resources) {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Liquid types");
+    }
+    
     vector<string> liquid_files =
         folder_to_vector(LIQUIDS_FOLDER_PATH, false);
         
@@ -884,6 +938,10 @@ void load_liquids(const bool load_resources) {
         }
         
         game.liquids[new_l->name] = new_l;
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
 }
 
@@ -1009,6 +1067,10 @@ sample_struct load_sample(const string &file_name) {
  * Loads the spike damage types available.
  */
 void load_spike_damage_types() {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Spike damage types");
+    }
+    
     vector<string> type_files =
         folder_to_vector(SPIKE_DAMAGES_FOLDER_PATH, false);
         
@@ -1063,6 +1125,10 @@ void load_spike_damage_types() {
         
         game.spike_damage_types[new_t.name] = new_t;
     }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 
@@ -1070,6 +1136,10 @@ void load_spike_damage_types() {
  * Loads spray types from the game data.
  */
 void load_spray_types(const bool load_resources) {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Spray types");
+    }
+    
     vector<string> type_files =
         folder_to_vector(SPRAYS_FOLDER_PATH, false);
         
@@ -1161,6 +1231,10 @@ void load_spray_types(const bool load_resources) {
             );
         }
     }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 
@@ -1168,6 +1242,10 @@ void load_spray_types(const bool load_resources) {
  * Loads status effect types from the game data.
  */
 void load_status_types(const bool load_resources) {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Status types");
+    }
+    
     vector<string> type_files =
         folder_to_vector(STATUSES_FOLDER_PATH, false);
         
@@ -1266,6 +1344,10 @@ void load_status_types(const bool load_resources) {
         
         game.status_types[new_t->name] = new_t;
     }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 
@@ -1286,6 +1368,10 @@ void load_system_animations() {
  * Loads the weather conditions available.
  */
 void load_weather() {
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Weather");
+    }
+    
     vector<string> weather_files =
         folder_to_vector(WEATHER_FOLDER_PATH, false);
         
@@ -1362,6 +1448,10 @@ void load_weather() {
         
         //Save it in the map.
         game.weather_conditions[new_w.name] = new_w;
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
     }
 }
 

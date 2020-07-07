@@ -214,7 +214,7 @@ void gameplay::leave() {
  */
 void gameplay::load() {
     if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_START_LOAD);
+        game.perf_mon->enter_state(PERF_MON_STATE_LOADING);
     }
     
     size_t errors_reported_at_start = game.errors_reported_so_far;
@@ -247,6 +247,10 @@ void gameplay::load() {
     }
     
     //Generate mobs.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object generation");
+    }
+    
     vector<mob*> mobs_per_gen;
     
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
@@ -300,7 +304,7 @@ void gameplay::load() {
     );
     
     if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_GENERATE_MOBS);
+        game.perf_mon->finish_measurement();
     }
     
     cur_leader_nr = 0;
@@ -406,8 +410,10 @@ void gameplay::load() {
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
+    
     if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_FINISH_LOAD);
+        game.perf_mon->set_area_name(game.cur_area_data.name);
+        game.perf_mon->leave_state();
     }
 }
 
@@ -417,45 +423,13 @@ void gameplay::load() {
  */
 void gameplay::load_game_content() {
     load_custom_particle_generators(true);
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_CUSTOM_PARTICLE_GENS);
-    }
-    
     load_liquids(true);
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_LIQUIDS);
-    }
-    
     load_status_types(true);
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_STATUS_TYPES);
-    }
-    
     load_spray_types(true);
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_SPRAY_TYPES);
-    }
-    
     load_hazards();
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_HAZARDS);
-    }
-    
     load_hud_info();
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_HUD_INFO);
-    }
-    
     load_weather();
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_WEATHER);
-    }
-    
     load_spike_damage_types();
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_SPIKE_DAMAGE_TYPES);
-    }
-    
     
     //Mob types.
     load_mob_types(true);
@@ -481,10 +455,6 @@ void gameplay::load_game_content() {
     }
     
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
-    
-    if(game.perf_mon) {
-        game.perf_mon->handle_load_point(PERF_MON_LOAD_MOB_TYPES);
-    }
 }
 
 
@@ -507,6 +477,10 @@ void gameplay::load_hud_coordinates(const int item, string data) {
 void gameplay::load_hud_info() {
     data_node file(MISC_FOLDER_PATH + "/HUD.txt");
     if(!file.file_was_opened) return;
+    
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("HUD info");
+    }
     
     //Hud coordinates.
     data_node* positions_node = file.get_child_by_name("positions");
@@ -570,6 +544,9 @@ void gameplay::load_hud_info() {
     
 #undef loader
     
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 

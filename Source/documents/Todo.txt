@@ -604,6 +604,7 @@ Tasks for later on (I might never implement these)
     ...An AI opponent in 2-player mode? It would help me test...
     Colors should be able to also be in hexadecimal
     The ability for enemies to eat other enemies
+    If I need performance gains, resize textures to smaller sizes when they're loaded (Kman)
     A way for spike damage to apply a status effect
     A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game creators can help make sure a level's not too bloated?
     Nighttime (what enemies can spawn at night, their changes, etc.)
