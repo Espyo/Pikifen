@@ -577,7 +577,7 @@ struct bitmap_effect_info {
 
 enum PERF_MON_STATES {
     PERF_MON_STATE_LOADING,
-    PERF_MON_STATE_GAMEPLAY_FRAME,
+    PERF_MON_STATE_FRAME,
 };
 
 /* ----------------------------------------------------------------------------
@@ -588,6 +588,7 @@ struct performance_monitor_struct {
 public:
     performance_monitor_struct();
     void set_area_name(const string &name);
+    void set_paused(const bool paused);
     void enter_state(const PERF_MON_STATES mode);
     void leave_state();
     void start_measurement(const string &name);
@@ -596,16 +597,45 @@ public:
     void reset();
     
 private:
-    string area_name;
-    PERF_MON_STATES cur_state;
-    double measurement_start_time;
-    vector<std::pair<string, double> > load_measurements;
-    double load_state_start_time;
-    double load_state_total_time;
+
+    struct page {
+    public:
+        double duration;
+        vector<std::pair<string, double> > measurements;
+        page();
+        void write(string &s);
+        
+    private:
+        void write_measurement(
+            string &str, const string &name,
+            const double time, const float total
+        );
+    };
     
-    void write_measurement(
-        string &str, const string &name, const double time, const float total
-    );
+    //Name of the area being monitored.
+    string area_name;
+    //Current state.
+    PERF_MON_STATES cur_state;
+    //Is the monitoring currently paused?
+    bool paused;
+    //When the current state began.
+    double cur_state_start_time;
+    //When the current measurement began.
+    double cur_measurement_start_time;
+    //Name of the current measurement.
+    string cur_measurement_name;
+    //Page of information about the current working info.
+    performance_monitor_struct::page cur_page;
+    //How many frames of gameplay have been sampled.
+    size_t frame_samples;
+    //Page of information about the loading process.
+    performance_monitor_struct::page loading_page;
+    //Page of information about the average frame.
+    performance_monitor_struct::page frame_avg_page;
+    //Page of information about the fastest frame.
+    performance_monitor_struct::page frame_fastest_page;
+    //Page of information about the slowest frame.
+    performance_monitor_struct::page frame_slowest_page;
 };
 
 

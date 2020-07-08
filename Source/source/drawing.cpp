@@ -57,25 +57,55 @@ void gameplay::do_game_drawing(
         al_clear_to_color(game.cur_area_data.bg_color);
         
         //Layer 1 -- Background.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- Background");
+        }
         draw_background(bmp_output);
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Layer 2 -- World components.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- World");
+        }
         al_use_transform(&world_to_screen_drawing_transform);
         draw_world_components(bmp_output);
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Layer 3 -- In-game text.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- In-game text");
+        }
         if(!bmp_output) {
             draw_ingame_text();
         }
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Layer 4 -- Precipitation.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- precipitation");
+        }
         if(!bmp_output) {
             draw_precipitation();
         }
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Layer 5 -- Tree shadows.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- Tree shadows");
+        }
         if(!(bmp_output && !game.creator_tools.area_image_shadows)) {
             draw_tree_shadows();
+        }
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
         }
         
         //Finish dumping to a bitmap image here.
@@ -85,16 +115,28 @@ void gameplay::do_game_drawing(
         }
         
         //Layer 6 -- Lighting filter.
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- Lighting");
+        }
         draw_lighting_filter();
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Layer 7 -- Cursor.
         draw_cursor(world_to_screen_drawing_transform);
         
         //Layer 8 -- HUD
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Drawing -- HUD");
+        }
         if(!msg_box) {
             draw_hud();
         } else {
             draw_message_box();
+        }
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
         }
         
         //Layer 9 -- System stuff.
@@ -2535,7 +2577,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
         ALLEGRO_VERTEX av[4];
         
         sector* other_sector = e_ptr->get_other_sector(s_ptr);
-            
+        
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
         float shadow_length =

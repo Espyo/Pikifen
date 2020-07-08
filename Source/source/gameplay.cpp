@@ -98,6 +98,10 @@ gameplay::gameplay() :
  */
 void gameplay::do_drawing() {
     do_game_drawing();
+    
+    if(game.perf_mon) {
+        game.perf_mon->leave_state();
+    }
 }
 
 
@@ -105,6 +109,17 @@ void gameplay::do_drawing() {
  * Tick the gameplay logic by one frame.
  */
 void gameplay::do_logic() {
+    if(game.perf_mon) {
+        if(is_input_allowed) {
+            //The first frame will have its speed all broken,
+            //because of the long loading time that came before it.
+            game.perf_mon->set_paused(false);
+            game.perf_mon->enter_state(PERF_MON_STATE_FRAME);
+        } else {
+            game.perf_mon->set_paused(true);
+        }
+    }
+    
     if(game.creator_tools.change_speed) {
         game.delta_t *= game.creator_tools.change_speed_mult;
     }
@@ -201,6 +216,11 @@ string gameplay::get_name() const {
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay::leave() {
+    if(game.perf_mon) {
+        //Don't register the final frame, since it won't draw anything.
+        game.perf_mon->set_paused(true);
+    }
+    
     if(game.states.area_editor_st->quick_play_area.empty()) {
         game.change_state(game.states.main_menu_st);
     } else {
@@ -214,7 +234,9 @@ void gameplay::leave() {
  */
 void gameplay::load() {
     if(game.perf_mon) {
+        game.perf_mon->reset();
         game.perf_mon->enter_state(PERF_MON_STATE_LOADING);
+        game.perf_mon->set_paused(false);
     }
     
     size_t errors_reported_at_start = game.errors_reported_so_far;

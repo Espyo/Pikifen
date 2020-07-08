@@ -2,12 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Performance monitoring improvements
-        F1 mode should tell you how long the frame took to process, by measuring it
-            A different measurement for logic and rendering, and for both combined, as well as more specific points, like mob physics, scripting, etc.
-        A maker tool option to toggle loading times for mobs, textures, vertexes, etc.
-        Maybe a tool that dumps really extensive measurements into a text file?
-        Try to figure out why Play has such varying framerate (use F1), but other areas don't
     Revamp editors
         A way to scale/rotate the currently selected vertexes
         Style the editors
@@ -26,6 +20,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** The animation editor now has a grid too, and animations have a simple timeline.
     ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
     ** Several other small things have been tweaked.
+    * Added a performance monitor to the creator tools. When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a results file gets written when you leave. It can help you figure out what the heaviest parts of your content are.
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)

@@ -172,8 +172,16 @@ void gameplay::do_gameplay_logic() {
         
         area_time_passed += game.delta_t;
         
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Logic -- Particles");
+        }
+        
         //Tick all particles.
         particles.tick_all(game.delta_t);
+        
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
         
         //Ticks all status effect animations.
         for(auto &s : game.status_types) {
@@ -186,6 +194,10 @@ void gameplay::do_gameplay_logic() {
         *   Sectors   |  | *
         *             +--+ *
         ********************/
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Logic -- Sector animation");
+        }
+        
         for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = game.cur_area_data.sectors[s];
             
@@ -213,6 +225,10 @@ void gameplay::do_gameplay_logic() {
             }
         }
         
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
+        
         
         /********************
         *              ***  *
@@ -236,7 +252,6 @@ void gameplay::do_gameplay_logic() {
         *   Mobs   ()--> *
         *                *
         ******************/
-        
         size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
@@ -265,6 +280,10 @@ void gameplay::do_gameplay_logic() {
         *   Leader   (*:O) *
         *             `-´  *
         *******************/
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Logic -- Current leader");
+        }
+        
         //Current leader movement.
         point dummy_coords;
         float dummy_angle;
@@ -451,6 +470,10 @@ void gameplay::do_gameplay_logic() {
             }
         }
         
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
+        
         
         /**************************
         *                    /  / *
@@ -502,6 +525,7 @@ void gameplay::do_gameplay_logic() {
     }
     
     hud_items.tick(game.delta_t);
+    
     replay_timer.tick(game.delta_t);
     
     //Process and print framerate and system info.
@@ -729,10 +753,20 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         
         dist d(m_ptr->pos, m2_ptr->pos);
         
+        if(game.perf_mon) {
+            game.perf_mon->start_measurement("Objects -- Touching others");
+        }
+        
         if(d <= m_ptr->type->max_span + m2_ptr->type->max_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
             process_mob_touches(m_ptr, m2_ptr, m, m2, d);
+            
+        }
+        
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+            game.perf_mon->start_measurement("Objects -- Reaches");
         }
         
         if(
@@ -744,9 +778,22 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
             );
         }
         
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+            game.perf_mon->start_measurement("Objects -- Misc. interactions");
+        }
+        
         process_mob_misc_interactions(
             m_ptr, m2_ptr, m, m2, d, pending_intermob_events
         );
+        
+        if(game.perf_mon) {
+            game.perf_mon->finish_measurement();
+        }
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Objects -- Interaction results");
     }
     
     //Check the pending inter-mob events.
@@ -777,6 +824,9 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
         
     }
     
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 

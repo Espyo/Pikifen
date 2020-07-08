@@ -2056,22 +2056,64 @@ void mob::tick(const float delta_t) {
     
     if(to_delete) return;
     
+    //Brain.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Brain");
+    }
     tick_brain(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
     if(to_delete) return;
     
+    //Physics.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Physics");
+    }
     tick_physics(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
     if(to_delete) return;
     
+    //Misc. logic.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Misc. logic");
+    }
     tick_misc_logic(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
     if(to_delete) return;
     
+    //Animation.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Animation");
+    }
     tick_animation(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
     if(to_delete) return;
     
+    //Script.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Script");
+    }
     tick_script(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
     if(to_delete) return;
     
+    //Class specifics.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Misc. specifics");
+    }
     tick_class_specifics(delta_t);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
 }
 
 

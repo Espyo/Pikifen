@@ -201,6 +201,8 @@ Bag of notes (useful stuff)
         Use .shrink_to_fit() on vectors where you want the memory to be freed
         Declare variables next to the relevant code, not at the top of the function
         static_cast instead of normal C-style cast
+    Why do some areas have erratic framerates?
+        It's the Pikmin amount, most likely. For some reason I didn't confirm, many Pikmin make the framerate vary a bunch.
 
 
 Procedure for every version release

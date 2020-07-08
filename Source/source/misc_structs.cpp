@@ -710,53 +710,122 @@ void msg_box_info::tick(const float delta_t) {
  */
 performance_monitor_struct::performance_monitor_struct() :
     cur_state(PERF_MON_STATE_LOADING),
-    measurement_start_time(0.0),
-    load_state_start_time(0.0),
-    load_state_total_time(0.0) {
+    paused(false),
+    cur_state_start_time(0.0),
+    cur_measurement_start_time(0.0),
+    frame_samples(0) {
     
     reset();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Enters the given state of the measurement process.
+ * Enters the given state of the monitoring process.
  */
 void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
+    if(paused) return;
+    
     cur_state = state;
-    switch(state) {
-    case PERF_MON_STATE_LOADING: {
-        load_state_start_time = al_get_time();
-        break;
-    }
+    cur_state_start_time = al_get_time();
+    cur_page = page();
+    
+    if(cur_state == PERF_MON_STATE_FRAME) {
+        frame_samples++;
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Finishes the latest loading procedure measurement.
+ * Finishes the latest measurement.
  */
 void performance_monitor_struct::finish_measurement() {
+    if(paused) return;
+    
     //Check if we were measuring something.
     engine_assert(
-        measurement_start_time != 0.0,
-        load_measurements.empty() ?
+        cur_measurement_start_time != 0.0,
+        cur_page.measurements.empty() ?
         "(No measurements)" :
-        "Last measurement: " + load_measurements.back().first
+        "Last measurement: " + cur_page.measurements.back().first
     );
     
-    load_measurements.back().second = al_get_time() - measurement_start_time;
-    measurement_start_time = 0.0;
+    double dur = al_get_time() - cur_measurement_start_time;
+    bool is_new = true;
+    
+    for(size_t m = 0; m < cur_page.measurements.size(); ++m) {
+        if(cur_page.measurements[m].first == cur_measurement_name) {
+            cur_page.measurements[m].second += dur;
+            is_new = false;
+            break;
+        }
+    }
+    if(is_new) {
+        cur_page.measurements.push_back(
+            std::make_pair(cur_measurement_name, dur)
+        );
+    }
+    
+    cur_measurement_start_time = 0.0;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Leaves the current state of the measurement process.
+ * Leaves the current state of the monitoring process.
  */
 void performance_monitor_struct::leave_state() {
+    if(paused) return;
+    
+    cur_page.duration = al_get_time() - cur_state_start_time;
+    
     switch(cur_state) {
     case PERF_MON_STATE_LOADING: {
-        load_state_total_time = al_get_time() - load_state_start_time;
+        loading_page = cur_page;
         break;
+    }
+    case PERF_MON_STATE_FRAME: {
+        if(
+            frame_fastest_page.duration == 0.0 ||
+            cur_page.duration < frame_fastest_page.duration
+        ) {
+            frame_fastest_page = cur_page;
+            
+        } else if(
+            frame_slowest_page.duration == 0.0 ||
+            cur_page.duration > frame_slowest_page.duration
+        ) {
+            frame_slowest_page = cur_page;
+            
+        }
+        
+        if(frame_avg_page.duration == 0.0) {
+            frame_avg_page = cur_page;
+        } else {
+            frame_avg_page.duration += cur_page.duration;
+            for(size_t m = 0; m < cur_page.measurements.size(); ++m) {
+                bool is_new = true;
+                for(
+                    size_t m2 = 0;
+                    m2 < frame_avg_page.measurements.size(); ++m2
+                ) {
+                    if(
+                        cur_page.measurements[m].first ==
+                        frame_avg_page.measurements[m2].first
+                    ) {
+                        frame_avg_page.measurements[m2].second +=
+                            cur_page.measurements[m].second;
+                        is_new = false;
+                        break;
+                    }
+                }
+                if(is_new) {
+                    frame_avg_page.measurements.push_back(
+                        cur_page.measurements[m]
+                    );
+                }
+            }
+        }
+        break;
+        
     }
     }
 }
@@ -768,11 +837,16 @@ void performance_monitor_struct::leave_state() {
 void performance_monitor_struct::reset() {
     area_name.clear();
     cur_state = PERF_MON_STATE_LOADING;
-    measurement_start_time = 0.0;
-    load_measurements.clear();
-    load_state_start_time = 0.0;
-    load_state_total_time = 0.0;
-    
+    paused = false;
+    cur_state_start_time = 0.0;
+    cur_measurement_start_time = 0.0;
+    cur_measurement_name.clear();
+    cur_page = page();
+    frame_samples = 0;
+    loading_page = page();
+    frame_avg_page = page();
+    frame_fastest_page = page();
+    frame_slowest_page = page();
 }
 
 
@@ -780,41 +854,41 @@ void performance_monitor_struct::reset() {
  * Saves a log file with all known stats, if there is anything to save.
  */
 void performance_monitor_struct::save_log() {
-    if(load_measurements.empty()) {
+    if(loading_page.measurements.empty()) {
         //Nothing to save.
         return;
     }
     
+    //Average out the frames of gameplay.
+    frame_avg_page.duration /= (double) frame_samples;
+    for(size_t m = 0; m < frame_avg_page.measurements.size(); ++m) {
+        frame_avg_page.measurements[m].second /= (double) frame_samples;
+    }
+    
+    //Fill out the string.
     string s =
         "\n" +
         get_current_time(false) +
         "; Pikifen version " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
         "." + i2s(VERSION_REV) + ", game version " +
-        game.config.version + "\n";
+        game.config.version;
         
-    s += "Latest area loading times (for area " + area_name + "):\n";
+    s +=
+        "\nData from the latest played area, " + area_name + ", with " +
+        i2s(frame_samples) + " gameplay frames sampled.\n";
+        
+    s += "\nLoading times:\n";
+    loading_page.write(s);
     
-    //Get the total measured time.
-    double total_measured_time = 0.0;
-    for(size_t m = 0; m < load_measurements.size(); ++m) {
-        total_measured_time += load_measurements[m].second;
-    }
+    s += "\nAverage frame logic processing:\n";
+    frame_avg_page.write(s);
     
-    //Write each measurement into the string.
-    for(size_t m = 0; m < load_measurements.size(); ++m) {
-        write_measurement(
-            s, load_measurements[m].first, load_measurements[m].second,
-            load_state_total_time
-        );
-    }
+    s += "\nFastest frame logic processing:\n";
+    frame_fastest_page.write(s);
     
-    write_measurement(
-        s, "Everything else", load_state_total_time - total_measured_time,
-        load_state_total_time
-    );
-    
-    s += "\n  TOTAL: " + std::to_string(load_state_total_time) + "\n";
+    s += "\nSlowest frame logic processing:\n";
+    frame_slowest_page.write(s);
     
     //Finally, write the string to a file.
     string prev_log;
@@ -846,19 +920,64 @@ void performance_monitor_struct::set_area_name(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets whether monitoring is currently paused or not.
+ */
+void performance_monitor_struct::set_paused(const bool paused) {
+    this->paused = paused;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts measuring a certain point in the loading procedure.
  */
 void performance_monitor_struct::start_measurement(const string &name) {
+    if(paused) return;
+    
     //Check if we were already measuring something.
     engine_assert(
-        measurement_start_time == 0.0,
-        load_measurements.empty() ?
+        cur_measurement_start_time == 0.0,
+        cur_page.measurements.empty() ?
         "(No measurements)" :
-        "Last measurement: " + load_measurements.back().first
+        "Last measurement: " + cur_page.measurements.back().first
     );
     
-    measurement_start_time = al_get_time();
-    load_measurements.push_back(std::make_pair(name, 0.0));
+    cur_measurement_start_time = al_get_time();
+    cur_measurement_name = name;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a performance monitor page struct.
+ */
+performance_monitor_struct::page::page() :
+    duration(0.0) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Writes a page of information to a string.
+ */
+void performance_monitor_struct::page::write(string &s) {
+    //Get the total measured time.
+    double total_measured_time = 0.0;
+    for(size_t m = 0; m < measurements.size(); ++m) {
+        total_measured_time += measurements[m].second;
+    }
+    
+    //Write each measurement into the string.
+    for(size_t m = 0; m < measurements.size(); ++m) {
+        write_measurement(
+            s, measurements[m].first,
+            measurements[m].second,
+            total_measured_time
+        );
+    }
+    
+    //Write the total.
+    s +=
+        "  TOTAL: " + std::to_string(duration) + "s (" +
+        std::to_string(total_measured_time) + "s measured, " +
+        std::to_string(duration - total_measured_time) + "s not measured).\n";
 }
 
 
@@ -873,13 +992,13 @@ void performance_monitor_struct::start_measurement(const string &name) {
  * total:
  *   How long the entire procedure lasted for.
  */
-void performance_monitor_struct::write_measurement(
+void performance_monitor_struct::page::write_measurement(
     string &str, const string &name, const double dur, const float total
 ) {
     float perc = dur / total * 100.0;
     str +=
         "  " + name + "\n" +
-        "    " + box_string(std::to_string(dur), 8) +
+        "    " + box_string(std::to_string(dur), 8, "s") +
         " (" + f2s(perc) + "%)\n    ";
     for(unsigned char p = 0; p < 100; p++) {
         if(p < perc) {
