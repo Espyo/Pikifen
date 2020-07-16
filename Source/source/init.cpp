@@ -349,7 +349,7 @@ void init_event_things(
         report_fatal_error("Could not create a display!");
     }
     
-    logic_timer = al_create_timer(1.0 / game.options.target_fps);
+    logic_timer = al_create_timer(1.0f / game.options.target_fps);
     if(!logic_timer) {
         report_fatal_error("Could not create the main logic timer!");
     }

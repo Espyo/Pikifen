@@ -55,10 +55,12 @@ private:
     };
     
     static const float KEYBOARD_PAN_AMOUNT;
+    static const float HITBOX_MIN_RADIUS;
     static const size_t TIMELINE_HEADER_HEIGHT;
     static const size_t TIMELINE_HEIGHT;
     static const size_t TIMELINE_LOOP_TRI_SIZE;
     static const size_t TIMELINE_PADDING;
+    static const float TOP_MIN_SIZE;
     static const float ZOOM_MAX_LEVEL_EDITOR;
     static const float ZOOM_MIN_LEVEL_EDITOR;
     
@@ -96,14 +98,14 @@ private:
     float cur_hitbox_alpha;
     //Index number of the current hitbox.
     size_t cur_hitbox_nr;
-    //Transformation controller of the current hitbox.
-    transformation_controller cur_hitbox_tc;
     //Current maturity to display on the Pikmin's top.
     unsigned char cur_maturity;
     //Current sprite.
     sprite* cur_sprite;
-    //Transformation controller of the current sprite.
-    transformation_controller cur_sprite_tc;
+    //Keep the aspect ratio when resizing the current sprite?
+    bool cur_sprite_keep_aspect_ratio;
+    //The current transformation widget.
+    transformation_widget cur_transformation_widget;
     //File path of the file currently being edited.
     string file_path;
     //Cache with the names of all global animation files (sans extension).
@@ -132,8 +134,8 @@ private:
     bool sprite_bmp_add_mode;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP* top_bmp[N_MATURITIES];
-    //Transformation controller for the Pikmin top.
-    transformation_controller top_tc;
+    //Keep the aspect ratio when resizing the Pikmin top?
+    bool top_keep_aspect_ratio;
     
     //Position of some important widgets.
     point load_widget_pos;
@@ -167,10 +169,7 @@ private:
     void enter_side_view();
     void exit_side_view();
     string get_path_short_name(const string &p) const;
-    void handle_cur_hitbox_tc();
-    void handle_cur_sprite_tc();
     void handle_mouse_in_timeline();
-    void handle_top_tc();
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
@@ -222,8 +221,6 @@ private:
     void sprite_bmp_flood_fill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
     );
-    void update_cur_hitbox_tc();
-    void update_cur_sprite_tc();
     void update_hitboxes();
     void update_stats();
     

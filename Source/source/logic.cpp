@@ -531,7 +531,7 @@ void gameplay::do_gameplay_logic() {
     //Process and print framerate and system info.
     if(game.show_system_info) {
     
-        game.framerate_history.push_back(1.0 / game.delta_t);
+        game.framerate_history.push_back(1.0f / game.delta_t);
         if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());
         }
@@ -580,7 +580,7 @@ void gameplay::do_gameplay_logic() {
         
         string fps_str =
             box_string(f2s(sample_avg), 12, " avg, ") +
-            box_string(f2s(1.0 / game.delta_t), 12, " now, ") +
+            box_string(f2s(1.0f / game.delta_t), 12, " now, ") +
             i2s(game.options.target_fps) + " intended";
         string n_mobs_str =
             box_string(i2s(mobs.all.size()), 7);

@@ -228,11 +228,49 @@ void animation_editor::draw_canvas() {
         }
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-            cur_sprite_tc.draw_handles();
+            point cur_sprite_size = cur_sprite->scale * cur_sprite->file_size;
+            cur_transformation_widget.draw(
+                &cur_sprite->offset,
+                &cur_sprite_size,
+                &cur_sprite->angle,
+                1.0f / game.cam.zoom
+            );
+            
         } else if(state == EDITOR_STATE_TOP && s->top_visible) {
-            top_tc.draw_handles();
+            cur_transformation_widget.draw(
+                &s->top_pos,
+                &s->top_size,
+                &s->top_angle,
+                1.0f / game.cam.zoom
+            );
+            
         } else if(state == EDITOR_STATE_HITBOXES && cur_hitbox) {
-            cur_hitbox_tc.draw_handles();
+            if(!side_view) {
+                point hitbox_size(
+                    cur_hitbox->radius * 2.0f, cur_hitbox->radius * 2.0f
+                );
+                cur_transformation_widget.draw(
+                    &cur_hitbox->pos,
+                    &hitbox_size,
+                    NULL,
+                    1.0f / game.cam.zoom
+                );
+            } else if(cur_hitbox->height != 0.0f) {
+                point hitbox_center(
+                    cur_hitbox->pos.x,
+                    (-(cur_hitbox->height / 2.0f)) - cur_hitbox->z
+                );
+                point hitbox_size(
+                    cur_hitbox->radius * 2.0f, cur_hitbox->height
+                );
+                cur_transformation_widget.draw(
+                    &hitbox_center,
+                    &hitbox_size,
+                    NULL,
+                    1.0f / game.cam.zoom
+                );
+            }
+            
         }
     }
     
@@ -258,11 +296,11 @@ void animation_editor::draw_canvas() {
         
         al_draw_line(
             0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-            al_map_rgb(240, 240, 240), 1 / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
         al_draw_line(
             cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-            al_map_rgb(240, 240, 240), 1 / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
     }
     
@@ -576,13 +614,13 @@ void animation_editor::draw_top_down_view_hitbox(
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
         0, 0, mt->radius,
-        al_map_rgb(240, 240, 240), 1.0 / game.cam.zoom
+        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
     if(mt->rectangular_dim.x != 0) {
         al_draw_rectangle(
             -mt->rectangular_dim.x / 2.0, -mt->rectangular_dim.y / 2.0,
             mt->rectangular_dim.x / 2.0, mt->rectangular_dim.y / 2.0,
-            al_map_rgb(240, 240, 240), 1.0 / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
     }
 }

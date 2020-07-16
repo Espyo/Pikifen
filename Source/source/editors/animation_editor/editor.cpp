@@ -25,6 +25,8 @@ using std::queue;
 const size_t animation_editor::HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
 const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+//Minimum radius that a hitbox can have.
+const float animation_editor::HITBOX_MIN_RADIUS = 1.0f;
 //How tall the animation timeline header is.
 const size_t animation_editor::TIMELINE_HEADER_HEIGHT = 12;
 //How tall the animation timeline is, in total.
@@ -33,6 +35,8 @@ const size_t animation_editor::TIMELINE_HEIGHT = 48;
 const size_t animation_editor::TIMELINE_LOOP_TRI_SIZE = 8;
 //Pad the left, right, and bottom of the timeline by this much.
 const size_t animation_editor::TIMELINE_PADDING = 6;
+//Minimum width or height a Pikmin top can have.
+const float animation_editor::TOP_MIN_SIZE = 1.0f;
 //Maximum zoom level possible in the editor.
 const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
@@ -59,14 +63,16 @@ animation_editor::animation_editor() :
     cur_hitbox_nr(INVALID),
     cur_maturity(0),
     cur_sprite(NULL),
+    cur_sprite_keep_aspect_ratio(true),
     hitboxes_visible(true),
     loaded_mob_type(nullptr),
     mob_radius_visible(false),
     grid_visible(true),
     pikmin_silhouette_visible(false),
     reset_load_dialog(true),
+    side_view(false),
     sprite_bmp_add_mode(false),
-    side_view(false) {
+    top_keep_aspect_ratio(true) {
     
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
@@ -80,12 +86,6 @@ animation_editor::animation_editor() :
     }
         );
     comparison_blink_timer.start();
-    
-    cur_hitbox_tc.keep_aspect_ratio = true;
-    cur_sprite_tc.keep_aspect_ratio = true;
-    cur_sprite_tc.allow_rotation = true;
-    top_tc.keep_aspect_ratio = true;
-    top_tc.allow_rotation = true;
     
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
@@ -246,60 +246,6 @@ string animation_editor::get_path_short_name(const string &p) const {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the current hitbox's transformation controller having been altered.
- */
-void animation_editor::handle_cur_hitbox_tc() {
-    if(!cur_sprite && !cur_hitbox) return;
-    
-    if(side_view) {
-        cur_hitbox->pos.x = cur_hitbox_tc.get_center().x;
-        cur_hitbox->radius = cur_hitbox_tc.get_size().x / 2.0f;
-        cur_hitbox->z =
-            -(
-                cur_hitbox_tc.get_center().y +
-                cur_hitbox_tc.get_size().y / 2.0f
-            );
-        cur_hitbox->height = cur_hitbox_tc.get_size().y;
-    } else {
-        cur_hitbox->pos = cur_hitbox_tc.get_center();
-        cur_hitbox->radius = cur_hitbox_tc.get_size().x / 2.0f;
-    }
-    
-    if(cur_hitbox->radius <= 0.0f) {
-        cur_hitbox->radius = 16.0f;
-        update_cur_hitbox_tc();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the current sprite's transformation controller having
- * been altered.
- */
-void animation_editor::handle_cur_sprite_tc() {
-    if(!cur_sprite) return;
-    
-    cur_sprite->offset = cur_sprite_tc.get_center();
-    cur_sprite->scale =
-        cur_sprite_tc.get_size() / cur_sprite->file_size;
-    cur_sprite->angle = cur_sprite_tc.get_angle();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the current sprite's top transformation controller having
- * been altered.
- */
-void animation_editor::handle_top_tc() {
-    if(!cur_sprite) return;
-    
-    cur_sprite->top_pos = top_tc.get_center();
-    cur_sprite->top_size = top_tc.get_size();
-    cur_sprite->top_angle = top_tc.get_angle();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Imports the animation data from a different animation to the current.
  */
 void animation_editor::import_animation_data(const string &name) {
@@ -342,7 +288,6 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
         cur_hitbox = &cur_sprite->hitboxes[0];
     }
     
-    update_cur_hitbox_tc();
     made_new_changes = true;
 }
 
@@ -357,10 +302,6 @@ void animation_editor::import_sprite_top_data(const string &name) {
     cur_sprite->top_size = s->top_size;
     cur_sprite->top_angle = s->top_angle;
     
-    top_tc.set_center(cur_sprite->top_pos);
-    top_tc.set_size(cur_sprite->top_size);
-    top_tc.set_angle(cur_sprite->top_angle);
-    
     made_new_changes = true;
 }
 
@@ -374,7 +315,6 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     cur_sprite->offset = s->offset;
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
-    update_cur_sprite_tc();
 }
 
 
@@ -517,7 +457,6 @@ void animation_editor::load() {
     can_save = false;
     loaded_content_yet = false;
     side_view = false;
-    cur_hitbox_tc.keep_aspect_ratio = true;
     change_state(EDITOR_STATE_MAIN);
     
     if(!auto_load_anim.empty()) {
@@ -1229,47 +1168,6 @@ void animation_editor::unload() {
     unload_spray_types();
     unload_status_types(false);
     unload_custom_particle_generators();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the current hitbox's transformation controller, based on whether
- * we're using the side view or not.
- */
-void animation_editor::update_cur_hitbox_tc() {
-    if(!cur_hitbox) return;
-    if(side_view) {
-        cur_hitbox_tc.set_center(
-            point(
-                cur_hitbox->pos.x,
-                (-(cur_hitbox->height / 2.0)) - cur_hitbox->z
-            )
-        );
-        cur_hitbox_tc.set_size(
-            point(cur_hitbox->radius * 2, cur_hitbox->height)
-        );
-    } else {
-        cur_hitbox_tc.set_center(cur_hitbox->pos);
-        cur_hitbox_tc.set_size(
-            point(cur_hitbox->radius * 2, cur_hitbox->radius * 2)
-        );
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the current sprite's transformation controller.
- */
-void animation_editor::update_cur_sprite_tc() {
-    if(!cur_sprite) return;
-    cur_sprite_tc.set_center(cur_sprite->offset);
-    cur_sprite_tc.set_size(
-        point(
-            cur_sprite->file_size.x * cur_sprite->scale.x,
-            cur_sprite->file_size.y * cur_sprite->scale.y
-        )
-    );
-    cur_sprite_tc.set_angle(cur_sprite->angle);
 }
 
 

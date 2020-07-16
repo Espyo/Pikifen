@@ -37,7 +37,6 @@ public:
     //Editor camera zoom before quick-play.
     float quick_play_cam_z;
     
-    
     //Standard functions.
     void do_logic();
     void do_drawing();
@@ -193,6 +192,7 @@ private:
     static const float         PATH_PREVIEW_TIMER_DUR;
     static const float         PATH_STOP_RADIUS;
     static const float         POINT_LETTER_TEXT_SCALE;
+    static const float         REFERENCE_MIN_SIZE;
     static const float         QUICK_PREVIEW_DURATION;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
@@ -222,6 +222,8 @@ private:
     string cur_area_name;
     //When showing a hazard in the list, this is the index of the current one.
     size_t cur_hazard_nr;
+    //The current transformation widget.
+    transformation_widget cur_transformation_widget;
     //Last known cursor snap position for heavy snap modes.
     point cursor_snap_cache;
     //Time left to update the cursor snap position for heavy snap modes.
@@ -330,12 +332,16 @@ private:
     timer quick_preview_timer;
     //Opacity of the reference image.
     unsigned char reference_alpha;
+    //Reference image center.
+    point reference_center;
+    //Reference image dimensions.
+    point reference_size;
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* reference_bitmap;
     //File name of the reference image.
     string reference_file_name;
-    //Current transformations on the reference image.
-    transformation_controller reference_transformation;
+    //Keep the aspect ratio when resizing the reference?
+    bool reference_keep_aspect_ratio;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -348,8 +354,8 @@ private:
     set<sector*> selected_sectors;
     //Currently selected tree shadow.
     tree_shadow* selected_shadow;
-    //Transformation controller of the selected tree shadow.
-    transformation_controller selected_shadow_transformation;
+    //Keep the aspect ratio of the currently selected shadow?
+    bool selected_shadow_keep_aspect_ratio;
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
     //Is the user currently performing a rectangle box?

@@ -819,39 +819,21 @@ void area_editor::process_gui_panel_details() {
                 ) {
                     register_change("tree shadow center change");
                     selected_shadow->center = shadow_center;
-                    selected_shadow_transformation.set_center(
-                        selected_shadow->center
-                    );
                 }
                 
                 //Tree shadow size value.
-                point shadow_size = selected_shadow->size;
-                if(
-                    ImGui::DragFloat2("Size", (float*) &shadow_size)
-                ) {
-                    register_change("tree shadow size change");
-                    if(selected_shadow_transformation.keep_aspect_ratio) {
-                        float ratio =
-                            selected_shadow->size.x / selected_shadow->size.y;
-                        if(shadow_size.x != selected_shadow->size.x) {
-                            shadow_size.y =
-                                shadow_size.x / ratio;
-                        } else {
-                            shadow_size.x =
-                                shadow_size.y * ratio;
-                        }
-                    }
-                    selected_shadow->size = shadow_size;
-                    selected_shadow_transformation.set_size(
-                        selected_shadow->size
-                    );
-                }
+                process_size_widgets(
+                    "Size", selected_shadow->size,
+                    1.0f, selected_shadow_keep_aspect_ratio,
+                    -FLT_MAX,
+                [this] () { register_change("tree shadow size change"); }
+                );
                 
                 //Tree shadow aspect ratio checkbox.
                 ImGui::Indent();
                 ImGui::Checkbox(
                     "Keep aspect ratio",
-                    &selected_shadow_transformation.keep_aspect_ratio
+                    &selected_shadow_keep_aspect_ratio
                 );
                 ImGui::Unindent();
                 set_tooltip("Keep the aspect ratio when resizing the image.");
@@ -861,9 +843,6 @@ void area_editor::process_gui_panel_details() {
                 if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
                     register_change("tree shadow angle change");
                     selected_shadow->angle = shadow_angle;
-                    selected_shadow_transformation.set_angle(
-                        selected_shadow->angle
-                    );
                 }
                 
                 //Tree shadow opacity value.
@@ -2555,39 +2534,20 @@ void area_editor::process_gui_panel_tools() {
         }
         
         //Reference center value.
-        point reference_center = reference_transformation.get_center();
-        if(
-            ImGui::DragFloat2("Center", (float*) &reference_center)
-        ) {
-            reference_transformation.set_center(
-                reference_center
-            );
-        }
+        ImGui::DragFloat2("Center", (float*) &reference_center);
         
         //Reference size value.
-        point old_size = reference_transformation.get_size();
-        point reference_size = old_size;
-        if(
-            ImGui::DragFloat2("Size", (float*) &reference_size)
-        ) {
-            if(reference_transformation.keep_aspect_ratio) {
-                float ratio = old_size.x / old_size.y;
-                if(reference_size.x != old_size.x) {
-                    reference_size.y =
-                        reference_size.x / ratio;
-                } else {
-                    reference_size.x =
-                        reference_size.y * ratio;
-                }
-            }
-            reference_transformation.set_size(reference_size);
-        }
+        process_size_widgets(
+            "Size", reference_size, 1.0f,
+            reference_keep_aspect_ratio,
+            REFERENCE_MIN_SIZE
+        );
         
         //Reference keep aspect ratio checkbox.
         ImGui::Indent();
         ImGui::Checkbox(
             "Keep aspect ratio",
-            &reference_transformation.keep_aspect_ratio
+            &reference_keep_aspect_ratio
         );
         ImGui::Unindent();
         set_tooltip("Keep the aspect ratio when resizing the image.");

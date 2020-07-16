@@ -243,7 +243,7 @@ void editor::draw_grid(
             al_draw_line(
                 x, cam_top_left_corner.y,
                 x, cam_bottom_right_corner.y + interval,
-                c, 1.0 / game.cam.zoom
+                c, 1.0f / game.cam.zoom
             );
         }
         x += interval;
@@ -269,7 +269,7 @@ void editor::draw_grid(
             al_draw_line(
                 cam_top_left_corner.x, y,
                 cam_bottom_right_corner.x + interval, y,
-                c, 1.0 / game.cam.zoom
+                c, 1.0f / game.cam.zoom
             );
         }
         y += interval;
@@ -982,6 +982,65 @@ void editor::process_mob_type_widgets(
 
 
 /* ----------------------------------------------------------------------------
+ * Process the width and height widgets that allow a user to
+ * specify the size of something.
+ * Returns true if the user changed one of the values.
+ * label:
+ *   Label for the widgets.
+ * size:
+ *   Size variable to alter.
+ * v_speed:
+ *   Variable change speed. Same value you'd pass to ImGui::DragFloat2.
+ *   1.0f for default.
+ * keep_aspect_ratio:
+ *   If true, changing one will change the other in the same ratio.
+ * min_size:
+ *   Minimum value that either width or height is allowed to have.
+ *   Use -FLT_MAX for none.
+ * pre_change_callback:
+ *   Callback to call when the width or height is changed, before it actually
+ *   changes.
+ */
+bool editor::process_size_widgets(
+    const char* label, point &size, const float v_speed,
+    const bool keep_aspect_ratio,
+    const float min_size,
+    const std::function<void()> &pre_change_callback
+) {
+    bool ret = false;
+    point new_size = size;
+    if(
+        ImGui::DragFloat2(label, (float*) &new_size, v_speed)
+    ) {
+        if(pre_change_callback) {
+            pre_change_callback();
+        }
+        
+        if(!keep_aspect_ratio) {
+            new_size.x = std::max(min_size, new_size.x);
+            new_size.y = std::max(min_size, new_size.y);
+        } else {
+            float ratio = size.x / size.y;
+            if(new_size.x != size.x) {
+                new_size.x = std::max(min_size * ratio, new_size.x);
+                new_size.x = std::max(min_size, new_size.x);
+                new_size.y = new_size.x / ratio;
+            } else {
+                new_size.x = std::max(min_size / ratio, new_size.y);
+                new_size.y = std::max(min_size, new_size.y);
+                new_size.x = new_size.y * ratio;
+            }
+        }
+        size = new_size;
+        
+        ret = true;
+    }
+    
+    return ret;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
  * based on the user's preferences. It also saves the user's preferences as
  * they open and close the node.
@@ -1270,159 +1329,182 @@ editor::picker_item::picker_item(
 }
 
 
-
-const float editor::transformation_controller::HANDLE_RADIUS = 6.0;
-const float editor::transformation_controller::ROTATION_HANDLE_THICKNESS = 8.0;
-
+const float editor::transformation_widget::DEF_SIZE = 32.0f;
+const float editor::transformation_widget::HANDLE_RADIUS = 6.0f;
+const float editor::transformation_widget::OUTLINE_THICKNESS = 2.0f;
+const float editor::transformation_widget::ROTATION_HANDLE_THICKNESS = 8.0f;
 
 /* ----------------------------------------------------------------------------
- * Creates a transformation controller.
+ * Creates a new transformation widget.
  */
-editor::transformation_controller::transformation_controller() :
+editor::transformation_widget::transformation_widget() :
     moving_handle(-1),
-    size(point(16, 16)),
-    angle(0),
-    keep_aspect_ratio(true),
-    allow_rotation(false) {
+    old_angle(0.0f),
+    old_mouse_angle(0.0f) {
     
 }
 
 
 /* ----------------------------------------------------------------------------
- * Draws the transformation (move, scale, rotate) handles.
+ * Draws the widget on-screen.
+ * center:
+ *   Center point.
+ * size:
+ *   Width and height. If NULL, no scale handles will be drawn.
+ * angle:
+ *   Angle. If NULL, the rotation handle will not be drawn.
+ * zoom:
+ *   Zoom the widget's components by this much.
  */
-void editor::transformation_controller::draw_handles() {
-    if(size.x == 0 || size.y == 0) return;
+void editor::transformation_widget::draw(
+    const point* const center, const point* const size,
+    const float* const angle, const float zoom
+) const {
+    if(!center) return;
     
-    //Rotation handle.
-    if(allow_rotation && !isnanf(radius)) {
+    point handles[9];
+    float radius;
+    get_locations(center, size, angle, handles, &radius, NULL);
+    
+    //Draw the rotation handle.
+    if(angle && !isnanf(radius)) {
         al_draw_circle(
-            center.x, center.y, radius,
-            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS / game.cam.zoom
+            center->x, center->y, radius,
+            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS * zoom
         );
     }
     
-    //Outline.
-    point corners[4];
-    corners[0] = point(-size.x / 2.0, -size.y / 2.0);
-    corners[1] = point(size.x / 2.0, -size.y / 2.0);
-    corners[2] = point(size.x / 2.0, size.y / 2.0);
-    corners[3] = point(-size.x / 2.0, size.y / 2.0);
-    for(unsigned char c = 0; c < 4; ++c) {
-        al_transform_coordinates(
-            &disalign_transform, &corners[c].x, &corners[c].y
-        );
-    }
+    //Draw the outline.
+    point corners[4] = {
+        handles[0],
+        handles[2],
+        handles[8],
+        handles[6],
+    };
     for(unsigned char c = 0; c < 4; ++c) {
         size_t c2 = sum_and_wrap(c, 1, 4);
         al_draw_line(
             corners[c].x, corners[c].y,
             corners[c2].x, corners[c2].y,
-            al_map_rgb(32, 32, 160), 2.0 / game.cam.zoom
+            al_map_rgb(32, 32, 160), OUTLINE_THICKNESS * zoom
         );
     }
     
-    //Translation and scale handles.
+    //Draw the translation and scale handles.
     for(unsigned char h = 0; h < 9; ++h) {
-        point handle_pos = get_handle_pos(h);
+        if(!size && h != 4) continue;
         al_draw_filled_circle(
-            handle_pos.x, handle_pos.y,
-            HANDLE_RADIUS / game.cam.zoom, al_map_rgb(96, 96, 224)
+            handles[h].x, handles[h].y,
+            HANDLE_RADIUS * zoom, al_map_rgb(96, 96, 224)
         );
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the angle.
+ * Returns the location of all handles, based on the information it
+ * was fed.
+ * center:
+ *   Center point.
+ * size:
+ *   Width and height. If NULL, the default size is used.
+ * angle:
+ *   Angle. If NULL, zero is used.
+ * handles:
+ *   Return the location of all nine translation and scale handles here.
+ * radius:
+ *   Return the angle handle's radius here.
+ * transform:
+ *   If not NULL, return the transformation used here.
+ *   The transformation will only rotate and translate, not scale.
  */
-float editor::transformation_controller::get_angle() const {
-    return angle;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the center.
- */
-point editor::transformation_controller::get_center() const {
-    return center;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the position at which a handle is.
- */
-point editor::transformation_controller::get_handle_pos(
-    const unsigned char handle
+void editor::transformation_widget::get_locations(
+    const point* const center, const point* const size,
+    const float* const angle, point* handles, float* radius,
+    ALLEGRO_TRANSFORM* transform
 ) const {
-    point result;
-    switch(handle) {
-    case 0:
-    case 3:
-    case 6: {
-        result.x = -size.x / 2.0;
-        break;
-    } case 2:
-    case 5:
-    case 8: {
-        result.x = size.x / 2.0;
-        break;
-    }
-    }
+    point size_to_use(DEF_SIZE, DEF_SIZE);
+    if(size) size_to_use = *size;
     
-    switch(handle) {
-    case 0:
-    case 1:
-    case 2: {
-        result.y = -size.y / 2.0;
-        break;
+    //First, the Allegro transformation.
+    ALLEGRO_TRANSFORM transform_to_use;
+    al_identity_transform(&transform_to_use);
+    if(angle) {
+        al_rotate_transform(&transform_to_use, *angle);
     }
-    case 6:
-    case 7:
-    case 8: {
-        result.y = size.y / 2.0;
-        break;
-    }
-    }
+    al_translate_transform(&transform_to_use, center->x, center->y);
     
-    al_transform_coordinates(&disalign_transform, &result.x, &result.y);
-    return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the size.
- */
-point editor::transformation_controller::get_size() const {
-    return size;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles a mouse press, allowing a handle to be grabbed.
- * Returns true if handled, false if nothing was done.
- */
-bool editor::transformation_controller::handle_mouse_down(const point pos) {
-    if(size.x == 0 || size.y == 0) return false;
+    //Get the coordinates of all translation and scale handles.
+    handles[0] = { -size_to_use.x / 2.0f, -size_to_use.y / 2.0f };
+    handles[1] = { 0.0f,                  -size_to_use.y / 2.0f };
+    handles[2] = { size_to_use.x / 2.0f,  -size_to_use.y / 2.0f };
+    handles[3] = { -size_to_use.x / 2.0f, 0.0f                  };
+    handles[4] = { 0.0f,                  0.0f                  };
+    handles[5] = { size_to_use.x / 2.0f,  0.0f                  };
+    handles[6] = { -size_to_use.x / 2.0f, size_to_use.y / 2.0f  };
+    handles[7] = { 0.0f,                  size_to_use.y / 2.0f  };
+    handles[8] = { size_to_use.x / 2.0f,  size_to_use.y / 2.0f  };
     
     for(unsigned char h = 0; h < 9; ++h) {
-        point handle_pos = get_handle_pos(h);
-        if(dist(handle_pos, pos) <= HANDLE_RADIUS / game.cam.zoom) {
-            moving_handle = h;
-            pre_move_size = size;
-            return true;
+        al_transform_coordinates(
+            &transform_to_use, &handles[h].x, &handles[h].y
+        );
+    }
+    
+    *radius = dist(point(), size_to_use).to_float() / 2.0f;
+    
+    if(transform) *transform = transform_to_use;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the user having held the left mouse button down.
+ * Returns true if the user did click on a handle.
+ * mouse_coords:
+ *   Mouse coordinates.
+ * center:
+ *   Center point.
+ * size:
+ *   Width and height. If NULL, no scale handling will be performed.
+ * angle:
+ *   Angle. If NULL, no rotation handling will be performed.
+ * zoom:
+ *   Zoom the widget's components by this much.
+ */
+bool editor::transformation_widget::handle_mouse_down(
+    const point &mouse_coords, const point* const center,
+    const point* const size, const float* const angle, const float zoom
+) {
+    if(!center) return false;
+    
+    point handles[9];
+    float radius;
+    get_locations(center, size, angle, handles, &radius, NULL);
+    
+    //Check if the user clicked on a translation or scale handle.
+    for(unsigned char h = 0; h < 9; ++h) {
+        if(dist(handles[h], mouse_coords) <= HANDLE_RADIUS * zoom) {
+            if(h == 4) {
+                moving_handle = h;
+                return true;
+            } else if(size) {
+                moving_handle = h;
+                old_size = *size;
+                return true;
+            }
         }
     }
     
-    if(allow_rotation) {
-        dist d(center, pos);
+    //Check if the user clicked on the rotation handle.
+    if(angle) {
+        dist d(*center, mouse_coords);
         if(
-            d >= radius - ROTATION_HANDLE_THICKNESS / game.cam.zoom / 2.0 &&
-            d <= radius + ROTATION_HANDLE_THICKNESS / game.cam.zoom / 2.0
+            d >= radius - ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
+            d <= radius + ROTATION_HANDLE_THICKNESS / 2.0f * zoom
         ) {
             moving_handle = 9;
-            pre_rotation_angle = angle;
-            pre_rotation_mouse_angle = ::get_angle(center, pos);
+            old_angle = *angle;
+            old_mouse_angle = get_angle(*center, mouse_coords);
             return true;
         }
     }
@@ -1432,49 +1514,78 @@ bool editor::transformation_controller::handle_mouse_down(const point pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles a mouse move, allowing a handle to be moved.
- * Returns true if handled, false if nothing was done.
+ * Handles the user having moved the mouse cursor.
+ * Returns true if the user is dragging a handle.
+ * mouse_coords:
+ *   Mouse coordinates.
+ * center:
+ *   Center point.
+ * size:
+ *   Width and height. If NULL, no scale handling will be performed.
+ * angle:
+ *   Angle. If NULL, no rotation handling will be performed.
+ * zoom:
+ *   Zoom the widget's components by this much.
+ * keep_aspect_ratio:
+ *   If true, aspect ratio is kept when resizing.
+ * min_size:
+ *   Minimum possible size for the width or height. Use -FLT_MAX for none.
  */
-bool editor::transformation_controller::handle_mouse_move(const point pos) {
+bool editor::transformation_widget::handle_mouse_move(
+    const point &mouse_coords, point* center, point* size, float* angle,
+    const float zoom, const bool keep_aspect_ratio, const float min_size
+) {
+    if(!center) return false;
+    
     if(moving_handle == -1) {
         return false;
     }
     
+    //Logic for moving the center handle.
     if(moving_handle == 4) {
-        set_center(pos);
+        *center = mouse_coords;
         return true;
     }
     
-    if(moving_handle == 9) {
-        set_angle(
-            pre_rotation_angle +
-            (::get_angle(center, pos) - pre_rotation_mouse_angle)
-        );
+    //Logic for moving the rotation handle.
+    if(moving_handle == 9 && angle) {
+        *angle =
+            old_angle +
+            get_angle(*center, mouse_coords) - old_mouse_angle;
         return true;
     }
     
-    point aligned_cursor_pos = pos;
-    al_transform_coordinates(
-        &align_transform,
-        &aligned_cursor_pos.x, &aligned_cursor_pos.y
-    );
-    point new_size = pre_move_size;
-    point aligned_new_center = center;
-    al_transform_coordinates(
-        &align_transform,
-        &aligned_new_center.x, &aligned_new_center.y
-    );
+    //From here on out, it's logic to move a scale handle.
+    if(!size) {
+        return false;
+    }
+    
+    ALLEGRO_TRANSFORM t;
+    point handles[9];
+    float radius;
+    get_locations(center, size, angle, handles, &radius, &t);
+    al_invert_transform(&t);
+    
+    point transformed_mouse = mouse_coords;
+    point transformed_center = *center;
+    point new_size = old_size;
+    al_transform_coordinates(&t, &transformed_mouse.x, &transformed_mouse.y);
+    al_transform_coordinates(&t, &transformed_center.x, &transformed_center.y);
+    bool scaling_x = false;
+    bool scaling_y = false;
     
     switch(moving_handle) {
     case 0:
     case 3:
     case 6: {
-        new_size.x = size.x / 2.0 - aligned_cursor_pos.x;
+        new_size.x = size->x / 2.0f - transformed_mouse.x;
+        scaling_x = true;
         break;
     } case 2:
     case 5:
     case 8: {
-        new_size.x = aligned_cursor_pos.x - (-size.x / 2.0);
+        new_size.x = transformed_mouse.x - (-size->x / 2.0f);
+        scaling_x = true;
         break;
     }
     }
@@ -1483,47 +1594,51 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
     case 0:
     case 1:
     case 2: {
-        new_size.y = (size.y / 2.0) - aligned_cursor_pos.y;
+        new_size.y = (size->y / 2.0f) - transformed_mouse.y;
+        scaling_y = true;
         break;
     } case 6:
     case 7:
     case 8: {
-        new_size.y = aligned_cursor_pos.y - (-size.y / 2.0);
+        new_size.y = transformed_mouse.y - (-size->y / 2.0f);
+        scaling_y = true;
         break;
     }
     }
     
-    if(keep_aspect_ratio) {
-        if(
-            fabs(pre_move_size.x - new_size.x) >
-            fabs(pre_move_size.y - new_size.y)
-        ) {
-            //Most significant change is width.
-            if(pre_move_size.x != 0) {
-                float ratio = pre_move_size.y / pre_move_size.x;
-                new_size.y = new_size.x * ratio;
-            }
-            
+    new_size.x = std::max(min_size, new_size.x);
+    new_size.y = std::max(min_size, new_size.y);
+    
+    if(keep_aspect_ratio && old_size.x != 0.0f && old_size.y != 0.0f) {
+        float scale_to_use;
+        float w_scale = new_size.x / old_size.x;
+        float h_scale = new_size.y / old_size.y;
+        if(!scaling_y) {
+            scale_to_use = w_scale;
+        } else if(!scaling_x) {
+            scale_to_use = h_scale;
         } else {
-            //Most significant change is height.
-            if(pre_move_size.y != 0) {
-                float ratio = pre_move_size.x / pre_move_size.y;
-                new_size.x = new_size.y * ratio;
+            if(fabs(w_scale) > fabs(h_scale)) {
+                scale_to_use = w_scale;
+            } else {
+                scale_to_use = h_scale;
             }
-            
         }
+        scale_to_use = std::max(min_size / old_size.x, scale_to_use);
+        scale_to_use = std::max(min_size / old_size.y, scale_to_use);
+        new_size = old_size * scale_to_use;
     }
     
     switch(moving_handle) {
     case 0:
     case 3:
     case 6: {
-        aligned_new_center.x = (size.x / 2.0) - new_size.x / 2.0;
+        transformed_center.x = (size->x / 2.0f) - new_size.x / 2.0f;
         break;
     } case 2:
     case 5:
     case 8: {
-        aligned_new_center.x = (-size.x / 2.0) + new_size.x / 2.0;
+        transformed_center.x = (-size->x / 2.0f) + new_size.x / 2.0f;
         break;
     }
     }
@@ -1532,75 +1647,36 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
     case 0:
     case 1:
     case 2: {
-        aligned_new_center.y = (size.y / 2.0) - new_size.y / 2.0;
+        transformed_center.y = (size->y / 2.0f) - new_size.y / 2.0f;
         break;
     } case 6:
     case 7:
     case 8: {
-        aligned_new_center.y = (-size.y / 2.0) + new_size.y / 2.0;
+        transformed_center.y = (-size->y / 2.0f) + new_size.y / 2.0f;
         break;
     }
     }
     
-    point new_center = aligned_new_center;
-    al_transform_coordinates(
-        &disalign_transform,
-        &new_center.x, &new_center.y
-    );
+    point new_center = transformed_center;
+    al_invert_transform(&t);
+    al_transform_coordinates(&t, &new_center.x, &new_center.y);
     
-    set_center(new_center);
-    set_size(new_size);
+    *center = new_center;
+    *size = new_size;
     
     return true;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles a mouse release, allowing a handle to be released.
+ * Handles the user having released the left mouse button.
+ * Returns true if the user stopped dragging a handle.
  */
-void editor::transformation_controller::handle_mouse_up() {
+bool editor::transformation_widget::handle_mouse_up() {
+    if(moving_handle == -1) {
+        return false;
+    }
+    
     moving_handle = -1;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the angle.
- */
-void editor::transformation_controller::set_angle(const float angle) {
-    this->angle = angle;
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the center.
- */
-void editor::transformation_controller::set_center(const point &center) {
-    this->center = center;
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the size.
- */
-void editor::transformation_controller::set_size(const point &size) {
-    this->size = size;
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the transformations to match the new data, as well as
- * some caches.
- */
-void editor::transformation_controller::update() {
-    al_identity_transform(&align_transform);
-    al_translate_transform(&align_transform, -center.x, -center.y);
-    al_rotate_transform(&align_transform, -angle);
-    
-    al_copy_transform(&disalign_transform, &align_transform);
-    al_invert_transform(&disalign_transform);
-    
-    radius = dist(center, center + (size / 2)).to_float();
+    return true;
 }

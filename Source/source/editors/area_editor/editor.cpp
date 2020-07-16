@@ -63,6 +63,8 @@ const float area_editor::PATH_STOP_RADIUS = 16.0f;
 const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Quick previewing lasts this long in total, including the fade out.
 const float area_editor::QUICK_PREVIEW_DURATION = 4.0f;
+//Minimum width or height that the reference image can have.
+const float area_editor::REFERENCE_MIN_SIZE = 5.0f;
 //Color of a selected element, or the selection box.
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
@@ -104,6 +106,7 @@ area_editor::area_editor() :
     quick_preview_timer(QUICK_PREVIEW_DURATION),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
+    selected_shadow_keep_aspect_ratio(false),
     selecting(false),
     selection_effect(0),
     selection_filter(SELECTION_FILTER_SECTORS),
@@ -130,8 +133,6 @@ area_editor::area_editor() :
         [this] () {save_backup();}
             );
     }
-    
-    selected_shadow_transformation.allow_rotation = true;
     
     zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
     zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
@@ -194,7 +195,6 @@ void area_editor::clear_circle_sector() {
  * Clears the currently loaded area data.
  */
 void area_editor::clear_current_area() {
-    reference_transformation.keep_aspect_ratio = true;
     reference_file_name.clear();
     update_reference();
     clear_selection();
@@ -1295,12 +1295,8 @@ void area_editor::load_reference() {
     
     if(file.file_was_opened) {
         reference_file_name = file.get_child_by_name("file")->value;
-        reference_transformation.set_center(
-            s2p(file.get_child_by_name("center")->value)
-        );
-        reference_transformation.set_size(
-            s2p(file.get_child_by_name("size")->value)
-        );
+        reference_center = s2p(file.get_child_by_name("center")->value);
+        reference_size = s2p(file.get_child_by_name("size")->value);
         reference_alpha =
             s2i(
                 file.get_child_by_name(
@@ -1310,8 +1306,8 @@ void area_editor::load_reference() {
             
     } else {
         reference_file_name.clear();
-        reference_transformation.set_center(point());
-        reference_transformation.set_size(point());
+        reference_center = point();
+        reference_size = point();
         reference_alpha = 0;
     }
     
@@ -2297,13 +2293,13 @@ void area_editor::save_reference() {
     reference_file.add(
         new data_node(
             "center",
-            p2s(reference_transformation.get_center())
+            p2s(reference_center)
         )
     );
     reference_file.add(
         new data_node(
             "size",
-            p2s(reference_transformation.get_size())
+            p2s(reference_size)
         )
     );
     reference_file.add(
@@ -2348,9 +2344,6 @@ void area_editor::select_sector(sector* s) {
  */
 void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
     selected_shadow = s_ptr;
-    selected_shadow_transformation.set_angle(s_ptr->angle);
-    selected_shadow_transformation.set_center(s_ptr->center);
-    selected_shadow_transformation.set_size(s_ptr->size);
     set_selection_status_text();
 }
 
@@ -3044,21 +3037,17 @@ void area_editor::update_reference() {
             load_bmp(reference_file_name, NULL, false, true, true, true);
             
         if(
-            reference_transformation.get_size().x == 0 ||
-            reference_transformation.get_size().y == 0
+            reference_size.x == 0 ||
+            reference_size.y == 0
         ) {
             //Let's assume this is a new reference. Reset sizes and alpha.
-            reference_transformation.set_size(
-                point(
-                    al_get_bitmap_width(reference_bitmap),
-                    al_get_bitmap_height(reference_bitmap)
-                )
-            );
+            reference_size.x = al_get_bitmap_width(reference_bitmap);
+            reference_size.y = al_get_bitmap_height(reference_bitmap);
             reference_alpha = DEF_REFERENCE_ALPHA;
         }
     } else {
-        reference_transformation.set_center(point());
-        reference_transformation.set_size(point());
+        reference_center = point();
+        reference_size = point();
     }
 }
 

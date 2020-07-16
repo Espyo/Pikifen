@@ -138,7 +138,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         "  Game state: " + game.get_cur_state_name() + ". delta_t: " +
         (
             game.delta_t == 0.0f ? "0" :
-            f2s(game.delta_t) + " (" + f2s(1 / game.delta_t) + " FPS)"
+            f2s(game.delta_t) + " (" + f2s(1.0f / game.delta_t) + " FPS)"
         ) + ".\n"
         "  Mob count: " + i2s(game.states.gameplay_st->mobs.all.size()) + ". Particle count: " +
         i2s(game.states.gameplay_st->particles.get_count()) + ".\n" +

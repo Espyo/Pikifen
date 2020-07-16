@@ -1504,14 +1504,6 @@ void animation_editor::process_gui_panel_sprite() {
         if(cur_sprite->bitmap) {
             //Sprite transformation button.
             if(ImGui::Button("Transformation", mode_buttons_size)) {
-                cur_sprite_tc.set_center(cur_sprite->offset);
-                cur_sprite_tc.set_size(
-                    point(
-                        cur_sprite->file_size.x * cur_sprite->scale.x,
-                        cur_sprite->file_size.y * cur_sprite->scale.y
-                    )
-                );
-                cur_sprite_tc.set_angle(cur_sprite->angle);
                 change_state(EDITOR_STATE_SPRITE_TRANSFORM);
             }
             set_tooltip(
@@ -1525,7 +1517,6 @@ void animation_editor::process_gui_panel_sprite() {
                 if(cur_sprite && !cur_sprite->hitboxes.empty()) {
                     cur_hitbox = &cur_sprite->hitboxes[0];
                     cur_hitbox_nr = 0;
-                    update_cur_hitbox_tc();
                     change_state(EDITOR_STATE_HITBOXES);
                 }
             }
@@ -1541,8 +1532,6 @@ void animation_editor::process_gui_panel_sprite() {
         
             //Sprite Pikmin top button.
             if(ImGui::Button("Pikmin top", mode_buttons_size)) {
-                top_tc.set_center(cur_sprite->top_pos);
-                top_tc.set_size(cur_sprite->top_size);
                 change_state(EDITOR_STATE_TOP);
             }
             set_tooltip(
@@ -1771,7 +1760,6 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
         }
-        update_cur_hitbox_tc();
     }
     set_tooltip(
         "Select the previous hitbox."
@@ -1795,7 +1783,6 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
         }
-        update_cur_hitbox_tc();
     }
     set_tooltip(
         "Select the next hitbox."
@@ -1840,10 +1827,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     ImGui::Dummy(ImVec2(0, 16));
     
     //Side view checkbox.
-    if(ImGui::Checkbox("Use side view", &side_view)) {
-        update_cur_hitbox_tc();
-        cur_hitbox_tc.keep_aspect_ratio = !side_view;
-    }
+    ImGui::Checkbox("Use side view", &side_view);
     set_tooltip(
         "Use a side view of the object, so you can adjust hitboxes "
         "horizontally."
@@ -1852,7 +1836,6 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(cur_hitbox) {
         //Hitbox center value.
         if(ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.05f)) {
-            update_cur_hitbox_tc();
             made_new_changes = true;
         }
         
@@ -1862,13 +1845,12 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 "Radius", &cur_hitbox->radius, 0.05f, 0.001f, FLT_MAX
             )
         ) {
-            update_cur_hitbox_tc();
             made_new_changes = true;
         }
+        cur_hitbox->radius = std::max(HITBOX_MIN_RADIUS, cur_hitbox->radius);
         
         //Hitbox Z value.
         if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
-            update_cur_hitbox_tc();
             made_new_changes = true;
         }
         set_tooltip(
@@ -1878,12 +1860,12 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(
             ImGui::DragFloat("Height", &cur_hitbox->height, 0.1f, 0.0f, FLT_MAX)
         ) {
-            update_cur_hitbox_tc();
             made_new_changes = true;
         }
         set_tooltip(
             "Hitbox's height. 0 = spans infinitely vertically."
         );
+        cur_hitbox->height = std::max(0.0f, cur_hitbox->height);
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
@@ -2076,9 +2058,6 @@ void animation_editor::process_gui_panel_sprite_top() {
             )
         ) {
             import_sprite_top_data(picked_sprite);
-            top_tc.set_center(cur_sprite->top_pos);
-            top_tc.set_size(cur_sprite->top_size);
-            top_tc.set_angle(cur_sprite->top_angle);
             status_text =
                 "Imported Pikmin top data from \"" + picked_sprite + "\".";
         }
@@ -2102,38 +2081,27 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.05f)
         ) {
-            top_tc.set_center(cur_sprite->top_pos);
             made_new_changes = true;
         }
         
         //Top size value.
-        point top_size = cur_sprite->top_size;
         if(
-            ImGui::DragFloat2("Size", (float*) &top_size, 0.01f)
+            process_size_widgets(
+                "Size", cur_sprite->top_size, 0.01f,
+                top_keep_aspect_ratio, TOP_MIN_SIZE
+            )
         ) {
-            if(top_tc.keep_aspect_ratio) {
-                float ratio =
-                    cur_sprite->top_size.x / cur_sprite->top_size.y;
-                if(top_size.x != cur_sprite->top_size.x) {
-                    top_size.y = top_size.x / ratio;
-                } else {
-                    top_size.x = top_size.y * ratio;
-                }
-            }
-            cur_sprite->top_size = top_size;
-            top_tc.set_size(cur_sprite->top_size);
             made_new_changes = true;
         }
         
         //Keep aspect ratio checkbox.
         ImGui::Indent();
-        ImGui::Checkbox("Keep aspect ratio", &top_tc.keep_aspect_ratio);
+        ImGui::Checkbox("Keep aspect ratio", &top_keep_aspect_ratio);
         ImGui::Unindent();
         set_tooltip("Keep the aspect ratio when resizing the top.");
         
         //Top angle value.
         if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
-            top_tc.set_angle(cur_sprite->top_angle);
             made_new_changes = true;
         }
         
@@ -2196,7 +2164,6 @@ void animation_editor::process_gui_panel_sprite_transform() {
             )
         ) {
             import_sprite_transformation_data(picked_sprite);
-            update_cur_sprite_tc();
             status_text =
                 "Imported transformation data from \"" + picked_sprite + "\".";
         }
@@ -2210,26 +2177,19 @@ void animation_editor::process_gui_panel_sprite_transform() {
     if(
         ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.05f)
     ) {
-        update_cur_sprite_tc();
         made_new_changes = true;
     }
     
     //Sprite scale value.
-    point sprite_scale = cur_sprite->scale;
     if(
-        ImGui::DragFloat2("Scale", (float*) &sprite_scale, 0.005f)
+        process_size_widgets(
+            "Scale",
+            cur_sprite->scale,
+            0.005f,
+            cur_sprite_keep_aspect_ratio,
+            -FLT_MAX
+        )
     ) {
-        if(cur_sprite_tc.keep_aspect_ratio) {
-            float ratio =
-                cur_sprite->scale.x / cur_sprite->scale.y;
-            if(sprite_scale.x != cur_sprite->scale.x) {
-                sprite_scale.y = sprite_scale.x / ratio;
-            } else {
-                sprite_scale.x = sprite_scale.y * ratio;
-            }
-        }
-        cur_sprite->scale = sprite_scale;
-        update_cur_sprite_tc();
         made_new_changes = true;
     }
     
@@ -2239,7 +2199,6 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip X")
     ) {
         cur_sprite->scale.x *= -1.0f;
-        update_cur_sprite_tc();
         made_new_changes = true;
     }
     
@@ -2249,18 +2208,16 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip Y")
     ) {
         cur_sprite->scale.y *= -1.0f;
-        update_cur_sprite_tc();
         made_new_changes = true;
     }
     
     //Keep aspect ratio checkbox.
-    ImGui::Checkbox("Keep aspect ratio", &cur_sprite_tc.keep_aspect_ratio);
+    ImGui::Checkbox("Keep aspect ratio", &cur_sprite_keep_aspect_ratio);
     ImGui::Unindent();
     set_tooltip("Keep the aspect ratio when resizing the sprite.");
     
     //Sprite angle value.
     if(ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f)) {
-        update_cur_sprite_tc();
         made_new_changes = true;
     }
     

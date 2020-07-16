@@ -1352,7 +1352,7 @@ void gameplay::draw_system_stuff() {
  */
 ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     //First, get the full dimensions of the map.
-    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
+    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
     
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
@@ -2021,8 +2021,8 @@ void draw_liquid(
             &tra,
             -s_ptr->texture_info.translation.x,
             -s_ptr->texture_info.translation.y,
-            1.0 / s_ptr->texture_info.scale.x,
-            1.0 / s_ptr->texture_info.scale.y,
+            1.0f / s_ptr->texture_info.scale.x,
+            1.0f / s_ptr->texture_info.scale.y,
             -s_ptr->texture_info.rot
         );
         
@@ -2450,7 +2450,7 @@ void draw_notification(
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
     al_translate_transform(&tra, target.x * game.cam.zoom, target.y * game.cam.zoom);
-    al_scale_transform(&tra, 1.0 / game.cam.zoom, 1.0 / game.cam.zoom);
+    al_scale_transform(&tra, 1.0f / game.cam.zoom, 1.0f / game.cam.zoom);
     al_copy_transform(&old, al_get_current_transform());
     al_compose_transform(&tra, &old);
     al_use_transform(&tra);
@@ -2937,8 +2937,8 @@ void draw_sector_texture(
                 &tra,
                 -texture_info_to_use->translation.x,
                 -texture_info_to_use->translation.y,
-                1.0 / texture_info_to_use->scale.x,
-                1.0 / texture_info_to_use->scale.y,
+                1.0f / texture_info_to_use->scale.x,
+                1.0f / texture_info_to_use->scale.y,
                 -texture_info_to_use->rot
             );
         }

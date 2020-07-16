@@ -99,39 +99,52 @@ protected:
     };
     
     
-    struct transformation_controller {
+    /*
+     * A widget that's drawn on-screen, and with handles that the user
+     * can drag in order to translate, scale, or rotate something.
+     * The transformation properties are not tied to anything, and are
+     * meant to be fed into the widget's functions so it can edit them.
+     */
+    struct transformation_widget {
     public:
-        bool keep_aspect_ratio;
-        bool allow_rotation;
+        void draw(
+            const point* const center, const point* const size,
+            const float* const angle, const float zoom = 1.0f
+        ) const;
+        bool handle_mouse_down(
+            const point &mouse_coords, const point* const center,
+            const point* const size, const float* const angle,
+            const float zoom = 1.0f
+        );
+        bool handle_mouse_move(
+            const point &mouse_coords, point* center, point* size, float* angle,
+            const float zoom = 1.0f,
+            const bool keep_aspect_ratio = false,
+            const float min_size = -FLT_MAX
+        );
+        bool handle_mouse_up();
         
-        void draw_handles();
-        bool handle_mouse_down(const point pos);
-        void handle_mouse_up();
-        bool handle_mouse_move(const point pos);
-        point get_center() const;
-        point get_size() const;
-        float get_angle() const;
-        void set_center(const point &center);
-        void set_size(const point &size);
-        void set_angle(const float angle);
-        transformation_controller();
-        
+        transformation_widget();
     private:
+        static const float DEF_SIZE;
         static const float HANDLE_RADIUS;
+        static const float OUTLINE_THICKNESS;
         static const float ROTATION_HANDLE_THICKNESS;
-        signed char moving_handle;
-        point center;
-        point size;
-        float angle;
-        ALLEGRO_TRANSFORM align_transform;
-        ALLEGRO_TRANSFORM disalign_transform;
-        float radius;
-        point pre_move_size;
-        float pre_rotation_angle;
-        float pre_rotation_mouse_angle;
-        point get_handle_pos(const unsigned char handle) const;
-        void update();
         
+        //What handle is being moved. -1 for none. 9 for the rotation handle.
+        signed char moving_handle;
+        //Old size, before the user started dragging handles.
+        point old_size;
+        //Old angle, before the user started dragging handles.
+        float old_angle;
+        //Before rotation began, the mouse made this angle with the center.
+        float old_mouse_angle;
+        
+        void get_locations(
+            const point* const center, const point* const size,
+            const float* const angle, point* points, float* radius,
+            ALLEGRO_TRANSFORM* transform
+        ) const;
     };
     
     class dialog_info {
@@ -280,6 +293,11 @@ protected:
         const bool only_show_area_editor_types,
         const std::function<void()> &category_change_callback = nullptr,
         const std::function<void()> &type_change_callback = nullptr
+    );
+    bool process_size_widgets(
+        const char* label, point &size, const float v_speed,
+        const bool keep_aspect_ratio, const float min_size,
+        const std::function<void()> &pre_change_callback = nullptr
     );
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);

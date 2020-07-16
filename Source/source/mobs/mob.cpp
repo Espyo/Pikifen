@@ -653,7 +653,7 @@ bool mob::calculate_damage(
                 *damage = 0;
                 return true;
             } else {
-                defense_multiplier = 1.0 / max_vulnerability;
+                defense_multiplier = 1.0f / max_vulnerability;
             }
             
         } else {
@@ -663,7 +663,7 @@ bool mob::calculate_damage(
                 *damage = 0;
                 return true;
             } else {
-                defense_multiplier = 1.0 / victim->type->default_vulnerability;
+                defense_multiplier = 1.0f / victim->type->default_vulnerability;
             }
         }
         
@@ -686,7 +686,7 @@ bool mob::calculate_damage(
         defense_multiplier *= victim->statuses[s].type->defense_multiplier;
     }
     
-    *damage = attacker_offense * (1.0 / defense_multiplier);
+    *damage = attacker_offense * (1.0f / defense_multiplier);
     return true;
 }
 

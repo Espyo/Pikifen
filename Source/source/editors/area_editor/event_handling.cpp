@@ -1028,17 +1028,13 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             bool transformation_handled = false;
             if(selected_shadow) {
                 transformation_handled =
-                    selected_shadow_transformation.handle_mouse_down(
-                        game.mouse_cursor_w
+                    cur_transformation_widget.handle_mouse_down(
+                        game.mouse_cursor_w,
+                        &selected_shadow->center,
+                        &selected_shadow->size,
+                        &selected_shadow->angle,
+                        1.0f / game.cam.zoom
                     );
-                if(transformation_handled) {
-                    selected_shadow->angle =
-                        selected_shadow_transformation.get_angle();
-                    selected_shadow->center =
-                        selected_shadow_transformation.get_center();
-                    selected_shadow->size =
-                        selected_shadow_transformation.get_size();
-                }
             }
             
             if(!transformation_handled) {
@@ -1077,7 +1073,13 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } case EDITOR_STATE_TOOLS: {
 
         if(reference_bitmap) {
-            reference_transformation.handle_mouse_down(game.mouse_cursor_w);
+            cur_transformation_widget.handle_mouse_down(
+                game.mouse_cursor_w,
+                &reference_center,
+                &reference_size,
+                NULL,
+                1.0f / game.cam.zoom
+            );
         }
         
         break;
@@ -1408,21 +1410,20 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 if(selected_shadow) {
                     area_data* prepared_state = prepare_state();
                     if(
-                        !selected_shadow_transformation.handle_mouse_move(
-                            snap_point(game.mouse_cursor_w)
+                        !cur_transformation_widget.handle_mouse_move(
+                            snap_point(game.mouse_cursor_w),
+                            &selected_shadow->center,
+                            &selected_shadow->size,
+                            &selected_shadow->angle,
+                            1.0f / game.cam.zoom,
+                            selected_shadow_keep_aspect_ratio,
+                            -FLT_MAX
                         )
                     ) {
                         forget_prepared_state(prepared_state);
                     } else {
                         register_change("tree shadow transformation", prepared_state);
                     }
-                    selected_shadow->angle =
-                        selected_shadow_transformation.get_angle();
-                    selected_shadow->center =
-                        selected_shadow_transformation.get_center();
-                    selected_shadow->size =
-                        selected_shadow_transformation.get_size();
-                        
                 }
             }
             
@@ -1431,8 +1432,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         } case EDITOR_STATE_TOOLS: {
     
             //Move reference handle.
-            reference_transformation.handle_mouse_move(
-                snap_point(game.mouse_cursor_w)
+            cur_transformation_widget.handle_mouse_move(
+                snap_point(game.mouse_cursor_w),
+                &reference_center,
+                &reference_size,
+                NULL,
+                1.0f / game.cam.zoom,
+                reference_keep_aspect_ratio,
+                5.0f
             );
             
             break;
@@ -1474,12 +1481,12 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_DETAILS: {
         if(selected_shadow) {
-            selected_shadow_transformation.handle_mouse_up();
+            cur_transformation_widget.handle_mouse_up();
         }
         break;
         
     } case EDITOR_STATE_TOOLS: {
-        reference_transformation.handle_mouse_up();
+        cur_transformation_widget.handle_mouse_up();
         break;
     }
     }
