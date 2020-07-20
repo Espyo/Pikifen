@@ -476,6 +476,20 @@ void area_editor::draw_canvas() {
         }
     }
     
+    //Selection transformation widget.
+    if(
+        game.options.area_editor_sel_trans &&
+        selected_vertexes.size() >= 2 &&
+        (!moving || cur_transformation_widget.is_moving_handle())
+    ) {
+        cur_transformation_widget.draw(
+            &selection_center,
+            &selection_size,
+            &selection_angle,
+            1.0f / game.cam.zoom
+        );
+    }
+    
     //Mobs.
     if(state == EDITOR_STATE_MOBS) {
         for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {

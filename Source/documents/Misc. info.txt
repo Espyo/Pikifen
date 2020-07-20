@@ -116,9 +116,10 @@ Bag of notes (useful stuff)
             If the user starts stitching by grabbing only one vertex, it'll complain that a sector is cut up
             There should be a clear way to communicate that you can't drag a sector into another...
             On the area editor, two triangular sectors, facing one another, sharing the middle vertex (like an hourglass lying down). The right triangle should be then turned into a rhombus, by adding a new vertex slightly above the joining vertex. Finally, drag the left triangle's top-left vertex and drop it in the top line. It will let you do so despite crossing lines. I have no idea how to solve this (January 2018)
+            Dragging a sector entirely outside of its parent sector is allowed, and there isn't a whole lot the engine can do to detect this...
         Conclusions
             Looks like there are only four ways for a new polygon (N) to be related to any existing polygon (E): N is parent of E, N is child of E, N is neighbor of E, or N is not connected to E
-            A sector can only be empty, have X holes, or be the void
+            A sector can only have no holes, have 1+ holes, or be the void
         Stuff me and others don't like about the Smash 4 stage creator
             If you mistap while creating a polygon, it can close off the entire thing; this is extra cumbersome for long polygons
             Creating a polygon next to another makes one of them go further above or below in the Z axis, which can look very awkward

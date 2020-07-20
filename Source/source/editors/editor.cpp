@@ -1680,3 +1680,11 @@ bool editor::transformation_widget::handle_mouse_up() {
     moving_handle = -1;
     return true;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Is the user currently moving a handle?
+ */
+bool editor::transformation_widget::is_moving_handle() {
+    return (moving_handle != -1);
+}

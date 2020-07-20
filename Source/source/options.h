@@ -27,6 +27,7 @@ struct options_struct {
 
     static const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
     static const float DEF_AREA_EDITOR_GRID_INTERVAL;
+    static const bool DEF_AREA_EDITOR_SEL_TRANS;
     static const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
     static const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
     static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
@@ -54,6 +55,8 @@ struct options_struct {
     float area_editor_backup_interval;
     //Grid interval in the area editor, in units.
     float area_editor_grid_interval;
+    //Can the user transform the selected vertexes?
+    bool area_editor_sel_trans;
     //Show the length of an edge that's being drawn?
     bool area_editor_show_edge_length;
     //Show the selected mob(s)'s territory?

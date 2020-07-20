@@ -618,6 +618,15 @@ void area_editor::process_gui_options_dialog() {
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
     
+        //Selection transformation checkbox.
+        ImGui::Checkbox(
+            "Selection transformation", &game.options.area_editor_sel_trans
+        );
+        set_tooltip(
+            "If true, when you select two or more vertexes, some handles\n"
+            "will appear, allowing you to scale or rotate them together."
+        );
+        
         //Grid interval text.
         ImGui::Text(
             "Grid interval: %i", (int) game.options.area_editor_grid_interval

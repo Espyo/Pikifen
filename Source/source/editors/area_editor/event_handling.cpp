@@ -310,6 +310,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                     );
                 }
             }
+            update_vertex_selection();
             set_selection_status_text();
         }
         break;
@@ -452,6 +453,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
                     split_edge(clicked_edge, game.mouse_cursor_w);
                 clear_selection();
                 selected_vertexes.insert(new_vertex);
+                update_vertex_selection();
             }
         }
         
@@ -600,67 +602,86 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
         } case EDITOR_SUB_STATE_NONE: {
     
-            //Start a new layout selection or select something.
-            bool start_new_selection = true;
-            
-            vertex* clicked_vertex = NULL;
-            edge* clicked_edge = NULL;
-            sector* clicked_sector = NULL;
-            get_clicked_layout_element(
-                &clicked_vertex, &clicked_edge, &clicked_sector
-            );
-            
-            if(!is_shift_pressed) {
-                if(clicked_vertex || clicked_edge || clicked_sector) {
-                    start_new_selection = false;
-                }
-                
+            bool tw_handled = false;
+            if(
+                game.options.area_editor_sel_trans &&
+                selected_vertexes.size() >= 2
+            ) {
+                tw_handled =
+                    cur_transformation_widget.handle_mouse_down(
+                        game.mouse_cursor_w,
+                        &selection_center,
+                        &selection_size,
+                        &selection_angle,
+                        1.0f / game.cam.zoom
+                    );
             }
             
-            if(start_new_selection) {
-                clear_selection();
-                selecting = true;
-                selection_start = game.mouse_cursor_w;
-                selection_end = game.mouse_cursor_w;
-                
-            } else {
+            if(!tw_handled) {
             
-                if(clicked_vertex) {
-                    if(
-                        selected_vertexes.find(clicked_vertex) ==
-                        selected_vertexes.end()
-                    ) {
-                        if(!is_ctrl_pressed) {
-                            clear_selection();
-                        }
-                        select_vertex(clicked_vertex);
+                //Start a new layout selection or select something.
+                bool start_new_selection = true;
+                
+                vertex* clicked_vertex = NULL;
+                edge* clicked_edge = NULL;
+                sector* clicked_sector = NULL;
+                get_clicked_layout_element(
+                    &clicked_vertex, &clicked_edge, &clicked_sector
+                );
+                
+                if(!is_shift_pressed) {
+                    if(clicked_vertex || clicked_edge || clicked_sector) {
+                        start_new_selection = false;
                     }
-                } else if(clicked_edge) {
-                    if(
-                        selected_edges.find(clicked_edge) ==
-                        selected_edges.end()
-                    ) {
-                        if(!is_ctrl_pressed) {
-                            clear_selection();
-                        }
-                        select_edge(clicked_edge);
-                    }
+                    
+                }
+                
+                if(start_new_selection) {
+                    clear_selection();
+                    selecting = true;
+                    selection_start = game.mouse_cursor_w;
+                    selection_end = game.mouse_cursor_w;
+                    
                 } else {
-                    if(
-                        selected_sectors.find(clicked_sector) ==
-                        selected_sectors.end()
-                    ) {
-                        if(!is_ctrl_pressed) {
-                            clear_selection();
+                
+                    if(clicked_vertex) {
+                        if(
+                            selected_vertexes.find(clicked_vertex) ==
+                            selected_vertexes.end()
+                        ) {
+                            if(!is_ctrl_pressed) {
+                                clear_selection();
+                            }
+                            select_vertex(clicked_vertex);
                         }
-                        select_sector(clicked_sector);
+                    } else if(clicked_edge) {
+                        if(
+                            selected_edges.find(clicked_edge) ==
+                            selected_edges.end()
+                        ) {
+                            if(!is_ctrl_pressed) {
+                                clear_selection();
+                            }
+                            select_edge(clicked_edge);
+                        }
+                    } else {
+                        if(
+                            selected_sectors.find(clicked_sector) ==
+                            selected_sectors.end()
+                        ) {
+                            if(!is_ctrl_pressed) {
+                                clear_selection();
+                            }
+                            select_sector(clicked_sector);
+                        }
                     }
+                    
                 }
                 
+                selection_homogenized = false;
+                set_selection_status_text();
+                
             }
-            
-            selection_homogenized = false;
-            set_selection_status_text();
             
             break;
             
@@ -1140,6 +1161,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     selected_vertexes.insert(v_ptr);
                 }
             }
+            update_vertex_selection();
             
             if(selection_filter != SELECTION_FILTER_VERTEXES) {
                 for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -1270,7 +1292,56 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
     
+            bool tw_handled = false;
             if(
+                game.options.area_editor_sel_trans &&
+                selected_vertexes.size() >= 2
+            ) {
+                tw_handled =
+                    cur_transformation_widget.handle_mouse_move(
+                        snap_point(game.mouse_cursor_w),
+                        &selection_center,
+                        &selection_size,
+                        &selection_angle,
+                        1.0f / game.cam.zoom,
+                        false,
+                        SELECTION_TW_PADDING * 2.0f
+                    );
+                if(tw_handled) {
+                    if(!moving) {
+                        start_vertex_move();
+                    }
+                    
+                    ALLEGRO_TRANSFORM t;
+                    al_identity_transform(&t);
+                    al_scale_transform(
+                        &t,
+                        selection_size.x / selection_orig_size.x,
+                        selection_size.y / selection_orig_size.y
+                    );
+                    al_translate_transform(
+                        &t,
+                        selection_center.x - selection_orig_center.x,
+                        selection_center.y - selection_orig_center.y
+                    );
+                    al_rotate_transform(
+                        &t,
+                        selection_angle - selection_orig_angle
+                    );
+                    
+                    for(vertex* v : selected_vertexes) {
+                        point p = pre_move_vertex_coords[v];
+                        p -= selection_orig_center;
+                        al_transform_coordinates(&t, &p.x, &p.y);
+                        p += selection_orig_center;
+                        v->x = p.x;
+                        v->y = p.y;
+                    }
+                }
+            }
+            
+            if(
+                !tw_handled &&
                 !selected_vertexes.empty() &&
                 sub_state == EDITOR_SUB_STATE_NONE
             ) {
@@ -1283,13 +1354,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 point closest_vertex_new_p =
                     snap_point(move_closest_vertex_start_pos + mouse_offset);
                 point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
-                for(
-                    auto v = selected_vertexes.begin();
-                    v != selected_vertexes.end(); ++v
-                ) {
-                    point orig = pre_move_vertex_coords[*v];
-                    (*v)->x = orig.x + offset.x;
-                    (*v)->y = orig.y + offset.y;
+                for(vertex* v : selected_vertexes) {
+                    point orig = pre_move_vertex_coords[v];
+                    v->x = orig.x + offset.x;
+                    v->y = orig.y + offset.y;
                 }
                 
             } else if(
@@ -1478,18 +1546,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         moving = false;
     }
     
-    switch(state) {
-    case EDITOR_STATE_DETAILS: {
-        if(selected_shadow) {
-            cur_transformation_widget.handle_mouse_up();
-        }
-        break;
-        
-    } case EDITOR_STATE_TOOLS: {
-        cur_transformation_widget.handle_mouse_up();
-        break;
-    }
-    }
+    cur_transformation_widget.handle_mouse_up();
     
     moving_path_preview_checkpoint = -1;
     moving_cross_section_point = -1;

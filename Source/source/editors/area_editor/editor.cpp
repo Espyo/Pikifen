@@ -69,6 +69,8 @@ const float area_editor::REFERENCE_MIN_SIZE = 5.0f;
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float area_editor::SELECTION_EFFECT_SPEED = TAU * 2;
+//Padding for the transformation widget when manipulating the selection.
+const float area_editor::SELECTION_TW_PADDING = 8.0f;
 //Wait this long before letting a new repeat undo operation be saved.
 const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
@@ -108,8 +110,10 @@ area_editor::area_editor() :
     selected_shadow(nullptr),
     selected_shadow_keep_aspect_ratio(false),
     selecting(false),
-    selection_effect(0),
+    selection_angle(0.0f),
+    selection_effect(0.0f),
     selection_filter(SELECTION_FILTER_SECTORS),
+    selection_orig_angle(0.0f),
     show_closest_stop(false),
     show_path_preview(false),
     show_reference(true),
@@ -661,8 +665,9 @@ void area_editor::finish_layout_moving() {
         }
     }
     
-    //Before moving on and making changes, let's check for crossing edges,
-    //but removing all of the ones that come from edge splits or vertex merges.
+    //Before moving on and making changes, check if the move causes problems.
+    //Start by checking all crossing edges, but removing all of the ones that
+    //come from edge splits or vertex merges.
     vector<edge_intersection> intersections =
         get_intersecting_edges();
     for(auto &m : merges) {
@@ -2354,6 +2359,7 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
 void area_editor::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
     set_selection_status_text();
+    update_vertex_selection();
 }
 
 
@@ -3111,6 +3117,32 @@ void area_editor::update_undo_history() {
     while(undo_history.size() > game.options.area_editor_undo_limit) {
         undo_history.pop_back();
     };
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the selection transformation widget's information, since
+ * a new vertex was just selected.
+ */
+void area_editor::update_vertex_selection() {
+    point sel_tl(FLT_MAX, FLT_MAX);
+    point sel_br(-FLT_MAX, -FLT_MAX);
+    for(vertex* v : selected_vertexes) {
+        sel_tl.x = std::min(sel_tl.x, v->x);
+        sel_tl.y = std::min(sel_tl.y, v->y);
+        sel_br.x = std::max(sel_br.x, v->x);
+        sel_br.y = std::max(sel_br.y, v->y);
+    }
+    sel_tl.x -= SELECTION_TW_PADDING;
+    sel_tl.y -= SELECTION_TW_PADDING;
+    sel_br.x += SELECTION_TW_PADDING;
+    sel_br.y += SELECTION_TW_PADDING;
+    selection_center = (sel_br + sel_tl) / 2.0f;
+    selection_size = sel_br - sel_tl;
+    selection_angle = 0.0f;
+    selection_orig_center = selection_center;
+    selection_orig_size = selection_size;
+    selection_orig_angle = selection_angle;
 }
 
 

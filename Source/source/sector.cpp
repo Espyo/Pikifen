@@ -1933,13 +1933,41 @@ bool vertex::is_2nd_degree_neighbor(
     vertex* other_v, vertex** first_neighbor
 ) const {
     //Let's crawl forward through all edges and stop at the second level.
-    //If there is any other_v at that distance, then we found it!
+    //If other_v is at that distance, then we found it!
     
     for(size_t e1 = 0; e1 < edges.size(); ++e1) {
         vertex* next_v = edges[e1]->get_other_vertex(this);
         
         for(size_t e2 = 0; e2 < next_v->edges.size(); ++e2) {
             if(next_v->edges[e2]->get_other_vertex(next_v) == other_v) {
+                *first_neighbor = next_v;
+                return true;
+            }
+        }
+        
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not this vertex is a second-degree neighbor to the
+ * specified edge. i.e. one of the vertex's neighbors is used by the edge.
+ * other_e:        The edge to compare against.
+ * first_neighbor: Return the common neighbor between them here,
+ *   if the result is true.
+ */
+bool vertex::is_2nd_degree_neighbor(
+    edge* other_e, vertex** first_neighbor
+) const {
+    //Let's crawl forward through all edges and stop at the second level.
+    //If other_e is at that distance, then we found it!
+    
+    for(size_t e1 = 0; e1 < edges.size(); ++e1) {
+        vertex* next_v = edges[e1]->get_other_vertex(this);
+        
+        for(size_t e2 = 0; e2 < next_v->edges.size(); ++e2) {
+            if(next_v->edges[e2] == other_e) {
                 *first_neighbor = next_v;
                 return true;
             }
@@ -2435,7 +2463,7 @@ TRIANGULATION_ERRORS get_polys(
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
                     if(prev_edge) {
-                        lone_edges->insert(prev_edge);
+                        if(lone_edges) lone_edges->insert(prev_edge);
                     }
                     result = TRIANGULATION_ERROR_LONE_EDGES;
                 }

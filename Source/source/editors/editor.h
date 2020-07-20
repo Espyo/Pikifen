@@ -123,6 +123,7 @@ protected:
             const float min_size = -FLT_MAX
         );
         bool handle_mouse_up();
+        bool is_moving_handle();
         
         transformation_widget();
     private:

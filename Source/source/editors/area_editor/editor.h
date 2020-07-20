@@ -196,6 +196,7 @@ private:
     static const float         QUICK_PREVIEW_DURATION;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
+    static const float         SELECTION_TW_PADDING;
     static const float         UNDO_SAVE_LOCK_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
@@ -366,8 +367,20 @@ private:
     point selection_end;
     //Current selection filter.
     unsigned char selection_filter;
+    //Angle of the selection.
+    float selection_angle;
+    //Center of the selection.
+    point selection_center;
     //Has the user agreed to homogenize the selection?
     bool selection_homogenized;
+    //Angle of the selection, before it got transformed.
+    float selection_orig_angle;
+    //Center of the selection, before it got transformed.
+    point selection_orig_center;
+    //Size of the selection, before it got transformed.
+    point selection_orig_size;
+    //Size of the selection, padding included.
+    point selection_size;
     //Point where the selection started.
     point selection_start;
     //Show the path stop closest to the cursor?
@@ -598,6 +611,7 @@ private:
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
+    void update_vertex_selection();
     
     //Input handler functions.
     void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);

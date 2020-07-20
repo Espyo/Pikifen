@@ -20,6 +20,7 @@
 //Default values for the different options.
 const float options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 const float options_struct::DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
+const bool options_struct::DEF_AREA_EDITOR_SEL_TRANS = false;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY = false;
 const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
@@ -51,6 +52,7 @@ const float options_struct::DEF_ZOOM_MID_LEVEL = 1.4f;
 options_struct::options_struct() :
     area_editor_backup_interval(DEF_AREA_EDITOR_BACKUP_INTERVAL),
     area_editor_grid_interval(DEF_AREA_EDITOR_GRID_INTERVAL),
+    area_editor_sel_trans(DEF_AREA_EDITOR_SEL_TRANS),
     area_editor_show_edge_length(DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
     area_editor_show_territory(DEF_AREA_EDITOR_SHOW_TERRITORY),
     area_editor_snap_threshold(DEF_AREA_EDITOR_SNAP_THRESHOLD),
@@ -141,6 +143,7 @@ void options_struct::load(data_node* file) {
     
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
+    rs.set("area_editor_selection_transformation", area_editor_sel_trans);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
     rs.set("area_editor_show_territory", area_editor_show_territory);
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
@@ -278,6 +281,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_grid_interval",
             i2s(area_editor_grid_interval)
+        )
+    );
+    file->add(
+        new data_node(
+            "area_editor_selection_transformation",
+            b2s(area_editor_sel_trans)
         )
     );
     file->add(
