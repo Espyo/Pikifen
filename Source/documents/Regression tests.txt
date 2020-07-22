@@ -29,6 +29,20 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * The new sector should be created successfully, with the other rectangle inside.
 
 
++-----+    +-@@@-+
+|     | -> |     |
++-----+    +-----+
+* Have a rectangle. Then, draw a line inside one of its edges.
+* The line will be rejected.
+
+
++-+-+-+    +-@@@@@
+|     | -> |     |
++-----+    +-----+
+* Have a rectangle where one of its sides is made up of several edges. Then, draw a line tracing some of those edges.
+* The drawing will be rejected.
+
+
 +-+    +-+
 | | -> | @@@
 +-+    +-+
@@ -148,6 +162,15 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-----@---------+
 * Have a long rectangle sector with an inner sector on one side. Then, draw an orthogonal line splitting the sector such that the side with the inner sector is on the smallest side of the split.
 * A new sector will have been created, on the smallest side of the original sector.
+
+
+  +-+        +-+
+  | |        | |
++-+ +-+ -> +-@@@-+
+|     |    |     |
++-----+    +-----+
+* Have a rectangular sector with a nook on the top edge. Then, draw a line between the two points of the nook to close it off.
+* The sector will have been split into two successfully.
 
 
 +---+---+
@@ -297,6 +320,13 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * Only one of the sectors should remain, with the shape of both combined.
 
 
++---@@@@@---+
+|   |   |   |
++---+---+---+
+* Have three rectangular sectors connected, in a row. Then, delete the topmost edge of the central one.
+* The leftmost and rightmost sectors will remain.
+
+
 +-----+
 |     |
 | +-@ |
@@ -426,17 +456,6 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * The move will be rejected due to edge intersection.
 
 
-+-----+    +-----+
-|     |    |     |
-| @@@ |    |     | @@@
-| @ @ | -> |     | @ @
-| @@@ |    |     | @@@
-|     |    |     |
-+-----+    +-----+
-* Have a rectangular sector inside another rectangular sector. Then, drag the inner so that it lands outside the outer.
-* The move will be rejected due to the inner sector changing sectors entirely.
-
-
 +---@@@    +
 |\  @ @    |\
 | \ @@@    | \
@@ -447,6 +466,17 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +---+      +---+
 * Have two triangular neighboring sectors making a rectangle shape, with the split going from top-left to bottom-right. Then, have a rectangular sector neighboring the top-right corner of the existing sectors, but shorter than the existing sectors. Then, have a rectangular sector below the twin triangle sectors, with the same dimensions as them. Then, drag the top-right rectangular sector downwards so it neighbors the top-right corner of the bottommost sector instead.
 * It should reject the move due to edge crushing, but it apparently allows it to happen without a problem...
+
+
++-----+    +-----+
+|     |    |     |
+| @@@ |    |     | @@@
+| @ @ | -> |     | @ @
+| @@@ |    |     | @@@
+|     |    |     |
++-----+    +-----+
+* Have a rectangular sector inside another rectangular sector. Then, drag the inner so that it lands outside the outer.
+* It should reject the move, but I have no good way of checking this! So it's a known issue for now.
 
 
 +----@@@@    +
@@ -461,7 +491,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 |       |    |       |
 +-------+    +-------+
 * Have two rectangular sectors, one above the other. Then, have a triangular sector inside the topmost rectangular sector, such that it hugs the top-right corner, and half of the topmost edge and half of the rightmost edge. Then, drag the triangle down such that its topmost edge is flush with the edge separating the two rectangles.
-* The move will be rejected due to the triangle going to a different sector.
+* It should reject the move, but I have no good way of checking this! So it's a known issue for now.
 
 
 +---@@@@@    +
@@ -474,18 +504,23 @@ When testing, test with the specified sectors in the void, and inside a big sect
 |     |      |     |
 +-----+      +-----+
 * Have two rectangular sectors, one above the other. Then, have a triangular sector taking up part of the topmost rectangular sector. The triangular sector should have a vertex pointing down, and it should land in the middle of the topmost rectangle's rightmost edge, if the rectangle were whole. The triangle's leftmost vertex should land in the middle of the rectangle's topmost edge. The final triangle vertex should be at the same height as the previous one, but farther to the right than the bottommost vertex. Then, drag the triangle down such that its topmost edge is flush with the edge separating the two rectangles, but slightly higher (use Shift).
-* The move will be rejected due to the triangle going to a different sector.
+* It should reject the move, but I have no good way of checking this! So it's a known issue for now.
 
 
-                    @
-     +             @*@
-    / \           @/ \@
-   / @ \          @@@@@
-  / @ @ \   ->   /     \
- / @@@@@ \      /       \
-+---------+    +---------+
-* Have a triangular sector, 12x7, with a vertex pointing up. Then, have an inner one with the same shape, but 8x5. Then, drag the inner one up such that its upper vertex goes outside the outer sector, and the other two vertexes land on edges of the outer sector. May need to zoom out before the vertexes will consider snapping and melding with the edges.
-* The move will be rejected due to the inner sector changing sectors.
+
+
+
++-------+    +-------+
+|       |    |       |
+|   @   |    |       @
+|  @ @  |    |      @|@
+| @   @ | -> |     @ | @
+|  @ @  |    |      @|@
+|   @   |    |       @
+|       |    |       |
++-------+    +-------+
+* Have a rectangular sector, and a diamond sector inside. Then, drag the diamond such that two of its opposite vertexes land on one of the rectangle's edges.
+* It should reject the move, but I have no good way of checking this! So it's a known issue for now.
 
 
 +-+    @        +-+  @
@@ -497,7 +532,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | |             | |
 +-+             +-+
 * Have a rectangle sector and a triangle sector side by side, such that one of the triangle's vertexes is close to one of the rectangle's edges. Then, drag the triangle such that its vertex melds with the rectangle's edge, splitting it.
-* The triangle will have moved, but the outer sector (if any) will become broken, due to a "loop" in the inner sector edges.
+* The triangle will have moved. If the two sectors are in the void, everything is fine. Otherwise, the outer sector will have become broken, due to a "loop" in the inner sector edges.
 
 
 

@@ -117,38 +117,95 @@ void area_editor::check_drawing_line(const point &pos) {
         return;
     }
     
-    //Check for edge collisions.
-    if(!tentative_node.on_vertex) {
-        for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
-            //If this edge is the same or a neighbor of the previous node,
-            //then never mind.
-            edge* e_ptr = game.cur_area_data.edges[e];
+    //Check if it's just hitting the same edge, or vertexes of the same edge.
+    if(
+        tentative_node.on_edge &&
+        tentative_node.on_edge == prev_node->on_edge
+    ) {
+        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        return;
+    }
+    if(
+        tentative_node.on_vertex &&
+        tentative_node.on_vertex->has_edge(prev_node->on_edge)
+    ) {
+        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        return;
+    }
+    if(
+        prev_node->on_vertex &&
+        prev_node->on_vertex->has_edge(tentative_node.on_edge)
+    ) {
+        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        return;
+    }
+    if(
+        tentative_node.on_vertex &&
+        tentative_node.on_vertex->is_neighbor(prev_node->on_vertex)
+    ) {
+        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        return;
+    }
+    
+    //Check of edge collisions in collinear lines.
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        //We don't need to watch out for the edge of the current point
+        //or the previous one, since this collinearity check doesn't
+        //return true for line segments that touch in only one point.
+        edge* e_ptr = game.cur_area_data.edges[e];
+        point ep1(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
+        point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
+        
+        if(lines_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)) {
             if(
-                prev_node->on_edge == e_ptr ||
-                tentative_node.on_edge == e_ptr
+                collinear_lines_intersect(
+                    prev_node->snapped_spot, pos, ep1, ep2
+                )
+            ) {
+                drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+                return;
+            }
+        }
+    }
+    
+    //Check for edge collisions.
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = game.cur_area_data.edges[e];
+        //If this edge is the same or a neighbor of the previous node,
+        //then never mind.
+        if(
+            prev_node->on_edge == e_ptr ||
+            tentative_node.on_edge == e_ptr
+        ) {
+            continue;
+        }
+        if(prev_node->on_vertex) {
+            if(
+                e_ptr->vertexes[0] == prev_node->on_vertex ||
+                e_ptr->vertexes[1] == prev_node->on_vertex
             ) {
                 continue;
             }
-            if(prev_node->on_vertex) {
-                if(
-                    e_ptr->vertexes[0] == prev_node->on_vertex ||
-                    e_ptr->vertexes[1] == prev_node->on_vertex
-                ) {
-                    continue;
-                }
-            }
-            
+        }
+        if(tentative_node.on_vertex) {
             if(
-                lines_intersect(
-                    prev_node->snapped_spot, pos,
-                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                    NULL, NULL
-                )
+                e_ptr->vertexes[0] == tentative_node.on_vertex ||
+                e_ptr->vertexes[1] == tentative_node.on_vertex
             ) {
-                drawing_line_error = DRAWING_LINE_CROSSES_EDGES;
-                return;
+                continue;
             }
+        }
+        
+        if(
+            lines_intersect(
+                prev_node->snapped_spot, pos,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                NULL, NULL
+            )
+        ) {
+            drawing_line_error = DRAWING_LINE_CROSSES_EDGES;
+            return;
         }
     }
     

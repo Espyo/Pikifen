@@ -104,6 +104,10 @@ bool circle_intersects_rectangle(
     const float rect_angle,
     float* overlap_dist = NULL, float* rectangle_side_angle = NULL
 );
+bool collinear_lines_intersect(
+    const point &a, const point &b, const point &c, const point &d,
+    point* intersection_tl = NULL, point* intersection_br = NULL
+);
 void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
 );
@@ -127,6 +131,9 @@ bool is_point_in_triangle(
     bool loq
 );
 float linear_dist_to_angular(const float linear_dist, const float radius);
+bool lines_are_collinear(
+    const point &a, const point &b, const point &c, const point &d
+);
 bool lines_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* ur, float* ul

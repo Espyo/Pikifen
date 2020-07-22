@@ -1979,6 +1979,21 @@ bool vertex::is_2nd_degree_neighbor(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not this vertex is a neighbor to the
+ * specified vertex. i.e. they have a shared edge between them.
+ * other_v:        The vertex to compare against.
+ */
+bool vertex::is_neighbor(vertex* other_v) const {
+    for(size_t e = 0; e < edges.size(); ++e) {
+        if(edges[e]->get_other_vertex(this) == other_v) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes an edge from a vertex's list of edges, if it is there.
  */
 void vertex::remove_edge(edge* e_ptr) {

@@ -69,8 +69,8 @@ Next tasks (roughly sorted most important first)
     Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
     Zooming in and out in an editor is making the cursor coordinates in the status bar go all janky
     Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
-    You can drag an inner sector outside of its outer sector -- try it with the rightmost double circles in Play, dragging the inner to the top-left
-    You can trace an edge, and it'll try to cut a sector in two
+    Hitting enter at the load area dialog, in the text box, will just make you quit, and you'll always quit by selecting the textbox from there on out
+        Also, shouldn't it auto-focus on that textbox?
     
     --- v0.19.0 ---
     There should be a way to add custom scripting to the objects with hardcoded scripts
@@ -87,8 +87,6 @@ Next tasks (roughly sorted most important first)
             Rename the creator tools to maker tools
         Recreate the script and animation tutorials to be like the area one
     Try to compile on Mac
-    Minor
-        The code that selects an edge (maybe sector too?) with the selection box doesn't need to do bbox checks again, it can just check if its vertexes are selected
     
     --- v0.20.0 ---
     Details

@@ -1153,6 +1153,10 @@ void area_editor::handle_line_error() {
         status_text =
             "To draw the shape of a sector, you can't hit an edge or vertex!";
         break;
+    } case DRAWING_LINE_ALONG_EDGE: {
+        status_text =
+            "That line is drawn on top of an edge!";
+        break;
     } case DRAWING_LINE_CROSSES_DRAWING: {
         status_text =
             "That line crosses other lines in the drawing!";
@@ -2894,7 +2898,7 @@ void area_editor::traverse_sector_for_split(
                 }
                 next_vertex = e_ptr->get_other_vertex(v_ptr);
                 if(next_vertex == prev_vertex) {
-                    //This is the direction we came from.
+                    //This is the vertex we came from.
                     continue;
                 }
                 

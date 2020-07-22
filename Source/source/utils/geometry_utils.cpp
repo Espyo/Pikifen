@@ -10,6 +10,7 @@
  */
 
 #include <algorithm>
+#include <math.h>
 
 #include "geometry_utils.h"
 #include "math_utils.h"
@@ -442,6 +443,44 @@ bool circle_intersects_rectangle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether the two line segments, which are known to be collinear,
+ * are intersecting.
+ * The first line segment is AB, and the second is CD.
+ * intersection_tl:
+ *   If not NULL, and if there is an intersection, return the top-left
+ *   corner of the intersection here.
+ * intersection_br:
+ *   If not NULL, and if there is an intersection, return the bottom-right
+ *   corner of the intersection here.
+ */
+bool collinear_lines_intersect(
+    const point &a, const point &b, const point &c, const point &d,
+    point* intersection_tl, point* intersection_br
+) {
+    point min1(std::min(a.x, b.x), std::min(a.y, b.y));
+    point max1(std::max(a.x, b.x), std::max(a.y, b.y));
+    point min2(std::min(c.x, d.x), std::min(c.y, d.y));
+    point max2(std::max(c.x, d.x), std::max(c.y, d.y));
+    
+    point i_tl(std::max(min1.x, min2.x), std::max(min1.y, min2.y));
+    point i_br(std::min(max1.x, max2.x), std::min(max1.y, max2.y));
+    
+    if(i_tl.x == i_br.x && i_tl.y == i_br.y) {
+        //Special case -- they share just one point. Let it slide.
+        return false;
+    }
+    
+    if(i_tl.x <= i_br.x && i_tl.y <= i_br.y) {
+        if(intersection_tl) *intersection_tl = i_tl;
+        if(intersection_br) *intersection_br = i_br;
+        return true;
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the angle and magnitude of vector coordinates.
  * coordinates: The coordinates.
  * angle:       Variable to return the angle to.
@@ -631,6 +670,41 @@ bool is_point_in_triangle(
  */
 float linear_dist_to_angular(const float linear_dist, const float radius) {
     return 2 * atan(linear_dist / (2 * radius));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the two line segments are collinear.
+ * The first line segment is AB, the second is CD.
+ */
+bool lines_are_collinear(
+    const point &a, const point &b, const point &c, const point &d
+) {
+    //Special case: vertical lines. This is because we can't divide by zero.
+    if(a.x == b.x) {
+        return (a.x == c.x && a.x == d.x);
+    }
+    
+    //Check the slopes of AB, AC, AD, BC, BD, and CD.
+    //If one of them differs, they are not collinear.
+    float slope = fabs(a.y - b.y) / fabs(a.x - b.x);
+    
+    if(a.x != c.x) {
+        if(fabs(a.y - c.y) / fabs(a.x - c.x) != slope) return false;
+    }
+    if(a.x != d.x) {
+        if(fabs(a.y - d.y) / fabs(a.x - d.x) != slope) return false;
+    }
+    if(b.x != c.x) {
+        if(fabs(b.y - c.y) / fabs(b.x - c.x) != slope) return false;
+    }
+    if(b.x != d.x) {
+        if(fabs(b.y - d.y) / fabs(b.x - d.x) != slope) return false;
+    }
+    if(c.x != d.x) {
+        if(fabs(c.y - d.y) / fabs(c.x - d.x) != slope) return false;
+    }
+    return true;
 }
 
 

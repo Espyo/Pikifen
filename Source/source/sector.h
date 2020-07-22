@@ -258,6 +258,7 @@ struct vertex {
     bool has_edge(edge* e_ptr) const;
     bool is_2nd_degree_neighbor(vertex* other_v, vertex** first_neighbor) const;
     bool is_2nd_degree_neighbor(edge* other_e, vertex** first_neighbor) const;
+    bool is_neighbor(vertex* v_ptr) const;
     void remove_edge(edge* e_ptr);
 };
 
