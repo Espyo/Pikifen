@@ -1,8 +1,8 @@
 name = Seesaw block
 
-area_editor_tips = Link this object to another seesaw block object, so they\nwork in tandem. Remember to link the other back to this one!
+area_editor_tips = Link this object to another seesaw block object, so they\nwork in tandem. Remember to link the other back to this one,\nand remember that one of them should start in a "down" position!\nRaised height: 128. Lowered height: 8.
 casts_shadow = false
-height = 20
+height = 128
 pushes = true
 radius = 90
 rectangular_dimensions = 220 180

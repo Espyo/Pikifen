@@ -1,6 +1,7 @@
 first_state = up
 
 init {
+    set_var height 128
     set_var pair_weight 0
     set_var start_down false
     set_var weight 0
@@ -13,14 +14,18 @@ script {
                 set_var start_down false
                 set_state down
             end_if
-            set_animation up
+            set_var height 128
             set_height 128
+            set_animation up
+            if $weight > $pair_weight
+                set_state lowering
+            end_if
         }
         on_weight_added {
             get_info weight weight
             send_message_to_links $weight
             if $weight > $pair_weight
-                set_state down
+                set_state lowering
             end_if
         }
         on_weight_removed {
@@ -30,15 +35,43 @@ script {
         on_receive_message {
             get_info pair_weight message
             if $weight > $pair_weight
-                set_state down
+                set_state lowering
             end_if
+        }
+    }
+    
+    lowering {
+        on_enter {
+            set_animation lowering
+        }
+        on_frame_signal {
+            calculate height $height - 20
+            set_height $height
+        }
+        on_animation_end {
+            set_state down
+        }
+        on_weight_added {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_weight_removed {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_receive_message {
+            get_info pair_weight message
         }
     }
     
     down {
         on_enter {
+            set_var height 8
+            set_height 8
             set_animation down
-            set_height 2
+            if $weight < $pair_weight
+                set_state rising
+            end_if
         }
         on_weight_added {
             get_info weight weight
@@ -48,14 +81,38 @@ script {
             get_info weight weight
             send_message_to_links $weight
             if $weight < $pair_weight
-                set_state up
+                set_state rising
             end_if
         }
         on_receive_message {
             get_info pair_weight message
             if $weight < $pair_weight
-                set_state up
+                set_state rising
             end_if
+        }
+    }
+    
+    rising {
+        on_enter {
+            set_animation rising
+        }
+        on_frame_signal {
+            calculate height $height + 20
+            set_height $height
+        }
+        on_animation_end {
+            set_state up
+        }
+        on_weight_added {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_weight_removed {
+            get_info weight weight
+            send_message_to_links $weight
+        }
+        on_receive_message {
+            get_info pair_weight message
         }
     }
 }

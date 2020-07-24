@@ -41,7 +41,6 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    "i have 1 pikmin on the other seesaw block" https://discordapp.com/channels/459094367425134593/459094782648778772/706173248903315477 (Kman)
     Ambrosia found a crash: > i was throwing pikmin / spamming Z / and MMB / and calling pikmin / all at the same time / repeatedly https://cdn.discordapp.com/attachments/600813605398642703/695743067914764388/unknown.png
     Two Pikmin bouncing on the same bouncer at once may leave one behind?
     mob::swallow_chomped_pikmin isn't picking at random, it clears the list even if you only swallow a few, and worst of all, isn't removing swallowed Pikmin from the list of held mobs

@@ -1,5 +1,12 @@
 animations{
 	down{
+		frames{
+			down{
+				duration=0.1000
+			}
+		}
+	}
+	lowering{
 		loop_frame=15
 		frames{
 			up{
@@ -7,36 +14,42 @@ animations{
 			}
 			up2{
 				duration=0.0800
+				signal=0
 			}
 			up3{
 				duration=0.0800
 			}
 			up4{
 				duration=0.0800
+				signal=0
 			}
 			up{
 				duration=0.0800
 			}
 			up2{
 				duration=0.0800
+				signal=0
 			}
 			up3{
 				duration=0.0800
 			}
 			up4{
 				duration=0.0800
+				signal=0
 			}
 			down{
 				duration=0.0800
 			}
 			down2{
 				duration=0.0800
+				signal=0
 			}
 			down3{
 				duration=0.0800
 			}
 			down4{
 				duration=0.0800
+				signal=0
 			}
 			down{
 				duration=0.0800
@@ -52,7 +65,7 @@ animations{
 			}
 		}
 	}
-	up{
+	rising{
 		loop_frame=15
 		frames{
 			down{
@@ -60,24 +73,42 @@ animations{
 			}
 			down2{
 				duration=0.0800
+				signal=0
 			}
 			down3{
 				duration=0.0800
 			}
 			down4{
 				duration=0.0800
+				signal=0
 			}
 			down{
 				duration=0.0800
 			}
 			down2{
 				duration=0.0800
+				signal=0
 			}
 			down3{
 				duration=0.0800
 			}
 			down4{
 				duration=0.0800
+				signal=0
+			}
+			up{
+				duration=0.0800
+			}
+			up2{
+				duration=0.0800
+				signal=0
+			}
+			up3{
+				duration=0.0800
+			}
+			up4{
+				duration=0.0800
+				signal=0
 			}
 			up{
 				duration=0.0800
@@ -91,17 +122,12 @@ animations{
 			up4{
 				duration=0.0800
 			}
+		}
+	}
+	up{
+		frames{
 			up{
-				duration=0.0800
-			}
-			up2{
-				duration=0.0800
-			}
-			up3{
-				duration=0.0800
-			}
-			up4{
-				duration=0.0800
+				duration=0.1000
 			}
 		}
 	}
@@ -119,8 +145,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -137,8 +161,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -155,8 +177,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -173,8 +193,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -190,8 +208,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -208,8 +224,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -226,8 +240,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -244,8 +256,6 @@ sprites{
 				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
