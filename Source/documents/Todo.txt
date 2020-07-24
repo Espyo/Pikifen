@@ -23,6 +23,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     * Added a way to add actions, events, and states to object types that have hardcoded scripts.
     * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
+    * Fixed cardboard boxes not blocking the way if they are not in place, but for this to work, you'll need to use a "Dummy obstacle target" object as a target.
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     
     ;Compatibility warnings
@@ -72,10 +73,12 @@ Next tasks (roughly sorted most important first)
     Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
     Hitting enter at the load area dialog, in the text box, will just make you quit, and you'll always quit by selecting the textbox from there on out
         Also, shouldn't it auto-focus on that textbox?
+    Carrying when there's an obstacle isn't working right
+        Try an area with a cardboard box, whose path can only be crossed when the box is in place
+        The Pikmin will oftentimes ignore the fact that the box is now in place and will keep walking in a circle
+        I've even had one time where the Pikmin moved to somewhere completely random while the others were busy pushing the box
     
     --- v0.19.0 ---
-    There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
-        Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
     Documentation update
         Document tutorials and the like offline
         The tutorials should be "making X" instead of "creating a new X"

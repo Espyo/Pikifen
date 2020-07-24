@@ -326,6 +326,8 @@ void area_editor::process_gui_menu_bar() {
  * Processes the ImGui mob script vars for this frame.
  */
 void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
+    if(!m_ptr->type) return;
+    
     map<string, string> vars_map = get_var_map(m_ptr->vars);
     map<string, string> new_vars_map;
     map<string, bool> vars_in_widgets;

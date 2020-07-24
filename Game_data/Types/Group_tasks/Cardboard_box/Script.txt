@@ -31,6 +31,7 @@ script {
         on_enter {
             stop
             stop_particles
+            send_message_to_links obstacle_in_place
         }
     }
 }
