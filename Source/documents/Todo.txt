@@ -2,8 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Revamp editors
-        Style the editors
+    
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -18,10 +17,12 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
     ** The animation editor now has a grid too, and animations have a simple timeline.
     ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
+    ** Added a way to resize and rotate selected vertexes together.
     ** Several other small things have been tweaked.
     * Added a performance monitor to the creator tools. When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a results file gets written when you leave. It can help you figure out what the heaviest parts of your content are.
-    * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
+    * Added a way to add actions, events, and states to object types that have hardcoded scripts.
     * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
+    * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     
     ;Compatibility warnings
@@ -73,11 +74,6 @@ Next tasks (roughly sorted most important first)
         Also, shouldn't it auto-focus on that textbox?
     
     --- v0.19.0 ---
-    There should be a way to add custom scripting to the objects with hardcoded scripts
-        Idea
-            The user can write a script text file like they would for a customizable object type
-            If the write the name of a new state, that's fine, but if they write the name of an existing one, they're editing it
-            If they write a new event inside, that's fine, but if they write an existing event, then one of their actions MUST be "run_engine_code"
     There should be a way for carrier Pikmin to recognize Cardboard Boxes as not ready https://cdn.discordapp.com/attachments/459094367877988373/688850970859667542/Pikifen_alpha_2020-03-15_16-47-30.mp4
         Maybe a way to link objects to a path stop, and the mob can tell, via scripting, that a stop is now un/blocked (Kman)
     Documentation update

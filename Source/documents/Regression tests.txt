@@ -34,6 +34,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-----+    +-----+
 * Have a rectangle. Then, draw a line inside one of its edges.
 * The line will be rejected.
+* Fixed in 5e6ef3ce4cfcd028b1f0bbcd30db36287379a7aa.
 
 
 +-+-+-+    +-@@@@@
@@ -41,6 +42,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-----+    +-----+
 * Have a rectangle where one of its sides is made up of several edges. Then, draw a line tracing some of those edges.
 * The drawing will be rejected.
+* Fixed in 5e6ef3ce4cfcd028b1f0bbcd30db36287379a7aa.
 
 
 +-+    +-+
@@ -171,6 +173,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-----+    +-----+
 * Have a rectangular sector with a nook on the top edge. Then, draw a line between the two points of the nook to close it off.
 * The sector will have been split into two successfully.
+* Fixed in 5e6ef3ce4cfcd028b1f0bbcd30db36287379a7aa.
 
 
 +---+---+
@@ -325,6 +328,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +---+---+---+
 * Have three rectangular sectors connected, in a row. Then, delete the topmost edge of the central one.
 * The leftmost and rightmost sectors will remain.
+* Fixed in 5e6ef3ce4cfcd028b1f0bbcd30db36287379a7aa.
 
 
 +-----+
@@ -505,9 +509,6 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-----+      +-----+
 * Have two rectangular sectors, one above the other. Then, have a triangular sector taking up part of the topmost rectangular sector. The triangular sector should have a vertex pointing down, and it should land in the middle of the topmost rectangle's rightmost edge, if the rectangle were whole. The triangle's leftmost vertex should land in the middle of the rectangle's topmost edge. The final triangle vertex should be at the same height as the previous one, but farther to the right than the bottommost vertex. Then, drag the triangle down such that its topmost edge is flush with the edge separating the two rectangles, but slightly higher (use Shift).
 * It should reject the move, but I have no good way of checking this! So it's a known issue for now.
-
-
-
 
 
 +-------+    +-------+
