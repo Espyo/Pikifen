@@ -1251,6 +1251,8 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         change_to_next_leader(true, true);
     }
     
+    leader_fsm::release(m, info1, info2);
+    leader_fsm::dismiss(m, info1, info2);
     m->stop_chasing();
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_LYING);

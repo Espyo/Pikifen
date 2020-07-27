@@ -98,6 +98,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_DROP); {
             efc.change_state("drinking");
         }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
@@ -765,6 +769,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_ON_TICK); {
             efc.run(pikmin_fsm::tick_attacking_grounded);
+        }
+        efc.new_event(MOB_EV_FOCUS_OFF_REACH); {
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.run(pikmin_fsm::rechase_opponent);
@@ -2410,6 +2417,7 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_circling();
     m->stop_following_path();
     m->stop_chasing();
+    m->stop_turning();
     m->speed.x = m->speed.y = 0;
 }
 
