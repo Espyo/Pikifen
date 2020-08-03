@@ -853,34 +853,37 @@ void gameplay::draw_ingame_text() {
     for(size_t m = 0; m < n_mobs; ++m) {
         mob* mob_ptr = mobs.all[m];
         
-        if(mob_ptr->carry_info) {
-            if(
-                mob_ptr->carry_info->cur_carrying_strength > 0 &&
-                (
-                    mob_ptr->type->weight > 1 ||
-                    mob_ptr->carry_info->intended_mob
-                )
-            ) {
+        if(
+            mob_ptr->carry_info &&
+            mob_ptr->carry_info->cur_carrying_strength > 0
+        ) {
+            bool destination_is_onion =
+                mob_ptr->carry_info->intended_mob &&
+                mob_ptr->carry_info->intended_mob->type->category->id ==
+                MOB_CATEGORY_ONIONS;
+                
+            if(mob_ptr->type->weight > 1 || destination_is_onion) {
                 ALLEGRO_COLOR color;
-                bool valid = false;
                 if(mob_ptr->carry_info->is_moving) {
                     if(
                         mob_ptr->carry_info->destination ==
                         CARRY_DESTINATION_SHIP
                     ) {
                         color = game.config.carrying_color_move;
-                        valid = true;
-                    } else if(mob_ptr->carry_info->intended_mob) {
+                        
+                    } else if(destination_is_onion) {
                         color =
                             (
                                 (onion*) (mob_ptr->carry_info->intended_mob)
                             )->oni_type->pik_type->main_color;
-                        valid = true;
+                    } else {
+                        color = game.config.carrying_color_move;
                     }
-                }
-                if(!valid) {
+                    
+                } else {
                     color = game.config.carrying_color_stop;
                 }
+                
                 draw_fraction(
                     point(
                         mob_ptr->pos.x,

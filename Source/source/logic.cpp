@@ -128,7 +128,7 @@ void gameplay::do_aesthetic_logic() {
             
             if(max_throw_z > 0) {
                 throw_can_reach_cursor =
-                    leader_cursor_sector->z < cur_leader_ptr->z + max_throw_z;
+                    leader_cursor_sector->z <= cur_leader_ptr->z + max_throw_z;
             }
         }
     }

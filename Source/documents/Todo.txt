@@ -65,15 +65,10 @@ Next tasks (roughly sorted most important first)
         Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
         Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
     Others
-        Ambrosia found a crash: > i was throwing pikmin / spamming Z / and MMB / and calling pikmin / all at the same time / repeatedly https://cdn.discordapp.com/attachments/600813605398642703/695743067914764388/unknown.png
-        mob::swallow_chomped_pikmin isn't picking at random, it clears the list even if you only swallow a few, and worst of all, isn't removing swallowed Pikmin from the list of held mobs
-        In the new Tests area's throw blocks, the cursor keeps showing X for Pikmin that CAN make it, and Yellow Pikmin can't even jump on their platform (the throw calculation returns 0 speed)
         Bulborbs shaking make the no-damage "ding" show up (Kman)
         Some mob events check whether the mob has been bumped or whistled by checking if whistle.whistling is true; this isn't enough, since the leader could be moving while whistling something else
             Note that these events exists: MOB_EV_TOUCHED_ACTIVE_LEADER, MOB_EV_WHISTLED
-        Linking a bridge pile to, say, a leader, will crash when it drops a berry (Kman)
         Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (neutral carrying numbers appear black; probably the same problem) (Kman)
-        A clog won't drain all the water if there's a bridge sector in-between (Kman)
     
     --- v0.19.0 ---
     Remove a leader's health wheel from the HUD when they die (Kman)
@@ -84,7 +79,9 @@ Next tasks (roughly sorted most important first)
         Use the term "make" more, to refer to anything a maker does (instead of "creator"); both inside documentation and in the actual engine
             Rename the creator tools to maker tools
         Recreate the script and animation tutorials to be like the area one
-    Try to compile on Mac
+        A Javascript script to add a table-of-contents to pages
+        Note that:
+            "drain_liquid" also detects bridge sectors now
     
     --- v0.20.0 ---
     Details
@@ -192,6 +189,7 @@ Next tasks (roughly sorted most important first)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
+    Try to compile on Mac
     
     --- v0.21.0 ---
     Menus

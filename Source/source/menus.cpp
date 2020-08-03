@@ -814,14 +814,14 @@ void main_menu::do_drawing() {
     draw_scaled_text(
         game.fonts.main, al_map_rgb(255, 255, 255),
         point(8, game.win_h  - 8),
-        point(0.4, 0.4),
+        point(0.6, 0.6),
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
     draw_scaled_text(
         game.fonts.main, al_map_rgb(255, 255, 255),
         point(game.win_w - 8, game.win_h  - 8),
-        point(0.4, 0.4),
+        point(0.6, 0.6),
         ALLEGRO_ALIGN_RIGHT, 2,
         game.config.name + " " + game.config.version +
         ", powered by Pikifen " +

@@ -756,16 +756,18 @@ void mob::calculate_throw(
     //for the mob to land at the target vertical coordinate. The formula for
     //this can be found on Wikipedia, for instance.
     float height_delta = z - target_z;
-    float flight_time =
-        (
-            (*req_speed_z) +
+    //Because of floating point precision problems, the result of the sqrt
+    //could end up negative. Let's cap it to zero.
+    float sqrt_part =
+        std::max(
+            0.0,
             sqrt(
-                (*req_speed_z) *
-                (*req_speed_z) +
+                (*req_speed_z) * (*req_speed_z) +
                 2.0 * (-GRAVITY_ADDER) * (height_delta)
             )
-        ) / (-GRAVITY_ADDER);
-        
+        );
+    float flight_time = ((*req_speed_z) + sqrt_part) / (-GRAVITY_ADDER);
+    
     //Once we know the total flight time, we can divide the horizontal reach
     //by the total time to get the horizontal speed.
     float h_angle, h_reach;
@@ -2045,6 +2047,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
     for(size_t p = 0; p < total; ++p) {
         chomping_mobs[p]->set_health(false, false, 0.0f);
         chomping_mobs[p]->cause_spike_damage(this, true);
+        release(chomping_mobs[p]);
     }
     chomping_mobs.clear();
 }
@@ -2059,7 +2062,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
  * Then, the actual physics go into place, your nerves
  * send signals to the muscles, and gravity, intertia, etc.
  * take over the rest, to make you move.
- * How many seconds to tick by.
+ * delta_t: How many seconds to tick by.
  */
 void mob::tick(const float delta_t) {
     //Since the mob could be marked for deletion after any little

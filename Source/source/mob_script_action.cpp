@@ -696,6 +696,12 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
                 return true;
             }
         }
+        if(s->type == SECTOR_TYPE_BRIDGE) {
+            return true;
+        }
+        if(s->type == SECTOR_TYPE_BRIDGE_RAIL) {
+            return true;
+        }
         return false;
     },
     sectors_to_drain
