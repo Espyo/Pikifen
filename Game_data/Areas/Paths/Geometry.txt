@@ -794,6 +794,14 @@ mobs{
 		type=Red Pikmin
 		p=1056.0000 -64.0000
 	}
+	Custom{
+		type=White bramble gate
+		p=704.0000 224.0000
+	}
+	Custom{
+		type=White bramble gate
+		p=640.0000 224.0000
+	}
 }
 path_stops{
 	s{
@@ -931,7 +939,7 @@ path_stops{
 		}
 	}
 	s{
-		pos=1248.0000 -32.0000
+		pos=1248.0000 -64.0000
 		links{
 			nr=8
 			nr=9

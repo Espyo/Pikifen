@@ -61,6 +61,8 @@ public:
     particle_manager particles;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+    //Path manager.
+    path_manager path_mgr;
     //All droplets of precipitation.
     vector<point> precipitation;
     //Time until the next drop of precipitation.

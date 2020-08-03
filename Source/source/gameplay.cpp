@@ -329,6 +329,8 @@ void gameplay::load() {
         game.perf_mon->finish_measurement();
     }
     
+    path_mgr.handle_area_load();
+    
     cur_leader_nr = 0;
     cur_leader_ptr = mobs.leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -577,6 +579,8 @@ void gameplay::load_hud_info() {
  */
 void gameplay::unload() {
     al_show_mouse_cursor(game.display);
+    
+    path_mgr.clear();
     
     cur_leader_ptr = NULL;
     

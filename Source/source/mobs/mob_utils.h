@@ -91,10 +91,6 @@ struct carry_info_struct {
     //of spaces reserved. A Pikmin could be on its way to its spot,
     //not necessarily there already.
     size_t cur_n_carriers;
-    //When stuck, look out for these obstacles. They may fix the situation.
-    unordered_set<mob*> obstacle_ptrs;
-    //Are the Pikmin stuck with nowhere to go?
-    bool is_stuck;
     //Is the object moving at the moment?
     bool is_moving;
     //When the object begins moving, the idea is to carry it to this mob.
@@ -340,16 +336,17 @@ struct path_info_struct {
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.
     size_t cur_path_stop_nr;
-    //List of all obstacles located somewhere in the path.
-    unordered_set<mob*> obstacle_ptrs;
     //If true, it's best to go straight to the target point
     //instead of taking a path.
     bool go_straight;
     //For the chase from the final path stop to the target, use this
     //value in the target_distance parameter.
     float final_target_distance;
+    //Is the way forward currently blocked?
+    bool is_blocked;
     
     path_info_struct(mob* m, const point &target);
+    bool check_blockage();
 };
 
 

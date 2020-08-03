@@ -1139,7 +1139,8 @@ mob_gen::mob_gen(
 path_link::path_link(path_stop* end_ptr, size_t end_nr) :
     end_ptr(end_ptr),
     end_nr(end_nr),
-    distance(0) {
+    distance(0),
+    blocked_by_obstacle(false) {
     
 }
 
@@ -1151,6 +1152,100 @@ path_link::path_link(path_stop* end_ptr, size_t end_nr) :
  */
 void path_link::calculate_dist(path_stop* start_ptr) {
     distance = dist(start_ptr->pos, end_ptr->pos).to_float();
+}
+
+
+
+
+
+/* ----------------------------------------------------------------------------
+ * Clears all info.
+ */
+void path_manager::clear() {
+    obstructions.clear();
+    
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            game.cur_area_data.path_stops[s]->links[l].blocked_by_obstacle =
+                false;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the area having been loaded. It checks all path links and saves
+ * any obstacle obstructions found.
+ */
+void path_manager::handle_area_load() {
+    //Go through all path links and check if they have obstacles.
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            path_link* l_ptr = &(game.cur_area_data.path_stops[s]->links[l]);
+            
+            for(
+                size_t m = 0;
+                m < game.states.gameplay_st->mobs.all.size();
+                ++m
+            ) {
+                mob* m_ptr = game.states.gameplay_st->mobs.all[m];
+                
+                if(!m_ptr->type->blocks_carrier_pikmin) continue;
+                
+                if(
+                    circle_intersects_line(
+                        m_ptr->pos,
+                        m_ptr->type->radius,
+                        s_ptr->pos, l_ptr->end_ptr->pos
+                    )
+                ) {
+                    obstructions[l_ptr].insert(m_ptr);
+                    l_ptr->blocked_by_obstacle = true;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an obstacle having been cleared. This updates all information
+ * about that obstruction.
+ * m:
+ *   Pointer to the obstacle mob that got cleared.
+ */
+void path_manager::handle_obstacle_clear(mob* m) {
+    //Remove the obstacle from our list, if it's there.
+    bool paths_changed = false;
+    
+    for(auto o = obstructions.begin(); o != obstructions.end();) {
+        bool to_delete = false;
+        if(o->second.erase(m) > 0) {
+            if(o->second.empty()) {
+                o->first->blocked_by_obstacle = false;
+                to_delete = true;
+                paths_changed = true;
+            }
+        }
+        if(to_delete) {
+            o = obstructions.erase(o);
+        } else {
+            ++o;
+        }
+    }
+    
+    if(paths_changed) {
+        //Re-calculate the paths of mobs taking paths.
+        for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay_st->mobs.all[m];
+            if(!m_ptr->path_info) continue;
+            
+            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+        }
+    }
 }
 
 
@@ -2044,14 +2139,11 @@ void depth_first_search(
  * Uses Dijkstra's algorithm to get the shortest path between two nodes.
  * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
  * *node:           Start and end node.
- * obstacles_found: If there is no clear path, this points to all obstacles
- *   found, so the mob can keep an eye for when they're open and try again.
  * total_dist:      If not NULL, place the total path distance here.
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles,
-    unordered_set<mob*>* obstacles_found, float* total_dist
+    const bool ignore_obstacles, float* total_dist
 ) {
 
     unordered_set<path_stop*> unvisited;
@@ -2059,9 +2151,6 @@ vector<path_stop*> dijkstra(
     map<path_stop*, std::pair<float, path_stop*> > data;
     //If we found an error, set this to true.
     bool got_error = false;
-    //Total obstacles found.
-    unordered_set<mob*> total_obstacles;
-    
     
     //Initialize the algorithm.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
@@ -2069,7 +2158,6 @@ vector<path_stop*> dijkstra(
         unvisited.insert(s_ptr);
         data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
     }
-    if(obstacles_found) obstacles_found->clear();
     
     //The distance between the start node and the start node is 0.
     data[start_node].first = 0;
@@ -2125,13 +2213,8 @@ vector<path_stop*> dijkstra(
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
             
             //Is this link unobstructed?
-            if(!ignore_obstacles) {
-                mob* obs =
-                    get_path_link_obstacle(shortest_node, l_ptr->end_ptr);
-                if(obs) {
-                    total_obstacles.insert(obs);
-                    continue;
-                }
+            if(!ignore_obstacles && l_ptr->blocked_by_obstacle) {
+                continue;
             }
             
             float total_dist = shortest_node_data.first + l_ptr->distance;
@@ -2146,39 +2229,13 @@ vector<path_stop*> dijkstra(
     }
     
     //If we got to this point, there means that there is no available path!
-    if(!total_obstacles.empty()) {
     
-        //First, let's find the shortest path, period.
-        float td;
-        vector<path_stop*> shortest_path =
-            dijkstra(start_node, end_node, true, NULL, &td);
-            
-        if(shortest_path.empty()) {
-            //No path found...
-            if(total_dist) *total_dist = 0;
-            if(obstacles_found) obstacles_found->clear();
-            return vector<path_stop*>();
-        }
-        
-        vector<path_stop*> final_path;
-        
-        //Now, trim the path such that it ends at the closest obstacle.
-        //This will be the final recommended path.
-        for(size_t s = 0; s < shortest_path.size() - 1; ++s) {
-            final_path.push_back(shortest_path[s]);
-            if(get_path_link_obstacle(shortest_path[s], shortest_path[s + 1])) {
-                break;
-            }
-        }
-        
-        if(obstacles_found) *obstacles_found = total_obstacles;
-        if(total_dist) *total_dist = td;
-        return final_path;
-        
+    if(!ignore_obstacles) {
+        //Let's try again, this time ignoring obstacles.
+        return dijkstra(start_node, end_node, true, total_dist);
     } else {
-        //No obstacle?... Something really went wrong. No path.
+        //Nothing that can be done. No path.
         if(total_dist) *total_dist = 0;
-        if(obstacles_found) obstacles_found->clear();
         return vector<path_stop*>();
     }
 }
@@ -2244,16 +2301,13 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  * the area's path graph.
  * start:           Start coordinates.
  * end:             End coordinates.
- * obstacles_found: If there is no clear path, this points to all obstacles
- *   found, so the mob can keep an eye for when they're open and try again.
  * go_straight:     This is set according to whether it's better
  *   to go straight to the end point.
  * total_dist:      If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
     const point &start, const point &end,
-    unordered_set<mob*>* obstacles_found, bool* go_straight,
-    float* total_dist
+    bool* go_straight, float* total_dist
 ) {
 
     vector<path_stop*> full_path;
@@ -2318,7 +2372,7 @@ vector<path_stop*> get_path(
     //Calculate the path.
     full_path =
         dijkstra(
-            closest_to_start, closest_to_end, false, obstacles_found, total_dist
+            closest_to_start, closest_to_end, false, total_dist
         );
         
     if(total_dist && !full_path.empty()) {

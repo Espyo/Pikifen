@@ -11,6 +11,7 @@
 #ifndef SECTOR_INCLUDED
 #define SECTOR_INCLUDED
 
+#include <map>
 #include <set>
 #include <unordered_set>
 #include <vector>
@@ -25,6 +26,7 @@
 #include "mob_types/mob_type.h"
 #include "weather.h"
 
+using std::map;
 using std::set;
 using std::size_t;
 using std::unordered_set;
@@ -150,12 +152,17 @@ struct path_stop {
 
 /* ----------------------------------------------------------------------------
  * Info about a path link. A path stop can link to N other path stops,
- * and this structure holds information about the connection.
+ * and this structure holds information about a connection.
  */
 struct path_link {
+    //Pointer to the path stop at the end.
     path_stop* end_ptr;
+    //Index number of the path stop at the end.
     size_t end_nr;
+    //Distance between the two stops.
     float distance;
+    //Is the stop currently blocked by an obstacle? Cache for performance.
+    bool blocked_by_obstacle;
     
     path_link(path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
@@ -402,14 +409,28 @@ struct area_data {
 
 
 
+/* ----------------------------------------------------------------------------
+ * Manages the paths in the area, particularly whether they are blocked
+ * by an obstacle or not.
+ */
+struct path_manager {
+    map<path_link*, unordered_set<mob*> > obstructions;
+    
+    void handle_area_load();
+    void handle_obstacle_clear(mob* m);
+    void clear();
+};
+
+
+
+
 void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
 );
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles,
-    unordered_set<mob*>* obstacles_found, float* total_dist
+    const bool ignore_obstacles, float* total_dist
 );
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
@@ -420,7 +441,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 );
 vector<path_stop*> get_path(
     const point &start, const point &end,
-    unordered_set<mob*>* obstacles_found, bool* go_straight, float* get_dist
+    bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 TRIANGULATION_ERRORS get_polys(

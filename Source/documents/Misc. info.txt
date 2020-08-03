@@ -110,6 +110,13 @@ Bag of notes (useful stuff)
     What about upscaling the game?
         Forget it. It's an insane headache. Between changing all of the file formats, variables, constants, etc. to the new numbers, you'd have to update the SVG and PNG files, and there are other tiny code problems that aren't immediately apparent. Players can just increase the resolution and zoom_mid_level.
         What if a higher resolution zooms in the game further (except for the HUD and menus and such), and zoom_mid_level can be used to see more or less by default? This makes sense, since if the game's min zoom is 0.5, that's because the creator doesn't want you to see too far.
+    Carrying
+        Mobs that care about paths can only be in one of two stats: moving, or stuck
+        When an obstacle is freed, it can only matter to the mob in one of the following ways:
+            It is irrelevant to the mob's goal
+            If blocked, it unblocks its current path
+            If blocked, it unblocks a new path
+            If unblocked, it unblocks a faster path than the current one
     Area editor
         Open problems
             If the user turns a sector inside out, there's not much the engine can do...

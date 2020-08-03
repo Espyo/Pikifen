@@ -42,7 +42,6 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     destination(destination),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    is_stuck(false),
     is_moving(false),
     intended_mob(nullptr),
     must_return(false),
@@ -598,9 +597,29 @@ path_info_struct::path_info_struct(mob* m, const point &target) :
     m(m),
     target_point(target),
     cur_path_stop_nr(0),
-    go_straight(false) {
+    go_straight(false),
+    is_blocked(false) {
     
-    path = get_path(m->pos, target, &obstacle_ptrs, &go_straight, NULL);
+    path = get_path(m->pos, target, &go_straight, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates whether or not the way forward is currently blocked.
+ */
+bool path_info_struct::check_blockage() {
+    if(
+        path.size() >= 2 &&
+        cur_path_stop_nr > 0 &&
+        cur_path_stop_nr < path.size()
+    ) {
+        path_stop* cur_stop = path[cur_path_stop_nr - 1];
+        path_stop* next_stop = path[cur_path_stop_nr];
+        
+        return
+            cur_stop->links[cur_stop->get_link(next_stop)].blocked_by_obstacle;
+    }
+    return false;
 }
 
 
@@ -757,22 +776,26 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         m_ptr->leave_group();
         
         for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-            mob* m_ptr = game.states.gameplay_st->mobs.all[m];
-            if(m_ptr->focused_mob == m_ptr) {
-                m_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-                m_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
-                m_ptr->fsm.run_event(MOB_EV_FOCUS_DIED);
-                m_ptr->focused_mob = NULL;
+            mob* m2_ptr = game.states.gameplay_st->mobs.all[m];
+            if(m2_ptr->focused_mob == m_ptr) {
+                m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+                m2_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
+                m2_ptr->fsm.run_event(MOB_EV_FOCUS_DIED);
+                m2_ptr->focused_mob = NULL;
             }
-            if(m_ptr->parent && m_ptr->parent->m == m_ptr) {
-                delete m_ptr->parent;
-                m_ptr->parent = NULL;
-                m_ptr->to_delete = true;
+            if(m2_ptr->parent && m2_ptr->parent->m == m_ptr) {
+                delete m2_ptr->parent;
+                m2_ptr->parent = NULL;
+                m2_ptr->to_delete = true;
             }
         }
         
         while(!m_ptr->holding.empty()) {
             m_ptr->release(m_ptr->holding[0]);
+        }
+        
+        if(m_ptr->type->blocks_carrier_pikmin) {
+            game.states.gameplay_st->path_mgr.handle_obstacle_clear(m_ptr);
         }
         
         m_ptr->fsm.set_state(INVALID);

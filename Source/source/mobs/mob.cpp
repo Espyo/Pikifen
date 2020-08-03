@@ -1186,12 +1186,14 @@ bool mob::follow_path(
     const point &target, const bool can_continue,
     const float speed, const float final_target_distance
 ) {
-    vector<path_stop*> old_path;
-    size_t old_path_stop_nr = INVALID;
+    bool was_blocked = false;
+    path_stop* old_next_stop = NULL;
     
     if(can_continue && path_info) {
-        old_path = path_info->path;
-        old_path_stop_nr = path_info->cur_path_stop_nr;
+        was_blocked = path_info->is_blocked;
+        if(path_info->cur_path_stop_nr < path_info->path.size()) {
+            old_next_stop = path_info->path[path_info->cur_path_stop_nr];
+        }
     }
     
     if(path_info) {
@@ -1201,15 +1203,26 @@ bool mob::follow_path(
     path_info = new path_info_struct(this, target);
     path_info->final_target_distance = final_target_distance;
     
-    if(can_continue && old_path.size() >= 2 && path_info->path.size() >= 2) {
-        path_stop* next_stop = old_path[old_path_stop_nr];
+    if(
+        can_continue &&
+        old_next_stop &&
+        !was_blocked &&
+        path_info->path.size() >= 2
+    ) {
         for(size_t s = 1; s < path_info->path.size(); ++s) {
-            if(path_info->path[s] == next_stop) {
+            if(path_info->path[s] == old_next_stop) {
                 //If before, the mob was already heading towards this stop,
                 //then just continue the new journey from there.
                 path_info->cur_path_stop_nr = s;
                 break;
             }
+        }
+    }
+    
+    if(path_info->path.size() >= 2 && path_info->cur_path_stop_nr > 0) {
+        if(path_info->check_blockage()) {
+            path_info->is_blocked = true;
+            fsm.run_event(MOB_EV_PATH_BLOCKED);
         }
     }
     
@@ -2203,42 +2216,44 @@ void mob::tick_brain(const float delta_t) {
         } else {
             //Reached the chase location.
             
-            bool stuck_at_obstacle = false;
             if(path_info && !path_info->go_straight) {
-                path_info->cur_path_stop_nr++;
-                if(path_info->cur_path_stop_nr == path_info->path.size()) {
-                    //Reached the final stop of the path, but not the goal.
-                    
-                    if(!path_info->obstacle_ptrs.empty()) {
-                        //If there's an obstacle in the path, the last stop
-                        //on the path actually means it's the last possible
-                        //stop before the obstacle. Meaning the object
-                        //is now facing an obstacle.
-                        stuck_at_obstacle = true;
-                        chase_info.reached_destination = true;
-                        
+            
+                if(!path_info->is_blocked) {
+                    path_info->cur_path_stop_nr++;
+                }
+                
+                if(path_info->cur_path_stop_nr < path_info->path.size()) {
+                    //Reached a regular stop while traversing the path.
+                    //Think about going to the next, if possible.
+                    if(path_info->check_blockage()) {
+                        //Oop, there's an obstacle!
+                        path_info->is_blocked = true;
+                        fsm.run_event(MOB_EV_PATH_BLOCKED);
                     } else {
-                        //Time to head towards the actual goal.
+                        //All good. Head to the next stop.
                         chase(
-                            path_info->target_point,
-                            NULL, false, NULL, true,
-                            path_info->final_target_distance, chase_info.speed
+                            path_info->path[path_info->cur_path_stop_nr]->pos,
+                            NULL, false, NULL, true, 3.0f, chase_info.speed
                         );
                     }
                     
                 } else if(
+                    path_info->cur_path_stop_nr == path_info->path.size()
+                ) {
+                    //Reached the final stop of the path, but not the goal.
+                    //Let's head there.
+                    chase(
+                        path_info->target_point,
+                        NULL, false, NULL, true,
+                        path_info->final_target_distance, chase_info.speed
+                    );
+                    
+                } else if(
                     path_info->cur_path_stop_nr == path_info->path.size() + 1
                 ) {
-                    //Reached the final destination.
+                    //Reached the path's goal.
                     chase_info.reached_destination = true;
                     
-                } else {
-                    //Reached a stop while traversing the path.
-                    //Think about going to the next.
-                    chase(
-                        path_info->path[path_info->cur_path_stop_nr]->pos,
-                        NULL, false, NULL, true, 3.0f, chase_info.speed
-                    );
                 }
                 
             } else {
@@ -2248,10 +2263,7 @@ void mob::tick_brain(const float delta_t) {
             if(chase_info.reached_destination) {
                 //Reached the final destination. Think about stopping.
                 chase_info.speed = 0;
-                fsm.run_event(
-                    MOB_EV_REACHED_DESTINATION,
-                    (stuck_at_obstacle ? (void*) stuck_at_obstacle : NULL)
-                );
+                fsm.run_event(MOB_EV_REACHED_DESTINATION);
             }
         }
         
@@ -2269,6 +2281,7 @@ void mob::tick_class_specifics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Performs some logic code for this game frame.
  */
+#include <iostream>
 void mob::tick_misc_logic(const float delta_t) {
     time_alive += delta_t;
     
@@ -2296,6 +2309,10 @@ void mob::tick_misc_logic(const float delta_t) {
         if(height_effect_pivot == LARGE_FLOAT) {
             height_effect_pivot = z;
         }
+    }
+    
+    if(type->blocks_carrier_pikmin && health <= 0) {
+        game.states.gameplay_st->path_mgr.handle_obstacle_clear(this);
     }
 }
 
@@ -2428,38 +2445,6 @@ void mob::tick_script(const float delta_t) {
         dist d(pos, home);
         if(d >= type->territory_radius) {
             far_from_home_ev->run(this);
-        }
-    }
-    
-    //Following a path, and an obstacle was destroyed.
-    if(path_info) {
-        for(
-            auto o = path_info->obstacle_ptrs.begin();
-            o != path_info->obstacle_ptrs.end();
-            ++o
-        ) {
-            if((*o)->health == 0) {
-                follow_path(
-                    path_info->target_point,
-                    true, chase_info.speed,
-                    path_info->final_target_distance
-                );
-                break;
-            }
-        }
-    }
-    
-    //Being carried, is stuck, and an obstacle was destroyed.
-    if(carry_info && carry_info->is_stuck) {
-        for(
-            auto o = carry_info->obstacle_ptrs.begin();
-            o != carry_info->obstacle_ptrs.end();
-            ++o
-        ) {
-            if((*o)->health == 0) {
-                fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
-                break;
-            }
         }
     }
     

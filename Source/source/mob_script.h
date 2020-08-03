@@ -148,11 +148,13 @@ enum MOB_EV_TYPES {
     MOB_EV_CARRY_BEGIN_MOVE,
     //When the mob needs to stop moving, as it's no longer being carried.
     MOB_EV_CARRY_STOP_MOVE,
-    //When the mob being carried becomes stuck.
-    MOB_EV_CARRY_STUCK,
     //When the mob was sucessfully delivered
     //to its destination after being carried.
     MOB_EV_CARRY_DELIVERED,
+    //When the mob following a path encounters an obstacle.
+    MOB_EV_PATH_BLOCKED,
+    //When the paths in the area changed, and the mob may have a new way to go.
+    MOB_EV_PATHS_CHANGED,
     //When the focused mob stops being able to be focused.
     MOB_EV_FOCUSED_MOB_UNAVAILABLE,
     //When the mob receives an object that was carried to it.

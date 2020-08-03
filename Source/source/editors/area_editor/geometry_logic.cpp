@@ -67,7 +67,7 @@ float area_editor::calculate_preview_path() {
         get_path(
             path_preview_checkpoints[0],
             path_preview_checkpoints[1],
-            NULL, NULL, &d
+            NULL, &d
         );
         
     if(path_preview.empty() && d == 0) {

@@ -64,10 +64,6 @@ Next tasks (roughly sorted most important first)
         Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
         Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
         Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
-    Carrying when there's an obstacle isn't working right
-        Try an area with a cardboard box, whose path can only be crossed when the box is in place
-        The Pikmin will oftentimes ignore the fact that the box is now in place and will keep walking in a circle
-        I've even had one time where the Pikmin moved to somewhere completely random while the others were busy pushing the box
     Others
         Ambrosia found a crash: > i was throwing pikmin / spamming Z / and MMB / and calling pikmin / all at the same time / repeatedly https://cdn.discordapp.com/attachments/600813605398642703/695743067914764388/unknown.png
         mob::swallow_chomped_pikmin isn't picking at random, it clears the list even if you only swallow a few, and worst of all, isn't removing swallowed Pikmin from the list of held mobs
@@ -145,7 +141,7 @@ Next tasks (roughly sorted most important first)
             Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
             Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
             Some signs should talk about dismissing, and group moving
-        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, etc.
+        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
     Add a ball of yarn treasure
     Cursor improvements
@@ -536,6 +532,7 @@ Misc things (so I don't forget)
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
     The ability for status effects to add/remove HP in absolute amounts, not relative
+    Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
     Area sections
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
@@ -570,6 +567,7 @@ Misc things (so I don't forget)
     Carrying path revamping
         Patrolling enemies need to follow a path -- they can't reuse the carrying path (e.g. Nectarous Dandelflies). Maybe make it so you can create multiple paths on the area editor?
         Paths that only Pikmin exclusive to a certain hazard can take (paths on the water for Blue Pikmin)
+        The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
         Maybe make it so some paths can only be crossed if what is being carried is less than X width?
     If a Pikmin is too far away, it should sigh and lose the party
     The ability for objects to be not-circular, but ellipses

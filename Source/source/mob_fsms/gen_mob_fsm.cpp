@@ -47,12 +47,6 @@ const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
 void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
     engine_assert(m->carry_info != NULL, m->print_state_history());
     
-    m->carry_info->is_stuck = true;
-    if(m->path_info) {
-        m->carry_info->obstacle_ptrs = m->path_info->obstacle_ptrs;
-    }
-    m->stop_following_path();
-    
     m->circle_around(
         NULL, m->pos, CARRY_STUCK_CIRCLING_RADIUS, true,
         m->carry_info->get_speed() * CARRY_STUCK_SPEED_MULTIPLIER,
@@ -69,10 +63,16 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
     if(m->carry_info->intended_mob == NULL) {
-        m->fsm.run_event(MOB_EV_CARRY_STUCK);
+        m->fsm.run_event(MOB_EV_PATH_BLOCKED);
         return;
     }
-    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a mob wants a new path.
+ */
+void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     float target_distance = 3.0f;
     if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
         //Because the ship's beam can be offset, and because
@@ -97,24 +97,17 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->path_info->target_point = m->carry_info->intended_point;
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
-        m->fsm.run_event(MOB_EV_CARRY_STUCK);
+        m->fsm.run_event(MOB_EV_PATH_BLOCKED);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
  * When a mob reaches the destination or an obstacle when carrying.
- * info1: If not NULL, then it's impossible to progress because of an obstacle.
  */
 void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
-    if(info1) {
-        //Stuck...
-        m->fsm.run_event(MOB_EV_CARRY_STUCK);
-    } else {
-        //Successful delivery!
-        m->stop_following_path();
-        m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
-    }
+    m->stop_following_path();
+    m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
 }
 
 
@@ -122,10 +115,6 @@ void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
  * When a mob is no longer stuck waiting to be carried.
  */
 void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
-    if(m->carry_info) {
-        m->carry_info->is_stuck = false;
-        m->carry_info->obstacle_ptrs.clear();
-    }
     m->stop_circling();
 }
 
@@ -139,36 +128,6 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = false;
     m->stop_following_path();
     m->stop_chasing();
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin checks if it should start carrying the mob.
- */
-void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
-    if(m->carry_info->cur_carrying_strength >= m->type->weight) {
-        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin checks if it should stop carrying the mob.
- */
-void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
-    bool run_event = false;
-    
-    for(size_t s = 0; s < m->carry_info->spot_info.size(); ++s) {
-        if(m->carry_info->spot_info[s].state == CARRY_SPOT_RESERVED) {
-            //If a Pikmin is coming, we should wait.
-            run_event = true;
-            break;
-        }
-    }
-    
-    if(m->carry_info->cur_carrying_strength < m->type->weight || run_event) {
-        m->fsm.run_event(MOB_EV_CARRY_STOP_MOVE);
-    }
 }
 
 
@@ -197,6 +156,11 @@ void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
     
+    //Save some data before changing anything.
+    bool could_move = m->carry_info->cur_carrying_strength >= m->type->weight;
+    mob* prev_destination = m->carry_info->intended_mob;
+    
+    //Update the numbers and such.
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
     m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_USED;
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
@@ -208,6 +172,20 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
         pik_ptr, NULL,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
+    
+    bool can_move = m->carry_info->cur_carrying_strength >= m->type->weight;
+    
+    //If the mob can now start moving, or if it already could and the target
+    //changed, send a move begin event, so that the mob can calculate
+    //a (new) path and start taking it.
+    if(can_move) {
+        if(
+            !could_move ||
+            (prev_destination != m->carry_info->intended_mob)
+        ) {
+            m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+        }
+    }
 }
 
 
@@ -217,6 +195,11 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
     
+    //Save some data before changing anything.
+    bool could_move = m->carry_info->cur_carrying_strength >= m->type->weight;
+    mob* prev_destination = m->carry_info->intended_mob;
+    
+    //Update the numbers and such.
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;
     m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_FREE;
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
@@ -228,6 +211,22 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
         NULL, pik_ptr,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
+    
+    bool can_move = m->carry_info->cur_carrying_strength >= m->type->weight;
+    
+    //If the mob can no longer move, send a move stop event,
+    //so the mob, well, stops.
+    if(could_move && !can_move) {
+        m->fsm.run_event(MOB_EV_CARRY_STOP_MOVE);
+        return;
+    }
+    
+    //If the target changed, send a move begin event,
+    //so that the mob can calculate a (new) path and start taking it.
+    if(prev_destination != m->carry_info->intended_mob) {
+        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+        return;
+    }
 }
 
 

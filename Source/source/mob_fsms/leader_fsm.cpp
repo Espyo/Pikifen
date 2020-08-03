@@ -623,12 +623,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
         }
         efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("sleeping_moving");
         }
         efc.new_event(LEADER_EV_CANCEL); {
@@ -664,21 +664,23 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_begin);
-            efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.change_state("sleeping_waiting");
         }
         efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.run(gen_mob_fsm::carry_begin_move);
         }
-        efc.new_event(MOB_EV_CARRY_STUCK); {
+        efc.new_event(MOB_EV_PATH_BLOCKED); {
             efc.change_state("sleeping_stuck");
+        }
+        efc.new_event(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.run(gen_mob_fsm::carry_begin_move);
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(gen_mob_fsm::carry_reach_destination);
@@ -721,27 +723,28 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_become_stuck);
         }
-        efc.new_event(MOB_EV_ON_LEAVE); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-        }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.change_state("sleeping_waiting");
         }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.new_event(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("sleeping_moving");
         }
         efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("waking_up");
         }
         efc.new_event(LEADER_EV_INACTIVATED); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_sleeping_moving");
         }
@@ -750,6 +753,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EV_DEATH); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
@@ -775,12 +779,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
         }
         efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(LEADER_EV_CANCEL); {
@@ -819,21 +823,23 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
-            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_begin);
-            efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.change_state("inactive_sleeping_waiting");
         }
         efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.run(gen_mob_fsm::carry_begin_move);
         }
-        efc.new_event(MOB_EV_CARRY_STUCK); {
+        efc.new_event(MOB_EV_PATH_BLOCKED); {
             efc.change_state("inactive_sleeping_stuck");
+        }
+        efc.new_event(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.run(gen_mob_fsm::carry_begin_move);
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(gen_mob_fsm::carry_reach_destination);
@@ -880,27 +886,28 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_become_stuck);
         }
-        efc.new_event(MOB_EV_ON_LEAVE); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-        }
         efc.new_event(MOB_EV_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
-            efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.change_state("inactive_sleeping_waiting");
         }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+        efc.new_event(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("sleeping_moving");
         }
         efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("inactive_waking_up");
         }
         efc.new_event(LEADER_EV_ACTIVATED); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::become_active);
             efc.change_state("sleeping_moving");
         }
@@ -909,6 +916,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::start_waking_up);
         }
         efc.new_event(MOB_EV_DEATH); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
@@ -922,6 +930,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.run(leader_fsm::fall_down_pit);
             efc.change_state("idling");
