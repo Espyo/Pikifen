@@ -24,6 +24,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
     * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
     * Fixed cardboard boxes not blocking the way if they are not in place, but for this to work, you'll need to use a "Dummy obstacle target" object as a target.
+    * Fixed a few miscellaneous glitches. (Thanks Kman)
     * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
     
     ;Compatibility warnings
@@ -64,11 +65,6 @@ Next tasks (roughly sorted most important first)
         Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
         Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
         Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
-    Others
-        Bulborbs shaking make the no-damage "ding" show up (Kman)
-        Some mob events check whether the mob has been bumped or whistled by checking if whistle.whistling is true; this isn't enough, since the leader could be moving while whistling something else
-            Note that these events exists: MOB_EV_TOUCHED_ACTIVE_LEADER, MOB_EV_WHISTLED
-        Leaders can be burned, poisoned, etc. at random -- The reason is in load_status_types and the uninitialized affects_pikmin_bool et al variables (neutral carrying numbers appear black; probably the same problem) (Kman)
     
     --- v0.19.0 ---
     Remove a leader's health wheel from the HUD when they die (Kman)

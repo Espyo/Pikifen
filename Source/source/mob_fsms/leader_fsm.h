@@ -27,7 +27,6 @@ void be_thrown(             mob* m, void* info1, void* info2);
 void be_thrown_by_bouncer(  mob* m, void* info1, void* info2);
 void become_active(         mob* m, void* info1, void* info2);
 void become_inactive(       mob* m, void* info1, void* info2);
-void called_while_riding(   mob* m, void* info1, void* info2);
 void chase_leader(          mob* m, void* info1, void* info2);
 void die(                   mob* m, void* info1, void* info2);
 void dismiss(               mob* m, void* info1, void* info2);
@@ -68,6 +67,7 @@ void tick_track_ride(       mob* m, void* info1, void* info2);
 void touched_hazard(        mob* m, void* info1, void* info2);
 void touched_spray(         mob* m, void* info1, void* info2);
 void whistle(               mob* m, void* info1, void* info2);
+void whistled_while_riding( mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef LEADER_FSM_INCLUDED

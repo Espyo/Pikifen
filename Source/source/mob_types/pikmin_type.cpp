@@ -145,13 +145,13 @@ void pikmin_type::load_resources(data_node* file) {
     string icon_leaf_str;
     string icon_bud_str;
     string icon_flower_str;
-    data_node* top_leaf_node;
-    data_node* top_bud_node;
-    data_node* top_flower_node;
-    data_node* icon_node;
-    data_node* icon_leaf_node;
-    data_node* icon_bud_node;
-    data_node* icon_flower_node;
+    data_node* top_leaf_node = NULL;
+    data_node* top_bud_node = NULL;
+    data_node* top_flower_node = NULL;
+    data_node* icon_node = NULL;
+    data_node* icon_leaf_node = NULL;
+    data_node* icon_bud_node = NULL;
+    data_node* icon_flower_node = NULL;
     
     rs.set("icon", icon_str, &icon_node);
     rs.set("icon_bud", icon_bud_str, &icon_bud_node);

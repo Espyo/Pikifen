@@ -31,8 +31,6 @@ void become_idle(              mob* m, void* info1, void* info2);
 void become_sprout(            mob* m, void* info1, void* info2);
 void begin_pluck(              mob* m, void* info1, void* info2);
 void called(                   mob* m, void* info1, void* info2);
-void called_while_holding(     mob* m, void* info1, void* info2);
-void called_while_riding(      mob* m, void* info1, void* info2);
 void check_attack(             mob* m, void* info1, void* info2);
 void check_disabled_edible(    mob* m, void* info1, void* info2);
 void check_remove_flailing(    mob* m, void* info1, void* info2);
@@ -96,6 +94,8 @@ void try_held_item_hotswap(    mob* m, void* info1, void* info2);
 void try_latching(             mob* m, void* info1, void* info2);
 void unlatch(                  mob* m, void* info1, void* info2);
 void update_in_group_chasing(  mob* m, void* info1, void* info2);
+void whistled_while_holding(   mob* m, void* info1, void* info2);
+void whistled_while_riding(    mob* m, void* info1, void* info2);
 void work_on_group_task(       mob* m, void* info1, void* info2);
 }
 

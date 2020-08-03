@@ -1278,7 +1278,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stop_being_idle);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called_while_holding);
+            efc.run(pikmin_fsm::whistled_while_holding);
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing_h");
         }
@@ -1315,7 +1315,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::tick_track_ride);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::called_while_riding);
+            efc.run(pikmin_fsm::whistled_while_riding);
         }
     }
     
@@ -1354,7 +1354,6 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
     
     float knockback = 0;
     float knockback_angle = 0;
@@ -1372,6 +1371,8 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     m->leave_group();
+    
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
     
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
@@ -1540,48 +1541,6 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     game.states.gameplay_st->cur_leader_ptr->add_to_group(pik);
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin is called over by a leader, either by being whistled,
- * or touched when idling, but while the Pikmin is holding a tool.
- */
-void pikmin_fsm::called_while_holding(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    tool* too_ptr = (tool*) * (m->holding.begin());
-    
-    if(
-        too_ptr->too_type->dropped_when_pikmin_is_whistled &&
-        pik_ptr->is_tool_primed_for_whistle &&
-        game.states.gameplay_st->whistle.whistling
-    ) {
-        //Since this event can be called when the Pikmin is bumped, we must add
-        //a check to only release the tool if it's a real whistle. Checking
-        //if the leader is whistling is a roundabout way... but it works.
-        pikmin_fsm::release_tool(m, info1, info2);
-    }
-    
-    pik_ptr->is_tool_primed_for_whistle = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin is called over by a leader while riding on a track.
- */
-void pikmin_fsm::called_while_riding(mob* m, void* info1, void* info2) {
-    engine_assert(m->track_info, m->print_state_history());
-    
-    track* tra_ptr = (track*) (m->track_info->m);
-    
-    if(
-        tra_ptr->tra_type->cancellable_with_whistle &&
-        game.states.gameplay_st->whistle.whistling
-    ) {
-        m->stop_track_ride();
-        pikmin_fsm::called(m, NULL, NULL);
-        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
-    }
 }
 
 
@@ -2826,6 +2785,40 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     
     m->chase(pos, NULL, false);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is whistled over by a leader while holding a tool.
+ */
+void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    tool* too_ptr = (tool*) * (m->holding.begin());
+    
+    if(
+        too_ptr->too_type->dropped_when_pikmin_is_whistled &&
+        pik_ptr->is_tool_primed_for_whistle
+    ) {
+        pikmin_fsm::release_tool(m, info1, info2);
+    }
+    
+    pik_ptr->is_tool_primed_for_whistle = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is whistled over by a leader while riding on a track.
+ */
+void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info, m->print_state_history());
+    
+    track* tra_ptr = (track*) (m->track_info->m);
+    
+    if(tra_ptr->tra_type->cancellable_with_whistle) {
+        m->stop_track_ride();
+        pikmin_fsm::called(m, NULL, NULL);
+        m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+    }
 }
 
 

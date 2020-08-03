@@ -1052,7 +1052,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::tick_track_ride);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(leader_fsm::called_while_riding);
+            efc.run(leader_fsm::whistled_while_riding);
         }
     }
     
@@ -1088,7 +1088,6 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
     
     m->stop_chasing();
     
@@ -1100,6 +1099,8 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     m->apply_knockback(knockback, knockback_angle);
     
     m->leave_group();
+    
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
     
     if(knockback > 0) {
         m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
@@ -1187,25 +1188,6 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
     ((leader*) m)->active = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a leader is called over by another leader while riding on a track.
- */
-void leader_fsm::called_while_riding(mob* m, void* info1, void* info2) {
-    engine_assert(m->track_info, m->print_state_history());
-    
-    track* tra_ptr = (track*) (m->track_info->m);
-    
-    if(
-        tra_ptr->tra_type->cancellable_with_whistle &&
-        game.states.gameplay_st->whistle.whistling
-    ) {
-        m->stop_track_ride();
-        leader_fsm::join_group(m, NULL, NULL);
-        m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
-    }
 }
 
 
@@ -1962,4 +1944,22 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::whistle(mob* m, void* info1, void* info2) {
     ((leader*) m)->start_whistling();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader is whistled over by another leader while riding on a track.
+ */
+void leader_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info, m->print_state_history());
+    
+    track* tra_ptr = (track*) (m->track_info->m);
+    
+    if(!tra_ptr->tra_type->cancellable_with_whistle) {
+        return;
+    }
+    
+    m->stop_track_ride();
+    leader_fsm::join_group(m, NULL, NULL);
+    m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
 }

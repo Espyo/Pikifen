@@ -55,7 +55,7 @@ void onion_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     string pik_type_str;
-    data_node* pik_type_node;
+    data_node* pik_type_node = NULL;
     
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     

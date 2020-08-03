@@ -258,12 +258,12 @@ void load_mob_type_from_file(
     string huntable_targets_str;
     string hurtable_targets_str;
     string team_str;
-    data_node* area_editor_tips_node;
-    data_node* spike_damage_node;
-    data_node* target_type_node;
-    data_node* huntable_targets_node;
-    data_node* hurtable_targets_node;
-    data_node* team_node;
+    data_node* area_editor_tips_node = NULL;
+    data_node* spike_damage_node = NULL;
+    data_node* target_type_node = NULL;
+    data_node* huntable_targets_node = NULL;
+    data_node* hurtable_targets_node = NULL;
+    data_node* team_node = NULL;
     
     rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
@@ -507,8 +507,8 @@ void load_mob_type_from_file(
         data_node* prop_node = ae_props_node->get_child(p);
         reader_setter prop_rs(prop_node);
         string type_str;
-        data_node* type_node;
         string list_str;
+        data_node* type_node = NULL;
         
         mob_type::area_editor_prop_struct new_prop;
         new_prop.name = prop_node->name;

@@ -59,7 +59,7 @@ void load_area(
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
     
-    data_node* weather_node;
+    data_node* weather_node = NULL;
     
     rs.set("name", game.cur_area_data.name);
     rs.set("subtitle", game.cur_area_data.subtitle);
@@ -617,7 +617,7 @@ void load_creator_tools() {
     
     reader_setter rs(&file);
     
-    data_node* mob_hurting_percentage_node;
+    data_node* mob_hurting_percentage_node = NULL;
     
     rs.set("area_image_mobs", game.creator_tools.area_image_mobs);
     rs.set("area_image_shadows", game.creator_tools.area_image_shadows);
@@ -660,10 +660,10 @@ void load_custom_particle_generators(const bool load_resources) {
         reader_setter prs(p_node);
         
         string name_str;
-        float emission_interval_float;
-        size_t number_int;
+        float emission_interval_float = 0.0f;
+        size_t number_int = 1;
         string bitmap_str;
-        data_node* bitmap_node;
+        data_node* bitmap_node = NULL;
         
         particle base_p;
         
@@ -847,8 +847,8 @@ void load_hazards() {
         
         string effects_str;
         string liquid_str;
-        data_node* effects_node;
-        data_node* liquid_node;
+        data_node* effects_node = NULL;
+        data_node* liquid_node = NULL;
         
         rs.set("name", new_h.name);
         rs.set("color", new_h.main_color);
@@ -1083,8 +1083,8 @@ void load_spike_damage_types() {
         reader_setter rs(&file);
         
         string particle_generator_name;
-        data_node* damage_node;
-        data_node* particle_generator_node;
+        data_node* damage_node = NULL;
+        data_node* particle_generator_node = NULL;
         
         rs.set("name", new_t.name);
         rs.set("damage", new_t.damage, &damage_node);
@@ -1155,8 +1155,8 @@ void load_spray_types(const bool load_resources) {
         
         string effects_str;
         string icon_str;
-        data_node* effects_node;
-        data_node* icon_node;
+        data_node* effects_node = NULL;
+        data_node* icon_node = NULL;
         
         rs.set("name", new_t.name);
         rs.set("effects", effects_str, &effects_node);
@@ -1257,13 +1257,13 @@ void load_status_types(const bool load_resources) {
         status_type* new_t = new status_type();
         reader_setter rs(&file);
         
-        bool affects_pikmin_bool;
-        bool affects_leaders_bool;
-        bool affects_enemies_bool;
-        bool affects_others_bool;
+        bool affects_pikmin_bool = false;
+        bool affects_leaders_bool = false;
+        bool affects_enemies_bool = false;
+        bool affects_others_bool = false;
         string particle_offset_str;
         string particle_gen_str;
-        data_node* particle_gen_node;
+        data_node* particle_gen_node = NULL;
         
         rs.set("name",                    new_t->name);
         rs.set("color",                   new_t->color);

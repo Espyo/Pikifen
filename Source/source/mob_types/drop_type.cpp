@@ -57,11 +57,11 @@ void drop_type::load_properties(data_node* file) {
     string effect_str;
     string spray_name_str;
     string status_name_str;
-    data_node* consumer_node;
-    data_node* effect_node;
-    data_node* spray_name_node;
-    data_node* status_name_node;
-    data_node* total_doses_node;
+    data_node* consumer_node = NULL;
+    data_node* effect_node = NULL;
+    data_node* spray_name_node = NULL;
+    data_node* status_name_node = NULL;
+    data_node* total_doses_node = NULL;
     
     rs.set("consumer", consumer_str, &consumer_node);
     rs.set("effect", effect_str, &effect_node);

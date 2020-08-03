@@ -999,13 +999,20 @@ void mob::delete_old_status_effects() {
 /* ----------------------------------------------------------------------------
  * Starts the particle effect and sound for an attack, which could either be
  * a meaty whack, or a harmless ding.
- * attacker: Mob that caused the attack.
- * attack_h: Hitbox that caused the attack.
- * victim_h: Hitbox that suffered the attack.
- * damage:   Total damage caused.
+ * attacker:
+ *   Mob that caused the attack.
+ * attack_h:
+ *   Hitbox that caused the attack.
+ * victim_h:
+ *   Hitbox that suffered the attack.
+ * damage:
+ *   Total damage caused.
+ * knockback:
+ *   Total knockback strength.
  */
 void mob::do_attack_effects(
-    mob* attacker, hitbox* attack_h, hitbox* victim_h, const float damage
+    mob* attacker, hitbox* attack_h, hitbox* victim_h,
+    const float damage, const float knockback
 ) {
     //Calculate the particle's final position.
     point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
@@ -1026,8 +1033,10 @@ void mob::do_attack_effects(
         attack_h_pos +
         point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
         
+    bool useless = (damage <= 0 && knockback == 0.0f);
+    
     //Create the particle.
-    if(damage > 0) {
+    if(!useless) {
         particle smack_p(
             PARTICLE_TYPE_SMACK, particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
@@ -1050,7 +1059,7 @@ void mob::do_attack_effects(
     }
     
     //Play the sound.
-    if(damage > 0) {
+    if(!useless) {
         game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
     }
 }

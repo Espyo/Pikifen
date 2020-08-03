@@ -306,7 +306,8 @@ public:
     size_t get_latched_pikmin_amount() const;
     float get_latched_pikmin_weight() const;
     void do_attack_effects(
-        mob* attacker, hitbox* attack_h, hitbox* victim_h, const float damage
+        mob* attacker, hitbox* attack_h, hitbox* victim_h,
+        const float damage, const float knockback
     );
     bool is_off_camera() const;
     void focus_on_mob(mob* m);

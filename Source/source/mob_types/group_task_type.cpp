@@ -42,8 +42,8 @@ void group_task_type::load_properties(data_node* file) {
     
     string contribution_method_str;
     string worker_pikmin_pose_str;
-    data_node* contribution_method_node;
-    data_node* worker_pikmin_pose_node;
+    data_node* contribution_method_node = NULL;
+    data_node* worker_pikmin_pose_node = NULL;
     
     rs.set(
         "contribution_method", contribution_method_str,

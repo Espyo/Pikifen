@@ -66,7 +66,7 @@ void pile_type::load_properties(data_node* file) {
     
     string contents_str;
     string size_animation_suffixes_str;
-    data_node* contents_node;
+    data_node* contents_node = NULL;
     
     rs.set("can_drop_multiple", can_drop_multiple);
     rs.set("contents", contents_str, &contents_node);

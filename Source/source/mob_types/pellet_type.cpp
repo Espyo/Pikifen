@@ -50,7 +50,7 @@ void pellet_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     string pik_type_str;
-    data_node* pik_type_node;
+    data_node* pik_type_node = NULL;
     
     rs.set("match_seeds", match_seeds);
     rs.set("non_match_seeds", non_match_seeds);
@@ -76,7 +76,7 @@ void pellet_type::load_resources(data_node* file) {
     reader_setter rs(file);
     
     string number_image_str;
-    data_node* number_image_node;
+    data_node* number_image_node = NULL;
     
     rs.set("number_image", number_image_str, &number_image_node);
     

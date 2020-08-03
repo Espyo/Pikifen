@@ -35,7 +35,7 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage);
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, 0.0f);
 }
 
 
