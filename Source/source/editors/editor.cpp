@@ -805,7 +805,7 @@ void editor::open_picker(
     const bool can_make_new,
     const string &filter
 ) {
-    picker_info* new_picker = new picker_info();
+    picker_info* new_picker = new picker_info(this);
     
     new_picker->title = title;
     new_picker->process_callback =
@@ -1149,13 +1149,14 @@ void editor::update_transformations() {
  * Zooms to the specified level, keeping the mouse cursor in the same spot.
  */
 void editor::zoom_with_cursor(const float new_zoom) {
-    game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
-    
     //Keep a backup of the old mouse coordinates.
     point old_mouse_pos = game.mouse_cursor_w;
     
-    //Figure out where the mouse will be after the zoom.
+    //Do the zoom.
+    game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
     update_transformations();
+    
+    //Figure out where the mouse will be after the zoom.
     game.mouse_cursor_w = game.mouse_cursor_s;
     al_transform_coordinates(
         &game.screen_to_world_transform,
@@ -1171,14 +1172,21 @@ void editor::zoom_with_cursor(const float new_zoom) {
         )
     );
     
+    //Update the mouse coordinates again.
     update_transformations();
+    game.mouse_cursor_w = game.mouse_cursor_s;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+    );
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a new picker info.
  */
-editor::picker_info::picker_info() :
+editor::picker_info::picker_info(editor* editor_ptr) :
+    editor_ptr(editor_ptr),
     can_make_new(false),
     pick_callback(nullptr) {
 }
@@ -1218,6 +1226,8 @@ void editor::picker_info::process() {
     }
     
     auto try_make_new = [this] () {
+        if(filter.empty()) return;
+        
         bool is_really_new = true;
         for(size_t i = 0; i < items.size(); ++i) {
             if(filter == items[i].name) {
@@ -1251,7 +1261,8 @@ void editor::picker_info::process() {
         can_make_new ?
         "Search filter or new item name" :
         "Search filter";
-    //TODO next_input_needs_special_focus();
+        
+    editor_ptr->next_input_needs_special_focus();
     if(
         ImGui::InputTextWithHint(
             "##filter", filter_widget_hint.c_str(), &filter,

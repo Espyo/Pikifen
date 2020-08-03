@@ -178,6 +178,9 @@ protected:
     };
     
     class picker_info : public dialog_info {
+    private:
+        //Pointer to the editor that's using it.
+        editor* editor_ptr;
     public:
         //List of picker dialog items to choose from.
         vector<picker_item> items;
@@ -192,7 +195,7 @@ protected:
         //Only show picker dialog items matching this filter.
         string filter;
         
-        picker_info();
+        picker_info(editor* editor_ptr);
         void process();
     };
     

@@ -2,10 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Both editors
-        Zooming in and out in an editor is making the cursor coordinates in the status bar go all janky
-        Hitting enter at the load area dialog, in the text box, will just make you quit, and you'll always quit by selecting the textbox from there on out
-            Also, shouldn't it auto-focus on that textbox?
+    
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
