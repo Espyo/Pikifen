@@ -1249,7 +1249,7 @@ void area_editor::process_gui_panel_layout() {
             "Current selection filter: " + sel_filter_description + ".\n"
             "When selecting things in the canvas, only these will "
             "become selected.",
-            "F"
+            "F or Shift + F"
         );
         
         //Clear selection button.

@@ -2,7 +2,10 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Both editors
+        Zooming in and out in an editor is making the cursor coordinates in the status bar go all janky
+        Hitting enter at the load area dialog, in the text box, will just make you quit, and you'll always quit by selecting the textbox from there on out
+            Also, shouldn't it auto-focus on that textbox?
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -51,15 +54,10 @@ Next tasks (roughly sorted most important first)
         The shading on seesaw block ropes is reversed, with the lighter parts near the edges
         Cloaking Burrow-nit doesn't really visually shake when attacking?
         Pikmin sprout sprites have their hitboxes swapped
-    Both editors
-        All key shortcuts in the editors should check if their modifier key is pressed AND other modifier keys are not pressed (e.g. Ctrl+R is both toggling the reference and rotating mobs)
-        Zooming in and out in an editor is making the cursor coordinates in the status bar go all janky
-        Hitting enter at the load area dialog, in the text box, will just make you quit, and you'll always quit by selecting the textbox from there on out
-            Also, shouldn't it auto-focus on that textbox?
     Area editor
         If you're dragging a sector, you can't zoom or pan
         If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
-        Reloading the area isn't setting the sub-state to normal
+        Re/Loading the area isn't setting the sub-state to normal
         Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
         Deleting a stop says you deleted 1 stop, 0 links
         Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather

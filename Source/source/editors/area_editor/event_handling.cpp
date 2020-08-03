@@ -25,8 +25,7 @@ using std::set;
 void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) return;
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_F1: {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
             status_text =
@@ -35,9 +34,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             status_text =
                 "Disabled debug edge number display.";
         }
-        break;
         
-    } case ALLEGRO_KEY_F2: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
         debug_sector_nrs = !debug_sector_nrs;
         if(debug_sector_nrs) {
             status_text =
@@ -46,9 +44,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             status_text =
                 "Disabled debug sector number display.";
         }
-        break;
         
-    } case ALLEGRO_KEY_F3: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F3)) {
         debug_vertex_nrs = !debug_vertex_nrs;
         if(debug_vertex_nrs) {
             status_text =
@@ -57,9 +54,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             status_text =
                 "Disabled debug vertex number display.";
         }
-        break;
         
-    } case ALLEGRO_KEY_F4: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F4)) {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
             status_text =
@@ -68,9 +64,8 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             status_text =
                 "Disabled debug triangulation display.";
         }
-        break;
         
-    } case ALLEGRO_KEY_F5: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F5)) {
         debug_path_nrs = !debug_path_nrs;
         if(debug_path_nrs) {
             status_text =
@@ -79,15 +74,10 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             status_text =
                 "Disabled debug path number display.";
         }
-        break;
         
-    } case ALLEGRO_KEY_Z: {
-        if(is_ctrl_pressed) {
-            press_undo_button();
-        }
-        break;
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Z, true)) {
+        press_undo_button();
         
-    }
     }
 }
 
@@ -98,60 +88,53 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_gui_focused) return;
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_LEFT: {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
         
-    } case ALLEGRO_KEY_RIGHT: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
         game.cam.target_pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
         
-    } case ALLEGRO_KEY_UP: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
         game.cam.target_pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
         
-    } case ALLEGRO_KEY_DOWN: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
         game.cam.target_pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
         
-    } case ALLEGRO_KEY_MINUS: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
                 game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
-        break;
-        
-    } case ALLEGRO_KEY_EQUALS: {
+            
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
+        //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
         game.cam.target_zoom =
             clamp(
                 game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
-        break;
-        
-    } case ALLEGRO_KEY_0: {
+            
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         if(game.cam.target_zoom == 1.0f) {
             game.cam.target_pos = point();
         } else {
             game.cam.target_zoom = 1.0f;
         }
-        break;
         
-    } case ALLEGRO_KEY_R: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R)) {
         rotate_mob_gens_to_point(game.mouse_cursor_w);
-        break;
         
-    } case ALLEGRO_KEY_X: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
         press_snap_mode_button();
-        break;
         
-    } case ALLEGRO_KEY_BACKSPACE: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X, false, true)) {
+        //Toggles the snap modes backwards.
+        press_snap_mode_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_BACKSPACE)) {
         undo_layout_drawing_node();
-        break;
         
-    }
     }
 }
 
@@ -162,38 +145,22 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) return;
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_L: {
-        if(is_ctrl_pressed) {
-            press_load_button();
-        }
-        break;
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
+        press_load_button();
         
-    } case ALLEGRO_KEY_P: {
-        if(is_ctrl_pressed) {
-            press_quick_play_button();
-        }
-        break;
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        press_quick_play_button();
         
-    } case ALLEGRO_KEY_Q: {
-        if(is_ctrl_pressed) {
-            press_quit_button();
-        }
-        break;
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
+        press_quit_button();
         
-    } case ALLEGRO_KEY_R: {
-        if(is_ctrl_pressed) {
-            press_reference_button();
-        }
-        break;
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
+        press_reference_button();
         
-    } case ALLEGRO_KEY_S: {
-        if(is_ctrl_pressed) {
-            press_save_button();
-        }
-        break;
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
+        press_save_button();
         
-    } case ALLEGRO_KEY_ESCAPE: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         if(!dialogs.empty()) {
             close_top_dialog();
             
@@ -244,9 +211,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             press_quit_button();
             
         }
-        break;
         
-    }
     }
 }
 
@@ -257,81 +222,75 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_gui_focused) return;
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_1: {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_1)) {
         if(state == EDITOR_STATE_PATHS) {
             path_drawing_normals = false;
         } else if(sub_state == EDITOR_SUB_STATE_OCTEE) {
             octee_mode = OCTEE_MODE_OFFSET;
         }
-        break;
         
-    } case ALLEGRO_KEY_2: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_2)) {
         if(state == EDITOR_STATE_PATHS) {
             path_drawing_normals = true;
         } else if(sub_state == EDITOR_SUB_STATE_OCTEE) {
             octee_mode = OCTEE_MODE_SCALE;
         }
-        break;
         
-    } case ALLEGRO_KEY_3: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_3)) {
         if(sub_state == EDITOR_SUB_STATE_OCTEE) {
             octee_mode = OCTEE_MODE_ANGLE;
         }
-        break;
         
-    } case ALLEGRO_KEY_A: {
-        if(is_ctrl_pressed) {
-            if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-                if(state == EDITOR_STATE_LAYOUT) {
-                    selected_edges.insert(
-                        game.cur_area_data.edges.begin(),
-                        game.cur_area_data.edges.end()
-                    );
-                    selected_sectors.insert(
-                        game.cur_area_data.sectors.begin(),
-                        game.cur_area_data.sectors.end()
-                    );
-                    selected_vertexes.insert(
-                        game.cur_area_data.vertexes.begin(),
-                        game.cur_area_data.vertexes.end()
-                    );
-                    
-                } else if(state == EDITOR_STATE_MOBS) {
-                    selected_mobs.insert(
-                        game.cur_area_data.mob_generators.begin(),
-                        game.cur_area_data.mob_generators.end()
-                    );
-                    
-                } else if(state == EDITOR_STATE_PATHS) {
-                    selected_path_stops.insert(
-                        game.cur_area_data.path_stops.begin(),
-                        game.cur_area_data.path_stops.end()
-                    );
-                }
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_A, true)) {
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            if(state == EDITOR_STATE_LAYOUT) {
+                selected_edges.insert(
+                    game.cur_area_data.edges.begin(),
+                    game.cur_area_data.edges.end()
+                );
+                selected_sectors.insert(
+                    game.cur_area_data.sectors.begin(),
+                    game.cur_area_data.sectors.end()
+                );
+                selected_vertexes.insert(
+                    game.cur_area_data.vertexes.begin(),
+                    game.cur_area_data.vertexes.end()
+                );
+                
+            } else if(state == EDITOR_STATE_MOBS) {
+                selected_mobs.insert(
+                    game.cur_area_data.mob_generators.begin(),
+                    game.cur_area_data.mob_generators.end()
+                );
+                
+            } else if(state == EDITOR_STATE_PATHS) {
+                selected_path_stops.insert(
+                    game.cur_area_data.path_stops.begin(),
+                    game.cur_area_data.path_stops.end()
+                );
             }
-            update_vertex_selection();
-            set_selection_status_text();
         }
-        break;
+        update_vertex_selection();
+        set_selection_status_text();
         
-    } case ALLEGRO_KEY_C: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C)) {
         if(!moving && !selecting) {
             press_circle_sector_button();
         }
-        break;
         
-    } case ALLEGRO_KEY_D: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(!moving && !selecting) {
             press_duplicate_mobs_button();
         }
-        break;
         
-    } case ALLEGRO_KEY_F: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F)) {
         press_selection_filter_button();
-        break;
         
-    } case ALLEGRO_KEY_N: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F, false, true)) {
+        //Toggles the filter modes backwards.
+        press_selection_filter_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
             press_new_sector_button();
@@ -347,9 +306,8 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             break;
         }
         }
-        break;
         
-    } case ALLEGRO_KEY_DELETE: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
             press_remove_edge_button();
@@ -365,9 +323,8 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             break;
         }
         }
-        break;
         
-    } case ALLEGRO_KEY_HOME: {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
         bool got_something = false;
         point min_coords, max_coords;
         
@@ -426,9 +383,6 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
         center_camera(min_coords, max_coords);
         
-        break;
-        
-    }
     }
 }
 

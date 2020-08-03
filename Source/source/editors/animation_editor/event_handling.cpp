@@ -25,46 +25,45 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_LEFT: {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
-    } case ALLEGRO_KEY_RIGHT: {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
         game.cam.target_pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
-    } case ALLEGRO_KEY_UP: {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
         game.cam.target_pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
-    } case ALLEGRO_KEY_DOWN: {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
         game.cam.target_pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        break;
-    } case ALLEGRO_KEY_MINUS: {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
                 game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
-        break;
-    } case ALLEGRO_KEY_EQUALS: {
+            
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
+        //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
         game.cam.target_zoom =
             clamp(
                 game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
-        break;
-    } case ALLEGRO_KEY_0: {
+            
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         if(game.cam.target_zoom == 1.0f) {
             game.cam.target_pos = point();
         } else {
             game.cam.target_zoom = 1.0f;
         }
-        break;
-    } case ALLEGRO_KEY_C: {
-        if(state == EDITOR_STATE_SPRITE_TRANSFORM && is_ctrl_pressed) {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
+        if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
             comparison = !comparison;
         }
-        break;
-    }
+        
     }
 }
 
@@ -77,43 +76,27 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_G: {
-        if(is_ctrl_pressed) {
-            press_grid_button();
-        }
-        break;
-    } case ALLEGRO_KEY_H: {
-        if(is_ctrl_pressed) {
-            press_hitboxes_button();
-        }
-        break;
-    } case ALLEGRO_KEY_L: {
-        if(is_ctrl_pressed) {
-            press_load_button();
-        }
-        break;
-    } case ALLEGRO_KEY_P: {
-        if(is_ctrl_pressed) {
-            press_pikmin_silhouette_button();
-        }
-        break;
-    } case ALLEGRO_KEY_Q: {
-        if(is_ctrl_pressed) {
-            press_quit_button();
-        }
-        break;
-    } case ALLEGRO_KEY_R: {
-        if(is_ctrl_pressed) {
-            press_mob_radius_button();
-        }
-        break;
-    } case ALLEGRO_KEY_S: {
-        if(is_ctrl_pressed) {
-            press_save_button();
-        }
-        break;
-    }
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
+        press_grid_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_H, true)) {
+        press_hitboxes_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
+        press_load_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        press_pikmin_silhouette_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
+        press_quit_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
+        press_mob_radius_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
+        press_save_button();
+        
     }
 }
 
@@ -126,11 +109,10 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_SPACE: {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
         press_play_animation_button();
-        break;
-    } case ALLEGRO_KEY_HOME: {
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
         sprite* s_ptr = cur_sprite;
         if(!s_ptr && cur_anim && cur_frame_nr != INVALID) {
             string name =
@@ -168,9 +150,9 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
         center_camera(cmin, cmax);
-        break;
-    } case ALLEGRO_KEY_ESCAPE: {
-
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
+    
         if(!dialogs.empty()) {
             close_top_dialog();
             
@@ -182,8 +164,7 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             }
             }
         }
-        break;
-    }
+        
     }
 }
 

@@ -266,6 +266,10 @@ protected:
     void draw_unsaved_changes_warning();
     void focus_next_special_input();
     point get_last_widget_pos();
+    bool key_check(
+        const int pressed_key, const int match_key,
+        const bool needs_ctrl = false, const int needs_shift = false
+    );
     bool input_popup(
         const char* label, const char* prompt, string* text
     );

@@ -644,6 +644,28 @@ bool editor::input_popup(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not the pressed key corresponds to the specified
+ * key combination. Used for keyboard shortcuts.
+ */
+bool editor::key_check(
+    const int pressed_key, const int match_key,
+    const bool needs_ctrl, const int needs_shift
+) {
+
+    if(pressed_key != match_key) {
+        return false;
+    }
+    if(needs_ctrl != is_ctrl_pressed) {
+        return false;
+    }
+    if(needs_shift != is_shift_pressed) {
+        return false;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Displays a popup, if applicable, and fills it with selectable items
  * from a list. Returns true if one of the items was clicked on,
  * false otherwise.
