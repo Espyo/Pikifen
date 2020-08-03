@@ -1253,7 +1253,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             ) {
                 tw_handled =
                     cur_transformation_widget.handle_mouse_move(
-                        snap_point(game.mouse_cursor_w),
+                        snap_point(game.mouse_cursor_w, true),
                         &selection_center,
                         &selection_size,
                         &selection_angle,
@@ -1306,7 +1306,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
                 point closest_vertex_new_p =
-                    snap_point(move_closest_vertex_start_pos + mouse_offset);
+                    snap_point(
+                        move_closest_vertex_start_pos + mouse_offset, true
+                    );
                 point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
                 for(vertex* v : selected_vertexes) {
                     point orig = pre_move_vertex_coords[v];
@@ -1430,6 +1432,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_NONE
             ) {
                 if(selected_shadow) {
+                    //Move tree shadow.
                     area_data* prepared_state = prepare_state();
                     if(
                         !cur_transformation_widget.handle_mouse_move(
@@ -1554,7 +1557,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     );
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-        point hotspot = snap_point(game.mouse_cursor_w);
+        point hotspot = snap_point(game.mouse_cursor_w, true);
         if(new_circle_sector_step == 1) {
             new_circle_sector_anchor = hotspot;
         } else {

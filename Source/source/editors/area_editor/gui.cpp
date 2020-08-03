@@ -91,7 +91,8 @@ void area_editor::process_gui() {
     //Draw the canvas now.
     ImGui::BeginChild("canvas", ImVec2(0, -18));
     ImGui::EndChild();
-    is_mouse_in_gui = !ImGui::IsItemHovered();
+    is_mouse_in_gui =
+        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
     ImVec2 tl = ImGui::GetItemRectMin();
     canvas_tl.x = tl.x;
     canvas_tl.y = tl.y;

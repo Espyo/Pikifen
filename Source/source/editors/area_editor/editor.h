@@ -580,7 +580,7 @@ private:
     void select_vertex(vertex* v_ptr);
     void set_selection_status_text();
     void set_new_circle_sector_points();
-    point snap_point(const point &p);
+    point snap_point(const point &p, const bool ignore_selected = false);
     void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(

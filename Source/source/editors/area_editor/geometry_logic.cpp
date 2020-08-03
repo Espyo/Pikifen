@@ -1588,8 +1588,13 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
 /* ----------------------------------------------------------------------------
  * Snaps a point to the nearest available snapping space, based on the
  * current snap mode.
+ * p:
+ *   Point to snap.
+ * ignore_selected:
+ *   If true, ignore the selected vertexes or edges when snapping to
+ *   vertexes or edges.
  */
-point area_editor::snap_point(const point &p) {
+point area_editor::snap_point(const point &p, const bool ignore_selected) {
     if(is_shift_pressed) return p;
     
     switch(snap_mode) {
@@ -1610,17 +1615,28 @@ point area_editor::snap_point(const point &p) {
         }
         cursor_snap_timer.start();
         
-        vector<std::pair<dist, vertex*> > v =
+        vector<vertex*> vertexes_to_check = game.cur_area_data.vertexes;
+        if(ignore_selected) {
+            for(vertex* v : selected_vertexes) {
+                for(size_t v2 = 0; v2 < vertexes_to_check.size(); ++v2) {
+                    if(vertexes_to_check[v2] == v) {
+                        vertexes_to_check.erase(vertexes_to_check.begin() + v2);
+                        break;
+                    }
+                }
+            }
+        }
+        vector<std::pair<dist, vertex*> > snappable_vertexes =
             get_merge_vertexes(
-                p, game.cur_area_data.vertexes,
+                p, vertexes_to_check,
                 game.options.area_editor_snap_threshold / game.cam.zoom
             );
-        if(v.empty()) {
+        if(snappable_vertexes.empty()) {
             cursor_snap_cache = p;
             return p;
         } else {
             sort(
-                v.begin(), v.end(),
+                snappable_vertexes.begin(), snappable_vertexes.end(),
                 [] (
                     std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2
             ) -> bool {
@@ -1628,9 +1644,12 @@ point area_editor::snap_point(const point &p) {
             }
             );
             
-            point ret(v[0].second->x, v[0].second->y);
-            cursor_snap_cache = ret;
-            return ret;
+            point result(
+                snappable_vertexes[0].second->x,
+                snappable_vertexes[0].second->y
+            );
+            cursor_snap_cache = result;
+            return result;
         }
         
         break;
@@ -1648,6 +1667,20 @@ point area_editor::snap_point(const point &p) {
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
             float r;
+            
+            if(ignore_selected) {
+                //Let's ignore not only the selected edge, but also
+                //neighboring edges, because as we move an edge,
+                //the neighboring edges stretch along with it.
+                bool skip = false;
+                for(vertex* v : selected_vertexes) {
+                    if(v->has_edge(e_ptr)) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if(skip) continue;
+            }
             
             point edge_p =
                 get_closest_point_in_line(

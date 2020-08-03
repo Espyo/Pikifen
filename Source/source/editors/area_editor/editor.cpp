@@ -234,6 +234,7 @@ void area_editor::clear_current_area() {
     made_new_changes = false;
     backup_timer.start(game.options.area_editor_backup_interval);
     
+    sub_state = EDITOR_SUB_STATE_NONE;
     state = EDITOR_STATE_MAIN;
 }
 

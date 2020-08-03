@@ -2,7 +2,12 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Area editor
+        If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
+        Deleting a stop says you deleted 1 stop, 0 links
+        Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
+        Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
+        Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -51,15 +56,6 @@ Next tasks (roughly sorted most important first)
         The shading on seesaw block ropes is reversed, with the lighter parts near the edges
         Cloaking Burrow-nit doesn't really visually shake when attacking?
         Pikmin sprout sprites have their hitboxes swapped
-    Area editor
-        If you're dragging a sector, you can't zoom or pan
-        If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
-        Re/Loading the area isn't setting the sub-state to normal
-        Vertex or edge snap modes react really weirdly when there are no vertexes/edges nearby, if you're dragging a vertex
-        Deleting a stop says you deleted 1 stop, 0 links
-        Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
-        Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
-        Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
     
     --- v0.19.0 ---
     Remove a leader's health wheel from the HUD when they die (Kman)
