@@ -192,7 +192,10 @@ void area_editor::draw_canvas() {
             selected_sectors.find(s_ptr) != selected_sectors.end();
         bool valid = true;
         
-        if(non_simples.find(s_ptr) != non_simples.end()) {
+        if(
+            game.cur_area_data.problems.non_simples.find(s_ptr) !=
+            game.cur_area_data.problems.non_simples.end()
+        ) {
             valid = false;
         }
         if(s_ptr == problem_sector_ptr) {
@@ -296,13 +299,18 @@ void area_editor::draw_canvas() {
             valid = false;
         }
         
-        if(lone_edges.find(e_ptr) != lone_edges.end()) {
+        if(
+            game.cur_area_data.problems.lone_edges.find(e_ptr) !=
+            game.cur_area_data.problems.lone_edges.end()
+        ) {
             valid = false;
         }
         
         if(
-            non_simples.find(e_ptr->sectors[0]) != non_simples.end() ||
-            non_simples.find(e_ptr->sectors[1]) != non_simples.end()
+            game.cur_area_data.problems.non_simples.find(e_ptr->sectors[0]) !=
+            game.cur_area_data.problems.non_simples.end() ||
+            game.cur_area_data.problems.non_simples.find(e_ptr->sectors[1]) !=
+            game.cur_area_data.problems.non_simples.end()
         ) {
             valid = false;
         }

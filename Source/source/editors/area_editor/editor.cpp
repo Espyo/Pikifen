@@ -206,8 +206,6 @@ void area_editor::clear_current_area() {
     clear_layout_drawing();
     clear_layout_moving();
     clear_problems();
-    non_simples.clear();
-    lone_edges.clear();
     
     clear_area_textures();
     
@@ -1020,26 +1018,26 @@ void area_editor::goto_problem() {
         
     } case EPT_BAD_SECTOR: {
 
-        if(non_simples.empty()) {
+        if(game.cur_area_data.problems.non_simples.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
             return;
         }
         
-        sector* s_ptr = non_simples.begin()->first;
+        sector* s_ptr = game.cur_area_data.problems.non_simples.begin()->first;
         center_camera(s_ptr->bbox[0], s_ptr->bbox[1]);
         
         break;
         
     } case EPT_LONE_EDGE: {
 
-        if(lone_edges.empty()) {
+        if(game.cur_area_data.problems.lone_edges.empty()) {
             //Uh, old information. Try searching for problems again.
             find_problems();
             return;
         }
         
-        edge* e_ptr = *lone_edges.begin();
+        edge* e_ptr = *game.cur_area_data.problems.lone_edges.begin();
         point min_coords, max_coords;
         min_coords.x = e_ptr->vertexes[0]->x;
         max_coords.x = min_coords.x;
@@ -1446,7 +1444,10 @@ void area_editor::press_circle_sector_button() {
         return;
     }
     
-    if(!non_simples.empty() || !lone_edges.empty()) {
+    if(
+        !game.cur_area_data.problems.non_simples.empty() ||
+        !game.cur_area_data.problems.lone_edges.empty()
+    ) {
         status_text =
             "Please fix any broken sectors or edges before trying to make "
             "a new sector!";
@@ -1553,7 +1554,10 @@ void area_editor::press_new_sector_button() {
         return;
     }
     
-    if(!non_simples.empty() || !lone_edges.empty()) {
+    if(
+        !game.cur_area_data.problems.non_simples.empty() ||
+        !game.cur_area_data.problems.lone_edges.empty()
+    ) {
         status_text =
             "Please fix any broken sectors or edges before trying to make "
             "a new sector!";
@@ -2439,9 +2443,9 @@ void area_editor::set_new_circle_sector_points() {
 void area_editor::set_selection_status_text() {
     status_text.clear();
     
-    if(!non_simples.empty()) {
+    if(!game.cur_area_data.problems.non_simples.empty()) {
         emit_triangulation_error_status_bar_message(
-            non_simples.begin()->second
+            game.cur_area_data.problems.non_simples.begin()->second
         );
     }
     
@@ -2971,8 +2975,6 @@ void area_editor::undo() {
     clear_layout_drawing();
     clear_layout_moving();
     clear_problems();
-    non_simples.clear();
-    lone_edges.clear();
     
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
     path_preview_timer.start(false);

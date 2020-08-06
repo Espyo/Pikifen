@@ -341,6 +341,19 @@ struct tree_shadow {
 
 
 /* ----------------------------------------------------------------------------
+ * A structure holding info on the geometry problems the area currently has.
+ */
+struct geometry_problems {
+    //Non-simple sectors found, and their reason for being broken.
+    map<sector*, TRIANGULATION_ERRORS> non_simples;
+    //List of lone edges found.
+    unordered_set<edge*> lone_edges;
+};
+
+
+
+
+/* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
  * the sectors know how to communicate with
@@ -372,6 +385,8 @@ struct area_data {
     
     weather weather_condition;
     string weather_name;
+    
+    geometry_problems problems;
     
     area_data();
     void check_stability();

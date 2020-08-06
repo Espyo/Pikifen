@@ -26,10 +26,6 @@ class area_editor : public editor {
 public:
     //Load this area when the area editor loads.
     string auto_load_area;
-    //Non-simple sectors found, and their reason for being broken.
-    map<sector*, TRIANGULATION_ERRORS> non_simples;
-    //List of lone edges found.
-    unordered_set<edge*> lone_edges;
     //Area being edited when using the quick-play button.
     string quick_play_area;
     //Position the camera was it in the editor before quick-play.

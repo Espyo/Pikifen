@@ -135,6 +135,9 @@ void area_data::clear() {
     bg_color = al_map_rgb(0, 0, 0);
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
+    
+    problems.non_simples.clear();
+    problems.lone_edges.clear();
 }
 
 
@@ -302,6 +305,18 @@ void area_data::clone(area_data &other) {
     other.spray_amounts = spray_amounts;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
+    
+    other.problems.non_simples.clear();
+    other.problems.lone_edges.clear();
+    other.problems.lone_edges.reserve(problems.lone_edges.size());
+    for(const auto &s : problems.non_simples) {
+        size_t nr = find_sector_nr(s.first);
+        other.problems.non_simples[other.sectors[nr]] = s.second;
+    }
+    for(const edge* e : problems.lone_edges) {
+        size_t nr = find_edge_nr(e);
+        other.problems.lone_edges.insert(other.edges[nr]);
+    }
 }
 
 

@@ -472,10 +472,10 @@ void area_editor::find_problems() {
     }
     
     //Check non-simple sectors.
-    if(!non_simples.empty()) {
+    if(!game.cur_area_data.problems.non_simples.empty()) {
         problem_type = EPT_BAD_SECTOR;
         problem_title = "Non-simple sector!";
-        switch(non_simples.begin()->second) {
+        switch(game.cur_area_data.problems.non_simples.begin()->second) {
         case TRIANGULATION_ERROR_LONE_EDGES: {
             problem_description =
                 "It contains lone edges. Try clearing them up.";
@@ -506,7 +506,7 @@ void area_editor::find_problems() {
     }
     
     //Check lone edges.
-    if(!lone_edges.empty()) {
+    if(!game.cur_area_data.problems.lone_edges.empty()) {
         problem_type = EPT_LONE_EDGE;
         problem_title = "Lone edge!";
         problem_description =
@@ -1815,15 +1815,16 @@ void area_editor::update_affected_sectors(
             triangulate(s_ptr, &triangulation_lone_edges, true, true);
             
         if(triangulation_error == TRIANGULATION_NO_ERROR) {
-            auto it = non_simples.find(s_ptr);
-            if(it != non_simples.end()) {
-                non_simples.erase(it);
+            auto it = game.cur_area_data.problems.non_simples.find(s_ptr);
+            if(it != game.cur_area_data.problems.non_simples.end()) {
+                game.cur_area_data.problems.non_simples.erase(it);
             }
         } else {
-            non_simples[s_ptr] = triangulation_error;
+            game.cur_area_data.problems.non_simples[s_ptr] =
+                triangulation_error;
             last_triangulation_error = triangulation_error;
         }
-        lone_edges.insert(
+        game.cur_area_data.problems.lone_edges.insert(
             triangulation_lone_edges.begin(),
             triangulation_lone_edges.end()
         );
