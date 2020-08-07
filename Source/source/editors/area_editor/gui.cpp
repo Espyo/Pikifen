@@ -290,8 +290,8 @@ void area_editor::process_gui_menu_bar() {
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "on" : "off";
-                status_text = "Tooltips are now " + state_str + ".";
+                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                status_text = state_str + " tooltips.";
                 save_options();
             }
             

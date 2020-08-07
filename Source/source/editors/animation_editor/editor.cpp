@@ -474,8 +474,8 @@ void animation_editor::load() {
  */
 void animation_editor::press_grid_button() {
     grid_visible = !grid_visible;
-    string state_str = (grid_visible ? "visible" : "invisible");
-    status_text = "The grid is now " + state_str + ".";
+    string state_str = (grid_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " grid visibility.";
 }
 
 
@@ -484,8 +484,8 @@ void animation_editor::press_grid_button() {
  */
 void animation_editor::press_hitboxes_button() {
     hitboxes_visible = !hitboxes_visible;
-    string state_str = (hitboxes_visible ? "visible" : "invisible");
-    status_text = "The hitboxes are now " + state_str + ".";
+    string state_str = (hitboxes_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " hitbox visibility.";
 }
 
 
@@ -504,8 +504,8 @@ void animation_editor::press_load_button() {
  */
 void animation_editor::press_mob_radius_button() {
     mob_radius_visible = !mob_radius_visible;
-    string state_str = (mob_radius_visible ? "visible" : "invisible");
-    status_text = "The object radius is now " + state_str + ".";
+    string state_str = (mob_radius_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " object radius visibility.";
 }
 
 
@@ -514,8 +514,8 @@ void animation_editor::press_mob_radius_button() {
  */
 void animation_editor::press_pikmin_silhouette_button() {
     pikmin_silhouette_visible = !pikmin_silhouette_visible;
-    string state_str = (pikmin_silhouette_visible ? "visible" : "invisible");
-    status_text = "The Pikmin silhouette is now " + state_str + ".";
+    string state_str = (pikmin_silhouette_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " Pikmin silhouette visibility.";
 }
 
 
@@ -647,7 +647,8 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
     //Check if the name already exists.
     for(size_t a = 0; a < anims.animations.size(); ++a) {
         if(anims.animations[a]->name == new_name) {
-            status_text = "That animation name is already being used!";
+            status_text =
+                "An animation by the name \"" + new_name + "\" already exists!";
             return;
         }
     }
@@ -688,7 +689,8 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
     //Check if the name already exists.
     for(size_t b = 0; b < anims.body_parts.size(); ++b) {
         if(anims.body_parts[b]->name == new_name) {
-            status_text = "That body part name is already being used!";
+            status_text =
+                "A body part by the name \"" + new_name + "\" already exists!";
             return;
         }
     }
@@ -736,7 +738,8 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
     //Check if the name already exists.
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         if(anims.sprites[s]->name == new_name) {
-            status_text = "That name is already being used!";
+            status_text =
+                "A sprite by the name \"" + new_name + "\" already exists!";
             return;
         }
     }

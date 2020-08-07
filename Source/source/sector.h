@@ -409,6 +409,7 @@ struct area_data {
     void fix_vertex_pointers(vertex* v_ptr);
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
+    size_t get_nr_path_links();
     edge* new_edge();
     sector* new_sector();
     vertex* new_vertex();

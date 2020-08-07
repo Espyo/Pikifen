@@ -736,6 +736,28 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how many path links exist in the area.
+ */
+size_t area_data::get_nr_path_links() {
+    size_t one_ways_found = 0;
+    size_t normals_found = 0;
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        path_stop* s_ptr = path_stops[s];
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            path_link* l_ptr = &s_ptr->links[l];
+            if(l_ptr->end_ptr->get_link(s_ptr) != INVALID) {
+                //The other stop links to this one. So it's a two-way.
+                normals_found++;
+            } else {
+                one_ways_found++;
+            }
+        }
+    }
+    return (normals_found / 2.0f) + one_ways_found;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds a new edge to the list and returns its pointer.
  */
 edge* area_data::new_edge() {

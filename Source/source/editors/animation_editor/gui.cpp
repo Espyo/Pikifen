@@ -456,8 +456,8 @@ void animation_editor::process_gui_menu_bar() {
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "on" : "off";
-                status_text = "Tooltips are now " + state_str + ".";
+                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                status_text = state_str + " tooltips.";
                 save_options();
             }
             
@@ -1044,11 +1044,11 @@ void animation_editor::process_gui_panel_body_part() {
                 }
                 update_hitboxes();
                 made_new_changes = true;
-                status_text = "Crated body part \"" + new_part_name + "\".";
+                status_text = "Created body part \"" + new_part_name + "\".";
                 new_part_name.clear();
             } else {
                 status_text =
-                    "A body part called \"" + new_part_name +
+                    "A body part by the name \"" + new_part_name +
                     "\" already exists!";
             }
         }

@@ -1617,8 +1617,8 @@ void area_editor::press_quit_button() {
  */
 void area_editor::press_reference_button() {
     show_reference = !show_reference;
-    string state_str = (show_reference ? "visible" : "invisible");
-    status_text = "The reference image is now " + state_str + ".";
+    string state_str = (show_reference ? "Enabled" : "Disabled");
+    status_text = state_str + " reference image visibility.";
 }
 
 
@@ -1687,7 +1687,7 @@ void area_editor::press_remove_mob_button() {
     
     //Prepare everything.
     register_change("object deletion");
-    size_t amount = selected_mobs.size();
+    size_t n_before = game.cur_area_data.mob_generators.size();
     
     //Delete!
     delete_mobs(selected_mobs);
@@ -1697,7 +1697,12 @@ void area_editor::press_remove_mob_button() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
     //Report.
-    status_text = "Deleted " + amount_str(amount, "object") + ".";
+    status_text =
+        "Deleted " +
+        amount_str(
+            n_before - game.cur_area_data.mob_generators.size(), "object"
+        ) +
+        ".";
 }
 
 
@@ -1717,8 +1722,8 @@ void area_editor::press_remove_path_button() {
     
     //Prepare everything.
     register_change("path deletion");
-    size_t path_link_amount = selected_path_links.size();
-    size_t path_stop_amount = selected_path_stops.size();
+    size_t n_stops_before = game.cur_area_data.path_stops.size();
+    size_t n_links_before = game.cur_area_data.get_nr_path_links();
     
     //Delete!
     delete_path_links(selected_path_links);
@@ -1733,8 +1738,17 @@ void area_editor::press_remove_path_button() {
     //Report.
     status_text =
         "Deleted " +
-        amount_str(path_link_amount, "path link") + ", " +
-        amount_str(path_stop_amount, "path stop") + ".";
+        amount_str(
+            n_stops_before - game.cur_area_data.path_stops.size(),
+            "path stop"
+        ) +
+        ", " +
+        amount_str(
+            n_links_before - game.cur_area_data.get_nr_path_links(),
+            "path link"
+        ) +
+        "."
+        ;
 }
 
 
@@ -2474,11 +2488,23 @@ void area_editor::set_selection_status_text() {
         
     } case EDITOR_STATE_PATHS: {
         if(!selected_path_links.empty() || !selected_path_stops.empty()) {
+            size_t normals_found = 0;
+            size_t one_ways_found = 0;
+            for(const auto &l : selected_path_links) {
+                if(l.second->get_link(l.first) != INVALID) {
+                    //They both link to each other. So it's a two-way.
+                    normals_found++;
+                } else {
+                    one_ways_found++;
+                }
+            }
             status_text =
                 "Selected " +
-                amount_str(selected_path_links.size(), "path link") +
-                ", " +
                 amount_str(selected_path_stops.size(), "path stop") +
+                ", " +
+                amount_str(
+                    (normals_found / 2.0f) + one_ways_found, "path link"
+                ) +
                 ".";
         }
         break;
@@ -2751,9 +2777,16 @@ void area_editor::split_sector_with_drawing() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
     register_change("sector split", pre_split_area_data);
-    status_text =
-        "Split sector, creating one with " +
-        amount_str(new_sector->edges.size(), "edge") + ".";
+    if(!working_sector) {
+        status_text =
+            "Created sector with " +
+            amount_str(new_sector->edges.size(), "edge") + ".";
+    } else {
+        status_text =
+            "Split sector, creating one with " +
+            amount_str(new_sector->edges.size(), "edge") + ", one with " +
+            amount_str(working_sector->edges.size(), "edge") + ".";
+    }
 }
 
 

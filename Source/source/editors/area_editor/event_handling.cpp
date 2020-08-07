@@ -670,7 +670,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             selected_mobs.insert(game.cur_area_data.mob_generators.back());
             
-            status_text = "Object created.";
+            status_text = "Created object.";
             
             break;
             

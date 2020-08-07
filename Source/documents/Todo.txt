@@ -3,8 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Area editor
-        If you undo to a state with broken geometry (e.g. sector with loops), it should highlight the broken sectors in red
-        Deleting a stop says you deleted 1 stop, 0 links
         Creating a new area, going into the Info panel, and playing it will make it complain about the "(None)" weather
         Looks like typing a texture file name (maybe not texture, but tree shadows or backgrounds or something) is adding an error log entry every time the file name changes and fails to load
         Rotatable things in the editors map to really weird upper and lower bounds in the corresponding angle slider widgets
