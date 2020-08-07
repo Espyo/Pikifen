@@ -39,23 +39,23 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** The following have been affected: hazards, liquids, particle generators, spike damage types, spray types, status effects, weather conditions.
     ** In addition, added the <code>spray_order</code> property to the game configuration file; use this to set the standard order of sprays.
     * Some file name logic was changed to sanitize the file names. This is to make it so you can still save an area called "Secret?", for instance, since otherwise the question mark would be illegal. That said, if one of your areas fails to load, try changing its folder name to something simpler (letters, numbers, spaces, dashes, and underscores allowed).
+    * If you made an area and wrote down your creator name in the "Info" section, you'll need to write it again, since the property "creator" got renamed to "maker".
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
     
     
     --- v0.19.0 ---
-    Remove a leader's health wheel from the HUD when they die (Kman)
-    There's a mob event for the focus dying, being away, and being unavailable; check if we need three?
     Documentation update
         Document tutorials and the like offline
+            A Javascript script to add a table-of-contents to pages
         The tutorials should be "making X" instead of "creating a new X"
-        Use the term "make" more, to refer to anything a maker does (instead of "creator"); both inside documentation and in the actual engine
-            Rename the creator tools to maker tools
+        Use the term "make" more, to refer to anything a maker does (instead of "creator")
         Recreate the script and animation tutorials to be like the area one
-        A Javascript script to add a table-of-contents to pages
+        Figure out what to do with the README and Pikmin Fanon front page too
         Note that:
             "drain_liquid" also detects bridge sectors now
+            The tutorial links in-engine need to be updated
     
     --- v0.20.0 ---
     Details

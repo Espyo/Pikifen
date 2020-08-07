@@ -378,7 +378,7 @@ struct area_data {
     string name;
     string subtitle;
     
-    string creator;
+    string maker;
     string version;
     string notes;
     string spray_amounts;

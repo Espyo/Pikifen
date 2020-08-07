@@ -69,8 +69,8 @@ public:
     camera_info cam;
     //Game's configuration.
     game_config config;
-    //Info about the creator tools.
-    creator_tools_info creator_tools;
+    //Info about the maker tools.
+    maker_tools_info maker_tools;
     //Data about the area that's currently being used.
     area_data cur_area_data;
     //Particle generators declared by the user.

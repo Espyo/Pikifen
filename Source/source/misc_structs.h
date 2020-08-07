@@ -119,9 +119,9 @@ struct timer {
 
 
 /* ----------------------------------------------------------------------------
- * Information about all of the creator tools.
+ * Information about all of the maker tools.
  */
-struct creator_tools_info {
+struct maker_tools_info {
     //Show tree shadows in the area image tool?
     bool area_image_shadows;
     //Maximum width or height of the area image.
@@ -144,13 +144,13 @@ struct creator_tools_info {
     bool hitboxes;
     //Mob currently locked-on to for the mob information tool. NULL if off.
     mob* info_lock;
-    //If any creator info is being printed, this is how long it lasts on-screen.
+    //If any maker info is being printed, this is how long it lasts on-screen.
     float info_print_duration;
-    //If any creator info is being printed, this is how long its fade lasts.
+    //If any maker info is being printed, this is how long its fade lasts.
     float info_print_fade_duration;
-    //If any creator info is being printed, this is its text.
+    //If any maker info is being printed, this is its text.
     string info_print_text;
-    //If any creator info is being printed, this represents its time to live.
+    //If any maker info is being printed, this represents its time to live.
     timer info_print_timer;
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
     unsigned char keys[20];
@@ -161,7 +161,7 @@ struct creator_tools_info {
     //Use the performance monitor?
     bool use_perf_mon;
     
-    creator_tools_info();
+    maker_tools_info();
 };
 
 

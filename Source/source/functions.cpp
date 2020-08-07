@@ -670,10 +670,10 @@ string p2s(const point &p, float* z) {
 void print_info(
     const string &text, const float total_duration, const float fade_duration
 ) {
-    game.creator_tools.info_print_text = text;
-    game.creator_tools.info_print_duration = total_duration;
-    game.creator_tools.info_print_fade_duration = fade_duration;
-    game.creator_tools.info_print_timer.start(total_duration);
+    game.maker_tools.info_print_text = text;
+    game.maker_tools.info_print_duration = total_duration;
+    game.maker_tools.info_print_fade_duration = fade_duration;
+    game.maker_tools.info_print_timer.start(total_duration);
 }
 
 
@@ -867,13 +867,13 @@ string sanitize_file_name(const string &s) {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the creator tools settings.
+ * Saves the maker tools settings.
  */
-void save_creator_tools() {
+void save_maker_tools() {
     data_node file("", "");
     
     file.add(
-        new data_node("enabled", b2s(game.creator_tools.enabled))
+        new data_node("enabled", b2s(game.maker_tools.enabled))
     );
     
     for(unsigned char k = 0; k < 20; k++) {
@@ -885,54 +885,54 @@ void save_creator_tools() {
             //The second ten indexes are the 0 - 9 keys.
             tool_key = i2s(k - 10);
         }
-        string tool_name = CREATOR_TOOL_NAMES[game.creator_tools.keys[k]];
+        string tool_name = MAKER_TOOL_NAMES[game.maker_tools.keys[k]];
         
         file.add(new data_node(tool_key, tool_name));
     }
     
     file.add(
         new data_node(
-            "area_image_mobs", b2s(game.creator_tools.area_image_mobs)
+            "area_image_mobs", b2s(game.maker_tools.area_image_mobs)
         )
     );
     file.add(
         new data_node(
-            "area_image_shadows", b2s(game.creator_tools.area_image_shadows)
+            "area_image_shadows", b2s(game.maker_tools.area_image_shadows)
         )
     );
     file.add(
         new data_node(
-            "area_image_size", i2s(game.creator_tools.area_image_size)
+            "area_image_size", i2s(game.maker_tools.area_image_size)
         )
     );
     file.add(
         new data_node(
-            "change_speed_multiplier", f2s(game.creator_tools.change_speed_mult)
+            "change_speed_multiplier", f2s(game.maker_tools.change_speed_mult)
         )
     );
     file.add(
         new data_node(
-            "mob_hurting_percentage", f2s(game.creator_tools.mob_hurting_ratio * 100)
+            "mob_hurting_percentage", f2s(game.maker_tools.mob_hurting_ratio * 100)
         )
     );
     
     file.add(
         new data_node(
-            "auto_start_option", game.creator_tools.auto_start_option
+            "auto_start_option", game.maker_tools.auto_start_option
         )
     );
     file.add(
         new data_node(
-            "auto_start_mode", game.creator_tools.auto_start_mode
+            "auto_start_mode", game.maker_tools.auto_start_mode
         )
     );
     file.add(
         new data_node(
-            "performance_monitor", b2s(game.creator_tools.use_perf_mon)
+            "performance_monitor", b2s(game.maker_tools.use_perf_mon)
         )
     );
     
-    file.save_file(CREATOR_TOOLS_FILE_PATH, true, true);
+    file.save_file(MAKER_TOOLS_FILE_PATH, true, true);
 }
 
 

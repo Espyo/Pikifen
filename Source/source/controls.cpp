@@ -703,7 +703,7 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
             game.show_system_info = !game.show_system_info;
             
         } else if(
-            game.creator_tools.enabled &&
+            game.maker_tools.enabled &&
             (
                 (
                     ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
@@ -722,19 +722,19 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
             ) {
                 //The first ten indexes are the F2 - F11 keys.
                 id =
-                    game.creator_tools.keys[
+                    game.maker_tools.keys[
                 ev.keyboard.keycode - ALLEGRO_KEY_F2
                 ];
             } else {
                 //The second ten indexes are the 0 - 9 keys.
                 id =
-                    game.creator_tools.keys[
+                    game.maker_tools.keys[
                 10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
                 ];
             }
             
             switch(id) {
-            case CREATOR_TOOL_AREA_IMAGE: {
+            case MAKER_TOOL_AREA_IMAGE: {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
                 string file_name =
                     USER_DATA_FOLDER_PATH + "/Area_" +
@@ -750,38 +750,38 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
                 break;
                 
-            } case CREATOR_TOOL_CHANGE_SPEED: {
-                game.creator_tools.change_speed = !game.creator_tools.change_speed;
+            } case MAKER_TOOL_CHANGE_SPEED: {
+                game.maker_tools.change_speed = !game.maker_tools.change_speed;
                 break;
                 
-            } case CREATOR_TOOL_GEOMETRY_INFO: {
-                game.creator_tools.geometry_info = !game.creator_tools.geometry_info;
+            } case MAKER_TOOL_GEOMETRY_INFO: {
+                game.maker_tools.geometry_info = !game.maker_tools.geometry_info;
                 break;
                 
-            } case CREATOR_TOOL_HITBOXES: {
-                game.creator_tools.hitboxes = !game.creator_tools.hitboxes;
+            } case MAKER_TOOL_HITBOXES: {
+                game.maker_tools.hitboxes = !game.maker_tools.hitboxes;
                 break;
                 
-            } case CREATOR_TOOL_HURT_MOB: {
+            } case MAKER_TOOL_HURT_MOB: {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->set_health(true, true, -game.creator_tools.mob_hurting_ratio);
+                    m->set_health(true, true, -game.maker_tools.mob_hurting_ratio);
                 }
                 break;
                 
-            } case CREATOR_TOOL_MOB_INFO: {
+            } case MAKER_TOOL_MOB_INFO: {
                 mob* m = get_closest_mob_to_cursor();
-                game.creator_tools.info_lock =
-                    (game.creator_tools.info_lock == m ? NULL : m);
+                game.maker_tools.info_lock =
+                    (game.maker_tools.info_lock == m ? NULL : m);
                 break;
                 
-            } case CREATOR_TOOL_NEW_PIKMIN: {
+            } case MAKER_TOOL_NEW_PIKMIN: {
                 if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
                     pikmin_type* new_pikmin_type = game.mob_types.pikmin.begin()->second;
                     
                     auto p = game.mob_types.pikmin.begin();
                     for(; p != game.mob_types.pikmin.end(); ++p) {
-                        if(p->second == game.creator_tools.last_pikmin_type) {
+                        if(p->second == game.maker_tools.last_pikmin_type) {
                             ++p;
                             if(p != game.mob_types.pikmin.end()) {
                                 new_pikmin_type = p->second;
@@ -789,7 +789,7 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
                             break;
                         }
                     }
-                    game.creator_tools.last_pikmin_type = new_pikmin_type;
+                    game.maker_tools.last_pikmin_type = new_pikmin_type;
                     
                     create_mob(
                         game.mob_categories.get(MOB_CATEGORY_PIKMIN),
@@ -799,7 +799,7 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
                 break;
                 
-            } case CREATOR_TOOL_TELEPORT: {
+            } case MAKER_TOOL_TELEPORT: {
                 sector* mouse_sector =
                     get_sector(game.mouse_cursor_w, NULL, true);
                 if(mouse_sector) {

@@ -2213,7 +2213,7 @@ bool area_editor::save_area(const bool to_backup) {
         new data_node("weather", game.cur_area_data.weather_name)
     );
     data_file.add(
-        new data_node("creator", game.cur_area_data.creator)
+        new data_node("maker", game.cur_area_data.maker)
     );
     data_file.add(
         new data_node("version", game.cur_area_data.version)

@@ -315,9 +315,9 @@ void camera_info::update_box() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a creator tool info struct.
+ * Creates a maker tool info struct.
  */
-creator_tools_info::creator_tools_info() :
+maker_tools_info::maker_tools_info() :
     area_image_shadows(true),
     area_image_size(2048),
     area_image_mobs(true),
@@ -334,7 +334,7 @@ creator_tools_info::creator_tools_info() :
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
     for(size_t k = 0; k < 20; ++k) {
-        keys[k] = CREATOR_TOOL_NONE;
+        keys[k] = MAKER_TOOL_NONE;
     }
 }
 

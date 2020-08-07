@@ -1054,13 +1054,13 @@ void area_editor::process_gui_panel_info() {
     //Metadata node.
     if(saveable_tree_node("info", "Metadata")) {
     
-        //Creator input.
-        string creator = game.cur_area_data.creator;
-        if(ImGui::InputText("Creator", &creator)) {
-            register_change("area creator change");
-            game.cur_area_data.creator = creator;
+        //Maker input.
+        string maker = game.cur_area_data.maker;
+        if(ImGui::InputText("Maker", &maker)) {
+            register_change("area maker change");
+            game.cur_area_data.maker = maker;
         }
-        set_tooltip("Name (or nickname) of who created this area. Optional.");
+        set_tooltip("Name (or nickname) of who made this area. Optional.");
         
         //Version input.
         string version = game.cur_area_data.version;

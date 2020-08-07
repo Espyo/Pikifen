@@ -243,34 +243,34 @@ int game_class::start() {
     init_sector_types();
     init_hud_items();
     load_game_config();
-    load_creator_tools();
-    save_creator_tools();
+    load_maker_tools();
+    save_maker_tools();
     
-    if(game.creator_tools.use_perf_mon) {
+    if(game.maker_tools.use_perf_mon) {
         game.perf_mon = new performance_monitor_struct();
     }
     
     if(
-        game.creator_tools.enabled &&
-        game.creator_tools.auto_start_mode == "play" &&
-        !game.creator_tools.auto_start_option.empty()
+        game.maker_tools.enabled &&
+        game.maker_tools.auto_start_mode == "play" &&
+        !game.maker_tools.auto_start_option.empty()
     ) {
         game.states.gameplay_st->area_to_load =
-            game.creator_tools.auto_start_option;
+            game.maker_tools.auto_start_option;
         game.change_state(game.states.gameplay_st);
     } else if(
-        game.creator_tools.enabled &&
-        game.creator_tools.auto_start_mode == "animation_editor"
+        game.maker_tools.enabled &&
+        game.maker_tools.auto_start_mode == "animation_editor"
     ) {
         game.states.animation_editor_st->auto_load_anim =
-            game.creator_tools.auto_start_option;
+            game.maker_tools.auto_start_option;
         game.change_state(game.states.animation_editor_st);
     } else if(
-        game.creator_tools.enabled &&
-        game.creator_tools.auto_start_mode == "area_editor"
+        game.maker_tools.enabled &&
+        game.maker_tools.auto_start_mode == "area_editor"
     ) {
         game.states.area_editor_st->auto_load_area =
-            game.creator_tools.auto_start_option;
+            game.maker_tools.auto_start_option;
         game.change_state(game.states.area_editor_st);
     } else {
         game.change_state(game.states.main_menu_st);

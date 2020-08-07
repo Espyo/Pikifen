@@ -126,7 +126,7 @@ void area_data::clear() {
     
     name.clear();
     subtitle.clear();
-    creator.clear();
+    maker.clear();
     version.clear();
     notes.clear();
     spray_amounts.clear();
@@ -299,7 +299,7 @@ void area_data::clone(area_data &other) {
     
     other.name = name;
     other.subtitle = subtitle;
-    other.creator = creator;
+    other.maker = maker;
     other.version = version;
     other.notes = notes;
     other.spray_amounts = spray_amounts;

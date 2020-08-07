@@ -590,8 +590,8 @@ void gameplay::do_gameplay_logic() {
             i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =
             game.cur_area_data.version;
-        string area_creator_str =
-            game.cur_area_data.creator;
+        string area_maker_str =
+            game.cur_area_data.maker;
         string engine_v_str =
             i2s(VERSION_MAJOR) + "." +
             i2s(VERSION_MINOR) + "." +
@@ -606,7 +606,7 @@ void gameplay::do_gameplay_logic() {
             "\n"
             "Resolution: " + resolution_str +
             "\n"
-            "Area version " + area_v_str + ", by " + area_creator_str +
+            "Area version " + area_v_str + ", by " + area_maker_str +
             "\n"
             "Pikifen version " + engine_v_str +
             ", game version " + game_v_str,
@@ -619,46 +619,46 @@ void gameplay::do_gameplay_logic() {
     }
     
     //Print info on a mob.
-    if(game.creator_tools.info_lock) {
+    if(game.maker_tools.info_lock) {
         string name_str =
-            box_string(game.creator_tools.info_lock->type->name, 26);
+            box_string(game.maker_tools.info_lock->type->name, 26);
         string coords_str =
             box_string(
-                box_string(f2s(game.creator_tools.info_lock->pos.x), 8, " ") +
-                box_string(f2s(game.creator_tools.info_lock->pos.y), 8, " ") +
-                box_string(f2s(game.creator_tools.info_lock->z), 7),
+                box_string(f2s(game.maker_tools.info_lock->pos.x), 8, " ") +
+                box_string(f2s(game.maker_tools.info_lock->pos.y), 8, " ") +
+                box_string(f2s(game.maker_tools.info_lock->z), 7),
                 23
             );
         string state_h_str =
             (
-                game.creator_tools.info_lock->fsm.cur_state ?
-                game.creator_tools.info_lock->fsm.cur_state->name :
+                game.maker_tools.info_lock->fsm.cur_state ?
+                game.maker_tools.info_lock->fsm.cur_state->name :
                 "(None!)"
             );
         for(unsigned char p = 0; p < STATE_HISTORY_SIZE; ++p) {
             state_h_str +=
-                " " + game.creator_tools.info_lock->fsm.prev_state_names[p];
+                " " + game.maker_tools.info_lock->fsm.prev_state_names[p];
         }
         string anim_str =
-            game.creator_tools.info_lock->anim.cur_anim ?
-            game.creator_tools.info_lock->anim.cur_anim->name :
+            game.maker_tools.info_lock->anim.cur_anim ?
+            game.maker_tools.info_lock->anim.cur_anim->name :
             "(None!)";
         string health_str =
             box_string(
-                box_string(f2s(game.creator_tools.info_lock->health), 6) +
+                box_string(f2s(game.maker_tools.info_lock->health), 6) +
                 " / " +
                 box_string(
-                    f2s(game.creator_tools.info_lock->type->max_health), 6
+                    f2s(game.maker_tools.info_lock->type->max_health), 6
                 ),
                 23
             );
         string timer_str =
-            f2s(game.creator_tools.info_lock->script_timer.time_left);
+            f2s(game.maker_tools.info_lock->script_timer.time_left);
         string vars_str;
-        if(!game.creator_tools.info_lock->vars.empty()) {
+        if(!game.maker_tools.info_lock->vars.empty()) {
             for(
-                auto v = game.creator_tools.info_lock->vars.begin();
-                v != game.creator_tools.info_lock->vars.end(); ++v
+                auto v = game.maker_tools.info_lock->vars.begin();
+                v != game.maker_tools.info_lock->vars.end(); ++v
             ) {
                 vars_str += v->first + "=" + v->second + "; ";
             }
@@ -683,7 +683,7 @@ void gameplay::do_gameplay_logic() {
     }
     
     //Print mouse coordinates.
-    if(game.creator_tools.geometry_info) {
+    if(game.maker_tools.geometry_info) {
         sector* mouse_sector =
             get_sector(game.mouse_cursor_w, NULL, true);
             
@@ -726,7 +726,7 @@ void gameplay::do_gameplay_logic() {
         print_info(str, 1.0f, 1.0f);
     }
     
-    game.creator_tools.info_print_timer.tick(game.delta_t);
+    game.maker_tools.info_print_timer.tick(game.delta_t);
     
     if(!ready_for_input) {
         ready_for_input = true;

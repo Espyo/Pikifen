@@ -5,7 +5,7 @@ bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=1.0000
 weather=Normal
-creator=Espyo
+maker=Espyo
 version=0.17
 notes=Sorry for how weird the area is! It merely exists to test the engine's features.
 spray_amounts=Ultra-Spicy Spray=20;Ultra-Bitter Spray=20
