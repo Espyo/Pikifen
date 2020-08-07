@@ -565,10 +565,15 @@ struct spike_damage_type {
  * translation, rotation, coloring, etc.
  */
 struct bitmap_effect_info {
+    //Offset horizontally and vertically by this much.
     point translation;
+    //Rotate the bitmap by this angle, in radians.
     float rotation;
+    //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
     point scale;
+    //Tint the bitmap by this color. Also makes it transparent.
     ALLEGRO_COLOR tint_color;
+    //Re-draws the bitmap on top, in additive blend, with this color.
     ALLEGRO_COLOR glow_color;
     bitmap_effect_info();
 };

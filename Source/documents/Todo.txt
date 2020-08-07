@@ -43,13 +43,11 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
 Next tasks (roughly sorted most important first)
     --- Known problems ---
     Bitmaps
-        If it fails to load a system bitmap (like the swarm arrows), and you close it, you get a sigsegv because it's trying to delete bmp_error when it was deleted before
         Bridges leave behind a missing texture texture
         The "Bubble.txt" global animation is using the HUD day sprite
     Object appearance
         https://cdn.discordapp.com/attachments/459094367877988373/688550728121450510/Pikifen_alpha_3_14_2020_8_54_30_PM.png Whiptongue is off-center?
         The shading on seesaw block ropes is reversed, with the lighter parts near the edges
-        Cloaking Burrow-nit doesn't really visually shake when attacking?
         Pikmin sprout sprites have their hitboxes swapped
     
     --- v0.19.0 ---

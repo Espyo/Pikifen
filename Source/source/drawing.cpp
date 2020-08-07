@@ -1694,13 +1694,16 @@ void draw_bitmap_with_effects(
     }
     
     point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    float scale_x =
+        (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
+    float scale_y =
+        (effects.scale.y == LARGE_FLOAT) ? effects.scale.x : effects.scale.y;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         effects.tint_color,
         bmp_size.x / 2, bmp_size.y / 2,
         effects.translation.x, effects.translation.y,
-        (effects.scale.x == -1) ? effects.scale.y : effects.scale.x,
-        (effects.scale.y == -1) ? effects.scale.x : effects.scale.y,
+        scale_x, scale_y,
         effects.rotation,
         0
     );
@@ -1716,8 +1719,7 @@ void draw_bitmap_with_effects(
             effects.glow_color,
             bmp_size.x / 2, bmp_size.y / 2,
             effects.translation.x, effects.translation.y,
-            (effects.scale.x == -1) ? effects.scale.y : effects.scale.x,
-            (effects.scale.y == -1) ? effects.scale.x : effects.scale.y,
+            scale_x, scale_y,
             effects.rotation,
             0
         );

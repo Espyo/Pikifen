@@ -1038,7 +1038,11 @@ bool editor::process_size_widgets(
             pre_change_callback();
         }
         
-        if(!keep_aspect_ratio) {
+        if(
+            !keep_aspect_ratio ||
+            size.x == 0.0f || size.y == 0.0f ||
+            new_size.x == 0.0f || new_size.y == 0.0f
+        ) {
             new_size.x = std::max(min_size, new_size.x);
             new_size.y = std::max(min_size, new_size.y);
         } else {
