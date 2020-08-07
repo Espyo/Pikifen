@@ -27,8 +27,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			left{
 				coords=0.0000 48.0000 0.0000
@@ -37,8 +35,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			right{
 				coords=0.0000 -48.0000 0.0000
@@ -47,13 +43,11 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	destroyed{
-		file
+		file=Wood_bridge.png
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -63,8 +57,6 @@ sprites{
 				radius=32.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			left{
 				coords=0.0000 0.0000 0.0000
@@ -72,8 +64,6 @@ sprites{
 				radius=32.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			right{
 				coords=0.0000 0.0000 0.0000
@@ -81,8 +71,6 @@ sprites{
 				radius=32.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}

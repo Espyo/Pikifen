@@ -10,7 +10,7 @@ base {
     size_grow_speed = 0
     size = 16
     speed = 0 -10
-    color = 128 255 255 255
+    color = 255 255 255 255
 }
 duration_deviation = 0.2
 friction_deviation = 0

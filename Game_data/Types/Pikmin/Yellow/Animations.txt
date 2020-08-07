@@ -150,22 +150,18 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
 				coords=-4.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -180,22 +176,18 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
 				coords=-4.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -210,22 +202,18 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
 				coords=-4.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -245,8 +233,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -254,8 +240,6 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -276,8 +260,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -285,8 +267,6 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -307,8 +287,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -316,8 +294,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -337,8 +313,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -346,8 +320,6 @@ sprites{
 				radius=8.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -367,8 +339,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -376,8 +346,6 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -397,8 +365,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=8.0000 0.0000 0.0000
@@ -406,8 +372,6 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -427,8 +391,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -436,8 +398,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -457,8 +417,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=2.0000 0.0000 0.0000
@@ -466,8 +424,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -487,8 +443,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -496,8 +450,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -517,8 +469,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=-2.0000 0.0000 0.0000
@@ -526,8 +476,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -547,8 +495,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -556,8 +502,6 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -578,8 +522,6 @@ sprites{
 				radius=4.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -587,8 +529,6 @@ sprites{
 				radius=5.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -616,8 +556,6 @@ sprites{
 				radius=6.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
