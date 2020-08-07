@@ -34,7 +34,9 @@ const unsigned char VERSION_MINOR = 18;
 const unsigned char VERSION_REV   = 0;
 
 
+//Cross-platform way of representing an invalid index.
 constexpr size_t INVALID = UINT32_MAX;
+//Cross-platform way of representing a float value of "invalid" or similar.
 constexpr float LARGE_FLOAT = 999999.0f;
 
 const string ANIMATION_EDITOR_TUTORIAL_URL =
@@ -74,6 +76,8 @@ const float MOB_SHADOW_Y_MULT = 0.2f;
 const float MOB_HEIGHT_EFFECT_FACTOR = 0.0017;
 //Number of maturities.
 const size_t N_MATURITIES = 3;
+//Name to display on the "none" option in a combobox.
+const string NONE_OPTION = "(None)";
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 //How frequently should a replay state be saved.

@@ -821,7 +821,9 @@ void area_editor::process_gui_panel_details() {
                         game.textures.detach(selected_shadow->file_name);
                     }
                     selected_shadow->bitmap =
-                        game.textures.get(selected_shadow->file_name, NULL);
+                        game.textures.get(
+                            selected_shadow->file_name, NULL, false
+                        );
                 }
                 
                 //Tree shadow center value.
@@ -851,7 +853,7 @@ void area_editor::process_gui_panel_details() {
                 set_tooltip("Keep the aspect ratio when resizing the image.");
                 
                 //Tree shadow angle value.
-                float shadow_angle = selected_shadow->angle;
+                float shadow_angle = normalize_angle(selected_shadow->angle);
                 if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
                     register_change("tree shadow angle change");
                     selected_shadow->angle = shadow_angle;
@@ -931,20 +933,17 @@ void area_editor::process_gui_panel_info() {
         
         //Area weather combobox.
         vector<string> weather_conditions;
-        weather_conditions.push_back("(None)");
+        weather_conditions.push_back(NONE_OPTION);
         for(auto w : game.weather_conditions) {
             weather_conditions.push_back(w.first);
         }
         if(game.cur_area_data.weather_name.empty()) {
-            game.cur_area_data.weather_name = "(None)";
+            game.cur_area_data.weather_name = NONE_OPTION;
         }
         string weather_name = game.cur_area_data.weather_name;
         if(ImGui::Combo("Weather", &weather_name, weather_conditions)) {
             register_change("area weather change");
-            game.cur_area_data.weather_name =
-                weather_name == "(None)" ?
-                "" :
-                weather_name;
+            game.cur_area_data.weather_name = weather_name;
         }
         set_tooltip(
             "The weather condition to use."
@@ -1492,7 +1491,7 @@ void area_editor::process_gui_panel_mob() {
     ImGui::Dummy(ImVec2(0, 16));
     
     //Object angle value.
-    float mob_angle = m_ptr->angle;
+    float mob_angle = normalize_angle(m_ptr->angle);
     if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
         register_change("object angle change");
         m_ptr->angle = mob_angle;
@@ -2359,7 +2358,7 @@ void area_editor::process_gui_panel_sector() {
             );
             
             //Sector texture rotation value.
-            float texture_rotation = s_ptr->texture_info.rot;
+            float texture_rotation = normalize_angle(s_ptr->texture_info.rot);
             if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
                 register_change("sector texture angle change");
                 s_ptr->texture_info.rot = texture_rotation;

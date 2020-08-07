@@ -573,7 +573,7 @@ void animation_editor::process_gui_panel_animation() {
     
     //Change current animation button.
     string anim_button_name =
-        (cur_anim ? cur_anim->name : "(None)") + "##anim";
+        (cur_anim ? cur_anim->name : NONE_OPTION) + "##anim";
     ImVec2 anim_button_size(
         -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
     );
@@ -1319,7 +1319,7 @@ void animation_editor::process_gui_panel_sprite() {
     
     //Change current sprite button.
     string sprite_button_name =
-        (cur_sprite ? cur_sprite->name : "(None)") + "##sprite";
+        (cur_sprite ? cur_sprite->name : NONE_OPTION) + "##sprite";
     ImVec2 sprite_button_size(
         -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
     );
@@ -1739,7 +1739,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     //Hitbox name text.
     ImGui::Text(
         "Hitbox: %s",
-        cur_hitbox ? cur_hitbox->body_part_name.c_str() : "(None)"
+        cur_hitbox ? cur_hitbox->body_part_name.c_str() : NONE_OPTION.c_str()
     );
     
     //Previous hitbox button.
@@ -1964,6 +1964,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             
             //Knockback angle value.
             if(!cur_hitbox->knockback_outward) {
+                cur_hitbox->knockback_angle =
+                    normalize_angle(cur_hitbox->knockback_angle);
                 ImGui::SetNextItemWidth(128.0f);
                 if(
                     ImGui::SliderAngle(
@@ -2102,6 +2104,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         set_tooltip("Keep the aspect ratio when resizing the top.");
         
         //Top angle value.
+        cur_sprite->top_angle = normalize_angle(cur_sprite->top_angle);
         if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
             made_new_changes = true;
         }
@@ -2218,6 +2221,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     set_tooltip("Keep the aspect ratio when resizing the sprite.");
     
     //Sprite angle value.
+    cur_sprite->angle = normalize_angle(cur_sprite->angle);
     if(ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f)) {
         made_new_changes = true;
     }
