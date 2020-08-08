@@ -25,6 +25,7 @@ void on_touched(mob* m, void* info1, void* info2);
 void set_bumped_anim(mob* m, void* info1, void* info2);
 void set_falling_anim(mob* m, void* info1, void* info2);
 void set_idling_anim(mob* m, void* info1, void* info2);
-};
+}
+
 
 #endif //ifndef DROP_FSM_INCLUDED

@@ -17,6 +17,7 @@
 #include "../particle.h"
 #include "../utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the ship's logic.
  */

@@ -23,6 +23,7 @@ void create_fsm(mob_type* typ);
 void handle_mob(mob* m, void* info1, void* info2);
 void set_bouncing_animation(mob* m, void* info1, void* info2);
 void set_idling_animation(mob* m, void* info1, void* info2);
-};
+}
+
 
 #endif //ifndef BOUNCER_FSM_INCLUDED

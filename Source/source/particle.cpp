@@ -18,6 +18,7 @@
 #include "mobs/mob.h"
 #include "utils/geometry_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a particle.
  * type:     The type of particle. Use PARTICLE_TYPE_*.

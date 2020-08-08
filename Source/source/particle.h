@@ -18,7 +18,9 @@
 #include "utils/geometry_utils.h"
 #include "world_component.h"
 
+
 using std::vector;
+
 
 class mob;
 
@@ -31,6 +33,7 @@ enum PARTICLE_TYPES {
     PARTICLE_TYPE_SMACK,
     PARTICLE_TYPE_DING,
 };
+
 
 enum PARTICLE_PRIORITIES {
     PARTICLE_PRIORITY_LOW,
@@ -173,5 +176,6 @@ private:
     float emission_timer;
     
 };
+
 
 #endif //ifndef PARTICLE_INCLUDED

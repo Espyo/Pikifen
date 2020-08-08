@@ -245,4 +245,5 @@ private:
     void reset_cam_zoom(const ALLEGRO_EVENT &ev);
 };
 
+
 #endif //ifndef ANIMATION_EDITOR_INCLUDED

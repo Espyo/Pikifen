@@ -11,6 +11,7 @@
 
 #include <algorithm>
 
+
 /* ----------------------------------------------------------------------------
  * Limits the given number to the given range, inclusive.
  */

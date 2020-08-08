@@ -21,6 +21,7 @@
 #include "mobs/tool.h"
 #include "utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.

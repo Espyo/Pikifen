@@ -29,4 +29,5 @@ public:
     track(const point &pos, track_type* type, const float angle);
 };
 
+
 #endif //ifndef TRACK_INCLUDED

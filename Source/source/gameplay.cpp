@@ -22,6 +22,7 @@
 #include "misc_structs.h"
 #include "utils/string_utils.h"
 
+
 //How long the HUD moves for when the area is entered.
 const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.

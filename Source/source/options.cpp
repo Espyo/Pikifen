@@ -17,6 +17,7 @@
 #include "misc_structs.h"
 #include "utils/string_utils.h"
 
+
 //Default values for the different options.
 const float options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 const float options_struct::DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;

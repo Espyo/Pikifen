@@ -20,7 +20,9 @@
 
 #include "utils/geometry_utils.h"
 
+
 using std::string;
+
 
 class menu_widget {
 protected:
@@ -56,6 +58,7 @@ public:
     bool mouse_on(const point &mc) const;
 };
 
+
 class menu_button : public menu_widget {
 public:
     string text;
@@ -77,6 +80,7 @@ private:
     virtual void on_click();
     
 };
+
 
 class menu_checkbox : public menu_widget {
 public:
@@ -101,6 +105,7 @@ private:
     
 };
 
+
 class menu_text : public menu_widget {
 public:
     string text;
@@ -121,5 +126,6 @@ private:
     virtual void on_click();
     
 };
+
 
 #endif //ifndef MENU_WIDGETS_INCLUDED

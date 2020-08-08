@@ -14,10 +14,12 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum TRACK_RIDERS {
     TRACK_RIDER_PIKMIN = 1,
     TRACK_RIDER_LEADERS = 2,
 };
+
 
 enum TRACK_RIDING_POSES {
     TRACK_RIDING_POSE_STOPPED,
@@ -25,9 +27,11 @@ enum TRACK_RIDING_POSES {
     TRACK_RIDING_POSE_SLIDING,
 };
 
+
 enum TRACK_ANIMATIONS {
     TRACK_ANIM_IDLING,
 };
+
 
 enum TRACK_STATES {
     TRACK_STATE_IDLING,
@@ -51,5 +55,6 @@ public:
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef TRACK_TYPE_INCLUDED

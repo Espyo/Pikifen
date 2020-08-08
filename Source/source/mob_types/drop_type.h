@@ -18,6 +18,7 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum DROP_ANIMATIONS {
     DROP_ANIM_IDLING,
     DROP_ANIM_FALLING,
@@ -25,16 +26,19 @@ enum DROP_ANIMATIONS {
     DROP_ANIM_BUMPED,
 };
 
+
 enum DROP_CONSUMERS {
     DROP_CONSUMER_LEADERS,
     DROP_CONSUMER_PIKMIN,
 };
+
 
 enum DROP_EFFECT {
     DROP_EFFECT_MATURATE,
     DROP_EFFECT_INCREASE_SPRAYS,
     DROP_EFFECT_GIVE_STATUS,
 };
+
 
 enum DROP_STATES {
     DROP_STATE_IDLING,
@@ -63,5 +67,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef DROP_TYPE_INCLUDED

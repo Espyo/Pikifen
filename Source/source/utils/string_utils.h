@@ -15,9 +15,11 @@
 #include <string>
 #include <vector>
 
+
 using std::size_t;
 using std::string;
 using std::vector;
+
 
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))

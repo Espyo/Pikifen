@@ -14,6 +14,7 @@
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
 
+
 using std::string;
 using std::vector;
 
@@ -36,5 +37,6 @@ public:
     
     bouncer_category();
 };
+
 
 #endif //ifndef BOUNCER_CATEGORY_INCLUDED

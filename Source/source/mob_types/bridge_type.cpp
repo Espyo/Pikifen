@@ -15,6 +15,7 @@
 #include "../mob_script.h"
 #include "../mobs/bridge.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a type of bridge.
  */

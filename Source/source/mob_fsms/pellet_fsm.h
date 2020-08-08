@@ -13,6 +13,7 @@
 
 #include "../mob_types/mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * Functions about the Onion's finite state machine and behavior.
  */
@@ -21,5 +22,6 @@ void create_fsm(mob_type* typ);
 
 void stand_still(mob* m, void* info1, void* info2);
 }
+
 
 #endif //ifndef PELLET_FSM_INCLUDED

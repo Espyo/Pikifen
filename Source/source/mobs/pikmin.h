@@ -87,4 +87,5 @@ pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved
 );
 
+
 #endif //ifndef PIKMIN_INCLUDED

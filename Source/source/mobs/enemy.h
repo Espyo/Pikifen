@@ -14,6 +14,7 @@
 #include "../mob_types/enemy_type.h"
 #include "mob.h"
 
+
 /* ----------------------------------------------------------------------------
  * I don't need to explain what an enemy is.
  */
@@ -41,5 +42,6 @@ public:
     //Death start class-specific logic.
     virtual void start_dying_class_specifics();
 };
+
 
 #endif //ifndef ENEMY_INCLUDED

@@ -17,6 +17,7 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 using std::size_t;
 
 
@@ -34,5 +35,6 @@ public:
     
     void load_properties(data_node* file);
 };
+
 
 #endif //ifndef ENEMY_TYPE_INCLUDED

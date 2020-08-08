@@ -20,6 +20,7 @@
 #include "../utils/math_utils.h"
 #include "../utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates an enemy mob.
  */

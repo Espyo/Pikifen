@@ -3,7 +3,8 @@ import os
 from .common import *
 
 CRAMPED_THING_INCLUDE = 0
-CRAMPED_THING_CLOSE_BRACE = 1
+CRAMPED_THING_USING = 1
+CRAMPED_THING_CLOSE_BRACE = 2
 
 def check_cramped_things_in_file(file_path):
     file = open(file_path)
@@ -17,7 +18,7 @@ def check_cramped_things_in_file(file_path):
         line_nr = line_nr + 1
         
         if not found_thing:
-            if l.startswith('}') or l.startswith('};'):
+            if l.startswith('}'):
                 found_thing = True
                 empty_lines = 0
                 thing = CRAMPED_THING_CLOSE_BRACE
@@ -25,6 +26,10 @@ def check_cramped_things_in_file(file_path):
                 found_thing = True
                 empty_lines = 0
                 thing = CRAMPED_THING_INCLUDE
+            elif l.startswith('using'):
+                found_thing = True
+                empty_lines = 0
+                thing = CRAMPED_THING_USING
         
         else:
             if l == '\n':
@@ -35,13 +40,17 @@ def check_cramped_things_in_file(file_path):
 
                 if thing == CRAMPED_THING_INCLUDE and l.startswith('#include'):
                     ignore = True
+                if thing == CRAMPED_THING_USING and l.startswith('using'):
+                    ignore = True
 
                 if empty_lines < 2 and not ignore:
                     thing_name = ''
                     if thing == CRAMPED_THING_INCLUDE:
-                        thing_name = 'Include'
+                        thing_name = 'include'
+                    elif thing == CRAMPED_THING_USING:
+                        thing_name = 'using'
                     elif thing == CRAMPED_THING_CLOSE_BRACE:
-                        thing_name = 'Close brace'
+                        thing_name = 'close brace'
                     problems.append((file_path, 'Two newlines missing after ' + thing_name, pad(line_nr - empty_lines - 1, 4)))
 
     return problems

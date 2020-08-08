@@ -10,6 +10,7 @@
 
 #include "code_debug.h"
 
+
 #ifdef CODE_DEBUG_NEW
 
 map<void*, string> code_debug_new_allocs;
@@ -25,6 +26,7 @@ void operator delete(void* ptr) noexcept {
     return free(ptr);
 }
 
+
 void operator delete[](void* ptr) noexcept {
     if(code_debug_new_recording) {
         map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
@@ -35,6 +37,7 @@ void operator delete[](void* ptr) noexcept {
     return free(ptr);
 }
 
+
 void* operator new(size_t size, char* file, int line) {
     void* ptr = malloc(size);
     if(code_debug_new_recording) {
@@ -44,6 +47,7 @@ void* operator new(size_t size, char* file, int line) {
     return ptr;
 }
 
+
 void* operator new[](size_t size, char* file, int line) {
     void* ptr = malloc(size);
     if(code_debug_new_recording) {
@@ -52,5 +56,6 @@ void* operator new[](size_t size, char* file, int line) {
     }
     return ptr;
 }
+
 
 #endif //ifndef CODE_DEBUG_NEW

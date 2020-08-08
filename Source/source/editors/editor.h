@@ -16,6 +16,7 @@
 
 #include "../game_state.h"
 
+
 using std::map;
 using std::string;
 using std::vector;
@@ -340,5 +341,6 @@ private:
     //Controls text input widget focus, when focusing on one is necessary.
     unsigned char special_input_focus_controller;
 };
+
 
 #endif //ifndef EDITOR_INCLUDED

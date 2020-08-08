@@ -14,20 +14,24 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum BOUNCER_RIDERS {
     BOUNCER_RIDER_PIKMIN = 1,
     BOUNCER_RIDER_LEADERS = 2,
 };
+
 
 enum BOUNCER_RIDING_POSES {
     BOUNCER_RIDING_POSE_STOPPED,
     BOUNCER_RIDING_POSE_SOMERSAULT,
 };
 
+
 enum BOUNCER_ANIMATIONS {
     BOUNCER_ANIM_IDLING,
     BOUNCER_ANIM_BOUNCING,
 };
+
 
 enum BOUNCER_STATES {
     BOUNCER_STATE_IDLING,
@@ -50,5 +54,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef BOUNCER_TYPE_INCLUDED

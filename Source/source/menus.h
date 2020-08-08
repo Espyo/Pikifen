@@ -18,9 +18,11 @@
 #include "game_state.h"
 #include "menu_widgets.h"
 
+
 using std::map;
 using std::size_t;
 using std::vector;
+
 
 class main_menu : public game_state {
 public:

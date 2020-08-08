@@ -14,6 +14,7 @@
 #include "../mob_script.h"
 #include "../mobs/decoration.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a type of decoration.
  */

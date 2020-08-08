@@ -40,6 +40,7 @@
 #include "../sector.h"
 #include "../utils/geometry_utils.h"
 
+
 using std::size_t;
 using std::vector;
 
@@ -50,6 +51,7 @@ enum CARRY_SPOT_STATES {
     CARRY_SPOT_RESERVED,
     CARRY_SPOT_USED,
 };
+
 
 enum CARRY_DESTINATIONS {
     CARRY_DESTINATION_SHIP,

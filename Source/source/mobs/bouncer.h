@@ -29,4 +29,5 @@ public:
     bouncer(const point &pos, bouncer_type* type, const float angle);
 };
 
+
 #endif //ifndef BOUNCER_INCLUDED

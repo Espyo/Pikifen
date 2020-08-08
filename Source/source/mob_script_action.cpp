@@ -19,6 +19,7 @@
 #include "mobs/scale.h"
 #include "utils/string_utils.h"
 
+
 using std::set;
 
 
@@ -1465,6 +1466,7 @@ void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
 void mob_action_runners::stop_particles(mob_action_run_data &data) {
     data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Code for the vertical stopping mob script action.

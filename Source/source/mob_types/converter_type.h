@@ -16,6 +16,7 @@
 #include "mob_type.h"
 #include "pikmin_type.h"
 
+
 enum CONVERTER_ANIMATIONS {
     /* Because converters can have multiple animations that do the same thing,
      * due to the different types, there are actually
@@ -32,6 +33,7 @@ enum CONVERTER_ANIMATIONS {
     
     N_CONVERTER_ANIMS,
 };
+
 
 enum CONVERTER_STATES {
     CONVERTER_STATE_IDLING,
@@ -64,5 +66,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef CONVERTER_TYPE_INCLUDED

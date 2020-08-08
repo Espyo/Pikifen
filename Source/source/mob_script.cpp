@@ -25,7 +25,6 @@
 #include "utils/string_utils.h"
 
 
-
 /* ----------------------------------------------------------------------------
  * Creates the easy fsm creator.
  */

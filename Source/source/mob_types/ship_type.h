@@ -17,9 +17,11 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum SHIP_ANIMATIONS {
     SHIP_ANIM_IDLING,
 };
+
 
 enum SHIP_STATES {
     SHIP_STATE_IDLING,
@@ -42,5 +44,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef SHIP_TYPE_INCLUDED

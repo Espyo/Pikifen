@@ -20,6 +20,7 @@
 #include "../utils/string_utils.h"
 #include "mob.h"
 
+
 static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
 
 /* ----------------------------------------------------------------------------

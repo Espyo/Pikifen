@@ -22,6 +22,7 @@
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 
+
 using std::unordered_set;
 
 
@@ -1384,6 +1385,7 @@ void leader_fsm::finish_current_pluck(mob* m, void* info1, void* info2) {
     l_ptr->stop_chasing();
     l_ptr->set_animation(LEADER_ANIM_IDLING);
 }
+
 
 /* ----------------------------------------------------------------------------
  * When a leader finishes drinking the drop it was drinking.

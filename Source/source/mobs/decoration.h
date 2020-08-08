@@ -40,4 +40,5 @@ public:
     virtual void draw_mob();
 };
 
+
 #endif //ifndef DECORATION_INCLUDED

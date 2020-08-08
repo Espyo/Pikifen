@@ -28,4 +28,5 @@ public:
     void load_properties(data_node* file);
 };
 
+
 #endif //ifndef INTERACTABLE_TYPE_INCLUDED

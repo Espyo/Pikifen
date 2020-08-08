@@ -44,4 +44,5 @@ public:
     tool(const point &pos, tool_type* type, const float angle);
 };
 
+
 #endif //ifndef TOOL_INCLUDED

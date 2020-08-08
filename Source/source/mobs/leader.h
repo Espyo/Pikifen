@@ -16,6 +16,7 @@
 #include "../mob_types/leader_type.h"
 #include "mob.h"
 
+
 class pikmin;
 
 using std::size_t;

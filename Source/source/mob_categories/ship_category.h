@@ -17,6 +17,7 @@
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
 
+
 using std::string;
 using std::vector;
 
@@ -38,5 +39,6 @@ public:
     
     ship_category();
 };
+
 
 #endif //ifndef SHIP_CATEGORY_INCLUDED

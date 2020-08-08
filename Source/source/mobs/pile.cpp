@@ -16,6 +16,7 @@
 #include "../utils/string_utils.h"
 #include "resource.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a pile.
  */

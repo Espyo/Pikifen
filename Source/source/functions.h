@@ -24,11 +24,13 @@
 #include "sector.h"
 #include "utils/data_file.h"
 
+
 enum FILE_DIALOG_RESULTS {
     FILE_DIALOG_RES_SUCCESS,
     FILE_DIALOG_RES_WRONG_FOLDER,
     FILE_DIALOG_RES_CANCELED,
 };
+
 
 //Disables an enabled widget.
 #define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;

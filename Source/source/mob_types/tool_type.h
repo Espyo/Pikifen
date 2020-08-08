@@ -14,6 +14,7 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * A type of tool. A type of hand-held explosive, for instance.
  */
@@ -32,5 +33,6 @@ public:
     void load_properties(data_node* file);
     void load_resources(data_node* file);
 };
+
 
 #endif //ifndef TOOL_TYPE_INCLUDED

@@ -50,4 +50,5 @@ public:
     virtual void tick_class_specifics(const float delta_t);
 };
 
+
 #endif //ifndef SHIP_INCLUDED

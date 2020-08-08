@@ -23,6 +23,7 @@
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 
+
 using std::unordered_set;
 using std::set;
 
@@ -2171,6 +2172,7 @@ void depth_first_search(
         depth_first_search(nodes, visited, l);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Uses Dijkstra's algorithm to get the shortest path between two nodes.

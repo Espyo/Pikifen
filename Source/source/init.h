@@ -14,6 +14,7 @@
 #include "animation.h"
 #include "utils/data_file.h"
 
+
 void init_allegro();
 void init_controls();
 void init_dear_imgui();

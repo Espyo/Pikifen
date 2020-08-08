@@ -15,6 +15,7 @@
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the decoration's logic.
  */

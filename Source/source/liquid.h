@@ -18,7 +18,9 @@
 
 #include "animation.h"
 
+
 using std::string;
+
 
 /* ----------------------------------------------------------------------------
  * A liquid type defines how a sector should look to make it look like water.
@@ -38,5 +40,6 @@ struct liquid {
     
     liquid();
 };
+
 
 #endif //ifndef LIQUID_INCLUDED

@@ -16,6 +16,7 @@
 #include "../utils/string_utils.h"
 #include "ship.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a treasure.
  */

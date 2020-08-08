@@ -20,6 +20,7 @@ constexpr float TAU = (float) M_PI * 2.0f;
 #include <math.h>
 #include <string>
 
+
 //Returns a string with a number, adding a leading zero if it's less than 10.
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
 

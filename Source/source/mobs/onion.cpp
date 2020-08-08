@@ -18,8 +18,10 @@
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 
+
 using std::size_t;
 using std::string;
+
 
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.

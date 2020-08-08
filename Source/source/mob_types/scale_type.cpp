@@ -13,6 +13,7 @@
 #include "../mobs/scale.h"
 #include "../utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a type of scale.
  */

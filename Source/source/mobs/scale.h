@@ -15,6 +15,7 @@
 
 #include "../mob_types/scale_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * A scale is something that measures the weight being applied on top of it,
  * and does something depending on the value.
@@ -30,5 +31,6 @@ public:
     //Constructor.
     scale(const point &pos, scale_type* type, float angle);
 };
+
 
 #endif //ifndef SCALE_INCLUDED

@@ -26,11 +26,13 @@
 #include "mob_types/mob_type.h"
 #include "weather.h"
 
+
 using std::map;
 using std::set;
 using std::size_t;
 using std::unordered_set;
 using std::vector;
+
 
 const float LIQUID_DRAIN_DURATION = 2.0f;
 
@@ -487,6 +489,7 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_BRIDGE_RAIL,
 };
 
+
 enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_NONE,
     TERRAIN_SOUND_DIRT,
@@ -496,6 +499,7 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_METAL,
     TERRAIN_SOUND_WATER,
 };
+
 
 const float BLOCKMAP_BLOCK_SIZE = 128;
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;

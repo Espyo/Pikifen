@@ -26,6 +26,7 @@
 #include "pikmin_type.h"
 #include "treasure_type.h"
 
+
 using std::string;
 
 /* ----------------------------------------------------------------------------

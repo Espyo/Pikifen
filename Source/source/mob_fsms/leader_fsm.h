@@ -13,6 +13,7 @@
 
 #include "../mob_types/mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * Functions about the leader's finite state machine and behavior.
  */
@@ -69,5 +70,6 @@ void touched_spray(         mob* m, void* info1, void* info2);
 void whistle(               mob* m, void* info1, void* info2);
 void whistled_while_riding( mob* m, void* info1, void* info2);
 }
+
 
 #endif //ifndef LEADER_FSM_INCLUDED

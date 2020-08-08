@@ -18,15 +18,18 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum RESOURCE_ANIMATIONS {
     RESOURCE_ANIM_IDLING,
 };
+
 
 enum RESOURCE_DELIVERY_RESULTS {
     RESOURCE_DELIVERY_RESULT_DAMAGE_MOB,
     RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS,
     RESOURCE_DELIVERY_RESULT_ADD_POINTS,
 };
+
 
 enum RESOURCE_STATES {
     RESOURCE_STATE_IDLE_WAITING,
@@ -56,5 +59,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef RESOURCE_TYPE_INCLUDED

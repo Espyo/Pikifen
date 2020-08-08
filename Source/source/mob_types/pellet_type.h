@@ -15,6 +15,7 @@
 #include "mob_type.h"
 #include "pikmin_type.h"
 
+
 enum PELLET_STATES {
     PELLET_STATE_IDLE_WAITING,
     PELLET_STATE_IDLE_MOVING,
@@ -49,5 +50,6 @@ public:
     void unload_resources();
     
 };
+
 
 #endif //ifndef PELLET_TYPE_INCLUDED

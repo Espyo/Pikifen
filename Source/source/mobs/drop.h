@@ -41,4 +41,5 @@ protected:
     virtual void tick_class_specifics(const float delta_t);
 };
 
+
 #endif //ifndef DROP_INCLUDED

@@ -21,6 +21,7 @@
 
 #include "utils/math_utils.h"
 
+
 using std::size_t;
 using std::string;
 
@@ -178,6 +179,7 @@ enum MAKER_TOOL_IDS {
     N_MAKER_TOOLS,
 };
 
+
 const string MAKER_TOOL_NAMES[N_MAKER_TOOLS] = {
     "",
     "area_image",
@@ -189,6 +191,7 @@ const string MAKER_TOOL_NAMES[N_MAKER_TOOLS] = {
     "new_pikmin",
     "teleport"
 };
+
 
 enum HUD_ITEMS {
     HUD_ITEM_TIME,
@@ -224,6 +227,7 @@ enum HUD_ITEMS {
     N_HUD_ITEMS,
 };
 
+
 enum LIMB_DRAW_METHODS {
     LIMB_DRAW_BELOW_BOTH,
     LIMB_DRAW_BELOW_CHILD,
@@ -233,11 +237,13 @@ enum LIMB_DRAW_METHODS {
     LIMB_DRAW_ABOVE_BOTH,
 };
 
+
 enum HOLD_ROTATION_METHODS {
     HOLD_ROTATION_METHOD_NEVER,
     HOLD_ROTATION_METHOD_FACE_HOLDER,
     HOLD_ROTATION_METHOD_COPY_HOLDER,
 };
+
 
 const unsigned char N_WHISTLE_RING_COLORS = 8;
 const unsigned char WHISTLE_RING_COLORS[N_WHISTLE_RING_COLORS][3] = {
@@ -250,5 +256,6 @@ const unsigned char WHISTLE_RING_COLORS[N_WHISTLE_RING_COLORS][3] = {
     {0,   255, 0  },
     {128, 255, 0  }
 };
+
 
 #endif //ifndef CONST_INCLUDED

@@ -13,6 +13,7 @@
 #include "../drawing.h"
 #include "../functions.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a decoration mob.
  */

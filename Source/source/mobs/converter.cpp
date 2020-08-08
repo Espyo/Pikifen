@@ -14,6 +14,7 @@
 #include "../game.h"
 #include "../misc_structs.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a converter mob.
  */

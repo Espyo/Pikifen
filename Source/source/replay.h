@@ -23,6 +23,7 @@
 #include "mobs/treasure.h"
 #include "utils/geometry_utils.h"
 
+
 using std::size_t;
 using std::string;
 using std::vector;
@@ -36,6 +37,7 @@ enum REPLAY_ELEMENT_TYPES {
     REPLAY_ELEMENT_ONION,
     REPLAY_ELEMENT_OBSTACLE,
 };
+
 
 enum REPLAY_EVENT_TYPES {
     //A replay element was added.
@@ -124,5 +126,6 @@ private:
     size_t prev_leader_nr;
     
 };
+
 
 #endif //ifndef REPLAY_INCLUDED

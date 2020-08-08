@@ -10,6 +10,7 @@
 
 #include "interactable.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a new interactable mob.
  */

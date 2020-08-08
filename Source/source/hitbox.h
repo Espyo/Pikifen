@@ -16,8 +16,10 @@
 #include "const.h"
 #include "utils/geometry_utils.h"
 
+
 using std::string;
 using std::vector;
+
 
 /*
  * You can read more about hitboxes
@@ -29,6 +31,7 @@ enum HITBOX_TYPES {
     HITBOX_TYPE_ATTACK,
     HITBOX_TYPE_DISABLED,
 };
+
 
 struct hazard;
 
@@ -88,5 +91,6 @@ public:
         const float mob_angle_cos, const float mob_angle_sin
     ) const;
 };
+
 
 #endif //ifndef HITBOX_INCLUDED

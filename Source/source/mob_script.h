@@ -17,9 +17,11 @@
 
 #include "utils/data_file.h"
 
+
 using std::size_t;
 using std::string;
 using std::vector;
+
 
 class mob;
 struct mob_action_call;
@@ -202,6 +204,7 @@ enum MOB_EV_TYPES {
     N_MOB_EVENTS,
 };
 
+
 class mob_event {
 public:
     unsigned char type;
@@ -283,6 +286,7 @@ private:
     
 };
 
+
 struct hitbox_interaction {
     mob* mob2;  //Mob that touched our mob.
     hitbox* h1; //Hitbox of our mob that got touched.
@@ -292,6 +296,7 @@ struct hitbox_interaction {
         hitbox* h1 = NULL, hitbox* h2 = NULL
     );
 };
+
 
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);

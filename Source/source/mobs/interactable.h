@@ -29,4 +29,5 @@ public:
     interactable(const point &pos, interactable_type* type, const float angle);
 };
 
+
 #endif //ifndef INTERACTABLE_INCLUDED

@@ -13,11 +13,13 @@
 
 #include "mob_type.h"
 
+
 enum GROUP_TASK_PIKMIN_POSES {
     GROUP_TASK_PIKMIN_POSE_STOPPED,
     GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED,
     GROUP_TASK_PIKMIN_POSE_PUSHING,
 };
+
 
 enum GROUP_TASK_CONTRIBUTION_METHODS {
     GROUP_TASK_CONTRIBUTION_NORMAL,
@@ -47,5 +49,6 @@ public:
     
     void load_properties(data_node* file);
 };
+
 
 #endif //ifndef GROUP_TASK_TYPE_INCLUDED

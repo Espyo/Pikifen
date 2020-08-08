@@ -16,11 +16,14 @@
 #include <string>
 #include <vector>
 
+
 using std::string;
 using std::vector;
 
+
 struct liquid;
 struct status_type;
+
 
 /* ----------------------------------------------------------------------------
  * An hazard is the likes of fire, water, electricty, crushing, etc.
@@ -37,5 +40,6 @@ struct hazard {
     
     hazard();
 };
+
 
 #endif //ifndef HAZARD_INCLUDED

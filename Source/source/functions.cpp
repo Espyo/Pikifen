@@ -494,6 +494,7 @@ float get_sun_strength() {
     return 1.0f;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Given a string representation of mob script variables,
  * returns a map, where every key is a variable, and every value is the
@@ -1149,6 +1150,7 @@ string strsignal(const int signum) {
     }
     }
 }
+
 
 #endif //if defined(_WIN32)
 

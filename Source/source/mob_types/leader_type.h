@@ -17,6 +17,7 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum LEADER_STATES {
     LEADER_STATE_IDLING,
     LEADER_STATE_ACTIVE,
@@ -56,6 +57,7 @@ enum LEADER_STATES {
     
 };
 
+
 enum LEADER_ANIMATIONS {
     LEADER_ANIM_IDLING,
     LEADER_ANIM_WALKING,
@@ -71,6 +73,7 @@ enum LEADER_ANIMATIONS {
     LEADER_ANIM_SPRAYING,
     LEADER_ANIM_DRINKING,
 };
+
 
 const float LEADER_HELD_MOB_ANGLE = TAU / 2;
 const float LEADER_HELD_MOB_DIST = 1.2f;
@@ -103,5 +106,6 @@ public:
     anim_conversion_vector get_anim_conversions() const;
     void unload_resources();
 };
+
 
 #endif //ifndef LEADER_TYPE_INCLUDED

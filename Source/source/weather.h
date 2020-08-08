@@ -17,6 +17,7 @@
 
 #include <allegro5/allegro.h>
 
+
 using std::size_t;
 using std::string;
 using std::vector;
@@ -65,5 +66,6 @@ enum PRECIPITATION_TYPES {
     PRECIPITATION_TYPE_RAIN,
     PRECIPITATION_TYPE_WIND,
 };
+
 
 #endif //ifndef WEATHER_INCLUDED

@@ -13,6 +13,7 @@
 
 #include "mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * A type of scale (seesaw block, crushable paper bag, etc.).
  */
@@ -23,5 +24,6 @@ public:
     scale_type();
     void load_properties(data_node* file);
 };
+
 
 #endif //ifndef SCALE_TYPE_INCLUDED

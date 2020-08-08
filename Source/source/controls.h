@@ -19,6 +19,7 @@
 
 #include <allegro5/allegro.h>
 
+
 using std::size_t;
 using std::string;
 using std::vector;
@@ -60,6 +61,7 @@ struct action_from_event {
         pos(pos),
         player(player) { }
 };
+
 
 vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
 
@@ -108,6 +110,7 @@ enum BUTTONS {
     N_BUTTONS,
 };
 
+
 enum CONTROL_TYPES {
     CONTROL_TYPE_NONE,
     CONTROL_TYPE_KEYBOARD_KEY,
@@ -120,5 +123,6 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_JOYSTICK_AXIS_POS,
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
 };
+
 
 #endif //ifndef CONTROLS_INCLUDED

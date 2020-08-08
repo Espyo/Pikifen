@@ -19,9 +19,11 @@
 #include "controls.h"
 #include "utils/data_file.h"
 
+
 using std::map;
 using std::size_t;
 using std::vector;
+
 
 struct options_struct {
 
@@ -120,5 +122,6 @@ private:
     );
     
 };
+
 
 #endif //ifndef OPTIONS_INCLUDED

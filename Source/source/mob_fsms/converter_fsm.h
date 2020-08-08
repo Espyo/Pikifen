@@ -31,6 +31,7 @@ void open_or_die(mob* m, void* info1, void* info2);
 void open_or_spit(mob* m, void* info1, void* info2);
 void spew(mob* m, void* info1, void* info2);
 void start_dying(mob* m, void* info1, void* info2);
-};
+}
+
 
 #endif //ifndef CONVERTER_FSM_INCLUDED

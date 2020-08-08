@@ -34,4 +34,5 @@ public:
     bridge(const point &pos, bridge_type* bri_type, const float angle);
 };
 
+
 #endif //ifndef BRIDGE_INCLUDED

@@ -10,6 +10,7 @@
 
 #include "world_component.h"
 
+
 /* ----------------------------------------------------------------------------
  * Initializes a world component struct.
  */

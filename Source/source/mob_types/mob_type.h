@@ -22,9 +22,11 @@
 #include "../mob_script.h"
 #include "../utils/data_file.h"
 
+
 using std::size_t;
 using std::string;
 using std::vector;
+
 
 enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_CARRIABLE_WAITING,
@@ -32,6 +34,7 @@ enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_CARRIABLE_STUCK,
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
 };
+
 
 //Area editor mob property types.
 enum AEMP_TYPES {
@@ -48,6 +51,7 @@ enum AEMP_TYPES {
     //One of a list of numbers, though each has a name.
     AEMP_NUMBER_LIST,
 };
+
 
 typedef vector<std::pair<size_t, string> > anim_conversion_vector;
 
@@ -308,5 +312,6 @@ void load_mob_type_from_file(
 );
 void unload_mob_types(const bool unload_resources);
 void unload_mob_types(mob_category* category, const bool unload_resources);
+
 
 #endif //ifndef MOB_TYPE_INCLUDED

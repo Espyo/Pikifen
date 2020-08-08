@@ -13,6 +13,7 @@
 
 #include "../mobs/mob.h"
 
+
 /* ----------------------------------------------------------------------------
  * Functions about the generic mob's finite state machine and behavior.
  */
@@ -33,5 +34,6 @@ void start_being_delivered(mob* m, void* info1, void* info2);
 void touch_hazard(mob* m, void* info1, void* info2);
 void touch_spray(mob* m, void* info1, void* info2);
 }
+
 
 #endif //ifndef GEN_MOB_FSM_INCLUDED

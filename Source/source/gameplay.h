@@ -19,6 +19,7 @@
 #include "mobs/ship.h"
 #include "replay.h"
 
+
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
@@ -220,5 +221,6 @@ private:
     void unload_game_content();
     
 };
+
 
 #endif //ifndef GAMEPLAY_INCLUDED

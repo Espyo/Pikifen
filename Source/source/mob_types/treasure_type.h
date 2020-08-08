@@ -14,6 +14,7 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum TREASURE_STATES {
     TREASURE_STATE_IDLE_WAITING,
     TREASURE_STATE_IDLE_MOVING,
@@ -39,5 +40,6 @@ public:
     treasure_type();
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef TREASURE_TYPE_INCLUDED

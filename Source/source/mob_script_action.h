@@ -87,6 +87,7 @@ enum MOB_ACTION_TYPES {
     N_MOB_ACTIONS
 };
 
+
 //Arachnorb plan logic action sub-types.
 enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES {
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_HOME,
@@ -95,6 +96,7 @@ enum MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES {
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_CCW_TURN,
 };
 
+
 //Face action sub-types.
 enum MOB_ACTION_TURN_TYPES {
     MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC,
@@ -102,12 +104,14 @@ enum MOB_ACTION_TURN_TYPES {
     MOB_ACTION_TURN_HOME,
 };
 
+
 //Focus action sub-types.
 enum MOB_ACTION_FOCUS_TYPES {
     MOB_ACTION_FOCUS_LINK,
     MOB_ACTION_FOCUS_PARENT,
     MOB_ACTION_FOCUS_TRIGGER,
 };
+
 
 //If action operator types.
 enum MOB_ACTION_IF_OPERATOR_TYPES {
@@ -118,6 +122,7 @@ enum MOB_ACTION_IF_OPERATOR_TYPES {
     MOB_ACTION_IF_OP_LESS_E,
     MOB_ACTION_IF_OP_MORE_E,
 };
+
 
 //Get info action info types.
 enum MOB_ACTION_GET_INFO_TYPES {
@@ -137,6 +142,7 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_WEIGHT,
 };
 
+
 //Moving action sub-types.
 enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB,
@@ -147,9 +153,11 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_LINKED_MOB_AVERAGE,
 };
 
+
 enum MOB_ACTION_SET_ANIMATION_OPTIONS {
     MOB_ACTION_SET_ANIMATION_NO_RESTART,
 };
+
 
 //Set var action sub-types.
 enum MOB_ACTION_SET_VAR_TYPES {
@@ -159,6 +167,7 @@ enum MOB_ACTION_SET_VAR_TYPES {
     MOB_ACTION_SET_VAR_DIVIDE,
     MOB_ACTION_SET_VAR_MODULO,
 };
+
 
 //Stabilize Z action sub-types.
 enum MOB_ACTION_STABILIZE_Z_TYPES {
@@ -310,6 +319,7 @@ void turn_to_absolute(mob_action_run_data &data);
 void turn_to_relative(mob_action_run_data &data);
 void turn_to_target(mob_action_run_data &data);
 };
+
 
 namespace mob_action_loaders {
 bool arachnorb_plan_logic(mob_action_call &call);

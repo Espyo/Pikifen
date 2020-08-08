@@ -75,4 +75,5 @@ private:
     void update_spot_absolute_positions();
 };
 
+
 #endif //ifndef GROUP_TASK_INCLUDED

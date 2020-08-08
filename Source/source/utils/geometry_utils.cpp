@@ -50,42 +50,68 @@ dist &dist::operator =(const float d) {
     has_normal_distance = true;
     return *this;
 }
+
+
 bool dist::operator<(const float d2) const {
     return distance_squared < (d2 * d2);
 }
+
+
 bool dist::operator>(const float d2) const {
     return distance_squared > (d2 * d2);
 }
+
+
 bool dist::operator==(const float d2) const {
     return distance_squared == (d2 * d2);
 }
+
+
 bool dist::operator<=(const float d2) const {
     return !operator>(d2);
 }
+
+
 bool dist::operator>=(const float d2) const {
     return !operator<(d2);
 }
+
+
 bool dist::operator!=(const float d2) const {
     return !operator==(d2);
 }
+
+
 bool dist::operator<(const dist &d2) const {
     return distance_squared < d2.distance_squared;
 }
+
+
 bool dist::operator>(const dist &d2) const {
     return distance_squared > d2.distance_squared;
 }
+
+
 bool dist::operator==(const dist &d2) const {
     return distance_squared == d2.distance_squared;
 }
+
+
 bool dist::operator<=(const dist &d2) const {
     return !operator>(d2);
 }
+
+
 bool dist::operator>=(const dist &d2) const {
     return !operator<(d2);
 }
+
+
 bool dist::operator!=(const dist &d2) const {
     return !operator==(d2);
 }
+
+
 void dist::operator+=(const dist &d2) {
     distance_squared += d2.distance_squared;
     if(has_normal_distance && d2.has_normal_distance) {

@@ -34,4 +34,5 @@ public:
     virtual void draw_mob();
 };
 
+
 #endif //ifndef PELLET_INCLUDED

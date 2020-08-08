@@ -16,10 +16,12 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum DECORATION_ANIMATIONS {
     DECORATION_ANIM_IDLING,
     DECORATION_ANIM_BUMPED,
 };
+
 
 enum DECORATION_STATES {
     DECORATION_STATE_IDLING,
@@ -43,5 +45,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef DECORATION_TYPE_INCLUDED

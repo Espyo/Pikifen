@@ -17,6 +17,7 @@
 #include "../../game.h"
 #include "../../utils/string_utils.h"
 
+
 const float ANIMATION_EDITOR_GRID_INTERVAL = 16.0f;
 
 /* ----------------------------------------------------------------------------

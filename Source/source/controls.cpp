@@ -24,6 +24,7 @@
 #include "gameplay.h"
 #include "utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates information about a control.
  * action: The action this control does in-game. Use BUTTON_*.

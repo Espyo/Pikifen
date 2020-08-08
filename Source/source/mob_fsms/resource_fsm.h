@@ -13,6 +13,7 @@
 
 #include "../mob_types/mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * Functions about the resource's finite state machine and behavior.
  */
@@ -26,5 +27,6 @@ void lose_momentum(mob* m, void* info1, void* info2);
 void start_waiting(mob* m, void* info1, void* info2);
 void vanish(mob* m, void* info1, void* info2);
 }
+
 
 #endif //ifndef RESOURCE_FSM_INCLUDED

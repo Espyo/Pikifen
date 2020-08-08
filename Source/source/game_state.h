@@ -19,6 +19,7 @@
 #include "menu_widgets.h"
 #include "mobs/mob.h"
 
+
 using std::size_t;
 using std::vector;
 
@@ -58,5 +59,6 @@ public:
     virtual void update_transformations();
     virtual string get_name() const = 0;
 };
+
 
 #endif //ifndef GAME_STATE_INCLUDED

@@ -26,6 +26,7 @@
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
 
+
 class pikmin_type;
 
 using std::map;
@@ -585,6 +586,7 @@ enum PERF_MON_STATES {
     PERF_MON_STATE_FRAME,
 };
 
+
 /* ----------------------------------------------------------------------------
  * Contains information about how long certain things took. Useful for makers
  * to monitor performance with.
@@ -650,7 +652,10 @@ enum SUBGROUP_TYPE_CATEGORIES {
     SUBGROUP_TYPE_CATEGORY_LEADER,
     SUBGROUP_TYPE_CATEGORY_TOOL,
 };
+
+
 struct subgroup_type_manager;
+
 
 /* ----------------------------------------------------------------------------
  * Represents a leader subgroup type;

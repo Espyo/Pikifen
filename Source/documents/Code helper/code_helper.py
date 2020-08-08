@@ -115,7 +115,9 @@ def find_problems():
             problems_by_file[file] = []
         problems_by_file[file].append((problem, info))
     
-    for file in problems_by_file:
+    for file, dummy in sorted(problems_by_file.items()):
+        if file.find('imgui') != -1:
+            continue
         print(file)
         for problem, info in problems_by_file[file]:
             print('  ' + problem + ': ' + info)

@@ -17,6 +17,7 @@
 #include "../const.h"
 #include "../mob_categories/mob_category.h"
 
+
 using std::string;
 using std::vector;
 
@@ -39,5 +40,6 @@ public:
     
     group_task_category();
 };
+
 
 #endif //ifndef GROUP_TASK_CATEGORY_INCLUDED

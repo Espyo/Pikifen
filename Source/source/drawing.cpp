@@ -24,6 +24,7 @@
 #include "utils/geometry_utils.h"
 #include "utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
  * bmp_output: if not NULL, draw the area onto this.

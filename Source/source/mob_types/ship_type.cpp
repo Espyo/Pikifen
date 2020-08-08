@@ -15,6 +15,7 @@
 #include "../mobs/ship.h"
 #include "../utils/string_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a type of ship.
  */

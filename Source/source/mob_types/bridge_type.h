@@ -16,10 +16,12 @@
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
+
 enum BRIDGE_ANIMATIONS {
     BRIDGE_ANIM_IDLING,
     BRIDGE_ANIM_DESTROYED,
 };
+
 
 enum BRIDGE_STATES {
     BRIDGE_STATE_IDLING,
@@ -44,5 +46,6 @@ public:
     anim_conversion_vector get_anim_conversions() const;
     void unload_resources();
 };
+
 
 #endif //ifndef BRIDGE_TYPE_INCLUDED

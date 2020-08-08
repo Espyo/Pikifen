@@ -21,6 +21,7 @@
 #include "hitbox.h"
 #include "utils/data_file.h"
 
+
 using std::size_t;
 using std::string;
 using std::vector;

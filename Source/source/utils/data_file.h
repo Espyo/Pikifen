@@ -45,8 +45,10 @@
 #include <string>
 #include <vector>
 
+
 using std::string;
 using std::vector;
+
 
 const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
 

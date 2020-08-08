@@ -26,6 +26,7 @@
 #include "../status.h"
 #include "mob_utils.h"
 
+
 using std::map;
 using std::size_t;
 using std::string;
@@ -46,6 +47,7 @@ enum DISABLED_STATE_FLAGS {
     DISABLED_STATE_FLAG_INEDIBLE = 1,
 };
 
+
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.
@@ -59,6 +61,7 @@ enum MOB_PARTICLE_GENERATOR_IDS {
     //So make sure this is the last on the enum.
     MOB_PARTICLE_GENERATOR_STATUS,
 };
+
 
 enum MOB_TEAMS {
     //Has no friends!
@@ -80,6 +83,7 @@ enum MOB_TEAMS {
     //Number of teams.
     N_MOB_TEAMS,
 };
+
 
 enum MOB_TARGET_TYPES {
     //Cannot be damaged or hunted down.

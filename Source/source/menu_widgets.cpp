@@ -18,6 +18,7 @@
 #include "drawing.h"
 #include "game.h"
 
+
 const float menu_widget::ICON_SWAY_DELTA = 1.0f;
 const float menu_widget::ICON_SWAY_TIME_SCALE = 1.0f;
 const float menu_widget::JUICY_GROW_DELTA = 0.05f;

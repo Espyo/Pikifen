@@ -18,11 +18,13 @@
 #include "mob_type.h"
 #include "resource_type.h"
 
+
 enum PILE_ANIMATIONS {
     PILE_ANIM_IDLING,
     
     N_PILE_ANIMS,
 };
+
 
 enum PILE_STATES {
     PILE_STATE_IDLING,
@@ -50,5 +52,6 @@ public:
     void load_properties(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
+
 
 #endif //ifndef PILE_TYPE_INCLUDED

@@ -20,6 +20,7 @@
 #include "mob_types/leader_type.h"
 #include "mob_types/pikmin_type.h"
 
+
 using std::size_t;
 using std::vector;
 
@@ -127,5 +128,6 @@ struct game_config {
     
     game_config();
 };
+
 
 #endif //ifndef GAME_CONFIG_INCLUDED

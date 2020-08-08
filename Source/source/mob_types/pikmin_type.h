@@ -64,6 +64,7 @@ enum PIKMIN_STATES {
     N_PIKMIN_STATES
 };
 
+
 enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_IDLING,
     PIKMIN_ANIM_WALKING,
@@ -78,6 +79,7 @@ enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_DRINKING,
     PIKMIN_ANIM_PICKING_UP,
 };
+
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
 const float PIKMIN_INVULN_PERIOD = 0.7f;
@@ -111,5 +113,6 @@ public:
     void unload_resources();
     
 };
+
 
 #endif //ifndef PIKMIN_TYPE_INCLUDED

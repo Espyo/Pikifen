@@ -14,9 +14,11 @@
 #include <string>
 #include <vector>
 
+
 using std::size_t;
 using std::string;
 using std::vector;
+
 
 const size_t BACKTRACE_MAX_FRAMES = 30;
 const size_t BACKTRACE_MAX_SYMBOL_LENGTH = 512;
@@ -27,6 +29,7 @@ const size_t BACKTRACE_DEMANGLE_BUFFER_SIZE = 512;
 
 #include <execinfo.h>
 #include <cxxabi.h>
+
 
 string demangle_symbol(const string &symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
@@ -89,6 +92,7 @@ string demangle_symbol(const string &symbol) {
     }
     return ret;
 }
+
 
 vector<string> get_backtrace() {
     vector<string> result;
@@ -179,6 +183,7 @@ vector<string> get_backtrace() {
     v.push_back("(Not supported)");
     return v;
 }
+
 
 #endif
 

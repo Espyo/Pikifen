@@ -16,8 +16,10 @@
 #include "../mobs/mob.h"
 #include "../mob_types/mob_type.h"
 
+
 using std::size_t;
 using std::string;
+
 
 /* ----------------------------------------------------------------------------
  * Initializes an instance of a mob category.

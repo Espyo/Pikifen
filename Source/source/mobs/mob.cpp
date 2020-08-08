@@ -2293,7 +2293,6 @@ void mob::tick_class_specifics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Performs some logic code for this game frame.
  */
-#include <iostream>
 void mob::tick_misc_logic(const float delta_t) {
     time_alive += delta_t;
     

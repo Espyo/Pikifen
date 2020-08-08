@@ -15,6 +15,7 @@
 #include "../mob_fsms/onion_fsm.h"
 #include "../mobs/onion.h"
 
+
 /* ----------------------------------------------------------------------------
  * Creates a type of Onion.
  */
