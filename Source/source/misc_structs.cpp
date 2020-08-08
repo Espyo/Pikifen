@@ -314,31 +314,6 @@ void camera_info::update_box() {
 }
 
 
-/* ----------------------------------------------------------------------------
- * Creates a maker tool info struct.
- */
-maker_tools_info::maker_tools_info() :
-    area_image_shadows(true),
-    area_image_size(2048),
-    area_image_mobs(true),
-    change_speed(false),
-    change_speed_mult(2.0f),
-    geometry_info(false),
-    hitboxes(false),
-    info_lock(nullptr),
-    info_print_duration(5.0f),
-    info_print_fade_duration(3.0f),
-    last_pikmin_type(nullptr),
-    mob_hurting_ratio(0.5),
-    use_perf_mon(false) {
-    
-    info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
-    for(size_t k = 0; k < 20; ++k) {
-        keys[k] = MAKER_TOOL_NONE;
-    }
-}
-
-
 const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------
@@ -561,6 +536,31 @@ void hud_item_manager::tick(const float time) {
         offscreen = true;
     } else {
         offscreen = false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a maker tool info struct.
+ */
+maker_tools_info::maker_tools_info() :
+    area_image_shadows(true),
+    area_image_size(2048),
+    area_image_mobs(true),
+    change_speed(false),
+    change_speed_mult(2.0f),
+    geometry_info(false),
+    hitboxes(false),
+    info_lock(nullptr),
+    info_print_duration(5.0f),
+    info_print_fade_duration(3.0f),
+    last_pikmin_type(nullptr),
+    mob_hurting_ratio(0.5),
+    use_perf_mon(false) {
+    
+    info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
+    for(size_t k = 0; k < 20; ++k) {
+        keys[k] = MAKER_TOOL_NONE;
     }
 }
 

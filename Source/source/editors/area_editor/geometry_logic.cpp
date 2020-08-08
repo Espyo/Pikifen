@@ -271,30 +271,6 @@ sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
 
 
 /* ----------------------------------------------------------------------------
- * Deletes the specified edges. The sectors on each side of the edge
- * are merged, so the smallest sector will be deleted. In addition,
- * this operation will delete any sectors that would end up incomplete.
- * Returns false if one of the edges couldn't be deleted.
- */
-bool area_editor::delete_edges(const set<edge*> &which) {
-    bool ret = true;
-    
-    for(edge* e_ptr : which) {
-        if(!e_ptr->vertexes[0]) {
-            //Huh, looks like one of the edge deletion procedures already
-            //wiped this edge out. Skip it.
-            continue;
-        }
-        if(!merge_sectors(e_ptr->sectors[0], e_ptr->sectors[1])) {
-            ret = false;
-        }
-    }
-    
-    return ret;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Deletes the specified edge, removing it from all sectors and vertexes that
  * use it, as well as removing any now-useless sectors or vertexes.
  */
@@ -320,6 +296,30 @@ void area_editor::delete_edge(edge* e_ptr) {
     
     //Finally, delete the edge proper.
     game.cur_area_data.remove_edge(e_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the specified edges. The sectors on each side of the edge
+ * are merged, so the smallest sector will be deleted. In addition,
+ * this operation will delete any sectors that would end up incomplete.
+ * Returns false if one of the edges couldn't be deleted.
+ */
+bool area_editor::delete_edges(const set<edge*> &which) {
+    bool ret = true;
+    
+    for(edge* e_ptr : which) {
+        if(!e_ptr->vertexes[0]) {
+            //Huh, looks like one of the edge deletion procedures already
+            //wiped this edge out. Skip it.
+            continue;
+        }
+        if(!merge_sectors(e_ptr->sectors[0], e_ptr->sectors[1])) {
+            ret = false;
+        }
+    }
+    
+    return ret;
 }
 
 

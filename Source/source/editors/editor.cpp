@@ -11,8 +11,8 @@
 #include "editor.h"
 
 #include "../drawing.h"
-#include "../game.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../imgui/imgui_impl_allegro5.h"
 #include "../imgui/imgui_stdlib.h"
 #include "../load.h"
@@ -38,45 +38,6 @@ const int editor::UNSAVED_CHANGES_WARNING_HEIGHT = 30;
 const int editor::UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
 //Width of the unsaved changes warning, sans spike.
 const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new dialog info.
- */
-editor::dialog_info::dialog_info() :
-    close_callback(nullptr),
-    process_callback(nullptr),
-    is_open(true) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Processes the dialog for this frame.
- */
-void editor::dialog_info::process() {
-    if(!is_open) return;
-    
-    ImGui::SetNextWindowPos(
-        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
-        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
-    );
-    ImGui::SetNextWindowSize(
-        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
-    );
-    ImGui::OpenPopup((title + "##dialog").c_str());
-    
-    if(
-        ImGui::BeginPopupModal(
-            (title + "##dialog").c_str(), &is_open
-        )
-    ) {
-    
-        process_callback();
-        
-        ImGui::EndPopup();
-    }
-}
 
 
 /* ----------------------------------------------------------------------------
@@ -666,6 +627,25 @@ bool editor::key_check(
 
 
 /* ----------------------------------------------------------------------------
+ * Exits out of the editor, with a fade.
+ */
+void editor::leave() {
+    //Save the user's preferred tree node open states.
+    save_options();
+    
+    game.fade_mgr.start_fade(false, [] () {
+        if(game.states.area_editor_st->quick_play_area.empty()) {
+            game.change_state(game.states.main_menu_st);
+        } else {
+            game.states.gameplay_st->area_to_load =
+                game.states.area_editor_st->quick_play_area;
+            game.change_state(game.states.gameplay_st);
+        }
+    });
+}
+
+
+/* ----------------------------------------------------------------------------
  * Displays a popup, if applicable, and fills it with selectable items
  * from a list. Returns true if one of the items was clicked on,
  * false otherwise.
@@ -691,25 +671,6 @@ bool editor::list_popup(
         ImGui::EndPopup();
     }
     return ret;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Exits out of the editor, with a fade.
- */
-void editor::leave() {
-    //Save the user's preferred tree node open states.
-    save_options();
-    
-    game.fade_mgr.start_fade(false, [] () {
-        if(game.states.area_editor_st->quick_play_area.empty()) {
-            game.change_state(game.states.main_menu_st);
-        } else {
-            game.states.gameplay_st->area_to_load =
-                game.states.area_editor_st->quick_play_area;
-            game.change_state(game.states.gameplay_st);
-        }
-    });
 }
 
 
@@ -1183,6 +1144,45 @@ void editor::zoom_with_cursor(const float new_zoom) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new dialog info.
+ */
+editor::dialog_info::dialog_info() :
+    close_callback(nullptr),
+    process_callback(nullptr),
+    is_open(true) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the dialog for this frame.
+ */
+void editor::dialog_info::process() {
+    if(!is_open) return;
+    
+    ImGui::SetNextWindowPos(
+        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
+        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
+    );
+    ImGui::SetNextWindowSize(
+        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
+    );
+    ImGui::OpenPopup((title + "##dialog").c_str());
+    
+    if(
+        ImGui::BeginPopupModal(
+            (title + "##dialog").c_str(), &is_open
+        )
+    ) {
+    
+        process_callback();
+        
+        ImGui::EndPopup();
+    }
 }
 
 

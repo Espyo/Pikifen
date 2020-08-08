@@ -15,10 +15,10 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../gameplay.h"
+#include "../mob_types/leader_type.h"
 #include "../mobs/drop.h"
 #include "../mobs/leader.h"
 #include "../mobs/track.h"
-#include "../mob_types/leader_type.h"
 #include "../utils/string_utils.h"
 #include "gen_mob_fsm.h"
 

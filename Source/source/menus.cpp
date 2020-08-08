@@ -1213,20 +1213,20 @@ void options_menu::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string options_menu::get_name() const {
+    return "options menu";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Goes to the controls menu.
  */
 void options_menu::go_to_controls() {
     game.fade_mgr.start_fade(false, [] () {
         game.change_state(game.states.controls_menu_st);
     });
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the name of this state.
- */
-string options_menu::get_name() const {
-    return "options menu";
 }
 
 

@@ -30,17 +30,6 @@
 using std::string;
 
 /* ----------------------------------------------------------------------------
- * Creates a structure with info about an area editor's mob property.
- */
-mob_type::area_editor_prop_struct::area_editor_prop_struct() :
-    type(AEMP_TEXT) {
-    
-    min_value = -LARGE_FLOAT;
-    max_value = LARGE_FLOAT;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  */
 mob_type::mob_type(size_t category_id) :
@@ -216,6 +205,17 @@ void mob_type::load_resources(data_node* file) { }
  * Unloads loaded resources from memory.
  */
 void mob_type::unload_resources() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a structure with info about an area editor's mob property.
+ */
+mob_type::area_editor_prop_struct::area_editor_prop_struct() :
+    type(AEMP_TEXT) {
+    
+    min_value = -LARGE_FLOAT;
+    max_value = LARGE_FLOAT;
+}
 
 
 /* ----------------------------------------------------------------------------

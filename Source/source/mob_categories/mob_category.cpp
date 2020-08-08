@@ -13,8 +13,8 @@
 #include "mob_category.h"
 
 #include "../functions.h"
-#include "../mobs/mob.h"
 #include "../mob_types/mob_type.h"
+#include "../mobs/mob.h"
 
 
 using std::size_t;

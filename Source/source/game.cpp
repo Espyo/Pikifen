@@ -16,8 +16,8 @@
 
 #include "drawing.h"
 #include "functions.h"
-#include "init.h"
 #include "imgui/imgui_impl_allegro5.h"
+#include "init.h"
 #include "load.h"
 
 

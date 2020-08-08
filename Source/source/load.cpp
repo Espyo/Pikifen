@@ -590,55 +590,6 @@ ALLEGRO_BITMAP* load_bmp(
 
 
 /* ----------------------------------------------------------------------------
- * Loads the maker tools from the tool config file.
- */
-void load_maker_tools() {
-    data_node file(MAKER_TOOLS_FILE_PATH);
-    
-    if(!file.file_was_opened) return;
-    
-    game.maker_tools.enabled = s2b(file.get_child_by_name("enabled")->value);
-    
-    for(unsigned char k = 0; k < 20; k++) {
-        string tool_name;
-        if(k < 10) {
-            //The first ten indexes are the F2 - F11 keys.
-            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
-        } else {
-            //The second ten indexes are the 0 - 9 keys.
-            tool_name = file.get_child_by_name(i2s(k - 10))->value;
-        }
-        
-        for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
-            if(tool_name == MAKER_TOOL_NAMES[t]) {
-                game.maker_tools.keys[k] = t;
-            }
-        }
-    }
-    
-    reader_setter rs(&file);
-    
-    data_node* mob_hurting_percentage_node = NULL;
-    
-    rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
-    rs.set("area_image_shadows", game.maker_tools.area_image_shadows);
-    rs.set("area_image_size", game.maker_tools.area_image_size);
-    rs.set("change_speed_multiplier", game.maker_tools.change_speed_mult);
-    rs.set(
-        "mob_hurting_percentage", game.maker_tools.mob_hurting_ratio,
-        &mob_hurting_percentage_node
-    );
-    rs.set("auto_start_option", game.maker_tools.auto_start_option);
-    rs.set("auto_start_mode", game.maker_tools.auto_start_mode);
-    rs.set("performance_monitor", game.maker_tools.use_perf_mon);
-    
-    if(mob_hurting_percentage_node) {
-        game.maker_tools.mob_hurting_ratio /= 100.0;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Loads the user-made particle generators.
  */
 void load_custom_particle_generators(const bool load_resources) {
@@ -943,6 +894,55 @@ void load_liquids(const bool load_resources) {
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the maker tools from the tool config file.
+ */
+void load_maker_tools() {
+    data_node file(MAKER_TOOLS_FILE_PATH);
+    
+    if(!file.file_was_opened) return;
+    
+    game.maker_tools.enabled = s2b(file.get_child_by_name("enabled")->value);
+    
+    for(unsigned char k = 0; k < 20; k++) {
+        string tool_name;
+        if(k < 10) {
+            //The first ten indexes are the F2 - F11 keys.
+            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+        } else {
+            //The second ten indexes are the 0 - 9 keys.
+            tool_name = file.get_child_by_name(i2s(k - 10))->value;
+        }
+        
+        for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
+            if(tool_name == MAKER_TOOL_NAMES[t]) {
+                game.maker_tools.keys[k] = t;
+            }
+        }
+    }
+    
+    reader_setter rs(&file);
+    
+    data_node* mob_hurting_percentage_node = NULL;
+    
+    rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
+    rs.set("area_image_shadows", game.maker_tools.area_image_shadows);
+    rs.set("area_image_size", game.maker_tools.area_image_size);
+    rs.set("change_speed_multiplier", game.maker_tools.change_speed_mult);
+    rs.set(
+        "mob_hurting_percentage", game.maker_tools.mob_hurting_ratio,
+        &mob_hurting_percentage_node
+    );
+    rs.set("auto_start_option", game.maker_tools.auto_start_option);
+    rs.set("auto_start_mode", game.maker_tools.auto_start_mode);
+    rs.set("performance_monitor", game.maker_tools.use_perf_mon);
+    
+    if(mob_hurting_percentage_node) {
+        game.maker_tools.mob_hurting_ratio /= 100.0;
     }
 }
 

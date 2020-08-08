@@ -15,8 +15,8 @@
 
 #include "functions.h"
 #include "game.h"
-#include "mobs/tool.h"
 #include "mobs/scale.h"
+#include "mobs/tool.h"
 #include "utils/string_utils.h"
 
 

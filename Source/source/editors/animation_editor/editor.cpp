@@ -320,6 +320,37 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the animation editor.
+ */
+void animation_editor::load() {
+    editor::load();
+    
+    load_custom_particle_generators(false);
+    load_status_types(false);
+    load_spray_types(false);
+    load_liquids(false);
+    load_hazards();
+    load_spike_damage_types();
+    load_mob_types(false);
+    
+    file_path.clear();
+    can_reload = false;
+    can_save = false;
+    loaded_content_yet = false;
+    side_view = false;
+    change_state(EDITOR_STATE_MAIN);
+    
+    if(!auto_load_anim.empty()) {
+        loaded_mob_type = NULL;
+        file_path = auto_load_anim;
+        load_animation_database(true);
+    } else {
+        open_load_dialog();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the animation database for the current object.
  */
 void animation_editor::load_animation_database(
@@ -440,32 +471,48 @@ void animation_editor::load_animation_database(
 
 
 /* ----------------------------------------------------------------------------
- * Loads the animation editor.
+ * Callback for when the user picks an animation from the picker.
  */
-void animation_editor::load() {
-    editor::load();
-    
-    load_custom_particle_generators(false);
-    load_status_types(false);
-    load_spray_types(false);
-    load_liquids(false);
-    load_hazards();
-    load_spike_damage_types();
-    load_mob_types(false);
-    
-    file_path.clear();
-    can_reload = false;
-    can_save = false;
-    loaded_content_yet = false;
-    side_view = false;
-    change_state(EDITOR_STATE_MAIN);
-    
-    if(!auto_load_anim.empty()) {
-        loaded_mob_type = NULL;
-        file_path = auto_load_anim;
-        load_animation_database(true);
-    } else {
-        open_load_dialog();
+void animation_editor::pick_animation(
+    const string &name, const string &category, const bool is_new
+) {
+    if(is_new) {
+        anims.animations.push_back(new animation(name));
+        anims.sort_alphabetically();
+        made_new_changes = true;
+        status_text = "Created animation \"" + name + "\".";
+    }
+    cur_anim = anims.animations[anims.find_animation(name)];
+    cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
+    cur_frame_time = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Callback for when the user picks a sprite from the picker.
+ */
+void animation_editor::pick_sprite(
+    const string &name, const string &category, const bool is_new
+) {
+    if(is_new) {
+        if(anims.find_sprite(name) == INVALID) {
+            anims.sprites.push_back(new sprite(name));
+            anims.sprites.back()->create_hitboxes(
+                &anims,
+                loaded_mob_type ? loaded_mob_type->height : 128,
+                loaded_mob_type ? loaded_mob_type->radius : 32
+            );
+            anims.sort_alphabetically();
+            made_new_changes = true;
+            status_text = "Created sprite \"" + name + "\".";
+        }
+    }
+    cur_sprite = anims.sprites[anims.find_sprite(name)];
+    cur_hitbox = NULL;
+    cur_hitbox_nr = INVALID;
+    if(is_new) {
+        //New sprite. Suggest file name.
+        cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
     }
 }
 
@@ -572,53 +619,6 @@ void animation_editor::press_reload_button() {
 void animation_editor::press_save_button() {
     if(!can_save) return;
     save_animation_database();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks an animation from the picker.
- */
-void animation_editor::pick_animation(
-    const string &name, const string &category, const bool is_new
-) {
-    if(is_new) {
-        anims.animations.push_back(new animation(name));
-        anims.sort_alphabetically();
-        made_new_changes = true;
-        status_text = "Created animation \"" + name + "\".";
-    }
-    cur_anim = anims.animations[anims.find_animation(name)];
-    cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
-    cur_frame_time = 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Callback for when the user picks a sprite from the picker.
- */
-void animation_editor::pick_sprite(
-    const string &name, const string &category, const bool is_new
-) {
-    if(is_new) {
-        if(anims.find_sprite(name) == INVALID) {
-            anims.sprites.push_back(new sprite(name));
-            anims.sprites.back()->create_hitboxes(
-                &anims,
-                loaded_mob_type ? loaded_mob_type->height : 128,
-                loaded_mob_type ? loaded_mob_type->radius : 32
-            );
-            anims.sort_alphabetically();
-            made_new_changes = true;
-            status_text = "Created sprite \"" + name + "\".";
-        }
-    }
-    cur_sprite = anims.sprites[anims.find_sprite(name)];
-    cur_hitbox = NULL;
-    cur_hitbox_nr = INVALID;
-    if(is_new) {
-        //New sprite. Suggest file name.
-        cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
-    }
 }
 
 

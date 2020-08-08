@@ -12,8 +12,8 @@
 
 #include "group_task_category.h"
 
-#include "../mobs/group_task.h"
 #include "../game.h"
+#include "../mobs/group_task.h"
 
 
 /* ----------------------------------------------------------------------------
