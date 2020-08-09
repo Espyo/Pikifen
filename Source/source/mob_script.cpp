@@ -125,9 +125,12 @@ void easy_fsm_creator::run(custom_action_code code) {
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about an event where two hitboxes touch.
- * mob2: the other mob.
- * h1:   the current mob's hitbox.
- * h2:   the other mob's hitbox.
+ * mob2:
+ *   The other mob.
+ * h1:
+ *   The current mob's hitbox.
+ * h2:
+ *   The other mob's hitbox.
  */
 hitbox_interaction::hitbox_interaction(
     mob* mob2, hitbox* h1, hitbox* h2
@@ -140,8 +143,10 @@ hitbox_interaction::hitbox_interaction(
 
 /* ----------------------------------------------------------------------------
  * Creates a new event given a data node.
- * node:    the data node.
- * actions: its actions.
+ * node:
+ *   The data node.
+ * actions:
+ *   Its actions.
  */
 mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     actions(actions) {
@@ -189,8 +194,10 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new event.
- * t: the event type.
- * a: its actions.
+ * t:
+ *   The event type.
+ * a:
+ *   Its actions.
  */
 mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
     type(t),
@@ -201,9 +208,12 @@ mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
 
 /* ----------------------------------------------------------------------------
  * Runs a mob event. Basically runs all actions within.
- * m:             the mob.
- * custom_data_1: custom argument #1 to pass to the code.
- * custom_data_2: custom argument #2 to pass to the code.
+ * m:
+ *   The mob.
+ * custom_data_1:
+ *   Custom argument #1 to pass to the code.
+ * custom_data_2:
+ *   Custom argument #2 to pass to the code.
  */
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     if(m->parent && m->parent->relay_events) {
@@ -312,7 +322,8 @@ mob_fsm::mob_fsm(mob* m) :
 /* ----------------------------------------------------------------------------
  * Returns a pointer to an event of the given type in the current state,
  * if it exists.
- * type: the event's type.
+ * type:
+ *   The event's type.
  */
 mob_event* mob_fsm::get_event(const size_t type) const {
     if(!cur_state) return NULL;
@@ -322,9 +333,12 @@ mob_event* mob_fsm::get_event(const size_t type) const {
 
 /* ----------------------------------------------------------------------------
  * Runs an event in the current state, if it exists.
- * type:          the event's type.
- * custom_data_1: custom argument #1 to pass to the code.
- * custom_data_2: custom argument #2 to pass to the code.
+ * type:
+ *   The event's type.
+ * custom_data_1:
+ *   Custom argument #1 to pass to the code.
+ * custom_data_2:
+ *   Custom argument #2 to pass to the code.
  */
 void mob_fsm::run_event(
     const size_t type, void* custom_data_1, void* custom_data_2
@@ -387,7 +401,8 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Creates a new state.
- * name: the state's name.
+ * name:
+ *   The state's name.
  */
 mob_state::mob_state(const string &name) :
     name(name),
@@ -418,8 +433,10 @@ mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new, empty state.
- * name: the state's name.
- * id:   its ID, for sorting on the vector of states.
+ * name:
+ *   The state's name.
+ * id:
+ *   Its ID, for sorting on the vector of states.
  */
 mob_state::mob_state(const string &name, const size_t id) :
     name(name),
@@ -434,7 +451,8 @@ mob_state::mob_state(const string &name, const size_t id) :
 /* ----------------------------------------------------------------------------
  * Returns a pointer to an event of the given type in the state,
  * if it exists.
- * type: the event's type.
+ * type:
+ *   The event's type.
  */
 mob_event* mob_state::get_event(const size_t type) const {
     return events[type];
@@ -445,9 +463,11 @@ mob_event* mob_state::get_event(const size_t type) const {
  * Fixes some things in the list of states.
  * For instance, state-switching actions that use
  * a name instead of a number.
- * states:         the vector of states.
- * starting_state: name of the starting state for the mob.
  * Returns the number of the starting state.
+ * states:
+ *   The vector of states.
+ * starting_state:
+ *   Name of the starting state for the mob.
  */
 size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
     size_t starting_state_nr = INVALID;
@@ -500,9 +520,12 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
 
 /* ----------------------------------------------------------------------------
  * Loads the states off of a data node.
- * mt:     The type of mob the states are going to.
- * node:   The data node.
- * states: Vector of states to place the new states on.
+ * mt:
+ *   The type of mob the states are going to.
+ * node:
+ *   The data node.
+ * states:
+ *   Vector of states to place the new states on.
  */
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     size_t n_new_states = node->get_nr_of_children();
@@ -653,7 +676,8 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
 
 /* ----------------------------------------------------------------------------
  * Unloads the states from memory.
- * mt: the type of mob.
+ * mt:
+ *   The type of mob.
  */
 void unload_script(mob_type* mt) {
     for(size_t s = 0; s < mt->states.size(); ++s) {

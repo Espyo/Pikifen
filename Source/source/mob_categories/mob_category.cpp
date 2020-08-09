@@ -76,8 +76,10 @@ mob_type* mob_category_manager::find_mob_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Finds a mob type given its folder's name in the Game data folder.
- * cat:  Category the mob is in.
- * name: Name of the folder.
+ * cat:
+ *   Category the mob is in.
+ * name:
+ *   Name of the folder.
  */
 mob_type* mob_category_manager::find_mob_type_from_folder_name(
     mob_category* cat, const string &name

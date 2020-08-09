@@ -1410,10 +1410,14 @@ void area_editor::draw_cross_section_sector(
 
 /* ----------------------------------------------------------------------------
  * Draws debug text, used to identify edges, sectors, or vertexes.
- * color: Text color.
- * where: Where to draw, in world coordinates.
- * text:  Text to show.
- * dots:  How many dots to draw above the text. 0, 1, or 2.
+ * color:
+ *   Text color.
+ * where:
+ *   Where to draw, in world coordinates.
+ * text:
+ *   Text to show.
+ * dots:
+ *   How many dots to draw above the text. 0, 1, or 2.
  */
 void area_editor::draw_debug_text(
     const ALLEGRO_COLOR color, const point &where, const string &text,

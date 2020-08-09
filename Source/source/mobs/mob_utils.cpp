@@ -233,7 +233,8 @@ point group_info_struct::get_spot_offset(const size_t spot_index) const {
  * (Re-)Initializes the group spots. This resizes it to the current number
  * of group members. Any old group members are moved to the appropriate
  * new spot.
- * affected_mob_ptr: If this initialization is because a new mob entered
+ * affected_mob_ptr:
+ *   If this initialization is because a new mob entered
  *   or left the group, this should point to said mob.
  */
 void group_info_struct::init_spots(mob* affected_mob_ptr) {
@@ -417,7 +418,8 @@ void group_info_struct::reassign_spots() {
  * Sets the standby group member type to the next available one,
  * or NULL if none.
  * Returns true on success, false on failure.
- * move_backwards: If true, go through the list backwards.
+ * move_backwards:
+ *   If true, go through the list backwards.
  */
 bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
 
@@ -662,12 +664,18 @@ track_info_struct::track_info_struct(mob* m) :
 /* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  * Returns the new mob.
- * category:            The category the new mob belongs to.
- * pos:                 Initial position.
- * type:                Type of the new mob.
- * angle:               Initial facing angle.
- * vars:                Script variables.
- * code_after_creation: Code to run right after the mob is created, if any.
+ * category:
+ *   The category the new mob belongs to.
+ * pos:
+ *   Initial position.
+ * type:
+ *   Type of the new mob.
+ * angle:
+ *   Initial facing angle.
+ * vars:
+ *   Script variables.
+ * code_after_creation:
+ *   Code to run right after the mob is created, if any.
  *   This is run before any scripting takes place.
  */
 mob* create_mob(
@@ -789,8 +797,10 @@ mob* create_mob(
  * It's always removed from the vector of mobs, but it's
  * also removed from the vector of Pikmin if it's a Pikmin,
  * leaders if it's a leader, etc.
- * m_ptr:                The mob to delete.
- * complete_destruction: If true, don't bother removing it from groups and such,
+ * m_ptr:
+ *   The mob to delete.
+ * complete_destruction:
+ *   If true, don't bother removing it from groups and such,
  *   since everything is going to be destroyed.
  */
 void delete_mob(mob* m_ptr, const bool complete_destruction) {

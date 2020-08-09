@@ -127,9 +127,12 @@ void clear_area_textures() {
 /* ----------------------------------------------------------------------------
  * Purposely crashes the engine, reporting as much information as possible to
  * the logs. Used when a fatal problem occurs.
- * reason:      Explanation of the type of crash (assert, SIGSEGV, etc.).
- * info:        Any extra information to report to the logs.
- * exit_status: Program exit status.
+ * reason:
+ *   Explanation of the type of crash (assert, SIGSEGV, etc.).
+ * info:
+ *   Any extra information to report to the logs.
+ * exit_status:
+ *   Program exit status.
  */
 void crash(const string &reason, const string &info, const int exit_status) {
 
@@ -357,8 +360,8 @@ mob* get_closest_mob_to_cursor() {
 
 /* ----------------------------------------------------------------------------
  * Returns a string representing the current date and time.
- * filename_friendly: If true, slashes become dashes,
- *   and semicolons become dots.
+ * filename_friendly:
+ *   If true, slashes become dashes, and semicolons become dots.
  */
 string get_current_time(const bool filename_friendly) {
     time_t tt;
@@ -454,10 +457,14 @@ ALLEGRO_COLOR get_fog_color() {
  * Lines are split by a single "\n" character.
  * These are the dimensions of a bitmap
  * that would hold a drawing by draw_text_lines().
- * font:  The text's font.
- * text:  The text.
- * ret_w: The width gets returned here, if not NULL.
- * ret_h: The height gets returned here, if not NULL.
+ * font:
+ *   The text's font.
+ * text:
+ *   The text.
+ * ret_w:
+ *   The width gets returned here, if not NULL.
+ * ret_h:
+ *   The height gets returned here, if not NULL.
  */
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
@@ -643,8 +650,10 @@ ALLEGRO_COLOR interpolate_color(
 
 /* ----------------------------------------------------------------------------
  * Prints something onto the error log.
- * s: String that represents the error.
- * d: If not null, this will be used to obtain the file name
+ * s:
+ *   String that represents the error.
+ * d:
+ *   If not null, this will be used to obtain the file name
  *   and line that caused the error.
  */
 void log_error(string s, data_node* d) {
@@ -703,9 +712,12 @@ string p2s(const point &p, float* z) {
 
 /* ----------------------------------------------------------------------------
  * Prints a bit of info onto the screen, for some seconds.
- * text:           Text to print. Can use line breaks.
- * total_duration: Total amount of time in which the text is present.
- * fade_duration:  When closing, fade out in the last N seconds.
+ * text:
+ *   Text to print. Can use line breaks.
+ * total_duration:
+ *   Total amount of time in which the text is present.
+ * fade_duration:
+ *   When closing, fade out in the last N seconds.
  */
 void print_info(
     const string &text, const float total_duration, const float fade_duration
@@ -811,7 +823,8 @@ vector<string> prompt_file_dialog_locked_to_folder(
 /* ----------------------------------------------------------------------------
  * Basically, it destroys and recreates a bitmap.
  * The main purpose of this is to update its mipmap.
- * b: The bitmap.
+ * b:
+ *   The bitmap.
  */
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
     ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
@@ -1068,8 +1081,10 @@ void save_screenshot() {
 
 /* ----------------------------------------------------------------------------
  * Returns a vector with all items inside a semicolon-separated list.
- * s:   The string containing the list.
- * sep: Separator to use, in case you need something else. Default is semicolon.
+ * s:
+ *   The string containing the list.
+ * sep:
+ *   Separator to use, in case you need something else. Default is semicolon.
  */
 vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
     vector<string> parts = split(s, sep);
@@ -1197,8 +1212,10 @@ string standardize_path(const string &path) {
  * If the text is empty, it closes the message box.
  * Any newline characters or slashes followed by n ("\n") will be used to
  * separate the message into lines.
- * text:        Text to display.
- * speaker_bmp: Bitmap representing the speaker.
+ * text:
+ *   Text to display.
+ * speaker_bmp:
+ *   Bitmap representing the speaker.
  */
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
@@ -1294,8 +1311,10 @@ string unescape_string(const string &s) {
  * Returns a string that's a join of the strings in the specified vector,
  * but only past a certain position. The strings are joined with a space
  * character.
- * v:   The vector of strings.
- * pos: Use the string at this position and onward.
+ * v:
+ *   The vector of strings.
+ * pos:
+ *   Use the string at this position and onward.
  */
 string vector_tail_to_string(const vector<string> &v, const size_t pos) {
     string result = v[pos];

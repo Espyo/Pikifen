@@ -1403,8 +1403,10 @@ path_stop::path_stop(const point &pos, const vector<path_link> &links) :
  * Adds a link between this stop and another, whether it's one-way or not.
  * Also adds the link to the other stop, if applicable.
  * If these two stops already had some link, it gets removed.
- * other_stop: Pointer to the other stop.
- * normal:     Normal link? False means one-way link.
+ * other_stop:
+ *   Pointer to the other stop.
+ * normal:
+ *   Normal link? False means one-way link.
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
     remove_link(other_stop);
@@ -1898,10 +1900,11 @@ void sector::clone(sector* new_sector) {
 /* ----------------------------------------------------------------------------
  * Fills a vector with neighboring sectors, recursively, but only if they
  * meet certain criteria.
- * condition:       Function that accepts a sector and checks its criteria. This
+ * condition:
+ *   Function that accepts a sector and checks its criteria. This
  *   function must return true if accepted, false if not.
- * sector_list: List of sectors to be filled. Also doubles as the list of
- *   visited sectors.
+ * sector_list:
+ *   List of sectors to be filled. Also doubles as the list of visited sectors.
  */
 void sector::get_neighbor_sectors_conditionally(
     const std::function<bool(sector* s_ptr)> &condition,
@@ -2212,9 +2215,10 @@ bool vertex::has_edge(edge* e_ptr) const {
 /* ----------------------------------------------------------------------------
  * Returns whether or not this vertex is a second-degree neighbor to the
  * specified vertex. i.e. they have a shared neighbor between them.
- * other_v:        The vertex to compare against.
- * first_neighbor: Return the common neighbor between them here,
- *   if the result is true.
+ * other_v:
+ *   The vertex to compare against.
+ * first_neighbor:
+ *   Return the common neighbor between them here, if the result is true.
  */
 bool vertex::is_2nd_degree_neighbor(
     vertex* other_v, vertex** first_neighbor
@@ -2240,9 +2244,10 @@ bool vertex::is_2nd_degree_neighbor(
 /* ----------------------------------------------------------------------------
  * Returns whether or not this vertex is a second-degree neighbor to the
  * specified edge. i.e. one of the vertex's neighbors is used by the edge.
- * other_e:        The edge to compare against.
- * first_neighbor: Return the common neighbor between them here,
- *   if the result is true.
+ * other_e:
+ *   The edge to compare against.
+ * first_neighbor:
+ *   Return the common neighbor between them here, if the result is true.
  */
 bool vertex::is_2nd_degree_neighbor(
     edge* other_e, vertex** first_neighbor
@@ -2268,7 +2273,8 @@ bool vertex::is_2nd_degree_neighbor(
 /* ----------------------------------------------------------------------------
  * Returns whether or not this vertex is a neighbor to the
  * specified vertex. i.e. they have a shared edge between them.
- * other_v:        The vertex to compare against.
+ * other_v:
+ *   The vertex to compare against.
  */
 bool vertex::is_neighbor(vertex* other_v) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -2299,9 +2305,12 @@ void vertex::remove_edge(edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Traverses a graph using the depth first search algorithm.
- * nodes:   Vector of nodes.
- * visited: Set with the visited nodes.
- * start:   Starting node.
+ * nodes:
+ *   Vector of nodes.
+ * visited:
+ *   Set with the visited nodes.
+ * start:
+ *   Starting node.
  */
 void depth_first_search(
     vector<path_stop*> &nodes, unordered_set<path_stop*> &visited,
@@ -2512,11 +2521,15 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 /* ----------------------------------------------------------------------------
  * Returns the shortest available path between two points, following
  * the area's path graph.
- * start:           Start coordinates.
- * end:             End coordinates.
- * go_straight:     This is set according to whether it's better
+ * start:
+ *   Start coordinates.
+ * end:
+ *   End coordinates.
+ * go_straight:
+ *   This is set according to whether it's better
  *   to go straight to the end point.
- * total_dist:      If not NULL, place the total path distance here.
+ * total_dist:
+ *   If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
     const point &start, const point &end,
@@ -2639,13 +2652,17 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
  * Returns the outer polygon and inner polygons of a sector,
  * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
- * s_ptr:              Pointer to the sector.
- * outer:              Return the outer polygon here.
- * inners:             Return the inner polygons here.
- * lone_edges:         Return any lone edges found here.
- * check_vertex_reuse: True if the algorithm is meant to check for vertexes
- *   that get reused.
  * Returns a number based on what happened. See TRIANGULATION_ERRORS.
+ * s_ptr:
+ *   Pointer to the sector.
+ * outer:
+ *   Return the outer polygon here.
+ * inners:
+ *   Return the inner polygons here.
+ * lone_edges:
+ *   Return any lone edges found here.
+ * check_vertex_reuse:
+ *   True if the algorithm is meant to check for vertexes that get reused.
  */
 TRIANGULATION_ERRORS get_polys(
     sector* s_ptr, polygon* outer, vector<polygon>* inners,
@@ -2855,11 +2872,13 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 
 /* ----------------------------------------------------------------------------
  * Returns which sector the specified point belongs to.
- * p:            Coordinates of the point.
- * sector_nr:    If not NULL, the number of the sector
- *   on the area map is placed here.
+ * p:
+ *   Coordinates of the point.
+ * sector_nr:
+ *   If not NULL, the number of the sector on the area map is placed here.
  *   The number will not be set if the search is using the blockmap.
- * use_blockmap: If true, use the blockmap to search.
+ * use_blockmap:
+ *   If true, use the blockmap to search.
  *   This provides faster results, but the blockmap must be built.
  */
 sector* get_sector(
@@ -3000,13 +3019,15 @@ bool is_vertex_ear(
 /* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector.
  * This is because drawing concave polygons is not possible.
- * s_ptr:              Pointer to the sector.
- * lone_edges:         Return lone edges found here.
- * check_vertex_reuse: True if the algorithm is meant to check for vertexes
- *   that get reused.
- * clear_lone_edges:   Clear this sector's edges from the list of lone edges,
- *   if they are there.
  * Returns a number based on what happened. See TRIANGULATION_ERRORS.
+ * s_ptr:
+ *   Pointer to the sector.
+ * lone_edges:
+ *   Return lone edges found here.
+ * check_vertex_reuse:
+ *   True if the algorithm is meant to check for vertexes that get reused.
+ * clear_lone_edges:
+ *   Clear this sector's edges from the list of lone edges, if they are there.
  */
 TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,

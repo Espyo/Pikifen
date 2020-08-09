@@ -814,9 +814,10 @@ void load_mob_types(bool load_resources) {
 
 /* ----------------------------------------------------------------------------
  * Loads the mob types from a category's folder.
- * category:       Pointer to the mob category.
- * load_resources: False if you don't need the images and sounds,
- *   so it loads faster.
+ * category:
+ *   Pointer to the mob category.
+ * load_resources:
+ *   False if you don't need the images and sounds, so it loads faster.
  */
 void load_mob_types(mob_category* category, bool load_resources) {
     if(category->folder.empty()) return;
@@ -885,8 +886,10 @@ void unload_mob_types(const bool unload_resources) {
 
 /* ----------------------------------------------------------------------------
  * Unloads all loaded types of mob from a category.
- * category:         Pointer to the mob category.
- * unload_resources: False if you don't need to unload images or sounds,
+ * category:
+ *   Pointer to the mob category.
+ * unload_resources:
+ *   False if you don't need to unload images or sounds,
  *   since they never got loaded in the first place.
  */
 void unload_mob_types(mob_category* category, bool unload_resources) {

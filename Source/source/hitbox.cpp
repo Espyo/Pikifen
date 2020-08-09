@@ -24,14 +24,21 @@ body_part::body_part(const string &name) :
 
 /* ----------------------------------------------------------------------------
  * Creates a hitbox.
- * bpn:    Name of the body part.
- * bpi:    Index of the body part in the animation database.
- * bpp:    Pointer to the body part.
- * pos:    Hitbox's coordinates, from the center of the mob.
- * z:      Z coordinate of the bottom point of the hitbox.
- * height: The hitbox's total height.
+ * bpn:
+ *   Name of the body part.
+ * bpi:
+ *   Index of the body part in the animation database.
+ * bpp:
+ *   Pointer to the body part.
+ * pos:
+ *   Hitbox's coordinates, from the center of the mob.
+ * z:
+ *   Z coordinate of the bottom point of the hitbox.
+ * height:
+ *   The hitbox's total height.
  *   0 means it spans indefinitely across the Z axis.
- * radius: Hitbox radius.
+ * radius:
+ *   Hitbox radius.
  */
 hitbox::hitbox(
     const string &bpn, size_t bpi, body_part* bpp, const point &pos,

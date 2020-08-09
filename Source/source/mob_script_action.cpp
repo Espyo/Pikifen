@@ -56,7 +56,8 @@ mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new mob action call that is meant to run custom code.
- * code: the function to run.
+ * code:
+ *   The function to run.
  */
 mob_action_call::mob_action_call(custom_action_code code):
     action(nullptr),
@@ -75,8 +76,10 @@ mob_action_call::mob_action_call(custom_action_code code):
 
 /* ----------------------------------------------------------------------------
  * Loads a mob action call from a data node.
- * dn:     the data node.
- * mt:     mob type this action's fsm belongs to.
+ * dn:
+ *   The data node.
+ * mt:
+ *   Mob type this action's fsm belongs to.
  */
 bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 
@@ -194,11 +197,14 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
 
 /* ----------------------------------------------------------------------------
  * Runs an action.
- * m:             the mob.
- * custom_data_1: custom argument #1 to pass to the code.
- * custom_data_2: custom argument #2 to pass to the code.
  * Return value is only used by the "if" actions, to indicate their
  *   evaluation result.
+ * m:
+ *   The mob.
+ * custom_data_1:
+ *   Custom argument #1 to pass to the code.
+ * custom_data_2:
+ *   Custom argument #2 to pass to the code.
  */
 bool mob_action_call::run(
     mob* m, void* custom_data_1, void* custom_data_2
@@ -1740,8 +1746,10 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
  * Also checks if there are actions past a "set_state" action.
  * If everything is okay, returns true. If not, throws errors to the
  * error log and returns false.
- * actions: The vector of actions to check.
- * dn:      Data node from where these actions came.
+ * actions:
+ *   The vector of actions to check.
+ * dn:
+ *   Data node from where these actions came.
  */
 bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
@@ -1850,9 +1858,12 @@ bool assert_actions(
 
 /* ----------------------------------------------------------------------------
  * Loads the actions to be run when the mob initializes.
- * mt:      The type of mob the actions are going to.
- * node:    The data node.
- * actions: Vector of actions to be filled.
+ * mt:
+ *   The type of mob the actions are going to.
+ * node:
+ *   The data node.
+ * actions:
+ *   Vector of actions to be filled.
  */
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions

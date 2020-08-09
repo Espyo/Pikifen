@@ -25,10 +25,12 @@ using std::set;
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
- * name:            Name of the area's folder.
- * load_for_editor: If true, skips loading some things that the area editor
- *   won't need.
- * from_backup:     If true, load from a backup, if any.
+ * name:
+ *   Name of the area's folder.
+ * load_for_editor:
+ *   If true, skips loading some things that the area editor won't need.
+ * from_backup:
+ *   If true, load from a backup, if any.
  */
 void load_area(
     const string &name, const bool load_for_editor, const bool from_backup
@@ -549,14 +551,20 @@ void load_asset_file_names() {
 
 /* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
- * file_name:          File name of the bitmap.
- * node:               If present, it will be used to report errors, if any.
- * report_error:       If false, omits error reporting.
- * error_bmp_on_error: If true, returns the error bitmap in the case of an
+ * file_name:
+ *   File name of the bitmap.
+ * node:
+ *   If present, it will be used to report errors, if any.
+ * report_error:
+ *   If false, omits error reporting.
+ * error_bmp_on_error:
+ *   If true, returns the error bitmap in the case of an
  *   error. Otherwise, returns NULL.
- * error_bmp_on_empty: If true, returns the error bitmap in the case of an
+ * error_bmp_on_empty:
+ *   If true, returns the error bitmap in the case of an
  *   empty file name. Otherwise, returns NULL.
- * path_from_root:     Normally, files are fetched from the images folder.
+ * path_from_root:
+ *   Normally, files are fetched from the images folder.
  *   If this parameter is true, the path starts from the game's root.
  */
 ALLEGRO_BITMAP* load_bmp(

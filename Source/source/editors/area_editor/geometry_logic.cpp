@@ -887,10 +887,14 @@ void area_editor::get_affected_sectors(
 /* ----------------------------------------------------------------------------
  * For a given vertex, returns the edge closest to the given angle, in the
  * given direction.
- * v_ptr:           Pointer to the vertex.
- * angle:           Angle coming into the vertex.
- * clockwise:       Return the closest edge clockwise?
- * closest_edge_angle: If not NULL, the angle the edge makes into its
+ * v_ptr:
+ *   Pointer to the vertex.
+ * angle:
+ *   Angle coming into the vertex.
+ * clockwise:
+ *   Return the closest edge clockwise?
+ * closest_edge_angle:
+ *   If not NULL, the angle the edge makes into its
  *   other vertex is returned here.
  */
 edge* area_editor::get_closest_edge_to_angle(
@@ -936,10 +940,13 @@ edge* area_editor::get_closest_edge_to_angle(
  * a neighboring edge, or if a vertex is inside it.
  * Use the former for vertexes that will be merged, and the latter
  * for vertexes that won't.
- * vertexes: List of vertexes to check.
- * edges:    List of edges to check.
- * result:   Returns the common sector here.
  * Returns false if there is no common sector. True otherwise.
+ * vertexes:
+ *   List of vertexes to check.
+ * edges:
+ *   List of edges to check.
+ * result:
+ *   Returns the common sector here.
  */
 bool area_editor::get_common_sector(
     vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
@@ -1113,8 +1120,10 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the edge currently under the specified point, or NULL if none.
- * p:     The point.
- * after: Only check edges that come after this one.
+ * p:
+ *   The point.
+ * after:
+ *   Only check edges that come after this one.
  */
 edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
     bool found_after = (!after ? true : false);
@@ -1476,9 +1485,12 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
 
 /* ----------------------------------------------------------------------------
  * Merges vertex 1 into vertex 2.
- * v1:               Vertex that is being moved and will be merged.
- * v2:               Vertex that is going to absorb v1.
- * affected_sectors: List of sectors that will be affected by this merge.
+ * v1:
+ *   Vertex that is being moved and will be merged.
+ * v2:
+ *   Vertex that is going to absorb v1.
+ * affected_sectors:
+ *   List of sectors that will be affected by this merge.
  */
 void area_editor::merge_vertex(
     vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors

@@ -1631,12 +1631,17 @@ void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
 
 /* ----------------------------------------------------------------------------
  * Draws a bitmap.
- * bmp:    The bitmap.
- * center: Center coordinates.
- * size:   Final width and height.
+ * bmp:
+ *   The bitmap.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Final width and height.
  *   Make this -1 on one of them to keep the aspect ratio from the other.
- * angle:  Angle to rotate the bitmap by.
- * tint:   Tint the bitmap with this color.
+ * angle:
+ *   Angle to rotate the bitmap by.
+ * tint:
+ *   Tint the bitmap with this color.
  */
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
@@ -1667,12 +1672,17 @@ void draw_bitmap(
 /* ----------------------------------------------------------------------------
  * Draws a bitmap, but keeps its aspect ratio,
  * and scales it to fit in an imaginary box.
- * bmp:      The bitmap.
- * center:   Center coordinates.
- * box_size: Width and height of the box.
- * angle:    Angle to rotate the bitmap by.
+ * bmp:
+ *   The bitmap.
+ * center:
+ *   Center coordinates.
+ * box_size:
+ *   Width and height of the box.
+ * angle:
+ *   Angle to rotate the bitmap by.
  *   The box does not take angling into account.
- * tint:     Tint the bitmap with this color.
+ * tint:
+ *   Tint the bitmap with this color.
  */
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center,
@@ -1692,8 +1702,10 @@ void draw_bitmap_in_box(
 
 /* ----------------------------------------------------------------------------
  * Draws a bitmap, applying bitmap effects.
- * bmp:     The bitmap.
- * effects: Effects to use.
+ * bmp:
+ *   The bitmap.
+ * effects:
+ *   Effects to use.
  */
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
@@ -1801,11 +1813,14 @@ void draw_compressed_text(
 
 /* ----------------------------------------------------------------------------
  * Draws a key or button on the screen.
- * font:     Font to use for the name.
- * c:        Info on the control.
- * where:    Center of the place to draw at.
- * max_size: Max width or height. Used to compress it if needed.
- *   0 = unlimited.
+ * font:
+ *   Font to use for the name.
+ * c:
+ *   Info on the control.
+ * where:
+ *   Center of the place to draw at.
+ * max_size:
+ *   Max width or height. Used to compress it if needed. 0 = unlimited.
  */
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
@@ -1910,9 +1925,12 @@ void draw_control(
 
 /* ----------------------------------------------------------------------------
  * Draws a filled diamond shape.
- * center: Center.
- * radius: How far each point of the diamond reaches from the center.
- * color:  Color the diamond with this color.
+ * center:
+ *   Center.
+ * radius:
+ *   How far each point of the diamond reaches from the center.
+ * color:
+ *   Color the diamond with this color.
  */
 void draw_filled_diamond(
     const point &center, const float radius, const ALLEGRO_COLOR &color
@@ -1939,10 +1957,14 @@ void draw_filled_diamond(
 /* ----------------------------------------------------------------------------
  * Draws a strength/weight fraction, in the style of Pikmin 2.
  * The strength is above the weight.
- * center:  Center of the text.
- * current: Current strength.
- * needed:  Needed strength to lift the object (weight).
- * color:   Color of the fraction's text.
+ * center:
+ *   Center of the text.
+ * current:
+ *   Current strength.
+ * needed:
+ *   Needed strength to lift the object (weight).
+ * color:
+ *   Color of the fraction's text.
  */
 void draw_fraction(
     const point &center, const size_t current,
@@ -1978,13 +2000,18 @@ void draw_fraction(
 
 /* ----------------------------------------------------------------------------
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
- * center:     Center of the wheel.
- * health:     Current amount of health of the mob
+ * center:
+ *   Center of the wheel.
+ * health:
+ *   Current amount of health of the mob
  *   whose health we're representing.
- * max_health: Maximum amount of health of the mob;
+ * max_health:
+ *   Maximum amount of health of the mob;
  *   health for when it's fully healed.
- * radius:     Radius of the wheel (the whole wheel, not just the pieslice).
- * just_chart: If true, only draw the actual pieslice (pie-chart).
+ * radius:
+ *   Radius of the wheel (the whole wheel, not just the pieslice).
+ * just_chart:
+ *   If true, only draw the actual pieslice (pie-chart).
  *   Used for leader HP on the HUD.
  */
 void draw_health(
@@ -2018,10 +2045,14 @@ void draw_health(
 
 /* ----------------------------------------------------------------------------
  * Draws a liquid sector.
- * s_ptr: Pointer to the sector.
- * l_ptr: Pointer to the liquid.
- * where: X and Y offset.
- * scale: Scale the sector by this much.
+ * s_ptr:
+ *   Pointer to the sector.
+ * l_ptr:
+ *   Pointer to the liquid.
+ * where:
+ *   X and Y offset.
+ * scale:
+ *   Scale the sector by this much.
  */
 void draw_liquid(
     sector* s_ptr, liquid* l_ptr, const point &where, const float scale
@@ -2169,9 +2200,12 @@ void draw_liquid(
 
 /* ----------------------------------------------------------------------------
  * Draws the loading screen for an area (or anything else, really).
- * text:    The main text to show, optional.
- * subtext: Subtext to show under the main text, optional.
- * opacity: 0 to 1. The background blackness lowers in opacity much faster.
+ * text:
+ *   The main text to show, optional.
+ * subtext:
+ *   Subtext to show under the main text, optional.
+ * opacity:
+ *   0 to 1. The background blackness lowers in opacity much faster.
  */
 void draw_loading_screen(
     const string &text, const string &subtext, const float opacity
@@ -2422,11 +2456,14 @@ void draw_loading_screen(
 
 /* ----------------------------------------------------------------------------
  * Draws a mob's shadow.
- * center:         Center of the mob.
- * diameter:       Diameter of the mob.
- * delta_z:        The mob is these many units above the floor
- *   directly below it.
- * shadow_stretch: How much to stretch the shadow by
+ * center:
+ *   Center of the mob.
+ * diameter:
+ *   Diameter of the mob.
+ * delta_z:
+ *   The mob is these many units above the floor directly below it.
+ * shadow_stretch:
+ *   How much to stretch the shadow by
  *   (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
@@ -2464,9 +2501,12 @@ void draw_mob_shadow(
 /* ----------------------------------------------------------------------------
  * Draws a notification, like a note saying that the player can press
  * a certain button to pluck.
- * target:  Spot that the notification is pointing at.
- * text:    Text to say.
- * control: If not NULL, draw the control's button/key/etc. before the text.
+ * target:
+ *   Spot that the notification is pointing at.
+ * text:
+ *   Text to say.
+ * control:
+ *   If not NULL, draw the control's button/key/etc. before the text.
  */
 void draw_notification(
     const point &target, const string &text, control_info* control
@@ -2533,11 +2573,16 @@ void draw_notification(
 
 /* ----------------------------------------------------------------------------
  * Draws a rotated rectangle.
- * center:     Center of the rectangle.
- * dimensions: Width and height of the rectangle.
- * angle:      Angle the rectangle is facing.
- * color:      Color to use.
- * thickness:  Thickness to use.
+ * center:
+ *   Center of the rectangle.
+ * dimensions:
+ *   Width and height of the rectangle.
+ * angle:
+ *   Angle the rectangle is facing.
+ * color:
+ *   Color to use.
+ * thickness:
+ *   Thickness to use.
  */
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,
@@ -2911,10 +2956,14 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
 
 /* ----------------------------------------------------------------------------
  * Draws a sector, but only the texture (no wall shadows).
- * s_ptr:   Pointer to the sector.
- * where:   X and Y offset.
- * scale:   Scale the sector by this much.
- * opacity: Draw the textures at this opacity, 0 - 1.
+ * s_ptr:
+ *   Pointer to the sector.
+ * where:
+ *   X and Y offset.
+ * scale:
+ *   Scale the sector by this much.
+ * opacity:
+ *   Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
@@ -3083,12 +3132,18 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  * Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
- * font:   Font to use.
- * color:  Color.
- * where:  Coordinates of the text.
- * flags:  Flags, just like the ones you'd pass to al_draw_text.
- * valign: Vertical align: 0 for top, 1 for center, 2 for bottom.
- * text:   Text to write, line breaks included ('\n').
+ * font:
+ *   Font to use.
+ * color:
+ *   Color.
+ * where:
+ *   Coordinates of the text.
+ * flags:
+ *   Flags, just like the ones you'd pass to al_draw_text.
+ * valign:
+ *   Vertical align: 0 for top, 1 for center, 2 for bottom.
+ * text:
+ *   Text to write, line breaks included ('\n').
  */
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -3122,8 +3177,10 @@ void draw_text_lines(
 /* ----------------------------------------------------------------------------
  * Eases a number [0, 1] in accordance to a non-linear interpolation
  * method. Normally used for camera movement and such.
- * method: the method to use. Use EASE_*.
- * n:      the number to ease, in the range [0, 1].
+ * method:
+ *   The method to use. Use EASE_*.
+ * n:
+ *   The number to ease, in the range [0, 1].
  */
 float ease(const unsigned char method, const float n) {
     switch(method) {

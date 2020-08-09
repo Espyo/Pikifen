@@ -837,12 +837,18 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
 
 /* ----------------------------------------------------------------------------
  * Handles the logic between m_ptr and m2_ptr regarding miscellaneous things.
- * m_ptr:                   Mob that's being processed.
- * m2_ptr:                  Check against this mob.
- * m:                       Index of the mob being processed.
- * m2:                      Index of the mob to check against.
- * d:                       Distance between the two.
- * pending_intermob_events: Vector of events to be processed.
+ * m_ptr:
+ *   Mob that's being processed.
+ * m2_ptr:
+ *   Check against this mob.
+ * m:
+ *   Index of the mob being processed.
+ * m2:
+ *   Index of the mob to check against.
+ * d:
+ *   Distance between the two.
+ * pending_intermob_events:
+ *   Vector of events to be processed.
  */
 void gameplay::process_mob_misc_interactions(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
@@ -912,12 +918,18 @@ void gameplay::process_mob_misc_interactions(
 /* ----------------------------------------------------------------------------
  * Handles the logic between m_ptr and m2_ptr regarding everything involving
  * one being in the other's reach.
- * m_ptr:                   Mob that's being processed.
- * m2_ptr:                  Check against this mob.
- * m:                       Index of the mob being processed.
- * m2:                      Index of the mob to check against.
- * d:                       Distance between the two.
- * pending_intermob_events: Vector of events to be processed.
+ * m_ptr:
+ *   Mob that's being processed.
+ * m2_ptr:
+ *   Check against this mob.
+ * m:
+ *   Index of the mob being processed.
+ * m2:
+ *   Index of the mob to check against.
+ * d:
+ *   Distance between the two.
+ * pending_intermob_events:
+ *   Vector of events to be processed.
  */
 void gameplay::process_mob_reaches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
@@ -973,11 +985,16 @@ void gameplay::process_mob_reaches(
 /* ----------------------------------------------------------------------------
  * Handles the logic between m_ptr and m2_ptr regarding everything involving
  * one touching the other.
- * m_ptr:        Mob that's being processed.
- * m2_ptr:       Check against this mob.
- * m:            Index of the mob being processed.
- * m2:           Index of the mob to check against.
- * d:            Distance between the two.
+ * m_ptr:
+ *   Mob that's being processed.
+ * m2_ptr:
+ *   Check against this mob.
+ * m:
+ *   Index of the mob being processed.
+ * m2:
+ *   Index of the mob to check against.
+ * d:
+ *   Distance between the two.
  */
 void gameplay::process_mob_touches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d

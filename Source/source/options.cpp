@@ -190,11 +190,16 @@ void options_struct::load(data_node* file) {
 
 /* ----------------------------------------------------------------------------
  * Loads a game control from the options file.
- * action: Load the control corresponding to this action.
- * player: Load the control corresponding to this player.
- * name:   Name of the option in the file.
- * file:   File to load from.
- * def:    Default value of this control. Only applicable for player 1.
+ * action:
+ *   Load the control corresponding to this action.
+ * player:
+ *   Load the control corresponding to this player.
+ * name:
+ *   Name of the option in the file.
+ * file:
+ *   File to load from.
+ * def:
+ *   Default value of this control. Only applicable for player 1.
  */
 void options_struct::load_control(
     const unsigned char action, const unsigned char player,

@@ -21,12 +21,18 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a particle.
- * type:     The type of particle. Use PARTICLE_TYPE_*.
- * pos:      Starting coordinates.
- * z:        Starting Z coordinate.
- * size:     Diameter.
- * duration: Total lifespan.
- * priority: Lower priority particles will be removed in favor of higher ones.
+ * type:
+ *   The type of particle. Use PARTICLE_TYPE_*.
+ * pos:
+ *   Starting coordinates.
+ * z:
+ *   Starting Z coordinate.
+ * size:
+ *   Diameter.
+ * duration:
+ *   Total lifespan.
+ * priority:
+ *   Lower priority particles will be removed in favor of higher ones.
  */
 particle::particle(
     const unsigned char type, const point &pos, const float z,
@@ -171,12 +177,15 @@ void particle::tick(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Creates a particle generator.
- * emission_interval: Interval to spawn a new set of particles in,
+ * emission_interval:
+ *   Interval to spawn a new set of particles in,
  *   in seconds. 0 means it spawns only one set and that's it.
- * base_particle:     All particles created will be based on this one.
+ * base_particle:
+ *   All particles created will be based on this one.
  *   Their properties will deviate randomly based on the
  *   deviation members of the particle generator object.
- * number:            Number of particles to spawn.
+ * number:
+ *   Number of particles to spawn.
  *   This number is also deviated by number_deviation.
  */
 particle_generator::particle_generator(
@@ -206,7 +215,8 @@ particle_generator::particle_generator(
 
 /* ----------------------------------------------------------------------------
  * Emits the particles, regardless of the timer.
- * manager: The particle manager to place these particles on.
+ * manager:
+ *   The particle manager to place these particles on.
  */
 void particle_generator::emit(particle_manager &manager) {
     point base_p_pos = base_particle.pos;

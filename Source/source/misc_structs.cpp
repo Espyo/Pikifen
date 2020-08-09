@@ -447,8 +447,10 @@ font_list::font_list() :
 
 /* ----------------------------------------------------------------------------
  * Creates a new HUD item.
- * center: Center coordinates, in screen dimension ratio.
- * size:   Dimensions, in screen dimension ratio.
+ * center:
+ *   Center coordinates, in screen dimension ratio.
+ * size:
+ *   Dimensions, in screen dimension ratio.
  */
 hud_item::hud_item(const point center, const point size) :
     center(center),
@@ -474,9 +476,12 @@ hud_item_manager::hud_item_manager(const size_t item_total) :
 /* ----------------------------------------------------------------------------
  * Retrieves the data necessary for the drawing routine.
  * Returns false if this element shouldn't be drawn.
- * id:     ID of the HUD item.
- * center: Pointer to place the final center coordinates in, if any.
- * size:   Pointer to place the final dimensions in, if any.
+ * id:
+ *   ID of the HUD item.
+ * center:
+ *   Pointer to place the final center coordinates in, if any.
+ * size:
+ *   Pointer to place the final dimensions in, if any.
  */
 bool hud_item_manager::get_draw_data(
     const size_t id, point* center, point* size
@@ -565,8 +570,10 @@ void hud_item_manager::set_item(
 
 /* ----------------------------------------------------------------------------
  * Starts a movement animation.
- * in:       Are the items moving into view, or out of view?
- * duration: How long this animation lasts for.
+ * in:
+ *   Are the items moving into view, or out of view?
+ * duration:
+ *   How long this animation lasts for.
  */
 void hud_item_manager::start_move(const bool in, const float duration) {
     move_in = in;
@@ -1090,7 +1097,8 @@ void performance_monitor_struct::page::write_measurement(
 
 /* ----------------------------------------------------------------------------
  * Creates a "reader setter".
- * dn: Pointer to the base data node.
+ * dn:
+ *   Pointer to the base data node.
  */
 reader_setter::reader_setter(data_node* dn) :
     node(dn) {
@@ -1101,9 +1109,12 @@ reader_setter::reader_setter(data_node* dn) :
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is an Allegro color.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is an Allegro color.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1122,9 +1133,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is a string.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is a string.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1143,9 +1157,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is an integer.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is an integer.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1164,9 +1181,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is an integer.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is an integer.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1185,9 +1205,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is an unsigned char.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is an unsigned char.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1206,9 +1229,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is a boolean.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is a boolean.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1227,9 +1253,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is a float.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is a float.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1248,9 +1277,12 @@ void reader_setter::set(
 /* ----------------------------------------------------------------------------
  * Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
- * child:      Name of the child node.
- * var:        The var to set. This is a point.
- * child_node: If not-NULL, the node from whence the value came is placed here.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is a point.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
  *   NULL is placed if the property does not exist or has no value.
  */
 void reader_setter::set(
@@ -1297,13 +1329,18 @@ void sample_struct::destroy() {
 
 /* ----------------------------------------------------------------------------
  * Play the sample.
- * max_override_pos: Override the currently playing sound
+ * max_override_pos:
+ *   Override the currently playing sound
  *   only if it's already in this position, or beyond.
  *   This is in seconds. 0 means always override. -1 means never override.
- * loop: Loop the sound?
- * gain: Volume, 0 - 1.
- * pan: Panning, 0 - 1 (0.5 is centered).
- * speed: Playing speed.
+ * loop:
+ *   Loop the sound?
+ * gain:
+ *   Volume, 0 - 1.
+ * pan:
+ *   Panning, 0 - 1 (0.5 is centered).
+ * speed:
+ *   Playing speed.
  */
 void sample_struct::play(
     const float max_override_pos, const bool loop, const float gain,
@@ -1343,7 +1380,8 @@ void sample_struct::stop() {
 
 /* ----------------------------------------------------------------------------
  * Creates a "script var reader".
- * vars: Map of variables to read from.
+ * vars:
+ *   Map of variables to read from.
  */
 script_var_reader::script_var_reader(map<string, string> &vars) :
     vars(vars) {
@@ -1354,8 +1392,10 @@ script_var_reader::script_var_reader(map<string, string> &vars) :
 /* ----------------------------------------------------------------------------
  * Assigns an Allegro color to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
     auto v = vars.find(name);
@@ -1370,8 +1410,10 @@ bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns a string to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, string &dest) const {
     auto v = vars.find(name);
@@ -1386,8 +1428,10 @@ bool script_var_reader::get(const string &name, string &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns a size_t to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, size_t &dest) const {
     auto v = vars.find(name);
@@ -1402,8 +1446,10 @@ bool script_var_reader::get(const string &name, size_t &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns an int to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, int &dest) const {
     auto v = vars.find(name);
@@ -1418,8 +1464,10 @@ bool script_var_reader::get(const string &name, int &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns an unsigned char to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, unsigned char &dest) const {
     auto v = vars.find(name);
@@ -1434,8 +1482,10 @@ bool script_var_reader::get(const string &name, unsigned char &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns a bool to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, bool &dest) const {
     auto v = vars.find(name);
@@ -1450,8 +1500,10 @@ bool script_var_reader::get(const string &name, bool &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns a float to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, float &dest) const {
     auto v = vars.find(name);
@@ -1466,8 +1518,10 @@ bool script_var_reader::get(const string &name, float &dest) const {
 /* ----------------------------------------------------------------------------
  * Assigns a point to the value of a given variable, if it exists.
  * Returns true if it exists, false if not.
- * name:      Name of the variable to read.
- * dest:      Destination for the value.
+ * name:
+ *   Name of the variable to read.
+ * dest:
+ *   Destination for the value.
  */
 bool script_var_reader::get(const string &name, point &dest) const {
     auto v = vars.find(name);
@@ -1591,8 +1645,10 @@ subgroup_type* subgroup_type_manager::get_prev_type(
 /* ----------------------------------------------------------------------------
  * Returns the type of subgroup corresponding to the parameters.
  * Returns NULL if not found.
- * category:      The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * specific_type: Specific type of mob, if you want to specify further.
+ * category:
+ *   The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * specific_type:
+ *   Specific type of mob, if you want to specify further.
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
@@ -1613,9 +1669,12 @@ subgroup_type* subgroup_type_manager::get_type(
 
 /* ----------------------------------------------------------------------------
  * Registers a new type of subgroup.
- * category:      The category of subgroup type. Pikmin, leader, bomb-rock, etc.
- * specific_type: Specific type of mob, if you want to specify further.
- * icon:          If not NULL, use this icon to represent this subgroup.
+ * category:
+ *   The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * specific_type:
+ *   Specific type of mob, if you want to specify further.
+ * icon:
+ *   If not NULL, use this icon to represent this subgroup.
  */
 void subgroup_type_manager::register_type(
     const SUBGROUP_TYPE_CATEGORIES category,
@@ -1699,7 +1758,8 @@ float timer::get_ratio_left() const {
 
 /* ----------------------------------------------------------------------------
  * Starts a timer.
- * can_restart: If false, calling this while the timer is still ticking down
+ * can_restart:
+ *   If false, calling this while the timer is still ticking down
  *   will not do anything.
  */
 void timer::start(const bool can_restart) {
@@ -1729,7 +1789,8 @@ void timer::stop() {
 
 /* ----------------------------------------------------------------------------
  * Ticks a timer.
- * amount: Time to tick.
+ * amount:
+ *   Time to tick.
  */
 void timer::tick(const float amount) {
     if(time_left == 0.0f) return;

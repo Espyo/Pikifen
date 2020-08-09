@@ -27,8 +27,10 @@
 
 /* ----------------------------------------------------------------------------
  * Creates information about a control.
- * action: The action this control does in-game. Use BUTTON_*.
- * s:      The textual code that represents the hardware inputs.
+ * action:
+ *   The action this control does in-game. Use BUTTON_*.
+ * s:
+ *   The textual code that represents the hardware inputs.
  */
 control_info::control_info(unsigned char action, const string &s) :
     action(action),
@@ -288,12 +290,15 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles a button "press". Technically, it could also be a button release.
- * button: The button's ID. Use BUTTON_*.
- * pos:    The position of the button, i.e., how much it's "held".
+ * button:
+ *   The button's ID. Use BUTTON_*.
+ * pos:
+ *   The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
  *   For controls with more sensitivity, values between 0 and 1 are important.
  *   Like a 0.5 for swarming makes the group swarm at half distance.
- * player: Number of the player that pressed.
+ * player:
+ *   Number of the player that pressed.
  */
 void gameplay::handle_button(
     const size_t button, const float pos, const size_t player
@@ -842,7 +847,8 @@ void gameplay::handle_button(
  * Grabs an ALLEGRO_EVENT and checks all available controls.
  * For every control that matches, it adds its input information to a vector,
  * which it then returns.
- * ev:   Pointer to the event.
+ * ev:
+ *   Pointer to the event.
  */
 vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
 

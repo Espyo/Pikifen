@@ -1094,9 +1094,12 @@ void init_sector_types() {
 
 /* ----------------------------------------------------------------------------
  * Loads a single animation from the system animations definition file.
- * anim_def_file: The animation definition file.
- * name:          Name of the animation on this file.
- * anim:          The single animation suite structure to fill.
+ * anim_def_file:
+ *   The animation definition file.
+ * name:
+ *   Name of the animation on this file.
+ * anim:
+ *   The single animation suite structure to fill.
  */
 void init_single_animation(
     data_node* anim_def_file, const string &name,

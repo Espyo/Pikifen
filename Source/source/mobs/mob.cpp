@@ -148,10 +148,14 @@ void mob::add_to_group(mob* new_member) {
 
 /* ----------------------------------------------------------------------------
  * Applies the damage caused by an attack from another mob to this one.
- * attacker: The mob that caused the attack.
- * attack_h: Hitbox used for the attack.
- * victim_h: Victim's hitbox that got hit.
- * damage:   Total damage the attack caused.
+ * attacker:
+ *   The mob that caused the attack.
+ * attack_h:
+ *   Hitbox used for the attack.
+ * victim_h:
+ *   Victim's hitbox that got hit.
+ * damage:
+ *   Total damage the attack caused.
  */
 void mob::apply_attack_damage(
     mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
@@ -350,7 +354,8 @@ void mob::arachnorb_head_turn_logic() {
 /* ----------------------------------------------------------------------------
  * Does the logic that arachnorb heads need to plan out how to move their feet
  * for the next set of steps.
- * goal: Use MOB_ACTION_ARACHNORB_PLAN_LOGIC_*.
+ * goal:
+ *   Use MOB_ACTION_ARACHNORB_PLAN_LOGIC_*.
  */
 void mob::arachnorb_plan_logic(const unsigned char goal) {
     float max_step_distance = s2f(vars["max_step_distance"]);
@@ -414,7 +419,8 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
 
 /* ----------------------------------------------------------------------------
  * Sets up data for a mob to become carriable.
- * destination: Where to carry it. Use CARRY_DESTINATION_*.
+ * destination:
+ *   Where to carry it. Use CARRY_DESTINATION_*.
  */
 void mob::become_carriable(const size_t destination) {
     carry_info = new carry_info_struct(this, destination);
@@ -448,10 +454,14 @@ void mob::become_uncarriable() {
  * Pikmin got added or removed.
  * Returns true on success, false if there are no available targets or if
  *   something went wrong.
- * added:        The Pikmin that got added, if any.
- * removed:      The Pikmin that got removed, if any.
- * target_mob:   Return the target mob (if any) here.
- * target_point: Return the target point here.
+ * added:
+ *   The Pikmin that got added, if any.
+ * removed:
+ *   The Pikmin that got removed, if any.
+ * target_mob:
+ *   Return the target mob (if any) here.
+ * target_point:
+ *   Return the target point here.
  */
 bool mob::calculate_carrying_destination(
     mob* added, mob* removed, mob** target_mob, point* target_point
@@ -636,10 +646,14 @@ bool mob::calculate_carrying_destination(
  * Calculates how much damage an attack will cause.
  * Returns true if the attack will hit (even if it will end up causing zero
  * damage), false if it cannot hit (e.g. the victim hitbox is not valid).
- * victim:   The mob that'll take the damage.
- * attack_h: Hitbox used for the attack.
- * victim_h: Victim's hitbox that got hit.
- * damage:   Return the calculated damage here.
+ * victim:
+ *   The mob that'll take the damage.
+ * attack_h:
+ *   Hitbox used for the attack.
+ * victim_h:
+ *   Victim's hitbox that got hit.
+ * damage:
+ *   Return the calculated damage here.
  */
 bool mob::calculate_damage(
     mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage
@@ -712,11 +726,16 @@ bool mob::calculate_damage(
 
 /* ----------------------------------------------------------------------------
  * Calculates how much knockback an attack will cause.
- * victim:      the mob that'll take the damage.
- * attack_h:    the hitbox of the attacker mob, if any.
- * victim_h:    the hitbox of the victim mob, if any.
- * kb_strength: the variable to return the knockback amount to.
- * kb_angle:    the variable to return the angle of the knockback to.
+ * victim:
+ *   The mob that'll take the damage.
+ * attack_h:
+ *   The hitbox of the attacker mob, if any.
+ * victim_h:
+ *   The hitbox of the victim mob, if any.
+ * kb_strength:
+ *   The variable to return the knockback amount to.
+ * kb_angle:
+ *   The variable to return the angle of the knockback to.
  */
 void mob::calculate_knockback(
     mob* victim, hitbox* attack_h,
@@ -742,12 +761,18 @@ void mob::calculate_knockback(
  * specific peak height.
  * If the calculation is impossible (like if the peak height is lower than the
  * starting height), the speed variables will all be set to 0.
- * target_xy:     Target destination's X and Y coordinates.
- * target_z:      Target destination's Z coordinate.
- * max_h:         Maximum height, using the starting Z as the reference.
- * req_speed_xy:  The required X and Y speed is returned here.
- * req_speed_z:   The required Z speed is returned here.
- * final_h_angle: The final horizontal angle is returned here (if not NULL).
+ * target_xy:
+ *   Target destination's X and Y coordinates.
+ * target_z:
+ *   Target destination's Z coordinate.
+ * max_h:
+ *   Maximum height, using the starting Z as the reference.
+ * req_speed_xy:
+ *   The required X and Y speed is returned here.
+ * req_speed_z:
+ *   The required Z speed is returned here.
+ * final_h_angle:
+ *   The final horizontal angle is returned here (if not NULL).
  */
 void mob::calculate_throw(
     const point &target_xy, const float target_z, const float max_h,
@@ -868,9 +893,10 @@ bool mob::can_receive_status(status_type* s) const {
 
 /* ----------------------------------------------------------------------------
  * Makes the mob cause spike damage to another mob.
- * victim:       The mob that will be damaged.
- * is_ingestion: If true, the attacker just got eaten.
- *   If false, it merely got hurt.
+ * victim:
+ *   The mob that will be damaged.
+ * is_ingestion:
+ *   If true, the attacker just got eaten. If false, it merely got hurt.
  */
 void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     if(!type->spike_damage) return;
@@ -976,13 +1002,19 @@ void mob::chomp(mob* m, hitbox* hitbox_info) {
 
 /* ----------------------------------------------------------------------------
  * Makes the mob start circling around a point or another mob.
- * m:             The mob to circle around.
+ * m:
+ *   The mob to circle around.
  *   If NULL, circle around a point instead.
- * p:             The point to circle around, if any.
- * radius:        Circle these many units around the target.
- * clockwise:     Circle clockwise or counter-clockwise?
- * speed:         Speed at which to move.
- * can_free_move: Can the mob move freely, or only forward?
+ * p:
+ *   The point to circle around, if any.
+ * radius:
+ *   Circle these many units around the target.
+ * clockwise:
+ *   Circle clockwise or counter-clockwise?
+ * speed:
+ *   Speed at which to move.
+ * can_free_move:
+ *   Can the mob move freely, or only forward?
  */
 void mob::circle_around(
     mob* m, const point &p, const float radius, const bool clockwise,
@@ -1180,8 +1212,10 @@ void mob::draw_mob() {
 
 /* ----------------------------------------------------------------------------
  * Makes a mob intend to face a new angle.
- * new_angle: Face this angle.
- * new_pos:   If this is not NULL, turn towards this point every frame, instead.
+ * new_angle:
+ *   Face this angle.
+ * new_pos:
+ *   If this is not NULL, turn towards this point every frame, instead.
  */
 void mob::face(const float new_angle, point* new_pos) {
     if(carry_info) return; //If it's being carried, it shouldn't rotate.
@@ -1222,13 +1256,17 @@ void mob::focus_on_mob(mob* m2) {
 /* ----------------------------------------------------------------------------
  * Makes the mob start following a path. This populates the path_info
  * class member, and calculates a path to take.
- * target:                Target point to reach.
- * can_continue:          If true, it is possible for the new path to continue
- *   from where the old one left off, if there was an old one.
- * speed:                 Speed at which to travel. -1 uses the mob's speed.
- * final_target_distance: For the final chase, from the last path stop to
- *   the destination, use this for the target distance parameter.
  * Returns whether or not there is a path available.
+ * target:
+ *   Target point to reach.
+ * can_continue:
+ *   If true, it is possible for the new path to continue
+ *   from where the old one left off, if there was an old one.
+ * speed:
+ *   Speed at which to travel. -1 uses the mob's speed.
+ * final_target_distance:
+ *   For the final chase, from the last path stop to
+ *   the destination, use this for the target distance parameter.
  */
 bool mob::follow_path(
     const point &target, const bool can_continue,
@@ -1313,9 +1351,12 @@ point mob::get_chase_target() const {
 /* ----------------------------------------------------------------------------
  * Returns the closest hitbox to a point, belonging to a mob's current frame
  * of animation and position.
- * p:      The point.
- * h_type: Type of hitbox. INVALID means any.
- * d:      Return the distance here, optionally.
+ * p:
+ *   The point.
+ * h_type:
+ *   Type of hitbox. INVALID means any.
+ * d:
+ *   Return the distance here, optionally.
  */
 hitbox* mob::get_closest_hitbox(
     const point &p, const size_t h_type, dist* d
@@ -1378,12 +1419,15 @@ hitbox* mob::get_hitbox(const size_t nr) const {
 /* ----------------------------------------------------------------------------
  * When a mob is meant to be held by a hitbox, this function returns where
  * in the hitbox the mob currently is.
- * mob_to_hold:  The mob that will be held.
- * h_ptr:        Pointer to the hitbox to check.
- * offset_dist:  The distance from the center of the hitbox is returned here.
+ * mob_to_hold:
+ *   The mob that will be held.
+ * h_ptr:
+ *   Pointer to the hitbox to check.
+ * offset_dist:
+ *   The distance from the center of the hitbox is returned here.
  *   1 means the full radius.
- * offset_angle: The angle the mob to hold makes with the hitbox's center is
- *   returned here.
+ * offset_angle:
+ *   The angle the mob to hold makes with the hitbox's center is returned here.
  */
 void mob::get_hitbox_hold_point(
     mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
@@ -1436,16 +1480,20 @@ float mob::get_latched_pikmin_weight() const {
 /* ----------------------------------------------------------------------------
  * Returns what the given sprite's center, rotation, tint, etc. should be
  * at the present moment, for normal mob drawing routines.
- * s_ptr:                    Sprite to get info about.
- * info:                     Struct to fill the info with.
- * add_status:               If true, add status effect coloring to the result.
- * add_sector_brightness:    If true, add sector brightness coloring to the
- *   result.
- * delivery_time_ratio_left: If not LARGE_FLOAT, this indicates how much time
+ * s_ptr:
+ *   Sprite to get info about.
+ * info:
+ *   Struct to fill the info with.
+ * add_status:
+ *   If true, add status effect coloring to the result.
+ * add_sector_brightness:
+ *   If true, add sector brightness coloring to the result.
+ * delivery_time_ratio_left:
+ *   If not LARGE_FLOAT, this indicates how much time
  *   is left in the delivery, as a ratio, and the delivery's shrinking
  *   and glowing effects will be added to the result.
- * delivery_color:           If applying a delivery effect, this is the color
- *   to make it glow in.
+ * delivery_color:
+ *   If applying a delivery effect, this is the color to make it glow in.
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info,
@@ -1550,8 +1598,10 @@ point mob::get_sprite_center(sprite* s) const {
 /* ----------------------------------------------------------------------------
  * Returns what a sprite's dimensions should be,
  * for normal mob drawing routines.
- * s:     the sprite.
- * scale: variable to return the scale used to. Optional.
+ * s:
+ *   The sprite.
+ * scale:
+ *   Variable to return the scale used to. Optional.
  */
 point mob::get_sprite_dimensions(sprite* s, point* scale) const {
     point dim;
@@ -1584,7 +1634,8 @@ point mob::get_sprite_dimensions(sprite* s, point* scale) const {
 /* ----------------------------------------------------------------------------
  * Returns the current sprite of one of the status effects
  * that the mob is under.
- * bmp_scale: Returns the mob size's scale to apply to the image.
+ * bmp_scale:
+ *   Returns the mob size's scale to apply to the image.
  */
 ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
     *bmp_scale = 0.0f;
@@ -1618,12 +1669,18 @@ void mob::handle_status_effect(status_type* s) {
 
 /* ----------------------------------------------------------------------------
  * Starts holding the specified mob.
- * m:               Mob to start holding.
- * hitbox_nr:       Number of the hitbox to hold on. INVALID for mob center.
- * offset_dist:     Distance from the hitbox/body center. 1 is full radius.
- * offset_angle:    Hitbox/body angle from which the mob will be held.
- * above_holder:    Is the mob meant to appear above the holder?
- * rotation_method: How should the held mob rotate? Use HOLD_ROTATION_METHOD_*.
+ * m:
+ *   Mob to start holding.
+ * hitbox_nr:
+ *   Number of the hitbox to hold on. INVALID for mob center.
+ * offset_dist:
+ *   Distance from the hitbox/body center. 1 is full radius.
+ * offset_angle:
+ *   Hitbox/body angle from which the mob will be held.
+ * above_holder:
+ *   Is the mob meant to appear above the holder?
+ * rotation_method:
+ *   How should the held mob rotate? Use HOLD_ROTATION_METHOD_*.
  */
 void mob::hold(
     mob* m, const size_t hitbox_nr,
@@ -1829,10 +1886,12 @@ void mob::send_message(mob* receiver, string &msg) const {
 
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
- * nr:         Animation number.
- *   It's the animation instance number from the database.
- * pre_named:  If true, the animation has already been named in-engine.
- * auto_start: After the change, start the new animation from time 0.
+ * nr:
+ *   Animation number. It's the animation instance number from the database.
+ * pre_named:
+ *   If true, the animation has already been named in-engine.
+ * auto_start:
+ *   After the change, start the new animation from time 0.
  */
 void mob::set_animation(
     const size_t nr, const bool pre_named, const bool auto_start
@@ -1875,12 +1934,15 @@ void mob::set_animation(
 
 /* ----------------------------------------------------------------------------
  * Changes a mob's health, relatively or absolutely.
- * add:    If true, change is relative to the current value
+ * add:
+ *   If true, change is relative to the current value
  *   (i.e. add or subtract from current health).
  *   If false, simply set to that number.
- * ratio:  If true, the specified value represents the max health ratio.
+ * ratio:
+ *   If true, the specified value represents the max health ratio.
  *   If false, it's the number in HP.
- * amount: Health amount.
+ * amount:
+ *   Health amount.
  */
 void mob::set_health(const bool add, const bool ratio, const float amount) {
     float change = amount;
@@ -1894,7 +1956,8 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
 
 /* ----------------------------------------------------------------------------
  * Changes the timer's time and interval.
- * time: New time.
+ * time:
+ *   New time.
  */
 void mob::set_timer(const float time) {
     script_timer.duration = time;
@@ -1904,8 +1967,10 @@ void mob::set_timer(const float time) {
 
 /* ----------------------------------------------------------------------------
  * Sets a script variable's value.
- * name:  The variable's name
- * value: The variable's new value.
+ * name:
+ *   The variable's name
+ * value:
+ *   The variable's new value.
  */
 void mob::set_var(const string &name, const string &value) {
     vars[name] = value;
@@ -1914,8 +1979,10 @@ void mob::set_var(const string &name, const string &value) {
 
 /* ----------------------------------------------------------------------------
  * Makes the current mob spawn a new mob, given some spawn information.
- * info:     Structure with information about how to spawn it.
- * type_ptr: If NULL, the pointer to the mob type is obtained given its
+ * info:
+ *   Structure with information about how to spawn it.
+ * type_ptr:
+ *   If NULL, the pointer to the mob type is obtained given its
  *   name in the information structure. If not NULL, uses this instead.
  */
 mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
@@ -2103,7 +2170,8 @@ void mob::stop_turning() {
 
 /* ----------------------------------------------------------------------------
  * Makes the mob swallow some of the opponents it has chomped on.
- * nr: Number of captured opponents to swallow.
+ * nr:
+ *   Number of captured opponents to swallow.
  */
 void mob::swallow_chomped_pikmin(const size_t nr) {
 
@@ -2127,7 +2195,8 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
  * Then, the actual physics go into place, your nerves
  * send signals to the muscles, and gravity, intertia, etc.
  * take over the rest, to make you move.
- * delta_t: How many seconds to tick by.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick(const float delta_t) {
     //Since the mob could be marked for deletion after any little

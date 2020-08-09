@@ -1247,7 +1247,8 @@ void area_editor::load() {
 
 /* ----------------------------------------------------------------------------
  * Load the area from the disk.
- * from_backup: If false, load it normally. If true, load from a backup, if any.
+ * from_backup:
+ *   If false, load it normally. If true, load from a backup, if any.
  */
 void area_editor::load_area(const bool from_backup) {
     clear_current_area();
@@ -1910,8 +1911,10 @@ void area_editor::press_undo_button() {
  * operation is the same as the previous one's, then it is ignored.
  * This is useful to stop, for instance, a slider
  * drag from saving several dozen operations in the undo history.
- * operation_name:     Name of the operation.
- * pre_prepared_state: If you have the area state prepared from elsewhere in
+ * operation_name:
+ *   Name of the operation.
+ * pre_prepared_state:
+ *   If you have the area state prepared from elsewhere in
  *   the code, specify it here. Otherwise, it uses the current area state.
  */
 void area_editor::register_change(
@@ -1958,8 +1961,9 @@ void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
 
 /* ----------------------------------------------------------------------------
  * Saves the area onto the disk.
- * to_backup: If false, save normally. If true, save to an auto-backup file.
  * Returns true on success, false on failure.
+ * to_backup:
+ *   If false, save normally. If true, save to an auto-backup file.
  */
 bool area_editor::save_area(const bool to_backup) {
 

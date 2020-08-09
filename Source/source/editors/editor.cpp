@@ -953,8 +953,10 @@ void editor::open_picker(
 /* ----------------------------------------------------------------------------
  * Creates widgets with the goal of placing a disabled text widget to the
  * right side of the panel.
- * title: Title to write.
- * width: Width to reserve for it.
+ * title:
+ *   Title to write.
+ * width:
+ *   Width to reserve for it.
  */
 void editor::panel_title(const char* title, const float width) {
     //Spacer dummy widget.
@@ -1199,9 +1201,11 @@ bool editor::process_size_widgets(
  * they open and close the node.
  * In order for these preferences to be saved onto disk, save_options must
  * be called.
- * category: Category this node belongs to. This is just a generic term, and
+ * category:
+ *   Category this node belongs to. This is just a generic term, and
  *   you likely want to use the panel this node belongs to.
- * label:    Label to give to Dear ImGui.
+ * label:
+ *   Label to give to Dear ImGui.
  */
 bool editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;

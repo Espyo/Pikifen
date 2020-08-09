@@ -80,7 +80,8 @@ group_task::group_task(
 
 /* ----------------------------------------------------------------------------
  * Adds a Pikmin to the task as an actual worker.
- * who: Pikmin to add.
+ * who:
+ *   Pikmin to add.
  */
 void group_task::add_worker(pikmin* who) {
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -129,7 +130,8 @@ void group_task::finish_task() {
 
 /* ----------------------------------------------------------------------------
  * Frees up a previously-reserved spot.
- * whose: Who had the reservation?
+ * whose:
+ *   Who had the reservation?
  */
 void group_task::free_up_spot(pikmin* whose) {
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -200,7 +202,8 @@ float group_task::get_power() const {
 /* ----------------------------------------------------------------------------
  * Returns the current world coordinates of a spot, occupied by a Pikmin.
  * Returns a (0,0) point if that Pikmin doesn't have a spot.
- * whose: Pikmin whose spot to check.
+ * whose:
+ *   Pikmin whose spot to check.
  */
 point group_task::get_spot_pos(pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); ++s) {
@@ -214,8 +217,10 @@ point group_task::get_spot_pos(pikmin* whose) const {
 
 /* ----------------------------------------------------------------------------
  * Reserves a spot for a Pikmin.
- * spot: Pointer to the spot to reserve.
- * who:  Who will be reserving this spot?
+ * spot:
+ *   Pointer to the spot to reserve.
+ * who:
+ *   Who will be reserving this spot?
  */
 void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
     spot->state = 1;

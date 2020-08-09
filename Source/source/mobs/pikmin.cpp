@@ -307,9 +307,12 @@ void pikmin::tick_class_specifics(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Returns the sprout closest to a leader. Used when auto-plucking.
- * pos:             Coordinates of the leader.
- * d:               Variable to return the distance to. NULL for none.
- * ignore_reserved: If true, ignore any sprouts that are "reserved"
+ * pos:
+ *   Coordinates of the leader.
+ * d:
+ *   Variable to return the distance to. NULL for none.
+ * ignore_reserved:
+ *   If true, ignore any sprouts that are "reserved"
  *   (i.e. already chosen to be plucked by another leader).
  */
 pikmin* get_closest_sprout(
