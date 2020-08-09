@@ -72,7 +72,11 @@ mob_type* bridge_category::create_type() {
  */
 void bridge_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.bridges.erase(
-        find(game.states.gameplay_st->mobs.bridges.begin(), game.states.gameplay_st->mobs.bridges.end(), (bridge*) m)
+        find(
+            game.states.gameplay_st->mobs.bridges.begin(),
+            game.states.gameplay_st->mobs.bridges.end(),
+            (bridge*) m
+        )
     );
 }
 

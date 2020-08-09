@@ -72,7 +72,11 @@ mob_type* onion_category::create_type() {
  */
 void onion_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.onions.erase(
-        find(game.states.gameplay_st->mobs.onions.begin(), game.states.gameplay_st->mobs.onions.end(), (onion*) m)
+        find(
+        game.states.gameplay_st->mobs.onions.begin(),
+        game.states.gameplay_st->mobs.onions.end(),
+        (onion*) m
+        )
     );
 }
 

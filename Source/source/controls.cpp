@@ -203,21 +203,26 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 break;
                 
             } case MAKER_TOOL_CHANGE_SPEED: {
-                game.maker_tools.change_speed = !game.maker_tools.change_speed;
+                game.maker_tools.change_speed =
+                    !game.maker_tools.change_speed;
                 break;
                 
             } case MAKER_TOOL_GEOMETRY_INFO: {
-                game.maker_tools.geometry_info = !game.maker_tools.geometry_info;
+                game.maker_tools.geometry_info =
+                    !game.maker_tools.geometry_info;
                 break;
                 
             } case MAKER_TOOL_HITBOXES: {
-                game.maker_tools.hitboxes = !game.maker_tools.hitboxes;
+                game.maker_tools.hitboxes =
+                    !game.maker_tools.hitboxes;
                 break;
                 
             } case MAKER_TOOL_HURT_MOB: {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->set_health(true, true, -game.maker_tools.mob_hurting_ratio);
+                    m->set_health(
+                        true, true, -game.maker_tools.mob_hurting_ratio
+                    );
                 }
                 break;
                 
@@ -229,8 +234,9 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
             } case MAKER_TOOL_NEW_PIKMIN: {
                 if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
-                    pikmin_type* new_pikmin_type = game.mob_types.pikmin.begin()->second;
-                    
+                    pikmin_type* new_pikmin_type =
+                        game.mob_types.pikmin.begin()->second;
+                        
                     auto p = game.mob_types.pikmin.begin();
                     for(; p != game.mob_types.pikmin.end(); ++p) {
                         if(p->second == game.maker_tools.last_pikmin_type) {
@@ -273,7 +279,10 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
     }
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && game.options.mouse_moves_cursor[p]) {
+        if(
+            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
+            game.options.mouse_moves_cursor[p]
+        ) {
             game.mouse_cursor_s.x = ev.mouse.x;
             game.mouse_cursor_s.y = ev.mouse.y;
             game.mouse_cursor_w = game.mouse_cursor_s;
@@ -595,7 +604,8 @@ void gameplay::handle_button(
             
             if(game.spray_types.size() > 2) {
                 if(button == BUTTON_NEXT_SPRAY) {
-                    selected_spray = (selected_spray + 1) % game.spray_types.size();
+                    selected_spray =
+                        (selected_spray + 1) % game.spray_types.size();
                 } else {
                     if(selected_spray == 0) {
                         selected_spray = game.spray_types.size() - 1;
@@ -649,11 +659,17 @@ void gameplay::handle_button(
         } case BUTTON_ZOOM_IN:
         case BUTTON_ZOOM_OUT: {
     
-            if(game.cam.target_zoom >= game.config.zoom_max_level && button == BUTTON_ZOOM_IN) {
+            if(
+                game.cam.target_zoom >= game.config.zoom_max_level &&
+                button == BUTTON_ZOOM_IN
+            ) {
                 return;
             }
             
-            if(game.cam.target_zoom <= game.config.zoom_min_level && button == BUTTON_ZOOM_OUT) {
+            if(
+                game.cam.target_zoom <= game.config.zoom_min_level &&
+                button == BUTTON_ZOOM_OUT
+            ) {
                 return;
             }
             
@@ -665,8 +681,12 @@ void gameplay::handle_button(
                 game.cam.target_zoom = game.cam.target_zoom - 0.1 * floored_pos;
             }
             
-            if(game.cam.target_zoom > game.config.zoom_max_level) game.cam.target_zoom = game.config.zoom_max_level;
-            if(game.cam.target_zoom < game.config.zoom_min_level) game.cam.target_zoom = game.config.zoom_min_level;
+            if(game.cam.target_zoom > game.config.zoom_max_level) {
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+            if(game.cam.target_zoom < game.config.zoom_min_level) {
+                game.cam.target_zoom = game.config.zoom_min_level;
+            }
             
             game.sys_assets.sfx_camera.play(-1, false);
             

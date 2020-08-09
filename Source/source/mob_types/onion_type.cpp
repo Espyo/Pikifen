@@ -62,7 +62,10 @@ void onion_type::load_properties(data_node* file) {
     
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     
-    if(game.mob_types.pikmin.find(pik_type_str) == game.mob_types.pikmin.end()) {
+    if(
+        game.mob_types.pikmin.find(pik_type_str) ==
+        game.mob_types.pikmin.end()
+    ) {
         log_error(
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node

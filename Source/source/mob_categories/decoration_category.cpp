@@ -72,7 +72,11 @@ mob_type* decoration_category::create_type() {
  */
 void decoration_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.decorations.erase(
-        find(game.states.gameplay_st->mobs.decorations.begin(), game.states.gameplay_st->mobs.decorations.end(), (decoration*) m)
+        find(
+            game.states.gameplay_st->mobs.decorations.begin(),
+            game.states.gameplay_st->mobs.decorations.end(),
+            (decoration*) m
+        )
     );
 }
 

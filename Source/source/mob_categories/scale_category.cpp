@@ -72,7 +72,11 @@ mob_type* scale_category::create_type() {
  */
 void scale_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.scales.erase(
-        find(game.states.gameplay_st->mobs.scales.begin(), game.states.gameplay_st->mobs.scales.end(), (scale*) m)
+        find(
+        game.states.gameplay_st->mobs.scales.begin(), 
+        game.states.gameplay_st->mobs.scales.end(),
+ (scale*) m
+ )
     );
 }
 

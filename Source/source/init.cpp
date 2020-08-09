@@ -267,7 +267,9 @@ void init_controls() {
         string dc = game.buttons.list[b].default_control_str;
         if(dc.empty()) continue;
         
-        game.options.controls[0].push_back(control_info(game.buttons.list[b].id, dc));
+        game.options.controls[0].push_back(
+            control_info(game.buttons.list[b].id, dc)
+        );
     }
 }
 
@@ -442,7 +444,11 @@ void init_misc() {
         particle_manager(game.options.max_particles);
         
     game.options.zoom_mid_level =
-        clamp(game.options.zoom_mid_level, game.config.zoom_min_level, game.config.zoom_max_level);
+        clamp(
+            game.options.zoom_mid_level,
+            game.config.zoom_min_level,
+            game.config.zoom_max_level
+        );
         
     //Some maker tool defaults that are convenient to have on.
     game.maker_tools.keys[10] = MAKER_TOOL_AREA_IMAGE;

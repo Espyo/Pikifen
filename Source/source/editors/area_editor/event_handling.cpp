@@ -540,7 +540,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 set_new_circle_sector_points();
                 
                 bool all_valid = true;
-                for(size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e) {
+                for(
+                    size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e
+                ) {
                     if(!new_circle_sector_valid_edges[e]) {
                         all_valid = false;
                         break;
@@ -756,7 +758,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             register_change("Object link creation");
             
             m_ptr->links.push_back(target);
-            m_ptr->link_nrs.push_back(game.cur_area_data.find_mob_gen_nr(target));
+            m_ptr->link_nrs.push_back(
+                game.cur_area_data.find_mob_gen_nr(target)
+            );
             
             homogenize_selected_mobs();
             
@@ -774,7 +778,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             if(!target) {
                 std::pair<mob_gen*, mob_gen*> data1;
                 std::pair<mob_gen*, mob_gen*> data2;
-                if(!get_mob_link_under_point(game.mouse_cursor_w, &data1, &data2)) {
+                if(
+                    !get_mob_link_under_point(
+                        game.mouse_cursor_w, &data1, &data2
+                    )
+                ) {
                     return;
                 }
                 
@@ -900,7 +908,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     register_change("path stop creation");
                     path_drawing_stop_1 = new path_stop(hotspot);
-                    game.cur_area_data.path_stops.push_back(path_drawing_stop_1);
+                    game.cur_area_data.path_stops.push_back(
+                        path_drawing_stop_1
+                    );
                     status_text = "Created path stop.";
                 }
                 
@@ -939,7 +949,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             std::pair<path_stop*, path_stop*> clicked_link_data_2;
             bool clicked_link =
                 get_path_link_under_point(
-                    game.mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
+                    game.mouse_cursor_w,
+                    &clicked_link_data_1, &clicked_link_data_2
                 );
                 
             if(!is_shift_pressed) {
@@ -1029,7 +1040,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             if(!transformation_handled) {
                 //Select a tree shadow.
                 selected_shadow = NULL;
-                for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
+                for(
+                    size_t s = 0;
+                    s < game.cur_area_data.tree_shadows.size(); ++s
+                ) {
                 
                     tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
                     point min_coords, max_coords;
@@ -1191,7 +1205,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             //Selection box around mobs.
             clear_selection();
             
-            for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+            for(
+                size_t m = 0;
+                m < game.cur_area_data.mob_generators.size(); ++m
+            ) {
                 mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
                 float radius = get_mob_gen_radius(m_ptr);
                 
@@ -1325,7 +1342,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     snap_point(
                         move_closest_vertex_start_pos + mouse_offset, true
                     );
-                point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
+                point offset =
+                    closest_vertex_new_p - move_closest_vertex_start_pos;
                 for(vertex* v : selected_vertexes) {
                     point orig = pre_move_vertex_coords[v];
                     v->x = orig.x + offset.x;
@@ -1351,7 +1369,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     point diff = (game.mouse_cursor_w - octee_drag_start);
                     diff = rotate_point(diff, -s_ptr->texture_info.rot);
                     point drag_start_rot =
-                        rotate_point(octee_drag_start, -s_ptr->texture_info.rot);
+                        rotate_point(
+                            octee_drag_start, -s_ptr->texture_info.rot
+                        );
                     diff = diff / drag_start_rot * octee_orig_scale;
                     s_ptr->texture_info.scale = octee_orig_scale + diff;
                     break;
@@ -1463,7 +1483,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     ) {
                         forget_prepared_state(prepared_state);
                     } else {
-                        register_change("tree shadow transformation", prepared_state);
+                        register_change(
+                            "tree shadow transformation", prepared_state
+                        );
                     }
                 }
             }

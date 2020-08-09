@@ -72,7 +72,11 @@ mob_type* pile_category::create_type() {
  */
 void pile_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.piles.erase(
-        find(game.states.gameplay_st->mobs.piles.begin(), game.states.gameplay_st->mobs.piles.end(), (pile*) m)
+        find(
+        game.states.gameplay_st->mobs.piles.begin(), 
+        game.states.gameplay_st->mobs.piles.end(), 
+        (pile*) m
+        )
     );
 }
 

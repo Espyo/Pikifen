@@ -120,9 +120,13 @@ void group_task::add_worker(pikmin* who) {
  * Code to run when the task is finished.
  */
 void group_task::finish_task() {
-    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p) {
-        if(game.states.gameplay_st->mobs.pikmin_list[p]->focused_mob && game.states.gameplay_st->mobs.pikmin_list[p]->focused_mob == this) {
-            game.states.gameplay_st->mobs.pikmin_list[p]->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+    for(
+        size_t p = 0;
+        p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p
+    ) {
+        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
+        if(p_ptr->focused_mob && p_ptr->focused_mob == this) {
+            p_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
 }

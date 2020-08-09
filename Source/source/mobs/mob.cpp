@@ -231,8 +231,9 @@ void mob::apply_status_effect(
     
     //Let's start by sending the status to the child mobs.
     for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-        if(game.states.gameplay_st->mobs.all[m]->parent && game.states.gameplay_st->mobs.all[m]->parent->m == this) {
-            game.states.gameplay_st->mobs.all[m]->apply_status_effect(s, refill, true);
+        mob* m2_ptr = game.states.gameplay_st->mobs.all[m];
+        if(m2_ptr->parent && m2_ptr->parent->m == this) {
+            m2_ptr->apply_status_effect(s, refill, true);
         }
     }
     
@@ -629,7 +630,8 @@ bool mob::calculate_carrying_destination(
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
     for(; onion_nr < game.states.gameplay_st->mobs.onions.size(); ++onion_nr) {
-        if(game.states.gameplay_st->mobs.onions[onion_nr]->oni_type->pik_type == decided_type) {
+        onion* o_ptr = game.states.gameplay_st->mobs.onions[onion_nr];
+        if(o_ptr->oni_type->pik_type == decided_type) {
             break;
         }
     }
@@ -1449,7 +1451,10 @@ void mob::get_hitbox_hold_point(
  */
 size_t mob::get_latched_pikmin_amount() const {
     size_t total = 0;
-    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p) {
+    for(
+        size_t p = 0;
+        p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p
+    ) {
         pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
@@ -1466,7 +1471,10 @@ size_t mob::get_latched_pikmin_amount() const {
  */
 float mob::get_latched_pikmin_weight() const {
     float total = 0;
-    for(size_t p = 0; p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p) {
+    for(
+        size_t p = 0;
+        p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p
+    ) {
         pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
@@ -1716,7 +1724,10 @@ bool mob::is_off_camera() const {
         m_radius = type->radius;
     } else {
         m_radius =
-            std::max(type->rectangular_dim.x / 2.0, type->rectangular_dim.y / 2.0);
+            std::max(
+                type->rectangular_dim.x / 2.0,
+                type->rectangular_dim.y / 2.0
+            );
     }
     
     return !bbox_check(game.cam.box[0], game.cam.box[1], pos, m_radius);
@@ -1994,7 +2005,8 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-        game.states.gameplay_st->mobs.pikmin_list.size() >= game.config.max_pikmin_in_field
+        game.states.gameplay_st->mobs.pikmin_list.size() >=
+        game.config.max_pikmin_in_field
     ) {
         return NULL;
     }
@@ -2441,7 +2453,9 @@ void mob::tick_misc_logic(const float delta_t) {
     delete_old_status_effects();
     
     for(size_t g = 0; g < particle_generators.size();) {
-        particle_generators[g].tick(delta_t, game.states.gameplay_st->particles);
+        particle_generators[g].tick(
+            delta_t, game.states.gameplay_st->particles
+        );
         if(particle_generators[g].emission_interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
         } else {
@@ -2560,7 +2574,10 @@ void mob::tick_script(const float delta_t) {
     //Check if it got whistled.
     mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
     if(game.states.gameplay_st->whistle.whistling && whistled_ev) {
-        if(dist(pos, game.states.gameplay_st->leader_cursor_w) <= game.states.gameplay_st->whistle.radius) {
+        if(
+            dist(pos, game.states.gameplay_st->leader_cursor_w) <=
+            game.states.gameplay_st->whistle.radius
+        ) {
             whistled_ev->run(this);
         }
     }

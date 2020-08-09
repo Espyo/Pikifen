@@ -72,7 +72,11 @@ mob_type* pellet_category::create_type() {
  */
 void pellet_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.pellets.erase(
-        find(game.states.gameplay_st->mobs.pellets.begin(), game.states.gameplay_st->mobs.pellets.end(), (pellet*) m)
+        find(
+            game.states.gameplay_st->mobs.pellets.begin(),
+            game.states.gameplay_st->mobs.pellets.end(),
+            (pellet*) m
+        )
     );
 }
 

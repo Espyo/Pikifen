@@ -72,12 +72,14 @@ void menu_button::draw(const float time_spent) {
     
     if(selected) {
         draw_bitmap(
-            game.sys_assets.bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
+            game.sys_assets.bmp_icon,
+            point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_bitmap(
-            game.sys_assets.bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
+            game.sys_assets.bmp_icon,
+            point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
@@ -165,12 +167,14 @@ void menu_checkbox::draw(const float time_spent) {
     
     if(selected) {
         draw_bitmap(
-            game.sys_assets.bmp_icon, point(center.x - size.x * 0.5 + 16, center.y),
+            game.sys_assets.bmp_icon,
+            point(center.x - size.x * 0.5 + 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_bitmap(
-            game.sys_assets.bmp_icon, point(center.x + size.x * 0.5 - 16, center.y),
+            game.sys_assets.bmp_icon,
+            point(center.x + size.x * 0.5 - 16, center.y),
             point(16, 16),
             sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );

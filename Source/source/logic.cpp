@@ -362,7 +362,9 @@ void gameplay::do_gameplay_logic() {
             if(!done) {
                 for(size_t i = 0; i < mobs.interactables.size(); ++i) {
                     d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
-                    if(d > mobs.interactables[i]->int_type->trigger_range) continue;
+                    if(d > mobs.interactables[i]->int_type->trigger_range) {
+                        continue;
+                    }
                     if(d < closest_d || !close_to_interactable_to_use) {
                         close_to_interactable_to_use = mobs.interactables[i];
                         closest_d = d;
@@ -402,9 +404,11 @@ void gameplay::do_gameplay_logic() {
         if(leader_to_cursor_dist > game.config.cursor_max_dist) {
             //Cursor goes beyond the range limit.
             leader_cursor_w.x =
-                cur_leader_ptr->pos.x + (cos(cursor_angle) * game.config.cursor_max_dist);
+                cur_leader_ptr->pos.x +
+                (cos(cursor_angle) * game.config.cursor_max_dist);
             leader_cursor_w.y =
-                cur_leader_ptr->pos.y + (sin(cursor_angle) * game.config.cursor_max_dist);
+                cur_leader_ptr->pos.y +
+                (sin(cursor_angle) * game.config.cursor_max_dist);
                 
             if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
                 //If we're speeding the mouse cursor (via analog stick),

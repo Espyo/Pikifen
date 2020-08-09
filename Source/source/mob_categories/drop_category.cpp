@@ -72,7 +72,11 @@ mob_type* drop_category::create_type() {
  */
 void drop_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.drops.erase(
-        find(game.states.gameplay_st->mobs.drops.begin(), game.states.gameplay_st->mobs.drops.end(), (drop*) m)
+        find(
+        game.states.gameplay_st->mobs.drops.begin(),
+        game.states.gameplay_st->mobs.drops.end(),
+        (drop*) m
+        )
     );
 }
 

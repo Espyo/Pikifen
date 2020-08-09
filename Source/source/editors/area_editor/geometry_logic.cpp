@@ -348,7 +348,9 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
         }
         
         //Check all links to this mob.
-        for(size_t m2 = 0; m2 < game.cur_area_data.mob_generators.size(); ++m2) {
+        for(
+            size_t m2 = 0; m2 < game.cur_area_data.mob_generators.size(); ++m2
+        ) {
             mob_gen* m2_ptr = game.cur_area_data.mob_generators[m2];
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
             
@@ -1219,7 +1221,9 @@ bool area_editor::get_mob_link_under_point(
         for(size_t l = 0; l < m_ptr->links.size(); ++l) {
             mob_gen* m2_ptr = m_ptr->links[l];
             if(
-                circle_intersects_line(p, 8 / game.cam.zoom, m_ptr->pos, m2_ptr->pos)
+                circle_intersects_line(
+                    p, 8 / game.cam.zoom, m_ptr->pos, m2_ptr->pos
+                )
             ) {
                 *data1 = std::make_pair(m_ptr, m2_ptr);
                 *data2 = std::make_pair((mob_gen*) NULL, (mob_gen*) NULL);
@@ -1282,7 +1286,9 @@ bool area_editor::get_path_link_under_point(
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_stop* s2_ptr = s_ptr->links[l].end_ptr;
             if(
-                circle_intersects_line(p, 8 / game.cam.zoom, s_ptr->pos, s2_ptr->pos)
+                circle_intersects_line(
+                    p, 8 / game.cam.zoom, s_ptr->pos, s2_ptr->pos
+                )
             ) {
                 *data1 = std::make_pair(s_ptr, s2_ptr);
                 if(s2_ptr->get_link(s_ptr) != INVALID) {
@@ -1777,7 +1783,9 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
             }
             
             dist d(p, edge_p);
-            if(d > game.options.area_editor_snap_threshold / game.cam.zoom) continue;
+            if(d > game.options.area_editor_snap_threshold / game.cam.zoom) {
+                continue;
+            }
             
             if(!got_one || d < closest_dist) {
                 got_one = true;

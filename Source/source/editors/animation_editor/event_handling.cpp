@@ -335,8 +335,10 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             point selection_tl;
             point selection_br;
             if(
-                (cur_sprite->file_size.x == 0 || cur_sprite->file_size.y == 0) ||
-                !sprite_bmp_add_mode
+                (
+                    cur_sprite->file_size.x == 0 ||
+                    cur_sprite->file_size.y == 0
+                ) || !sprite_bmp_add_mode
             ) {
                 selection_tl = bmp_click_pos;
                 selection_br = bmp_click_pos;

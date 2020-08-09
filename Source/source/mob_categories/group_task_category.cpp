@@ -72,7 +72,11 @@ mob_type* group_task_category::create_type() {
  */
 void group_task_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.group_tasks.erase(
-        find(game.states.gameplay_st->mobs.group_tasks.begin(), game.states.gameplay_st->mobs.group_tasks.end(), (group_task*) m)
+        find(
+        game.states.gameplay_st->mobs.group_tasks.begin(),
+        game.states.gameplay_st->mobs.group_tasks.end(),
+        (group_task*) m
+        )
     );
 }
 

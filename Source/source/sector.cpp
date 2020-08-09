@@ -2761,7 +2761,9 @@ TRIANGULATION_ERRORS get_polys(
                 poly_done = true;
                 if(!doing_outer && inners->back().vertexes.size() == 1) {
                     if(lone_edges) {
-                        lone_edges->insert(inners->back().vertexes[0]->edges[0]);
+                        lone_edges->insert(
+                            inners->back().vertexes[0]->edges[0]
+                        );
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {

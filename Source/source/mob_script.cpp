@@ -635,8 +635,12 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             ) == mt->states_ignoring_spray.end()
         ) {
             vector<mob_action_call*> s_actions;
-            s_actions.push_back(new mob_action_call(gen_mob_fsm::touch_spray));
-            new_events.push_back(new mob_event(MOB_EV_TOUCHED_SPRAY, s_actions));
+            s_actions.push_back(
+                new mob_action_call(gen_mob_fsm::touch_spray)
+            );
+            new_events.push_back(
+                new mob_event(MOB_EV_TOUCHED_SPRAY, s_actions)
+            );
             new_events_custom_actions_after.push_back(false);
         }
         

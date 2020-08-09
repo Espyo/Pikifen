@@ -191,7 +191,9 @@ void animation_editor::draw_canvas() {
                 hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
                 float hitbox_outline_thickness =
-                    (cur_hitbox_nr == h ? 3 / game.cam.zoom : 2 / game.cam.zoom);
+                    cur_hitbox_nr == h ?
+                    3.0f / game.cam.zoom :
+                    2 / game.cam.zoom;
                     
                 switch(h_ptr->type) {
                 case HITBOX_TYPE_NORMAL: {

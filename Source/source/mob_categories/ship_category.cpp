@@ -72,7 +72,11 @@ mob_type* ship_category::create_type() {
  */
 void ship_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.ships.erase(
-        find(game.states.gameplay_st->mobs.ships.begin(), game.states.gameplay_st->mobs.ships.end(), (ship*) m)
+        find(
+        game.states.gameplay_st->mobs.ships.begin(),
+ game.states.gameplay_st->mobs.ships.end(), 
+ (ship*) m
+ )
     );
 }
 

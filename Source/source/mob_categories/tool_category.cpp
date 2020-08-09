@@ -72,7 +72,11 @@ mob_type* tool_category::create_type() {
  */
 void tool_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.tools.erase(
-        find(game.states.gameplay_st->mobs.tools.begin(), game.states.gameplay_st->mobs.tools.end(), (tool*) m)
+        find(
+        game.states.gameplay_st->mobs.tools.begin(), 
+        game.states.gameplay_st->mobs.tools.end(), 
+        (tool*) m
+        )
     );
 }
 

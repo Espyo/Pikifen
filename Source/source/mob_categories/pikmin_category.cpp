@@ -72,7 +72,11 @@ mob_type* pikmin_category::create_type() {
  */
 void pikmin_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.pikmin_list.erase(
-        find(game.states.gameplay_st->mobs.pikmin_list.begin(), game.states.gameplay_st->mobs.pikmin_list.end(), (pikmin*) m)
+        find(
+        game.states.gameplay_st->mobs.pikmin_list.begin(), 
+        game.states.gameplay_st->mobs.pikmin_list.end(), 
+        (pikmin*) m
+        )
     );
 }
 

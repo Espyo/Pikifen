@@ -72,7 +72,11 @@ mob_type* track_category::create_type() {
  */
 void track_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.tracks.erase(
-        find(game.states.gameplay_st->mobs.tracks.begin(), game.states.gameplay_st->mobs.tracks.end(), (track*) m)
+        find(
+        game.states.gameplay_st->mobs.tracks.begin(), 
+        game.states.gameplay_st->mobs.tracks.end(), 
+        (track*) m
+        )
     );
 }
 

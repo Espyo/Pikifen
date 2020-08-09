@@ -72,7 +72,11 @@ mob_type* resource_category::create_type() {
  */
 void resource_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.resources.erase(
-        find(game.states.gameplay_st->mobs.resources.begin(), game.states.gameplay_st->mobs.resources.end(), (resource*) m)
+        find(
+        game.states.gameplay_st->mobs.resources.begin(), 
+        game.states.gameplay_st->mobs.resources.end(), 
+        (resource*) m
+        )
     );
 }
 

@@ -189,23 +189,39 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
         bmp_h * 0.5 * game.cur_area_data.bg_dist / zoom_to_use
     );
     
-    bg_v[0].x = 0;
-    bg_v[0].y = 0;
-    bg_v[0].u = (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[0].v = (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[1].x = bmp_w;
-    bg_v[1].y = 0;
-    bg_v[1].u = (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[1].v = (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[2].x = bmp_w;
-    bg_v[2].y = bmp_h;
-    bg_v[2].u = (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[2].v = (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[3].x = 0;
-    bg_v[3].y = bmp_h;
-    bg_v[3].u = (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
-    bg_v[3].v = (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
-    
+    bg_v[0].x =
+        0;
+    bg_v[0].y =
+        0;
+    bg_v[0].u =
+        (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[0].v =
+        (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[1].x =
+        bmp_w;
+    bg_v[1].y =
+        0;
+    bg_v[1].u =
+        (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[1].v =
+        (game.cam.pos.y - final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[2].x =
+        bmp_w;
+    bg_v[2].y =
+        bmp_h;
+    bg_v[2].u =
+        (game.cam.pos.x + final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[2].v =
+        (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[3].x =
+        0;
+    bg_v[3].y =
+        bmp_h;
+    bg_v[3].u =
+        (game.cam.pos.x - final_zoom.x) / game.cur_area_data.bg_bmp_zoom;
+    bg_v[3].v =
+        (game.cam.pos.y + final_zoom.y) / game.cur_area_data.bg_bmp_zoom;
+        
     al_draw_prim(
         bg_v, NULL, game.cur_area_data.bg_bmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
@@ -234,7 +250,8 @@ void gameplay::draw_cursor(
             64 + std::min(
                 191,
                 (int) (
-                    191 * (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
+                    191 *
+                    (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
@@ -363,8 +380,10 @@ void gameplay::draw_cursor(
         game.sys_assets.bmp_mouse_cursor,
         game.mouse_cursor_s,
         point(
-            game.cam.zoom * al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
-            game.cam.zoom * al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
+            game.cam.zoom *
+            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
+            game.cam.zoom *
+            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
         ),
         -(area_time_passed * game.config.cursor_spin_speed),
         change_color_lighting(
@@ -419,7 +438,8 @@ void gameplay::draw_hud() {
     for(size_t l = 0; l < 3; ++l) {
         if(mobs.leaders.size() < l + 1) continue;
         
-        size_t l_nr = (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
+        size_t l_nr =
+            (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
         size_t icon_id = HUD_ITEM_LEADER_1_ICON + l;
         size_t health_id = HUD_ITEM_LEADER_1_HEALTH + l;
         
@@ -442,7 +462,8 @@ void gameplay::draw_hud() {
         if(hud_items.get_draw_data(health_id, &i_center, &i_size)) {
             draw_health(
                 i_center,
-                mobs.leaders[l_nr]->health, mobs.leaders[l_nr]->type->max_health,
+                mobs.leaders[l_nr]->health,
+                mobs.leaders[l_nr]->type->max_health,
                 std::min(i_size.x, i_size.y) * 0.4f,
                 true
             );
@@ -454,10 +475,13 @@ void gameplay::draw_hud() {
     //Sun Meter.
     if(hud_items.get_draw_data(HUD_ITEM_TIME, &i_center, &i_size)) {
         unsigned char n_hours =
-            (game.config.day_minutes_end - game.config.day_minutes_start) / 60.0f;
+            (game.config.day_minutes_end -
+             game.config.day_minutes_start) / 60.0f;
+        float day_length =
+            game.config.day_minutes_end - game.config.day_minutes_start;
         float day_passed_ratio =
             (float) (day_minutes - game.config.day_minutes_start) /
-            (float) (game.config.day_minutes_end - game.config.day_minutes_start);
+            (float) (day_length);
         float sun_radius = i_size.y / 2.0;
         float first_dot_x = (i_center.x - i_size.x / 2.0) + sun_radius;
         float last_dot_x = (i_center.x + i_size.x / 2.0) - sun_radius;
@@ -731,14 +755,19 @@ void gameplay::draw_hud() {
             for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
                 if(
                     (
-                        game.options.controls[0][c].action == BUTTON_USE_SPRAY_1 &&
+                        game.options.controls[0][c].action ==
+                        BUTTON_USE_SPRAY_1 &&
                         game.spray_types.size() <= 2
                     ) || (
-                        game.options.controls[0][c].action == BUTTON_USE_SPRAY &&
+                        game.options.controls[0][c].action ==
+                        BUTTON_USE_SPRAY &&
                         game.spray_types.size() >= 3
                     )
                 ) {
-                    draw_control(game.fonts.main, game.options.controls[0][c], i_center, i_size);
+                    draw_control(
+                        game.fonts.main,
+                        game.options.controls[0][c], i_center, i_size
+                    );
                     break;
                 }
             }
@@ -752,7 +781,9 @@ void gameplay::draw_hud() {
                     HUD_ITEM_SPRAY_2_ICON, &i_center, &i_size
                 )
             ) {
-                draw_bitmap_in_box(game.spray_types[1].bmp_spray, i_center, i_size);
+                draw_bitmap_in_box(
+                    game.spray_types[1].bmp_spray, i_center, i_size
+                );
             }
             
             if(
@@ -775,9 +806,13 @@ void gameplay::draw_hud() {
                 )
             ) {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-                    if(game.options.controls[0][c].action == BUTTON_USE_SPRAY_2) {
+                    if(
+                        game.options.controls[0][c].action ==
+                        BUTTON_USE_SPRAY_2
+                    ) {
                         draw_control(
-                            game.fonts.main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main,
+                            game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -808,9 +843,13 @@ void gameplay::draw_hud() {
                 )
             ) {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-                    if(game.options.controls[0][c].action == BUTTON_PREV_SPRAY) {
+                    if(
+                        game.options.controls[0][c].action ==
+                        BUTTON_PREV_SPRAY
+                    ) {
                         draw_control(
-                            game.fonts.main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main,
+                            game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -839,9 +878,13 @@ void gameplay::draw_hud() {
                 )
             ) {
                 for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-                    if(game.options.controls[0][c].action == BUTTON_NEXT_SPRAY) {
+                    if(
+                        game.options.controls[0][c].action ==
+                        BUTTON_NEXT_SPRAY
+                    ) {
                         draw_control(
-                            game.fonts.main, game.options.controls[0][c], i_center, i_size
+                            game.fonts.main,
+                            game.options.controls[0][c], i_center, i_size
                         );
                         break;
                     }
@@ -913,7 +956,8 @@ void gameplay::draw_ingame_text() {
                     game.config.carrying_color_stop,
                     point(
                         p_ptr->pos.x,
-                        p_ptr->pos.y - p_ptr->type->radius - al_get_font_line_height(game.fonts.main) * 1.25
+                        p_ptr->pos.y - p_ptr->type->radius -
+                        al_get_font_line_height(game.fonts.main) * 1.25
                     ),
                     ALLEGRO_ALIGN_CENTER,
                     1,
@@ -1258,19 +1302,31 @@ void gameplay::draw_message_box() {
     
     draw_bitmap(
         bmp_message_box,
-        point(game.win_w / 2, game.win_h - al_get_font_line_height(game.fonts.main) * 2 - 4),
-        point(game.win_w - 16, al_get_font_line_height(game.fonts.main) * 4)
+        point(
+            game.win_w / 2,
+            game.win_h - al_get_font_line_height(game.fonts.main) * 2 - 4
+        ),
+        point(
+            game.win_w - 16,
+            al_get_font_line_height(game.fonts.main) * 4
+        )
     );
     
     if(msg_box->speaker_icon) {
         draw_bitmap(
             msg_box->speaker_icon,
-            point(40, game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16),
+            point(
+                40,
+                game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16
+            ),
             point(48, 48)
         );
         draw_bitmap(
             bmp_bubble,
-            point(40, game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16),
+            point(
+                40,
+                game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16
+            ),
             point(64, 64)
         );
     }
@@ -1281,7 +1337,11 @@ void gameplay::draw_message_box() {
     
         draw_compressed_text(
             game.fonts.main, al_map_rgb(255, 255, 255),
-            point(24, game.win_h - al_get_font_line_height(game.fonts.main) * (4 - l) + 8),
+            point(
+                24,
+                game.win_h -
+                al_get_font_line_height(game.fonts.main) * (4 - l) + 8
+            ),
             ALLEGRO_ALIGN_LEFT, 0, point(game.win_w - 64, 0),
             lines[l]
         );
@@ -1315,11 +1375,17 @@ void gameplay::draw_precipitation() {
 void gameplay::draw_system_stuff() {
     if(!game.maker_tools.info_print_text.empty()) {
         float alpha_mult = 1;
-        if(game.maker_tools.info_print_timer.time_left < game.maker_tools.info_print_fade_duration) {
-            alpha_mult = game.maker_tools.info_print_timer.time_left / game.maker_tools.info_print_fade_duration;
+        if(
+            game.maker_tools.info_print_timer.time_left <
+            game.maker_tools.info_print_fade_duration
+        ) {
+            alpha_mult =
+                game.maker_tools.info_print_timer.time_left /
+                game.maker_tools.info_print_fade_duration;
         }
         
-        size_t n_lines = split(game.maker_tools.info_print_text, "\n", true).size();
+        size_t n_lines =
+            split(game.maker_tools.info_print_text, "\n", true).size();
         int fh = al_get_font_line_height(game.fonts.builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = n_lines * fh + (n_lines - 1);
@@ -1832,7 +1898,8 @@ void draw_control(
         if(c.button >= 1 && c.button <= 3) {
         
             draw_bitmap_in_box(
-                game.sys_assets.bmp_mouse_button_icon[c.button - 1], where, max_size
+                game.sys_assets.bmp_mouse_button_icon[c.button - 1],
+                where, max_size
             );
             return;
             
@@ -1881,9 +1948,15 @@ void draw_control(
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
     float total_width =
-        std::min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
+        std::min(
+            (float) (x2 - x1 + 4),
+            (max_size.x == 0 ? FLT_MAX : max_size.x)
+        );
     float total_height =
-        std::min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
+        std::min(
+            (float) (y2 - y1 + 4),
+            (max_size.y == 0 ? FLT_MAX : max_size.y)
+        );
     total_width = std::max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
@@ -1970,7 +2043,8 @@ void draw_fraction(
     const point &center, const size_t current,
     const size_t needed, const ALLEGRO_COLOR &color
 ) {
-    float first_y = center.y - (al_get_font_line_height(game.fonts.main) * 3) / 2;
+    float first_y =
+        center.y - (al_get_font_line_height(game.fonts.main) * 3) / 2;
     float font_h = al_get_font_line_height(game.fonts.value);
     
     draw_scaled_text(
@@ -2435,9 +2509,13 @@ void draw_loading_screen(
             game.win_h - 8 - al_get_font_line_height(game.fonts.main) * 0.5
         );
         
-        if(game.sys_assets.bmp_icon && game.sys_assets.bmp_icon != game.bmp_error) {
+        if(
+            game.sys_assets.bmp_icon &&
+            game.sys_assets.bmp_icon != game.bmp_error
+        ) {
             draw_bitmap(
-                game.sys_assets.bmp_icon, icon_pos, point(-1, al_get_font_line_height(game.fonts.main)),
+                game.sys_assets.bmp_icon, icon_pos,
+                point(-1, al_get_font_line_height(game.fonts.main)),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
@@ -2514,7 +2592,9 @@ void draw_notification(
 
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
-    al_translate_transform(&tra, target.x * game.cam.zoom, target.y * game.cam.zoom);
+    al_translate_transform(
+        &tra, target.x * game.cam.zoom, target.y * game.cam.zoom
+    );
     al_scale_transform(&tra, 1.0f / game.cam.zoom, 1.0f / game.cam.zoom);
     al_copy_transform(&old, al_get_current_transform());
     al_compose_transform(&tra, &old);

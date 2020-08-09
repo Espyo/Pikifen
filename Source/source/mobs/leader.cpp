@@ -41,7 +41,9 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     
     group = new group_info_struct(this);
     subgroup_type_ptr =
-        game.states.gameplay_st->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+        game.states.gameplay_st->subgroup_types.get_type(
+            SUBGROUP_TYPE_CATEGORY_LEADER
+        );
 }
 
 
@@ -116,14 +118,17 @@ void leader::dismiss() {
     vector<subgroup_dismiss_info> subgroups_info;
     
     //Go through all subgroups and populate the vector of data.
-    subgroup_type* first_type = game.states.gameplay_st->subgroup_types.get_first_type();
+    subgroup_type* first_type =
+        game.states.gameplay_st->subgroup_types.get_first_type();
     subgroup_type* cur_type = first_type;
     
     do {
     
         if(
             cur_type !=
-            game.states.gameplay_st->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER)
+            game.states.gameplay_st->subgroup_types.get_type(
+                SUBGROUP_TYPE_CATEGORY_LEADER
+            )
         ) {
         
             bool subgroup_exists = false;
@@ -143,8 +148,9 @@ void leader::dismiss() {
             
         }
         
-        cur_type = game.states.gameplay_st->subgroup_types.get_next_type(cur_type);
-        
+        cur_type =
+            game.states.gameplay_st->subgroup_types.get_next_type(cur_type);
+            
     } while(cur_type != first_type);
     
     //Let's figure out each subgroup's size.
@@ -377,8 +383,9 @@ void leader::draw_mob() {
     get_sprite_bitmap_effects(s_ptr, &eff, true, true);
     
     if(invuln_period.time_left > 0.0f) {
-        sprite* spark_s = game.sys_assets.spark_animation.instance.get_cur_sprite();
-        
+        sprite* spark_s =
+            game.sys_assets.spark_animation.instance.get_cur_sprite();
+            
         if(spark_s && spark_s->bitmap) {
             bitmap_effect_info spark_eff = eff;
             point size(
@@ -548,7 +555,8 @@ void leader::tick_class_specifics(const float delta_t) {
                 group->anchor = pos + move_anchor_offset;
                 
                 float intensity_dist =
-                    game.config.cursor_max_dist * game.states.gameplay_st->swarm_magnitude;
+                    game.config.cursor_max_dist *
+                    game.states.gameplay_st->swarm_magnitude;
                 al_translate_transform(
                     &group->transform, -SWARM_MARGIN, 0
                 );
@@ -644,7 +652,11 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     
     while(searching) {
         new_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), game.states.gameplay_st->mobs.leaders.size());
+            sum_and_wrap(
+                new_leader_nr,
+                (forward ? 1 : -1),
+                game.states.gameplay_st->mobs.leaders.size()
+            );
         new_leader_ptr = game.states.gameplay_st->mobs.leaders[new_leader_nr];
         
         if(new_leader_nr == original_leader_nr) {
@@ -666,11 +678,18 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
         game.states.gameplay_st->cur_leader_nr =
-            sum_and_wrap(new_leader_nr, (forward ? 1 : -1), game.states.gameplay_st->mobs.leaders.size());
+            sum_and_wrap(
+                new_leader_nr,
+                (forward ? 1 : -1),
+                game.states.gameplay_st->mobs.leaders.size()
+            );
         game.states.gameplay_st->cur_leader_ptr =
-            game.states.gameplay_st->mobs.leaders[game.states.gameplay_st->cur_leader_nr];
+            game.states.gameplay_st->
+            mobs.leaders[game.states.gameplay_st->cur_leader_nr];
             
-        game.states.gameplay_st->cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+        game.states.gameplay_st->cur_leader_ptr->fsm.set_state(
+            LEADER_STATE_ACTIVE
+        );
     }
 }
 

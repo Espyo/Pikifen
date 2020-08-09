@@ -72,7 +72,11 @@ mob_type* treasure_category::create_type() {
  */
 void treasure_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.treasures.erase(
-        find(game.states.gameplay_st->mobs.treasures.begin(), game.states.gameplay_st->mobs.treasures.end(), (treasure*) m)
+        find(
+            game.states.gameplay_st->mobs.treasures.begin(),
+            game.states.gameplay_st->mobs.treasures.end(),
+            (treasure*) m
+        )
     );
 }
 

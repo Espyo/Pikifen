@@ -163,7 +163,8 @@ void crash(const string &reason, const string &info, const int exit_status) {
             game.delta_t == 0.0f ? "0" :
             f2s(game.delta_t) + " (" + f2s(1.0f / game.delta_t) + " FPS)"
         ) + ".\n"
-        "  Mob count: " + i2s(game.states.gameplay_st->mobs.all.size()) + ". Particle count: " +
+        "  Mob count: " +
+        i2s(game.states.gameplay_st->mobs.all.size()) + ". Particle count: " +
         i2s(game.states.gameplay_st->particles.get_count()) + ".\n" +
         "  Bitmaps loaded: " + i2s(game.bitmaps.get_list_size()) + " (" +
         i2s(game.bitmaps.get_total_calls()) + " total calls).\n" +
@@ -188,17 +189,25 @@ void crash(const string &reason, const string &info, const int exit_status) {
         for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
             error_str +=
                 " " +
-                game.states.gameplay_st->cur_leader_ptr->fsm.prev_state_names[h];
+                game.states.gameplay_st->cur_leader_ptr->
+                fsm.prev_state_names[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<pikmin*> closest_pikmin = game.states.gameplay_st->mobs.pikmin_list;
+        vector<pikmin*> closest_pikmin =
+            game.states.gameplay_st->mobs.pikmin_list;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (pikmin * p1, pikmin * p2) -> bool {
             return
-            dist(game.states.gameplay_st->cur_leader_ptr->pos, p1->pos).to_float() <
-            dist(game.states.gameplay_st->cur_leader_ptr->pos, p2->pos).to_float();
+            dist(
+                game.states.gameplay_st->cur_leader_ptr->pos,
+                p1->pos
+            ).to_float() <
+            dist(
+                game.states.gameplay_st->cur_leader_ptr->pos,
+                p2->pos
+            ).to_float();
         }
         );
         
@@ -993,7 +1002,8 @@ void save_maker_tools() {
     );
     file.add(
         new data_node(
-            "mob_hurting_percentage", f2s(game.maker_tools.mob_hurting_ratio * 100)
+            "mob_hurting_percentage",
+            f2s(game.maker_tools.mob_hurting_ratio * 100)
         )
     );
     

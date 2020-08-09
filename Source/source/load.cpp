@@ -209,7 +209,9 @@ void load_area(
         sector* new_sector = new sector();
         
         new_sector->type =
-            game.sector_types.get_nr(sector_data->get_child_by_name("type")->value);
+            game.sector_types.get_nr(
+                sector_data->get_child_by_name("type")->value
+            );
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
         new_sector->is_bottomless_pit =
             s2b(
@@ -1032,21 +1034,36 @@ void load_misc_sounds() {
         );
     al_attach_mixer_to_voice(game.mixer, game.voice);
     
-    game.sys_assets.sfx_attack = load_sample(              "Attack.ogg");
-    game.sys_assets.sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg");
-    game.sys_assets.sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg");
-    game.sys_assets.sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg");
-    game.sys_assets.sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg");
-    game.sys_assets.sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg");
-    game.sys_assets.sfx_pikmin_held = load_sample(         "Pikmin_held.ogg");
-    game.sys_assets.sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg");
-    game.sys_assets.sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg");
-    game.sys_assets.sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg");
-    game.sys_assets.sfx_pikmin_called = load_sample(       "Pikmin_called.ogg");
-    game.sys_assets.sfx_pluck = load_sample(               "Pluck.ogg");
-    game.sys_assets.sfx_throw = load_sample(               "Throw.ogg");
-    game.sys_assets.sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg");
-    game.sys_assets.sfx_camera = load_sample(              "Camera.ogg");
+    game.sys_assets.sfx_attack =
+        load_sample("Attack.ogg");
+    game.sys_assets.sfx_pikmin_attack =
+        load_sample("Pikmin_attack.ogg");
+    game.sys_assets.sfx_pikmin_carrying =
+        load_sample("Pikmin_carrying.ogg");
+    game.sys_assets.sfx_pikmin_carrying_grab =
+        load_sample("Pikmin_carrying_grab.ogg");
+    game.sys_assets.sfx_pikmin_caught =
+        load_sample("Pikmin_caught.ogg");
+    game.sys_assets.sfx_pikmin_dying =
+        load_sample("Pikmin_dying.ogg");
+    game.sys_assets.sfx_pikmin_held =
+        load_sample("Pikmin_held.ogg");
+    game.sys_assets.sfx_pikmin_idle =
+        load_sample("Pikmin_idle.ogg");
+    game.sys_assets.sfx_pikmin_thrown =
+        load_sample("Pikmin_thrown.ogg");
+    game.sys_assets.sfx_pikmin_plucked =
+        load_sample("Pikmin_plucked.ogg");
+    game.sys_assets.sfx_pikmin_called =
+        load_sample("Pikmin_called.ogg");
+    game.sys_assets.sfx_pluck =
+        load_sample("Pluck.ogg");
+    game.sys_assets.sfx_throw =
+        load_sample("Throw.ogg");
+    game.sys_assets.sfx_switch_pikmin =
+        load_sample("Switch_Pikmin.ogg");
+    game.sys_assets.sfx_camera =
+        load_sample("Camera.ogg");
 }
 
 
@@ -1403,7 +1420,8 @@ void load_system_animations() {
         load_data_file(SYSTEM_ANIMATIONS_FILE_PATH);
         
     init_single_animation(
-        &system_animations_file, "leader_damage_sparks", game.sys_assets.spark_animation
+        &system_animations_file,
+        "leader_damage_sparks", game.sys_assets.spark_animation
     );
 }
 

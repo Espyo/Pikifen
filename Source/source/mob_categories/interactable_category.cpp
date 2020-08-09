@@ -72,7 +72,11 @@ mob_type* interactable_category::create_type() {
  */
 void interactable_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.interactables.erase(
-        find(game.states.gameplay_st->mobs.interactables.begin(), game.states.gameplay_st->mobs.interactables.end(), (interactable*) m)
+        find(
+        game.states.gameplay_st->mobs.interactables.begin(),
+        game.states.gameplay_st->mobs.interactables.end(),
+        (interactable*) m
+        )
     );
 }
 

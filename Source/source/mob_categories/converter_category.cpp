@@ -72,7 +72,11 @@ mob_type* converter_category::create_type() {
  */
 void converter_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.converters.erase(
-        find(game.states.gameplay_st->mobs.converters.begin(), game.states.gameplay_st->mobs.converters.end(), (converter*) m)
+        find(
+            game.states.gameplay_st->mobs.converters.begin(),
+            game.states.gameplay_st->mobs.converters.end(),
+            (converter*) m
+        )
     );
 }
 

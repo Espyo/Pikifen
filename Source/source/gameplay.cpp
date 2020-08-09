@@ -321,10 +321,16 @@ void gameplay::load() {
         mobs.leaders.begin(), mobs.leaders.end(),
     [] (leader * l1, leader * l2) -> bool {
         size_t priority_l1 =
-        find(game.config.leader_order.begin(), game.config.leader_order.end(), l1->lea_type) -
+        find(
+            game.config.leader_order.begin(),
+            game.config.leader_order.end(), l1->lea_type
+        ) -
         game.config.leader_order.begin();
         size_t priority_l2 =
-        find(game.config.leader_order.begin(), game.config.leader_order.end(), l2->lea_type) -
+        find(
+            game.config.leader_order.begin(),
+            game.config.leader_order.end(), l2->lea_type
+        ) -
         game.config.leader_order.begin();
         return priority_l1 < priority_l2;
     }
@@ -723,7 +729,10 @@ void gameplay::update_closest_group_member() {
     }
     
     if(
-        fabs(game.states.gameplay_st->closest_group_member->z - cur_leader_ptr->z) >
+        fabs(
+            game.states.gameplay_st->closest_group_member->z -
+            cur_leader_ptr->z
+        ) >
         SECTOR_STEP
     ) {
         //If the group member is beyond a step, it's obviously above or below
@@ -747,7 +756,9 @@ void gameplay::update_transformations() {
         -game.cam.pos.x + game.win_w / 2.0 / game.cam.zoom,
         -game.cam.pos.y + game.win_h / 2.0 / game.cam.zoom
     );
-    al_scale_transform(&game.world_to_screen_transform, game.cam.zoom, game.cam.zoom);
+    al_scale_transform(
+        &game.world_to_screen_transform, game.cam.zoom, game.cam.zoom
+    );
     
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;

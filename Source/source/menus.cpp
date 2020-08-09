@@ -608,7 +608,8 @@ void controls_menu::load() {
     [this] () {
         cur_page_nr =
             sum_and_wrap(
-                cur_page_nr, -1, ceil(game.options.controls[cur_player_nr].size() / 8.0)
+                cur_page_nr, -1,
+                ceil(game.options.controls[cur_player_nr].size() / 8.0)
             );
         cur_page_nr_widget->start_juicy_grow();
         update();
@@ -690,7 +691,12 @@ void controls_menu::update() {
     cur_page_nr =
         std::min(
             cur_page_nr,
-            (size_t) (ceil(game.options.controls[cur_player_nr].size() / 8.0) - 1)
+            (size_t)
+            (
+                ceil(
+                    game.options.controls[cur_player_nr].size() / 8.0
+                ) - 1
+            )
         );
     cur_player_nr_widget->text = i2s(cur_player_nr + 1);
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);

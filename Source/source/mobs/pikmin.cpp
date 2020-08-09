@@ -48,7 +48,9 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
-        game.states.gameplay_st->subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
+        game.states.gameplay_st->subgroup_types.get_type(
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type
+        );
     near_reach = 0;
     far_reach = 2;
     
@@ -110,9 +112,11 @@ void pikmin::draw_mob() {
         bitmap_effect_info idle_eff = eff;
         idle_eff.translation = pos;
         idle_eff.scale.x =
-            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_width(game.sys_assets.bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) /
+            al_get_bitmap_width(game.sys_assets.bmp_idle_glow);
         idle_eff.scale.y =
-            (game.config.standard_pikmin_radius * 8) / al_get_bitmap_height(game.sys_assets.bmp_idle_glow);
+            (game.config.standard_pikmin_radius * 8) /
+            al_get_bitmap_height(game.sys_assets.bmp_idle_glow);
         idle_eff.rotation =
             game.states.gameplay_st->area_time_passed * IDLE_GLOW_SPIN_SPEED;
         idle_eff.tint_color = type->main_color;
@@ -323,12 +327,22 @@ pikmin* get_closest_sprout(
     
     size_t n_pikmin = game.states.gameplay_st->mobs.pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; ++p) {
-        if(game.states.gameplay_st->mobs.pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
+        if(
+            game.states.gameplay_st->mobs.pikmin_list[p]->fsm.cur_state->id !=
+            PIKMIN_STATE_SPROUT
+        ) {
+            continue;
+        }
         
         dist dis(pos, game.states.gameplay_st->mobs.pikmin_list[p]->pos);
         if(closest_pikmin == NULL || dis < closest_distance) {
         
-            if(!(ignore_reserved || game.states.gameplay_st->mobs.pikmin_list[p]->pluck_reserved)) {
+            if(
+                !(
+                    ignore_reserved ||
+                    game.states.gameplay_st->mobs.pikmin_list[p]->pluck_reserved
+                )
+            ) {
                 closest_distance = dis;
                 closest_pikmin = game.states.gameplay_st->mobs.pikmin_list[p];
             }

@@ -72,7 +72,11 @@ mob_type* bouncer_category::create_type() {
  */
 void bouncer_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.bouncers.erase(
-        find(game.states.gameplay_st->mobs.bouncers.begin(), game.states.gameplay_st->mobs.bouncers.end(), (bouncer*) m)
+        find(
+            game.states.gameplay_st->mobs.bouncers.begin(),
+            game.states.gameplay_st->mobs.bouncers.end(),
+            (bouncer*) m
+        )
     );
 }
 

@@ -69,7 +69,12 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  */
 void onion::call_pikmin() {
 
-    if(game.states.gameplay_st->mobs.pikmin_list.size() >= game.config.max_pikmin_in_field) return;
+    if(
+        game.states.gameplay_st->mobs.pikmin_list.size() >=
+        game.config.max_pikmin_in_field
+    ) {
+        return;
+    }
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.

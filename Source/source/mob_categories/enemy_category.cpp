@@ -72,7 +72,11 @@ mob_type* enemy_category::create_type() {
  */
 void enemy_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.enemies.erase(
-        find(game.states.gameplay_st->mobs.enemies.begin(), game.states.gameplay_st->mobs.enemies.end(), (enemy*) m)
+        find(
+        game.states.gameplay_st->mobs.enemies.begin(),
+        game.states.gameplay_st->mobs.enemies.end(),
+        (enemy*) m
+        )
     );
 }
 

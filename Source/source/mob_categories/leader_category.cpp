@@ -72,7 +72,11 @@ mob_type* leader_category::create_type() {
  */
 void leader_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.leaders.erase(
-        find(game.states.gameplay_st->mobs.leaders.begin(), game.states.gameplay_st->mobs.leaders.end(), (leader*) m)
+        find(
+        game.states.gameplay_st->mobs.leaders.begin(),
+        game.states.gameplay_st->mobs.leaders.end(),
+        (leader*) m
+        )
     );
 }
 

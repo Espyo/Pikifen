@@ -1272,7 +1272,9 @@ void editor::update_transformations() {
         -game.cam.pos.x + canvas_center.x / game.cam.zoom,
         -game.cam.pos.y + canvas_center.y / game.cam.zoom
     );
-    al_scale_transform(&game.world_to_screen_transform, game.cam.zoom, game.cam.zoom);
+    al_scale_transform(
+        &game.world_to_screen_transform, game.cam.zoom, game.cam.zoom
+    );
     
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;
