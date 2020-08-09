@@ -25,6 +25,12 @@ static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
 
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Pikmin type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     mob(pos, type, angle),
@@ -56,6 +62,8 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not a Pikmin can receive a given status effect.
+ * s:
+ *   Status type to check.
  */
 bool pikmin::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_PIKMIN;
@@ -122,6 +130,8 @@ void pikmin::draw_mob() {
  * This quickly runs over several steps in the usual FSM logic, just to
  * instantly get to the end result.
  * As such, be careful when using it.
+ * m:
+ *   The mob to carry.
  */
 void pikmin::force_carry(mob* m) {
     pikmin_fsm::go_to_carriable_object(this, (void*) m, NULL);
@@ -154,6 +164,8 @@ void pikmin::handle_panic_loss() {
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
+ * s:
+ *   Status effect to handle.
  */
 void pikmin::handle_status_effect(status_type* s) {
     if(s->causes_disable) {
@@ -173,6 +185,8 @@ void pikmin::handle_status_effect(status_type* s) {
 /* ----------------------------------------------------------------------------
  * Increases (or decreases) the Pikmin's maturity by the given amount.
  * This makes sure that the maturity doesn't overflow.
+ * amount:
+ *   Amount to increase by.
  */
 void pikmin::increase_maturity(const int amount) {
     int new_maturity = maturity + amount;
@@ -186,6 +200,8 @@ void pikmin::increase_maturity(const int amount) {
  * straight no. If not, it will roll with the hit rate to check.
  * If the attack is a miss, it also registers the miss, so that we can keep
  * memory of it for the next frames.
+ * info:
+ *   Info about the hitboxes involved.
  */
 bool pikmin::process_attack_miss(hitbox_interaction* info) {
     if(info->mob2->anim.cur_anim == missed_attack_ptr) {
@@ -211,6 +227,8 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
  */
 void pikmin::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -249,6 +267,8 @@ void pikmin::start_throw_trail() {
 
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to Pikmin.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void pikmin::tick_class_specifics(const float delta_t) {
     //Carrying object.

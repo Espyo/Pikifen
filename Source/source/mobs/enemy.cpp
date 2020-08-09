@@ -23,6 +23,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates an enemy mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Enemy type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 enemy::enemy(const point &pos, enemy_type* type, const float angle) :
     mob(pos, type, angle),
@@ -33,6 +39,8 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not an enemy can receive a given status effect.
+ * s:
+ *   Status type to check.
  */
 bool enemy::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_ENEMIES;
@@ -101,6 +109,8 @@ void enemy::finish_dying_class_specifics() {
 
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to read with.
  */
 void enemy::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);

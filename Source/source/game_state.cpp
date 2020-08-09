@@ -33,12 +33,15 @@ game_state::game_state() :
 /* ----------------------------------------------------------------------------
  * Handles a button "press" in a menu. Technically, it could also be
  * a button release.
- * button: The button's ID. Use BUTTON_*.
- * pos:    The position of the button, i.e., how much it's "held".
+ * action:
+ *   The button's ID. Use BUTTON_*.
+ * pos:
+ *   The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
  *   For controls with more sensitivity, values between 0 and 1 are important.
  *   Like a 0.5 for swarming makes the group swarm at half distance.
- * player: Number of the player that pressed.
+ * player:
+ *   Number of the player that pressed.
  */
 void game_state::handle_menu_button(
     const size_t action, const float pos, const size_t player
@@ -183,6 +186,8 @@ void game_state::handle_menu_button(
 /* ----------------------------------------------------------------------------
  * Pass an Allegro event to this so the state's widgets can
  * handle it if necessary.
+ * ev:
+ *   Event to handle.
  */
 void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 
@@ -220,6 +225,8 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 
 /* ----------------------------------------------------------------------------
  * Sets the currently selected widget.
+ * widget:
+ *   Widget to set.
  */
 void game_state::set_selected_widget(menu_widget* widget) {
     if(selected_widget) selected_widget->selected = false;
@@ -228,4 +235,7 @@ void game_state::set_selected_widget(menu_widget* widget) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Updates any transformations. Unused.
+ */
 void game_state::update_transformations() { }

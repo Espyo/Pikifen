@@ -325,6 +325,8 @@ void area_editor::process_gui_menu_bar() {
 
 /* ----------------------------------------------------------------------------
  * Processes the ImGui mob script vars for this frame.
+ * m_ptr:
+ *   Mob to process.
  */
 void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     if(!m_ptr->type) return;

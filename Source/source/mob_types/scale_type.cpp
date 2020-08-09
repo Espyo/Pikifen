@@ -28,6 +28,8 @@ scale_type::scale_type() :
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void scale_type::load_properties(data_node* file) {
     reader_setter rs(file);

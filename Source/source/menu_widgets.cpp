@@ -26,6 +26,20 @@ const float menu_widget::JUICY_GROW_DURATION = 0.3f;
 
 /* ----------------------------------------------------------------------------
  * Creates a clickable button widget.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * click_handler:
+ *   Code to run when the user clicks on it.
+ * text:
+ *   Text to display in the button.
+ * font:
+ *   Font to use for the text.
+ * color:
+ *   Text color.
+ * align:
+ *   Text alignment.
  */
 menu_button::menu_button(
     const point &center, const point &size,
@@ -44,6 +58,8 @@ menu_button::menu_button(
 
 /* ----------------------------------------------------------------------------
  * Draws a button widget.
+ * time_spent:
+ *   How much time has passed in the menu, in seconds.
  */
 void menu_button::draw(const float time_spent) {
     if(!font || !enabled) return;
@@ -86,12 +102,36 @@ void menu_button::draw(const float time_spent) {
 }
 
 
-bool menu_button::is_clickable() const { return enabled; }
+/* ----------------------------------------------------------------------------
+ * Is this type of widget clickable?
+ */
+bool menu_button::is_clickable() const {
+    return enabled;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when it is clicked, regardless of which instance it is.
+ */
 void menu_button::on_click() { }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a checkbox widget.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * click_handler:
+ *   Code to run when the user clicks on it.
+ * text:
+ *   Text to display in the button.
+ * font:
+ *   Font to use for the text.
+ * color:
+ *   Text color.
+ * align:
+ *   Text alignment.
  */
 menu_checkbox::menu_checkbox(
     const point &center, const point &size,
@@ -111,6 +151,8 @@ menu_checkbox::menu_checkbox(
 
 /* ----------------------------------------------------------------------------
  * Draws a checkbox.
+ * time_spent:
+ *   How much time has passed in the menu, in seconds.
  */
 void menu_checkbox::draw(const float time_spent) {
     if(!font || !enabled) return;
@@ -160,12 +202,32 @@ void menu_checkbox::draw(const float time_spent) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Is this type of widget clickable?
+ */
 bool menu_checkbox::is_clickable() const { return enabled; }
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when it is clicked, regardless of which instance it is.
+ */
 void menu_checkbox::on_click() { checked = !checked; }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a text widget.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * text:
+ *   Text to display in the button.
+ * font:
+ *   Font to use for the text.
+ * color:
+ *   Text color.
+ * align:
+ *   Text alignment.
  */
 menu_text::menu_text(
     const point &center, const point &size, const string &text,
@@ -183,6 +245,8 @@ menu_text::menu_text(
 
 /* ----------------------------------------------------------------------------
  * Draws a text widget.
+ * time_spent:
+ *   How much time has passed in the menu, in seconds.
  */
 void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
@@ -213,12 +277,26 @@ void menu_text::draw(const float time_spent) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Is this type of widget clickable?
+ */
 bool menu_text::is_clickable() const { return false; }
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when it is clicked, regardless of which instance it is.
+ */
 void menu_text::on_click() { }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a menu widget.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * click_handler:
+ *   Code to run when the user clicks on it.
  */
 menu_widget::menu_widget(
     const point &center, const point &size,
@@ -248,6 +326,8 @@ void menu_widget::click() {
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not the mouse cursor is on top of this widget.
+ * mc:
+ *   The mouse cursor coordinates.
  */
 bool menu_widget::mouse_on(const point &mc) const {
     return
@@ -270,6 +350,8 @@ void menu_widget::start_juicy_grow() {
 
 /* ----------------------------------------------------------------------------
  * Ticks an in-game frame worth of logic.
+ * time:
+ *   How much to tick by.
  */
 void menu_widget::tick(const float time) {
     if(juicy_grow_time_left > 0) {

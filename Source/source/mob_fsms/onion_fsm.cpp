@@ -20,6 +20,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the Onion's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void onion_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -44,7 +46,12 @@ void onion_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When an Onion finishes receiving a mob carried by Pikmin.
- * info1: Pointer to the mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the mob being received.
+ * info2:
+ *   Unused.
  */
 void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());

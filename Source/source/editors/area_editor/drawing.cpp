@@ -1357,10 +1357,16 @@ void area_editor::draw_canvas() {
 
 /* ----------------------------------------------------------------------------
  * Draws a sector on the cross-section view.
- * *_ratio:    Where the sector starts/ends on the graph ([0, 1]).
- * proportion: Ratio of how much to resize the heights.
- * lowest_z:   What z coordinate represents the bottom of the graph.
- * sector_ptr: Pointer to the sector to draw.
+ * start_ratio:
+ *   Where the sector starts on the graph ([0, 1]).
+ * end_ratio:
+ *   Where the sector end on the graph ([0, 1]).
+ * proportion:
+ *   Ratio of how much to resize the heights.
+ * lowest_z:
+ *   What z coordinate represents the bottom of the graph.
+ * sector_ptr:
+ *   Pointer to the sector to draw.
  */
 void area_editor::draw_cross_section_sector(
     const float start_ratio, const float end_ratio, const float proportion,
@@ -1478,8 +1484,12 @@ void area_editor::draw_debug_text(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a number signifying the distance between two points next to the
- * main one.
+ * Draws a number signifying the distance between two points.
+ * The number is drawn next to the main point.
+ * focus:
+ *   The main point.
+ * other:
+ *   The point to measure against.
  */
 void area_editor::draw_line_dist(const point &focus, const point &other) {
     float d = dist(other, focus).to_float();

@@ -591,6 +591,9 @@ ALLEGRO_BITMAP* load_bmp(
 
 /* ----------------------------------------------------------------------------
  * Loads the user-made particle generators.
+ * load_resources:
+ *   If true, things like bitmaps and the like will be loaded as well.
+ *   If you don't need those, set this to false to make it load faster.
  */
 void load_custom_particle_generators(const bool load_resources) {
     if(game.perf_mon) {
@@ -679,6 +682,8 @@ void load_custom_particle_generators(const bool load_resources) {
 
 /* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
+ * file_name:
+ *   Name of the file.
  */
 data_node load_data_file(const string &file_name) {
     data_node n = data_node(file_name);
@@ -849,6 +854,9 @@ void load_hazards() {
 
 /* ----------------------------------------------------------------------------
  * Loads the liquids from the game data.
+ * load_resources:
+ *   If true, things like bitmaps and the like will be loaded as well.
+ *   If you don't need those, set this to false to make it load faster.
  */
 void load_liquids(const bool load_resources) {
     if(game.perf_mon) {
@@ -1071,6 +1079,8 @@ void load_options() {
 
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
+ * file_name:
+ *   Name of the file to load.
  */
 sample_struct load_sample(const string &file_name) {
     ALLEGRO_SAMPLE* sample =
@@ -1154,6 +1164,9 @@ void load_spike_damage_types() {
 
 /* ----------------------------------------------------------------------------
  * Loads spray types from the game data.
+ * load_resources:
+ *   If true, things like bitmaps and the like will be loaded as well.
+ *   If you don't need those, set this to false to make it load faster.
  */
 void load_spray_types(const bool load_resources) {
     if(game.perf_mon) {
@@ -1260,6 +1273,9 @@ void load_spray_types(const bool load_resources) {
 
 /* ----------------------------------------------------------------------------
  * Loads status effect types from the game data.
+ * load_resources:
+ *   If true, things like bitmaps and the like will be loaded as well.
+ *   If you don't need those, set this to false to make it load faster.
  */
 void load_status_types(const bool load_resources) {
     if(game.perf_mon) {
@@ -1585,6 +1601,8 @@ void unload_spray_types() {
 
 /* ----------------------------------------------------------------------------
  * Unloads loaded status effect types from memory.
+ * unload_resources:
+ *   If resources got loaded, set this to true to unload them.
  */
 void unload_status_types(const bool unload_resources) {
 

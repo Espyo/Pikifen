@@ -41,6 +41,12 @@ void group_task_category::clear_types() {
 
 /* ----------------------------------------------------------------------------
  * Creates a group task and adds it to the list of group tasks.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
  */
 mob* group_task_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -61,6 +67,8 @@ mob_type* group_task_category::create_type() {
 
 /* ----------------------------------------------------------------------------
  * Clears a group task from the list of group task.
+ * m:
+ *   The mob to erase.
  */
 void group_task_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.group_tasks.erase(
@@ -71,6 +79,8 @@ void group_task_category::erase_mob(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Returns a type of group task given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
  */
 mob_type* group_task_category::get_type(const string &name) const {
     auto it = game.mob_types.group_task.find(name);
@@ -81,6 +91,8 @@ mob_type* group_task_category::get_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns all types of group tasks by name.
+ * list:
+ *   This list gets filled with the mob type names.
  */
 void group_task_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.group_task) {
@@ -91,6 +103,8 @@ void group_task_category::get_type_names(vector<string> &list) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a created type of group task.
+ * type:
+ *   Mob type to register.
  */
 void group_task_category::register_type(mob_type* type) {
     game.mob_types.group_task[type->name] = (group_task_type*) type;

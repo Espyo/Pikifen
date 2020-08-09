@@ -19,6 +19,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the pellet's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void pellet_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -119,6 +121,12 @@ void pellet_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When the pellet should lose its momentum and stand still.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void pellet_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_chasing();

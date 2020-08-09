@@ -18,6 +18,9 @@ using std::string;
 using std::vector;
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a new replay.
+ */
 replay::replay() :
     prev_leader_nr(INVALID) {
     
@@ -28,6 +31,20 @@ replay::replay() :
 /* ----------------------------------------------------------------------------
  * Adds a new state to the replay, filling it with data from the supplied
  * mob vectors.
+ * leader_list:
+ *   List of leaders.
+ * pikmin_list:
+ *   List of Pikmin.
+ * enemy_list:
+ *   List of enemies.
+ * treasure_list:
+ *   List of treasures.
+ * onion_list:
+ *   List of Onions.
+ * obstacle_list:
+ *   List of mobs that represent obstacles.
+ * cur_leader_nr:
+ *   Index number of the current leader.
  */
 void replay::add_state(
     const vector<leader*> &leader_list,
@@ -160,6 +177,8 @@ void replay::finish_recording() {
 
 /* ----------------------------------------------------------------------------
  * Loads replay data from a file in the disk.
+ * file_name:
+ *   Name of the file to load from.
  */
 void replay::load_from_file(const string &file_name) {
     clear();
@@ -200,6 +219,8 @@ void replay::load_from_file(const string &file_name) {
 
 /* ----------------------------------------------------------------------------
  * Saves replay data to a file in the disk.
+ * file_name:
+ *   Name of the file to save to.
  */
 void replay::save_to_file(const string &file_name) const {
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "wb");
@@ -228,6 +249,10 @@ void replay::save_to_file(const string &file_name) const {
 
 /* ----------------------------------------------------------------------------
  * Creates a new replay element.
+ * type:
+ *   Type of element. Use REPLAY_ELEMENT_*.
+ * pos:
+ *   Its coordinates.
  */
 replay_element::replay_element(const unsigned char type, const point &pos) :
     type(type),
@@ -238,6 +263,10 @@ replay_element::replay_element(const unsigned char type, const point &pos) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new replay event.
+ * type:
+ *   Type of event. Use REPLAY_EVENT_*.
+ * data:
+ *   Any numerical data this event needs.
  */
 replay_event::replay_event(
     const unsigned char type, const size_t data

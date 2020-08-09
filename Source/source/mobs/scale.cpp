@@ -15,6 +15,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a scale mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Scale type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 scale::scale(const point &pos, scale_type* type, float angle) :
     mob(pos, type, angle),

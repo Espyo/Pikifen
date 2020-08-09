@@ -68,6 +68,8 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void leader_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -79,6 +81,8 @@ void leader_type::load_properties(data_node* file) {
 
 /* ----------------------------------------------------------------------------
  * Loads resources into memory.
+ * file:
+ *   File to read from.
  */
 void leader_type::load_resources(data_node* file) {
     reader_setter rs(file);

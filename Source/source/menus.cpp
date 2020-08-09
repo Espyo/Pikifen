@@ -80,6 +80,8 @@ string area_menu::get_name() const {
 
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
+ * ev:
+ *   Event to handle.
  */
 void area_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -358,6 +360,8 @@ string controls_menu::get_name() const {
 
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
+ * ev:
+ *   Event to handle.
  */
 void controls_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -890,6 +894,8 @@ string main_menu::get_name() const {
 
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
+ * ev:
+ *   Event to handle.
  */
 void main_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -1147,6 +1153,8 @@ options_menu::options_menu() :
 
 /* ----------------------------------------------------------------------------
  * Changes to the next resolution preset in the list.
+ * step:
+ *   How much to move forward in the list.
  */
 void options_menu::change_resolution(const signed int step) {
     size_t current_r_index = INVALID;
@@ -1232,6 +1240,8 @@ void options_menu::go_to_controls() {
 
 /* ----------------------------------------------------------------------------
  * Handles Allegro events.
+ * ev:
+ *   Event to handle.
  */
 void options_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;

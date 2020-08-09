@@ -18,10 +18,16 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a drop mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Drop type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
-drop::drop(const point &pos, drop_type* dro_type, const float angle) :
-    mob(pos, dro_type, angle),
-    dro_type(dro_type),
+drop::drop(const point &pos, drop_type* type, const float angle) :
+    mob(pos, type, angle),
+    dro_type(type),
     cur_scale(1.0),
     doses_left(dro_type->total_doses) {
     
@@ -48,6 +54,8 @@ void drop::draw_mob() {
 
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to drops.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void drop::tick_class_specifics(const float delta_t) {
     float intended_scale;

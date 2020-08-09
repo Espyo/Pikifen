@@ -27,7 +27,10 @@
 
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
- * bmp_output: if not NULL, draw the area onto this.
+ * bmp_output:
+ *   If not NULL, draw the area onto this.
+ * bmp_transform:
+ *   Transformation to use when drawing to a bitmap.
  */
 void gameplay::do_game_drawing(
     ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transform
@@ -163,6 +166,8 @@ void gameplay::do_game_drawing(
 
 /* ----------------------------------------------------------------------------
  * Draws the area background.
+ * bmp_output:
+ *   If not NULL, draw the background onto this.
  */
 void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
     if(!game.cur_area_data.bg_bmp) return;
@@ -210,6 +215,8 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
 
 /* ----------------------------------------------------------------------------
  * Draws the cursor.
+ * world_to_screen_drawing_transform:
+ *   Use this transformation to get the cursor coordinates.
  */
 void gameplay::draw_cursor(
     ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
@@ -1425,6 +1432,8 @@ void gameplay::draw_tree_shadows() {
 
 /* ----------------------------------------------------------------------------
  * Draws the components that make up the game world: layout, objects, etc.
+ * bmp_output:
+ *   If not NULL, draw the area onto this.
  */
 void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     vector<world_component> components;
@@ -1734,10 +1743,20 @@ void draw_bitmap_with_effects(
 /* ----------------------------------------------------------------------------
  * Draws text on the screen, but compresses (scales) it
  * to fit within the specified range.
- * font - flags: The parameters you'd use for al_draw_text.
- * valign:       Vertical align: 0 = top, 1 = middle, 2 = bottom.
- * max_size:     The maximum width and height. Use <= 0 to have no limit.
- * text:         Text to draw.
+ * font:
+ *   Font to use.
+ * color:
+ *   Tint the text by this color.
+ * where:
+ *   Coordinates to draw it at.
+ * flags:
+ *   Allegro text render function flags.
+ * valign:
+ *   Vertical align: 0 = top, 1 = middle, 2 = bottom.
+ * max_size:
+ *   The maximum width and height. Use <= 0 to have no limit.
+ * text:
+ *   Text to draw.
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -2542,13 +2561,21 @@ void draw_rotated_rectangle(
 
 
 /* ----------------------------------------------------------------------------
- * Draws text, scaled
- * font - color: The parameters you'd use for al_draw_text.
- * where:        Coordinates to draw in.
- * scale:        Horizontal or vertical scale.
- * flags:        Same flags you'd use for al_draw_text.
- * valign:       Vertical align. 0: top, 1: center, 2: bottom.
- * text:         Text to draw.
+ * Draws text, scaled.
+ * font:
+ *   Font to use.
+ * color:
+ *   Tint the text with this color.
+ * where:
+ *   Coordinates to draw in.
+ * scale:
+ *   Horizontal or vertical scale.
+ * flags:
+ *   Same flags you'd use for al_draw_text.
+ * valign:
+ *   Vertical align. 0: top, 1: center, 2: bottom.
+ * text:
+ *   Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -2571,9 +2598,12 @@ void draw_scaled_text(
 
 /* ----------------------------------------------------------------------------
  * Draws the wall shadows that are being cast on top of this sector.
- * s:        The sector to draw.
- * where:    Top-left coordinates.
- * scale:    Drawing scale.
+ * s_ptr:
+ *   The sector to draw.
+ * where:
+ *   Top-left coordinates.
+ * scale:
+ *   Drawing scale.
  */
 void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
     if(s_ptr->is_bottomless_pit) return;
@@ -3030,6 +3060,10 @@ void draw_sector_texture(
 
 /* ----------------------------------------------------------------------------
  * Draws a status effect's bitmap.
+ * m:
+ *   Mob that has this status effect.
+ * effects:
+ *   List of bitmap effects to use.
  */
 void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
     float status_bmp_scale;

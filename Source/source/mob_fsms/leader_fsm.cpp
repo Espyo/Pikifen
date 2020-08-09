@@ -28,6 +28,8 @@ using std::unordered_set;
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the leader's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void leader_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -1071,7 +1073,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When a leader loses health.
- * info1: Pointer to the hitbox touch information structure.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the hitbox touch information structure.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1121,6 +1128,12 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader's leader dismisses them.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -1130,6 +1143,12 @@ void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is grabbed by another leader.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_IDLING);
@@ -1138,6 +1157,12 @@ void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader grabbed by another is released.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_released(mob* m, void* info1, void* info2) {
 
@@ -1146,6 +1171,12 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader grabbed by another is thrown.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     ((leader*) m)->start_throw_trail();
@@ -1154,7 +1185,12 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is thrown by a bouncer mob.
- * info1: Points to the bouncer mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the bouncer mob.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
     ((leader*) m)->start_throw_trail();
@@ -1163,6 +1199,12 @@ void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is meant to become the active one.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1186,6 +1228,12 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader stops being the active one.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
     ((leader*) m)->active = false;
@@ -1194,6 +1242,12 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader must chase another.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     group_info_struct* leader_group_ptr = m->following_group->group;
@@ -1226,6 +1280,12 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader dies.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
     size_t living_leaders = 0;
@@ -1253,6 +1313,12 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader dismisses the group.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
     ((leader*) m)->dismiss();
@@ -1261,6 +1327,12 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader throws the grabbed mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     engine_assert(!m->holding.empty(), m->print_state_history());
@@ -1338,6 +1410,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader enters the active state.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
@@ -1347,6 +1425,12 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader enters the idling state.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_IDLING);
@@ -1355,6 +1439,12 @@ void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader falls asleep.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
     leader_fsm::dismiss(m, NULL, NULL);
@@ -1369,6 +1459,12 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a leader falls down a bottomless pit.
  * This damages and respawns them.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->leave_group();
@@ -1379,6 +1475,12 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When the leader finishes the animation of the current pluck.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::finish_current_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1389,6 +1491,12 @@ void leader_fsm::finish_current_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader finishes drinking the drop it was drinking.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -1423,7 +1531,12 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a leader heads towards a Pikmin with the intent to pluck it.
  * Also signals other leaders in the group to search for other seeds.
- * info1: Pointer to the Pikmin to be plucked.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the Pikmin to be plucked.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1456,7 +1569,12 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader grabs onto a mob for throwing.
- * info1: Pointer to the mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the mob to grab.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1473,6 +1591,12 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader joins another leader's group. This transfers their Pikmin.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1488,6 +1612,12 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a thrown leader lands.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -1505,7 +1635,12 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader leaves a hazardous sector.
- * info1: Points to the hazard.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the hazard.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1519,6 +1654,12 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader should lose his momentum and stand still.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -1528,7 +1669,12 @@ void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader begins to move via player control.
- * info1: Pointer to the movement info structure.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the movement info structure.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::move(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1549,6 +1695,12 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader notifies the mob it's holding that it will be released.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1559,6 +1711,12 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader punches.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::punch(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PUNCHING);
@@ -1568,6 +1726,12 @@ void leader_fsm::punch(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Queues the stopping of the plucking session, for after this pluck's end.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1577,6 +1741,12 @@ void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader gently releases the held mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::release(mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
@@ -1587,6 +1757,12 @@ void leader_fsm::release(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a leader searches for a seed next to them.
  * If found, issues events to go towards the seed.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1621,6 +1797,12 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader needs to change to the idling animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1633,6 +1815,12 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader needs to change to the walking animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1645,6 +1833,12 @@ void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When the leader must signal to their follower leaders to stop plucking.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1658,7 +1852,12 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader uses a spray.
- * info1: Pointer to a size_t with the spray's ID number.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to a size_t with the spray's ID number.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     size_t spray_nr = *((size_t*) info1);
@@ -1743,7 +1942,12 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader starts drinking the drop it touched.
- * info1: Pointer to the drop mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the drop mob.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
     mob* drop_ptr = (mob*) info1;
@@ -1757,6 +1961,12 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader grabs on to a sprout and begins plucking it out.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1771,7 +1981,12 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader starts riding on a track.
- * info1: Points to the track mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the track mob.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) info1;
@@ -1801,6 +2016,12 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader wakes up.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
@@ -1810,6 +2031,12 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader stops moving.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::stop(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -1818,6 +2045,12 @@ void leader_fsm::stop(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader quits the auto-plucking mindset.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1834,6 +2067,12 @@ void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is no longer in the thrown state.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
     //Remove the throw particle generator.
@@ -1843,6 +2082,12 @@ void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader stands still while in another's group.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -1852,6 +2097,12 @@ void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader stops whistling.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
     ((leader*) m)->stop_whistling();
@@ -1860,6 +2111,12 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Every tick in the active state.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
     m->face(get_angle(m->pos, game.states.gameplay_st->leader_cursor_w), NULL);
@@ -1868,6 +2125,12 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader has to teleport to its spot in a track it is riding.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
@@ -1885,7 +2148,12 @@ void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader touches a hazard.
- * info1: Pointer to the hazard.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the hazard.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1927,7 +2195,12 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is sprayed.
- * info1: Pointer to the spray type.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the spray type.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -1943,6 +2216,12 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader begins whistling.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::whistle(mob* m, void* info1, void* info2) {
     ((leader*) m)->start_whistling();
@@ -1951,6 +2230,12 @@ void leader_fsm::whistle(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a leader is whistled over by another leader while riding on a track.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void leader_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info, m->print_state_history());

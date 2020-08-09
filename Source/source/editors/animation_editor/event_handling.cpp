@@ -19,6 +19,8 @@
 
 /* ----------------------------------------------------------------------------
  * Handles a key being "char"-typed on the canvas exclusively.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) {
@@ -70,6 +72,8 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles a key being pressed down anywhere.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) {
@@ -103,6 +107,8 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles a key being pressed down on the canvas exclusively.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) {
@@ -171,6 +177,8 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the left mouse button being double-clicked.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
@@ -181,6 +189,8 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the left mouse button being pressed down.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) {
@@ -394,6 +404,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the left mouse button being dragged.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(
@@ -492,6 +504,8 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the left mouse button being released.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     switch(state) {
@@ -518,6 +532,8 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the middle mouse button being double-clicked.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
@@ -528,6 +544,8 @@ void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the middle mouse button being pressed down.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
@@ -538,6 +556,8 @@ void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the middle mouse button being dragged.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -590,6 +610,8 @@ void animation_editor::handle_mouse_in_timeline() {
 
 /* ----------------------------------------------------------------------------
  * Handles the mouse coordinates being updated.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     game.mouse_cursor_s.x = ev.mouse.x;
@@ -604,6 +626,8 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the mouse wheel being moved.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
@@ -614,6 +638,8 @@ void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the right mouse button being double-clicked.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -624,6 +650,8 @@ void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the right mouse button being dragged.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
@@ -634,6 +662,8 @@ void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Handles the right mouse button being dragged.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
@@ -644,6 +674,8 @@ void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Pans the camera around.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
@@ -657,6 +689,8 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Resets the camera's X and Y coordinates.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
     game.cam.target_pos = point();
@@ -665,6 +699,8 @@ void animation_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Resets the camera's zoom.
+ * ev:
+ *   Event to handle.
  */
 void animation_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
     zoom_with_cursor(1.0f);

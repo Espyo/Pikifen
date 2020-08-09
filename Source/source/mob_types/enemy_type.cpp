@@ -62,6 +62,8 @@ enemy_type::enemy_type() :
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void enemy_type::load_properties(data_node* file) {
     reader_setter rs(file);

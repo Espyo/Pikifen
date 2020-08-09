@@ -36,6 +36,8 @@ mob_action::mob_action() :
 
 /* ----------------------------------------------------------------------------
  * Creates a new, empty mob action call, of a certain type.
+ * type:
+ *   Type of mob action call.
  */
 mob_action_call::mob_action_call(MOB_ACTION_TYPES type) :
     action(nullptr),
@@ -227,6 +229,8 @@ bool mob_action_call::run(
 
 /* ----------------------------------------------------------------------------
  * Loading code for the arachnorb logic plan mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
     if(call.args[0] == "home") {
@@ -247,6 +251,8 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the calculation mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::calculate(mob_action_call &call) {
     if(call.args[2] == "+") {
@@ -269,6 +275,8 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the focus mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::focus(mob_action_call &call) {
     if(call.args[0] == "link") {
@@ -287,6 +295,8 @@ bool mob_action_loaders::focus(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the info getting script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::get_info(mob_action_call &call) {
     if(call.args[1] == "body_part") {
@@ -327,6 +337,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the "if" mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::if_function(mob_action_call &call) {
     if(call.args[1] == "=") {
@@ -351,6 +363,8 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the move to target mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::move_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_foot_logic") {
@@ -375,6 +389,8 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the status reception mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::receive_status(mob_action_call &call) {
     if(game.status_types.find(call.args[0]) == game.status_types.end()) {
@@ -388,6 +404,8 @@ bool mob_action_loaders::receive_status(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the status removal mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::remove_status(mob_action_call &call) {
     if(game.status_types.find(call.args[0]) == game.status_types.end()) {
@@ -401,6 +419,10 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Reports an error of an unknown enum value.
+ * call:
+ *   Mob action call that called this.
+ * arg_nr:
+ *   Index number of the argument that is an enum.
  */
 void mob_action_loaders::report_enum_error(
     mob_action_call &call, const size_t arg_nr
@@ -415,6 +437,8 @@ void mob_action_loaders::report_enum_error(
 
 /* ----------------------------------------------------------------------------
  * Loading code for the animation setting mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::set_animation(mob_action_call &call) {
     size_t a_pos = call.mt->anims.find_animation(call.args[0]);
@@ -439,6 +463,8 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the far reach setting mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::set_far_reach(mob_action_call &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
@@ -454,6 +480,8 @@ bool mob_action_loaders::set_far_reach(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the holdable setting mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::set_holdable(mob_action_call &call) {
     for(size_t a = 0; a < call.args.size(); ++a) {
@@ -472,6 +500,8 @@ bool mob_action_loaders::set_holdable(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the near reach setting mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::set_near_reach(mob_action_call &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); ++r) {
@@ -487,6 +517,8 @@ bool mob_action_loaders::set_near_reach(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the team setting mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::set_team(mob_action_call &call) {
     size_t team_nr = string_to_team_nr(call.args[0]);
@@ -501,6 +533,8 @@ bool mob_action_loaders::set_team(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the spawning mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::spawn(mob_action_call &call) {
     for(size_t s = 0; s < call.mt->spawns.size(); ++s) {
@@ -517,6 +551,8 @@ bool mob_action_loaders::spawn(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the z stabilization mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::stabilize_z(mob_action_call &call) {
     if(call.args[0] == "lowest") {
@@ -533,6 +569,8 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the chomping start mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::start_chomping(mob_action_call &call) {
     for(size_t s = 1; s < call.args.size(); ++s) {
@@ -550,6 +588,8 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the particle start mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::start_particles(mob_action_call &call) {
     if(
@@ -566,6 +606,8 @@ bool mob_action_loaders::start_particles(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Loading code for the turn to target mob script action.
+ * call:
+ *   Mob action call that called this.
  */
 bool mob_action_loaders::turn_to_target(mob_action_call &call) {
     if(call.args[0] == "arachnorb_head_logic") {
@@ -584,6 +626,14 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
 
 /* ----------------------------------------------------------------------------
  * Creates a new mob action parameter struct.
+ * name:
+ *   Name of the parameter.
+ * type:
+ *   Type of parameter.
+ * force_const:
+ *   If true, this must be a constant value. If false, it can also be a var.
+ * is_extras:
+ *   If true, this is an array of them (minimum amount 0).
  */
 mob_action_param::mob_action_param(
     const string &name,
@@ -601,6 +651,10 @@ mob_action_param::mob_action_param(
 
 /* ----------------------------------------------------------------------------
  * Creates a new mob action run data struct.
+ * m:
+ *   The mob responsible.
+ * call:
+ *   Mob action call that called this.
  */
 mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
     m(m),
@@ -614,6 +668,8 @@ mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
 
 /* ----------------------------------------------------------------------------
  * Code for the health addition mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::add_health(mob_action_run_data &data) {
     data.m->set_health(true, false, s2f(data.args[0]));
@@ -622,6 +678,8 @@ void mob_action_runners::add_health(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the arachnorb logic plan mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
     data.m->arachnorb_plan_logic(s2i(data.args[0]));
@@ -630,6 +688,8 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the calculation mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
@@ -675,6 +735,8 @@ void mob_action_runners::calculate(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the deletion mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::delete_function(mob_action_run_data &data) {
     data.m->to_delete = true;
@@ -683,6 +745,8 @@ void mob_action_runners::delete_function(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the liquid draining mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     sector* s_ptr = get_sector(data.m->pos, NULL, true);
@@ -717,6 +781,8 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the death finish mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::finish_dying(mob_action_run_data &data) {
     data.m->finish_dying();
@@ -725,6 +791,8 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the focus mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
     size_t t = s2i(data.args[0]);
@@ -769,6 +837,8 @@ void mob_action_runners::focus(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the mob script action for getting chomped.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::get_chomped(mob_action_run_data &data) {
     if(data.call->parent_event == MOB_EV_HITBOX_TOUCH_EAT) {
@@ -782,6 +852,8 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the focused mob var getting script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::get_focus_var(mob_action_run_data &data) {
     if(!data.m->focused_mob) return;
@@ -792,6 +864,8 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the info obtaining mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::get_info(mob_action_run_data &data) {
     string* var = &(data.m->vars[data.args[0]]);
@@ -922,6 +996,8 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the decimal number randomization mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
@@ -931,6 +1007,8 @@ void mob_action_runners::get_random_decimal(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the integer number randomization mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::get_random_int(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
@@ -940,6 +1018,8 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the "if" mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::if_function(mob_action_run_data &data) {
     string lhs = data.args[0];
@@ -986,6 +1066,8 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the move to absolute coordinates mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
     data.m->chase(
@@ -997,6 +1079,8 @@ void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the move to relative coordinates mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::move_to_relative(mob_action_run_data &data) {
     point p =
@@ -1010,6 +1094,8 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the move to target mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::move_to_target(mob_action_run_data &data) {
     size_t t = s2i(data.args[0]);
@@ -1071,6 +1157,8 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the release order mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::order_release(mob_action_run_data &data) {
     if(data.m->holder.m) {
@@ -1081,6 +1169,8 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the sound playing mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::play_sound(mob_action_run_data &data) {
 
@@ -1089,6 +1179,8 @@ void mob_action_runners::play_sound(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the text printing mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::print(mob_action_run_data &data) {
     string text = vector_tail_to_string(data.args, 0);
@@ -1101,6 +1193,8 @@ void mob_action_runners::print(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the status reception mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::receive_status(mob_action_run_data &data) {
     data.m->apply_status_effect(game.status_types[data.args[0]], true, false);
@@ -1109,6 +1203,8 @@ void mob_action_runners::receive_status(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the release mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::release(mob_action_run_data &data) {
     data.m->release_chomped_pikmin();
@@ -1117,6 +1213,8 @@ void mob_action_runners::release(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the status removal mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::remove_status(mob_action_run_data &data) {
     for(size_t s = 0; s < data.m->statuses.size(); ++s) {
@@ -1129,6 +1227,8 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the focused mob message sending mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
     if(!data.m->focused_mob) return;
@@ -1138,6 +1238,8 @@ void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the linked mob message sending mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
     for(size_t l = 0; l < data.m->links.size(); ++l) {
@@ -1149,6 +1251,8 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the nearby mob message sending mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
     float d = s2f(data.args[0]);
@@ -1164,6 +1268,8 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the animation setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
     bool must_restart =
@@ -1177,6 +1283,8 @@ void mob_action_runners::set_animation(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the far reach setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_far_reach(mob_action_run_data &data) {
     data.m->far_reach = s2i(data.args[0]);
@@ -1185,6 +1293,8 @@ void mob_action_runners::set_far_reach(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the gravity setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_gravity(mob_action_run_data &data) {
     data.m->gravity_mult = s2f(data.args[0]);
@@ -1193,6 +1303,8 @@ void mob_action_runners::set_gravity(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the health setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_health(mob_action_run_data &data) {
     data.m->set_health(false, false, s2f(data.args[0]));
@@ -1201,6 +1313,8 @@ void mob_action_runners::set_health(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the height setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_height(mob_action_run_data &data) {
     data.m->height = s2f(data.args[0]);
@@ -1218,6 +1332,8 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the hiding setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_hiding(mob_action_run_data &data) {
     data.m->hide = s2b(data.args[0]);
@@ -1226,6 +1342,8 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the holdable setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_holdable(mob_action_run_data &data) {
     if(typeid(*(data.m)) == typeid(tool)) {
@@ -1240,6 +1358,8 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the huntable setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_huntable(mob_action_run_data &data) {
     data.m->is_huntable = s2b(data.args[0]);
@@ -1248,6 +1368,8 @@ void mob_action_runners::set_huntable(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the limb animation setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
     if(!data.m->parent) {
@@ -1271,6 +1393,8 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the near reach setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_near_reach(mob_action_run_data &data) {
     data.m->near_reach = s2i(data.args[0]);
@@ -1279,6 +1403,8 @@ void mob_action_runners::set_near_reach(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the sector scroll setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
     sector* s_ptr = get_sector(data.m->pos, NULL, true);
@@ -1291,6 +1417,8 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the state setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_state(mob_action_run_data &data) {
     data.m->fsm.set_state(
@@ -1303,6 +1431,8 @@ void mob_action_runners::set_state(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the tangible setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_tangible(mob_action_run_data &data) {
     data.m->tangible = s2b(data.args[0]);
@@ -1311,6 +1441,8 @@ void mob_action_runners::set_tangible(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the team setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_team(mob_action_run_data &data) {
     data.m->team = s2i(data.args[0]);
@@ -1319,6 +1451,8 @@ void mob_action_runners::set_team(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the timer setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_timer(mob_action_run_data &data) {
     data.m->set_timer(s2f(data.args[0]));
@@ -1327,6 +1461,8 @@ void mob_action_runners::set_timer(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the var setting mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::set_var(mob_action_run_data &data) {
     data.m->set_var(data.args[0], data.args[1]);
@@ -1335,6 +1471,8 @@ void mob_action_runners::set_var(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the show message from var mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
     start_message(data.m->vars[data.args[0]], NULL);
@@ -1343,6 +1481,8 @@ void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the spawning mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::spawn(mob_action_run_data &data) {
     data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
@@ -1351,6 +1491,8 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the z stabilization mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     if(data.m->links.empty()) {
@@ -1386,6 +1528,8 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the chomping start mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::start_chomping(mob_action_run_data &data) {
     data.m->chomp_max = s2i(data.args[0]);
@@ -1398,6 +1542,8 @@ void mob_action_runners::start_chomping(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the dying start mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::start_dying(mob_action_run_data &data) {
     data.m->start_dying();
@@ -1406,6 +1552,8 @@ void mob_action_runners::start_dying(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the height effect start mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::start_height_effect(mob_action_run_data &data) {
     data.m->start_height_effect();
@@ -1414,6 +1562,8 @@ void mob_action_runners::start_height_effect(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the particle start mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::start_particles(mob_action_run_data &data) {
     float offset_x = 0;
@@ -1436,6 +1586,8 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the stopping mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stop(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -1445,6 +1597,8 @@ void mob_action_runners::stop(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the chomp stopping mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stop_chomping(mob_action_run_data &data) {
     data.m->chomp_max = 0;
@@ -1454,6 +1608,8 @@ void mob_action_runners::stop_chomping(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the height effect stopping mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
     data.m->stop_height_effect();
@@ -1462,6 +1618,8 @@ void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the particle stopping mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stop_particles(mob_action_run_data &data) {
     data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
@@ -1470,6 +1628,8 @@ void mob_action_runners::stop_particles(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the vertical stopping mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::stop_vertically(mob_action_run_data &data) {
     data.m->speed_z = 0;
@@ -1478,6 +1638,8 @@ void mob_action_runners::stop_vertically(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the swallow mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::swallow(mob_action_run_data &data) {
     data.m->swallow_chomped_pikmin(s2i(data.args[1]));
@@ -1486,6 +1648,8 @@ void mob_action_runners::swallow(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the swallow all mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::swallow_all(mob_action_run_data &data) {
     data.m->swallow_chomped_pikmin(data.m->chomping_mobs.size());
@@ -1494,6 +1658,8 @@ void mob_action_runners::swallow_all(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the teleport to absolute coordinates mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -1504,6 +1670,8 @@ void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the teleport to relative coordinates mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
     data.m->stop_chasing();
@@ -1519,6 +1687,8 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the turn to an absolute angle mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
     data.m->face(deg_to_rad(s2f(data.args[0])), NULL);
@@ -1527,6 +1697,8 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the turn to a relative angle mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
     data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), NULL);
@@ -1535,6 +1707,8 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
 
 /* ----------------------------------------------------------------------------
  * Code for the turn to target mob script action.
+ * data:
+ *   Data about the action call.
  */
 void mob_action_runners::turn_to_target(mob_action_run_data &data) {
     size_t t = s2i(data.args[0]);

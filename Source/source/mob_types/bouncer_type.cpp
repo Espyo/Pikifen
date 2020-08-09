@@ -48,6 +48,8 @@ anim_conversion_vector bouncer_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void bouncer_type::load_properties(data_node* file) {
     reader_setter rs(file);

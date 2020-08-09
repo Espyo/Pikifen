@@ -23,6 +23,7 @@
  * Creates a particle.
  * type:     The type of particle. Use PARTICLE_TYPE_*.
  * pos:      Starting coordinates.
+ * z:        Starting Z coordinate.
  * size:     Diameter.
  * duration: Total lifespan.
  * priority: Lower priority particles will be removed in favor of higher ones.
@@ -146,6 +147,8 @@ void particle::draw() {
 /* ----------------------------------------------------------------------------
  * Makes a particle follow a game tick.
  * Returns false if its lifespan is over and it should be deleted.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void particle::tick(const float delta_t) {
     time -= delta_t;
@@ -168,7 +171,6 @@ void particle::tick(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Creates a particle generator.
- * type:              Type of generator. Use PARTICLE_GENERATOR_*.
  * emission_interval: Interval to spawn a new set of particles in,
  *   in seconds. 0 means it spawns only one set and that's it.
  * base_particle:     All particles created will be based on this one.
@@ -301,6 +303,10 @@ void particle_generator::reset() {
 
 /* ----------------------------------------------------------------------------
  * Ticks one game frame of logic.
+ * delta_t:
+ *   How many seconds to tick by.
+ * manager:
+ *   The manager of all particles.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
     if(follow_mob) {
@@ -317,6 +323,8 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
 
 /* ----------------------------------------------------------------------------
  * Creates a particle manager.
+ * max_nr:
+ *   Maximum number of particles it can manage.
  */
 particle_manager::particle_manager(const size_t &max_nr) :
     particles(nullptr),
@@ -330,6 +338,8 @@ particle_manager::particle_manager(const size_t &max_nr) :
 
 /* ----------------------------------------------------------------------------
  * Creates a particle manager by copying data from another.
+ * pm2:
+ *   Particle manager to copy from.
  */
 particle_manager::particle_manager(const particle_manager &pm2) :
     particles(NULL),
@@ -345,6 +355,8 @@ particle_manager::particle_manager(const particle_manager &pm2) :
 
 /* ----------------------------------------------------------------------------
  * Copies a particle manager from another one.
+ * pm2:
+ *   Particle manager to copy from.
  */
 const particle_manager &particle_manager::operator =(
     const particle_manager &pm2
@@ -379,6 +391,8 @@ particle_manager::~particle_manager() {
 /* ----------------------------------------------------------------------------
  * Adds a new particle to the list. It will fail if there is no slot
  * where it can be added to.
+ * p:
+ *   Particle to add.
  */
 void particle_manager::add(particle p) {
     if(max_nr == 0) return;
@@ -422,8 +436,12 @@ void particle_manager::clear() {
 /* ----------------------------------------------------------------------------
  * Adds the particle pointers to the provided list of world component,
  * so that the particles can be drawn, after being Z-sorted.
- * list:           The list to populate.
- * cam_tl, cam_br: Only draw particles inside this frame.
+ * list:
+ *   The list to populate.
+ * cam_tl:
+ *   Only draw particles below and to the right of this coordinate.
+ * cam_br:
+ *   Only draw particles above and to the left of this coordinate.
  */
 void particle_manager::fill_component_list(
     vector<world_component> &list,
@@ -462,6 +480,8 @@ size_t particle_manager::get_count() const {
 
 /* ----------------------------------------------------------------------------
  * Removes a particle from the list.
+ * pos:
+ *   Position in the list.
  */
 void particle_manager::remove(const size_t pos) {
     if(pos > count) return;
@@ -491,6 +511,8 @@ void particle_manager::remove(const size_t pos) {
 
 /* ----------------------------------------------------------------------------
  * Ticks all particles in the list.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void particle_manager::tick_all(const float delta_t) {
     for(size_t c = 0; c < count;) {

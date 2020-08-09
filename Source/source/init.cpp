@@ -65,6 +65,10 @@ void destroy_allegro() {
 
 /* ----------------------------------------------------------------------------
  * Destroys Allegro's event-related things.
+ * logic_timer:
+ *   The game logic timer.
+ * logic_queue:
+ *   Queue of game logic events.
  */
 void destroy_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
@@ -314,6 +318,10 @@ void init_essentials() {
 
 /* ----------------------------------------------------------------------------
  * Initializes things regarding Allegro events, like the queue, timer, etc.
+ * logic_timer:
+ *   The game logic timer.
+ * logic_queue:
+ *   Queue of game logic events.
  */
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue

@@ -16,6 +16,11 @@
 map<void*, string> code_debug_new_allocs;
 bool code_debug_new_recording;
 
+/* ----------------------------------------------------------------------------
+ * Overrides operator delete.
+ * ptr:
+ *   Pointer to memory to deallocate.
+ */
 void operator delete(void* ptr) noexcept {
     if(code_debug_new_recording) {
         map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
@@ -27,6 +32,11 @@ void operator delete(void* ptr) noexcept {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Overrides operator delete[].
+ * ptr:
+ *   Pointer to memory to deallocate.
+ */
 void operator delete[](void* ptr) noexcept {
     if(code_debug_new_recording) {
         map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
@@ -38,6 +48,15 @@ void operator delete[](void* ptr) noexcept {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Overrides operator new.
+ * size:
+ *   Size of memory to allocate.
+ * file:
+ *   Name of the code file that requested this allocation.
+ * line:
+ *   Line in the code file that requested this allocation.
+ */
 void* operator new(size_t size, char* file, int line) {
     void* ptr = malloc(size);
     if(code_debug_new_recording) {
@@ -48,6 +67,15 @@ void* operator new(size_t size, char* file, int line) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Overrides operator new[].
+ * size:
+ *   Size of memory to allocate.
+ * file:
+ *   Name of the code file that requested this allocation.
+ * line:
+ *   Line in the code file that requested this allocation.
+ */
 void* operator new[](size_t size, char* file, int line) {
     void* ptr = malloc(size);
     if(code_debug_new_recording) {

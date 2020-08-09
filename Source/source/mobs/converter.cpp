@@ -17,12 +17,18 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a converter mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Convert type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 converter::converter(
-    const point &pos, converter_type* con_type, const float angle
+    const point &pos, converter_type* type, const float angle
 ) :
-    mob(pos, con_type, angle),
-    con_type(con_type),
+    mob(pos, type, angle),
+    con_type(type),
     amount_in_buffer(0),
     input_pikmin_left(con_type->total_input_pikmin),
     current_type(con_type->available_pikmin_types[0]),
@@ -118,6 +124,8 @@ void converter::spew() {
 
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to converters.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void converter::tick_class_specifics(const float delta_t) {
     type_change_timer.tick(delta_t);

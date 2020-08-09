@@ -13,6 +13,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a new interactable mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Interactable type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 interactable::interactable(
     const point &pos, interactable_type* type, const float angle

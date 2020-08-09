@@ -11,10 +11,25 @@
 #include "weather.h"
 
 
-weather::weather() {}
+/* ----------------------------------------------------------------------------
+ * Creates a weather type.
+ */
+weather::weather() {
+}
+
 
 /* ----------------------------------------------------------------------------
  * Creates a weather type.
+ * n:
+ *   Its name.
+ * dl:
+ *   Daylight information table.
+ * ss:
+ *   Sun strength information table.
+ * bs:
+ *   Blackout strength information table.
+ * pt:
+ *   Precipitation type.
  */
 weather::weather(
     const string &n, const vector<std::pair<size_t, ALLEGRO_COLOR> > &dl,

@@ -41,6 +41,12 @@ void decoration_category::clear_types() {
 
 /* ----------------------------------------------------------------------------
  * Creates a decoration and adds it to the list of decorations.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
  */
 mob* decoration_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -61,6 +67,8 @@ mob_type* decoration_category::create_type() {
 
 /* ----------------------------------------------------------------------------
  * Clears a decoration from the list of decorations.
+ * m:
+ *   The mob to erase.
  */
 void decoration_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.decorations.erase(
@@ -71,6 +79,8 @@ void decoration_category::erase_mob(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Returns a type of decoration given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
  */
 mob_type* decoration_category::get_type(const string &name) const {
     auto it = game.mob_types.decoration.find(name);
@@ -81,6 +91,8 @@ mob_type* decoration_category::get_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns all types of decoration by name.
+ * list:
+ *   This list gets filled with the mob type names.
  */
 void decoration_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.decoration) {
@@ -91,6 +103,8 @@ void decoration_category::get_type_names(vector<string> &list) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a created type of decoration.
+ * type:
+ *   Mob type to register.
  */
 void decoration_category::register_type(mob_type* type) {
     game.mob_types.decoration[type->name] = (decoration_type*) type;

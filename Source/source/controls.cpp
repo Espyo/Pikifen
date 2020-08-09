@@ -28,7 +28,6 @@
 /* ----------------------------------------------------------------------------
  * Creates information about a control.
  * action: The action this control does in-game. Use BUTTON_*.
- * player: Player number.
  * s:      The textual code that represents the hardware inputs.
  */
 control_info::control_info(unsigned char action, const string &s) :
@@ -138,6 +137,8 @@ string control_info::stringify() const {
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event related to hardware input,
  * and triggers the corresponding controls, if any.
+ * ev:
+ *   Event to handle.
  */
 void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {

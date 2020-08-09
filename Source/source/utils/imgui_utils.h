@@ -26,10 +26,6 @@ using std::vector;
 
 namespace ImGui {
 
-bool ImageButtonAndText(
-    ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
-    const string &text
-);
 bool Combo(
     const string &label, int* current_item, const vector<string> &items,
     const int popup_max_height_in_items = -1
@@ -37,6 +33,10 @@ bool Combo(
 bool Combo(
     const string &label, string* current_item, const vector<string> &items,
     const int popup_max_height_in_items = -1
+);
+bool ImageButtonAndText(
+    ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
+    const string &text
 );
 bool ListBox(
     const string &label, int* current_item, const vector<string> &items,

@@ -14,6 +14,12 @@
 
 /* ----------------------------------------------------------------------------
  * Limits the given number to the given range, inclusive.
+ * number:
+ *   Number to clamp.
+ * minimum:
+ *   Minimum value it can have, inclusive.
+ * maximum:
+ *   Maximum value it can have, inclusive.
  */
 float clamp(const float number, const float minimum, const float maximum) {
     return std::min(maximum, std::max(minimum, number));
@@ -22,7 +28,8 @@ float clamp(const float number, const float minimum, const float maximum) {
 
 /* ----------------------------------------------------------------------------
  * Given an input, it returns a 32-bit unsigned integer hash of that input.
- * input: The input number.
+ * input:
+ *   The input number.
  */
 uint32_t hash_nr(const unsigned int input) {
     //Robert Jenkins' 32 bit integer hash function.
@@ -40,8 +47,10 @@ uint32_t hash_nr(const unsigned int input) {
 
 /* ----------------------------------------------------------------------------
  * Given two inputs, it returns a 32-bit unsigned integer hash of those inputs.
- * input1: First input number.
- * input2: Second input number.
+ * input1:
+ *   First input number.
+ * input2:
+ *   Second input number.
  */
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
     uint32_t n1 = hash_nr(input1);
@@ -61,6 +70,16 @@ uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
 
 /* ----------------------------------------------------------------------------
  * Returns the interpolation of the value between two positions.
+ * p:
+ *   Input point.
+ * p1:
+ *   Minimum value the input can have.
+ * p2:
+ *   Maximum value the input can have.
+ * v1:
+ *   Minimum value the interpolation result can have.
+ * v2:
+ *   Maximum value the interpolation result can have.
  */
 float interpolate_number(
     const float p, const float p1, const float p2,
@@ -72,6 +91,10 @@ float interpolate_number(
 
 /* ----------------------------------------------------------------------------
  * Returns a random float between the provided range, inclusive.
+ * minimum:
+ *   Minimum value that can be generated, inclusive.
+ * maximum:
+ *   Maximum value that can be generated, inclusive.
  */
 float randomf(float minimum, float maximum) {
     if(minimum == maximum) return minimum;
@@ -82,6 +105,10 @@ float randomf(float minimum, float maximum) {
 
 /* ----------------------------------------------------------------------------
  * Returns a random integer between the provided range, inclusive.
+ * minimum:
+ *   Minimum value that can be generated, inclusive.
+ * maximum:
+ *   Maximum value that can be generated, inclusive.
  */
 int randomi(int minimum, int maximum) {
     if(minimum == maximum) return minimum;
@@ -93,9 +120,12 @@ int randomi(int minimum, int maximum) {
 /* ----------------------------------------------------------------------------
  * Sums a number to another (even if negative), and then
  * wraps that number across a limit, applying a modulus operation.
- * nr:         Base number.
- * sum:        Number to add (or subtract).
- * wrap_limit: Wrap between [0 - wrap_limit[.
+ * nr:
+ *   Base number.
+ * sum:
+ *   Number to add (or subtract).
+ * wrap_limit:
+ *   Wrap between [0 - wrap_limit[.
  */
 int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
     int final_nr = nr + sum;

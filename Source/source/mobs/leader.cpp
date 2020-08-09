@@ -20,6 +20,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a leader mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Leader type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 leader::leader(const point &pos, leader_type* type, const float angle) :
     mob(pos, type, angle),
@@ -41,6 +47,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not a leader can receive a given status effect.
+ * s:
+ *   Status type to check.
  */
 bool leader::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_LEADERS;
@@ -390,6 +398,8 @@ void leader::draw_mob() {
 /* ----------------------------------------------------------------------------
  * Returns how many rows will be needed to fit all of the members.
  * Used to calculate how subgroup members will be placed when dismissing.
+ * n_members:
+ *   Total number of group members to dismiss.
  */
 size_t leader::get_dismiss_rows(const size_t n_members) const {
     size_t members_that_fit = 1;
@@ -463,6 +473,8 @@ void leader::stop_whistling() {
 
 /* ----------------------------------------------------------------------------
  * Swaps out the currently held Pikmin for a different one.
+ * new_pik:
+ *   The new Pikmin to hold.
  */
 void leader::swap_held_pikmin(mob* new_pik) {
     if(holding.empty()) return;
@@ -488,6 +500,8 @@ void leader::swap_held_pikmin(mob* new_pik) {
 
 /* ----------------------------------------------------------------------------
  * Ticks leader-related logic for this frame.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void leader::tick_class_specifics(const float delta_t) {
     if(group && group->members.size()) {
@@ -598,6 +612,11 @@ void leader::tick_class_specifics(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Switch active leader.
+ * forward:
+ *   If true, switch to the next one. If false, to the previous.
+ * force_success:
+ *   If true, switch to this leader even if they can't currently handle the
+ *   leader switch script event.
  */
 void change_to_next_leader(const bool forward, const bool force_success) {
     if(game.states.gameplay_st->mobs.leaders.size() == 1) return;

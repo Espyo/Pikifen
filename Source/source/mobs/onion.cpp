@@ -25,6 +25,12 @@ using std::string;
 
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Onion type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 onion::onion(const point &pos, onion_type* type, const float angle) :
     mob(pos, type, angle),
@@ -102,6 +108,8 @@ void onion::draw_mob() {
 
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
  */
 void onion::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
@@ -202,6 +210,8 @@ void onion::stow_pikmin() {
 
 /* ----------------------------------------------------------------------------
  * Ticks some logic specific to Onions.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void onion::tick_class_specifics(const float delta_t) {
     for(size_t o = 0; o < game.states.gameplay_st->mobs.onions.size(); ++o) {

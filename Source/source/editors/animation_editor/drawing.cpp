@@ -366,6 +366,14 @@ void animation_editor::draw_comparison() {
 
 /* ----------------------------------------------------------------------------
  * Draws a hitbox on the canvas in the sideways view.
+ * h_ptr:
+ *   Hitbox to draw.
+ * color:
+ *   Color to use for the hitbox's main shape.
+ * outline_color:
+ *   Color to use for the hitbox's outline.
+ * outline_thickness:
+ *   Thickness of the hitbox's outline.
  */
 void animation_editor::draw_side_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
@@ -412,6 +420,8 @@ void animation_editor::draw_side_view_hitbox(
 
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin silhouette on the canvas in the sideways view.
+ * x_offset:
+ *   From the center, offset the silhouette this much to the right.
  */
 void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
     draw_bitmap(
@@ -425,6 +435,8 @@ void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
 
 /* ----------------------------------------------------------------------------
  * Draws a sprite on the canvas in the sideways view.
+ * s:
+ *   Sprite to draw.
  */
 void animation_editor::draw_side_view_sprite(sprite* s) {
     point min, max;
@@ -591,6 +603,14 @@ void animation_editor::draw_timeline() {
 
 /* ----------------------------------------------------------------------------
  * Draws a hitbox on the canvas in the standard top-down view.
+ * h_ptr:
+ *   Hitbox to draw.
+ * color:
+ *   Color of the hitbox's main shape.
+ * outline_color:
+ *   Color of the hitbox's outline.
+ * outline_thickness:
+ *   Thickness of the hitbox's outline.
  */
 void animation_editor::draw_top_down_view_hitbox(
     hitbox* h_ptr, const ALLEGRO_COLOR &color,
@@ -611,6 +631,8 @@ void animation_editor::draw_top_down_view_hitbox(
 
 /* ----------------------------------------------------------------------------
  * Draws the mob radius on the canvas in the standard top-down view.
+ * mt:
+ *   Type of the mob to draw.
  */
 void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
     al_draw_circle(
@@ -629,6 +651,8 @@ void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
 
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin silhouette on the canvas in the standard top-down view.
+ * x_offset:
+ *   From the center, offset the Pikmin silhouette this much to the right.
  */
 void animation_editor::draw_top_down_view_pikmin_silhouette(
     const float x_offset
@@ -643,6 +667,8 @@ void animation_editor::draw_top_down_view_pikmin_silhouette(
 
 /* ----------------------------------------------------------------------------
  * Draws a sprite on the canvas in the standard top-down view.
+ * s:
+ *   Sprite to draw.
  */
 void animation_editor::draw_top_down_view_sprite(sprite* s) {
     if(!comparison_above) {

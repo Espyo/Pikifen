@@ -61,6 +61,8 @@ anim_conversion_vector pile_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void pile_type::load_properties(data_node* file) {
     reader_setter rs(file);

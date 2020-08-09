@@ -46,6 +46,8 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.19.0 ---
+    Misc.
+        Editors's pan_cam, reset_cam_xy, and reset_zoom functions don't need an Allegro event
     Documentation update
         Document tutorials and the like offline
             A Javascript script to add a table-of-contents to pages
@@ -159,6 +161,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Animate the Hocotate ship -- use Kman's zip
         Explosions https://www.patreon.com/posts/explosions-part-7719254
+        Onions have dead space to the left in the SVG
         Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Rock Pikmin
         Should be unable to latch

@@ -13,6 +13,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a new bouncer mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Bouncer type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 bouncer::bouncer(
     const point &pos, bouncer_type* type, const float angle

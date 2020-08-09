@@ -74,6 +74,10 @@ editor::editor() :
  * A bit of padding is added, so that, for instance, the top-left
  * point isn't exactly on the top-left of the screen,
  * where it's hard to see.
+ * min_coords:
+ *   Top-left coordinates of the content to focus on.
+ * max_coords:
+ *   Bottom-right coordinates of the content to focus on.
  */
 void editor::center_camera(
     const point &min_coords, const point &max_coords
@@ -105,6 +109,9 @@ void editor::center_camera(
  * Checks if there are any unsaved changes that have not been notified yet.
  * Returns true if there are, and also sets up the unsaved changes warning.
  * Returns false if everything is okay to continue.
+ * pos:
+ *   Screen coordinates to show the warning on.
+ *   If 0,0, then these will be set to the last processed widget's position.
  */
 bool editor::check_new_unsaved_changes(const point &pos) {
     unsaved_changes_warning_timer.stop();
@@ -348,6 +355,8 @@ point editor::get_last_widget_pos() {
 
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event for control-related things.
+ * ev:
+ *   Event to handle.
  */
 void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
@@ -539,26 +548,175 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
 }
 
 
-//Input handler functions.
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being "char-typed" anywhere.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being "char-typed" in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being pressed down anywhere.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being pressed down in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being released anywhere.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling a key being released in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_key_up_canvas(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the left mouse button being double-clicked
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the left mouse button being pressed down
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the left mouse button being dragged
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the left mouse button released
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the middle mouse button being double-clicked
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the middle mouse button being pressed down
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the middle mouse button being dragged
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the middle mouse button being released
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the mouse coordinates being updated.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the mouse wheel being turned in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the right mouse button being double-clicked
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the right mouse button being pressed down
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the right mouse button being dragged
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
+
+
+/* ----------------------------------------------------------------------------
+ * Placeholder for handling the right mouse button being released
+ * in the canvas.
+ * ev:
+ *   Event to process.
+ */
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
 
 
@@ -607,6 +765,14 @@ bool editor::input_popup(
 /* ----------------------------------------------------------------------------
  * Returns whether or not the pressed key corresponds to the specified
  * key combination. Used for keyboard shortcuts.
+ * pressed_key:
+ *   Key that the user pressed.
+ * match_key:
+ *   Key that must be matched in order to return true.
+ * needs_ctrl:
+ *   If true, only returns true if Ctrl was also pressed.
+ * needs_shift:
+ *   If true, only returns true if Shift was also pressed.
  */
 bool editor::key_check(
     const int pressed_key, const int match_key,
@@ -1112,6 +1278,8 @@ void editor::update_transformations() {
 
 /* ----------------------------------------------------------------------------
  * Zooms to the specified level, keeping the mouse cursor in the same spot.
+ * new_zoom:
+ *   New zoom level.
  */
 void editor::zoom_with_cursor(const float new_zoom) {
     //Keep a backup of the old mouse coordinates.
@@ -1188,6 +1356,8 @@ void editor::dialog_info::process() {
 
 /* ----------------------------------------------------------------------------
  * Creates a new picker info.
+ * editor_ptr:
+ *   Pointer to the editor in charge.
  */
 editor::picker_info::picker_info(editor* editor_ptr) :
     editor_ptr(editor_ptr),
@@ -1355,6 +1525,12 @@ void editor::picker_info::process() {
 
 /* ----------------------------------------------------------------------------
  * Creates a picker item.
+ * name:
+ *   Name of the item.
+ * category:
+ *   Category it belongs to. If none, use an empty string.
+ * bitmap:
+ *   Bitmap to display on the item. If none, use NULL.
  */
 editor::picker_item::picker_item(
     const string &name, const string &category, ALLEGRO_BITMAP* bitmap

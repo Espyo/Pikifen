@@ -62,6 +62,8 @@ asset_file_names_struct::asset_file_names_struct() :
 
 /* ----------------------------------------------------------------------------
  * Loads the asset file names from a file.
+ * file:
+ *   File to load from.
  */
 void asset_file_names_struct::load(data_node* file) {
     reader_setter rs(file);
@@ -117,6 +119,8 @@ bitmap_effect_info::bitmap_effect_info() :
 
 /* ----------------------------------------------------------------------------
  * Creates a bitmap manager.
+ * base_dir:
+ *   Base directory its files belong to.
  */
 bmp_manager::bmp_manager(const string &base_dir) :
     base_dir(base_dir),
@@ -142,6 +146,8 @@ void bmp_manager::clear() {
 /* ----------------------------------------------------------------------------
  * Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
+ * it:
+ *   Iterator from the map for the bitmap.
  */
 void bmp_manager::detach(map<string, bmp_info>::iterator it) {
     if(it == list.end()) return;
@@ -160,6 +166,8 @@ void bmp_manager::detach(map<string, bmp_info>::iterator it) {
 /* ----------------------------------------------------------------------------
  * Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
+ * name:
+ *   Bitmap's file name.
  */
 void bmp_manager::detach(const string &name) {
     if(name.empty()) return;
@@ -170,6 +178,8 @@ void bmp_manager::detach(const string &name) {
 /* ----------------------------------------------------------------------------
  * Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
+ * bmp:
+ *   Bitmap to detach.
  */
 void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
     if(!bmp || bmp == game.bmp_error) return;
@@ -185,6 +195,12 @@ void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
 
 /* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
+ * name:
+ *   Name of the bitmap to get.
+ * node:
+ *   If not NULL, blame this data node if the file doesn't exist.
+ * report_errors:
+ *   Only issues errors if this is true.
  */
 ALLEGRO_BITMAP* bmp_manager::get(
     const string &name, data_node* node,
@@ -225,6 +241,8 @@ long bmp_manager::get_total_calls() const {
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with information about a bitmap, for the manager.
+ * b:
+ *   The bitmap.
  */
 bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
     b(b),
@@ -235,6 +253,14 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 
 /* ----------------------------------------------------------------------------
  * Adds a new button to the list.
+ * id:
+ *   Its ID.
+ * name:
+ *   Its name.
+ * option_name:
+ *   The name of its property in the options file.
+ * default_control_str:
+ *   A string representing the default controls for this button.
  */
 void button_manager::add(
     const size_t id, const string &name, const string &option_name,
@@ -262,6 +288,8 @@ camera_info::camera_info() :
 
 /* ----------------------------------------------------------------------------
  * Instantly places the camera at the specified coordinates.
+ * new_pos:
+ *   Coordinates to place the camera at.
  */
 void camera_info::set_pos(const point &new_pos) {
     pos = new_pos;
@@ -271,6 +299,8 @@ void camera_info::set_pos(const point &new_pos) {
 
 /* ----------------------------------------------------------------------------
  * Instantly places the camera at the specified zoom.
+ * new_zoom:
+ *   Zoom to set to.
  */
 void camera_info::set_zoom(const float new_zoom) {
     zoom = new_zoom;
@@ -282,6 +312,8 @@ const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 
 /* ----------------------------------------------------------------------------
  * Ticks one frame of camera movement.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void camera_info::tick(const float delta_t) {
     pos.x += (target_pos.x - pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
@@ -369,6 +401,10 @@ bool fade_manager::is_fading() const {
 
 /* ----------------------------------------------------------------------------
  * Sets up the start of a fade.
+ * is_fade_in:
+ *   If true, this fades in. If false, fades out.
+ * on_end:
+ *   Code to run when the fade finishes.
  */
 void fade_manager::start_fade(
     const bool is_fade_in, const std::function<void()> &on_end
@@ -381,6 +417,8 @@ void fade_manager::start_fade(
 
 /* ----------------------------------------------------------------------------
  * Ticks the fade manager by one frame.
+ * time:
+ *   How many seconds to tick by.
  */
 void fade_manager::tick(const float time) {
     if(time_left == 0) return;
@@ -421,6 +459,8 @@ hud_item::hud_item(const point center, const point size) :
 
 /* ----------------------------------------------------------------------------
  * Initializes a HUD item manager.
+ * item_total:
+ *   How many HUD items exist in total.
  */
 hud_item_manager::hud_item_manager(const size_t item_total) :
     move_in(false),
@@ -503,9 +543,16 @@ bool hud_item_manager::get_draw_data(
 
 /* ----------------------------------------------------------------------------
  * Sets a HUD item's data.
- * id:   ID of the HUD item.
- * x, y: Center coordinates, in screen dimension ratio (0 to 1, normally).
- * w, h: Total width and height, in screen dimension ratio (0 to 1, normally).
+ * id:
+ *   ID of the HUD item.
+ * x:
+ *   Horizontal coordinate, in screen width ratio (0 to 1, normally).
+ * y:
+ *   Vertical coordinate, in screen height ratio (0 to 1, normally).
+ * w:
+ *   Total width, in screen width ratio (0 to 1, normally).
+ * h:
+ *   Total height, in screen height ratio (0 to 1, normally).
  */
 void hud_item_manager::set_item(
     const size_t id,
@@ -529,6 +576,8 @@ void hud_item_manager::start_move(const bool in, const float duration) {
 
 /* ----------------------------------------------------------------------------
  * Ticks the manager one frame in time.
+ * time:
+ *   Seconds to tick by.
  */
 void hud_item_manager::tick(const float time) {
     move_timer.tick(time);
@@ -581,6 +630,12 @@ movement_struct::movement_struct() :
  * Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
  * All parameters are mandatory.
+ * coords:
+ *   Final X and Y coordinates.
+ * angle:
+ *   Angle compared to the center.
+ * magnitude:
+ *   Magnitude from the center.
  */
 void movement_struct::get_clean_info(
     point* coords, float* angle, float* magnitude
@@ -604,6 +659,12 @@ void movement_struct::get_clean_info(
  * exactly as they are right now, without being "cleaned".
  * Don't use this one for normal gameplay, please.
  * All parameters are mandatory.
+ * coords:
+ *   X and Y coordinates.
+ * angle:
+ *   Angle compared to the center.
+ * magnitude:
+ *   Magnitude from the center.
  */
 void movement_struct::get_raw_info(
     point* coords, float* angle, float* magnitude
@@ -615,6 +676,10 @@ void movement_struct::get_raw_info(
 
 /* ----------------------------------------------------------------------------
  * Creates a message box information struct.
+ * text:
+ *   Text to display.
+ * speaker_icon:
+ *   Bitmap representing who is talking, if not NULL.
  */
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     cur_char(0),
@@ -692,6 +757,8 @@ vector<string> msg_box_info::get_current_lines() const {
 
 /* ----------------------------------------------------------------------------
  * Ticks one frame of gameplay.
+ * delta_t:
+ *   Seconds to tick by.
  */
 void msg_box_info::tick(const float delta_t) {
     if(cur_char < stopping_chars[cur_section + 1]) {
@@ -721,6 +788,8 @@ performance_monitor_struct::performance_monitor_struct() :
 
 /* ----------------------------------------------------------------------------
  * Enters the given state of the monitoring process.
+ * state:
+ *   New state.
  */
 void performance_monitor_struct::enter_state(const PERF_MON_STATES state) {
     if(paused) return;
@@ -913,6 +982,8 @@ void performance_monitor_struct::save_log() {
 
 /* ----------------------------------------------------------------------------
  * Sets the name of the area that was monitored.
+ * name:
+ *   Name of the area.
  */
 void performance_monitor_struct::set_area_name(const string &name) {
     area_name = name;
@@ -921,6 +992,8 @@ void performance_monitor_struct::set_area_name(const string &name) {
 
 /* ----------------------------------------------------------------------------
  * Sets whether monitoring is currently paused or not.
+ * paused:
+ *   Pause value.
  */
 void performance_monitor_struct::set_paused(const bool paused) {
     this->paused = paused;
@@ -929,6 +1002,8 @@ void performance_monitor_struct::set_paused(const bool paused) {
 
 /* ----------------------------------------------------------------------------
  * Starts measuring a certain point in the loading procedure.
+ * name:
+ *   Name of the measurement.
  */
 void performance_monitor_struct::start_measurement(const string &name) {
     if(paused) return;
@@ -956,6 +1031,8 @@ performance_monitor_struct::page::page() :
 
 /* ----------------------------------------------------------------------------
  * Writes a page of information to a string.
+ * s:
+ *   String to write to.
  */
 void performance_monitor_struct::page::write(string &s) {
     //Get the total measured time.
@@ -1192,6 +1269,10 @@ void reader_setter::set(
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with sample info.
+ * s:
+ *   Allegro sample.
+ * mixer:
+ *   Allegro mixer.
  */
 sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) :
     sample(s),
@@ -1402,6 +1483,8 @@ bool script_var_reader::get(const string &name, point &dest) const {
 /* ----------------------------------------------------------------------------
  * Returns the name of a sector type, given its number.
  * Returns an empty string on error.
+ * nr:
+ *   Number of the sector type.
  */
 string sector_types_manager::get_name(const unsigned char nr) const {
     if(nr < names.size()) return names[nr];
@@ -1412,6 +1495,8 @@ string sector_types_manager::get_name(const unsigned char nr) const {
 /* ----------------------------------------------------------------------------
  * Returns the number of a sector type, given its name.
  * Returns 255 on error.
+ * name:
+ *   Name of the sector type.
  */
 unsigned char sector_types_manager::get_nr(const string &name) const {
     for(unsigned char n = 0; n < names.size(); ++n) {
@@ -1431,6 +1516,10 @@ unsigned char sector_types_manager::get_nr_of_types() const {
 
 /* ----------------------------------------------------------------------------
  * Registers a new type of sector.
+ * nr:
+ *   Its ID number.
+ * name:
+ *   Its name.
  */
 void sector_types_manager::register_type(
     const unsigned char nr, const string &name
@@ -1467,6 +1556,8 @@ subgroup_type* subgroup_type_manager::get_first_type() const {
 
 /* ----------------------------------------------------------------------------
  * Returns the subgroup type that comes after the given type.
+ * sgt:
+ *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_next_type(
     subgroup_type* sgt
@@ -1482,6 +1573,8 @@ subgroup_type* subgroup_type_manager::get_next_type(
 
 /* ----------------------------------------------------------------------------
  * Returns the subgroup type that comes before the given type.
+ * sgt:
+ *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_prev_type(
     subgroup_type* sgt
@@ -1573,6 +1666,10 @@ system_asset_list::system_asset_list():
 
 /* ----------------------------------------------------------------------------
  * Creates a timer.
+ * duration:
+ *   How long before it ticks, in seconds.
+ * on_end:
+ *   Code to run when time ends.
  */
 timer::timer(float duration, const std::function<void()> &on_end) :
     time_left(0),
@@ -1613,6 +1710,8 @@ void timer::start(const bool can_restart) {
 
 /* ----------------------------------------------------------------------------
  * Starts a timer, but sets a new duration.
+ * new_duration:
+ *   Its new duration.
  */
 void timer::start(const float new_duration) {
     duration = new_duration;
@@ -1710,6 +1809,12 @@ void whistle_struct::stop_whistling() {
 
 /* ----------------------------------------------------------------------------
  * Ticks one frame of gameplay.
+ * delta_t:
+ *   How many seconds to tick by.
+ * whistle_range:
+ *   How far the whistle can reach from the cursor center.
+ * leader_to_cursor_dist:
+ *   Distance between the leader and the cursor.
  */
 void whistle_struct::tick(
     const float delta_t,

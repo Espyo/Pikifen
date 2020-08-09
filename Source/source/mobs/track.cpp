@@ -13,6 +13,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a new track mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Track type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 track::track(
     const point &pos, track_type* type, const float angle

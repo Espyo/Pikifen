@@ -122,6 +122,8 @@ void animation_editor::center_camera_on_sprite_bitmap(const bool instant) {
 
 /* ----------------------------------------------------------------------------
  * Changes to a new state, cleaning up whatever is needed.
+ * new_state:
+ *   The new state.
  */
 void animation_editor::change_state(const EDITOR_STATES new_state) {
     comparison = false;
@@ -198,6 +200,10 @@ void animation_editor::do_logic() {
 
 /* ----------------------------------------------------------------------------
  * Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ * parent_list:
+ *   Unused.
+ * cmd:
+ *   Unused.
  */
 void animation_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -219,6 +225,8 @@ string animation_editor::get_name() const {
  * name and brief context about its folder remain. If that's not possible, it
  * is returned as is, though its beginning may be cropped off with ellipsis
  * if it's too big.
+ * p:
+ *   The long path name.
  */
 string animation_editor::get_path_short_name(const string &p) const {
     if(p.find(TYPES_FOLDER_PATH) != string::npos) {
@@ -248,6 +256,8 @@ string animation_editor::get_path_short_name(const string &p) const {
 
 /* ----------------------------------------------------------------------------
  * Imports the animation data from a different animation to the current.
+ * name:
+ *   Name of the animation to import.
  */
 void animation_editor::import_animation_data(const string &name) {
     animation* a = anims.animations[anims.find_animation(name)];
@@ -262,6 +272,8 @@ void animation_editor::import_animation_data(const string &name) {
 
 /* ----------------------------------------------------------------------------
  * Imports the sprite file data from a different sprite to the current.
+ * name:
+ *   Name of the animation to import.
  */
 void animation_editor::import_sprite_file_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -274,6 +286,8 @@ void animation_editor::import_sprite_file_data(const string &name) {
 
 /* ----------------------------------------------------------------------------
  * Imports the sprite hitbox data from a different sprite to the current.
+ * name:
+ *   Name of the animation to import.
  */
 void animation_editor::import_sprite_hitbox_data(const string &name) {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
@@ -295,6 +309,8 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
 
 /* ----------------------------------------------------------------------------
  * Imports the sprite top data from a different sprite to the current.
+ * name:
+ *   Name of the animation to import.
  */
 void animation_editor::import_sprite_top_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -310,6 +326,8 @@ void animation_editor::import_sprite_top_data(const string &name) {
 /* ----------------------------------------------------------------------------
  * Imports the sprite transformation data from
  * a different sprite to the current.
+ * name:
+ *   Name of the animation to import.
  */
 void animation_editor::import_sprite_transformation_data(const string &name) {
     sprite* s = anims.sprites[anims.find_sprite(name)];
@@ -352,6 +370,8 @@ void animation_editor::load() {
 
 /* ----------------------------------------------------------------------------
  * Loads the animation database for the current object.
+ * should_update_history:
+ *   If true, this loading process should update the user's file open history.
  */
 void animation_editor::load_animation_database(
     const bool should_update_history
@@ -472,6 +492,12 @@ void animation_editor::load_animation_database(
 
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks an animation from the picker.
+ * name:
+ *   Name of the animation.
+ * category:
+ *   Unused.
+ * is_new:
+ *   Is this a new animation or an existing one?
  */
 void animation_editor::pick_animation(
     const string &name, const string &category, const bool is_new
@@ -490,6 +516,12 @@ void animation_editor::pick_animation(
 
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks a sprite from the picker.
+ * name:
+ *   Name of the sprite.
+ * category:
+ *   Unused.
+ * is_new:
+ *   Is this a new sprite or an existing one?
  */
 void animation_editor::pick_sprite(
     const string &name, const string &category, const bool is_new
@@ -624,6 +656,10 @@ void animation_editor::press_save_button() {
 
 /* ----------------------------------------------------------------------------
  * Renames an animation to the given name.
+ * a:
+ *   Animation to rename.
+ * new_name:
+ *   Its new name.
  */
 void animation_editor::rename_animation(animation* a, const string &new_name) {
     //Check if it's valid.
@@ -666,6 +702,10 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
 
 /* ----------------------------------------------------------------------------
  * Renames a body part to the given name.
+ * p:
+ *   Body part to rename.
+ * new_name:
+ *   Its new name.
  */
 void animation_editor::rename_body_part(body_part* p, const string &new_name) {
     //Check if it's valid.
@@ -715,6 +755,10 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
 
 /* ----------------------------------------------------------------------------
  * Renames a sprite to the given name.
+ * s:
+ *   Sprite to rename.
+ * new_name:
+ *   Its new name.
  */
 void animation_editor::rename_sprite(sprite* s, const string &new_name) {
     //Check if it's valid.
@@ -765,6 +809,8 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
 
 /* ----------------------------------------------------------------------------
  * Resizes all sprites, hitboxes, etc. by a multiplier.
+ * mult:
+ *   Multiplier to resize by.
  */
 void animation_editor::resize_everything(const float mult) {
     if(mult == 0.0f) {
@@ -787,6 +833,10 @@ void animation_editor::resize_everything(const float mult) {
 
 /* ----------------------------------------------------------------------------
  * Resizes a sprite by a multiplier.
+ * s:
+ *   Sprite to resize.
+ * mult:
+ *   Multiplier to resize by.
  */
 void animation_editor::resize_sprite(sprite* s, const float mult) {
     if(mult == 0.0f) {
@@ -1020,6 +1070,8 @@ void animation_editor::save_animation_database() {
 
 /* ----------------------------------------------------------------------------
  * Sets all sprite scales to the value specified in the textbox.
+ * scale:
+ *   Value to set the scales to.
  */
 void animation_editor::set_all_sprite_scales(const float scale) {
     if(scale == 0) {
@@ -1043,9 +1095,14 @@ static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
 /* ----------------------------------------------------------------------------
  * Performs a flood fill on the bitmap sprite, to see what parts
  * contain non-alpha pixels, based on a starting position.
- * bmp:              Locked bitmap to check.
- * selection_pixels: Array that controls which pixels are selected or not.
- * x, y:             Image coordinates to start on.
+ * bmp:
+ *   Locked bitmap to check.
+ * selection_pixels:
+ *   Array that controls which pixels are selected or not.
+ * x:
+ *   X coordinate to start on.
+ * y:
+ *   Y coordinate to start on.
  */
 void animation_editor::sprite_bmp_flood_fill(
     ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
@@ -1177,6 +1234,8 @@ void animation_editor::unload() {
 
 /* ----------------------------------------------------------------------------
  * Updates the history list, by adding a new entry or bumping it up.
+ * n:
+ *   Name of the entry.
  */
 void animation_editor::update_history(const string &n) {
     //First, check if it exists.

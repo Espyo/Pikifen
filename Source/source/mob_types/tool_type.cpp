@@ -41,6 +41,8 @@ tool_type::tool_type() :
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void tool_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -61,6 +63,8 @@ void tool_type::load_properties(data_node* file) {
 
 /* ----------------------------------------------------------------------------
  * Loads resources into memory.
+ * file:
+ *   File to read from.
  */
 void tool_type::load_resources(data_node* file) {
     reader_setter rs(file);

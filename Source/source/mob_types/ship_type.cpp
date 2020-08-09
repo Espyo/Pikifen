@@ -42,6 +42,8 @@ anim_conversion_vector ship_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void ship_type::load_properties(data_node* file) {
     reader_setter rs(file);

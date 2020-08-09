@@ -24,6 +24,8 @@ data_node::data_node() :
 /* ----------------------------------------------------------------------------
  * Creates a data node, using the data and creating a copy
  * of the children from another node.
+ * dn2:
+ *   The node to copy data from.
  */
 data_node::data_node(const data_node &dn2) :
     name(dn2.name),
@@ -43,6 +45,8 @@ data_node::data_node(const data_node &dn2) :
 
 /* ----------------------------------------------------------------------------
  * Creates a data node from a file, given the file name.
+ * file_name:
+ *   Name of the file to load.
  */
 data_node::data_node(const string &file_name) :
     file_was_opened(false),
@@ -55,6 +59,10 @@ data_node::data_node(const string &file_name) :
 
 /* ----------------------------------------------------------------------------
  * Creates a data node by filling its name and value.
+ * name:
+ *   The node's name.
+ * value:
+ *   Its value.
  */
 data_node::data_node(const string &name, const string &value) :
     name(name),
@@ -81,6 +89,8 @@ data_node::~data_node() {
 
 /* ----------------------------------------------------------------------------
  * Adds a new child to the list.
+ * new_node:
+ *   The node to add.
  */
 size_t data_node::add(data_node* new_node) {
     children.push_back(new_node);
@@ -104,6 +114,8 @@ data_node* data_node::create_dummy() {
 
 /* ----------------------------------------------------------------------------
  * Returns a child node given its number on the list (direct children only).
+ * number:
+ *   The index number of the child.
  */
 data_node* data_node::get_child(const size_t number) {
     if(number >= children.size()) return create_dummy();
@@ -113,6 +125,10 @@ data_node* data_node::get_child(const size_t number) {
 
 /* ----------------------------------------------------------------------------
  * Returns the nth child with this name on the list (direct children only).
+ * name:
+ *   The name the child must have.
+ * occurrence_number:
+ *   This function will return the nth child with the specified name.
  */
 data_node* data_node::get_child_by_name(
     const string &name, const size_t occurrence_number
@@ -144,6 +160,8 @@ size_t data_node::get_nr_of_children() const {
 
 /* ----------------------------------------------------------------------------
  * Returns the number of occurences of a child name (direct children only).
+ * name:
+ *   Name the children must have.
  */
 size_t data_node::get_nr_of_children_by_name(const string &name) const {
     size_t number = 0;
@@ -158,6 +176,8 @@ size_t data_node::get_nr_of_children_by_name(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the value of a node, or def if it has no value.
+ * def:
+ *   Default value.
  */
 string data_node::get_value_or_default(const string &def) const {
     return (value.empty() ? def : value);
@@ -166,6 +186,14 @@ string data_node::get_value_or_default(const string &def) const {
 
 /* ----------------------------------------------------------------------------
  * Loads data from a file.
+ * file_name:
+ *   Name of the file to load.
+ * trim_values:
+ *   If true, spaces before and after the value will be trimmed off.
+ * names_only_after_root:
+ *   If true, any nodes that are not in the root node (i.e. they are children
+ *   of some node inside the file) will only have a name and no value; the
+ *   entire contents of their line will be their name.
  */
 void data_node::load_file(
     const string &file_name, const bool trim_values,
@@ -207,6 +235,18 @@ void data_node::load_file(
  * Loads data from a list of text lines.
  * Returns the number of the line this node ended on, judging by start_line.
  * This is used for the recursion.
+ * lines:
+ *   Text lines that make up the node.
+ * trim_values:
+ *   If true, spaces before and after the value will be trimmed off.
+ * start_line:
+ *   This node starts at this line of the document.
+ * depth:
+ *   Depth of this node. 0 means root.
+ * names_only_after_root:
+ *   If true, any nodes that are not in the root node (i.e. they are children
+ *   of some node inside the file) will only have a name and no value; the
+ *   entire contents of their line will be their name.
  */
 size_t data_node::load_node(
     const vector<string> &lines, const bool trim_values,
@@ -300,6 +340,8 @@ size_t data_node::load_node(
 
 /* ----------------------------------------------------------------------------
  * Copies data from another data node.
+ * dn2:
+ *   Node to copy from.
  */
 const data_node &data_node::operator=(const data_node &dn2) {
     if(this != &dn2) {
@@ -325,6 +367,8 @@ const data_node &data_node::operator=(const data_node &dn2) {
 
 /* ----------------------------------------------------------------------------
  * Removes and destroys a child from the list.
+ * node_to_remove:
+ *   The node to be removed.
  */
 bool data_node::remove(data_node* node_to_remove) {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -342,6 +386,12 @@ bool data_node::remove(data_node* node_to_remove) {
  * Saves a node into a new text file. Line numbers are ignored.
  * If you don't provide a file name, it'll use the node's file name.
  * Returns true on success.
+ * file_name:
+ *   Name of the file to save.
+ * children_only:
+ *   If true, only save the nodes inside this node.
+ * include_empty_values:
+ *   If true, even nodes with an empty value will be saved.
  */
 bool data_node::save_file(
     string file_name, const bool children_only,
@@ -379,6 +429,12 @@ bool data_node::save_file(
 
 /* ----------------------------------------------------------------------------
  * Saved a node into a text file.
+ * file:
+ *   Allegro file handle.
+ * level:
+ *   Current level of depth.
+ * include_empty_values:
+ *   If true, even nodes with an empty value will be saved.
  */
 void data_node::save_node(
     ALLEGRO_FILE* file, const size_t level,
@@ -409,8 +465,10 @@ void data_node::save_node(
 /* ----------------------------------------------------------------------------
  * Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
- * s:         The original string.
- * left_only: If true, only trim the spaces at the left.
+ * s:
+ *   The original string.
+ * left_only:
+ *   If true, only trim the spaces at the left.
  */
 string data_node::trim_spaces(const string &s, const bool left_only) {
     string orig = s;
@@ -441,6 +499,10 @@ string data_node::trim_spaces(const string &s, const bool left_only) {
 
 /* ----------------------------------------------------------------------------
  * Like an std::getline(), but for ALLEGRO_FILE*.
+ * file:
+ *   Allegro file handle.
+ * line:
+ *   String to save the line into.
  */
 void getline(ALLEGRO_FILE* file, string &line) {
     line.clear();

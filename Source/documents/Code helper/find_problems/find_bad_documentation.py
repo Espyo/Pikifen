@@ -38,7 +38,7 @@ def check_bad_documentation_in_file(file_path):
 
         params_documented = []
         for l in comment_lines:
-            match = re.search(r'\* ([^ ]+):', l)
+            match = re.search(r'\* ([^ \.]+):', l)
             if match is not None:
                 params_documented.append(match.group(1))
         

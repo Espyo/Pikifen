@@ -91,6 +91,8 @@ game_config::game_config() :
 
 /* ----------------------------------------------------------------------------
  * Loads the game's config from a file.
+ * file:
+ *   File to load from.
  */
 void game_config::load(data_node* file) {
     reader_setter rs(file);

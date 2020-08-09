@@ -20,6 +20,12 @@ const unsigned int ship::SHIP_BEAM_RING_COLOR_SPEED = 255;
 
 /* ----------------------------------------------------------------------------
  * Creates a ship mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Ship type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
@@ -59,6 +65,8 @@ void ship::draw_mob() {
 
 /* ----------------------------------------------------------------------------
  * Heals a leader, causes particle effects, etc.
+ * l:
+ *   Leader to heal.
  */
 void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
@@ -82,6 +90,8 @@ void ship::heal_leader(leader* l) const {
 /* ----------------------------------------------------------------------------
  * Checks whether the specified leader is currently under the ship's
  * beam or not.
+ * l:
+ *   Leader to check.
  */
 bool ship::is_leader_under_beam(leader* l) const {
     return dist(l->pos, beam_final_pos) <= shi_type->beam_radius;
@@ -90,6 +100,8 @@ bool ship::is_leader_under_beam(leader* l) const {
 
 /* ----------------------------------------------------------------------------
  * Ticks class-specific logic.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void ship::tick_class_specifics(const float delta_t) {
     //The way the beam ring works is that the three color components are saved.

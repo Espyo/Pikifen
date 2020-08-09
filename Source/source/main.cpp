@@ -13,10 +13,13 @@
 
 /* ----------------------------------------------------------------------------
  * Main function.
- * It begins by loading Allegro stuff,
- * the options, setting some settings,
- * and loading all of the game content.
- * Once that's done, it enters the main loop.
+ * It begins by loading Allegro stuff, the options, setting some settings,
+ * and loading all of the game content. Once that's done,
+ * it enters the main loop.
+ * argc:
+ *   Command line argument count.
+ * argv:
+ *   Command line argument values.
  */
 int main(int argc, char** argv) {
     game = game_class();

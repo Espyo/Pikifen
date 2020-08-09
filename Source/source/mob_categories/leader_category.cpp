@@ -41,6 +41,12 @@ void leader_category::clear_types() {
 
 /* ----------------------------------------------------------------------------
  * Creates a leader and adds it to the list of leaders.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
  */
 mob* leader_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -61,6 +67,8 @@ mob_type* leader_category::create_type() {
 
 /* ----------------------------------------------------------------------------
  * Clears a leader from the list of leaders.
+ * m:
+ *   The mob to erase.
  */
 void leader_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.leaders.erase(
@@ -71,6 +79,8 @@ void leader_category::erase_mob(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Returns a type of leader given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
  */
 mob_type* leader_category::get_type(const string &name) const {
     auto it = game.mob_types.leader.find(name);
@@ -81,6 +91,8 @@ mob_type* leader_category::get_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns all types of leader by name.
+ * list:
+ *   This list gets filled with the mob type names.
  */
 void leader_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.leader) {
@@ -91,6 +103,8 @@ void leader_category::get_type_names(vector<string> &list) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a created type of leader.
+ * type:
+ *   Mob type to register.
  */
 void leader_category::register_type(mob_type* type) {
     game.mob_types.leader[type->name] = (leader_type*) type;

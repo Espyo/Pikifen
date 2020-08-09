@@ -43,16 +43,25 @@ string amount_str(
 }
 
 
-//Converts a boolean to a string, returning either "true" or "false".
-string b2s(const bool b) { return b ? "true" : "false"; }
+/* ----------------------------------------------------------------------------
+ * Converts a boolean to a string, returning either "true" or "false".
+ * b:
+ *   Boolean to convert.
+ */
+string b2s(const bool b) {
+    return b ? "true" : "false";
+}
 
 
 /* ----------------------------------------------------------------------------
  * Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
- * s:        String to box.
- * size:     Maximum size of the return string.
- * finisher: This comes after s and before the padding (if any). This must
+ * s:
+ *   String to box.
+ * size:
+ *   Maximum size of the return string.
+ * finisher:
+ *   This comes after s and before the padding (if any). This must
  *   always be present, even if that means that s needs to get truncated.
  */
 string box_string(const string &s, const size_t size, const string &finisher) {
@@ -65,7 +74,11 @@ string box_string(const string &s, const size_t size, const string &finisher) {
 }
 
 
-//Converts a float to a string, with 4 decimal places.
+/* ----------------------------------------------------------------------------
+ * Converts a float to a string, with 4 decimal places.
+ * f:
+ *   Float to convert.
+ */
 string f2s(const float f) {
     std::stringstream s;
     s << std::fixed << std::setprecision(4) << f;
@@ -75,6 +88,8 @@ string f2s(const float f) {
 
 /* ----------------------------------------------------------------------------
  * Checks if the contents of a string are a number or not.
+ * s:
+ *   String to check.
  */
 bool is_number(const string &s) {
     unsigned char ch;
@@ -91,6 +106,8 @@ bool is_number(const string &s) {
 /* ----------------------------------------------------------------------------
  * Given a file name as a string, it removes the extension.
  * Returns the string as it is if there is no extension.
+ * s:
+ *   String to remove the extension from.
  */
 string remove_extension(const string &s) {
     size_t pos = s.find_last_of('.');
@@ -103,6 +120,12 @@ string remove_extension(const string &s) {
 
 /* ----------------------------------------------------------------------------
  * Replaces all instances of x with y.
+ * s:
+ *   String with the text to change.
+ * search:
+ *   Search term that will be replaced.
+ * replacement:
+ *   What to replace found search terms with.
  */
 string replace_all(string s, const string &search, const string &replacement) {
     size_t pos = s.find(search);
@@ -115,8 +138,12 @@ string replace_all(string s, const string &search, const string &replacement) {
 }
 
 
-//Converts a string to a boolean, judging by
-//the English language words that represent true and false.
+/* ----------------------------------------------------------------------------
+ * Converts a string to a boolean, judging by
+ * the English language words that represent true and false.
+ * s:
+ *   String to convert.
+ */
 bool s2b(const string &s) {
     string s2 = s;
     s2 = str_to_lower(s2);
@@ -126,8 +153,12 @@ bool s2b(const string &s) {
 }
 
 
-//Converts a string to a float,
-//trimming the spaces and accepting commas or points.
+/* ----------------------------------------------------------------------------
+ * Converts a string to a float,
+ * trimming the spaces and accepting commas or points.
+ * s:
+ *   String to convert.
+ */
 double s2f(const string &s) {
     string s2 = trim_spaces(s);
     replace(s2.begin(), s2.end(), ',', '.');
@@ -135,18 +166,28 @@ double s2f(const string &s) {
 }
 
 
-//Converts a string to an integer.
-int s2i(const string &s) { return s2f(s); }
+/* ----------------------------------------------------------------------------
+ * Converts a string to an integer.
+ * s:
+ *   String to convert.
+ */
+int s2i(const string &s) {
+    return s2f(s);
+}
 
 
 /* ----------------------------------------------------------------------------
  * Splits a string into several substrings, by the specified delimiter.
- * text:        The string to split.
- * del:         The delimiter. Default is space.
- * inc_empty:   If true, include empty substrings on the vector.
+ * text:
+ *   The string to split.
+ * del:
+ *   The delimiter. Default is space.
+ * inc_empty:
+ *   If true, include empty substrings on the vector.
  *   i.e. if two delimiters come together in a row,
  *   keep an empty substring between.
- * inc_del:     If true, include the delimiters on the vector as a substring.
+ * inc_del:
+ *   If true, include the delimiters on the vector as a substring.
  */
 vector<string> split(
     string text, const string &del, const bool inc_empty, const bool inc_del
@@ -190,6 +231,8 @@ vector<string> split(
 
 /* ----------------------------------------------------------------------------
  * Converts an entire string into lowercase.
+ * s:
+ *   String to convert.
  */
 string str_to_lower(string s) {
     unsigned short n_characters = s.size();
@@ -202,6 +245,8 @@ string str_to_lower(string s) {
 
 /* ----------------------------------------------------------------------------
  * Converts an entire string into uppercase.
+ * s:
+ *   String to convert.
  */
 string str_to_upper(string s) {
     unsigned short n_characters = s.size();
@@ -215,8 +260,10 @@ string str_to_upper(string s) {
 /* ----------------------------------------------------------------------------
  * Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
- * s:         The original string.
- * left_only: If true, only trim the spaces at the left.
+ * s:
+ *   The original string.
+ * left_only:
+ *   If true, only trim the spaces at the left.
  */
 string trim_spaces(const string &s, const bool left_only) {
     string orig = s;

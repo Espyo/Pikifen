@@ -28,6 +28,8 @@ interactable_type::interactable_type() :
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void interactable_type::load_properties(data_node* file) {
     reader_setter rs(file);

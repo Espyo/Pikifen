@@ -57,6 +57,8 @@ anim_conversion_vector bridge_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads resources into memory.
+ * file:
+ *   File to read from.
  */
 void bridge_type::load_resources(data_node* file) {
     reader_setter rs(file);

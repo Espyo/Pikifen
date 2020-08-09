@@ -22,6 +22,10 @@
  * Checks whether it's possible to traverse from drawing node n1 to n2
  * with the existing edges and vertexes. In other words, if you draw a line
  * between n1 and n2, it will not go inside a sector.
+ * n1:
+ *   Starting drawing node.
+ * n2:
+ *   Ending drawing node.
  */
 bool area_editor::are_nodes_traversable(
     const layout_drawing_node &n1, const layout_drawing_node &n2
@@ -85,6 +89,8 @@ float area_editor::calculate_preview_path() {
 /* ----------------------------------------------------------------------------
  * Checks if the line the user is trying to draw is okay. Sets the line's status
  * to drawing_line_error.
+ * pos:
+ *   Position the user is trying to finish the line on.
  */
 void area_editor::check_drawing_line(const point &pos) {
     drawing_line_error = DRAWING_LINE_NO_ERROR;
@@ -251,6 +257,8 @@ void area_editor::check_drawing_line(const point &pos) {
  * Creates a new sector for use in layout drawing operations.
  * This automatically clones it from another sector, if not NULL, or gives it
  * a recommended texture if the other sector NULL.
+ * copy_from:
+ *   Sector to copy from.
  */
 sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
     sector* new_sector = game.cur_area_data.new_sector();
@@ -273,6 +281,8 @@ sector* area_editor::create_sector_for_layout_drawing(sector* copy_from) {
 /* ----------------------------------------------------------------------------
  * Deletes the specified edge, removing it from all sectors and vertexes that
  * use it, as well as removing any now-useless sectors or vertexes.
+ * e_ptr:
+ *   Edge to delete.
  */
 void area_editor::delete_edge(edge* e_ptr) {
     //Remove sectors first.
@@ -304,6 +314,8 @@ void area_editor::delete_edge(edge* e_ptr) {
  * are merged, so the smallest sector will be deleted. In addition,
  * this operation will delete any sectors that would end up incomplete.
  * Returns false if one of the edges couldn't be deleted.
+ * which:
+ *   Edges to delete.
  */
 bool area_editor::delete_edges(const set<edge*> &which) {
     bool ret = true;
@@ -325,6 +337,8 @@ bool area_editor::delete_edges(const set<edge*> &which) {
 
 /* ----------------------------------------------------------------------------
  * Deletes the specified mobs.
+ * which:
+ *   Mobs to delete.
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
     for(auto sm : which) {
@@ -359,6 +373,8 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
 
 /* ----------------------------------------------------------------------------
  * Deletes the specified path links.
+ * which:
+ *   Path links to delete.
  */
 void area_editor::delete_path_links(
     const set<std::pair<path_stop*, path_stop*> > &which
@@ -371,6 +387,8 @@ void area_editor::delete_path_links(
 
 /* ----------------------------------------------------------------------------
  * Deletes the specified path stops.
+ * which:
+ *   Path stops to delete.
  */
 void area_editor::delete_path_stops(const set<path_stop*> &which) {
     for(auto s : which) {
@@ -813,6 +831,10 @@ void area_editor::find_problems() {
  * Adds to the list all sectors affected by the specified sector.
  * The list can include the NULL sector, and will include the
  * provided sector too.
+ * s_ptr:
+ *   Sector that's affecting others.
+ * list:
+ *   The list of affected sectors to fill out.
  */
 void area_editor::get_affected_sectors(
     sector* s_ptr, unordered_set<sector*> &list
@@ -828,6 +850,10 @@ void area_editor::get_affected_sectors(
  * Adds to the list all sectors affected by the specified sectors.
  * The list can include the NULL sector, and will include the
  * provided sectors too.
+ * sectors:
+ *   Sectors that are affecting others.
+ * list:
+ *   The list of affected sectors to fill out.
  */
 void area_editor::get_affected_sectors(
     set<sector*> &sectors, unordered_set<sector*> &list
@@ -841,6 +867,10 @@ void area_editor::get_affected_sectors(
 /* ----------------------------------------------------------------------------
  * Adds to the list all sectors affected by the specified vertexes.
  * The list can include the NULL sector.
+ * vertexes:
+ *   Vertexes that are affecting sectors.
+ * list:
+ *   The list of affected sectors to fill out.
  */
 void area_editor::get_affected_sectors(
     set<vertex*> &vertexes, unordered_set<sector*> &list
@@ -1002,6 +1032,12 @@ bool area_editor::get_common_sector(
  * original edge, but may now need to merge with the NEW edge.
  * This function can check which is the "correct" edge to point to, from
  * the two provided.
+ * v_ptr:
+ *   Vertex that caused a split.
+ * e1_ptr:
+ *   First edge resulting of the split.
+ * e2_ptr:
+ *   Second edge resulting of the split.
  */
 edge* area_editor::get_correct_post_split_edge(
     vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
@@ -1031,7 +1067,8 @@ edge* area_editor::get_correct_post_split_edge(
 /* ----------------------------------------------------------------------------
  * Returns true if the drawing has an outer sector it belongs to,
  * even if the sector is the void, or false if something's gone wrong.
- * The outer sector is returned to result.
+ * result:
+ *   The outer sector, if any, is returned here.
  */
 bool area_editor::get_drawing_outer_sector(sector** result) const {
     //Start by checking if there's a node on a sector. If so, that's it!
@@ -1143,6 +1180,8 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
 /* ----------------------------------------------------------------------------
  * Returns the radius of the specific mob generator. Normally, this returns the
  * type's radius, but if the type/radius is invalid, it returns a default.
+ * m:
+ *   The mob to get the radius of.
  */
 float area_editor::get_mob_gen_radius(mob_gen* m) const {
     return m->type ? m->type->radius == 0 ? 16 : m->type->radius : 16;
@@ -1154,6 +1193,13 @@ float area_editor::get_mob_gen_radius(mob_gen* m) const {
  * data1 takes the info of the found link. If there's also a link in
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
  * with NULLs.
+ * p:
+ *   The point to check against.
+ * data1:
+ *   If there is a link under the point, its data is returned here.
+ * data2:
+ *   If there is a link under the point going in the opposite direction of
+ *   the previous link, its data is returned here.
  */
 bool area_editor::get_mob_link_under_point(
     const point &p,
@@ -1186,6 +1232,8 @@ bool area_editor::get_mob_link_under_point(
 
 /* ----------------------------------------------------------------------------
  * Returns the mob currently under the specified point, or NULL if none.
+ * p:
+ *   The point to check against.
  */
 mob_gen* area_editor::get_mob_under_point(const point &p) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
@@ -1207,6 +1255,13 @@ mob_gen* area_editor::get_mob_under_point(const point &p) const {
  * data1 takes the info of the found link. If there's also a link in
  * the opposite direction, data2 gets that data, otherwise data2 gets filled
  * with NULLs.
+ * p:
+ *   The point to check against.
+ * data1:
+ *   If there is a path link under that point, its data is returned here.
+ * data2:
+ *   If there is a path link under the point, but going in the opposite
+ *   direction, its data is returned here.
  */
 bool area_editor::get_path_link_under_point(
     const point &p,
@@ -1238,6 +1293,8 @@ bool area_editor::get_path_link_under_point(
 
 /* ----------------------------------------------------------------------------
  * Returns the path stop currently under the specified point, or NULL if none.
+ * p:
+ *   Point to check against.
  */
 path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
@@ -1254,6 +1311,8 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the sector currently under the specified point, or NULL if none.
+ * p:
+ *   Point to check against.
  */
 sector* area_editor::get_sector_under_point(const point &p) const {
     return get_sector(p, NULL, false);
@@ -1262,6 +1321,8 @@ sector* area_editor::get_sector_under_point(const point &p) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the vertex currently under the specified point, or NULL if none.
+ * p:
+ *   Point to check against.
  */
 vertex* area_editor::get_vertex_under_point(const point &p) const {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
@@ -1333,6 +1394,10 @@ void area_editor::homogenize_selected_sectors() {
 /* ----------------------------------------------------------------------------
  * Merges two neighboring sectors into one. The final sector will
  * be the largest of the two.
+ * s1:
+ *   First sector to merge.
+ * s2:
+ *   Second sector to merge.
  */
 bool area_editor::merge_sectors(sector* s1, sector* s2) {
     //Of the two sectors, figure out which is the largest.
@@ -1531,6 +1596,8 @@ void area_editor::merge_vertex(
 
 /* ----------------------------------------------------------------------------
  * Resizes all X and Y coordinates by the specified multiplier.
+ * mult:
+ *   Multiply the coordinates by this value.
  */
 void area_editor::resize_everything(const float mult) {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
@@ -1572,6 +1639,8 @@ void area_editor::resize_everything(const float mult) {
 /* ----------------------------------------------------------------------------
  * Makes all currently selected mob generators (if any) rotate to face where the
  * the given point is.
+ * pos:
+ *   Point that the mobs must face.
  */
 void area_editor::rotate_mob_gens_to_point(const point &pos) {
     if(selected_mobs.empty()) return;
@@ -1720,6 +1789,10 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
 /* ----------------------------------------------------------------------------
  * Splits an edge into two, near the specified point, and returns the
  * newly-created vertex. The new vertex gets added to the current area.
+ * e_ptr:
+ *   Edge to split.
+ * where:
+ *   Point to split at.
  */
 vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
     point new_v_pos =
@@ -1759,6 +1832,14 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
 /* ----------------------------------------------------------------------------
  * Splits a path link into two, near the specified point, and returns the
  * newly-created path stop. The new stop gets added to the current area.
+ * l1:
+ *   Path link to split.
+ * l2:
+ *   If there is also a path link going in the opposite direction between
+ *   the two stops involved, this contains its data. Otherwise, it contains
+ *   NULLs.
+ * where:
+ *   Where to make the split.
  */
 path_stop* area_editor::split_path_link(
     const std::pair<path_stop*, path_stop*> &l1,
@@ -1801,6 +1882,8 @@ path_stop* area_editor::split_path_link(
 /* ----------------------------------------------------------------------------
  * Updates the triangles and bounding box of the specified sectors, and
  * reports any errors found.
+ * affected_sectors:
+ *   The list of affected sectors.
  */
 void area_editor::update_affected_sectors(
     const unordered_set<sector*> &affected_sectors

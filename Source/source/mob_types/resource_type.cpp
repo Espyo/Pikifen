@@ -49,6 +49,8 @@ anim_conversion_vector resource_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void resource_type::load_properties(data_node* file) {
     reader_setter rs(file);

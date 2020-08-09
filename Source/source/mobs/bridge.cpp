@@ -15,10 +15,16 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a bridge mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Bridge type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
-bridge::bridge(const point &pos, bridge_type* bri_type, const float angle) :
-    mob(pos, bri_type, angle),
-    bri_type(bri_type) {
+bridge::bridge(const point &pos, bridge_type* type, const float angle) :
+    mob(pos, type, angle),
+    bri_type(type) {
     
     //Search neighboring sectors.
     get_sector(pos, NULL, true)->get_neighbor_sectors_conditionally(

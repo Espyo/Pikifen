@@ -15,6 +15,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a status effect instance.
+ * type:
+ *   Its type.
  */
 status::status(status_type* type) :
     type(type),
@@ -26,6 +28,8 @@ status::status(status_type* type) :
 
 /* ----------------------------------------------------------------------------
  * Ticks a status effect instance's logic, but not its effects.
+ * delta_t:
+ *   Seconds to tick by.
  */
 void status::tick(const float delta_t) {
     if(type->auto_remove_time > 0.0f) {

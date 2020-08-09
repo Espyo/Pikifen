@@ -31,6 +31,8 @@ using std::string;
 
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
+ * category_id:
+ *   The ID of the category it belongs to.
  */
 mob_type::mob_type(size_t category_id) :
     category(game.mob_categories.get(category_id)),
@@ -191,12 +193,16 @@ anim_conversion_vector mob_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file, if any.
+ * file:
+ *   File to read from.
  */
 void mob_type::load_properties(data_node* file) { }
 
 
 /* ----------------------------------------------------------------------------
  * Loads any resources into memory, if any.
+ * file:
+ *   File to read from.
  */
 void mob_type::load_resources(data_node* file) { }
 
@@ -221,6 +227,10 @@ mob_type::area_editor_prop_struct::area_editor_prop_struct() :
 /* ----------------------------------------------------------------------------
  * Grabs an animation conversion vector, filled with base animations,
  * and outputs one that combines all base animations with their groups.
+ * v:
+ *   The animation conversion vector.
+ * base_anim_total:
+ *   How many base animations exist.
  */
 anim_conversion_vector
 mob_type_with_anim_groups::get_anim_conversions_with_groups(
@@ -246,6 +256,15 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
 
 /* ----------------------------------------------------------------------------
  * Loads a mob type's info from a text file.
+ * mt:
+ *   Mob type to read data into.
+ * file:
+ *   File to read data from.
+ * load_resources:
+ *   If true, resources like bitmaps are loaded too. If you don't need them,
+ *   let this be false so it loads faster.
+ * folder:
+ *   Name of the folder where this mob type's data is from.
  */
 void load_mob_type_from_file(
     mob_type* mt, data_node &file,
@@ -716,6 +735,9 @@ void load_mob_type_from_file(
 
 /* ----------------------------------------------------------------------------
  * Loads all mob types.
+ * load_resources:
+ *   If true, resources like bitmaps are loaded too. If you don't need them,
+ *   let this be false so it loads faster.
  */
 void load_mob_types(bool load_resources) {
     //Load the categorized mob types.
@@ -828,6 +850,11 @@ void load_mob_types(mob_category* category, bool load_resources) {
 
 /* ----------------------------------------------------------------------------
  * Unloads a type of mob.
+ * mt:
+ *   Mob type to unload.
+ * unload_resources:
+ *   False if you don't need to unload images or sounds,
+ *   since they never got loaded in the first place.
  */
 void unload_mob_type(mob_type* mt, const bool unload_resources) {
     if(unload_resources) {
@@ -841,6 +868,9 @@ void unload_mob_type(mob_type* mt, const bool unload_resources) {
 
 /* ----------------------------------------------------------------------------
  * Unloads all loaded types of mob from memory.
+ * unload_resources:
+ *   False if you don't need to unload images or sounds,
+ *   since they never got loaded in the first place.
  */
 void unload_mob_types(const bool unload_resources) {
     game.config.leader_order.clear();

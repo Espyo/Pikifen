@@ -19,6 +19,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the bridge's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void bridge_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -54,6 +56,12 @@ void bridge_fsm::create_fsm(mob_type* typ) {
 /* ----------------------------------------------------------------------------
  * Opens up the bridge. Updates all relevant sectors,
  * does the particle explosion, etc.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void bridge_fsm::open(mob* m, void* info1, void* info2) {
     bridge* b_ptr = (bridge*) m;
@@ -108,6 +116,12 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Sets the standard "idling" animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(BRIDGE_ANIM_IDLING);

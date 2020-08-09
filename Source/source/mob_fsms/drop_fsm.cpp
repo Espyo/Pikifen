@@ -17,6 +17,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the drop's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void drop_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -71,6 +73,12 @@ void drop_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When the drop lands on the floor.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void drop_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
@@ -80,6 +88,12 @@ void drop_fsm::land(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * What to do when the drop is touched.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     drop* d_ptr = (drop*) m;
@@ -154,6 +168,12 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Sets the animation to the "bumped" one.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void drop_fsm::set_bumped_anim(mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_BUMPED);
@@ -162,6 +182,12 @@ void drop_fsm::set_bumped_anim(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Sets the animation to the "falling" one.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_FALLING);
@@ -170,6 +196,12 @@ void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Sets the standard "idling" animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void drop_fsm::set_idling_anim(mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_IDLING);

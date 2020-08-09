@@ -29,6 +29,12 @@ size_t next_mob_id = 0;
 
 /* ----------------------------------------------------------------------------
  * Creates a mob of no particular type.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 mob::mob(const point &pos, mob_type* type, const float angle) :
     type(type),
@@ -109,6 +115,8 @@ mob::~mob() {
 
 /* ----------------------------------------------------------------------------
  * Adds a mob to this mob's group.
+ * new_member:
+ *   The new member to add.
  */
 void mob::add_to_group(mob* new_member) {
     //If it's already following, never mind.
@@ -178,6 +186,10 @@ void mob::apply_attack_damage(
 
 /* ----------------------------------------------------------------------------
  * Applies the knockback values to a mob, caused by an attack.
+ * knockback:
+ *   Total knockback value.
+ * knockback_angle:
+ *   Angle to knockback towards.
  */
 void mob::apply_knockback(const float knockback, const float knockback_angle) {
     if(knockback != 0) {
@@ -193,6 +205,13 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
 
 /* ----------------------------------------------------------------------------
  * Applies a status effect's effects.
+ * s:
+ *   Status effect to use.
+ * refill:
+ *   If true, then the time left before the status wears off is reset, if the
+ *   mob is already under this status effect.
+ * given_by_parent:
+ *   If true, this status effect was given to the mob by its parent mob.
  */
 void mob::apply_status_effect(
     status_type* s, const bool refill, const bool given_by_parent
@@ -787,6 +806,8 @@ void mob::calculate_throw(
 /* ----------------------------------------------------------------------------
  * Does this mob want to attack mob v? Teams and other factors are used to
  * decide this.
+ * v:
+ *   The victim to check.
  */
 bool mob::can_hunt(mob* v) const {
     //Teammates cannot hunt each other down.
@@ -808,6 +829,8 @@ bool mob::can_hunt(mob* v) const {
 
 /* ----------------------------------------------------------------------------
  * Can this mob damage v? Teams and other factors are used to decide this.
+ * v:
+ *   The victim to check.
  */
 bool mob::can_hurt(mob* v) const {
     //Teammates cannot hurt each other.
@@ -835,6 +858,8 @@ bool mob::can_hurt(mob* v) const {
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not a mob can receive a given status effect.
+ * s:
+ *   Status type to check.
  */
 bool mob::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_OTHERS;
@@ -880,18 +905,24 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
 
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
- * offs_*:          Coordinates of the target, relative to either the
+ * offset:
+ *   Coordinates of the target, relative to either the
  *   world origin, or another point, specified in the next parameters.
- * orig_*:          Pointers to changing coordinates. If NULL, it is
+ * orig_coords:
+ *   Pointer to changing coordinates. If NULL, it is
  *   the world origin. Use this to make the mob follow another mob
  *   wherever they go, for instance.
- * teleport:        If true, the mob teleports to that spot,
- *   instead of walking to it.
- * teleport_z:      Teleports to this Z coordinate, too.
- * free_move:       If true, the mob can go to a direction they're not facing.
- * target_distance: Distance from the target in which the mob is
+ * teleport:
+ *   If true, the mob teleports to that spot, instead of walking to it.
+ * teleport_z:
+ *   Teleports to this Z coordinate, too.
+ * free_move:
+ *   If true, the mob can go to a direction they're not facing.
+ * target_distance:
+ *   Distance from the target in which the mob is
  *   considered as being there.
- * speed:           Speed at which to go to the target. -1 uses the mob's speed.
+ * speed:
+ *   Speed at which to go to the target. -1 uses the mob's speed.
  */
 void mob::chase(
     const point &offset, point* orig_coords,
@@ -915,6 +946,10 @@ void mob::chase(
 /* ----------------------------------------------------------------------------
  * Makes a mob chomp another mob. Mostly applicable for enemies chomping
  * on Pikmin.
+ * m:
+ *   The mob to be chomped.
+ * hitbox_info:
+ *   Information about the hitbox that caused the chomp.
  */
 void mob::chomp(mob* m, hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
@@ -1175,10 +1210,12 @@ void mob::finish_dying_class_specifics() {
 
 /* ----------------------------------------------------------------------------
  * Makes the mob focus on m2.
+ * m2:
+ *   The mob to focus on.
  */
-void mob::focus_on_mob(mob* m) {
+void mob::focus_on_mob(mob* m2) {
     unfocus_from_mob();
-    focused_mob = m;
+    focused_mob = m2;
 }
 
 
@@ -1311,6 +1348,8 @@ hitbox* mob::get_closest_hitbox(
 /* ----------------------------------------------------------------------------
  * Returns how vulnerable the mob is to that specific hazard,
  * or the mob type's default if there is no vulnerability data for that hazard.
+ * h_ptr:
+ *   The hazard to check.
  */
 float mob::get_hazard_vulnerability(hazard* h_ptr) const {
     float vulnerability_value = type->default_vulnerability;
@@ -1324,8 +1363,9 @@ float mob::get_hazard_vulnerability(hazard* h_ptr) const {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the hitbox in the current animation with
- * the specified number.
+ * Returns the hitbox in the current animation with the specified number.
+ * nr:
+ *   The hitbox's number.
  */
 hitbox* mob::get_hitbox(const size_t nr) const {
     sprite* s = anim.get_cur_sprite();
@@ -1496,6 +1536,8 @@ void mob::get_sprite_bitmap_effects(
 
 /* ----------------------------------------------------------------------------
  * Returns where a sprite's center should be, for normal mob drawing routines.
+ * s:
+ *   Sprite to check.
  */
 point mob::get_sprite_center(sprite* s) const {
     point p;
@@ -1567,6 +1609,8 @@ void mob::handle_panic_loss() {
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
+ * s:
+ *   Status type to check.
  */
 void mob::handle_status_effect(status_type* s) {
 }
@@ -1624,6 +1668,8 @@ bool mob::is_off_camera() const {
 
 /* ----------------------------------------------------------------------------
  * Checks if a mob is resistant to all of the hazards inside a given list.
+ * hazards:
+ *   List of hazards to check.
  */
 bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); ++h) {
@@ -1682,6 +1728,8 @@ string mob::print_state_history() const {
 
 /* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
  */
 void mob::read_script_vars(const script_var_reader &svr) {
     string team_var;
@@ -1703,6 +1751,8 @@ void mob::read_script_vars(const script_var_reader &svr) {
 
 /* ----------------------------------------------------------------------------
  * Stop holding a mob.
+ * m:
+ *   Mob to release.
  */
 void mob::release(mob* m) {
     for(size_t h = 0; h < holding.size(); ++h) {
@@ -1737,6 +1787,8 @@ void mob::release_chomped_pikmin() {
 
 /* ----------------------------------------------------------------------------
  * Removes all particle generators with the given ID.
+ * id:
+ *   ID of particle generators to remove.
  */
 void mob::remove_particle_generator(const size_t id) {
     for(size_t g = 0; g < particle_generators.size();) {
@@ -1763,6 +1815,10 @@ void mob::respawn() {
 /* ----------------------------------------------------------------------------
  * Sends a message to another mob. This calls the mob's "message received"
  * event, with the message as data.
+ * receiver:
+ *   Mob that will receive the message.
+ * msg:
+ *   The message.
  */
 void mob::send_message(mob* receiver, string &msg) const {
     mob_event* ev = q_get_event(receiver, MOB_EV_RECEIVE_MESSAGE);
@@ -2144,6 +2200,8 @@ void mob::tick(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Ticks one game frame into the mob's animations.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_animation(const float delta_t) {
     float mult = 1.0f;
@@ -2181,6 +2239,8 @@ void mob::tick_animation(const float delta_t) {
  * This has nothing to do with the mob's individual script.
  * This is related to mob-global things, like
  * thinking about where to move next and such.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_brain(const float delta_t) {
     //Circling around something.
@@ -2285,6 +2345,8 @@ void mob::tick_brain(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Code specific for each class. Meant to be overwritten by the child classes.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_class_specifics(const float delta_t) {
 }
@@ -2292,6 +2354,8 @@ void mob::tick_class_specifics(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Performs some logic code for this game frame.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_misc_logic(const float delta_t) {
     time_alive += delta_t;
@@ -2330,6 +2394,8 @@ void mob::tick_misc_logic(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Checks general events in the mob's script for this frame.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_script(const float delta_t) {
     if(!fsm.cur_state) return;
@@ -2547,6 +2613,12 @@ mob_with_anim_groups::mob_with_anim_groups() :
 /* ----------------------------------------------------------------------------
  * Returns the number of an animation, given a base animation number and
  * group number.
+ * base_anim_nr:
+ *   Base animation number.
+ * group_nr:
+ *   Group it belongs to.
+ * base_anim_total:
+ *   Total number of base animations.
  */
 size_t mob_with_anim_groups::get_animation_nr_from_base_and_group(
     const size_t base_anim_nr, const size_t group_nr,

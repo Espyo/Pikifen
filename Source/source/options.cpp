@@ -85,6 +85,8 @@ options_struct::options_struct() :
 
 /* ----------------------------------------------------------------------------
  * Loads the player's options from a file.
+ * file:
+ *   File to read from.
  */
 void options_struct::load(data_node* file) {
     reader_setter rs(file);
@@ -213,6 +215,8 @@ void options_struct::load_control(
 
 /* ----------------------------------------------------------------------------
  * Saves the player's options into a file.
+ * file:
+ *   File to write to.
  */
 void options_struct::save(data_node* file) const {
     //First, group the controls by action and player.

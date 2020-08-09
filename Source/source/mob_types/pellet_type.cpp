@@ -46,6 +46,8 @@ anim_conversion_vector pellet_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void pellet_type::load_properties(data_node* file) {
     reader_setter rs(file);
@@ -72,6 +74,8 @@ void pellet_type::load_properties(data_node* file) {
 
 /* ----------------------------------------------------------------------------
  * Loads resources into memory.
+ * file:
+ *   File to read from.
  */
 void pellet_type::load_resources(data_node* file) {
     reader_setter rs(file);

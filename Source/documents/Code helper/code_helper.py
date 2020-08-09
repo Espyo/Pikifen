@@ -107,6 +107,7 @@ def find_problems():
     problems = problems + find_alphabetical_problems()
     problems = problems + find_cramped_things()
     problems = problems + find_bad_documentation()
+    has_problems = False
     
     problems_by_file = {}
     
@@ -116,11 +117,16 @@ def find_problems():
         problems_by_file[file].append((problem, info))
     
     for file, dummy in sorted(problems_by_file.items()):
-        if file.find('imgui') != -1:
+        if file.find('imgui/') != -1:
             continue
+            
+        has_problems = True
         print(file)
         for problem, info in problems_by_file[file]:
             print('  ' + problem + ': ' + info)
+    
+    if not has_problems:
+        print("No problems found.")
     
     input("Done. Press Enter...")
     

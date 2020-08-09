@@ -134,6 +134,10 @@ const int FOG_BITMAP_SIZE = 128;
 
 /* ----------------------------------------------------------------------------
  * Generates the bitmap that'll draw the fog fade effect.
+ * near_radius:
+ *   Until this radius, the fog is not present.
+ * far_radius:
+ *   From this radius on, the fog is fully dense.
  */
 ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
     const float near_radius, const float far_radius
@@ -485,6 +489,10 @@ void gameplay::load_game_content() {
 
 /* ----------------------------------------------------------------------------
  * Loads HUD coordinates of a specific HUD item.
+ * item:
+ *   Item to load the coordinates for.
+ * data:
+ *   String containing the coordinate data.
  */
 void gameplay::load_hud_coordinates(const int item, string data) {
     vector<string> words = split(data);

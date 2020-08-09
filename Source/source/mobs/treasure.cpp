@@ -19,6 +19,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a treasure.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Treasure type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 treasure::treasure(const point &pos, treasure_type* type, const float angle) :
     mob(pos, type, angle),

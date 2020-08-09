@@ -41,6 +41,12 @@ void interactable_category::clear_types() {
 
 /* ----------------------------------------------------------------------------
  * Creates an interactable and adds it to the list of interactables.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
  */
 mob* interactable_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -61,6 +67,8 @@ mob_type* interactable_category::create_type() {
 
 /* ----------------------------------------------------------------------------
  * Clears an interactable from the list of interactables.
+ * m:
+ *   The mob to erase.
  */
 void interactable_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.interactables.erase(
@@ -71,6 +79,8 @@ void interactable_category::erase_mob(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Returns a type of interactable given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
  */
 mob_type* interactable_category::get_type(const string &name) const {
     auto it = game.mob_types.interactable.find(name);
@@ -81,6 +91,8 @@ mob_type* interactable_category::get_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns all types of interactable by name.
+ * list:
+ *   This list gets filled with the mob type names.
  */
 void interactable_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.interactable) {
@@ -91,6 +103,8 @@ void interactable_category::get_type_names(vector<string> &list) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a created type of interactable.
+ * type:
+ *   Mob type to register.
  */
 void interactable_category::register_type(mob_type* type) {
     game.mob_types.interactable[type->name] = (interactable_type*) type;

@@ -38,6 +38,8 @@ easy_fsm_creator::easy_fsm_creator() :
 /* ----------------------------------------------------------------------------
  * Creates a new action call for the current event, one that changes
  * the mob's state to something else.
+ * new_state:
+ *   State to change to.
  */
 void easy_fsm_creator::change_state(const string &new_state) {
     cur_event->actions.push_back(new mob_action_call(MOB_ACTION_SET_STATE));
@@ -85,6 +87,8 @@ vector<mob_state*> easy_fsm_creator::finish() {
 /* ----------------------------------------------------------------------------
  * Finishes the previous event, if any, creates a new event for the
  * current state, and starts tracking for the creation of its actions.
+ * type:
+ *   Type of event.
  */
 void easy_fsm_creator::new_event(const unsigned char type) {
     commit_event();
@@ -96,6 +100,10 @@ void easy_fsm_creator::new_event(const unsigned char type) {
 /* ----------------------------------------------------------------------------
  * Finishes the previous state, if any, creates a new state,
  * and starts tracking for the creation of its events.
+ * name:
+ *   Name of the state.
+ * id:
+ *   Its ID.
  */
 void easy_fsm_creator::new_state(const string &name, const size_t id) {
     commit_state();
@@ -107,6 +115,8 @@ void easy_fsm_creator::new_state(const string &name, const size_t id) {
 /* ----------------------------------------------------------------------------
  * Creates a new action for the current event, one that
  * runs some custom code.
+ * code:
+ *   Function with said code.
  */
 void easy_fsm_creator::run(custom_action_code code) {
     cur_event->actions.push_back(new mob_action_call(code));
@@ -287,6 +297,8 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
 
 /* ----------------------------------------------------------------------------
  * Creates a new mob FSM.
+ * m:
+ *   The mob this FSM belongs to.
  */
 mob_fsm::mob_fsm(mob* m) :
     cur_state(nullptr),
@@ -312,7 +324,7 @@ mob_event* mob_fsm::get_event(const size_t type) const {
  * Runs an event in the current state, if it exists.
  * type:          the event's type.
  * custom_data_1: custom argument #1 to pass to the code.
- * custom_data_1: custom argument #1 to pass to the code.
+ * custom_data_2: custom argument #2 to pass to the code.
  */
 void mob_fsm::run_event(
     const size_t type, void* custom_data_1, void* custom_data_2
@@ -337,8 +349,13 @@ void mob_fsm::run_event(
 
 /* ----------------------------------------------------------------------------
  * Changes the fsm to use a different state.
- * info*: data to pass on to the code after the state change.
+ * new_state:
+ *   The state to change to.
+ * info1:
+ *   Data to pass on to the code after the state change.
  *   This data comes from the event that started all of this.
+ * info2:
+ *   Same as info1, but a second variable.
  */
 void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
@@ -384,8 +401,10 @@ mob_state::mob_state(const string &name) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new state.
- * name: the state's name.
- * e:    its events.
+ * name:
+ *   The state's name.
+ * evs:
+ *   Its events.
  */
 mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
     name(name),

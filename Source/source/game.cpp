@@ -73,6 +73,8 @@ game_class::game_class() :
 
 /* ----------------------------------------------------------------------------
  * Changes to a different game state.
+ * new_state:
+ *   State to change to.
  */
 void game_class::change_state(game_state* new_state) {
 

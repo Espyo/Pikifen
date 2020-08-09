@@ -60,7 +60,7 @@ def get_params(lines, line_nr):
 
     # Scan the file to find the function's entire signature.
     while finding_sig:
-        if line_nr == len(lines):
+        if line_nr > len(lines):
             # Reached the end of file.
             finding_sig = False
             break
@@ -70,14 +70,16 @@ def get_params(lines, line_nr):
         bracket_pos = line.find('{')
         if bracket_pos != -1:
             finding_sig = False
-            line = line[:bracket_pos]
+            line = line[:bracket_pos + 1]
         colon_pos = line.find(':\n')
         if colon_pos != -1:
             finding_sig = False
-            line = line[:colon_pos]
+            line = line[:colon_pos + 1]
         
         sig = sig + ' ' + line[:-1]
         line_nr = line_nr + 1
+    
+    sig = sig.strip()
     
     if len(sig) == 0:
         return params
@@ -93,6 +95,7 @@ def get_params(lines, line_nr):
 
     # Keep it simple - remove angle brackets and parentheses, and everything in between.
     sig = remove_inside(sig, '<', '>')
+    sig = remove_inside(sig, '[', ']')
     sig = remove_inside(sig, '(', ')')
 
     # Remove default values from parameters.

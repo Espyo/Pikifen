@@ -23,6 +23,12 @@
 
 /* ----------------------------------------------------------------------------
  * Event handler that makes a mob lose health by being damaged by another.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -43,6 +49,12 @@ const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
 const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
 /* ----------------------------------------------------------------------------
  * When it's time to become stuck and move in circles.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
     engine_assert(m->carry_info != NULL, m->print_state_history());
@@ -58,6 +70,12 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When it's time to check if a carried object should begin moving,
  * or update its path.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
@@ -71,6 +89,12 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a mob wants a new path.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     float target_distance = 3.0f;
@@ -104,6 +128,12 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a mob reaches the destination or an obstacle when carrying.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
     m->stop_following_path();
@@ -113,6 +143,12 @@ void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a mob is no longer stuck waiting to be carried.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
     m->stop_circling();
@@ -121,6 +157,12 @@ void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a carried object stops moving.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
@@ -133,6 +175,12 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Event handler that makes a mob die.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
     if(m->type->death_state_nr == INVALID) return;
@@ -142,6 +190,12 @@ void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Event handler that makes a mob fall into a pit and vanish.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(false, false, 0);
@@ -152,6 +206,12 @@ void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Event handler for a Pikmin being added as a carrier.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
@@ -191,6 +251,12 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Event handler for a carrier Pikmin being removed.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
@@ -232,6 +298,12 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Generic handler for when a mob was delivered to an Onion/ship.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
@@ -246,6 +318,12 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a mob starts the process of being delivered to an Onion/ship.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carry_info->spot_info.size(); ++p) {
@@ -264,6 +342,12 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Generic handler for a mob touching a hazard.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -278,6 +362,12 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Generic handler for a mob touching a spray.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());

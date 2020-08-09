@@ -51,6 +51,8 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void onion_type::load_properties(data_node* file) {
     reader_setter rs(file);

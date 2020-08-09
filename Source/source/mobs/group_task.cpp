@@ -15,6 +15,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a new group task mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Group task type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 group_task::group_task(
     const point &pos, group_task_type* type, const float angle
@@ -219,6 +225,8 @@ void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
 
 /* ----------------------------------------------------------------------------
  * Runs code specific to this class, once per frame.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void group_task::tick_class_specifics(const float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {
@@ -266,6 +274,8 @@ void group_task::update_spot_absolute_positions() {
 
 /* ----------------------------------------------------------------------------
  * Creates a new group task spot struct.
+ * pos:
+ *   Position of the spot, in relative coordinates.
  */
 group_task::group_task_spot::group_task_spot(const point &pos) :
     relative_pos(pos), absolute_pos(pos), state(0), pikmin_here(nullptr) {

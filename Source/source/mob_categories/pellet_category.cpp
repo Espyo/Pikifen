@@ -41,6 +41,12 @@ void pellet_category::clear_types() {
 
 /* ----------------------------------------------------------------------------
  * Creates a pellet and adds it to the list of pellets.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
  */
 mob* pellet_category::create_mob(
     const point &pos, mob_type* type, const float angle
@@ -61,6 +67,8 @@ mob_type* pellet_category::create_type() {
 
 /* ----------------------------------------------------------------------------
  * Clears a pellet from the list of pellets.
+ * m:
+ *   The mob to erase.
  */
 void pellet_category::erase_mob(mob* m) {
     game.states.gameplay_st->mobs.pellets.erase(
@@ -71,6 +79,8 @@ void pellet_category::erase_mob(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Returns a type of pellet given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
  */
 mob_type* pellet_category::get_type(const string &name) const {
     auto it = game.mob_types.pellet.find(name);
@@ -81,6 +91,8 @@ mob_type* pellet_category::get_type(const string &name) const {
 
 /* ----------------------------------------------------------------------------
  * Returns all types of pellet by name.
+ * list:
+ *   This list gets filled with the mob type names.
  */
 void pellet_category::get_type_names(vector<string> &list) const {
     for(auto &t : game.mob_types.pellet) {
@@ -91,6 +103,8 @@ void pellet_category::get_type_names(vector<string> &list) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a created type of pellet.
+ * type:
+ *   Mob type to register.
  */
 void pellet_category::register_type(mob_type* type) {
     game.mob_types.pellet[type->name] = (pellet_type*) type;

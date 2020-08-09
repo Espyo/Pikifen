@@ -740,6 +740,10 @@ void gameplay::do_gameplay_logic() {
 /* ----------------------------------------------------------------------------
  * Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
+ * m_ptr:
+ *   Mob to process.
+ * m:
+ *   Index of the mob.
  */
 void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     vector<pending_intermob_event> pending_intermob_events;

@@ -16,6 +16,12 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a pellet mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Pellet type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     mob(pos, type, angle),

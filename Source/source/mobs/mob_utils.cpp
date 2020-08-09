@@ -23,6 +23,8 @@ using std::size_t;
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about a carrying spot.
+ * pos:
+ *   The spot's relative coordinates.
  */
 carrier_spot_struct::carrier_spot_struct(const point &pos) :
     state(CARRY_SPOT_FREE),
@@ -34,9 +36,10 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about carrying.
- * m:                 The mob this info belongs to.
- * max_carriers:      The maximum number of carrier Pikmin.
- * carry_destination: Where to deliver the mob. Use CARRY_DESTINATION_*.
+ * m:
+ *   The mob this info belongs to.
+ * destination:
+ *   Where to deliver the mob. Use CARRY_DESTINATION_*.
  */
 carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     m(m),
@@ -123,6 +126,8 @@ bool carry_info_struct::is_full() const {
  * angle away from the mob.
  * This is useful when the first Pikmin is coming, to make the first carry
  * spot be closer to that Pikmin.
+ * angle:
+ *   Angle to rotate to.
  */
 void carry_info_struct::rotate_points(const float angle) {
     for(size_t s = 0; s < spot_info.size(); ++s) {
@@ -154,6 +159,8 @@ chase_info_struct::chase_info_struct() :
 
 /* ----------------------------------------------------------------------------
  * Creates an instance of a structure with info about the mob's circling.
+ * m:
+ *   Mob this circling info struct belongs to.
  */
 circling_info_struct::circling_info_struct(mob* m) :
     m(m),
@@ -169,6 +176,8 @@ circling_info_struct::circling_info_struct(mob* m) :
 
 /* ----------------------------------------------------------------------------
  * Creates a new group information struct.
+ * leader_ptr:
+ *   Mob this group info struct belongs to.
  */
 group_info_struct::group_info_struct(mob* leader_ptr) :
     radius(0),
@@ -210,6 +219,8 @@ point group_info_struct::get_average_member_pos() const {
 /* ----------------------------------------------------------------------------
  * Returns a point's offset from the anchor,
  * given the current group transformation.
+ * spot_index:
+ *   Index of the spot to check.
  */
 point group_info_struct::get_spot_offset(const size_t spot_index) const {
     point res = spots[spot_index].pos;
@@ -460,6 +471,8 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
 /* ----------------------------------------------------------------------------
  * Sorts the group with the specified type at the front, and the other types
  * (in order) behind.
+ * leading_type:
+ *   The subgroup type that will be at the front of the group.
  */
 void group_info_struct::sort(subgroup_type* leading_type) {
 
@@ -531,6 +544,8 @@ void hold_info_struct::clear() {
 
 /* ----------------------------------------------------------------------------
  * Returns the final coordinates this mob should be at.
+ * final_z:
+ *   The Z coordinate is returned here.
  */
 point hold_info_struct::get_final_pos(float* final_z) const {
     if(!m) return point();
@@ -572,6 +587,8 @@ point hold_info_struct::get_final_pos(float* final_z) const {
 
 /* ----------------------------------------------------------------------------
  * Initializes a parent mob information struct.
+ * m:
+ *   The parent mob.
  */
 parent_info_struct::parent_info_struct(mob* m) :
     m(m),
@@ -593,6 +610,10 @@ parent_info_struct::parent_info_struct(mob* m) :
 
 /* ----------------------------------------------------------------------------
  * Creates an instance of a structure with info about the mob's path-following.
+ * m:
+ *   Mob this path info struct belongs to.
+ * target:
+ *   Its target destination.
  */
 path_info_struct::path_info_struct(mob* m, const point &target) :
     m(m),
@@ -627,6 +648,8 @@ bool path_info_struct::check_blockage() {
 /* ----------------------------------------------------------------------------
  * Creates an instance of a structure with info about the track the mob
  * is riding.
+ * m:
+ *   Mob this track info struct belongs to.
  */
 track_info_struct::track_info_struct(mob* m) :
     m(m),
@@ -812,6 +835,8 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
 /* ----------------------------------------------------------------------------
  * Returns a string that describes the given mob. Used in error messages
  * where you have to indicate a specific mob in the area.
+ * m:
+ *   The mob.
  */
 string get_error_message_mob_info(mob* m) {
     return
@@ -823,6 +848,8 @@ string get_error_message_mob_info(mob* m) {
 /* ----------------------------------------------------------------------------
  * Converts a string to the numeric representation of a mob target type.
  * Returns INVALID if the string is not valid.
+ * type_str:
+ *   Text representation of the target type.
  */
 size_t string_to_mob_target_type(const string &type_str) {
     if(type_str == "none") {
@@ -851,6 +878,8 @@ size_t string_to_mob_target_type(const string &type_str) {
 /* ----------------------------------------------------------------------------
  * Converts a string to the numeric representation of a team.
  * Returns INVALID if the string is not valid.
+ * team_str:
+ *   Text representation of the team.
  */
 size_t string_to_team_nr(const string &team_str) {
     for(size_t t = 0; t < N_MOB_TEAMS; ++t) {

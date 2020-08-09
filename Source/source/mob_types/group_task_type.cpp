@@ -36,6 +36,8 @@ group_task_type::group_task_type() :
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file.
+ * file:
+ *   File to read from.
  */
 void group_task_type::load_properties(data_node* file) {
     reader_setter rs(file);

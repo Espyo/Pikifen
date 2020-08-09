@@ -23,6 +23,16 @@ using std::string;
 
 /* ----------------------------------------------------------------------------
  * Initializes an instance of a mob category.
+ * id:
+ *   This category's ID.
+ * name:
+ *   Standard category name, in singular.
+ * plural_name:
+ *   Standard category name, in plural.
+ * folder:
+ *   Name of the folder where the mob types for this category are.
+ * editor_color:
+ *   In the area editor, objects of this category get this color.
  */
 mob_category::mob_category(
     const size_t id, const string &name, const string &plural_name,
@@ -52,6 +62,8 @@ void mob_category_manager::clear() {
  * Finds a mob type given its name. This finds the first occurence, in case
  * multiple categories have a mob type of that name.
  * Returns NULL on error.
+ * name:
+ *   Name of the mob type.
  */
 mob_type* mob_category_manager::find_mob_type(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
@@ -83,6 +95,8 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
 /* ----------------------------------------------------------------------------
  * Returns a category given its ID.
  * Returns NULL on error.
+ * id:
+ *   ID of the category.
  */
 mob_category* mob_category_manager::get(const size_t id) const {
     if(id >= categories.size()) return NULL;
@@ -93,6 +107,8 @@ mob_category* mob_category_manager::get(const size_t id) const {
 /* ----------------------------------------------------------------------------
  * Returns a category given its folder name.
  * Returns NULL on error.
+ * name:
+ *   Name of the folder.
  */
 mob_category* mob_category_manager::get_from_folder_name(
     const string &name
@@ -108,6 +124,8 @@ mob_category* mob_category_manager::get_from_folder_name(
 /* ----------------------------------------------------------------------------
  * Returns a category given its name.
  * Returns NULL on error.
+ * name:
+ *   Name of the category.
  */
 mob_category* mob_category_manager::get_from_name(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
@@ -121,6 +139,8 @@ mob_category* mob_category_manager::get_from_name(const string &name) const {
 /* ----------------------------------------------------------------------------
  * Returns a category given its plural name.
  * Returns NULL on error.
+ * pname:
+ *   Plural name of the category.
  */
 mob_category* mob_category_manager::get_from_pname(const string &pname) const {
     for(size_t n = 0; n < categories.size(); ++n) {
@@ -132,6 +152,10 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) const {
 
 /* ----------------------------------------------------------------------------
  * Registers a new mob category.
+ * nr:
+ *   ID of the category.
+ * category:
+ *   Pointer to its data.
  */
 void mob_category_manager::register_category(
     size_t nr,
@@ -161,14 +185,58 @@ none_category::none_category() :
 
 
 /* ----------------------------------------------------------------------------
- * Dummies.
+ * Clears the list of registered types.
  */
 void none_category::clear_types() { }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Mob type.
+ * angle:
+ *   Starting angle.
+ */
 mob* none_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) { return NULL; }
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new, empty type of mob.
+ */
 mob_type* none_category::create_type() { return NULL; }
+
+
+/* ----------------------------------------------------------------------------
+ * Clears a mob from the list.
+ * m:
+ *   The mob to erase.
+ */
 void none_category::erase_mob(mob* m) { }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a type of mob given its name, or NULL on error.
+ * name:
+ *   Name of the mob type to get.
+ */
 mob_type* none_category::get_type(const string &name) const { return NULL; }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns all types of leader by name.
+ * list:
+ *   This list gets filled with the mob type names.
+ */
 void none_category::get_type_names(vector<string> &list) const { }
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a created type of leader.
+ * type:
+ *   Mob type to register.
+ */
 void none_category::register_type(mob_type* type) { }

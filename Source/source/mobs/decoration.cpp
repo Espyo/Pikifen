@@ -16,12 +16,18 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a decoration mob.
+ * pos:
+ *   Starting coordinates.
+ * type:
+ *   Decoration type this mob belongs to.
+ * angle:
+ *   Starting angle.
  */
 decoration::decoration(
-    const point &pos, decoration_type* dec_type, const float angle
+    const point &pos, decoration_type* type, const float angle
 ) :
-    mob(pos, dec_type, angle),
-    dec_type(dec_type),
+    mob(pos, type, angle),
+    dec_type(type),
     individual_scale(1.0f),
     individual_rotation(0.0f),
     has_done_first_animation(false) {

@@ -177,6 +177,8 @@ void area_editor::cancel_layout_moving() {
 
 /* ----------------------------------------------------------------------------
  * Changes to a new state, cleaning up whatever is needed.
+ * new_state:
+ *   The new state.
  */
 void area_editor::change_state(const EDITOR_STATES new_state) {
     clear_selection();
@@ -473,6 +475,10 @@ void area_editor::do_logic() {
 
 /* ----------------------------------------------------------------------------
  * Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ * parent_list:
+ *   Unused.
+ * cmd:
+ *   Unused.
  */
 void area_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -483,6 +489,8 @@ void area_editor::draw_canvas_imgui_callback(
 
 /* ----------------------------------------------------------------------------
  * Emits a message onto the status bar, based on the given triangulation error.
+ * error:
+ *   The triangulation error.
  */
 void area_editor::emit_triangulation_error_status_bar_message(
     const TRIANGULATION_ERRORS error
@@ -883,6 +891,8 @@ void area_editor::finish_new_sector_drawing() {
 /* ----------------------------------------------------------------------------
  * Forgets a pre-prepared area state that was almost ready to be added to
  * the undo history.
+ * prepared_state:
+ *   The prepared state to forget.
  */
 void area_editor::forget_prepared_state(area_data* prepared_state) {
     delete prepared_state;
@@ -890,7 +900,14 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns which layout element got clicked, if any.
+ * Returns which layout element got clicked, if any. It will only return
+ * one of them.
+ * clicked_vertex:
+ *   If a vertex got clicked, it is returned here.
+ * clicked_edge:
+ *   If an edge got clicked, it is returned here.
+ * clicked_sector:
+ *   If a sector got clicked, it is returned here.
  */
 void area_editor::get_clicked_layout_element(
     vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
@@ -1325,6 +1342,12 @@ void area_editor::load_reference() {
 
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks an area from the picker.
+ * name:
+ *   Name of the area.
+ * category:
+ *   Unused.
+ * is_new:
+ *   Is it a new area, or an existing one?
  */
 void area_editor::pick_area(
     const string &name, const string &category, const bool is_new
@@ -1360,6 +1383,12 @@ void area_editor::pick_area(
 
 /* ----------------------------------------------------------------------------
  * Callback for when the user picks a texture from the picker.
+ * name:
+ *   Name of the texture.
+ * category:
+ *   Unused.
+ * is_new:
+ *   Unused.
  */
 void area_editor::pick_texture(
     const string &name, const string &category, const bool is_new
@@ -1919,6 +1948,8 @@ void area_editor::register_change(
 
 /* ----------------------------------------------------------------------------
  * Returns to a previously prepared area state.
+ * prepared_state:
+ *   Prepared state to return to.
  */
 void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
     prepared_state->clone(game.cur_area_data);
@@ -2348,6 +2379,8 @@ void area_editor::save_reference() {
 
 /* ----------------------------------------------------------------------------
  * Selects an edge and its vertexes.
+ * e:
+ *   Edge to select.
  */
 void area_editor::select_edge(edge* e) {
     if(selection_filter == SELECTION_FILTER_VERTEXES) return;
@@ -2361,6 +2394,8 @@ void area_editor::select_edge(edge* e) {
 
 /* ----------------------------------------------------------------------------
  * Selects a sector and its edges and vertexes.
+ * s:
+ *   Sector to select.
  */
 void area_editor::select_sector(sector* s) {
     if(selection_filter != SELECTION_FILTER_SECTORS) return;
@@ -2374,6 +2409,8 @@ void area_editor::select_sector(sector* s) {
 
 /* ----------------------------------------------------------------------------
  * Selects a tree shadow.
+ * s_ptr:
+ *   Tree shadow to select.
  */
 void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
     selected_shadow = s_ptr;
@@ -2383,6 +2420,8 @@ void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Selects a vertex.
+ * v:
+ *   Vertex to select.
  */
 void area_editor::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
@@ -3105,6 +3144,10 @@ void area_editor::update_reference() {
 
 /* ----------------------------------------------------------------------------
  * Updates a sector's texture.
+ * s_ptr:
+ *   Sector to update.
+ * file_name:
+ *   New file name of the texture.
  */
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &file_name
@@ -3117,6 +3160,8 @@ void area_editor::update_sector_texture(
 
 /* ----------------------------------------------------------------------------
  * Updates the list of texture suggestions, adding a new one or bumping it up.
+ * n:
+ *   Name of the chosen texture.
  */
 void area_editor::update_texture_suggestions(const string &n) {
     //First, check if it exists.
@@ -3193,6 +3238,10 @@ void area_editor::update_vertex_selection() {
 
 /* ----------------------------------------------------------------------------
  * Creates a layout drawing node based on the mouse's click position.
+ * ae_ptr:
+ *   Pointer to the area editor instance in charge.
+ * mouse_click:
+ *   Coordinates of the mouse click.
  */
 area_editor::layout_drawing_node::layout_drawing_node(
     area_editor* ae_ptr, const point &mouse_click
@@ -3264,6 +3313,8 @@ area_editor::layout_drawing_node::layout_drawing_node() :
 
 /* ----------------------------------------------------------------------------
  * Creates a texture suggestion.
+ * n:
+ *   File name of the texture.
  */
 area_editor::texture_suggestion::texture_suggestion(
     const string &n

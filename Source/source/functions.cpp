@@ -35,11 +35,23 @@
 #include "utils/string_utils.h"
 
 
-//Calls al_fwrite, but with an std::string instead of a c-string.
-void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
+/* ----------------------------------------------------------------------------
+ * Calls al_fwrite, but with an std::string instead of a c-string.
+ * f:
+ *   Allegro file.
+ * s:
+ *   String to write.
+ */
+void al_fwrite(ALLEGRO_FILE* f, string s) {
+    al_fwrite(f, s.c_str(), s.size());
+}
 
 
-//Converts a color to its string representation.
+/* ----------------------------------------------------------------------------
+ * Converts a color to its string representation.
+ * c:
+ *   Color to convert.
+ */
 string c2s(const ALLEGRO_COLOR &c) {
     return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
            (c.a == 1 ? "" : " " + i2s(c.a * 255));
@@ -48,6 +60,10 @@ string c2s(const ALLEGRO_COLOR &c) {
 
 /* ----------------------------------------------------------------------------
  * Does sector s1 cast a shadow onto sector s2?
+ * s1:
+ *   Sector that would cast a shadow.
+ * s2:
+ *   Sector that would have the shadow cast onto it.
  */
 bool casts_shadow(sector* s1, sector* s2) {
     if(!s1 || !s2) return false;
@@ -61,8 +77,10 @@ bool casts_shadow(sector* s1, sector* s2) {
 
 /* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
- * color: The color to change the alpha on.
- * a:     The new alpha, [0-255].
+ * c:
+ *   The color to change the alpha on.
+ * a:
+ *   The new alpha, [0-255].
  */
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
     ALLEGRO_COLOR c2;
@@ -74,8 +92,10 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
 
 /* ----------------------------------------------------------------------------
  * Returns the color provided, but darker or lighter by l amount.
- * color: The color to change the lighting on.
- * l:     Lighting amount, positive or negative.
+ * c:
+ *   The color to change the lighting on.
+ * l:
+ *   Lighting amount, positive or negative.
  */
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
     ALLEGRO_COLOR c2;
@@ -211,8 +231,12 @@ void crash(const string &reason, const string &info, const int exit_status) {
 
 /* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
- * folder_name: Name of the folder.
- * folders:     If true, only read folders. If false, only read files.
+ * folder_name:
+ *   Name of the folder.
+ * folders:
+ *   If true, only read folders. If false, only read files.
+ * folder_found:
+ *   If not NULL, returns whether the folder was found or not.
  */
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found
@@ -499,6 +523,8 @@ float get_sun_strength() {
  * Given a string representation of mob script variables,
  * returns a map, where every key is a variable, and every value is the
  * variable's value.
+ * vars_string:
+ *   String with the variables.
  */
 map<string, string> get_var_map(const string &vars_string) {
     map<string, string> final_map;
@@ -524,8 +550,9 @@ const float WALL_SHADOW_LENGTH_MULT = 0.2f;
 
 /* ----------------------------------------------------------------------------
  * Returns the length a wall's shadow should be.
- * height_difference: Difference in height between the sector casting the shadow
- * * and the one the shadow is being cast on.
+ * height_difference:
+ *   Difference in height between the sector casting the shadow
+ *   and the one the shadow is being cast on.
  */
 float get_wall_shadow_length(const float height_difference) {
     return
@@ -539,6 +566,8 @@ float get_wall_shadow_length(const float height_difference) {
 
 /* ----------------------------------------------------------------------------
  * Auxiliary function that returns a table used in the weather configs.
+ * node:
+ *   Data node with the weather table.
  */
 vector<std::pair<size_t, string> > get_weather_table(data_node* node) {
     vector<std::pair<size_t, string> > table;
@@ -585,10 +614,17 @@ vector<std::pair<size_t, string> > get_weather_table(data_node* node) {
 
 /* ----------------------------------------------------------------------------
  * Returns the interpolation between two colors, given a number in an interval.
- * n: The number.
- * n1, n2: The interval the number falls on.
- * * The closer to n1, the closer the final color is to c1.
- * c1, c2: Colors.
+ * n:
+ *   The number.
+ * n1:
+ *   Start of the interval the number falls on, inclusive.
+ *   The closer to n1, the closer the final color is to c1.
+ * n2:
+ *   End of the interval the number falls on, inclusive.
+ * c1:
+ *   Color on the first end of the interpolation.
+ * c2:
+ *   Color on the second end of the interpolation.
  */
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
@@ -655,7 +691,10 @@ void log_error(string s, data_node* d) {
 
 /* ----------------------------------------------------------------------------
  * Converts a point to a string.
- * If z is present, the third word is placed there.
+ * p:
+ *   Point to convert.
+ * z:
+ *   If not NULL, the third word is placed here.
  */
 string p2s(const point &p, float* z) {
     return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
@@ -681,7 +720,14 @@ void print_info(
 /* ----------------------------------------------------------------------------
  * Creates and opens an Allegro native file dialog, and returns
  * the user's choice(s).
- * The arguments are the same you'd pass to al_create_native_file_dialog().
+ * initial_path:
+ *   Initial path for the dialog.
+ * title:
+ *   Title of the dialog.
+ * patterns:
+ *   File name patterns to match, separated by semicolon.
+ * mode:
+ *   al_create_native_file_dialog mode flags.
  */
 vector<string> prompt_file_dialog(
     const string &initial_path, const string &title,
@@ -719,11 +765,19 @@ vector<string> prompt_file_dialog(
  * The result pointer returns FILE_DIALOG_RES_SUCCESS on success,
  * FILE_DIALOG_RES_WRONG_FOLDER if the one or more choices do not belong to
  * the specified folder, and FILE_DIALOG_RES_CANCELED if the user canceled.
- * The folder argument is the folder to lock to, without the ending slash.
- * The other arguments are the same you'd pass to prompt_file_dialog().
  * The list of choices that are returned only have the file name, not the
  * rest of the path. Choices can also be contained inside subfolders of the
  * specified folder.
+ * folder:
+ *   The folder to lock to, without the ending slash.
+ * title:
+ *   Title of the dialog.
+ * patterns:
+ *   File name patterns to match, separated by semicolon.
+ * mode:
+ *   al_create_native_file_dialog mode flags.
+ * result:
+ *   The result of the dialog is returned here.
  */
 vector<string> prompt_file_dialog_locked_to_folder(
     const string &folder, const string &title,
@@ -768,6 +822,10 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
 
 /* ----------------------------------------------------------------------------
  * Reports a fatal error to the user and shuts down the program.
+ * s:
+ *   String explaining the error.
+ * dn:
+ *   File to log the error into, if any.
  */
 void report_fatal_error(const string &s, data_node* dn) {
     log_error(s, dn);
@@ -785,8 +843,12 @@ void report_fatal_error(const string &s, data_node* dn) {
 }
 
 
-//Converts a string to an Allegro color.
-//Components are separated by spaces, and the final one (alpha) is optional.
+/* ----------------------------------------------------------------------------
+ * Converts a string to an Allegro color.
+ * Components are separated by spaces, and the final one (alpha) is optional.
+ * s:
+ *   String to convert.
+ */
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
     s2 = trim_spaces(s2);
@@ -824,7 +886,10 @@ ALLEGRO_COLOR s2c(const string &s) {
 
 /* ----------------------------------------------------------------------------
  * Converts a string to a point.
- * If z is present, the third word is placed there.
+ * s:
+ *   String to convert.
+ * z:
+ *   If not NULL, the third word is placed here.
  */
 point s2p(const string &s, float* z) {
     vector<string> words = split(s);
@@ -846,6 +911,8 @@ point s2p(const string &s, float* z) {
  * Sanitizes a file name (or part of it), such that it doesn't use any
  * weird characters.
  * Do not use on paths, since colons, slashes, and backslashes will be replaced!
+ * s:
+ *   File name to sanitize.
  */
 string sanitize_file_name(const string &s) {
     string ret;
@@ -1017,7 +1084,18 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
  * Shows a native message box. It is better to call this rather than
  * al_show_native_message_box() directly because it does not reset the locale
  * after it is done.
- * The parameters are the same ones you'd pass to the Allegro function.
+ * display:
+ *   Display responsible for this dialog.
+ * title:
+ *   Title to display on the dialog.
+ * heading:
+ *   Heading text to display on the dialog.
+ * text:
+ *   Main text to display on the dialog.
+ * buttons:
+ *   Buttons the user can press.
+ * flags:
+ *   al_show_native_message_box flags.
  */
 int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
@@ -1037,6 +1115,8 @@ int show_message_box(
 
 /* ----------------------------------------------------------------------------
  * Handles a system signal.
+ * signum:
+ *   Signal number.
  */
 void signal_handler(const int signum) {
     volatile static bool already_handling_signal = false;
@@ -1065,6 +1145,18 @@ void signal_handler(const int signum) {
 
 /* ----------------------------------------------------------------------------
  * Spews out a Pikmin from a given point. Used by Onions and converters.
+ * pos:
+ *   Point of origin.
+ * z:
+ *   Z of the point of origin.
+ * pik_type:
+ *   Type of the Pikmin to spew out.
+ * angle:
+ *   Direction in which to spew.
+ * horizontal_speed:
+ *   Horizontal speed in which to spew.
+ * vertical_speed:
+ *   Vertical speed in which to spew.
  */
 void spew_pikmin_seed(
     const point pos, const float z, pikmin_type* pik_type,
@@ -1090,6 +1182,8 @@ void spew_pikmin_seed(
 /* ----------------------------------------------------------------------------
  * Standardizes a path, making it use forward slashes instead of backslashes,
  * and removing excess slashes at the end.
+ * path:
+ *   Path to standardize.
  */
 string standardize_path(const string &path) {
     string res = replace_all(path, "\\", "/");
@@ -1118,6 +1212,11 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
 
 #if defined(_WIN32)
 
+/* ----------------------------------------------------------------------------
+ * An implementation of strsignal from POSIX.
+ * signum:
+ *   Signal number.
+ */
 string strsignal(const int signum) {
     switch(signum) {
     case SIGINT: {
@@ -1158,6 +1257,8 @@ string strsignal(const int signum) {
 /* ----------------------------------------------------------------------------
  * Unescapes a user string. This converts two backslashes into one, and
  * converts backslash n into a newline character.
+ * s:
+ *   String to unescape.
  */
 string unescape_string(const string &s) {
     string ret;

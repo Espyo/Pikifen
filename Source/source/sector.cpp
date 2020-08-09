@@ -144,6 +144,8 @@ void area_data::clear() {
 
 /* ----------------------------------------------------------------------------
  * Clones this area data into another area_data object.
+ * other:
+ *   The area data object to clone to.
  */
 void area_data::clone(area_data &other) {
     other.clear();
@@ -324,6 +326,12 @@ void area_data::clone(area_data &other) {
 /* ----------------------------------------------------------------------------
  * Connects an edge to a sector, adding the sector and its number to the edge's
  * lists, and adding the edge and its number to the sector's.
+ * e_ptr:
+ *   Edge to connect.
+ * s_ptr:
+ *   Sector to connect.
+ * side:
+ *   Which of the sides of the edge the sector goes to.
  */
 void area_data::connect_edge_to_sector(
     edge* e_ptr, sector* s_ptr, size_t side
@@ -342,6 +350,12 @@ void area_data::connect_edge_to_sector(
 /* ----------------------------------------------------------------------------
  * Connects an edge to a vertex, adding the vertex and its number to the edge's
  * lists, and adding the edge and its number to the vertex's.
+ * e_ptr:
+ *   Edge to connect.
+ * v_ptr:
+ *   Vertex to connect.
+ * endpoint:
+ *   Which of the edge endpoints the vertex goes to.
  */
 void area_data::connect_edge_to_vertex(
     edge* e_ptr, vertex* v_ptr, size_t endpoint
@@ -358,6 +372,8 @@ void area_data::connect_edge_to_vertex(
 
 /* ----------------------------------------------------------------------------
  * Connects the edges of a sector that link to it into the edge_nrs vector.
+ * s_ptr:
+ *   The sector.
  */
 void area_data::connect_sector_edges(sector* s_ptr) {
     s_ptr->edge_nrs.clear();
@@ -373,6 +389,8 @@ void area_data::connect_sector_edges(sector* s_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Connects the edges that link to it into the edge_nrs vector.
+ * v_ptr:
+ *   The vertex.
  */
 void area_data::connect_vertex_edges(vertex* v_ptr) {
     v_ptr->edge_nrs.clear();
@@ -389,6 +407,8 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
 /* ----------------------------------------------------------------------------
  * Scans the list of edges and retrieves the number of the specified edge.
  * Returns INVALID if not found.
+ * e_ptr:
+ *   Edge to find.
  */
 size_t area_data::find_edge_nr(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -401,6 +421,8 @@ size_t area_data::find_edge_nr(const edge* e_ptr) const {
 /* ----------------------------------------------------------------------------
  * Scans the list of mob generators and retrieves the number of
  * the specified mob generator. Returns INVALID if not found.
+ * m_ptr:
+ *   Mob to find.
  */
 size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
@@ -413,6 +435,8 @@ size_t area_data::find_mob_gen_nr(const mob_gen* m_ptr) const {
 /* ----------------------------------------------------------------------------
  * Scans the list of sectors and retrieves the number of the specified sector.
  * Returns INVALID if not found.
+ * s_ptr:
+ *   Sector to find.
  */
 size_t area_data::find_sector_nr(const sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); ++s) {
@@ -425,6 +449,8 @@ size_t area_data::find_sector_nr(const sector* s_ptr) const {
 /* ----------------------------------------------------------------------------
  * Scans the list of vertexes and retrieves the number of the specified vertex.
  * Returns INVALID if not found.
+ * v_ptr:
+ *   Vertex to find.
  */
 size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -438,6 +464,8 @@ size_t area_data::find_vertex_nr(const vertex* v_ptr) const {
  * Fixes the sector and vertex numbers in an edge,
  * making them match the correct sectors and vertexes,
  * based on the existing sector and vertex pointers.
+ * e_ptr:
+ *   Edge to fix the numbers of.
  */
 void area_data::fix_edge_nrs(edge* e_ptr) {
     for(size_t s = 0; s < 2; ++s) {
@@ -462,6 +490,8 @@ void area_data::fix_edge_nrs(edge* e_ptr) {
  * Fixes the sector and vertex pointers of an edge,
  * making them point to the correct sectors and vertexes,
  * based on the existing sector and vertex numbers.
+ * e_ptr:
+ *   Edge to fix the pointers of.
  */
 void area_data::fix_edge_pointers(edge* e_ptr) {
     e_ptr->sectors[0] = NULL;
@@ -484,6 +514,8 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
  * Fixes the path stop numbers in a path stop's links,
  * making them match the correct path stops,
  * based on the existing path stop pointers.
+ * s_ptr:
+ *   Path stop to fix the numbers of.
  */
 void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
@@ -506,6 +538,8 @@ void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
  * Fixes the path stop pointers in a path stop's links,
  * making them point to the correct path stops,
  * based on the existing path stop numbers.
+ * s_ptr:
+ *   Path stop to fix the pointers of.
  */
 void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
@@ -523,6 +557,8 @@ void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
 /* ----------------------------------------------------------------------------
  * Fixes the edge numbers in a sector, making them match the correct edges,
  * based on the existing edge pointers.
+ * s_ptr:
+ *   Sector to fix the numbers of.
  */
 void area_data::fix_sector_nrs(sector* s_ptr) {
     s_ptr->edge_nrs.clear();
@@ -535,6 +571,8 @@ void area_data::fix_sector_nrs(sector* s_ptr) {
 /* ----------------------------------------------------------------------------
  * Fixes the edge pointers in a sector, making them point to the correct edges,
  * based on the existing edge numbers.
+ * s_ptr:
+ *   Sector to fix the pointers of.
  */
 void area_data::fix_sector_pointers(sector* s_ptr) {
     s_ptr->edges.clear();
@@ -548,6 +586,8 @@ void area_data::fix_sector_pointers(sector* s_ptr) {
 /* ----------------------------------------------------------------------------
  * Fixes the edge numbers in a vertex, making them match the correct edges,
  * based on the existing edge pointers.
+ * v_ptr:
+ *   Vertex to fix the numbers of.
  */
 void area_data::fix_vertex_nrs(vertex* v_ptr) {
     v_ptr->edge_nrs.clear();
@@ -560,6 +600,8 @@ void area_data::fix_vertex_nrs(vertex* v_ptr) {
 /* ----------------------------------------------------------------------------
  * Fixes the edge pointers in a vertex, making them point to the correct edges,
  * based on the existing edge numbers.
+ * v_ptr:
+ *   Vertex to fix the pointers of.
  */
 void area_data::fix_vertex_pointers(vertex* v_ptr) {
     v_ptr->edges.clear();
@@ -666,6 +708,8 @@ void area_data::generate_blockmap() {
 
 /* ----------------------------------------------------------------------------
  * Generates the blockmap for a set of edges.
+ * edges:
+ *   Edges to generate the blockmap around.
  */
 void area_data::generate_edges_blockmap(vector<edge*> &edges) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
@@ -790,6 +834,8 @@ vertex* area_data::new_vertex() {
 
 /* ----------------------------------------------------------------------------
  * Removes an edge from the list, and updates all IDs referencing it.
+ * e_nr:
+ *   Index number of the edge to remove.
  */
 void area_data::remove_edge(const size_t e_nr) {
     edges.erase(edges.begin() + e_nr);
@@ -832,6 +878,8 @@ void area_data::remove_edge(const size_t e_nr) {
 
 /* ----------------------------------------------------------------------------
  * Removes an edge from the list, and updates all IDs referencing it.
+ * e_ptr:
+ *   Pointer of the edge to remove.
  */
 void area_data::remove_edge(const edge* e_ptr) {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -845,6 +893,8 @@ void area_data::remove_edge(const edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Removes a sector from the list, and updates all IDs referencing it.
+ * s_nr:
+ *   Index number of the sector to remove.
  */
 void area_data::remove_sector(const size_t s_nr) {
     sectors.erase(sectors.begin() + s_nr);
@@ -870,6 +920,8 @@ void area_data::remove_sector(const size_t s_nr) {
 
 /* ----------------------------------------------------------------------------
  * Removes a sector from the list, and updates all IDs referencing it.
+ * s_ptr:
+ *   Pointer of the sector to remove.
  */
 void area_data::remove_sector(const sector* s_ptr) {
     for(size_t s = 0; s < sectors.size(); ++s) {
@@ -883,6 +935,8 @@ void area_data::remove_sector(const sector* s_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Removes a vertex from the list, and updates all IDs referencing it.
+ * v_nr:
+ *   Index number of the vertex to remove.
  */
 void area_data::remove_vertex(const size_t v_nr) {
     vertexes.erase(vertexes.begin() + v_nr);
@@ -908,6 +962,8 @@ void area_data::remove_vertex(const size_t v_nr) {
 
 /* ----------------------------------------------------------------------------
  * Removes a vertex from the list, and updates all IDs referencing it.
+ * v_ptr:
+ *   Pointer of the vertex to remove.
  */
 void area_data::remove_vertex(const vertex* v_ptr) {
     for(size_t v = 0; v < vertexes.size(); ++v) {
@@ -942,6 +998,8 @@ void blockmap::clear() {
 /* ----------------------------------------------------------------------------
  * Returns the block column in which an X coordinate is contained.
  * Returns INVALID on error.
+ * x:
+ *   X coordinate.
  */
 size_t blockmap::get_col(const float x) const {
     if(x < top_left_corner.x) return INVALID;
@@ -954,6 +1012,8 @@ size_t blockmap::get_col(const float x) const {
 /* ----------------------------------------------------------------------------
  * Returns the block row in which a Y coordinate is contained.
  * Returns INVALID on error.
+ * y:
+ *   Y coordinate.
  */
 size_t blockmap::get_row(const float y) const {
     if(y < top_left_corner.y) return INVALID;
@@ -965,6 +1025,10 @@ size_t blockmap::get_row(const float y) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the top-left coordinates for the specified column and row.
+ * col:
+ *   Column to check.
+ * row:
+ *   Row to check.
  */
 point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
     return
@@ -977,6 +1041,10 @@ point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
 
 /* ----------------------------------------------------------------------------
  * Creates an edge.
+ * v1:
+ *   Its first vertex.
+ * v2:
+ *   Its second vertex.
  */
 edge::edge(size_t v1, size_t v2) {
     vertexes[0] = vertexes[1] = NULL;
@@ -989,6 +1057,8 @@ edge::edge(size_t v1, size_t v2) {
 
 /* ----------------------------------------------------------------------------
  * Returns the sector that ISN'T the specified one.
+ * s_ptr:
+ *   The sector that ISN'T the one to return.
  */
 sector* edge::get_other_sector(const sector* s_ptr) const {
     if(sectors[0] == s_ptr) return sectors[1];
@@ -998,6 +1068,8 @@ sector* edge::get_other_sector(const sector* s_ptr) const {
 
 /* ----------------------------------------------------------------------------
  * Returns the vertex that ISN'T the specified one.
+ * v_ptr:
+ *   The vertex that ISN'T the one to return.
  */
 vertex* edge::get_other_vertex(const vertex* v_ptr) const {
     if(vertexes[0] == v_ptr) return vertexes[1];
@@ -1007,6 +1079,8 @@ vertex* edge::get_other_vertex(const vertex* v_ptr) const {
 
 /* ----------------------------------------------------------------------------
  * Returns which side has the specified sector, or INVALID if neither.
+ * s_ptr:
+ *   Sector to check.
  */
 size_t edge::get_side_with_sector(sector* s_ptr) const {
     for(unsigned char s = 0; s < 2; ++s) {
@@ -1019,6 +1093,8 @@ size_t edge::get_side_with_sector(sector* s_ptr) const {
 /* ----------------------------------------------------------------------------
  * If the specified edge and this one are not neighbors, returns NULL.
  * Otherwise, returns the vertex that binds them.
+ * other:
+ *   Edge to check as a neighbor.
  */
 vertex* edge::has_neighbor(edge* other) const {
     for(size_t v1 = 0; v1 < 2; ++v1) {
@@ -1139,6 +1215,10 @@ void edge::transfer_sector(
 
 /* ----------------------------------------------------------------------------
  * Creates an edge intersection info structure.
+ * e1:
+ *   First edge in the intersection.
+ * e2:
+ *   Second edge in the intersection.
  */
 edge_intersection::edge_intersection(edge* e1, edge* e2) :
     e1(e1),
@@ -1149,6 +1229,8 @@ edge_intersection::edge_intersection(edge* e1, edge* e2) :
 
 /* ----------------------------------------------------------------------------
  * Checks whether the edge intersection contains the specified edge.
+ * e:
+ *   Edge to check.
  */
 bool edge_intersection::contains(edge* e) {
     return e1 == e || e2 == e;
@@ -1157,6 +1239,16 @@ bool edge_intersection::contains(edge* e) {
 
 /* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
+ * category:
+ *   The mob category.
+ * pos:
+ *   Coordinates.
+ * type:
+ *   The mob type.
+ * angle:
+ *   Angle it is facing.
+ * vars:
+ *   String representation of the script vars.
  */
 mob_gen::mob_gen(
     mob_category* category, const point &pos,
@@ -1173,6 +1265,10 @@ mob_gen::mob_gen(
 
 /* ----------------------------------------------------------------------------
  * Creates a new stop link.
+ * end_ptr:
+ *   The path stop at the end of this link.
+ * end_nr:
+ *   Index number of the path stop at the end of this link.
  */
 path_link::path_link(path_stop* end_ptr, size_t end_nr) :
     end_ptr(end_ptr),
@@ -1187,6 +1283,8 @@ path_link::path_link(path_stop* end_ptr, size_t end_nr) :
  * Calculates and stores the distance between the two stops.
  * Because the link doesn't know about the starting stop,
  * you need to provide it as a parameter when calling the function.
+ * start_ptr:
+ *   The path stop at the start of this link.
  */
 void path_link::calculate_dist(path_stop* start_ptr) {
     distance = dist(start_ptr->pos, end_ptr->pos).to_float();
@@ -1289,6 +1387,10 @@ void path_manager::handle_obstacle_clear(mob* m) {
 
 /* ----------------------------------------------------------------------------
  * Creates a new path stop.
+ * pos:
+ *   Its coordinates.
+ * links:
+ *   List of path links, linking it to other stops.
  */
 path_stop::path_stop(const point &pos, const vector<path_link> &links) :
     pos(pos),
@@ -1353,6 +1455,8 @@ void path_stop::calculate_dists_plus_neighbors() {
  * The links in memory are one-way, meaning that if the only link
  * is from the other stop to this one, it will not count.
  * Returns INVALID if it does not link to that stop.
+ * other_stop:
+ *   Path stop to check against.
  */
 size_t path_stop::get_link(path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -1364,6 +1468,8 @@ size_t path_stop::get_link(path_stop* other_stop) const {
 
 /* ----------------------------------------------------------------------------
  * Removes the link between this stop and the specified one.
+ * other_stop:
+ *   Path stop to remove the link from.
  */
 void path_stop::remove_link(path_stop* other_stop) {
     for(size_t l = 0; l < links.size(); ++l) {
@@ -1384,6 +1490,8 @@ polygon::polygon() {
 
 /* ----------------------------------------------------------------------------
  * Creates a polygon with the specified list of vertexes.
+ * vertexes:
+ *   Vertexes that make up the polygon.
  */
 polygon::polygon(const vector<vertex*> &vertexes) :
     vertexes(vertexes) {
@@ -1439,6 +1547,8 @@ void polygon::clean() {
 /* ----------------------------------------------------------------------------
  * When this polygon has inner polygons, a cut must be made between it
  * and the inner polygons, as to make this one holeless.
+ * inners:
+ *   List of inner polygons.
  */
 void polygon::cut(vector<polygon>* inners) {
     if(vertexes.size() < 3) {
@@ -1712,6 +1822,10 @@ sector::~sector() {
 
 /* ----------------------------------------------------------------------------
  * Adds an edge to the sector's list of edges, if it's not there already.
+ * e_ptr:
+ *   Edge to add.
+ * e_nr:
+ *   Index number of the edge to add.
  */
 void sector::add_edge(edge* e_ptr, const size_t e_nr) {
     for(size_t i = 0; i < edges.size(); ++i) {
@@ -1761,6 +1875,8 @@ void sector::calculate_bounding_box() {
  * Clones a sector's properties onto another,
  * not counting the list of edges, bounding box, or bitmap
  * (the file name is cloned too, though).
+ * new_sector:
+ *   Sector to clone the data into.
  */
 void sector::clone(sector* new_sector) {
     new_sector->type = type;
@@ -1838,6 +1954,10 @@ vertex* sector::get_rightmost_vertex() const {
 /* ----------------------------------------------------------------------------
  * If texture merging is required, this returns what two neighboring sectors
  * will be used for it.
+ * s1:
+ *   Receives the first sector.
+ * s2:
+ *   Receives the second sector.
  */
 void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //Check all edges to find which two textures need merging.
@@ -1923,6 +2043,8 @@ bool sector::is_clockwise() const {
 
 /* ----------------------------------------------------------------------------
  * Returns whether a point is inside a sector by checking its triangles.
+ * p:
+ *   Point to check.
  */
 bool sector::is_point_in_sector(const point &p) const {
     for(size_t t = 0; t < triangles.size(); ++t) {
@@ -1946,6 +2068,8 @@ bool sector::is_point_in_sector(const point &p) const {
 
 /* ----------------------------------------------------------------------------
  * Removes an edge from a sector's list of edges, if it is there.
+ * e_ptr:
+ *   Edge to remove.
  */
 void sector::remove_edge(edge* e_ptr) {
     size_t i = 0;
@@ -1972,6 +2096,18 @@ sector_texture_info::sector_texture_info() :
 
 /* ----------------------------------------------------------------------------
  * Creates a tree shadow.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * angle:
+ *   Angle it is rotated by.
+ * alpha:
+ *   How opaque it is [0-255].
+ * file_name:
+ *   Name of the file with the tree shadow's texture.
+ * sway:
+ *   Multiply the sway distance by this much, horizontally and vertically.
  */
 tree_shadow::tree_shadow(
     const point &center, const point &size, const float angle,
@@ -1998,6 +2134,12 @@ tree_shadow::~tree_shadow() {
 
 /* ----------------------------------------------------------------------------
  * Creates a triangle.
+ * v1:
+ *   First vertex.
+ * v2:
+ *   Second vertex.
+ * v3:
+ *   Third vertex.
  */
 triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
     points[0] = v1;
@@ -2008,6 +2150,10 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 
 /* ----------------------------------------------------------------------------
  * Creates a vertex.
+ * x:
+ *   X coordinate.
+ * y:
+ *   Y coordinate.
  */
 vertex::vertex(float x, float y) :
     x(x),
@@ -2018,6 +2164,10 @@ vertex::vertex(float x, float y) :
 
 /* ----------------------------------------------------------------------------
  * Adds an edge to the vertex's list of edges, if it's not there already.
+ * e_ptr:
+ *   Edge to add.
+ * e_nr:
+ *   Index number of the edge to add.
  */
 void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
     for(size_t i = 0; i < edges.size(); ++i) {
@@ -2033,6 +2183,8 @@ void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
 /* ----------------------------------------------------------------------------
  * Returns the edge that has the specified vertex as a neighbor of this vertex.
  * Returns NULL if not found.
+ * neighbor:
+ *   The neighbor vertex to check.
  */
 edge* vertex::get_edge_by_neighbor(vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -2046,6 +2198,8 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) const {
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not this vertex has the specified edge in its list.
+ * e_ptr:
+ *   Edge to check.
  */
 bool vertex::has_edge(edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -2128,6 +2282,8 @@ bool vertex::is_neighbor(vertex* other_v) const {
 
 /* ----------------------------------------------------------------------------
  * Removes an edge from a vertex's list of edges, if it is there.
+ * e_ptr:
+ *   Edge to remove.
  */
 void vertex::remove_edge(edge* e_ptr) {
     size_t i = 0;
@@ -2176,15 +2332,22 @@ void depth_first_search(
 
 /* ----------------------------------------------------------------------------
  * Uses Dijkstra's algorithm to get the shortest path between two nodes.
- * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
- * *node:           Start and end node.
- * total_dist:      If not NULL, place the total path distance here.
+ * start_node:
+ *   Start node.
+ * end_node:
+ *   End node.
+ * ignore_obstacles:
+ *   If true, obstacles are ignored. If false, links with obstacles will be
+ *   unable to be crossed.
+ * total_dist:
+ *   If not NULL, place the total path distance here.
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
     const bool ignore_obstacles, float* total_dist
 ) {
-
+    //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
     map<path_stop*, std::pair<float, path_stop*> > data;
@@ -2282,6 +2445,14 @@ vector<path_stop*> dijkstra(
 
 /* ----------------------------------------------------------------------------
  * Get the convex, concave and ear vertexes.
+ * vertexes_left:
+ *   List of vertexes left to be processed.
+ * ears:
+ *   List of ears found.
+ * convex_vertexes:
+ *   List of convex vertexes found.
+ * concave_vertexes:
+ *   List of concave vertexes found.
  */
 void get_cce(
     vector<vertex*> &vertexes_left, vector<size_t> &ears,
@@ -2311,9 +2482,12 @@ void get_cce(
 /* ----------------------------------------------------------------------------
  * Returns all vertexes that are close enough to be merged with
  * the specified point, as well as their distances to said point.
- * point:        Coordinates of the point.
- * all_vertexes: Vector with all of the vertexes in the area.
- * merge_radius: Minimum radius to merge. This does not take the camera zoom
+ * pos:
+ *   Coordinates of the point.
+ * all_vertexes:
+ *   Vector with all of the vertexes in the area.
+ * merge_radius:
+ *   Minimum radius to merge. This does not take the camera zoom
  *   level into account.
  */
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
@@ -2428,6 +2602,10 @@ vector<path_stop*> get_path(
 /* ----------------------------------------------------------------------------
  * Returns what active obstacle stands in the way of these two stops, if any.
  * If multiple ones do, it returns the closest.
+ * s1:
+ *   First path stop to check.
+ * s2:
+ *   Second path stop to check.
  */
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     mob* closest_obs = NULL;
@@ -2640,6 +2818,8 @@ TRIANGULATION_ERRORS get_polys(
 
 /* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right in a list of edges.
+ * edges:
+ *   Edges to check.
  */
 vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
@@ -2661,6 +2841,10 @@ vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
  * In the case of a tie, the highest one is returned.
  * This is necessary because at one point, the rightmost
  * vertex was being decided kinda randomly.
+ * v1:
+ *   First vertex to check.
+ * v2:
+ *   Second vertex to check.
  */
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
     if(v1->x > v2->x) return v1;
@@ -2735,6 +2919,8 @@ sector* get_sector(
 /* ----------------------------------------------------------------------------
  * Returns whether a polygon was created clockwise or anti-clockwise,
  * given the order of its vertexes.
+ * vertexes:
+ *   Vertexes to check.
  */
 bool is_polygon_clockwise(vector<vertex*> &vertexes) {
     //Solution by http://stackoverflow.com/a/1165943
@@ -2750,6 +2936,10 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
 
 /* ----------------------------------------------------------------------------
  * Returns whether this vertex is convex or not.
+ * vec:
+ *   List of all vertexes.
+ * nr:
+ *   Index number of the vertex to check.
  */
 bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     const vertex* cur_v = vec[nr];
@@ -2772,6 +2962,12 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
 
 /* ----------------------------------------------------------------------------
  * Returns whether this vertex is an ear or not.
+ * vec:
+ *   List of all vertexes.
+ * concaves:
+ *   List of concave vertexes.
+ * nr:
+ *   Index number of the vertex to check.
  */
 bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr

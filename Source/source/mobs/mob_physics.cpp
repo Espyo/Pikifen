@@ -592,6 +592,8 @@ void mob::tick_horizontal_movement_physics(
 /* ----------------------------------------------------------------------------
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
+ * delta_t:
+ *   How many seconds to tick by.
  */
 void mob::tick_physics(const float delta_t) {
     if(!ground_sector) {

@@ -17,6 +17,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the track's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void track_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -44,6 +46,12 @@ void track_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * What to do when the track is touched.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void track_fsm::on_touched(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) m;
@@ -78,6 +86,12 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When the track spawns.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void track_fsm::spawn(mob* m, void* info1, void* info2) {
     m->set_animation(TRACK_ANIM_IDLING);

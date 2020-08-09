@@ -13,6 +13,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates a body part.
+ * name:
+ *   Its name.
  */
 body_part::body_part(const string &name) :
     name(name) {
@@ -55,6 +57,10 @@ hitbox::hitbox(
 
 /* ----------------------------------------------------------------------------
  * Returns the coordinates of the hitbox given the mob's location and angle.
+ * mob_pos:
+ *   The mob's position.
+ * mob_angle:
+ *   The angle the mob is facing.
  */
 point hitbox::get_cur_pos(const point &mob_pos, const float mob_angle) const {
     float mob_angle_cos = cos(mob_angle);
@@ -71,6 +77,12 @@ point hitbox::get_cur_pos(const point &mob_pos, const float mob_angle) const {
  * Returns the coordinates of the hitbox given the mob's location and angle.
  * If the angle's sine and cosine are known from having been calculated
  * previously, use this function, since it's faster.
+ * mob_pos:
+ *   The mob's position.
+ * mob_angle_cos:
+ *   Cosine of the angle the mob is facing.
+ * mob_angle_sin:
+ *   Sine of the angle the mob is facing.
  */
 point hitbox::get_cur_pos(
     const point &mob_pos, const float mob_angle_cos, const float mob_angle_sin

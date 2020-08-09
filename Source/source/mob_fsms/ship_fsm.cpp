@@ -20,6 +20,8 @@
 
 /* ----------------------------------------------------------------------------
  * Creates the finite state machine for the ship's logic.
+ * typ:
+ *   Mob type to create the finite state machine for.
  */
 void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
@@ -47,7 +49,12 @@ void ship_fsm::create_fsm(mob_type* typ) {
 
 /* ----------------------------------------------------------------------------
  * When a ship finishes receiving a mob carried by Pikmin.
- * info1: Pointer to the mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the mob.
+ * info2:
+ *   Unused.
  */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -103,6 +110,12 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a ship needs to enter its default "idling" animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
  */
 void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(SHIP_ANIM_IDLING);
