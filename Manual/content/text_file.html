@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Text files - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Text files</h1>
+    
+    <p>The following page explains how text files work in <i>Pikifen</i>.</p>
+    
+    <p>The engine reads a text file one line at a time. The most basic type of line is a simple variable and its value. The variable's name comes first, followed by an equals sign, and then the value. Text files may also contain blocks, which in turn can contain variables or blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</p>
+    
+    <p>Example:</p>
+    
+<pre>variable = value 1
+block {
+    variable_inside_block = value 2
+    sub_block {
+        variable_inside_sub_block = another_value
+    }
+}</pre>
+    
+    <p>It is good practice to <a href="http://en.wikipedia.org/wiki/Indentation_style">indent</a> the lines inside a block. The deeper the block, the deeper the indentation. The engine ignores any spaces or tabs before the first word in the line, so add as many as you want. The engine will also not read empty lines.</p>
+
+    <p>As a final note, the engine will not read lines that have two slashes before the first word. Meaning that something like <code>//This is a comment.</code> will not be read. You can use these comments to explain or label parts of the file to make it easier to understand.</p>
+    
+    <p><b>Warning</b>: it is preferred that you edit text files with an editor other than Window's "Notepad" program. Try something like Notepad++, otherwise you might see everything in a single line.</p>
+    
+  </div>
+</body>
+
+</html>

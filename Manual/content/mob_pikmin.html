@@ -1,0 +1,101 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikmin - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; Pikmin</h1>
+    
+    <p>The <b>Pikmin</b> are the creatures the player controls. They can carry, fight, multiply, get eaten, etc.</p>
+
+    <p>Examples of Pikmin include Red Pikmin, Yellow Pikmin, Purple Pikmin, etc.</p>
+
+    <p>To create a new type of Pikmin, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+    
+    <p>The Pikmin are programmed to do a lot of things in the engine, and the player can edit several of their properties to create Pikmin resistant to various things, and with different strengths and weaknesses.</p>
+
+    <p>Pikmin type objects are hardcoded in the engine to be shot out as a seed from an Onion, be a sprout on the floor, get plucked by a leader, follow a leader in a formation, be thrown, get dismissed, idle, chase an opponent, sigh when giving up on something, carry something, return to a pile of carriable objects, attacking while on the floor or latched on, be grabbed by an enemy, get knocked down, become paralyzed, flail around, panic around, drink a drop, and carry a tool. Pretty much all of the Pikmin's behavior comes from what is in the engine's code, and is too complex to do via scripting, so Pikmin do not support user-made scripting.</p>
+
+    <h2 id="props">Properties</h2>
+    
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a Pikmin type has the following properties.</p>
+
+    <p>Note that if you want your Pikmin to be resistant to a certain hazard, you'll want to use the <a href="mob_type.html#vulnerabilities">vulnerabilities</a> properties. Another thing to note when making Pikmin is that the movement speed property indicates the movement speed of a leaf Pikmin. Bud Pikmin move 110% faster, and flowers move 120% faster.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+    
+    <ul>
+      <li><b><code>icon_leaf</code></b>: Name of the image with the Pikmin type's icon for when it is a leaf. This is displayed on the HUD, for the standby Pikmin bubble. The image should be in <code>Game_data/Graphics</code>, and the extension of the file name must be included.</li>
+      <li><b><code>icon_bud</code></b>: Same as <code>icon_leaf</code>, but for a bud.</li>
+      <li><b><code>icon_flower</code></b>: Same as <code>icon_leaf</code>, but for a flower.</li>
+      <li><b><code>top_leaf</code></b>: Name of the image with the leaf sprite to use in-game. The image should be in <code>Game_data/Graphics</code>, and the extension of the file name must be included.</li>
+      <li><b><code>top_bud</code></b>: Same as <code>top_leaf</code>, but for a bud.</li>
+      <li><b><code>top_flower</code></b>: Same as <code>top_leaf</code>, but for a flower.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+    
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+    
+    <ul>
+      <li><b><code>can_carry_tools</code></b>: <code>true</code> if the Pikmin can carry tools. Defaults to <code>true</code>.</li>
+      <li><b><code>carry_strength</code></b>: The Pikmin is worth this much for carrying strength. Defaults to 1.</li>
+      <li><b><code>push_strength</code></b>: The Pikmin is worth this much for pushing strength. Used for certain <a href="mob_group_task.html">group tasks</a>. Defaults to 1.</li>
+      <li><b><code>max_throw_height</code></b>: When thrown, the Pikmin reaches this height at the apex of the throw. For reference, a standard Pikmin has this set to 260, and Yellow Pikmin have this set to 330. Defaults to 260.</li>
+      <li><b><code>sprout_evolution_time_1</code></b>: How long a leaf Pikmin sprout must wait before they turn into a bud. 0 means it will never evolve into the next stage. Defaults to 2 minutes.</li>
+      <li><b><code>sprout_evolution_time_2</code></b>: Same as the previous, but between a bud and a flower. Defaults to 2 minutes.</li>
+      <li><b><code>sprout_evolution_time_3</code></b>: Same as the previous, but between a flower and the process of withering back into a leaf. Defaults to 3 minutes.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+    
+    <p>A Pikmin type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>attacking</code></b>: Reeling back its head and smacking with it.</li>
+      <li><b><code>carrying</code></b>: Carrying an object.</li>
+      <li><b><code>drinking</code></b>: Bending down to drink a drop.</li>
+      <li><b><code>grabbing</code></b>: Standing upright and grabbing onto an object.</li>
+      <li><b><code>lying</code></b>: Knocked down to the ground by an attack, staying there for a bit, and getting back up.</li>
+      <li><b><code>plucking</code></b>: Coming out of the ground.</li>
+      <li><b><code>sighing</code></b>: Sighing after becoming disappointed with something, like being unable to reach a carrying spot.</li>
+      <li><b><code>sprout</code></b>: Idling underground; only the stem is visible.</li>
+      <li><b><code>thrown</code></b>: Twirling in the air after being thrown.</li>
+      <li><b><code>walking</code></b>: Walking.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+    
+    <p>A Pikmin type's <a href="script.html">object script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+    
+    <p>When a Pikmin type object is spawned, it will read the following script variables, if they're present:</p>
+    
+    <ul>
+      <li><b><code>maturity</code></b>: The Pikmin's maturity. 0 is leaf, 1 is bud, and 2 is flower.</li>
+      <li><b><code>sprout</code></b>: If true, the Pikmin spawns as a sprout. Otherwise, it spawns as an idle Pikmin.</li>
+    </ul>
+
+    <p>Besides that, there are the <a href="area.html#script-vars">global spawn script variables</a>.</p>
+
+  </div>
+</body>
+
+</html>

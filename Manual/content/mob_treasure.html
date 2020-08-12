@@ -1,0 +1,68 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Treasure - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; treasure</h1>
+    
+    <p>A <b>treasure</b> refers to any main collectible that the Pikmin can deliver back to the ship. These are the ship parts in <i>Pikmin</i>, the treasures in <i>Pikmin 2</i>, and the fruits in <i>Pikmin 3</i>.</p>
+
+    <p>Examples of treasure types include the Main Engine, the Courage Reactor, and the Sunseed Berry.</p>
+
+    <p>To create a new type of treasure, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A treasure type object simply has logic to be carried, and to give a different value of points. The only other important parts of the treasure are their radius and weight.</p>
+
+    <p>Treasure type objects are hardcoded in the engine to sit there, be carried, be delivered to a ship, and give out some number of points.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a treasure type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <p>None.</p>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A treasure type needs to have the following animations:</p>
+    
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A treasure type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, treasure type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

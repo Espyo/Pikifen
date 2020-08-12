@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Converter - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; converter</h1>
+    
+    <b>Converters</b> are objects that convert a Pikmin from one type to another. They're the Candypop Buds in the main series, whether the normal single-typed Candypop Buds, or the Queen Candypop Bud.
+
+    <p>Examples of converter types include the Crimson Candypop Bud, the Golden Candypop Bud, and the Queen Candypop Bud.</p>
+
+    <p>To create a new type of converter, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>The converter object just sits there, and when a Pikmin is thrown inside, it is stored inside. After some seconds have passed, the object has been bumped against, or enough Pikmin have been stored at once, the converter closes, and spits out seeds of the new type. Some converters can also change their Pikmin type with time, cycling through them so the player can throw Pikmin at the right time to get the type of Pikmin they want.</p>
+
+    <p>Converter type objects are hardcoded in the engine to sit there and wait for Pikmin to be thrown inside, store them, close, spit new seeds, open up, wither out, be bumped against, and change the output type with time.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a converter type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>available_pikmin_types</code></b>: List of Pikmin types that this converter can produce, separated by semicolon. If there is only one type, the converter never changes, but if there are more, it will cycle through them with time, in the order you write here.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>auto_conversion_timeout</code></b>: When a Pikmin is thrown in, the converter will close and convert after these many seconds have passed, if nothing else happened in the meantime. Defaults to 5 seconds.</li>
+      <li><b><code>buffer_size</code></b>: How many Pikmin the converter can have stored in its buffer before it's forced to close and convert them all. Defaults to 5.</li>
+      <li><b><code>pikmin_per_conversion</code></b>: For every one Pikmin inserted, how many Pikmin come out. Defaults to 1.</li>
+      <li><b><code>same_type_counts_for_output</code></b>: A converter can only handle so many Pikmin during its lifetime. If this is true, throwing a Pikmin of the same type as the output will count for this lifetime total. Defaults to false.</li>
+      <li><b><code>total_input_pikmin</code></b>: After the converter has handled these many Pikmin, it closes, converts, and dies out. Defaults to 5.</li>
+      <li><b><code>type_animation_suffixes</code></b>: If this converter can output multiple types of Pikmin, this will indicate the suffix of the animations for every given type. This is a semicolon-separated list, and must be filled with the same amount and in the same order as <code>available_pikmin_types</code>. For example, if it outputs Red Pikmin and Yellow Pikmin, setting this to <code>_red; _yellow</code> means that all animations that end in <code>_red</code> (for instance, <code>idling_red</code>) will be used when the converter's current output is Red Pikmin. Defaults to not set.</li>
+      <li><b><code>type_change_interval</code></b>: If this converter can output multiple types of Pikmin, this is how long it takes for it to switch to the next type. Defaults to 3 seconds.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A converter type needs to have the following animations. Note that for every type of Pikmin it can output, you need another set of these animations, and each set needs to end with the suffix you specified in the <code>type_animation_suffixes</code> property.</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Just idling.</li>
+      <li><b><code>bumping</code></b>: When it's been bumped against.</li>
+      <li><b><code>closing</code></b>: Closing.</li>
+      <li><b><code>spitting</code></b>: Spitting out the new seeds.</li>
+      <li><b><code>opening</code></b>: Opening back up.</li>
+      <li><b><code>dying</code></b>: Dying.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A converter type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, converter type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Weather - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Weather</h1>
+    
+    <p>This page will guide you on how to create a weather condition for <i>Pikifen</i>. A weather condition lasts throughout the entire day.</p>
+
+    <h2 id="intro">Introduction</h2>
+    
+    <h3 id="overview">Overview</h3>
+    
+    <p>During a clear day in most places in real life...</p>
+    
+    <ul>
+      <li>At midday, everything is perfectly visible in normal sunlight. The sun shines the brightest around this time, so shadows are pretty opaque.</li>
+      <li>At around 5 PM, that "normal" sunlight period finishes.</li>
+      <li>From there to around 6 PM, twilight gradually kicks in, and everything starts to become tinted orange. The sun also becomes weaker, and shadows are less and less opaque.</li>
+      <li>From 6 to 7, things start to gradually get darker.</li>
+      <li>At 7 PM, it stops, and a period of darkness kicks in that lasts until around 5 AM.</li>
+      <li>From then to around 8 AM, things start to get brighter, as does the sun, and also very slightly tinted in pink.</li>
+      <li>And from there, the cycle repeats.</li>
+    </ul>
+
+    <p>Weather on the engine controls how the ambiance is throughout the day, like in real life. Currently, precipitation like rain or snow is not possible, but weather still makes sense to exist, given that a clear day is much brighter than a thunderstorm day. To decorate the ambiance for a given weather condition, you need to inform the engine about how everything is tinted, how strong the sun is, how strong the fog is (if any), and so on, and you need to explain how everything changes throughout the day. This is provided by <a href="#tables">tables</a>.</p>
+
+    <h3 id="creating">Creating a weather condition</h3>
+    
+    <p>The engine will find the existing weather conditions on the <code>Game_data/Misc/Weather.txt</code> file. Create it if it doesn't exist.</p>
+
+    <p>To create a weather condition, write a block by typing <code>Sunny {</code> on one line and <code>}</code> on the next. Replace <code>Sunny</code> with whatever you want to name this weather condition. Inside the block is where you'll add information about the lighting, sun's strength, etc.</p>
+
+    <h3 id="tables">Tables</h3>
+    
+    <p>A table consists of a series of values. Given a time of day, you tell the engine what the value for the lighting is, or the value for the sun strength, or what have you. If two neighboring points use the same values, then that effect stays the same between those two times. If they're different, the engine will automatically shift from one value to the other as time passes by that period. Most of the information in a weather condition is provided in this table format, where you provide points in time, and what their values are. You've got one table for the lighting color, one table for the strength of the sun, etc., and each table can have different key times. Tables are written as follows:</p>
+
+    <p>Each line of text starts with the number of minutes in the day (with 0 being midnight), followed by an equals, and then the value of the effect at that point of day. For example: <code>360 = 64 64 96 128</code> for the lighting. This means that at minute 360 of the day (360 divided by 60 is 6, so 6 AM), the lighting color is RGB 64 64 96 (a dark purple), and the opacity is 128 (half opaque). This creates a very strong dark purple tint in the game.</p>
+
+    <p>While adding your own values, if you can't figure out the number of minutes, simply get the hour you want (in a 24-hour format, so 0 is midnight, and 12 is midday), and multiply it by 60, since there are 60 minutes in an hour. If you want an effect's value to be the same throughout the entire day, then you can make your table only have one line, with the time "0", for instance. When you're creating a table, it may be a bit difficult to envision how everything will end up, so don't be afraid of trial-and-error, and of using any tools at your disposal to get a better view of the passage of time while in-game.</p>
+
+    <h2 id="lighting">Lighting</h2>
+    
+    <div class="image image-right">
+      <img src="../images/sunset.jpg" alt="The 'Play' area at sunset. Notice how everything is tinted orange.">
+      <p>The "Play" area at sunset. Notice how everything is tinted orange.</p>
+    </div>
+    
+    <p>The way the engine does daylight is quite simple: the entire game scene is rendered on the screen, and then a giant, transparent, colored layer is placed on top of everything. Imagine having a drawing of a scene from the engine on top of a table, in a piece of paper. Now imagine placing a sheet of <a href="http://en.wikipedia.org/wiki/Tracing_paper">tracing paper</a> that's slightly orange on top of it. This would make the scene be more orange, which would give it a faint twilight-hour look. The color and the opacity of the layer (the tracing paper, in the real world example) influence the final daylight tint.</p>
+
+    <p>To add lighting information, you must create a <code>lighting</code> block inside the weather condition's block. Inside the block you just created, write down the <a href="#tables">table</a> with the colors to use throughout the day, in the format <code>R G B A</code>. Alpha is optional, and will become 255 if you don't specify it. If you don't add lighting information, then no lighting filter will be applied.</p>
+
+    <h2 id="sun-strength">Sun strength</h2>
+    
+    <p>You can specify how strong the sun is throughout the day. This information is used for the shadows under the objects and for the tree shadows. If the sun is at full strength, the shadows are at the strongest opacity (which doesn't necessarily mean they're fully opaque, otherwise you would only see black under the leaves), and the weaker the sunlight is, the more translucent the shadows are.</p>
+
+    <p>To create sun strength information, go inside the weather condition's block, and create a <code>sun_strength</code> block. Inside this, create a <a href="#tables">table</a>, where you specify the sun's strength, that goes from 0 (no strength) to 255 (full strength). 96 is a good number to use during the night, and 255 during the day. If you don't specify sun strength information, it'll just assume max strength (255) throughout the entire day.</p>
+
+    <h2 id="fog">Fog</h2>
+    
+    <div class="image image-right">
+      <img src="../images/fog.jpg" alt="The 'Play' area with a fog effect, with a color of 192 192 192 224, near radius at 64, and far radius at 512.">
+      <p>The "Play" area with a fog effect, with a color of <code>192 192 192 224</code>, near radius at 64, and far radius at 512.</p>
+    </div>
+    
+    <p>You can add a fog effect to make things near the camera visible, but things farther away to become more and more washed out by the fog. This is a good way to limit the player's visibility, or to add a gloomy feel to the ambiance.</p>
+
+    <p>To add fog information, create a <code>fog_near</code> property inside the weather condition's block. Specify a number for this property. Anything within this radius you wrote is 100% visible, and from this radius outwards, visibility starts to become gradually more consumed by the fog. Then, add a <code>fog_far</code> property. From this distance outwards, the fog is fully dense. This is where the gradual fog density increase stops. Finally, write a <code>fog</code> block, and inside, write down the <a href="#tables">table</a> that lists the color and opacity of the fog throughout the day, in the <code>R G B A</code> format. Like the lighting, if you don't write an alpha, it'll be set to 255 (fully opaque). If you don't specify fog information, no fog effect will be applied.</p>
+
+    <h2 id="blackout">Blackout effect</h2>
+    
+    <div class="image image-right">
+      <img src="../images/blackout.jpg" alt="The 'Play' area with a blackout effect, with a strength of 192.">
+      <p>The "Play" area with a blackout effect, with a strength of 192.</p>
+    </div>
+    
+    <p>If you want an effect of extreme darkness that has more of a gameplay impact, you can activate the blackout effect. This will turn everything dark except for objects, which emit light.</p>
+
+    <p>To add blackout info, create a <code>blackout_strength</code> block inside the weather condition's block. Inside of that, write a <a href="#tables">table</a>, and specify how dark it is, with a value from 0 (no darkness) to 255 (pitch-black). If you don't specify any blackout information, no blackout will occur at any point of the day.</p>
+    
+  </div>
+</body>
+
+</html>

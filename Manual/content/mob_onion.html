@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Onion - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; Onion</h1>
+    
+    <b>Onions</b> are where Pikmin deliver corpses and pellets, they generate seeds, and they store Pikmin.
+
+    <p>Examples of Onion types include the Red Onion, the Yellow Onion, and the Blue Onion.</p>
+
+    <p>To create a new type of Onion, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>An Onion type object can organize the Pikmin of one Pikmin type. Onion objects serve as a destination for carried corpses and pellets, and will accept the corpse or pellet when it is delivered. Shortly afterwards, the Onion generates some Pikmin sprouts by shooting seeds in the air, or, if the limit of Pikmin has been reached, stores them inside the Onion. Currently, there is almost no logic in the engine related to stowing or retrieving Pikmin from and to the Onion; the player can use the throw or whistle buttons to do that at a very rudimentary level.</p>
+
+    <p>Onion type objects are hardcoded in the engine to idle, receive delivered objects, convert them to Pikmin or sprouts, hold the number of Pikmin stowed, per maturity, and very basically allow the player to retrieve or stow a Pikmin at a time.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, an Onion type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>pikmin_type</code></b>: Name of the type of Pikmin this Onion belongs to.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>An Onion type needs to have the following animations:</p>
+    
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>An Onion type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>When an Onion type object is spawned, it will read the following script variables, if they're present:</p>
+    
+    <ul>
+      <li><b><code>pikmin_inside</code></b>: How many Pikmin, per maturity, are inside. For instance, <code>8 0 1</code> means this Onion has 8 leaf Pikmin inside, and 1 flower Pikmin.</li>
+    </ul>
+
+    <p>Besides that, there are the <a href="area.html#script-vars">global spawn script variables</a>.</p>
+
+  </div>
+</body>
+
+</html>

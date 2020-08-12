@@ -1,0 +1,238 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Misc. configurations - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Misc. configurations</h1>
+    
+    <p>This article explains how miscellaneous configuration files on <i>Pikifen</i> work. These are plain engine <a href="text_file.html">text files</a>.</p>
+
+    <h2 id="game">Game configuration</h2>
+    
+    <p>This file controls some general settings about how the game works. It can be found in <code>Game_data/Misc/Config.txt</code>. Create it if it does not exist. The defaults can be found <a href="https://github.com/Espyo/Pikifen/blob/master/Game_data/Misc/Config.txt">here</a>.</p>
+
+    <p>The following properties exist:</p>
+
+    <ul>
+      <li><b><code>game_name</code></b>: Name of the fangame.</li>
+      <li><b><code>game_version</code></b>: Version of the fangame. Can be anything, but the preferred format is something like "1.2.3".</li>
+    </ul>
+    
+    <br>
+    
+    <ul>
+      <li><b><code>carrying_color_move</code></b>: Color to use for the carrying numbers when an object that is meant for the ship is being carried. Format is "red green blue" or "red green blue alpha".</li>
+      <li><b><code>carrying_color_stop</code></b>: Same as above, but for when the object is not moving.</li>
+      <li><b><code>carrying_speed_base_mult</code></b>: When an object is being carried, its movement speed depends on the carriers' average speed (and more). With 0 carriers, the average speed is multiplied by base_mult, and with all spots taken, it's multiplied by max_mult. This property controls the base value. In other words, this controls how high the slowest speed of a carried object is.</li>
+      <li><b><code>carrying_speed_max_mult</code></b>: Same as above, but the max_mult. In other words, this controls how high the fastest speed of a carried object is.</li>
+      <li><b><code>carrying_speed_weight_mult</code></b>: For every 1 unit of weight, decrease the carrying speed by this much.</li>
+    </ul>
+    
+    <br>
+
+    <ul>
+      <li><b><code>day_minutes_start</code></b>: When a normal day starts. This follows a format similar to real life, so 0 is midnight, 60 is 1 AM, 120 is 2 AM, 420 is 7 AM.</li>
+      <li><b><code>day_minutes_end</code></b>: Same as above, but for when the day ends.</li>
+      <li><b><code>day_minutes_per_irl_sec</code></b>: For every real-time second, these many in-game minutes pass.</li>
+    </ul>
+    
+    <br>
+    
+    <ul>
+      <li><b><code>pikmin_order</code></b>: Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Separate each type with a semicolon (;). e.g. <code>Red Pikmin;Yellow Pikmin;Blue Pikmin</code>.</li>
+      <li><b><code>standard_pikmin_height</code></b>: The height of a "standard" Pikmin, i.e. a Pikmin that's not shorter or taller than most. Used to help calculate some physics logic.</li>
+      <li><b><code>standard_pikmin_radius</code></b>: The radius of a "standard" Pikmin, i.e. a Pikmin that's not skinnier or fatter than most. Used to help calculate some physics logic.</li>
+    </ul>
+    
+    <br>
+
+    <ul>
+      <li><b><code>leader_order</code></b>: Like <code>pikmin_order</code>, but for the leaders.</li>
+    </ul>
+    
+    <br>
+
+    <ul>
+      <li><b><code>idle_task_range</code></b>: Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</li>
+      <li><b><code>group_move_task_range</code></b>: Same as above, but for a Pikmin on the group during the "group move" command.</li>
+      <li><b><code>max_pikmin_in_field</code></b>: Maximum number of Pikmin that can be on the field.</li>
+      <li><b><code>maturity_power_mult</code></b>: Every maturity level, multiply a Pikmin's attack power by this much.</li>
+      <li><b><code>maturity_speed_mult</code></b>: Every maturity level, multiply a Pikmin's walking speed by this much.</li>
+      <li><b><code>pikmin_chase_range</code></b>: Pikmin will chase after enemies unless they're this far away.</li>
+    </ul>
+    
+    <br>
+
+    <ul>
+      <li><b><code>can_throw_leaders</code></b>: "true" if it's possible to throw leaders, "false" if not.</li>
+      <li><b><code>cursor_max_dist</code></b>: Maximum distance away from the leader that their cursor can go to.</li>
+      <li><b><code>cursor_spin_speed</code></b>: How quickly the mouse cursor's icon spins, in degrees per second.</li>
+      <li><b><code>next_pluck_range</code></b>: When auto-plucking, a leader will only choose the next Pikmin if it is within this distance.</li>
+      <li><b><code>onion_open_range</code></b>: Leaders can open an Onion if they're within this range from the center of the Onion object.</li>
+      <li><b><code>pikmin_grab_range</code></b>: A leader can grab the closest Pikmin only if it is within this distance.</li>
+      <li><b><code>pluck_range</code></b>: A leader can pluck a Pikmin only if it is within this distance.</li>
+      <li><b><code>whistle_growth_speed</code></b>: How quickly the whistle's radius grows in size, in pixels per second.</li>
+    </ul>
+    
+    <br>
+
+    <ul>
+      <li><b><code>message_char_interval</code></b>: Time interval between characters when displaying a message, in seconds. 0 shows the entire text instantly.</li>
+      <li><b><code>zoom_max_level</code></b>: Maximum level of zoom (i.e. how close the camera can get).</li>
+      <li><b><code>zoom_min_level</code></b>: Minimum level of zoom (i.e. how far away the camera can get).</li>
+    </ul>
+
+    <h2 id="hud">HUD</h2>
+    
+    <p>The position and size of the HUD's elements can be customized in <code>Game_data/Misc/HUD.txt</code>. In order to work with any window size, this data is specified in percentages, not pixels. This means that an X and Y of "50" equals the center of the screen on any window size.</p>
+
+    <p>There are two blocks, <code>positions</code> and <code>files</code>. Inside the first block, every property's value takes on the format <code>x y w h</code>, which are the X and Y coordinates of the center of the item, plus the total width and total height. The numbers you put in don't use a percentage sign. To hide a HUD element, just put <code>0 0 0 0</code>. Inside the second block, you just specify the file name of the image that represents a HUD element, or a HUD element's component.</p>
+
+    <p>The list of properties for each block is as follows. The defaults can be found <a href="https://github.com/Espyo/Pikifen/blob/master/Game_data/Misc/HUD.txt">here</a>.</p>
+
+    <h3 id="hud-pos">Positions</h3>
+    
+    <ul>
+      <li><b><code>time</code></b>: Time of day, represented by the Sun Meter.</li>
+      <li><b><code>day_bubble</code></b>: The bubble for the current day number.</li>
+      <li><b><code>day_nr</code></b>: Current day number.</li>
+      <li><b><code>leader_1_icon</code></b>: Icon of the current leader.</li>
+      <li><b><code>leader_2_icon</code></b>: Icon of the next leader.</li>
+      <li><b><code>leader_3_icon</code></b>: Icon of the next next leader.</li>
+      <li><b><code>leader_1_health</code></b>: Health wheel of the current leader.</li>
+      <li><b><code>leader_2_health</code></b>: Health wheel of the next leader.</li>
+      <li><b><code>leader_3_health</code></b>: Health wheel of the next next leader.</li>
+      <li><b><code>pikmin_standby_icon</code></b>: Icon of the type of Pikmin in standby (the closest Pikmin), sans leaf/bud/flower.</li>
+      <li><b><code>pikmin_standby_m_icon</code></b>: Icon of the maturity of the Pikmin in standby.</li>
+      <li><b><code>pikmin_standby_x</code></b>: Multiplication sign ("&times;"), found to the right of the standby icon in <i>Pikmin</i> and <i>Pikmin 2</i>.</li>
+      <li><b><code>pikmin_standby_nr</code></b>: Number of Pikmin of the standby type.</li>
+      <li><b><code>pikmin_group_nr</code></b>: Number of Pikmin on the leader's group.</li>
+      <li><b><code>pikmin_field_nr</code></b>: Number of Pikmin on the field.</li>
+      <li><b><code>pikmin_total_nr</code></b>: Number of total Pikmin (field + Onions).</li>
+      <li><b><code>pikmin_slash_1</code></b>: One of the slashes that go between the counter numbers. There are three of them to be used at will, depending on how many counter numbers you want visible.</li>
+      <li><b><code>pikmin_slash_2</code></b>: See above.</li>
+      <li><b><code>pikmin_slash_3</code></b>: See above.</li>
+      <li><b><code>spray_1_icon</code></b>: Icon of the spray, when there is only one type, icon of spray #1 (the "up" one), when there are two types, or icon of the currently selected spray, when there are more than 2.</li>
+      <li><b><code>spray_1_amount</code></b>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
+      <li><b><code>spray_1_button</code></b>: Same as above, but the button to press.</li>
+      <li><b><code>spray_2_icon</code></b>: Icon of spray #2 (the "down" one), when there are two types.</li>
+      <li><b><code>spray_2_amount</code></b>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
+      <li><b><code>spray_2_button</code></b>: Same as above, but the button to press.</li>
+      <li><b><code>spray_prev_icon</code></b>: Icon of the previous spray on the list, when there are more than two types.</li>
+      <li><b><code>spray_prev_button</code></b>: Same as above, but the button to press.</li>
+      <li><b><code>spray_next_icon</code></b>: Icon of the next spray on the list, when there are more than two types.</li>
+      <li><b><code>spray_next_button</code></b>: Same as above, but the button to press.</li>
+    </ul>
+
+    <h3 id="hud-files">Files</h3>
+    
+    <ul>
+      <li><b><code>bubble</code></b>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
+      <li><b><code>checkbox_check</code></b>: A checkbox's "check". Used in menus.</li>
+      <li><b><code>counter_bubble_field</code></b>: The bubble in which the Pikmin-on-field counter is contained.</li>
+      <li><b><code>counter_bubble_group</code></b>: Same as above, but the in-group counter.</li>
+      <li><b><code>counter_bubble_standby</code></b>: Same as above, but the counter of group members of the current standby type.</li>
+      <li><b><code>counter_bubble_total</code></b>: Same as above, but the Pikmin total counter.</li>
+      <li><b><code>day_bubble</code></b>: The bubble in which the day counter is contained.</li>
+      <li><b><code>distant_pikmin_marker</code></b>: The graphic that gets overlayed on top of the standby Pikmin's icon, to indicate that the closest Pikmin is too far away to grab.</li>
+      <li><b><code>hard_bubble</code></b>: A rough, hard bubble. Used on the Sun Meter, leader icons, etc.</li>
+      <li><b><code>message_box</code></b>: A message box's background.</li>
+      <li><b><code>mouse_button_1_icon</code></b>: Icon that represents the left mouse button.</li>
+      <li><b><code>mouse_button_2_icon</code></b>: Icon that represents the right mouse button.</li>
+      <li><b><code>mouse_button_3_icon</code></b>: Icon that represents the middle mouse button.</li>
+      <li><b><code>mouse_wheel_down_icon</code></b>: Icon that represents the mouse wheel being scrolled down.</li>
+      <li><b><code>mouse_wheel_up_icon</code></b>: Icon that represents the mouse wheel being scrolled up.</li>
+      <li><b><code>no_pikmin_bubble</code></b>: Bubble to show when there are no Pikmin in the group.</li>
+      <li><b><code>sun</code></b>: Icon for the sun in the Sun Meter.</li>
+    </ul>
+
+    <h2 id="spike-damage">Spike damage</h2>
+    
+    <p>"Spike damage" is a mechanic where objects that suffered damage can immediately retaliate by damaging their attacker. In the <i>Pikmin</i> games, this is used by a White Pikmin to release poison to the enemy that ate it, in order to cause poison damage. In the engine, the same can be done, but any object can retaliate in any way, whether it is swallowed or damaged normally.</p>
+
+    <p>The file <code>Game_data/Misc/Spike_damage.txt</code> controls the types of spike damage that exist in the game. Each block in this file represents one type of spike damage, and the properties inside control how it works. The name of the block is the name of the type of spike damage, and you will have to refer to this name when setting object properties elsewhere.</p>
+
+    <p>The properties are:</p>
+    
+    <ul>
+      <li><b><code>damage</code></b>: How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property.</li>
+      <li><b><code>ingestion_only</code></b>: <code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin.</li>
+      <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Default is <code>false</code>.</li>
+      <li><b><code>particle_generator</code></b>: When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</li>
+      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coords">relative coordinates</a>.</li>
+    </ul>
+
+    <p>Remember to change the mob type properties for the mobs you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>
+
+    <h2 id="system-asset">System asset file names</h2>
+    
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This text file has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults in the source code, in the function <code>init_asset_file_names</code>, visible <a href="https://github.com/Espyo/Pikifen/blob/ec4c4d034c3fc2dd5b04d46ff64903c60480ba9a/Source/source/init.cpp#L54">here</a>.</p>
+    
+    <ul>
+      <li><b><code>area_name_font</code></b>: Font to use for area names.</li>
+      <li><b><code>checkbox_check</code></b>: The checkmark of checkboxes in menus.</li>
+      <li><b><code>cursor</code></b>: Leader cursor.</li>
+      <li><b><code>cursor_invalid</code></b>: Overlay to place on top of the leader cursor when a throw is invalid.</li>
+      <li><b><code>counter_font</code></b>: Font to use for counters in the HUD.</li>
+      <li><b><code>editor_icons</code></b>: Spritesheet where all editor icons are.</li>
+      <li><b><code>enemy_spirit</code></b>: Enemy spirit.</li>
+      <li><b><code>group_move_arrow</code></b>: Arrow that comes out from the leader when using group move.</li>
+      <li><b><code>icon</code></b>: The game's icon.</li>
+      <li><b><code>idle_glow</code></b>: Glowing effect on idle Pikmin.</li>
+      <li><b><code>main_font</code></b>: The game's main text font.</li>
+      <li><b><code>main_menu</code></b>: Background for the main menu.</li>
+      <li><b><code>mouse_button_1_icon</code></b>: Icon for the left mouse button.</li>
+      <li><b><code>mouse_button_2_icon</code></b>: Icon for the right mouse button.</li>
+      <li><b><code>mouse_button_3_icon</code></b>: Icon for the middle mouse button.</li>
+      <li><b><code>mouse_cursor</code></b>: Mouse cursor.</li>
+      <li><b><code>mouse_wheel_down_icon</code></b>: Icon for the mouse wheel scrolling down.</li>
+      <li><b><code>mouse_wheel_up_icon</code></b>: Icon for the mouse wheel scrolling up.</li>
+      <li><b><code>notification</code></b>: Notification bubble.</li>
+      <li><b><code>pikmin_silhouette</code></b>: Silhouette of a Pikmin. Used in the area editor's cross-section feature.</li>
+      <li><b><code>pikmin_spirit</code></b>: Pikmin spirit.</li>
+      <li><b><code>shadow</code></b>: Object shadows.</li>
+      <li><b><code>smack</code></b>: Smack particle.</li>
+      <li><b><code>smoke</code></b>: Smoke particle.</li>
+      <li><b><code>sparkle</code></b>: Sparkle particle.</li>
+      <li><b><code>spotlight</code></b>: Spotlight texture to use for blackout weather.</li>
+      <li><b><code>value_font</code></b>: Font to use for numeric values, like the carrying fraction numbers.</li>
+      <li><b><code>wave_ring</code></b>: Particle for waves in water, used when objects are standing in water.</li>
+    </ul>
+
+    <h2 id="title">Title screen</h2>
+    
+    <p>The title screen (or main menu) has some settings that can be changed, mostly in regards to the logo made up of Pikmin. These are all specified in <code>/Game_data/Misc/Title_screen.txt</code>.</p>
+
+    <p>The settings for the logo are inside a <code>logo</code> block. They are:</p>
+
+    <ul>
+      <li><b><code>min_screen_limit</code></b>: Top-left coordinates of the logo's placement on-screen, in screen width or height percentage. For example, <code>10 20</code> means the logo starts at 10% of screen width, and 20% of the screen height.</li>
+      <li><b><code>max_screen_limit</code></b>: Same as above, but for the bottom-right.</li>
+      <li><b><code>pikmin_max_speed</code></b>: Each Pikmin's speed is random. This is the maximum speed possible, in pixels per second.</li>
+      <li><b><code>pikmin_min_speed</code></b>: Same as above, but minimum possible.</li>
+      <li><b><code>pikmin_speed_smoothness</code></b>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
+      <li><b><code>pikmin_sway_amount</code></b>: How many pixels a Pikmin sways left or right when standing still.</li>
+      <li><b><code>pikmin_sway_max_speed</code></b>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
+      <li><b><code>pikmin_sway_min_speed</code></b>: Same as above, but the minimum speed.</li>
+      <li><b><code>pikmin_size</code></b>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
+      <li><b><code>pikmin_types</code></b>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the name of the image in the <code>/Game_data/Graphics</code> folder (extension included).</li>
+      <li><b><code>map</code></b>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

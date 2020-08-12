@@ -1,0 +1,63 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Status effects - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Status effects</h1>
+    
+    <p>This page will guide you on the creation of status effects for <i>Pikifen</i>.</p>
+
+    <h2 id="intro">Introduction</h2>
+    
+    <p>Status effects temporarily change an object's properties. While under a status effect, an object can be slower, stronger, colored differently, etc. Objects can be under multiple status effects at once. Examples of status effects are: on fire, spicy, petrified, drowning, etc.</p>
+
+    <p>Status effects are defined on <code>Game_data/Misc/Statuses.txt</code>. In this <a href="text_file.html">text file</a>, each block defines a status effect, with the block's name being the status effect's name.</p>
+
+    <h2 id="props">Properties</h2>
+    
+    <p>Each status effect has the following properties:</p>
+    
+    <ul>
+      <li><b><code>color</code></b>: Color that represents the status effect, in the format <code>r g b</code> or <code>r g b a</code>.</li>
+      <li><b><code>tint</code></b>: When an object is under this status effect, they are tinted by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>255 255 255</code> (white, which means no tint).</li>
+      <li><b><code>glow</code></b>: When an object is under this status effect, they are lit up by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>0 0 0 0</code> (no color).</li>
+      <li><b><code>removable_with_whistle</code></b>: If true, the status effect can be removed if the object is whistled by a leader.</li>
+      <li><b><code>auto_remove_time</code></b>: The status effect is automatically removed after these many seconds have passed. 0 means it does not auto-remove with time.</li>
+      <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this much. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second.</li>
+      <li><b><code>causes_disable</code></b>: If true, Pikmin affected by this will enter a "disabled" state. During this state, they can't do much, and can't interact with much. Useful for stunning them.</li>
+      <li><b><code>causes_flailing</code></b>: If true, Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>
+      <li><b><code>causes_panic</code></b>: If true, Pikmin affected by this will enter a "panic" state, where they won't interact with many things, but will run around randomly in a panic.</li>
+      <li><b><code>disabled_state_inedible</code></b>: If true, Pikmin in the "disabled" state caused by this status effect will not be able to be eaten. If false, they can be eaten even in this state.</li>
+      <li><b><code>disables_attack</code></b>: If true, attack hitboxes are ignored. Useful for petrifying mobs and making them harmless, for instance.</li>
+      <li><b><code>speed_multiplier</code></b>: Multiply the object's movement speed by this much.</li>
+      <li><b><code>attack_multiplier</code></b>: Multiply the object's attack power by this much.</li>
+      <li><b><code>defense_multiplier</code></b>: Multiply the object's defense by this much.</li>
+      <li><b><code>anim_speed_multiplier</code></b>: Multiply the speed of animations by this much. 0 means animations don't move. Useful for petrified enemies.</li>
+      <li><b><code>animation</code></b>: Name of the animation to draw on top of the object affected by this status effect, if any. This animation must be defined in <code>Game_data/Animations</code>, and the property must include the extension (e.g. <code>Fire.txt</code>).</li>
+      <li><b><code>animation_mob_scale</code></b>: If 1, the animation is scaled to be the same size as the object. 0.5 will make it half the size of the object, 2.0 will make it twice as big, etc. Only the width of the animation is taken into account to calculate the final size, but the animation's proportions are kept.</li>
+      <li><b><code>affects_pikmin</code></b>: If true, this status effect affects Pikmin.</li>
+      <li><b><code>affects_leaders</code></b>: If true, this status effect affects leaders.</li>
+      <li><b><code>affects_enemies</code></b>: If true, this status effect affects enemies.</li>
+      <li><b><code>particle_generator</code></b>: If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to create some.</li>
+      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coords">relative coordinates</a>.</li>
+      <li><b><code>maturity_change_amount</code></b>: If a Pikmin is affected by this status effect, its maturity will instantly increase by the specified amount. You can also write negative numbers to decrease the maturity. You don't need to worry about the maturity number going over, so a change amount of "+4" on Pikmin won't make it go beyond a flower.</li>
+      <li><b><code>turns_invisible</code></b>: If true, objects under this status effect will be considered invisible for other objects. They will still show up on the screen (unless you tinted them with transparency), but other objects will not be able to receive "in reach" <a href="script.html">events</a>.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

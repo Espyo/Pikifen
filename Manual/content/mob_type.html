@@ -1,0 +1,327 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Object types - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object types</h1>
+    
+    <p>This page will instruct you on how to create new object types in <i>Pikifen</i>. This includes a new type of enemy, new type of Pikmin, etc.</p>
+
+    <h2 id="idea">General idea</h2>
+    
+    <p>In order for the engine to detect a type of object, it will check the <code>Game_data/Types</code> folder. Inside are several folders, one for each category of object (enemies, gates, etc.). Inside each category are folders for the different types of objects (the different types of enemies, different types of leaders, etc.). Finally, inside those are some <a href="text_file.html">text files</a> with data about how the object works, its animations, or its script.</p>
+
+    <h2 id="creating">Creating a new object type</h2>
+    
+    <p>To create a new object type, make a folder for it in the right category, and create an empty text files inside called <code>Data.txt</code>. Inside, you will write all of the object's properties, like the name, its movement speed, etc. These take on the form of <code>property = value</code>, and there is one property per line. So for instance, to name Louie's object type, you'd have the line <code>name = Louie</code> in the file.</p>
+
+    <p>Some properties are mandatory, some are optional, some apply to all object types, and some only apply to certain categories of object type. You can get a list of properties that apply to all object types in the following sub-sections of this page, and then check what properties exist for that category by visiting the category's article from the <a href="#mob-list">list</a>. After you're done setting the properties, you must create the animations for the object type; use the <a href="animation.html">animation tutorial</a> for this. Finally, some object types will also need a script to run. To figure out if your object will need a script or not, check the <a href="#mob-list">list of categories</a> and if it does, read the <a href="script.html">object script tutorial</a> to learn what you need to do.</p>
+
+    <p>After you have done that, you can boot up the engine, go to the area editor, place your new object in an area, hit play, and watch it in action!</p>
+
+    <p>Naturally, instead of creating your own files from scratch, you may copy and paste an existing object's files and simply edit those.</p>
+
+    <h3 id="manadtory-props">Mandatory properties</h3>
+    
+    <p>The following properties <b>must</b> exist, regardless of category.</p>
+
+    <ul>
+      <li><b><code>name</code></b>: Name of the object type. e.g. "Olimar", "Red Pikmin", "Cloaking Burrow-nit".</li>
+    </ul>
+
+    <h3 id="recommended-props">Recommended properties</h3>
+    
+    <p>The following are properties that you really should have, but the engine can run without them.</p>
+
+    <ul>
+      <li><b><code>can_hunt</code></b>: This object will only want to hunt down objects of this target type. i.e. it will only consider those an "opponent" (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player" and "enemy".</li>
+      <li><b><code>can_hurt</code></b>: This object can only cause damage to objects of this target type (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player", "enemy", and "fragile".</li>
+      <li><b><code>height</code></b>: Object's height. This doesn't need to be <i>very</i> specific. For reference, leaders are usually 32, Pikmin are usually 24. Defaults to 0.</li>
+      <li><b><code>max_health</code></b>: The object's top health. For reference, leaders have 2000, and something like a Red Bulborb has 750. Defaults to 100.</li>
+      <li><b><code>move_speed</code></b>: Standard movement speed (in pixels per second). For reference, leaders move at 130. Defaults to 0.</li>
+      <li><b><code>pushable</code></b>: <code>true</code> if this object can be pushed out of the way by other objects. <code>false</code> otherwise. Defaults to false.</li>
+      <li><b><code>pushes</code></b>: <code>true</code> if this object can push "pushable" objects out of the way. <code>false</code> otherwise. Defaults to false.</li>
+      <li><b><code>radius</code></b>: The object's size, represented by the circle's radius (in pixels). Leaders are 32 pixels wide, so their radius is 16. Pikmin have a radius of 10. Defaults to 0.</li>
+      <li><b><code>rotation_speed</code></b>: How fast the object turns when moving, in degrees per second. For reference, leaders use around 360, Pikmin use around 630, and a Red Bulborb uses around 114. Defaults to 630.</li>
+      <li>
+        <b><code>target_type</code></b>: What type of "target" the object is. This determines which objects will hunt it, and which objects can attack it. Possible values are as follows, along with what each type is meant to represent. Defaults to "none".
+        <ul>
+          <li><code>none</code>: Cannot be damaged or hunted down.</li>
+          <li><code>player</code>: Leaders, Pikmin, and anything belonging to the "heroes" of the player's side.</li>
+          <li><code>enemy</code>: Enemies.</li>
+          <li><code>weak_plain_obstacle</code>: Weaker objects that should be damaged by many things, like leaders, Pikmin, or explosions. e.g. egg.</li>
+          <li><code>strong_plain_obstacle</code>: Stronger objects that should be damaged by beefy hits, like Pikmin or explosions. e.g. gas pipe.</li>
+          <li><code>pikmin_obstacle</code>: An object only Pikmin should harm. e.g. electric gate.</li>
+          <li><code>explodable</code>: An object that should only be hurt by an explosion. e.g. reinforced wall.</li>
+          <li><code>explodable_pikmin_obstacle</code>: An object that should be hurt by Pikmin or explosives only. e.g. Burgeoning Spiderwort.</li>
+          <li><code>fragile</code>: A fragile object that should be harmed by even the gentlest smack. e.g. bomb rock.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="optional-props">Optional properties</h3>
+    
+    <p>For all categories of object type, you may set these properties, but they will still work if you don't.</p>
+
+    <ul>
+      <li><b><code>blocks_carrier_pikmin</code></b>: If set to <code>true</code>, the object being alive in the way of carrier Pikmin will block their carrying, like a gate or an unbuilt bridge. Defaults to false.</li>
+      <li><b><code>can_free_move</code></b>: If true, this object can move in any direction freely, without having to first turn there. It will also not face towards the direction it is going. Defaults to false.</li>
+      <li><b><code>casts_shadow</code></b>: If set to <code>false</code>, the object won't cast a shadow on the ground. Defaults to true.</li>
+      <li><b><code>default_vulnerability</code></b>: For every source of damage not specified in the <a href="#vulnerabilities">vulnerabilities</a>, the damage the object receives is multiplied by this amount. Defaults to 1.</li>
+      <li><b><code>health_regen</code></b>: Passive health regeneration rate, in HP per second. Defaults to 0.</li>
+      <li><b><code>is_obstacle</code></b>: If set to <code>true</code>, the object will be considered an obstacle. This only impacts whether enemies and such can harm it or not. Defaults to false.</li>
+      <li><b><code>itch_damage</code></b>: If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code>on_itch</code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go. Defaults to 0.</li>
+      <li><b><code>itch_time</code></b>: In order for the enemy to not shake over and over, if you keep damaging it, you can also specify a minimum time requirement between itches, in seconds. Defaults to 0.</li>
+      <li><b><code>main_color</code></b>: A color to represent the object by. The format is <code>R G B</code> (values range from 0 to 255). Defaults to black.</li>
+      <li><b><code>max_carriers</code></b>: Maximum number of Pikmin that can carry this object, when it is made carriable. Defaults to 0.</li>
+      <li><b><code>pushes_with_hitboxes</code></b>: If true, this object pushes with its (normal or attack) hitboxes, instead of pushing using its object's center and radius. Defaults to false.</li>
+      <li><b><code>rectangular_dimensions</code></b>: If this object is meant to have rectangular collision, specify the rectangle's dimensions here, in the format <code>&lt;width&gt; &lt;height&gt;</code>. This is useful for objects like gates, but shouldn't be used by objects that can move (among other things, the engine is not ready to handle rectangular object vs rectangular object collisions). Defaults to no rectangular dimensions.</li>
+      <li><b><code>show_health</code></b>: If set to <code>false</code>, the object's health wheel will not appear on top of it. Defaults to true.</li>
+      <li><b><code>spike_damage</code></b>: If this object is meant to cause <a href="misc_features.html">spike damage</a>, specify the spike damage type's name here. Defaults to none.</li>
+      <li><b><code>spike_damage_vulnerabilities</code></b>: Normally, objects hit by a spike damage attack will receive the damage specified. If you want this mob type to take more or less damage (or even heal!), you can specify it here. This is a block, where every property inside has the spike damage type's name as a name, and the percentage as a value. Example: <code>poison = 50</code> will make this enemy take half the intended damage when ingesting a White Pikmin. Defaults to not set.</li>
+      <li><b><code>territory_radius</code></b>: How far away from the spawn point must the enemy be before being considered "far from home". For reference, a Red Bulborb has this set to 500. Defaults to 0.</li>
+      <li><b><code>walkable</code></b>: If <code>true</code>, this object can be walked on top of by other objects. Other objects will be able to mount it if they fall on it from above, or if they are on a floor that's within 50 units of height from the top of this object (much like how climbing up <a href="area.html#ramps">stairs</a> work). Defaults to false.</li>
+      <li><b><code>weight</code></b>: How much Pikmin strength does it take to carry the object. Defaults to 0.</li>
+    </ul>
+
+    <h2 id="mob-categories">List of object categories</h2>
+    
+    <p>The following is a list of all categories that exist in the engine, with links to pages detailing more information about them.</p>
+    
+    <table>
+      <tr><th>Category</th><th>Brief description</th><th>Examples</th><th>Script?</th></tr>
+      <tr>
+        <th><a href="mob_pikmin.html">Pikmin</a></th>
+        <td>A type of Pikmin.</td>
+        <td>Red Pikmin, Yellow Pikmin</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_leader.html">Leader</a></th>
+        <td>A leader. Yes, you can have multiple "Olimars" in an area!</td>
+        <td>Olimar, Louie</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_enemy.html">Enemy</a></th>
+        <td>An enemy, either prey or predator.</td>
+        <td>Red Bulborb, Cloaking Burrow-nit</td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><a href="mob_onion.html">Onion</a></th>
+        <td>An Onion. Each can only handle one Pikmin type.</td>
+        <td>Red Onion, Yellow Onion</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_ship.html">Ship</a></th>
+        <td>Anything that the Pikmin can return treasures to.</td>
+        <td>S.S. Dolphin, Hocotate ship</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_pellet.html">Pellet</a></th>
+        <td>A pellet.</td>
+        <td>Red 1 pellet, Blue 5 pellet</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_treasure.html">Treasure</a></th>
+        <td>A main collectible, like a ship part, treasure, fruit, etc.</td>
+        <td>Main Engine, Courage Reactor</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_bridge.html">Bridge</a></th>
+        <td>Anything that once opened, creates a bridge.</td>
+        <td>Wood bridge, Red ceramic bridge</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_group_task.html">Group task</a></th>
+        <td>Something that requires Pikmin to pose together in order to open, move, etc.</td>
+        <td>Cardboard box, electrode</td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><a href="mob_scale.html">Scale</a></th>
+        <td>Measures how much weight is on top of it, and does things depending on the amount.</td>
+        <td>Seesaw block, crushable paper bag</td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><a href="mob_track.html">Track</a></th>
+        <td>Transports an object from point to point.</td>
+        <td>Climbing stick, slide</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_bouncer.html">Bouncer</a></th>
+        <td>Bounces an object to some other location.</td>
+        <td>Bouncy Mushroom, geyser</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_converter.html">Converter</a></th>
+        <td>Anything that converts a thrown Pikmin to another type.</td>
+        <td>Crimson Candypop Bud, Queen Candypop Bud</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_decoration.html">Decoration</a></th>
+        <td>Any decorative plant or object.</td>
+        <td>Clover, Margaret</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_drop.html">Drop</a></th>
+        <td>A droplet that can be drunk.</td>
+        <td>Nectar, Ultra-bitter nectar</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_pile.html">Pile</a></th>
+        <td>Any sort of pile of resources.</td>
+        <td>Bitter Burgeoning Spiderwort, Ceramic pile red</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_resource.html">Resource</a></th>
+        <td>Anything that can be harvested from a pile and brought somewhere.</td>
+        <td>Bitter berry, Ceramic fragment red</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><a href="mob_tool.html">Tool</a></th>
+        <td>Anything that can be held by a Pikmin and activated when the Pikmin's thrown.</td>
+        <td>Bomb rock, Mine</td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><a href="mob_interactable.html">Interactable</a></th>
+        <td>Anything that the current leader can interact with to cause some action.</td>
+        <td>Sign</td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><a href="mob_custom.html">Custom</a></th>
+        <td>Any object with no specific behavior.</td>
+        <td>Egg, Fire geyser, anything really</td>
+        <td><b>Yes</b></td>
+      </tr>
+    </table>
+    
+    <p>If there's a type of object you know is popular in the <i>Pikmin</i> series, but you can't find the category for it, then either an appropriate category does not yet exist in the engine, or it can be created as a custom object.</p>
+
+    <h2 id="extra">Extra features</h2>
+    
+    <h3 id="spawning">Spawning other objects</h3>
+    
+    <p>If you want your object to spawn other objects, you need to specify their spawn data. In <code>Data.txt</code>, include a block titled <code>spawns</code>. Inside, you will write a series of blocks, each one with a unique name that will identify that spawn data. Later, when you want to spawn an object using the <a href="script.html">script</a>, you need to refer to this name.</p>
+
+    <p>These spawn data blocks must have the following properties inside:</p>
+    
+    <ul>
+      <li><b><code>object</code></b>: Name of the type of object to be spawned. This is the formal name, i.e. the name provided in the <code>name</code> property in the mob type's <code>Data.txt</code> file.</li>
+    </ul>
+
+    <p>It can also optionally have these properties:</p>
+    
+    <ul>
+      <li><b><code>relative</code></b>: Are the specified spawn coordinates absolute or relative? See <a href="script.html#rel-coords">here</a> for more help.</li>
+      <li><b><code>coordinates</code></b>: Coordinates to spawn in, in the format <code>x y z</code>.</li>
+      <li><b><code>angle</code></b>: Angle the spawned object will be facing.</li>
+      <li><b><code>momentum</code></b>: If this is 0, the mob spawns in the exact spot specified and stand there. Otherwise, it will spawn in that spot but be launched in a random direction, with the specified momentum. 100 is a good general case value.</li>
+      <li><b><code>vars</code></b>: Any script variables to include, separated by semicolon. Example: <code>vars = maturity = 0; sprout = true</code>.</li>
+      <li><b><code>link_spawn_to_object</code></b>: If <code>true</code>, a <a href="misc_features.html#mob-links">link</a> will be created from the spawned object to your object.</li>
+      <li><b><code>link_object_to_spawn</code></b>: If <code>true</code>, a link will be created from your object to the spawned object.</li>
+    </ul>
+
+    <h3 id="parent">Parent/Child objects</h3>
+    
+    <p>Your object can be a <b>parent</b> object, meaning it is actually composed of several different <b>child</b> objects. This feature is especially useful when you need several independently-moving parts. For instance, in a <a href="https://www.pikminwiki.com/Beady_Long_Legs">Beady Long Legs</a>, the head is the parent object, meaning it is the enemy proper, and each leg is a child object.</p>
+
+    <p>A parent will spawn its children at the same time that it itself is spawned. Because every child is meant to be its own individual thing but also serve as components of the parent object, there are several ways for you to specify what it should do when it interacts with the world. This means specifying what happens when it receives damage, receives a script event, or receives a status effect: it can either ignore what it received or not, and it can either relay it to the parent object or not.</p>
+
+    <p>Children objects can also be connected to a specific body part in the parent. Because children objects are commonly used as appendages of the creature, it is possible to draw a "limb" connecting a parent object to a child object. This limb is a rectangular shaped sprite that stretches and rotates accordingly.</p>
+
+    <p>To make your object type a parent, go to <code>Data.txt</code>, and add a block called <code>children</code>. Inside, you will include a series of blocks, each one with a unique name that represents the child, e.g. "left_foot". Now, when your object is spawned, it will spawn these children along with it. Each of these children blocks needs to have the following properties:</p>
+    
+    <ul>
+      <li><b><code>spawn</code></b>: Name of the <a href="#spawning">spawn data</a> to use.</li>
+    </ul>
+
+    <p>The blocks can also have the following optional properties:</p>
+    
+    <ul>
+      <li><b><code>parent_holds</code></b>: If <code>true</code>, then the parent object is holding this one, much like an enemy holds a Pikmin that is latched on to it. Use the following properties to specify the location.</li>
+      <li><b><code>hold_body_part</code></b>: If the parent holds this child, this is the name of the body part it is held on. If empty, the center of the parent object is used instead.</li>
+      <li><b><code>hold_offset_distance</code></b>: If the parent holds this child, this is how far away from the center of the body part/object the child is. 0 means dead center, and 1 means on the edge, but you can write numbers beyond this range.</li>
+      <li><b><code>hold_offset_angle</code></b>: If the parent holds this child, this is the angle from the body part/object's default position that the child is located at.</li>
+      <li><b><code>hold_rotation_method</code></b>: Indicates how the child can rotate. <code>never</code> means it never rotates (besides the starting angle). <code>face_parent</code> means it always rotates to face the center of the parent object. <code>copy_parent</code> means it's always the same angle as the parent object. Defaults to never.</li>
+      <li><b><code>handle_damage</code></b>: If <code>true</code>, the child object loses health when it receives damage. If <code>false</code>, it ignores the damage.</li>
+      <li><b><code>relay_damage</code></b>: If <code>true</code>, the child object relays any damage to the parent object, so <i>it</i> can handle it.</li>
+      <li><b><code>handle_events</code></b>: If <code>true</code>, the child object handles any script event that it receives. If <code>false</code>, it ignores the event.</li>
+      <li><b><code>relay_events</code></b>: If <code>true</code>, the child object relays any events received to the parent object, so <i>it</i> can handle them.</li>
+      <li><b><code>handle_statuses</code></b>: If <code>true</code>, the child object handles any status effect that it receives. If <code>false</code>, it ignores the status.</li>
+      <li><b><code>relay_statuses</code></b>: If <code>true</code>, the child object relays any status effects received to the parent object, so <i>it</i> can handle them.</li>
+      <li><b><code>limb_animation</code></b>: If there is meant to be a "limb" drawn between the child and parent, specify the name of its <a href="animation.html">animation</a> here. This animation must be included in the parent object's animation set.</li>
+      <li><b><code>limb_thickness</code></b>: If there is a limb, this specifies how thick it is.</li>
+      <li><b><code>limb_parent_body_part</code></b>: If there is a limb, this specifies where it connects to in the parent. If it's empty, it connects to the parent's center. Otherwise, it connects to the center of the specified body part.</li>
+      <li><b><code>limb_parent_offset</code></b>: If there is a limb, you can specify how far away it is from the center of the parent-side connection.</li>
+      <li><b><code>limb_child_body_part</code></b>: Same as <code>limb_parent_body_part</code>, but for the child object.</li>
+      <li><b><code>limb_child_offset</code></b>: Same as <code>limb_parent_offset</code>, but for the child object.</li>
+      <li>
+        <b><code>limb_draw_method</code></b>: How to draw the limb. This can be one of the following:
+        <ul>
+          <li><code>below_both</code>: Draw the limb below both the parent and the child.</li>
+          <li><code>below_child</code>: Draw the limb below the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
+          <li><code>below_parent</code>: Draw the limb below the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
+          <li><code>above_parent</code>: Draw the limb above the parent. It may appear above or below the child, depending on the child and parent's positions.</li>
+          <li><code>above_child</code>: Draw the limb above the child. It may appear above or below the parent, depending on the child and parent's positions.</li>
+          <li><code>above_both</code>: Draw the limb above both the parent and the child.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 id="vulnerabilities">Vulnerabilities</h3>
+    
+    <p>You can make it so that an object is completely invulnerable to a hazard, more vulnerable to another, etc.</p>
+
+    <p>In <code>Data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each line will indicate a hazard, and a multiplier, in the format <code>hazard = multiplier</code>. The hazard is the name of the hazard you want to receive special treatment, and the multiplier is how much the damage will be multiplied by. So for instance, if you want an object to be invulnerable to fire attacks, write a line with <code>fire = 0</code>, and if you want the object to take double damage to water attacks, write <code>water = 2</code>.</p>
+
+    <p>You can use this in conjunction with the <code>default_vulnerability</code> <a href="optional-props">property</a> to make an object that is invulnerable to anything except explosions, for instance.</p>
+
+    <h2 id="notes">Notes</h2>
+    
+    <ul>
+      <li>
+        If objects of your new type are not being hunted down or hurt, confirm the following:
+        <ul>
+          <li> The object's target type is one of the types the attacker wants to hunt or can hurt.
+          <li> The object is not in the same team as the attacker.
+          <li> The object has more than zero health.
+          <li> The object is not unhuntable via the <code>set_huntable</code> <a href="script.html">script action</a>.
+          <li> The object is not invisible via a <a href="status.html">status effect</a>.
+        </ul>
+      </li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

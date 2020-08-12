@@ -1,0 +1,66 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Scale - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; scale</h1>
+    
+    <b>Scales</b> are objects that can measure how much weight is on top of them, and change freely based on that amount. Numbers can appear above the object indicating how much weight is on top of it now, and optionally, how much weight is required to trigger something. Any object can weigh down a scale object.
+
+    <p>Examples of scale types include seesaw blocks, where one block weighing more than the other causes that one to sink and the other to rise, or crushable paper bags, that block the way until enough weight is put on them to crush them.</p>
+
+    <p>To create a new type of scale, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A scale object can be anything and do anything, but it can also have information to show a goal weight number above it. Objects of this category should worry about checking how much weight is atop them, and change accordingly.</p>
+
+    <p>Other than that, scale objects are hardcoded in the engine to do whatever the script tells them.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a scale type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <p>None.</p>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>goal_number</code></b>: If not zero, the numbers above the object will be a fraction with the bottom number being this "goal" amount. Defaults to 0.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>Scale object types do not need any specific animations, only the ones that you call in the script.</p>
+
+    <h2 id="script">Script</h2>
+
+    <p>All of the scale type object's behavior is defined by the user-made <a href="script.html">script</a>. You should be using the <code>on_weight_added</code> and <code>on_weight_removed</code> events to know when the weight atop a scale has changed, and also use the <code>get_info</code> action to know what the current weight is.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, scale type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

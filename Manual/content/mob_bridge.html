@@ -1,0 +1,72 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Bridge - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; bridge</h1>
+    
+    <b>Bridges</b> are objects that start off as just a stub, and when Pikmin are done working on them, they form a full bridge over an obstacle that anything can walk on.
+
+    <p>Examples of bridge types include the wooden bridge from <i>Pikmin</i>, that starts as a stub Pikmin work on and gets fully built when they are done, the red ceramic bridge from <i>Pikmin 3</i>, that starts as a stub and grows as Pikmin collect shards and drop them on the bridge, etc.</p>
+
+    <p>To create a new type of bridge, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>The bridge object serves as something for the Pikmin to work on. Once its health is fully depleted, it changes to a "destroyed" animation, and several bridge sectors are created nearby. As such, in order for a bridge to work, you need to place both a bridge object and some bridge sectors. See the <a href="area.html#bridge">area tutorial</a> for more information. Some bridges are built by having the Pikmin attack it (e.g. <i>Pikmin</i> wooden bridge). Others are built by having the Pikmin deliver some sort of <a href="mob_resource.html">resource</a> into the bridge (e.g. <i>Pikmin 3</i> ceramic bridge).</p>
+
+    <p>Bridge type objects are hardcoded in the engine to sit there and have their health depleted in some way, and when it reaches 0, they change animation and edit the surrounding bridge sectors's texture and height.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a bridge type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+    
+    <ul>
+      <li><b><code>main_texture</code></b>: File name of the texture to use for the bridge's main floor, extension included. This is what the bridge sectors will use. This texture should be in <code>Game_data/Graphics/Textures/</code>.</li>
+      <li><b><code>rail_texture</code></b>: Same as above, but the texture to use for the railing.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A bridge type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Under construction, and is just idling.</li>
+      <li><b><code>destroyed</code></b>: Fully built.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A bridge type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, bridge type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

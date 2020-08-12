@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Enemy - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; enemy</h1>
+    
+    <b>Enemies</b> are any type of object that can attack or be attacked by the Pikmin.
+
+    <p>Examples of enemy types include Red Bulborbs, Water Dumples, White Spectralids, etc.</p>
+
+    <p>To create a new type of enemy, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>An enemy is something that a Pikmin will consider an opponent, and will want to attack. Depending on how the enemy is scripted, it can also want to attack the Pikmin, run away from them, ignore them, etc. Once killed, an enemy can drop a corpse, which can then be carried to an Onion to give Pikmin seeds. Because enemies can have many varied behaviors, most of what they do is controlled by the script.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, an enemy type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <p>None.</p>
+
+    <h3 id="recommended">Recommended</h3>
+    
+    <ul>
+      <li><b><code>allow_ground_attacks</code></b>: <code>false</code> makes it so that Pikmin cannot attack it with grounded attacks; the only way to hurt it is by throwing Pikmin and letting them attack latched on. Defaults to true.</li>
+      <li><b><code>drops_corpse</code></b>: <code>true</code> if this enemy drops a corpse, <code>false</code> otherwise. Defaults to true.</li>
+      <li><b><code>pikmin_seeds</code></b>: How many seeds this enemy gives when the corpse is returned to the Onion. Defaults to 0.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>Enemy object types do not need any specific animations, only the ones that you call in the script.</p>
+
+    <h2 id="script">Script</h2>
+
+    <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. There are no recommended states, events, or actions.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>When an enemy type object is spawned, it will read the following script variables, if they're present:</p>
+    
+    <ul>
+      <li><b><code>spoils</code></b>: A list of objects to spawn, separated by colon. These are spawned with a bit of momentum.</li>
+      <li><b><code>random_pellet_spoils</code></b>: A list of pellet numbers to spawn, separated by colon. When the enemy dies, it will spawn a pellets of random types, but each one matching each of the specified numbers. For instance, <code>1,1,5</code> would make it spawn two 1 pellets and one 5 pellet. It will only pick Pikmin types from the ones that have an Onion in the current area.</li>
+    </ul>
+
+    <p>Besides that, there are the <a href="area.html#script-vars">global spawn script variables</a>, and any other script variable that you write can be used by the enemy's script.</p>
+
+  </div>
+</body>
+
+</html>

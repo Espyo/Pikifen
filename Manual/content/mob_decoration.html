@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Decoration - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; decoration</h1>
+    
+    <b>Decorations</b> are simple objects that do nothing but decorate the area. They just idle, and change animation when bumped against, making them great for decorative plants.
+
+    <p>Examples of decoration types include Clovers or Margarets.</p>
+
+    <p>To create a new type of decoration, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A decoration type object simply idles and changes to a different animation when it's bumped by any moving object. Having an object touch it, but not moving, will cause it to use the idle animation, so it only looks like it's brushed against when it's actually being, well, really brushed against. Because most of these are plants, and plants in the real world, even from the same species, come in all shapes and sizes, a decoration object type can have data on how to randomize the look of each decoration object in the area.</p>
+
+    <p>Decoration type objects are hardcoded in the engine to spawn with a random tint, rotation, scale, and animation offset, and they're programmed to sit there and change animation when touched by a moving object.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a decoration type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <p>None.</p>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>random_animation_delay</code></b>: If true, the first frame of each object's idle animation when spawning will be decided at random, instead of always being the first one. Useful if you have several different decorative objects together, and don't want them to look like they're all moving in sync. Defaults to false.</li>
+      <li><b><code>rotation_random_variation</code></b>: When an object of this type spawns, its angle will be randomly shifted clockwise or counterclockwise, randomly between 0 degrees and these many degrees. Defaults to 0.</li>
+      <li><b><code>scale_random_variation</code></b>: When an object of this type spawns, its scale will be randomly increased or decreased, by a random factor between 0 and this much. 0.1 is a good general-case value. Defaults to 0.</li>
+      <li><b><code>tint_random_maximum</code></b>: When an object of this type spawns, it will be tinted randomly. This color (format <code>r g b</code> or <code>r g b a</code>) is the maximum tint that it can undergo, and the engine will pick a random color to tint it with between this color and full white (i.e. no tint). If you specify an alpha channel, the object's transparency will be decided randomly (but independently) too, between this value and 255 (full opacity). Defaults to transparent black.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A decoration type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Just idling.</li>
+      <li><b><code>bumped</code></b>: When it's been bumped against.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A decoration type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, decoration type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

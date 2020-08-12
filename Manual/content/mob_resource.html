@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Resource - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; resource</h1>
+    
+    <b>Resources</b> are objects that Pikmin can carry somewhere, and once delivered, they cause something to happen. These resources are almost always provided by a <a href="mob_pile.html">pile</a>.
+
+    <p>Examples of resource types include Burgeoning Spiderwort berries, which get delivered to the ship to make sprays with, bridge shards, which get delivered to the corresponding bridge, nuggets, which get delivered to the ship for points, etc.</p>
+
+    <p>To create a new type of resource, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A resource type specifies where the resource must be delivered, what happens to the resource when it's delivered, and what happens when it's dropped by the Pikmin.</p>
+
+    <p>Resource type objects are hardcoded in the engine to sit there, be picked up by the Pikmin, be dropped by the Pikmin, vanish if necessary, and be delivered somewhere. There is also logic to cause something specific to happen when they are delivered.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a resource type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>carrying_destination</code></b>: Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship, and <code>linked_mob</code> means it gets taken to whatever object is linked to the pile that originated this resource.</li>
+      <li><b><code>delivery_result</code></b>: Specifies what happens when the resource is successfully delivered. <code>damage_mob</code> causes some amount of damage to the delivery object, <code>increase_ingredients</code> causes an increase (by one) in the number of ingredients that make up a spray, and <code>add_points</code> add points to the player's score.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>damage_mob_amount</code></b>: If the resource's delivery damages the delivery object, this specifies how much to hurt it by. Defaults to 1.</li>
+      <li><b><code>point_amount</code></b>: If the resource's delivery increases the player's score, this specifies how much to increase by. Defaults to 1.</li>
+      <li><b><code>return_to_pile_on_vanish</code></b>: If true, the resource returns to the pile from which it came, when it vanishes. If false, it's gone forever. Defaults to false.</li>
+      <li><b><code>spray_to_concoct</code></b>: If the resource's delivery increases a spray's ingredient count, this specifies the name of the spray type. Defaults to not set.</li>
+      <li><b><code>vanish_delay</code></b>: When a resource is dropped, wait these many seconds before making it vanish. 0 means it vanishes instantly. Defaults to 0.</li>
+      <li><b><code>vanish_on_drop</code></b>: If true, the resource will vanish when the Pikmin drops it, after a delay. If false, the resource will lie there forever. Either way, it can be picked up again before it actually vanishes. Defaults to false.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A resource type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A resource type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, resource type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

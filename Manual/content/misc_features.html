@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Misc. features - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Misc. features</h1>
+    
+    <p>This page will describe several miscellaneous features in <i>Pikifen</i> that don't quite fit in other pages.</p>
+
+    <h2 id="mob-links">Object links</h2>
+    
+    <p>You can make one object in the area have a link towards another object. This allows one object to send messages to its links, with the appropriate <a href="script.html">script actions</a>. It also makes it possible for the engine to know how certain special objects should function, when they need to know data about a second object. Connections are one-way, so if you want object A to send messages to object B and vice-versa, you will need to create a link from B to A as well.</p>
+
+    <p>To link an object to another, you can either link them in the <a href="area.html#linked-mobs">area editor</a>, or when an object is <a href="mob_type.html#spawning">spawning another</a>. In the latter case, you can specify if you want the link to be from the spawner object to the spawned object, the opposite, or both.
+    
+  </div>
+</body>
+
+</html>

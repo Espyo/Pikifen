@@ -2,7 +2,17 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Documentation update
+        The tutorials should be "making X" instead of "creating a new X"
+        Use the term "make" more, to refer to anything a maker does (instead of "creator")
+        Recreate the script and animation tutorials to be like the area one
+        Move the editor controls info to the controls page
+        Figure out what to do with the README and Pikmin Fanon front page too
+            README should only be for things you need to/want to know before downloading
+        Note that:
+            "drain_liquid" also detects bridge sectors now
+            The tutorial links in-engine need to be updated
+            Windows XP is no longer supported
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -17,7 +27,7 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
     ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
     ** The animation editor now has a grid too, and animations have a simple timeline.
     ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
-    ** Added a way to resize and rotate selected vertexes together.
+    ** Added a way to resize and rotate selected vertexes together; enable it in the area editor options.
     ** Several other small things have been tweaked.
     * Added a performance monitor to the creator tools. When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a results file gets written when you leave. It can help you figure out what the heaviest parts of your content are.
     * Added a way to add actions, events, and states to object types that have hardcoded scripts.
@@ -48,16 +58,6 @@ Next tasks (roughly sorted most important first)
     --- v0.19.0 ---
     Misc.
         Editors's pan_cam, reset_cam_xy, and reset_zoom functions don't need an Allegro event
-    Documentation update
-        Document tutorials and the like offline
-            A Javascript script to add a table-of-contents to pages
-        The tutorials should be "making X" instead of "creating a new X"
-        Use the term "make" more, to refer to anything a maker does (instead of "creator")
-        Recreate the script and animation tutorials to be like the area one
-        Figure out what to do with the README and Pikmin Fanon front page too
-        Note that:
-            "drain_liquid" also detects bridge sectors now
-            The tutorial links in-engine need to be updated
     
     --- v0.20.0 ---
     Details

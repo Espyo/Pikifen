@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pile - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; pile</h1>
+    
+    <b>Piles</b> are objects that contain several <a href="mob_resource.html">resources</a> in them, that can be harvested by the Pikmin.
+
+    <p>Examples of pile types include piles of bridge fragments, or Burgeoning Spiderworts, which have a bundle of berries.</p>
+
+    <p>To create a new type of pile, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>Pile objects just sit there, and can be attacked by the Pikmin. Once they suffer enough damage, they give the Pikmin one of their resources. They can recharge with time, and change their look as the number of resources they have left changes.</p>
+
+    <p>Pile type objects are hardcoded in the engine to sit there and have their health depleted, give out resources when they suffer enough damage, show how many resources they have, changed their look based on how many resources they have, and optionally disappear when they're empty.</p>
+
+    <h2 id="properties">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a pile type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>contents</code></b>: What resource they contain. Specify the name of the resource object type here.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>health_per_resource</code></b>: The pile must suffer this much damage to give out the next resource. Defaults to 1.</li>
+      <li><b><code>max_amount</code></b>: At most, this pile type can only contain these many resources inside. Defaults to 1.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>can_drop_multiple</code></b>: If true, the pile can drop multiple resources at once in a single attack, if the damage requirements are met. This is useful if you want the pile to drop resources when struck with a bomb rock, for instance. Excess resources will not be delivered to a Pikmin, but will instead be thrown to the ground next to the pile. Defaults to false.</li>
+      <li><b><code>delete_when_finished</code></b>: If true, the pile object is deleted when the harvesting has been done. The harvesting won't be considered finished until the last resource it had is successfully delivered. Defaults to true.</li>
+      <li><b><code>hide_when_empty</code></b>: If true, the pile object will hide and become intangible when it has no resources at the moment. Defaults to true.</li>
+      <li><b><code>recharge_amount</code></b>: If this pile can recharge, this specifies how many resources get added per recharge. Defaults to 0.</li>
+      <li><b><code>recharge_interval</code></b>: Specifies how often the pile recharge. If this is 0, the pile will not recharge. It will also not recharge if it's already at max capacity. Defaults to 0.</li>
+      <li><b><code>show_amount</code></b>: If true, the number of resources left in the pile will be shown above the object. Defaults to true.</li>
+      <li><b><code>size_animation_suffixes</code></b>: If you want the pile to change animations as it changes amount, this will indicate the suffix of the animations for every given phase. This is a semicolon-separated list, and must be filled in order from empty to fullest. For example, in a pile of 10 resources max, if you want it to have an idling animation for when it's empty, and three more idling animations for the different amounts of resources it's holding, you'd set this to something like <code>_empty; _low; _mid; _high</code>. This would mean the <code>idling_empty</code> animation would be used when empty, <code>idling_mid</code> for when it's got 5, etc. The first will always correspond to the pile being empty, while the others are divided equally. So a pile with 20 max, split into 5 animations + empty, would change animation every 4 resources. Defaults to not set.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A pile type needs to have the following animations. Note that for every phase specified in the <code>size_animation_suffixes</code> property, you need another set of these animations, and each set needs to end with the corresponding suffix.</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A pile type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>When a pile type object is spawned, it will read the following script variables, if they're present:</p>
+
+    <ul>
+      <li><b><code>amount</code></b>: How many resources this starts with.</li>
+    </ul>
+
+    <p>Besides that, there are the <a href="area.html#script-vars">global spawn script variables</a>.</p>
+    
+  </div>
+</body>
+
+</html>

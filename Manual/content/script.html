@@ -1,0 +1,790 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Object script - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object script</h1>
+    
+    <p>This page will guide you on how to write a script for enemy objects in <i>Pikifen</i>. Although it is recommended to follow this guide from start to finish, you may jump straight to a section that explains a specific problem you may be having. To note is that you can also copy and paste an existing enemy's scripts and properties and adjust them to your liking, instead of creating everything from scratch.</p>
+
+    <h2 id="intro">Introduction</h2>
+    
+    <p>The script is basically that: a script, like in a movie or theater. Something like: "<b>When</b> the bad guy says 'I'll get you', <b>you say</b> 'never!'. <b>When</b> the bad guy throws the punch, <b>you dodge</b> to the side." Except we'll be instructing the enemies to do what they need to do. "<b>When</b> a Pikmin shows up, <b>you move</b> to it. <b>When</b> the Pikmin is close, <b>you lunge</b> in for a bite."</p>
+
+    <p>For this, you'll need to understand some concepts: an <b>action</b> is an instruction we'll tell the enemy to do, like moving somewhere, focusing its sights on an object, changing its animation to the sleeping one, etc. An <b>event</b> is the same as the "when"s on the previous example. An event can be something like when a Pikmin approaches, when it reaches its intended destination, when its current animation finishes, etc. So, in essence, <i>when an <b>event</b> happens, the object will perform some <b>actions</b></i>. That's the basics of it.</p>
+
+    <p>There is one more concept: a <b>state</b>. To make it easier, you can think of a state like a state of mind in a human: sleeping, hungry, disturbed, thinking about what to cook, etc. Except states for enemies can be anything you want. For an enemy like a Red Bulborb, the states would be sleeping, chasing prey, chewing, shaking, going back home, etc. States are important, because depending on the state, we may want the same event to trigger different actions. For instance, suppose a Pikmin comes near. What is the Red Bulborb to do? Well, it depends on its state: if it's sleeping, it must wake up, but if it is awake, it should lunge in for a chomp.</p>
+
+    <p>One final note: "mob" (short for "mobile object") is an alternate name for "object".</p>
+
+    <h2 id="guide">Red Bulborb guide</h2>
+    
+    <h3 id="creating">Creating the script</h3>
+    <p>If you haven't already, follow the <a href="object_type.html">object type tutorial</a> to create your own enemy. We'll be writing the script on a file called <code>Script.txt</code>, on the same folder. Create the file if it is not there already.</p>
+
+    <p>In this text file, add a <code>script</code> block. Inside of this, we'll be adding our enemy script. For the rest of this tutorial, we'll be creating a very basic (and varied) Red Bulborb.</p>
+
+    <h3 id="state">Creating a state</h3>
+    
+    <p>We'll need to start the script with a state. Let's think of the most "normal" state for a Bulborb, to serve as a starting point. That would probably be the sleeping state, right? Most Bulborbs we see in the games are asleep when first met, so it makes sense to start here. You can name a state whatever you want (so long as you don't use spaces), but for the sake of clarity, let's call it <code>sleeping</code>. Ok, now we're going to have to specify what events and actions can take place while in this state. In order for the engine to understand what events/actions belong to this state, we'll need to a block for this state, create a <code>sleeping {</code> line, and the matching <code>}</code> line.</p>
+
+    <p>Your script should be looking like this:</p>
+
+<pre>script {
+    sleeping {
+        
+    }
+}</pre>
+
+    <h3 id="event">Looking out for an event</h3>
+    
+    <p>Let's see, in this state, there's not much the Bulborb can do except wake up. Let's make it so that it wakes up when a Pikmin or leader touches it. For clarity, let's call Pikmin and leaders "opponents", since they are the sort of object the Red Bulborbs want to take down. We have to write the name of the event, which in this case, is <code>on_touch_opponent</code>. All events start with <code>on_</code> (as in: "<b>on</b> the event that <i>this</i> happens, do <i>that</i>"), and in this case, this event triggers every time the Red Bulborb is near an opponent. What now? Well, we need to specify what actions to take. To recap: on the <b>state</b> of sleeping, <b>when</b> an opponent touches it, the Bulborb will perform some <b>actions</b> that we will specify later (waking up).</p>
+
+    <p>Because the engine needs to know what actions to perform on this event, we need to open up the event as a block with curly braces.</p>
+
+    <h3 id="action">Performing an action</h3>
+    
+    <p>Let's assume that you already have animations for the Bulborb &ndash; these include waking up, walking, biting, going back to sleep, etc.</p>
+
+    <p>What we want now is for the Bulborb to wake up. Visually, we want its animation to change from the one where it is sleeping to the one where it wakes up and gets on its feet. For that, we can type <code>set_animation waking_up</code>. That <code>set_animation</code> word at the start tells the engine that the enemy needs to change animations, while the other word specifies what the animation is. Here, it is assumed that the animation for waking up is in fact called <code>waking_up</code>, but you can name it whatever you want.</p>
+
+    <p>So, when the Bulborb is in the sleeping <b>state</b>, the engine will look out for the <b>event</b> in which an opponent touches it. When that happens, the Bulborb will perform an <b>action</b> in which it changes its animation to waking up. Makes sense, right? Except there isn't much else that will happen. A Pikmin touches it, the Bulborb visually changes to an animation where it wakes up, but then what? Well, right after it begins its waking up animation, the engine will realize that an opponent is touching it (yet still). And because the Bulborb is still in the "sleeping" state, which is a state that is looking out for the "opponent is touching" event...it will just trigger the event again and again, which will keep restarting the animation. And it will keep doing this until the Pikmin walks away. The logical solution would be to change its state right after setting its animation, so that it may wake up in peace, without being interrupted by the constant "opponent is touching" events.</p>
+
+    <p>Add the line <code>set_state waking_up</code> after the line with the animation change action. This action will make its state change. Well, now that we've said that, we should also create this new "waking up" state, then. Create it below the "sleeping" state's block. If you want, you can add an empty line between the two states to make it easier to read. The script should be looking like this, so far:</p>
+
+<pre>script {
+    sleeping {
+        on_near_opponent {
+            set_animation waking_up
+            set_state waking_up
+        }
+    }
+    
+    waking_up {
+        
+    }
+}</pre>
+
+    <h3 id="on-enter">On enter</h3>
+    <p>Although it is not the case, imagine that we wanted to make a grumble sound play, and an "exclamation mark" particle effect whenever the Bulborb wakes up. That's fine, we would just add more actions to the event. But now imagine that there were more ways for the Bulborb to wake up. Like we wanted it to wake up if an internal alarm set off (a creature can't stay asleep forever, right?), or even when a bomb rock explosion happens nearby. No problem, we would just add the events for those to the "sleeping" state, and make those events do the same. Except...it is a bit of a pain having to copy and paste the exact same set of animation+sound+particle+state actions for every one of those events. Well, there is an alternative way, which is much more organized.</p>
+
+    <p>Let's think about this: the animation, sound, and particle effect all happen when? When the Bulborb wakes up. When do we know exactly that the Bulborb woke up? When it enters the "waking_up" state. Regardless of how it got there (opponent touch, biological alarm, etc.), we know that if it got to this state, it means that it must perform the wake-up routine that involves all of those things. Luckily, we can specify what should happen when an object <b>enters a state</b>. Go to the "waking_up" state and add an event called <code>on_enter</code>. In here, place the usual actions. Oh, but because the sound and particle only belong to that a hypothetical scenario, the only action you should put here is the animation change we wrote earlier. Remember to remove the animation action from the sleeping state's <code>on_touch_opponent</code> event.</p>
+
+    <p>So, to recap, while sleeping, whenever an opponent touches it, it will change state to waking up. When it enters this "waking up" state, it will perform its animation to wake up. Makes a bit more sense this way, and it's also more organized. Keep this in mind when you want to switch to a state using multiple ways.</p>
+
+    <h3 id="on-anim-end">On animation end</h3>
+    <p>Ok, now that the Red Bulborb can enter the "waking up" animation, what should it do while in it? Well, it shouldn't really be willing to fight, should it? It <i>is</i> still getting up, so it's not ready for that. In fact, it cannot do anything while in this state except finish getting up. As soon as it finishes though, it should probably look around for whatever woke it up. Ok, so on the <b>event</b> that it finishes getting up, it shall begin examining its surroundings. But how do we know that it finished getting up? Considering that games are simpler than real life, we know how long the Bulborb takes to wake up, since its animation is always the same. We could then wait for that amount of time, but we don't need anything that complex. There is an event that will trigger every time the current animation finishes. So, the best way to go about this is: "on the <b>event</b> that its waking up animation finishes". The event that checks this is called <code>on_animation_end</code>. As for what actions to perform, it would make sense to enter a state where it analyzes its surroundings and acts according to what it decides at the time (going back to sleep, chasing prey, etc.).
+
+    <p>Your script should look like so:</p>
+
+<pre>script {
+    sleeping {
+        on_near_opponent {
+            set_state waking_up
+        }
+    }
+    
+    waking_up {
+        on_enter {
+            set_animation waking_up
+        }
+        on_animation_end {
+            set_state examining
+        }
+    }
+    
+    examining {
+        
+    }
+}</pre>
+
+    <h3 id="moving">Moving</h3>
+    
+    <p>Let's speed up the tutorial a bit. On the "examining" state, we can set its animation to the animation where it looks around left and right in search of something to do. If it was asleep and woke up because of a nearby Pikmin, it will perform the waking up animation, enter the examining state, spot the Pikmin, and go for it. Makes sense. If it can't find anything to do by the point it finishes looking around, it should head back home (the spawn point) and fall asleep. Let's handle that scenario. On the "examining" state (where its animation is set to looking around when the state is entered), on the event that it finishes its animation, it should change to a state where it's focused on returning home. You might find it weird why the Bulborb would try to go home right after waking up, but remember that we can use the "examining" state elsewhere too, like after it finished eating all Pikmin, or has wandered too far.</p>
+
+    <p>On this "returning home" state, we must tell the Bulborb to walk home. The action that does this is simple enough: <code>move_to_target home</code>. It would make sense to make this action run whenever the "returning_home" state is entered, of course. Now, on this same state, we want to make it so that on the event that it reaches its home, it proceeds to fall asleep. The event that checks if an object has reached its destination is <code>on_reach_destination</code>. Here, we can set it to a state where it falls asleep.</p>
+
+    <h3 id="chasing">Chasing</h3>
+    
+    <p>What about moving towards a Pikmin? On the examining state, in the event that it spots a Pikmin, it should move towards it to try to eat it, right? But let's think about what it means to "spot a Pikmin". Enemies can only spot Pikmin if they are close enough &ndash; if they're within vision reach. And once the enemy gets close to the Pikmin, it will only lunge for the kill if the Pikmin is within biting reach. All of these <b>reaches</b> are things you have to define yourself.</p>
+
+    <p>When in a state, an enemy can consider something to be "near" it if it is within a certain reach. It can also consider the object it is focused on to be "out of reach". Since in the examining state, a "near" Pikmin is any Pikmin that is within eyesight reach, and in the chasing state, it's any Pikmin that's fairly close, you have to change what "near" means. So, add the line <code>set_near_reach wake_up</code> to the <code>on_enter</code> event of the sleeping state. This will set the "near" reach to a reach we'll call "wake_up". We can name reaches whatever we want; let's worry only about the names for now, since we'll actually declare their values later. For the examining state, set the "near" reach to "search". This way, a Pikmin will only be considered "in reach" if it's within "waking up" reach when sleeping, and if it's within "searching" reach when examining.</p>
+
+    <p>Now that the reach is set, we can be on the lookout for the <code>on_opponent_in_reach</code> event on the examining state. When this event happens, well, we want the Bulborb to start chasing after the Pikmin. In order for the engine to keep track of what object our enemy is going to go towards, we need to say that the Bulborb will take <b>focus</b> on the Pikmin. On the <code>on_opponent_in_reach</code> event, we can perform the action <code>focus trigger</code>. This will make the Bulborb focus on whatever object triggered the event. This "focus" mechanic is also useful when losing track of the focused object: imagine that the Bulborb focuses on a Red Pikmin, and is going to chase it, but eventually, said Pikmin drowns. You would want the Bulborb to do something because it lost track of its prey, right?</p>
+
+    <p>Now that we've got that Pikmin focused, we want to move to it. Let's create a state for when the Bulborb is chasing. You may have guessed it, but the action that makes the Bulborb move to our focused Pikmin mob is <code>move_to_target focused_mob</code>. In addition, let's add an <code>on_focus_off_reach</code> event. This will trigger when the Pikmin is out of reach, which should happen when the Pikmin is so far away that the Bulborb can't see it any more. But just like before, this is another "reach". So, when entering the chasing state, use <code>set_far_reach chase</code>, so that the <code>on_focus_off_reach</code> event triggers whenever the focused Pikmin is off of this "chase" reach. You don't need to worry about the Pikmin dying or disappearing &ndash; that will also trigger the <code>on_focus_off_reach</code> event. Now that you're handling this event, you can make the Bulborb go back to the examining state, if the Pikmin it was chasing got out of reach.</p>
+
+    <h3 id="attacking">Attacking</h3>
+    
+    <p>In the "chasing" state, our Bulborb is in pursuit. It's got its sights locked on to the Pikmin, and is always moving in its direction. On the event that it gets near (remember to update the "reach"!), it should take a bite. The general way biting works in the <i>Pikmin</i> games is that an enemy clamps its jaws in front of it, and any Pikmin that get hit will be caught in its mouth. In reality, there is a limit: if you have a massive group of Pikmin bundled together, and a Red Bulborb chomps through the group, it will only be able to catch 3 in <i>Pikmin</i>, or 5 in <i>Pikmin 2</i>. This behavior can be replicated on the engine as well.</p>
+
+    <p>In order for the whole "catching" part to work, we need to keep in mind something about animations; read the <a href="animation.html">animation tutorial</a> if you need a reminder. Each object has a set of body parts, and they are named. Enemies like a Red Bulborb should have a "mouth" body part, because this is the body part that will be keeping hold of any captured Pikmin.</p>
+
+    <p>When the Bulborb begins lunging, its mouth is no longer a passive body part sitting around doing whatever. The creature will open its mouth and will use it to capture Pikmin. So, on the beginning of its lunging procedure (likely when the Bulborb enters the "lunging" state), we should let the engine know that its "mouth" body part is now a Pikmin-eating body part. To do so, use the action <code>start_chomping 5 mouth</code>. The <code>start_chomping</code> action makes some body parts start trapping Pikmin. The "5" there is the maximum number of Pikmin that can be caught at once. Finally, the "mouth" part is the name of the body part that will be made to trap Pikmin. From here on out, any Pikmin that touch the "mouth" body part will squeal and become trapped in its mouth.</p>
+
+    <p>When the lunge animation is over, you should set the "mouth" body part back to normal, so Pikmin don't accidentally get caught later when the enemy is, for instance, walking. To do this, write <code>stop_chomping</code>. Then, we'll (likely) want to change to a chewing state, where the Bulborb is chewing, and after it is done, kill off any caught Pikmin. This is controlled by the <code>swallow</code> and <code>swallow_all</code> actions, which will make it swallow some (randomly picked) or all captured Pikmin. On the flip-side, if you use <code>release</code>, the enemy will safely release all captured Pikmin.</p>
+
+    <h3 id="vars">Variables</h3>
+    
+    <p>The Red Bulborb lunges. But did it capture any Pikmin? We need to know this in order to decide if the creature should start chomping, or if it should flop to the ground. We can ask the engine this question and it will be able to give us an answer. Once the lunge animation is over, add the action <code>get_info pim chomped_pikmin</code>. This is what we use to get info of all sorts; in this case, we want to know the amount of chomped Pikmin currently in its mouth. But what do we do with this information?</p>
+
+    <p>We'll save it somewhere known as a <b>variable</b>. This is some space in memory dedicated to saving a value, and we can change it or retrieve it at any point. In our case, the variable will hold the amount of chomped Pikmin. And what about its name? In the previous paragraph, we called it <code>pim</code> (short for "Pikmin in mouth"), but you can call any variable whatever you like. From here on out, whenever you need to refer to the number of Pikmin in its mouth, you can access the value in this "pim" variable by writing <code>$pim</code>. When the script is run, it will replace <code>$pim</code> with 0, or 1, or whatever else "pim" is worth at the time.</p>
+
+    <p>It's generally good practice to declare a starting value for your variables. For this, you can create an <code>init</code> block <i>outside</i> of the <code>script</code> block, and in it, add <code>set_var pim 0</code>. This will set the value of the "pim" variable to 0. Any actions inside this block will be run when the object is created, so you always know what the starting value of every variable is.</p>
+
+    <h3 id="conditions">Conditions</h3>
+    
+    <p>Now to actually decide what to do after the lunge. The creature's behavior splits into two here: <b>if</b> it caught something, it should change to a chomping state, <b>else</b>, it should flop to the ground. This conditional logic can be written in the script.</p>
+
+    <p>After pointing down how many Pikmin got bit, let's run an <code>if</code> action. Write it down as such: <code>if $pim > 0</code>. This action, when run, will check the number of Pikmin in its mouth, via our "pim" variable. Naturally, in this case, we want to check if more than zero Pikmin got caught. Then this action will change the flow of the script: if the Bulborb caught Pikmin, the script continues on to the next actions. So after this <code>if</code> action, add the action to enter a chewing state.</p>
+
+    <p>But what if it didn't capture anything? Well, write an <code>else</code> action after the action that sets to the chewing state. And after that, write the logic to change to a flopping state. With all of this logic, the engine will enter that <code>if</code> action, and if it realizes the condition is false, it will jump to the actions after the "else". To wrap up the conditional part of this event, after the action that changes to the flopping state, you will need to add an <code>end_if</code> action. With this, the engine knows that what comes after is no longer a part of the conditional logic, and its flow works like normal.</p>
+
+    <p>Note that you don't always need to add an "else" part to your condition. Also, you may want to indent (add another tab at the start) lines inside the "if" and "else" parts. This example is simple, but more complex conditions and flows will be much easier to read if you can easily tell what belongs to what part of the condition just from the way the text is laid out.</p>
+
+    <h3 id="death">Death</h3>
+    
+    <p>The enemy can die at (almost) any moment. When that happens, the engine automatically jumps the script into a different state, so you don't need to worry about listening to the death event on every single state. To specify what state it should jump into, go out of the <code>script</code> block, and write a line with <code>death_state = dying</code>. This way, the engine knows that when the enemy's HP reaches 0, it must enter the "dying" state.</p>
+
+    <p>There are two parts to an enemy's death. The start, and the end. When an enemy's HP reaches 0, you likely want to make them perform a fainting animation, as well as call a special action that will run some extra code related to an enemy beginning to die (this code will, amongst other things, create the sparkling particles). This is done with the action <code>start_dying</code>. When it's time to register the enemy as completely dead (like when the fainting animation ends), you need to call the action <code>finish_dying</code>. This will make the object carriable, release a spirit, etc.</p>
+
+    <h3 id="timers">Timers</h3>
+    
+    <p>Remember earlier when the idea of having the Bulborb wake up due to a biological timer came up? Let's implement that. Let's say that every time the Bulborb falls asleep, its biological clock sets an alarm for 20 seconds, at which point, it will wake up on its own, look around, and if there's nothing going on, fall asleep again. When the Bulborb falls asleep, so when the "sleeping" state is entered, use the following action: <code>set_timer 20</code>. This will start an internal timer for the object that will tick in 20 seconds.</p>
+
+    <p>On the sleeping state, look out for the <code>on_timer</code> event. This will be triggered when the timer reaches 0. This would be the time to change the state to the "waking_up" state. When a timer reaches 0, it deactivates, so if you have a timer that you want to tick every X seconds, you need to set the timer again at that point. Other than that, there is one important question: what if the Red Bulborb's sleep is interrupted by a leader or Pikmin walking near? The timer would keep going, which is something we likely don't want. You can kill the timer by simply typing <code>set_timer 0</code>.</p>
+
+    <h3 id="script-props">Script-related properties</h3>
+    
+    <p>In order for the engine to get a grip on this script, we'll need to specify a few more things. First of all, on the <code>Script.txt</code> file, which you should still be on, add the following property outside the <code>script</code> block: <code>first_state = sleeping</code>.</p>
+
+    <p>This is so that the engine may know how the Bulborb begins its life. We did decide that the starting point of a Red Bulborb should be the sleeping state, so that is what we'll tell the engine. In addition, along this tutorial, there have been times where "being near" and "within sight distance" have been mentioned, but what are these distances? And surely they must vary by enemy. Well, they're just more properties, and are as normal as weight or rotation speed. The following properties exist, and you should try to declare them all. Go back to the <code>Data.txt</code> file to add them:</p>
+
+    <ul>
+      <li><b><code>itch_damage</code></b>: If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code>on_itch</code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go.</li>
+      <li><b><code>itch_time</code></b>: In order for the enemy to not shake over and over, if you keep damaging it, you can also specify a minimum time requirement between itches, in seconds.</li>
+      <li><b><code>territory_radius</code></b>: How far away from the spawn point must the enemy be before being considered "far from home". For reference, a Red Bulborb has this set to 500.</li>
+    </ul>
+
+    <p>What about the "reaches" from before? This is where you'll define what a "waking up" reach is, what a "chasing" reach is, etc. Create a block called <code>reaches</code>. Inside, one per line, you declare the reaches, in the format <code>&lt;name&gt; = &lt;distance 1&gt; &lt;angle 1&gt; &lt;distance 2&gt; &lt;angle 2&gt;</code>. What does this mean? Well, let's fill in the "wake_up" reach. Type down <code>wake_up = 10 360</code>. What this means is that any Pikmin within 10 units of the Red Bulborb will be considered "in reach". The 360 is because we want this to happen regardless of where the Pikmin is in relation to where the Bulborb is facing, so it's a 360 degree range.</p>
+
+    <p>Now, add <code>search = 250 180 30 360</code> for the next range. What about this? Well, this range actually has two parts. The first part means that Pikmin within 180 degrees of the Bulborb's front, and within 250 units, will be considered "in reach". This makes sense: any Pikmin that's within a fair distance in front of the Bulborb should be enough for the enemy to spot it. The second part means that any Pikmin within 30 units, at any angle, will <i>also</i> be considered "in reach". This extra part is useful for when the Pikmin is, for instance, hitting the Bulborb's back. Since the Pikmin is completely behind the Bulborb, it wouldn't be caught by the 250-180 description, since that only finds Pikmin in front. This way, any Pikmin close enough will also be considered "seen" by the Bulborb. The reason why we don't set the within-250-unit reach to 360 degrees is because that would unrealistically make the Bulborb see Pikmin far away that are <i>behind it</i>.</p>
+
+    <p>You'll need to tinker with these values until you find some balance you like. The other reaches will be something like <code>attack = 40 30</code> (Pikmin within this reach are ready to be chomped), and <code>chase = 250 360</code> (focused Pikmin outside of this reach will be considered lost).</p>
+
+    <p>Other than that, there's the script file's <code>death_state</code> property we filled earlier, and there is also a <code>states_ignoring_death</code> property, in which you can list states that are meant to ignore the death event (separated by semicolon). If you find that a death even is being sent on states you don't want, add the state's name here. Similarly, there's a <code>states_ignoring_spray</code> property.</p>
+
+    <p>This ends the tutorial. From here on out, you would continue the script whichever way you wanted. Know that you can check the scripts of enemies that come packaged with the engine to learn more.</p>
+
+    <h2 id="event-list">List of events</h2>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr>
+        <th style="text-align: left;"><code>on_enter</code></th>
+        <td>Triggered when the current state is entered.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_leave</code></th>
+        <td>Triggered when the current state is left.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_animation end</code></th>
+        <td>Triggered when the current animation finishes. Technically, this is triggered when the current animation begins looping.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_damage</code></th>
+        <td>Triggered when the object takes any sort of damage.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_far_from_home</code></th>
+        <td>Triggered every frame the object is far enough away from its home (as per the <code>territory_radius</code> property).</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_focus_off_reach</code></th>
+        <td>Triggered every frame the focused object is beyond the current "far reach", or is dead. Also triggered when the focused object is deleted. Useful for making enemies lose track of focused Pikmin that are too far away.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_frame_signal</code></th>
+        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code>get_info</code> action.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_held</code></th>
+        <td>Triggered when the object is picked up by another one. Particularly useful for tool objects.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_hitbox_touch_eat</code></th>
+        <td>Triggered when one of the object's normal hitboxes touches an opponent's "eat" hitbox. Particularly useful for tool objects.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_hitbox_touch_a_n</code></th>
+        <td>Triggered when one of the object's attack hitboxes touches an opponent's normal hitbox. The opposite doesn't exist since it's reserved by the engine for controlling attack damage.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_itch</code></th>
+        <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until an event shows up that can handle it.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_land</code></th>
+        <td>Triggered every frame the object is touching the floor.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_object_in_reach</code></th>
+        <td>Triggered when an object has entered within its "near reach". Will trigger every frame for the same object, too.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_opponent_in_reach</code></th>
+        <td>Same as <code>on_object_in_reach</code>, but for opponents only.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_pikmin_land</code></th>
+        <td>Triggered when a thrown Pikmin lands on it. Might not work on objects that are too short.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_reach_destination</code></th>
+        <td>Triggered every frame that the object is in its destination, by moving there with any of the "move" actions.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_receive_message</code></th>
+        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_info</code> action.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_released</code></th>
+        <td>Triggered when the object was being held by another, but has now been released. Particularly useful for tool objects.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_touch_hazard</code></th>
+        <td>Triggered when it touches a hazard, whether from a hitbox, or from a sector.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_touch_object</code></th>
+        <td>Triggered every frame it is touches an object, for every object it's touching.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_touch_opponent</code></th>
+        <td>Same as <code>on_touch_object</code>, but for opponents only.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_tick</code></th>
+        <td>Triggered every single game frame. Because a frame can last for any amount of time, this is not an appropriate way to make things change over time. It is more useful for when you want to constantly update something, like make the object constantly turn to its focused object's position.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_timer</code></th>
+        <td>Triggered when the internal timer reaches 0.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_touch_wall</code></th>
+        <td>Triggered every frame it is touching a wall.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_weight_added</code></th>
+        <td>Triggered when an object starts standing atop this one, thus adding weight.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_weight_removed</code></th>
+        <td>Triggered when an object that was standing atop this one leaves, thus removing weight.</td>
+      </tr>
+    </table>
+    
+    <h2 id="action-list">List of actions</h2>
+    
+    <table>
+      <tr><th>Action</th><th>Description</th></tr>
+      <tr>
+        <th><code>add_health</code></th>
+        <td><dl>
+          <dt><b><code>add_health &lt;amount&gt;</code></b></dt>
+          <dd>Add &lt;amount&gt; health to the object's health. You can also remove some health by specifying a negative number.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>arachnorb_plan_logic</code></th>
+        <td>
+          Special logic for <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>-type enemies. This is used to internally plan what sort of movements the arachnorb's feet will need to do for the next sequence of steps, so that it can achieve the specified goal. This only works on the object that represents the arachnorb's head, which must be a <a href="object_types.html#parent">parent object</a> with feet children objects. In order for the engine to know where to position the feet, the following script variables should be declared: <code>max_step_distance</code> specifies the maximum distance a foot can move per step; <code>max_turn_angle</code> specifies the maximum amount of degrees the arachnorb can turn per step; <code>min_turn_angle</code> specifies the minimum amount of degrees the arachnorb can turn per step; <code>feet_normal_distance</code> specifies the usual distance the feet are from the center of the head.
+          <dl><dt><code><b>arachnorb_plan_logic</b> home</code></dt>
+          <dd>Sets up the internal logic for the arachnorb to head home. This will automatically decide how to turn or how to walk forward to get there.</dd>
+          <dt><code><b>arachnorb_plan_logic</b> forward</code></dt>
+          <dd>Sets up the internal logic for the arachnorb to move forward.</dd>
+          <dt><code><b>arachnorb_plan_logic</b> cw_turn</code></dt>
+          <dd>Sets up the internal logic for the arachnorb to rotate clockwise. When this is called manually, the arachnorb turns a random angle between the minimum and maximum turn amounts.</dd>
+          <dt><code><b>arachnorb_plan_logic</b> ccw_turn</code></dt>
+          <dd>Same as the <code>cw_turn</code> goal, but for a counter-clockwise turn.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>calculate</code></th>
+        <td><dl>
+          <dt><code><b>calculate</b> &lt;variable&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
+          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), or <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;variable&gt; field shouldn't use it!</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>delete</code></th>
+        <td>Delete this object.</td>
+      </tr>
+      <tr>
+        <th><code>drain_liquid</code></th>
+        <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</td>
+      </tr>
+      <tr>
+        <th><code>else</code></th>
+        <td>If the corresponding <code>if</code> action's check ends up being false, the script will run the actions after this <code>else</code>, until it reaches the matching <code>end_if</code>.</td>
+      </tr>
+      <tr>
+        <th><code>end_if</code></th>
+        <td>Closes a condition started by an <code>if</code> action.</td>
+      </tr>
+      <tr>
+        <th><code>finish_dying</code></th>
+        <td>Runs the procedure related to the end of the object's death sequence. Amongst other things, this makes enemies unleash a spirit.</td>
+      </tr>
+      <tr>
+        <th><code>focus</code></th>
+        <td><dl>
+          <dt><code><b>focus</b> trigger</code></dt>
+          <dd>Focuses on the object that triggered the event.</dd>
+          <dt><code><b>focus</b> link</code></dt>
+          <dd>Focuses on the first linked object, if any.</dd>
+          <dt><code><b>focus</b> parent</code></dt>
+          <dd>Focuses on the parent object, if any.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>get_chomped</code></th>
+        <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code>on_hitbox_touch_eat</code> event.</td>
+      </tr>
+      <tr>
+        <th><code>get_focus_var</code></th>
+        <td><dl>
+          <dt><code><b>get_focus_var</b> &lt;destination_variable&gt; &lt;variable_from_focus&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable&gt; of this mob to the same value as the variable &lt;variable_from_focus&gt; of the focused mob, if any.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>get_info</code></th>
+        <td><dl>
+          <dt><code><b>get_info</b> &lt;destination_variable&gt; &lt;information&gt;</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable&gt; to some special information. The possible data are:
+            <ul>
+              <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
+              <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
+              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
+              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
+              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
+              <li><code><b>health</b></code>: The object's current health.</li>
+              <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
+              <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
+              <li><code><b>message</b></code>: What the message was that got sent when the <code>on_message_received</code> event got triggered.</li>
+              <li><code><b>message_sender</b></code>: Name of the type of object that sent the message, when an <code>on_message_received</code> event gets triggered.</li>
+              <li><code><b>mob_category</b></code>: Category of the mob that triggered the event. This is the same name as the corresponding folder in <code>Game_data/Types</code>. Only available for certain events.</li>
+              <li><code><b>mob_type</b></code>: Type of the mob that triggered the event. This is the name defined in the <code>name</code> property of the object type's <code>Data.txt</code> file. Only available for certain events.</li>
+              <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
+              <li><code><b>weight</b></code>: Current weight on top of it.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>get_random_decimal</code></th>
+        <td><dl>
+          <dt><code><b>get_random_decimal</b> &lt;variable&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
+          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;variable&gt;. This number is a real number, so it can have decimal places.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>get_random_int</code></th>
+        <td><dl>
+          <dt><code><b>get_random_int</b> &lt;variable&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
+          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;variable&gt;. This number is an integer number, so it will not have decimal places.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>goto</code></th>
+        <td><dl>
+          <dt><code><b>goto</b> &lt;label_name&gt;</code></dt>
+          <dd>Orders the script to jump to where the label named &lt;label_name&gt; is. The label must be in the same event block as this <code>goto</code>. You can use this to loop actions multiple times in a row by returning to the top of the loop.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>if</code></th>
+        <td>
+          Only executes the next actions, until an <code>else</code> or <code>end_if</code> action, if the condition you specify is true. If not, it jumps to the matching <code>else</code> or <code>end_if</code> action.
+          <dl><dt><code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
+          <dd>
+            &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is a string. The possible operators are:
+            <ul>
+              <li><code><b>=</b></code>: True if &lt;left&gt; matches &lt;right&gt;. It works with text too.</li>
+              <li><code><b>!=</b></code>: True if they don't match; also works with text.</li>
+              <li><code><b>&lt;</b></code>: True if the number in &lt;left&gt; is less than the number in &lt;right&gt;.</li>
+              <li><code><b>&gt;</b></code>: Greater than.</li>
+              <li><code><b>&lt;=</b></code>: Less than or equal.</li>
+              <li><code><b>&gt;=</b></code>: Greater than or equal.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>label</code></th>
+        <td><dl>
+          <dt><code><b>label</b> &lt;label_name&gt;</code></dt>
+          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code>goto</code> to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>move_to_absolute</code></th>
+        <td><dl>
+          <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Tells the object to begin moving to the specified area coordinates.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>move_to_relative</code></th>
+        <td><dl>
+          <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Tells the object to begin moving to the specified relative coordinates. See <a href="#rel-coord">here</a> for more info.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>move_to_target</code></th>
+        <td><dl>
+          <dt><code><b>move_to_target</b> &lt;target&gt;</code></dt>
+          <dd>
+            Tells the object to begin moving towards a special target. Possible values:
+            <ul>
+              <li><code>arachnorb_foot_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> feet objects to move according to the internal plan. See the <code>arachnorb_plan_logic</code> action for more information.</li>
+              <li><code>away_from_focused_mob</code>: Move away from the focused object, thus going in the direct opposite direction.</li>
+              <li><code>focused_mob</code>: Move towards the focused object, following it as it moves.</li>
+              <li><code>focused_mob_position</code>: Move towards the position of the focused object at this exact moment. In other words, don't follow it as it moves.</li>
+              <li><code>home</code>: Move towards home (spawn point).</li>
+              <li><code>linked_mob_average</code>: Move towards the average position of its linked objects. Useful for keeping an <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>'s head in the center position of its feet objects, for instance.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>order_release</code></th>
+        <td>Orders the Pikmin that is holding on to this object to release it.</td>
+      </tr>
+      <tr>
+        <th><code>print</code></th>
+        <td><dl>
+          <dt><code><b>print</b> &lt;text&gt;</code></dt>
+          <dd>Prints some text to the top of the screen. Only useful for debugging the script, so you know how much a variable is worth, where the script passes, etc.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>receive_status</code></th>
+        <td><dl>
+          <dt><code><b>receive_status</b> &lt;status name&gt;</code></dt>
+          <dd>Applies the specified status effect.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>release</code></th>
+        <td>All captured Pikmin are safely freed.</td>
+      </tr>
+      <tr>
+        <th><code>remove_status</code></th>
+        <td><dl>
+          <dt><code><b>remove_status</b> &lt;status name&gt;</code></dt>
+          <dd>Removes the specified status effect, if the object is currently afflicted by it.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>send_message_to_focus</code></th>
+        <td><dl>
+          <dt><code><b>send_message_to_focus</b> &lt;message&gt;</code></dt>
+          <dd>Send a text message to the currently focused mob. Objects that receive a message will be thrown the <code>on_receive_message</code> event.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>send_message_to_links</code></th>
+        <td><dl>
+          <dt><code><b>send_message_to_focus</b> &lt;message&gt;</code></dt>
+          <dd>Same as <code>send_message_to_focus</code>, but it sends it to all linked objects.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>send_message_to_nearby</code></th>
+        <td><dl>
+          <dt><code><b>send_message_to_focus</b> &lt;distance&gt; &lt;message&gt;</code></dt>
+          <dd>Same as <code>send_message_to_focus</code>, but it sends it to all objects that are within the specified distance.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_animation</code></th>
+        <td><dl>
+          <dt><code><b>set_animation</b> &lt;animation&gt;</code></dt>
+          <dd>Changes to and begins the animation &lt;animation&gt;.</dd>
+          <dt><code><b>set_animation</b> &lt;animation&gt; no_restart</code></dt>
+          <dd>Same as above, but doesn't set the frame number to 0, meaning that animation will continue from whatever frame number the previous one left off.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_far_reach</code></th>
+        <td><dl>
+          <dt><code><b>set_far_reach</b> &lt;reach_name&gt;</code></dt>
+          <dd>Makes it use the specified reach as the "far reach", from here on out.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_gravity</code></th>
+        <td><dl>
+          <dt><code><b>set_gravity</b> &lt;multiplier&gt;</code></dt>
+          <dd>Sets how gravity affects this object. 1 is normal, 0 is no gravity, 0.5 is half gravity, -1 is upwards gravity, etc.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_health</code></th>
+        <td><dl>
+          <dt><code><b>set_health</b> &lt;amount&gt;</code></dt>
+          <dd>Sets the object's health to the specified number.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_height</code></th>
+        <td><dl>
+          <dt><code><b>set_height</b> &lt;height&gt;</code></dt>
+          <dd>Sets the object's height. Objects atop this one will rise or lower accordingly.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_hiding</code></th>
+        <td><dl>
+          <dt><code><b>set_hiding</b> &lt;true/false&gt;</code></dt>
+          <dd>Sets whether or not the engine should hide this object's shadow and health from here on out. This is useful, for instance, when a Sheargrub digs underground.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_holdable</code></th>
+        <td><dl>
+          <dt><code><b>set_holdable</b></code></dt>
+          <dd>Makes it so that nothing can hold this object.</dd>
+          <dt><code><b>set_holdable</b> &lt;rules&gt;</code></dt>
+          <dd>Makes it so that the specified kinds of objects can hold this object. You can write more than one, by writing one in each word. The valid values are <code>pikmin</code> for Pikmin, and <code>enemies</code> for enemies.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_huntable</code></th>
+        <td><dl>
+          <dt><code><b>set_huntable</b> &lt;true/false&gt;</code></dt>
+          <dd>Sets whether or not this object can currently be hunted by other objects. This does not affect whether or not other objects can hurt it.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_limb_animation</code></th>
+        <td><dl>
+          <dt><code><b>set_limb_animation</b> &lt;animation&gt;</code></dt>
+          <dd>Same as <code>set_animation</code>, but for the limb connecting it to its parent mob.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_near_reach</code></th>
+        <td><dl>
+          <dt><code><b>set_near_reach</b> &lt;reach_name&gt;</code></dt>
+          <dd>Makes it use the specified reach as the "near reach", from here on out.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_sector_scroll</code></th>
+        <td><dl>
+          <dt><code><b>set_sector_scroll</b> &lt;x_speed&gt; &lt;y_speed&gt;</code></dt>
+          <dd>Makes the sector this object is on begin scrolling, with the specified speed in the X axis (units per second) and the specified speed in the Y axis. Its floor texture will scroll along, and any objects on this sector will be dragged too. Setting both values to 0 will make it stop scrolling, naturally.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_state</code></th>
+        <td><dl>
+          <dt><code><b>set_state</b> &lt;state&gt;</code></dt>
+          <dd>Instantly changes to the specified state. If it was meant to run any actions after this one, they will not be run.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_tangible</code></th>
+        <td><dl>
+          <dt><code><b>set_tangible</b> &lt;true/false&gt;</code></dt>
+          <dd>Sets whether or not this mob can be touched by others. This only affects whether or not the mob can push or be pushed.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_team</code></th>
+        <td><dl>
+          <dt><code><b>set_team</b> &lt;team_name&gt;</code></dt>
+          <dd>
+            Sets the object's current team. Objects in the same team will not hunt or harm each other. Valid values are:
+            <ul>
+              <li><b><code>none</code></b>: Does not belong to a team.</li>
+              <li><b><code>player_X</code></b>: Belongs to player 1, 2, 3, or 4's team (replace the X with a number). Usually used for leaders and Pikmin.</li>
+              <li><b><code>enemy_X</code></b>: Belongs to the enemy team 1, 2, 3, or 4 (replace the X with a number).</li>
+              <li><b><code>obstacle</code></b>: Obstacle team.</li>
+              <li><b><code>other</code></b>: Team for whatever else.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_timer</code></th>
+        <td><dl>
+          <dt><code><b>set_timer</b> &lt;amount&gt;</code></dt>
+          <dd>Starts the mob's timer with the specified time period. Writing 0 makes the current timer stop, without triggering any <code>on_timer</code> events.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_var</code></th>
+        <td><dl>
+          <dt><code><b>set_var</b> &lt;variable&gt; &lt;value&gt;</code></dt>
+          <dd>Sets the value of the specified variable.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>show_message_from_var</code></th>
+        <td><dl>
+          <dt><code><b>show_message_from_var</b> &lt;variable&gt;</code></dt>
+          <dd>Shows a message on-screen using the text inside the specific variable. Any <code>\n</code> in that text represents a line break.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>spawn</code></th>
+        <td><dl>
+          <dt><code><b>spawn</b> &lt;spawn data&gt;</code></dt>
+          <dd>Instantly creates a new object, with the information in the supplied spawn data block. See <a href="mob_type.html#spawning">here</a> for more information.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>stabilize_z</code></th>
+        <td><dl>
+          <dt><code><b>stabilize_z</b> &lt;reference&gt; &lt;offset&gt;</code></dt>
+          <dd>Changes the object's Z coordinate to match the Z coordinate of its highest (if the reference is <code>highest</code>) or lowest (if the reference is <code>lowest</code>) linked object. After changing it, it also moves it up by the specified offset.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>start_chomping</code></th>
+        <td>
+          Sets what body parts will be used to trap Pikmin from here on out.
+          <dl><dt><code><b>start_chomping</b> &lt;victim_max&gt; &lt;body_parts&gt;</code></dt>
+          <dd>&lt;victim_max&gt; is the maximum number of Pikmin that can be caught. &lt;body_parts&gt; is the name of the body part(s) that will be used for trapping, one per word.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>start_dying</code></th>
+        <td>Runs the procedure related to the start of the object's death sequence. Amongst other things, this makes enemies unleash a cloud of sparkle particles.</td>
+      </tr>
+      <tr>
+        <th><code>start_height_effect</code></th>
+        <td>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</td>
+      </tr>
+      <tr>
+        <th><code>start_particles</code></th>
+        <td><dl>
+          <dt><code><b>start_particles</b> &lt;generator_name&gt; [&lt;x offset&gt;] [&lt;y offset&gt;] [&lt;z offset&gt;]</code></dt>
+          <dd>Begin emitting particles using the specified particle generator. If specified, the x, y, and z coordinates are the offset from the object's center coordinates and Z coordinate, based on the object's angle. See <a href="#rel-coord">here</a> for more info. If the particle generator specified has no interval (i.e. it only launches particles once and then it's over), then the particle generator is automatically removed from the object after it emits its particles. An object can only have one script-given particle generator attached at a time.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>stop</code></th>
+        <td>Makes the object stop moving laterally, and makes it stop rotating.</td>
+      </tr>
+      <tr>
+        <th><code>stop_vertically</code></th>
+        <td>Kills the object's vertical momentum.</td>
+      </tr>
+      <tr>
+        <th><code>stop_chomping</code></th>
+        <td>Makes it so no body parts will be used for chomping any more, from here on out.</td>
+      </tr>
+      <tr>
+        <th><code>stop_height_effect</code></th>
+        <td>Stops the height effect started with <code>start_height_effect</code>. This also gets called every time the object touches the floor.</td>
+      </tr>
+      <tr>
+        <th><code>stop_particles</code></th>
+        <td>Removes any currently attached particle generator.</td>
+      </tr>
+      <tr>
+        <th><code>swallow</code></th>
+        <td><dl>
+          <dt><code><b>swallow</b> &lt;number&gt;</code></dt>
+          <dd>Makes the object swallow &lt;number&gt; amount out of the captured Pikmin, picked at random. This kills the Pikmin.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>swallow_all</code></th>
+        <td>Makes the object swallow all captured Pikmin. This kills the Pikmin.</td>
+      </tr>
+      <tr>
+        <th><code>teleport_to_absolute</code></th>
+        <td><dl>
+          <dt><code><b>teleport_to_absolute</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
+          <dd>Instantly teleports the object to the specified area coordinates.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>teleport_to_relative</code></th>
+        <td><dl>
+          <dt><code><b>teleport_to_relative</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
+          <dd>Instantly teleports the object to the specified coordinates relative to its position and angle. See <a href="rel-coords">here</a> for more info.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>turn_to_absolute</code></th>
+        <td><dl>
+          <dt><code><b>turn_to_absolute</b> &lt;angle&gt;</code></dt>
+          <dd>Turn towards the specified angle. 0 is east, 90 is south, etc.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>turn_to_relative</code></th>
+        <td><dl>
+          <dt><code><b>turn_to_relative</b> &lt;angle&gt;</code></dt>
+          <dd>Turn &lt;angle&gt; degrees anti-clockwise.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>turn_to_target</code></th>
+        <td><dl>
+          <dt><code><b>turn_to_target</b> &lt;target&gt;</code></dt>
+          <dd>
+            Turns towards a special target. Possible values are:
+            <ul>
+              <li><code>arachnorb_head_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code>arachnorb_plan_logic</code> action for more information.</li>
+              <li><code>focused_mob</code>: Constantly turn towards the focused mob. You can make it stop with the <code>stop</code> action.</li>
+              <li><code>home</code>: Turn towards home (spawn point).</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+    </table>
+
+    <h3 id="rel-coord">Relative coordinates</h3>
+    
+    <p>Some mob actions allow you to specify some coordinates relative to the object. While the absolute coordinates 50,100 are in the location of the map at X=50, Y=100, the relative coordinates mean that this is at the object's position, plus 50 to the right, and 100 down. This is assuming the object is facing the right.</p>
+
+    <p>If it isn't, the coordinates rotate around the object, such that a positive X is always in front of the mob. So for coordinates 50,100, this would mean 50 units in front of the mob, and 100 units to its right, regardless of where it's facing.</p>
+
+    <p>The same also applies to relative and absolute angles: a relative angle of 0 means the same angle that the mob is facing.</p>
+
+    <h2 id="precautions">Precautions</h2>
+    
+    <ul>
+      <li>When you want to change states, make sure that the action that switches the state is the last one that will be run on the event's code. This is because when a state change action happens, it skips over all other actions that were written after it.</li>
+      <li>When changing a state, make sure that the new state's <code>on_enter</code> event doesn't change to another state in a way that could create an infinite loop. For instance, if changing to state A causes it to change to state B, which causes it to change to state C, which causes it to change to state A again, the engine will crash.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Animations - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Animations</h1>
+    
+    <p>This page will guide you on the way animations work on <i>Pikifen</i>, and how to make your own.</p>
+
+    <h2 id="intro">Introduction</h2>
+    
+    <div class="image image-right">
+      <img src="../images/walk_sprites.png" alt="Frames used to make the Red Bulborb's walking animation.">
+      <p>Frames used to make the Red Bulborb's walking animation.</p>
+    </div>
+    
+    <div class="image image-right">
+      <img src="../images/walk_anim.gif" alt="By showing the frames in rapid succession and in the right order (1 2 3 2 1 4 5 4), it creates an animation.">
+      <p>By showing the frames in rapid succession and in the right order (1 2 3 2 1 4 5 4), it creates an animation.</p>
+    </div>
+    
+    <p>An <a href="http://en.wikipedia.org/wiki/Animation">animation</a> is a collection of images that flip in quick succession to give the illusion of movement. For instance, for a Pikmin's attack animation, it would consist of an image (also called a <b>frame</b> or a sprite) with the Pikmin clinging on, an image with it reeling its head back, an image with it swinging the head forward, and an image where the stem shows recoil from impacting something. By quickly flipping through these images, it gives the illusion that the Pikmin is moving.</p>
+
+    <p>On the engine, every object has a list of animations. Animations are made up of frames, an in the engine, each frame fetches information from a <b>sprite</b>. This is because, in order to save on space, an animation may reuse the same image multiple times. In the example of the Bulborb on the right, the "half-step right" image (#2) is used both after and before the "full-step right" image (#3). As such, there is only one sprite for the "half-step right", and two frames in the walking animation that make use of that same sprite.</p>
+
+    <p>Finally, each object also has a list of <b>body parts</b>. In each sprite, you can place different <b>hitboxes</b> (also known as hitbubbles), with each one matching a body part. This way, if a Pikmin is clinging on to the Bulborb's "back", the engine will know where the place the Pikmin at any moment, since the creature's back changes places during its animations. The fact that each body part is also represented by a hitbox means you can specify if that body part can be damaged, latched-on to, or if its currently attacking or knocking Pikmin away, among other things.</p>
+
+    <h2 id="starting">Starting some animations</h2>
+
+    <p>Before beginning to animate an object, you must have that object on the game's data (see the <a href="mob_type.html">object types tutorial</a>), as well as some images to be used as the sprites. The images should be in a top-down perspective and <b>show the object facing the right</b>. Although it is possible to place each image in a different file, it is a lot more efficient to have all (or most) images for the object within the same file. These are what are known as "spritesheets". For examples, see the spritesheets that come with the engine.</p>
+
+    <p>If your enemy is completely new, you will have to create the images from scratch, or download them off somewhere. If your image is a recolor of an existing one, you can make a copy of the original enemy's spritesheet and use any painting program to change the colors. You can also use the <a href="https://github.com/Espyo/Pikifen/tree/master/Documents/Vectorial%20graphics">SVG files</a> used on the prepackaged enemy graphics with a vectorial art editing program to change the color schemes.</p>
+
+    <h2 id="using">Using the animation editor</h2>
+
+    <p>On the engine, open the animation editor. On the left side of the editor, you'll see an empty canvas. This area will show what the sprites and animations look like. On the right side, there is a panel, where you perform most of your tasks. On the top-left is a toolbar, where you can quit the editor, save the animations to the game files, and perform other common tasks. Finally, to the bottom-left is a status bar that will give you information about anything you place your mouse cursor over on the panel, so use that if you need help.</p>
+
+    <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the prepackaged Red Bulborb spritesheet. For that, you should probably create a new Red Bulborb enemy, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
+
+    <p>After you have created the new enemy's folder (again, see the <a href="mob_type.html">object types tutorial</a>), you can choose that enemy type in the editor's load menu. Let's begin by creating the enemy's body parts.</p>
+
+    <h2 id="body-part">Creating a body part</h2>
+
+    <p>From the main panel, click "Body parts", so that you may enter the body part control panel. Some instructions appear on the top-right. There should be no body parts, so let's use the textbox on the panel to type the name of a new one. But first, let's think about what body parts this enemy will need. Body parts are circles, and because the Bulborb is a very round creature, we could use a bubble for its entire body and call it a day. But it is also true that hitting a Bulborb on its back causes more damage than the front. So we'll need to distinguish between the head and the back. Finally, the Bulborb can grab Pikmin with its mouth, and the engine must be able to recognize the mouth as a body part that can capture Pikmin.</p>
+
+    <p>Let's start with the simplest one: the head. Type <code>head</code> on the textbox, and press the nearby "+" button. This will register the first hitbox. Then do the same for "back", and once that is done, do it for "mouth". There, now the body parts that we'll be needing are all registered. Oh, but there is something else we need to think about here. Because the hitboxes are bubbles, it will be nearly impossible to align them on the Bulborb without them overlapping, unless we leave a huge chunk of the enemy uncovered by hitboxes. What happens if a Pikmin hits both the "back" and the "head" hitboxes, because they intersected? How will the engine know which one to connect the Pikmin to? This is where the note on the panel comes into play. The lower the number of a hitbox, the higher its priority for scenarios like that one.</p>
+
+    <p>We will want the player to benefit from the extra damage bonus as much as possible, so it's fair that the back hitbox has higher priority when it comes to being picked in the case of a tie. But the order we currently have is the head as #1 and the back as #2 (you can use the &lt; and &gt; arrow buttons to switch which hitbox's data you're looking at). We can move the back to the previous number by pressing the "&lt;=" button. The arrows may be a bit confusing, but remember that the status bar on the bottom-left can explain what they do so long as you place your mouse over them.</p>
+
+    <h2 id="sprite">Creating a sprite</h2>
+
+    <p>You can now press the "Back" button to return to the main panel. From here, enter the "Sprites" mode so we may create our first sprite to be used in some frame in the future. Begin by pressing the "Sprite" button at the top of the panel. This will give you a list so you can choose which sprite is it that you are editing, but because there are none, the list will be empty. There is however a textbox at the top which you can use to create a new one. Just give it a name. Let's start with the most basic pose, which would be the idle position. Type "idle" for the name of this sprite.</p>
+
+    <p>A fair bit of information just got unlocked. First we will need to specify what image represents this sprite. Click the "Bitmap file" button to enter a new panel. Use the first textbox to specify where the bitmap file is, so in other words, our spritesheet. You can also use the "..." button to browse for a file. To use the pre-packaged Red Bulborb spritesheet, we'll want <code>Red_Bulborb.png</code>. Now, we need to tell the engine where in the spritesheet our "idle" sprite is. On the pre-packaged spritesheet, this is the one on the top-left. If you know the coordinates and size of the idle sprite, you can type them in the textboxes, but if not, you can just click on that exact sprite in the canvas, and the editor will select that area for you.</p>
+
+    <p>The engine has now successfully captured the image from within the spritesheet, and when you back out, you should see the Bulborb's idle pose on the canvas. Up next is the "Transformations" panel, in which you can resize, flip, offset, or rotate the sprite's image. For instance, the pre-packaged Dwarf Red Bulborb just uses the Red Bulborb graphics, but scales down every sprite to be the size of a Dwarf Red Bulborb. Although some enemies have the center of their sprites match the center of their body, this is not quite the case for the Red Bulborb, as it makes more sense to consider the center of its body as the center of its backside; basically, when the creature rotates, it does so around this point. (You reach conclusions like these by trial-and-error, so don't worry if you didn't think the same.) The white plus-shaped grid on the canvas indicates where the center of the object is. In order to align the sprite, you can drag it using the central blue handle on the canvas, or type a number in the "Offset" textboxes. To align this sprite of the Red Bulborb, simply type 16 for the X offset, but different sprites might require different measurements. In this panel, you can also pull out a comparison sprite so you can align future sprites better.</p>
+
+    <h2 id="hitbox">Placing hitboxes</h2>
+
+    <p>Our sprite is now good to be used in a frame of animation, except the hitboxes are all crumpled up. That's right &ndash; the green bubble in the center of the sprite is the three hitboxes of this sprite, each representing one body part. They're all occupying the same spot, though. Click the "Hitboxes" button on the sprite panel. One of the bubbles will receive a gentle glow and some handles, to let you know that one is the one currently selected. You can also tell which hitbox this is by checking the name on the top-right of the panel. To select a different hitbox, click on it (without clicking a blue handle!), or use the "&lt;" and "&gt;" buttons. You can move a hitbox by dragging the central handle, and you can resize it by dragging one of the edge or corner handles. In order to clean up the workspace so we can get a better view on how to organize the hitboxes, drag the three hitboxes away from one another. Now, let's take care of each one, one at a time.</p>
+
+    <p>Of the three hitboxes, pick the one corresponding to the Bulborb's back, which we named "back", and place it on the Bulborb's back. You should see the X and Y textboxes update as you move it around, meaning you can either position a hitbox using the mouse, or those textboxes. Now, you may have noticed that the hitbox doesn't cover up the creature's back that well. That's because the hitbox is using a default size that's not tailored exactly for the back, and we're meant to change hitbox sizes as we see fit. To change a hitbox's size, you can either edit the "Radius" textbox, or use the canvas handles. With a radius of 50, the hitbox fits the Bulborb's backside just fine, so simply drag it into place after you're done changing its size.</p>
+
+    <p>Before we move on, we need to specify something else: the Z and the height. Just like the X and Y coordinates control where the hitbox is in space, so does the Z coordinate controls where it is vertically. Imagine a hitbox as a cylinder. 0 means it starts at ground level, and higher values make it float off the ground. For most enemies, you can keep it simple and leave all hitboxes to start at ground level, but if you want to create, say, a Beady Long Legs, the body's hitbox will need to be above ground, and this is where you'd change it. As for the height, if it is 0, that means the hitbox is infinitely tall. This is useful for the likes of gates, to make sure Pikmin can't be thrown past them. But other than that, to keep things simple, you will want to set a hitbox's height to the exact same height that your object has, if it's not already. In the Red Bulborb's case, that's 128. In-game, everything will look good enough, but if you wanted an unnecessary level of realism, you would need to write more specific heights for each body part (for instance, the Bulborb's mouth is not as tall as its whole body, and starts higher above the ground). You can use the "Use side view" checkbox to get a side view representation of the object and the hitboxes, which is especially useful for verticality. Remember though: because the engine has no real side view, the object will simply be represented by a solid rectangle here. This side mode is just a visual aid, after all!</p>
+
+    <p>Now that the "back" hitbox's positioning is all set up, let's change how it works for combat. There are three radio buttons labeled as the "Hitbox type". Bulborbs can't attack with their backsides when idling, and their backs are definitely present when on the "idle" pose, so it's neither an attack nor a disabled hitbox. So, the hitbox type to pick here is "Normal". Remember how the backside is meant to suffer extra damage from Pikmin attacks? We can set that on the defense multiplier. "1" means that hitbox has a defense of 100%, so it takes full damage, while "0.8" means the hitbox only has 80% defense, meaning it takes a bit more damage than normal. "0.8" seems like a good value for this hitbox, but lower than that could start to make the backside too weak. Remember to experiment when creating your own enemies. Before we move on to the next hitbox, check the "Pikmin can latch" checkbox because Pikmin are indeed meant to latch on to a Bulborb's back.</p>
+
+    <p>Now, do the same for the head hitbox. As was stated before, it will be next to impossible to place the hitboxes such that they don't overlap or leave parts of the enemy uncovered, so try to go for a good balance between the two. Make the hitbox cover the parts of the head that the "back" hitbox doesn't cover, but don't make it too big, otherwise Pikmin will be able to latch on and hit the air. Likewise, don't make it too small, or else Pikmin will not be able to grab a part of the Bulborb that should seemingly be grabbed. Try these coordinates: 52 and 0 for the X and Y, and 40 for the radius. This is more or less how the hitboxes should be placed: they cover everything with a good balance. Remember to also fill in the hitbox's Z (still simple, so still ground level, so still 0) and height (still the height of the Bulborb, 128), the hitbox type (also normal), and specify that Pikmin can latch on to it. You should leave the defense multiplier as 1.0, as it makes sense for the head to take a normal amount of damage.</p>
+
+    <p>Finally, let's move on to the mouth. This is the body part that will be able to hold captured Pikmin, so don't make it too big nor too small. A radius of 16 for this is enough. Place it on the general area of the mouth. Fill in the other stats as usual. Now, do we really want the Pikmin to be able to attack the mouth? It's a body part like any other, but it might make things a bit more complex to keep the mouth around, especially considering that it's so small, and the bulk of the damage collisions happen on the creature's back and head. As such, change this hitbox's type to "disabled", meaning that, in an "idle" pose, the engine will not have to worry about the creature's mouth. Of course, it will worry about the mouth on some other sprites, like during a chomp, but not here. You might ask...why bother placing it in the first place? This is so that if the "chewing" animation needs to use this sprite, the engine will know where to place the Pikmin in the creature's mouth. As such, it's a good practice to always place even disabled hitboxes in the right spot (more or less).</p>
+
+    <h2 id="anim">Creating animations</h2>
+
+    <p>Let's create the rest of the sprites for the walking animation. If you didn't notice, the "idle" frame is part of the walking animation. The idle pose is the Bulborb posing still in a neutral position, but to walk, it lifts its right leg, returns to the neutral position, lifts the left, returns to neutral. For most enemies, the "idle" frame is actually used quite a lot. To create the sprites that will make up the rest of the walking animation's frames (walkl1, walkl2, walkr1, walkr2), check the Red Bulborb that comes with the engine. You can also copy and paste from the Animations.txt files. One thing to note is that "walkr1" is just "walkl1" except flipped vertically. You can obtain this effect by specifying a negative vertical scale (negative horizontal scale obviously means flipping horizontally) in the sprite transformation data.</p>
+
+    <p>Once you have those sprites, go to the main panel and enter the "Animations" mode. It should be empty, since there are no animations, but just like with the sprites, we can click the "Animation" button to create a new animation. For the walking animation, call it "walk". Ignore the "Loop frame" box for now. The frame list is a list of the frames that this animation is composed of; each one of these makes use of a sprite we created earlier. There is a button to play or pause the animation on the left side of the editor, a button to switch what frame you're currently looking at, a button to add a new frame, and a button to remove the current one from the list. Add the first one with the "+" button. On the "Sprite" button, choose "idle", making this the first frame of our walking animation. Next, we specify how long this frame exists for until it is replaced by the next one on the list. 0.1 or 0.2 is usually a good value.</p>
+
+    <p>Press "+" once again to add a new frame. This will be created using the same data as the previous frame, for convenience, which means you don't need to change the duration this time (unless you want to). The next frame in the animation would use the sprite "walkr1", and the one after would use "walkr2", then "walkr1" again, "idle", "walkl1", "walkl2", and "walkl1". It would make sense for the animation to loop back to the first "idle" frame so it repeats the same "right foot, left foot" cycle. This is where the "Loop frame" textbox from before is used. Luckily, it is already set at 1, which is the first frame, so you don't need to change it this time, but if you wanted the animation to repeat from a specific frame, this is where you'd write the frame's number. Feel free to play the animation with the "Play/Pause" button. As a reminder, you can also use the "Hitbox visibility" button on the toolbar to disable the hitboxes, which will give you a better view of the creature itself.</p>
+
+    <h2 id="pikmin-top">Pikmin tops</h2>
+
+    <p>When editing sprites for a Pikmin, you must specify where the Pikmin's top (leaf, bud, or flower) is to be located on that frame. For that, click the "Pikmin top" button on the sprite panel. You can then drag it around, resize it, and rotate it with the on-canvas handles, or with the textboxes in the panel. If you would like to see how the Pikmin looks with a different object as its top, press the "Change maturity" button.</p>
+
+    <p>On some sprites, the top might not be visible whatsoever. For instance, when a Pikmin is thrown, on the frames where it is upside down, the top is under the Pikmin, so from a top-down view, it is impossible to see. For these cases, uncheck the "Visible" checkbox.</p>
+
+    <h2 id="necessary">Necessary animations</h2>
+
+    <p>To create enemies, you can make whatever animations you wish, and you can call them whatever. As long as you use the correct names on the script, all is good. But for Pikmin, gates, and most other objects, the engine is the one that decides what animations to switch to, and it expects to find them with specific names on the object's animation data. To know what animations your object needs, check the corresponding article in the <a href="mob_type.html#mob-categories">list of object categories</a>.</p>
+
+    <h2 id="special">Special animations</h2>
+
+    <p>The folder <code>Game_data/Animations</code> contains a list of custom animations that aren't necessarily bound to an object. These can include animations expected by the engine, like the status effects or liquids.</p>
+
+    <h2 id="tips">Tips</h2>
+    
+    <ul>
+      <li>You can zoom in on the canvas by scrolling the mouse wheel, pan by holding the right mouse button, and reset the zoom and pan by clicking the mouse wheel.</li>
+      <li>You can press Ctrl + Tab or Ctrl + Shift + Tab (Cmd instead of Ctrl on Mac) to go left and right between the current hitbox, frame, etc.</li>
+      <li>Remember to save periodically. Although rare, it is possible for the editor to crash, or for you to quit accidentally, causing you to lose unsaved progress.</li>
+      <li>When making a spritesheet, try to add at least one row or column of empty pixels between each frame. Without this padding, some in-game sprites will have artifacts from a sprite right next to them, and when you click a section of the spritesheet to specify the bitmap, the editor could interpret a nearby pose as part of the same one.</li>
+      <li>If your graphics are twice the resolution of your in-game size, you can enter the special tools from the main menu, and use the resolution resize tool. If they're twice as big, use the value "2" in this tool.</li>
+      <li>If you accidentally named a sprite or an animation the wrong thing, you can enter the special tools from the main menu, and use the corresponding renaming tools.</li>
+      <li>If you have an enemy shaking animation, and only want a percentage of the Pikmin to be shaken of, you can make the shake animation a "missable" attack animation. For instance, if you type in the textbox <code>70</code>, that means only 70% of the Pikmin that are latched on will get knocked out, on average. This can be used for other attacks too, not just shaking. This feature only affects Pikmin.</li>
+      <li>When editing a sprite's hitboxes, if you have a large hitbox selected and you want to select one that's covered up by it, you can just click an area that is overlapped by both hitboxes, and the editor will toggle between the hitboxes in that spot.</li>
+    </ul>
+
+    <h3 id="controls">Controls</h3>
+
+    <p>Some widgets have keyboard shortcuts. You can keep your cursor over them and read the status bar's description to learn what they are, if any. Besides that, here are some keyboard controls:</p>
+    
+    <ul>
+      <li><b>Arrow keys</b> or <b>right mouse button</b>: pan the camera around.</li>
+      <li><b>Plus/Minus</b> or <b>mouse wheel</b>: zoom in and out.</li>
+      <li><b>Zero</b> or <b>middle mouse button</b>: reset the zoom, and if pressed again, reset the camera position.</li>
+      <li><b>Home</b>: pan and zoom camera such that the whole sprite fits snugly into view.</li>
+      <li><b>Escape</b>: quit back out of certain panels.</li>
+    </ul>
+
+  </div>
+</body>
+
+</html>

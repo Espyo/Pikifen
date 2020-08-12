@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Drop - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; drop</h1>
+    
+    <b>Drops</b> are any kind of droplet that can be drunk by a Pikmin or a leader. Once the Pikmin or leader has finished slurping up their portion, they will be affected in some way, like having their maturity boosted, or having the number of sprays increased.
+
+    <p>Examples of drop types include nectar, which flowers up the Pikmin, ultra-spicy nectar, which gives the leaders one extra usage of ultra-spicy spray, etc.</p>
+
+    <p>To create a new type of drop, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A drop type object can only be drunk by either a Pikmin or a leader, not both. For Pikmin, their maturity can be increased, for leaders, their spray count for a given spray can be increased, and for either, they can undergo a <a href="status.html">status effect</a>. Each type of drop can also have a different amount of doses, and shrink down at different speeds.</p>
+
+    <p>Drop type objects are hardcoded in the engine to sit there and, when an object that wants to drink them approaches, have their doses dropped down by one, and give the corresponding object an effect once that dose is finished being slurped. They can also be bumped against to slosh around in place.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a drop type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>consumer</code></b>: What type of object will consume this drop. <code>pikmin</code> or <code>leaders</code>.</li>
+      <li><b><code>effect</code></b>: What will happen to the consumer once they've drunk it. <code>maturate</code> to cause a Pikmin's maturity to change, <code>increase_sprays</code> to change the number of available sprays of a given type, or <code>give_status</code> to apply a status effect to the object that drank it.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>increase_amount</code></b>: When it increases a Pikmin's maturity or the number of a spray, this is the amount to increase by. To maturate a Pikmin directly to the flower stage, you want to give this the value <code>2</code>. You can also write negative values to lower a Pikmin's maturity or a spray count. Defaults to 2.</li>
+      <li><b><code>total_doses</code></b>: How many objects this drop can serve. Defaults to 1.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>shrink_speed</code></b>: When an object drinks it, the drop will decrease in size. This is purely visual. This number specifies the speed of the shrinking in percentage per second. 40 is a good amount for nectar, and 120 is a good amount for spray nectar. Defaults to 40.</li>
+      <li><b><code>spray_type_to_increase</code></b>: If this drop increases the amount of a spray, write the spray type's name here. Defaults to not set.</li>
+      <li><b><code>status_to_give</code></b>: If this drop gives the consumer a status effect, write its name here. Defaults to not set.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A drop type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling.</li>
+      <li><b><code>falling</code></b>: Falling down. Normally used after it's thrown when being spawn, like when it pops out of an egg.</li>
+      <li><b><code>landing</code></b>: Lands on the floor from falling.</li>
+      <li><b><code>bumped</code></b>: When it's been bumped against.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A drop type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, drop type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

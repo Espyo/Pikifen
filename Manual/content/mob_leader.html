@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Leader - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; leader</h1>
+    
+    <p>A type of <b>leader</b> represents a playable character. Since you can have any number of instances of the same type in the same area, you can effectively have multiple Olimars roaming about. Whether you want to or not is up to you though! At least one leader is required to be in the area in order to play it.</p>
+
+    <p>Examples of leader types include Olimar, Louie, Alph, etc.</p>
+
+    <p>To create a new type of leader, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+    
+    <p>A leader is any character that the player controls directly. When there are multiple leaders in the area, the player can swap between them. Leaders can whistle Pikmin into their group, throw them, punch, dismiss, etc.</p>
+
+    <p>Leader objects are hardcoded in the engine to be controlled by the player's input and to have "active" and "inactive" states, depending on whether the player is controlling them right now or not. They can idle, whistle, punch, hold a Pikmin or another leader, throw it, dismiss, spray around, flinch or get knocked back when hurt, die, follow a group, pluck, sleep, be held and thrown, and drink a drop.</p>
+
+    <h2 id="props">Properties</h2>
+    
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a leader type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+    
+    <ul>
+      <li><b><code>icon</code></b>: Name of the image file with the leader's icon. This icon is used on the HUD. The image should be in <code>Game_data/Graphics</code>, and the extension of the file name must also be included.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+    
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+    
+    <ul>
+      <li><b><code>dismiss_sfx</code></b>: Name of the sound file to play when this leader dismisses. The sound should be in <code>Game_data/Audio</code>, and the extension of the file name must be included. If not set, no sound will play. Defaults to not set.</li>
+      <li><b><code>max_throw_height</code></b>: When thrown, the leader reaches this height at the apex of the throw. For reference, a standard Pikmin has this set to 260, and leaders have this set to 130. Defaults to 130.</li>
+      <li><b><code>name_call_sfx</code></b>: Same as <code>dismiss_sfx</code>, but the sound the leader makes when they are switched to. Defaults to not set.</li>
+      <li><b><code>whistle_range</code></b>: Maximum range the whistle can cover. Defaults to 80.</li>
+      <li><b><code>whistle_sfx</code></b>: Same as <code>dismiss_sfx</code>, but the sound the leader's regular whistle makes. Defaults to not set.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+    
+    <p>A leader object type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Just standing still.</li>
+      <li><b><code>walking</code></b>: Walking.</li>
+      <li><b><code>plucking</code></b>: Plucking a Pikmin sprout.</li>
+      <li><b><code>getting_up</code></b>: Getting up from a lying down position.</li>
+      <li><b><code>dismissing</code></b>: Ordering their group to dismiss.</li>
+      <li><b><code>throwing</code></b>: Throwing a Pikmin or leader.</li>
+      <li><b><code>whistling</code></b>: Blowing the whistle.</li>
+      <li><b><code>punching</code></b>: Punching.</li>
+      <li><b><code>lying</code></b>: Starts lying down and stays down.</li>
+      <li><b><code>pain</code></b>: Reels back in pain.</li>
+      <li><b><code>knocked_down</code></b>: Knocked down to the ground, and then gets up.</li>
+      <li><b><code>spraying</code></b>: Spraying around.</li>
+      <li><b><code>drinking</code></b>: Bending down to drink a drop.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+    
+    <p>A leader type's <a href="script.html">object script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+    
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, leader type objects do not read any specific script variables.</p>
+
+  </div>
+</body>
+
+</html>

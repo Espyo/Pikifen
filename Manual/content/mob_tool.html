@@ -1,0 +1,72 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tool - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; tool</h1>
+    
+    <p>A <b>tool</b> object is anything that can be picked up by a Pikmin and have the Pikmin hold it until it is needed later. Most of the time, this is when the Pikmin is thrown.</p>
+
+    <p>Examples of tool types include the bomb rock, which can be carried around and explodes when dropped, and the mine from Bingo Battle, which sticks to surfaces and objects and explodes when a leader draws near.</p>
+
+    <p>To create a new type of tool, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>Tool object types dictate what happens when the Pikmin picks them up, and what happens when they are dropped. They also specify when they can and cannot be picked up, be it by Pikmin or by enemies, and when exactly it is that they get activated. Their behavior is specified by the user-made script.</p>
+
+    <p>Tool type objects are hardcoded in the engine to be chased out by the Pikmin (when appropriate), picked up, released, and optionally, get stuck to an object.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a tool type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>icon</code></b>: Icon to show on the HUD standby bubble, representing Pikmin that are holding a tool of this type.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <p>None.</p>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>dropped_when_pikmin_is_whistled</code></b>: If true, the Pikmin will drop the tool when it is whistled. Defaults to false.</li>
+      <li><b><code>dropped_when_pikmin_lands</code></b>: If true, the Pikmin will drop the tool when the Pikmin lands on the floor. Defaults to true.</li>
+      <li><b><code>dropped_when_pikmin_lands_on_opponent</code></b>: If true, the Pikmin will drop the tool when the Pikmin lands on the an opponent. Defaults to false.</li>
+      <li><b><code>pikmin_returns_after_using</code></b>: If true, the Pikmin will return to the current leader after it drops the tool. Defaults to true.</li>
+      <li><b><code>stuck_when_pikmin_lands_on_opponent</code></b>: If true, and if the Pikmin drops when it lands on an opponent, then the tool will become stuck to the opponent object. Defaults to false.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>Tool object types do not need any specific animations, only the ones that you call in the script.</p>
+
+    <h2 id="script">Script</h2>
+
+    <p>All of the tool type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that you use the <code>set_holdable</code> action at some point to make it so Pikmin can hold the tool, and listen out to the <code>on_held</code> and <code>on_released</code> events, to know when the tool has been picked up, and is ready to be used.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, tool type objects do not read any specific script variables, but any script variable fed into them can be used in the script.</p>
+    
+  </div>
+</body>
+
+</html>

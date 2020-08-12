@@ -1,0 +1,446 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Glossary - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body>
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Glossary</h1>
+    
+    <p>A glossary of terms used in <i>Pikifen</i>, both for casual play, and for creating content. This glossary will not include terms popular in the <i>Pikmin</i> franchise, since you can find more about those on <a href="https://www.pikminwiki.com">Pikipedia</a>, and will also not focus on terms used in the engine's code, even though most of them match what you'd read outside of the code.</p>
+    
+    <dl>
+      <dd><i><b>Navigation:</i></b> <a href="#.23">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a></dd>
+    </dl>
+    
+    <h2 id=".23">#</h2>
+    
+    <h2 id="A">A</h2>
+
+    <dl>
+      <dt>Action</dt>
+      <dd>Something that an object can do in its <a href="#S">script</a>. This includes walking to a certain point, losing <a href="#H">health</a>, changing its <a href="#A">animation</a>, etc.</dd>
+      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Animation</dt>
+      <dd>A series of <a href="#F">frames</a> that change the way an object looks. When put together nicely, these make it look like the object is walking, growling, chomping, etc. Animations are independent of what the object is actually doing. For instance, it can be walking, but it could be frozen in appearance, which would make it appear to slide. That said, accurate animations are necessary for gameplay reasons, like <a href="#H">hitboxes</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Assert, Assertion</dt>
+      <dd>When something is wrong with the engine, and it is detected by an assertion, the program usually shuts down in a controlled manner. This helps because the developer can know what assert was triggered exactly, to make finding the problem easier.</dd>
+    </dl>
+    
+    <h2 id="B">B</h2>
+
+    <dl>
+      <dt>Blackout</dt>
+      <dd>A <a href="#W">weather</a> effect that makes everything dark (to different degrees) except for the leaders and a few specific objects, which cast light.</dd>
+      <dd>Further reading: <a href="weather.html">Creating weather</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Body part</dt>
+      <dd>Objects can have a series of body parts, which move around when it is <a href="#A">animating</a>. When a Pikmin latches on to a leg, for instance, it will follow the leg around as the body part moves. In an animation, body parts are directed by <a href="#H">hitboxes</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Bitmap</dt>
+      <dd>An image. It contains a series of pixels, like most computer images.</dd>
+      <dd>Further reading: <a href="http://en.wikipedia.org/wiki/Bitmap">Wikipedia's definition of bitmap</a>.</dd>
+    </dl>
+    
+    <h2 id="C">C</h2>
+
+    <dl>
+      <dt>Canvas</dt>
+      <dd>The area on an editor where the user can see a preview of what they are working on, as well as drag components, draw elements, etc. This is the part of the editor that is not the panel, toolbar, status bar, etc.</dd>
+    </dl>
+    <dl>
+      <dt>Category</dt>
+      <dd>See <a href="#O">object category</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Child</dt>
+      <dd>An object that is part of a more complex object.</dd>
+      <dd>Further reading: <a href="mob_type.html#parent">Parent/Child objects</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Coordinates</dt>
+      <dd>Numbers representing where in the world the object is. X refers to where it is horizontally on west/east &#8211; a smaller X means more to the west, and a larger one more to the east. Y is north/south, with a lower Y corresponding to higher north. Z is the vertical coordinate, with a higher Z being higher up in the air.</dd>
+    </dl>
+    <dl>
+      <dt>Creator tool</dt>
+      <dd>Any tool that exists to help creators create content. There are tools that speed up the gameplay, tools that show <a href="#H">hitbox</a> locations, etc.</dd>
+      <dd>Further reading: <a href="maker_toolkit.html">Creator toolkit</a>.</dd>
+    </dl>
+    
+    <h2 id="D">D</h2>
+
+    <dl>
+      <dt>Dummy</dt>
+      <dd>An object that does absolutely nothing. It serves to guide other objects, like indicating the end point of a pushable cardboard box.</dd>
+    </dl>
+    
+    <h2 id="E">E</h2>
+
+    <dl>
+      <dt>Edge</dt>
+      <dd>In an area's layout, edges are the lines that delimit a <a href="#S">sector</a>. An edge can have sectors on either side, and if they are different heights, that creates a wall.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Enemy</dt>
+      <dd>Enemy is a general term for the creatures that attack or are attacked by Pikmin. Although it makes little sense, one could create a fire geyser "enemy", and it would be technically valid.</dd>
+    </dl>
+    <dl>
+      <dt>Error</dt>
+      <dd>If something goes wrong when loading or during gameplay, the engine will write an error on the error log file. Not all errors will result in a crash, but ideally, one should aim to resolve all of them.</dd>
+    </dl>
+    <dl>
+      <dt>Event</dt>
+      <dd>When something happens to an object, like when it gets hurt, or it reaches its destination, an event is thrown. In the <a href="#S">script</a>, you can specify what <a href="#A">actions</a> to perform whenever a certain event is triggered. Different <a href="#S">states</a> can have different event handling.</dd>
+      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    
+    <h2 id="F">F</h2>
+
+    <dl>
+      <dt>Fade</dt>
+      <dd>In an area's layout, a "fade" <a href="#S">sector</a> refers to a sector whose only purpose is to fade the <a href="#T">textures</a> of the sectors around it, transitioning smoothly from one neighbor to the other.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Frame</dt>
+      <dd>A represents a specific point during an <a href="#A">animation</a>. In this point, a certain <a href="#S">sprite</a> is shown, and different frames can have different durations.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Frame signal</dt>
+      <dd>When something needs to happen during a specific <a href="#F">frame</a> of <a href="#A">animation</a>, a frame signal <a href="#E">event</a> can be thrown, and handled in the <a href="#S">script</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>, <a href="mob_type.html">Object script</a>.</dd>
+    </dl>
+    
+    <h2 id="G">G</h2>
+
+    <dl>
+      <dt>Glow</dt>
+      <dd>A way to brighten up an object. Due to Allegro limitations, it's not a real glow in the current versions of the engine because: 1. the brightness is limited to the bitmap's original pixels &#8211; darker bitmaps have a harder time becoming brighter; 2. the glow doesn't bleed and fade out, but is limited to the exact shape of the original bitmap.</dd>
+    </dl>
+    
+    <h2 id="H">H</h2>
+
+    <dl>
+      <dt>Hazard</dt>
+      <dd>Like in the canon games, a hazard refers to the concept of danger, not to a physical object. Electricity (danger of being shocked), fire (danger of burning up), etc. are all hazards, but electrical wires, fire geysers, and so on are just obstacles whose attacks involve hazards.</dd>
+      <dd>Further reading: <a href="hazard.html">Creating hazards</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Health</dt>
+      <dd>Every <a href="#O">object</a> in the engine has an amount of health, whether that is used for anything or not. Objects can be attacked in a few ways, and doing so depletes health. When the health reaches zero, the object is considered dead, and its behavior when that happens depends on the type of object.</dd>
+    </dl>
+    <dl>
+      <dt>Hitbox</dt>
+      <dd>A hitbox is a part of a <a href="#S">sprite</a> that represents where a <a href="#B">body part</a> is at that moment. It also contains information about how that body part relates to combat at that moment &#8211; the body part could be vulnerable to enemy attacks, it could be causing damage of its own, etc.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Home</dt>
+      <dd>The spot an object <a href="#S">spawns</a> on. The <a href="#T">territory</a> radius is determined around this spot. This is also where a treasure returns to when it falls into a pit, for instance.</dd>
+    </dl>
+    <dl>
+      <dt>HUD</dt>
+      <dd>Refers to the on-screen elements visible to the player to help them understand what is going on during gameplay. The Pikmin counter, health meters, sun meter, etc. are all HUD elements.</dd>
+      <dd>Further reading: <a href="misc_config.html">Misc. configurations</a>.</dd>
+    </dl>
+    
+    <h2 id="I">I</h2>
+
+    <dl>
+      <dt>Ingredient</dt>
+      <dd>An ingredient for concocting a spray. In the canon games, these are berries. After a certain number of ingredients of a certain type are collected, the player gains one more dosage of a certain spray.</dd>
+    </dl>
+    <dl>
+      <dt>Itch</dt>
+      <dd>When an object has been taking damage for a while, an "itch" <a href="#E">event</a> will be triggered. This periodic event allows an enemy to shake Pikmin off when it is under attack. In order for the enemy to not shake several times in a row, an "itch" event will only be triggered if enough time has passed since the last one, and if enough damage has been done since the last one.</dd>
+    </dl>
+    
+    <h2 id="J">J</h2>
+
+    
+    <h2 id="K">K</h2>
+
+    <dl>
+      <dt>Knockback</dt>
+      <dd>Leaders and Pikmin, when hurt, can get blown backwards and land on the floor lying down. When this happens, it is said that they have suffered knockback.</dd>
+    </dl>
+    
+    <h2 id="L">L</h2>
+
+    <dl>
+      <dt>Latch</dt>
+      <dd>A latched Pikmin is any Pikmin that is grabbing on to an enemy (or gate, etc.) for the purpose of attacking it.</dd>
+    </dl>
+    <dl>
+      <dt>Link</dt>
+      <dd>See <a href="#O">object link</a> or <a href="#P">path stop link</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Liquid</dt>
+      <dd>Water, mud, lava, etc. are all liquids. If a <a href="#S">sector</a> has an associated liquid, it will change the sector's appearance to have a water surface <a href="#T">texture</a>, among other things. If a liquid has an associated <a href="#H">hazard</a>, <a href="#O">objects</a> vulnerable to that hazard can get affected when they walk on the sector.</dd>
+      <dd>Further reading: <a href="hazard.html">Creating hazards</a>.</dd>
+    </dl>
+    
+    <h2 id="M">M</h2>
+
+    <dl>
+      <dt>Message</dt>
+      <dd>One of the object <a href="#A">actions</a> involves sending a message to other objects. This message is in plain text, and could be whatever you want. The receivers can either be objects that have an <a href="#O">object link</a>, or all nearby objects, up to a specified distance.</dd>
+      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Mob</dt>
+      <dd>Alternative name for <a href="#O">object</a>. Short for "mobile object".</dd>
+    </dl>
+    
+    <h2 id="N">N</h2>
+
+    
+    <h2 id="O">O</h2>
+
+    <dl>
+      <dt>Object</dt>
+      <dd>Any individual Pikmin, leader, obstacle, enemy, ship, etc. is an object. Each object is of an <a href="#O">object type</a>, and multiple objects of the same type can exist in the same area at once.</dd>
+    </dl>
+    <dl>
+      <dt>Object link</dt>
+      <dd>A way for an object to send messages or refer to another object.</dd>
+      <dd>Further reading: <a href="misc_features.html#mob-links">Object links</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Object type</dt>
+      <dd>An object type contains data about what an object of its type should look and behave like. Red Pikmin look different from Blue Pikmin, so these two are different object types.</dd>
+      <dd>Further reading: <a href="mob_type.html">Creating object types</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Object category</dt>
+      <dd>A category contains a list of <a href="#O">object types</a>. Examples include Pikmin, leaders, treasures, and so on. Types in the same category look and behave similarly. For instance, all <a href="#O">objects</a> of a Pikmin type need to show the Pikmin itself and its <a href="#T">top</a>, they all need to follow leaders who whistle them, etc.</dd>
+      <dd>Further reading: <a href="mob_type.html#mob-categories">List of object categories</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Obstacle</dt>
+      <dd>"Obstacle" is a generic term used to refer to objects that stand in the way of the leaders and Pikmin; it does not refer to anything specific.</dd>
+    </dl>
+    <dl>
+      <dt>Opponent</dt>
+      <dd>In the engine, "opponent" refers to any <a href="#O">object</a> that the current object wants to hunt down. For instance, Pikmin and enemies are opponents of each other, but gates and enemies are not opponents. Two objects that are normally opponents but belong to the same <a href="#T">team</a>, will no longer be opponents.</dd>
+    </dl>
+    
+    <h2 id="P">P</h2>
+
+    <dl>
+      <dt>Parent</dt>
+      <dd>An object that is composed of simpler objects.</dd>
+      <dd>Further reading: <a href="mob_type.html#parent">Parent/Child objects</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Particle</dt>
+      <dd>A particle is a small, simple thing that shows up on the game world, disappears with time, and follows a very simple behavior. They are used for graphical effects and ambiance. For instance, because each particle is its own thing, you can have a Wollywog's landing cause several smoke particles to appear, each moving away from the creature, to simulate dust picking up after a thud.</dd>
+      <dd>Further reading: <a href="particle.html">Creating particle generators</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Particle generator</dt>
+      <dd>Responsible for spawning <a href="#P">particles</a> over time.</dd>
+      <dd>Further reading: <a href="particle.html">Creating particle generators</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Path stop</dt>
+      <dd>When an <a href="#O">object</a> is following a path, it goes from one stop to another, to another, until its destination. It goes from stop A to stop B in a straight line. It can only cross stops that are linked with <a href="#P">path stop links</a>.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Path stop link</dt>
+      <dd>Path stop links refer to the connection between two path stops. This means an object can go from stop A to stop B when following a path. Path stop links can either be one-way or bidirectional.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    
+    <h2 id="Q">Q</h2>
+
+    
+    <h2 id="R">R</h2>
+
+    <dl>
+      <dt>Ramp</dt>
+      <dd>Although <a href="#S">sectors</a> in the engine have a fixed height, and hence, cannot ramp smoothly from one height to another, the engine doesn't have real ramps. However, a convincing alternative is to just use stairs. Any wall that is 50 units or less in height can make an <a href="#O">object</a> walk up or down the sectors smoothly as they move forward and back.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Rotation</dt>
+      <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is spun clockwise or counter-clockwise, that is called a rotation.</dd>
+    </dl>
+    
+    <h2 id="S">S</h2>
+
+    <dl>
+      <dt>Scale</dt>
+      <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is shrunk or grown to different sizes, that is called a scale. The width and height can be scaled independently. A negative scale flips the image around in that same axis.</dd>
+    </dl>
+    <dl>
+      <dt>Script</dt>
+      <dd>An <a href="#O">object</a>'s script controls what the object should do when certain scenarios occur. Every object is in a <a href="#S">state</a> at any given time, and depending on the <a href="#E">events</a> it receives while in a specific state, it can do a different set of <a href="#A">actions</a>.</dd>
+      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Sector</dt>
+      <dd>An area's layout is made of up of sectors. Each sector is a polygon (which is composed of <a href="#E">edges</a> and <a href="#V">vertexes</a>), which represent a floor an <a href="#O">object</a> can walk on. Neighboring sectors of different heights make a wall.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Spawn</dt>
+      <dd>As a verb, it means "to make appear". When an object is created and placed into the game world, it is said that it has "spawned". As a noun, it refers to any object created by the current object.</dd>
+    </dl>
+    <dl>
+      <dt>Spike</dt>
+      <dd>Spike damage is a special type of damage that only happens in retaliation. When an <a href="#O">object</a> is hurt, if it has spike damage configured, it will automatically hurt its attacker as well. Another type of spike damage happens when a Pikmin is swallowed; this allows White Pikmin to cause some damage to their predators.</dd>
+      <dd>Further reading: <a href="misc_config.html">Misc. configurations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Spoil</dt>
+      <dd>Something that an enemy drops when it dies.</dd>
+    </dl>
+    <dl>
+      <dt>Sprite</dt>
+      <dd>When creating <a href="#A">animations</a>, a sprite is a <a href="#B">bitmap</a> that represents how the animation looks at a specific point in time. Sprites are used in <a href="#F">frames</a>, and one sprite can be used in more than one frame. For instance, an image of an enemy with its leg up could represent part of its walking animation, growling animation, dying animation, etc.</dd>
+      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Spritesheet</dt>
+      <dd>Name given to <a href="#B">bitmaps</a> that hold several <a href="#S">sprites</a> inside. Due to the way modern GPUs work, it's faster to store several sprites into one image, rather than creating several images for each.</dd>
+    </dl>
+    <dl>
+      <dt>State</dt>
+      <dd>Every <a href="#O">object</a> with a <a href="#S">script</a> is in a specific state at any given time. When an <a href="#E">event</a> is received, the state the object is on will influence the response. For instance, when a Pikmin is near a Red Bulborb, if the Bulborb is in the "sleeping" state, it should wake up, but if it is in the "chasing" state, it should lunge in for a bite.</dd>
+      <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Stairs</dt>
+      <dd>See <a href="#R">ramp</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Status</dt>
+      <dd>An <a href="#O">object</a> can be under the influence of any number of statuses. These affect the object's stats. For instance, if a Pikmin is under the "burning" status effect, it loses health at a steady pace. If it is under the "spicy" status effect, it gains a boost in speed until the status wears off.</dd>
+      <dd>Further reading: <a href="status.html">Creating status effects</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Stop</dt>
+      <dd>See <a href="#P">path stop</a>.</dd>
+    </dl>
+    
+    <h2 id="T">T</h2>
+
+    <dl>
+      <dt>Team</dt>
+      <dd>An <a href="#O">object</a> can be a part of a specific team. Two objects in the same team will never try to hunt each other down, nor will they ever be able to cause damage to one another.</dd>
+    </dl>
+    <dl>
+      <dt>Territory</dt>
+      <dd>An imaginary circle around an object's <a href="#H">home</a>. If the object goes past this circle, the "far from home" <a href="#E">event</a> is triggered, which is normally used to make enemies turn around and go back to a more comfortable place instead of wandering off too far.</dd>
+    </dl>
+    <dl>
+      <dt>Texture</dt>
+      <dd>Textures are just <a href="#B">bitmaps</a>, although the term is more commonly used when the image portrays terrain, and is meant to tile over and over, like dirt, grass, stone, etc.</dd>
+    </dl>
+    <dl>
+      <dt>Top</dt>
+      <dd>Refers to a Pikmin's leaf, bud, or flower.</dd>
+    </dl>
+    <dl>
+      <dt>Transformation</dt>
+      <dd>Certain shapes, images, or other such things in the engine can be transformed using primary <a href="http://en.wikipedia.org/wiki/Geometric_transformation">geometric transformations</a>. This is what allows you to resize, flip, rotate, or shift an enemy's image, for instance. The following primary transformations exist: <a href="#T">translation</a>, <a href="#S">scale</a>, and <a href="#R">rotation</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Translation</dt>
+      <dd>One of the primary <a href="#T">transformations</a>. When a shape, image, etc. is moved exactly as it is from one point to another, that is called a translation.</dd>
+    </dl>
+    <dl>
+      <dt>Treasure</dt>
+      <dd>Treasure is a general term for the <a href="#O">objects</a> that can be carried by Pikmin to a ship, to exchange for some sort of value.</dd>
+    </dl>
+    <dl>
+      <dt>Tree shadow</dt>
+      <dd>A tree shadow refers to a <a href="#T">texture</a> overlaid on the area that represents the shadow of a tree and its leaves. Despite the name, it can be a shadow of anything, or even any texture at all.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Triangle</dt>
+      <dd>Internally, a <a href="#S">sector</a> is made up of triangles, since those are needed for rendering and physics. They are generated automatically, and are not controllable by the user. That said, the disposition of the triangles can help explain the twisted look of some <a href="#F">fade sectors</a>, as well as other minor quirks.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Type</dt>
+      <dd>See <a href="#O">object type</a>.</dd>
+    </dl>
+    
+    <h2 id="U">U</h2>
+
+    <dl>
+      <dt>Unit</dt>
+      <dd>Likely refers to <a href="#W">world unit</a>.</dd>
+    </dl>
+    
+    <h2 id="V">V</h2>
+
+    <dl>
+      <dt>Vertex</dt>
+      <dd>A <a href="#S">sector</a> is made up of <a href="#E">edges</a>, and each edge is determined by a starting point and an end point. These points are called vertexes. A vertex can serve as an endpoint for one or several edges.</dd>
+      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+    </dl>
+    
+    <h2 id="W">W</h2>
+
+    <dl>
+      <dt>Weather</dt>
+      <dd>The current weather controls more than just the rain: it controls the lighting of the area, from the sunlight throughout the day, to the strength of the shadows, to how foggy it is.</dd>
+      <dd>Further reading: <a href="weather.html">Creating weather</a>.</dd>
+    </dl>
+    <dl>
+      <dt>World unit</dt>
+      <dd>One unit in the game's space. When the camera is at 1:1 zoom (which is not the default value!), 1 pixel on your screen represents 1 world unit. For reference, Pikmin have a diameter of 10 units.</dd>
+    </dl>
+    
+    <h2 id="X">X</h2>
+
+    <dl>
+      <dt>X</dt>
+      <dd>See <a href="#C">coordinates</a>.</dd>
+    </dl>
+    
+    <h2 id="Y">Y</h2>
+
+    <dl>
+      <dt>Y</dt>
+      <dd>See <a href="#C">coordinates</a>.</dd>
+    </dl>
+    
+    <h2 id="Z">Z</h2>
+
+    <dl>
+      <dt>Z</dt>
+      <dd>See <a href="#C">coordinates</a>.</dd>
+    </dl>
+    
+  </div>
+</body>
+
+</html>

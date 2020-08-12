@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Options - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Options</h1>
+    
+    <p>The following is an explanation of the player options in <i>Pikifen</i>.</p>
+
+    <p>The resolution and fullscreen options can be set in the options menu. The controls can be changed in a sub-menu, and the defaults are listed on <a href="https://github.com/Espyo/Pikifen/blob/master/README.txt">the included README.txt file</a>. The rest of the options can be set in the <code>/User_data/Options.txt</code> file, but since these don't have a large impact for most fans, there is no way to edit them in the options menu. The following options (besides controls) can be found in that text file:</p>
+
+    <table>
+      <tr>
+        <th>Option</th><th>Description</th><th>Default</th><th>Performance impact?</th>
+      </tr>
+      <tr>
+        <th><code>draw_cursor_trail</code></th>
+        <td>If false, the faint trail that follows the cursor will be removed, which could help with performance.</td>
+        <td><code>true</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>area_editor_backup_interval</code></th>
+        <td>How often the area editor creates a backup of the current area, in seconds.</td>
+        <td><code>120</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_grid_interval</code></th>
+        <td>Space between each grid cell in the area editor.</td>
+        <td><code>32</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_mmb_pan</code></th>
+        <td>Should the middle mouse button pan (<code>true</code>) or reset the camera/zoom (<code>false</code>)? The right mouse button will do the other function.</td>
+        <td><code>false</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_show_edge_length</code></th>
+        <td>If <code>true</code>, the length of nearby edges will be shown, when dragging them or drawing them.</td>
+        <td><code>true</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_undo_limit</code></th>
+        <td>How many steps can be saved in the undo history, at most. 0 disables the undo feature.</td>
+        <td><code>20</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_view_mode</code></th>
+        <td>View mode to use. 0 for standard, 1 for wireframe, 2 for height map, 3 for brightness map.</td>
+        <td><code>0</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>fps</code></th>
+        <td>Framerate cap. The higher it is, the smoother the gameplay is, but the heavier on performance the engine will be.</td>
+        <td><code>60</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>fullscreen</code></th>
+        <td>Is the window fullscreen (<code>true</code>) or windowed (<code>false</code>)? Note that if the specified resolution doesn't work in fullscreen, the engine will revert the option to windowed mode.</td>
+        <td><code>false</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>joystick_min_deadzone</code></th>
+        <td>Tilting the joystick this far or less will be considered the same as keeping the joystick in neutral. If your analog stick is wobbly, and you see actions happening in-game even thought you're not moving the analog stick, try increasing this value. <code>0.2</code> (20%) is a good value for most cases.</td>
+        <td><code>0.2</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>joystick_max_deadzone</code></th>
+        <td>Tilting the joystick this far or more will be considered the same as holding the joystick fully in that direction. If you tilt your analog stick fully, but realize that the engine is responding like if you only tilted it a bit, try lowering this value. <code>0.9</code> (90%) is a good value for most cases.</td>
+        <td><code>0.9</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>max_particles</code></th>
+        <td>Maximum number of particles to have on the world at once. If more particles than this need to be created, older particles are deleted.</td>
+        <td><code>200</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>middle_zoom_level</code></th>
+        <td>When pressing the camera button, the zoom level swaps between near, far, and this amount.</td>
+        <td><code>1.50</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>mipmaps</code></th>
+        <td><code>true</code> to enable <a href="http://en.wikipedia.org/wiki/mipmaps">mipmaps</a>, <code>false</code> to disable them. Enabling them is recommended, and increases VRAM usage for slightly less GPU usage. Turn it off if you need RAM.</td>
+        <td><code>true</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>pretty_whistle</code></th>
+        <td>If false, the whistle is replaced with a plain yellow circle, which could help with performance.</td>
+        <td><code>true</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>resolution</code></th>
+        <td>Width and height of the game window. The engine was made with a small-medium resolution in mind, although you can change the window size to anything you want.</td>
+        <td><code>1024 768</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>smooth_scaling</code></th>
+        <td>If true, images that need to shrink or grow big will do so smoothly. Otherwise it will look pixelated, but it might help with performance.</td>
+        <td><code>true</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>window_position_hack</code></th>
+        <td>For some users, the game window does not appear, although the engine is definitely running fine. This is because it somehow gets placed out of the screen. Set this to true to force it to appear inside the screen.</td>
+        <td><code>false</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>animation_editor_history_&lt;<i>number</i>&gt;</code></th>
+        <td>List of recently-opened files on the animation editor. This does not need to be edited by the player, as the engine controls the list by itself.</td>
+        <td></td>
+        <td>No</td>
+      </tr>
+    </table>
+
+  </div>
+</body>
+
+</html>

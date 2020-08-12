@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Particle generators - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Particle generators</h1>
+    
+    <p>This page will guide you on how to create a particle generator for <i>Pikifen</i>. A particle generator is a set of information about how the engine should throw particles into the game world. Particles are small images that don't interact with the environment, like rocks flying around, clouds of gas floating by, or even the trail left behind by thrown Pikmin and leaders. Then, in-game, enemies, or obstacles, or what have you can call one of these generators in order to generate particles.</p>
+
+    <h2 id="intro">Introduction</h2>
+    
+    <p>A generator can tell the engine to generate one single thing, or multiple ones over an unknown amount of time. For instance, if an enemy wants to spit a puff of gas, it should generate 10 or so clouds of gas, all at once, and that's the end of it. But if an obstacle wants to continuously spit out thick smoke, it would generate gray clouds over time; it would likely spit a bunch of them every half second or so, to keep a constant stream. So the logic depends on the usage of the generator.</p>
+
+    <p>Particles are static images, but they can move, change size, and change opacity over time, and can also be tinted by a certain color. Each generator can only emit one type of particle, but their properties (size, position, etc.) are randomly decided every time one is created, according to the generator's settings. This decision is based on the deviation properties. For instance, when a particle of size 32 is created, if the size deviation property is set to 3, that means the particle can spawn with less 3 pixels in size, more 3 pixels in size, or anything in between. 0, for any deviation property, means no deviation, naturally.</p>
+
+    <p>The <a href="text_file.html">text file</a> that has a list of all particle generators is <code>Game_data/Misc/Particle_generators.txt</code>. This contains all custom-made particle generators, but not particle generators created inside the engine's logic itself, for internal use. Each main block on the file is a generator. The name of the block is also the name of the generator, and the name you should refer it by when writing scripts.</p>
+
+    <h2 id="base">Base particle</h2>
+    
+    <p>As stated before, each generator can only generate one type of particle. The <code>base</code> block inside a generator's data on the text file specifies what the particle looks like. Its size, speed, etc. can all be deviated randomly when it spawns, which is all controlled by the generator.</p>
+
+    <p>The base particle has the following properties:</p>
+    
+    <ul>
+      <li><b><code>bitmap</code></b>: Image to use, on the </code>Game_data/Graphics</code> folder. This must include the extension (e.g. <code>Smoke.png</code>). If empty, the particle won't use an image, but will use a colored, solid circle instead.</li>
+      <li><b><code>duration</code></b>: How long the particle lives for, in seconds. The closer it is to dying, the more transparent it becomes. This means that it fades with time on its own.</li>
+      <li><b><code>friction</code></b>: When a particle moves, it can slow down over time. The friction controls this. This property specifies the ratio of how much is lost by each second. 0 means no speed loss.</li>
+      <li><b><code>gravity</code></b>: If set to something other than 0, the created particle is pulled downward each time more over time, like the effects of gravity. This isn't "down" in the game world, this is "down" on the screen, meaning the particles are pulled south, really. Negative values can make the particle rise up each time more. Don't use this to simulate actual gravity on particles, since having a subtle pull to a direction looks good, but a harsh pull southwards may make no sense.</li>
+      <li><b><code>size_grow_speed</code></b>: Over time, its size increases by this much. This is measured in pixels per second. 0 means no change, and negative numbers make it shrink.</li>
+      <li><b><code>size</code></b>: Starting size, in pixels. The particle must be square, and this specifies its width or height.</li>
+      <li><b><code>speed</code></b>: Speed at which it moves horizontally and vertically, in pixels per second. Format: <code>speed = &lt;x&gt; &lt;y&gt;</code>. Naturally, 0 means it stays in place.</li>
+      <li><b><code>color</code></b>: Starting color, in the format <code>r g b</code>, or <code>r g b a</code>.</li>
+    </ul>
+
+    <h2 id="generator">Generator properties</h2>
+    
+    <ul>
+      <li><b><code>emission_interval</code></b>: A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once.</li>
+      <li><b><code>number</code></b>: Number of particles to spawn. Every bunch of particles generated contains X of them.</li>
+      <li><b><code>number_deviation</code></b>: The number of particles to spawn in each bunch is randomly deviated randomly by this amount.</li>
+      <li><b><code>base</code></b>: See the <a href="#base">base particle</a> section.</li>
+      <li><b><code>duration_deviation</code></b>: The total duration of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>friction_deviation</code></b>: The friction of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>gravity_deviation</code></b>: The gravity of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>size_deviation</code></b>: The size of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>pos_deviation</code></b>: The X and Y coordinates of any created particle is deviated randomly by this amount. Format: <code>pos_deviation = &lt;x&gt; &lt;y&gt;</code>.</li>
+    </ul>
+
+    <p>On top of this, there are two ways to control the direction a particle goes to when created:</p>
+    
+    <ul>
+      <li>By the X/Y speeds of the particle, and their random variations.</li>
+      <li>By the angle at which the generator launches it, the launch speed, and their random variations.</li>
+    </ul>
+
+    <p>To use one of the methods, give the corresponding set of properties a non-zero value, and leave the other set of properties as 0, including deviations. (Alternatively, you can just omit the properties entirely.)</p>
+    
+    <ul>
+      <li><b><code>speed_deviation</code></b>: The X and Y speed of any created particle is deviated randomly by this amount. Format: <code>speed_deviation = &lt;x&gt; &lt;y&gt;</code>.</li>
+      <li><b><code>angle</code></b>: Angle to launch the particle at. This is in degrees.</li>
+      <li><b><code>angle_deviation</code></b>: The launch angle of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>total_speed</code></b>: Particles launched with a given angle have this much speed.</li>
+      <li><b><code>total_speed_deviation</code></b>: The launch speed of any created particle is deviated randomly by this amount.</li>
+    </ul>
+
+    <h2 id="examples">Examples</h2>
+    
+    <p>For smoke emitted by a fire, the friction can be set to 1, so the particles slow down the more they go, and they can be told to grow in size over time, just like real smoke. For movement, they can be told to go up with a speed of something like -50. The X and Y speed can then be deviated by a bit for variety, but the launch angle and launch speed properties must be set to 0.</p>
+
+    <p>For a bunch of clouds of gas emitted in a circle, the friction can again be set to 1, and the size growth can also be positive. However, if we deviate their X and Y speed randomly to obtain a spread, the reach will be that of a square (or rectangle), which wouldn't look very natural. Instead, we leave the X/Y speeds at 0, and set the launch angle to something (0 will work), and set the angle deviation to 6.28318, which is 360 degrees (a full circle). We must also set the launch speed to something positive, so they actually move. The launch speed can be deviated slightly for variety.</p>
+    
+  </div>
+</body>
+
+</html>

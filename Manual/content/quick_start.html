@@ -1,0 +1,183 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Quick start guide - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Quick start guide</h1>
+    
+    <p>This page contains quick guides that teach you the basics on how to create content for <i>Pikifen</i>. Read <a href="home.html#how-to-create">this</a> for a list of more in-depth and complete guides.</p>
+
+    <h2 id="areas">Areas</h2>
+
+    <h3 id="areas-concepts">Concepts</h3>
+
+    <p>An area's physical geometry is made up of neighboring <a href="http://en.wikipedia.org/wiki/Polygon">polygons</a>, which represent <b>floor</b>s when seen from above. Their height can also be changed, and a polygon with a higher height than its neighbor creates a <b>wall</b>.</p>
+
+    <h3 id="areas-how-to">How to make an area</h3>
+    
+    <div class="image image-right">
+      <img src="../images/ramp.png" alt="Making a ramp with the area editor.">
+      <p>Making a ramp with the area editor.</p>
+    </div>
+    
+    <p>Feel free to check or copy the existing areas for references and ideas.</p>
+
+    <ol>
+      <li>Open the game, enter the area editor.</li>
+      <li>Use the big button on the right to create your area.</li>
+      <li>Use the "Info" mode to give it a name.</li>
+      <li>
+        Use the "Layout" mode to create and edit the polygons (also called sectors).
+        <ul>
+          <li>Drag a polygon's vertexes around to give it shape.</li>
+          <li>Double click a polygon's lines to create a new vertex.</li>
+          <li>Use the "+" button on the panel to start drawing a new sector.</li>
+          <li>Drag a vertex into another to merge the two. Connect edges to stitch them.</li>
+          <li>Edges between higher sectors to lower ones make walls.</li>
+        </ul>
+      </li>
+      <li>Use the "Objects" mode to create and edit the level's objects.</li>
+      <li>Use the "Paths" mode to create and edit the Pikmin's paths, by drawing the path stops and links between them.</li>
+      <li>Use the "Details" mode to create and edit tree shadows.</li>
+    </ol>
+
+    <h3 id="areas-info">Further info</h3>
+
+    <ul>
+      <li>On the area editor, right-click-drag moves the camera.</li>
+      <li>Objects will walk up floors within 50 units of each other. Use this for ramps and staircases.</li>
+      <li>Bridges need to be inside sectors of the "Bridge" type. Neighboring "Bridge"-type sectors will be used for the finished bridge's layout.</li>
+      <li>Don't overlap lines or create non-simple polygons.</li>
+    </ul>
+
+    <p><i>Full area guide: <a href="area.html">Creating areas</a></i></p>
+
+    <h2 id="mob-types">Object types</h2>
+
+    <h3 id="mob-types-concepts">Concepts</h3>
+
+    <p>Red Pikmin is a <b>type</b> of Pikmin, Wollywog is a <b>type</b> of enemy, Captain Olimar is a <b>type</b> of leader, and wood bridge is a <b>type</b> of bridge. You then place in an area several instances of Wollywog, several instances of wood bridge, (hopefully) one instance of Captain Olimar, etc. Each type has its own properties (color, health, script, etc.)</p>
+
+    <h3 id="mob-types-how-to">How to create an object type</h3>
+
+    <p>Feel free to check or copy the existing object types for references and ideas.</p>
+
+    <ol>
+      <li>Create a folder for your object's type in <code>Game_data/Types/&lt;category&gt;</code>.
+      <li>Inside, create <code>Data.txt</code>.
+      <li>
+        Inside, write the necessary properties, which take on the format <code>property = value</code>, one per line.
+        <ul>
+          <li><code>name</code>, <code>height</code>, <code>max_carriers</code>, <code>max_health</code>, <code>move_speed</code>, <code>pushable</code>, <code>pushes</code>, <code>radius</code>, <code>rotation_speed</code>, <code>weight</code>.</li>
+        </ul>
+      </li>
+      <li>Depending on the category, you must also add some more properties; check the corresponding category article in the <a href="mob_type.html#mob-categories">list of object categories</a>.
+      <li>Create and set up the <a href="animation.html">animations</a> for it.
+    </ol>
+
+    <h3 id="mob-types-info">Further info</h3>
+
+    <ul>
+      <li>Your object may also need a <a href="#scripts">script</a>; check if it does in the <a href="mob_type.html#mob-categories">list of object categories</a>.</li>
+      <li>The "Custom" category is for fully custom objects. These too need a script.</li>
+      <li>In order for your object to attack or be attacked, you need to specify its <code>target_type</code>, <code>can_hunt</code>, and <code>can_hurt</code> properties.</li>
+    </ul>
+
+    <p><i>Full object type guide: <a href="mob_type.html">Creating object types</a></i></p>
+
+    <h2 id="animations">Animations</h2>
+
+    <h3 id="animations-concepts">Concepts</h3>
+
+    <p>Animations are made up of <b><a href="http://en.wikipedia.org/wiki/Animation">frames</a></b> that are displayed in rapid succession. Each frame has a <b>sprite</b>, and info about how long it lasts. The engine reads sprites from sections of one or more images (called spritesheets). Besides the image, each sprite has <b>hitboxes</b>, which are connected to <b>body parts</b> (e.g. body, head, tail, etc.), and define whether that body part is currently damageable, causing damage, or being ignored. These hit"boxes" are actually cylinders.</p>
+
+    <h3 id="animations-how-to">How to create animations</h3>
+
+    <p>Feel free to check or copy existing animations and images for references and ideas.</p>
+
+    <ol>
+    <li>Create the images that will be used for the object's sprites. In every sprite's image, the object must be facing the right.</li>
+    <li>Open the game, enter the animation editor.</li>
+    <li>Use the big button on the right to load the object type whose animations you want to edit. Create its folder in <code>Game_data/Types/&lt;category&gt;</code> if it doesn't exist.</li>
+    <li>Use the "Edit body parts" mode to create and edit the list of relevant body parts.</li>
+    <li>
+      Use the "Edit sprites" mode to create and edit the sprites to be used in future animations's frames.
+      <ul>  
+        <li>Use the big button at the top to select a sprite or create a new one.</li>
+        <li>Use the "Edit hitboxes" button to specify where each body part's hitbox is and what it does. They can be dragged around and resized with the left mouse button.</li>
+      </ul>
+    </li>
+    <li>
+      Use the "Edit animations" mode to create and edit the animations.
+      <ul>
+        <li>Use the big button at the top to select an animation or create a new one.</li>
+      </ul>
+    </li>
+    <li>Create the necessary animations for the type of object. To know which ones you need, check the corresponding category article from the <a href="mob_type.html#mob-categories">list of object categories</a>.</li>
+    </ol>
+
+    <h3>Further info</h3>
+
+    <ul>
+      <li>On the animation editor, right-click-drag moves the camera.</li>
+      <li>When making animations for Pikmin, use the "Edit Pikmin top" button on an animation's data to specify where the leaf/bud/flower is on that frame.</li>
+    </ul>
+
+    <p><i>Full animation guide: <a href="animation.html">Creating animations</a></i></p>
+
+    <h2 id="scripts">Scripts</h2>
+
+    <h3 id="scripts-concepts">Concepts</h3>
+
+    <p>Scripts use an event-driven <a href="http://en.wikipedia.org/wiki/finite-state_machine">finite-state machine</a>. An object is always in one of several <b>states</b> (e.g. sleeping, going home, biting). In this state, it can respond to a series of <b>events</b> (e.g. when it sees a Pikmin, when it reaches its home, when it loses health). Its response consists of a list of <b>actions</b> (e.g. changing animation, changing state, swallowing Pikmin in its mouth, walk somewhere). Only enemies and custom objects use the scripting feature.</p>
+
+    <h3 id="scrpts-how-to">How to create a script</h3>
+
+    <p>Feel free to check or copy existing scripts for references and ideas. It is recommended to <a href="#mob-types">create the object</a> you want before writing the script.</p>
+
+    <ol>
+      <li>Go to <code>Game_data/Types/&lt;category&gt;/&lt;type&gt;</code>.</li>
+      <li>Inside, create a file called <code>Script.txt</code>.</li>
+      <li>Inside, add a <code>script</code> block. This means one line has <code>script {</code>, and another has <code>}</code>.</li>
+      <li>Inside the script block, create a block for the name of a state.</li>
+      <li>Inside a state's block, create a block for an event. See <a href="script.html#event-list">here</a> for a list of events.</li>
+      <li>Inside an event's block, write one action per line. See <a href="script.html#action-list">here</a> for a list of action.</li>
+      <li>In the same file, add the <code>first_state</code> property, which specifies what the starting state is, and <code>death_state</code>, which is the state to go to when the health reches zero.</li>
+      <li>
+        In <code>Data.txt</code> in the same folder, next to the existing object properties, add the following properties:
+        <ul>
+          <li><code>territory_radius</code>.</li>
+          <li><code>reaches</code>, which is a block with named "reaches". Each reach uses the format <code>&lt;pie-slice 1 radius&gt; &lt;pie-slice 1 angle&gt; &lt;pie-slice 2 radius&gt; &lt;pie-slice 2 angle&gt;</code> (the latter two are optional).</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Further info</h3>
+
+    <ul>
+      <li>To chase after an object, it must first be focused on.</li>
+      <li>For an enemy to eat, it must first set how many Pikmin can be grabbed at max, and which body parts will do the grabbing. After some Pikmin are grabbed, it must then swallow them, which is what really kills them.</li>
+      <li>When an enemy dies, it should run the <code>start_dying</code> and later, <code>finish_dying</code> actions.</li>
+      <li>An enemy can keep a list of variables with any name you wish, and these variables can contain any value you want. You can refer to a variable's value in an action with <code>$variable_name</code>.</li>
+      <li>When switching states, the action that switches the state should be the last one run on the event's code.</li>
+    </ul>
+
+    <p><i>Full script guide: <a href="script.html">Object script</a></i></p>
+
+  </div>
+</body>
+
+</html>

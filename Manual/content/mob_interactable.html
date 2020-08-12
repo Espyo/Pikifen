@@ -1,0 +1,68 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Interactable - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; interactable</h1>
+    
+    <b>Interactables</b> are any object that the current leader can interact with to cause something to happen. This interaction happens via the throw button.
+
+    <p>Examples of interactable types include a sign that the player can read.</p>
+
+    <p>To create a new type of interactable, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>An interactable type object will cause a prompt to appear above it when the player's current leader approaches, informing the player what button to press to interact with the object. The most common case for this is to allow the player to read the contents of a sign, but it can be used for things like user-activated switches, too. Because the interactable only needs to be on the lookout for the player's input, and because the outcome can be anything, the player is tasked with giving each interactable type object its behavior using the script.</p>
+
+    <p>Interactable type objects are hardcoded in the engine to do whatever the script tells them, plus show the user prompt above them when the current leader is within a certain radius. They also have logic to receive the <code>interact</code> message from the leader object when they're interacted with.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, an interactable type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>prompt</code></b>: What text to show on the prompt, like "Read", or "Flip switch".</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>trigger_range</code></b>: How close the leader object needs to be to this one before it can be interacted with. Defaults to 64.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>Interactable object types do not need any specific animations, only the ones that you call in the script.</p>
+
+    <h2 id="script">Script</h2>
+
+    <p>All of the interactable type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that, in all relevant states, you handle the <code>on_receive_message</code> event, since when the player interacts with the object, a message is sent from the leader object with the text <code>interact</code>.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, interactable type objects do not read any specific script variables, but any script variable fed into them can be used in the script.</p>
+    
+  </div>
+</body>
+
+</html>

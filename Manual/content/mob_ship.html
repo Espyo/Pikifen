@@ -1,0 +1,70 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ship - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; ship</h1>
+    
+    <p>A <b>ship</b> type refers to any vessel that the Pikmin can deliver treasure or berries to. Leaders can also heal on some ship types.</p>
+
+    <p>Examples of ship types include the S.S. Dolphin, Hocotate ship, the Hocotate ship's pod, etc.</p>
+
+    <p>To create a new type of ship, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>Every ship has a beam next to it; this is where the Pikmin and leader interact with the ship proper. Besides that, ships don't do much.</p>
+
+    <p>Ship type objects are hardcoded in the engine to sit there and accept delivered items, and to heal leaders, if possible.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a ship type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <p>None.</p>
+
+    <h3 id="recommended">Recommended</h3>
+    
+    <ul>
+      <li><b><code>can_heal</code></b>: If <code>true</code>, that means that leaders can heal their spacesuits using this ship, like the S.S. Dolphin. Defaults to false.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A ship type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A ship type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, ship type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

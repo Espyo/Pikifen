@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pellet - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; pellet</h1>
+    
+    <b>Pellets</b> are carriable objects that simply give more Pikmin, when delivered to an Onion.
+
+    <p>Examples of pellet types include the Red 1 pellet, the Red 5 pellet, the Yellow 1 pellet, etc.</p>
+
+    <p>To create a new type of pellet, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>Each pellet object type can be bound to one type of Pikmin. Its color and look can be anything, though. That said, a pellet is forced to have a number drawn on top of it. Each pellet type is bound to one Pikmin type, and has data on how many seeds to give when the Pikmin type matches the Onion, and how many for when it doesn't.</p>
+
+    <p>Pellet type objects are hardcoded in the engine to be carriable, have a number displayed on top of them, have a number for Pikmin type match seeds, and a number for non-match seeds.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a pellet type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>number</code></b>: The number written on the pellet (e.g. 1, 5, 10). This will set the weight to the same thing.</li>
+      <li><b><code>number_image</code></b>: Name of the image with the number. The image should be in <code>Game_data/Graphics</code>, and the extension of the file name must be included.</li>
+      <li><b><code>pikmin_type</code></b>: Name of the type of Pikmin the pellet matches with.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>match_seeds</code></b>: How many seeds it gives to the Onion when the pellet's Pikmin type matches the Onion's. Defaults to 0.</li>
+      <li><b><code>non_match_seeds</code></b>: How many seeds it gives to the Onion when the pellet's Pikmin type does not match the Onion's. Defaults to 0.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A pellet type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything. This should not include the number, since the number is placed on top of the pellet during gameplay.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A pellet type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, pellet type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

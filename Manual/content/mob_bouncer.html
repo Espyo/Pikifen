@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Bouncer - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; bouncer</h1>
+    
+    <b>Bouncers</b> are objects that, when a leader or Pikmin lands on top of them, throw them away to some other location.
+
+    <p>Examples of bouncer types include the Bouncy Mushroom, which bounces Pikmin and leaders somewhere, and the <i>Pikmin</i> geyser, which throws Olimar to a different spot.</p>
+
+    <p>To create a new type of bouncer, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A bouncer just stands there waiting for other objects to land on top of it. It has information on what kinds of objects can ride on it, as well as what animation they'll be doing. The target destination is specified by whatever object is linked to it, so it's recommended to link it to a <i>dummy</i> object to serve as a target.</p>
+
+    <p>Bouncer objects are hardcoded to not do anything, except detect when a Pikmin or leader is above them, and throw them away to the designated spot.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a bouncer type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>riders</code></b>: A list of what types of riders are allowed. This list is separated by space, and the possible values are <code>pikmin</code> or <code>leaders</code>.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>riding_pose</code></b>: What sort of animation the riders switch to when being bounced away. Possible values are <code>stopped</code>, <code>somersault</code>. Defaults to stopped.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <p>None.</p>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A bouncer type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling.</li>
+      <li><b><code>bouncing</code></b>: Plays when an object gets on top of it.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A bouncer type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, bouncer type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

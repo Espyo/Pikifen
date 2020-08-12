@@ -1,0 +1,79 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Group task - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; group task</h1>
+    
+    <b>Group tasks</b> are objects that need to be cleared or moved out of the way, and to do so, several Pikmin need to work together on them. Once the combined Pikmin power reaches a certain goal amount, the task begins.
+
+    <p>Examples of group task types include the pushable cardboard box in <i>Pikmin</i>, where several Pikmin need to all push together, or the electrode in <i>Pikmin 3</i>, where Yellow Pikmin need to pose together to transmit the current from one end to the other.</p>
+
+    <p>To create a new type of group task, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A group task object can be anything and do anything, but it has information on how much Pikmin power is required to get the task started, how many Pikmin can contribute at once, what type of contribution a Pikmin can do, and rules about the Pikmin's layout, work poses, and contribution methods.</p>
+
+    <p>Each object has a series of spots for Pikmin to stand on when they're working on it. These spots are organized into rows, and as Pikmin are tasked to work, they move to the closest free spot in the frontmost row. After all spots in that row are taken, new Pikmin go to the row behind, if any, and so on.</p>
+
+    <p>Group task objects are hardcoded in the engine to do whatever the script tells them, but when the required power quota is reached, the <code>goal_reached</code> message is sent; this should be handled by the script in order to do something. Likewise, the message <code>goal_lost</code> is sent if enough Pikmin leave the task such that the power goes below the required quota.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a group task type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+    
+    <ul>
+      <li><b><code>first_row_p1</code></b>: X and Y (in relative coordinates) of the leftmost point of the first row.</li>
+      <li><b><code>first_row_p2</code></b>: Same as above, but the rightmost point.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>contribution_method</code></b>: In what way does a Pikmin contribute? Possible values are <code>normal</code>, where each Pikmin contributes by 1, <code>weight</code>, where it depends on the Pikmin's weight, <code>carry_strength</code>, for each Pikmin's carry strength, and <code>push_strength</code>, for each Pikmin's pushing strength. Defaults to normal.</li>
+      <li><b><code>power_goal</code></b>: How much combined power is required to meet the quota. Defaults to 10.</li>
+      <li><b><code>max_pikmin</code></b>: Maximum number of Pikmin that can contribute to the task. Defaults to 20.</li>
+      <li><b><code>worker_pikmin_angle</code></b>: Pikmin that are working will be facing this angle (relative to the group task object). Defaults to 0.</li>
+      <li><b><code>worker_pikmin_pose</code></b>: Pikmin that are working will be doing this pose. Possible values: <code>stopped</code>, <code>arms_stretched</code>, <code>pushing</code>. Defaults to stopped.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>interval_between_rows</code></b>: Keep this much distance between each row. Defaults to 10.</li>
+      <li><b><code>pikmin_per_row</code></b>: How many Pikmin fit in one row. Defaults to 10.</li>
+      <li><b><code>speed_bonus</code></b>: If this object can move, it will speed up by this much for every extra unit of power put on the task beyond the goal. Defaults to 1.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>Group task object types do not need any specific animations, only the ones that you call in the script.</p>
+
+    <h2 id="script">Script</h2>
+
+    <p>All of the group task type object's behavior is defined by the user-made <a href="script.html">script</a>. You should add events for <code>on_receive_message</code> to know when the power goal has been met or lost. You should also set the object's health to zero when you are done, if you don't want the Pikmin to work on it any more.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, group task type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

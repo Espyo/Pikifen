@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Track - Object category - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Object category &ndash; track</h1>
+    
+    <b>Tracks</b> are any object that can transport another object from one point to another. Optionally, they can have other points in the trajectory as well. These points are located relative to the track object itself, not the area.
+
+    <p>Examples of track types include climbing sticks, where Pikmin go from the base to the top, or the vine slides in <i>Pikmin 3</i><nowiki>'s</nowiki> Mission Mode, where Pikmin and leaders follow a pre-determined swirling path to go from a higher ledge to somewhere below.</p>
+
+    <p>To create a new type of track, please follow the <a href="mob_type.html">creating object types tutorial</a>.</p>
+
+    <h2 id="overview">Overview</h2>
+
+    <p>A track object doesn't do much except for idling and waiting for leaders or Pikmin to draw near. It has information on how objects get transported around, which includes who can ride it, at what speed, how they pose while riding, and if they can stop riding by being whistled out of it.</p>
+
+    <p>When an object wants to ride a track, it goes to where the track's first body part is located. Then, it moves linearly to where the second body part is. If there is a third body part, it moves there afterwards, and so on. Objects move from one body part to the next at the specified speed, but this is in ratio per second. This means that if the value is 0.5, it takes two seconds to go from the first body part to the second, another two to go from that to the third, etc. Riders can be in mid-air whilst riding, and will fall to the floor if they cancel out of the ride.</p>
+
+    <p>Track objects are hardcoded to not do anything, but there is logic in the engine for when a Pikmin or leader gets close, to go to it and start riding, if applicable.</p>
+
+    <h2 id="props">Properties</h2>
+
+    <p>Besides the <a href="mob_type.html#creating">global object type properties</a>, a track type has the following properties.</p>
+
+    <h3 id="mandatory">Mandatory</h3>
+
+    <ul>
+      <li><b><code>riders</code></b>: A list of what types of riders are allowed. This list is separated by space, and the possible values are <code>pikmin</code> or <code>leaders</code>.</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+
+    <ul>
+      <li><b><code>riding_pose</code></b>: What sort of animation the riders switch to when riding. Possible values are <code>stopped</code>, <code>sliding</code>, <code>climbing</code>. Defaults to stopped.</li>
+      <li><b><code>ride_speed</code></b>: The speed riders go from one body part to the next at. This is in ratio per second, so 0.5 means 50% of the way in one second. Defaults to 0.5.</li>
+    </ul>
+
+    <h3 id="optional">Optional</h3>
+
+    <ul>
+      <li><b><code>cancellable_with_whistle</code></b>: If <code>true</code>, riders can stop riding if they are whistled by a leader. Defaults to false.</li>
+    </ul>
+
+    <h2 id="animations">Animations</h2>
+
+    <p>A track type needs to have the following animations:</p>
+
+    <ul>
+      <li><b><code>idling</code></b>: Idling; used for everything.</li>
+    </ul>
+
+    <h2 id="script">Script</h2>
+
+    <p>A track type's <a href="script.html">script</a> cannot be changed.</p>
+
+    <h2 id="script-vars">Object spawn script variables</h2>
+
+    <p>Besides the <a href="area.html#script-vars">global spawn script variables</a>, track type objects do not read any specific script variables.</p>
+    
+  </div>
+</body>
+
+</html>

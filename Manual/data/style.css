@@ -1,0 +1,96 @@
+body {
+  background-color: #f0f8f0;
+  font-family: 'DejaVu Sans', 'Arial', sans-serif;
+  font-size: 13pt;
+  line-height: 1.5;
+  margin: 0px;
+}
+
+h1, h2, h3, h4 {
+    text-decoration: underline;
+    padding-top: 30px;
+}
+
+h1 {
+  text-align: center;
+}
+
+code, pre {
+  background-color: #ccc;
+  font-family: monospace;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+pre {
+  padding: 4px;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 6px;
+}
+
+th {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#header-frame {
+  border: none;
+  border-bottom: 2px solid #454;
+  position: sticky;
+  height: 44px;
+  top: 0px;
+  width: 100%;
+}
+
+#header {
+  margin: 8px;
+}
+
+#content {
+  margin-left: 80px;
+  margin-right: 80px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+#toc {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px solid black;
+  font-size: 80%;
+  padding: 8px;
+  width: 500px;
+}
+
+#toc, ul {
+  margin: 0px;
+}
+
+.image {
+  border: 1px solid black;
+  display: inline-block;
+  font-size: 75%;
+  margin: 12px;
+  padding: 5px;
+  width: 300px;
+}
+
+.image-right {
+  clear: right;
+  float: right;
+}
+
+.image img {
+  width: 290px;
+}
+
+.image p {
+    margin: 0px;
+}
