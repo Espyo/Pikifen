@@ -40,11 +40,6 @@ constexpr size_t INVALID = UINT32_MAX;
 //Cross-platform way of representing a float value of "invalid" or similar.
 constexpr float LARGE_FLOAT = 999999.0f;
 
-const string ANIMATION_EDITOR_TUTORIAL_URL =
-    "http://www.pikminfanon.com/Pikifen/Creating_animations";
-const string AREA_EDITOR_TUTORIAL_URL =
-    "http://www.pikminfanon.com/Pikifen/Creating_areas";
-
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_SAVE_N_SPOTS = 10;
 //The default rotation speed of a mob type.

@@ -306,7 +306,7 @@ void area_editor::process_gui_menu_bar() {
                     "specify the carrying paths, add details, and try it out."
                     "\n\n"
                     "If you need more help on how to use the area editor, "
-                    "check out the tutorial on\n" + AREA_EDITOR_TUTORIAL_URL;
+                    "check out the tutorial in the included manual.";
                 show_message_box(
                     game.display, "Help", "Area editor help",
                     help_str.c_str(), NULL, 0

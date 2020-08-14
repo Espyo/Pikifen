@@ -241,8 +241,8 @@ private:
     void handle_rmb_down(const ALLEGRO_EVENT &ev);
     void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam_xy(const ALLEGRO_EVENT &ev);
-    void reset_cam_zoom(const ALLEGRO_EVENT &ev);
+    void reset_cam_xy();
+    void reset_cam_zoom();
 };
 
 

@@ -1,5 +1,5 @@
 The project's code is licensed under the MIT License (MIT), described below.
-For licenses on the various assets, please read README.txt.
+For licenses on the various assets, please read the user manual's credits.
 
 
 The MIT License (MIT)

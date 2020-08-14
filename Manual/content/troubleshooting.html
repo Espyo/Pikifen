@@ -1,0 +1,84 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Troubleshooting - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Troubleshooting</h1>
+    
+    <p>If something is wrong, this page will try to fix your problem.</p>
+
+    <h2 id="playing">Problems while playing</h2>
+    
+    <dl>
+      <dt><b>Why did it crash?</b></dt>
+      <dd>If you made some content for it and you suspect that that is the problem, please check the <code>User_data/Error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</dd>
+      <dd>
+        If you think the crash is due to a problem with the engine itself, then it could be one of the following:
+        <ul>
+          <li>You're not using the most recent version of the engine, which could have solved that problem. You should try upgrading if you're not up-to-date.</li>
+          <li>The game is running from inside a zip file. Remember that when you download the engine's zip file, you need to unzip everything inside of it into a folder, before you're able to play.</li>
+          <li>It's a problem that I need to fix. Please get in touch with me about it. I'll likely ask you to explain what you were doing when the crash happened, ask you to send me any errors in the <code>User_data/Error_log.txt</code> file, and ask you to send me the crash screenshots in the <code>User_data</code> folder. So you should try to get those ready.</li>
+        </ul>
+      </dd>
+      
+      <dt><b>Why can't I see the game window?</b></dt>
+      <dd>Because windows sometimes break under Windows.</dd>
+      <dd>Open <code>User_data/Options.txt</code>, go to the line with <code>window_pos_hack=false</code>, and change it to <code>window_pos_hack=true</code>.</dd>
+      
+      <dt><b>Why is it running slowly?</b></dt>
+      <dd>Well, it IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.</dd>
+      <dd>You can check the <code>User_data/Options.txt</code> file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.</dd>
+      <dd>If you have created a particularly large area or complex creatures, maybe consider toning them down, since they can have an impact on performance.</dd>
+      
+      <dt><b>Why are some parts of the logic and physics so broken?</b></dt>
+      <dd>Because their code is still under construction, most likely.</dd>
+      
+      <dt><b>Why are some textures black, but not HUD elements?</b></dt>
+      <dd>Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.</dd>
+      
+      <dt><b>Why does the engine think I'm touching the analog stick when I'm not?</b></dt>
+      <dd>You can open <code>User_data/Options.txt</code> and set <code>joystick_min_deadzone</code> to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.</dd>
+    </dl>
+    
+    <h2 id="making">Problems while making</h2>
+    
+    <dl>
+      <dt><b>Why do I see everything in a single line when I open a text file with Notepad?</b></dt>
+      <dd>Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use.</dd>
+      <dd>Install Notepad++ and start using that instead, since it's better in every way.</dd>
+
+      <dt><b>Why are my graphics showing up as black and violet patterns?</b></dt>
+      <dd>
+        That's what the engine shows when it can't open a texture. Make sure you're following these points:
+        <ul>
+          <li>File names are case sensitive. Lowercase and uppercase matter.</li>
+          <li>You need to include the extension. This is the <code>.jpg</code> or <code>.png</code> part of the file name.</li>
+          <li>The engine only finds the image in one folder. General images go in <code>Game_data/Graphics</code>, and textures go in <code>Game_data/Graphics/Textures</code>.</li>
+        </ul>
+      </dd>
+
+      <dt><b>One of my textures is cutting off to black or to garbage, in a repeating pattern.</b></dt>
+      <dd>Your texture's resolution does not use power-of-two numbers. It doesn't happen on all machines, but that's the solution, I guess...</dd>
+
+      <dt><b>I'm having a hard time understanding X.</b></dt>
+      <dd>Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.</dd>
+      <dd>If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.</dd>
+    </dl>
+
+  </div>
+</body>
+
+</html>

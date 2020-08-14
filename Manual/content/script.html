@@ -37,7 +37,7 @@
 
     <p>In this text file, add a <code>script</code> block. Inside of this, we'll be adding our enemy script. For the rest of this tutorial, we'll be creating a very basic (and varied) Red Bulborb.</p>
 
-    <h3 id="state">Creating a state</h3>
+    <h3 id="state">Making a state</h3>
     
     <p>We'll need to start the script with a state. Let's think of the most "normal" state for a Bulborb, to serve as a starting point. That would probably be the sleeping state, right? Most Bulborbs we see in the games are asleep when first met, so it makes sense to start here. You can name a state whatever you want (so long as you don't use spaces), but for the sake of clarity, let's call it <code>sleeping</code>. Ok, now we're going to have to specify what events and actions can take place while in this state. In order for the engine to understand what events/actions belong to this state, we'll need to a block for this state, create a <code>sleeping {</code> line, and the matching <code>}</code> line.</p>
 
@@ -685,7 +685,7 @@
       </tr>
       <tr>
         <th><code>start_height_effect</code></th>
-        <td>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</td>
+        <td>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a fake perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</td>
       </tr>
       <tr>
         <th><code>start_particles</code></th>

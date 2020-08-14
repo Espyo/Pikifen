@@ -471,8 +471,7 @@ void animation_editor::process_gui_menu_bar() {
                     "match what poses), and then create animations, populating "
                     "their frames with the sprites.\n\n"
                     "If you need more help on how to use the animation editor, "
-                    "check out the tutorial on\n" +
-                    ANIMATION_EDITOR_TUTORIAL_URL;
+                    "check out the tutorial in the included manual.";
                 show_message_box(
                     game.display, "Help", "Animation editor help",
                     help_str.c_str(), NULL, 0

@@ -3,16 +3,9 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Documentation update
-        The tutorials should be "making X" instead of "creating a new X"
-        Use the term "make" more, to refer to anything a maker does (instead of "creator")
         Recreate the script and animation tutorials to be like the area one
-        Move the editor controls info to the controls page
-        Figure out what to do with the README and Pikmin Fanon front page too
-            README should only be for things you need to/want to know before downloading
-        Note that:
-            "drain_liquid" also detects bridge sectors now
-            The tutorial links in-engine need to be updated
-            Windows XP is no longer supported
+        Update it for 0.19
+            Note that "drain_liquid" also detects bridge sectors now
     
 Completed tasks (formatted and cherry-picked for use in the next version's changelog)
     ;Changes
@@ -54,10 +47,6 @@ Completed tasks (formatted and cherry-picked for use in the next version's chang
 Next tasks (roughly sorted most important first)
     --- Known problems ---
     
-    
-    --- v0.19.0 ---
-    Misc.
-        Editors's pan_cam, reset_cam_xy, and reset_zoom functions don't need an Allegro event
     
     --- v0.20.0 ---
     Details
@@ -480,6 +469,7 @@ Misc things (so I don't forget)
     For intervals, use the code on the "misc info" text file
     Water depth (Thanks ThyCheshireCat)
     A way to add random variation to the knockback angle of a hitbox
+    The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be addedd to the script (Kman)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP

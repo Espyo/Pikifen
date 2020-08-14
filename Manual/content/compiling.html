@@ -1,0 +1,95 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Compiling - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Compiling</h1>
+    
+    <p>This page will explain how to compile the engine from its source code. If you have downloaded the zip file with the engine already built, in an <code>.exe</code>, then you don't need to do any of this in order to play or make content!</p>
+    
+    <p>To begin, make sure you have downloaded the engine's source code, and you have a C++ compiler.</p>
+    
+    <h2 id="vs2019">Windows - Visual Studio 2019</h2>
+    
+    <ol>
+      <li>Open the VS2019 .sln file with Visual Studio 2019.</li>
+      <li>
+        Compile. If you get any errors, try the following troubleshooting tips:
+        <ul>
+          <li>
+            If you get <code>'min': identifier not found</code> (or <code>'max'</code>):
+            <ul>
+              <li>At the top of the file with the error add, near the other includes, <code>#include &lt;algorithm&gt;</code>. (I try to fix these errors for Windows builds, but I don't do it often, so bear with me!)</li>
+            </ul>
+          </li>
+          <li>
+            If you get tons of <code>expected an identifier</code> and <code>namespace __ has no member --</code> errors:
+            <ul>
+              <li>Try compiling with the Release x64 target.</li>
+            </ul>
+          </li>
+          <li>
+            If you get <code>Element &lt;LanguageStandard&gt; has an invalid value of "Default"</code>:
+            <ul>
+              <li>Project properties, C/C++, Language, C++ Language, C++ Language Standard: Set it to the highest available option, hopefully C++ 17.</li>
+            </ul>
+          </li>
+          <li>
+            If you don't have the Windows 10 SDK:
+            <ul>
+              <li>Right-click the solution, Retarget solution, and choose whatever the most recent option is.</li>
+            </ul>
+          </li>
+          <li>It might only work if, during Visual Studio's installation, you've included <code>MSVC v142 - VS 2019 C++ x64/x86 Build Tools</code> and <code>Windows 10 SDK</code>.</li>
+        </ul>
+      </li>
+    </ol>
+    
+    <h2 id="vs-other">Windows - other version of Visual Studio</h2>
+    
+    <p>Follow the instructions for <a href="#vs2019">Visual Studio 2019</a>, but go to the project properties, General, Platform Toolset, and set it to whatever you have.</p>
+    
+    <h2 id="linux-g++">Linux - G++ or Clang</h2>
+    
+    <ol>
+      <li>
+        Install Allegro 5.2 on your system using the instructions <a href="https://wiki.allegro.cc/index.php?title=Getting_Started">here</a>.
+        <ul>
+          <li>If you are on Ubuntu, I recommend <a href="https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853">this link</a> (but use 5.2 instead of 5.1 in the steps, of course).</li>
+        </ul>
+      </li>
+      <li>On a terminal, go to the engine's <code>Source/gnu_makefile</code> folder and write <code>make</code>.</li>
+    </ol>
+    
+    <ul>
+      <li>If you get linker errors, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean</code> and then <code>make</code> once more.</li>
+      <li>If you prefer to use Clang, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean</code> and then <code>make</code> once more.</li>
+      <li>If you prefer to compile with Allegro 5.0.10 instead, edit the <code>makefile</code> file and add a <code>.0</code> after every <code>5</code> in the <code>LDFLAGS</code> line.
+    </ul>
+    
+    <h2 id="notes">Notes</h2>
+    
+    <p>Note that I mainly develop on Linux, so it's not unusual for the Visual Studio projects to have missing files or some compilation errors. If you get errors:</p>
+    <ul>
+      <li>Try adding any missing <code>.h</code> and <code>.cpp</code> files that are not in the project's files.</li>
+      <li>Try adding <code>#include &lt;algorithm&gt;</code> to the top of any files that complain about <code>min()</code> or <code>max()</code> not existing.</li>
+      <li>Try casting to <code>float</code> or <code>double</code> the parameters used in calls to <code>min()</code> or <code>max()</code>, if you get errors about unsuitable function calls.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

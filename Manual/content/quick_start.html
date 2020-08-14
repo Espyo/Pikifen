@@ -40,7 +40,7 @@
       <li>Use the big button on the right to create your area.</li>
       <li>Use the "Info" mode to give it a name.</li>
       <li>
-        Use the "Layout" mode to create and edit the polygons (also called sectors).
+        Use the "Layout" mode to make the polygons (also called sectors).
         <ul>
           <li>Drag a polygon's vertexes around to give it shape.</li>
           <li>Double click a polygon's lines to create a new vertex.</li>
@@ -49,9 +49,9 @@
           <li>Edges between higher sectors to lower ones make walls.</li>
         </ul>
       </li>
-      <li>Use the "Objects" mode to create and edit the level's objects.</li>
-      <li>Use the "Paths" mode to create and edit the Pikmin's paths, by drawing the path stops and links between them.</li>
-      <li>Use the "Details" mode to create and edit tree shadows.</li>
+      <li>Use the "Objects" mode to make the level's objects.</li>
+      <li>Use the "Paths" mode to make the Pikmin's paths, by drawing the path stops and links between them.</li>
+      <li>Use the "Details" mode to make tree shadows.</li>
     </ol>
 
     <h3 id="areas-info">Further info</h3>
@@ -63,7 +63,7 @@
       <li>Don't overlap lines or create non-simple polygons.</li>
     </ul>
 
-    <p><i>Full area guide: <a href="area.html">Creating areas</a></i></p>
+    <p><i>Full area guide: <a href="area.html">Making areas</a></i></p>
 
     <h2 id="mob-types">Object types</h2>
 
@@ -71,7 +71,7 @@
 
     <p>Red Pikmin is a <b>type</b> of Pikmin, Wollywog is a <b>type</b> of enemy, Captain Olimar is a <b>type</b> of leader, and wood bridge is a <b>type</b> of bridge. You then place in an area several instances of Wollywog, several instances of wood bridge, (hopefully) one instance of Captain Olimar, etc. Each type has its own properties (color, health, script, etc.)</p>
 
-    <h3 id="mob-types-how-to">How to create an object type</h3>
+    <h3 id="mob-types-how-to">How to make an object type</h3>
 
     <p>Feel free to check or copy the existing object types for references and ideas.</p>
 
@@ -96,7 +96,7 @@
       <li>In order for your object to attack or be attacked, you need to specify its <code>target_type</code>, <code>can_hunt</code>, and <code>can_hurt</code> properties.</li>
     </ul>
 
-    <p><i>Full object type guide: <a href="mob_type.html">Creating object types</a></i></p>
+    <p><i>Full object type guide: <a href="mob_type.html">Making object types</a></i></p>
 
     <h2 id="animations">Animations</h2>
 
@@ -104,7 +104,7 @@
 
     <p>Animations are made up of <b><a href="http://en.wikipedia.org/wiki/Animation">frames</a></b> that are displayed in rapid succession. Each frame has a <b>sprite</b>, and info about how long it lasts. The engine reads sprites from sections of one or more images (called spritesheets). Besides the image, each sprite has <b>hitboxes</b>, which are connected to <b>body parts</b> (e.g. body, head, tail, etc.), and define whether that body part is currently damageable, causing damage, or being ignored. These hit"boxes" are actually cylinders.</p>
 
-    <h3 id="animations-how-to">How to create animations</h3>
+    <h3 id="animations-how-to">How to make animations</h3>
 
     <p>Feel free to check or copy existing animations and images for references and ideas.</p>
 
@@ -112,16 +112,16 @@
     <li>Create the images that will be used for the object's sprites. In every sprite's image, the object must be facing the right.</li>
     <li>Open the game, enter the animation editor.</li>
     <li>Use the big button on the right to load the object type whose animations you want to edit. Create its folder in <code>Game_data/Types/&lt;category&gt;</code> if it doesn't exist.</li>
-    <li>Use the "Edit body parts" mode to create and edit the list of relevant body parts.</li>
+    <li>Use the "Edit body parts" mode to make the list of relevant body parts.</li>
     <li>
-      Use the "Edit sprites" mode to create and edit the sprites to be used in future animations's frames.
+      Use the "Edit sprites" mode to make the sprites to be used in future animations's frames.
       <ul>  
         <li>Use the big button at the top to select a sprite or create a new one.</li>
         <li>Use the "Edit hitboxes" button to specify where each body part's hitbox is and what it does. They can be dragged around and resized with the left mouse button.</li>
       </ul>
     </li>
     <li>
-      Use the "Edit animations" mode to create and edit the animations.
+      Use the "Edit animations" mode to make the animations.
       <ul>
         <li>Use the big button at the top to select an animation or create a new one.</li>
       </ul>
@@ -136,7 +136,7 @@
       <li>When making animations for Pikmin, use the "Edit Pikmin top" button on an animation's data to specify where the leaf/bud/flower is on that frame.</li>
     </ul>
 
-    <p><i>Full animation guide: <a href="animation.html">Creating animations</a></i></p>
+    <p><i>Full animation guide: <a href="animation.html">Making animations</a></i></p>
 
     <h2 id="scripts">Scripts</h2>
 
@@ -144,7 +144,7 @@
 
     <p>Scripts use an event-driven <a href="http://en.wikipedia.org/wiki/finite-state_machine">finite-state machine</a>. An object is always in one of several <b>states</b> (e.g. sleeping, going home, biting). In this state, it can respond to a series of <b>events</b> (e.g. when it sees a Pikmin, when it reaches its home, when it loses health). Its response consists of a list of <b>actions</b> (e.g. changing animation, changing state, swallowing Pikmin in its mouth, walk somewhere). Only enemies and custom objects use the scripting feature.</p>
 
-    <h3 id="scrpts-how-to">How to create a script</h3>
+    <h3 id="scrpts-how-to">How to make a script</h3>
 
     <p>Feel free to check or copy existing scripts for references and ideas. It is recommended to <a href="#mob-types">create the object</a> you want before writing the script.</p>
 

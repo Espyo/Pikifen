@@ -1559,7 +1559,7 @@ void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(!game.options.editor_mmb_pan) {
-        reset_cam_xy(ev);
+        reset_cam_xy();
     }
 }
 
@@ -1573,7 +1573,7 @@ void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(!game.options.editor_mmb_pan) {
-        reset_cam_zoom(ev);
+        reset_cam_zoom();
     }
 }
 
@@ -1636,7 +1636,7 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(game.options.editor_mmb_pan) {
-        reset_cam_xy(ev);
+        reset_cam_xy();
     }
 }
 
@@ -1650,7 +1650,7 @@ void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
     
     if(game.options.editor_mmb_pan) {
-        reset_cam_zoom(ev);
+        reset_cam_zoom();
     }
 }
 
@@ -1684,19 +1684,15 @@ void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
 
 /* ----------------------------------------------------------------------------
  * Resets the camera's X and Y coordinates.
- * ev:
- *   Event to handle.
  */
-void area_editor::reset_cam_xy(const ALLEGRO_EVENT &ev) {
+void area_editor::reset_cam_xy() {
     game.cam.target_pos = point();
 }
 
 
 /* ----------------------------------------------------------------------------
  * Resets the camera's zoom.
- * ev:
- *   Event to handle.
  */
-void area_editor::reset_cam_zoom(const ALLEGRO_EVENT &ev) {
+void area_editor::reset_cam_zoom() {
     zoom_with_cursor(1.0f);
 }

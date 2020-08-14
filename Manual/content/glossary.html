@@ -18,7 +18,7 @@
     
     <h1>Glossary</h1>
     
-    <p>A glossary of terms used in <i>Pikifen</i>, both for casual play, and for creating content. This glossary will not include terms popular in the <i>Pikmin</i> franchise, since you can find more about those on <a href="https://www.pikminwiki.com">Pikipedia</a>, and will also not focus on terms used in the engine's code, even though most of them match what you'd read outside of the code.</p>
+    <p>A glossary of terms used in <i>Pikifen</i>, both for casual play, and for making content. This glossary will not include terms popular in the <i>Pikmin</i> franchise, since you can find more about those on <a href="https://www.pikminwiki.com">Pikipedia</a>, and will also not focus on terms used in the engine's code, even though most of them match what you'd read outside of the code.</p>
     
     <dl>
       <dd><i><b>Navigation:</i></b> <a href="#.23">#</a> <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a> <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a> <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a> <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a> <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a> <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a> <a href="#Y">Y</a> <a href="#Z">Z</a></dd>
@@ -36,7 +36,7 @@
     <dl>
       <dt>Animation</dt>
       <dd>A series of <a href="#F">frames</a> that change the way an object looks. When put together nicely, these make it look like the object is walking, growling, chomping, etc. Animations are independent of what the object is actually doing. For instance, it can be walking, but it could be frozen in appearance, which would make it appear to slide. That said, accurate animations are necessary for gameplay reasons, like <a href="#H">hitboxes</a>.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
       <dt>Assert, Assertion</dt>
@@ -48,12 +48,12 @@
     <dl>
       <dt>Blackout</dt>
       <dd>A <a href="#W">weather</a> effect that makes everything dark (to different degrees) except for the leaders and a few specific objects, which cast light.</dd>
-      <dd>Further reading: <a href="weather.html">Creating weather</a>.</dd>
+      <dd>Further reading: <a href="weather.html">Making weather</a>.</dd>
     </dl>
     <dl>
       <dt>Body part</dt>
       <dd>Objects can have a series of body parts, which move around when it is <a href="#A">animating</a>. When a Pikmin latches on to a leg, for instance, it will follow the leg around as the body part moves. In an animation, body parts are directed by <a href="#H">hitboxes</a>.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
       <dt>Bitmap</dt>
@@ -80,11 +80,6 @@
       <dt>Coordinates</dt>
       <dd>Numbers representing where in the world the object is. X refers to where it is horizontally on west/east &#8211; a smaller X means more to the west, and a larger one more to the east. Y is north/south, with a lower Y corresponding to higher north. Z is the vertical coordinate, with a higher Z being higher up in the air.</dd>
     </dl>
-    <dl>
-      <dt>Creator tool</dt>
-      <dd>Any tool that exists to help creators create content. There are tools that speed up the gameplay, tools that show <a href="#H">hitbox</a> locations, etc.</dd>
-      <dd>Further reading: <a href="maker_toolkit.html">Creator toolkit</a>.</dd>
-    </dl>
     
     <h2 id="D">D</h2>
 
@@ -98,11 +93,11 @@
     <dl>
       <dt>Edge</dt>
       <dd>In an area's layout, edges are the lines that delimit a <a href="#S">sector</a>. An edge can have sectors on either side, and if they are different heights, that creates a wall.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Enemy</dt>
-      <dd>Enemy is a general term for the creatures that attack or are attacked by Pikmin. Although it makes little sense, one could create a fire geyser "enemy", and it would be technically valid.</dd>
+      <dd>Enemy is a general term for the creatures that attack or are attacked by Pikmin. Although it makes little sense, one could make a fire geyser "enemy", and it would be technically valid.</dd>
     </dl>
     <dl>
       <dt>Error</dt>
@@ -119,17 +114,17 @@
     <dl>
       <dt>Fade</dt>
       <dd>In an area's layout, a "fade" <a href="#S">sector</a> refers to a sector whose only purpose is to fade the <a href="#T">textures</a> of the sectors around it, transitioning smoothly from one neighbor to the other.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Frame</dt>
       <dd>A represents a specific point during an <a href="#A">animation</a>. In this point, a certain <a href="#S">sprite</a> is shown, and different frames can have different durations.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
       <dt>Frame signal</dt>
       <dd>When something needs to happen during a specific <a href="#F">frame</a> of <a href="#A">animation</a>, a frame signal <a href="#E">event</a> can be thrown, and handled in the <a href="#S">script</a>.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>, <a href="mob_type.html">Object script</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>, <a href="mob_type.html">Object script</a>.</dd>
     </dl>
     
     <h2 id="G">G</h2>
@@ -144,7 +139,7 @@
     <dl>
       <dt>Hazard</dt>
       <dd>Like in the canon games, a hazard refers to the concept of danger, not to a physical object. Electricity (danger of being shocked), fire (danger of burning up), etc. are all hazards, but electrical wires, fire geysers, and so on are just obstacles whose attacks involve hazards.</dd>
-      <dd>Further reading: <a href="hazard.html">Creating hazards</a>.</dd>
+      <dd>Further reading: <a href="hazard.html">Making hazards</a>.</dd>
     </dl>
     <dl>
       <dt>Health</dt>
@@ -153,7 +148,7 @@
     <dl>
       <dt>Hitbox</dt>
       <dd>A hitbox is a part of a <a href="#S">sprite</a> that represents where a <a href="#B">body part</a> is at that moment. It also contains information about how that body part relates to combat at that moment &#8211; the body part could be vulnerable to enemy attacks, it could be causing damage of its own, etc.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
       <dt>Home</dt>
@@ -199,11 +194,16 @@
     <dl>
       <dt>Liquid</dt>
       <dd>Water, mud, lava, etc. are all liquids. If a <a href="#S">sector</a> has an associated liquid, it will change the sector's appearance to have a water surface <a href="#T">texture</a>, among other things. If a liquid has an associated <a href="#H">hazard</a>, <a href="#O">objects</a> vulnerable to that hazard can get affected when they walk on the sector.</dd>
-      <dd>Further reading: <a href="hazard.html">Creating hazards</a>.</dd>
+      <dd>Further reading: <a href="hazard.html">Making hazards</a>.</dd>
     </dl>
     
     <h2 id="M">M</h2>
 
+    <dl>
+      <dt>Maker tool</dt>
+      <dd>Any tool that exists to help makers make content. There are tools that speed up the gameplay, tools that show <a href="#H">hitbox</a> locations, etc.</dd>
+      <dd>Further reading: <a href="maker_toolkit.html">Maker toolkit</a>.</dd>
+    </dl>
     <dl>
       <dt>Message</dt>
       <dd>One of the object <a href="#A">actions</a> involves sending a message to other objects. This message is in plain text, and could be whatever you want. The receivers can either be objects that have an <a href="#O">object link</a>, or all nearby objects, up to a specified distance.</dd>
@@ -231,7 +231,7 @@
     <dl>
       <dt>Object type</dt>
       <dd>An object type contains data about what an object of its type should look and behave like. Red Pikmin look different from Blue Pikmin, so these two are different object types.</dd>
-      <dd>Further reading: <a href="mob_type.html">Creating object types</a>.</dd>
+      <dd>Further reading: <a href="mob_type.html">Making object types</a>.</dd>
     </dl>
     <dl>
       <dt>Object category</dt>
@@ -257,22 +257,22 @@
     <dl>
       <dt>Particle</dt>
       <dd>A particle is a small, simple thing that shows up on the game world, disappears with time, and follows a very simple behavior. They are used for graphical effects and ambiance. For instance, because each particle is its own thing, you can have a Wollywog's landing cause several smoke particles to appear, each moving away from the creature, to simulate dust picking up after a thud.</dd>
-      <dd>Further reading: <a href="particle.html">Creating particle generators</a>.</dd>
+      <dd>Further reading: <a href="particle.html">Making particle generators</a>.</dd>
     </dl>
     <dl>
       <dt>Particle generator</dt>
       <dd>Responsible for spawning <a href="#P">particles</a> over time.</dd>
-      <dd>Further reading: <a href="particle.html">Creating particle generators</a>.</dd>
+      <dd>Further reading: <a href="particle.html">Making particle generators</a>.</dd>
     </dl>
     <dl>
       <dt>Path stop</dt>
       <dd>When an <a href="#O">object</a> is following a path, it goes from one stop to another, to another, until its destination. It goes from stop A to stop B in a straight line. It can only cross stops that are linked with <a href="#P">path stop links</a>.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Path stop link</dt>
       <dd>Path stop links refer to the connection between two path stops. This means an object can go from stop A to stop B when following a path. Path stop links can either be one-way or bidirectional.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     
     <h2 id="Q">Q</h2>
@@ -283,7 +283,7 @@
     <dl>
       <dt>Ramp</dt>
       <dd>Although <a href="#S">sectors</a> in the engine have a fixed height, and hence, cannot ramp smoothly from one height to another, the engine doesn't have real ramps. However, a convincing alternative is to just use stairs. Any wall that is 50 units or less in height can make an <a href="#O">object</a> walk up or down the sectors smoothly as they move forward and back.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Rotation</dt>
@@ -304,7 +304,7 @@
     <dl>
       <dt>Sector</dt>
       <dd>An area's layout is made of up of sectors. Each sector is a polygon (which is composed of <a href="#E">edges</a> and <a href="#V">vertexes</a>), which represent a floor an <a href="#O">object</a> can walk on. Neighboring sectors of different heights make a wall.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Spawn</dt>
@@ -321,8 +321,8 @@
     </dl>
     <dl>
       <dt>Sprite</dt>
-      <dd>When creating <a href="#A">animations</a>, a sprite is a <a href="#B">bitmap</a> that represents how the animation looks at a specific point in time. Sprites are used in <a href="#F">frames</a>, and one sprite can be used in more than one frame. For instance, an image of an enemy with its leg up could represent part of its walking animation, growling animation, dying animation, etc.</dd>
-      <dd>Further reading: <a href="animation.html">Creating animations</a>.</dd>
+      <dd>When making <a href="#A">animations</a>, a sprite is a <a href="#B">bitmap</a> that represents how the animation looks at a specific point in time. Sprites are used in <a href="#F">frames</a>, and one sprite can be used in more than one frame. For instance, an image of an enemy with its leg up could represent part of its walking animation, growling animation, dying animation, etc.</dd>
+      <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
       <dt>Spritesheet</dt>
@@ -340,7 +340,7 @@
     <dl>
       <dt>Status</dt>
       <dd>An <a href="#O">object</a> can be under the influence of any number of statuses. These affect the object's stats. For instance, if a Pikmin is under the "burning" status effect, it loses health at a steady pace. If it is under the "spicy" status effect, it gains a boost in speed until the status wears off.</dd>
-      <dd>Further reading: <a href="status.html">Creating status effects</a>.</dd>
+      <dd>Further reading: <a href="status.html">Making status effects</a>.</dd>
     </dl>
     <dl>
       <dt>Stop</dt>
@@ -380,12 +380,12 @@
     <dl>
       <dt>Tree shadow</dt>
       <dd>A tree shadow refers to a <a href="#T">texture</a> overlaid on the area that represents the shadow of a tree and its leaves. Despite the name, it can be a shadow of anything, or even any texture at all.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Triangle</dt>
       <dd>Internally, a <a href="#S">sector</a> is made up of triangles, since those are needed for rendering and physics. They are generated automatically, and are not controllable by the user. That said, the disposition of the triangles can help explain the twisted look of some <a href="#F">fade sectors</a>, as well as other minor quirks.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     <dl>
       <dt>Type</dt>
@@ -404,7 +404,7 @@
     <dl>
       <dt>Vertex</dt>
       <dd>A <a href="#S">sector</a> is made up of <a href="#E">edges</a>, and each edge is determined by a starting point and an end point. These points are called vertexes. A vertex can serve as an endpoint for one or several edges.</dd>
-      <dd>Further reading: <a href="area.html">Creating areas</a>.</dd>
+      <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
     </dl>
     
     <h2 id="W">W</h2>
@@ -412,7 +412,7 @@
     <dl>
       <dt>Weather</dt>
       <dd>The current weather controls more than just the rain: it controls the lighting of the area, from the sunlight throughout the day, to the strength of the shadows, to how foggy it is.</dd>
-      <dd>Further reading: <a href="weather.html">Creating weather</a>.</dd>
+      <dd>Further reading: <a href="weather.html">Making weather</a>.</dd>
     </dl>
     <dl>
       <dt>World unit</dt>

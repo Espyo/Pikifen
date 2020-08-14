@@ -232,7 +232,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         NULL, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
-        "FAQ & troubleshooting section of the readme file. Thanks!",
+        "FAQ & troubleshooting section of the included manual. Thanks!",
         NULL,
         ALLEGRO_MESSAGEBOX_ERROR
     );
