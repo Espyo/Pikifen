@@ -1588,7 +1588,7 @@ void editor::transformation_widget::draw(
     get_locations(center, size, angle, handles, &radius, NULL);
     
     //Draw the rotation handle.
-    if(angle && !std::isnan(radius)) {
+    if(angle && radius >= 0.0f) {
         al_draw_circle(
             center->x, center->y, radius,
             al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS * zoom
@@ -1672,7 +1672,12 @@ void editor::transformation_widget::get_locations(
         );
     }
     
-    *radius = dist(point(), size_to_use).to_float() / 2.0f;
+    float diameter = dist(point(), size_to_use).to_float();
+    if(diameter == 0.0f) {
+        *radius = 0.0f;
+    } else {
+        *radius = diameter / 2.0f;
+    }
     
     if(transform) *transform = transform_to_use;
 }
