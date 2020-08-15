@@ -23,16 +23,24 @@
     
     <h2 id="how-to-play">How to play</h2>
     
-    <p>To play, just choose the "Play" option from the main menu and pick an area. The following pages might help with more specific topics:</p>
+    <p>To play, just choose the "Play" option from the main menu and pick an area, really.</p>
+    
+    <p>More technically, in order to play a game on the engine, there must be data for that game in the engine's <code>Game_data folder</code>. Luckily, the engine currently comes with some demo content that can be played right off the bat, although you can also download or create any fan-made content and place it in the game data folder. Because the engine is still in development, the concept of a "game" isn't much more than "a collection of areas, enemies, and Pikmin". Upon running the engine, it will read the information in the game data folder and instantly boot up the game. Currently, the main menu will be the same all the time, regardless of game, and choosing the "Play" option will prompt you on which available area you wish to play (if there is only one area, it will be loaded automatically). To note is that some downloaded content might depend on other content. For instance, if an area has an enemy called "Green_Bulborb", but you do not have any "Green_Bulborb" enemy in you game data, the area will not load properly.</p>
+
+    <p>In-game, you are allowed to control the leaders and play around like in the canon games. At the moment, there is no concept of an "end", so nothing will trigger the "end" of the level, though losing all leaders will take you back to the main menu. Depending on the mechanics that are implemented or missing, some behaviors might work, some might not, and some might be working incorrectly.</p>
+
+    <p>The minimum requirements to run the engine aren't that high; old machines should run it just fine without many performance problems. But it does depend on what is going on: a simple area with just a leader will run much better than a complex area with 100 Pikmin on the field. Some <a href="options.html">options</a> in the options file can be set to help with performance, at the cost of appearance, while others just tweak the experience based on your preferences.</p>
+    
+    <p>The following pages that go more in-depth about specific topics:</p>
     <ul>
       <li><a href="controls.html">Controls</a></li>
-      <li><a href="options.html">Options</a> - If you need to fine-tune the options, this page will explain them in detail.</li>
+      <li><a href="options.html">Options</a></li>
       <li><a href="tips.html">Tips</a></li>
     </ul>
     
     <h2 id="how-to-make">How to make</h2>
     
-    <p>You can make any content to be run on the engine, and the ways to do so vary, but are in general made to be easy and intuitive. Enemies, Pikmin types, and other such creations can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic. The following pages lead to tutorials on how to make different content for the engine:</p>
+    <p>You can make any content to be run in the engine, and the ways to do so vary, but are in general made to be easy and intuitive. Enemies, Pikmin types, and other such creations can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic. The following pages lead to tutorials on how to make different content for the engine:</p>
     <ul>
       <li><a href="quick_start.html">Quick start guide</a> – for users who need help understanding the basics, but believe they can figure out the rest on their own.</li>
       <li>In-depth guides:</li>
@@ -59,12 +67,23 @@
     <h2 id="other">Other pages</h2>
     
     <ul>
-      <li><a href="faq.html">Frequently Asked Questions</a></li>
-      <li><a href="troubleshooting.html">Troubleshooting</a></li>
-      <li><a href="compiling.html">Compiling</a></li>
-      <li><a href="changelog.html">Changelog</a></li>
-      <li><a href="credits.html">Credits</a></li>
-      <li><a href="glossary.html">Glossary</a></li>
+      <li>
+        Useful info for playing and making:
+        <ul>
+          <li><a href="troubleshooting.html">Troubleshooting</a></li>
+          <li><a href="glossary.html">Glossary</a></li>
+        </ul>
+      </li>
+      <li>
+        Information about the engine:
+        <ul>
+          <li><a href="compiling.html">Compiling</a></li>
+          <li><a href="faq.html">Frequently asked questions</a></li>
+          <li><a href="changelog.html">Changelog</a></li>
+          <li><a href="history.html">History and roadmap</a></li>
+          <li><a href="credits.html">Credits</a></li>
+        </ul>
+      </li>
     </ul>
     
   </div>
