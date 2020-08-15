@@ -359,16 +359,16 @@ private:
     set<vertex*> selected_vertexes;
     //Is the user currently performing a rectangle box?
     bool selecting;
+    //Angle of the selection.
+    float selection_angle;
+    //Center of the selection.
+    point selection_center;
     //The selection's alpha depends on this value.
     float selection_effect;
     //Point where the selection is currently at.
     point selection_end;
     //Current selection filter.
     unsigned char selection_filter;
-    //Angle of the selection.
-    float selection_angle;
-    //Center of the selection.
-    point selection_center;
     //Has the user agreed to homogenize the selection?
     bool selection_homogenized;
     //Angle of the selection, before it got transformed.

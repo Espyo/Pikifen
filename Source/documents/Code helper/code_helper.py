@@ -80,9 +80,9 @@ def get_new_png():
     #TODO crush them in this script
     aux = system_call("git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png)'")
     if len(aux) == 0:
-        print("No new PNGs.")
+        print("No altered PNGs.")
     else:
-        print("New PNGs:")
+        print("Altered PNGs:")
         for line in aux.splitlines():
             print("  " + line)
     
@@ -92,9 +92,9 @@ def get_new_png():
 def get_new_svg():
     aux = system_call("git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'")
     if len(aux) == 0:
-        print("No new SVGs.")
+        print("No altered SVGs.")
     else:
-        print("New SVGs:")
+        print("Altered SVGs:")
         for line in aux.splitlines():
             print("  " + line)
     
@@ -156,8 +156,8 @@ if __name__=="__main__":
         print("1. Change engine version numbers in const.h/resource files")
         print("2. Get new/deleted source files (for Visual Studio)")
         print("3. Get new textures")
-        print("4. Get new PNG files")
-        print("5. Get new SVG files")
+        print("4. Get altered PNG files")
+        print("5. Get altered SVG files")
         print("6. Find problems in code")
         print("Q. Quit")
         option = input()

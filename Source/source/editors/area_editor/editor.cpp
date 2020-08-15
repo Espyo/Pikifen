@@ -85,6 +85,7 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
+    quick_play_cam_z(1.0f),
     backup_timer(game.options.area_editor_backup_interval),
     can_load_backup(false),
     can_reload(false),
@@ -116,8 +117,7 @@ area_editor::area_editor() :
     selection_orig_angle(0.0f),
     show_closest_stop(false),
     show_path_preview(false),
-    show_reference(true),
-    quick_play_cam_z(1.0f) {
+    show_reference(true) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {
@@ -542,14 +542,11 @@ void area_editor::finish_circle_sector() {
  * Finishes a vertex moving procedure.
  */
 void area_editor::finish_layout_moving() {
-    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
-    
     unordered_set<sector*> affected_sectors;
     get_affected_sectors(selected_vertexes, affected_sectors);
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
     unordered_set<sector*> merge_affected_sectors;
-    size_t vertex_amount = selected_vertexes.size();
     
     //Find merge vertexes and edges to split, if any.
     for(auto v : selected_vertexes) {
@@ -780,8 +777,6 @@ void area_editor::finish_new_sector_drawing() {
         return;
     }
     
-    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
-    
     //This is the basic idea: create a new sector using the
     //vertexes provided by the user, as a "child" of an existing sector.
     
@@ -946,7 +941,6 @@ void area_editor::goto_problem() {
     case EPT_NONE:
     case EPT_NONE_YET: {
         return;
-        break;
         
     } case EPT_INTERSECTING_EDGES: {
 
@@ -1421,11 +1415,9 @@ void area_editor::pick_texture(
             //File doesn't belong to the folder.
             status_text = "The chosen image is not in the textures folder!";
             return;
-            break;
         } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
             return;
-            break;
         } case FILE_DIALOG_RES_SUCCESS: {
             final_name = f[0];
             status_text = "Picked an image successfully.";
@@ -2750,7 +2742,6 @@ void area_editor::split_sector_with_drawing() {
     
     //Create the new sector, empty.
     sector* new_sector = create_sector_for_layout_drawing(working_sector);
-    size_t new_sector_nr = game.cur_area_data.sectors.size() - 1;
     
     //Connect the edges to the sectors.
     unsigned char new_sector_side = (is_new_clockwise ? 1 : 0);

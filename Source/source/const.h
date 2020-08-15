@@ -31,7 +31,7 @@ using std::string;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 18;
+const unsigned char VERSION_MINOR = 19;
 const unsigned char VERSION_REV   = 0;
 
 

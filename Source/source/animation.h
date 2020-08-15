@@ -101,7 +101,7 @@ public:
         const point &b_size, const vector<hitbox> &h
     );
     sprite(const sprite &s2);
-    const sprite &operator=(const sprite &s2);
+    sprite &operator=(const sprite &s2);
     void create_hitboxes(
         animation_database* const adb,
         const float height = 0, const float radius = 0
@@ -156,7 +156,7 @@ public:
         const size_t loop_frame = 0, const unsigned char hit_rate = 100
     );
     animation(const animation &a2);
-    const animation &operator=(const animation &a2);
+    animation &operator=(const animation &a2);
 };
 
 
@@ -205,7 +205,7 @@ public:
     
     animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);
-    const animation_instance &operator=(const animation_instance &ai2);
+    animation_instance &operator=(const animation_instance &ai2);
     
     void start();
     void skip_ahead_randomly();

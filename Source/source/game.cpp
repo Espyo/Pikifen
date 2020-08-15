@@ -41,9 +41,11 @@ game_class::game_class() :
     win_fullscreen(options_struct::DEF_WIN_FULLSCREEN),
     win_h(options_struct::DEF_WIN_H),
     win_w(options_struct::DEF_WIN_W),
+    voice(nullptr),
     cur_state(nullptr),
-    reset_delta_t(true),
-    voice(nullptr) {
+    logic_queue(nullptr),
+    logic_timer(nullptr),
+    reset_delta_t(true) {
     
     team_internal_names[MOB_TEAM_NONE] = "none";
     team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
@@ -108,7 +110,6 @@ string game_class::get_cur_state_name() const {
  * etc.
  */
 void game_class::main_loop() {
-    bool cursor_in_window = true;
     //Used to calculate the time difference between the current and last frames.
     double prev_frame_time = 0.0;
     ALLEGRO_EVENT ev;

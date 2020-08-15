@@ -65,7 +65,7 @@ animation::animation(const animation &a2) :
  * a2:
  *   The other animation.
  */
-const animation &animation::operator=(const animation &a2) {
+animation &animation::operator=(const animation &a2) {
     if(this != &a2) {
         name = a2.name;
         frames = a2.frames;
@@ -289,7 +289,7 @@ animation_instance::animation_instance(const animation_instance &ai2) :
  * ai2:
  *   The other animation instance.
  */
-const animation_instance &animation_instance::operator=(
+animation_instance &animation_instance::operator=(
     const animation_instance &ai2
 ) {
     if(this != &ai2) {
@@ -531,7 +531,7 @@ void sprite::create_hitboxes(
  * s2:
  *   The other sprite.
  */
-const sprite &sprite::operator=(const sprite &s2) {
+sprite &sprite::operator=(const sprite &s2) {
     if(this != &s2) {
         name = s2.name;
         parent_bmp = NULL;

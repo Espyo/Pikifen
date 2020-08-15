@@ -58,10 +58,10 @@ public:
     point leader_cursor_w;
     //List of all mobs in the area.
     mob_lists mobs;
-    //Manager of all particles.
-    particle_manager particles;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+    //Manager of all particles.
+    particle_manager particles;
     //Path manager.
     path_manager path_mgr;
     //All droplets of precipitation.
@@ -133,14 +133,6 @@ private:
     
     //Control ID for player 1's cancel button. Cache for convenience.
     size_t cancel_control_id;
-    //Ligthten player 1's cursor by this due to leader/cursor height difference.
-    float cursor_height_diff_light;
-    //Movement of player 1's cursor via non-mouse means.
-    movement_struct cursor_movement;
-    //Spots the cursor has been through. Used for the faint trail left behind.
-    vector<point> cursor_spots;
-    //Time left until the position of the cursor is saved on the vector.
-    timer cursor_save_timer;
     //Points to an interactable close enough for player 1 to use, if any.
     interactable* close_to_interactable_to_use;
     //Points to an Onion close enough for player 1 to open, if any.
@@ -149,6 +141,14 @@ private:
     pikmin* close_to_pikmin_to_pluck;
     //Points to a ship close enough for player 1 to heal in, if any.
     ship* close_to_ship_to_heal;
+    //Ligthten player 1's cursor by this due to leader/cursor height difference.
+    float cursor_height_diff_light;
+    //Movement of player 1's cursor via non-mouse means.
+    movement_struct cursor_movement;
+    //Spots the cursor has been through. Used for the faint trail left behind.
+    vector<point> cursor_spots;
+    //Time left until the position of the cursor is saved on the vector.
+    timer cursor_save_timer;
     //What day it is, in-game.
     size_t day;
     //Is input enabled, for reasons outside the ready_for_input variable?

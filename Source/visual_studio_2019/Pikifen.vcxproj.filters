@@ -22,9 +22,6 @@
     <Filter Include="Header Files\editors\area_editor">
       <UniqueIdentifier>{474be91e-8a30-415d-8c50-66d7d5ffd30c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\LAFI">
-      <UniqueIdentifier>{e8aecf53-bfc7-42d6-84ae-0ef8736e07fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\mob_categories">
       <UniqueIdentifier>{906d8334-4470-472f-a044-8aa67f3b7549}</UniqueIdentifier>
     </Filter>
@@ -49,9 +46,6 @@
     <Filter Include="Source Files\editors\area_editor">
       <UniqueIdentifier>{bc32e712-39c3-427c-882a-8ea49fde1b86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\LAFI">
-      <UniqueIdentifier>{5002db25-7051-436d-94d1-6e6dc2b965c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\mob_categories">
       <UniqueIdentifier>{c7e82f34-e7ac-4b97-a7f8-2fdc0e7ccbf5}</UniqueIdentifier>
     </Filter>
@@ -67,6 +61,12 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{4f6a75e4-d7b2-4167-b6d3-3364d424a4e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\imgui">
+      <UniqueIdentifier>{52b2f606-563c-49ac-9a02-659db7bb88a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{1b0037dc-6d06-49d9-be94-65c326ca8fca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -77,48 +77,6 @@
     </ClInclude>
     <ClInclude Include="..\source\editors\area_editor\editor.h">
       <Filter>Header Files\editors\area_editor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\angle_picker.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\button.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\checkbox.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\const.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\frame.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\gui.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\image.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\label.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\minor.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\radio_button.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\scrollbar.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\style.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\textbox.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\LAFI\widget.h">
-      <Filter>Header Files\LAFI</Filter>
     </ClInclude>
     <ClInclude Include="..\source\mob_categories\bridge_category.h">
       <Filter>Header Files\mob_categories</Filter>
@@ -321,19 +279,10 @@
     <ClInclude Include="..\source\animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\backtrace.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\code_debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\controls.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\data_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\drawing.h">
@@ -355,9 +304,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\init.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\interval.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\liquid.h">
@@ -394,9 +340,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\status.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\vars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\weather.h">
@@ -456,6 +399,51 @@
     <ClInclude Include="..\source\mob_script_action.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\utils\backtrace.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\code_debug.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\data_file.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imconfig.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_impl_allegro5.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_internal.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_stdlib.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_rectpack.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_textedit.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_truetype.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\options.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\utils\imgui_utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\editors\animation_editor\drawing.cpp">
@@ -467,12 +455,6 @@
     <ClCompile Include="..\source\editors\animation_editor\event_handling.cpp">
       <Filter>Source Files\editors\animation_editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor\gui_functions.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor\loading.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\editors\area_editor\drawing.cpp">
       <Filter>Source Files\editors\area_editor</Filter>
     </ClCompile>
@@ -481,51 +463,6 @@
     </ClCompile>
     <ClCompile Include="..\source\editors\area_editor\event_handling.cpp">
       <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\gui_functions.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\loading.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\angle_picker.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\button.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\checkbox.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\frame.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\gui.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\image.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\label.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\minor.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\radio_button.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\scrollbar.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\style.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\textbox.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\LAFI\widget.cpp">
-      <Filter>Source Files\LAFI</Filter>
     </ClCompile>
     <ClCompile Include="..\source\mob_categories\bridge_category.cpp">
       <Filter>Source Files\mob_categories</Filter>
@@ -728,13 +665,7 @@
     <ClCompile Include="..\source\animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\code_debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\controls.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\data_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\drawing.cpp">
@@ -756,9 +687,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\init.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\interval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\liquid.cpp">
@@ -798,9 +726,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\status.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\vars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\weather.cpp">
@@ -856,6 +781,54 @@
     </ClCompile>
     <ClCompile Include="..\source\mob_script_action.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\code_debug.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\data_file.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor\gui.cpp">
+      <Filter>Source Files\editors\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\geometry_logic.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor\gui.cpp">
+      <Filter>Source Files\editors\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_demo.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_draw.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_impl_allegro5.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_stdlib.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob_physics.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\options.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\utils\imgui_utils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

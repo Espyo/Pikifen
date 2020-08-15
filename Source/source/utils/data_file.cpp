@@ -343,7 +343,7 @@ size_t data_node::load_node(
  * dn2:
  *   Node to copy from.
  */
-const data_node &data_node::operator=(const data_node &dn2) {
+data_node &data_node::operator=(const data_node &dn2) {
     if(this != &dn2) {
         name = dn2.name;
         value = dn2.value;

@@ -105,7 +105,7 @@ public:
     explicit data_node(const string &file_name);
     data_node(const string &name, const string &value);
     data_node(const data_node &dn2);
-    const data_node &operator=(const data_node &dn2);
+    data_node &operator=(const data_node &dn2);
     ~data_node();
 
 private:

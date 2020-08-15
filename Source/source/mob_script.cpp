@@ -529,7 +529,6 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
  */
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     size_t n_new_states = node->get_nr_of_children();
-    size_t old_n_states = states->size();
     
     //Let's save the states now, so that the state switching events
     //can know what numbers the events they need correspond to.

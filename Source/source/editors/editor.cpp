@@ -8,6 +8,8 @@
  * Editor-related functions.
  */
 
+#include <algorithm>
+
 #include "editor.h"
 
 #include "../drawing.h"
@@ -55,12 +57,12 @@ editor::editor() :
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
-    unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
-    special_input_focus_controller(0),
     state(0),
     sub_state(0),
+    unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     zoom_max_level(0),
-    zoom_min_level(0) {
+    zoom_min_level(0),
+    special_input_focus_controller(0) {
     
     editor_icons.reserve(N_EDITOR_ICONS);
     for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
@@ -776,7 +778,7 @@ bool editor::input_popup(
  */
 bool editor::key_check(
     const int pressed_key, const int match_key,
-    const bool needs_ctrl, const int needs_shift
+    const bool needs_ctrl, const bool needs_shift
 ) {
 
     if(pressed_key != match_key) {
@@ -1325,8 +1327,8 @@ void editor::zoom_with_cursor(const float new_zoom) {
  * Creates a new dialog info.
  */
 editor::dialog_info::dialog_info() :
-    close_callback(nullptr),
     process_callback(nullptr),
+    close_callback(nullptr),
     is_open(true) {
     
 }
@@ -1367,8 +1369,8 @@ void editor::dialog_info::process() {
  */
 editor::picker_info::picker_info(editor* editor_ptr) :
     editor_ptr(editor_ptr),
-    can_make_new(false),
-    pick_callback(nullptr) {
+    pick_callback(nullptr),
+    can_make_new(false) {
 }
 
 
@@ -1586,7 +1588,7 @@ void editor::transformation_widget::draw(
     get_locations(center, size, angle, handles, &radius, NULL);
     
     //Draw the rotation handle.
-    if(angle && !isnanf(radius)) {
+    if(angle && !std::isnan(radius)) {
         al_draw_circle(
             center->x, center->y, radius,
             al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS * zoom

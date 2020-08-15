@@ -192,7 +192,6 @@ particle_generator::particle_generator(
     const float emission_interval,
     const particle &base_particle, const size_t number
 ) :
-    emission_timer(emission_interval),
     id(0),
     base_particle(base_particle),
     number(number),
@@ -208,7 +207,8 @@ particle_generator::particle_generator(
     angle(0),
     angle_deviation(0),
     total_speed(0),
-    total_speed_deviation(0) {
+    total_speed_deviation(0),
+    emission_timer(emission_interval) {
     
 }
 
@@ -368,7 +368,7 @@ particle_manager::particle_manager(const particle_manager &pm2) :
  * pm2:
  *   Particle manager to copy from.
  */
-const particle_manager &particle_manager::operator =(
+particle_manager &particle_manager::operator =(
     const particle_manager &pm2
 ) {
 

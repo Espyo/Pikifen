@@ -632,7 +632,6 @@ void mob::tick_physics(const float delta_t) {
     switch (h_mov_type) {
     case H_MOVE_FAIL: {
         return;
-        break;
     } case H_MOVE_TELEPORTED: {
         break;
     } case H_MOVE_OK: {

@@ -104,31 +104,22 @@ string control_info::stringify() const {
     switch(type) {
     case CONTROL_TYPE_KEYBOARD_KEY: {
         return "k_" + i2s(button);
-        break;
     } case CONTROL_TYPE_MOUSE_BUTTON: {
         return "mb_" + i2s(button);
-        break;
     } case CONTROL_TYPE_MOUSE_WHEEL_UP: {
         return "mwu";
-        break;
     } case CONTROL_TYPE_MOUSE_WHEEL_DOWN: {
         return "mwd";
-        break;
     } case CONTROL_TYPE_MOUSE_WHEEL_LEFT: {
         return "mwl";
-        break;
     } case CONTROL_TYPE_MOUSE_WHEEL_RIGHT: {
         return "mwr";
-        break;
     } case CONTROL_TYPE_JOYSTICK_BUTTON: {
         return "jb_" + i2s(device_nr) + "_" + i2s(button);
-        break;
     } case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
-        break;
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG: {
         return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
-        break;
     }
     }
     

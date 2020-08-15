@@ -46,7 +46,6 @@ struct asset_file_names_struct {
     string counter_font;
     string editor_icons;
     string enemy_spirit;
-    string swarm_arrow;
     string icon;
     string idle_glow;
     string main_font;
@@ -64,6 +63,7 @@ struct asset_file_names_struct {
     string smoke;
     string sparkle;
     string spotlight;
+    string swarm_arrow;
     string value_font;
     string wave_ring;
     

@@ -109,7 +109,7 @@ public:
     
     particle_manager(const size_t &max_nr = 0);
     particle_manager(const particle_manager &pm2);
-    const particle_manager &operator=(const particle_manager &pm2);
+    particle_manager &operator=(const particle_manager &pm2);
     ~particle_manager();
     
 private:

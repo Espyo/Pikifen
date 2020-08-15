@@ -1248,31 +1248,22 @@ string strsignal(const int signum) {
     switch(signum) {
     case SIGINT: {
         return "SIGINT";
-        break;
     } case SIGILL: {
         return "SIGILL";
-        break;
     } case SIGFPE: {
         return "SIGFPE";
-        break;
     } case SIGSEGV: {
         return "SIGSEGV";
-        break;
     } case SIGTERM: {
         return "SIGTERM";
-        break;
     } case SIGBREAK: {
         return "SIGBREAK";
-        break;
     } case SIGABRT: {
         return "SIGABRT";
-        break;
     } case SIGABRT_COMPAT: {
         return "SIGABRT_COMPAT";
-        break;
     } default: {
         return "Unknown";
-        break;
     }
     }
 }
