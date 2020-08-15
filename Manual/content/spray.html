@@ -22,15 +22,16 @@
 
     <h2 id="intro">Introduction</h2>
     
-    <p>Whenever a leader uses a spray, they spray a bunch of particles in a given direction, and certain mobs, dictated by the rules of the spray, will befall under some status effect. A status effect can make them faster (like an ultra-spicy spray), or make them stop on their tracks (like an ultra-bitter spray). Before creating sprays, you must have some status effect definitions. If you don't, please read the <a href="status.html">status effects guide</a> for information on how to create some.</p>
+    <p>Whenever a leader uses a spray, they spray a bunch of particles in a given direction, and certain objects, dictated by the rules of the spray, will befall under some status effect. A status effect can make them faster (like an ultra-spicy spray), or make them stop on their tracks (like an ultra-bitter spray), amongst other things. Before creating sprays, you must have some status effect definitions. If you don't, please read the <a href="status.html">status effects guide</a> for information on how to create some.</p>
 
-    <p>Spray definitions can be found on <code>Game_data/Misc/Sprays.txt</code>. In this <a href="text_file.html">text file</a>, each block defines a spray, and the block's name is the spray's name.</p>
+    <p>Spray definitions can be found in <code>Game_data/Sprays</code> folder. Every <a href="text_file.html">text file</a> here defines a spray, and the file's name is not important.</p>
 
     <h2 id="props">Properties</h2>
     
-    <p>Every spray block has these properties:</p>
+    <p>Every spray file has these properties:</p>
     
     <ul>
+      <li><b><code>name</code></b>: Name of the spray. You must use this name when referring to this spray in other files.</li>
       <li><b><code>angle</code></b>: Angle to spray it at, relative to the leader's angle, in degrees. In other words, 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them.</li>
       <li><b><code>angle_range</code></b>: How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180.</li>
       <li><b><code>buries_pikmin</code></b>: If true, any Pikmin that touch this spray will become sprouts.</li>

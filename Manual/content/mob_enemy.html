@@ -56,17 +56,6 @@
 
     <p>All of the enemy type object's behavior is defined by the user-made <a href="script.html">script</a>. There are no recommended states, events, or actions.</p>
 
-    <h2 id="script-vars">Object spawn script variables</h2>
-
-    <p>When an enemy type object is spawned, it will read the following script variables, if they're present:</p>
-    
-    <ul>
-      <li><b><code>spoils</code></b>: A list of objects to spawn, separated by colon. These are spawned with a bit of momentum.</li>
-      <li><b><code>random_pellet_spoils</code></b>: A list of pellet numbers to spawn, separated by colon. When the enemy dies, it will spawn a pellets of random types, but each one matching each of the specified numbers. For instance, <code>1,1,5</code> would make it spawn two 1 pellets and one 5 pellet. It will only pick Pikmin types from the ones that have an Onion in the current area.</li>
-    </ul>
-
-    <p>Besides that, there are the <a href="area.html#script-vars">global spawn script variables</a>, and any other script variable that you write can be used by the enemy's script.</p>
-
   </div>
 </body>
 

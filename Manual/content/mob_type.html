@@ -82,7 +82,6 @@
       <li><b><code>casts_shadow</code></b>: If set to <code>false</code>, the object won't cast a shadow on the ground. Defaults to true.</li>
       <li><b><code>default_vulnerability</code></b>: For every source of damage not specified in the <a href="#vulnerabilities">vulnerabilities</a>, the damage the object receives is multiplied by this amount. Defaults to 1.</li>
       <li><b><code>health_regen</code></b>: Passive health regeneration rate, in HP per second. Defaults to 0.</li>
-      <li><b><code>is_obstacle</code></b>: If set to <code>true</code>, the object will be considered an obstacle. This only impacts whether enemies and such can harm it or not. Defaults to false.</li>
       <li><b><code>itch_damage</code></b>: If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code>on_itch</code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go. Defaults to 0.</li>
       <li><b><code>itch_time</code></b>: In order for the enemy to not shake over and over, if you keep damaging it, you can also specify a minimum time requirement between itches, in seconds. Defaults to 0.</li>
       <li><b><code>main_color</code></b>: A color to represent the object by. The format is <code>R G B</code> (values range from 0 to 255). Defaults to black.</li>
@@ -102,7 +101,7 @@
     <p>The following is a list of all categories that exist in the engine, with links to pages detailing more information about them.</p>
     
     <table>
-      <tr><th>Category</th><th>Brief description</th><th>Examples</th><th>Script?</th></tr>
+      <tr><th>Category</th><th>Brief description</th><th>Examples</th><th>Needs script?</th></tr>
       <tr>
         <th><a href="mob_pikmin.html">Pikmin</a></th>
         <td>A type of Pikmin.</td>
@@ -246,7 +245,7 @@
       <li><b><code>coordinates</code></b>: Coordinates to spawn in, in the format <code>x y z</code>.</li>
       <li><b><code>angle</code></b>: Angle the spawned object will be facing.</li>
       <li><b><code>momentum</code></b>: If this is 0, the mob spawns in the exact spot specified and stand there. Otherwise, it will spawn in that spot but be launched in a random direction, with the specified momentum. 100 is a good general case value.</li>
-      <li><b><code>vars</code></b>: Any script variables to include, separated by semicolon. Example: <code>vars = maturity = 0; sprout = true</code>.</li>
+      <li><b><code>vars</code></b>: Any <a href="script.html#vars">script variables</a> to include, separated by semicolon. Example: <code>vars = maturity = 0; sprout = true</code>.</li>
       <li><b><code>link_spawn_to_object</code></b>: If <code>true</code>, a <a href="misc_features.html#mob-links">link</a> will be created from the spawned object to your object.</li>
       <li><b><code>link_object_to_spawn</code></b>: If <code>true</code>, a link will be created from your object to the spawned object.</li>
     </ul>
@@ -305,6 +304,38 @@
     <p>In <code>Data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each line will indicate a hazard, and a multiplier, in the format <code>hazard = multiplier</code>. The hazard is the name of the hazard you want to receive special treatment, and the multiplier is how much the damage will be multiplied by. So for instance, if you want an object to be invulnerable to fire attacks, write a line with <code>fire = 0</code>, and if you want the object to take double damage to water attacks, write <code>water = 2</code>.</p>
 
     <p>You can use this in conjunction with the <code>default_vulnerability</code> <a href="optional-props">property</a> to make an object that is invulnerable to anything except explosions, for instance.</p>
+    
+    <h3 id="area-editor-tips">Area editor tips</h3>
+    
+    <p>Some objects require certain things to be set up in certain ways in the area editor before they work as intended. e.g. bridges must be on a bridge sector, scales need to link to each other before they work together, etc. Users who are not very familiar with these tricks may take a while to realize what's wrong. To help with this, you can also specify a property that, when read by the area editor, will make it display a specific widget. This widget, when the user places their mouse over it, will show some helpful tips about how to make use of the object.</p>
+    
+    <p>In <code>Data.txt</code>, add a property titled <code>area_editor_tips</code>. Then, simply write the tips you want as the value. Remember that these are displayed in a tooltip, and if you don't keep it short, or cut your text into multiple lines, it will all be in one large line, which may not even fit on-screen. To add a line break, write <code>\n</code> in your text. To write a literal backslash, you will need to type <code>\\</code>.
+    
+    <h3 id="area-editor-props">Area editor properties</h3>
+    
+    <p>Some object types can make use of <a href="script.html#vars">script variables</a> to make specific objects have different behavior. For instance, with script variables, you can place two Pellet Posies in an area, and one of them can start already fully bloomed. When an object spawns, the engine itself or the object's script may read any declared script variables and use them as they see fit. In the area editor, you can write down the script variables you want a specific object to declare, along with their values, but having to memorize the names of the variables &ndash; as well as what each value means &ndash; is a bit of a pain. To remedy this, you can add some properties to the object type's data with information about important script variables. Then, when the area editor loads, it will use that information to present the user with some helpful widgets to set those special behaviors with, each widget in charge of one script variable.</p>
+    
+    <p>In <code>Data.txt</code>, add a block titled <code>area_editor_properties</code>. Inside, you will write one block per script variable, with each block's name being the name of the widget responsible. Then, add the following properties as needed:</p>
+    
+    <ul>
+      <li><b><code>var</code></b>: The name of the variable, as used in the script.</li>
+      <li>
+        <b><code>type</code></b>: What type of variable this is. Can be one of the following:
+        <ul>
+          <li><code>text</code>: The variable is meant to be text. The widget will be a text box. Use this when the other types won't cut it, so that the user is free to write whatever they need in the text box.</li>
+          <li><code>int</code>: The variable is meant to be an integer number. The widget will be a number box with integers.</li>
+          <li><code>decimal</code>: The variable is meant to be a decimal number. The widget will be a number box with decimal numbers.</li>
+          <li><code>bool</code>: The variable is meant to be true or false. The widget will be a checkbox.</li>
+          <li><code>list</code>: The variable is meant to be text. The widget will be a list box with several choices to choose from.</li>
+          <li><code>number_list</code>: The variable is meant to be an integer number. The widget will be a list box with several choices, where each choice maps to a number.</li>
+        </ul>
+      </li>
+      <li><b><code>def_value</code></b>: The variable's default value, as used in the script.</li>
+      <li><b><code>min_value</code></b>: For variables meant to be integer or decimal numbers, this is the minimum value it is meant to have. The widget will not let the user pick a number beyond this one.</li>
+      <li><b><code>max_value</code></b>: Same as <code>min_value</code>, but for the maximum.</li>
+      <li><b><code>list</code></b>: For list widgets, this is the list of choices, separated by semicolon (;). If the variable is meant to be an integer, the first option maps to 0, the second to 1, etc.</li>
+      <li><b><code>tooltip</code></b>: Tooltip to display when the user places their mouse cursor on top of the widget. Use this to explain what the variable means, to provide extra info, to give special instructions, etc.</li>
+    </ul>
 
     <h2 id="notes">Notes</h2>
     
@@ -312,11 +343,11 @@
       <li>
         If objects of your new type are not being hunted down or hurt, confirm the following:
         <ul>
-          <li> The object's target type is one of the types the attacker wants to hunt or can hurt.
-          <li> The object is not in the same team as the attacker.
-          <li> The object has more than zero health.
-          <li> The object is not unhuntable via the <code>set_huntable</code> <a href="script.html">script action</a>.
-          <li> The object is not invisible via a <a href="status.html">status effect</a>.
+          <li>The object's target type is one of the types the attacker wants to hunt or can hurt.</li>
+          <li>The object is not in the same team as the attacker.</li>
+          <li>The object has more than zero health.</li>
+          <li>The object is not unhuntable via the <code>set_huntable</code> <a href="script.html">script action</a>.</li>
+          <li>The object is not invisible via a <a href="status.html">status effect</a>.</li>
         </ul>
       </li>
     </ul>

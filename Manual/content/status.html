@@ -24,13 +24,14 @@
     
     <p>Status effects temporarily change an object's properties. While under a status effect, an object can be slower, stronger, colored differently, etc. Objects can be under multiple status effects at once. Examples of status effects are: on fire, spicy, petrified, drowning, etc.</p>
 
-    <p>Status effects are defined on <code>Game_data/Misc/Statuses.txt</code>. In this <a href="text_file.html">text file</a>, each block defines a status effect, with the block's name being the status effect's name.</p>
+    <p>Status effects are defined in the <code>Game_data/Statuses</code> folder. Every <a href="text_file.html">text file</a> defines a status effect, and the file's name can be anything you want.</p>
 
     <h2 id="props">Properties</h2>
     
     <p>Each status effect has the following properties:</p>
     
     <ul>
+      <li><b><code>name</code></b>: The status effect's name. Use this when referring to this status effect in other files.</li>
       <li><b><code>color</code></b>: Color that represents the status effect, in the format <code>r g b</code> or <code>r g b a</code>.</li>
       <li><b><code>tint</code></b>: When an object is under this status effect, they are tinted by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>255 255 255</code> (white, which means no tint).</li>
       <li><b><code>glow</code></b>: When an object is under this status effect, they are lit up by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>0 0 0 0</code> (no color).</li>

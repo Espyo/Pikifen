@@ -18,7 +18,7 @@
     
     <h1>Areas</h1>
     
-    <p>This page will teach you how to make an area in <i>Pikifen</i>. It will guide you through the creation of a simple area, teaching you the different mechanics and aspects of area making. You can follow the entire document for the full guide, or read just the bold lines to get the general gist of how to do something. As you follow it, feel free to save your area after a section, quit the area editor, and check out how it looks in-game.</p>
+    <p>This page will teach you how to make an area in <i>Pikifen</i>. It will guide you through the creation of a simple area, teaching you the different mechanics and aspects of area making. You can follow the entire document for the full guide, or read just the bold lines to get the general gist of how to do something. As you follow it, feel free to save your area after a section, and use the button in the toolbar to check out how it looks in-game.</p>
 
     <p>Note: The images on this page may be from several different versions of the engine. They can still be followed to understand the idea, however.</p>
 
@@ -35,9 +35,9 @@
 
     <dl>
       <dt><b>To create the area's geometry, you draw the polygons that make out the floors.</b></dt>
-      <dd>Each "floor" (also known as "sector") of the area is made up of a polygon. Imagine you're in a square room. This would be represented with a square sector in the engine. In that room is a carpet; this would be defined by a different sector, with a different texture. Like real-world polygons, there are edges and vertexes. An edge makes up a line of the polygon, and a vertex is a point that joins two edges.<dd>
+      <dd>Each "floor" (also known as "sector") of the area is made up of a polygon. Imagine you're in a square room. This would be represented with a square sector in the engine. In that room is a carpet; this would be defined by a different sector inside of it, and with a different texture. Like real-world polygons, there are edges and vertexes. An edge makes up a line of the polygon, and a vertex is a point that joins two edges.<dd>
       <dt><b>Polygons cannot overlap. They can only have neighbors.</b></dt>
-      <dd>If you want a triangle shape overlapping a rectangle shape, you need to know that the intersection between the three is an entirely separate sector. Check the diagram on the right.</dd>
+      <dd>If you want a triangle shape overlapping a rectangle shape, you need to know that the intersection between the two must be an entirely separate sector. Check the diagram on the right.</dd>
       <dt><b>A floor that is higher than its neighbor creates a wall.</b></dt>
       <dd>In the room example, if there's a filing cabinet inside, it would be yet another floor, but it would be higher than the room's floor. The lines surrounding the cabinet's sector would be the walls of the cabinet.</dd>
       <dt><b>Everything is top-down, and there are no ramps or slanted terrain.</b></dt>
@@ -51,20 +51,20 @@
     <h3 id="using-editor">Using the area editor</h3>
     
     <dl>
-      <dt><b>The left-hand side is your workstation.</b></dt>
-      <dd>It shows you the sketch of the area, and it's where you can move and select the layout, objects, etc. The light-blue plus-shaped cross on the center is the origin, or the "center of the universe", so to speak. Its coordinates are 0,0, making it an important landmark when sketching.</dd>
+      <dt><b>The left-hand side is your canvas.</b></dt>
+      <dd>It shows you the sketch of the area, and it's where you can move and select the layout, objects, etc. The light-blue plus-shaped cross at the center is the origin, or the "center of the universe", so to speak. Its coordinates are 0,0, making it an important landmark when designing.</dd>
       <dt><b>The right-hand side contains panels for you to edit properties with.</b></dt>
       <dd>When you select a sector, an object, etc., you can change its properties here, including a sector's height, the type of object, and more.</dd>
-      <dt><b>The bottom-left is the status bar. It can help you if you get stuck.</b></dt>
-      <dd>Normally, it shows your mouse cursor's coordinates in the world, but if you place the cursor on top of something in a panel, it will contain a description of that widget and what it does. It can also let you know if something went wrong.</dd>
-      <dt><b>In the workstation, a left mouse button click can select area elements.</b></dt>
-      <dd>Click on a sector, an object, etc. to select it.</dd>
+      <dt><b>The bottom-left is the status bar. It can help if you get stuck.</b></dt>
+      <dd>The status bar will let you know what just happened, whether an operation finished successfully, or something went wrong. If you're confused, check it out.</dd>
+      <dt><b>In the canvas, a left mouse button click can select area elements.</b></dt>
+      <dd>Click on a sector, an object, etc. to select it. Click an empty space to unselect everything.</dd>
       <dt><b>A left mouse button drag can create a selection box, allowing you to select multiple elements at once.</b></dt>
       <dd>Click somewhere empty and start dragging to create a selection box. Anything inside the box will be selected when you release.</dd>
       <dt><b>A left mouse button drag can also move an element, or all selected elements together.</b></dt>
       <dd>You can left click and drag on top of something to move it. If you move something that is selected, all of the selected elements will be moved together.</dd>
       <dt><b>Use the right mouse button to pan, and the mouse wheel to zoom.</b></dt>
-      <dd>In the workstation, the right mouse button and mouse wheel control your view. Clicking and double-clicking the mouse wheel will also reset your zoom level and camera position, respectively.</dd>
+      <dd>In the canvas, the right mouse button and mouse wheel control your view. Clicking and double-clicking the mouse wheel will also reset your zoom level and camera position, respectively.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>As a general tip, save your area often, so you can go back in case you corrupt its geometry.</li>
@@ -81,8 +81,8 @@
     <dl>
       <dt><b>Open the area editor.</b></dt>
       <dd>To do so, from the engine's main menu, choose the Area editor option.</dd>
-      <dt><b>On the panel, type in the name of the new area and press Return.</b></dt>
-      <dd>The panel will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key, to create the new area. Let's call it <code>forest</code>. This is the internal name of the area, not the name that will appear on the loading screen.</dd>
+      <dt><b>In the dialog, type in the name of the new area and press Return.</b></dt>
+      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key, to create the new area. Let's call it <code>forest</code>. This is the internal name of the area, not the name that will appear on the loading screen.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>A new area will already have a default sector with a grassy texture, as well as a leader object.</li>
@@ -97,7 +97,7 @@
       <dt><b>Enter the info panel.</b></dt>
       <dd>From the main menu panel, click on the "Info" button to open the area information panel.</dd>
       <dt><b>Change the area's name by changing the text in the "Name" textbox.</b></dt>
-      <dd>Let's call it "Simple Forest".</dd>
+      <dd>This box can be found in the "General" section. Let's call our area "Simple Forest". Feel free to leave this panel now with the "Back" button.</dd>
     </dl>
 
     <h3 id="moving-vertexes">Moving vertexes</h3>
@@ -141,7 +141,7 @@
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>Your drawings should represent a sector entirely, so don't try to cut through other sectors.</li>
-        <li>You can also draw on top of existing vertexes and edges, and the sectors will become <a href="#stitching">stitched together</a>.</li>
+        <li>If you start on an edge or vertex, you can finish on another edge or vertex to split one sector into two.</li>
       </ul><dd>
     </dl>
 
@@ -175,21 +175,17 @@
       <dd>To select a sector, just click inside it. Once you do, the panel will show the sector's properties.</dd>
       <dt><b>Click the texture button in the "Appearance" section of the panel.</b></dt>
       <dd>This button will allow you to set the sector's texture.</dd>
-      <dt><b>Choose a texture from the suggestions list, or write its name on the textbox and press "Ok".</b></dt>
-      <dd>Most likely, only the grassy texture will be available on the list. The game's textures can be found in the <code>Game_data/Graphics/Textures</code> folder. When you type a texture's name, include the extension. You can type <code>Stone.jpg</code>, which is a texture that comes with the engine. Alternatively, you can click on "..." to browse for the file to use. Again, this must be in the textures folder.</dd>
-      <dt><b>Notes:</b></dt>
-      <dd><ul>
-        <li>If the texture that shows up is a black-and-violet pattern, that means the engine couldn't load the texture. Make sure you wrote its name correctly (keeping in mind uppercase and lowercase letters), you included the extension in the file name, and the texture really exists in the <code>Game_data/Graphics/Textures</code> folder!</li>
-      </ul></dd>
+      <dt><b>Choose a texture from the suggestions list, or browse for a new one.</b></dt>
+      <dd>Most likely, only the grassy texture will be available in the list. The game's textures can be found in the <code>Game_data/Graphics/Textures</code> folder. Click on "Browse..." to browse for the file to use. Let's pick <code>Stone.jpg</code>.</dd>
     </dl>
 
     <h3 id="sector-height">Sector height</h3>
     
-    <p>To make the rock protrude from the ground, lets give it a height higher than the grassy floor. This will also make all of the rock's edges serve as walls.</p>
+    <p>To make the rock protrude from the ground, lets give it a height higher than the grassy ground. This will also make all of the rock's edges serve as walls.</p>
 
     <dl>
       <dt><b>Select the sector whose texture you want to change.</b></dt>
-      <dd>Like before, click inside a sector to select it. If you check the panel, the sector's height should be 0, the same as the floor.</dd>
+      <dd>Like before, click inside a sector to select it. If you check the panel's "Behavior" section, the sector's height should be 0, the same as the ground.</dd>
       <dt><b>Change the number inside the "Height" textbox. Higher number means higher height.</b></dt>
       <dd>For our rock, set it to something like 200. It may be hard to visualize how it ended up in your head, but know that 200 is much taller than a leader, but not tall enough that most Pikmin can't be thrown on top of it.</dd>
     </dl>
@@ -201,11 +197,11 @@
       <p>The smaller rock connected to the main one.</p>
     </div>
     
-    <p>Let's create a smaller rock that's connected to the existing rock. Create a new sector to the north of the central sector, set its texture, and set its height to 100, so the new rock is also shorter than the big rock. To close off the gap between the two rocks, you'll want to stitch the sectors together.</p>
+    <p>Let's create a smaller rock that's connected to the existing rock. Create a new sector, isolated, to the north of the central sector. Set its texture, and set its height to 100, so the new rock is also shorter than the big rock. To close off the gap between the two rocks, you'll want to stitch the sectors together.</p>
     
     <dl>
       <dt><b>Grab one of the first sector's vertexes and drop it on the other sector's vertex or edge.</b></dt>
-      <dd>In this case, grab one of the small rock's southern vertexes and drop it on top of one of the big rock's northern vertexes. The two vertexes will merge together.</dd>
+      <dd>In this case, grab one of the small rock's southern vertexes and drop it on top of one of the big rock's northern vertexes. If you've got the full sector selected, press Escape, or the "Clear selection" button in the panel to stop selecting it. After you drop it, the two vertexes will merge together.</dd>
       <dt><b>If the sectors around you turn red, it just means you can't leave the area as it is, and need to continue the stitch.</b></dt>
       <dd>If you leave the area as it is right now, with only this vertex merged, the grassy plain sector will fail to triangulate properly because of engine limitations. But you aren't done stitching the two sectors yet, so don't worry about it and continue.</dd>
       <dt><b>Grab the next neighbor of the first vertex you grabbed, and drop it on the second sector's vertex or edge, without leaving gaps.</b></dt>
@@ -219,12 +215,12 @@
       <p>Blending the two ground textures.</p>
     </div>
     
-    <p>The ground looks a bit bland. Let's add a patch of dirt in the corner. Draw a triangular sector hugging the southwest corner of the area and set its texture to dirt (e.g. <code>Dirt.jpg</code>). But because the dirt and grass textures are so different, you'll see a clear split where one texture starts and the other begins. Let's smooth this out.</p>
+    <p>The ground looks a bit bland. Let's add a patch of dirt in the corner. Draw a triangular sector hugging the southwest corner of the area by spitting the ground sector using one line, from its western edge to its southern edge. Set the triangle's texture to dirt (e.g. <code>Dirt.jpg</code>). But because the dirt and grass textures are so different, you'll see a clear split where one texture starts and the other begins. Let's smoothen this out.</p>
     
     <dl>
       <dt><b>Create a thin and long sector between the two sectors whose textures you want to blend.</b></dt>
-      <dd>In our case, draw a sector adjacent to the triangle's northeast edge, with four edges in total.</dd>
-      <dt><b>In the "appearance" section of the sector panel, set it to a "texture fader" sector.</b></dt>
+      <dd>In our case, draw a line parallel to the triangle's northeast edge to create a new split.</dd>
+      <dt><b>In the "Appearance" section of the sector panel, set it to a "texture fader" sector.</b></dt>
       <dd>This will cause the sector to take a look at the sectors around it, and blend one texture into the other! The thicker your blending sector, the longer the transition.</dd>
       <dt><b>If the blending is in the wrong direction, try making the blend sector longer and thinner.</b></dt>
       <dd>The engine decides the direction to blend in based on the thickness of its edges. If you make the sector too chubby, it may think that you want to blend the other, longer edges's sectors.</dd>
@@ -245,7 +241,7 @@
       <dt><b>Draw a sector around the entire area.</b></dt>
       <dd>Make it big enough that it is hard for the player to see where it ends from within the play area. Making it rectangular is usually a good choice, but you can make it in any shape.</dd>
       <dt><b>Set its height to something tall, but reasonable.</b></dt>
-      <dd>Something like 500 units above the usual floor level is a good number, and will ensure most of your area gets a wall shadow cast onto it. While you're here, set its texture to something different, like <code>Grass_light.jpg</code>.</dd>
+      <dd>Something like 500 units above the usual ground level is a good number, and will ensure most of your area gets a wall shadow cast onto it. While you're here, set its texture to something different, like <code>Grass_light.jpg</code>.</dd>
       <dt><b>In the sector panel, go to the advanced behavior settings, and set the sector type to "Blocking".</b></dt>
       <dd>This will ensure that nothing can go through this sector, even if the floor is within reach. This way, players won't accidentally throw Pikmin at the out-of-bounds area and exploit it, and Pikmin knocked by enemies won't be thrown too far to be reached.</dd>
     </dl>
@@ -279,16 +275,18 @@
       <dt><b>Move objects by clicking on them and dragging them.</b></dt>
       <dd>Let's move our leader object (likely Olimar) to near the southern edge of the grassy plain, so the player doesn't start in the middle of the rocks.</dd>
       <dt><b>Set an object's properties, like its angle, by selecting it and changing the widgets in the panel.</b></dt>
-      <dd>Let's make Olimar face north instead of east. Select him, and in the "angle" widget, angle it up, or set it to "-90".</dd>
-      <dt><b>Add new objects by clicking the "+" button on the top of the panel, then clicking the area.</b></dt>
+      <dd>Let's make Olimar face north instead of east. Select him, and in the "Angle" widget, angle it up, or set it to 270 degrees.</dd>
+      <dt><b>Add new objects by clicking the "+" button in the top of the panel, then clicking the area.</b></dt>
       <dd>When you press the button, you enter placement mode. You can now click on a spot in the area to place an object there. Click near the leader so we can place an Onion.</dd>
-      <dt><b>The new object will be of the last type you placed, or a Red Pikmin by default. Click on the "type" button to set its type.</b></dt>
-      <dd>In this list, navigate up to the "Onions" section and pick the Red Onion. After, place a Red Pikmin nearby. You may also want to make it face Olimar.</dd>
-      <dt><b>Select objects and press the "duplicate" button on the panel to place copies on the area.</b></dt>
+      <dt><b>The new object will be of the last type you placed, or a Red Pikmin by default. Use the "Category" and "type" boxes to set its type.</b></dt>
+      <dd>For the category, choose "Onions", and in the type, pick the Red Onion. Afterwards, place a Red Pikmin nearby. You may also want to make it face Olimar.</dd>
+      <dt><b>Select objects and press the "duplicate" button on the panel to place copies in the area.</b></dt>
       <dd>To make your job of placing more Pikmin easier, select the one you placed, and press the duplicate button. Now click on the area to place the copied Pikmin there. You can now select these two, duplicate, and place them in yet another spot, and repeat as you want to get a big number of objects placed! Try placing down 10 Pikmin for this example.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>Select an object and press the "delete" button on the panel to remove it.</li>
+        <li>Select an object and press the "delete" button in the panel to remove it.</li>
+        <li>Certain types of objects come with extra tips on how to use them. If the selected one does, some grayed-out text will appear under the category/type selection widgets. To read the tips, place your mouse over the text, and make sure you have tooltips enabled (menu bar, Help menu)!</li>
+        <li>Certain types of objects can also have some specific settings, present in the "Script vars" section. Internally, these are "script variables", so you'll see the "Full list" textbox update as you change them. Read more about this <a href="#script-vars">here</a>.</li>
       </ul></dd>
     </dl>
 
@@ -299,7 +297,7 @@
       <p>The bridge sectors and the object.</p>
     </div>
     
-    <p>Now, let's make it so the Pikmin can build a bridge on the western side of the rock to grant access to the top. Basically, when the Pikmin finish working on a bridge object, a bunch of new sectors appear. You will have to define these sectors like normal, but give them special information so they act and look normal when the bridge is closed, and serve as a bridge once it's done.</p>
+    <p>Now, let's make it so the Pikmin can build a bridge on the western side of the rock to grant access to the top. Basically, when the Pikmin finish working on a bridge object, some sectors change appearance and height. You will have to define these sectors like normal, but give them special information so they act and look normal when the bridge is closed, and serve as a bridge once it's done.</p>
     
     <dl>
       <dt><b>Draw out the sector(s) that make up the built bridge. If it's a ramp, draw them out like a stairway like normal. Don't set any properties yet.</b></dt>
@@ -308,10 +306,10 @@
       <dd>These sectors will be thin and long, and run parallel to the ramp sectors. They help make sure Pikmin and leaders don't fall off the sides of the bridge.</dd>
       <dt><b>Set the sector's appearance to how they should look <i>before</i> the bridge is opened.</b></dt>
       <dd>You likely don't need to change much, but keep the sectors with the floor-level height (0), and keep the grassy texture.</dd>
-      <dt><b>In the advanced sector behavior settings, set the "Bridge height" field of each bridge sector (both floor and railings) to the height the sector should be <i>after</i> the bridge is opened.</b></dt>
-      <dd>When the bridge opens, all bridge and railing sectors will have their texture changed to a bridge texture, and will also have their height updated to whatever the "tag" field says. Naturally, the railing sectors should go higher than the bridge floor. Like the ramp from before, set the "Bridge height" of the ramp closest to the bridge to 50, the one after to 100, etc., and keep all rails around 120 units higher than the bridge floor sector they are meant to be railing.</dd>
-      <dt><b>Set the bridge floor sector's types (in the advanced sector behavior settings) to "Bridge", and set the railing sectors to "Bridge rail".</b></dt>
-      <dd>The sector types are how the engine knows what sectors to change for the bridge's construction. The two different types will also influence the texture that appears.</dd>
+      <dt><b>In the advanced sector behavior settings, set the bridge floor sector's types to "Bridge", and set the railing sectors to "Bridge rail".</b></dt>
+      <dd>When the bridge opens, all bridge and railing sectors will have their texture and height changed to make them look and act like a bridge. The sector types are how the engine knows what sectors to change. The two different types will also influence the texture that appears.</dd>
+      <dt><b>Set the "Bridge height" field of each bridge sector (both floor and railings) to the height the sector should be <i>after</i> the bridge is opened.</b></dt>
+      <dd>When the bridge is built, the sectors will have their height updated to whatever this property says. Naturally, the railing sectors should go higher than the bridge floor. Like the ramp from before, set the "Bridge height" of the ramp closest to the bridge to 50, the one after to 100, etc., and keep all rails around 120 units higher than the bridge floor sector they are meant to be railing.</dd>
       <dt><b>Place a bridge object inside the first sector of the bridge.</b></dt>
       <dd>In our case, this is the bottommost (the westernmost) sector. Since the bridge opens to the east, keep the object's angle facing east.</dd>
     </dl>
@@ -323,12 +321,12 @@
       <p>The pond of water, with a texture fader around it.</p>
     </div>
     
-    <p>Let's place a small pond on the northwest corner.</p>
+    <p>Let's place a small pond at the northwest corner.</p>
 
     <dl>
       <dt><b>Create the water's sector.</b></dt>
-      <dd>Any object standing on this sector will be considered submerged underwater. Make a nice oval shape for it, and add <a href="#blending-textures">texture blending</a> if you want.</dd>
-      <dt><b>In the advanced sector behavior settings panel, press the "+" button in the hazards section, and choose water.</b></dt>
+      <dd>We will want any object standing on this sector to be considered submerged underwater. Make a nice oval shape for it, and add <a href="#blending-textures">texture blending</a> if you want.</dd>
+      <dt><b>In the sector behavior's "Hazards" section, press the "+" button in the hazards section, and choose water.</b></dt>
       <dd>All liquids are tied to a hazard. This means a sector can have muddy water, acid, lava, and so on, but there has to be a hazard controlling it. You can learn more <a href="hazard.html">here</a>.</dd>
     </dl>
 
@@ -342,22 +340,22 @@
     <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid obstacles. First of all, from the main menu panel, enter the "Paths" mode.</p>
     
     <dl>
-      <dt><b>Press on the "+" button on the panel to enter the path drawing mode.</b></dt>
+      <dt><b>Press the "+" button on the panel to enter the path drawing mode.</b></dt>
       <dd>In this mode, you can draw the path on the area by clicking.</dd>
-      <dt><b>Click somewhere the place down a path stop.</b></dt>
-      <dd>Path stops are a bit like bus stops. The carrier Pikmin go in a straight line from the previous stop to the next, then turn to face the next stop, and so on. The first stop you want to create should be very close to the Onion, or at least on the starting area.</dd>
+      <dt><b>Click somewhere to place down a path stop.</b></dt>
+      <dd>Path stops are a bit like bus stops. The carrier Pikmin go in a straight line from the previous stop to the next, then turn to face the next stop, and so on. The first stop you want to create should be very close to the Onion, or at least in the starting region.</dd>
       <dt><b>Click somewhere else to place a new stop, and connect the previous to the current one.</b></dt>
-      <dd>This will create the second stop and will also link the two. Now the Pikmin know that from the first stop, they can go to this second stop. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember that if the bridge is built, it will be a solid obstacle too!)</dd>
+      <dd>This will create the second stop and will also link the two. Now the Pikmin know that from one stop, they can go to the other. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember that if the bridge is built, it will be a solid obstacle too!)</dd>
       <dt><b>Normal links (recommended) allow Pikmin to go from A to B, and B to A. One-way links only allow from A to B. Change link types in the panel.</b></dt>
-      <dd>Add a one-way link that goes from the top of the rock to the path stop to the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall.</dd>
+      <dd>Add a one-way link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall.</dd>
       <dt><b>Pikmin cannot take a line in the path if there is an obstacle object touching the line.</b></dt>
-      <dd>Make your paths as if all bridges were built and all gates were taken down. And make sure the line between the paths touches the obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
+      <dd>Make your paths go up the big rock from the west and east sides. When making these sorts of lines, pretend all bridges are built and all gates are taken down. And make sure the line between the path stops touches any important obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>While outside of drawing mode, you can double-click a path link to split it into two, creating a node where you click.</li>
+        <li>While outside of drawing mode, you can double-click a path link to split it into two, creating a stop where you click.</li>
         <li>Keep in mind Pikmin will be carrying large objects through these paths, so make sure there's enough space around them.</li>
         <li>Pikmin go to the nearest stop when they begin carrying. Make sure that for most places, the nearest stop is not on the other side of a wall or through a hazard.</li>
-        <li>Don't worry about making your paths 100% foolproof, since <a href="https://www.pikminwiki.com/Path_oversights">not even the canon developers could do it</a>.</li>
+        <li>Don't worry about making your paths 100% foolproof, since <a href="https://www.pikminwiki.com/Path_oversights">not even the canon developers can do it</a>.</li>
       </ul></dd>
     </dl>
 
@@ -368,15 +366,15 @@
       <p>The standard tree shadow on top of the area.</p>
     </div>
     
-    <p>One important detail to add to most outdoor areas is the shadows the trees and leafs cast onto the floor. Because they sway left and right, and also change opacity in real-time, they cannot be baked into the textures of the area, and instead need to be their own thing. You can only edit tree shadows in the "Details" mode, accessible by pressing the mode's button from the main menu panel.</p>
+    <p>One important detail to add to most outdoor areas is the shadows the trees and leaves cast onto the floor. Because they sway left and right, and also change opacity in real-time, they cannot be baked into the textures of the area, and instead need to be their own thing. You can only edit tree shadows in the "Details" mode, accessible from the main menu panel.</p>
 
     <dl>
-      <dt><b>Press the "+" button on the panel to place a new tree shadow where you click.</b></dt>
+      <dt><b>Press the "+" button in the panel to place a new tree shadow where you click.</b></dt>
       <dd>Click more or less in the center of the area, since this will also be the center of our tree shadow.</dd>
-      <dt><b>Set its texture in the "File" textbox.</b></dt>
+      <dt><b>Set its texture in the "Bitmap" textbox.</b></dt>
       <dd>This texture should be in the <code>Game_data/Graphics/Textures</code> folder. Remember to include the extension. Until you give a valid texture, it will just be a black-and-violet pattern. Try using <code>Tree_shadow.png</code>, which should come with the engine. Alternatively, use the "..." button to browse for a texture which, once more, needs to be in the textures folder.</dd>
-      <dt><b>Use the handles around the tree shadow to move it (center handle), rotate it (large circle around it), or scale it (8 handles on the edges and corners).</b></dt>
-      <dd>Use these to make the shadows cover the terrain, the outer rim, and even a bit of the void, just so the player cannot see when the shadow texture ends, even as it sways left and right. To scale the width and height independently, uncheck the "Keep aspect ratio" option.</dd>
+      <dt><b>Use the handles around the tree shadow to move it (center handle), rotate it (large circle around it), or scale it (edge and corner handles).</b></dt>
+      <dd>Use these to make the shadows cover the terrain, the outer rim, and even a bit of the void, just so the player cannot see when the shadow texture ends, even as it sways left and right. To scale the width and height independently, uncheck the "Keep aspect ratio" option. Alternatively, you can use the panel widgets to set these properties.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>Don't worry if the texture is so stretched that it becomes blurry. That's actually a good thing, since shadows of distant things are blurry.</li>
@@ -386,7 +384,7 @@
 
     <h3 id="reviewing">Reviewing</h3>
     
-    <p>The sector-based system works well for areas in the engine, but has a few drawbacks. If you mess with the sectors, edges, or vertexes in <a href="#precautions">ways that aren't expected</a>, the sectors will have problems and will not work properly in-game. Even if everything works okay, it may not look exactly like you envisioned in the editor. You can use the review mode, accessible by the "Review" button on the main menu panel, to make sure everything is all right with your area, and that it matches up what what you want.</p>
+    <p>The sector-based system works well for areas in the engine, but has a few drawbacks. If you mess with the sectors, edges, or vertexes in <a href="#precautions">ways that aren't expected</a>, the sectors will have problems and will not work properly in-game. Even if everything works okay, it may not look exactly like you envisioned in the editor. You can use the review mode, accessible by the "Review" button on the main menu panel, to make sure everything is all right with your area, and that it matches up with what you want.</p>
 
     <dl>
       <dt><b>Use the "Find errors" button to search for problems with the area, from logical mistakes to parts of the geometry being corrupted.</b></dt>
@@ -398,15 +396,15 @@
     <h3 id="other-basics">Other basic operations</h3>
     
     <ul>
-      <li><b>Deleting a sector</b>: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If this sector is isolated, meaning that it's not connected to any other sector, you can just select it and click the sector deletion button on the panel. But if it is connected, you'll have to delete edge by edge.</li>
-      <li><b>Unstitching a sector</b>: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits.</li>
+      <li><b>Deleting edges and sectors</b>: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
+      <li><b>Unstitching a sector</b>: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits. Alternatively, draw a sector between them, and then delete one of the edges that is exclusive to that sector.</li>
       <li><b>Making a bottomless pit</b>: Just check the "bottomless pit" checkbox in the advanced behavior settings. Objects that touch the floor of this sector will be considered as falling into the pit. The floor is also not visible, so you see the background, or just black.</li>
       <li><b>Making a circular sector</b>: You can't draw actual circles, since those don't have lines, but you can get close by drawing a polygon with a lot of same-length lines. Instead of painstakingly drawing out the lines, you can click the button next to the new sector creation button to start the process of drawing a circular sector. Start by specifying the center of the circle, then its radius, and finally, how smooth it is.</li>
     </ul>
 
     <div class="image">
-      <img src="../images/delete_sector.png" alt="How to delete a sector.">
-      <p>How to delete a sector.</p>
+      <img src="../images/delete_sector.png" alt="How to delete a sector by crushing it.">
+      <p>How to delete a sector by crushing it.</p>
     </div>
     <div class="image">
       <img src="../images/unstitch.png" alt="How to unstitch a sector.">
@@ -423,54 +421,43 @@
 
     <h3 id="weather">Subtitle and weather</h3>
     
-    <p>If you want your area to have a simple subtitle to show up on the loading screen, like the "Battle enemies!" subtext in <a href="https://www.pikminwiki.com/Mission_Mode">Mission Mode</a>, you can specify it in the "subtitle" option in the area information panel. In addition, you can also specify the weather condition to use in this area (if any), which affects the lighting throughout the day, and can have some visual effects and particles. See <a href="weather.html">this page</a> for a guide on how to make weather conditions.</p>
+    <p>If you want your area to have a simple subtitle to show up on the loading screen, like the "Battle Enemies!" subtext in <a href="https://www.pikminwiki.com/Mission_Mode">Mission Mode</a>, you can specify it in the "subtitle" option in the area information panel. In addition, you can also specify the weather condition to use in this area (if any), which affects the lighting throughout the day, and can have some visual effects and particles. See <a href="weather.html">this page</a> for a guide on how to make weather conditions.</p>
 
     <h3 id="advanced-texture">Advanced texture settings</h3>
     
-    <p>Suppose you have a texture for a circular tree trunk and you want to put it on a sector. But the way the texture is aligned, it doesn't match up with the sector at all. It is possible to rotate, scale, and move a sector's texture such that it fits your needs. Enter the advanced sector appearance settings panel. You can adjust the numbers in the panel to transform the texture. This process is very hard to do manually though, so you can instead go to the tools panel, accessible from the main menu panel, and enter the texture transformer. Change what operation you want to perform using the panel, and then drag a sector's texture around to transform it. These transformations are based on the origin (coordinates 0,0), so for instance, the texture rotates around the area's origin.</p>
+    <p>Suppose you have a texture for a circular tree trunk and you want to put it on a sector. But the way the texture is aligned, it doesn't match up with the sector at all. It is possible to rotate, scale, and move a sector's texture such that it fits your needs. Enter the texture effects section of the sector panel. You can adjust the numbers in the panel to transform the texture. This process is very hard to do manually though, so you can instead activate on-canvas editing, choose what operation you want to perform, and then drag a sector's texture around to transform it. These transformations are based on the origin (coordinates 0,0), so for instance, the texture rotates around the area's origin.</p>
 
     <p>In the advanced sector appearance settings, you can also tint the texture with any given color. This is a great way to darken the texture without actually tampering with the sector's brightness.</p>
 
     <h3 id="persistent-shadow">Persistent shadow casting</h3>
     
-    <p>If you want to make it so that a sector will always cast a shadow against its neighboring sectors, regardless of how much higher it is, there is a checkbox for that on the advanced sector appearance's panel. This is useful for when you have a tiny step up in the terrain (which doesn't normally cast a shadow), but it looks ugly against the other terrain, so you want it to cast a shadow. For example, a tree's root protruding slightly through the ground.</p>
+    <p>If you want to make it so that a sector will always cast a shadow against its neighboring sectors, regardless of how much higher it is, there is a checkbox for that in the advanced sector appearance's panel. This is useful for when you have a tiny step up in the terrain (which doesn't normally cast a shadow), but it looks ugly against the other terrain, so you want it to cast a shadow. For example, a tree's root protruding slightly through the ground.</p>
 
     <h3 id="script-vars">Script variables</h3>
     
-    <p>When you place an object, you can specify some special properties, that are unique to each object type. This is done by writing the variables and their values in the "Script variables" textbox in the object's panel. Each variable follows the format <code>variable=value</code>, and you separate them with semicolons (;). Example: <code>maturity = 0; sprout = true</code>.</p>
-
-    <p>That example contained variables that a Pikmin can use. Specifically, that would make it start as a leaf (<code>0</code> would be a leaf, and <code>2</code> a flower), as well as start as a sprout buried in the ground.</p>
-
-    <p>The following script variables will be read when an object spawns:</p>
-    <ul>
-      <li><b><code>team</code></b>: What team this specific object belongs to. The list of teams is the same as the one used in the <code>set_team</code> action of the object script, so see <a href="script.html">here</a> for more information.</li>
-    </ul>
-
-    <p>The object you've placed can also read and do something with other variables. Check that object's <a href="mob_type.html#mob-categories">category article</a> for a list of variables, if any. If the object also supports a custom script, you can pass any variable here for the script to use.</p>
-
-    <p>Some useful tips for very specific objects:</p>
-    <ul>
-      <li>To spawn functional signs, which give the player information when a leader interacts with them, you need to set the <code>text</code> variable to specify what text shows up. You can use <code>\n</code> in this text to represent a new line.</li>
-      <li>To get a Pellet Posy to take less time to grow, set the <code>bloom_time</code> variable to the number of seconds left before full bloom. To change what colors it has, set the <code>red</code>, <code>yellow</code>, and/or <code>blue</code> variables to true, e.g. <code>red = true; blue = true</code>.</li>
-      <li>To force an egg to always contain the same thing, set the <code>contents</code> variable to one of the following: <code>nectar</code>, <code>nectar_2</code> (2 drops of nectar), <code>spicy_drop</code>, or <code>bitter_drop</code>.</li>
-      <li>To get a seesaw block in a pair to start in the downed position, use <code>start_down = true</code>.</li>
-    </ul>
+    <p>When an object spawns in the area, it can read some "<a href="script.html#vars">script variables</a>" to change its behavior. These take on the format <code>variable=value</code>, and in the object's internal data, the full list separates each one with a semicolon (;). Example: <code>maturity = 0; sprout = true</code>.</p>
+    
+    <p>Although you can edit the list manually using the "Full list" textbox in the panel, most variables can be edited with dedicated widgets, also present in the panel's "Script vars" section. That said, if you know the object's script, and want to edit a variable that is not present as a widget, you can edit the "Full list" field instead and set the variable there.</p>
 
     <h3 id="linked-mobs">Linked objects</h3>
     
-    <p>If you want an object to <b><a href="misc_features.html#mob-links">link</a></b> to another one, first select that object, then at the bottom of the panel, there will be a counter saying something like "0 links". This means the object has no links right now. Simply click the "+" button and click on another object to link to it. Note that links are one-way, so if you want the other object to be linked to this one, you need to do the same process to that one. To remove an object's link, click the "-" button when that object is selected, and then simply click on the object you want to remove the link from. You can also click on the little line that connects the two.</p>
+    <p>If you want an object to <a href="misc_features.html#mob-links">link</a> to another one, first select that object, then at the bottom of the panel, there will be a counter saying something like "0 links". This means the object has no links right now. Simply click the "+" button and click on another object to link to it. Note that links are one-way, so if you want the other object to be linked to this one, you need to do the same process to that one. To remove an object's link, click the "-" button when that object is selected, and then simply click on the object you want to remove the link from. You can also click on the little line that connects the two.</p>
 
     <p>Some objects need to be linked together in order to work, like two seesaw blocks in a pair.</p>
 
     <h3 id="sideways">Sideways view</h3>
     
-    <p>At times, it may be very hard to visualize in your head just how high a sector is in comparison to the sectors around it. You can get a graph that shows what a slice of the area looks like from the side, which should help you get a better understanding of your world. When reviewing the area, there is an option to enable the cross-section view, which, as the name implies, draws a cross-section of the area. The length and angle of this cross-section is determined by points A and B, that show up on the area when you enable the option.</p>
+    <p>At times, it may be very hard to visualize in your head just how high a sector is in comparison to the sectors around it. You can open a graph that shows what a slice of the area looks like from the side, which should help you get a better understanding of your world. When reviewing the area, there is an option to enable the cross-section view, which, as the name implies, draws a cross-section of the area. The length and angle of this cross-section is determined by points A and B, that show up on the area when you enable the option.</p>
 
     <p>Move the points to make them cross some edges, and see the window at the top-left update accordingly. To get an idea of what you're seeing, imagine that, from the game world, you cut an ultra-thin block, represented by the line, and are looking at it from the side. The location of A is at the left of the chart, whereas B is on the right. If you move your mouse near the line, you'll see a gray line on the window that represents where the cursor is. You can use this to get an idea of where each sector is. The chart will also have a Pikmin icon, which represents the standard Pikmin height, just to give you extra perspective.</p>
 
     <h3 id="references">Reference</h3>
     
-    <p>If you made a reference image for your area, like a sketch, you can place it on top of the editor, so that you may draw through it. The information for the reference will be saved in your user data folder, and will not show up in-game, only on the editor. To use one in your area, go to the Tools panel, and specify the file name there. It can be any file on your computer, so it doesn't even need to be in the engine's folder. Next, you can either edit the position and size of the reference using the textboxes, or you can drag the handles; they should work just like transforming a <a href="#tree-shadows">tree shadow</a>. While you're working, if your reference is in the way, remember that there are controls in the toolbar to quickly change its visibility.</p>
+    <p>If you made a reference image for your area, like a sketch, you can place it on top of the editor, so that you may draw through it. The information for the reference will be saved in your user data folder, and will not show up in-game, only in the editor. To use one in your area, go to the Tools panel, and specify the file name there. It can be any file in your computer, so it doesn't even need to be in the engine's folder. Next, you can either edit the position and size of the reference using the textboxes, or you can drag the handles; they should work just like transforming a <a href="#tree-shadows">tree shadow</a>. While you're working, if your reference is in the way, remember that there are controls in the toolbar to quickly change its visibility.</p>
+    
+    <h3 id="vertex-transform">Vertex transformation</h3>
+    
+    <p>In the area editor's options (accessible in the menu bar), you can enable selection transformation. This allows you to select several vertexes and transform them all together. This means you can move them all together with the transformation widget's center handle, or you can scale the entire selection, or you can rotate them. When doing this, be careful with the edges connected to these sectors, or you may move them in a way that's not allowed.
 
     <h2 id="precautions">Precautions</h2>
     
@@ -479,7 +466,7 @@
       <li>When stitching several vertexes, go one neighbor at a time. If you leave a gap, the engine might report an error on the gap sector until it is properly closed.</li>
       <li>Don't split a sector into two by inserting a different sector in-between. If a sector is split into two, it stops being one polygon and becomes two. The engine isn't ready to handle that, so fill in one of the two polygons with an entirely new sector.</li>
       <li>Sectors must be simple. The only noteworthy part about this fact is that when making a sector, you can't have its edges share the same vertex more than twice.</li>
-      <li>Areas are very complex on the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu on the area editor, and load the automatically-saved backup from there.</li>
+      <li>Areas are very complex in the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu in the area editor, and load the automatically-saved backup from there.</li>
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
 
@@ -524,19 +511,25 @@
       <li>You can move entire sectors by clicking on them and dragging them.</li>
       <li>You can drag multiple vertexes, edges, sectors, objects, or path stops together by selecting them and dragging one.</li>
       <li>You can force the engine to only select vertexes, vertexes and edges, or everything, by setting the selection filter. Click on the filter button at the top of the "Layout" panel to toggle the current filter.</li>
-      <li>If you accidentally clicked the "+" button to create a new sector, object, etc., you can press it again to cancel.</li>
       <li>Holding shift will free the mouse, so that you're no longer forced to do things exactly on the grid.</li>
       <li>When creating a new vertex via double-click, you don't need to let go off the mouse button on the second click; you can move the vertex right away if you keep it held.</li>
       <li>When drawing out a new sector, if you accidentally placed the last vertex in the wrong spot, you can click that same vertex to try again.</li>
-      <li>Although most of the work is done on the editor, you are free to edit the text file manually if you need to fine-tune some numbers.</li>
+      <li>Use the options (in the menu bar) to customize the editor to your liking.</li>
+      <li>Although most of the work is done in the editor, you are free to edit the text file manually if you need to fine-tune some numbers. Be careful, though!</li>
       <li>A "texture fader" sector will also fade between levels of brightness and texture tints. Use this creatively.</li>
-      <li>If you place your mouse cursor over elements in the panel on the right, you'll get a description about them. With this, you can also learn about shortcut keys. For instance, holding Ctrl and pressing D will allow you to quickly duplicate the currently selected object.</li>
       <li>With the stock content that comes with the engine, Pikmin or leaders thrown by the player's leader can reach a maximum height of:
         <ul>
           <li>Leaders: 130</li>
           <li>Purple Pikmin: 210</li>
           <li>Standard Pikmin: 260</li>
           <li>Yellow Pikmin: 330</li>
+        </ul>
+      </li>
+      <li>
+        The GUI is built using Dear ImGui. Here are some tips on how to use the widgets:
+        <ul>
+          <li>When dragging your mouse on a slider widget, hold Alt to make the values change more slowly, and Shift to make them change faster.</li>
+          <li>Double-click or Ctrl + click a slider widget to be able to edit the number inside directly.</li>
         </ul>
       </li>
     </ul>

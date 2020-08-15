@@ -1142,6 +1142,10 @@ void animation_editor::process_gui_panel_body_part() {
             
         }
         
+    }
+    
+    if(anims.body_parts.size() > 1) {
+    
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         

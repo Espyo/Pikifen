@@ -2,53 +2,14 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Documentation update
-        Recreate the script and animation tutorials to be like the area one
-        Update it for 0.19
-            Note that "drain_liquid" also detects bridge sectors now
     
-Completed tasks (formatted and cherry-picked for use in the next version's changelog)
-    ;Changes
-    * Revamped editors
-    ** The GUI now uses ImGui.
-    ** More information fits in a single panel now, and the user can open or close parts of the panel at will (this is memorized between sessions).
-    ** Information on widgets is now shown via (toggleable) tooltips, instead of the status bar.
-    ** The way some things are done has been changed to be more streamlined. e.g.: picking a texture now shows a dedicated dialog, renaming animations is now done in-place in the animation panel.
-    ** If you select an object that can change its behavior thanks to certain script vars, the panel will now show widgets that let you tweak those properties yourself, instead of having to write script vars by hand.
-    ** Objects with certain tricks to them (e.g. they must be linked to another mob) will now show hints in the object panel, when you select them.
-    ** Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)
-    ** Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.
-    ** The animation editor now has a grid too, and animations have a simple timeline.
-    ** Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)
-    ** Added a way to resize and rotate selected vertexes together; enable it in the area editor options.
-    ** Several other small things have been tweaked.
-    * Added a performance monitor to the creator tools. When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a results file gets written when you leave. It can help you figure out what the heaviest parts of your content are.
-    * Added a way to add actions, events, and states to object types that have hardcoded scripts.
-    * If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)
-    * Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.
-    * Fixed cardboard boxes not blocking the way if they are not in place, but for this to work, you'll need to use a "Dummy obstacle target" object as a target.
-    * Fixed a few miscellaneous glitches. (Thanks Kman)
-    * Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)
-    
-    ;Compatibility warnings
-    * The <code>is_obstacle</code> property has been removed. Use the <code>team</code> property instead to change an object type's starting team, and set that to the "obstacle" team if you want.
-    * "Group move" has been renamed to "swarm". This affects the following:
-    ** <code>Group_move_arrow.png</code> in the graphics folder was renamed to <code>Swarm_arrow.png</code>.
-    ** The property <code>group_move_arrow</code> in the system asset file names file was renamed to <code>swarm_arrow</code>.
-    ** The config file property <code>group_move_task_range</code> was renamed to <code>swarm_task_range</code>.
-    ** The controls for group control were renamed to <code>swarm_right</code>, <code>swarm_up</code>, <code>swarm_left</code>, <code>swarm_down</code>, and <code>swarm_cursor</code>. Please re-bind them in the options.
-    * <code>pikmin_grab_range</code> in the game configuration file has been renamed to <code>group_member_grab_range</code>.
-    * Some definitions have been changed from being all lumped into a single file, to being spread over several files in a folder. This should allow makers to share their content more easily by only including new files, thus avoiding replacing the files players already had.
-    ** The following have been affected: hazards, liquids, particle generators, spike damage types, spray types, status effects, weather conditions.
-    ** In addition, added the <code>spray_order</code> property to the game configuration file; use this to set the standard order of sprays.
-    * Some file name logic was changed to sanitize the file names. This is to make it so you can still save an area called "Secret?", for instance, since otherwise the question mark would be illegal. That said, if one of your areas fails to load, try changing its folder name to something simpler (letters, numbers, spaces, dashes, and underscores allowed).
-    * If you made an area and wrote down your creator name in the "Info" section, you'll need to write it again, since the property "creator" got renamed to "maker".
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
     
     
     --- v0.20.0 ---
+    Recreate the script and animation tutorials to be like the area one
     Details
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)

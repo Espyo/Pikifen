@@ -18,7 +18,7 @@
     
     <h1>Object script</h1>
     
-    <p>This page will guide you on how to write a script for enemy objects in <i>Pikifen</i>. Although it is recommended to follow this guide from start to finish, you may jump straight to a section that explains a specific problem you may be having. To note is that you can also copy and paste an existing enemy's scripts and properties and adjust them to your liking, instead of creating everything from scratch.</p>
+    <p>This page will guide you on how to write a script for objects in <i>Pikifen</i>. Although it is recommended to follow this guide from start to finish, you may jump straight to a section that explains a specific problem you may be having. To note is that you can also copy and paste an existing enemy's scripts and properties and adjust them to your liking, instead of creating everything from scratch.</p>
 
     <h2 id="intro">Introduction</h2>
     
@@ -144,6 +144,8 @@
     <p>We'll save it somewhere known as a <b>variable</b>. This is some space in memory dedicated to saving a value, and we can change it or retrieve it at any point. In our case, the variable will hold the amount of chomped Pikmin. And what about its name? In the previous paragraph, we called it <code>pim</code> (short for "Pikmin in mouth"), but you can call any variable whatever you like. From here on out, whenever you need to refer to the number of Pikmin in its mouth, you can access the value in this "pim" variable by writing <code>$pim</code>. When the script is run, it will replace <code>$pim</code> with 0, or 1, or whatever else "pim" is worth at the time.</p>
 
     <p>It's generally good practice to declare a starting value for your variables. For this, you can create an <code>init</code> block <i>outside</i> of the <code>script</code> block, and in it, add <code>set_var pim 0</code>. This will set the value of the "pim" variable to 0. Any actions inside this block will be run when the object is created, so you always know what the starting value of every variable is.</p>
+    
+    <p>It is also possible for one specific Red Bulborb in the area to spawn with some new variables set, or some initial variables altered. For instance, in the area editor, you can tell one specific Pellet Posy to start already bloomed, or an Armored Cannon Beetle can spawn a boulder and tell it to be homing. This data is stored in the script vars, and parts of the script can make use of them to change the object's behavior. Or if a given variable is not set, the script can use the default value specified in the aforementioned <code>init</code> block. You can use this to allow different objects to behave differently using the same script. Also note the engine can make use of the script variable system to allow you to set some internal data about the object, like a Pikmin's starting maturity, or an object's team. You don't need to do anything with this information, but it is helpful to know this is how the engine works.</p>
 
     <h3 id="conditions">Conditions</h3>
     
@@ -186,9 +188,19 @@
     <p>You'll need to tinker with these values until you find some balance you like. The other reaches will be something like <code>attack = 40 30</code> (Pikmin within this reach are ready to be chomped), and <code>chase = 250 360</code> (focused Pikmin outside of this reach will be considered lost).</p>
 
     <p>Other than that, there's the script file's <code>death_state</code> property we filled earlier, and there is also a <code>states_ignoring_death</code> property, in which you can list states that are meant to ignore the death event (separated by semicolon). If you find that a death even is being sent on states you don't want, add the state's name here. Similarly, there's a <code>states_ignoring_spray</code> property.</p>
-
+    
     <p>This ends the tutorial. From here on out, you would continue the script whichever way you wanted. Know that you can check the scripts of enemies that come packaged with the engine to learn more.</p>
-
+    
+    <h2 id="hardcoded">Hardcoded script</h2>
+    
+    <p>Some categories of object type do not require you to build a script. Pikmin, leaders, and some other categories all have a hardcoded script inside the engine's logic, and you can create a new Pikmin or leader without worrying about scripting them. This is because these objects require much more complex operations than normal. That said, you can still enhance the existing hardcoded script.</p>
+    
+    <p>To do so, you can add a <code>Script.txt</code> file to the object's folder like normal. In reality, the hardcoded script cannot be edited per se, but what you can do is add new actions to existing events, create new events, or create new states. To know what states and events an object in a category uses, your best bet is to open the engine's source code, and check the <code>.cpp</code> code files inside the <code>source/mob_fsms</code> folder. Keep in mind some states handle events that cannot be recognized in a <code>Script.txt</code> file, so you will be unable to extend those.</p>
+    
+    <p>In <code>Script.txt</code>, you can write existing states or new ones, and existing events or new ones. If this is a new state, or a new event in an existing state, the engine will simply run the actions you specify when the time comes. Otherwise, the engine will run your actions first and then run whatever hardcoded actions it has. The reason it runs your actions first is because its own logic likely changes the state, and as you know, any action that comes after a state change will be ignored. That said, if you want the actions in a given event to take place <i>after</i> the hardcoded actions, write <code>custom_actions_after</code> as the first line in your list of actions.</p>
+    
+    <p>Because the engine expects objects to follow their hardcoded script, which usually involves a lot of complex tasks, tampering with the script is risky. For instance, if an object was meant to change to a specific state, and you make it change to another one instead, the engine could later on try to do something with the state it <i>thinks</i> the object should be at, and crash. As such, if you want to enhance a hardcoded script, try sticking with things like adding particles, setting some script variables, sending messages, etc.</p>
+    
     <h2 id="event-list">List of events</h2>
     
     <table>
@@ -337,7 +349,7 @@
       </tr>
       <tr>
         <th><code>drain_liquid</code></th>
-        <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</td>
+        <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid, or are bridges (or bridge rails).</td>
       </tr>
       <tr>
         <th><code>else</code></th>

@@ -962,13 +962,13 @@ void performance_monitor_struct::save_log() {
     s += "\nLoading times:\n";
     loading_page.write(s);
     
-    s += "\nAverage frame logic processing:\n";
+    s += "\nAverage frame processing times:\n";
     frame_avg_page.write(s);
     
-    s += "\nFastest frame logic processing:\n";
+    s += "\nFastest frame processing times:\n";
     frame_fastest_page.write(s);
     
-    s += "\nSlowest frame logic processing:\n";
+    s += "\nSlowest frame processing times:\n";
     frame_slowest_page.write(s);
     
     //Finally, write the string to a file.

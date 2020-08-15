@@ -32,7 +32,7 @@
 
     <p>The <code>enabled</code> property controls whether or not the toolkit is enabled.</p>
 
-    <p>Afterwards, there are the <code>f1</code>, <code>f2</code>, etc. properties, all the way up to <code>f11</code>, as well as the <code>0</code> to </code>9</code> properties. These properties specify what tool to run when that key is pressed, if any. The value of these properties should be the tool's ID; to know a tool's ID, check its section on this article.</p>
+    <p>Afterwards, there are the <code>f1</code>, <code>f2</code>, etc. properties, all the way up to <code>f11</code>, as well as the <code>0</code> to <code>9</code> properties. These properties specify what tool to run when that key is pressed, if any. The value of these properties should be the tool's ID; to know a tool's ID, check its section on this article.</p>
 
     <p>Finally, this file can also contain settings for some of the tools. Read a tool's section on this article to learn more about what settings it has.</p>
 
@@ -106,9 +106,11 @@
     </ul>
 
     <p>As such, the information shown is mostly useful to debug scripts and animations. </p>
-
-    <li>Tool ID: <code>mob_info</code>.</li>
-    <li>Settings: none.</li>
+    
+    <ul>
+      <li>Tool ID: <code>mob_info</code>.</li>
+      <li>Settings: none.</li>
+    </ul>
 
     <h3 id="new-pikmin">New Pikmin</h3>
     
@@ -118,7 +120,7 @@
       <li>Tool ID: <code>new_pikmin</code>.</li>
       <li>Settings: none.</li>
     </ul>
-
+    
     <h3 id="hitboxes">Show hitboxes</h3>
     
     <p>Toggles visibility of mob hitboxes in-game. For each mob that has hitboxes, they will appear overlaid on top of it, and with a color scheme similar to the animation editor (green for hitboxes that can be damaged, red for those currently causing damage, and yellow for ignored ones).</p>
@@ -144,6 +146,16 @@
     <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid that. It makes the engine start on something other than the main menu automatically, and also optionally automatically open a specific area or animation.</p>
 
     <p>The <code>auto_start_mode</code> variable controls what mode to automatically start on. If left empty, the engine boots to the main menu as usual. Valid values are <code>play</code>, <code>animation_editor</code> or <code>area_editor</code>. The <code>auto_start_option</code> variable contains the area or animation to load on the game or editor, optionally. For areas, this is just the area name, but for animations, this has to be the full file name, directories included.</p>
+    
+    <h3 id="perf-mon">Performance monitor</h3>
+    
+    <p>When you enter an area, the engine loads a lot of content, and does a lot processing to get the gameplay state ready. This procedure takes a few seconds. If you suspect some of your content is causing the load times to be too high, you can use the performance monitor to find out how long the engine takes on each part of the area loading procedure. Likewise, while playing, the engine needs to process and draw several different things. If the framerate (press F1) is low or unstable, and you suspect some of your content is to blame, the performance monitor can help you here too.</p>
+    
+    <p>The <code>performance_monitor</code> property controls whether the monitor is on or off. If you don't need it, keep it off, since it can slow the game down! When you turn it on, any area you enter will be monitored. When you quit, the engine will generate a performance report about the area's loading procedure, and the frames of gameplay. The report can be found in <code>User_data/Performance_log.txt</code>.</p>
+    
+    <p>The data for each recorded area is split into four parts. The first is the loading times; with this, you can tell how long the engine took to load the particle generator info, the HUD settings, the weather data, etc. For object types, it will also split the measurements by each category of object type. Besides that, the log will also show how long it took to process the different parts of the area generation procedure. All of this information can help you realize what's making your area take so long to load &ndash; maybe it has too many objects, maybe its sectors are too complex, or maybe your pellet graphics are just too high-resolution.</p>
+    
+    <p>The other three parts of the report refer to the framerate. The second part measures how long the average frame takes to process and draw on-screen, while the third and fourth parts report the fastest frame you had, and the slowest, respectively. This difference can be useful in figuring out if something during gameplay is causing severe frame drops. In these reports, the log will tell you how long the engine takes to completely process one frame, measuring how long it takes to process all particles, object physics, etc., as well as how long it takes to draw the background, world components, HUD, and so on. With this data, you may come to a conclusion about what's making your framerate be so low, or so unstable &ndash; maybe your area has too many objects colliding against each other, maybe one of your enemy scripts is too heavy when doing some specific calculation, or maybe you just have way too many tree shadows.</p>
     
   </div>
 </body>

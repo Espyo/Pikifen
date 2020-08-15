@@ -1039,7 +1039,7 @@ void editor::process_mob_type_widgets(
             vector<string> names;
             mob_category* c_ptr = game.mob_categories.get(c);
             c_ptr->get_type_names(names);
-            string cat_name = game.mob_categories.get(c)->plural_name;
+            string cat_name = game.mob_categories.get(c)->name;
             
             for(size_t n = 0; n < names.size(); ++n) {
                 if(
@@ -1077,7 +1077,7 @@ void editor::process_mob_type_widgets(
     
     vector<string> categories;
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        categories.push_back(game.mob_categories.get(c)->plural_name);
+        categories.push_back(game.mob_categories.get(c)->name);
     }
     int selected_category_nr = (*cat)->id;
     

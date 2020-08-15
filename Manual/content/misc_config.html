@@ -52,7 +52,7 @@
     <br>
     
     <ul>
-      <li><b><code>pikmin_order</code></b>: Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Separate each type with a semicolon (;). e.g. <code>Red Pikmin;Yellow Pikmin;Blue Pikmin</code>.</li>
+      <li><b><code>pikmin_order</code></b>: Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Separate each type with a semicolon (;). e.g. <code>Red Pikmin;Yellow Pikmin;Blue Pikmin</code>. Types you do not specify will go to the end of the list.</li>
       <li><b><code>standard_pikmin_height</code></b>: The height of a "standard" Pikmin, i.e. a Pikmin that's not shorter or taller than most. Used to help calculate some physics logic.</li>
       <li><b><code>standard_pikmin_radius</code></b>: The radius of a "standard" Pikmin, i.e. a Pikmin that's not skinnier or fatter than most. Used to help calculate some physics logic.</li>
     </ul>
@@ -61,13 +61,14 @@
 
     <ul>
       <li><b><code>leader_order</code></b>: Like <code>pikmin_order</code>, but for the leaders.</li>
+      <li><b><code>spray_order</code></b>: Like <code>pikmin_order</code>, but for sprays.</li>
     </ul>
     
     <br>
 
     <ul>
       <li><b><code>idle_task_range</code></b>: Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</li>
-      <li><b><code>group_move_task_range</code></b>: Same as above, but for a Pikmin on the group during the "group move" command.</li>
+      <li><b><code>swarm_task_range</code></b>: Same as above, but for a Pikmin in the group during swarming.</li>
       <li><b><code>max_pikmin_in_field</code></b>: Maximum number of Pikmin that can be on the field.</li>
       <li><b><code>maturity_power_mult</code></b>: Every maturity level, multiply a Pikmin's attack power by this much.</li>
       <li><b><code>maturity_speed_mult</code></b>: Every maturity level, multiply a Pikmin's walking speed by this much.</li>
@@ -82,7 +83,7 @@
       <li><b><code>cursor_spin_speed</code></b>: How quickly the mouse cursor's icon spins, in degrees per second.</li>
       <li><b><code>next_pluck_range</code></b>: When auto-plucking, a leader will only choose the next Pikmin if it is within this distance.</li>
       <li><b><code>onion_open_range</code></b>: Leaders can open an Onion if they're within this range from the center of the Onion object.</li>
-      <li><b><code>pikmin_grab_range</code></b>: A leader can grab the closest Pikmin only if it is within this distance.</li>
+      <li><b><code>group_member_grab_range</code></b>: A leader can grab the closest group member only if it is within this distance.</li>
       <li><b><code>pluck_range</code></b>: A leader can pluck a Pikmin only if it is within this distance.</li>
       <li><b><code>whistle_growth_speed</code></b>: How quickly the whistle's radius grows in size, in pixels per second.</li>
     </ul>
@@ -163,11 +164,12 @@
     
     <p>"Spike damage" is a mechanic where objects that suffered damage can immediately retaliate by damaging their attacker. In the <i>Pikmin</i> games, this is used by a White Pikmin to release poison to the enemy that ate it, in order to cause poison damage. In the engine, the same can be done, but any object can retaliate in any way, whether it is swallowed or damaged normally.</p>
 
-    <p>The file <code>Game_data/Misc/Spike_damage.txt</code> controls the types of spike damage that exist in the game. Each block in this file represents one type of spike damage, and the properties inside control how it works. The name of the block is the name of the type of spike damage, and you will have to refer to this name when setting object properties elsewhere.</p>
+    <p>The folder <code>Game_data/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="text_file.html">text file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
 
     <p>The properties are:</p>
     
     <ul>
+      <li><b><code>name</code></b>: The name of this type of spike damage. You will need to use this name when referring to this type elsewhere.</li>
       <li><b><code>damage</code></b>: How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property.</li>
       <li><b><code>ingestion_only</code></b>: <code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin.</li>
       <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Default is <code>false</code>.</li>
@@ -175,7 +177,7 @@
       <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coords">relative coordinates</a>.</li>
     </ul>
 
-    <p>Remember to change the mob type properties for the mobs you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>
+    <p>Remember to change the object type properties for the objects you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>
 
     <h2 id="system-asset">System asset file names</h2>
     
@@ -189,7 +191,7 @@
       <li><b><code>counter_font</code></b>: Font to use for counters in the HUD.</li>
       <li><b><code>editor_icons</code></b>: Spritesheet where all editor icons are.</li>
       <li><b><code>enemy_spirit</code></b>: Enemy spirit.</li>
-      <li><b><code>group_move_arrow</code></b>: Arrow that comes out from the leader when using group move.</li>
+      <li><b><code>swarm_arrow</code></b>: Arrow that comes out from the leader when swarming.</li>
       <li><b><code>icon</code></b>: The game's icon.</li>
       <li><b><code>idle_glow</code></b>: Glowing effect on idle Pikmin.</li>
       <li><b><code>main_font</code></b>: The game's main text font.</li>
