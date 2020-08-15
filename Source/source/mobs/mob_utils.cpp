@@ -66,6 +66,10 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
  * Returns the speed at which the object should move, given the carrier Pikmin.
  */
 float carry_info_struct::get_speed() const {
+    if(cur_n_carriers == 0) {
+        return 0;
+    }
+    
     float max_speed = 0;
     
     //Begin by obtaining the average walking speed of the carriers.

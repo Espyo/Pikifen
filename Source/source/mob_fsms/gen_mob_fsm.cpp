@@ -289,7 +289,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     
     //If the target changed, send a move begin event,
     //so that the mob can calculate a (new) path and start taking it.
-    if(prev_destination != m->carry_info->intended_mob) {
+    if(can_move && (prev_destination != m->carry_info->intended_mob)) {
         m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
         return;
     }
