@@ -404,6 +404,11 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
+    if(ImGui::GetIO().WantCaptureKeyboard) {
+        //A textbox is in use. Clicking could change the state of the area,
+        //so ignore it now, and let Dear ImGui close the box.
+        return;
+    }
     if(is_ctrl_pressed) {
         handle_lmb_down(ev);
         return;
@@ -462,6 +467,11 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_mouse_in_gui) return;
+    if(ImGui::GetIO().WantCaptureKeyboard) {
+        //A textbox is in use. Clicking could change the state of the area,
+        //so ignore it now, and let Dear ImGui close the box.
+        return;
+    }
     
     switch(state) {
     case EDITOR_STATE_LAYOUT: {

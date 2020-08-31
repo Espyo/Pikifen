@@ -42,6 +42,7 @@ bool ListBox(
     const string &label, int* current_item, const vector<string> &items,
     const int height_in_items = -1
 );
+void Reset();
 
 };
 

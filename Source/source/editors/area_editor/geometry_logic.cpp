@@ -586,7 +586,8 @@ void area_editor::find_problems() {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         if(
-            m_ptr->category->id == MOB_CATEGORY_BRIDGES
+            m_ptr->category->id == MOB_CATEGORY_BRIDGES ||
+            m_ptr->category->id == MOB_CATEGORY_DECORATIONS
         ) {
             continue;
         }

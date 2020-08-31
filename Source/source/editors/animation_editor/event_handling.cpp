@@ -181,6 +181,11 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(ImGui::GetIO().WantCaptureKeyboard) {
+        //A textbox is in use. Clicking could change the state of the animation,
+        //so ignore it now, and let Dear ImGui close the box.
+        return;
+    }
     if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
         handle_lmb_down(ev);
     }
@@ -194,6 +199,11 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty()) {
+        return;
+    }
+    if(ImGui::GetIO().WantCaptureKeyboard) {
+        //A textbox is in use. Clicking could change the state of the animation,
+        //so ignore it now, and let Dear ImGui close the box.
         return;
     }
     

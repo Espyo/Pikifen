@@ -863,6 +863,8 @@ void editor::load() {
     
     //Load the user's preferred tree node open states.
     load_options();
+    
+    ImGui::Reset();
 }
 
 
@@ -1060,7 +1062,7 @@ void editor::process_mob_type_widgets(
             if(type_change_callback) {
                 type_change_callback();
             }
-            (*cat) = game.mob_categories.get_from_pname(c);
+            (*cat) = game.mob_categories.get_from_name(c);
             (*typ) = (*cat)->get_type(n);
         },
         "", false

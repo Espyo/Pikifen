@@ -151,3 +151,26 @@ bool ImGui::ListBox(
             label.c_str(), current_item, array, items.size(), height_in_items
         );
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Resets some variables inside the ImGui namespace.
+ */
+void ImGui::Reset() {
+    ImGuiIO &io = ImGui::GetIO();
+    
+    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    io.MouseWheel = 0.0f;
+    io.MouseWheelH = 0.0f;
+    for(size_t b = 0; b < IM_ARRAYSIZE(io.MouseDown); ++b) {
+        io.MouseDown[b] = false;
+    }
+    
+    io.KeyCtrl = false;
+    io.KeyShift = false;
+    io.KeyAlt = false;
+    io.KeySuper = false;
+    for(size_t k = 0; k < IM_ARRAYSIZE(io.KeysDown); ++k) {
+        io.KeysDown[k] = false;
+    }
+}

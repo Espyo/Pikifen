@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Special focus shenanigans should instead use if(!ImGui::IsAnyItemActive()) { ImGui::SetKeyboardFocusHere(); }
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
@@ -10,32 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.20.0 ---
     Recreate the script and animation tutorials to be like the area one
-    Details
-        Shadows
-            A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
-            Check if it'd make sense to mark not-tall, always-casts-shadow sectors cast a shadow that's just a line, instead of a rectangle with a gradient
-            A "never casts shadows" option for sectors (suggested by Neo)
-        Make bridges open sectors gradually
-            If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (suggested by Kman)
-        Make White Pikmin inflict enemies with a "poisoned" status effect that saps away health over time
-        "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" -- Kman
-        Add the Inkscape noise filter to more sprites? Or even a different filter
-        There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
-            There should only be one on-screen at a time
-            Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
-            The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
-        Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
-        Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
-        The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
-        Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (elated)
-        Decorative objects shouldn't cast light in blackout mode
-        Improve the look of the ship's ring
-        An option to control the cursor's movement speed, when not using the mouse (MonkeyUhOh)
-        Make the whistle look prettier and more like a mix between the classic and the new whistle
-            Suggestion: Make the light rings not be ugly circles, but sprites instead
-        Game feel
-            https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
-            https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
     Add rudimentary menus
         Pause
             Continue, end day, quit
@@ -45,28 +19,12 @@ Next tasks (roughly sorted most important first)
         Sunset warning
         End of day
             Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
-    Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
-    Sounds really need a makeover...
-    Pikmin should push each other a bit
-    Objects should move with acceleration
-    Improve the way ceramic bridge textures work
-    A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
-    Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
-    If something is under construction, like a menu or something, add a small "WIP" blurb
-    Maybe add an F1 screen with quick-start help?
-    Add several pre-packaged areas, since players have nothing to play with right now
-        A tutorial area
-            The area should be linear, but more intuitive and representative of the series
-            Linear, starts with an info spot that says welcome, and mentions the movement controls
-            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
-            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
-            You need to gather X Pikmin, to take down a paper bag or something
-            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
-            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
-            Some signs should talk about dismissing, and group moving
-        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-        Kman's Adventure area (see #content-sharing)
-    Add a ball of yarn treasure
+    Sector edge features
+        Shadows
+            A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
+            Check if it'd make sense to mark not-tall, always-casts-shadow sectors cast a shadow that's just a line, instead of a rectangle with a gradient
+            A "never casts shadows" option for sectors (suggested by Neo)
+        Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (elated)
     Cursor improvements
         The cursor should change to the standby color, and show the number of Pikmin of that type next to it
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
@@ -78,10 +36,36 @@ Next tasks (roughly sorted most important first)
             Leader cursor: unlimited or distance-limited?
             Whistling: can be on cursor or distance-limited?
             Throwing: can be on cursor or distance-limited?
-    Whistling lying Pikmin should make them get up and go to you
-        Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
-        When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
-    Gates should have a different appearance depending on how damaged they are
+        An option to control the cursor's movement speed, when not using the mouse (MonkeyUhOh)
+    Object physics improvements
+        Pikmin should push each other a bit
+        Objects should move with acceleration
+        A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
+    Details
+        Make bridges open sectors gradually
+            If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (suggested by Kman)
+        Make White Pikmin inflict enemies with a "poisoned" status effect that saps away health over time
+        "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" -- Kman
+        There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
+            There should only be one on-screen at a time
+            Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
+            The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
+        Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
+        Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
+        The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
+        Decorative objects shouldn't cast light in blackout mode
+        Improve the look of the ship's ring
+        Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
+        Sounds really need a makeover...
+        Make the whistle look prettier and more like a mix between the classic and the new whistle
+            Suggestion: Make the light rings not be ugly circles, but sprites instead
+        Whistling lying Pikmin should make them get up and go to you
+            Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
+            When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
+        Game feel
+            https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
+            https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
+    Improve the way ceramic bridge textures work
     Missing animations and animation improvements
         Pikmin
             Sighing
@@ -96,12 +80,14 @@ Next tasks (roughly sorted most important first)
             Sliding (add the track logic too)
             Pushing (add the group task logic too)
             Arms outstretched (add the group task logic too)
-        Leaders
+        Leader
             Bored
             Throwing (it exists, but isn't being used)
             Thrown (add to the logic of bouncers too)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
+    Graphics overhaul
+        Gates should have a different appearance depending on how damaged they are
         Sprouts should have their tops sway in the wind, and the animation should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Kman's made some)
         Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
         Smoothen some of the more jerky animations, like Red Bulborbs flopping
@@ -113,9 +99,27 @@ Next tasks (roughly sorted most important first)
         Explosions https://www.patreon.com/posts/explosions-part-7719254
         Onions have dead space to the left in the SVG
         Allow any animation to interpolate the transformations (rotation, scale, etc.)
+        Add the Inkscape noise filter to more sprites? Or even a different filter
+    Demo content
+        Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
+        If something is under construction, like a menu or something, add a small "WIP" blurb
+        Maybe add an F1 screen with quick-start help?
+        Add a ball of yarn treasure
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
+    Add several pre-packaged areas, since players have nothing to play with right now
+        A tutorial area
+            The area should be linear, but more intuitive and representative of the series
+            Linear, starts with an info spot that says welcome, and mentions the movement controls
+            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
+            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
+            You need to gather X Pikmin, to take down a paper bag or something
+            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
+            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
+            Some signs should talk about dismissing, and group moving
+        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
+        Kman's Adventure area (see #content-sharing)
     Try to compile on Mac
     
     --- v0.21.0 ---
@@ -218,6 +222,7 @@ Next tasks (roughly sorted most important first)
         Current leader should move slower if the analog stick is not held all the way
         If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
         There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
+        Button icons should use smaller text, and be less verbose, for things like axes
         If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
         When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (Ambrosia)
         New approach, thought of long after I've paused this project:
