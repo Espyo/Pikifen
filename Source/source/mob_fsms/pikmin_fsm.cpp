@@ -1849,7 +1849,7 @@ void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
-    engine_assert(p->carrying_mob != NULL, m->print_state_history());
+    if(!p->carrying_mob) return;
     
     p->carrying_mob->carry_info->spot_info[p->carrying_spot].state =
         CARRY_SPOT_FREE;

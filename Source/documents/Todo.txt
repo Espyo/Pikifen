@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Special focus shenanigans should instead use if(!ImGui::IsAnyItemActive()) { ImGui::SetKeyboardFocusHere(); }
+    
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---

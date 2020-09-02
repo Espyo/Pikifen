@@ -518,10 +518,29 @@ void getline(ALLEGRO_FILE* file, string &line) {
     while(bytes_read > 0) {
         c = *((char*) c_ptr);
         
-        if(c == '\r' || c == '\n') {
+        if(c == '\r') {
+            //Let's check if the next character is a \n. If so, they should
+            //both be consumed by al_fread().
+            bytes_read = al_fread(file, c_ptr, 1);
+            if(bytes_read > 0) {
+                if(*((char*) c_ptr) == '\n') {
+                    //Yep. Done.
+                    break;
+                } else {
+                    //Oops, we're reading an entirely new line. Let's go back.
+                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
+                    break;
+                }
+            }
+            
+        } else if(c == '\n') {
+            //Standard line break.
             break;
+            
         } else {
+            //Line content.
             line.push_back(c);
+            
         }
         
         bytes_read = al_fread(file, c_ptr, 1);

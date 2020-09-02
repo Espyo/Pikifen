@@ -61,8 +61,7 @@ editor::editor() :
     sub_state(0),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
     zoom_max_level(0),
-    zoom_min_level(0),
-    special_input_focus_controller(0) {
+    zoom_min_level(0) {
     
     editor_icons.reserve(N_EDITOR_ICONS);
     for(size_t i = 0; i < N_EDITOR_ICONS; ++i) {
@@ -331,15 +330,6 @@ void editor::draw_unsaved_changes_warning() {
         box_center, ALLEGRO_ALIGN_CENTER, 1,
         "You have\nunsaved changes!"
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets up logic to focus on the next input widget, if it is one of the
- * input widgets with logic to focus on it.
- */
-void editor::focus_next_special_input() {
-    special_input_focus_controller = 2;
 }
 
 
@@ -739,7 +729,9 @@ bool editor::input_popup(
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
         ImGui::Text("%s", prompt);
-        next_input_needs_special_focus();
+        if(!ImGui::IsAnyItemActive()) {
+            ImGui::SetKeyboardFocusHere();
+        }
         if(
             ImGui::InputText(
                 "##inputPopupText", text,
@@ -869,22 +861,6 @@ void editor::load() {
 
 
 /* ----------------------------------------------------------------------------
- * The next input widget requires special focus logic.
- * It will only be focused on if focus_next_special_input() was called.
- */
-void editor::next_input_needs_special_focus() {
-    //In order to focus on the InputText when the input popup is
-    //opened, we need to call SetKeyboardFocusHere two frames in
-    //a row. I'm not quite sure why, but it's likely the same as
-    //this: https://github.com/ocornut/imgui/issues/343
-    if(special_input_focus_controller > 0) {
-        ImGui::SetKeyboardFocusHere();
-        special_input_focus_controller--;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Opens a dialog.
  * title:
  *   Title of the dialog window. This is normally a request to the user,
@@ -947,8 +923,6 @@ void editor::open_picker(
     new_picker->pick_callback = pick_callback;
     new_picker->can_make_new = can_make_new;
     new_picker->filter = filter;
-    
-    focus_next_special_input();
     
     dialogs.push_back(new_picker);
 }
@@ -1446,7 +1420,9 @@ void editor::picker_info::process() {
         "Search filter or new item name" :
         "Search filter";
         
-    editor_ptr->next_input_needs_special_focus();
+    if(!ImGui::IsAnyItemActive()) {
+        ImGui::SetKeyboardFocusHere();
+    }
     if(
         ImGui::InputTextWithHint(
             "##filter", filter_widget_hint.c_str(), &filter,
