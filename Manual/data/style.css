@@ -9,6 +9,7 @@ body {
 h1, h2, h3, h4 {
     text-decoration: underline;
     padding-top: 30px;
+    clear: right;
 }
 
 h1 {
@@ -73,24 +74,29 @@ th {
   margin: 0px;
 }
 
-.image {
+.box {
   border: 1px solid black;
   display: inline-block;
-  font-size: 75%;
-  margin: 12px;
+  font-size: 70%;
+  margin-bottom: 12px;
+  margin-left: 12px;
   padding: 5px;
   width: 300px;
 }
 
-.image-right {
+.box-right {
   clear: right;
   float: right;
 }
 
-.image img {
+.box img {
   width: 290px;
 }
 
-.image p {
+.box p {
     margin: 0px;
+}
+
+.code-faded {
+    color: #909090;
 }

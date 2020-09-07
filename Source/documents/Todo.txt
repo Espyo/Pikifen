@@ -6,10 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    
+    Leaving the animation editor on for a few hours will apparently make the system jerk to a crawl after a bit -- potential memory leak?
     
     --- v0.20.0 ---
-    Recreate the script and animation tutorials to be like the area one
     Add rudimentary menus
         Pause
             Continue, end day, quit
@@ -65,6 +64,8 @@ Next tasks (roughly sorted most important first)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
+        Minor
+            When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
     Improve the way ceramic bridge textures work
     Missing animations and animation improvements
         Pikmin
