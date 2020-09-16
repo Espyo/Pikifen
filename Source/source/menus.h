@@ -24,9 +24,9 @@ using std::size_t;
 using std::vector;
 
 
-class main_menu : public game_state {
+class main_menu_state : public game_state {
 public:
-    main_menu();
+    main_menu_state();
     virtual void load();
     virtual void unload();
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
@@ -65,9 +65,9 @@ private:
 };
 
 
-class options_menu : public game_state {
+class options_menu_state : public game_state {
 public:
-    options_menu();
+    options_menu_state();
     virtual void load();
     virtual void unload();
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
@@ -93,9 +93,9 @@ private:
 };
 
 
-class controls_menu : public game_state {
+class controls_menu_state : public game_state {
 public:
-    controls_menu();
+    controls_menu_state();
     virtual void load();
     virtual void unload();
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
@@ -126,9 +126,9 @@ private:
 };
 
 
-class area_menu : public game_state {
+class area_menu_state : public game_state {
 public:
-    area_menu();
+    area_menu_state();
     virtual void load();
     virtual void unload();
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);

@@ -77,8 +77,8 @@ void drop::tick_class_specifics(const float delta_t) {
     if(cur_scale == 0) {
         //Disappeared into nothingness. Time to delete...if it's not being used.
         
-        for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-            if(game.states.gameplay_st->mobs.all[m]->focused_mob == this) {
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            if(game.states.gameplay->mobs.all[m]->focused_mob == this) {
                 return;
             }
         }

@@ -52,7 +52,7 @@ mob* bridge_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     bridge* m = new bridge(pos, (bridge_type*) type, angle);
-    game.states.gameplay_st->mobs.bridges.push_back(m);
+    game.states.gameplay->mobs.bridges.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* bridge_category::create_type() {
  *   The mob to erase.
  */
 void bridge_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.bridges.erase(
+    game.states.gameplay->mobs.bridges.erase(
         find(
-            game.states.gameplay_st->mobs.bridges.begin(),
-            game.states.gameplay_st->mobs.bridges.end(),
+            game.states.gameplay->mobs.bridges.begin(),
+            game.states.gameplay->mobs.bridges.end(),
             (bridge*) m
         )
     );

@@ -52,7 +52,7 @@ mob* ship_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     ship* m = new ship(pos, (ship_type*) type, angle);
-    game.states.gameplay_st->mobs.ships.push_back(m);
+    game.states.gameplay->mobs.ships.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* ship_category::create_type() {
  *   The mob to erase.
  */
 void ship_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.ships.erase(
+    game.states.gameplay->mobs.ships.erase(
         find(
-        game.states.gameplay_st->mobs.ships.begin(),
- game.states.gameplay_st->mobs.ships.end(), 
+        game.states.gameplay->mobs.ships.begin(),
+ game.states.gameplay->mobs.ships.end(), 
  (ship*) m
  )
     );

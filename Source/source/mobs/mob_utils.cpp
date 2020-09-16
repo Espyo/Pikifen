@@ -439,22 +439,22 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
     subgroup_type* final_type = cur_standby_type;
     if(!starting_type) {
         starting_type =
-            game.states.gameplay_st->subgroup_types.get_first_type();
+            game.states.gameplay->subgroup_types.get_first_type();
     }
     subgroup_type* scanning_type = starting_type;
     subgroup_type* leader_subgroup_type =
-        game.states.gameplay_st->subgroup_types.get_type(
+        game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
         
     if(move_backwards) {
         scanning_type =
-            game.states.gameplay_st->subgroup_types.get_prev_type(
+            game.states.gameplay->subgroup_types.get_prev_type(
                 scanning_type
             );
     } else {
         scanning_type =
-            game.states.gameplay_st->subgroup_types.get_next_type(
+            game.states.gameplay->subgroup_types.get_next_type(
                 scanning_type
             );
     }
@@ -477,12 +477,12 @@ bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
         
         if(move_backwards) {
             scanning_type =
-                game.states.gameplay_st->subgroup_types.get_prev_type(
+                game.states.gameplay->subgroup_types.get_prev_type(
                     scanning_type
                 );
         } else {
             scanning_type =
-                game.states.gameplay_st->subgroup_types.get_next_type(
+                game.states.gameplay->subgroup_types.get_next_type(
                     scanning_type
                 );
         }
@@ -532,7 +532,7 @@ void group_info_struct::sort(subgroup_type* leading_type) {
             //There are no more members of the current type left!
             //Next type.
             cur_type =
-                game.states.gameplay_st->subgroup_types.get_next_type(cur_type);
+                game.states.gameplay->subgroup_types.get_next_type(cur_type);
         } else {
             spots[cur_spot].mob_ptr = closest_member;
             closest_member->group_spot_index = cur_spot;
@@ -811,7 +811,7 @@ mob* create_mob(
         }
     }
     
-    game.states.gameplay_st->mobs.all.push_back(m_ptr);
+    game.states.gameplay->mobs.all.push_back(m_ptr);
     return m_ptr;
 }
 
@@ -833,8 +833,8 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
     if(!complete_destruction) {
         m_ptr->leave_group();
         
-        for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-            mob* m2_ptr = game.states.gameplay_st->mobs.all[m];
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->focused_mob == m_ptr) {
                 m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
                 m2_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
@@ -853,17 +853,17 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         }
         
         if(m_ptr->type->blocks_carrier_pikmin) {
-            game.states.gameplay_st->path_mgr.handle_obstacle_clear(m_ptr);
+            game.states.gameplay->path_mgr.handle_obstacle_clear(m_ptr);
         }
         
         m_ptr->fsm.set_state(INVALID);
     }
     
     m_ptr->type->category->erase_mob(m_ptr);
-    game.states.gameplay_st->mobs.all.erase(
+    game.states.gameplay->mobs.all.erase(
         find(
-            game.states.gameplay_st->mobs.all.begin(),
-            game.states.gameplay_st->mobs.all.end(),
+            game.states.gameplay->mobs.all.begin(),
+            game.states.gameplay->mobs.all.end(),
             m_ptr
         )
     );

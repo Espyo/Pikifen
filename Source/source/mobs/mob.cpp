@@ -230,8 +230,8 @@ void mob::apply_status_effect(
     }
     
     //Let's start by sending the status to the child mobs.
-    for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-        mob* m2_ptr = game.states.gameplay_st->mobs.all[m];
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        mob* m2_ptr = game.states.gameplay->mobs.all[m];
         if(m2_ptr->parent && m2_ptr->parent->m == this) {
             m2_ptr->apply_status_effect(s, refill, true);
         }
@@ -476,8 +476,8 @@ bool mob::calculate_carrying_destination(
         ship* closest_ship = NULL;
         dist closest_ship_dist;
         
-        for(size_t s = 0; s < game.states.gameplay_st->mobs.ships.size(); ++s) {
-            ship* s_ptr = game.states.gameplay_st->mobs.ships[s];
+        for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
+            ship* s_ptr = game.states.gameplay->mobs.ships[s];
             dist d(pos, s_ptr->beam_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
@@ -520,8 +520,8 @@ bool mob::calculate_carrying_destination(
     unordered_set<pikmin_type*> available_onions;
     
     //First, check which Onions are even available.
-    for(size_t o = 0; o < game.states.gameplay_st->mobs.onions.size(); o++) {
-        onion* o_ptr = game.states.gameplay_st->mobs.onions[o];
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(o_ptr->activated) {
             available_onions.insert(o_ptr->oni_type->pik_type);
         }
@@ -629,15 +629,15 @@ bool mob::calculate_carrying_destination(
     
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
-    for(; onion_nr < game.states.gameplay_st->mobs.onions.size(); ++onion_nr) {
-        onion* o_ptr = game.states.gameplay_st->mobs.onions[onion_nr];
+    for(; onion_nr < game.states.gameplay->mobs.onions.size(); ++onion_nr) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[onion_nr];
         if(o_ptr->oni_type->pik_type == decided_type) {
             break;
         }
     }
     
     //Finally, set the destination data.
-    *target_mob = game.states.gameplay_st->mobs.onions[onion_nr];
+    *target_mob = game.states.gameplay->mobs.onions[onion_nr];
     *target_point = (*target_mob)->pos;
     
     return true;
@@ -926,7 +926,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
             victim->pos + type->spike_damage->particle_offset_pos;
         pg.base_particle.z =
             victim->z + type->spike_damage->particle_offset_z;
-        pg.emit(game.states.gameplay_st->particles);
+        pg.emit(game.states.gameplay->particles);
     }
 }
 
@@ -1113,7 +1113,7 @@ void mob::do_attack_effects(
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
         smack_p.color = al_map_rgb(255, 160, 128);
-        game.states.gameplay_st->particles.add(smack_p);
+        game.states.gameplay->particles.add(smack_p);
         
     } else {
         particle ding_p(
@@ -1123,7 +1123,7 @@ void mob::do_attack_effects(
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
         ding_p.color = al_map_rgb(192, 208, 224);
-        game.states.gameplay_st->particles.add(ding_p);
+        game.states.gameplay->particles.add(ding_p);
         
     }
     
@@ -1453,9 +1453,9 @@ size_t mob::get_latched_pikmin_amount() const {
     size_t total = 0;
     for(
         size_t p = 0;
-        p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p
+        p < game.states.gameplay->mobs.pikmin_list.size(); ++p
     ) {
-        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
+        pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1473,9 +1473,9 @@ float mob::get_latched_pikmin_weight() const {
     float total = 0;
     for(
         size_t p = 0;
-        p < game.states.gameplay_st->mobs.pikmin_list.size(); ++p
+        p < game.states.gameplay->mobs.pikmin_list.size(); ++p
     ) {
-        pikmin* p_ptr = game.states.gameplay_st->mobs.pikmin_list[p];
+        pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -2005,7 +2005,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     if(!type_ptr) return NULL;
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
-        game.states.gameplay_st->mobs.pikmin_list.size() >=
+        game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
     ) {
         return NULL;
@@ -2089,7 +2089,7 @@ void mob::start_dying() {
     pg.total_speed = 100;
     pg.total_speed_deviation = 40;
     pg.duration_deviation = 0.5;
-    pg.emit(game.states.gameplay_st->particles);
+    pg.emit(game.states.gameplay->particles);
     
     start_dying_class_specifics();
 }
@@ -2454,7 +2454,7 @@ void mob::tick_misc_logic(const float delta_t) {
     
     for(size_t g = 0; g < particle_generators.size();) {
         particle_generators[g].tick(
-            delta_t, game.states.gameplay_st->particles
+            delta_t, game.states.gameplay->particles
         );
         if(particle_generators[g].emission_interval == 0) {
             particle_generators.erase(particle_generators.begin() + g);
@@ -2470,7 +2470,7 @@ void mob::tick_misc_logic(const float delta_t) {
     }
     
     if(type->blocks_carrier_pikmin && health <= 0) {
-        game.states.gameplay_st->path_mgr.handle_obstacle_clear(this);
+        game.states.gameplay->path_mgr.handle_obstacle_clear(this);
     }
 }
 
@@ -2573,10 +2573,10 @@ void mob::tick_script(const float delta_t) {
     
     //Check if it got whistled.
     mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
-    if(game.states.gameplay_st->whistle.whistling && whistled_ev) {
+    if(game.states.gameplay->whistle.whistling && whistled_ev) {
         if(
-            dist(pos, game.states.gameplay_st->leader_cursor_w) <=
-            game.states.gameplay_st->whistle.radius
+            dist(pos, game.states.gameplay->leader_cursor_w) <=
+            game.states.gameplay->whistle.radius
         ) {
             whistled_ev->run(this);
         }

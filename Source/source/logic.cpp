@@ -26,7 +26,7 @@
  * Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.
  */
-void gameplay::do_aesthetic_logic() {
+void gameplay_state::do_aesthetic_logic() {
 
     /*************************************
     *                               .-.  *
@@ -151,7 +151,7 @@ void gameplay::do_aesthetic_logic() {
 /* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
  */
-void gameplay::do_gameplay_logic() {
+void gameplay_state::do_gameplay_logic() {
 
     //Camera movement.
     game.cam.tick(game.delta_t);
@@ -749,7 +749,7 @@ void gameplay::do_gameplay_logic() {
  * m:
  *   Index of the mob.
  */
-void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
+void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
     vector<pending_intermob_event> pending_intermob_events;
     mob_state* state_before = m_ptr->fsm.cur_state;
     
@@ -854,7 +854,7 @@ void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
  * pending_intermob_events:
  *   Vector of events to be processed.
  */
-void gameplay::process_mob_misc_interactions(
+void gameplay_state::process_mob_misc_interactions(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
@@ -935,7 +935,7 @@ void gameplay::process_mob_misc_interactions(
  * pending_intermob_events:
  *   Vector of events to be processed.
  */
-void gameplay::process_mob_reaches(
+void gameplay_state::process_mob_reaches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
     vector<pending_intermob_event> &pending_intermob_events
 ) {
@@ -1000,7 +1000,7 @@ void gameplay::process_mob_reaches(
  * d:
  *   Distance between the two.
  */
-void gameplay::process_mob_touches(
+void gameplay_state::process_mob_touches(
     mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
 ) {
     //Check if mob 1 should be pushed by mob 2.

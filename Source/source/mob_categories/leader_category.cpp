@@ -52,7 +52,7 @@ mob* leader_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     leader* m = new leader(pos, (leader_type*) type, angle);
-    game.states.gameplay_st->mobs.leaders.push_back(m);
+    game.states.gameplay->mobs.leaders.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* leader_category::create_type() {
  *   The mob to erase.
  */
 void leader_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.leaders.erase(
+    game.states.gameplay->mobs.leaders.erase(
         find(
-        game.states.gameplay_st->mobs.leaders.begin(),
-        game.states.gameplay_st->mobs.leaders.end(),
+        game.states.gameplay->mobs.leaders.begin(),
+        game.states.gameplay->mobs.leaders.end(),
         (leader*) m
         )
     );

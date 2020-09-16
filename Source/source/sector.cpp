@@ -1324,10 +1324,10 @@ void path_manager::handle_area_load() {
             
             for(
                 size_t m = 0;
-                m < game.states.gameplay_st->mobs.all.size();
+                m < game.states.gameplay->mobs.all.size();
                 ++m
             ) {
-                mob* m_ptr = game.states.gameplay_st->mobs.all[m];
+                mob* m_ptr = game.states.gameplay->mobs.all[m];
                 
                 if(!m_ptr->type->blocks_carrier_pikmin) continue;
                 
@@ -1375,8 +1375,8 @@ void path_manager::handle_obstacle_clear(mob* m) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-            mob* m_ptr = game.states.gameplay_st->mobs.all[m];
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay->mobs.all[m];
             if(!m_ptr->path_info) continue;
             
             m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
@@ -2624,8 +2624,8 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     mob* closest_obs = NULL;
     dist closest_obs_dist;
     
-    for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-        mob* m_ptr = game.states.gameplay_st->mobs.all[m];
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(!m_ptr->type->blocks_carrier_pikmin) continue;
         
         if(

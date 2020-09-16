@@ -83,7 +83,7 @@ void ship::heal_leader(leader* l) const {
     particle_generator g(0, p, 12);
     g.duration_deviation = 0.5;
     g.pos_deviation = point(l->type->radius, l->type->radius);
-    g.emit(game.states.gameplay_st->particles);
+    g.emit(game.states.gameplay->particles);
 }
 
 

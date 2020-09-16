@@ -1608,7 +1608,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
     
-    game.states.gameplay_st->cur_leader_ptr->add_to_group(pik);
+    game.states.gameplay->cur_leader_ptr->add_to_group(pik);
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
@@ -1813,7 +1813,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
     }
     
     m->subgroup_type_ptr =
-        game.states.gameplay_st->subgroup_types.get_type(
+        game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
     m->hold(m->focused_mob, INVALID, 4, 0, true, true);
@@ -1832,7 +1832,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
     m->chase(
-        game.states.gameplay_st->cur_leader_ptr->pos, NULL, false, NULL, true
+        game.states.gameplay->cur_leader_ptr->pos, NULL, false, NULL, true
     );
 }
 
@@ -2494,12 +2494,12 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     t_ptr->speed = point();
     t_ptr->push_amount = 0.0f;
     m->subgroup_type_ptr =
-        game.states.gameplay_st->subgroup_types.get_type(
+        game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, p_ptr->pik_type
         );
     if(m->following_group) {
         m->following_group->group->change_standby_type_if_needed();
-        game.states.gameplay_st->update_closest_group_member();
+        game.states.gameplay->update_closest_group_member();
     }
 }
 
@@ -2558,7 +2558,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     pg.total_speed = 50;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.25;
-    pg.emit(game.states.gameplay_st->particles);
+    pg.emit(game.states.gameplay->particles);
 }
 
 
@@ -2635,7 +2635,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed = 40;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
-        pg.emit(game.states.gameplay_st->particles);
+        pg.emit(game.states.gameplay->particles);
         
     } else {
         //Flower to leaf.
@@ -2658,7 +2658,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         pg.total_speed = 50;
         pg.total_speed_deviation = 10;
         pg.duration_deviation = 0.25;
-        pg.emit(game.states.gameplay_st->particles);
+        pg.emit(game.states.gameplay->particles);
     }
 }
 

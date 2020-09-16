@@ -52,7 +52,7 @@ mob* decoration_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     decoration* m = new decoration(pos, (decoration_type*) type, angle);
-    game.states.gameplay_st->mobs.decorations.push_back(m);
+    game.states.gameplay->mobs.decorations.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* decoration_category::create_type() {
  *   The mob to erase.
  */
 void decoration_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.decorations.erase(
+    game.states.gameplay->mobs.decorations.erase(
         find(
-            game.states.gameplay_st->mobs.decorations.begin(),
-            game.states.gameplay_st->mobs.decorations.end(),
+            game.states.gameplay->mobs.decorations.begin(),
+            game.states.gameplay->mobs.decorations.end(),
             (decoration*) m
         )
     );

@@ -28,7 +28,7 @@ using std::size_t;
 /* ----------------------------------------------------------------------------
  * Creates an "area menu" state.
  */
-area_menu::area_menu() :
+area_menu_state::area_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
     time_spent(0),
@@ -41,7 +41,7 @@ area_menu::area_menu() :
 /* ----------------------------------------------------------------------------
  * Draws the area menu.
  */
-void area_menu::do_drawing() {
+void area_menu_state::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
@@ -60,7 +60,7 @@ void area_menu::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Ticks one frame's worth of logic.
  */
-void area_menu::do_logic() {
+void area_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);
     time_spent += game.delta_t;
     
@@ -73,7 +73,7 @@ void area_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string area_menu::get_name() const {
+string area_menu_state::get_name() const {
     return "area menu";
 }
 
@@ -83,7 +83,7 @@ string area_menu::get_name() const {
  * ev:
  *   Event to handle.
  */
-void area_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -94,9 +94,9 @@ void area_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Leaves the area menu and goes into the main menu.
  */
-void area_menu::leave() {
+void area_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu_st);
+        game.change_state(game.states.main_menu);
     });
 }
 
@@ -104,7 +104,7 @@ void area_menu::leave() {
 /* ----------------------------------------------------------------------------
  * Loads the area menu into memory.
  */
-void area_menu::load() {
+void area_menu_state::load() {
     selected_widget = NULL;
     bmp_menu_bg = NULL;
     time_spent = 0;
@@ -115,9 +115,9 @@ void area_menu::load() {
     
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {
-        game.states.gameplay_st->area_to_load =
+        game.states.gameplay->area_to_load =
             areas_to_pick[0];
-        game.change_state(game.states.gameplay_st);
+        game.change_state(game.states.gameplay);
         return;
     }
     
@@ -232,7 +232,7 @@ void area_menu::load() {
 /* ----------------------------------------------------------------------------
  * Unloads the area menu from memory.
  */
-void area_menu::unload() {
+void area_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
@@ -254,7 +254,7 @@ void area_menu::unload() {
 /* ----------------------------------------------------------------------------
  * Updates the contents of the area menu.
  */
-void area_menu::update() {
+void area_menu_state::update() {
     cur_page_nr =
         std::min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
@@ -271,9 +271,9 @@ void area_menu::update() {
         
         ((menu_button*) area_buttons[list_nr])->click_handler =
         [area_name, area_folder] () {
-            game.states.gameplay_st->area_to_load = area_folder;
+            game.states.gameplay->area_to_load = area_folder;
             game.fade_mgr.start_fade(false, [] () {
-                game.change_state(game.states.gameplay_st);
+                game.change_state(game.states.gameplay);
             });
         };
         ((menu_button*) area_buttons[list_nr])->text = area_name;
@@ -286,7 +286,7 @@ void area_menu::update() {
 /* ----------------------------------------------------------------------------
  * Creates a "controls menu" state.
  */
-controls_menu::controls_menu() :
+controls_menu_state::controls_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
     time_spent(0),
@@ -304,7 +304,7 @@ controls_menu::controls_menu() :
 /* ----------------------------------------------------------------------------
  * Draws the controls menu.
  */
-void controls_menu::do_drawing() {
+void controls_menu_state::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     draw_bitmap(
@@ -340,7 +340,7 @@ void controls_menu::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Ticks one frame's worth of logic.
  */
-void controls_menu::do_logic() {
+void controls_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);
     time_spent += game.delta_t;
     
@@ -353,7 +353,7 @@ void controls_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string controls_menu::get_name() const {
+string controls_menu_state::get_name() const {
     return "controls menu";
 }
 
@@ -363,7 +363,7 @@ string controls_menu::get_name() const {
  * ev:
  *   Event to handle.
  */
-void controls_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(capturing_input) {
@@ -439,9 +439,9 @@ void controls_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Leaves the controls menu and goes to the options menu.
  */
-void controls_menu::leave() {
+void controls_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.options_menu_st);
+        game.change_state(game.states.options_menu);
     });
     save_options();
 }
@@ -450,7 +450,7 @@ void controls_menu::leave() {
 /* ----------------------------------------------------------------------------
  * Loads the controls menu into memory.
  */
-void controls_menu::load() {
+void controls_menu_state::load() {
     selected_widget = NULL;
     bmp_menu_bg = NULL;
     cur_page_nr = 0;
@@ -664,7 +664,7 @@ void controls_menu::load() {
 /* ----------------------------------------------------------------------------
  * Unloads the controls menu from memory.
  */
-void controls_menu::unload() {
+void controls_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
@@ -687,7 +687,7 @@ void controls_menu::unload() {
 /* ----------------------------------------------------------------------------
  * Updates the contents of the controls menu.
  */
-void controls_menu::update() {
+void controls_menu_state::update() {
     cur_page_nr =
         std::min(
             cur_page_nr,
@@ -780,7 +780,7 @@ void controls_menu::update() {
 /* ----------------------------------------------------------------------------
  * Creates a "main menu" state.
  */
-main_menu::main_menu() :
+main_menu_state::main_menu_state() :
     game_state(),
     time_spent(0),
     bmp_menu_bg(NULL),
@@ -800,7 +800,7 @@ main_menu::main_menu() :
 /* ----------------------------------------------------------------------------
  * Draws the main menu.
  */
-void main_menu::do_drawing() {
+void main_menu_state::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
@@ -848,7 +848,7 @@ void main_menu::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Ticks a frame's worth of logic.
  */
-void main_menu::do_logic() {
+void main_menu_state::do_logic() {
     time_spent += game.delta_t;
     
     //Animate the logo Pikmin.
@@ -893,7 +893,7 @@ void main_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string main_menu::get_name() const {
+string main_menu_state::get_name() const {
     return "main menu";
 }
 
@@ -903,7 +903,7 @@ string main_menu::get_name() const {
  * ev:
  *   Event to handle.
  */
-void main_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -913,7 +913,7 @@ void main_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Loads the main menu into memory.
  */
-void main_menu::load() {
+void main_menu_state::load() {
     selected_widget = NULL;
     
     draw_loading_screen("", "", 1.0);
@@ -926,7 +926,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.area_menu_st);
+            game.change_state(game.states.area_menu);
         });
     }, "Play", game.fonts.area_name
         )
@@ -937,7 +937,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.options_menu_st);
+            game.change_state(game.states.options_menu);
         });
     }, "Options", game.fonts.area_name
         )
@@ -948,7 +948,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.animation_editor_st);
+            game.change_state(game.states.animation_ed);
         });
     }, "Animation editor", game.fonts.area_name
         )
@@ -959,7 +959,7 @@ void main_menu::load() {
             point(game.win_w * 0.8, game.win_h * 0.06),
     [this] () {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.area_editor_st);
+            game.change_state(game.states.area_ed);
         });
     }, "Area editor", game.fonts.area_name
         )
@@ -1089,7 +1089,7 @@ void main_menu::load() {
 /* ----------------------------------------------------------------------------
  * Unloads the main menu from memory.
  */
-void main_menu::unload() {
+void main_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
@@ -1110,7 +1110,7 @@ void main_menu::unload() {
 /* ----------------------------------------------------------------------------
  * Creates an "options menu" state.
  */
-options_menu::options_menu() :
+options_menu_state::options_menu_state() :
     game_state() {
     
     //Let's fill in the list of preset resolutions. For that, we'll get
@@ -1162,7 +1162,7 @@ options_menu::options_menu() :
  * step:
  *   How much to move forward in the list.
  */
-void options_menu::change_resolution(const signed int step) {
+void options_menu_state::change_resolution(const signed int step) {
     size_t current_r_index = INVALID;
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
@@ -1197,7 +1197,7 @@ void options_menu::change_resolution(const signed int step) {
 /* ----------------------------------------------------------------------------
  * Draws the options menu.
  */
-void options_menu::do_drawing() {
+void options_menu_state::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     draw_bitmap(
@@ -1217,7 +1217,7 @@ void options_menu::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Ticks one frame's worth of logic.
  */
-void options_menu::do_logic() {
+void options_menu_state::do_logic() {
     time_spent += game.delta_t;
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->tick(game.delta_t);
@@ -1229,7 +1229,7 @@ void options_menu::do_logic() {
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string options_menu::get_name() const {
+string options_menu_state::get_name() const {
     return "options menu";
 }
 
@@ -1237,9 +1237,9 @@ string options_menu::get_name() const {
 /* ----------------------------------------------------------------------------
  * Goes to the controls menu.
  */
-void options_menu::go_to_controls() {
+void options_menu_state::go_to_controls() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.controls_menu_st);
+        game.change_state(game.states.controls_menu);
     });
 }
 
@@ -1249,7 +1249,7 @@ void options_menu::go_to_controls() {
  * ev:
  *   Event to handle.
  */
-void options_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -1259,9 +1259,9 @@ void options_menu::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Leaves the options menu and goes to the main menu.
  */
-void options_menu::leave() {
+void options_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu_st);
+        game.change_state(game.states.main_menu);
     });
     save_options();
 }
@@ -1270,7 +1270,7 @@ void options_menu::leave() {
 /* ----------------------------------------------------------------------------
  * Loads the options menu into memory.
  */
-void options_menu::load() {
+void options_menu_state::load() {
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
@@ -1362,7 +1362,7 @@ void options_menu::load() {
 /* ----------------------------------------------------------------------------
  * Unloads the options menu from memory.
  */
-void options_menu::unload() {
+void options_menu_state::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
@@ -1380,7 +1380,7 @@ void options_menu::unload() {
 /* ----------------------------------------------------------------------------
  * Updates the contents of the options menu.
  */
-void options_menu::update() {
+void options_menu_state::update() {
     size_t current_r_index = INVALID;
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {

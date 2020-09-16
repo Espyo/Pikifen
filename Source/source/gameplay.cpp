@@ -24,22 +24,22 @@
 
 
 //How long the HUD moves for when the area is entered.
-const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
+const float gameplay_state::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
-const float gameplay::AREA_TITLE_FADE_DURATION = 3.0f;
+const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
 //How fast the "invalid cursor" effect goes, per second.
-const float gameplay::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
+const float gameplay_state::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
-const float gameplay::CURSOR_SAVE_INTERVAL = 0.03f;
+const float gameplay_state::CURSOR_SAVE_INTERVAL = 0.03f;
 //Swarming arrows move these many units per second.
-const float gameplay::SWARM_ARROW_SPEED = 400.0f;
+const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
-const float gameplay::SWARM_ARROWS_INTERVAL = 0.1f;
+const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
 
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
  */
-gameplay::gameplay() :
+gameplay_state::gameplay_state() :
     game_state(),
     area_time_passed(0.0f),
     area_title_fade_timer(AREA_TITLE_FADE_DURATION),
@@ -97,7 +97,7 @@ gameplay::gameplay() :
 /* ----------------------------------------------------------------------------
  * Draw the gameplay.
  */
-void gameplay::do_drawing() {
+void gameplay_state::do_drawing() {
     do_game_drawing();
     
     if(game.perf_mon) {
@@ -109,7 +109,7 @@ void gameplay::do_drawing() {
 /* ----------------------------------------------------------------------------
  * Tick the gameplay logic by one frame.
  */
-void gameplay::do_logic() {
+void gameplay_state::do_logic() {
     if(game.perf_mon) {
         if(is_input_allowed) {
             //The first frame will have its speed all broken,
@@ -139,7 +139,7 @@ const int FOG_BITMAP_SIZE = 128;
  * far_radius:
  *   From this radius on, the fog is fully dense.
  */
-ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
+ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
     const float near_radius, const float far_radius
 ) {
     if(far_radius == 0) return NULL;
@@ -212,7 +212,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
 /* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
-string gameplay::get_name() const {
+string gameplay_state::get_name() const {
     return "gameplay";
 }
 
@@ -220,16 +220,16 @@ string gameplay::get_name() const {
 /* ----------------------------------------------------------------------------
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
-void gameplay::leave() {
+void gameplay_state::leave() {
     if(game.perf_mon) {
         //Don't register the final frame, since it won't draw anything.
         game.perf_mon->set_paused(true);
     }
     
-    if(game.states.area_editor_st->quick_play_area.empty()) {
-        game.change_state(game.states.main_menu_st);
+    if(game.states.area_ed->quick_play_area.empty()) {
+        game.change_state(game.states.main_menu);
     } else {
-        game.change_state(game.states.area_editor_st);
+        game.change_state(game.states.area_ed);
     }
 }
 
@@ -237,7 +237,7 @@ void gameplay::leave() {
 /* ----------------------------------------------------------------------------
  * Loads the "gameplay" state into memory.
  */
-void gameplay::load() {
+void gameplay_state::load() {
     if(game.perf_mon) {
         game.perf_mon->reset();
         game.perf_mon->enter_state(PERF_MON_STATE_LOADING);
@@ -456,7 +456,7 @@ void gameplay::load() {
 /* ----------------------------------------------------------------------------
  * Loads all of the game's content.
  */
-void gameplay::load_game_content() {
+void gameplay_state::load_game_content() {
     load_custom_particle_generators(true);
     load_liquids(true);
     load_status_types(true);
@@ -500,7 +500,7 @@ void gameplay::load_game_content() {
  * data:
  *   String containing the coordinate data.
  */
-void gameplay::load_hud_coordinates(const int item, string data) {
+void gameplay_state::load_hud_coordinates(const int item, string data) {
     vector<string> words = split(data);
     if(data.size() < 4) return;
     
@@ -513,7 +513,7 @@ void gameplay::load_hud_coordinates(const int item, string data) {
 /* ----------------------------------------------------------------------------
  * Loads all gameplay HUD info.
  */
-void gameplay::load_hud_info() {
+void gameplay_state::load_hud_info() {
     data_node file(MISC_FOLDER_PATH + "/HUD.txt");
     if(!file.file_was_opened) return;
     
@@ -592,7 +592,7 @@ void gameplay::load_hud_info() {
 /* ----------------------------------------------------------------------------
  * Unloads the "gameplay" state from memory.
  */
-void gameplay::unload() {
+void gameplay_state::unload() {
     al_show_mouse_cursor(game.display);
     
     path_mgr.clear();
@@ -642,7 +642,7 @@ void gameplay::unload() {
 /* ----------------------------------------------------------------------------
  * Unloads loaded game content.
  */
-void gameplay::unload_game_content() {
+void gameplay_state::unload_game_content() {
     unload_weather();
     
     subgroup_types.clear();
@@ -666,7 +666,7 @@ void gameplay::unload_game_content() {
  * and more mature one.
  * NULL if there is no member of that subgroup available.
  */
-void gameplay::update_closest_group_member() {
+void gameplay_state::update_closest_group_member() {
     //Closest members so far for each maturity.
     dist closest_dists[N_MATURITIES];
     mob* closest_ptrs[N_MATURITIES];
@@ -674,7 +674,7 @@ void gameplay::update_closest_group_member() {
         closest_ptrs[m] = NULL;
     }
     
-    game.states.gameplay_st->closest_group_member = NULL;
+    game.states.gameplay->closest_group_member = NULL;
     
     //Fetch the closest, for each maturity.
     size_t n_members = cur_leader_ptr->group->members.size();
@@ -706,22 +706,22 @@ void gameplay::update_closest_group_member() {
     for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
         if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
-        game.states.gameplay_st->closest_group_member = closest_ptrs[2 - m];
+        game.states.gameplay->closest_group_member = closest_ptrs[2 - m];
         closest_dist = closest_dists[2 - m];
         break;
     }
     
-    if(!game.states.gameplay_st->closest_group_member) {
+    if(!game.states.gameplay->closest_group_member) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
         for(unsigned char m = 0; m < N_MATURITIES; ++m) {
             if(!closest_ptrs[m]) continue;
             
             if(
-                !game.states.gameplay_st->closest_group_member ||
+                !game.states.gameplay->closest_group_member ||
                 closest_dists[m] < closest_dist
             ) {
-                game.states.gameplay_st->closest_group_member = closest_ptrs[m];
+                game.states.gameplay->closest_group_member = closest_ptrs[m];
                 closest_dist = closest_dists[m];
             }
         }
@@ -730,16 +730,16 @@ void gameplay::update_closest_group_member() {
     
     if(
         fabs(
-            game.states.gameplay_st->closest_group_member->z -
+            game.states.gameplay->closest_group_member->z -
             cur_leader_ptr->z
         ) >
         SECTOR_STEP
     ) {
         //If the group member is beyond a step, it's obviously above or below
         //a wall, compared to the leader. No grabbing allowed.
-        game.states.gameplay_st->closest_group_member_distant = true;
+        game.states.gameplay->closest_group_member_distant = true;
     } else {
-        game.states.gameplay_st->closest_group_member_distant =
+        game.states.gameplay->closest_group_member_distant =
             closest_dist > game.config.group_member_grab_range;
     }
 }
@@ -748,7 +748,7 @@ void gameplay::update_closest_group_member() {
 /* ----------------------------------------------------------------------------
  * Updates the transformations, with the current camera coordinates, zoom, etc.
  */
-void gameplay::update_transformations() {
+void gameplay_state::update_transformations() {
     //World coordinates to screen coordinates.
     game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(

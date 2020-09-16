@@ -23,10 +23,10 @@
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
-class gameplay : public game_state {
+class gameplay_state : public game_state {
 public:
 
-    gameplay();
+    gameplay_state();
     
     //How much real time has passed since the area was loaded.
     float area_time_passed;

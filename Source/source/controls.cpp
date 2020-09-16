@@ -133,7 +133,7 @@ string control_info::stringify() const {
  * ev:
  *   Event to handle.
  */
-void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
         
@@ -300,7 +300,7 @@ void gameplay::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * player:
  *   Number of the player that pressed.
  */
-void gameplay::handle_button(
+void gameplay_state::handle_button(
     const size_t button, const float pos, const size_t player
 ) {
 

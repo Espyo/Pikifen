@@ -230,7 +230,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
     pg.total_speed = 70;
     pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
-    pg.emit(game.states.gameplay_st->particles);
+    pg.emit(game.states.gameplay->particles);
 }
 
 

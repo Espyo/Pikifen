@@ -101,7 +101,7 @@ void converter::spew() {
     
     for(size_t s = 0; s < total_to_spit; ++s) {
         if(
-            game.states.gameplay_st->mobs.pikmin_list.size() ==
+            game.states.gameplay->mobs.pikmin_list.size() ==
             game.config.max_pikmin_in_field
         ) {
             break;

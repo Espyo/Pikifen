@@ -52,7 +52,7 @@ mob* converter_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     converter* m = new converter(pos, (converter_type*) type, angle);
-    game.states.gameplay_st->mobs.converters.push_back(m);
+    game.states.gameplay->mobs.converters.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* converter_category::create_type() {
  *   The mob to erase.
  */
 void converter_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.converters.erase(
+    game.states.gameplay->mobs.converters.erase(
         find(
-            game.states.gameplay_st->mobs.converters.begin(),
-            game.states.gameplay_st->mobs.converters.end(),
+            game.states.gameplay->mobs.converters.begin(),
+            game.states.gameplay->mobs.converters.end(),
             (converter*) m
         )
     );

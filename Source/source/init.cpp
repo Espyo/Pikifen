@@ -384,7 +384,7 @@ void init_event_things(
  * Initializes the HUD items, along with their default coordinates.
  */
 void init_hud_items() {
-    hud_item_manager* mgr = &game.states.gameplay_st->hud_items;
+    hud_item_manager* mgr = &game.states.gameplay->hud_items;
     mgr->set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
     mgr->set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
     mgr->set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
@@ -437,10 +437,10 @@ void init_misc() {
     
     srand(time(NULL));
     
-    game.states.gameplay_st->whistle.next_dot_timer.start();
-    game.states.gameplay_st->whistle.next_ring_timer.start();
+    game.states.gameplay->whistle.next_dot_timer.start();
+    game.states.gameplay->whistle.next_ring_timer.start();
     
-    game.states.gameplay_st->particles =
+    game.states.gameplay->particles =
         particle_manager(game.options.max_particles);
         
     game.options.zoom_mid_level =

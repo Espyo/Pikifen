@@ -258,25 +258,25 @@ int game_class::start() {
         game.maker_tools.auto_start_mode == "play" &&
         !game.maker_tools.auto_start_option.empty()
     ) {
-        game.states.gameplay_st->area_to_load =
+        game.states.gameplay->area_to_load =
             game.maker_tools.auto_start_option;
-        game.change_state(game.states.gameplay_st);
+        game.change_state(game.states.gameplay);
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "animation_editor"
     ) {
-        game.states.animation_editor_st->auto_load_anim =
+        game.states.animation_ed->auto_load_anim =
             game.maker_tools.auto_start_option;
-        game.change_state(game.states.animation_editor_st);
+        game.change_state(game.states.animation_ed);
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "area_editor"
     ) {
-        game.states.area_editor_st->auto_load_area =
+        game.states.area_ed->auto_load_area =
             game.maker_tools.auto_start_option;
-        game.change_state(game.states.area_editor_st);
+        game.change_state(game.states.area_ed);
     } else {
-        game.change_state(game.states.main_menu_st);
+        game.change_state(game.states.main_menu);
     }
     
     return 0;
@@ -287,13 +287,13 @@ int game_class::start() {
  * Creates a game state list struct.
  */
 game_state_list::game_state_list() :
-    animation_editor_st(nullptr),
-    area_editor_st(nullptr),
-    area_menu_st(nullptr),
-    controls_menu_st(nullptr),
-    gameplay_st(nullptr),
-    main_menu_st(nullptr),
-    options_menu_st(nullptr) {
+    animation_ed(nullptr),
+    area_ed(nullptr),
+    area_menu(nullptr),
+    controls_menu(nullptr),
+    gameplay(nullptr),
+    main_menu(nullptr),
+    options_menu(nullptr) {
     
 }
 
@@ -302,19 +302,21 @@ game_state_list::game_state_list() :
  * Destroys the states in the list.
  */
 void game_state_list::destroy() {
-    delete animation_editor_st;
-    delete area_menu_st;
-    delete controls_menu_st;
-    delete gameplay_st;
-    delete main_menu_st;
-    delete options_menu_st;
+    delete animation_ed;
+    delete area_ed;
+    delete area_menu;
+    delete controls_menu;
+    delete gameplay;
+    delete main_menu;
+    delete options_menu;
     
-    animation_editor_st = NULL;
-    area_menu_st = NULL;
-    controls_menu_st = NULL;
-    gameplay_st = NULL;
-    main_menu_st = NULL;
-    options_menu_st = NULL;
+    animation_ed = NULL;
+    area_ed = NULL;
+    area_menu = NULL;
+    controls_menu = NULL;
+    gameplay = NULL;
+    main_menu = NULL;
+    options_menu = NULL;
 }
 
 
@@ -322,13 +324,13 @@ void game_state_list::destroy() {
  * Initializes the states in the list.
  */
 void game_state_list::init() {
-    animation_editor_st = new animation_editor();
-    area_editor_st = new area_editor();
-    area_menu_st = new area_menu();
-    controls_menu_st = new controls_menu();
-    gameplay_st = new gameplay();
-    main_menu_st = new main_menu();
-    options_menu_st = new options_menu();
+    animation_ed = new animation_editor();
+    area_ed = new area_editor();
+    area_menu = new area_menu_state();
+    controls_menu = new controls_menu_state();
+    gameplay = new gameplay_state();
+    main_menu = new main_menu_state();
+    options_menu = new options_menu_state();
 }
 
 

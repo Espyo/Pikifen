@@ -483,7 +483,7 @@ void area_editor::do_logic() {
 void area_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
-    game.states.area_editor_st->draw_canvas();
+    game.states.area_ed->draw_canvas();
 }
 
 

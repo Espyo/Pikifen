@@ -41,7 +41,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     
     group = new group_info_struct(this);
     subgroup_type_ptr =
-        game.states.gameplay_st->subgroup_types.get_type(
+        game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
 }
@@ -78,10 +78,10 @@ void leader::dismiss() {
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(game.states.gameplay_st->swarm_magnitude > 0) {
+    if(game.states.gameplay->swarm_magnitude > 0) {
         //If the leader's swarming,
         //they should be dismissed in that direction.
-        base_angle = game.states.gameplay_st->swarm_angle;
+        base_angle = game.states.gameplay->swarm_angle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         point min_coords, max_coords;
@@ -119,14 +119,14 @@ void leader::dismiss() {
     
     //Go through all subgroups and populate the vector of data.
     subgroup_type* first_type =
-        game.states.gameplay_st->subgroup_types.get_first_type();
+        game.states.gameplay->subgroup_types.get_first_type();
     subgroup_type* cur_type = first_type;
     
     do {
     
         if(
             cur_type !=
-            game.states.gameplay_st->subgroup_types.get_type(
+            game.states.gameplay->subgroup_types.get_type(
                 SUBGROUP_TYPE_CATEGORY_LEADER
             )
         ) {
@@ -149,7 +149,7 @@ void leader::dismiss() {
         }
         
         cur_type =
-            game.states.gameplay_st->subgroup_types.get_next_type(cur_type);
+            game.states.gameplay->subgroup_types.get_next_type(cur_type);
             
     } while(cur_type != first_type);
     
@@ -461,7 +461,7 @@ void leader::start_throw_trail() {
  * Makes the leader start whistling.
  */
 void leader::start_whistling() {
-    game.states.gameplay_st->whistle.start_whistling();
+    game.states.gameplay->whistle.start_whistling();
     lea_type->sfx_whistle.play(0, false);
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
@@ -472,8 +472,8 @@ void leader::start_whistling() {
  * Makes the leader stop whistling.
  */
 void leader::stop_whistling() {
-    if(!game.states.gameplay_st->whistle.whistling) return;
-    game.states.gameplay_st->whistle.stop_whistling();
+    if(!game.states.gameplay->whistle.whistling) return;
+    game.states.gameplay->whistle.stop_whistling();
     lea_type->sfx_whistle.stop();
 }
 
@@ -517,8 +517,8 @@ void leader::tick_class_specifics(const float delta_t) {
         
         bool is_swarming =
             (
-                game.states.gameplay_st->swarm_magnitude &&
-                game.states.gameplay_st->cur_leader_ptr == this
+                game.states.gameplay->swarm_magnitude &&
+                game.states.gameplay->cur_leader_ptr == this
             );
             
         if(
@@ -550,13 +550,13 @@ void leader::tick_class_specifics(const float delta_t) {
                         point(
                             -(type->radius + GROUP_SPOT_INTERVAL * 2),
                             0
-                        ), game.states.gameplay_st->swarm_angle + TAU / 2
+                        ), game.states.gameplay->swarm_angle + TAU / 2
                     );
                 group->anchor = pos + move_anchor_offset;
                 
                 float intensity_dist =
                     game.config.cursor_max_dist *
-                    game.states.gameplay_st->swarm_magnitude;
+                    game.states.gameplay->swarm_magnitude;
                 al_translate_transform(
                     &group->transform, -SWARM_MARGIN, 0
                 );
@@ -566,12 +566,12 @@ void leader::tick_class_specifics(const float delta_t) {
                     1 -
                     (
                         SWARM_VERTICAL_SCALE *
-                        game.states.gameplay_st->swarm_magnitude
+                        game.states.gameplay->swarm_magnitude
                     )
                 );
                 al_rotate_transform(
                     &group->transform,
-                    game.states.gameplay_st->swarm_angle + TAU / 2
+                    game.states.gameplay->swarm_angle + TAU / 2
                 );
                 
             } else {
@@ -627,10 +627,10 @@ void leader::tick_class_specifics(const float delta_t) {
  *   leader switch script event.
  */
 void change_to_next_leader(const bool forward, const bool force_success) {
-    if(game.states.gameplay_st->mobs.leaders.size() == 1) return;
+    if(game.states.gameplay->mobs.leaders.size() == 1) return;
     
     if(
-        !game.states.gameplay_st->cur_leader_ptr->fsm.get_event(
+        !game.states.gameplay->cur_leader_ptr->fsm.get_event(
             LEADER_EV_INACTIVATED
         ) && !force_success
     ) {
@@ -644,10 +644,10 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    size_t new_leader_nr = game.states.gameplay_st->cur_leader_nr;
+    size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
     leader* new_leader_ptr = NULL;
     bool searching = true;
-    size_t original_leader_nr = game.states.gameplay_st->cur_leader_nr;
+    size_t original_leader_nr = game.states.gameplay->cur_leader_nr;
     bool cant_find_new_leader = false;
     
     while(searching) {
@@ -655,9 +655,9 @@ void change_to_next_leader(const bool forward, const bool force_success) {
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay_st->mobs.leaders.size()
+                game.states.gameplay->mobs.leaders.size()
             );
-        new_leader_ptr = game.states.gameplay_st->mobs.leaders[new_leader_nr];
+        new_leader_ptr = game.states.gameplay->mobs.leaders[new_leader_nr];
         
         if(new_leader_nr == original_leader_nr) {
             //Back to the original; stop trying.
@@ -670,24 +670,24 @@ void change_to_next_leader(const bool forward, const bool force_success) {
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(game.states.gameplay_st->cur_leader_nr != original_leader_nr) {
+        if(game.states.gameplay->cur_leader_nr != original_leader_nr) {
             searching = false;
         }
     }
     
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
-        game.states.gameplay_st->cur_leader_nr =
+        game.states.gameplay->cur_leader_nr =
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay_st->mobs.leaders.size()
+                game.states.gameplay->mobs.leaders.size()
             );
-        game.states.gameplay_st->cur_leader_ptr =
-            game.states.gameplay_st->
-            mobs.leaders[game.states.gameplay_st->cur_leader_nr];
+        game.states.gameplay->cur_leader_ptr =
+            game.states.gameplay->
+            mobs.leaders[game.states.gameplay->cur_leader_nr];
             
-        game.states.gameplay_st->cur_leader_ptr->fsm.set_state(
+        game.states.gameplay->cur_leader_ptr->fsm.set_state(
             LEADER_STATE_ACTIVE
         );
     }
@@ -699,23 +699,23 @@ void change_to_next_leader(const bool forward, const bool force_success) {
  * Returns true on success, false on failure.
  */
 bool grab_closest_group_member() {
-    if(game.states.gameplay_st->closest_group_member) {
+    if(game.states.gameplay->closest_group_member) {
         mob_event* grabbed_ev =
-            game.states.gameplay_st->closest_group_member->fsm.get_event(
+            game.states.gameplay->closest_group_member->fsm.get_event(
                 MOB_EV_GRABBED_BY_FRIEND
             );
         mob_event* grabber_ev =
-            game.states.gameplay_st->cur_leader_ptr->fsm.get_event(
+            game.states.gameplay->cur_leader_ptr->fsm.get_event(
                 LEADER_EV_HOLDING
             );
         if(grabber_ev && grabbed_ev) {
-            game.states.gameplay_st->cur_leader_ptr->fsm.run_event(
+            game.states.gameplay->cur_leader_ptr->fsm.run_event(
                 LEADER_EV_HOLDING,
-                (void*) game.states.gameplay_st->closest_group_member
+                (void*) game.states.gameplay->closest_group_member
             );
             grabbed_ev->run(
-                game.states.gameplay_st->closest_group_member,
-                (void*) game.states.gameplay_st->closest_group_member
+                game.states.gameplay->closest_group_member,
+                (void*) game.states.gameplay->closest_group_member
             );
             return true;
         }

@@ -32,7 +32,7 @@
  * bmp_transform:
  *   Transformation to use when drawing to a bitmap.
  */
-void gameplay::do_game_drawing(
+void gameplay_state::do_game_drawing(
     ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transform
 ) {
 
@@ -169,7 +169,7 @@ void gameplay::do_game_drawing(
  * bmp_output:
  *   If not NULL, draw the background onto this.
  */
-void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
+void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     if(!game.cur_area_data.bg_bmp) return;
     
     ALLEGRO_VERTEX bg_v[4];
@@ -234,7 +234,7 @@ void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
  * world_to_screen_drawing_transform:
  *   Use this transformation to get the cursor coordinates.
  */
-void gameplay::draw_cursor(
+void gameplay_state::draw_cursor(
     ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
 ) {
 
@@ -430,7 +430,7 @@ void gameplay::draw_cursor(
 /* ----------------------------------------------------------------------------
  * Draws the HUD.
  */
-void gameplay::draw_hud() {
+void gameplay_state::draw_hud() {
     al_use_transform(&game.identity_transform);
     point i_center, i_size;
     
@@ -898,7 +898,7 @@ void gameplay::draw_hud() {
 /* ----------------------------------------------------------------------------
  * Draws the in-game text.
  */
-void gameplay::draw_ingame_text() {
+void gameplay_state::draw_ingame_text() {
     //Fractions and health.
     size_t n_mobs = mobs.all.size();
     for(size_t m = 0; m < n_mobs; ++m) {
@@ -1166,7 +1166,7 @@ void gameplay::draw_ingame_text() {
 /* ----------------------------------------------------------------------------
  * Draws the full-screen effects that will represent lighting.
  */
-void gameplay::draw_lighting_filter() {
+void gameplay_state::draw_lighting_filter() {
     al_use_transform(&game.identity_transform);
     
     //Draw the fog effect.
@@ -1297,7 +1297,7 @@ void gameplay::draw_lighting_filter() {
 /* ----------------------------------------------------------------------------
  * Draws a message box.
  */
-void gameplay::draw_message_box() {
+void gameplay_state::draw_message_box() {
     al_use_transform(&game.identity_transform);
     
     draw_bitmap(
@@ -1353,7 +1353,7 @@ void gameplay::draw_message_box() {
 /* ----------------------------------------------------------------------------
  * Draws the precipitation.
  */
-void gameplay::draw_precipitation() {
+void gameplay_state::draw_precipitation() {
     if(
         game.cur_area_data.weather_condition.precipitation_type !=
         PRECIPITATION_TYPE_NONE
@@ -1372,7 +1372,7 @@ void gameplay::draw_precipitation() {
 /* ----------------------------------------------------------------------------
  * Draws system stuff.
  */
-void gameplay::draw_system_stuff() {
+void gameplay_state::draw_system_stuff() {
     if(!game.maker_tools.info_print_text.empty()) {
         float alpha_mult = 1;
         if(
@@ -1427,7 +1427,7 @@ void gameplay::draw_system_stuff() {
 /* ----------------------------------------------------------------------------
  * Draws the current area and mobs to a bitmap and returns it.
  */
-ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
+ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     //First, get the full dimensions of the map.
     float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
     
@@ -1472,7 +1472,7 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
 /* ----------------------------------------------------------------------------
  * Draws tree shadows.
  */
-void gameplay::draw_tree_shadows() {
+void gameplay_state::draw_tree_shadows() {
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         
@@ -1501,7 +1501,7 @@ void gameplay::draw_tree_shadows() {
  * bmp_output:
  *   If not NULL, draw the area onto this.
  */
-void gameplay::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
+void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     vector<world_component> components;
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
@@ -2158,7 +2158,7 @@ void draw_liquid(
         
         float ground_wobble =
             -sin(
-                game.states.gameplay_st->area_time_passed *
+                game.states.gameplay->area_time_passed *
                 LIQUID_WOBBLE_TIME_SCALE
             ) * LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
@@ -2246,7 +2246,7 @@ void draw_liquid(
             av[v].y = vy - where.y;
             av[v].u =
                 vx +
-                (game.states.gameplay_st->area_time_passed * layer_speed[l]);
+                (game.states.gameplay->area_time_passed * layer_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
                 al_map_rgba(
@@ -2555,7 +2555,7 @@ void draw_mob_shadow(
     float shadow_w =
         diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
         
-    if(game.states.gameplay_st->day_minutes < 60 * 12) {
+    if(game.states.gameplay->day_minutes < 60 * 12) {
         //Shadows point to the West.
         shadow_x = -shadow_w + diameter * 0.5;
         shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;

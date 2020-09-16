@@ -36,13 +36,13 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * List of all game states.
  */
 struct game_state_list {
-    animation_editor* animation_editor_st;
-    area_editor* area_editor_st;
-    area_menu* area_menu_st;
-    controls_menu* controls_menu_st;
-    gameplay* gameplay_st;
-    main_menu* main_menu_st;
-    options_menu* options_menu_st;
+    animation_editor* animation_ed;
+    area_editor* area_ed;
+    area_menu_state* area_menu;
+    controls_menu_state* controls_menu;
+    gameplay_state* gameplay;
+    main_menu_state* main_menu;
+    options_menu_state* options_menu;
     
     void init();
     void destroy();

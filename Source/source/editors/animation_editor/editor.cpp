@@ -208,7 +208,7 @@ void animation_editor::do_logic() {
 void animation_editor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
-    game.states.animation_editor_st->draw_canvas();
+    game.states.animation_ed->draw_canvas();
 }
 
 

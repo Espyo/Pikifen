@@ -6,18 +6,18 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    Leaving the animation editor on for a few hours will apparently make the system jerk to a crawl after a bit -- potential memory leak?
+    
     
     --- v0.20.0 ---
     Add rudimentary menus
-        Pause
-            Continue, end day, quit
         Onion
             Pikmin in Onion, Pikmin with you (/Pikmin in field), ok, cancel
             Ship too
         Sunset warning
         End of day
             Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
+        Pause
+            Continue, end day, quit
     Sector edge features
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)

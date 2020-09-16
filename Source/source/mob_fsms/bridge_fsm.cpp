@@ -84,7 +84,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     pg.total_speed = 75;
     pg.total_speed_deviation = 15;
     pg.duration_deviation = 0.25;
-    pg.emit(game.states.gameplay_st->particles);
+    pg.emit(game.states.gameplay->particles);
     
     for(size_t s = 0; s < b_ptr->secs.size(); s++) {
         sector* s_ptr = b_ptr->secs[s];

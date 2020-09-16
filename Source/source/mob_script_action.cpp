@@ -883,11 +883,11 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_GET_INFO_DAY_MINUTES: {
-        *var = i2s(game.states.gameplay_st->day_minutes);
+        *var = i2s(game.states.gameplay->day_minutes);
         break;
         
     } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {
-        *var = i2s(game.states.gameplay_st->mobs.pikmin_list.size());
+        *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
         break;
         
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
@@ -1263,16 +1263,16 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
 void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
     float d = s2f(data.args[0]);
     
-    for(size_t m2 = 0; m2 < game.states.gameplay_st->mobs.all.size(); ++m2) {
-        if(game.states.gameplay_st->mobs.all[m2] == data.m) {
+    for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+        if(game.states.gameplay->mobs.all[m2] == data.m) {
             continue;
         }
-        if(dist(data.m->pos, game.states.gameplay_st->mobs.all[m2]->pos) > d) {
+        if(dist(data.m->pos, game.states.gameplay->mobs.all[m2]->pos) > d) {
             continue;
         }
         
         data.m->send_message(
-            game.states.gameplay_st->mobs.all[m2], data.args[1]
+            game.states.gameplay->mobs.all[m2], data.args[1]
         );
     }
 }
@@ -1333,8 +1333,8 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
     
     if(data.m->type->walkable) {
         //Update the Z of mobs standing on top of it.
-        for(size_t m = 0; m < game.states.gameplay_st->mobs.all.size(); ++m) {
-            mob* m2_ptr = game.states.gameplay_st->mobs.all[m];
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->standing_on_mob == data.m) {
                 m2_ptr->z = data.m->z + data.m->height;
             }

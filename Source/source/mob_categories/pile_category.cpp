@@ -52,7 +52,7 @@ mob* pile_category::create_mob(
     const point &pos, mob_type* type, const float angle
 ) {
     pile* m = new pile(pos, (pile_type*) type, angle);
-    game.states.gameplay_st->mobs.piles.push_back(m);
+    game.states.gameplay->mobs.piles.push_back(m);
     return m;
 }
 
@@ -71,10 +71,10 @@ mob_type* pile_category::create_type() {
  *   The mob to erase.
  */
 void pile_category::erase_mob(mob* m) {
-    game.states.gameplay_st->mobs.piles.erase(
+    game.states.gameplay->mobs.piles.erase(
         find(
-        game.states.gameplay_st->mobs.piles.begin(), 
-        game.states.gameplay_st->mobs.piles.end(), 
+        game.states.gameplay->mobs.piles.begin(), 
+        game.states.gameplay->mobs.piles.end(), 
         (pile*) m
         )
     );

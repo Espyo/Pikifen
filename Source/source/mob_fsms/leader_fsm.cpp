@@ -1208,20 +1208,20 @@ void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    game.states.gameplay_st->cur_leader_ptr->fsm.run_event(
+    game.states.gameplay->cur_leader_ptr->fsm.run_event(
         LEADER_EV_INACTIVATED
     );
     
-    size_t new_leader_nr = game.states.gameplay_st->cur_leader_nr;
-    for(size_t l = 0; l < game.states.gameplay_st->mobs.leaders.size(); ++l) {
-        if(game.states.gameplay_st->mobs.leaders[l] == l_ptr) {
+    size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        if(game.states.gameplay->mobs.leaders[l] == l_ptr) {
             new_leader_nr = l;
             break;
         }
     }
     
-    game.states.gameplay_st->cur_leader_ptr = l_ptr;
-    game.states.gameplay_st->cur_leader_nr = new_leader_nr;
+    game.states.gameplay->cur_leader_ptr = l_ptr;
+    game.states.gameplay->cur_leader_nr = new_leader_nr;
     l_ptr->active = true;
     
     l_ptr->lea_type->sfx_name_call.play(0, false);
@@ -1291,8 +1291,8 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
     size_t living_leaders = 0;
-    for(size_t l = 0; l < game.states.gameplay_st->mobs.leaders.size(); ++l) {
-        if(game.states.gameplay_st->mobs.leaders[l]->health > 0) {
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        if(game.states.gameplay->mobs.leaders[l]->health > 0) {
             living_leaders++;
         }
     }
@@ -1300,10 +1300,10 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         game.fade_mgr.start_fade(
             false,
         []() {
-            game.states.gameplay_st->leave();
+            game.states.gameplay->leave();
         }
         );
-    } else if(game.states.gameplay_st->cur_leader_ptr == m) {
+    } else if(game.states.gameplay->cur_leader_ptr == m) {
         change_to_next_leader(true, true);
     }
     
@@ -1355,12 +1355,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     float angle;
     float target_z;
-    if(game.states.gameplay_st->leader_cursor_mob) {
+    if(game.states.gameplay->leader_cursor_mob) {
         target_z =
-            game.states.gameplay_st->leader_cursor_mob->z +
-            game.states.gameplay_st->leader_cursor_mob->height;
-    } else if(game.states.gameplay_st->leader_cursor_sector) {
-        target_z = game.states.gameplay_st->leader_cursor_sector->z;
+            game.states.gameplay->leader_cursor_mob->z +
+            game.states.gameplay->leader_cursor_mob->height;
+    } else if(game.states.gameplay->leader_cursor_sector) {
+        target_z = game.states.gameplay->leader_cursor_sector->z;
     } else {
         target_z = m->z;
     }
@@ -1387,7 +1387,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     }
     
     holding_ptr->calculate_throw(
-        game.states.gameplay_st->leader_cursor_w,
+        game.states.gameplay->leader_cursor_w,
         target_z,
         max_height,
         &holding_ptr->speed,
@@ -1509,7 +1509,7 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     switch(d_ptr->dro_type->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
         spray_stats_struct* stats =
-            &game.states.gameplay_st->spray_stats[
+            &game.states.gameplay->spray_stats[
         d_ptr->dro_type->spray_type_to_increase
         ];
         stats->nr_sprays =
@@ -1560,8 +1560,8 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     pik_ptr->pluck_reserved = true;
     
     //Now for the leaders in the group.
-    for(size_t l = 0; l < game.states.gameplay_st->mobs.leaders.size(); ++l) {
-        leader* l2_ptr = game.states.gameplay_st->mobs.leaders[l];
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
             l2_ptr->auto_plucking = true;
             l2_ptr->fsm.run_event(LEADER_EV_MUST_SEARCH_SEED);
@@ -1606,11 +1606,11 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     
-    game.states.gameplay_st->cur_leader_ptr->add_to_group(l_ptr);
+    game.states.gameplay->cur_leader_ptr->add_to_group(l_ptr);
     while(!l_ptr->group->members.empty()) {
         mob* member = l_ptr->group->members[0];
         member->leave_group();
-        game.states.gameplay_st->cur_leader_ptr->add_to_group(member);
+        game.states.gameplay->cur_leader_ptr->add_to_group(member);
     }
 }
 
@@ -1630,7 +1630,7 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
     
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
     
-    if(m == game.states.gameplay_st->cur_leader_ptr) {
+    if(m == game.states.gameplay->cur_leader_ptr) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
     } else {
         m->fsm.set_state(LEADER_STATE_IDLING);
@@ -1847,8 +1847,8 @@ void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    for(size_t l = 0; l < game.states.gameplay_st->mobs.leaders.size(); ++l) {
-        leader* l2_ptr = game.states.gameplay_st->mobs.leaders[l];
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == l_ptr) {
             l2_ptr->fsm.run_event(LEADER_EV_CANCEL);
         }
@@ -1868,13 +1868,13 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     size_t spray_nr = *((size_t*) info1);
     
-    if(game.states.gameplay_st->spray_stats[spray_nr].nr_sprays == 0) {
+    if(game.states.gameplay->spray_stats[spray_nr].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
         return;
     }
     
     float cursor_angle =
-        get_angle(m->pos, game.states.gameplay_st->leader_cursor_w);
+        get_angle(m->pos, game.states.gameplay->leader_cursor_w);
     float shoot_angle =
         cursor_angle + ((game.spray_types[spray_nr].angle) ? TAU / 2 : 0);
         
@@ -1896,9 +1896,9 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         
     } else {
         for(
-            size_t am = 0; am < game.states.gameplay_st->mobs.all.size(); ++am
+            size_t am = 0; am < game.states.gameplay->mobs.all.size(); ++am
         ) {
-            mob* am_ptr = game.states.gameplay_st->mobs.all[am];
+            mob* am_ptr = game.states.gameplay->mobs.all[am];
             if(am_ptr == m) continue;
             
             if(
@@ -1939,9 +1939,9 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.total_speed = game.spray_types[spray_nr].distance_range * 0.8;
     pg.total_speed_deviation = game.spray_types[spray_nr].distance_range * 0.4;
     pg.size_deviation = 0.5;
-    pg.emit(game.states.gameplay_st->particles);
+    pg.emit(game.states.gameplay->particles);
     
-    game.states.gameplay_st->spray_stats[spray_nr].nr_sprays--;
+    game.states.gameplay->spray_stats[spray_nr].nr_sprays--;
     
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);
@@ -2127,7 +2127,7 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
-    m->face(get_angle(m->pos, game.states.gameplay_st->leader_cursor_w), NULL);
+    m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), NULL);
 }
 
 
