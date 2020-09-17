@@ -51,11 +51,18 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     [this] () { next_spew_timer.start(); };
     next_spew_timer.on_end =
     [this] () {
-        if(spew_queue == 0) return; next_spew_timer.start(); spew();
+        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+            if(spew_queue[t] > 0) {
+                next_spew_timer.start();
+                spew();
+                return;
+            }
+        }
     };
     
-    for(size_t m = 0; m < N_MATURITIES; ++m) {
-        pikmin_inside[m] = 0;
+    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+        pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
+        spew_queue.push_back(0);
     }
     
     set_animation(ANIM_IDLING);
@@ -68,7 +75,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  * Gives priority to the higher maturities.
  */
 void onion::call_pikmin() {
-
+    //TODO delete this when the Onion menu is done.
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
@@ -80,12 +87,12 @@ void onion::call_pikmin() {
         //Let's check the maturities in reverse order.
         size_t cur_m = N_MATURITIES - m - 1;
         
-        if(pikmin_inside[cur_m] == 0) continue;
+        if(pikmin_inside[0][cur_m] == 0) continue;
         
-        pikmin_inside[cur_m]--;
+        pikmin_inside[0][cur_m]--;
         create_mob(
             game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-            pos, oni_type->pik_type, 0,
+            pos, oni_type->pik_types[0], 0,
             "maturity=" + i2s(cur_m)
         );
         
@@ -123,12 +130,15 @@ void onion::read_script_vars(const script_var_reader &svr) {
     
     if(svr.get("pikmin_inside", pikmin_inside_var)) {
         vector<string> pikmin_inside_vars = split(pikmin_inside_var);
+        size_t word = 0;
         
-        for(
-            size_t m = 0; m < pikmin_inside_vars.size() && m < N_MATURITIES;
-            ++m
-        ) {
-            pikmin_inside[m] = s2i(pikmin_inside_vars[m]);
+        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                if(word < pikmin_inside_vars.size()) {
+                    pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
+                    word++;
+                }
+            }
         }
     }
 }
@@ -150,26 +160,32 @@ const float ONION_SPEW_V_SPEED = 600.0f;
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void onion::spew() {
-    if(spew_queue == 0) return;
-    spew_queue--;
-    
-    unsigned total_after = game.states.gameplay->mobs.pikmin_list.size() + 1;
-    
-    if(total_after > game.config.max_pikmin_in_field) {
-        pikmin_inside[0]++;
+    for(size_t t = 0; t < spew_queue.size(); ++t) {
+        if(spew_queue[t] == 0) continue;
+        
+        spew_queue[t]--;
+        
+        unsigned total_after =
+            game.states.gameplay->mobs.pikmin_list.size() + 1;
+            
+        if(total_after > game.config.max_pikmin_in_field) {
+            pikmin_inside[t][0]++;
+            return;
+        }
+        
+        float horizontal_strength =
+            ONION_SPEW_H_SPEED +
+            randomf(-ONION_SPEW_H_SPEED_DEVIATION, ONION_SPEW_H_SPEED_DEVIATION);
+        spew_pikmin_seed(
+            pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->pik_types[t],
+            next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
+        );
+        
+        next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
+        next_spew_angle = normalize_angle(next_spew_angle);
+        
         return;
     }
-    
-    float horizontal_strength =
-        ONION_SPEW_H_SPEED +
-        randomf(-ONION_SPEW_H_SPEED_DEVIATION, ONION_SPEW_H_SPEED_DEVIATION);
-    spew_pikmin_seed(
-        pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->pik_type,
-        next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
-    );
-    
-    next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
-    next_spew_angle = normalize_angle(next_spew_angle);
 }
 
 
@@ -179,6 +195,7 @@ void onion::spew() {
  * Gives priority to the lower maturities.
  */
 void onion::stow_pikmin() {
+    //TODO delete this when the Onion menu is done.
     //Find a Pikmin of that type, preferring lower maturities.
     pikmin* pik_to_stow = NULL;
     size_t maturity = 0;
@@ -196,7 +213,7 @@ void onion::stow_pikmin() {
             
             pikmin* p_ptr = (pikmin*) mob_ptr;
             if(p_ptr->maturity != maturity) continue;
-            if(p_ptr->pik_type != oni_type->pik_type) continue;
+            if(p_ptr->pik_type != oni_type->pik_types[0]) continue;
             
             pik_to_stow = p_ptr;
             break;
@@ -209,7 +226,7 @@ void onion::stow_pikmin() {
     
     pik_to_stow->leave_group();
     pik_to_stow->to_delete = true;
-    pikmin_inside[maturity]++;
+    pikmin_inside[0][maturity]++;
 }
 
 
@@ -219,10 +236,18 @@ void onion::stow_pikmin() {
  *   How many seconds to tick by.
  */
 void onion::tick_class_specifics(const float delta_t) {
+    bool needs_to_spew = false;
+    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+        if(spew_queue[t] > 0) {
+            needs_to_spew = true;
+            break;
+        }
+    }
+    
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         
-        if(o_ptr->spew_queue != 0) {
+        if(needs_to_spew) {
         
             o_ptr->full_spew_timer.tick(delta_t);
             o_ptr->next_spew_timer.tick(delta_t);

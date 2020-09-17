@@ -31,11 +31,11 @@ const float ONION_FADE_SPEED               = 255; //Values per second.
 
 /* ----------------------------------------------------------------------------
  * An Onion type.
- * It's basically associated with a Pikmin type.
+ * It's basically associated with one or more Pikmin types.
  */
 class onion_type : public mob_type {
 public:
-    pikmin_type* pik_type;
+    vector<pikmin_type*> pik_types;
     
     onion_type();
     

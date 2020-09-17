@@ -59,7 +59,7 @@ void enemy::draw_mob() {
     float delivery_time_ratio_left = LARGE_FLOAT;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        delivery_color = ((onion*) focused_mob)->oni_type->pik_type->main_color;
+        delivery_color = delivery_info->color;
         delivery_time_ratio_left = script_timer.get_ratio_left();
     }
     
@@ -156,12 +156,11 @@ void enemy::start_dying_class_specifics() {
         
         //Start by obtaining a list of available Pikmin types, given the
         //Onions currently in the area.
-        for(
-            size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o
-        ) {
-            available_pik_types.push_back(
-                game.states.gameplay->mobs.onions[o]->oni_type->pik_type
-            );
+        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+            onion* o_ptr = game.states.gameplay->mobs.onions[o];
+            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+                available_pik_types.push_back(o_ptr->oni_type->pik_types[t]);
+            }
         }
         
         //Remove duplicates from the list.

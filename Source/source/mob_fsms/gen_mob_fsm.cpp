@@ -137,6 +137,16 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::carry_reach_destination(mob* m, void* info1, void* info2) {
     m->stop_following_path();
+    
+    if(m->delivery_info) {
+        delete m->delivery_info;
+    }
+    m->delivery_info = new delivery_info_struct();
+    if(m->carry_info->intended_pik_type) {
+        m->delivery_info->color = m->carry_info->intended_pik_type->main_color;
+        m->delivery_info->intended_pik_type = m->carry_info->intended_pik_type;
+    }
+    
     m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
 }
 
@@ -230,6 +240,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     
     m->calculate_carrying_destination(
         pik_ptr, NULL,
+        &m->carry_info->intended_pik_type,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
     
@@ -275,6 +286,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     
     m->calculate_carrying_destination(
         NULL, pik_ptr,
+        &m->carry_info->intended_pik_type,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
     

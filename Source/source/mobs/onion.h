@@ -30,10 +30,10 @@ public:
     
     //Is this Onion currently activated?
     bool activated;
-    //How many Pikmin are inside, per maturity.
-    size_t pikmin_inside[N_MATURITIES];
-    //How many Pikmin are queued up to be spat.
-    size_t spew_queue;
+    //How many Pikmin are inside, per type, per maturity.
+    vector<vector<size_t> > pikmin_inside;
+    //How many seeds are queued up to be spat, of each type.
+    vector<size_t> spew_queue;
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
     //Time left until it spews the next seed in the queue.

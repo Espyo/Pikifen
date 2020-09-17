@@ -459,13 +459,16 @@ void mob::become_uncarriable() {
  *   The Pikmin that got added, if any.
  * removed:
  *   The Pikmin that got removed, if any.
+ * target_type:
+ *   Return the target Pikmin type (if any) here.
  * target_mob:
  *   Return the target mob (if any) here.
  * target_point:
  *   Return the target point here.
  */
 bool mob::calculate_carrying_destination(
-    mob* added, mob* removed, mob** target_mob, point* target_point
+    mob* added, mob* removed,
+    pikmin_type** target_type, mob** target_mob, point* target_point
 ) const {
     if(!carry_info) return false;
     
@@ -517,18 +520,20 @@ bool mob::calculate_carrying_destination(
     map<pikmin_type*, unsigned> type_quantity;
     //The Pikmin type with the most carriers.
     vector<pikmin_type*> majority_types;
-    unordered_set<pikmin_type*> available_onions;
+    unordered_set<pikmin_type*> available_types;
     
-    //First, check which Onions are even available.
+    //First, check which Onion Pikmin types are even available.
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(o_ptr->activated) {
-            available_onions.insert(o_ptr->oni_type->pik_type);
+            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+                available_types.insert(o_ptr->oni_type->pik_types[t]);
+            }
         }
     }
     
-    if(available_onions.empty()) {
-        //No Onions?! Well...make the Pikmin stuck.
+    if(available_types.empty()) {
+        //No available types?! Well...make the Pikmin stuck.
         *target_mob = NULL;
         return false;
     }
@@ -541,8 +546,8 @@ bool mob::calculate_carrying_destination(
         
         pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
         
-        //If it doesn't have an Onion, it won't even count.
-        if(available_onions.find(pik_ptr->pik_type) == available_onions.end()) {
+        //If it doesn't have an Onion to carry to, it won't even count.
+        if(available_types.find(pik_ptr->pik_type) == available_types.end()) {
             continue;
         }
         
@@ -563,8 +568,8 @@ bool mob::calculate_carrying_destination(
     //out of all possible types.
     if(majority_types.empty()) {
         for(
-            auto t = available_onions.begin();
-            t != available_onions.end(); ++t
+            auto t = available_types.begin();
+            t != available_types.end(); ++t
         ) {
             majority_types.push_back(*t);
         }
@@ -629,14 +634,19 @@ bool mob::calculate_carrying_destination(
     
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
-    for(; onion_nr < game.states.gameplay->mobs.onions.size(); ++onion_nr) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[onion_nr];
-        if(o_ptr->oni_type->pik_type == decided_type) {
-            break;
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        if(!o_ptr->activated) continue;
+        for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+            if(o_ptr->oni_type->pik_types[t] == decided_type) {
+                onion_nr = o;
+                break;
+            }
         }
     }
     
     //Finally, set the destination data.
+    *target_type = decided_type;
     *target_mob = game.states.gameplay->mobs.onions[onion_nr];
     *target_point = (*target_mob)->pos;
     

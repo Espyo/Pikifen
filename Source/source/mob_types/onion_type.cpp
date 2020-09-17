@@ -20,8 +20,7 @@
  * Creates a type of Onion.
  */
 onion_type::onion_type() :
-    mob_type(MOB_CATEGORY_ONIONS),
-    pik_type(NULL) {
+    mob_type(MOB_CATEGORY_ONIONS) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     
@@ -31,7 +30,9 @@ onion_type::onion_type() :
     aep_pik_inside.type = AEMP_TEXT;
     aep_pik_inside.def_value = "";
     aep_pik_inside.tooltip =
-        "How many Pikmin, per maturity, are inside, separated by space.\n"
+        "How many Pikmin are inside.\n"
+        "One word per maturity. The first three words are for the first type,\n"
+        "then three more for the second type, and so on.\n"
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
     area_editor_props.push_back(aep_pik_inside);
     
@@ -57,19 +58,24 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
 void onion_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
-    string pik_type_str;
-    data_node* pik_type_node = NULL;
+    string pik_types_str;
+    data_node* pik_types_node = NULL;
     
-    rs.set("pikmin_type", pik_type_str, &pik_type_node);
+    rs.set("pikmin_types", pik_types_str, &pik_types_node);
     
-    if(
-        game.mob_types.pikmin.find(pik_type_str) ==
-        game.mob_types.pikmin.end()
-    ) {
-        log_error(
-            "Unknown Pikmin type \"" + pik_type_str + "\"!",
-            pik_type_node
-        );
+    vector<string> pik_types_strs = semicolon_list_to_vector(pik_types_str);
+    for(size_t t = 0; t < pik_types_strs.size(); ++t) {
+        string &str = pik_types_strs[t];
+        if(
+            game.mob_types.pikmin.find(str) ==
+            game.mob_types.pikmin.end()
+        ) {
+            log_error(
+                "Unknown Pikmin type \"" + str + "\"!",
+                pik_types_node
+            );
+        } else {
+            pik_types.push_back(game.mob_types.pikmin[str]);
+        }
     }
-    pik_type = game.mob_types.pikmin[pik_type_str];
 }

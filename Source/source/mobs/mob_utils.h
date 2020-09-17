@@ -99,6 +99,8 @@ struct carry_info_struct {
     mob* intended_mob;
     //When the object begins moving, the idea is to carry it to this point.
     point intended_point;
+    //When delivering to an Onion, this is the Pikmin type that will benefit.
+    pikmin_type* intended_pik_type;
     //Is the Pikmin meant to return somewhere after carrying?
     bool must_return;
     //Location to return true.
@@ -164,6 +166,16 @@ struct circling_info_struct {
     float cur_angle;
     
     circling_info_struct(mob* m);
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Information on a mob that's being delivered to an Onion, ship, etc.
+ */
+struct delivery_info_struct {
+    ALLEGRO_COLOR color;
+    pikmin_type* intended_pik_type;
+    delivery_info_struct();
 };
 
 

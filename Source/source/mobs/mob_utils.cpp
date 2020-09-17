@@ -48,6 +48,7 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     cur_n_carriers(0),
     is_moving(false),
     intended_mob(nullptr),
+    intended_pik_type(nullptr),
     must_return(false),
     return_dist(0) {
     
@@ -177,6 +178,16 @@ circling_info_struct::circling_info_struct(mob* m) :
     can_free_move(false),
     cur_angle(0) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new delivery information struct.
+ */
+delivery_info_struct::delivery_info_struct() :
+    intended_pik_type(nullptr) {
+    
+    color = game.config.carrying_color_move;
 }
 
 

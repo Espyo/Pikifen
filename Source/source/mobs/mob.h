@@ -216,6 +216,8 @@ public:
     //Structure holding information on how this mob should be carried.
     //If NULL, it cannot be carried.
     carry_info_struct* carry_info;
+    //Onion delivery info. If NULL, the mob is not being delivered.
+    delivery_info_struct* delivery_info;
     
     //Riding a track. If NULL, the mob is not riding on any track.
     track_info_struct* track_info;
@@ -289,7 +291,8 @@ public:
     void add_to_group(mob* new_member);
     void apply_knockback(const float knockback, const float knockback_angle);
     bool calculate_carrying_destination(
-        mob* added, mob* removed, mob** target_mob, point* target_point
+        mob* added, mob* removed,
+        pikmin_type** target_type, mob** target_mob, point* target_point
     ) const;
     bool calculate_damage(
         mob* victim, hitbox* attack_h, hitbox* victim_h, float* damage

@@ -66,7 +66,10 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
         break;
     } case MOB_CATEGORY_PELLETS: {
         pellet* p_ptr = (pellet*) delivery;
-        if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
+        if(
+            p_ptr->pel_type->pik_type ==
+            delivery->delivery_info->intended_pik_type
+        ) {
             seeds = p_ptr->pel_type->match_seeds;
         } else {
             seeds = p_ptr->pel_type->non_match_seeds;
@@ -75,9 +78,19 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     }
     
+    size_t type_idx = 0;
+    for(; type_idx < o_ptr->oni_type->pik_types.size(); ++type_idx) {
+        if(
+            o_ptr->oni_type->pik_types[type_idx] ==
+            delivery->delivery_info->intended_pik_type
+        ) {
+            break;
+        }
+    }
+    
     o_ptr->full_spew_timer.start();
     o_ptr->next_spew_timer.stop();
-    o_ptr->spew_queue += seeds;
+    o_ptr->spew_queue[type_idx] += seeds;
     
     particle p(
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height - 0.01,

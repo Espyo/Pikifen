@@ -494,8 +494,11 @@ void gameplay_state::draw_hud() {
     ) {
         size_t total_pikmin = mobs.pikmin_list.size();
         for(size_t o = 0; o < mobs.onions.size(); ++o) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
-                total_pikmin += mobs.onions[o]->pikmin_inside[m];
+            onion* o_ptr = mobs.onions[o];
+            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+                for(size_t m = 0; m < N_MATURITIES; ++m) {
+                    total_pikmin += mobs.onions[o]->pikmin_inside[t][m];
+                }
             }
         }
         
@@ -735,9 +738,7 @@ void gameplay_state::draw_ingame_text() {
                         
                     } else if(destination_is_onion) {
                         color =
-                            (
-                                (onion*) (mob_ptr->carry_info->intended_mob)
-                            )->oni_type->pik_type->main_color;
+                            mob_ptr->carry_info->intended_pik_type->main_color;
                     } else {
                         color = game.config.carrying_color_move;
                     }

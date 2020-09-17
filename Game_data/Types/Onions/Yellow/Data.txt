@@ -1,7 +1,7 @@
 name = Yellow Onion
 
 height = 200
-pikmin_type = Yellow Pikmin
+pikmin_types = Yellow Pikmin
 pushable = false
 pushes = false
 radius = 16

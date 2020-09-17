@@ -45,7 +45,7 @@ void pellet::draw_mob() {
     float delivery_time_ratio_left = LARGE_FLOAT;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        delivery_color = ((onion*) focused_mob)->oni_type->pik_type->main_color;
+        delivery_color = delivery_info->color;
         delivery_time_ratio_left = script_timer.get_ratio_left();
     }
     
@@ -54,13 +54,9 @@ void pellet::draw_mob() {
         delivery_time_ratio_left, delivery_color
     );
     
-    eff.scale.x = type->radius * 2.0 / al_get_bitmap_width(s_ptr->bitmap);
-    eff.scale.y = type->radius * 2.0 / al_get_bitmap_height(s_ptr->bitmap);
+    eff.scale.x *= type->radius * 2.0 / al_get_bitmap_width(s_ptr->bitmap);
+    eff.scale.y *= type->radius * 2.0 / al_get_bitmap_height(s_ptr->bitmap);
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
-    
-    eff.scale.x = type->radius / al_get_bitmap_width(pel_type->bmp_number);
-    eff.scale.y = type->radius / al_get_bitmap_height(pel_type->bmp_number);
-    
     draw_bitmap_with_effects(pel_type->bmp_number, eff);
 }
