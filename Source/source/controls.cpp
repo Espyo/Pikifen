@@ -434,7 +434,8 @@ void gameplay_state::handle_button(
                 //Now check if the leader should open an Onion's menu.
                 if(!done) {
                     if(close_to_onion_to_open) {
-                        close_to_onion_to_open->call_pikmin();
+                        onion_menu =
+                            new onion_menu_struct(close_to_onion_to_open);
                         done = true;
                     }
                 }

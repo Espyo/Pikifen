@@ -127,17 +127,19 @@ void gameplay_state::do_game_drawing(
             game.perf_mon->finish_measurement();
         }
         
-        //Layer 7 -- Cursor.
-        draw_cursor(world_to_screen_drawing_transform);
+        //Layer 7 -- Leader cursor.
+        draw_leader_cursor(world_to_screen_drawing_transform);
         
         //Layer 8 -- HUD
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Drawing -- HUD");
         }
-        if(!msg_box) {
-            draw_hud();
-        } else {
+        if(msg_box) {
             draw_message_box();
+        } else if(onion_menu) {
+            draw_onion_menu();
+        } else {
+            draw_hud();
         }
         if(game.perf_mon) {
             game.perf_mon->finish_measurement();
@@ -230,207 +232,16 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the cursor.
- * world_to_screen_drawing_transform:
- *   Use this transformation to get the cursor coordinates.
- */
-void gameplay_state::draw_cursor(
-    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
-) {
-
-    al_use_transform(&world_to_screen_drawing_transform);
-    
-    size_t n_arrows = swarm_arrows.size();
-    for(size_t a = 0; a < n_arrows; ++a) {
-        point pos(
-            cos(swarm_angle) * swarm_arrows[a],
-            sin(swarm_angle) * swarm_arrows[a]
-        );
-        float alpha =
-            64 + std::min(
-                191,
-                (int) (
-                    191 *
-                    (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
-                )
-            );
-        draw_bitmap(
-            game.sys_assets.bmp_swarm_arrow,
-            cur_leader_ptr->pos + pos,
-            point(16 * (1 + swarm_arrows[a] / game.config.cursor_max_dist), -1),
-            swarm_angle,
-            map_alpha(alpha)
-        );
-    }
-    
-    size_t n_rings = whistle.rings.size();
-    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
-    for(size_t r = 0; r < n_rings; ++r) {
-        point pos(
-            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
-            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
-        );
-        unsigned char n = whistle.ring_colors[r];
-        al_draw_circle(
-            pos.x, pos.y, 8,
-            al_map_rgba(
-                WHISTLE_RING_COLORS[n][0],
-                WHISTLE_RING_COLORS[n][1],
-                WHISTLE_RING_COLORS[n][2],
-                192
-            ), 3
-        );
-    }
-    
-    if(whistle.radius > 0 || whistle.fade_timer.time_left > 0.0f) {
-        if(game.options.pretty_whistle) {
-            unsigned char n_dots = 16 * 6;
-            for(unsigned char d = 0; d < 6; ++d) {
-                for(unsigned char d2 = 0; d2 < 16; ++d2) {
-                    unsigned char current_dot = d2 * 6 + d;
-                    float angle =
-                        TAU / n_dots *
-                        current_dot -
-                        WHISTLE_DOT_SPIN_SPEED * area_time_passed;
-                        
-                    point dot_pos(
-                        leader_cursor_w.x +
-                        cos(angle) * whistle.dot_radius[d],
-                        leader_cursor_w.y +
-                        sin(angle) * whistle.dot_radius[d]
-                    );
-                    
-                    ALLEGRO_COLOR c;
-                    float alpha_mult;
-                    if(whistle.fade_timer.time_left > 0.0f)
-                        alpha_mult = whistle.fade_timer.get_ratio_left();
-                    else
-                        alpha_mult = 1;
-                        
-                    switch(d) {
-                    case 0: {
-                        //Red.
-                        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
-                        break;
-                    } case 1: {
-                        //Orange.
-                        c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
-                        break;
-                    } case 2: {
-                        //Lime.
-                        c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
-                        break;
-                    } case 3: {
-                        //Cyan.
-                        c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
-                        break;
-                    } case 4: {
-                        //Blue.
-                        c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
-                        break;
-                    } default: {
-                        //Purple.
-                        c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
-                        break;
-                    }
-                    }
-                    
-                    al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
-                }
-            }
-        } else {
-            unsigned char alpha = whistle.fade_timer.get_ratio_left() * 255;
-            float radius = whistle.fade_radius;
-            if(whistle.radius > 0) {
-                alpha = 255;
-                radius = whistle.radius;
-            }
-            al_draw_circle(
-                leader_cursor_w.x, leader_cursor_w.y, radius,
-                al_map_rgba(192, 192, 0, alpha), 2
-            );
-        }
-    }
-    
-    //Cursor trail
-    al_use_transform(&game.identity_transform);
-    if(game.options.draw_cursor_trail) {
-        for(size_t p = 1; p < cursor_spots.size(); ++p) {
-            point* p_ptr = &cursor_spots[p];
-            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
-            if(
-                (*p_ptr) != (*pp_ptr) &&
-                dist(*p_ptr, *pp_ptr) > 4
-            ) {
-                al_draw_line(
-                    p_ptr->x, p_ptr->y,
-                    pp_ptr->x, pp_ptr->y,
-                    change_alpha(
-                        cur_leader_ptr->lea_type->main_color,
-                        (p / (float) cursor_spots.size()) * 64
-                    ),
-                    p * 3
-                );
-            }
-        }
-    }
-    
-    //Mouse cursor.
-    draw_bitmap(
-        game.sys_assets.bmp_mouse_cursor,
-        game.mouse_cursor_s,
-        point(
-            game.cam.zoom *
-            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
-            game.cam.zoom *
-            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
-        ),
-        -(area_time_passed * game.config.cursor_spin_speed),
-        change_color_lighting(
-            cur_leader_ptr->lea_type->main_color,
-            cursor_height_diff_light
-        )
-    );
-    
-    //Leader cursor.
-    al_use_transform(&world_to_screen_drawing_transform);
-    draw_bitmap(
-        game.sys_assets.bmp_cursor,
-        leader_cursor_w,
-        point(
-            al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
-            al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
-        ),
-        cursor_angle,
-        change_color_lighting(
-            cur_leader_ptr->lea_type->main_color,
-            cursor_height_diff_light
-        )
-    );
-    
-    if(!throw_can_reach_cursor) {
-        unsigned char alpha =
-            0 +
-            (sin(area_time_passed * CURSOR_INVALID_EFFECT_SPEED) + 1) * 127.0;
-            
-        draw_bitmap(
-            game.sys_assets.bmp_cursor_invalid,
-            leader_cursor_w,
-            point(
-                al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
-                al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
-            ),
-            0,
-            change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
-        );
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the HUD.
  */
 void gameplay_state::draw_hud() {
+    draw_mouse_cursor(
+        change_color_lighting(
+            cur_leader_ptr->lea_type->main_color,
+            cursor_height_diff_light
+        )
+    );
+    
     al_use_transform(&game.identity_transform);
     point i_center, i_size;
     
@@ -1164,6 +975,164 @@ void gameplay_state::draw_ingame_text() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws the leader's cursor.
+ * world_to_screen_drawing_transform:
+ *   Use this transformation to get the cursor coordinates.
+ */
+void gameplay_state::draw_leader_cursor(
+    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
+) {
+
+    al_use_transform(&world_to_screen_drawing_transform);
+    
+    size_t n_arrows = swarm_arrows.size();
+    for(size_t a = 0; a < n_arrows; ++a) {
+        point pos(
+            cos(swarm_angle) * swarm_arrows[a],
+            sin(swarm_angle) * swarm_arrows[a]
+        );
+        float alpha =
+            64 + std::min(
+                191,
+                (int) (
+                    191 *
+                    (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
+                )
+            );
+        draw_bitmap(
+            game.sys_assets.bmp_swarm_arrow,
+            cur_leader_ptr->pos + pos,
+            point(16 * (1 + swarm_arrows[a] / game.config.cursor_max_dist), -1),
+            swarm_angle,
+            map_alpha(alpha)
+        );
+    }
+    
+    size_t n_rings = whistle.rings.size();
+    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
+    for(size_t r = 0; r < n_rings; ++r) {
+        point pos(
+            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
+            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
+        );
+        unsigned char n = whistle.ring_colors[r];
+        al_draw_circle(
+            pos.x, pos.y, 8,
+            al_map_rgba(
+                WHISTLE_RING_COLORS[n][0],
+                WHISTLE_RING_COLORS[n][1],
+                WHISTLE_RING_COLORS[n][2],
+                192
+            ), 3
+        );
+    }
+    
+    if(whistle.radius > 0 || whistle.fade_timer.time_left > 0.0f) {
+        if(game.options.pretty_whistle) {
+            unsigned char n_dots = 16 * 6;
+            for(unsigned char d = 0; d < 6; ++d) {
+                for(unsigned char d2 = 0; d2 < 16; ++d2) {
+                    unsigned char current_dot = d2 * 6 + d;
+                    float angle =
+                        TAU / n_dots *
+                        current_dot -
+                        WHISTLE_DOT_SPIN_SPEED * area_time_passed;
+                        
+                    point dot_pos(
+                        leader_cursor_w.x +
+                        cos(angle) * whistle.dot_radius[d],
+                        leader_cursor_w.y +
+                        sin(angle) * whistle.dot_radius[d]
+                    );
+                    
+                    ALLEGRO_COLOR c;
+                    float alpha_mult;
+                    if(whistle.fade_timer.time_left > 0.0f)
+                        alpha_mult = whistle.fade_timer.get_ratio_left();
+                    else
+                        alpha_mult = 1;
+                        
+                    switch(d) {
+                    case 0: {
+                        //Red.
+                        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
+                        break;
+                    } case 1: {
+                        //Orange.
+                        c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
+                        break;
+                    } case 2: {
+                        //Lime.
+                        c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
+                        break;
+                    } case 3: {
+                        //Cyan.
+                        c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
+                        break;
+                    } case 4: {
+                        //Blue.
+                        c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
+                        break;
+                    } default: {
+                        //Purple.
+                        c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
+                        break;
+                    }
+                    }
+                    
+                    al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
+                }
+            }
+        } else {
+            unsigned char alpha = whistle.fade_timer.get_ratio_left() * 255;
+            float radius = whistle.fade_radius;
+            if(whistle.radius > 0) {
+                alpha = 255;
+                radius = whistle.radius;
+            }
+            al_draw_circle(
+                leader_cursor_w.x, leader_cursor_w.y, radius,
+                al_map_rgba(192, 192, 0, alpha), 2
+            );
+        }
+    }
+    
+    //Leader cursor.
+    al_use_transform(&world_to_screen_drawing_transform);
+    draw_bitmap(
+        game.sys_assets.bmp_cursor,
+        leader_cursor_w,
+        point(
+            al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
+            al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
+        ),
+        cursor_angle,
+        change_color_lighting(
+            cur_leader_ptr->lea_type->main_color,
+            cursor_height_diff_light
+        )
+    );
+    
+    if(!throw_can_reach_cursor) {
+        unsigned char alpha =
+            0 +
+            (sin(area_time_passed * CURSOR_INVALID_EFFECT_SPEED) + 1) * 127.0;
+            
+        draw_bitmap(
+            game.sys_assets.bmp_cursor_invalid,
+            leader_cursor_w,
+            point(
+                al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
+                al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
+            ),
+            0,
+            change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the full-screen effects that will represent lighting.
  */
 void gameplay_state::draw_lighting_filter() {
@@ -1298,6 +1267,13 @@ void gameplay_state::draw_lighting_filter() {
  * Draws a message box.
  */
 void gameplay_state::draw_message_box() {
+    draw_mouse_cursor(
+        change_color_lighting(
+            cur_leader_ptr->lea_type->main_color,
+            cursor_height_diff_light
+        )
+    );
+    
     al_use_transform(&game.identity_transform);
     
     draw_bitmap(
@@ -1347,6 +1323,121 @@ void gameplay_state::draw_message_box() {
         );
         
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the mouse cursor.
+ * color:
+ *   Color to tint it with.
+ */
+void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
+    //Cursor trail.
+    al_use_transform(&game.identity_transform);
+    if(game.options.draw_cursor_trail) {
+        for(size_t p = 1; p < cursor_spots.size(); ++p) {
+            point* p_ptr = &cursor_spots[p];
+            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
+            if(
+                (*p_ptr) != (*pp_ptr) &&
+                dist(*p_ptr, *pp_ptr) > 4
+            ) {
+                al_draw_line(
+                    p_ptr->x, p_ptr->y,
+                    pp_ptr->x, pp_ptr->y,
+                    change_alpha(
+                        color,
+                        (p / (float) cursor_spots.size()) * 64
+                    ),
+                    p * 3
+                );
+            }
+        }
+    }
+    
+    //Mouse cursor.
+    draw_bitmap(
+        game.sys_assets.bmp_mouse_cursor,
+        game.mouse_cursor_s,
+        point(
+            game.cam.zoom *
+            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
+            game.cam.zoom *
+            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
+        ),
+        -(area_time_passed * game.config.cursor_spin_speed),
+        color
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current Onion menu.
+ */
+void gameplay_state::draw_onion_menu() {
+    al_use_transform(&game.identity_transform);
+    
+    al_draw_filled_rectangle(
+        0, 0, game.win_w, game.win_h, al_map_rgba(24, 64, 60, 200)
+    );
+    
+    //Menu title.
+    draw_text_lines(
+        game.fonts.main,
+        al_map_rgb(188, 230, 230),
+        point(game.win_w * 0.50, game.win_h * 0.07),
+        ALLEGRO_ALIGN_CENTER, 1,
+        "Call or store Pikmin"
+    );
+    
+    //Cancel button.
+    draw_bitmap(
+        bmp_counter_bubble_standby,
+        point(game.win_w * 0.16, game.win_h * 0.87),
+        point(game.win_w * 0.18, game.win_h * 0.11)
+    );
+    
+    draw_text_lines(
+        game.fonts.main,
+        al_map_rgb(120, 48, 24),
+        point(game.win_w * 0.16, game.win_h * 0.87),
+        ALLEGRO_ALIGN_CENTER, 1,
+        "Cancel"
+    );
+    
+    //Ok button.
+    draw_bitmap(
+        bmp_counter_bubble_standby,
+        point(game.win_w * 0.84, game.win_h * 0.87),
+        point(game.win_w * 0.18, game.win_h * 0.11)
+    );
+    
+    draw_text_lines(
+        game.fonts.main,
+        al_map_rgb(48, 120, 24),
+        point(game.win_w * 0.84, game.win_h * 0.87),
+        ALLEGRO_ALIGN_CENTER, 1,
+        "Ok"
+    );
+    
+    //Field count.
+    al_draw_filled_rounded_rectangle(
+        game.win_w * 0.41, game.win_h * 0.81,
+        game.win_w * 0.59, game.win_h * 0.85,
+        game.win_w * 0.01, game.win_w * 0.01,
+        al_map_rgba(188, 230, 230, 128)
+    );
+    
+    draw_text_lines(
+        game.fonts.main,
+        al_map_rgb(188, 230, 230),
+        point(game.win_w * 0.5, game.win_h * 0.83),
+        ALLEGRO_ALIGN_CENTER, 1,
+        "Field: " + i2s(mobs.pikmin_list.size())
+    );
+    
+    //Cursor.
+    draw_mouse_cursor(al_map_rgb(188, 230, 230));
 }
 
 

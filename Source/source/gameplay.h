@@ -118,6 +118,13 @@ private:
         }
     };
     
+    //Contains information about the Onion menu currently being presented to
+    //the player.
+    struct onion_menu_struct {
+        onion* onion_ptr;
+        onion_menu_struct(onion* onion_ptr);
+    };
+    
     ALLEGRO_BITMAP* bmp_bubble;
     ALLEGRO_BITMAP* bmp_counter_bubble_group;
     ALLEGRO_BITMAP* bmp_counter_bubble_field;
@@ -159,6 +166,8 @@ private:
     size_t main_control_id;
     //Movement of player 1's leader.
     movement_struct leader_movement;
+    //Information about the current Onion menu, if any.
+    onion_menu_struct* onion_menu;
     //Is the gameplay paused?
     bool paused;
     //The first frame shouldn't allow for input just yet, because
@@ -187,11 +196,15 @@ private:
     );
     void do_gameplay_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
-    void draw_cursor(ALLEGRO_TRANSFORM &world_to_screen_drawing_transform);
+    void draw_leader_cursor(
+        ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
+    );
+    void draw_mouse_cursor(const ALLEGRO_COLOR &color);
     void draw_hud();
     void draw_ingame_text();
     void draw_lighting_filter();
     void draw_message_box();
+    void draw_onion_menu();
     void draw_precipitation();
     void draw_system_stuff();
     void draw_tree_shadows();

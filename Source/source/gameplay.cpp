@@ -79,6 +79,7 @@ gameplay_state::gameplay_state() :
     is_input_allowed(false),
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
+    onion_menu(nullptr),
     paused(false),
     ready_for_input(false),
     selected_spray(0),
@@ -590,6 +591,17 @@ void gameplay_state::load_hud_info() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an Onion menu struct.
+ * onion_ptr:
+ *   Pointer to the Onion being opened.
+ */
+gameplay_state::onion_menu_struct::onion_menu_struct(onion* onion_ptr) :
+    onion_ptr(onion_ptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
@@ -635,6 +647,7 @@ void gameplay_state::unload() {
     }
     
     if(msg_box) delete msg_box;
+    if(onion_menu) delete onion_menu;
     game.maker_tools.info_print_text.clear();
 }
 
