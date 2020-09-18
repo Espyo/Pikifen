@@ -45,6 +45,8 @@ public:
     
     //Call a Pikmin out.
     void call_pikmin();
+    //Get how many are inside by a given type.
+    size_t get_amount_by_type(pikmin_type* type);
     //Spit a new seed.
     void spew();
     //Store a Pikmin inside.

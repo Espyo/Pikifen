@@ -1376,6 +1376,7 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  * Draws the current Onion menu.
  */
 void gameplay_state::draw_onion_menu() {
+    //Setup.
     al_use_transform(&game.identity_transform);
     
     al_draw_filled_rectangle(
@@ -1436,6 +1437,86 @@ void gameplay_state::draw_onion_menu() {
         ALLEGRO_ALIGN_CENTER, 1,
         "Field: " + i2s(mobs.pikmin_list.size())
     );
+    
+    //Onion buttons.
+    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+        
+        draw_bitmap(
+            bmp_counter_bubble_standby,
+            point(t_ptr->screen_x, game.win_h * 0.30),
+            point(game.win_w * 0.09, game.win_h * 0.12)
+        );
+        
+        draw_bitmap(
+            t_ptr->pik_type->bmp_icon,
+            point(t_ptr->screen_x, game.win_h * 0.30),
+            point(game.win_w * 0.09, -1)
+        );
+    }
+    
+    //Onion amounts.
+    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+        
+        al_draw_filled_rounded_rectangle(
+            t_ptr->screen_x - game.win_w * 0.06,
+            game.win_h * 0.37,
+            t_ptr->screen_x + game.win_w * 0.06,
+            game.win_h * 0.41,
+            game.win_w * 0.01, game.win_w * 0.01,
+            al_map_rgba(188, 230, 230, 128)
+        );
+        
+        draw_text_lines(
+            game.fonts.area_name,
+            al_map_rgb(255, 255, 255),
+            point(t_ptr->screen_x, game.win_h * 0.39),
+            ALLEGRO_ALIGN_CENTER,
+            1,
+            i2s(onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type))
+        );
+    }
+    
+    //Squad amounts.
+    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+        
+        al_draw_filled_rounded_rectangle(
+            t_ptr->screen_x - game.win_w * 0.06,
+            game.win_h * 0.59,
+            t_ptr->screen_x + game.win_w * 0.06,
+            game.win_h * 0.63,
+            game.win_w * 0.01, game.win_w * 0.01,
+            al_map_rgba(188, 230, 230, 128)
+        );
+        
+        draw_text_lines(
+            game.fonts.area_name,
+            al_map_rgb(255, 255, 255),
+            point(t_ptr->screen_x, game.win_h * 0.61),
+            ALLEGRO_ALIGN_CENTER,
+            1,
+            i2s(t_ptr->wanted_group_amount)
+        );
+    }
+    
+    //Squad buttons.
+    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+        
+        draw_bitmap(
+            bmp_counter_bubble_standby,
+            point(t_ptr->screen_x, game.win_h * 0.70),
+            point(game.win_w * 0.09, game.win_h * 0.12)
+        );
+        
+        draw_bitmap(
+            t_ptr->pik_type->bmp_icon,
+            point(t_ptr->screen_x, game.win_h * 0.70),
+            point(game.win_w * 0.09, -1)
+        );
+    }
     
     //Cursor.
     draw_mouse_cursor(al_map_rgb(188, 230, 230));

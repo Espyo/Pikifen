@@ -119,6 +119,23 @@ void onion::draw_mob() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how many Pikmin of the given type exist inside.
+ */
+size_t onion::get_amount_by_type(pikmin_type* type) {
+    size_t amount = 0;
+    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+        if(oni_type->pik_types[t] == type) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                amount += pikmin_inside[t][m];
+            }
+            break;
+        }
+    }
+    return amount;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  * svr:
  *   Script var reader to use.

@@ -529,6 +529,10 @@ void gameplay_state::do_gameplay_logic() {
         msg_box->tick(game.delta_t);
     }
     
+    if(onion_menu) {
+        onion_menu->correct_wanted_groups();
+    }
+    
     hud_items.tick(game.delta_t);
     
     replay_timer.tick(game.delta_t);

@@ -66,7 +66,7 @@ protected:
     virtual void tick_class_specifics(const float delta_t);
     
 private:
-    //Combined Pikmin power put into the task right now. Cached for performance.
+    //Combined Pikmin power put into the task right now. Cache for performance.
     float power;
     //Has it already run the "task finished" code?
     bool ran_task_finished_code;

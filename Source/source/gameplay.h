@@ -96,6 +96,7 @@ private:
     static const float AREA_TITLE_FADE_DURATION;
     static const float CURSOR_INVALID_EFFECT_SPEED;
     static const float CURSOR_SAVE_INTERVAL;
+    static const size_t ONION_MENU_TYPES_PER_PAGE;
     static const float SWARM_ARROW_SPEED;
     static const float SWARM_ARROWS_INTERVAL;
     
@@ -118,11 +119,41 @@ private:
         }
     };
     
+    //Contains information about a given Pikmin type in an Onion menu.
+    struct onion_menu_type_struct {
+        //How many of this Pikmin the player wants in the group.
+        size_t wanted_group_amount;
+        //Index of this type in the Onion's list. Cache for convenience.
+        size_t type_idx;
+        //Pikmin type associated. Cache for convenience.
+        pikmin_type* pik_type;
+        //X coordinate on-screen. Cache for convenience.
+        int screen_x;
+        
+        onion_menu_type_struct(size_t idx);
+    };
+    
     //Contains information about the Onion menu currently being presented to
     //the player.
     struct onion_menu_struct {
-        onion* onion_ptr;
-        onion_menu_struct(onion* onion_ptr);
+    public:
+        //Pointer to the Onion.
+        onion* o_ptr;
+        //Pointer to the leader responsible.
+        leader* l_ptr;
+        //Information on every type's management.
+        vector<onion_menu_type_struct> types;
+        //If it manages more than 5, this is the Pikmin type page index.
+        size_t page;
+        //Pikmin types currently on-screen. Cache for convenience.
+        vector<onion_menu_type_struct*> on_screen_types;
+        
+        onion_menu_struct(onion* onion_ptr, leader* l_ptr);
+        void go_to_page(const size_t page);
+        void correct_wanted_groups();
+        
+    private:
+        void update_caches();
     };
     
     ALLEGRO_BITMAP* bmp_bubble;

@@ -222,6 +222,20 @@ void group_info_struct::change_standby_type_if_needed() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns how many members of the given type exist in the group.
+ */
+size_t group_info_struct::get_amount_by_type(mob_type* type) const {
+    size_t amount = 0;
+    for(size_t m = 0; m < members.size(); ++m) {
+        if(members[m]->type == type) {
+            amount++;
+        }
+    }
+    return amount;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the average position of the members.
  */
 point group_info_struct::get_average_member_pos() const {

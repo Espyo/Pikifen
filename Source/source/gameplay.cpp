@@ -31,6 +31,8 @@ const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
 const float gameplay_state::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float gameplay_state::CURSOR_SAVE_INTERVAL = 0.03f;
+//The Onion menu can only show, at most, these many Pikmin types per page.
+const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.
 const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
@@ -591,17 +593,6 @@ void gameplay_state::load_hud_info() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates an Onion menu struct.
- * onion_ptr:
- *   Pointer to the Onion being opened.
- */
-gameplay_state::onion_menu_struct::onion_menu_struct(onion* onion_ptr) :
-    onion_ptr(onion_ptr) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
@@ -646,8 +637,14 @@ void gameplay_state::unload() {
         bmp_fog = NULL;
     }
     
-    if(msg_box) delete msg_box;
-    if(onion_menu) delete onion_menu;
+    if(msg_box) {
+        delete msg_box;
+        msg_box = NULL;
+    }
+    if(onion_menu) {
+        delete onion_menu;
+        onion_menu = NULL;
+    }
     game.maker_tools.info_print_text.clear();
 }
 
@@ -776,4 +773,102 @@ void gameplay_state::update_transformations() {
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;
     al_invert_transform(&game.screen_to_world_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an Onion menu struct.
+ * onion_ptr:
+ *   Pointer to the Onion being opened.
+ * leader_ptr:
+ *   Leader responsible.
+ */
+gameplay_state::onion_menu_struct::onion_menu_struct(
+    onion* onion_ptr, leader* leader_ptr
+) :
+    o_ptr(onion_ptr),
+    l_ptr(leader_ptr),
+    page(0) {
+    
+    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+        onion_menu_type_struct str(t);
+        str.pik_type = o_ptr->oni_type->pik_types[t];
+        str.wanted_group_amount =
+            l_ptr->group->get_amount_by_type(str.pik_type);
+        types.push_back(str);
+    }
+    
+    update_caches();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Corrects the amount of wanted group members, if they are invalid.
+ */
+void gameplay_state::onion_menu_struct::correct_wanted_groups() {
+    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+    
+        //Get how many the player really has with them.
+        size_t real_group_amount =
+            l_ptr->group->get_amount_by_type(
+                o_ptr->oni_type->pik_types[t]
+            );
+            
+        //Get how many are really in the Onion.
+        size_t real_onion_amount =
+            o_ptr->get_amount_by_type(o_ptr->oni_type->pik_types[t]);
+            
+        //Finally, make sure the player can't request to have more Pikmin
+        //than the ones available.
+        types[t].wanted_group_amount =
+            std::min(
+                types[t].wanted_group_amount,
+                real_group_amount + real_onion_amount
+            );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Flips to the specified page of Pikmin types.
+ * page:
+ *   Index of the new page.
+ */
+void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
+    this->page = page;
+    update_caches();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the caches.
+ */
+void gameplay_state::onion_menu_struct::update_caches() {
+    on_screen_types.clear();
+    
+    for(
+        size_t t = page * ONION_MENU_TYPES_PER_PAGE;
+        t < (page + 1) * ONION_MENU_TYPES_PER_PAGE &&
+        t < o_ptr->oni_type->pik_types.size();
+        ++t
+    ) {
+        on_screen_types.push_back(&types[t]);
+    }
+    
+    float splits = on_screen_types.size() + 1;
+    for(size_t t = 0; t < on_screen_types.size(); ++t) {
+        on_screen_types[t]->screen_x = game.win_w / splits * (t + 1);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an Onion menu Pikmin type struct.
+ */
+gameplay_state::onion_menu_type_struct::onion_menu_type_struct(size_t idx) :
+    wanted_group_amount(0),
+    type_idx(idx),
+    pik_type(nullptr),
+    screen_x(0) {
+    
 }
