@@ -507,13 +507,13 @@ bool hud_item_manager::get_draw_data(
  * id:
  *   ID of the HUD item.
  * x:
- *   Horizontal coordinate, in screen width ratio (0 to 1, normally).
+ *   Horizontal coordinate, in screen width percentage (0 to 100, normally).
  * y:
- *   Vertical coordinate, in screen height ratio (0 to 1, normally).
+ *   Vertical coordinate, in screen height percentage (0 to 100, normally).
  * w:
- *   Total width, in screen width ratio (0 to 1, normally).
+ *   Total width, in screen width percentage (0 to 100, normally).
  * h:
- *   Total height, in screen height ratio (0 to 1, normally).
+ *   Total height, in screen height percentage (0 to 100, normally).
  */
 void hud_item_manager::set_item(
     const size_t id,
@@ -521,6 +521,41 @@ void hud_item_manager::set_item(
 ) {
     items[id] =
         hud_item(point(x / 100.0f, y / 100.0f), point(w / 100.0f, h / 100.0f));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the mouse cursor is inside the specified item or not.
+ * id:
+ *   ID of the item to check.
+ */
+bool hud_item_manager::is_mouse_in(const size_t id) {
+    const hud_item* h = &items[id];
+    if(
+        game.mouse_cursor_s.x >
+        h->center.x * game.win_w + h->size.x * game.win_w
+    ) {
+        return false;
+    }
+    if(
+        game.mouse_cursor_s.x <
+        h->center.x * game.win_w - h->size.x * game.win_w
+    ) {
+        return false;
+    }
+    if(
+        game.mouse_cursor_s.y >
+        h->center.y * game.win_h + h->size.y * game.win_h
+    ) {
+        return false;
+    }
+    if(
+        game.mouse_cursor_s.y <
+        h->center.y * game.win_h - h->size.y * game.win_h
+    ) {
+        return false;
+    }
+    return true;
 }
 
 

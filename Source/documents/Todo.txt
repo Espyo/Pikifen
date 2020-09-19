@@ -2,6 +2,18 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
+    Onion menu
+        "Select all"
+        Add logic to actually call or store Pikmin
+        Support for more than 5 on-screen
+        If the button is held, it should request multiple times
+        Pause gameplay
+        Add ship support
+        Improve look
+            Use Onion icons, not Pikmin icons
+            Logic to draw boxes given a sprite of nine pieces
+        Tests:
+            What if more Pikmin spawn and the values the player wants end up going over 100?
     
     
 Next tasks (roughly sorted most important first)
@@ -10,9 +22,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.20.0 ---
     Add rudimentary menus
-        Onion
-            Pikmin in Onion, Pikmin with you (/Pikmin in field), ok, cancel
-            Ship too
         Sunset warning
         End of day
             Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths

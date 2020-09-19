@@ -149,14 +149,14 @@ private:
     
     //Contains information about a given Pikmin type in an Onion menu.
     struct onion_menu_type_struct {
-        //How many of this Pikmin the player wants in the group.
-        size_t wanted_group_amount;
+        //The player wants to add/subtract these many from the group.
+        int delta;
         //Index of this type in the Onion's list. Cache for convenience.
         size_t type_idx;
         //Pikmin type associated. Cache for convenience.
         pikmin_type* pik_type;
         
-        onion_menu_type_struct(size_t idx);
+        onion_menu_type_struct(const size_t idx, pikmin_type* pik_type);
     };
     
     //Contains information about the Onion menu currently being presented to
@@ -178,8 +178,10 @@ private:
         
         onion_menu_struct(onion* onion_ptr, leader* l_ptr);
         ~onion_menu_struct();
+        void add_to_group(const size_t type_idx);
+        void add_to_onion(const size_t type_idx);
         void go_to_page(const size_t page);
-        void correct_wanted_groups();
+        void tick(const float delta_t);
         
     private:
         void update_caches();

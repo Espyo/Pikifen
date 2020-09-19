@@ -308,7 +308,7 @@ void gameplay_state::handle_button(
     
     bool is_down = (pos >= 0.5);
     
-    if(!msg_box) {
+    if(!msg_box && !onion_menu) {
     
         switch(button) {
         case BUTTON_RIGHT:
@@ -844,12 +844,56 @@ void gameplay_state::handle_button(
         }
         }
         
-    } else { //Displaying a message.
+    } else if(msg_box) {
     
+        //Displaying a message.
         if((button == BUTTON_THROW || button == BUTTON_PAUSE) && is_down) {
             if(!msg_box->advance()) {
                 start_message("", NULL);
             }
+        }
+        
+    } else if(onion_menu) {
+    
+        //Managing an Onion.
+        if(button == BUTTON_THROW && is_down) {
+        
+            //Ok button press.
+            if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_OK)) {
+                //TODO
+                delete onion_menu;
+                onion_menu = NULL;
+                return;
+            }
+            
+            //Cancel button press.
+            if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
+                //TODO
+                delete onion_menu;
+                onion_menu = NULL;
+                return;
+            }
+            
+            //Onion button press.
+            for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+                int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
+                if(onion_menu->hud->is_mouse_in(hud_item_id)) {
+                    onion_menu->add_to_onion(
+                        onion_menu->on_screen_types[t]->type_idx
+                    );
+                }
+            }
+            
+            //Pikmin button press.
+            for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+                int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
+                if(onion_menu->hud->is_mouse_in(hud_item_id)) {
+                    onion_menu->add_to_group(
+                        onion_menu->on_screen_types[t]->type_idx
+                    );
+                }
+            }
+            
         }
         
     }

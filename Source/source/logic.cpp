@@ -530,7 +530,7 @@ void gameplay_state::do_gameplay_logic() {
     }
     
     if(onion_menu) {
-        onion_menu->correct_wanted_groups();
+        onion_menu->tick(game.delta_t);
     }
     
     hud_items.tick(game.delta_t);

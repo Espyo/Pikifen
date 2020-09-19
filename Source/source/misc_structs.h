@@ -291,6 +291,7 @@ public:
     virtual bool get_draw_data(
         const size_t id, point* center, point* size
     ) const;
+    virtual bool is_mouse_in(const size_t id);
     virtual void tick(const float time);
     hud_item_manager(const size_t item_total);
 };

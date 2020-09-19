@@ -917,11 +917,9 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     page(0) {
     
     for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
-        onion_menu_type_struct str(t);
-        str.pik_type = o_ptr->oni_type->pik_types[t];
-        str.wanted_group_amount =
-            l_ptr->group->get_amount_by_type(str.pik_type);
-        types.push_back(str);
+        types.push_back(
+            onion_menu_type_struct(t, o_ptr->oni_type->pik_types[t])
+        );
     }
     
     hud = new onion_hud_manager(N_ONION_HUD_ITEMS);
@@ -963,28 +961,116 @@ gameplay_state::onion_menu_struct::~onion_menu_struct() {
 
 
 /* ----------------------------------------------------------------------------
- * Corrects the amount of wanted group members, if they are invalid.
+ * Adds one Pikmin from the Onion to the group, if possible.
+ * type_idx:
+ *   Index of the Onion's Pikmin type.
  */
-void gameplay_state::onion_menu_struct::correct_wanted_groups() {
-    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
+    size_t real_onion_amount =
+        o_ptr->get_amount_by_type(o_ptr->oni_type->pik_types[type_idx]);
+        
+    //First, check if there are enough in the Onion to take out.
+    if(real_onion_amount - types[type_idx].delta <= 0) {
+        return;
+    }
     
+    //Next, check if the addition won't make the field amount hit the limit.
+    int total_delta = 0;
+    for(size_t t = 0; t < types.size(); ++t) {
+        total_delta += types[t].delta;
+    }
+    if(
+        game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
+        game.config.max_pikmin_in_field
+    ) {
+        return;
+    }
+    
+    types[type_idx].delta++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds one Pikmin from the group to the Onion, if possible.
+ * type_idx:
+ *   Index of the Onion's Pikmin type.
+ */
+void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
+    size_t real_group_amount =
+        l_ptr->group->get_amount_by_type(o_ptr->oni_type->pik_types[type_idx]);
+        
+    if(real_group_amount + types[type_idx].delta <= 0) {
+        return;
+    }
+    
+    types[type_idx].delta--;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the Onion menu by one frame.
+ * time:
+ *   How many seconds to tick by.
+ */
+void gameplay_state::onion_menu_struct::tick(const float delta_t) {
+    //Correct the amount of wanted group members, if they are invalid.
+    
+    int total_delta = 0;
+    
+    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
         //Get how many the player really has with them.
-        size_t real_group_amount =
+        int real_group_amount =
             l_ptr->group->get_amount_by_type(
                 o_ptr->oni_type->pik_types[t]
             );
             
+        //Make sure the player can't request to store more than what they have.
+        types[t].delta = std::max(-real_group_amount, (int) types[t].delta);
+        
         //Get how many are really in the Onion.
-        size_t real_onion_amount =
+        int real_onion_amount =
             o_ptr->get_amount_by_type(o_ptr->oni_type->pik_types[t]);
             
-        //Finally, make sure the player can't request to have more Pikmin
-        //than the ones available.
-        types[t].wanted_group_amount =
-            std::min(
-                types[t].wanted_group_amount,
-                real_group_amount + real_onion_amount
-            );
+        //Make sure the player can't request to call more than the Onion has.
+        types[t].delta = std::min(real_onion_amount, (int) types[t].delta);
+        
+        //Calculate the total delta.
+        total_delta += types[t].delta;
+    }
+    
+    //Make sure the player can't request to have more than the field limit.
+    int delta_over_limit =
+        game.states.gameplay->mobs.pikmin_list.size() + total_delta -
+        game.config.max_pikmin_in_field;
+        
+    while(delta_over_limit > 0) {
+        vector<size_t> candidate_types;
+        
+        for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+            int real_group_amount =
+                l_ptr->group->get_amount_by_type(
+                    o_ptr->oni_type->pik_types[t]
+                );
+                
+            if((-types[t].delta) < real_group_amount) {
+                //It's possible to take away from this type's delta request.
+                candidate_types.push_back(t);
+            }
+        }
+        
+        //Figure out the type with the largest delta.
+        size_t best_type = 0;
+        int best_type_delta = types[candidate_types[0]].delta;
+        for(size_t t = 1; t < candidate_types.size(); ++t) {
+            if(types[candidate_types[t]].delta > best_type_delta) {
+                best_type = candidate_types[t];
+                best_type_delta = types[candidate_types[t]].delta;
+            }
+        }
+        
+        //Finally, remove one request from this type.
+        types[best_type].delta--;
+        delta_over_limit--;
     }
 }
 
@@ -1029,9 +1115,11 @@ void gameplay_state::onion_menu_struct::update_caches() {
 /* ----------------------------------------------------------------------------
  * Creates an Onion menu Pikmin type struct.
  */
-gameplay_state::onion_menu_type_struct::onion_menu_type_struct(size_t idx) :
-    wanted_group_amount(0),
+gameplay_state::onion_menu_type_struct::onion_menu_type_struct(
+    const size_t idx, pikmin_type* pik_type
+) :
+    delta(0),
     type_idx(idx),
-    pik_type(nullptr) {
+    pik_type(pik_type) {
     
 }

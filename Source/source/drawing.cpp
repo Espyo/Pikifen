@@ -1443,6 +1443,11 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_FIELD, &i_center, &i_size
         )
     ) {
+        int total_delta = 0;
+        for(size_t t = 0; t < onion_menu->types.size(); ++t) {
+            total_delta += onion_menu->types[t].delta;
+        }
+        
         al_draw_filled_rounded_rectangle(
             i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
             i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
@@ -1456,7 +1461,7 @@ void gameplay_state::draw_onion_menu() {
             i_center,
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
-            "Field: " + i2s(mobs.pikmin_list.size())
+            "Field: " + i2s(mobs.pikmin_list.size() + total_delta)
         );
     }
     
@@ -1486,6 +1491,9 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
+            size_t real_onion_amount =
+                onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type);
+                
             al_draw_filled_rounded_rectangle(
                 i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
                 i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
@@ -1499,7 +1507,7 @@ void gameplay_state::draw_onion_menu() {
                 i_center,
                 ALLEGRO_ALIGN_CENTER, 1,
                 i_size,
-                i2s(onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type))
+                i2s(real_onion_amount - t_ptr->delta)
             );
         }
     }
@@ -1530,6 +1538,9 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
+            size_t real_group_amount =
+                onion_menu->l_ptr->group->get_amount_by_type(t_ptr->pik_type);
+                
             al_draw_filled_rounded_rectangle(
                 i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
                 i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
@@ -1543,7 +1554,7 @@ void gameplay_state::draw_onion_menu() {
                 i_center,
                 ALLEGRO_ALIGN_CENTER, 1,
                 i_size,
-                i2s(t_ptr->wanted_group_amount)
+                i2s(real_group_amount + t_ptr->delta)
             );
         }
     }
