@@ -464,11 +464,7 @@ hud_item::hud_item(const point center, const point size) :
  * item_total:
  *   How many HUD items exist in total.
  */
-hud_item_manager::hud_item_manager(const size_t item_total) :
-    move_in(false),
-    move_timer(0),
-    offscreen(false) {
-    
+hud_item_manager::hud_item_manager(const size_t item_total) {
     items.assign(item_total, hud_item());
 }
 
@@ -487,55 +483,15 @@ bool hud_item_manager::get_draw_data(
     const size_t id, point* center, point* size
 ) const {
     const hud_item* h = &items[id];
-    if(offscreen) return false;
     if(h->size.x <= 0 || h->size.y <= 0) return false;
     if(h->center.x + h->size.x / 2.0f < 0)    return false;
     if(h->center.x - h->size.x / 2.0f > 1.0f) return false;
     if(h->center.y + h->size.y / 2.0f < 0)    return false;
     if(h->center.y - h->size.y / 2.0f > 1.0f) return false;
     
-    point normal_coords, final_coords;
-    normal_coords.x = h->center.x * game.win_w;
-    normal_coords.y = h->center.y * game.win_h;
-    
-    if(move_timer.time_left == 0.0f) {
-        final_coords = normal_coords;
-        
-    } else {
-        point start_coords, end_coords;
-        unsigned char ease_method;
-        point offscreen_coords;
-        
-        float angle = get_angle(point(0.5, 0.5), h->center);
-        offscreen_coords.x = h->center.x + cos(angle);
-        offscreen_coords.y = h->center.y + sin(angle);
-        offscreen_coords.x *= game.win_w;
-        offscreen_coords.y *= game.win_h;
-        
-        if(move_in) {
-            start_coords = offscreen_coords;
-            end_coords = normal_coords;
-            ease_method = EASE_OUT;
-        } else {
-            start_coords = normal_coords;
-            end_coords = offscreen_coords;
-            ease_method = EASE_IN;
-        }
-        
-        final_coords.x =
-            interpolate_number(
-                ease(ease_method, 1 - move_timer.get_ratio_left()),
-                0, 1, start_coords.x, end_coords.x
-            );
-        final_coords.y =
-            interpolate_number(
-                ease(ease_method, 1 - move_timer.get_ratio_left()),
-                0, 1, start_coords.y, end_coords.y
-            );
-    }
-    
     if(center) {
-        *center = final_coords;
+        center->x = h->center.x * game.win_w;
+        center->y = h->center.y * game.win_h;
     }
     if(size) {
         size->x = h->size.x * game.win_w;
@@ -569,30 +525,11 @@ void hud_item_manager::set_item(
 
 
 /* ----------------------------------------------------------------------------
- * Starts a movement animation.
- * in:
- *   Are the items moving into view, or out of view?
- * duration:
- *   How long this animation lasts for.
- */
-void hud_item_manager::start_move(const bool in, const float duration) {
-    move_in = in;
-    move_timer.start(duration);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Ticks the manager one frame in time.
  * time:
  *   Seconds to tick by.
  */
 void hud_item_manager::tick(const float time) {
-    move_timer.tick(time);
-    if(!move_in && move_timer.time_left == 0.0f) {
-        offscreen = true;
-    } else {
-        offscreen = false;
-    }
 }
 
 

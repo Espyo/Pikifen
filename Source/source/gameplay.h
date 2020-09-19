@@ -21,6 +21,34 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Manages the HUD items seen during normal gameplay.
+ */
+class gameplay_hud_manager : public hud_item_manager {
+public:
+    bool get_draw_data(
+        const size_t id, point* center, point* size
+    ) const;
+    void start_move(const bool in, const float duration);
+    void tick(const float time);
+    gameplay_hud_manager(const size_t item_total);
+    
+private:
+    bool move_in;
+    timer move_timer;
+    bool offscreen;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Manages the HUD items seen in the Onion menu.
+ */
+class onion_hud_manager : public hud_item_manager {
+public:
+    onion_hud_manager(const size_t item_total);
+};
+
+
+/* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay_state : public game_state {
@@ -47,7 +75,7 @@ public:
     //Replay of the current day.
     replay day_replay;
     //Information about all HUD items.
-    hud_item_manager hud_items;
+    gameplay_hud_manager hud_items;
     //Mob that player 1's leader cursor is on top of, if any.
     mob* leader_cursor_mob;
     //Player 1's leader cursor, in screen coordinates.
@@ -127,8 +155,6 @@ private:
         size_t type_idx;
         //Pikmin type associated. Cache for convenience.
         pikmin_type* pik_type;
-        //X coordinate on-screen. Cache for convenience.
-        int screen_x;
         
         onion_menu_type_struct(size_t idx);
     };
@@ -145,10 +171,13 @@ private:
         vector<onion_menu_type_struct> types;
         //If it manages more than 5, this is the Pikmin type page index.
         size_t page;
+        //HUD item manager.
+        onion_hud_manager* hud;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
         
         onion_menu_struct(onion* onion_ptr, leader* l_ptr);
+        ~onion_menu_struct();
         void go_to_page(const size_t page);
         void correct_wanted_groups();
         

@@ -278,26 +278,21 @@ struct hud_item {
 
 
 /* ----------------------------------------------------------------------------
- * Manages the HUD items.
+ * Manages HUD items.
  */
-struct hud_item_manager {
+class hud_item_manager {
 public:
-    void set_item(
+    vector<hud_item> items;
+    
+    virtual void set_item(
         const size_t id,
         const float x, const float y, const float w, const float h
     );
-    bool get_draw_data(const size_t id, point* center, point* size) const;
-    void start_move(const bool in, const float duration);
-    void tick(const float time);
+    virtual bool get_draw_data(
+        const size_t id, point* center, point* size
+    ) const;
+    virtual void tick(const float time);
     hud_item_manager(const size_t item_total);
-    
-private:
-    vector<hud_item> items;
-    bool move_in;
-    timer move_timer;
-    bool offscreen;
-    void update_offscreen();
-    
 };
 
 

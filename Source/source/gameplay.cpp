@@ -38,6 +38,121 @@ const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
 const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
 
+
+/* ----------------------------------------------------------------------------
+ * Initializes the gameplay HUD item manager.
+ * item_total:
+ *   How many HUD items exist in total.
+ */
+gameplay_hud_manager::gameplay_hud_manager(const size_t item_total) :
+    hud_item_manager(item_total),
+    move_in(false),
+    move_timer(0),
+    offscreen(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Retrieves the data necessary for the drawing routine.
+ * Returns false if this element shouldn't be drawn.
+ * id:
+ *   ID of the HUD item.
+ * center:
+ *   Pointer to place the final center coordinates in, if any.
+ * size:
+ *   Pointer to place the final dimensions in, if any.
+ */
+bool gameplay_hud_manager::get_draw_data(
+    const size_t id, point* center, point* size
+) const {
+    if(offscreen) return false;
+    if(!hud_item_manager::get_draw_data(id, NULL, NULL)) {
+        return false;
+    }
+    const hud_item* h = &items[id];
+    
+    point normal_coords, final_coords;
+    normal_coords.x = h->center.x * game.win_w;
+    normal_coords.y = h->center.y * game.win_h;
+    
+    if(move_timer.time_left == 0.0f) {
+        final_coords = normal_coords;
+        
+    } else {
+        point start_coords, end_coords;
+        unsigned char ease_method;
+        point offscreen_coords;
+        
+        float angle = get_angle(point(0.5, 0.5), h->center);
+        offscreen_coords.x = h->center.x + cos(angle);
+        offscreen_coords.y = h->center.y + sin(angle);
+        offscreen_coords.x *= game.win_w;
+        offscreen_coords.y *= game.win_h;
+        
+        if(move_in) {
+            start_coords = offscreen_coords;
+            end_coords = normal_coords;
+            ease_method = EASE_OUT;
+        } else {
+            start_coords = normal_coords;
+            end_coords = offscreen_coords;
+            ease_method = EASE_IN;
+        }
+        
+        final_coords.x =
+            interpolate_number(
+                ease(ease_method, 1 - move_timer.get_ratio_left()),
+                0, 1, start_coords.x, end_coords.x
+            );
+        final_coords.y =
+            interpolate_number(
+                ease(ease_method, 1 - move_timer.get_ratio_left()),
+                0, 1, start_coords.y, end_coords.y
+            );
+    }
+    
+    if(center) {
+        *center = final_coords;
+    }
+    if(size) {
+        size->x = h->size.x * game.win_w;
+        size->y = h->size.y * game.win_h;
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts a movement animation.
+ * in:
+ *   Are the items moving into view, or out of view?
+ * duration:
+ *   How long this animation lasts for.
+ */
+void gameplay_hud_manager::start_move(const bool in, const float duration) {
+    move_in = in;
+    move_timer.start(duration);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the manager one frame in time.
+ * time:
+ *   Seconds to tick by.
+ */
+void gameplay_hud_manager::tick(const float time) {
+    hud_item_manager::tick(time);
+    move_timer.tick(time);
+    if(!move_in && move_timer.time_left == 0.0f) {
+        offscreen = true;
+    } else {
+        offscreen = false;
+    }
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
  */
@@ -777,6 +892,17 @@ void gameplay_state::update_transformations() {
 
 
 /* ----------------------------------------------------------------------------
+ * Initializes the Onion menu HUD item manager.
+ * item_total:
+ *   How many HUD items exist in total.
+ */
+onion_hud_manager::onion_hud_manager(const size_t item_total) :
+    hud_item_manager(item_total) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an Onion menu struct.
  * onion_ptr:
  *   Pointer to the Onion being opened.
@@ -798,7 +924,41 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         types.push_back(str);
     }
     
+    hud = new onion_hud_manager(N_ONION_HUD_ITEMS);
+    hud->set_item(ONION_HUD_ITEM_TITLE,     50,  7, 90, 20);
+    hud->set_item(ONION_HUD_ITEM_CANCEL,    16, 87, 18, 11);
+    hud->set_item(ONION_HUD_ITEM_OK,        84, 87, 18, 11);
+    hud->set_item(ONION_HUD_ITEM_FIELD,     50, 83, 18,  4);
+    hud->set_item(ONION_HUD_ITEM_O1_BUTTON, 50, 30,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O2_BUTTON, 50, 30,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O3_BUTTON, 50, 30,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O4_BUTTON, 50, 30,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O5_BUTTON, 50, 30,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O1_AMOUNT, 50, 39, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O2_AMOUNT, 50, 39, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O3_AMOUNT, 50, 39, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O4_AMOUNT, 50, 39, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O5_AMOUNT, 50, 39, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P1_BUTTON, 50, 70,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P2_BUTTON, 50, 70,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P3_BUTTON, 50, 70,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P4_BUTTON, 50, 70,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P5_BUTTON, 50, 70,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P1_AMOUNT, 50, 61, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P2_AMOUNT, 50, 61, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P3_AMOUNT, 50, 61, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P4_AMOUNT, 50, 61, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P5_AMOUNT, 50, 61, 12,  4);
+    
     update_caches();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys an Onion menu struct.
+ */
+gameplay_state::onion_menu_struct::~onion_menu_struct() {
+    delete hud;
 }
 
 
@@ -857,7 +1017,11 @@ void gameplay_state::onion_menu_struct::update_caches() {
     
     float splits = on_screen_types.size() + 1;
     for(size_t t = 0; t < on_screen_types.size(); ++t) {
-        on_screen_types[t]->screen_x = game.win_w / splits * (t + 1);
+        float x = 1.0f / splits * (t + 1);
+        hud->items[ONION_HUD_ITEM_O1_BUTTON + t].center.x = x;
+        hud->items[ONION_HUD_ITEM_O1_AMOUNT + t].center.x = x;
+        hud->items[ONION_HUD_ITEM_P1_BUTTON + t].center.x = x;
+        hud->items[ONION_HUD_ITEM_P1_AMOUNT + t].center.x = x;
     }
 }
 
@@ -868,7 +1032,6 @@ void gameplay_state::onion_menu_struct::update_caches() {
 gameplay_state::onion_menu_type_struct::onion_menu_type_struct(size_t idx) :
     wanted_group_amount(0),
     type_idx(idx),
-    pik_type(nullptr),
-    screen_x(0) {
+    pik_type(nullptr) {
     
 }

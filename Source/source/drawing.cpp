@@ -1377,6 +1377,8 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  */
 void gameplay_state::draw_onion_menu() {
     //Setup.
+    point i_center, i_size;
+    
     al_use_transform(&game.identity_transform);
     
     al_draw_filled_rectangle(
@@ -1384,138 +1386,166 @@ void gameplay_state::draw_onion_menu() {
     );
     
     //Menu title.
-    draw_text_lines(
-        game.fonts.main,
-        al_map_rgb(188, 230, 230),
-        point(game.win_w * 0.50, game.win_h * 0.07),
-        ALLEGRO_ALIGN_CENTER, 1,
-        "Call or store Pikmin"
-    );
+    if(
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_TITLE, &i_center, &i_size
+        )
+    ) {
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(188, 230, 230),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "Call or store Pikmin"
+        );
+    }
     
     //Cancel button.
-    draw_bitmap(
-        bmp_counter_bubble_standby,
-        point(game.win_w * 0.16, game.win_h * 0.87),
-        point(game.win_w * 0.18, game.win_h * 0.11)
-    );
-    
-    draw_text_lines(
-        game.fonts.main,
-        al_map_rgb(120, 48, 24),
-        point(game.win_w * 0.16, game.win_h * 0.87),
-        ALLEGRO_ALIGN_CENTER, 1,
-        "Cancel"
-    );
+    if(
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_CANCEL, &i_center, &i_size
+        )
+    ) {
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(120, 48, 24),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "Cancel"
+        );
+    }
     
     //Ok button.
-    draw_bitmap(
-        bmp_counter_bubble_standby,
-        point(game.win_w * 0.84, game.win_h * 0.87),
-        point(game.win_w * 0.18, game.win_h * 0.11)
-    );
-    
-    draw_text_lines(
-        game.fonts.main,
-        al_map_rgb(48, 120, 24),
-        point(game.win_w * 0.84, game.win_h * 0.87),
-        ALLEGRO_ALIGN_CENTER, 1,
-        "Ok"
-    );
+    if(
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_OK, &i_center, &i_size
+        )
+    ) {
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(48, 120, 24),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "Ok"
+        );
+    }
     
     //Field count.
-    al_draw_filled_rounded_rectangle(
-        game.win_w * 0.41, game.win_h * 0.81,
-        game.win_w * 0.59, game.win_h * 0.85,
-        game.win_w * 0.01, game.win_w * 0.01,
-        al_map_rgba(188, 230, 230, 128)
-    );
-    
-    draw_text_lines(
-        game.fonts.main,
-        al_map_rgb(188, 230, 230),
-        point(game.win_w * 0.5, game.win_h * 0.83),
-        ALLEGRO_ALIGN_CENTER, 1,
-        "Field: " + i2s(mobs.pikmin_list.size())
-    );
+    if(
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_FIELD, &i_center, &i_size
+        )
+    ) {
+        al_draw_filled_rounded_rectangle(
+            i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
+            i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
+            game.win_w * 0.01, game.win_w * 0.01,
+            al_map_rgba(188, 230, 230, 128)
+        );
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(188, 230, 230),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "Field: " + i2s(mobs.pikmin_list.size())
+        );
+    }
     
     //Onion buttons.
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
-        
-        draw_bitmap(
-            bmp_counter_bubble_standby,
-            point(t_ptr->screen_x, game.win_h * 0.30),
-            point(game.win_w * 0.09, game.win_h * 0.12)
-        );
-        
-        draw_bitmap(
-            t_ptr->pik_type->bmp_icon,
-            point(t_ptr->screen_x, game.win_h * 0.30),
-            point(game.win_w * 0.09, -1)
-        );
+        int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
+        if(
+            onion_menu->hud->get_draw_data(
+                hud_item_id, &i_center, &i_size
+            )
+        ) {
+            onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+            
+            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            
+            draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
+        }
     }
     
     //Onion amounts.
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
-        
-        al_draw_filled_rounded_rectangle(
-            t_ptr->screen_x - game.win_w * 0.06,
-            game.win_h * 0.37,
-            t_ptr->screen_x + game.win_w * 0.06,
-            game.win_h * 0.41,
-            game.win_w * 0.01, game.win_w * 0.01,
-            al_map_rgba(188, 230, 230, 128)
-        );
-        
-        draw_text_lines(
-            game.fonts.area_name,
-            al_map_rgb(255, 255, 255),
-            point(t_ptr->screen_x, game.win_h * 0.39),
-            ALLEGRO_ALIGN_CENTER,
-            1,
-            i2s(onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type))
-        );
-    }
-    
-    //Squad amounts.
-    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
-        
-        al_draw_filled_rounded_rectangle(
-            t_ptr->screen_x - game.win_w * 0.06,
-            game.win_h * 0.59,
-            t_ptr->screen_x + game.win_w * 0.06,
-            game.win_h * 0.63,
-            game.win_w * 0.01, game.win_w * 0.01,
-            al_map_rgba(188, 230, 230, 128)
-        );
-        
-        draw_text_lines(
-            game.fonts.area_name,
-            al_map_rgb(255, 255, 255),
-            point(t_ptr->screen_x, game.win_h * 0.61),
-            ALLEGRO_ALIGN_CENTER,
-            1,
-            i2s(t_ptr->wanted_group_amount)
-        );
+        int hud_item_id = ONION_HUD_ITEM_O1_AMOUNT + t;
+        if(
+            onion_menu->hud->get_draw_data(
+                hud_item_id, &i_center, &i_size
+            )
+        ) {
+            onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+            
+            al_draw_filled_rounded_rectangle(
+                i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
+                i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
+                game.win_w * 0.01, game.win_w * 0.01,
+                al_map_rgba(188, 230, 230, 128)
+            );
+            
+            draw_compressed_text(
+                game.fonts.area_name,
+                al_map_rgb(255, 255, 255),
+                i_center,
+                ALLEGRO_ALIGN_CENTER, 1,
+                i_size,
+                i2s(onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type))
+            );
+        }
     }
     
     //Squad buttons.
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-        onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
-        
-        draw_bitmap(
-            bmp_counter_bubble_standby,
-            point(t_ptr->screen_x, game.win_h * 0.70),
-            point(game.win_w * 0.09, game.win_h * 0.12)
-        );
-        
-        draw_bitmap(
-            t_ptr->pik_type->bmp_icon,
-            point(t_ptr->screen_x, game.win_h * 0.70),
-            point(game.win_w * 0.09, -1)
-        );
+        int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
+        if(
+            onion_menu->hud->get_draw_data(
+                hud_item_id, &i_center, &i_size
+            )
+        ) {
+            onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+            
+            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            
+            draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
+        }
+    }
+    
+    //Squad amounts.
+    for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+        int hud_item_id = ONION_HUD_ITEM_P1_AMOUNT + t;
+        if(
+            onion_menu->hud->get_draw_data(
+                hud_item_id, &i_center, &i_size
+            )
+        ) {
+            onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
+            
+            al_draw_filled_rounded_rectangle(
+                i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,
+                i_center.x + i_size.x / 2.0f, i_center.y + i_size.y / 2.0f,
+                game.win_w * 0.01, game.win_w * 0.01,
+                al_map_rgba(188, 230, 230, 128)
+            );
+            
+            draw_compressed_text(
+                game.fonts.area_name,
+                al_map_rgb(255, 255, 255),
+                i_center,
+                ALLEGRO_ALIGN_CENTER, 1,
+                i_size,
+                i2s(t_ptr->wanted_group_amount)
+            );
+        }
     }
     
     //Cursor.

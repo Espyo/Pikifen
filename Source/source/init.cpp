@@ -384,36 +384,36 @@ void init_event_things(
  * Initializes the HUD items, along with their default coordinates.
  */
 void init_hud_items() {
-    hud_item_manager* mgr = &game.states.gameplay->hud_items;
+    gameplay_hud_manager* mgr = &game.states.gameplay->hud_items;
     mgr->set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
     mgr->set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
     mgr->set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
-    mgr->set_item(HUD_ITEM_LEADER_1_ICON,         7,  90, 8,  10);
-    mgr->set_item(HUD_ITEM_LEADER_2_ICON,         6,  80, 5,  9 );
-    mgr->set_item(HUD_ITEM_LEADER_3_ICON,         6,  72, 5,  9 );
-    mgr->set_item(HUD_ITEM_LEADER_1_HEALTH,       16, 90, 8,  10);
-    mgr->set_item(HUD_ITEM_LEADER_2_HEALTH,       12, 80, 5,  9 );
-    mgr->set_item(HUD_ITEM_LEADER_3_HEALTH,       12, 72, 5,  9 );
-    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 91, 8,  10);
-    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 88, 4,  8 );
-    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
+    mgr->set_item(HUD_ITEM_LEADER_1_ICON,          7, 90,  8, 10);
+    mgr->set_item(HUD_ITEM_LEADER_2_ICON,          6, 80,  5,  9);
+    mgr->set_item(HUD_ITEM_LEADER_3_ICON,          6, 72,  5,  9);
+    mgr->set_item(HUD_ITEM_LEADER_1_HEALTH,       16, 90,  8, 10);
+    mgr->set_item(HUD_ITEM_LEADER_2_HEALTH,       12, 80,  5,  9);
+    mgr->set_item(HUD_ITEM_LEADER_3_HEALTH,       12, 72,  5,  9);
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 91,  8, 10);
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 88,  4,  8);
+    mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91,  7,  8);
     mgr->set_item(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
     mgr->set_item(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
     mgr->set_item(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
-    mgr->set_item(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
-    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
-    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
-    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_3,        0,  0,  0,  0 );
-    mgr->set_item(HUD_ITEM_SPRAY_1_ICON,          6,  36, 4,  7 );
-    mgr->set_item(HUD_ITEM_SPRAY_1_AMOUNT,        13, 37, 10, 5 );
-    mgr->set_item(HUD_ITEM_SPRAY_1_BUTTON,        10, 42, 10, 5 );
-    mgr->set_item(HUD_ITEM_SPRAY_2_ICON,          6,  52, 4,  7 );
-    mgr->set_item(HUD_ITEM_SPRAY_2_AMOUNT,        13, 53, 10, 5 );
-    mgr->set_item(HUD_ITEM_SPRAY_2_BUTTON,        10, 47, 10, 5 );
-    mgr->set_item(HUD_ITEM_SPRAY_PREV_ICON,       6,  52, 3,  5 );
-    mgr->set_item(HUD_ITEM_SPRAY_PREV_BUTTON,     6,  47, 4,  4 );
-    mgr->set_item(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52, 3,  5 );
-    mgr->set_item(HUD_ITEM_SPRAY_NEXT_BUTTON,     13, 47, 4,  4 );
+    mgr->set_item(HUD_ITEM_PIKMIN_TOTAL_NR,        0,  0,  0,  0);
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_1,        82, 91,  4,  8);
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_2,         0,  0,  0,  0);
+    mgr->set_item(HUD_ITEM_PIKMIN_SLASH_3,         0,  0,  0,  0);
+    mgr->set_item(HUD_ITEM_SPRAY_1_ICON,           6, 36,  4,  7);
+    mgr->set_item(HUD_ITEM_SPRAY_1_AMOUNT,        13, 37, 10,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_1_BUTTON,        10, 42, 10,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_2_ICON,           6, 52,  4,  7);
+    mgr->set_item(HUD_ITEM_SPRAY_2_AMOUNT,        13, 53, 10,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_2_BUTTON,        10, 47, 10,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_PREV_ICON,        6, 52,  3,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_PREV_BUTTON,      6, 47,  4,  4);
+    mgr->set_item(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52,  3,  5);
+    mgr->set_item(HUD_ITEM_SPRAY_NEXT_BUTTON,     13, 47,  4,  4);
 }
 
 
