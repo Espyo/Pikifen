@@ -914,6 +914,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
 ) :
     o_ptr(onion_ptr),
     l_ptr(leader_ptr),
+    select_all(false),
     page(0) {
     
     for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
@@ -923,30 +924,33 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     }
     
     hud = new onion_hud_manager(N_ONION_HUD_ITEMS);
-    hud->set_item(ONION_HUD_ITEM_TITLE,     50,  7, 90, 20);
-    hud->set_item(ONION_HUD_ITEM_CANCEL,    16, 87, 18, 11);
-    hud->set_item(ONION_HUD_ITEM_OK,        84, 87, 18, 11);
-    hud->set_item(ONION_HUD_ITEM_FIELD,     50, 83, 18,  4);
-    hud->set_item(ONION_HUD_ITEM_O1_BUTTON, 50, 30,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O2_BUTTON, 50, 30,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O3_BUTTON, 50, 30,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O4_BUTTON, 50, 30,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O5_BUTTON, 50, 30,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O1_AMOUNT, 50, 39, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O2_AMOUNT, 50, 39, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O3_AMOUNT, 50, 39, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O4_AMOUNT, 50, 39, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O5_AMOUNT, 50, 39, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P1_BUTTON, 50, 70,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P2_BUTTON, 50, 70,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P3_BUTTON, 50, 70,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P4_BUTTON, 50, 70,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P5_BUTTON, 50, 70,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P1_AMOUNT, 50, 61, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P2_AMOUNT, 50, 61, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P3_AMOUNT, 50, 61, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P4_AMOUNT, 50, 61, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P5_AMOUNT, 50, 61, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_TITLE,       50,  7, 90, 20);
+    hud->set_item(ONION_HUD_ITEM_CANCEL,      16, 87, 18, 11);
+    hud->set_item(ONION_HUD_ITEM_OK,          84, 87, 18, 11);
+    hud->set_item(ONION_HUD_ITEM_FIELD,       50, 77, 18,  4);
+    hud->set_item(ONION_HUD_ITEM_SEL_ALL,     50, 89, 24,  6);
+    hud->set_item(ONION_HUD_ITEM_O1_BUTTON,   50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O2_BUTTON,   50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O3_BUTTON,   50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O4_BUTTON,   50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O5_BUTTON,   50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_O1_AMOUNT,   50, 29, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O2_AMOUNT,   50, 29, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O3_AMOUNT,   50, 29, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O4_AMOUNT,   50, 29, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_O5_AMOUNT,   50, 29, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P1_BUTTON,   50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P2_BUTTON,   50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P3_BUTTON,   50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P4_BUTTON,   50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P5_BUTTON,   50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_P1_AMOUNT,   50, 51, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P2_AMOUNT,   50, 51, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P3_AMOUNT,   50, 51, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P4_AMOUNT,   50, 51, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_P5_AMOUNT,   50, 51, 12,  4);
+    hud->set_item(ONION_HUD_ITEM_OALL_BUTTON, 50, 20,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_PALL_BUTTON, 50, 60,  9, 12);
     
     update_caches();
 }
@@ -957,6 +961,26 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
  */
 gameplay_state::onion_menu_struct::~onion_menu_struct() {
     delete hud;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds one Pikmin of each type from Onion to the group, if possible.
+ */
+void gameplay_state::onion_menu_struct::add_all_to_group() {
+    for(size_t t = 0; t < types.size(); ++t) {
+        add_to_group(t);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds one Pikmin of each type from the group to the Onion, if possible.
+ */
+void gameplay_state::onion_menu_struct::add_all_to_onion() {
+    for(size_t t = 0; t < types.size(); ++t) {
+        add_to_onion(t);
+    }
 }
 
 
@@ -1004,6 +1028,17 @@ void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
     }
     
     types[type_idx].delta--;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Flips to the specified page of Pikmin types.
+ * page:
+ *   Index of the new page.
+ */
+void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
+    this->page = page;
+    update_caches();
 }
 
 
@@ -1076,12 +1111,11 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
- * Flips to the specified page of Pikmin types.
- * page:
- *   Index of the new page.
+ * Toggles the "select all" mode.
  */
-void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
-    this->page = page;
+void gameplay_state::onion_menu_struct::toggle_select_all() {
+    select_all = !select_all;
+    
     update_caches();
 }
 
@@ -1102,13 +1136,28 @@ void gameplay_state::onion_menu_struct::update_caches() {
     }
     
     float splits = on_screen_types.size() + 1;
+    float leftmost = 0.50f;
+    float rightmost = 0.50f;
     for(size_t t = 0; t < on_screen_types.size(); ++t) {
         float x = 1.0f / splits * (t + 1);
         hud->items[ONION_HUD_ITEM_O1_BUTTON + t].center.x = x;
         hud->items[ONION_HUD_ITEM_O1_AMOUNT + t].center.x = x;
         hud->items[ONION_HUD_ITEM_P1_BUTTON + t].center.x = x;
         hud->items[ONION_HUD_ITEM_P1_AMOUNT + t].center.x = x;
+        leftmost =
+            std::min(
+                leftmost,
+                x - hud->items[ONION_HUD_ITEM_O1_BUTTON].size.x / 2.0f
+            );
+        rightmost =
+            std::max(
+                rightmost,
+                x + hud->items[ONION_HUD_ITEM_O1_BUTTON].size.x / 2.0f
+            );
     }
+    
+    hud->items[ONION_HUD_ITEM_OALL_BUTTON].size.x = rightmost - leftmost;
+    hud->items[ONION_HUD_ITEM_PALL_BUTTON].size.x = rightmost - leftmost;
 }
 
 

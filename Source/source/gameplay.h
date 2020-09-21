@@ -169,19 +169,24 @@ private:
         leader* l_ptr;
         //Information on every type's management.
         vector<onion_menu_type_struct> types;
-        //If it manages more than 5, this is the Pikmin type page index.
-        size_t page;
         //HUD item manager.
         onion_hud_manager* hud;
+        //Is "select all" currently on?
+        bool select_all;
+        //If it manages more than 5, this is the Pikmin type page index.
+        size_t page;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
         
         onion_menu_struct(onion* onion_ptr, leader* l_ptr);
         ~onion_menu_struct();
+        void add_all_to_group();
+        void add_all_to_onion();
         void add_to_group(const size_t type_idx);
         void add_to_onion(const size_t type_idx);
         void go_to_page(const size_t page);
         void tick(const float delta_t);
+        void toggle_select_all();
         
     private:
         void update_caches();

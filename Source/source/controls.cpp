@@ -874,23 +874,52 @@ void gameplay_state::handle_button(
                 return;
             }
             
-            //Onion button press.
-            for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-                int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
-                if(onion_menu->hud->is_mouse_in(hud_item_id)) {
-                    onion_menu->add_to_onion(
-                        onion_menu->on_screen_types[t]->type_idx
-                    );
+            //"Select all" button press.
+            if(
+                onion_menu->on_screen_types.size() > 1 &&
+                onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_SEL_ALL)
+            ) {
+                onion_menu->toggle_select_all();
+                return;
+            }
+            
+            //Individual Onion button press.
+            if(!onion_menu->select_all) {
+                for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+                    int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
+                    if(onion_menu->hud->is_mouse_in(hud_item_id)) {
+                        onion_menu->add_to_onion(
+                            onion_menu->on_screen_types[t]->type_idx
+                        );
+                        return;
+                    }
                 }
             }
             
-            //Pikmin button press.
-            for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-                int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
-                if(onion_menu->hud->is_mouse_in(hud_item_id)) {
-                    onion_menu->add_to_group(
-                        onion_menu->on_screen_types[t]->type_idx
-                    );
+            //Individual Pikmin button press.
+            if(!onion_menu->select_all) {
+                for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
+                    int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
+                    if(onion_menu->hud->is_mouse_in(hud_item_id)) {
+                        onion_menu->add_to_group(
+                            onion_menu->on_screen_types[t]->type_idx
+                        );
+                        return;
+                    }
+                }
+            }
+            
+            //Combined Onion button press.
+            if(onion_menu->select_all) {
+                if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_OALL_BUTTON)) {
+                    onion_menu->add_all_to_onion();
+                }
+            }
+            
+            //Combined Pikmin button press.
+            if(onion_menu->select_all) {
+                if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_PALL_BUTTON)) {
+                    onion_menu->add_all_to_group();
                 }
             }
             

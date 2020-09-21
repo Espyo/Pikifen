@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        "Select all"
         Add logic to actually call or store Pikmin
         Support for more than 5 on-screen
         If the button is held, it should request multiple times
@@ -12,6 +11,7 @@ Current tasks (tasks being worked on, but not yet committed)
         Improve look
             Use Onion icons, not Pikmin icons
             Logic to draw boxes given a sprite of nine pieces
+            If the player tries to store a Pikmin they don't have, or call Pikmin not in the Onion, or Pikmin over 100, the corresponding number should flash red
         Tests:
             What if more Pikmin spawn and the values the player wants end up going over 100?
     

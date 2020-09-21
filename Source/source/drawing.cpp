@@ -1465,7 +1465,44 @@ void gameplay_state::draw_onion_menu() {
         );
     }
     
+    //"Select all" button.
+    if(
+        onion_menu->on_screen_types.size() > 1 &&
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_SEL_ALL, &i_center, &i_size
+        )
+    ) {
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(48, 120, 24),
+            point(i_center.x + i_size.x * 0.4, i_center.y),
+            ALLEGRO_ALIGN_RIGHT, 1,
+            i_size,
+            "Select all"
+        );
+        
+        if(onion_menu->select_all) {
+            draw_bitmap(
+                game.sys_assets.bmp_checkbox_check,
+                point(i_center.x - i_size.x * 0.4, i_center.y),
+                point(i_size.y * 0.6, i_size.y * 0.6)
+            );
+        }
+    }
+    
     //Onion buttons.
+    if(onion_menu->select_all) {
+        if(
+            onion_menu->hud->get_draw_data(
+                ONION_HUD_ITEM_OALL_BUTTON, &i_center, &i_size
+            )
+        ) {
+            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        }
+    }
+    
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
         int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
         if(
@@ -1475,7 +1512,9 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
-            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            if(!onion_menu->select_all) {
+                draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            }
             
             draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
         }
@@ -1513,6 +1552,16 @@ void gameplay_state::draw_onion_menu() {
     }
     
     //Squad buttons.
+    if(onion_menu->select_all) {
+        if(
+            onion_menu->hud->get_draw_data(
+                ONION_HUD_ITEM_PALL_BUTTON, &i_center, &i_size
+            )
+        ) {
+            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        }
+    }
+    
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
         int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
         if(
@@ -1522,7 +1571,9 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
-            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            if(!onion_menu->select_all) {
+                draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+            }
             
             draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
         }
