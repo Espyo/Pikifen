@@ -2018,7 +2018,14 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     }
     }
     
-    m->track_info = new track_info_struct(tra_ptr);
+    vector<size_t> checkpoints;
+    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size() - 1; ++c) {
+        checkpoints.push_back(c);
+    }
+    m->track_info =
+        new track_info_struct(
+            tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+        );
 }
 
 

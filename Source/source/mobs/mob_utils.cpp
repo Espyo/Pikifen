@@ -701,11 +701,19 @@ bool path_info_struct::check_blockage() {
  * is riding.
  * m:
  *   Mob this track info struct belongs to.
+ * checkpoints:
+ *   List of checkpoints (body part indexes) to cross.
+ * ride_speed:
+ *  Speed to ride at, in ratio per second.
  */
-track_info_struct::track_info_struct(mob* m) :
+track_info_struct::track_info_struct(
+    mob* m, const vector<size_t> checkpoints, const float ride_speed
+) :
     m(m),
+    checkpoints(checkpoints),
     cur_cp_nr(0),
-    cur_cp_progress(0.0f) {
+    cur_cp_progress(0.0f),
+    ride_speed(ride_speed) {
     
 }
 

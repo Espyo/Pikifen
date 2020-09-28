@@ -2632,10 +2632,8 @@ void mob::tick_script(const float delta_t) {
  * Returns true if the ride is over, false if not.
  */
 bool mob::tick_track_ride() {
-    track* tra_ptr = (track*) (track_info->m);
-    
     track_info->cur_cp_progress +=
-        tra_ptr->tra_type->ride_speed * game.delta_t;
+        track_info->ride_speed * game.delta_t;
         
     if(track_info->cur_cp_progress >= 1.0f) {
         //Next checkpoint.
@@ -2644,7 +2642,7 @@ bool mob::tick_track_ride() {
         
         if(
             track_info->cur_cp_nr ==
-            tra_ptr->type->anims.body_parts.size() - 1
+            track_info->checkpoints.size() - 1
         ) {
             stop_track_ride();
             return true;
@@ -2653,13 +2651,17 @@ bool mob::tick_track_ride() {
     
     //Teleport to the right spot.
     hitbox* cur_cp =
-        tra_ptr->get_hitbox(track_info->cur_cp_nr);
+        track_info->m->get_hitbox(
+            track_info->checkpoints[track_info->cur_cp_nr]
+        );
     hitbox* next_cp =
-        tra_ptr->get_hitbox(track_info->cur_cp_nr + 1);
+        track_info->m->get_hitbox(
+            track_info->checkpoints[track_info->cur_cp_nr + 1]
+        );
     point cur_cp_pos =
-        cur_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+        cur_cp->get_cur_pos(track_info->m->pos, track_info->m->angle);
     point next_cp_pos =
-        next_cp->get_cur_pos(tra_ptr->pos, tra_ptr->angle);
+        next_cp->get_cur_pos(track_info->m->pos, track_info->m->angle);
         
     point dest_xy(
         interpolate_number(
@@ -2675,8 +2677,8 @@ bool mob::tick_track_ride() {
     float dest_z =
         interpolate_number(
             track_info->cur_cp_progress, 0.0f, 1.0f,
-            tra_ptr->z + cur_cp->z,
-            tra_ptr->z + next_cp->z
+            track_info->m->z + cur_cp->z,
+            track_info->m->z + next_cp->z
         );
         
     float dest_angle = get_angle(cur_cp_pos, next_cp_pos);

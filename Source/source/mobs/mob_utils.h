@@ -372,13 +372,19 @@ struct path_info_struct {
 struct track_info_struct {
     //Pointer to the track mob.
     mob* m;
+    //List of checkpoints (body part indexes) to cross.
+    vector<size_t> checkpoints;
     //Current checkpoint of the track. This is the last checkpoint crossed.
     size_t cur_cp_nr;
     //Progress within the current checkpoint. 0 means at the checkpoint.
     //1 means it's at the next checkpoint.
     float cur_cp_progress;
+    //Speed to ride at, in ratio per second.
+    float ride_speed;
     
-    track_info_struct(mob* m);
+    track_info_struct(
+        mob* m, const vector<size_t> checkpoints, const float speed
+    );
 };
 
 
