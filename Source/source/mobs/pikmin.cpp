@@ -41,6 +41,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     maturity(2),
     is_seed_or_sprout(false),
     pluck_reserved(false),
+    leader_to_return_to(nullptr),
     latched(false),
     is_tool_primed_for_whistle(false),
     consecutive_dud_hits(0) {

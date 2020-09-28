@@ -36,10 +36,13 @@ const float ONION_FADE_SPEED               = 255; //Values per second.
 class onion_type : public mob_type {
 public:
     vector<pikmin_type*> pik_types;
+    vector<string> leg_body_parts;
+    float pikmin_exit_speed;
     
     onion_type();
     
     void load_properties(data_node* file);
+    void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
 

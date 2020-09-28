@@ -36,10 +36,11 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     mob(pos, type, angle),
     oni_type(type),
     activated(true),
-    spew_queue(0),
+    calling_leader(nullptr),
     full_spew_timer(ONION_FULL_SPEW_DELAY),
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
     next_spew_angle(0),
+    next_call_time(0.0f),
     seethrough(255) {
     
     //Increase its Z by one so that mobs that walk at
@@ -63,6 +64,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
         pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
         spew_queue.push_back(0);
+        call_queue.push_back(0);
     }
     
     set_animation(ANIM_IDLING);
@@ -73,31 +75,68 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
  * Temporary feature to allow Pikmin to be called from the Onion.
  * Calls out a Pikmin from inside the Onion, if possible.
  * Gives priority to the higher maturities.
+ * Returns true if a Pikmin was spawned, false otherwise.
+ * type_idx:
+ *   Index of the Pikmin type, from the types this Onion manages.
  */
-void onion::call_pikmin() {
-    //TODO delete this when the Onion menu is done.
+bool onion::call_pikmin(const size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
     ) {
-        return;
+        return false;
     }
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         //Let's check the maturities in reverse order.
         size_t cur_m = N_MATURITIES - m - 1;
         
-        if(pikmin_inside[0][cur_m] == 0) continue;
+        if(pikmin_inside[type_idx][cur_m] == 0) continue;
         
-        pikmin_inside[0][cur_m]--;
-        create_mob(
-            game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-            pos, oni_type->pik_types[0], 0,
-            "maturity=" + i2s(cur_m)
+        //Spawn the Pikmin!
+        //Update the Pikmin count.
+        pikmin_inside[type_idx][cur_m]--;
+        
+        //Decide a leg to come out of.
+        size_t leg_idx =
+            randomi(0, (oni_type->leg_body_parts.size() / 2) - 1);
+        size_t leg_hole_bp_idx =
+            anim.anim_db->find_body_part(
+                oni_type->leg_body_parts[leg_idx * 2]
+            );
+        size_t leg_foot_bp_idx =
+            anim.anim_db->find_body_part(
+                oni_type->leg_body_parts[leg_idx * 2 + 1]
+            );
+        point spawn_coords =
+            get_hitbox(leg_hole_bp_idx)->get_cur_pos(pos, angle);
+        float spawn_angle =
+            get_angle(pos, spawn_coords);
+            
+        //Create the Pikmin.
+        pikmin* new_pikmin =
+            (pikmin*)
+            create_mob(
+                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
+                spawn_coords, oni_type->pik_types[type_idx], spawn_angle,
+                "maturity=" + i2s(cur_m)
+            );
+            
+        //Set its data to start sliding.
+        new_pikmin->fsm.set_state(PIKMIN_STATE_LEAVING_ONION, (void*) this);
+        vector<size_t> checkpoints;
+        checkpoints.push_back(leg_hole_bp_idx);
+        checkpoints.push_back(leg_foot_bp_idx);
+        new_pikmin->track_info =
+            new track_info_struct(
+            this, checkpoints, oni_type->pikmin_exit_speed
         );
+        new_pikmin->leader_to_return_to = calling_leader;
         
-        return;
+        return true;
     }
+    
+    return false;
 }
 
 
@@ -161,6 +200,27 @@ void onion::read_script_vars(const script_var_reader &svr) {
 }
 
 
+//Wait these many seconds before allowing another Pikmin to be called out.
+const float ONION_CALL_INTERVAL = 0.028f;
+
+/* ----------------------------------------------------------------------------
+ * Requests that Pikmin of the given type get called out.
+ * type_idx:
+ *   Index of the type of Pikmin to call out, from the Onion's types.
+ * amount:
+ *   How many to call out.
+ * l_ptr:
+ *   Leader responsible.
+ */
+void onion::request_pikmin(
+    const size_t type_idx, const size_t amount, leader* l_ptr
+) {
+    call_queue[type_idx] += amount;
+    next_call_time = ONION_CALL_INTERVAL;
+    calling_leader = l_ptr;
+}
+
+
 //An Onion-spat seed starts with this Z offset from the Onion.
 const float ONION_NEW_SEED_Z_OFFSET = 320.0f;
 //After spitting a seed, the next seed's angle shifts by this much.
@@ -192,7 +252,10 @@ void onion::spew() {
         
         float horizontal_strength =
             ONION_SPEW_H_SPEED +
-            randomf(-ONION_SPEW_H_SPEED_DEVIATION, ONION_SPEW_H_SPEED_DEVIATION);
+            randomf(
+                -ONION_SPEW_H_SPEED_DEVIATION,
+                ONION_SPEW_H_SPEED_DEVIATION
+            );
         spew_pikmin_seed(
             pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->pik_types[t],
             next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
@@ -253,6 +316,10 @@ void onion::stow_pikmin() {
  *   How many seconds to tick by.
  */
 void onion::tick_class_specifics(const float delta_t) {
+    if(calling_leader && calling_leader->to_delete) {
+        calling_leader = NULL;
+    }
+    
     bool needs_to_spew = false;
     for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
         if(spew_queue[t] > 0) {
@@ -308,5 +375,31 @@ void onion::tick_class_specifics(const float delta_t) {
                     );
             }
         }
+    }
+    
+    //Call out Pikmin, if the timer agrees.
+    if(next_call_time > 0.0f) {
+        next_call_time -= delta_t;
+    }
+    
+    while(next_call_time < 0.0f) {
+        size_t best_type = INVALID;
+        size_t best_type_amount = 0;
+        
+        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+            if(call_queue[t] == 0) continue;
+            if(call_queue[t] > best_type_amount) {
+                best_type = t;
+                best_type_amount = call_queue[t];
+            }
+        }
+        
+        if(best_type != INVALID) {
+            if(call_pikmin(best_type)) {
+                call_queue[best_type]--;
+            }
+        }
+        
+        next_call_time += ONION_CALL_INTERVAL;
     }
 }

@@ -1,6 +1,8 @@
 name = Yellow Onion
 
 height = 200
+leg_body_parts = hole_1; foot_1; hole_2; foot_2; hole_3; foot_3
+pikmin_exit_speed = 2
 pikmin_types = Yellow Pikmin
 pushable = false
 pushes = false

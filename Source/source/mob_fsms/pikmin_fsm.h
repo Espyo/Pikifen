@@ -56,6 +56,7 @@ void land(                     mob* m, void* info1, void* info2);
 void land_on_mob(              mob* m, void* info1, void* info2);
 void land_on_mob_while_holding(mob* m, void* info1, void* info2);
 void land_while_holding(       mob* m, void* info1, void* info2);
+void leave_onion(              mob* m, void* info1, void* info2);
 void left_hazard(              mob* m, void* info1, void* info2);
 void lose_latched_mob(         mob* m, void* info1, void* info2);
 void notify_leader_release(    mob* m, void* info1, void* info2);

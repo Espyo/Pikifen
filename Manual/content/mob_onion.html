@@ -26,9 +26,11 @@
 
     <h2 id="overview">Overview</h2>
 
-    <p>An Onion type object can organize the Pikmin of one Pikmin type. Onion objects serve as a destination for carried corpses and pellets, and will accept the corpse or pellet when it is delivered. Shortly afterwards, the Onion generates some Pikmin sprouts by shooting seeds in the air, or, if the limit of Pikmin has been reached, stores them inside the Onion. Currently, there is almost no logic in the engine related to stowing or retrieving Pikmin from and to the Onion; the player can use the throw or whistle buttons to do that at a very rudimentary level.</p>
+    <p>An Onion type object can organize the Pikmin of one Pikmin type. Onion objects serve as a destination for carried corpses and pellets, and will accept the corpse or pellet when it is delivered. Shortly afterwards, the Onion generates some Pikmin sprouts by shooting seeds in the air, or, if the limit of Pikmin has been reached, stores them inside the Onion.</p>
+    
+    <p>The player can place their leader under the Onion and press the throw button to open up the Onion's menu, which they can then use to store Pikmin inside, or call Pikmin out.</p>
 
-    <p>Onion type objects are hardcoded in the engine to idle, receive delivered objects, convert them to Pikmin or sprouts, hold the number of Pikmin stowed, per maturity, and very basically allow the player to retrieve or stow a Pikmin at a time.</p>
+    <p>Onion type objects are hardcoded in the engine to idle, receive delivered objects, convert them to Pikmin or sprouts, hold the number of Pikmin stowed, per maturity, know the concept of "legs", and feature a menu for the player to manage their Pikmin with.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -38,6 +40,7 @@
 
     <ul>
       <li><b><code>pikmin_types</code></b>: Names of the types of Pikmin this Onion can manage, separated by semicolon.</li>
+      <li><b><code>leg_body_parts</code></b>: Names of the <a href="animation.html">body parts</a> that make up the Onion's legs, separated by semicolon. Every pair starts with the hole on the Onion, and ends with the foot of the leg. Example with two legs: <code>first_hole;first_foot;second_hole;second_foot</code>.
     </ul>
 
     <h3 id="recommended">Recommended</h3>
@@ -46,7 +49,9 @@
 
     <h3 id="optional">Optional</h3>
 
-    <p>None.</p>
+    <ul>
+      <li><b><code>pikmin_exit_speed</code></b>: When a Pikmin is called from the Onion, it will slide down a leg. This indicates the speed, in ratio per second. See the <a href="mob_track.html">track object category</a> for more information on what this means. Defaults to 2.
+    </ul>
 
     <h2 id="animations">Animations</h2>
 

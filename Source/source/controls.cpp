@@ -860,7 +860,7 @@ void gameplay_state::handle_button(
         
             //Ok button press.
             if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_OK)) {
-                //TODO
+                onion_menu->confirm();
                 delete onion_menu;
                 onion_menu = NULL;
                 return;
@@ -868,7 +868,6 @@ void gameplay_state::handle_button(
             
             //Cancel button press.
             if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
-                //TODO
                 delete onion_menu;
                 onion_menu = NULL;
                 return;

@@ -184,6 +184,7 @@ private:
         void add_all_to_onion();
         void add_to_group(const size_t type_idx);
         void add_to_onion(const size_t type_idx);
+        void confirm();
         void go_to_page(const size_t page);
         void tick(const float delta_t);
         void toggle_select_all();

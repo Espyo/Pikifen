@@ -62,6 +62,15 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("leaving_onion", PIKMIN_STATE_LEAVING_ONION); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::leave_onion);
+        }
+        efc.new_event(MOB_EV_ON_TICK); {
+            efc.run(pikmin_fsm::tick_track_ride);
+        }
+    }
+    
     efc.new_state("in_group_chasing", PIKMIN_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::start_chasing_leader);
@@ -2292,6 +2301,22 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin leaves its Onion because it got called out.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the Onion.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::leave_onion(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    m->set_animation(PIKMIN_ANIM_SLIDING);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin leaves a hazardous sector.
  * m:
  *   The mob.
@@ -2984,10 +3009,15 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != NULL, m->print_state_history());
+    pikmin* pik_ptr = (pikmin*) m;
     
     if(m->tick_track_ride()) {
         //Finished!
         m->fsm.set_state(PIKMIN_STATE_IDLING, NULL, NULL);
+        if(pik_ptr->leader_to_return_to) {
+            pikmin_fsm::called(m, info1, info2);
+            m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+        }
     }
 }
 

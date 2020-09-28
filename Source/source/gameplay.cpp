@@ -1032,6 +1032,20 @@ void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
 
 
 /* ----------------------------------------------------------------------------
+ * Confirms the player's changes, and sets up the Pikmin to climb up the
+ * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
+ */
+void gameplay_state::onion_menu_struct::confirm() {
+    for(size_t t = 0; t < types.size(); ++t) {
+        if(types[t].delta > 0) {
+            o_ptr->request_pikmin(t, types[t].delta, l_ptr);
+        }
+        //TODO request Pikmin to go back in.
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Flips to the specified page of Pikmin types.
  * page:
  *   Index of the new page.
