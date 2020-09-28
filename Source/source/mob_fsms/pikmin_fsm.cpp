@@ -2847,7 +2847,7 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         m->set_animation(PIKMIN_ANIM_WALKING);
         break;
     } case TRACK_RIDING_POSE_SLIDING: {
-        m->set_animation(PIKMIN_ANIM_WALKING);
+        m->set_animation(PIKMIN_ANIM_SLIDING);
         break;
     }
     }

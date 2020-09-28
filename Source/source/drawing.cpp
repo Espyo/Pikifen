@@ -1361,10 +1361,8 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
         game.sys_assets.bmp_mouse_cursor,
         game.mouse_cursor_s,
         point(
-            game.cam.zoom *
-            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor) * 0.5,
-            game.cam.zoom *
-            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor) * 0.5
+            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
+            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
         ),
         -(area_time_passed * game.config.cursor_spin_speed),
         color

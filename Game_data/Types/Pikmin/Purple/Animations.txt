@@ -18,19 +18,17 @@ animations{
 			}
 		}
 	}
-	sprout{
+	carrying{
 		frames{
-			sprout1{
-				duration=0.2000
+			grabbing{
+				duration=0.0000
 			}
-			sprout2{
-				duration=0.2000
-			}
-			sprout1{
-				duration=0.2000
-			}
-			sprout3{
-				duration=0.2000
+		}
+	}
+	drinking{
+		frames{
+			thrown1{
+				duration=1.0000
 			}
 		}
 	}
@@ -58,6 +56,59 @@ animations{
 			}
 			half_lying{
 				duration=0.1000
+			}
+		}
+	}
+	picking_up{
+		frames{
+			thrown1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	plucking{
+		frames{
+			sprout1{
+				duration=0.2000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	sighing{
+		frames{
+			thrown1{
+				duration=1.5000
+			}
+			idling{
+				duration=1.0000
+			}
+		}
+	}
+	sliding{
+		frames{
+			sliding{
+				duration=1.0000
+			}
+		}
+	}
+	sprout{
+		frames{
+			sprout1{
+				duration=0.2000
+			}
+			sprout2{
+				duration=0.2000
+			}
+			sprout1{
+				duration=0.2000
+			}
+			sprout3{
+				duration=0.2000
 			}
 		}
 	}
@@ -93,126 +144,31 @@ animations{
 			}
 		}
 	}
-	plucking{
-		frames{
-			sprout1{
-				duration=0.2000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
-	carrying{
-		frames{
-			grabbing{
-				duration=0.0000
-			}
-		}
-	}
-	sighing{
-		frames{
-			thrown1{
-				duration=1.5000
-			}
-			idling{
-				duration=1.0000
-			}
-		}
-	}
-	drinking{
-		frames{
-			thrown1{
-				duration=1.0000
-			}
-		}
-	}
-	picking_up{
-		frames{
-			thrown1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
-			}
-		}
-	}
 }
 sprites{
-	sprout1{
+	attack{
 		file=Purple_Pikmin.png
-		file_pos=190.0000 0.0000
-		file_size=12.0000 12.0000
+		file_pos=210.0000 35.0000
+		file_size=28.0000 34.0000
+		offset=3.5000 0.0000
 		scale=0.5000 0.5000
 		top_visible=true
-		top_pos=-4.0000 0.0000
+		top_pos=13.0000 0.0000
 		top_size=5.5000 10.0000
-		top_angle=0.0000
+		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=-4.0000 0.0000 0.0000
+				coords=12.0000 -0.0000 0.0000
 				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
+				radius=8.0000
+				type=1
+				value=11.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=2.0000 0.0000 0.0000
 				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sprout2{
-		file=Purple_Pikmin.png
-		file_pos=190.0000 0.0000
-		file_size=12.0000 12.0000
-		scale=0.5000 0.5000
-		top_visible=true
-		top_pos=-4.5000 0.0000
-		top_size=5.5000 10.0000
-		top_angle=0.0000
-		hitboxes{
-			top{
-				coords=-4.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-			}
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	sprout3{
-		file=Purple_Pikmin.png
-		file_pos=190.0000 0.0000
-		file_size=12.0000 12.0000
-		scale=0.5000 0.5000
-		top_visible=true
-		top_pos=-3.5000 0.0000
-		top_size=5.5000 10.0000
-		top_angle=0.0000
-		hitboxes{
-			top{
-				coords=-4.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
-				value=1.0000
-			}
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=24.0000
-				radius=4.0000
-				type=2
+				radius=6.0000
+				type=0
 				value=1.0000
 			}
 		}
@@ -375,6 +331,111 @@ sprites{
 			}
 		}
 	}
+	sliding{
+		file=Purple_Pikmin.png
+		file_pos=58.0000 0.0000
+		file_size=48.0000 34.0000
+		offset=-8.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-21.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-21.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-6.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sprout1{
+		file=Purple_Pikmin.png
+		file_pos=190.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sprout2{
+		file=Purple_Pikmin.png
+		file_pos=190.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sprout3{
+		file=Purple_Pikmin.png
+		file_pos=190.0000 0.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-3.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
 	thrown1{
 		file=Purple_Pikmin.png
 		file_pos=0.0000 37.0000
@@ -526,33 +587,6 @@ sprites{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=5.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	attack{
-		file=Purple_Pikmin.png
-		file_pos=210.0000 35.0000
-		file_size=28.0000 34.0000
-		offset=3.5000 0.0000
-		scale=0.5000 0.5000
-		top_visible=true
-		top_pos=13.0000 0.0000
-		top_size=5.5000 10.0000
-		top_angle=3.1400
-		hitboxes{
-			top{
-				coords=12.0000 -0.0000 0.0000
-				height=24.0000
-				radius=8.0000
-				type=1
-				value=11.0000
-			}
-			body{
-				coords=2.0000 0.0000 0.0000
-				height=24.0000
-				radius=6.0000
 				type=0
 				value=1.0000
 			}
