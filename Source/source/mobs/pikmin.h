@@ -29,8 +29,6 @@ public:
     
     //Mob that it is carrying.
     mob* carrying_mob;
-    //Carrying spot reserved for it.
-    size_t carrying_spot;
     //The Pikmin is considering this attack animation as having "missed".
     animation* missed_attack_ptr;
     //The Pikmin will consider the miss for this long.
@@ -53,6 +51,9 @@ public:
     bool latched;
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool is_tool_primed_for_whistle;
+    
+    //State-dependant temporary variable.
+    size_t temp_i;
     
     //Forces the Pikmin to carry a mob.
     void force_carry(mob* m);

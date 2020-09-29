@@ -60,7 +60,7 @@ public:
     //Spit a new seed.
     void spew();
     //Store a Pikmin inside.
-    void stow_pikmin();
+    void store_pikmin(pikmin* p_ptr);
     
     //Constructor.
     onion(const point &pos, onion_type* type, const float angle);

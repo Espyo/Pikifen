@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        Add logic to actually call or store Pikmin
         Support for more than 5 on-screen
         If the button is held, it should request multiple times
         Pause gameplay

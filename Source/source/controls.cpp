@@ -491,14 +491,7 @@ void gameplay_state::handle_button(
                 //Button pressed.
                 //Cancel auto-pluck, lying down, etc.
                 cur_leader_ptr->fsm.run_event(LEADER_EV_CANCEL);
-                
-                if(close_to_onion_to_open) {
-                    close_to_onion_to_open->stow_pikmin();
-                    
-                } else {
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
-                    
-                }
+                cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
                 
             } else {
                 //Button released.

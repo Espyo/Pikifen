@@ -36,7 +36,6 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     mob(pos, type, angle),
     pik_type(type),
     carrying_mob(NULL),
-    carrying_spot(0),
     missed_attack_ptr(nullptr),
     maturity(2),
     is_seed_or_sprout(false),
@@ -44,7 +43,8 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     leader_to_return_to(nullptr),
     latched(false),
     is_tool_primed_for_whistle(false),
-    consecutive_dud_hits(0) {
+    consecutive_dud_hits(0),
+    temp_i(0) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;

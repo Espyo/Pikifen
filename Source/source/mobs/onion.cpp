@@ -270,43 +270,18 @@ void onion::spew() {
 
 
 /* ----------------------------------------------------------------------------
- * Temporary feature to allow Pikmin to be stowed in the Onion.
- * Stows away a Pikmin in the current leader's group, if possible.
- * Gives priority to the lower maturities.
+ * Stores the given Pikmin inside the Onion. This basically deletes the
+ * Pikmin and updates the amount inside the Onion.
  */
-void onion::stow_pikmin() {
-    //TODO delete this when the Onion menu is done.
-    //Find a Pikmin of that type, preferring lower maturities.
-    pikmin* pik_to_stow = NULL;
-    size_t maturity = 0;
-    for(; maturity < N_MATURITIES; ++maturity) {
-        for(
-            size_t p = 0;
-            p < game.states.gameplay->cur_leader_ptr->group->members.size();
-            ++p
-        ) {
-            mob* mob_ptr =
-                game.states.gameplay->cur_leader_ptr->group->members[p];
-            if(mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN) {
-                continue;
-            }
-            
-            pikmin* p_ptr = (pikmin*) mob_ptr;
-            if(p_ptr->maturity != maturity) continue;
-            if(p_ptr->pik_type != oni_type->pik_types[0]) continue;
-            
-            pik_to_stow = p_ptr;
+void onion::store_pikmin(pikmin* p_ptr) {
+    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+        if(p_ptr->type == oni_type->pik_types[t]) {
+            pikmin_inside[t][p_ptr->maturity]++;
             break;
         }
-        
-        if(pik_to_stow) break;
     }
     
-    if(!pik_to_stow) return;
-    
-    pik_to_stow->leave_group();
-    pik_to_stow->to_delete = true;
-    pikmin_inside[0][maturity]++;
+    p_ptr->to_delete = true;
 }
 
 

@@ -71,6 +71,15 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("entering_onion", PIKMIN_STATE_ENTERING_ONION); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::enter_onion);
+        }
+        efc.new_event(MOB_EV_ON_TICK); {
+            efc.run(pikmin_fsm::tick_entering_onion);
+        }
+    }
+    
     efc.new_state("in_group_chasing", PIKMIN_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::start_chasing_leader);
@@ -78,6 +87,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
+        }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_SPOT_IS_FAR); {
             efc.run(pikmin_fsm::update_in_group_chasing);
@@ -126,6 +138,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
+        }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_SPOT_IS_FAR); {
             efc.change_state("in_group_chasing");
@@ -621,6 +636,39 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::forget_group_task);
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state(
+        "going_to_onion", PIKMIN_STATE_GOING_TO_ONION
+    ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::go_to_onion);
+        }
+        efc.new_event(MOB_EV_REACHED_DESTINATION); {
+            efc.change_state("entering_onion");
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
     }
@@ -1737,6 +1785,34 @@ void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin must start climbing up an Onion's leg.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    pikmin* p_ptr = (pikmin*) m;
+    onion* o_ptr = (onion*) p_ptr->focused_mob;
+    
+    //Set its data to start climbing.
+    p_ptr->set_animation(PIKMIN_ANIM_WALKING); //TODO
+    
+    vector<size_t> checkpoints;
+    checkpoints.push_back((p_ptr->temp_i * 2) + 1);
+    checkpoints.push_back(p_ptr->temp_i * 2);
+    
+    p_ptr->track_info = new track_info_struct(
+        o_ptr, checkpoints, o_ptr->oni_type->pikmin_enter_speed
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin falls down a bottomless pit.
  * m:
  *   The mob.
@@ -1860,9 +1936,9 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     if(!p->carrying_mob) return;
     
-    p->carrying_mob->carry_info->spot_info[p->carrying_spot].state =
+    p->carrying_mob->carry_info->spot_info[p->temp_i].state =
         CARRY_SPOT_FREE;
-    p->carrying_mob->carry_info->spot_info[p->carrying_spot].pik_ptr =
+    p->carrying_mob->carry_info->spot_info[p->temp_i].pik_ptr =
         NULL;
         
     p->carrying_mob = NULL;
@@ -1992,7 +2068,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->focus_on_mob(carriable_mob);
-    pik_ptr->carrying_spot = closest_spot;
+    pik_ptr->temp_i = closest_spot;
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
     
@@ -2047,6 +2123,41 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin needs to walk towards an Onion to climb inside.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the Onion.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    pikmin* p_ptr = (pikmin*) m;
+    onion* o_ptr = (onion*) info1;
+    
+    //Pick a leg at random.
+    p_ptr->temp_i =
+        randomi(0, (o_ptr->oni_type->leg_body_parts.size() / 2) - 1);
+    size_t leg_foot_bp_idx =
+        o_ptr->anim.anim_db->find_body_part(
+            o_ptr->oni_type->leg_body_parts[p_ptr->temp_i * 2 + 1]
+        );
+    point coords =
+        o_ptr->get_hitbox(
+            leg_foot_bp_idx
+        )->get_cur_pos(o_ptr->pos, o_ptr->angle);
+        
+    m->focus_on_mob(o_ptr);
+    m->stop_chasing();
+    m->chase(coords, NULL, false);
+    m->set_animation(PIKMIN_ANIM_WALKING);
+    m->leave_group();
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin needs to walk towards an opponent.
  * m:
  *   The mob.
@@ -2067,7 +2178,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         if(e_ptr->z > m->z + m->height) return;
     }
     
-    m->focus_on_mob((mob*) info1);
+    m->focus_on_mob(o_ptr);
     m->stop_chasing();
     m->chase(
         point(),
@@ -2424,10 +2535,10 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     
     point final_pos =
         carriable_mob->pos +
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].pos;
+        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos;
         
     pik_ptr->chase(
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].pos,
+        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos,
         &carriable_mob->pos,
         true, &carriable_mob->z
     );
@@ -2966,6 +3077,26 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     
     if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health <= 0) {
         return;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin has to teleport to its spot in the Onion leg.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::tick_entering_onion(mob* m, void* info1, void* info2) {
+    engine_assert(m->track_info != NULL, m->print_state_history());
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    if(m->tick_track_ride()) {
+        //Finished!
+        ((onion*) m->focused_mob)->store_pikmin((pikmin*) m);
     }
 }
 

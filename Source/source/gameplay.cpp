@@ -1039,8 +1039,11 @@ void gameplay_state::onion_menu_struct::confirm() {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t].delta > 0) {
             o_ptr->request_pikmin(t, types[t].delta, l_ptr);
+        } else if(types[t].delta < 0) {
+            l_ptr->order_pikmin_to_onion(
+                types[t].pik_type, o_ptr, -types[t].delta
+            );
         }
-        //TODO request Pikmin to go back in.
     }
 }
 

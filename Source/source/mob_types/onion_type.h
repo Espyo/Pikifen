@@ -37,6 +37,7 @@ class onion_type : public mob_type {
 public:
     vector<pikmin_type*> pik_types;
     vector<string> leg_body_parts;
+    float pikmin_enter_speed;
     float pikmin_exit_speed;
     
     onion_type();

@@ -126,10 +126,12 @@ enum MOB_EV_TYPES {
     MOB_EV_SPOT_IS_NEAR,
     //When its spot on the group is now far, and the mob is in the group.
     MOB_EV_SPOT_IS_FAR,
-    //When the group the mob is on started swarming..
+    //When the group the mob is on started swarming.
     MOB_EV_SWARM_STARTED,
     //When the group the mob is on stopped swarming.
     MOB_EV_SWARM_ENDED,
+    //When the mob is ordered to go to an Onion to be stored inside.
+    MOB_EV_GO_TO_ONION,
     //When the object the Pikmin was carrying gets delivered.
     MOB_EV_FINISHED_CARRYING,
     //When the Pikmin is near an object that can be carried.

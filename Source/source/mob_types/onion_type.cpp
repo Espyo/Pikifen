@@ -21,6 +21,7 @@
  */
 onion_type::onion_type() :
     mob_type(MOB_CATEGORY_ONIONS),
+    pikmin_enter_speed(0.7f),
     pikmin_exit_speed(2.0f) {
     
     target_type = MOB_TARGET_TYPE_NONE;
@@ -66,6 +67,7 @@ void onion_type::load_properties(data_node* file) {
     
     rs.set("leg_body_parts", legs_str, &legs_node);
     rs.set("pikmin_types", pik_types_str, &pik_types_node);
+    rs.set("pikmin_enter_speed", pikmin_enter_speed);
     rs.set("pikmin_exit_speed", pikmin_exit_speed);
     
     leg_body_parts = semicolon_list_to_vector(legs_str);
