@@ -968,7 +968,7 @@ void gameplay_state::draw_ingame_text() {
                 close_to_onion_to_open->pos.y -
                 close_to_onion_to_open->type->radius
             ),
-            "Call a Pikmin", &game.options.controls[0][main_control_id]
+            "Check", &game.options.controls[0][main_control_id]
         );
         done = true;
     }

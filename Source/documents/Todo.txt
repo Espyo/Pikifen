@@ -4,7 +4,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
         Support for more than 5 on-screen
-        If the button is held, it should request multiple times
         Pause gameplay
         Add ship support
         Improve look

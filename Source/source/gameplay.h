@@ -175,19 +175,37 @@ private:
         bool select_all;
         //If it manages more than 5, this is the Pikmin type page index.
         size_t page;
+        //ID of the amount-related button under the cursor.
+        size_t cursor_button;
+        //ID of the amount-related button being held. INVALID for none.
+        size_t button_hold_id;
+        //How long the current amount-related button has been held for.
+        float button_hold_time;
+        //How long until the next button activation, from it being held.
+        float button_hold_next_activation;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
+        //Is the struct meant to be deleted?
+        bool to_delete;
         
         onion_menu_struct(onion* onion_ptr, leader* l_ptr);
         ~onion_menu_struct();
+        void activate_held_button();
         void add_all_to_group();
         void add_all_to_onion();
         void add_to_group(const size_t type_idx);
         void add_to_onion(const size_t type_idx);
         void confirm();
         void go_to_page(const size_t page);
+        void handle_button(
+            const size_t button, const float pos, const size_t player
+        );
         void tick(const float delta_t);
         void toggle_select_all();
+        
+        static const float BUTTON_REPEAT_MAX_INTERVAL;
+        static const float BUTTON_REPEAT_MIN_INTERVAL;
+        static const float BUTTON_REPEAT_RAMP_TIME;
         
     private:
         void update_caches();

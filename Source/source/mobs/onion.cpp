@@ -23,6 +23,20 @@ using std::size_t;
 using std::string;
 
 
+//Wait these many seconds before allowing another Pikmin to be called out.
+const float onion::ONION_CALL_INTERVAL = 0.01f;
+//An Onion-spat seed starts with this Z offset from the Onion.
+const float onion::ONION_NEW_SEED_Z_OFFSET = 320.0f;
+//After spitting a seed, the next seed's angle shifts by this much.
+const float onion::ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
+//An Onion-spat seed is this quick, horizontally.
+const float onion::ONION_SPEW_H_SPEED = 80.0f;
+//Deviate the seed's horizontal speed by this much, more or less.
+const float onion::ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
+//An Onion-spat seed is this quick, vertically.
+const float onion::ONION_SPEW_V_SPEED = 600.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates an Onion mob.
  * pos:
@@ -200,9 +214,6 @@ void onion::read_script_vars(const script_var_reader &svr) {
 }
 
 
-//Wait these many seconds before allowing another Pikmin to be called out.
-const float ONION_CALL_INTERVAL = 0.028f;
-
 /* ----------------------------------------------------------------------------
  * Requests that Pikmin of the given type get called out.
  * type_idx:
@@ -219,18 +230,6 @@ void onion::request_pikmin(
     next_call_time = ONION_CALL_INTERVAL;
     calling_leader = l_ptr;
 }
-
-
-//An Onion-spat seed starts with this Z offset from the Onion.
-const float ONION_NEW_SEED_Z_OFFSET = 320.0f;
-//After spitting a seed, the next seed's angle shifts by this much.
-const float ONION_SPEW_ANGLE_SHIFT = TAU * 0.12345;
-//An Onion-spat seed is this quick, horizontally.
-const float ONION_SPEW_H_SPEED = 80.0f;
-//Deviate the seed's horizontal speed by this much, more or less.
-const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
-//An Onion-spat seed is this quick, vertically.
-const float ONION_SPEW_V_SPEED = 600.0f;
 
 
 /* ----------------------------------------------------------------------------

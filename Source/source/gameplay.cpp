@@ -38,6 +38,13 @@ const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
 const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
 
+//Interval between button hold activations, at the slowest speed.
+const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MAX_INTERVAL = 0.3f;
+//Interval between button hold activations, at the fastest speed.
+const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MIN_INTERVAL = 0.011f;
+//How long it takes for the button hold activation repeats to reach max speed.
+const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_RAMP_TIME = 0.9f;
+
 
 /* ----------------------------------------------------------------------------
  * Initializes the gameplay HUD item manager.
@@ -915,7 +922,12 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     o_ptr(onion_ptr),
     l_ptr(leader_ptr),
     select_all(false),
-    page(0) {
+    page(0),
+    cursor_button(INVALID),
+    button_hold_id(INVALID),
+    button_hold_time(0.0f),
+    button_hold_next_activation(0.0f),
+    to_delete(false) {
     
     for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
         types.push_back(
@@ -961,6 +973,43 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
  */
 gameplay_state::onion_menu_struct::~onion_menu_struct() {
     delete hud;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Activates the button currently being held down, either because it was
+ * just pressed, or because it was held long enough for another activation.
+ */
+void gameplay_state::onion_menu_struct::activate_held_button() {
+    //Individual Onion button.
+    for(size_t t = 0; t < on_screen_types.size(); ++t) {
+        int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
+        if(button_hold_id == hud_item_id) {
+            add_to_onion(on_screen_types[t]->type_idx);
+            return;
+        }
+    }
+    
+    //Individual Pikmin button.
+    for(size_t t = 0; t < on_screen_types.size(); ++t) {
+        int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
+        if(button_hold_id == hud_item_id) {
+            add_to_group(on_screen_types[t]->type_idx);
+            return;
+        }
+    }
+    
+    //Combined Onion button.
+    if(button_hold_id == ONION_HUD_ITEM_OALL_BUTTON) {
+        add_all_to_onion();
+        return;
+    }
+    
+    //Combined Pikmin button press.
+    if(button_hold_id == ONION_HUD_ITEM_PALL_BUTTON) {
+        add_all_to_group();
+        return;
+    }
 }
 
 
@@ -1065,8 +1114,8 @@ void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
  *   How many seconds to tick by.
  */
 void gameplay_state::onion_menu_struct::tick(const float delta_t) {
+
     //Correct the amount of wanted group members, if they are invalid.
-    
     int total_delta = 0;
     
     for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
@@ -1123,6 +1172,55 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
         //Finally, remove one request from this type.
         types[best_type].delta--;
         delta_over_limit--;
+    }
+    
+    //Figure out what amount-related button is under the cursor, if any.
+    size_t old_cursor_button = cursor_button;
+    cursor_button = INVALID;
+    
+    if(!select_all) {
+        for(size_t t = 0; t < on_screen_types.size(); ++t) {
+            int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
+            if(hud->is_mouse_in(hud_item_id)) {
+                cursor_button = hud_item_id;
+                break;
+            }
+            hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
+            if(hud->is_mouse_in(hud_item_id)) {
+                cursor_button = hud_item_id;
+                break;
+            }
+        }
+    } else  {
+        if(hud->is_mouse_in(ONION_HUD_ITEM_OALL_BUTTON)) {
+            cursor_button = ONION_HUD_ITEM_OALL_BUTTON;
+        } else if(hud->is_mouse_in(ONION_HUD_ITEM_PALL_BUTTON)) {
+            cursor_button = ONION_HUD_ITEM_PALL_BUTTON;
+        }
+    }
+    
+    if(cursor_button != old_cursor_button) {
+        button_hold_id = INVALID;
+    }
+    
+    //Repeat the held button, if any.
+    if(button_hold_id != INVALID) {
+        button_hold_time += delta_t;
+        button_hold_next_activation -= delta_t;
+        
+        while(button_hold_next_activation <= 0.0f) {
+            activate_held_button();
+            button_hold_next_activation +=
+                clamp(
+                    interpolate_number(
+                        button_hold_time,
+                        0, BUTTON_REPEAT_RAMP_TIME,
+                        BUTTON_REPEAT_MAX_INTERVAL, BUTTON_REPEAT_MIN_INTERVAL
+                    ),
+                    BUTTON_REPEAT_MIN_INTERVAL,
+                    BUTTON_REPEAT_MAX_INTERVAL
+                );
+        }
     }
 }
 

@@ -69,6 +69,13 @@ public:
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
     
+    static const float ONION_CALL_INTERVAL;
+    static const float ONION_NEW_SEED_Z_OFFSET;
+    static const float ONION_SPEW_ANGLE_SHIFT;
+    static const float ONION_SPEW_H_SPEED;
+    static const float ONION_SPEW_H_SPEED_DEVIATION;
+    static const float ONION_SPEW_V_SPEED;
+    
 protected:
     //Tick class-specific logic.
     virtual void tick_class_specifics(const float delta_t);

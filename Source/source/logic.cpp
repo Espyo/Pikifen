@@ -530,7 +530,12 @@ void gameplay_state::do_gameplay_logic() {
     }
     
     if(onion_menu) {
-        onion_menu->tick(game.delta_t);
+        if(!onion_menu->to_delete) {
+            onion_menu->tick(game.delta_t);
+        } else {
+            delete onion_menu;
+            onion_menu = NULL;
+        }
     }
     
     hud_items.tick(game.delta_t);

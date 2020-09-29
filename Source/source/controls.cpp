@@ -849,76 +849,64 @@ void gameplay_state::handle_button(
     } else if(onion_menu) {
     
         //Managing an Onion.
-        if(button == BUTTON_THROW && is_down) {
-        
-            //Ok button press.
-            if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_OK)) {
-                onion_menu->confirm();
-                delete onion_menu;
-                onion_menu = NULL;
-                return;
-            }
-            
-            //Cancel button press.
-            if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
-                delete onion_menu;
-                onion_menu = NULL;
-                return;
-            }
-            
-            //"Select all" button press.
-            if(
-                onion_menu->on_screen_types.size() > 1 &&
-                onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_SEL_ALL)
-            ) {
-                onion_menu->toggle_select_all();
-                return;
-            }
-            
-            //Individual Onion button press.
-            if(!onion_menu->select_all) {
-                for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-                    int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
-                    if(onion_menu->hud->is_mouse_in(hud_item_id)) {
-                        onion_menu->add_to_onion(
-                            onion_menu->on_screen_types[t]->type_idx
-                        );
-                        return;
-                    }
-                }
-            }
-            
-            //Individual Pikmin button press.
-            if(!onion_menu->select_all) {
-                for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
-                    int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
-                    if(onion_menu->hud->is_mouse_in(hud_item_id)) {
-                        onion_menu->add_to_group(
-                            onion_menu->on_screen_types[t]->type_idx
-                        );
-                        return;
-                    }
-                }
-            }
-            
-            //Combined Onion button press.
-            if(onion_menu->select_all) {
-                if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_OALL_BUTTON)) {
-                    onion_menu->add_all_to_onion();
-                }
-            }
-            
-            //Combined Pikmin button press.
-            if(onion_menu->select_all) {
-                if(onion_menu->hud->is_mouse_in(ONION_HUD_ITEM_PALL_BUTTON)) {
-                    onion_menu->add_all_to_group();
-                }
-            }
-            
-        }
+        onion_menu->handle_button(button, pos, player);
         
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a button "press" in the Onion menu.
+ * Technically, it could also be a button release.
+ * button:
+ *   The button's ID. Use BUTTON_*.
+ * pos:
+ *   The position of the button, i.e., how much it's "held".
+ *   0 means it was released. 1 means it was fully pressed.
+ * player:
+ *   Number of the player that pressed.
+ */
+void gameplay_state::onion_menu_struct::handle_button(
+    const size_t button, const float pos, const size_t player
+) {
+    if(button == BUTTON_THROW && pos >= 0.5f) {
+    
+        //Ok button press.
+        if(hud->is_mouse_in(ONION_HUD_ITEM_OK)) {
+            confirm();
+            to_delete = true;
+            return;
+        }
+        
+        //Cancel button press.
+        if(hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
+            to_delete = true;
+            return;
+        }
+        
+        //"Select all" button press.
+        if(
+            on_screen_types.size() > 1 &&
+            hud->is_mouse_in(ONION_HUD_ITEM_SEL_ALL)
+        ) {
+            toggle_select_all();
+            return;
+        }
+        
+        //An amount-related button.
+        if(cursor_button != INVALID) {
+            button_hold_id = cursor_button;
+            button_hold_time = 0.0f;
+            button_hold_next_activation = BUTTON_REPEAT_MAX_INTERVAL;
+            activate_held_button();
+        }
+        
+    } else if(button == BUTTON_THROW && pos < 0.5f) {
+    
+        button_hold_id = INVALID;
+        
+    }
 }
 
 
