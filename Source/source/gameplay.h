@@ -183,6 +183,8 @@ private:
         float button_hold_time;
         //How long until the next button activation, from it being held.
         float button_hold_next_activation;
+        //Total page amount. Cache for convenience.
+        size_t nr_pages;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
         //Is the struct meant to be deleted?
@@ -206,6 +208,7 @@ private:
         static const float BUTTON_REPEAT_MAX_INTERVAL;
         static const float BUTTON_REPEAT_MIN_INTERVAL;
         static const float BUTTON_REPEAT_RAMP_TIME;
+        static const size_t MAX_TYPES_ON_SCREEN;
         
     private:
         void update_caches();

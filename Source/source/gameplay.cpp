@@ -44,6 +44,8 @@ const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MAX_INTERVAL = 0.3f
 const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MIN_INTERVAL = 0.011f;
 //How long it takes for the button hold activation repeats to reach max speed.
 const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_RAMP_TIME = 0.9f;
+//How many Pikmin types can be on-screen per page.
+const size_t gameplay_state::onion_menu_struct::MAX_TYPES_ON_SCREEN = 5;
 
 
 /* ----------------------------------------------------------------------------
@@ -927,6 +929,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     button_hold_id(INVALID),
     button_hold_time(0.0f),
     button_hold_next_activation(0.0f),
+    nr_pages(0),
     to_delete(false) {
     
     for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
@@ -934,6 +937,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             onion_menu_type_struct(t, o_ptr->oni_type->pik_types[t])
         );
     }
+    
+    nr_pages = ceil(types.size() / (float) MAX_TYPES_ON_SCREEN);
     
     hud = new onion_hud_manager(N_ONION_HUD_ITEMS);
     hud->set_item(ONION_HUD_ITEM_TITLE,       50,  7, 90, 20);
@@ -963,6 +968,12 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     hud->set_item(ONION_HUD_ITEM_P5_AMOUNT,   50, 51, 12,  4);
     hud->set_item(ONION_HUD_ITEM_OALL_BUTTON, 50, 20,  9, 12);
     hud->set_item(ONION_HUD_ITEM_PALL_BUTTON, 50, 60,  9, 12);
+    hud->set_item(ONION_HUD_ITEM_PREV_PAGE,    5, 40,  8, 10);
+    hud->set_item(ONION_HUD_ITEM_NEXT_PAGE,   95, 40,  8, 11);
+    hud->set_item(ONION_HUD_ITEM_O_L_MORE,     5, 20,  3,  4);
+    hud->set_item(ONION_HUD_ITEM_O_R_MORE,    95, 20,  3,  4);
+    hud->set_item(ONION_HUD_ITEM_P_L_MORE,     5, 60,  3,  4);
+    hud->set_item(ONION_HUD_ITEM_P_R_MORE,    95, 60,  3,  4);
     
     update_caches();
 }
@@ -1268,6 +1279,21 @@ void gameplay_state::onion_menu_struct::update_caches() {
             std::max(
                 rightmost,
                 x + hud->items[ONION_HUD_ITEM_O1_BUTTON].size.x / 2.0f
+            );
+    }
+    
+    if(nr_pages > 1) {
+        leftmost =
+            std::min(
+                leftmost,
+                hud->items[ONION_HUD_ITEM_O_L_MORE].center.x -
+                hud->items[ONION_HUD_ITEM_O_L_MORE].size.x / 2.0f
+            );
+        rightmost =
+            std::max(
+                rightmost,
+                hud->items[ONION_HUD_ITEM_O_R_MORE].center.x +
+                hud->items[ONION_HUD_ITEM_O_R_MORE].size.x / 2.0f
             );
     }
     

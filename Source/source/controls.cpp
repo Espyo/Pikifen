@@ -887,7 +887,7 @@ void gameplay_state::onion_menu_struct::handle_button(
         
         //"Select all" button press.
         if(
-            on_screen_types.size() > 1 &&
+            types.size() > 1 &&
             hud->is_mouse_in(ONION_HUD_ITEM_SEL_ALL)
         ) {
             toggle_select_all();
@@ -900,6 +900,24 @@ void gameplay_state::onion_menu_struct::handle_button(
             button_hold_time = 0.0f;
             button_hold_next_activation = BUTTON_REPEAT_MAX_INTERVAL;
             activate_held_button();
+        }
+        
+        //Previous page button press.
+        if(
+            types.size() > MAX_TYPES_ON_SCREEN &&
+            hud->is_mouse_in(ONION_HUD_ITEM_PREV_PAGE)
+        ) {
+            go_to_page(sum_and_wrap(page, -1, nr_pages));
+            return;
+        }
+        
+        //Next page button press.
+        if(
+            types.size() > MAX_TYPES_ON_SCREEN &&
+            hud->is_mouse_in(ONION_HUD_ITEM_NEXT_PAGE)
+        ) {
+            go_to_page(sum_and_wrap(page, 1, nr_pages));
+            return;
         }
         
     } else if(button == BUTTON_THROW && pos < 0.5f) {

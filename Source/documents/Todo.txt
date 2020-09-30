@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        Support for more than 5 on-screen
         Pause gameplay
         Add ship support
         Improve look

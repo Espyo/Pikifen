@@ -1465,7 +1465,7 @@ void gameplay_state::draw_onion_menu() {
     
     //"Select all" button.
     if(
-        onion_menu->on_screen_types.size() > 1 &&
+        onion_menu->types.size() > 1 &&
         onion_menu->hud->get_draw_data(
             ONION_HUD_ITEM_SEL_ALL, &i_center, &i_size
         )
@@ -1606,6 +1606,70 @@ void gameplay_state::draw_onion_menu() {
                 i2s(real_group_amount + t_ptr->delta)
             );
         }
+    }
+    
+    //"More" indicators.
+    if(onion_menu->nr_pages > 1 && onion_menu->select_all) {
+        size_t more_indicator_item_ids[] = {
+            ONION_HUD_ITEM_O_L_MORE,
+            ONION_HUD_ITEM_O_R_MORE,
+            ONION_HUD_ITEM_P_L_MORE,
+            ONION_HUD_ITEM_P_R_MORE
+        };
+        for(unsigned char i = 0; i < 4; ++i) {
+            if(
+                onion_menu->hud->get_draw_data(
+                    more_indicator_item_ids[i], &i_center, &i_size
+                )
+            ) {
+                draw_compressed_text(
+                    game.fonts.main,
+                    al_map_rgba(255, 255, 255, 128),
+                    i_center,
+                    ALLEGRO_ALIGN_CENTER, 1,
+                    i_size,
+                    "..."
+                );
+            }
+        }
+    }
+    
+    //Previous page button.
+    if(
+        onion_menu->nr_pages > 1 &&
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_PREV_PAGE, &i_center, &i_size
+        )
+    ) {
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(255, 255, 255),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "<-"
+        );
+    }
+    
+    //Next page button.
+    if(
+        onion_menu->nr_pages > 1 &&
+        onion_menu->hud->get_draw_data(
+            ONION_HUD_ITEM_NEXT_PAGE, &i_center, &i_size
+        )
+    ) {
+        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
+        
+        draw_compressed_text(
+            game.fonts.main,
+            al_map_rgb(255, 255, 255),
+            i_center,
+            ALLEGRO_ALIGN_CENTER, 1,
+            i_size,
+            "->"
+        );
     }
     
     //Cursor.
