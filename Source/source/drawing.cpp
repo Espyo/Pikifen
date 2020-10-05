@@ -42,115 +42,109 @@ void gameplay_state::do_game_drawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    if(!paused) {
+    ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
     
-        ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
-        
-        if(bmp_output) {
-            world_to_screen_drawing_transform = *bmp_transform;
-            al_set_target_bitmap(bmp_output);
-            al_set_separate_blender(
-                ALLEGRO_ADD, ALLEGRO_ALPHA,
-                ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
-                ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
-            );
-        } else {
-            world_to_screen_drawing_transform = game.world_to_screen_transform;
-        }
-        
-        al_clear_to_color(game.cur_area_data.bg_color);
-        
-        //Layer 1 -- Background.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- Background");
-        }
-        draw_background(bmp_output);
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 2 -- World components.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- World");
-        }
-        al_use_transform(&world_to_screen_drawing_transform);
-        draw_world_components(bmp_output);
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 3 -- In-game text.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- In-game text");
-        }
-        if(!bmp_output) {
-            draw_ingame_text();
-        }
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 4 -- Precipitation.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- precipitation");
-        }
-        if(!bmp_output) {
-            draw_precipitation();
-        }
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 5 -- Tree shadows.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- Tree shadows");
-        }
-        if(!(bmp_output && !game.maker_tools.area_image_shadows)) {
-            draw_tree_shadows();
-        }
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Finish dumping to a bitmap image here.
-        if(bmp_output) {
-            al_set_target_backbuffer(game.display);
-            return;
-        }
-        
-        //Layer 6 -- Lighting filter.
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- Lighting");
-        }
-        draw_lighting_filter();
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 7 -- Leader cursor.
-        draw_leader_cursor(world_to_screen_drawing_transform);
-        
-        //Layer 8 -- HUD
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Drawing -- HUD");
-        }
-        if(msg_box) {
-            draw_message_box();
-        } else if(onion_menu) {
-            draw_onion_menu();
-        } else {
-            draw_hud();
-        }
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
-        
-        //Layer 9 -- System stuff.
-        draw_system_stuff();
-        
-    } else { //Paused.
-    
+    if(bmp_output) {
+        world_to_screen_drawing_transform = *bmp_transform;
+        al_set_target_bitmap(bmp_output);
+        al_set_separate_blender(
+            ALLEGRO_ADD, ALLEGRO_ALPHA,
+            ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
+            ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
+        );
+    } else {
+        world_to_screen_drawing_transform = game.world_to_screen_transform;
     }
+    
+    al_clear_to_color(game.cur_area_data.bg_color);
+    
+    //Layer 1 -- Background.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- Background");
+    }
+    draw_background(bmp_output);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 2 -- World components.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- World");
+    }
+    al_use_transform(&world_to_screen_drawing_transform);
+    draw_world_components(bmp_output);
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 3 -- In-game text.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- In-game text");
+    }
+    if(!bmp_output) {
+        draw_ingame_text();
+    }
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 4 -- Precipitation.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- precipitation");
+    }
+    if(!bmp_output) {
+        draw_precipitation();
+    }
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 5 -- Tree shadows.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- Tree shadows");
+    }
+    if(!(bmp_output && !game.maker_tools.area_image_shadows)) {
+        draw_tree_shadows();
+    }
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Finish dumping to a bitmap image here.
+    if(bmp_output) {
+        al_set_target_backbuffer(game.display);
+        return;
+    }
+    
+    //Layer 6 -- Lighting filter.
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- Lighting");
+    }
+    draw_lighting_filter();
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 7 -- Leader cursor.
+    draw_leader_cursor(world_to_screen_drawing_transform);
+    
+    //Layer 8 -- HUD
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Drawing -- HUD");
+    }
+    if(msg_box) {
+        draw_message_box();
+    } else if(onion_menu) {
+        draw_onion_menu();
+    } else {
+        draw_hud();
+    }
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+    //Layer 9 -- System stuff.
+    draw_system_stuff();
     
     if(area_title_fade_timer.time_left > 0) {
         draw_loading_screen(
@@ -1364,7 +1358,7 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
             al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
         ),
-        -(area_time_passed * game.config.cursor_spin_speed),
+        -(time_passed * game.config.cursor_spin_speed),
         color
     );
 }

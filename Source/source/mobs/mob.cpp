@@ -73,6 +73,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group(nullptr),
     group_spot_index(INVALID),
     carry_info(nullptr),
+    delivery_info(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -577,7 +578,7 @@ bool mob::calculate_carrying_destination(
     
     pikmin_type* decided_type = NULL;
     
-    //Now let's pick an Onion from the candidates.
+    //Now let's pick an Pikmin type from the candidates.
     if(majority_types.size() == 1) {
         //If there's only one possible type to pick, pick it.
         decided_type = *majority_types.begin();
@@ -633,21 +634,30 @@ bool mob::calculate_carrying_destination(
     
     
     //Figure out where that type's Onion is.
-    size_t onion_nr = 0;
+    size_t closest_onion_nr = INVALID;
+    dist closest_onion_dist;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(!o_ptr->activated) continue;
+        bool has_type = false;
         for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
             if(o_ptr->oni_type->pik_types[t] == decided_type) {
-                onion_nr = o;
+                has_type = true;
                 break;
             }
+        }
+        if(!has_type) continue;
+        
+        dist d(pos, o_ptr->pos);
+        if(closest_onion_nr == INVALID || d < closest_onion_dist) {
+            closest_onion_dist = d;
+            closest_onion_nr = o;
         }
     }
     
     //Finally, set the destination data.
     *target_type = decided_type;
-    *target_mob = game.states.gameplay->mobs.onions[onion_nr];
+    *target_mob = game.states.gameplay->mobs.onions[closest_onion_nr];
     *target_point = (*target_mob)->pos;
     
     return true;

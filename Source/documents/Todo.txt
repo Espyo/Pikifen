@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        Pause gameplay
         Add ship support
         Improve look
             Use Onion icons, not Pikmin icons
@@ -11,6 +10,7 @@ Current tasks (tasks being worked on, but not yet committed)
             If the player tries to store a Pikmin they don't have, or call Pikmin not in the Onion, or Pikmin over 100, the corresponding number should flash red
         Tests:
             What if more Pikmin spawn and the values the player wants end up going over 100?
+            When queueing Pikmin to take out, keep in mind that if you go to Onion 1, ask for 90 Pikmin, then go to Onion 2 while those Pikmin are still coming out, and try to take out Pikmin, it can't let you take out more than 10
     
     
 Next tasks (roughly sorted most important first)
@@ -141,17 +141,13 @@ Next tasks (roughly sorted most important first)
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
             The total play time should be shown somewhere; useful for speedruns
         Onion menu
-            Onion improvements
-                There should only be one Onion object, and you can specify what types it can have inside using spawn vars
-                You could have a solely-Red Onion, a Blue+Yellow Onion, and an Onion with all types, all in the same map
-                If Pikmin have multiple Onions they can take something to, they should pick the closest.
-                When queueing Pikmin to take out, keep in mind that if you go to Onion 1, ask for 90 Pikmin, then go to Onion 2 while those Pikmin are still coming out, and try to take out Pikmin, it can't let you take out more than 10
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
         Joystick navigation
             Check Openbox's source code, focus_cycle.c, focus_find_directional()
                 Basically, compare the box centers, check which one has the lowest distance+offset, and select that, for the given direction
         The ability to load TTF fonts
         Main menu shouldn't have those ugly rounded rectangles
+        Ways to customize the menu elements, like you can customize the HUD
     Level end
         Leaders being KO'd
         Pikmin extinction
@@ -442,6 +438,7 @@ Misc things (so I don't forget)
     For intervals, use the code on the "misc info" text file
     Water depth (Thanks ThyCheshireCat)
     A way to add random variation to the knockback angle of a hitbox
+    I think carry weight should be displayed when you hover over an enemy corpse/pellet --Elated
     The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be addedd to the script (Kman)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?

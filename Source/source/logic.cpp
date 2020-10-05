@@ -529,18 +529,31 @@ void gameplay_state::do_gameplay_logic() {
         msg_box->tick(game.delta_t);
     }
     
+    replay_timer.tick(game.delta_t);
+    
+    if(!ready_for_input) {
+        ready_for_input = true;
+        is_input_allowed = true;
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the logic of in-game menu-related things.
+ */
+void gameplay_state::do_menu_logic() {
     if(onion_menu) {
         if(!onion_menu->to_delete) {
             onion_menu->tick(game.delta_t);
         } else {
             delete onion_menu;
             onion_menu = NULL;
+            paused = false;
         }
     }
     
     hud_items.tick(game.delta_t);
-    
-    replay_timer.tick(game.delta_t);
     
     //Process and print framerate and system info.
     if(game.show_system_info) {
@@ -741,12 +754,6 @@ void gameplay_state::do_gameplay_logic() {
     }
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
-    
-    if(!ready_for_input) {
-        ready_for_input = true;
-        is_input_allowed = true;
-    }
-    
 }
 
 

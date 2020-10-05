@@ -277,6 +277,8 @@ private:
     movement_struct swarm_movement;
     //Is it possible for the currently held Pikmin to reach the cursor?
     bool throw_can_reach_cursor;
+    //How many seconds have passed in this state.
+    float time_passed;
     
     void do_aesthetic_logic();
     void do_game_drawing(
@@ -284,6 +286,7 @@ private:
         ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
     void do_gameplay_logic();
+    void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
     void draw_leader_cursor(
         ALLEGRO_TRANSFORM &world_to_screen_drawing_transform

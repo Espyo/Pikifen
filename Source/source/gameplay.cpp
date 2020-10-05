@@ -211,7 +211,8 @@ gameplay_state::gameplay_state() :
     selected_spray(0),
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     swarm_cursor(false),
-    throw_can_reach_cursor(true) {
+    throw_can_reach_cursor(true),
+    time_passed(0.0f) {
     
     swarm_next_arrow_timer.on_end = [this] () {
         swarm_next_arrow_timer.start();
@@ -237,6 +238,8 @@ void gameplay_state::do_drawing() {
  * Tick the gameplay logic by one frame.
  */
 void gameplay_state::do_logic() {
+    time_passed += game.delta_t;
+    
     if(game.perf_mon) {
         if(is_input_allowed) {
             //The first frame will have its speed all broken,
@@ -252,7 +255,10 @@ void gameplay_state::do_logic() {
         game.delta_t *= game.maker_tools.change_speed_mult;
     }
     
-    do_gameplay_logic();
+    if(!paused) {
+        do_gameplay_logic();
+    }
+    do_menu_logic();
     do_aesthetic_logic();
 }
 

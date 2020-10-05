@@ -438,6 +438,7 @@ void gameplay_state::handle_button(
                             close_to_onion_to_open,
                             cur_leader_ptr
                         );
+                        paused = true;
                         done = true;
                     }
                 }
