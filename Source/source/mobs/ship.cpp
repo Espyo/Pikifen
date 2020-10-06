@@ -30,7 +30,10 @@ const unsigned int ship::SHIP_BEAM_RING_COLOR_SPEED = 255;
 ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
     shi_type(type),
+    nest(nullptr),
     beam_final_pos(rotate_point(type->beam_offset, angle)) {
+    
+    nest = new pikmin_nest_struct(this, shi_type->nest);
     
     beam_final_pos += pos;
     beam_ring_color[0] = 0;
@@ -39,6 +42,14 @@ ship::ship(const point &pos, ship_type* type, float angle) :
     beam_ring_color_up[0] = true;
     beam_ring_color_up[1] = true;
     beam_ring_color_up[2] = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a ship mob.
+ */
+ship::~ship() {
+    delete nest;
 }
 
 
@@ -99,6 +110,18 @@ bool ship::is_leader_under_beam(leader* l) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
+ */
+void ship::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    nest->read_script_vars(svr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks class-specific logic.
  * delta_t:
  *   How many seconds to tick by.
@@ -123,4 +146,6 @@ void ship::tick_class_specifics(const float delta_t) {
             beam_ring_color[i] += addition;
         }
     }
+    
+    nest->tick(delta_t);
 }

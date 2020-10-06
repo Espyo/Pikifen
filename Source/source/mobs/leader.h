@@ -46,7 +46,7 @@ public:
     void dismiss();
     //Order some Pikmin to get in the Onion.
     bool order_pikmin_to_onion(
-        pikmin_type* type, onion* o_ptr, const size_t amount
+        pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
     );
     //Signal to every group member that swarm mode started.
     void signal_swarm_start() const;

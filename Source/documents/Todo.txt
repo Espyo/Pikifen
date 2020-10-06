@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
-        Add ship support
         Improve look
             Use Onion icons, not Pikmin icons
             Logic to draw boxes given a sprite of nine pieces

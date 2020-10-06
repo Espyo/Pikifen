@@ -421,20 +421,20 @@ size_t leader::get_dismiss_rows(const size_t n_members) const {
 
 /* ----------------------------------------------------------------------------
  * Orders Pikmin from the group to leave the group, and head for the specified
- * Onion, with the goal of being stored inside. This function prioritizes
- * less matured Pikmin, and ones closest to the Onion.
+ * nest, with the goal of being stored inside. This function prioritizes
+ * less matured Pikmin, and ones closest to the nest.
  * Returns true if the specified number of Pikmin were successfully ordered,
  * and false if there were not enough Pikmin of that type in the group
  * to fulfill the order entirely.
  * type:
  *   Type of Pikmin to order.
- * o_ptr:
- *   Onion to enter.
+ * n_ptr:
+ *   Nest to enter.
  * amount:
  *   Amount of Pikmin of the given type to order.
  */
 bool leader::order_pikmin_to_onion(
-    pikmin_type* type, onion* o_ptr, const size_t amount
+    pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
 ) {
     //Find Pikmin of that type.
     vector<std::pair<dist, pikmin*>> candidates;
@@ -451,7 +451,7 @@ bool leader::order_pikmin_to_onion(
         
         candidates.push_back(
             std::make_pair(
-                dist(mob_ptr->pos, o_ptr->pos),
+                dist(mob_ptr->pos, n_ptr->m_ptr->pos),
                 (pikmin*) mob_ptr
             )
         );
@@ -480,7 +480,7 @@ bool leader::order_pikmin_to_onion(
         mob_event* ev = pik_ptr->fsm.get_event(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
-        ev->run(pik_ptr, (void*) o_ptr);
+        ev->run(pik_ptr, (void*) n_ptr);
         
         amount_ordered++;
         if(amount_ordered == amount) {

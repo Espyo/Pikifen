@@ -489,9 +489,13 @@ void gameplay_state::draw_hud() {
         size_t total_pikmin = mobs.pikmin_list.size();
         for(size_t o = 0; o < mobs.onions.size(); ++o) {
             onion* o_ptr = mobs.onions[o];
-            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                ++t
+            ) {
                 for(size_t m = 0; m < N_MATURITIES; ++m) {
-                    total_pikmin += mobs.onions[o]->pikmin_inside[t][m];
+                    total_pikmin += mobs.onions[o]->nest->pikmin_inside[t][m];
                 }
             }
         }
@@ -950,17 +954,17 @@ void gameplay_state::draw_ingame_text() {
         done = true;
     }
     
-    //Onion open notification.
+    //Nest open notification.
     if(
         !done &&
-        close_to_onion_to_open &&
+        close_to_nest_to_open &&
         main_control_id != INVALID
     ) {
         draw_notification(
             point(
-                close_to_onion_to_open->pos.x,
-                close_to_onion_to_open->pos.y -
-                close_to_onion_to_open->type->radius
+                close_to_nest_to_open->m_ptr->pos.x,
+                close_to_nest_to_open->m_ptr->pos.y -
+                close_to_nest_to_open->m_ptr->type->radius
             ),
             "Check", &game.options.controls[0][main_control_id]
         );
@@ -1523,7 +1527,7 @@ void gameplay_state::draw_onion_menu() {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
             size_t real_onion_amount =
-                onion_menu->o_ptr->get_amount_by_type(t_ptr->pik_type);
+                onion_menu->n_ptr->get_amount_by_type(t_ptr->pik_type);
                 
             al_draw_filled_rounded_rectangle(
                 i_center.x - i_size.x / 2.0f, i_center.y - i_size.y / 2.0f,

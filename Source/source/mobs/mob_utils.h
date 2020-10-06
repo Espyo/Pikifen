@@ -27,13 +27,11 @@
 #include "../mob_types/group_task_type.h"
 #include "../mob_types/interactable_type.h"
 #include "../mob_types/leader_type.h"
-#include "../mob_types/onion_type.h"
 #include "../mob_types/pellet_type.h"
 #include "../mob_types/pikmin_type.h"
 #include "../mob_types/pile_type.h"
 #include "../mob_types/resource_type.h"
 #include "../mob_types/scale_type.h"
-#include "../mob_types/ship_type.h"
 #include "../mob_types/tool_type.h"
 #include "../mob_types/track_type.h"
 #include "../mob_types/treasure_type.h"
@@ -259,6 +257,9 @@ class tool;
 class track;
 class treasure;
 
+class onion_type;
+class ship_type;
+
 /* ----------------------------------------------------------------------------
  * Lists of all mobs in the area.
  */
@@ -362,6 +363,67 @@ struct path_info_struct {
     
     path_info_struct(mob* m, const point &target);
     bool check_blockage();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Information that a mob type may have about how to nest Pikmin inside,
+ * like an Onion or a ship.
+ */
+struct pikmin_nest_type_struct {
+    //Pikmin types it can manage.
+    vector<pikmin_type*> pik_types;
+    //Body parts that represent legs -- pairs of hole + foot.
+    vector<string> leg_body_parts;
+    //Speed at which Pikmin enter the nest.
+    float pikmin_enter_speed;
+    //Speed at which Pikmin exit the nest.
+    float pikmin_exit_speed;
+    
+    pikmin_nest_type_struct();
+    //Loads nest-related properties from a data file.
+    void load_properties(data_node* file);
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Information that a mob may have about how to nest Pikmin inside,
+ * like an Onion or a ship.
+ */
+struct pikmin_nest_struct {
+public:
+    //Pointer to the nest mob responsible.
+    mob* m_ptr;
+    //Pointer to the type of nest.
+    pikmin_nest_type_struct* nest_type;
+    
+    //How many Pikmin are inside, per type, per maturity.
+    vector<vector<size_t> > pikmin_inside;
+    //How many Pikmin are queued up to be called out, of each type.
+    vector<size_t> call_queue;
+    //Which leader is calling the Pikmin over?
+    leader* calling_leader;
+    //Time left until it can eject the next Pikmin in the call queue.
+    float next_call_time;
+    
+    //Call a Pikmin out.
+    bool call_pikmin(mob* m_ptr, const size_t type_idx);
+    //Get how many are inside by a given type.
+    size_t get_amount_by_type(pikmin_type* type);
+    //Reads nest-related script variables.
+    void read_script_vars(const script_var_reader &svr);
+    //Requests that Pikmin of the given type get called out.
+    void request_pikmin(
+        const size_t type_idx, const size_t amount, leader* l_ptr
+    );
+    //Store a Pikmin inside.
+    void store_pikmin(pikmin* p_ptr);
+    //Ticks one frame of logic.
+    void tick(const float delta_t);
+    
+    static const float CALL_INTERVAL;
+    
+    pikmin_nest_struct(mob* m_ptr, pikmin_nest_type_struct* type);
 };
 
 

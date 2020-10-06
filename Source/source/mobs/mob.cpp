@@ -527,8 +527,14 @@ bool mob::calculate_carrying_destination(
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(o_ptr->activated) {
-            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
-                available_types.insert(o_ptr->oni_type->pik_types[t]);
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                ++t
+            ) {
+                available_types.insert(
+                    o_ptr->oni_type->nest->pik_types[t]
+                );
             }
         }
     }
@@ -640,8 +646,12 @@ bool mob::calculate_carrying_destination(
         onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(!o_ptr->activated) continue;
         bool has_type = false;
-        for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
-            if(o_ptr->oni_type->pik_types[t] == decided_type) {
+        for(
+            size_t t = 0;
+            t < o_ptr->oni_type->nest->pik_types.size();
+            ++t
+        ) {
+            if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
                 has_type = true;
                 break;
             }

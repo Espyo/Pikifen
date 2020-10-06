@@ -343,13 +343,27 @@ void gameplay_state::do_gameplay_logic() {
             
             closest_d = 0;
             d = 0;
-            close_to_onion_to_open = NULL;
+            close_to_nest_to_open = NULL;
             if(!done) {
                 for(size_t o = 0; o < mobs.onions.size(); ++o) {
                     d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
                     if(d > game.config.onion_open_range) continue;
-                    if(d < closest_d || !close_to_onion_to_open) {
-                        close_to_onion_to_open = mobs.onions[o];
+                    if(d < closest_d || !close_to_nest_to_open) {
+                        close_to_nest_to_open = mobs.onions[o]->nest;
+                        closest_d = d;
+                        done = true;
+                    }
+                }
+                for(size_t s = 0; s < mobs.ships.size(); ++s) {
+                    d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
+                    if(!mobs.ships[s]->is_leader_under_beam(cur_leader_ptr)) {
+                        continue;
+                    }
+                    if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {
+                        continue;
+                    }
+                    if(d < closest_d || !close_to_nest_to_open) {
+                        close_to_nest_to_open = mobs.ships[s]->nest;
                         closest_d = d;
                         done = true;
                     }

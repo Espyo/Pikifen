@@ -29,6 +29,9 @@ public:
     //What type of ship it is.
     ship_type* shi_type;
     
+    //Nest data.
+    pikmin_nest_struct* nest;
+    
     //The beam's absolute coordinates.
     point beam_final_pos;
     //Current color of the beam ring.
@@ -43,9 +46,13 @@ public:
     
     //Constructor.
     ship(const point &pos, ship_type* type, float angle);
+    //Destructor.
+    ~ship();
     
     //Mob drawing routine.
     virtual void draw_mob();
+    //Read script variables from the area data.
+    virtual void read_script_vars(const script_var_reader &svr);
     //Tick class-specific logic.
     virtual void tick_class_specifics(const float delta_t);
 };

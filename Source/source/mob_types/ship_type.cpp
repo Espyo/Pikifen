@@ -24,9 +24,31 @@ ship_type::ship_type() :
     can_heal(false),
     beam_radius(0.0f) {
     
+    nest = new pikmin_nest_type_struct();
+    
     target_type = MOB_TARGET_TYPE_NONE;
     
+    area_editor_prop_struct aep_pik_inside;
+    aep_pik_inside.name = "Pikmin inside";
+    aep_pik_inside.var = "pikmin_inside";
+    aep_pik_inside.type = AEMP_TEXT;
+    aep_pik_inside.def_value = "";
+    aep_pik_inside.tooltip =
+        "How many Pikmin are inside.\n"
+        "One word per maturity. The first three words are for the first type,\n"
+        "then three more for the second type, and so on.\n"
+        "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
+    area_editor_props.push_back(aep_pik_inside);
+    
     ship_fsm::create_fsm(this);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a type of ship.
+ */
+ship_type::~ship_type() {
+    delete nest;
 }
 
 
@@ -52,4 +74,27 @@ void ship_type::load_properties(data_node* file) {
     rs.set("beam_offset_y", beam_offset.y);
     rs.set("beam_radius", beam_radius);
     rs.set("can_heal", can_heal);
+    
+    nest->load_properties(file);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads resources into memory.
+ * file:
+ *   File to read from.
+ */
+void ship_type::load_resources(data_node* file) {
+    //We don't actually need to load any, but we know that if this function
+    //is run, then the animations are definitely loaded.
+    //Now's a good time to check the leg body parts.
+    for(size_t b = 0; b < nest->leg_body_parts.size(); ++b) {
+        if(anims.find_body_part(nest->leg_body_parts[b]) == INVALID) {
+            log_error(
+                "The ship type \"" + name + "\" specifies a leg body part "
+                "called \"" + nest->leg_body_parts[b] + "\", "
+                "but no such body part exists!"
+            );
+        }
+    }
 }

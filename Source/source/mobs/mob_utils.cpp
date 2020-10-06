@@ -15,6 +15,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../mob_script_action.h"
+#include "../utils/string_utils.h"
 #include "mob.h"
 
 
@@ -693,6 +694,281 @@ bool path_info_struct::check_blockage() {
             cur_stop->links[cur_stop->get_link(next_stop)].blocked_by_obstacle;
     }
     return false;
+}
+
+
+//Wait these many seconds before allowing another Pikmin to be called out.
+const float pikmin_nest_struct::CALL_INTERVAL = 0.01f;
+
+/* ----------------------------------------------------------------------------
+ * Creates an instance of a class with info about a mob that
+ * can nest Pikmin inside.
+ * m_ptr:
+ *   Nest mob responsible.
+ * type:
+ *   Type of nest.
+ */
+pikmin_nest_struct::pikmin_nest_struct(
+    mob* m_ptr, pikmin_nest_type_struct* type
+) :
+    m_ptr(m_ptr),
+    nest_type(type),
+    calling_leader(nullptr),
+    next_call_time(0.0f) {
+    
+    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+        pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
+        call_queue.push_back(0);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Temporary feature to allow Pikmin to be called from the nest.
+ * Calls out a Pikmin from inside the nest, if possible.
+ * Gives priority to the higher maturities.
+ * Returns true if a Pikmin was spawned, false otherwise.
+ * m_ptr:
+ *   Pointer to the nest mob.
+ * type_idx:
+ *   Index of the Pikmin type, from the types this nest manages.
+ */
+bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
+    if(
+        game.states.gameplay->mobs.pikmin_list.size() >=
+        game.config.max_pikmin_in_field
+    ) {
+        return false;
+    }
+    
+    for(size_t m = 0; m < N_MATURITIES; ++m) {
+        //Let's check the maturities in reverse order.
+        size_t cur_m = N_MATURITIES - m - 1;
+        
+        if(pikmin_inside[type_idx][cur_m] == 0) continue;
+        
+        //Spawn the Pikmin!
+        //Update the Pikmin count.
+        pikmin_inside[type_idx][cur_m]--;
+        
+        //Decide a leg to come out of.
+        size_t leg_idx =
+            randomi(0, (nest_type->leg_body_parts.size() / 2) - 1);
+        size_t leg_hole_bp_idx =
+            m_ptr->anim.anim_db->find_body_part(
+                nest_type->leg_body_parts[leg_idx * 2]
+            );
+        size_t leg_foot_bp_idx =
+            m_ptr->anim.anim_db->find_body_part(
+                nest_type->leg_body_parts[leg_idx * 2 + 1]
+            );
+        point spawn_coords =
+            m_ptr->get_hitbox(leg_hole_bp_idx)->get_cur_pos(
+                m_ptr->pos, m_ptr->angle
+            );
+        float spawn_angle =
+            get_angle(m_ptr->pos, spawn_coords);
+            
+        //Create the Pikmin.
+        pikmin* new_pikmin =
+            (pikmin*)
+            create_mob(
+                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
+                spawn_coords, nest_type->pik_types[type_idx], spawn_angle,
+                "maturity=" + i2s(cur_m)
+            );
+            
+        //Set its data to start sliding.
+        new_pikmin->fsm.set_state(PIKMIN_STATE_LEAVING_ONION, (void*) this);
+        vector<size_t> checkpoints;
+        checkpoints.push_back(leg_hole_bp_idx);
+        checkpoints.push_back(leg_foot_bp_idx);
+        new_pikmin->track_info =
+            new track_info_struct(
+            m_ptr, checkpoints, nest_type->pikmin_exit_speed
+        );
+        new_pikmin->leader_to_return_to = calling_leader;
+        
+        return true;
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many Pikmin of the given type exist inside.
+ */
+size_t pikmin_nest_struct::get_amount_by_type(pikmin_type* type) {
+    size_t amount = 0;
+    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+        if(nest_type->pik_types[t] == type) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                amount += pikmin_inside[t][m];
+            }
+            break;
+        }
+    }
+    return amount;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with
+ * any that are related to nests.
+ * svr:
+ *   Script var reader to use.
+ */
+void pikmin_nest_struct::read_script_vars(const script_var_reader &svr) {
+    string pikmin_inside_var;
+    
+    if(svr.get("pikmin_inside", pikmin_inside_var)) {
+        vector<string> pikmin_inside_vars = split(pikmin_inside_var);
+        size_t word = 0;
+        
+        for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                if(word < pikmin_inside_vars.size()) {
+                    pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
+                    word++;
+                }
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Requests that Pikmin of the given type get called out.
+ * type_idx:
+ *   Index of the type of Pikmin to call out, from the nest's types.
+ * amount:
+ *   How many to call out.
+ * l_ptr:
+ *   Leader responsible.
+ */
+void pikmin_nest_struct::request_pikmin(
+    const size_t type_idx, const size_t amount, leader* l_ptr
+) {
+    call_queue[type_idx] += amount;
+    next_call_time = CALL_INTERVAL;
+    calling_leader = l_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stores the given Pikmin inside the nest. This basically deletes the
+ * Pikmin and updates the amount inside the nest.
+ */
+void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
+    for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+        if(p_ptr->type == nest_type->pik_types[t]) {
+            pikmin_inside[t][p_ptr->maturity]++;
+            break;
+        }
+    }
+    
+    p_ptr->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame of logic.
+ * delta_t:
+ *   Time to tick by.
+ */
+void pikmin_nest_struct::tick(const float delta_t) {
+    if(calling_leader && calling_leader->to_delete) {
+        calling_leader = NULL;
+    }
+    
+    //Call out Pikmin, if the timer agrees.
+    if(next_call_time > 0.0f) {
+        next_call_time -= delta_t;
+    }
+    
+    while(next_call_time < 0.0f) {
+        size_t best_type = INVALID;
+        size_t best_type_amount = 0;
+        
+        for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
+            if(call_queue[t] == 0) continue;
+            if(call_queue[t] > best_type_amount) {
+                best_type = t;
+                best_type_amount = call_queue[t];
+            }
+        }
+        
+        if(best_type != INVALID) {
+            if(call_pikmin(m_ptr, best_type)) {
+                call_queue[best_type]--;
+            }
+        }
+        
+        next_call_time += CALL_INTERVAL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an instance of a class with info about a mob type that
+ * can nest Pikmin inside.
+ */
+pikmin_nest_type_struct::pikmin_nest_type_struct() :
+    pikmin_enter_speed(0.7f),
+    pikmin_exit_speed(2.0f) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads nest-related properties from a data file.
+ * file:
+ *   File to read from.
+ */
+void pikmin_nest_type_struct::load_properties(
+    data_node* file
+) {
+    reader_setter rs(file);
+    
+    string pik_types_str;
+    string legs_str;
+    data_node* pik_types_node = NULL;
+    data_node* legs_node = NULL;
+    
+    rs.set("leg_body_parts", legs_str, &legs_node);
+    rs.set("pikmin_types", pik_types_str, &pik_types_node);
+    rs.set("pikmin_enter_speed", pikmin_enter_speed);
+    rs.set("pikmin_exit_speed", pikmin_exit_speed);
+    
+    leg_body_parts = semicolon_list_to_vector(legs_str);
+    if(pik_types_node && leg_body_parts.empty()) {
+        log_error(
+            "A nest-like object type needs a list of leg body parts!",
+            file
+        );
+    } else if(legs_node && leg_body_parts.size() % 2 == 1) {
+        log_error(
+            "A nest-like object type needs an even number of leg body parts!",
+            legs_node
+        );
+    }
+    
+    vector<string> pik_types_strs = semicolon_list_to_vector(pik_types_str);
+    for(size_t t = 0; t < pik_types_strs.size(); ++t) {
+        string &str = pik_types_strs[t];
+        if(
+            game.mob_types.pikmin.find(str) ==
+            game.mob_types.pikmin.end()
+        ) {
+            log_error(
+                "Unknown Pikmin type \"" + str + "\"!",
+                pik_types_node
+            );
+        } else {
+            pik_types.push_back(game.mob_types.pikmin[str]);
+        }
+    }
 }
 
 

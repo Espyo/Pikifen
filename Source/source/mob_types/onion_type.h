@@ -12,6 +12,7 @@
 #define ONION_TYPE_INCLUDED
 
 #include "../utils/data_file.h"
+#include "../mobs/mob_utils.h"
 #include "mob_type.h"
 #include "pikmin_type.h"
 
@@ -35,12 +36,11 @@ const float ONION_FADE_SPEED               = 255; //Values per second.
  */
 class onion_type : public mob_type {
 public:
-    vector<pikmin_type*> pik_types;
-    vector<string> leg_body_parts;
-    float pikmin_enter_speed;
-    float pikmin_exit_speed;
-    
     onion_type();
+    ~onion_type();
+    
+    //Nest data.
+    pikmin_nest_type_struct* nest;
     
     void load_properties(data_node* file);
     void load_resources(data_node* file);

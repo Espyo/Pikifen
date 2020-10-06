@@ -163,8 +163,8 @@ private:
     //the player.
     struct onion_menu_struct {
     public:
-        //Pointer to the Onion.
-        onion* o_ptr;
+        //Pointer to the struct with nest information.
+        pikmin_nest_struct* n_ptr;
         //Pointer to the leader responsible.
         leader* l_ptr;
         //Information on every type's management.
@@ -190,7 +190,7 @@ private:
         //Is the struct meant to be deleted?
         bool to_delete;
         
-        onion_menu_struct(onion* onion_ptr, leader* l_ptr);
+        onion_menu_struct(pikmin_nest_struct* n_ptr, leader* l_ptr);
         ~onion_menu_struct();
         void activate_held_button();
         void add_all_to_group();
@@ -231,8 +231,8 @@ private:
     size_t cancel_control_id;
     //Points to an interactable close enough for player 1 to use, if any.
     interactable* close_to_interactable_to_use;
-    //Points to an Onion close enough for player 1 to open, if any.
-    onion* close_to_onion_to_open;
+    //Points to a nest-like object close enough for player 1 to open, if any.
+    pikmin_nest_struct* close_to_nest_to_open;
     //Points to a Pikmin close enough for player 1 to pluck, if any.
     pikmin* close_to_pikmin_to_pluck;
     //Points to a ship close enough for player 1 to heal in, if any.

@@ -196,7 +196,7 @@ gameplay_state::gameplay_state() :
     bmp_sun(nullptr),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
-    close_to_onion_to_open(nullptr),
+    close_to_nest_to_open(nullptr),
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
@@ -919,16 +919,16 @@ onion_hud_manager::onion_hud_manager(const size_t item_total) :
 
 /* ----------------------------------------------------------------------------
  * Creates an Onion menu struct.
- * onion_ptr:
- *   Pointer to the Onion being opened.
+ * n_ptr:
+ *   Pointer to the nest information struct.
  * leader_ptr:
  *   Leader responsible.
  */
 gameplay_state::onion_menu_struct::onion_menu_struct(
-    onion* onion_ptr, leader* leader_ptr
+    pikmin_nest_struct* n_ptr, leader* l_ptr
 ) :
-    o_ptr(onion_ptr),
-    l_ptr(leader_ptr),
+    n_ptr(n_ptr),
+    l_ptr(l_ptr),
     select_all(false),
     page(0),
     cursor_button(INVALID),
@@ -938,9 +938,9 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     nr_pages(0),
     to_delete(false) {
     
-    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         types.push_back(
-            onion_menu_type_struct(t, o_ptr->oni_type->pik_types[t])
+            onion_menu_type_struct(t, n_ptr->nest_type->pik_types[t])
         );
     }
     
@@ -1057,7 +1057,7 @@ void gameplay_state::onion_menu_struct::add_all_to_onion() {
  */
 void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
     size_t real_onion_amount =
-        o_ptr->get_amount_by_type(o_ptr->oni_type->pik_types[type_idx]);
+        n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
     //First, check if there are enough in the Onion to take out.
     if(real_onion_amount - types[type_idx].delta <= 0) {
@@ -1087,7 +1087,7 @@ void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
  */
 void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
     size_t real_group_amount =
-        l_ptr->group->get_amount_by_type(o_ptr->oni_type->pik_types[type_idx]);
+        l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
     if(real_group_amount + types[type_idx].delta <= 0) {
         return;
@@ -1104,10 +1104,10 @@ void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
 void gameplay_state::onion_menu_struct::confirm() {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t].delta > 0) {
-            o_ptr->request_pikmin(t, types[t].delta, l_ptr);
+            n_ptr->request_pikmin(t, types[t].delta, l_ptr);
         } else if(types[t].delta < 0) {
             l_ptr->order_pikmin_to_onion(
-                types[t].pik_type, o_ptr, -types[t].delta
+                types[t].pik_type, n_ptr, -types[t].delta
             );
         }
     }
@@ -1135,11 +1135,11 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
     //Correct the amount of wanted group members, if they are invalid.
     int total_delta = 0;
     
-    for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         //Get how many the player really has with them.
         int real_group_amount =
             l_ptr->group->get_amount_by_type(
-                o_ptr->oni_type->pik_types[t]
+                n_ptr->nest_type->pik_types[t]
             );
             
         //Make sure the player can't request to store more than what they have.
@@ -1147,7 +1147,7 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
         
         //Get how many are really in the Onion.
         int real_onion_amount =
-            o_ptr->get_amount_by_type(o_ptr->oni_type->pik_types[t]);
+            n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[t]);
             
         //Make sure the player can't request to call more than the Onion has.
         types[t].delta = std::min(real_onion_amount, (int) types[t].delta);
@@ -1164,10 +1164,10 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
     while(delta_over_limit > 0) {
         vector<size_t> candidate_types;
         
-        for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
+        for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
             int real_group_amount =
                 l_ptr->group->get_amount_by_type(
-                    o_ptr->oni_type->pik_types[t]
+                    n_ptr->nest_type->pik_types[t]
                 );
                 
             if((-types[t].delta) < real_group_amount) {
@@ -1261,7 +1261,7 @@ void gameplay_state::onion_menu_struct::update_caches() {
     for(
         size_t t = page * ONION_MENU_TYPES_PER_PAGE;
         t < (page + 1) * ONION_MENU_TYPES_PER_PAGE &&
-        t < o_ptr->oni_type->pik_types.size();
+        t < n_ptr->nest_type->pik_types.size();
         ++t
     ) {
         on_screen_types.push_back(&types[t]);

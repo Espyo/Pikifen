@@ -28,48 +28,34 @@ public:
     //What type of Onion it is.
     onion_type* oni_type;
     
+    //Nest data.
+    pikmin_nest_struct* nest;
+    
     //Is this Onion currently activated?
     bool activated;
-    //How many Pikmin are inside, per type, per maturity.
-    vector<vector<size_t> > pikmin_inside;
     //How many seeds are queued up to be spat, of each type.
     vector<size_t> spew_queue;
-    //How many Pikmin are queued up to be called out, of each type.
-    vector<size_t> call_queue;
-    //Which leader is calling the Pikmin over?
-    leader* calling_leader;
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
     //Time left until it spews the next seed in the queue.
     timer next_spew_timer;
-    //Time left until it can eject the next Pikmin in the call queue.
-    float next_call_time;
     //Angle at which the next seed will be spit.
     float next_spew_angle;
     //The Onion's alpha.
     unsigned char seethrough;
     
-    //Call a Pikmin out.
-    bool call_pikmin(const size_t type_idx);
-    //Get how many are inside by a given type.
-    size_t get_amount_by_type(pikmin_type* type);
-    //Requests that Pikmin of the given type get called out.
-    void request_pikmin(
-        const size_t type_idx, const size_t amount, leader* l_ptr
-    );
     //Spit a new seed.
     void spew();
-    //Store a Pikmin inside.
-    void store_pikmin(pikmin* p_ptr);
     
     //Constructor.
     onion(const point &pos, onion_type* type, const float angle);
+    //Destructor.
+    ~onion();
     //Mob drawing routine.
     virtual void draw_mob();
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
     
-    static const float ONION_CALL_INTERVAL;
     static const float ONION_NEW_SEED_Z_OFFSET;
     static const float ONION_SPEW_ANGLE_SHIFT;
     static const float ONION_SPEW_H_SPEED;

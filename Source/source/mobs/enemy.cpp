@@ -158,8 +158,14 @@ void enemy::start_dying_class_specifics() {
         //Onions currently in the area.
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
-            for(size_t t = 0; t < o_ptr->oni_type->pik_types.size(); ++t) {
-                available_pik_types.push_back(o_ptr->oni_type->pik_types[t]);
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                ++t
+            ) {
+                available_pik_types.push_back(
+                    o_ptr->oni_type->nest->pik_types[t]
+                );
             }
         }
         

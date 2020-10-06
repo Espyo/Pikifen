@@ -23,8 +23,6 @@ using std::size_t;
 using std::string;
 
 
-//Wait these many seconds before allowing another Pikmin to be called out.
-const float onion::ONION_CALL_INTERVAL = 0.01f;
 //An Onion-spat seed starts with this Z offset from the Onion.
 const float onion::ONION_NEW_SEED_Z_OFFSET = 320.0f;
 //After spitting a seed, the next seed's angle shifts by this much.
@@ -49,13 +47,14 @@ const float onion::ONION_SPEW_V_SPEED = 600.0f;
 onion::onion(const point &pos, onion_type* type, const float angle) :
     mob(pos, type, angle),
     oni_type(type),
+    nest(nullptr),
     activated(true),
-    calling_leader(nullptr),
     full_spew_timer(ONION_FULL_SPEW_DELAY),
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
     next_spew_angle(0),
-    next_call_time(0.0f),
     seethrough(255) {
+    
+    nest = new pikmin_nest_struct(this, oni_type->nest);
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
@@ -66,7 +65,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     [this] () { next_spew_timer.start(); };
     next_spew_timer.on_end =
     [this] () {
-        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+        for(size_t t = 0; t < oni_type->nest->pik_types.size(); ++t) {
             if(spew_queue[t] > 0) {
                 next_spew_timer.start();
                 spew();
@@ -75,10 +74,8 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
         }
     };
     
-    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
-        pikmin_inside.push_back(vector<size_t>(N_MATURITIES, 0));
+    for(size_t t = 0; t < oni_type->nest->pik_types.size(); ++t) {
         spew_queue.push_back(0);
-        call_queue.push_back(0);
     }
     
     set_animation(ANIM_IDLING);
@@ -86,71 +83,10 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
 
 
 /* ----------------------------------------------------------------------------
- * Temporary feature to allow Pikmin to be called from the Onion.
- * Calls out a Pikmin from inside the Onion, if possible.
- * Gives priority to the higher maturities.
- * Returns true if a Pikmin was spawned, false otherwise.
- * type_idx:
- *   Index of the Pikmin type, from the types this Onion manages.
+ * Destroys an Onion mob.
  */
-bool onion::call_pikmin(const size_t type_idx) {
-    if(
-        game.states.gameplay->mobs.pikmin_list.size() >=
-        game.config.max_pikmin_in_field
-    ) {
-        return false;
-    }
-    
-    for(size_t m = 0; m < N_MATURITIES; ++m) {
-        //Let's check the maturities in reverse order.
-        size_t cur_m = N_MATURITIES - m - 1;
-        
-        if(pikmin_inside[type_idx][cur_m] == 0) continue;
-        
-        //Spawn the Pikmin!
-        //Update the Pikmin count.
-        pikmin_inside[type_idx][cur_m]--;
-        
-        //Decide a leg to come out of.
-        size_t leg_idx =
-            randomi(0, (oni_type->leg_body_parts.size() / 2) - 1);
-        size_t leg_hole_bp_idx =
-            anim.anim_db->find_body_part(
-                oni_type->leg_body_parts[leg_idx * 2]
-            );
-        size_t leg_foot_bp_idx =
-            anim.anim_db->find_body_part(
-                oni_type->leg_body_parts[leg_idx * 2 + 1]
-            );
-        point spawn_coords =
-            get_hitbox(leg_hole_bp_idx)->get_cur_pos(pos, angle);
-        float spawn_angle =
-            get_angle(pos, spawn_coords);
-            
-        //Create the Pikmin.
-        pikmin* new_pikmin =
-            (pikmin*)
-            create_mob(
-                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                spawn_coords, oni_type->pik_types[type_idx], spawn_angle,
-                "maturity=" + i2s(cur_m)
-            );
-            
-        //Set its data to start sliding.
-        new_pikmin->fsm.set_state(PIKMIN_STATE_LEAVING_ONION, (void*) this);
-        vector<size_t> checkpoints;
-        checkpoints.push_back(leg_hole_bp_idx);
-        checkpoints.push_back(leg_foot_bp_idx);
-        new_pikmin->track_info =
-            new track_info_struct(
-            this, checkpoints, oni_type->pikmin_exit_speed
-        );
-        new_pikmin->leader_to_return_to = calling_leader;
-        
-        return true;
-    }
-    
-    return false;
+onion::~onion() {
+    delete nest;
 }
 
 
@@ -172,23 +108,6 @@ void onion::draw_mob() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns how many Pikmin of the given type exist inside.
- */
-size_t onion::get_amount_by_type(pikmin_type* type) {
-    size_t amount = 0;
-    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
-        if(oni_type->pik_types[t] == type) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
-                amount += pikmin_inside[t][m];
-            }
-            break;
-        }
-    }
-    return amount;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  * svr:
  *   Script var reader to use.
@@ -196,39 +115,7 @@ size_t onion::get_amount_by_type(pikmin_type* type) {
 void onion::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
     
-    string pikmin_inside_var;
-    
-    if(svr.get("pikmin_inside", pikmin_inside_var)) {
-        vector<string> pikmin_inside_vars = split(pikmin_inside_var);
-        size_t word = 0;
-        
-        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
-            for(size_t m = 0; m < N_MATURITIES; ++m) {
-                if(word < pikmin_inside_vars.size()) {
-                    pikmin_inside[t][m] = s2i(pikmin_inside_vars[word]);
-                    word++;
-                }
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Requests that Pikmin of the given type get called out.
- * type_idx:
- *   Index of the type of Pikmin to call out, from the Onion's types.
- * amount:
- *   How many to call out.
- * l_ptr:
- *   Leader responsible.
- */
-void onion::request_pikmin(
-    const size_t type_idx, const size_t amount, leader* l_ptr
-) {
-    call_queue[type_idx] += amount;
-    next_call_time = ONION_CALL_INTERVAL;
-    calling_leader = l_ptr;
+    nest->read_script_vars(svr);
 }
 
 
@@ -245,7 +132,7 @@ void onion::spew() {
             game.states.gameplay->mobs.pikmin_list.size() + 1;
             
         if(total_after > game.config.max_pikmin_in_field) {
-            pikmin_inside[t][0]++;
+            nest->pikmin_inside[t][0]++;
             return;
         }
         
@@ -256,7 +143,7 @@ void onion::spew() {
                 ONION_SPEW_H_SPEED_DEVIATION
             );
         spew_pikmin_seed(
-            pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->pik_types[t],
+            pos, z + ONION_NEW_SEED_Z_OFFSET, oni_type->nest->pik_types[t],
             next_spew_angle, horizontal_strength, ONION_SPEW_V_SPEED
         );
         
@@ -269,33 +156,13 @@ void onion::spew() {
 
 
 /* ----------------------------------------------------------------------------
- * Stores the given Pikmin inside the Onion. This basically deletes the
- * Pikmin and updates the amount inside the Onion.
- */
-void onion::store_pikmin(pikmin* p_ptr) {
-    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
-        if(p_ptr->type == oni_type->pik_types[t]) {
-            pikmin_inside[t][p_ptr->maturity]++;
-            break;
-        }
-    }
-    
-    p_ptr->to_delete = true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Ticks some logic specific to Onions.
  * delta_t:
  *   How many seconds to tick by.
  */
 void onion::tick_class_specifics(const float delta_t) {
-    if(calling_leader && calling_leader->to_delete) {
-        calling_leader = NULL;
-    }
-    
     bool needs_to_spew = false;
-    for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
+    for(size_t t = 0; t < oni_type->nest->pik_types.size(); ++t) {
         if(spew_queue[t] > 0) {
             needs_to_spew = true;
             break;
@@ -351,29 +218,5 @@ void onion::tick_class_specifics(const float delta_t) {
         }
     }
     
-    //Call out Pikmin, if the timer agrees.
-    if(next_call_time > 0.0f) {
-        next_call_time -= delta_t;
-    }
-    
-    while(next_call_time < 0.0f) {
-        size_t best_type = INVALID;
-        size_t best_type_amount = 0;
-        
-        for(size_t t = 0; t < oni_type->pik_types.size(); ++t) {
-            if(call_queue[t] == 0) continue;
-            if(call_queue[t] > best_type_amount) {
-                best_type = t;
-                best_type_amount = call_queue[t];
-            }
-        }
-        
-        if(best_type != INVALID) {
-            if(call_pikmin(best_type)) {
-                call_queue[best_type]--;
-            }
-        }
-        
-        next_call_time += ONION_CALL_INTERVAL;
-    }
+    nest->tick(delta_t);
 }

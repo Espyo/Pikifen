@@ -18,7 +18,7 @@
     
     <h1>Object category &ndash; ship</h1>
     
-    <p>A <b>ship</b> type refers to any vessel that the Pikmin can deliver treasure or berries to. Leaders can also heal on some ship types.</p>
+    <p>A <b>ship</b> type refers to any vessel that the Pikmin can deliver treasure, berries, etc. to. They may also house Pikmin inside, and leaders may also heal on them.</p>
 
     <p>Examples of ship types include the S.S. Dolphin, Hocotate ship, the Hocotate ship's pod, etc.</p>
 
@@ -26,9 +26,9 @@
 
     <h2 id="overview">Overview</h2>
 
-    <p>Every ship has a beam next to it; this is where the Pikmin and leader interact with the ship proper. Besides that, ships don't do much.</p>
+    <p>Every ship has a beam next to it; this is where the Pikmin and leader interact with the ship proper. They can also store Pikmin inside, like Onions, though they are incapable of generating Pikmin seeds.</p>
 
-    <p>Ship type objects are hardcoded in the engine to sit there and accept delivered items, and to heal leaders, if possible.</p>
+    <p>Ship type objects are hardcoded in the engine to sit there and accept delivered items, to heal leaders if possible, and to allow the player to manage the Pikmin inside if possibe.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -46,7 +46,12 @@
 
     <h3 id="optional">Optional</h3>
 
-    <p>None.</p>
+    <ul>
+      <li><b><code>leg_body_parts</code></b>: Names of the <a href="animation.html">body parts</a> that make up the ship's "legs", separated by semicolon. This makes more sense if you follow the logic of the way an <a href="mob_onion.html">Onion</a> uses this property.
+      <li><b><code>pikmin_types</code></b>: Names of the types of Pikmin this ship can manage, separated by semicolon. Leave empty if the ship cannot manage Pikmin.</li>
+      <li><b><code>pikmin_enter_speed</code></b>: When a Pikmin is ordered to enter the ship, it will climb up a "leg" (see above). This indicates the speed, in ratio per second. See the <a href="mob_track.html">track object category</a> for more information on what this means. Defaults to 0.7.</li>
+      <li><b><code>pikmin_exit_speed</code></b>: Same as <code>pikmin_enter_speed</code>, but for popping out of a ship "leg". Defaults to 2.</li>
+    </ul>
 
     <h2 id="animations">Animations</h2>
 

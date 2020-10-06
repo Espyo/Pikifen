@@ -1807,7 +1807,7 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     checkpoints.push_back(p_ptr->temp_i * 2);
     
     p_ptr->track_info = new track_info_struct(
-        o_ptr, checkpoints, o_ptr->oni_type->pikmin_enter_speed
+        o_ptr, checkpoints, o_ptr->oni_type->nest->pikmin_enter_speed
     );
 }
 
@@ -2135,21 +2135,21 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     pikmin* p_ptr = (pikmin*) m;
-    onion* o_ptr = (onion*) info1;
+    pikmin_nest_struct* n_ptr = (pikmin_nest_struct*) info1;
     
     //Pick a leg at random.
     p_ptr->temp_i =
-        randomi(0, (o_ptr->oni_type->leg_body_parts.size() / 2) - 1);
+        randomi(0, (n_ptr->nest_type->leg_body_parts.size() / 2) - 1);
     size_t leg_foot_bp_idx =
-        o_ptr->anim.anim_db->find_body_part(
-            o_ptr->oni_type->leg_body_parts[p_ptr->temp_i * 2 + 1]
+        n_ptr->m_ptr->anim.anim_db->find_body_part(
+            n_ptr->nest_type->leg_body_parts[p_ptr->temp_i * 2 + 1]
         );
     point coords =
-        o_ptr->get_hitbox(
+        n_ptr->m_ptr->get_hitbox(
             leg_foot_bp_idx
-        )->get_cur_pos(o_ptr->pos, o_ptr->angle);
+        )->get_cur_pos(n_ptr->m_ptr->pos, n_ptr->m_ptr->angle);
         
-    m->focus_on_mob(o_ptr);
+    m->focus_on_mob(n_ptr->m_ptr);
     m->stop_chasing();
     m->chase(coords, NULL, false);
     m->set_animation(PIKMIN_ANIM_WALKING);
@@ -3096,7 +3096,7 @@ void pikmin_fsm::tick_entering_onion(mob* m, void* info1, void* info2) {
     
     if(m->tick_track_ride()) {
         //Finished!
-        ((onion*) m->focused_mob)->store_pikmin((pikmin*) m);
+        ((onion*) m->focused_mob)->nest->store_pikmin((pikmin*) m);
     }
 }
 

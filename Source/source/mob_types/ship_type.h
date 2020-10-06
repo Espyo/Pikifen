@@ -14,6 +14,7 @@
 #include <allegro5/allegro.h>
 
 #include "../misc_structs.h"
+#include "../mobs/mob_utils.h"
 #include "../utils/data_file.h"
 #include "mob_type.h"
 
@@ -35,13 +36,20 @@ enum SHIP_STATES {
  */
 class ship_type : public mob_type {
 public:
-
+    //Nest data.
+    pikmin_nest_type_struct* nest;
+    
+    //Can a leader heal at this ship?
     bool can_heal;
+    //The ship's beam is offset this much from the ship object's center.
     point beam_offset;
+    //Ship beam radius.
     float beam_radius;
     
     ship_type();
+    ~ship_type();
     void load_properties(data_node* file);
+    void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
 };
 
