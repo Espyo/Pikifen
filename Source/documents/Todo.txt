@@ -4,13 +4,17 @@
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
         Improve look
-            Use Onion icons, not Pikmin icons
             Logic to draw boxes given a sprite of nine pieces
+            The arrows indicating there are more types off-screen should be proper graphics, not text
             If the player tries to store a Pikmin they don't have, or call Pikmin not in the Onion, or Pikmin over 100, the corresponding number should flash red
         Tests:
             What if more Pikmin spawn and the values the player wants end up going over 100?
             When queueing Pikmin to take out, keep in mind that if you go to Onion 1, ask for 90 Pikmin, then go to Onion 2 while those Pikmin are still coming out, and try to take out Pikmin, it can't let you take out more than 10
-    
+    Misc. stuff
+        I was wondering if it would be better to have each pellet posie color have it's own sheet rather than each pellet size --Kman
+        GUI angle picker -- format to show decimals
+        Animation editor, bitmap name, as you type it keeps trying to load the bitmap and cause errors as it doesn't find it
+        The hit rate description -- is it backwards?    
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
@@ -323,7 +327,9 @@ Next tasks (roughly sorted most important first)
             Logic like culling isn't relying on just the first player
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team
-        Figure out how the game is meant to work when a pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
+        Figure out how the game is meant to work when:
+            A pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
+            A player's leader needs to throw another's
         Change menus to let you pick how many and which players will play
         Rules and game modes
             Point capture

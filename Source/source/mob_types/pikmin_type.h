@@ -109,6 +109,8 @@ public:
     ALLEGRO_BITMAP* bmp_icon;
     //Standby maturity icons.
     ALLEGRO_BITMAP* bmp_maturity_icon[N_MATURITIES];
+    //Icon for its Onion.
+    ALLEGRO_BITMAP* bmp_onion_icon;
     
     pikmin_type();
     void load_properties(data_node* file);

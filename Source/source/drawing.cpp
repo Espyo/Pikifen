@@ -1407,7 +1407,7 @@ void gameplay_state::draw_onion_menu() {
         
         draw_compressed_text(
             game.fonts.main,
-            al_map_rgb(120, 48, 24),
+            al_map_rgb(226, 112, 112),
             i_center,
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
@@ -1425,7 +1425,7 @@ void gameplay_state::draw_onion_menu() {
         
         draw_compressed_text(
             game.fonts.main,
-            al_map_rgb(48, 120, 24),
+            al_map_rgb(96, 226, 80),
             i_center,
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
@@ -1472,7 +1472,7 @@ void gameplay_state::draw_onion_menu() {
         
         draw_compressed_text(
             game.fonts.main,
-            al_map_rgb(48, 120, 24),
+            al_map_rgb(188, 230, 230),
             point(i_center.x + i_size.x * 0.4, i_center.y),
             ALLEGRO_ALIGN_RIGHT, 1,
             i_size,
@@ -1512,7 +1512,11 @@ void gameplay_state::draw_onion_menu() {
                 draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
             }
             
-            draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
+            if(t_ptr->pik_type->bmp_onion_icon) {
+                draw_bitmap(
+                    t_ptr->pik_type->bmp_onion_icon, i_center, i_size * 0.8f
+                );
+            }
         }
     }
     
@@ -1571,7 +1575,9 @@ void gameplay_state::draw_onion_menu() {
                 draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
             }
             
-            draw_bitmap(t_ptr->pik_type->bmp_icon, i_center, i_size);
+            draw_bitmap(
+                t_ptr->pik_type->bmp_icon, i_center, i_size * 0.8f
+            );
         }
     }
     

@@ -6,6 +6,10 @@ carry_strength = 1
 health_regen = 10
 height = 24
 icon = White_Pikmin_icon.png
+icon_bud = Pink_bud_icon.png
+icon_flower = Pink_flower_icon.png
+icon_leaf = Leaf_icon.png
+icon_onion = Hocotate_ship_icon.png
 main_color = 240 240 240
 max_health = 100
 max_throw_height = 260
@@ -24,6 +28,3 @@ top_flower = Pink_flower_top.png
 vulnerabilities {
     poison = 0
 }
-icon_leaf = Leaf_icon.png
-icon_bud = Pink_bud_icon.png
-icon_flower = Pink_flower_icon.png

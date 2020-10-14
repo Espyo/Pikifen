@@ -6,6 +6,10 @@ carry_strength = 1
 health_regen = 10
 height = 24
 icon = Blue_Pikmin_icon.png
+icon_bud = Bud_icon.png
+icon_flower = Flower_icon.png
+icon_leaf = Leaf_icon.png
+icon_onion = Blue_Onion_icon.png
 main_color = 32 32 240
 max_health = 100
 max_throw_height = 260
@@ -23,6 +27,3 @@ vulnerabilities {
     water = 0
     water_bubble = 0
 }
-icon_leaf = Leaf_icon.png
-icon_bud = Bud_icon.png
-icon_flower = Flower_icon.png

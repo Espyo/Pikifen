@@ -31,7 +31,8 @@ pikmin_type::pikmin_type() :
     push_strength(1),
     max_throw_height(260),
     can_carry_tools(true),
-    bmp_icon(nullptr) {
+    bmp_icon(nullptr),
+    bmp_onion_icon(nullptr) {
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
@@ -151,6 +152,7 @@ void pikmin_type::load_resources(data_node* file) {
     string icon_leaf_str;
     string icon_bud_str;
     string icon_flower_str;
+    string icon_onion_str;
     data_node* top_leaf_node = NULL;
     data_node* top_bud_node = NULL;
     data_node* top_flower_node = NULL;
@@ -158,11 +160,13 @@ void pikmin_type::load_resources(data_node* file) {
     data_node* icon_leaf_node = NULL;
     data_node* icon_bud_node = NULL;
     data_node* icon_flower_node = NULL;
+    data_node* icon_onion_node = NULL;
     
     rs.set("icon", icon_str, &icon_node);
     rs.set("icon_bud", icon_bud_str, &icon_bud_node);
     rs.set("icon_flower", icon_flower_str, &icon_flower_node);
     rs.set("icon_leaf", icon_leaf_str, &icon_leaf_node);
+    rs.set("icon_onion", icon_onion_str, &icon_onion_node);
     rs.set("top_bud", top_bud_str, &top_bud_node);
     rs.set("top_flower", top_flower_str, &top_flower_node);
     rs.set("top_leaf", top_leaf_str, &top_leaf_node);
@@ -174,6 +178,10 @@ void pikmin_type::load_resources(data_node* file) {
     bmp_top[0] = game.bitmaps.get(top_leaf_str, top_leaf_node);
     bmp_top[1] = game.bitmaps.get(top_bud_str, top_bud_node);
     bmp_top[2] = game.bitmaps.get(top_flower_str, top_flower_node);
+    
+    if(icon_onion_node) {
+        bmp_onion_icon = game.bitmaps.get(icon_onion_str, icon_onion_node);
+    }
 }
 
 
@@ -188,4 +196,7 @@ void pikmin_type::unload_resources() {
     game.bitmaps.detach(bmp_top[0]);
     game.bitmaps.detach(bmp_top[1]);
     game.bitmaps.detach(bmp_top[2]);
+    if(bmp_onion_icon) {
+        game.bitmaps.detach(bmp_onion_icon);
+    }
 }
