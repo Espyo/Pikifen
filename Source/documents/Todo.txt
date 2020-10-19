@@ -63,6 +63,7 @@ Next tasks (roughly sorted most important first)
         The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
         Decorative objects shouldn't cast light in blackout mode
         Improve the look of the ship's ring
+        On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
         Sounds really need a makeover...
         Make the whistle look prettier and more like a mix between the classic and the new whistle
@@ -165,6 +166,7 @@ Next tasks (roughly sorted most important first)
         Boss
         Add to the readme why there's only a normal and a fight variant -- Too many system resources
     Revamp sound system
+        Rename sound files to .oga, instead of .ogg
         There are three types of sounds
             Sounds that play "globally", like the "task complete jingle"
             Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
@@ -429,6 +431,7 @@ Misc things (so I don't forget)
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
     The makefile should have a "clean" rule, a "debug" rule a "release" rule, (with -Wall) etc.
     An option for the cursor to snap to the nearest object in-game, with an adjustable radius
+    "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" --Kman
     A Pikmin that's on fire and runs to the water should probably drown instead of continuing to be on fire
     Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
     Carrying stuff

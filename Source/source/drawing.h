@@ -107,6 +107,9 @@ void draw_text_lines(
     const point &where, const int flags, const unsigned char valign,
     const string &text
 );
+void draw_textured_box(
+    const point &center, const point &size, ALLEGRO_BITMAP* texture
+);
 float ease(
     const unsigned char method, float y
 );

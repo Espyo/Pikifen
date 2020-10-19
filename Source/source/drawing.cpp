@@ -3586,6 +3586,144 @@ void draw_text_lines(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a box, using a texture. The texture is split into three-by-three.
+ * The corners of the box will use the corners of the texture as they are.
+ * The remaining sections of the texture will be stretched to fill the
+ * box's center and sides.
+ * If the box's width or height is smaller than the two relevant corners
+ * combined, then the corner graphics will be shrunk down, though.
+ * center:
+ *   Center of the box.
+ * size:
+ *   Width and height of the box.
+ * texture:
+ *   Texture to use.
+ */
+void draw_textured_box(
+    const point &center, const point &size, ALLEGRO_BITMAP* texture
+) {
+    al_hold_bitmap_drawing(true);
+    
+    //Some caches.
+    //Vertex total. 9 sections * 2 tris * 3 vertexes.
+    constexpr size_t total_vertexes = 9 * 2 * 3;
+    //Top-left coordinates.
+    const point tl = center - size / 2.0f;
+    //Bitmap size.
+    const int bmp_w = al_get_bitmap_width(texture);
+    const int bmp_h = al_get_bitmap_height(texture);
+    //Corner sizes.
+    const point corner_size(
+        std::min(
+            (float) (bmp_w / 3.0f), size.x / 2.0f
+        ),
+        std::min(
+            (float) (bmp_h / 3.0f), size.y / 2.0f
+        )
+    );
+    
+    //Initialize the vertexes.
+    ALLEGRO_VERTEX vert[total_vertexes];
+    for(unsigned char v = 0; v < total_vertexes; ++v) {
+        vert[v].color = al_map_rgb(255, 255, 255);
+        vert[v].z = 0;
+    }
+    
+    size_t v = 0;
+    for(size_t r = 0; r < 3; ++r) {
+        //For every row.
+        
+        //Figure out the start and end Y drawing coordinates.
+        float y1;
+        float y2;
+        switch(r) {
+        case 0: {
+            y1 = tl.y;
+            y2 = tl.y + corner_size.y;
+            break;
+        } case 1: {
+            y1 = tl.y + corner_size.y;
+            y2 = tl.y + size.y - corner_size.y;
+            break;
+        } case 2: {
+            y1 = tl.y + size.y - corner_size.y;
+            y2 = tl.y + size.y;
+            break;
+        }
+        }
+        
+        //And the start and end Y texture coordinates.
+        float v1 = (bmp_h / 3.0f) * r;
+        float v2 = (bmp_h / 3.0f) * (r + 1);
+        
+        for(size_t c = 0; c < 3; ++c) {
+            //For every column.
+            
+            //Figure out the start and end X drawing coordinates.
+            float x1;
+            float x2;
+            switch(c) {
+            case 0: {
+                x1 = tl.x;
+                x2 = tl.x + corner_size.x;
+                break;
+            } case 1: {
+                x1 = tl.x + corner_size.x;
+                x2 = tl.x + size.x - corner_size.x;
+                break;
+            } case 2: {
+                x1 = tl.x + size.x - corner_size.x;
+                x2 = tl.x + size.x;
+                break;
+            }
+            }
+            
+            //And the start and end X texture coordinates.
+            float u1 = (bmp_w / 3.0f) * c;
+            float u2 = (bmp_w / 3.0f) * (c + 1);
+            
+            //Finally, fill the vertex info!
+            //First triangle (top-left).
+            vert[v + 0].x = x1;
+            vert[v + 0].u = u1;
+            vert[v + 0].y = y1;
+            vert[v + 0].v = v1;
+            vert[v + 1].x = x2;
+            vert[v + 1].u = u2;
+            vert[v + 1].y = y1;
+            vert[v + 1].v = v1;
+            vert[v + 2].x = x1;
+            vert[v + 2].u = u1;
+            vert[v + 2].y = y2;
+            vert[v + 2].v = v2;
+            
+            //Second triangle (bottom-right).
+            vert[v + 3].x = x2;
+            vert[v + 3].u = u2;
+            vert[v + 3].y = y1;
+            vert[v + 3].v = v1;
+            vert[v + 4].x = x1;
+            vert[v + 4].u = u1;
+            vert[v + 4].y = y2;
+            vert[v + 4].v = v2;
+            vert[v + 5].x = x2;
+            vert[v + 5].u = u2;
+            vert[v + 5].y = y2;
+            vert[v + 5].v = v2;
+            
+            v += 6;
+        }
+    }
+    
+    al_draw_prim(
+        vert, NULL, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+    );
+    
+    al_hold_bitmap_drawing(false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Eases a number [0, 1] in accordance to a non-linear interpolation
  * method. Normally used for camera movement and such.
  * method:

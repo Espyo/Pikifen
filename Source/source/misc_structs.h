@@ -40,6 +40,7 @@ using std::vector;
  */
 struct asset_file_names_struct {
     string area_name_font;
+    string bubble_box;
     string checkbox_check;
     string cursor;
     string cursor_invalid;
@@ -455,6 +456,7 @@ struct script_var_reader {
  */
 struct system_asset_list {
     //Bitmaps.
+    ALLEGRO_BITMAP* bmp_bubble_box;
     ALLEGRO_BITMAP* bmp_checkbox_check;
     ALLEGRO_BITMAP* bmp_cursor;
     ALLEGRO_BITMAP* bmp_cursor_invalid;

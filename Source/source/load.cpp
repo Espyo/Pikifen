@@ -974,6 +974,8 @@ void load_misc_graphics() {
     al_set_display_icon(game.display, game.sys_assets.bmp_icon);
     
     //Graphics.
+    game.sys_assets.bmp_bubble_box =
+        game.bitmaps.get(game.asset_file_names.bubble_box);
     game.sys_assets.bmp_checkbox_check =
         game.bitmaps.get(game.asset_file_names.checkbox_check);
     game.sys_assets.bmp_cursor =
@@ -1565,6 +1567,7 @@ void unload_liquids() {
  * Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
+    game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_cursor_invalid);

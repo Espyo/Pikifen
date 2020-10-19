@@ -27,6 +27,7 @@
  */
 asset_file_names_struct::asset_file_names_struct() :
     area_name_font("Area_name_font.png"),
+    bubble_box("Bubble_box.png"),
     checkbox_check("Checkbox_check.png"),
     cursor("Cursor.png"),
     cursor_invalid("Cursor_invalid.png"),
@@ -69,6 +70,7 @@ void asset_file_names_struct::load(data_node* file) {
     reader_setter rs(file);
     
     rs.set("area_name_font", area_name_font);
+    rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
     rs.set("cursor", cursor);
     rs.set("cursor_invalid", cursor_invalid);
@@ -1672,6 +1674,7 @@ void subgroup_type_manager::register_type(
  * Creates a system asset list struct.
  */
 system_asset_list::system_asset_list():
+    bmp_bubble_box(nullptr),
     bmp_checkbox_check(nullptr),
     bmp_cursor(nullptr),
     bmp_cursor_invalid(nullptr),
